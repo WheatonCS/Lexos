@@ -138,15 +138,15 @@ def _word_filter_(option, low, high, num_word, total_word_count, merge_list):
 def group_division(word_lists, group_map):
     """Divides the WordLists into Groups via the GroupMap.
 
-    * Notice that this program will change GroupMap.
+    Notice that this program will change GroupMap.
     :param word_lists: a list of dictionaries that each dictionary has the word
                        map to its word count, And each dictionary represents
                        the information inside a segment.
     :param group_map: a list of lists, each list represents the ids that in a
-                      group and each element in the list is id of a wordlist
-                      (original index of the wordlist in WordLists).
+                      group and each element in the list is id of a word list
+                      (original index of the word list in WordLists).
     :return: a list of lists, each list represents a group, where each element
-             in the list is a list that contain all the wordlists in the group.
+             in the list is a list that contain all the lists in the group.
     """
     # pack the Chunk data in to ChunkMap(because this is fast)
     for i in range(len(group_map)):
@@ -486,5 +486,4 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
         all_results.update(
             {(group_comp_index, group_base_index):
                 sorted_word_zscore_tuple_list})
-
     return all_results

@@ -1281,21 +1281,13 @@ def generate_sims_csv(file_manager: FileManager):
 
 
 def get_top_word_option():
-    """
-    Gets the top word options from the front-end
+    """Gets the top word options from the front-end.
 
-    Args:
-        None
-
-    Returns:
-        test_by_class: option for proportional z test to see whether to use
-                testgroup() or testall()
-                see analyze/topword.py testgroup() and testall() for more
-        option: the wordf ilter to determine what word to send to the topword
-                analysis
-                    see analyze/topword.py testgroup() and testall() for more
-        high: the Highest Proportion that sent to topword analysis
-        low: the Lowest Proportion that sent to topword analysis
+    :return: test_by_class: option for proportional z test to see whether to
+             use testgroup() or testall().
+             option: the word fileter to determine what words to analysis.
+             high: the highest proportion that sent to topword analysis.
+             low: the lowest proportion that sent to topword analysis.
     """
 
     if 'testInput' in request.form:  # when do KW this is not in request.form
@@ -1333,18 +1325,10 @@ def get_top_word_option():
 
 
 def generate_z_test_top_word(file_manager: FileManager):
-    """
+    """Generates the z-test top word results based on user options.
 
-    All paragraphs are really references to documents. The UI has been updated
-    to "documents" but all the variables below still use paragraphs.
-
-    Generates the Z-test Topwod results based on user options
-
-    Args:
-        file_manager:
-
-    Returns:
-        A dictionary containing the Z-test results
+    :param file_manager: A FileManager object (see managers/file_manager.py).
+    :return: A dictionary containing the Z-test results.
     """
 
     test_by_class, option, low, high = get_top_word_option()
