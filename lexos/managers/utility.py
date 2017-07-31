@@ -241,7 +241,7 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
 
 
 def generate_statistics(file_manager: FileManager) -> \
-        (List[Dict[str, object]], Dict[str, object]):
+        (List[information.FileInformation], information.CorpusInformation):
     """Calls analyze/information to generate statistics of the corpus.
 
     :param file_manager: A FileManager object (see managers/file_manager.py)
@@ -257,19 +257,16 @@ def generate_statistics(file_manager: FileManager) -> \
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
-
     # convert the checked_labels into int
     checked_labels = set(map(int, checked_labels))
-
     # if the file_id is not in checked list
     for file_id in file_ids - checked_labels:
         # make that file inactive in order to getMatrix
         file_manager.files[file_id].disable()
 
-    file_info_list = []
-    folder_path = os.path.join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)  # folder path for storing graphs and plots
+    # folder path for storing graphs and plots
+    folder_path = os.path.join(session_manager.session_folder(),
+                               constants.RESULTS_FOLDER)
     try:
         os.mkdir(folder_path)  # attempt to make folder to store graphs/plots
     except FileExistsError:
@@ -279,44 +276,23 @@ def generate_statistics(file_manager: FileManager) -> \
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    count_matrix, _, labels = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=n_gram_size,
         use_freq=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=culling)
 
-    word_lists = general_functions.matrix_to_dict(count_matrix)
-    files = [file for file in file_manager.get_active_files()]
-
-    i = 0
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                files[i].label = l_file.label
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                files[i].label = new_label
-            i += 1
-
-    for i in range(len(files)):
-
-        # because the first row of the first line is the ''
-        file_information = information.FileInformation(
-            word_lists[i], files[i].label)
-
-        file_info_list.append((files[i].id,
-                               file_information.return_statistics()))
-
-    corpus_information = information.CorpusInformation(
-        word_lists, files)  # make a new object called corpus
-    corpus_info_dict = corpus_information.return_statistics()
-
-    return file_info_list, corpus_info_dict
+    file_info_list = []
+    for count, label in enumerate(labels):
+        file_info_list.append(information.FileInformation(
+            count_list=count_matrix[count, :], file_name=label))
+    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
+                                                labels=labels)
+    return file_info_list, corpus_info
 
 
 def get_dendrogram_legend(file_manager: FileManager,
@@ -1206,19 +1182,16 @@ def generate_mc_json_obj(file_manager: FileManager):
     return json_obj
 
 
-def generate_similarities(file_manager: FileManager):
-    """
-    Generates cosine similarity rankings between the comparison file and a
-    model generated from other active files.
+def generate_similarities(file_manager: FileManager) -> (str, str):
+    """Generates cosine similarity rankings between comparison files
 
-    Args:
-        comp_file_id: ID of the comparison file (a lexos file) sent through
-                    from the request.form (that's why there's funky unicode
-                    stuff that has to happen)
-
-    Returns:
-        Two strings, one of the files ranked in order from best to worst, the
-        second of those files' cosine similarity scores
+    :param file_manager: a class for an object to hold all information of
+                         user's files and manage the files according to users's
+                         choices.
+    :return:
+        - doc_str_score: a string which stores the similarity scores
+        - doc_str_name: a string which stores the name of the comparison files
+                        ranked in order from best to worst
     """
 
     # generate tokenized lists of all documents and comparison document
@@ -1227,25 +1200,16 @@ def generate_similarities(file_manager: FileManager):
     ngram_size = int(request.form['tokenSize'])
     only_char_grams_within_words = 'inWordsOnly' in request.form
     cull = 'cullcheckbox' in request.form
-    grey_word = 'greyword' in request.form
     mfw = 'mfwcheckbox' in request.form
 
-    # iterates through active files and adds each file's contents as a string
-    # to allContents and label to temp_labels
-    # this loop excludes the comparison file
-    temp_labels = []  # list of labels for each segment
-    index = 0  # this is the index of comp file in filemanager.files.value
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            # if the file is not comp file
-            if int(l_file.id) != int(comp_file_id):
-                temp_labels.append(request.form["file_" + str(l_file.id)])
-            # if the file is comp file
-            else:
-                comp_file_index = index
-            index += 1
+    if file_manager.files.get(comp_file_id) is not None:
+        comp_file_index = list(file_manager.files.keys()).index(comp_file_id)
+    # to check if we find the index.
+    else:
+        raise ValueError('input comparison file id cannot be found '
+                         'in filemanager')
 
-    count_matrix = file_manager.get_matrix_deprec(
+    final_matrix, words, temp_labels = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option="N/A",
@@ -1253,39 +1217,18 @@ def generate_similarities(file_manager: FileManager):
         n_gram_size=ngram_size,
         use_freq=False,
         round_decimal=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=cull)
 
-    # to check if we find the index.
-    try:
-        comp_file_index
-    except NameError:
-        raise ValueError(
-            'input comparison file id: ' +
-            comp_file_id +
-            ' cannot be found in filemanager')
-
     # call similarity.py to generate the similarity list
-    docs_list_score, docs_list_name = similarity.similarity_maker(
-        count_matrix, comp_file_index, temp_labels)
+    docs_score, docs_name = similarity.similarity_maker(
+        final_matrix, comp_file_index, temp_labels)
 
-    # error handle
-    if docs_list_score == 'Error':
-        return 'Error', docs_list_name
-
-    # TODO: not safe
     # concatinates lists as strings with *** deliminator
     # so that the info can be passed successfully through the
     # html/javascript later on
-    doc_str_score = ""
-    doc_str_name = ""
-    for score in docs_list_score:
-        doc_str_score += str(score) + "***"
-    for name in docs_list_name:
-        doc_str_name += str(name) + "***"
-
-    return doc_str_score, doc_str_name
+    return "***".join(str(score) for score in docs_score),\
+           "***".join(str(name) for name in docs_name)
 
 
 def generate_sims_csv(file_manager: FileManager):
