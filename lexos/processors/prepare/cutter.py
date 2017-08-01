@@ -32,33 +32,32 @@ def count_words(text_list) -> int:
     return len([x for x in text_list if x not in WHITESPACE])
 
 
-def strip_leading_white_space(q: Queue):
+def strip_leading_white_space(word_queue: Queue):
     """Strips the leading whitespace
 
     This Stripping takes in the queue representation of the text.
-    :param q: The text in a Queue object separated by words.
+    :param word_queue: The text in a Queue object separated by words.
     """
-    # TODO: rewrite function
-    if not q.empty():
-        while q.queue[0] in WHITESPACE:
-            q.get()
+    if not word_queue.empty():
+        while word_queue.queue[0] in WHITESPACE:
+            word_queue.get()
 
-            if q.empty():
+            if word_queue.empty():
                 break
 
 
-def strip_leading_blank_lines(q: Queue):
+def strip_leading_blank_lines(word_queue: Queue):
     """Strips the leading blank lines.
 
     This stripping takes in the queue representation of the text.
-    :param q: The text in a Queue object separated by words.
+    :param word_queue: The text in a Queue object separated by words.
     """
-    # TODO: use peek, not queue
-    while q.queue == '':
-        q.get()
+    if not word_queue.empty():
+        while word_queue.queue[0] == '':
+            word_queue.get()
 
-        if q.empty():
-            break
+            if word_queue.empty():
+                break
 
 
 def strip_leading_characters(char_queue: Queue, num_chars: int):
@@ -284,10 +283,10 @@ def cut_by_lines(text: str, chunk_size: int, overlap: int, last_prop: float) \
 
     # Create list of chunks (chunks are lists of words and whitespace) by
     # using a queue as a rolling window
-    # TODO : there are no token being '' after splitlines()
     for token in split_text:
         if token == '':
-            chunk_so_far.put(token)
+            raise AttributeError("there should not be empty string after "
+                                 "splitlines")
 
         else:
             curr_chunk_size += 1
@@ -413,40 +412,9 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     :return: A list of strings which are to become the new chunks.
     """
     # pre-condition assertion
-    assert len(cutting_value) >0, EMPTY_MILESTONE_MESSAGE
+    assert len(cutting_value) > 0, EMPTY_MILESTONE_MESSAGE
 
-    chunk_list = []  # container for chunks
-    len_milestone = len(cutting_value)  # length of milestone term
-    cutting_value = cutting_value
-
-    if len(cutting_value) > 0:
-        chunk_stop = text.find(cutting_value)  # first boundary
-        # trap for error when first word in file is Milestone
-        while chunk_stop == 0:
-            text = text[len_milestone:]
-            chunk_stop = text.find(cutting_value)
-
-        # while next boundary != -1 (while next boundary exists)
-        while chunk_stop >= 0:
-            # print chunk_stop
-            # new chunk  = current text up to boundary index
-            next_chunk = text[:chunk_stop]
-            # text = text left after the boundary
-            text = text[chunk_stop + len_milestone:]
-            chunk_stop = text.find(cutting_value)  # first boundary
-
-            # trap for error when first word in file is Milestone
-            # TODO: cannot find a way to reach this part of code
-            while chunk_stop == 0:
-                if chunk_stop == 0:
-                    text = text[len_milestone:]
-                    chunk_stop = text.find(cutting_value)
-            chunk_list.append(next_chunk)  # append this chunk to chunk list
-
-        if len(text) > 0:
-            chunk_list.append(text)
-    else:
-        chunk_list.append(text)
+    chunk_list = text.split(cutting_value)
 
     return chunk_list
 
@@ -476,8 +444,6 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     if cutting_type != 'milestone':
         cutting_value = int(cutting_value)
 
-    # TODO : change the structure of the if statement
-    # TODO : maybe it's better to change the cutting_type string to "chars"
     if cutting_type == 'letters':
         string_list = cut_by_characters(text, cutting_value, overlap,
                                         last_prop)
