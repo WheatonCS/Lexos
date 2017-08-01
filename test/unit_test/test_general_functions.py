@@ -35,8 +35,8 @@ class TestGeneralFunctions:
         assert generate_d3_object(
             {'a': 1, 'b': 2, 'c': 3, 'd': 4},
             "object", "word", "count") == {'name': 'object', 'children': [{
-                'word': 'a', 'count': 1}, {'word': 'b', 'count': 2}, {
-                'word': 'c', 'count': 3}, {'word': 'd', 'count': 4}]}
+            'word': 'a', 'count': 1}, {'word': 'b', 'count': 2}, {
+            'word': 'c', 'count': 3}, {'word': 'd', 'count': 4}]}
 
     def test_merge_list(self):
         assert merge_list([{"a": 1, "b": 2}, {"c": 3, "d": 4}]) == {
@@ -45,24 +45,31 @@ class TestGeneralFunctions:
     def test_load_stastic(self):
         assert load_stastic(
             "this is a string string") == {
-            "this": 1, "is": 1, "a": 1, "string": 2}
+                   "this": 1, "is": 1, "a": 1, "string": 2}
 
     def test_matrix_to_dict(self):
         assert matrix_to_dict([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]]) == \
-            [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
+               [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
 
     def test_dict_to_matrix(self):
         assert dict_to_matrix(
             [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == (
-            [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
-            ['a', 'b', 'c', 'd'])
+                   [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
+                   ['a', 'b', 'c', 'd'])
 
     def test_html_escape(self):
-        assert html_escape("&") == "&amp;"
+        assert html_escape('&') == "&amp;"
         assert html_escape('"') == "&quot;"
         assert html_escape("'") == "&apos;"
-        assert html_escape(">") == "&gt;"
-        assert html_escape("<") == "&lt;"
+        assert html_escape('>') == "&gt;"
+        assert html_escape('<') == "&lt;"
+        assert html_escape('&"\'><') == '&amp;&quot;&apos;&gt;&lt;'
+        assert html_escape("<html lang='en'></html>") == '&lt;html lang=&apo' \
+                                                         's;en&apos;&gt;&lt;' \
+                                                         '/html&gt;'
+        assert html_escape('<html lang="en"></html>') == '&lt;html lang=&quo' \
+                                                         't;en&quot;&gt;&lt;' \
+                                                         '/html&gt;'
 
     def test_apply_function_exclude_tags(self):
         input_str = "<tag>asdf</tag>"
@@ -74,4 +81,5 @@ class TestGeneralFunctions:
             input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
 
     def test_decode_bytes(self):
-        assert decode_bytes(u'做戏之说做戏之'.encode('gb2312')) == "做戏之说做戏之"
+        assert decode_bytes(u'做戏之说做戏之'.encode('gb2312')) == '做戏之说做戏之'
+
