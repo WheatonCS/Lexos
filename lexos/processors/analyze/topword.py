@@ -9,6 +9,7 @@ import itertools
 from cmath import sqrt
 
 import numpy as np
+import pandas as pd
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.helpers.general_functions import merge_list
@@ -45,11 +46,11 @@ def _z_test_(p1, pt, n1, nt):
         return 'Insignificant'
 
 
-def group_division(word_lists, group_map):
+def group_division(dtm: pd.DataFrame, group_map: np.ndarray):
     """Divides the WordLists into Groups via the GroupMap.
 
     Notice that this program will change GroupMap.
-    :param word_lists: a list of dictionaries that each dictionary has the word
+    :param dtm_values: a list of dictionaries that each dictionary has the word
                        map to its word count, And each dictionary represents
                        the information inside a segment.
     :param group_map: a list of lists, each list represents the ids that in a
@@ -59,12 +60,14 @@ def group_division(word_lists, group_map):
              in the list is a list that contain all the lists in the group.
     """
     # pack the Chunk data in to ChunkMap(because this is fast)
-    assert word_lists, EMPTY_LIST_MESSAGE
+    assert dtm, EMPTY_LIST_MESSAGE
     assert group_map, EMPTY_LIST_MESSAGE
-    for i in range(len(group_map)):
-        for j in range(len(group_map[i])):
-            group_map[i][j] = word_lists[group_map[i][j]]
-    return group_map
+    group_list = []
+    label_list = []
+    for _, row in enumerate(group_map):
+        group_list.append(np.dot(row, dtm.values))
+        label_list.append(np.dot(row, dtm.columns.values))
+    return group_list, label_list
 
 
 def _z_test_word_list_(count_list_i, count_list_j, row_sum, total_sum, words):
@@ -105,7 +108,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
     total_sum = np.sum(count_matrix).item()
     count_matrix_sum = np.sum(count_matrix, axis=0)
     # Generate data
-    for row in list(count_matrix):
+    for _, row in enumerate(count_matrix):
         word_z_score_dict = _z_test_word_list_(
             count_list_i=row, count_list_j=count_matrix_sum,
             row_sum=np.sum(row).item(), total_sum=total_sum, words=words)
@@ -116,7 +119,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
     return all_results
 
 
-def analyze_para_to_group(group_para_lists):
+def analyze_para_to_group(group_values):
     """Analyzes each single word compare to all the other group
 
     :param group_para_lists: Array of words, where each element of array
@@ -133,14 +136,14 @@ def analyze_para_to_group(group_para_lists):
     """
 
     # init
+    all_results = {}  # the value to return
     # group list is the word list of each group (word to word count within the
     # whole group)
-    assert group_para_lists, EMPTY_LIST_MESSAGE
-    group_lists = [] # the total word count of each group
-    for chunk in group_para_lists:
-        group_lists.append(merge_list(chunk))
+    assert group_values, EMPTY_LIST_MESSAGE
+    group_lists = []  # the total word count of each group
+    for group in group_values:
+        group_lists.append(np.sum(group).item())
     num_group = len(group_lists)  # number of groups
-    all_results = {}  # the value to return
 
     # calculation
     # comparison map, in here is a list of tuple.
@@ -157,7 +160,7 @@ def analyze_para_to_group(group_para_lists):
     for group_comp_index, group_base_index in comp_map:
 
         # gives all the paragraphs in the group in a array
-        group_comp_paras = group_para_lists[group_comp_index]
+        group_comp_paras = group_values[group_comp_index]
         # the word list of base group
         group_base_list = group_lists[group_base_index]
 

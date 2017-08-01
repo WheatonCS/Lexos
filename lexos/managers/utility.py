@@ -1369,19 +1369,17 @@ def generate_z_test_top_word(file_manager: FileManager):
     elif test_by_class == 'classToPara':  # test by class
 
         # create division map
-        division_map, name_map, class_label_map = \
-            file_manager.get_class_division_map()
-
-        if len(division_map) == 1:
+        division_map = file_manager.get_class_division_map()
+        if division_map.shape[0] == 1:
             raise ValueError(
                 'only one class given, cannot do Z-test by class, '
                 'at least 2 classes needed')
 
         # divide into group
-        group_word_lists = group_division(word_lists, division_map)
+        group_values, name_map = group_division(dtm_data, division_map.values)
 
         # test
-        analysis_result = analyze_para_to_group(group_word_lists)
+        analysis_result = analyze_para_to_group(group_values)
 
         # convert to human readable form
         human_result = []
