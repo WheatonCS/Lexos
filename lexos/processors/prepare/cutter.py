@@ -6,7 +6,8 @@ from lexos.helpers.constants import WHITESPACE
 from lexos.helpers.error_messages import NEG_OVERLAP_LAST_PROP_MESSAGE, \
     LARGER_CHUNK_SIZE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, PROP_NEGATIVE_MESSAGE, OVERLAP_NEGATIVE_MESSAGE, \
-    INVALID_CUTTING_TYPE_MESSAGE, NON_POSITIVE_SEGMENT_MESSAGE
+    INVALID_CUTTING_TYPE_MESSAGE, NON_POSITIVE_SEGMENT_MESSAGE, \
+    EMPTY_MILESTONE_MESSAGE
 
 
 def split_keep_whitespace(string) -> List[str]:
@@ -411,10 +412,12 @@ def cut_by_milestone(text: str, cutting_value: str) -> List[str]:
     :param cutting_value: the value by which to cut the texts by.
     :return: A list of strings which are to become the new chunks.
     """
-    # TODO:maybe need to change the variable name for cutting_value
+    # pre-condition assertion
+    assert len(cutting_value) >0, EMPTY_MILESTONE_MESSAGE
+
     chunk_list = []  # container for chunks
     len_milestone = len(cutting_value)  # length of milestone term
-    cutting_value = cutting_value   # TODO: maybe we should delete this line?
+    cutting_value = cutting_value
 
     if len(cutting_value) > 0:
         chunk_stop = text.find(cutting_value)  # first boundary
