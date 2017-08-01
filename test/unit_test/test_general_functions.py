@@ -82,4 +82,5 @@ class TestGeneralFunctions:
 
     def test_decode_bytes(self):
         assert decode_bytes(u'做戏之说做戏之'.encode('gb2312')) == '做戏之说做戏之'
-
+        assert decode_bytes(u'абвгдежзийкл'.encode('utf-16')) == 'абвгдежзийкл'
+        assert decode_bytes(u'España'.encode('utf-8')) == 'España'
