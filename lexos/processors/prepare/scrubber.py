@@ -183,24 +183,23 @@ def replacement_handler(
 
         # At the end of this section, each element_list is a list of two lists.
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
-        element_list = replacement_line.split(':')
-        for index, element in enumerate(element_list):
-            element_list[index] = element.split(',')
+        replacements_list = [element.split(",") for index, element in
+                             enumerate(replacement_line.split(':'))]
 
         # 1 item -> 1 item, ex. "cat: dog"
-        if len(element_list[0]) == 1 and len(element_list[1]) == 1:
-            replacer = element_list.pop()[0]
+        if len(replacements_list[0]) == 1 and len(replacements_list[1]) == 1:
+            replacer = replacements_list.pop()[0]
         # 1 item <- 2+ items, ex. "dog: cat, wildebeest"
-        elif len(element_list[0]) == 1:
-            replacer = element_list.pop(0)[0]
+        elif len(replacements_list[0]) == 1:
+            replacer = replacements_list.pop(0)[0]
         # 2+ items -> 1 item, ex. "cat, wildebeest: dog"
-        elif len(element_list[1]) == 1:
-            replacer = element_list.pop()[0]
+        elif len(replacements_list[1]) == 1:
+            replacer = replacements_list.pop()[0]
         # Do nothing, ex. "cat, wildebeest: dog, three-toed sloth"
         else:
             return text
 
-        element_list = element_list[0]
+        to_replace = replacements_list[0]
 
         # Lemmas are words with boundary space, other replacements are chars
         if is_lemma:
@@ -208,7 +207,7 @@ def replacement_handler(
         else:
             edge = ''
 
-        for change_me in element_list:
+        for change_me in to_replace:
             the_regex = re.compile(edge + change_me + edge, re.UNICODE)
             text = the_regex.sub(replacer, text)
 
