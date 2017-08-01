@@ -1330,7 +1330,7 @@ def generate_z_test_top_word(file_manager: FileManager):
     :param file_manager: A FileManager object (see managers/file_manager.py).
     :return: A dictionary containing the Z-test results.
     """
-
+    # Initialize
     test_by_class, option, low, high = get_top_word_option()
 
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
@@ -1360,24 +1360,12 @@ def generate_z_test_top_word(file_manager: FileManager):
         cull=culling)
 
     if test_by_class == 'allToPara':  # test for all
-
         analysis_result = analyze_all_to_para(new_count_matrix, words)
-
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                if request.form["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.form["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
-
         # convert to human readable form
         human_result = []
-        for i in range(len(analysis_result)):
-            header = 'Document "' + \
-                     temp_labels[i] + '" compared to the whole corpus'
-            human_result.append([header, analysis_result[i]])
+        for count, label in enumerate(labels):
+            header = 'Document "' + label + '" compared to the whole corpus'
+            human_result.append([header, analysis_result[count]])
 
     elif test_by_class == 'classToPara':  # test by class
 
