@@ -2,7 +2,7 @@ import os
 import re
 import time
 
-from flask import Flask
+from flask import Flask, request, render_template
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
@@ -95,6 +95,13 @@ def nl2br(eval_ctx, value):
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
+
+
+# ==== add error handlers ====
+@app.errorhandler(404)
+def page_not_found(_):
+    app.logger.error('Page not found: %s', request.path)
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
