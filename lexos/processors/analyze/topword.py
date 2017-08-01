@@ -7,7 +7,8 @@
 
 import itertools
 from cmath import sqrt
-from operator import itemgetter
+
+import numpy as np
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.helpers.general_functions import merge_list
@@ -32,7 +33,6 @@ def _z_test_(p1, pt, n1, nt):
     :return: the probability that the particular word in a particular chunk is
              NOT an anomaly
     """
-
     try:
         p = (p1 * n1 + pt * nt) / (n1 + nt)
         standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
@@ -40,100 +40,6 @@ def _z_test_(p1, pt, n1, nt):
         return z_scores
     except ZeroDivisionError:
         return 'Insignificant'
-
-
-def _word_filter_(option, low, high, num_word, total_word_count, merge_list):
-    # option
-    """
-    handle the word filter option on the topword page
-    convert the default options and proportional options into raw count option
-    this removes word base on the frequency of that word in the whole corpus
-
-    :param option: the name of the option, like 'TopStdE' or 'CustomP'
-
-    :param low: the lower bound of the selected word filter type.
-            (if the option is CustomP, this means Prop Count,
-            if it is CustomR, this means Raw Count)
-
-    :param high: the upper bound of the selected word filter type.
-            (if the option is CustomP, this means Prop Count,
-            if it is CustomR, this means Raw Count)
-
-    :param num_word: number of distinct word
-    :param total_word_count: the total word count of the corpus
-    :param merge_list: the Merged word list of the entire corpus
-    :return:
-        high: the raw count upper bound of the words that send into the
-                topword analysis
-        low: the raw count lower bound of the words that send into the
-                topword analysis
-    :raise IOError: the option you put in is not recognized by the program
-
-    """
-    if option == 'CustomP':
-        low *= total_word_count
-        high *= total_word_count
-
-    elif option == 'CustomR':  # custom raw counts
-        pass
-
-    elif option.endswith('std_err'):
-        std_err = 0
-        # average frequency of the word appearance (raw count)
-        average = total_word_count / num_word
-        for word in merge_list:
-            std_err += (merge_list[word] - average) ** 2
-        std_err = sqrt(std_err)
-        std_err /= num_word
-
-        if option.startswith('top'):
-            # TopStdE: only analyze the Right outlier of word, determined by
-            # standard deviation
-            high = total_word_count
-            low = average + 2 * std_err
-
-        elif option.startswith('mid'):
-            # MidStdE: only analyze the Non-Outlier of word, determined by
-            # standard deviation
-            high = average + 2 * std_err
-            low = average - 2 * std_err
-
-        elif option.startswith('low'):
-            # LowStdE: only analyze the Left Outlier of word, determined by
-            # standard deviation
-            high = average - 2 * std_err
-
-        else:
-            raise IOError('input option is not valid')
-
-    elif option.endswith('iqr'):
-        temp_list = sorted(list(merge_list.items()), key=itemgetter(1))
-        mid = temp_list[int(num_word / 2)][1]
-        q3 = temp_list[int(num_word * 3 / 4)][1]
-        q1 = temp_list[int(num_word / 4)][1]
-        iqr = q3 - q1
-
-        if option.startswith('top'):
-            # TopIQR: only analyze the Top outlier of word, determined by iqr
-            high = total_word_count
-            low = (mid + 1.5 * iqr)
-
-        elif option.startswith('mid'):
-            # MidIQR: only analyze the non-outlier of word, determined by iqr
-            high = (mid + 1.5 * iqr)
-            low = (mid - 1.5 * iqr)
-
-        elif option.startswith('low'):
-            # LowIQR: only analyze the Left outlier of word, determined by iqr
-            high = (mid - 1.5 * iqr)
-
-        else:
-            raise IOError('input option is not valid')
-
-    else:
-        raise IOError('input option is not valid')
-
-    return high, low
 
 
 def group_division(word_lists, group_map):
@@ -158,7 +64,7 @@ def group_division(word_lists, group_map):
     return group_map
 
 
-def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
+def _z_test_word_list_(word_list_i, word_list_j):
     """Processes z-test on all the words of two input word lists
 
     :param word_list_i: first word list, a dictionary maps word to word counts
@@ -170,31 +76,24 @@ def _z_test_word_list_(word_list_i, word_list_j, corpus_list, high, low):
     total_list = merge_list([word_list_j, word_list_i])
     word_z_score_dict = {}
     for word in total_list:
-        # if low < corpus_list[word] < high:  # taking care fo the word filter
-            try:
-                p_i = word_list_i[word] / total_count_i
-            except KeyError:
-                p_i = 0
-            try:
-                p_j = word_list_j[word] / total_count_j
-            except KeyError:
-                p_j = 0
-            # keep 4 digits after the decimal point of z_score
-            z_score = round(
-                _z_test_(
-                    p_i,
-                    p_j,
-                    total_count_i,
-                    total_count_j),
-                4)
-            # get rid of the insignificant results, insignificant means those
-            # with absolute values smaller than 1.96
-            if abs(z_score) >= 1.96:
-                word_z_score_dict.update({word: z_score})
+        try:
+            p_i = word_list_i[word] / total_count_i
+        except KeyError:
+            p_i = 0
+        try:
+            p_j = word_list_j[word] / total_count_j
+        except KeyError:
+            p_j = 0
+        z_score = round(
+            _z_test_(p1=p_i, pt=p_j, n1=total_count_i, nt=total_count_j), 4)
+        # get rid of the insignificant results, insignificant means those
+        # with absolute values smaller than 1.96
+        if abs(z_score) >= 1.96:
+            word_z_score_dict.update({word: z_score})
     return word_z_score_dict
 
 
-def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
+def analyze_all_to_para(count_matrix, words):
     # TODO: Figure out if simply putting in one file makes sense or not.
     """Analyzes each single word compare to the total documents
 
@@ -202,114 +101,35 @@ def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
                        segment, which is in dictionary type. Each element in
                        the dictionary maps word inside that segment to its
                        frequency.
-    :param option: some default option to set for High And Low
-                   (see the document for High and Low)
-                   1. using standard deviation to find outlier
-                      TopStdE: only analyze the Right outlier of word,
-                               determined by standard deviation
-                               (word frequency > average + 2 * std_err)
-                      MidStdE: only analyze the Non-Outlier of word, determined
-                               by standard deviation
-                               (average + 2 * Standard_Deviation >
-                               word frequency >
-                               average - 2 * Standard_Deviation)
-                      LowStdE: only analyze the Left Outlier of word,
-                               determined by standard deviation
-                               (average - 2 * Standard_Deviation >
-                               word frequency)
-
-                   2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
-                      BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-                      TopIQR: only analyze the Top outlier of word, determined
-                              by IQR (word frequency > median + 1.5 * Standard)
-                      MidIQR: only analyze the non-outlier of word, determined
-                              by IQR
-                              (median + 1.5 * Standard > word frequency >
-                              median - 1.5 * Standard)
-                      LowIQR: only analyze the Left outlier of word, determined
-                              by IQR (median - 1.5 * Standard > word frequency)
-    :param low: this method will only analyze the word with higher frequency
-                than this input value
-                (this parameter will be overwritten if the option is not
-                'Custom')
-    :param high: this method will only analyze the word with lower frequency
-                 than this input value
-                 (this parameter will be overwritten if the option is not
-                 'Custom')
     :return: an array where each element of array is an array, represents a
              segment and it is sorted via z_score, each element array is a
              tuple: (word, corresponding z_score)
     """
-    assert word_lists, EMPTY_LIST_MESSAGE
-    # init
-    corpus_list = merge_list(word_lists)
+    assert np.size(count_matrix) > 0, EMPTY_LIST_MESSAGE
+    # initialize
     all_results = []  # the value to return
-    total_word_count = sum(corpus_list.values())
-    num_word = len(corpus_list)
-
     # calculation
-    for word_list in word_lists:
-        word_z_score_dict = _z_test_word_list_(
-            word_list_i=word_list,
-            word_list_j=corpus_list,
-            corpus_list=corpus_list,
-            high=high,
-            low=low)
 
+    for row in count_matrix:
+        word_z_score_dict = _z_test_word_list_(word_list_i=row,
+                                               word_list_j=count_matrix)
         sorted_list = sorted(
             list(word_z_score_dict.items()),
             key=lambda item: abs(item[1]),
             reverse=True
         )
-
         all_results.append(sorted_list)
 
     return all_results
 
 
-def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0,
-                          high=1.0):
+def analyze_para_to_group(group_para_lists):
     """Analyzes each single word compare to all the other group
 
     :param group_para_lists: Array of words, where each element of array
                              represents a segment, which is in dictionary type.
                              Each element in the dictionary maps word inside
                              that segment to its frequency.
-    :param option: some default option to set for High And Low
-                   (see the document for High and Low)
-                   1. using standard deviation to find outlier
-                      TopStdE: only analyze the Right outlier of word,
-                               determined by standard deviation
-                               (word frequency > average + 2 * std_err)
-                      MidStdE: only analyze the Non-Outlier of word, determined
-                               by standard deviation
-                               (average + 2 * Standard_Deviation >
-                               word frequency >
-                               average - 2 * Standard_Deviation)
-                      LowStdE: only analyze the Left Outlier of word,
-                               determined by standard deviation
-                               (average - 2 * Standard_Deviation >
-                               word frequency)
-
-                   2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
-                      BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-                      TopIQR: only analyze the Top outlier of word, determined
-                              by IQR (word frequency > median + 1.5 * Standard)
-                      MidIQR: only analyze the non-outlier of word, determined
-                              by IQR
-                              (median + 1.5 * Standard > word frequency >
-                              median - 1.5 * Standard)
-                      LowIQR: only analyze the Left outlier of word, determined
-                              by IQR (median - 1.5 * Standard > word frequency)
-    :param low: this method will only analyze the word with higher frequency
-                than this input value
-                (this parameter will be overwritten if the option is not
-                'Custom')
-    :param high: this method will only analyze the word with lower frequency
-                 than this input value
-                 (this parameter will be overwritten if the option is not
-                 'Custom')
-
     :return: an array where each element of array is a dictionary maps a tuple
              to a list tuple consist of 3 elements (group number 1, list
              number, group number 2) means compare the word in list number of
@@ -359,17 +179,12 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0,
 
         # enumerate through all the paragraphs in group_comp_paras
         for para_index, paras in enumerate(group_comp_paras):
-            word_z_score_dict = _z_test_word_list_(
-                word_list_i=paras,
-                word_list_j=group_base_list,
-                corpus_list=corpus_list,
-                high=high,
-                low=low)
+            word_z_score_dict = _z_test_word_list_(word_list_i=paras,
+                                                   word_list_j=group_base_list)
             # sort the dictionary
             sorted_word_zscore_tuple_list = sorted(
-                list(
-                    word_z_score_dict.items()), key=lambda item: abs(
-                    item[1]), reverse=True)
+                list(word_z_score_dict.items()), key=lambda item: abs(item[1]),
+                reverse=True)
             # pack the sorted result in sorted list
             all_results.update(
                 {(group_comp_index, para_index, group_base_index):
@@ -378,8 +193,7 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0,
     return all_results
 
 
-def analyze_group_to_group(group_para_lists, option='CustomP', low=0,
-                           high=None):
+def analyze_group_to_group(group_para_lists):
     """Analyzes the group compare with each other groups
 
     :param group_para_lists: a list, where each element of the list is a list,
@@ -387,40 +201,6 @@ def analyze_group_to_group(group_para_lists, option='CustomP', low=0,
                              group list is a dictionary, maps a word to a word
                              count, each dictionary represents a segment, in
                              the corresponding group
-    :param option: some default option to set for High And Low
-                   (see the document for High and Low)
-                   1. using standard deviation to find outlier
-                      TopStdE: only analyze the Right outlier of word,
-                               determined by standard deviation
-                               (word frequency > average + 2 * std_err)
-                      MidStdE: only analyze the Non-Outlier of word, determined
-                               by standard deviation
-                               (average + 2 * Standard_Deviation >
-                               word frequency >
-                               average - 2 * Standard_Deviation)
-                      LowStdE: only analyze the Left Outlier of word,
-                               determined by standard deviation
-                               (average - 2 * Standard_Deviation >
-                               word frequency)
-
-                   2. using IQR to find outlier *THIS METHOD DO NOT WORK WELL,
-                      BECAUSE THE DATA USUALLY ARE HIGHLY SKEWED*
-                      TopIQR: only analyze the Top outlier of word, determined
-                              by IQR (word frequency > median + 1.5 * Standard)
-                      MidIQR: only analyze the non-outlier of word, determined
-                              by IQR
-                              (median + 1.5 * Standard > word frequency >
-                              median - 1.5 * Standard)
-                      LowIQR: only analyze the Left outlier of word, determined
-                              by IQR (median - 1.5 * Standard > word frequency)
-    :param low: this method will only analyze the word with higher frequency
-                than this input value
-                (this parameter will be overwritten if the option is not
-                'Custom')
-    :param high: this method will only analyze the word with lower frequency
-                 than this input value
-                 (this parameter will be overwritten if the option is not
-                 'Custom')
     :return: a dictionary of a tuple mapped to a list:
              tuple: the tuple has two elements:
                     the two index is two groups to compare.
@@ -465,12 +245,8 @@ def analyze_group_to_group(group_para_lists, option='CustomP', low=0,
 
         group_comp_list = group_word_lists[group_comp_index]
         group_base_list = group_word_lists[group_base_index]
-        word_z_score_dict = _z_test_word_list_(
-            word_list_i=group_comp_list,
-            word_list_j=group_base_list,
-            corpus_list=corpus_list,
-            high=high,
-            low=low)
+        word_z_score_dict = _z_test_word_list_(word_list_i=group_comp_list,
+                                               word_list_j=group_base_list)
 
         # sort the dictionary
         sorted_word_zscore_tuple_list = sorted(

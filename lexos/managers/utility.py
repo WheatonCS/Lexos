@@ -1349,10 +1349,19 @@ def generate_z_test_top_word(file_manager: FileManager):
         cull=culling)
     word_lists = matrix_to_dict(count_matrix)
 
+    new_count_matrix, words, labels = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=False,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=n_gram_size,
+        use_freq=False,
+        mfw=mfw,
+        cull=culling)
+
     if test_by_class == 'allToPara':  # test for all
 
-        analysis_result = analyze_all_to_para(
-            word_lists, option=option, low=low, high=high)
+        analysis_result = analyze_all_to_para(new_count_matrix, words)
 
         temp_labels = []  # list of labels for each segment
         for l_file in list(file_manager.files.values()):
@@ -1385,8 +1394,7 @@ def generate_z_test_top_word(file_manager: FileManager):
         group_word_lists = group_division(word_lists, division_map)
 
         # test
-        analysis_result = analyze_para_to_group(
-            group_word_lists, option=option, low=low, high=high)
+        analysis_result = analyze_para_to_group(group_word_lists)
 
         # convert to human readable form
         human_result = []
@@ -1415,8 +1423,7 @@ def generate_z_test_top_word(file_manager: FileManager):
         group_word_lists = group_division(word_lists, division_map)
 
         # test
-        analysis_result = analyze_group_to_group(
-            group_word_lists, option=option, low=low, high=high)
+        analysis_result = analyze_group_to_group(group_word_lists)
 
         # convert to human readable form
         human_result = []
