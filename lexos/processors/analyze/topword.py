@@ -247,10 +247,6 @@ def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     total_word_count = sum(corpus_list.values())
     num_word = len(corpus_list)
 
-    # handle option (word filter)
-    # high, low = _word_filter_(
-        # option, low, high, num_word, total_word_count, corpus_list)
-
     # calculation
     for word_list in word_lists:
         word_z_score_dict = _z_test_word_list_(
@@ -271,7 +267,8 @@ def analyze_all_to_para(word_lists, option='CustomP', low=0.0, high=None):
     return all_results
 
 
-def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0):
+def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0,
+                          high=1.0):
     """Analyzes each single word compare to all the other group
 
     :param group_para_lists: Array of words, where each element of array
@@ -339,11 +336,7 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0)
     num_group = len(group_lists)  # number of groups
     all_results = {}  # the value to return
 
-    # high, low = _word_filter_(
-        # option, low, high, total_num_words, total_word_count, corpus_list)
-
     # calculation
-
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups
     # (for example the first group will have index 0)
@@ -385,7 +378,8 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0)
     return all_results
 
 
-def analyze_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
+def analyze_group_to_group(group_para_lists, option='CustomP', low=0,
+                           high=None):
     """Analyzes the group compare with each other groups
 
     :param group_para_lists: a list, where each element of the list is a list,
@@ -456,9 +450,6 @@ def analyze_group_to_group(group_para_lists, option='CustomP', low=0, high=None)
     total_num_words = len(corpus_list)
     num_group = len(group_word_lists)  # number of group
     all_results = {}
-
-    # high, low = _word_filter_(
-        # option, low, high, total_num_words, total_word_count, corpus_list)
 
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups
