@@ -175,9 +175,6 @@ def replacement_handler(
     replacement_lines = replacer_string.split('\n')
 
     for replacement_line in replacement_lines:
-        # Maybe redundant, since spaces are already gone
-        replacement_line = replacement_line.strip()
-
         # If there is no colon on a line, replace the last comma with a colon
         if replacement_line.find(':') == -1:
             last_comma = replacement_line.rfind(',')
@@ -187,15 +184,19 @@ def replacement_handler(
         # At the end of this section, each element_list is a list of two lists.
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
         element_list = replacement_line.split(':')
-        for i, element in enumerate(element_list):
-            element_list[i] = element.split(',')
+        for index, element in enumerate(element_list):
+            element_list[index] = element.split(',')
 
+        # 1 item -> 1 item, ex. "cat: dog"
         if len(element_list[0]) == 1 and len(element_list[1]) == 1:
             replacer = element_list.pop()[0]
-        elif len(element_list[0]) == 1:  # Target result word is first
+        # 1 item <- 2+ items, ex. "dog: cat, wildebeest"
+        elif len(element_list[0]) == 1:
             replacer = element_list.pop(0)[0]
-        elif len(element_list[1]) == 1:  # Target result word is last
+        # 2+ items -> 1 item, ex. "cat, wildebeest: dog"
+        elif len(element_list[1]) == 1:
             replacer = element_list.pop()[0]
+        # Do nothing, ex. "cat, wildebeest: dog, three-toed sloth"
         else:
             return text
 
