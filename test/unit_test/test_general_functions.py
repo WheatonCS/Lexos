@@ -57,12 +57,24 @@ class TestGeneralFunctions:
                    [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
                    ['a', 'b', 'c', 'd'])
 
-    def test_html_escape(self):
+
+class TestHtmlEscape:
+    def test_amp(self):
         assert html_escape('&') == "&amp;"
+
+    def test_quot(self):
         assert html_escape('"') == "&quot;"
+
+    def test_apos(self):
         assert html_escape("'") == "&apos;"
+
+    def test_gt(self):
         assert html_escape('>') == "&gt;"
+
+    def test_lt(self):
         assert html_escape('<') == "&lt;"
+
+    def test_all(self):
         assert html_escape('&"\'><') == '&amp;&quot;&apos;&gt;&lt;'
         assert html_escape("<html lang='en'></html>") == '&lt;html lang=&apo' \
                                                          's;en&apos;&gt;&lt;' \
