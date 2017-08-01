@@ -88,7 +88,7 @@ def _z_test_word_list_(count_list_i, count_list_j, row_sum, total_sum, words):
     return word_z_score_dict
 
 
-def analyze_all_to_para(count_matrix, words):
+def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
     # TODO: Figure out if simply putting in one file makes sense or not.
     """Analyzes each single word compare to the total documents
 

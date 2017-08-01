@@ -1349,7 +1349,7 @@ def generate_z_test_top_word(file_manager: FileManager):
         cull=culling)
     word_lists = matrix_to_dict(count_matrix)
 
-    new_count_matrix, words, labels = file_manager.get_matrix(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -1360,10 +1360,11 @@ def generate_z_test_top_word(file_manager: FileManager):
         cull=culling)
 
     if test_by_class == 'allToPara':  # test for all
-        analysis_result = analyze_all_to_para(new_count_matrix, words)
+        analysis_result = analyze_all_to_para(dtm_data.values,
+                                              dtm_data.columns.values)
         # convert to human readable form
         human_result = []
-        for count, label in enumerate(labels):
+        for count, label in enumerate(dtm_data.index.values):
             header = 'Document "' + label + '" compared to the whole corpus'
             human_result.append([header, analysis_result[count]])
 
