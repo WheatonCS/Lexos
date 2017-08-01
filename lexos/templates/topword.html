@@ -4,19 +4,14 @@
 
 {% block head %}
     <style type="text/css">
-        .topwordResultLegend {
-        }
+        .topwordResultLegend {}
     </style>
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}">
     </script>
-    <script type="text/javascript">
-            var classNum = {{ classmap[1]|length|default(0) }};
-    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}
-
 {% block title %}analyzer{% endblock %}
 
 
@@ -210,25 +205,24 @@
     {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
     <legend class="topwordResultLegend">Class Division:</legend>
-    {% if classmap[1]|length == 1 %}
+    {% if classmap.index.values.all()==[""] %}
             Please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to
             assign class labels to documents</strong></span>
     {% endif %}
 
-    {% for i in range(classmap[1]|length) %}
-    {% endfor %}
-
     <div class="row">
-    {% for i in range(classmap[1]|length) %}
+    {% for i in range(classmap.shape[0]) %}
         <div class="col-md-6 topwordTableDivv topwordTableDivClass">
-            {%  if classmap[1][i] == '' %}
+            {%  if classmap.index.values[i] == "" %}
                 <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
             {% else %}
-                <p class="topwordResultTableTitle"><strong>Class: "{{ classmap[1][i] }}"</strong></p>
+                <p class="topwordResultTableTitle"><strong>Class: "{{ classmap.index.values[i] }}"</strong></p>
             {% endif %}
                 <div class="topwordFileTable">
-                    {% for filename in classmap[0][i] %}
-                        <p class="topwordFile">{{ filename }}</p>
+                    {% for filename in classmap.columns.values %}
+                        {%  if classmap[filename][classmap.index.values[i]] == 1 %}
+                            <p class="topwordFile">{{ filename }}</p>
+                        {% endif %}
                     {% endfor %}
                 </div>
        </div>
