@@ -1,6 +1,8 @@
+import numpy as np
+import pandas as pd
+
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
-from lexos.processors.analyze.topword import _z_test_, analyze_all_to_para, \
-    group_division, analyze_para_to_group, analyze_group_to_group
+from lexos.processors.analyze.topword import _z_test_, analyze_all_to_para
 
 
 class TestZTest:
@@ -15,25 +17,34 @@ class TestZTest:
 
 
 # Create test suite for next part of test
-word_lists_one = [{'C': 1.0, 'D': 1.0}, {'A': 1.0, 'B': 1.0}]
-word_lists_two = [{'C': 1.0, 'D': 10.0}, {'A': 1.0, 'B': 1.0}]
-empty_list = []
+dtm_data_one = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 1)]),
+                            index=np.array(["F1", "F2"]),
+                            columns=np.array(["A", "B", "C", "D"]))
+dtm_data_two = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
+                            index=np.array(["F1", "F2"]),
+                            columns=np.array(["A", "B", "C", "D"]))
+empty_data = pd.DataFrame(data=[], index=[], columns=[])
 
 
 class TestAnalyzeAllToPara:
     def test_normal_case(self):
-        assert analyze_all_to_para(word_lists=word_lists_one) == [[], []]
-        assert analyze_all_to_para(word_lists=word_lists_two) == \
-            [[], [("D", -2.1483)]]
+        assert analyze_all_to_para(
+            count_matrix=dtm_data_one.values,
+            words=dtm_data_one.columns.values) == [[], []]
+        assert analyze_all_to_para(
+            count_matrix=dtm_data_two.values,
+            words=dtm_data_two.columns.values) == [[("D", -2.1483)], []]
 
     def test_special_case(self):
         try:
-            _ = analyze_all_to_para(word_lists=empty_list)
+            _ = analyze_all_to_para(count_matrix=empty_data.values,
+                                    words=empty_data.columns.values)
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
 
+"""
 # Create test suite for next part of test
 word_lists = [{'G': 1.0, 'H': 1.0}, {'E': 1.0, 'F': 1.0},
               {'C': 1.0, 'D': 1.0}, {'A': 1.0, 'B': 1.0}]
@@ -100,3 +111,4 @@ class TestGroupToGroup:
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
+"""
