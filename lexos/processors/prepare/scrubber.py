@@ -392,7 +392,7 @@ def get_remove_punctuation_map(
     # 3  remove all apostrophes (single quotes) except:
     #       possessives (joe's),
     #       contractions (i'll),
-    # 4. delete the rest of the punctuations
+    # 4. delete the rest of the punctuation
 
     punctuation_filename = os.path.join(
         constants.UPLOAD_FOLDER,
@@ -416,30 +416,27 @@ def get_remove_punctuation_map(
                 punctuation_filename,
                 'wb'))  # Cache
 
-    # If Keep Word-Internal Apostrophes (UTF-8: 39) ticked
-    #       (Remove must also be ticked in order for this option to appear)
+    # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
-        pattern = re.compile(r"""
-            # If apos preceded by any word character and
-            # followed by non-word character
-            (?<=[\w])'+(?=[^\w])
-            |
-            # If apos preceded by non-word character and
-            # followed by any word character
-            (?<=[^\w])'+(?=[\w])
-            |
-            # If apos surrounded by non-word characters
-            (?<=[^\w])'+(?=[^\w])
-        """, re.VERBOSE | re.UNICODE)
+
+        # If apos preceded by word character and followed by non-word character
+        # (?<=[\w])'+(?=[^\w])
+        # OR apos preceded by non-word character and followed by word character
+        # |(?<=[^\w])'+(?=[\w])
+        # OR apos surrounded by non-word characters
+        # |(?<=[^\w])'+(?=[^\w])
+        pattern = re.compile(
+            r"(?<=[\w])'+(?=[^\w])|(?<=[^\w])'+(?=[\w])|(?<=[^\w])'+(?=[^\w])",
+            re.UNICODE)
 
         # replace all external or floating apos with empty strings
         text = str(re.sub(pattern, r"", text))
 
-        # apos is removed from the remove_punctuation_map
-        del remove_punctuation_map[39]  # apostrophe is removed from map
+        # apos (UTF-8: 39) is deleted from the remove_punctuation_map
+        del remove_punctuation_map[39]
 
     if previewing:
-        del remove_punctuation_map[8230]
+        del remove_punctuation_map[8230]    # ord(…)
 
     # If keep hyphens (UTF-16: 45) ticked
     if hyphen:
