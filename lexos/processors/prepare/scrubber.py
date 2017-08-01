@@ -276,19 +276,18 @@ def handle_tags(text: str) -> str:
     """
 
     text = re.sub('[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-    text = re.sub(r"(<\?.*?>)", "", text)  # Remove xml declarations
-    text = re.sub(r"(<\!--.*?-->)", "", text)  # Remove comments
-    # Remove DOCTYPE declarations
-    """ Match the DOCTYPE and all internal entity declarations. To get just the
-        entity declarations, use (\[[^]]*\])? in line 3.
-    """
-    doctype = re.compile(r"""
-    <!DOCTYPE     # matches the string <!DOCTYPE
-    [^>[]*        # matches anything up to a > or [
-    \[[^]]*\]?    # matches an optional section surrounded by []
-    >             # matches the string >
-    """, re.VERBOSE)
-    text = re.sub(doctype, "", text)
+    text = re.sub(r"(<\?.*?>)", "", text)    # Remove xml declarations
+    text = re.sub(r"(<\!--.*?-->)", "", text)    # Remove comments
+
+    # <!DOCTYPE  matches the string "<!DOCTYPE"
+    # [^>[]*     matches anything up to a ">" or "["
+    # \[[^]]*\]? matches an optional section surrounded by "[]"
+    # >          matches the string ">"
+
+    # This matches the DOCTYPE and all internal entity declarations. To get
+    # just the entity declarations, use r"(\[[^]]*\])?"
+    doctype = re.compile(r"<!DOCTYPE[^>[]*\[[^]]*\]?>")
+    text = re.sub(doctype, "", text)    # Remove DOCTYPE declarations
 
     if 'xmlhandlingoptions' in session:  # Should always be true
 
