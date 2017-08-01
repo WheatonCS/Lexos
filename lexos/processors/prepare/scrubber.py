@@ -496,14 +496,15 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
         # open the digit map for further use
         remove_digit_map = pickle.load(open(digit_filename, 'rb'))
     else:
+
+        # Generate the digit map with all unicode characters that start with
+        # the category 'N'
+        # See http://www.fileformat.info/info/unicode/category/index.htm for
+        # the list of categories
         remove_digit_map = dict.fromkeys(
             [i for i in range(sys.maxunicode)
              if unicodedata.category(chr(i)).startswith('N')])
 
-        # else generate the digit map with all unicode characters
-        #   that start with the category 'N'
-        # see http://www.fileformat.info/info/unicode/category/index.htm for
-        # reference of categories
     try:
         # try making a directory for caching if it doesn't exist
         cache_path = os.path.dirname(digit_filename)
