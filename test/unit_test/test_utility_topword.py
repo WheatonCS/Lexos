@@ -1,6 +1,6 @@
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.processors.analyze.topword import _z_test_, analyze_all_to_para, \
-    group_division, analyze_para_to_group
+    group_division, analyze_para_to_group, analyze_group_to_group
 
 
 class TestZTest:
@@ -83,5 +83,17 @@ class TestAnalyzeParaToGroup:
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
+
 class TestGroupToGroup:
     def test_normal_case(self):
+        assert analyze_group_to_group(group_para_lists=group_para_list_one) \
+            == {(0, 1): []}
+        assert analyze_group_to_group(group_para_lists=group_para_list_two) \
+            == {(0, 1): [('G', 2.7336)]}
+
+    def test_special_case(self):
+        try:
+            _ = analyze_group_to_group(group_para_lists=empty_list)
+            raise AssertionError("Empty input error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_LIST_MESSAGE
