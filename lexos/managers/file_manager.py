@@ -873,8 +873,9 @@ class FileManager:
                                 is fixed to 6 decimal places
                                 (so far only used in tokenizer)
         :return:
-            Returns the sparse matrix and a list of lists representing the
-            matrix of data.
+            a panda data frame with:
+            - the index (row) as the segment names (temp_labels)
+            - the column as words
         """
 
         active_files = self.get_active_files()
