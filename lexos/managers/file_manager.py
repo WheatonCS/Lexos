@@ -1359,7 +1359,7 @@ class FileManager:
         return count_matrix
 
     def get_class_division_map(self):
-
+        """:return: a panda frame that contains class division map."""
         # TODO: get rid of this horrible function
         """
         Args:
@@ -1370,6 +1370,23 @@ class FileManager:
             class_label_map:
         """
         # create division map
+
+        files = self.get_active_files()
+        temp_labels = []
+        temp_classes = []
+        for file in files:
+            temp_labels.append(file.label)
+            if file.class_label not in temp_classes:
+                temp_classes.append(file.class_label)
+        division_map = pd.DataFrame(
+            data=np.zeros((len(temp_classes), len(temp_labels))),
+            index=temp_classes, columns=temp_labels)
+        for file in files:
+            division_map[file.label][file.class_label] = 1
+
+        print("DONE")
+
+        """
         division_map = [[0]]  # initialize the division map (at least one file)
         files = self.get_active_files()
         try:
@@ -1411,7 +1428,9 @@ class FileManager:
                     name_map.append([files[file_id].label])
                 class_label_map.append(files[file_id].class_label)
 
-        return division_map, name_map, class_label_map
+        print("")
+        """
+        return division_map
 
     def get_previews_of_all(self):
         """
