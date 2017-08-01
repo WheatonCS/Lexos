@@ -24,85 +24,24 @@ def handle_special_characters(text: str) -> str:
 
     if option_list in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
         if option_list == 'doe-sgml':
-            common_characters = [
-                '&ae;',
-                '&d;',
-                '&t;',
-                '&e;',
-                '&AE;',
-                '&D;',
-                '&T;',
-                '&E;',
-                '&oe;',
-                '&amp;',
-                '&egrave;',
-                '&eacute;',
-                '&auml;',
-                '&ouml;',
-                '&uuml;',
-                '&amacron;',
-                '&cmacron;',
-                '&emacron;',
-                '&imacron;',
-                '&nmacron;',
-                '&omacron;',
-                '&pmacron;',
-                '&qmacron;',
-                '&rmacron;',
-                '&lt;',
-                '&gt;',
-                '&lbar;',
-                '&tbar;',
-                '&bbar;']
-            common_unicode = [
-                'æ',
-                'ð',
-                'þ',
-                'ę',
-                'Æ',
-                'Ð',
-                'Þ',
-                'Ę',
-                'œ',
-                '⁊',
-                'è',
-                'é',
-                'ä',
-                'ö',
-                'ü',
-                'ā',
-                'c̄',
-                'ē',
-                'ī',
-                'n̄',
-                'ō',
-                'p̄',
-                'q̄',
-                'r̄',
-                '<',
-                '>',
-                'ł',
-                'ꝥ',
-                'ƀ']
+            character_entities = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;',
+                                  '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
+                                  '&eacute;', '&auml;', '&ouml;', '&uuml;',
+                                  '&amacron;', '&cmacron;', '&emacron;',
+                                  '&imacron;', '&nmacron;', '&omacron;',
+                                  '&pmacron;', '&qmacron;', '&rmacron;',
+                                  '&lt;', '&gt;', '&lbar;', '&tbar;', '&bbar;']
+            unicode_characters = ['æ', 'ð', 'þ', 'ę', 'Æ', 'Ð', 'Þ', 'Ę',
+                                  'œ', '⁊', 'è', 'é', 'ä', 'ö', 'ü', 'ā',
+                                  'c̄', 'ē', 'ī', 'n̄', 'ō', 'p̄', 'q̄',
+                                  'r̄', '<', '>', 'ł', 'ꝥ', 'ƀ']
 
         elif option_list == 'early-english-html':
-            common_characters = [
-                '&ae;',
-                '&d;',
-                '&t;',
-                '&e;',
-                '&AE;',
-                '&D;',
-                '&T;',
-                '&#541;',
-                '&#540;',
-                '&E;',
-                '&amp;',
-                '&lt;',
-                '&gt;',
-                '&#383;']
-            common_unicode = ['æ', 'ð', 'þ', '\u0119', 'Æ',
-                              'Ð', 'Þ', 'ȝ', 'Ȝ', 'Ę', '&', '<', '>', 'ſ']
+            character_entities = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;',
+                                  '&T;', '&#541;', '&#540;', '&E;', '&amp;',
+                                  '&lt;', '&gt;', '&#383;']
+            unicode_characters = ['æ', 'ð', 'þ', '\u0119', 'Æ', 'Ð', 'Þ', 'ȝ',
+                                  'Ȝ', 'Ę', '&', '<', '>', 'ſ']
 
         elif option_list == 'MUFI-3':
             # assign current working path to variable
@@ -121,25 +60,23 @@ def handle_special_characters(text: str) -> str:
                 constants.RESOURCE_DIR,
                 constants.MUFI_3_FILENAME)
 
-            common_characters = []
-            common_unicode = []
+            character_entities = []
+            unicode_characters = []
             with open(mufi3_path, encoding='utf-8') as MUFI_3:
 
+                # put the first two columns of the file into parallel arrays
                 for line in MUFI_3:
-                    # divide columns of .tsv file into two separate arrays
                     pieces = line.split('\t')
                     key = pieces[0]
-                    # print key
                     value = pieces[1].rstrip()
 
                     if value[-1:] == ';':
                         # put the value in the array for the characters
-                        common_characters.append(value)
+                        character_entities.append(value)
                         # put the key in the array for the unicode
-                        common_unicode.append(key)
+                        unicode_characters.append(key)
 
         elif option_list == 'MUFI-4':
-
             # assign current working path to variable
             cur_file_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -156,8 +93,8 @@ def handle_special_characters(text: str) -> str:
                 constants.RESOURCE_DIR,
                 constants.MUFI_4_FILENAME)
 
-            common_characters = []
-            common_unicode = []
+            character_entities = []
+            unicode_characters = []
             with open(mufi4_path, encoding='utf-8') as MUFI_4:
 
                 for line in MUFI_4:
@@ -165,15 +102,14 @@ def handle_special_characters(text: str) -> str:
                     pieces = line.split('\t')
                     key = pieces[0]
                     value = pieces[1].rstrip()
+
                     if value[-1:] == ';':
                         # put the value in the array for the characters
-                        common_characters.append(value)
+                        character_entities.append(value)
                         # put the key in the array for the unicode
-                        common_unicode.append(key)
-        # now we've set the common_characters and common_unicode based on the
-        # special chars used
+                        unicode_characters.append(key)
 
-        r = make_replacer(dict(list(zip(common_characters, common_unicode))))
+        r = make_replacer(dict(list(zip(character_entities, unicode_characters))))
         # r is a function created by make_replacer(), _do_replace(), and
         # replace().
         # do_replace() returns the new char to use when called with the char to
