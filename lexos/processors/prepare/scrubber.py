@@ -438,52 +438,26 @@ def get_remove_punctuation_map(
     if previewing:
         del remove_punctuation_map[8230]    # ord(…)
 
-    # If keep hyphens (UTF-16: 45) ticked
+    # If Remove All Punctuation and Keep Hyphens are ticked
     if hyphen:
-        # All UTF-8 values (hex) for different hyphens: for translating
+
+        # All UTF-8 values (hex) for different hyphens and dashes, except the
+        # math minus symbol
         # All unicode dashes have 'Pd'
+        hyphen_values = ['\u058A', '\u05BE', '\u2010', '\u2011', '\u2012',
+                         '\u2013', '\u2014', '\u2015', '\uFE58', '\uFE63',
+                         '\uFF0D', '\u1400', '\u1806', '\u2E17', '\u2E1A',
+                         '\u2E3A', '\u2E3B', '\u2E40', '\u301C', '\u3030',
+                         '\u30A0', '\uFE31', '\uFE32']
 
-        # as of -5/26/2015, we removed the math (minus) symbols from this list
-        # as of 5/31/2016, all the dashes were added to this list
-        hyphen_values = [
-            '\u058A',
-            '\u05BE',
-            '\u2010',
-            '\u2011',
-            '\u2012',
-            '\u2013',
-            '\u2014',
-            '\u2015',
-            '\uFE58',
-            '\uFE63',
-            '\uFF0D',
-            '\u1400',
-            '\u1806',
-            '\u2E17',
-            '\u2E1A',
-            '\u2E3A',
-            '\u2E3B',
-            '\u2E40',
-            '\u301C',
-            '\u3030',
-            '\u30A0',
-            '\uFE31',
-            '\uFE32']
-
-        # All UTF-8 values (decimal) for different hyphens: for translating
-        # hyphen_values =
-        # [8208, 8211, 8212, 8213, 8315, 8331, 65123, 65293, 56128, 56365]
-
-        # 002D corresponds to the hyphen-minus symbol
+        # hex 002D corresponds to the minus symbol (decimal 45)
         chosen_hyphen_value = '\u002D'
 
-        # convert all those types of hyphens into the ascii hyphen (decimal 45,
-        # hex 2D)
+        # convert all those types of hyphens into the ascii minus
         for value in hyphen_values:
             text = text.replace(value, chosen_hyphen_value)
-        # now that all those hyphens are the ascii hyphen (hex 002D), remove
-        # hyphens from the map
-        # now no hyphens will be deleted from the text
+        # now that all those hyphens are the ascii minus, remove it from the
+        # map so no hyphens will be deleted from the text
         del remove_punctuation_map[45]
 
     if amper:  # If keeping ampersands
