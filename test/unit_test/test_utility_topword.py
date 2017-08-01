@@ -13,6 +13,7 @@ class TestZTest:
         assert _z_test_(p1=0.1, pt=0.3, n1=100, nt=0) == "Insignificant"
         assert _z_test_(p1=0.1, pt=0.3, n1=0, nt=100) == "Insignificant"
 
+
 # Create test suite for next part of test
 word_lists_one = [{'C': 1.0, 'D': 1.0}, {'A': 1.0, 'B': 1.0}]
 word_lists_two = [{'C': 1.0, 'D': 10.0}, {'A': 1.0, 'B': 1.0}]
@@ -31,6 +32,7 @@ class TestAnalyzeAllToPara:
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
+
 
 # Create test suite for next part of test
 word_lists = [{'G': 1.0, 'H': 1.0}, {'E': 1.0, 'F': 1.0},
@@ -59,6 +61,7 @@ class TestGroupDivision:
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
+
 
 # Create test suite for next part of test
 group_para_list_one = [[{'G': 1.0, 'H': 1.0}, {'E': 1.0, 'F': 1.0}],
