@@ -51,13 +51,13 @@ class TestGeneralFunctions:
 
     def test_matrix_to_dict(self):
         assert matrix_to_dict([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]]) == \
-               [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
+            [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
 
     def test_dict_to_matrix(self):
         assert dict_to_matrix(
             [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == (
-                   [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
-                   ['a', 'b', 'c', 'd'])
+                [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
+                ['a', 'b', 'c', 'd'])
 
 
 class TestHtmlEscape:
@@ -100,8 +100,10 @@ class TestApplyFunctionExcludeTags:
 
     def test_two_functions(self):
         assert apply_function_exclude_tags(
-            '<tag>asdf</tag>', [str.upper, self.dummy_function]) == \
-               '<tag>ASDFASDF</tag>'
+            '<tag>asdf</tag>', [str.upper, self.dummy_function]) == '<tag>' \
+                                                                    'ASDF' \
+                                                                    'ASDF' \
+                                                                    '</tag>'
 
     def test_multiple_functions(self):
         assert apply_function_exclude_tags(
