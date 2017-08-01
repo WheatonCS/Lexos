@@ -77,36 +77,6 @@ app.register_blueprint(top_words_view)
 app.register_blueprint(word_cloud_view)
 
 
-def int_key(s):
-    """
-    Returns the key to sort by.
-
-    Args:
-        A key
-
-    Returns:
-        A key converted into an int if applicable
-    """
-    if isinstance(s, tuple):
-        s = s[0]
-    return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-                 for part in re.split(r'([0-9]+)', s))
-
-
-@app.template_filter('natsort')
-def natsort(l):
-    """
-    Sorts lists in human order (10 comes after 2, even when both are strings)
-
-    Args:
-        A list
-
-    Returns:
-        A sorted list
-    """
-    return sorted(l, key=int_key)
-
-
 # http://flask.pocoo.org/snippets/28/
 # http://stackoverflow.com/questions/12523725/
 # why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
