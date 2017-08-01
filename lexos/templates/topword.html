@@ -157,105 +157,73 @@
             </fieldset>
         </div>
     </div>
-<!--     <div class="row">
-        <div class="col-md-12">
-            <fieldset class="analyze-advanced-options" id="words-options">
-                <legend>Built-In Options</legend>
-                <label class="show-options">Standard Deviation
-                    <input type="radio" name="outlierMethodType" value="stdErr" checked/>
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose outlier region: all defined by the standard deviation from the mean on a normal distribution (bell-shaped curve) of frequencies of all terms."></i>
-                </label>
-                <div class="outlier-div expansion cf" id="outlier-radios">
-                    <hr/>
-                    <label>Top Outliers Only<input type="radio" name="outlierTypeStd" value="top" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather high frequencies: +2&#963; standard deviations above the mean."></i>
-                    </label>
-                    <label>Non-Outliers Only<input type="radio" name="outlierTypeStd" value="mid" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'mid' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with mid-range frequencies: frequences within +/-1&#963; around the mean."></i>
-                    </label>
-                    <label>Low Outliers Only<input type="radio" name="outlierTypeStd" value="low" {{ "checked" if session['topwordoption']['outlierTypeStd'] == 'low' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with rather low frequencies: +2&#963; standard deviations below the mean."></i>
-                    </label>
-                </div>
-                <label class="show-options">Interquartile Range
-                    <input type="radio" name="outlierMethodType" value="iqr" {{ 'checked' if session['topwordoption']['outlierMethodType'] == 'iqr' }}/>
-                    <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Choose to find topwords using samples of term proportions using the InterQuartile Range (IQR)."></i>
-                    <div class="outlier-div expansion cf" id="outlier-radios">
-                    <hr/>
-                    <label>Top Outliers Only<input type="radio" name="outlierTypeIQR" value="top" checked/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with unusually high frequencies which are at least 1.5 interquartile ranges above the third quartile (Q3)."></i>
-                    </label>
-                    <label>Non-Outliers Only<input type="radio" name="outlierTypeIQR" value="mid" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'mid' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms that are not outliers, whose frequencies are below (Q3 + 1.5 IQR) and above (Q1 - 1.5 IQR)."></i>
-                    </label>
-                    <label>Low Outliers Only<input type="radio" name="outlierTypeIQR" value="low" {{ "checked" if session['topwordoption']['outlierTypeIQR'] == 'low' }}/>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" style="" title="Only compare terms with unusually low frequencies which are at least 1.5 interquartile ranges below the first quartile (Q1)."></i>
-                    </label>
-                </div>
-            </fieldset>
-        </div>
-    </div> -->
 {% endblock %}
 
 
 {% block results %}
     <input class="bttn bttn-action" id="gettopword" name="gen-topword" type="submit" value="Get Topwords"/>
     <input type="submit" class="bttn bttn-exit bttndownload" id="topworddownload" name="get-topword" value="Download Results"/>
-
-    {# get request display the class division #}
     {% if topwordsgenerated == 'class_div' %}
-    <legend class="topwordResultLegend">Class Division:</legend>
-    {% if classmap.index.values.all()==[""] %}
-            Please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to
-            assign class labels to documents</strong></span>
-    {% endif %}
-
-    <div class="row">
-    {% for i in range(classmap.shape[0]) %}
-        <div class="col-md-6 topwordTableDivv topwordTableDivClass">
-            {%  if classmap.index.values[i] == "" %}
-                <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
-            {% else %}
-                <p class="topwordResultTableTitle"><strong>Class: "{{ classmap.index.values[i] }}"</strong></p>
+        {% if classmap.shape[1] == 0 %}
+            <br/><br/><br/>
+            <h3> Please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to upload documents first</h3>
+        {% elif classmap.shape[1] == 1 %}
+            <br/><br/><br/>
+            <h3> Please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to upload more documents to compare</h3>
+        {% else %}
+            <legend class="topwordResultLegend">Class Division:</legend>
+            {% if classmap.shape[0]==1 %}
+                <span><strong>Only one class found, if desired to compare between class:</strong></span>
+                <span><strong>please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to assign class labels to documents</strong></span>
             {% endif %}
-                <div class="topwordFileTable">
-                    {% for filename in classmap.columns.values %}
-                        {%  if classmap[filename][classmap.index.values[i]] == 1 %}
-                            <p class="topwordFile">{{ filename }}</p>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-       </div>
-    {% endfor %}
-    </div>
+        {% endif %}
 
-    {% elif topwordsgenerated == 'True' %}
-    <div class="row">
-        <div class="col-md-12">
-            <legend class="topwordResultLegend">{{ header }}</legend>
-        </div>
-    </div>
-    <div class="row">
-        {% for file in result %}
-            <div class="col-md-6 topwordTableDivv topwordTableDivPZAlll">
-                <p class="topwordResultTableTitle"><strong> {{ file[0] }} </strong></p>
-                <table style="border:1px solid #ddd;" class="table table-striped table-condensed table-hover header-fixed">
-                    <thead>
-                        <th>Top Word</th>
-                        <th>Z Score</th>
-                    </thead>
-                    <tbody>
-                    {% for data in file[1] %}
-                        <tr>
-                            <td>{{ data[0] }}</td>
-                            <td>{{ data[1] }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="row">
+        {% for i in range(classmap.shape[0]) %}
+            <div class="col-md-6 topwordTableDivv topwordTableDivClass">
+                {%  if classmap.index.values[i] == "" %}
+                    <p class="topwordResultTableTitle"><strong>Class: untitled</strong></p>
+                {% else %}
+                    <p class="topwordResultTableTitle"><strong>Class: "{{ classmap.index.values[i] }}"</strong></p>
+                {% endif %}
+                    <div class="topwordFileTable">
+                        {% for filename in classmap.columns.values %}
+                            {%  if classmap[filename][classmap.index.values[i]] == 1 %}
+                                <p class="topwordFile">{{ filename }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+           </div>
         {% endfor %}
-    </div>
+        </div>
+
+        {% elif topwordsgenerated == 'True' %}
+        <div class="row">
+            <div class="col-md-12">
+                <legend class="topwordResultLegend">{{ header }}</legend>
+            </div>
+        </div>
+        <div class="row">
+            {% for file in result %}
+                <div class="col-md-6 topwordTableDivv topwordTableDivPZAlll">
+                    <p class="topwordResultTableTitle"><strong> {{ file[0] }} </strong></p>
+                    <table style="border:1px solid #ddd;" class="table table-striped table-condensed table-hover header-fixed">
+                        <thead>
+                            <th>Top Word</th>
+                            <th>Z Score</th>
+                        </thead>
+                        <tbody>
+                        {% for data in file[1] %}
+                            <tr>
+                                <td>{{ data[0] }}</td>
+                                <td>{{ data[1] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
 {% endblock %}
