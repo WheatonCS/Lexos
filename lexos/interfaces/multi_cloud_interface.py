@@ -19,8 +19,8 @@ multi_cloud_view = Blueprint('multi_clouds', __name__)
 @multi_cloud_view.route("/multicloud", methods=["GET", "POST"])
 def multi_cloud():
     # Handles the functionality on the multicloud pages.
-    # Note: Returns a response object (often a render_template call) to flask 
-    # and eventually to the browser.
+    # Note: Returns a response object (often a render_template call)
+    # to Flask and eventually to the browser.
 
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
@@ -28,14 +28,15 @@ def multi_cloud():
     file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     from collections import OrderedDict
-    labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
+    labels = OrderedDict(
+        natsorted(list(labels.items()), key=lambda x: x[1]))
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded.
         if 'cloudoption' not in session:
             session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
         if 'multicloudoptions' not in session:
-            session['multicloudoptions'] = 
+            session['multicloudoptions'] = \
                 constants.DEFAULT_MULTICLOUD_OPTIONS
 
         return render_template(
@@ -62,8 +63,8 @@ def multi_cloud():
             for item in children:
                 word_counts[item["text"]] = item["size"]
             word_counts_array.append(
-                {"name": name, "word_counts": word_counts, 
-                "words": children})
+                {"name": name, "word_counts": word_counts,
+                    "words": children})
 
         # Temporary fix because the front end needs a string
         json_obj = json.dumps(json_obj)
@@ -78,7 +79,8 @@ def multi_cloud():
             numActiveDocs=num_active_docs)
 
 
-# Tells Flask to load this function when someone is at '/doMulticloud'
+# Tells Flask to load this function when '/doMulticloud'
+# is called
 @multi_cloud_view.route("/doMulticloud", methods=["GET", "POST"])
 def do_multicloud():
     # Get the file manager, sorted labels, and tokenization options
@@ -89,7 +91,9 @@ def do_multicloud():
     token_size = int(session['analyoption']['tokenSize'])
 
     # Limit docs to those selected or to active docs
-    chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
+    chosen_doc_ids = [
+        int(x) for x in request.form.getlist('segmentlist')
+    ]
     active_docs = []
     if chosen_doc_ids:
         for ID in chosen_doc_ids:
@@ -117,13 +121,14 @@ def do_multicloud():
                                            token_type,
                                            token_size)
 
-    # Convert the DTM to a pandas dataframe with terms as column headers
+    # Convert the DTM to a pandas dataframe with terms
+    # as column headers
     import pandas as pd
     df = pd.DataFrame(dtm, columns=vocab)  # Automatically sorts terms
 
     # Create a dict for each document.
     # Format:
-    # {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1}, 
+    # {0: [{u'term1': 1}, {u'term2': 0}], 1: [{u'term1': 1},
     # {u'term2': 0}]}
     docs = {}
     for i, row in df.iterrows():
@@ -136,8 +141,8 @@ def do_multicloud():
     json_obj = []
     for i, doc in enumerate(docs.items()):
         children = []
-        # Convert simple json values to full json values: 
-        # {u'a': 1} > {'text': u'a', 'size': 1}
+        # Convert simple json values to full json values: {u'a': 1} >
+        # {'text': u'a', 'size': 1}
         for simpleValues in doc[1]:
             for val in simpleValues.items():
                 values = {"text": val[0], "size": str(val[1])}
@@ -155,8 +160,8 @@ def do_multicloud():
         for item in children:
             word_counts[item["text"]] = item["size"]
         word_counts_array.append(
-            {"name": name, "word_counts": word_counts, 
-            "words": children})
+            {"name": name, "word_counts": word_counts,
+                "words": children})
 
     # The front end needs a string in the response
     response = json.dumps([json_obj, word_counts_array])
