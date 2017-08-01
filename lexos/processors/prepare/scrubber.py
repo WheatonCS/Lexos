@@ -530,9 +530,9 @@ def get_punctuation_string() -> str:
 
     # Map of punctuation to split on
     if os.path.exists(punctuation_filename):
-        punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
+        all_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
     else:
-        punctuation_map = get_all_punctuation_map()
+        all_punctuation_map = get_all_punctuation_map()
 
     try:
         cache_path = os.path.dirname(punctuation_filename)
@@ -540,16 +540,12 @@ def get_punctuation_string() -> str:
     except FileExistsError:
         pass
     pickle.dump(
-        punctuation_map,
-        open(
-            punctuation_filename,
-            'wb'))  # Cache
+        all_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
-    punctuation = "["
-    for key in punctuation_map:
-        punctuation += chr(key)
-    punctuation += " ]"
-    return punctuation
+    all_punctuation_str = "".join(chr(key) for key in all_punctuation_map)
+    punctuation_regex = "[" + all_punctuation_str + " ]"
+
+    return punctuation_regex
 
 
 def remove_stopwords(text: str, removal_string: str) -> str:
