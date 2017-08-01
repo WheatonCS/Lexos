@@ -34,9 +34,11 @@ class TestGeneralFunctions:
     def test_generate_d3_object(self):
         assert generate_d3_object(
             {'a': 1, 'b': 2, 'c': 3, 'd': 4},
-            "object", "word", "count") == {'name': 'object', 'children': [{
-            'word': 'a', 'count': 1}, {'word': 'b', 'count': 2}, {
-            'word': 'c', 'count': 3}, {'word': 'd', 'count': 4}]}
+            "object", "word", "count") == {
+            'name': 'object', 'children': [{'word': 'a', 'count': 1},
+                                           {'word': 'b', 'count': 2},
+                                           {'word': 'c', 'count': 3},
+                                           {'word': 'd', 'count': 4}]}
 
     def test_merge_list(self):
         assert merge_list([{"a": 1, "b": 2}, {"c": 3, "d": 4}]) == {
@@ -45,7 +47,7 @@ class TestGeneralFunctions:
     def test_load_stastic(self):
         assert load_stastic(
             "this is a string string") == {
-                   "this": 1, "is": 1, "a": 1, "string": 2}
+            "this": 1, "is": 1, "a": 1, "string": 2}
 
     def test_matrix_to_dict(self):
         assert matrix_to_dict([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]]) == \
@@ -103,8 +105,8 @@ class TestApplyFunctionExcludeTags:
 
     def test_multiple_functions(self):
         assert apply_function_exclude_tags(
-            '<tag>asdf</tag>', [str.upper, str.lower, self.dummy_function]) ==\
-               '<tag>asdfasdf</tag>'
+            '<tag>asdf</tag>', [str.upper, str.lower,
+                                self.dummy_function]) == '<tag>asdfasdf</tag>'
 
 
 class TestDecodeBytes:
