@@ -78,7 +78,12 @@ class TestGeneralFunctions:
             return input_string + input_string
 
         assert apply_function_exclude_tags(
-            input_str, [dummy_function]) == "<tag>asdfasdf</tag>"
+            input_str, [dummy_function]) == '<tag>asdfasdf</tag>'
+        assert apply_function_exclude_tags(
+            input_str, [str.upper]) == '<tag>ASDF</tag>'
+        assert apply_function_exclude_tags(
+            '<tag>asdf</tag>', [str.upper, dummy_function]) == \
+               '<tag>ASDFASDF</tag>'
 
     def test_decode_bytes(self):
         assert decode_bytes(u'做戏之说做戏之'.encode('gb2312')) == '做戏之说做戏之'
