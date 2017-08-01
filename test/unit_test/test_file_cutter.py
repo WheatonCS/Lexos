@@ -3,7 +3,8 @@ from queue import Queue
 from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
     NEG_OVERLAP_LAST_PROP_MESSAGE, LARGER_CHUNK_SIZE_MESSAGE, \
     OVERLAP_LARGE_MESSAGE, SEG_NON_POSITIVE_MESSAGE, PROP_NEGATIVE_MESSAGE, \
-    OVERLAP_NEGATIVE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE
+    OVERLAP_NEGATIVE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE, \
+    EMPTY_MILESTONE_MESSAGE
 from lexos.processors.prepare.cutter import split_keep_whitespace, \
     count_words, strip_leading_white_space, strip_leading_blank_lines, \
     strip_leading_characters, strip_leading_words, strip_leading_lines, cut, \
@@ -530,16 +531,25 @@ class TestCutByNumbers:
 
 
 class TestCutByMileStone:
-    def test_milestone_empty(self):
-        assert cut_by_milestone(text="", cutting_value="") == [""]
-        assert cut_by_milestone(text=" ", cutting_value="") == [" "]
+    def test_milestone_empty_text(self):
+        assert cut_by_milestone(text="", cutting_value=" ") == []
+        assert cut_by_milestone(text="", cutting_value="bobcat") == []
+
+    def test_milestone_empty_milestone(self):
+        try:
+            _ = cut_by_milestone(text="", cutting_value="")
+            _ = cut_by_milestone(text="The bobcat slept all day.",
+                                 cutting_value="")
+            raise AssertionError("empty milestone error does not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_MILESTONE_MESSAGE
 
     def test_milestone_short_word(self):
         assert cut_by_milestone(text="test\ntest", cutting_value="a") == [
             "test\ntest"]
         assert cut_by_milestone(text="test\ntest", cutting_value="t") == [
             "es", "\n", "es"]
-        assert cut_by_milestone(text="ABAB", cutting_value="A") \
+        assert cut_by_milestone(text="ABAAB", cutting_value="A") \
             == ["B", "B"]
 
     def test_milestone_regular(self):
@@ -560,17 +570,6 @@ class TestCutByMileStone:
         milestone = "The cute bobcat slept all day."
         assert cut_by_milestone(text_content, milestone) == [
             "The bobcat slept all day."]
-
-    def test_milestone_len_zero(self):
-        text_content = "The bobcat slept all day."
-        milestone = ""
-        assert cut_by_milestone(text_content, milestone) == [
-            "The bobcat slept all day."]
-
-    def test_milestone_empty_text(self):
-        text_content = ""
-        milestone = "bobcat"
-        assert cut_by_milestone(text_content, milestone) == []
 
     def test_milestone_check_case_sensative(self):
         text_content = "The bobcat slept all day."
