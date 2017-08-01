@@ -325,6 +325,7 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0)
     # init
     # group list is the word list of each group (word to word count within the
     # whole group)
+    assert group_para_lists, EMPTY_LIST_MESSAGE
     group_lists = []
     group_word_count = []  # the total word count of each group
     group_num_words = []  # a list of number of unique words in each group
@@ -338,8 +339,8 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0)
     num_group = len(group_lists)  # number of groups
     all_results = {}  # the value to return
 
-    high, low = _word_filter_(
-        option, low, high, total_num_words, total_word_count, corpus_list)
+    # high, low = _word_filter_(
+        # option, low, high, total_num_words, total_word_count, corpus_list)
 
     # calculation
 
@@ -384,7 +385,7 @@ def analyze_para_to_group(group_para_lists, option='CustomP', low=0.0, high=1.0)
     return all_results
 
 
-def test_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
+def analyze_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
     """Analyzes the group compare with each other groups
 
     :param group_para_lists: a list, where each element of the list is a list,
@@ -436,6 +437,7 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
                    in two different paragraphs (the index is represented in the
                    in the first tuple we talked about)
     """
+    assert group_para_lists, EMPTY_LIST_MESSAGE
     # init
     # group list is the word list of each group (word to word count within the
     # whole group)
@@ -455,8 +457,8 @@ def test_group_to_group(group_para_lists, option='CustomP', low=0, high=None):
     num_group = len(group_word_lists)  # number of group
     all_results = {}
 
-    high, low = _word_filter_(
-        option, low, high, total_num_words, total_word_count, corpus_list)
+    # high, low = _word_filter_(
+        # option, low, high, total_num_words, total_word_count, corpus_list)
 
     # comparison map, in here is a list of tuple.
     # there are two element in the tuple, each one is a index of groups
