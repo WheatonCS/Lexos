@@ -19,7 +19,7 @@ cluster_view = Blueprint('cluster', __name__)
 # Tells Flask to load this function when someone is at '/dendrogramimage'
 @cluster_view.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogram_image():
-    """Reads the png image of the dendrogram and displays it on the web 
+    """Reads the png image of the dendrogram and displays it on the web
     browser.
     *dendrogramimage() linked to in analysis.html, displaying the
     dendrogram.png
@@ -40,7 +40,7 @@ def dendrogram_image():
 # Tells Flask to load this function when someone is at '/kmeans'
 @cluster_view.route("/kmeans", methods=["GET", "POST"])
 def k_means():
-    """Handles the functionality on the kmeans page. It analyzes the various 
+    """Handles the functionality on the kmeans page. It analyzes the various
     texts and displays the class label of the files.
 
     :return: a response object (often a render_template call) to flask and
