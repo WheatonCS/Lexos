@@ -239,9 +239,10 @@ def call_replacement_handler(
     """
 
     replacement_line_string = ''
-    # file_strings[2] == special characters
     if replacer_string and not manual_replacer_string != '':
-        # call cache_file_string to cache a file string
+        # Consolidations: cache_number = 0
+        # Lemmas:         cache_number = 1
+        # Special chars:  cache_number = 2
         cache_filestring(
             replacer_string,
             cache_folder,
@@ -959,7 +960,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text):
         if request.form['sw_option'] == "stop":
-            if sw_kw_file_string:  # file_strings[3] == stop words
+            if sw_kw_file_string:  # file_strings[3] == stop/keep words
                 cache_filestring(
                     sw_kw_file_string,
                     cache_folder,
@@ -972,7 +973,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             else:
                 return orig_text
         elif request.form['sw_option'] == "keep":
-            if sw_kw_file_string:  # file_strings[3] == keep stopwords
+            if sw_kw_file_string:  # file_strings[3] == stop/keep words
                 cache_filestring(
                     sw_kw_file_string,
                     cache_folder,
