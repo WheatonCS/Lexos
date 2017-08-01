@@ -199,6 +199,8 @@ def replacement_handler(
         else:
             return text
 
+        # With the replacer popped, the remainder of replacements_list is text
+        # that needs to be replaced
         to_replace = replacements_list[0]
 
         # Lemmas are words with boundary space, other replacements are chars
