@@ -106,6 +106,7 @@ class TestApplyFunctionExcludeTags:
             '<tag>asdf</tag>', [str.upper, str.lower, self.dummy_function]) ==\
                '<tag>asdfasdf</tag>'
 
+
 class TestDecodeBytes:
     def test_gb2312_decoding(self):
         assert decode_bytes(u'做戏之说做戏之'.encode('gb2312')) == '做戏之说做戏之'
