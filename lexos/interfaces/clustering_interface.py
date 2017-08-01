@@ -19,11 +19,12 @@ cluster_view = Blueprint('cluster', __name__)
 # Tells Flask to load this function when someone is at '/dendrogramimage'
 @cluster_view.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogram_image():
-    """
-    Reads the png image of the dendrogram and displays it on the web browser.
+    """Reads the png image of the dendrogram and displays it on the web 
+    browser.
     *dendrogramimage() linked to in analysis.html, displaying the
     dendrogram.png
-    Note: Returns a response object with the dendrogram png to flask and
+
+    :return: a response object with the dendrogram png to flask and
     eventually to the browser.
     """
     # dendrogramimage() is called in analysis.html, displaying the
@@ -39,29 +40,25 @@ def dendrogram_image():
 # Tells Flask to load this function when someone is at '/kmeans'
 @cluster_view.route("/kmeans", methods=["GET", "POST"])
 def k_means():
-    """
-    Handles the functionality on the kmeans page. It analyzes the various texts
-     and displays the class label of the files.
-    Note: Returns a response object (often a render_template call) to flask and
-     eventually to the browser.
-    """
+    """Handles the functionality on the kmeans page. It analyzes the various 
+    texts and displays the class label of the files.
 
+    :return: a response object (often a render_template call) to flask and
+    eventually to the browser.
+    """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
-
     file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
     default_k = int(len(labels) / 2)
-
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'kmeanoption' not in session:
             session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
-
         return render_template(
             'kmeans.html',
             labels=labels,
@@ -75,18 +72,15 @@ def k_means():
             kmeansdatagenerated=False,
             itm="kmeans",
             numActiveDocs=num_active_docs)
-
     if request.method == "POST":
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
         session_manager.cache_analysis_option()
         session_manager.cache_k_mean_option()
         utility.save_file_manager(file_manager)
-
         if request.form['viz'] == 'PCA':
             kmeans_index, silhouette_score, file_name_str, k_value, \
                 color_chart_str = utility.generate_k_means_pca(file_manager)
-
             return render_template(
                 'kmeans.html',
                 labels=labels,
@@ -100,13 +94,11 @@ def k_means():
                 kmeansdatagenerated=True,
                 itm="kmeans",
                 numActiveDocs=num_active_docs)
-
         elif request.form['viz'] == 'Voronoi':
             kmeans_index, silhouette_score, file_name_str, k_value, \
                 color_chart_str, final_points_list, final_centroids_list, \
                 text_data, max_x = \
                 utility.generate_k_means_voronoi(file_manager)
-
             return render_template(
                 'kmeans.html',
                 labels=labels,
@@ -129,12 +121,10 @@ def k_means():
 # Tells Flask to load this function when someone is at '/kmeansimage'
 @cluster_view.route("/kmeansimage", methods=["GET", "POST"])
 def k_means_image():
-    """
-    Reads the png image of the kmeans and displays it on the web browser.
-
+    """Reads the png image of the kmeans and displays it on the web browser.
     *kmeansimage() linked to in analysis.html, displaying the kmeansimage.png
 
-    Note: Returns a response object with the kmeansimage png to flask and
+    :return: a response object with the kmeansimage png to flask and
      eventually to the browser.
     """
     # kmeansimage() is called in kmeans.html, displaying the
@@ -169,13 +159,16 @@ def big_pca():
 # Tells Flask to load this function when someone is at '/cluster'
 @cluster_view.route("/cluster", methods=["GET", "POST"])
 def cluster():
+    """Handles the functionality on the cluster page
+
+    :return: a response object (often a render_template call) to flask and
+    eventually to the browser.
+    """
     import random
     leq = '≤'
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
-
     file_manager = utility.load_file_manager()
-
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
@@ -192,14 +185,12 @@ def cluster():
             thresholdOps=threshold_ops,
             numActiveDocs=num_active_docs,
             itm="hierarchical")
-
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
         # utility.generateDendrogram(file_manager)
         attachment_name = "den_" + request.form['title'] + ".pdf" \
             if request.form['title'] != '' else 'dendrogram.pdf'
-
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
         return send_file(
@@ -209,12 +200,10 @@ def cluster():
                 "dendrogram.pdf"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if 'dendroSVG_download' in request.form:
         # utility.generateDendrogram(file_manager)
         attachment_name = "den_" + request.form['title'] + ".svg" \
             if request.form['title'] != '' else 'dendrogram.svg'
-
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
         return send_file(
@@ -224,7 +213,6 @@ def cluster():
                 "dendrogram.svg"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if 'dendroPNG_download' in request.form:
         # utility.generateDendrogram(file_manager)
         attachment_name = "den_" + request.form['title'] + ".png" if \
@@ -239,7 +227,6 @@ def cluster():
                 "dendrogram.png"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if 'dendroNewick_download' in request.form:
         attachment_name = "den_" + request.form['title'] + ".txt" \
             if request.form['title'] != '' else 'newNewickStr.txt'
@@ -252,7 +239,6 @@ def cluster():
                 "newNewickStr.txt"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if request.method == "POST":
         # Main functions
         pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
@@ -260,20 +246,16 @@ def cluster():
             inconsistent_op, maxclust_op, distance_op, monocrit_op, \
             threshold_ops = utility.generate_dendrogram_from_ajax(
                 file_manager, leq)
-
         session["score"] = score
         session["threshold"] = threshold
         criterion = request.json['criterion']
         session["criterion"] = criterion
-
         labels = file_manager.get_active_labels()
         for key in labels:
             labels[key] = labels[key]
-
         utility.save_file_manager(file_manager)
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
-
         ver = random.random() * 100
         data = {
             "labels": labels,
@@ -296,13 +278,16 @@ def cluster():
 # Tells Flask to load this function when someone is at '/cluster-old'
 @cluster_view.route("/cluster-old", methods=["GET", "POST"])
 def cluster_old():
+    """Handles the functionality on the cluster-old page
+
+    :return: a response object (often a render_template call) to flask and
+    eventually to the browser.
+    """
     import random
     leq = '≤'
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
-
     file_manager = utility.load_file_manager()
-
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
@@ -319,7 +304,6 @@ def cluster_old():
             labels=labels,
             thresholdOps=threshold_ops,
             numActiveDocs=num_active_docs)
-
     if 'dendroPDF_download' in request.form:
         # The 'PDF' button is clicked on cluster.html.
         # sends pdf file to downloads folder.
@@ -336,7 +320,6 @@ def cluster_old():
                 "dendrogram.pdf"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if 'dendroSVG_download' in request.form:
         attachment_name = "den_" + request.form['title'] + ".svg" if \
             request.form[
@@ -348,7 +331,6 @@ def cluster_old():
                       constants.RESULTS_FOLDER + "dendrogram.svg"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if 'dendroPNG_download' in request.form:
         attachment_name = "den_" + request.form['title'] + ".png" \
             if request.form['title'] != '' else 'dendrogram.png'
@@ -360,7 +342,6 @@ def cluster_old():
                 constants.RESULTS_FOLDER + "dendrogram.png"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     if 'dendroNewick_download' in request.form:
         attachment_name = "den_" + request.form['title'] + ".txt" if \
             request.form[
@@ -374,22 +355,18 @@ def cluster_old():
                 "newNewickStr.txt"),
             attachment_filename=attachment_name,
             as_attachment=True)
-
     # Main functions
     # utility.generateDendrogram
     pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
         distance_min, monocrit_max, monocrit_min, threshold, inconsistent_op, \
         maxclust_op, distance_op, monocrit_op, threshold_ops = \
         utility.generate_dendrogram(file_manager, leq)
-
     labels = file_manager.get_active_labels()
     for key in labels:
         labels[key] = labels[key]
-
     utility.save_file_manager(file_manager)
     session_manager.cache_analysis_option()
     session_manager.cache_hierarchy_option()
-
     ver = random.random() * 100
     return render_template(
         'cluster.html',
