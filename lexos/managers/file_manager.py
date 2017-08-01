@@ -8,6 +8,7 @@ from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
 import numpy as np
+import pandas as pd
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
@@ -1040,7 +1041,12 @@ class FileManager:
         if round_decimal:
             final_matrix = np.round(final_matrix, decimals=6)
 
-        return final_matrix, words, temp_labels
+        # pack the data into a data frame
+        dtm_data_frame = pd.DataFrame(data=final_matrix,
+                                      index=temp_labels,
+                                      columns=words)
+
+        return dtm_data_frame
 
     @staticmethod
     def get_most_frequent_word(lower_rank_bound: int,
