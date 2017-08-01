@@ -542,6 +542,7 @@ def get_punctuation_string() -> str:
     pickle.dump(
         all_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
+    # The resulting string looks like "[,.?!@<more punctuation here>^&* ]"
     all_punctuation_str = "".join(chr(key) for key in all_punctuation_map)
     punctuation_regex = "[" + all_punctuation_str + " ]"
 
