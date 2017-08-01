@@ -105,7 +105,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
     total_sum = np.sum(count_matrix).item()
     count_matrix_sum = np.sum(count_matrix, axis=0)
     # Generate data
-    for row in count_matrix:
+    for row in list(count_matrix):
         word_z_score_dict = _z_test_word_list_(
             count_list_i=row, count_list_j=count_matrix_sum,
             row_sum=np.sum(row).item(), total_sum=total_sum, words=words)
@@ -136,16 +136,9 @@ def analyze_para_to_group(group_para_lists):
     # group list is the word list of each group (word to word count within the
     # whole group)
     assert group_para_lists, EMPTY_LIST_MESSAGE
-    group_lists = []
-    group_word_count = []  # the total word count of each group
-    group_num_words = []  # a list of number of unique words in each group
+    group_lists = [] # the total word count of each group
     for chunk in group_para_lists:
         group_lists.append(merge_list(chunk))
-        group_word_count.append(sum(group_lists[-1].values()))
-        group_num_words.append(len(group_lists[-1]))
-    corpus_list = merge_list(group_lists)
-    total_word_count = sum(group_word_count)
-    total_num_words = len(corpus_list)
     num_group = len(group_lists)  # number of groups
     all_results = {}  # the value to return
 
@@ -154,10 +147,8 @@ def analyze_para_to_group(group_para_lists):
     # there are two element in the tuple, each one is a index of groups
     # (for example the first group will have index 0)
     # two group index cannot be equal
-    comp_map = itertools.product(
-        list(
-            range(num_group)), list(
-            range(num_group)))
+    comp_map = itertools.product(list(range(num_group)),
+                                 list(range(num_group)))
     comp_map = [(i_index, j_index)
                 for (i_index, j_index) in comp_map if i_index != j_index]
 
@@ -181,8 +172,7 @@ def analyze_para_to_group(group_para_lists):
             # pack the sorted result in sorted list
             all_results.update(
                 {(group_comp_index, para_index, group_base_index):
-                    sorted_word_zscore_tuple_list})
-
+                     sorted_word_zscore_tuple_list})
     return all_results
 
 
