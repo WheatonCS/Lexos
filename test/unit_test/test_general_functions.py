@@ -120,3 +120,9 @@ class TestDecodeBytes:
 
     def test_utf8_decoding(self):
         assert decode_bytes(u'España'.encode('utf-8')) == 'España'
+
+    def test_iso8859_1_decoding(self):
+        assert decode_bytes('Äpple'.encode()) == 'Äpple'
+
+    def test_windows_1251_decoding(self):
+        assert decode_bytes('Zемфира'.encode()) == 'Zемфира'
