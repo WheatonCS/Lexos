@@ -100,6 +100,7 @@ def nl2br(eval_ctx, value):
 # ==== add error handlers ====
 @app.errorhandler(404)
 def page_not_found(_):
+    """Custom 404 Page"""
     app.logger.error('Page not found: %s', request.path)
     return render_template('404.html'), 404
 
