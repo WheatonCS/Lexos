@@ -1360,17 +1360,8 @@ class FileManager:
 
     def get_class_division_map(self):
         """:return: a panda frame that contains class division map."""
-        # TODO: get rid of this horrible function
-        """
-        Args:
 
-        Returns:
-            division_map:
-            name_map:
-            class_label_map:
-        """
         # create division map
-
         files = self.get_active_files()
         temp_labels = []
         temp_classes = []
@@ -1383,53 +1374,6 @@ class FileManager:
             index=temp_classes, columns=temp_labels)
         for file in files:
             division_map[file.label][file.class_label] = 1
-
-        print("DONE")
-
-        """
-        division_map = [[0]]  # initialize the division map (at least one file)
-        files = self.get_active_files()
-        try:
-            # try to get temp label
-            name_map = [[request.form["file_" + str(files[0].id)]]]
-        except KeyError:
-            try:
-                name_map = [[files[0].label]]  # user send a get request.
-            except IndexError:
-                return []  # there is no active file
-        class_label_map = [files[0].class_label]
-
-        # because 0 is defined in the initialize
-        for file_id in range(1, len(files)):
-
-            inside_existing_group = False
-
-            for i in range(len(division_map)):  # for group in division map
-                for existing_id in division_map[i]:
-                    if files[existing_id].class_label == \
-                            files[file_id].class_label:
-                        division_map[i].append(file_id)
-                        try:
-                            # try to get temp label
-                            name_map[i].append(
-                                request.form["file_" + str(files[file_id].id)])
-                        except KeyError:
-                            name_map[i].append(files[file_id].label)
-                        inside_existing_group = True
-                        break
-
-            if not inside_existing_group:
-                division_map.append([file_id])
-                try:
-                    # try to get temp label
-                    name_map.append(
-                        [request.form["file_" + str(files[file_id].id)]])
-                except KeyError:
-                    name_map.append([files[file_id].label])
-                class_label_map.append(files[file_id].class_label)
-
-        print("")
-        """
         return division_map
 
     def get_previews_of_all(self):
