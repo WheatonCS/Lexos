@@ -71,21 +71,35 @@ class TestGeneralFunctions:
                                                          't;en&quot;&gt;&lt;' \
                                                          '/html&gt;'
 
-    def test_apply_function_exclude_tags(self):
-        input_str = "<tag>asdf</tag>"
 
-        def dummy_function(input_string):
-            return input_string + input_string
+class TestApplyFunctionExcludeTags:
+    input_str = "<tag>asdf</tag>"
 
+    def dummy_function(self, input_string):
+        return input_string + input_string
+
+    def test_one_function(self):
         assert apply_function_exclude_tags(
-            input_str, [dummy_function]) == '<tag>asdfasdf</tag>'
+            self.input_str, [self.dummy_function]) == '<tag>asdfasdf</tag>'
         assert apply_function_exclude_tags(
-            input_str, [str.upper]) == '<tag>ASDF</tag>'
+            self.input_str, [str.upper]) == '<tag>ASDF</tag>'
+
+    def test_two_functions(self):
         assert apply_function_exclude_tags(
-            '<tag>asdf</tag>', [str.upper, dummy_function]) == \
+            '<tag>asdf</tag>', [str.upper, self.dummy_function]) == \
                '<tag>ASDFASDF</tag>'
 
-    def test_decode_bytes(self):
+    def test_multiple_functions(self):
+        assert apply_function_exclude_tags(
+            '<tag>asdf</tag>', [str.upper, str.lower, self.dummy_function]) ==\
+               '<tag>asdfasdf</tag>'
+
+class TestDecodeBytes:
+    def test_gb2312_decoding(self):
         assert decode_bytes(u'做戏之说做戏之'.encode('gb2312')) == '做戏之说做戏之'
+
+    def test_utf16_decoding(self):
         assert decode_bytes(u'абвгдежзийкл'.encode('utf-16')) == 'абвгдежзийкл'
+
+    def test_utf8_decoding(self):
         assert decode_bytes(u'España'.encode('utf-8')) == 'España'
