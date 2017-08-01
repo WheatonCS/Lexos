@@ -14,6 +14,9 @@ from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.helpers.general_functions import merge_list
 
 
+# TODO: Bugfix: crash if go top word directly without uploading any files
+
+
 def _z_test_(p1, pt, n1, nt):
     """Examines if a particular word is an anomaly
 
@@ -64,28 +67,20 @@ def group_division(word_lists, group_map):
     return group_map
 
 
-def _z_test_word_list_(word_list_i, word_list_j):
+def _z_test_word_list_(count_list_i, count_list_j, row_sum, total_sum, words):
     """Processes z-test on all the words of two input word lists
 
-    :param word_list_i: first word list, a dictionary maps word to word counts
-    :param word_list_j: second word list, a dictionary maps word to word counts
+    :param count_list_i: first word list, a dictionary maps word to word counts
+    :param count_list_j: second word list, a dictionary maps word to word
+    counts
     :return: a dictionary maps words to z-scores
     """
-    total_count_i = sum(word_list_i.values())
-    total_count_j = sum(word_list_j.values())
-    total_list = merge_list([word_list_j, word_list_i])
     word_z_score_dict = {}
-    for word in total_list:
-        try:
-            p_i = word_list_i[word] / total_count_i
-        except KeyError:
-            p_i = 0
-        try:
-            p_j = word_list_j[word] / total_count_j
-        except KeyError:
-            p_j = 0
+    for count, word in enumerate(words):
+        p_i = count_list_i[count] / row_sum
+        p_j = count_list_j[count] / total_sum
         z_score = round(
-            _z_test_(p1=p_i, pt=p_j, n1=total_count_i, nt=total_count_j), 4)
+            _z_test_(p1=p_i, pt=p_j, n1=row_sum, nt=total_sum), 4)
         # get rid of the insignificant results, insignificant means those
         # with absolute values smaller than 1.96
         if abs(z_score) >= 1.96:
@@ -97,10 +92,9 @@ def analyze_all_to_para(count_matrix, words):
     # TODO: Figure out if simply putting in one file makes sense or not.
     """Analyzes each single word compare to the total documents
 
-    :param word_lists: Array of words, where each element of array represents a
-                       segment, which is in dictionary type. Each element in
-                       the dictionary maps word inside that segment to its
-                       frequency.
+    :param count_matrix: a 2D numpy array where each row contains the word
+                         count of the corresponding file.
+    :param words: words that show up at least one time in the whole corpus.
     :return: an array where each element of array is an array, represents a
              segment and it is sorted via z_score, each element array is a
              tuple: (word, corresponding z_score)
@@ -108,18 +102,17 @@ def analyze_all_to_para(count_matrix, words):
     assert np.size(count_matrix) > 0, EMPTY_LIST_MESSAGE
     # initialize
     all_results = []  # the value to return
-    # calculation
-
+    total_sum = np.sum(count_matrix).item()
+    count_matrix_sum = np.sum(count_matrix, axis=0)
+    # Generate data
     for row in count_matrix:
-        word_z_score_dict = _z_test_word_list_(word_list_i=row,
-                                               word_list_j=count_matrix)
-        sorted_list = sorted(
-            list(word_z_score_dict.items()),
-            key=lambda item: abs(item[1]),
-            reverse=True
-        )
+        word_z_score_dict = _z_test_word_list_(
+            count_list_i=row, count_list_j=count_matrix_sum,
+            row_sum=np.sum(row).item(), total_sum=total_sum, words=words)
+        sorted_list = sorted(list(word_z_score_dict.items()),
+                             key=lambda item: abs(item[1]),
+                             reverse=True)
         all_results.append(sorted_list)
-
     return all_results
 
 
@@ -179,8 +172,8 @@ def analyze_para_to_group(group_para_lists):
 
         # enumerate through all the paragraphs in group_comp_paras
         for para_index, paras in enumerate(group_comp_paras):
-            word_z_score_dict = _z_test_word_list_(word_list_i=paras,
-                                                   word_list_j=group_base_list)
+            word_z_score_dict = _z_test_word_list_(count_list_i=paras,
+                                                   count_list_j=group_base_list)
             # sort the dictionary
             sorted_word_zscore_tuple_list = sorted(
                 list(word_z_score_dict.items()), key=lambda item: abs(item[1]),
@@ -245,8 +238,8 @@ def analyze_group_to_group(group_para_lists):
 
         group_comp_list = group_word_lists[group_comp_index]
         group_base_list = group_word_lists[group_base_index]
-        word_z_score_dict = _z_test_word_list_(word_list_i=group_comp_list,
-                                               word_list_j=group_base_list)
+        word_z_score_dict = _z_test_word_list_(count_list_i=group_comp_list,
+                                               count_list_j=group_base_list)
 
         # sort the dictionary
         sorted_word_zscore_tuple_list = sorted(
