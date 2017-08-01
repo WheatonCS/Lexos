@@ -27,4 +27,4 @@ class TestGetDendroDistance:
                          [0.33333333333333331, 0.66666666666666663],
                          [0.66666666666666663, 0.33333333333333331]]
         assert get_dendro_distances(linkage_method, distance_metric,
-                                     dendro_matrix) == [1.0, 1.0]
+                                    dendro_matrix) == [1.0, 1.0]
