@@ -89,7 +89,7 @@ class TestStripLeadBlankLines:
         strip_leading_blank_lines(test_queue_blank_lines)
 
         # covert the queue back to list and assert  `
-        assert list(test_queue_blank_lines.queue) == ["", "test"]
+        assert list(test_queue_blank_lines.queue) == ["test"]
 
 
 class TestStripLeadChars:
@@ -532,8 +532,8 @@ class TestCutByNumbers:
 
 class TestCutByMileStone:
     def test_milestone_empty_text(self):
-        assert cut_by_milestone(text="", cutting_value=" ") == []
-        assert cut_by_milestone(text="", cutting_value="bobcat") == []
+        assert cut_by_milestone(text="", cutting_value=" ") == [""]
+        assert cut_by_milestone(text="", cutting_value="bobcat") == [""]
 
     def test_milestone_empty_milestone(self):
         try:
@@ -548,9 +548,9 @@ class TestCutByMileStone:
         assert cut_by_milestone(text="test\ntest", cutting_value="a") == [
             "test\ntest"]
         assert cut_by_milestone(text="test\ntest", cutting_value="t") == [
-            "es", "\n", "es"]
+            "", "es", "\n", "es", ""]
         assert cut_by_milestone(text="ABAAB", cutting_value="A") \
-            == ["B", "B"]
+            == ["", "B", "",  "B"]
 
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
@@ -580,7 +580,7 @@ class TestCutByMileStone:
     def test_milestone_whole_text_milestone(self):
         text_content = "The bobcat slept all day."
         milestone = "The bobcat slept all day."
-        assert cut_by_milestone(text_content, milestone) == []
+        assert cut_by_milestone(text_content, milestone) == ["", ""]
 
 
 class TestCutterFunction:
@@ -606,7 +606,7 @@ class TestCutterFunction:
         assert cut(text="test", cutting_value="1", cutting_type="milestone",
                    overlap="0", last_prop="0") == ["test"]
         assert cut(text="test", cutting_value="test", cutting_type="milestone",
-                   overlap="0", last_prop="0") == []
+                   overlap="0", last_prop="0") == ["", ""]
         assert cut(text="test", cutting_value="e", cutting_type="milestone",
                    overlap="0", last_prop="0") == ["t", "st"]
         assert cut(text="test\ntesttest", cutting_value="3",
