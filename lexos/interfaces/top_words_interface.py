@@ -2,8 +2,8 @@ from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
-from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
+from lexos.managers import utility, session_manager as session_manager
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -38,13 +38,13 @@ def top_words():
 
         # get the class label and eliminate the id (this is not the unique id
         # in file_manager)
-        class_division_map = file_manager.get_class_division_map()[1:]
-
+        class_division_map = file_manager.get_class_division_map()
+        num_class = class_division_map.shape[0]
         # get number of class
-        try:
-            num_class = len(class_division_map[1])
-        except IndexError:
-            num_class = 0
+#        try:
+#            num_class = len(class_division_map[1])
+#        except IndexError:
+#            num_class = 0
 
         return render_template(
             'topword.html',
@@ -86,7 +86,7 @@ def top_words():
 
         else:
             # get the number of class
-            num_class = len(file_manager.get_class_division_map()[2])
+            num_class = file_manager.get_class_division_map().shape[0]
 
             # only give the user a preview of the topWord
             for i in range(len(result)):
