@@ -456,21 +456,15 @@ def get_remove_punctuation_map(
         # convert all those types of hyphens into the ascii minus
         for value in hyphen_values:
             text = text.replace(value, chosen_hyphen_value)
-        # now that all those hyphens are the ascii minus, remove it from the
-        # map so no hyphens will be deleted from the text
+        # now that all those hyphens are the ascii minus, delete it from the
+        # map so no hyphens will be scrubbed from the text
         del remove_punctuation_map[45]
 
-    if amper:  # If keeping ampersands
+    # If Remove All Punctuation and Keep Ampersands are ticked
+    if amper:
 
-        amper_values = [
-            "\uFF06",
-            "\u214B",
-            "\U0001F674",
-            "\uFE60",
-            "\u0026",
-            "\U0001F675",
-            "\u06FD",
-            "\U000E0026"]
+        amper_values = ["\uFF06", "\u214B", "\U0001F674", "\uFE60", "\u0026",
+                        "\U0001F675", "\u06FD", "\U000E0026"]
 
         chosen_amper_value = "\u0026"
 
@@ -478,7 +472,7 @@ def get_remove_punctuation_map(
         for value in amper_values:
             text = text.replace(value, chosen_amper_value)
 
-        # Remove chosen ampersand from remove_punctuation_map
+        # Delete chosen ampersand from remove_punctuation_map
         del remove_punctuation_map[38]
 
     # this function has the side-effect of altering the text (both for apos
