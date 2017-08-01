@@ -846,8 +846,7 @@ class FileManager:
     def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
                    norm_option: str, only_char_grams_within_words: bool,
                    n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
-                   round_decimal: bool=False) -> \
-            pd.DataFrame:
+                   round_decimal: bool=False) -> pd.DataFrame:
         # TODO: remove round_decimal
         """Get the document term matrix (DTM) of all the active files
 
