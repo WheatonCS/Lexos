@@ -13,6 +13,8 @@ NON_NEGATIVE_INDEX_MESSAGE = "the index should be larger than or equal to zero"
 MATRIX_DIMENSION_UNEQUAL_MESSAGE = "the dimension of the matrix " \
     "should be equal"
 EMPTY_LIST_MESSAGE = "the list should not be empty"
+WINDOW_SIZE_LARGE_MESSAGE = "The window size must be less than or equal to" \
+                            " the length of the given document"
 INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
 EMPTY_MILESTONE_MESSAGE = "the milestone should not be empty"
