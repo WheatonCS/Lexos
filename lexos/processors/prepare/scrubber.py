@@ -109,7 +109,8 @@ def handle_special_characters(text: str) -> str:
                         # put the key in the array for the unicode
                         unicode_characters.append(key)
 
-        r = make_replacer(dict(list(zip(character_entities, unicode_characters))))
+        r = make_replacer(dict(list(zip(
+            character_entities, unicode_characters))))
         # r is a function created by make_replacer(), _do_replace(), and
         # replace().
         # do_replace() returns the new char to use when called with the char to
@@ -239,7 +240,7 @@ def call_replacement_handler(
     """
 
     replacement_line_string = ''
-    if replacer_string and not manual_replacer_string != '':
+    if replacer_string and not manual_replacer_string:
         # Consolidations: cache_number = 0
         # Lemmas:         cache_number = 1
         # Special chars:  cache_number = 2
@@ -248,12 +249,12 @@ def call_replacement_handler(
             cache_folder,
             cache_file_names[cache_number])
         replacement_line_string = replacer_string
-    elif not replacer_string and manual_replacer_string != '':
+    elif not replacer_string and manual_replacer_string:
         replacement_line_string = manual_replacer_string
-    elif replacer_string and manual_replacer_string != '':
+    elif replacer_string and manual_replacer_string:
         replacement_line_string = '\n'.join(
             [replacer_string, manual_replacer_string])
-    else:
+    else:        # not replacer_string and not manual_replacer_string
         text = handle_special_characters(text)
 
     if replacement_line_string != '':
