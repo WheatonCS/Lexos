@@ -309,7 +309,7 @@ def handle_tags(text: str) -> str:
                     '\s*/?)>',
                     re.MULTILINE | re.DOTALL | re.UNICODE)
 
-                # subsitute all matching patterns into one WHITEspace
+                # substitute all matching patterns with one space
                 text = re.sub(pattern, " ", text)
 
             # in GUI:  Remove Element and All Its Contents
@@ -326,10 +326,10 @@ def handle_tags(text: str) -> str:
                     ">",
                     re.MULTILINE | re.DOTALL | re.UNICODE)
 
-                # subsitute all matching patterns into one WHITEspace
+                # substitute all matching patterns with one space
                 text = re.sub(pattern, " ", text)
 
-            # in GUI:  Replace Element and Its Contents wtih Attribute Value
+            # in GUI:  Replace Element and Its Contents with Attribute Value
             elif action == "replace-element":
                 attribute = session['xmlhandlingoptions'][tag]["attribute"]
                 pattern = re.compile(
@@ -340,13 +340,13 @@ def handle_tags(text: str) -> str:
                     ".*?>",
                     re.MULTILINE | re.DOTALL | re.UNICODE)
 
-                # subsitute all matching patterns into one WHITEspace
+                # substitute all matching patterns with one space
                 text = re.sub(pattern, attribute, text)
 
             else:
                 pass  # Leave Tag Alone
 
-        # One last catch-all- removes extra white space from all the removed
+        # One last catch-all- removes extra whitespace from all the removed
         # tags
         text = re.sub('[\t ]+', " ", text, re.UNICODE)
 
