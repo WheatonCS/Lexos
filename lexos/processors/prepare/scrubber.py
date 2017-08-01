@@ -568,9 +568,10 @@ def remove_stopwords(text: str, removal_string: str) -> str:
         line = re.split('[,. ]', line)
         remove_list.extend(line)
 
+    # get rid of empty strings in remove_list
     remove_list = [word for word in remove_list if word != '']
 
-    # Create pattern
+    # Create regex pattern
     remove_string = "|".join(remove_list)
     # Compile pattern with bordering \b markers to demark only full words
     pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
