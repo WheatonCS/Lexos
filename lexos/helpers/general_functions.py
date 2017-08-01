@@ -162,7 +162,7 @@ def dict_to_matrix(word_lists: list) -> tuple:
 
 def html_escape(input_string: str) -> str:
     """escape all the html content
-    
+
     :param input_string: A string that may contain html tags
     :return: the string with all the html syntax escaped so that it will be
     safe to put the returned string to html
@@ -202,7 +202,7 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
 
 def decode_bytes(raw_bytes: bytes) -> str:
     """decode the raw bytes, typically used to decode `request.file`
-    
+
     :param raw_bytes: the bytes you get and want to decode to string
     :return: A decoded string
     """
