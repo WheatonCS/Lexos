@@ -23,7 +23,7 @@ from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 from lexos.processors.analyze import dendrogrammer
 from lexos.processors.analyze.topword import analyze_all_to_para, \
-    group_division, test_para_to_group, test_group_to_group
+    group_division, analyze_para_to_group, analyze_group_to_group
 
 
 def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
@@ -1385,7 +1385,7 @@ def generate_z_test_top_word(file_manager: FileManager):
         group_word_lists = group_division(word_lists, division_map)
 
         # test
-        analysis_result = test_para_to_group(
+        analysis_result = analyze_para_to_group(
             group_word_lists, option=option, low=low, high=high)
 
         # convert to human readable form
@@ -1415,7 +1415,7 @@ def generate_z_test_top_word(file_manager: FileManager):
         group_word_lists = group_division(word_lists, division_map)
 
         # test
-        analysis_result = test_group_to_group(
+        analysis_result = analyze_group_to_group(
             group_word_lists, option=option, low=low, high=high)
 
         # convert to human readable form
