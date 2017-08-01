@@ -70,17 +70,9 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
     """
     # values are the same from the previous ones, but the formats are slightly
     # different for dendrogram
-    linkage_method = "Single"
-    distance_metric = "Euclidean"
-    dendro_matrix = [[0, 10], [10, 10], [20, 10]]
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
-
-    distance_list = []
-    for i in range(0, len(z)):
-        temp = z[i][2]
-        rounded_dist = round(temp, 5)
-        distance_list.append(rounded_dist)
+    distance_list = [round(float(z[i][2]), 5) for i in range(0, len(z))]
 
     return distance_list
 
