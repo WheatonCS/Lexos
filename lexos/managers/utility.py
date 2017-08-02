@@ -18,7 +18,6 @@ import lexos.processors.analyze.information as information
 import lexos.processors.analyze.similarity as similarity
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
-from lexos.helpers.general_functions import matrix_to_dict
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 from lexos.processors.analyze import dendrogrammer
@@ -1335,18 +1334,6 @@ def generate_z_test_top_word(file_manager: FileManager):
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=False,
-        grey_word=grey_word,
-        mfw=mfw,
-        cull=culling)
-    word_lists = matrix_to_dict(count_matrix)
-
     dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
@@ -1367,17 +1354,13 @@ def generate_z_test_top_word(file_manager: FileManager):
             human_result.append([header, analysis_result[count]])
 
     elif test_by_class == 'classToPara':  # test by class
-
         # create division map
         division_map = file_manager.get_class_division_map()
         if division_map.shape[0] == 1:
-            raise ValueError(
-                'only one class given, cannot do Z-test by class, '
-                'at least 2 classes needed')
-
+            raise ValueError(" only one class given, cannot do Z-test by "
+                             "class, at least 2 classes needed")
         # divide into group
         group_values, name_map = group_division(dtm_data, division_map.values)
-
         # test
         analysis_result = analyze_para_to_group(group_values)
 
