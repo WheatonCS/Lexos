@@ -2,8 +2,8 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
     get_punctuation_string, get_remove_punctuation_map, \
     get_remove_digits_map, call_replacement_handler, get_all_punctuation_map, \
-    delete_words
-from test.helpers import special_chars_and_punct as chars
+    delete_words, handle_gutenberg
+from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 # handle_special_characters
 
@@ -479,7 +479,12 @@ class TestGetRemoveWhitespaceMap:
 
 class TestHandleGutenberg:
     def test_handle_gutenberg(self):
-        pass
-
+        assert handle_gutenberg("") == ""
+        assert handle_gutenberg(guten.TEXT_NEITHER) == guten.TEXT_NEITHER
+        assert handle_gutenberg(guten.TEXT_FRONT) == \
+            guten.FRONT_EXTRA + guten.TEXT_NEITHER
+        assert handle_gutenberg(guten.TEXT_BACK) == guten.TEXT_NEITHER
+        assert handle_gutenberg(guten.TEXT_BOTH) == \
+            guten.FRONT_EXTRA + guten.TEXT_NEITHER
 
 # scrub
