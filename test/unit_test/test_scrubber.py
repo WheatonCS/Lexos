@@ -1,7 +1,8 @@
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
     get_punctuation_string, get_remove_punctuation_map, \
-    get_remove_digits_map, call_replacement_handler, get_all_punctuation_map
+    get_remove_digits_map, call_replacement_handler, get_all_punctuation_map, \
+    delete_words
 from test.helpers import special_chars_and_punct as chars
 
 # handle_special_characters
@@ -348,10 +349,17 @@ class TestGetPunctuationString:
 
 
 class TestDeleteWords:
-    test_string = "Many words were written, but not much was said at all."
+    test_string = "Many words were written, but not many of the words said " \
+                  "much at all."
 
     def test_delete_words(self):
-        pass
+        assert delete_words(
+            self.test_string, ["Many", "words", "written", "all"]) == \
+               " were , but not many of the said much at ."
+        assert delete_words(self.test_string, [""]) == self.test_string
+        assert delete_words(self.test_string, []) == self.test_string
+        assert delete_words("", ["words"]) == ""
+        assert delete_words("", []) == ""
 
 
 class TestRemoveStopwords:
