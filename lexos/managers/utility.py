@@ -286,13 +286,23 @@ def generate_statistics(file_manager: FileManager) -> \
         use_freq=False,
         mfw=mfw,
         cull=culling)
+    # grab data from data frame
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
 
-    file_info_list = []
-    for count, label in enumerate(dtm_data.index.values):
-        file_info_list.append(information.FileInformation(
-            count_list=dtm_data.values[count, :], file_name=label))
-    corpus_info = information.CorpusInformation(count_matrix=dtm_data.values,
-                                                labels=dtm_data.index.values)
+    # helper function gets information for each file
+    def get_file_info(row_index, label):
+        return information.FileInformation(
+            count_list=count_matrix[row_index, :],
+            file_name=label)
+
+    # put information of each file into a list
+    file_info_list = [get_file_info(row_index=ind, label=label)
+                      for ind, label in enumerate(labels)]
+
+    # get information of the whole corpus
+    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
+                                                labels=labels)
     return file_info_list, corpus_info
 
 
