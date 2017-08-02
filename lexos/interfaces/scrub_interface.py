@@ -53,6 +53,8 @@ def scrub():
 # Tells Flask to load this function when someone is at '/doScrubbing'
 @scrubber_view.route("/doScrubbing", methods=["GET", "POST"])
 def do_scrubbing():
+    """:return: a json object with a scrubbed preview
+    """
     file_manager = utility.load_file_manager()
     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on
     # scrub.html.
