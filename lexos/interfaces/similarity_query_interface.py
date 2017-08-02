@@ -1,8 +1,9 @@
+import numpy as np
 from flask import request, session, render_template, send_file, Blueprint
 
 from lexos.helpers import constants as constants
-from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
+from lexos.managers import utility, session_manager as session_manager
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -49,8 +50,14 @@ def similarity():
     if 'gen-sims' in request.form:
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        docs_list_score, docs_list_name = utility.generate_similarities(
-            file_manager)
+        score_name_data_frame = utility.generate_similarities(file_manager)
+
+        docs_score = np.concatenate(score_name_data_frame.values)
+        docs_name = np.array(score_name_data_frame.index)
+
+        docs_list_score = '***'.join(str(score) for score in docs_score) \
+                          + '***'
+        docs_list_name = '***'.join(name for name in docs_name) + '***'
 
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
