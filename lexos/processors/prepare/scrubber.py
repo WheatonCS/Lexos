@@ -549,6 +549,27 @@ def get_punctuation_string() -> str:
     return punctuation_regex
 
 
+def delete_words(text: str, remove_list: List[str]) -> str:
+    """Deletes the words in remove_list from the text.
+
+    :param text: The original text string.
+    :param remove_list: A list of words to be removed from the text.
+    :return: The updated text, containing only words that were not in
+        remove_list.
+    """
+
+    # Create regex pattern
+    remove_string = "|".join(remove_list)
+    # Compile pattern with bordering \b markers to demark only full words
+    pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
+    # Swap target words for empty string
+    scrubbed_text = pattern.sub('', text)
+
+    # Replace multiple spaces with a single one
+    scrubbed_text = re.sub(' +', ' ', scrubbed_text)
+    return scrubbed_text
+
+
 def remove_stopwords(text: str, removal_string: str) -> str:
     """Removes stopwords from the text.
 
@@ -561,26 +582,19 @@ def remove_stopwords(text: str, removal_string: str) -> str:
 
     splitlines = removal_string.split("\n")
 
-    remove_list = []
+    remove_pieces = []
     for line in splitlines:
         line = line.strip()
         # Using re for multiple delimiter splitting
         line = re.split('[,. ]', line)
-        remove_list.extend(line)
+        remove_pieces.extend(line)
 
     # get rid of empty strings in remove_list
-    remove_list = [word for word in remove_list if word != '']
+    remove_list = [word for word in remove_pieces if word != '']
 
-    # Create regex pattern
-    remove_string = "|".join(remove_list)
-    # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
-    # Swap stopwords for empty string
-    text = pattern.sub('', text)
+    scrubbed_text = delete_words(text, remove_list)
 
-    # Replace multiple spaces with a single one
-    text = re.sub(' +', ' ', text)
-    return text
+    return scrubbed_text
 
 
 def keep_words(text: str, non_removal_string: str) -> str:
@@ -618,21 +632,13 @@ def keep_words(text: str, non_removal_string: str) -> str:
         line = re.split(token_regex, line)
         text_list.extend(line)
 
+    # get rid of empty strings in text_list
     text_list = [word for word in text_list if word != '']
 
     remove_list = [word for word in text_list if word not in keep_list]
+    scrubbed_text = delete_words(text, remove_list)
 
-    # Create pattern
-    remove_string = "|".join(remove_list)
-    # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
-
-    # Swap non-keepwords for empty string
-    text = re.sub(pattern, '', text)
-
-    # Replace multiple spaces with a single one
-    text = re.sub(' +', ' ', text)
-    return text
+    return scrubbed_text
 
 
 def get_remove_whitespace_map(
