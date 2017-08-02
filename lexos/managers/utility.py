@@ -1362,13 +1362,14 @@ def generate_z_test_top_word(file_manager: FileManager):
         # divide into group
         group_values, name_map = group_division(dtm_data, division_map.values)
         # test
-        analysis_result = analyze_para_to_group(group_values)
+        analysis_result = analyze_para_to_group(group_values,
+                                                dtm_data.columns.values)
 
         # convert to human readable form
         human_result = []
         for key in list(analysis_result.keys()):
             file_name = name_map[key[0]][key[1]]
-            comp_class_name = class_label_map[key[2]]
+            comp_class_name = division_map.index.values[key[2]]
             if comp_class_name == '':
                 header = 'Document "' + file_name + \
                          '" compared to Class: untitled'
@@ -1379,25 +1380,20 @@ def generate_z_test_top_word(file_manager: FileManager):
 
     elif test_by_class == 'classToClass':
         # create division map
-        division_map, name_map, class_label_map = \
-            file_manager.get_class_division_map()
-
-        if len(division_map) == 1:
-            raise ValueError(
-                'only one class given, cannot do Z-test By class, '
-                'at least 2 class needed')
-
+        division_map = file_manager.get_class_division_map()
+        if division_map.shape[0] == 1:
+            raise ValueError(" only one class given, cannot do Z-test by "
+                             "class, at least 2 classes needed")
         # divide into group
-        group_word_lists = group_division(word_lists, division_map)
-
+        group_values, name_map = group_division(dtm_data, division_map.values)
         # test
-        analysis_result = analyze_group_to_group(group_word_lists)
-
+        analysis_result = analyze_group_to_group(group_values,
+                                                 dtm_data.columns.values)
         # convert to human readable form
         human_result = []
         for key in list(analysis_result.keys()):
-            base_class_name = class_label_map[key[0]]
-            comp_class_name = class_label_map[key[1]]
+            base_class_name = division_map.index.values[key[0]]
+            comp_class_name = division_map.index.values[key[1]]
             if comp_class_name == '':
                 header = 'Class "' + base_class_name + \
                          '" compared to Class: untitled'
