@@ -122,6 +122,8 @@ def download_documents():
 
 @manage_view.route("/enableRows", methods=["GET", "POST"])
 def enable_rows():
+    """:return: string indicating that it has succeeded
+    """
     file_manager = utility.load_file_manager()
     for file_id in request.json:
         file_manager.enable_files([file_id, ])
@@ -131,6 +133,8 @@ def enable_rows():
 
 @manage_view.route("/disableRows", methods=["GET", "POST"])
 def disable_rows():
+    """:return: string indicating that it has succeeded
+    """
     file_manager = utility.load_file_manager()
     for file_id in request.json:
         file_manager.disable_files([file_id, ])
@@ -140,6 +144,9 @@ def disable_rows():
 
 @manage_view.route("/getPreview", methods=["GET", "POST"])
 def get_previews():
+    """:return: a json object with the id, label, and preview text for all
+    text files
+    """
     file_manager = utility.load_file_manager()
     file_id = int(request.data)
     file_label = file_manager.files[file_id].label
@@ -153,6 +160,10 @@ def get_previews():
 
 @manage_view.route("/setLabel", methods=["GET", "POST"])
 def set_label():
+    """sets the label of a file
+
+    :return: string indicating that it has succeeded
+    """
     file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
     new_name = request.json[1]
@@ -164,6 +175,10 @@ def set_label():
 
 @manage_view.route("/setClass", methods=["GET", "POST"])
 def set_class():
+    """sets a class
+
+    :return: string indicating that it has succeeded
+    """
     file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
     new_class_label = request.json[1]
@@ -174,6 +189,8 @@ def set_class():
 
 @manage_view.route("/deleteOne", methods=["GET", "POST"])
 def delete_one():
+    """:return: string indicating that it has succeeded
+    """
     file_manager = utility.load_file_manager()
     file_manager.delete_files([int(request.data)])
     utility.save_file_manager(file_manager)
@@ -182,6 +199,8 @@ def delete_one():
 
 @manage_view.route("/deleteSelected", methods=["GET", "POST"])
 def delete_selected():
+    """:returns json object with the ids of the files to delete
+    """
     file_manager = utility.load_file_manager()
     file_ids = file_manager.delete_active_files()
     utility.save_file_manager(file_manager)
@@ -201,6 +220,7 @@ def set_class_selected():
 
 @manage_view.route("/mergeDocuments", methods=["GET", "POST"])
 def merge_documents():
+    """:return: json object with the new file's id and preview"""
     print("Merging...")
     file_manager = utility.load_file_manager()
     file_manager.disable_all()
