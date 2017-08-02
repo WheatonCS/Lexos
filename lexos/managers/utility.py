@@ -607,6 +607,7 @@ def generate_k_means_pca(file_manager: FileManager):
         n_gram_size=ngram_size,
         use_freq=False,
         grey_word=grey_word,
+        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
@@ -693,6 +694,7 @@ def generate_k_means_voronoi(file_manager: FileManager):
         n_gram_size=ngram_size,
         use_freq=False,
         grey_word=grey_word,
+        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
@@ -1664,13 +1666,14 @@ def xml_handling_options(data: dict = {}):
                 session_manager.session['xmlhandlingoptions'][key] = {
                     "action": data_values[0],
                     "attribute": data["attributeValue" + key]}
+                session_manager.session.modified = True
 
     for key in list(session_manager.session['xmlhandlingoptions'].keys()):
 
         # makes sure that all current tags are in the active docs
         if key not in tags:
             del session_manager.session['xmlhandlingoptions'][key]
-
+            session_manager.session.modified = True
 
 # Gets called from cluster() in lexos_core.py
 def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):

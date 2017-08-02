@@ -34,6 +34,7 @@
                 }
                                 });
            tagDict=JSON.stringify(tagDict);
+           console.log(tagDict);
            $.ajax({
                 type: "POST",
                 url: "/xml",
@@ -44,7 +45,8 @@
                     $("#xml-modal-status").show();
                 },
                 success: function(response){
-                    $("#xml-modal-status").delay(1500).hide();
+                    $("#xml-modal-status").hide();
+                    $('.modal.in').modal('hide');
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     $("#error-modal .modal-body").html("Lexos could not perform the requested function.");
@@ -98,7 +100,7 @@
                 </p>
             </div>
           <div class="modal-footer">
-            <img id="xml-modal-status" src="/lexos/staticstatic/images/loading_icon.svg?ver=2.5" alt="Loading..." style="position: fixed; left: 50%; top: 50%; display: none;">
+            <img id="xml-modal-status" src="{{url_for('static', filename='images/loading_icon.svg')}}?ver=3.2" alt="Loading..." style="position: fixed; left: 50%; top: 50%; display: none;">
               <button id="save-button" type="button" class="btn btn-primary">Save Changes</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
