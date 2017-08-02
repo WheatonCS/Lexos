@@ -697,8 +697,47 @@ def load_cached_file_string(cache_folder: str, filename: str) -> str:
         return ""
 
 
-def handle_gutenberg():
-    pass
+def handle_gutenberg(text: str) -> str:
+    """Removes Project Gutenberg boilerplate from text.
+
+    :param text: A Project Gutenberg document.
+    :return: The input text document without the boilerplate.
+    """
+
+    # find end of front boiler plate, assuming something like:
+    #     *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
+
+    # This is a "non-greedy" regex pattern, meaning it will stop looking
+    # and return after the first "***" (instead of deleting some of the text
+    # if it finds "***" outside of the boilerplate.
+    re_start_gutenberg = re.compile(
+        r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+        re.IGNORECASE | re.UNICODE | re.MULTILINE)
+    match = re.search(re_start_gutenberg, text)
+    if match:
+        end_boiler_front = match.end()
+        # text saved without front boilerplate
+        text = text[end_boiler_front:]
+    else:
+        re_start_gutenberg = re.compile(
+            r"Copyright.*\n\n\n", re.IGNORECASE | re.UNICODE)
+        match = re.search(re_start_gutenberg, text)
+        if match:
+            end_boiler_front = match.end()
+            # text saved without front boilerplate
+            text = text[end_boiler_front:]
+
+    # now let's find the start of the ending boilerplate
+    re_end_gutenberg = re.compile(
+        r"End of.*?Project Gutenberg",
+        re.IGNORECASE | re.UNICODE | re.MULTILINE)
+    match = re.search(re_end_gutenberg, text)
+    if match:
+        start_boiler_end = match.start()
+        # text saved without end boilerplate
+        text = text[:start_boiler_end]
+
+    return text
 
 
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
@@ -809,39 +848,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 0. Gutenberg --------------------------------------------------------
     if gutenberg:
-        # find end of front boiler plate
-        # assuming something like:
-        #       *** START OF THIS PROJECT GUTENBERG EBOOK FRANKENSTEIN ***
-
-        # This is a "non-greedy" regex pattern, meaning it will stop looking
-        # and return after the first "***" (instead of deleting some of the
-        #  text if it finds "***" outside of the boilerplate
-        re_start_gutenberg = re.compile(
-            r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
-            re.IGNORECASE | re.UNICODE | re.MULTILINE)
-        match = re.search(re_start_gutenberg, text)
-        if match:
-            end_boiler_front = match.end()
-            # text saved without front boiler plate
-            text = text[end_boiler_front:]
-        else:
-            re_start_gutenberg = re.compile(
-                r"Copyright.*\n\n\n", re.IGNORECASE | re.UNICODE)
-            match = re.search(re_start_gutenberg, text)
-            if match:
-                end_boiler_front = match.end()
-                # text saved without front boiler plate
-                text = text[end_boiler_front:]
-
-        # now let's find the start of the ending boiler plate
-        re_end_gutenberg = re.compile(
-            r"End of.*?Project Gutenberg",
-            re.IGNORECASE | re.UNICODE | re.MULTILINE)
-        match = re.search(re_end_gutenberg, text)
-        if match:
-            start_boiler_end = match.start()
-            # text saved without end boiler plate
-            text = text[:start_boiler_end]
+        text = handle_gutenberg(text)
 
     # -- 1. lower ------------------------------------------------------------
     if lower:  # user want to ignore case
