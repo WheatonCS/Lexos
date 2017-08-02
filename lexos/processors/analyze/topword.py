@@ -7,7 +7,7 @@
 
 import itertools
 from cmath import sqrt
-from typing import List
+from typing import List, Dict
 
 import numpy as np
 import pandas as pd
@@ -46,13 +46,10 @@ def _z_test_(p1, pt, n1, nt):
 
 def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
         (List[np.ndarray], np.ndarray):
-    """Divides the WordLists into Groups via the GroupMap.
+    """Divides the word counts into groups via the group map.
 
-    Notice that this program will change GroupMap.
-    :param dtm:
-    :param division_map: a list of lists, each list represents the ids that in a
-                      group and each element in the list is id of a word list
-                      (original index of the word list in WordLists).
+    :param dtm: pandas data frame that contains the word count matrix.
+    :param division_map: a numpy matrix represents the group map.
     :return: a list of lists, each list represents a group, where each element
              in the list is a list that contain all the lists in the group.
     """
@@ -69,12 +66,12 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
 
 def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
                        words: np.ndarray) -> dict:
-    """Processes z-test on all the words of two input word lists
+    """Processes z-test on all the words of two input word lists.
 
-    :param count_list_i: first word list, a dictionary maps word to word counts
-    :param count_list_j: second word list, a dictionary maps word to word
-    counts
-    :return: a dictionary maps words to z-scores
+    :param count_list_i: first word list, a numpy arrant contains word counts.
+    :param count_list_j: second word list, a numpy arrant contains word counts.
+    :param words: words that show up at least one time in the whole corpus.
+    :return: a dictionary maps words to z-scores.
     """
     word_z_score_dict = {}
     row_sum = np.sum(count_list_i).item()
@@ -100,7 +97,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
     :param words: words that show up at least one time in the whole corpus.
     :return: an array where each element of array is an array, represents a
              segment and it is sorted via z_score, each element array is a
-             tuple: (word, corresponding z_score)
+             tuple: (word, corresponding z_score).
     """
     assert np.size(count_matrix) > 0, EMPTY_LIST_MESSAGE
     # initialize the value to return
@@ -117,8 +114,9 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
     return all_results
 
 
-def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> dict:
-    """Analyzes each single word compare to all the other group
+def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> \
+        Dict[dict]:
+    """Analyzes each single word compare to all the other group.
 
     :param group_values: a list of lists, where each list contains an matrix
                          that represents the word count of an existing class.
@@ -169,23 +167,19 @@ def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> dict:
     return all_results
 
 
-def analyze_group_to_group(group_values, words):
-    """Analyzes the group compare with each other groups
+def analyze_group_to_group(group_values: np.ndarray, words: np.ndarray) -> \
+        dict:
+    """Analyzes the group compare with each other groups.
 
-    :param group_para_lists: a list, where each element of the list is a list,
-                             each list represents a group. Each element in the
-                             group list is a dictionary, maps a word to a word
-                             count, each dictionary represents a segment, in
-                             the corresponding group
+    :param group_values: a list of lists, where each list contains an matrix
+                         that represents the word count of an existing class.
+    :param words: words that show up at least one time in the whole corpus.
     :return: a dictionary of a tuple mapped to a list:
-             tuple: the tuple has two elements:
-                    the two index is two groups to compare.
+             tuple: contains the index of the two groups to be compared
              list: a list of tuples represent the comparison result of the two
                    index that first element in the tuple is a string,
                    representing a word, second element is a float representing
-                   the corresponding z-score you get when you compare the word
-                   in two different paragraphs (the index is represented in the
-                   in the first tuple we talked about)
+                   the corresponding z-score.
     """
 
     # initialize the value to return
@@ -210,16 +204,12 @@ def analyze_group_to_group(group_values, words):
         word_z_score_dict = _z_test_word_list_(count_list_i=group_comp_list,
                                                count_list_j=group_base_list,
                                                words=words)
-
         # sort the dictionary
-        sorted_word_zscore_tuple_list = sorted(
-            list(word_z_score_dict.items()),
-            key=lambda item: abs(item[1]),
-            reverse=True
-        )
-
+        sorted_word_z_score_list = sorted(list(word_z_score_dict.items()),
+                                               key=lambda item: abs(item[1]),
+                                               reverse=True)
         # pack the sorted result in sorted list
         all_results.update(
             {(group_comp_index, group_base_index):
-                sorted_word_zscore_tuple_list})
+                sorted_word_z_score_list})
     return all_results
