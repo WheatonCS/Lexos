@@ -19,17 +19,15 @@ scrubber_view = Blueprint('scrubber', __name__)
 @scrubber_view.route("/scrub", methods=["GET", "POST"])
 def scrub():
     # Are you looking for scrubber.py?
-    """
-    Handles the functionality of the scrub page. It scrubs the files depending
-    on the specifications chosen by the user, with an option to download the
-    scrubbed files.
-    Note: Returns a response object (often a render_template call) to flask and
+    """Handles the functionality of the scrub page. It scrubs the files
+    depending on the specifications chosen by the user, with an option to
+    download the scrubbed files.
+
+    :return: a response object (often a render_template call) to flask and
      eventually to the browser.
     """
-
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
-
     file_manager = utility.load_file_manager()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
@@ -42,7 +40,6 @@ def scrub():
         previews = file_manager.get_previews_of_active()
         tags_present, doe_present, gutenberg_present = \
             file_manager.check_actives_tags()
-
         return render_template(
             'scrub.html',
             previews=previews,
@@ -61,7 +58,6 @@ def do_scrubbing():
     # scrub.html.
     session_manager.cache_alteration_files()
     session_manager.cache_scrub_options()
-
     # saves changes only if 'Apply Scrubbing' button is clicked
     saving_changes = True if request.form["formAction"] == "apply" else False
     # preview_info is a tuple of (id, file_name(label), class_label, preview)
@@ -71,10 +67,8 @@ def do_scrubbing():
     previews = [
         [preview[0], preview[1], preview[2],
          general_functions.html_escape(preview[3])] for preview in previews]
-
     if saving_changes:
         utility.save_file_manager(file_manager)
-
     data = {"data": previews}
     data = json.dumps(data)
     return data
@@ -83,6 +77,10 @@ def do_scrubbing():
 # Tells Flask to load this function when someone is at '/downloadScrubbing'
 @scrubber_view.route("/downloadScrubbing", methods=["GET", "POST"])
 def download_scrubbing():
+    """downloads scrubbed files
+
+    :return: a .zip with all the scrubbed files
+    """
     # The 'Download Scrubbed Files' button is clicked on scrub.html.
     # Sends zipped files to downloads folder.
     file_manager = utility.load_file_manager()
@@ -91,18 +89,15 @@ def download_scrubbing():
 
 @scrubber_view.route("/getTagsTable", methods=["GET", "POST"])
 def get_tags_table():
-    """ Returns an html table of the xml handling options
+    """ :return: an html table of the xml handling options
     """
     from natsort import humansorted
-
     utility.xml_handling_options()
     s = ''
     keys = list(session['xmlhandlingoptions'].keys())
     keys = humansorted(keys)
-
     for key in keys:
         b = '<select name="' + key + '">'
-
         if session['xmlhandlingoptions'][key]['action'] == r'remove-element':
             b += '<option value="remove-tag,' + key + \
                  '">Remove Tag Only</option>'
@@ -114,7 +109,6 @@ def get_tags_table():
                  '</option>'
             b += '<option value="leave-alone,' + key + \
                  '">Leave Tag Alone</option>'
-
         elif session['xmlhandlingoptions'][key]["action"] == 'replace-element':
             b += '<option value="remove-tag,' + key + \
                  '">Remove Tag Only</option>'
@@ -125,7 +119,6 @@ def get_tags_table():
                  'Contents with Attribute Value</option>'
             b += '<option value="leave-alone,' + key + \
                  '">Leave Tag Alone</option>'
-
         elif session['xmlhandlingoptions'][key]["action"] == r'leave-alone':
             b += '<option value="remove-tag,' + key + \
                  '">Remove Tag Only</option>'
@@ -152,14 +145,16 @@ def get_tags_table():
             '"/>'
         s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
              "</td></tr>"
-
     return json.dumps(s)
 
 
 @scrubber_view.route("/setAllTagsTable", methods=["GET", "POST"])
 def set_all_tags_table():
-    data = request.json
+    """sets all the tags options
 
+    :return: json object with the result html
+    """
+    data = request.json
     utility.xml_handling_options()
     s = ''
     data = data.split(',')
@@ -210,25 +205,25 @@ def set_all_tags_table():
             '"/>'
         s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
              "</td></tr>"
-
     return json.dumps(s)
 
 
 @scrubber_view.route("/xml", methods=["GET", "POST"])
 def xml():
-    """
-    Handle XML tags.
+    """Handle XML tags.
+
+    :return: string indicating that it has succeeded
     """
     data = request.json
     utility.xml_handling_options(data)
-
     return "success"
 
 
 @scrubber_view.route("/removeUploadLabels", methods=["GET", "POST"])
 def remove_upload_labels():
-    """
-    Removes Scrub upload files from the session when the labels are clicked.
+    """Removes Scrub upload files from the session when the labels are clicked
+
+    :return: string indicating that it has succeeded
     """
     option = request.headers["option"]
     session['scrubbingoptions']['optuploadnames'][option] = ''
