@@ -964,14 +964,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # apply all the functions and exclude tag
     text = general_functions.apply_function_exclude_tags(
-        text=text,
-        functions=[
-            to_lower_function,
-            consolidation_function,
-            lemmatize_function,
-            stop_keep_words_function,
-            total_removal_function])
+        text=text, functions=[to_lower_function, consolidation_function,
+                              lemmatize_function, stop_keep_words_function,
+                              total_removal_function])
 
-    text = re.sub("[\s]+", " ", text, re.UNICODE | re.MULTILINE)
+    finished_text = re.sub("[\s]+", " ", text, re.UNICODE | re.MULTILINE)
 
-    return text
+    return finished_text
