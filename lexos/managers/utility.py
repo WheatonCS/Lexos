@@ -8,6 +8,7 @@ from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
 import numpy as np
+import pandas as pd
 from flask import request
 
 import lexos.helpers.constants as constants
@@ -1180,7 +1181,7 @@ def generate_mc_json_obj(file_manager: FileManager):
     return json_obj
 
 
-def generate_similarities(file_manager: FileManager) -> (str, str):
+def generate_similarities(file_manager: FileManager) -> pd.DataFrame:
     """Generates cosine similarity rankings between comparison files
 
     :param file_manager: a class for an object to hold all information of
@@ -1200,13 +1201,9 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     cull = 'cullcheckbox' in request.form
     mfw = 'mfwcheckbox' in request.form
 
-    found = False
-    for file in file_manager.files.values():
-        if int(file.id) == int(comp_file_id) and not found:
-            comp_file_index = int(comp_file_id)
-            found = True
-
-    if not found:
+    if int(comp_file_id) in file_manager.files.keys():
+        comp_file_index = int(comp_file_id)
+    else:
         raise ValueError('input comparison file id cannot be found '
                          'in filemanager')
 
@@ -1230,11 +1227,10 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     docs_score, docs_name = similarity.similarity_maker(
         final_matrix, comp_file_index, temp_labels)
 
-    # concatinates lists as strings with *** deliminator
-    # so that the info can be passed successfully through the
-    # html/javascript later on
-    return "***".join(str(score) for score in docs_score) + "***",\
-           "***".join(str(name) for name in docs_name) + "***"
+    docs_score = docs_score.reshape(docs_score.size, 1)
+    score_name_data_frame = pd.DataFrame(docs_score, index=docs_name,
+                                         columns=["Cosine similarity"])
+    return score_name_data_frame
 
 
 def generate_sims_csv(file_manager: FileManager):
@@ -1250,12 +1246,9 @@ def generate_sims_csv(file_manager: FileManager):
     """
     extension = '.csv'
 
-    cosine_sims, document_name = generate_similarities(file_manager)
+    score_name_data_frame = generate_similarities(file_manager)
 
     delimiter = ','
-
-    cosine_sims = cosine_sims.split("***")
-    document_name = document_name.split("***")
 
     folder_path = pathjoin(
         session_manager.session_folder(),
@@ -1265,23 +1258,18 @@ def generate_sims_csv(file_manager: FileManager):
     out_file_path = pathjoin(folder_path, 'results' + extension)
     comp_file_id = request.form['uploadname']
 
-    with open(out_file_path, 'w', encoding='utf-8') as outFile:
-
+    with open(out_file_path, 'w') as outFile:
         outFile.write("Similarity Rankings:" + '\n')
         outFile.write(
             "The rankings are determined by 'distance between documents' "
             "where small distances (near zero) represent documents that are "
             "'similar' and unlike documents have distances closer to one.\n")
-
         outFile.write("Selected Comparison Document: " + delimiter +
-                      str(file_manager.get_active_labels()[int(comp_file_id)]))
-        outFile.write("Rank," + "Document," + "Cosine Similarity" + '\n')
-
-        for i in range(0, (len(cosine_sims) - 1)):
-            outFile.write(str(i + 1) + delimiter +
-                          document_name[i] + delimiter + cosine_sims[i] + '\n')
-
+                      str(file_manager.get_active_labels()[int(comp_file_id)])
+                      + '\n')
     outFile.close()
+    with open(out_file_path, 'a') as final:
+        score_name_data_frame.to_csv(final)
 
     return out_file_path, extension
 
