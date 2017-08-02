@@ -46,7 +46,7 @@ def _z_test_(p1, pt, n1, nt):
 
 
 def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
-        (List[np.ndarray], np.ndarray):
+        (List[np.ndarray], List[np.ndarray]):
     """Divides the word counts into groups via the group map.
 
     :param dtm: pandas data frame that contains the word count matrix.
@@ -165,7 +165,7 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
             # pack the sorted result in sorted list
             all_results.update(
                 {(group_comp_index, para_index, group_base_index):
-                     sorted_word_z_score_tuple_list})
+                 sorted_word_z_score_tuple_list})
     return all_results
 
 
@@ -213,6 +213,5 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
                                           reverse=True)
         # pack the sorted result in sorted list
         all_results.update(
-            {(group_comp_index, group_base_index):
-                 sorted_word_z_score_list})
+            {(group_comp_index, group_base_index): sorted_word_z_score_list})
     return all_results
