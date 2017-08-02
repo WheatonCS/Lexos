@@ -1375,7 +1375,7 @@ class FileManager:
 
         # initialize class division map
         division_map = pd.DataFrame(
-            data=np.zeros((label_length,class_length), dtype=bool),
+            data=np.zeros((class_length, label_length), dtype=bool),
             index=temp_classes,
             columns=temp_labels)
 

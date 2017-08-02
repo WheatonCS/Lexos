@@ -166,7 +166,7 @@
     {% if topwordsgenerated == 'class_div' %}
         {% if classmap.shape[1] == 0 %}
             <br/><br/><br/>
-            <h3> Please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to upload documents first</h3>
+            <h3> Please go to the <a href='{{ url_for("upload.upload") }}'>Upload page</a> to upload documents first</h3>
         {% elif classmap.shape[1] == 1 %}
             <br/><br/><br/>
             <h3> Please go to the <a href='{{ url_for("manage.manage") }}'>Manage page</a> to upload more documents to compare</h3>
