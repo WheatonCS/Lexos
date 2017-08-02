@@ -363,6 +363,15 @@ class TestSplitInputWordString:
             "\n., This,.string\n,, has.\n.some, of,. \neverything \n..") == \
             ["This", "string", "has", "some", "of", "everything"]
 
+    def test_split_input_word_str_no_words(self):
+        assert split_input_word_string("") == []
+        assert split_input_word_string("\n") == []
+        assert split_input_word_string(",") == []
+        assert split_input_word_string(".") == []
+        assert split_input_word_string(" ") == []
+        assert split_input_word_string(
+            "\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == []
+
 
 class TestDeleteWords:
     test_string = "Many words were written, but not many of the words said " \
