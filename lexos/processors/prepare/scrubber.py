@@ -897,11 +897,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     else:
         remove_digits_map = {}
 
-    # -- 6. white space ------------------------------------------------------
+    # -- 6. whitespace ------------------------------------------------------
 
-    # get_remove_whitespace_map() will return an empty dict if all three
-    # params are False
-    remove_whitespace_map = get_remove_whitespace_map(spaces, tabs, new_lines)
+    if white_space:
+        remove_whitespace_map = get_remove_whitespace_map(
+            spaces, tabs, new_lines)
+    else:
+        remove_whitespace_map = {}
 
     # -- create total removal function -----------------------------
     # merge all the removal map
