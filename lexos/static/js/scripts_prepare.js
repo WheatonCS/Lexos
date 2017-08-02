@@ -7,18 +7,18 @@ function shiftElementIfNeeded () {
   var scrollTop = $(window).scrollTop()
   var targetTop = 100
   if (scrollTop > targetTop) {
-	    buttons = $('#action-buttons').html()
-	    newEl = $('<div id="action-buttons" style="text-align:right"></div>')
-	    newEl.append(buttons)
+    buttons = $('#action-buttons').html()
+    newEl = $('<div id="action-buttons" style="text-align:right"></div>')
+    newEl.append(buttons)
 
     $('#action-buttons').remove()
     $('#preview-col').append(newEl)
     clearInterval(shiftElement)
 
-	    if (scrollTop <= targetTop) {
-		    $('#action-buttons').remove()
+    if (scrollTop <= targetTop) {
+      $('#action-buttons').remove()
       $('#preview-col').prepend(newEl)
       clearInterval(shiftElement)
-	    }
+    }
   }
 }

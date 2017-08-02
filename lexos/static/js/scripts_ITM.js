@@ -59,10 +59,10 @@ function toggleArrow (side) {
 
 /* In the Margins API Functions */
 function callAPI (slug, type) {
-    // No reason not to hard code this here since we only need the slug
+  // No reason not to hard code this here since we only need the slug
   var url = 'http://scalar.usc.edu/works/lexos/rdf/node/' + slug + '?rec=0&format=json'
 
-    // Ajax call
+  // Ajax call
   $.ajax({
     type: 'GET',
     url: url,
@@ -94,7 +94,7 @@ function processData (data, type, url) {
     }
     if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
       var video_url = node['http://simile.mit.edu/2003/10/ontologies/artstor#url'][0].value
-            // var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
+      // var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
     }
     if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
       var url = node['http://purl.org/dc/terms/isVersionOf'][0].value
@@ -108,19 +108,19 @@ function processData (data, type, url) {
 }
 
 function displayITMcontent (content, title, url, type, video_url) {
-    // Replace Scalar internal links with urls to Scalar
+  // Replace Scalar internal links with urls to Scalar
   content = content.replace(/<a href=\"/g, '<a href="http://scalar.usc.edu/works/lexos/')
   content = content.replace(/http:\/\/http:\/\/scalar.usc.edu\/works\/lexos\//g, 'http://')
   content = content.replace(/<a href=\"http:\/\/scalar/g, '<a target="_blank" href="http://scalar')
 
-    // In case there is no internet connection or user is in local mode
+  // In case there is no internet connection or user is in local mode
   var error_msg = 'Lexos cannot load <em>In the Margins</em> content from Scalar. '
   error_msg += 'There may be a problem with your internet connection. If you think '
   error_msg += 'your internet connection is working, try accessing <em>In the '
   error_msg += "Margins</em> content directly from the <a href='https://scalar.usc.edu/works/lexos/' target='_blank'>"
   error_msg += 'Scalar website</a>.'
 
-    // Fork here based on type
+  // Fork here based on type
   switch (type) {
     case 'panel':
       $('#panel-content').remove()
@@ -130,9 +130,9 @@ function displayITMcontent (content, title, url, type, video_url) {
       } else {
         $('#itm-content').append('<div id="panel-content"><h4>' + error_msg + '</h4></div>')
       }
-        // Next two lines determine the panel height and change on window resize
-        // var height = $("#panel-content").visibleHeight()+"px";
-        // $("#panel-content").css("height", height);
+      // Next two lines determine the panel height and change on window resize
+      // var height = $("#panel-content").visibleHeight()+"px";
+      // $("#panel-content").css("height", height);
       $('#panel-status').hide()
       break
 
@@ -150,7 +150,7 @@ function displayITMcontent (content, title, url, type, video_url) {
       $('#dialog-status').hide()
       break
 
-        // Works only with YouTube videos
+    // Works only with YouTube videos
     case 'video-dialog':
       var youtube_url = video_url.replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/')
       titleLink = '<a href="' + url + '" target="_blank">' + title + '</a>'
@@ -183,18 +183,18 @@ $.fn.visibleHeight = function () {
 
 /* Document Ready Functions */
 $(document).ready(function () {
-    /* Get the viewport height after the window is resized */
-    // $(window).on('scroll resize', getVisible);
+  /* Get the viewport height after the window is resized */
+  // $(window).on('scroll resize', getVisible);
 
-    /* ITM Panel Setup */
+  /* ITM Panel Setup */
   var container = $('#toggler').parent()
   var containerWidth = container.width()
-  container.css({left: -(containerWidth + 32)})
+  container.css({ left: -(containerWidth + 32) })
   container.attr('data-status', 'closed')
 
-    /* ITM Panel Toggle Events */
-    /* Note: This function currently only works with side-panel toggle icon.
-       To enable the use of other triggers, a class trigger should be used. */
+  /* ITM Panel Toggle Events */
+  /* Note: This function currently only works with side-panel toggle icon.
+     To enable the use of other triggers, a class trigger should be used. */
   $('#cog-toggler').click(function (e) {
     e.preventDefault()
     $('#settings-modal').modal('hide')
@@ -218,17 +218,17 @@ $(document).ready(function () {
     }
   })
 
-    /* Populate a Bootstrap modal */
+  /* Populate a Bootstrap modal */
   $('#ITM-modal').on('show.bs.modal', function (e) {
     var button = $(e.relatedTarget) // Button that triggered the modal
     var slug = button.data('slug') // Extract info from data-slug attribute
     var type = button.data('type') // Extract info from data-type attribute
     $('#dialog-status').show()
     callAPI(slug, type)
-        // callAPI("best-practices", "dialog");
+    // callAPI("best-practices", "dialog");
   })
 
-    /* Empty a Bootstrap modal */
+  /* Empty a Bootstrap modal */
   $('#ITM-modal').on('hide.bs.modal', function () {
     $('#ITM-modal').removeData('bs.modal')
     icon = $('#dialog-status').parent().html()
@@ -238,10 +238,10 @@ $(document).ready(function () {
     callAPI('best-practices', 'dialog')
   })
 
-    /* Handle Show Video Button in Bootstrap Modal */
-/*    $('#show-video').click(function() {
-        callAPI("how-to-read-a-dendrogram", "video-dialog")
-    }); */
+  /* Handle Show Video Button in Bootstrap Modal */
+  /*    $('#show-video').click(function() {
+          callAPI("how-to-read-a-dendrogram", "video-dialog")
+      }); */
 })
 
 /* Initialise Bootstrap Modal */

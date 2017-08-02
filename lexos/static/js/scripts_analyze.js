@@ -2,7 +2,7 @@ $(function () {
   $('.has-chevron').on('click', function () {
     $(this).find('span').toggleClass('down')
 
-		// Nasty hack because find("span") does not work in kmeans
+    // Nasty hack because find("span") does not work in kmeans
     $(this).find('#kmeansAdvancedChev').toggleClass('down')
     $(this).find('#kmeansSilhouetteChev').toggleClass('down')
 
@@ -85,31 +85,31 @@ $(function () {
 
   updatecullinput()
 
-	// Change position of submit div while scrolling the window
+  // Change position of submit div while scrolling the window
   var timer
   var buttonsFixed = false
   var buttons = $('#analyze-submit')
 
   $(window).scroll(function () {
-		// Timer stuff
+    // Timer stuff
     if (timer) {
       clearTimeout(timer)
     }
-		// Timer to throttle the scroll event so it doesn't happen too often
+    // Timer to throttle the scroll event so it doesn't happen too often
     timer = setTimeout(function () {
       var scrollBottom = $(window).scrollTop() + $(window).height()
       var scrollTop = $(window).scrollTop()
 
-			// if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
+      // if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
       if ((buttonsFixed && (scrollBottom >= ($('footer').offset().top)))) {
-				// console.log("Scroll bottom hit footer! On the way down");
+        // console.log("Scroll bottom hit footer! On the way down");
         buttons.removeClass('fixed')
         buttonsFixed = false
       }
 
-			// if bottom of scroll window at the footer, fix button to the screen
+      // if bottom of scroll window at the footer, fix button to the screen
       if (!buttonsFixed && (scrollBottom < ($('footer').offset().top))) {
-				// console.log("Scroll bottom hit footer! On the way up");
+        // console.log("Scroll bottom hit footer! On the way up");
         buttons.addClass('fixed')
         buttonsFixed = true
       }
