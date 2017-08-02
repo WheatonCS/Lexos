@@ -1370,10 +1370,10 @@ class FileManager:
             if file.class_label not in temp_classes:
                 temp_classes.append(file.class_label)
         division_map = pd.DataFrame(
-            data=np.zeros((len(temp_classes), len(temp_labels))),
+            data=np.zeros((len(temp_classes), len(temp_labels)), dtype=bool),
             index=temp_classes, columns=temp_labels)
         for file in files:
-            division_map[file.label][file.class_label] = 1
+            division_map[file.label][file.class_label] = True
         return division_map
 
     def get_previews_of_all(self):
