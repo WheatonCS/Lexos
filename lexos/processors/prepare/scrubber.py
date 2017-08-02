@@ -549,6 +549,28 @@ def get_punctuation_string() -> str:
     return punctuation_regex
 
 
+def split_input_word_string(input_string: str) -> List[str]:
+    """Breaks word string inputs into lists of words.
+
+    Word strings are a series of words delimited by newlines, commas, and
+        periods. The raw input of the stop words field from the browser is
+        one example.
+    :param input_string:
+    :return:
+    """
+
+    input_lines = input_string.split("\n")
+
+    input_words = []
+    for line in input_lines:
+        line = line.strip()
+        # Using re for multiple delimiter splitting
+        line = re.split('[,. ]', line)
+        input_words.extend(line)
+
+    return input_words
+
+
 def delete_words(text: str, remove_list: List[str]) -> str:
     """Deletes the words in remove_list from the text.
 
