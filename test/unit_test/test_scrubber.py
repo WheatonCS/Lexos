@@ -347,6 +347,13 @@ class TestGetPunctuationString:
         assert get_punctuation_string() == "[" + chars.PUNCT_SYMBOL_VALS + " ]"
 
 
+class TestDeleteWords:
+    test_string = "Many words were written, but not much was said at all."
+
+    def test_delete_words(self):
+        pass
+
+
 class TestRemoveStopwords:
     test_string = "This is a long story. It is time for this story to end."
 
