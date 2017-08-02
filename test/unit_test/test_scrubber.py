@@ -348,6 +348,12 @@ class TestGetPunctuationString:
         assert get_punctuation_string() == "[" + chars.PUNCT_SYMBOL_VALS + " ]"
 
 
+class TestSplitInputWordString:
+
+    def test_split_input_word_string(self):
+        pass
+
+
 class TestDeleteWords:
     test_string = "Many words were written, but not many of the words said " \
                   "much at all."
