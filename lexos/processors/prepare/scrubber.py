@@ -697,6 +697,10 @@ def load_cached_file_string(cache_folder: str, filename: str) -> str:
         return ""
 
 
+def handle_gutenberg():
+    pass
+
+
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
           white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
