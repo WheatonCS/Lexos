@@ -605,18 +605,7 @@ def remove_stopwords(text: str, removal_string: str) -> str:
         the stopwords chosen by the user.
     """
 
-    splitlines = removal_string.split("\n")
-
-    remove_pieces = []
-    for line in splitlines:
-        line = line.strip()
-        # Using re for multiple delimiter splitting
-        line = re.split('[,. ]', line)
-        remove_pieces.extend(line)
-
-    # get rid of empty strings in remove_list
-    remove_list = [word for word in remove_pieces if word != '']
-
+    remove_list = split_input_word_string(removal_string)
     scrubbed_text = delete_words(text, remove_list)
 
     return scrubbed_text
@@ -635,18 +624,11 @@ def keep_words(text: str, non_removal_string: str) -> str:
 
     punctuation = get_punctuation_string()
 
-    split_lines = non_removal_string.split("\n")
-    keep_list = []
-    for line in split_lines:
-        line = line.strip()
-        # Using re for multiple delimiter splitting
-        line = re.split('[., ]', line)  # maybe change '[., ]' for punctuation
-        keep_list.extend(line)
-
-    keep_list = [word for word in keep_list if word != '']
+    # a list containing the words in non_removal_string without punctuation
+    # or whitespace
+    keep_list = split_input_word_string(non_removal_string)
 
     split_lines = text.split("\n")
-
     text_list = []  # list of words and ""
     for line in split_lines:
         line = line.strip()
