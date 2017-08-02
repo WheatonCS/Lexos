@@ -76,7 +76,6 @@ class TestStripLeadWhitespace:
 
 
 class TestStripLeadBlankLines:
-    # this unit test DOES NOT work, see original function
     def test_blank_lines_regular(self):
         list_text_lead_blank_lines = ["", "test"]
         test_queue_blank_lines = Queue()
@@ -90,6 +89,21 @@ class TestStripLeadBlankLines:
 
         # covert the queue back to list and assert  `
         assert list(test_queue_blank_lines.queue) == ["test"]
+
+    def test_multi_blank_lines(self):
+        list_text_multi_blanks = ["", "", "", "test"]
+        test_queue_multi_blanks = Queue()
+
+        # putting text in lines into queue
+        for word in list_text_multi_blanks:
+            test_queue_multi_blanks.put(word)
+
+            # execute the tested function
+            strip_leading_blank_lines(test_queue_multi_blanks)
+
+        # convert the queue back to list and assert
+        assert list(test_queue_multi_blanks.queue) == ["test"]
+
 
 
 class TestStripLeadChars:
@@ -237,7 +251,7 @@ class TestStripLeadWords:
 class TestStripLeadLines:
     # this assertion DOES NOT work, since related to the
     # function of strip leading blank line
-    def test_strip_leading_lines(self):
+    def test_strip_leading_lines_regular(self):
         list_text_lead_lines = ["test", " ", "test", " "]
         test_queue_lines = Queue()
 
@@ -246,9 +260,22 @@ class TestStripLeadLines:
             test_queue_lines.put(line)
 
         # execute the test function
-        strip_leading_lines(line_queue=test_queue_lines, num_lines=1)
+        strip_leading_lines(line_queue=test_queue_lines, num_lines=3)
         # convert queue back to list and assert
-        assert list(test_queue_lines.queue) == [" ", "test", " "]
+        assert list(test_queue_lines.queue) == [" "]
+
+    def test_strip_multi_blank_lines(self):
+        list_text_multi_blank_lines = ["", "", "test"]
+        test_queue_multi_blanks = Queue()
+
+        # putting text into test queue
+        for line in list_text_multi_blank_lines:
+            test_queue_multi_blanks.put(line)
+
+        # execute the test function
+        strip_leading_lines(line_queue=test_queue_multi_blanks, num_lines=0)
+        # convert queue back to list and assert
+        assert list(test_queue_multi_blanks.queue) == ["test"]
 
 
 class TestCutByCharacters:
