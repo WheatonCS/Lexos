@@ -7,17 +7,15 @@
 
 import itertools
 from cmath import sqrt
+from typing import List
 
 import numpy as np
 import pandas as pd
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
-from lexos.helpers.general_functions import merge_list
 
 
-# TODO: Bugfix: crash if go top word directly without uploading any files
-
-
+# TODO: Fix this function
 def _z_test_(p1, pt, n1, nt):
     """Examines if a particular word is an anomaly
 
@@ -46,7 +44,8 @@ def _z_test_(p1, pt, n1, nt):
         return 'Insignificant'
 
 
-def group_division(dtm: pd.DataFrame, division_map: np.ndarray):
+def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
+        (List[np.ndarray], np.ndarray):
     """Divides the WordLists into Groups via the GroupMap.
 
     Notice that this program will change GroupMap.
@@ -68,7 +67,8 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray):
     return group_list, label_list
 
 
-def _z_test_word_list_(count_list_i, count_list_j, row_sum, total_sum, words):
+def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
+                       words: np.ndarray) -> dict:
     """Processes z-test on all the words of two input word lists
 
     :param count_list_i: first word list, a dictionary maps word to word counts
@@ -77,19 +77,22 @@ def _z_test_word_list_(count_list_i, count_list_j, row_sum, total_sum, words):
     :return: a dictionary maps words to z-scores
     """
     word_z_score_dict = {}
+    row_sum = np.sum(count_list_i).item()
+    total_sum = np.sum(count_list_j).item()
     for count, word in enumerate(words):
         p_i = count_list_i[count] / row_sum
         p_j = count_list_j[count] / total_sum
         z_score = round(
             _z_test_(p1=p_i, pt=p_j, n1=row_sum, nt=total_sum), 4)
-        # get rid of the insignificant results, insignificant means those
-        # with absolute values smaller than 1.96
+        # get rid of the insignificant results
+        # insignificant means those with absolute values smaller than 1.96
         if abs(z_score) >= 1.96:
             word_z_score_dict.update({word: z_score})
     return word_z_score_dict
 
 
-def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
+def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
+        List[list]:
     """Analyzes each single word compare to the total documents
 
     :param count_matrix: a 2D numpy array where each row contains the word
@@ -102,13 +105,11 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
     assert np.size(count_matrix) > 0, EMPTY_LIST_MESSAGE
     # initialize the value to return
     all_results = []
-    total_sum = np.sum(count_matrix).item()
     count_matrix_sum = np.sum(count_matrix, axis=0)
     # Generate data
     for _, row in enumerate(count_matrix):
         word_z_score_dict = _z_test_word_list_(
-            count_list_i=row, count_list_j=count_matrix_sum,
-            row_sum=np.sum(row).item(), total_sum=total_sum, words=words)
+            count_list_i=row, count_list_j=count_matrix_sum, words=words)
         sorted_list = sorted(list(word_z_score_dict.items()),
                              key=lambda item: abs(item[1]),
                              reverse=True)
@@ -116,43 +117,37 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray):
     return all_results
 
 
-def analyze_para_to_group(group_values):
+def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> dict:
     """Analyzes each single word compare to all the other group
 
-    :param group_para_lists: Array of words, where each element of array
-                             represents a segment, which is in dictionary type.
-                             Each element in the dictionary maps word inside
-                             that segment to its frequency.
+    :param group_values: a list of lists, where each list contains an matrix
+                         that represents the word count of an existing class.
+    :param words: words that show up at least one time in the whole corpus.
     :return: an array where each element of array is a dictionary maps a tuple
              to a list tuple consist of 3 elements (group number 1, list
-             number, group number 2) means compare the word in list number of
-             group number 1 to all the word in group number 2.
+             number, group number 2).
              The list contains tuples and sorted by p value: tuple means (word,
              p value), this is word usage of word in group compare to the word
              usage of the same word in another group.
     """
 
-    # init
+    # initialize the value to return
     all_results = {}  # the value to return
-    # group list is the word list of each group (word to word count within the
-    # whole group)
     group_lists = []  # the total word count of each group
-    for value in group_values:
+    for _, value in enumerate(group_values):
         group_lists.append(np.sum(value, axis=0))
     num_group = len(group_lists)  # number of groups
 
-    # calculation
     # comparison map, in here is a list of tuple.
-    # there are two element in the tuple, each one is a index of groups
+    # There are two elements in the tuple, each one is a index of groups
     # (for example the first group will have index 0)
-    # two group index cannot be equal
+    # Two groups index cannot be equal.
     comp_map = itertools.product(list(range(num_group)),
                                  list(range(num_group)))
     comp_map = [(i_index, j_index)
                 for (i_index, j_index) in comp_map if i_index != j_index]
 
-    # compare each paragraph in group_comp to group_base (group comp means
-    # group for comparison)
+    # compare each paragraph in group_comp to group_base
     for group_comp_index, group_base_index in comp_map:
         # gives all the paragraphs in the group in a array
         group_comp_paras = group_values[group_comp_index]
@@ -162,19 +157,19 @@ def analyze_para_to_group(group_values):
         # enumerate through all the paragraphs in group_comp_paras
         for para_index, paras in enumerate(group_comp_paras):
             word_z_score_dict = _z_test_word_list_(
-                count_list_i=paras, count_list_j=group_base_list)
+                count_list_i=paras, count_list_j=group_base_list, words=words)
             # sort the dictionary
-            sorted_word_zscore_tuple_list = sorted(
+            sorted_word_z_score_tuple_list = sorted(
                 list(word_z_score_dict.items()), key=lambda item: abs(item[1]),
                 reverse=True)
             # pack the sorted result in sorted list
             all_results.update(
                 {(group_comp_index, para_index, group_base_index):
-                     sorted_word_zscore_tuple_list})
+                     sorted_word_z_score_tuple_list})
     return all_results
 
 
-def analyze_group_to_group(group_para_lists):
+def analyze_group_to_group(group_values, words):
     """Analyzes the group compare with each other groups
 
     :param group_para_lists: a list, where each element of the list is a list,
@@ -192,42 +187,29 @@ def analyze_group_to_group(group_para_lists):
                    in two different paragraphs (the index is represented in the
                    in the first tuple we talked about)
     """
-    assert group_para_lists, EMPTY_LIST_MESSAGE
-    # init
-    # group list is the word list of each group (word to word count within the
-    # whole group)
-    group_word_lists = []
-    group_word_count = []  # the total word count of each group
-    for chunk in group_para_lists:
-        group_word_lists.append(merge_list(chunk))
-        group_word_count.append(sum(group_word_lists[-1].values()))
-    # the word list of the corpus (all the word maps to the sum of all the
-    # word count)
-    corpus_list = merge_list(group_word_lists)
-    # the total number of word count in words in the corpus
-    total_word_count = sum(group_word_count)
-    # the number of unique words
-    # example: 'the a ha the' has 3 unique words: 'the', 'a', and 'ha'
-    total_num_words = len(corpus_list)
-    num_group = len(group_word_lists)  # number of group
-    all_results = {}
+
+    # initialize the value to return
+    all_results = {}  # the value to return
+    group_lists = []  # the total word count of each group
+    for _, value in enumerate(group_values):
+        group_lists.append(np.sum(value, axis=0))
+    num_group = len(group_lists)  # number of groups
 
     # comparison map, in here is a list of tuple.
-    # there are two element in the tuple, each one is a index of groups
+    # There are two elements in the tuple, each one is a index of groups
     # (for example the first group will have index 0)
     # i_index has to be smaller than j_index to avoid repetition
     comp_map = itertools.product(list(range(num_group)),
                                  list(range(num_group)))
-
     comp_map = [(i_index, j_index)
                 for (i_index, j_index) in comp_map if i_index < j_index]
 
     for group_comp_index, group_base_index in comp_map:
-
-        group_comp_list = group_word_lists[group_comp_index]
-        group_base_list = group_word_lists[group_base_index]
+        group_comp_list = group_lists[group_comp_index]
+        group_base_list = group_lists[group_base_index]
         word_z_score_dict = _z_test_word_list_(count_list_i=group_comp_list,
-                                               count_list_j=group_base_list)
+                                               count_list_j=group_base_list,
+                                               words=words)
 
         # sort the dictionary
         sorted_word_zscore_tuple_list = sorted(
