@@ -268,7 +268,7 @@ $(document).on('change', $('#addMilestone'), function () {
 
 /* #### toggleActiveDocsIcon() #### */
 // Shows or hides the Active Documents icon in response to the table state
-function toggleActiveDocsIcon () {
+function toggleActiveDocsIcon() {
   // Hide the active docs icon if there are no docs selected
   if (table.rows({ selected: true }).ids().length < 1) {
     $('.fa-folder-open-o').fadeOut(200)
@@ -281,7 +281,7 @@ function toggleActiveDocsIcon () {
 
 /* #### selectAll() #### */
 // Sets the selected status of all documents in the File Manager and UI to selected.
-function selectAll () {
+function selectAll() {
   $.ajax({
     type: 'POST',
     url: '/selectAll',
@@ -302,7 +302,7 @@ function selectAll () {
 
 /* #### deselectAll() #### */
 // Sets the selected status of all documents in the File Manager and UI to deselected.
-function deselectAll () {
+function deselectAll() {
   $.ajax({
     type: 'POST',
     url: '/deselectAll',
@@ -323,7 +323,7 @@ function deselectAll () {
 
 /* #### enableRows() #### */
 // Enables selected rows in the File Manager and sets UI to selected.
-function enableRows (selected_rows) {
+function enableRows(selected_rows) {
   var file_ids = []
   selected_rows.each(function (index) {
     file_ids.push($(this).attr('id'))
@@ -354,7 +354,7 @@ function enableRows (selected_rows) {
 
 /* #### disableRows() #### */
 // Disables selected rows in the File Manager and sets UI to deselected.
-function disableRows (deselected_rows) {
+function disableRows(deselected_rows) {
   var file_ids = []
   deselected_rows.each(function (index) {
     file_ids.push($(this).attr('id'))
@@ -384,7 +384,7 @@ function disableRows (deselected_rows) {
 
 /* #### showPreviewText() #### */
 //* Opens modal containing the document preview text.
-function showPreviewText (row_id) {
+function showPreviewText(row_id) {
   $.ajax({
     type: 'POST',
     url: '/getPreview',
@@ -411,7 +411,7 @@ function showPreviewText (row_id) {
 /* #### END OF showPreviewText() #### */
 
 /* #### editName() #### */
-function editName (row_id) {
+function editName(row_id) {
   $('#edit-form').remove()
   cell_name = $('#' + row_id).find('td:eq(1)').text()
   var form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cell_name + '">'
@@ -424,7 +424,7 @@ function editName (row_id) {
 /* #### END OF editName() #### */
 
 /* #### editClass() #### */
-function editClass (row_id) {
+function editClass(row_id) {
   $('#edit-form').remove()
   doc_name = $('#' + row_id).find('td:eq(1)').text()
   cell_value = $('#' + row_id).find('td:eq(2)').text()
@@ -438,7 +438,7 @@ function editClass (row_id) {
 /* #### END OF editClass() #### */
 
 /* #### mergeSelected() #### */
-function mergeSelected (cell, selected_rows) {
+function mergeSelected(cell, selected_rows) {
   row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
@@ -461,7 +461,7 @@ function mergeSelected (cell, selected_rows) {
 /* #### END OF mergeSelected() #### */
 
 /* #### applyClassSelected() #### */
-function applyClassSelected (cell, selected_rows) {
+function applyClassSelected(cell, selected_rows) {
   row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
@@ -480,7 +480,7 @@ function applyClassSelected (cell, selected_rows) {
 
 /* #### mergeDocuments() #### */
 // Helper function saves value in edit dialog and updates table with a new document
-function mergeDocuments (row_ids, column, source, value, milestone) {
+function mergeDocuments(row_ids, column, source, value, milestone) {
   // Validation - make sure the document name is not left blank
   if (value == '') {
     msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
@@ -535,7 +535,7 @@ function mergeDocuments (row_ids, column, source, value, milestone) {
 
 /* #### saveMultiple() #### */
 // Helper function saves value in edit dialog and updates table for multiple rows
-function saveMultiple (row_ids, column, value) {
+function saveMultiple(row_ids, column, value) {
   // Prepare data and request
   url = '/setClassSelected'
   data = JSON.stringify([row_ids, value])
@@ -580,7 +580,7 @@ function saveMultiple (row_ids, column, value) {
 
 /* #### saveOne() #### */
 // Helper function saves value in edit dialog and updates table
-function saveOne (row_id, column, value) {
+function saveOne(row_id, column, value) {
   // Validation - make sure the document name is not left blank
   if (column == 1 && value == '') {
     msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
@@ -635,7 +635,7 @@ function saveOne (row_id, column, value) {
 
 /* #### deleteOne() #### */
 // Helper function deletes selected row and updates table
-function deleteOne (row_id) {
+function deleteOne(row_id) {
   // alert("Delete: " + row_id);
   url = '/deleteOne'
 
@@ -665,7 +665,7 @@ function deleteOne (row_id) {
 /* #### END OF deleteOne() #### */
 
 /* #### deleteDoc() #### */
-function deleteDoc (row_id) {
+function deleteDoc(row_id) {
   doc_name = $('#' + row_id).find('td:eq(1)').text()
   html = '<p>Are you sure you wish to delete <b>' + doc_name + '</b>?</p>'
   html += '<span id="deleteId" style="display:none;">' + row_id + '</span>'
@@ -682,7 +682,7 @@ function deleteDoc (row_id) {
 
 /* #### deleteSelected() #### */
 // Helper function deletes selected rows and updates table
-function deleteSelected (row_ids) {
+function deleteSelected(row_ids) {
   url = '/deleteSelected'
 
   // Do Ajax
@@ -715,7 +715,7 @@ function deleteSelected (row_ids) {
 /* #### END OF deleteSelected() #### */
 
 /* #### deleteAllSelected() #### */
-function deleteAllSelected (selected_rows) {
+function deleteAllSelected(selected_rows) {
   row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
@@ -736,7 +736,7 @@ function deleteAllSelected (selected_rows) {
 
 /* #### unique() #### */
 // Helper function ensures id lists have no duplicates
-function unique (array) {
+function unique(array) {
   return $.grep(array, function (el, index) {
     return index === $.inArray(el, array)
   })
@@ -746,7 +746,7 @@ function unique (array) {
 // Helper function to change configure the context menu based on
 // the number of rows currently selected
 
-function prepareContextMenu () {
+function prepareContextMenu() {
   // Refresh all options
   $('#context-menu').find('li').removeClass('disabled')
   $('#context-menu').find('li').find('a').removeProp('disabled')
@@ -783,7 +783,7 @@ function prepareContextMenu () {
 
 /* #### handleSelectButtons() #### */
 // Helper function to change state of selection buttons on events
-function handleSelectButtons (num_rows, num_rows_selected) {
+function handleSelectButtons(num_rows, num_rows_selected) {
   if (table.rows('.selected').data().length == 0) {
     $('#selectAllDocs').prop('disabled', false)
     // $("#disableAllDocs").prop("disabled", true);

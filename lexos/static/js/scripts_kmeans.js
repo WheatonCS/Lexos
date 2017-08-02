@@ -5,7 +5,7 @@ $(function () {
   } else {
     $('#silhouetteResults').hide()
   }
-  function doAjax (action) {
+  function doAjax(action) {
     $.ajax({
       'complete': function (response) {
         rand = Math.round(Math.random() * 100) + 1
@@ -98,7 +98,7 @@ $(function () {
     })
   })
 
-  function createDictionary () {
+  function createDictionary() {
     var ChunkSetDict = new Array()
 
     for (key = 0; key < KValue; key++) {
@@ -112,7 +112,7 @@ $(function () {
     return ChunkSetDict
   };// end createDictionary
 
-  function createTable (ChunkSetDict) {
+  function createTable(ChunkSetDict) {
     if ($('#kmeansresultscheck').text() == 'True') {
       $('#kmeansresults').removeClass('hidden')
       $('#kmeansresultscheck').text('')

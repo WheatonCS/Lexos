@@ -1,5 +1,5 @@
 $(function () {
-  function updateMaxWordsOpt () {
+  function updateMaxWordsOpt() {
     if ($('#vizmaxwords').is(':checked')) {
       console.log('hi')
       $('#vizmaxwordsopt').show()
@@ -11,7 +11,7 @@ $(function () {
   $('#vizmaxwords').click(updateMaxWordsOpt)
 })
 
-function preprocess (dataset) { // Used to decode utf-8
+function preprocess(dataset) { // Used to decode utf-8
   wordData = dataset['children']
 
   for (var i = 0; i < wordData.length; i++) {
@@ -21,10 +21,10 @@ function preprocess (dataset) { // Used to decode utf-8
 }
 
 // Return a flattened hierarchy containing all leaf nodes under the root.
-function classes (root) {
+function classes(root) {
   var classes = []
 
-  function recurse (name, node) {
+  function recurse(name, node) {
     if (node.children) node.children.forEach(function (child) { recurse(node.name, child) })
     // Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
     else classes.push({ packageName: name, className: node.name, value: node.size })

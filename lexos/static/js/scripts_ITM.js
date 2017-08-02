@@ -1,6 +1,6 @@
 /* In the Margins Side Panel Functions */
 /* Based on https://github.com/AndreaLombardo/BootSideMenu */
-function getSide (listClasses) {
+function getSide(listClasses) {
   var side
   for (var i = 0; i < listClasses.length; i++) {
     if (listClasses[i] == 'sidebar-left') {
@@ -16,7 +16,7 @@ function getSide (listClasses) {
   return side
 }
 
-function doAnimation (container, containerWidth, sidebarSide, sidebarStatus) {
+function doAnimation(container, containerWidth, sidebarSide, sidebarStatus) {
   var toggler = container.children()[1]
   if (sidebarStatus == 'opened') {
     if (sidebarSide == 'left') {
@@ -47,7 +47,7 @@ function doAnimation (container, containerWidth, sidebarSide, sidebarStatus) {
   }
 }
 
-function toggleArrow (side) {
+function toggleArrow(side) {
   if (side == 'left') {
     $('#toggler').children('.glyphicon-chevron-right').css('display', 'block')
     $('#toggler').children('.glyphicon-chevron-left').css('display', 'none')
@@ -58,7 +58,7 @@ function toggleArrow (side) {
 }
 
 /* In the Margins API Functions */
-function callAPI (slug, type) {
+function callAPI(slug, type) {
   // No reason not to hard code this here since we only need the slug
   var url = 'http://scalar.usc.edu/works/lexos/rdf/node/' + slug + '?rec=0&format=json'
 
@@ -74,7 +74,7 @@ function callAPI (slug, type) {
   })
 }
 
-function handleError (XMLHttpRequest, textStatus, errorThrown) {
+function handleError(XMLHttpRequest, textStatus, errorThrown) {
   var error_msg = 'Lexos cannot load <em>In the Margins</em> content from Scalar. '
   error_msg += 'There may be a problem with your internet connection. If you think '
   error_msg += 'your internet connection is working, try accessing <em>In the '
@@ -84,7 +84,7 @@ function handleError (XMLHttpRequest, textStatus, errorThrown) {
   $('#error-modal').modal()
 }
 
-function processData (data, type, url) {
+function processData(data, type, url) {
   for (var nodeProp in data) {
     node = data[nodeProp]
     content_path = node['http://rdfs.org/sioc/ns#content']
@@ -107,7 +107,7 @@ function processData (data, type, url) {
   displayITMcontent(content, title, url, type, video_url)
 }
 
-function displayITMcontent (content, title, url, type, video_url) {
+function displayITMcontent(content, title, url, type, video_url) {
   // Replace Scalar internal links with urls to Scalar
   content = content.replace(/<a href=\"/g, '<a href="http://scalar.usc.edu/works/lexos/')
   content = content.replace(/http:\/\/http:\/\/scalar.usc.edu\/works\/lexos\//g, 'http://')

@@ -9,7 +9,7 @@ $(function () {
     $(this).next().collapse('toggle')
   })
 
-  function updateTokenizeCheckbox () {
+  function updateTokenizeCheckbox() {
     if ($('#tokenByWords').is(':checked')) {
       $('#inWordsOnly').hide()
     } else {
@@ -21,7 +21,7 @@ $(function () {
 
   updateTokenizeCheckbox()
 
-  function updateNorm () {
+  function updateNorm() {
     if ($('#normalizeTypeRaw').is(':checked') || $('#normalizeTypeFreq').is(':checked')) {
       $('#tfidfspan').hide()
     } else {
@@ -33,7 +33,7 @@ $(function () {
 
   updateNorm()
 
-  function updateMFWinput () {
+  function updateMFWinput() {
     if ($('#MFW').is(':checked')) {
       $('span[id=mfwnumber-input]').show()
       if ($('#culling').is(':checked')) {
@@ -59,7 +59,7 @@ $(function () {
 
   updateMFWinput()
 
-  function updatecullinput () {
+  function updatecullinput() {
     if ($('#culling').is(':checked')) {
       $('span[id=cullnumber-input]').show()
       if ($('#MFW').is(':checked')) {

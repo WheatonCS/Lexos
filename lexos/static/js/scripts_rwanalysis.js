@@ -1,6 +1,6 @@
 // Show the milestone input when the milestone checkbox is checked
 
-function updateMSopt () {
+function updateMSopt() {
   if ($('#rollinghasmilestone').is(':checked')) {
     $('#rollingmilestoneopt').show()
   } else {
@@ -9,7 +9,7 @@ function updateMSopt () {
 }
 
 // Make the graph
-function makeRWAGraph () {
+function makeRWAGraph() {
   var tooltip = d3.select('body').select('div.rwtooltip')
   if ($('#rwagraphdiv').text() == 'True') {
     $('#rwagraphdiv').removeClass('hidden')
@@ -81,7 +81,7 @@ function makeRWAGraph () {
       .domain(yExtent)
 
     // Brushed on brush   // Redraws graph focus to the data contained within brush
-    function brushed () {
+    function brushed() {
       x.domain(brush.empty() ? x2.domain() : brush.extent())
       focus.selectAll('.line').attr('d', line)
       focus.select('.x.axis').call(xAxis)

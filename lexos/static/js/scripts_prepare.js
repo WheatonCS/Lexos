@@ -3,7 +3,7 @@
 scrolled = false
 var myvar
 var shiftElement = window.setInterval(shiftElementIfNeeded, 300)
-function shiftElementIfNeeded () {
+function shiftElementIfNeeded() {
   var scrollTop = $(window).scrollTop()
   var targetTop = 100
   if (scrollTop > targetTop) {

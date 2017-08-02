@@ -15,11 +15,11 @@ $(function () {
 
   var allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos']
 
-  function $id (id) {
+  function $id(id) {
     return document.getElementById(id)
   }
 
-  function AllowedFileType (filename) {
+  function AllowedFileType(filename) {
     var splitName = filename.split('.')
     var fileType = splitName[splitName.length - 1]
     if ($.inArray(fileType, allowedFileTypes) > -1) {
@@ -30,7 +30,7 @@ $(function () {
   }
 
   // file drag hover
-  function FileDragHover (e) {
+  function FileDragHover(e) {
     e.stopPropagation()
     e.preventDefault()
     e.target.className = (e.type == 'dragover' ? 'hover' : '')
@@ -39,7 +39,7 @@ $(function () {
   var numberOfFileDone = parseInt($('.fa-folder-open-o')[0].id)
 
   // file selection
-  function FileSelectHandler (e) {
+  function FileSelectHandler(e) {
     // cancel event and hover styling
 
     FileDragHover(e)
@@ -91,7 +91,7 @@ $(function () {
   }
 
   // upload and display file contents
-  function UploadAndParseFile (file) {
+  function UploadAndParseFile(file) {
     var filename = file.name.replace(/ /g, '_')
 
     if (AllowedFileType(file.name) && file.size <= $id('MAX_FILE_SIZE').value) {
@@ -172,7 +172,7 @@ $(function () {
   }
 
   // initialize
-  function Init () {
+  function Init() {
     var fileselect = $id('fileselect'),
       filedrag = $id('dragndrop'),
       submitbutton = $id('submitbutton')

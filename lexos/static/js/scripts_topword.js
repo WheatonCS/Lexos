@@ -4,7 +4,7 @@ $(function () {
   $('#temp-label-div').css('position', 'relative').css('left', '-6px').css('top', '0px')
 
   // display/hide expandable divs (Define Groups div) here
-  function updateGroupOptionDiv () {
+  function updateGroupOptionDiv() {
     $choice = $('.show-options div').siblings('input')
     $.each($choice, function () {
       if ($(this).is(':checked')) {

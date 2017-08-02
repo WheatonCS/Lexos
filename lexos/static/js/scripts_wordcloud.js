@@ -77,7 +77,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // Word Cloud - by Scott Kleinman
 // Word Cloud is based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html.
 
-function preprocess (dataset) { // Used to decode utf-8
+function preprocess(dataset) { // Used to decode utf-8
   wordData = dataset['children']
   for (var i = 0; i < wordData.length; i++) {
     // wordData[i].name = decodeURIComponent(escape(wordData[i].name));
@@ -106,7 +106,7 @@ $(function () {
       maxLength = 30,
       statusText = d3.select('#status')
 
-    function flatten (o, k) {
+    function flatten(o, k) {
       if (typeof o === 'string') return o
       var text = []
       for (k in o) {
@@ -116,7 +116,7 @@ $(function () {
       return text.join(' ')
     }
 
-    function parseJSON (jsonObject) {
+    function parseJSON(jsonObject) {
       cloud = jsonObject['children']
       tags = {}
       var cases = {}
@@ -135,7 +135,7 @@ $(function () {
       generate()
     }
 
-    function generate () {
+    function generate() {
       layout
         .font(d3.select('#font').property('value'))
         .spiral(d3.select('input[name=spiral]:checked').property('value'))
@@ -147,11 +147,11 @@ $(function () {
       layout.stop().words(tags.slice(0, max = Math.min(tags.length, +d3.select('#maxwords').property('value')))).start()
     }
 
-    function progress (d) {
+    function progress(d) {
       statusText.text('Loading words ' + ++complete + '/' + max)
     }
 
-    function draw (data, bounds) {
+    function draw(data, bounds) {
       // console.log(data); // At this stage the text is missing government.
       var tooltip = d3.select('body').select('div.d3tooltip')
       statusText.style('display', 'none')
@@ -222,7 +222,7 @@ $(function () {
     }
 
     // Converts a given word cloud to image/png.
-    function downloadPNG () {
+    function downloadPNG() {
       var canvas = document.createElement('canvas'),
         c = canvas.getContext('2d')
       canvas.width = w
@@ -274,14 +274,14 @@ $(function () {
       // End Save
     })
 
-    function downloadSVG () {
+    function downloadSVG() {
       d3.select(this).attr('href', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(
         svg.attr('version', '1.1')
           .attr('xmlns', 'http://www.w3.org/2000/svg')
           .node().parentNode.innerHTML))))
     }
 
-    function hashchange () {
+    function hashchange() {
       var h = location.hash
       if (h && h.length > 1) {
         h = h.substr(1).split(/@|=/, 2).map(decodeURIComponent)
@@ -291,13 +291,13 @@ $(function () {
       load('cloud')
     }
 
-    function load (d, f) {
+    function load(d, f) {
       f = f || dataset
       dataset = f
       if (dataset) parseJSON(dataset)
     }
 
-    function updateTabs () {
+    function updateTabs() {
       tabs.classed('active', function () {
         return decodeURIComponent(d3.select(this).attr('href').substr(1)) === dataset && dataset !== ''
       })
@@ -425,14 +425,14 @@ $(function () {
 
       getAngles()
 
-      function getAngles () {
+      function getAngles() {
         count = +d3.select('#angle-count').property('value')
         from = Math.max(-90, Math.min(90, +d3.select('#angle-from').property('value')))
         to = Math.max(-90, Math.min(90, +d3.select('#angle-to').property('value')))
         update()
       }
 
-      function update () {
+      function update() {
         scale.domain([0, count - 1]).range([from, to])
         var step = (to - from) / count
 
@@ -485,8 +485,8 @@ $(function () {
         d3.select('#angle-to').property('value', to)
       }
 
-      function cross (a, b) { return a[0] * b[1] - a[1] * b[0] }
-      function dot (a, b) { return a[0] * b[0] + a[1] * b[1] }
+      function cross(a, b) { return a[0] * b[1] - a[1] * b[0] }
+      function dot(a, b) { return a[0] * b[0] + a[1] * b[1] }
     })()
   }
 })

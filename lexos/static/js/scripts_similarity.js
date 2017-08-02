@@ -31,7 +31,7 @@ $(function () {
   })
 
   // Display selected document name on screen
-  function makeFilenameStr (fileID) {
+  function makeFilenameStr(fileID) {
     var selectedFilename = 'Selected Document: ' + documentLabels[fileID]
     $('#selectedDocument').text(selectedFilename)
   }
@@ -40,7 +40,7 @@ $(function () {
     makeFilenameStr($('input[type=radio]:checked').val())
   }
 
-  function createList () {
+  function createList() {
     var columnValues = []
     var rows = (docsListScore.length - 1)
     for (i = 0; i < rows; i++) {

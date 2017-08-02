@@ -46,7 +46,7 @@
     }
   };
 
-  function dtSetArea (top, left, width, height) {
+  function dtSetArea(top, left, width, height) {
     dtCtx.area.top = top;
     dtCtx.area.left = left;
     dtCtx.area.width = width;
@@ -54,7 +54,7 @@
   }
 
   // Changes backgrounds of selected items
-  function dtSelectRows () {
+  function dtSelectRows() {
     var selection = $(dtCtx.current + " tbody > tr")
       .withinBox(dtCtx.area.left,
       dtCtx.area.top,
@@ -89,7 +89,7 @@
   }
 
   // Updates selection square
-  function dtMouseMove (event) {
+  function dtMouseMove(event) {
     if (dtCtx.dragFirstFrame && !dtCtx.multiSelection) {
       var table = $(dtCtx.current).DataTable();
       table.rows({ selected: true }).deselect();
@@ -126,7 +126,7 @@
     dtSelectRows();
   }
 
-  function dtInitPersitancy () {
+  function dtInitPersitancy() {
     if (!dtCtx.initialized) {
       dtCtx.initialized = true;
 
@@ -153,7 +153,7 @@
     }
   }
 
-  function dtAreaSelection (table) {
+  function dtAreaSelection(table) {
     $(table)
       .on("mousedown", "tbody > tr > td:not(.dataTables_empty):not(.dataTables_noselect)", function (event) {
         var table = $(this).closest("table");

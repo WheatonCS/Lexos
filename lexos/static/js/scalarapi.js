@@ -19,7 +19,7 @@
 
 var scalarapi = new ScalarAPI();
 
-function is_array (input) {
+function is_array(input) {
   return typeof (input) == 'object' && (input instanceof Array);
 }
 
@@ -31,7 +31,7 @@ function is_array (input) {
  * @author		<a href="mailto:erik@song.nu">Erik Loyer</a>
  * @version		1.0
  */
-function ScalarAPI () {
+function ScalarAPI() {
 
   var me = this;
 
@@ -2315,7 +2315,7 @@ ScalarAPI.prototype.parsePagesByType = function (json) {
  *
  * @param 	{Object} options	An object containing relevant data for the plug-in.
  */
-function ScalarModel (options) {
+function ScalarModel(options) {
 
   var me = this;
 
@@ -2832,7 +2832,7 @@ ScalarModel.prototype.getPublisherNode = function () {
  * @param {Object} json					JSON data describing the node.
  * @param {Object} versionData			Data describing versions of the node.
  */
-function ScalarNode (url, json, versionData) {
+function ScalarNode(url, json, versionData) {
 
   var me = this;
 
@@ -3354,7 +3354,7 @@ ScalarNode.prototype.isRelatedToNode = function (node, relations) {
  * @param {Object} data					Data describing the version
  * @param {Object} node					The node this object is a version of.
  */
-function ScalarVersion (data, node) {
+function ScalarVersion(data, node) {
 
   var me = this;
 
@@ -3516,7 +3516,7 @@ ScalarVersion.prototype.parseRelations = function () {
  * @param {Object} target				Target (destination) node.
  * @param {Object} type					Data describing the relation.
  */
-function ScalarRelation (json, body, target, type) {
+function ScalarRelation(json, body, target, type) {
 
   this.properties = {};
 

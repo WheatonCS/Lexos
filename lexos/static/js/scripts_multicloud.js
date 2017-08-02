@@ -59,7 +59,7 @@ $(document).ready(function () {
   $('#multicloud-upload').hide()
 })
 
-function renderClouds (dataset, wordCounts) {
+function renderClouds(dataset, wordCounts) {
   // Decrease the first wordScale domain numbers to increase size contrast
   wordScale = d3.scale.linear().domain([1, 5, 50, 500]).range([10, 20, 40, 80]).clamp(true)
   wordColor = d3.scale.linear().domain([10, 20, 40, 80]).range(['blue', 'green', 'orange', 'red'])
@@ -87,7 +87,7 @@ function renderClouds (dataset, wordCounts) {
 		   ajax response. However, the client-side function is kept for reference. */
     // wordCounts = constructWordCounts(children);
 
-    function draw (words) {
+    function draw(words) {
       // Create the tooltip
       var tooltip = d3.select('body').select('div.d3tooltip').attr('id', i)
 

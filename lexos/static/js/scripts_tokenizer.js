@@ -1,6 +1,6 @@
 $(function () {
   // Toggle the additional DTM contents option
-  function updateCSVcontentOption () {
+  function updateCSVcontentOption() {
     if ($('#greyword').is(':checked') || $('#culling').is(':checked') || $('#MFW').is(':checked')) {
       $('#csvcontdiv').show()
     } else {

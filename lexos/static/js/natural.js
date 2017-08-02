@@ -27,7 +27,7 @@
    * Contributors: Mike Grier (mgrier.com), Clint Priest, Kyle Adams, guillermo
    * See: http://js-naturalsort.googlecode.com/svn/trunk/naturalSort.js
    */
-  function naturalSort (a, b) {
+  function naturalSort(a, b) {
     var re = /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi,
       sre = /(^[ ]*|[ ]*$)/g,
       dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
