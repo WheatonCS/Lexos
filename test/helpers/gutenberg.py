@@ -16,12 +16,12 @@ FRONT_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND PREJUDICE" \
               "\n\nBy Jane Austen\n\n"
 TEXT_NEITHER = "Chapter 1\n\nIt is a truth universally acknowledged, that a" \
                " single man in possession\nof a good fortune, must be in" \
-               " want of a wife.\n\n<much text goes here>\n\nWith the" \
-               " Gardiners, they were always on the most intimate terms." \
-               "\nDarcy, as well as Elizabeth, really loved them; and they" \
-               " were both ever\nsensible of the warmest gratitude towards" \
-               " the persons who, by bringing\nher into Derbyshire, had been" \
-               " the means of uniting them.\n\n"
+               " want of a wife.\n\n<much text goes here>\n\n*** Testing" \
+               " stars ***\n\nWith the Gardiners, they were always on the "\
+               " most intimate terms.\nDarcy, as well as Elizabeth, really "\
+               "loved them; and they were both ever\nsensible of the warmest" \
+               " gratitude towards the persons who, by bringing\nher into "\
+               " Derbyshire, had been the means of uniting them.\n\n"
 BACK_PLATE = "End of the Project Gutenberg EBook of Pride and Prejudice, by" \
              " Jane Austen\n\n*** END OF THIS PROJECT GUTENBERG EBOOK PRIDE" \
              " AND PREJUDICE ***\n\n***** This file should be named " \
