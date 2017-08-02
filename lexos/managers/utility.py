@@ -1202,23 +1202,31 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     cull = 'cullcheckbox' in request.form
     mfw = 'mfwcheckbox' in request.form
 
-    if file_manager.files.get(comp_file_id) is not None:
-        comp_file_index = list(file_manager.files.keys()).index(comp_file_id)
-    # to check if we find the index.
-    else:
+    found = False
+    for file in file_manager.files.values():
+        if int(file.id) == int(comp_file_id) and not found:
+            comp_file_index = int(comp_file_id)
+            found = True
+
+    if not found:
         raise ValueError('input comparison file id cannot be found '
                          'in filemanager')
 
-    final_matrix, words, temp_labels = file_manager.get_matrix(
+    dtm_data_frame = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option="N/A",
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
-        round_decimal=False,
         mfw=mfw,
-        cull=cull)
+        cull=cull,
+        round_decimal=False)
+
+    # extract the raw matrix from dataframe
+    final_matrix = dtm_data_frame.values
+    # extract the row header from dataframe
+    temp_labels = np.array(np.delete(dtm_data_frame.index, comp_file_index))
 
     # call similarity.py to generate the similarity list
     docs_score, docs_name = similarity.similarity_maker(
@@ -1227,8 +1235,8 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     # concatinates lists as strings with *** deliminator
     # so that the info can be passed successfully through the
     # html/javascript later on
-    return "***".join(str(score) for score in docs_score),\
-           "***".join(str(name) for name in docs_name)
+    return "***".join(str(score) for score in docs_score) + "***",\
+           "***".join(str(name) for name in docs_name) + "***"
 
 
 def generate_sims_csv(file_manager: FileManager):

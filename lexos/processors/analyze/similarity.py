@@ -9,10 +9,9 @@ def similarity_maker(final_matrix: np.ndarray, comp_file_index: int,
                      temp_labels: np.ndarray) -> (np.ndarray, np.ndarray):
     """this function generate the result of cos-similarity between files
 
-    :param final_matrix: the matrix that filemanager.GetMatirx returned
+    :param final_matrix: the raw matrix that filemanager.GetMatirx returned
     :param comp_file_index: the index of the comparison file
                             (the file that compares with others)
-    :param temp_labels: the Temporary Labels that user inputs
     :return: docs_score: a parallel list with `docs_name`, is an
                          array of the cos-similarity distance
     :return: docs_name: a parallel list with `docs_score`, is an
