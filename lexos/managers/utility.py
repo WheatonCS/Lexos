@@ -276,7 +276,7 @@ def generate_statistics(file_manager: FileManager) -> \
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix, _, labels = file_manager.get_matrix(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -287,11 +287,11 @@ def generate_statistics(file_manager: FileManager) -> \
         cull=culling)
 
     file_info_list = []
-    for count, label in enumerate(labels):
+    for count, label in enumerate(dtm_data.index.values):
         file_info_list.append(information.FileInformation(
-            count_list=count_matrix[count, :], file_name=label))
-    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
-                                                labels=labels)
+            count_list=dtm_data.values[count, :], file_name=label))
+    corpus_info = information.CorpusInformation(count_matrix=dtm_data.values,
+                                                labels=dtm_data.index.values)
     return file_info_list, corpus_info
 
 
