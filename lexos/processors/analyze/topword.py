@@ -7,7 +7,7 @@
 
 import itertools
 from cmath import sqrt
-from typing import List, Dict
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -116,7 +116,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
 
 
 def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
-        -> Dict[dict]:
+        -> dict:
     """Analyzes each single word compare to all the other group.
 
     :param group_values: a list of lists, where each list contains an matrix
