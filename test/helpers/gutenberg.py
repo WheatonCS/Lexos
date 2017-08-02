@@ -12,8 +12,11 @@ FRONT_PLATE = "'The Project Gutenberg EBook of Pride and Prejudice, by Jane" \
               " 2016\n\nLanguage: English\n\nCharacter set encoding: " \
               "UTF-8\n\n*** START OF THIS PROJECT GUTENBERG EBOOK PRIDE " \
               "AND PREJUDICE ***"
-FRONT_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND PREJUDICE" \
-              "\n\nBy Jane Austen\n\n"
+FRONT_PLATE_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND " \
+                    "PREJUDICE\n\nBy Jane Austen\n\n"
+FRONT_COPY = "Blah blah blah. This text is Copyright Joe Schmoe 2017.\nAll " \
+             "rights reserved.\n\nIf you are reading this, I will have your " \
+             "first born son. Bye bye.\n\n\n"
 TEXT_NEITHER = "Chapter 1\n\nIt is a truth universally acknowledged, that a" \
                " single man in possession\nof a good fortune, must be in" \
                " want of a wife.\n\n<much text goes here>\n\n*** Testing" \
@@ -40,6 +43,6 @@ BACK_PLATE = "End of the Project Gutenberg EBook of Pride and Prejudice, by" \
              " to the Project Gutenberg Literary\nArchive Foundation, how to" \
              " help produce our new eBooks, and how to\nsubscribe to our" \
              " email newsletter to hear about new eBooks.\n\n"
-TEXT_FRONT = FRONT_PLATE + FRONT_EXTRA + TEXT_NEITHER
+TEXT_FRONT_PLATE = FRONT_PLATE + FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_BACK = TEXT_NEITHER + BACK_PLATE
-TEXT_BOTH = TEXT_FRONT + BACK_PLATE
+TEXT_BOTH_PLATE = TEXT_FRONT_PLATE + BACK_PLATE

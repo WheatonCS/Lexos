@@ -507,10 +507,10 @@ class TestHandleGutenberg:
     def test_handle_gutenberg(self):
         assert handle_gutenberg("") == ""
         assert handle_gutenberg(guten.TEXT_NEITHER) == guten.TEXT_NEITHER
-        assert handle_gutenberg(guten.TEXT_FRONT) == \
-            guten.FRONT_EXTRA + guten.TEXT_NEITHER
+        assert handle_gutenberg(guten.TEXT_FRONT_PLATE) == \
+            guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
         assert handle_gutenberg(guten.TEXT_BACK) == guten.TEXT_NEITHER
-        assert handle_gutenberg(guten.TEXT_BOTH) == \
-            guten.FRONT_EXTRA + guten.TEXT_NEITHER
+        assert handle_gutenberg(guten.TEXT_BOTH_PLATE) == \
+            guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
 
 # scrub
