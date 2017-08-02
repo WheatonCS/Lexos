@@ -1281,44 +1281,14 @@ def get_top_word_option():
     """Gets the top word options from the front-end.
 
     :return: test_by_class: option for proportional z test to see whether to
-             use testgroup() or testall().
-             option: the word fileter to determine what words to analysis.
-             high: the highest proportion that sent to topword analysis.
-             low: the lowest proportion that sent to topword analysis.
+             use test by files or by classes
     """
-
     if 'testInput' in request.form:  # when do KW this is not in request.form
         test_by_class = request.form['testInput']
     else:
         test_by_class = None
 
-    outlier_method = \
-        'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
-
-    # begin get option
-    low = 0.0  # init low
-    high = 1.0  # init high
-
-    if outlier_method == 'StdE':
-        outlier_range = request.form["outlierTypeStd"]
-    else:
-        outlier_range = request.form["outlierTypeIQR"]
-
-    if request.form['groupOptionType'] == 'all':
-        option = 'CustomP'
-    elif request.form['groupOptionType'] == 'bio':
-        option = outlier_range + outlier_method
-    else:
-        if request.form['useFreq'] == 'RC':
-            option = 'CustomR'
-            high = int(request.form['upperboundRC'])
-            low = int(request.form['lowerboundRC'])
-        else:
-            option = 'CustomP'
-            high = float(request.form['upperboundPC'])
-            low = float(request.form['lowerboundPC'])
-
-    return test_by_class, option, low, high
+    return test_by_class
 
 
 def generate_z_test_top_word(file_manager: FileManager):
@@ -1328,12 +1298,13 @@ def generate_z_test_top_word(file_manager: FileManager):
     :return: A dictionary containing the Z-test results.
     """
     # Initialize
-    test_by_class, option, low, high = get_top_word_option()
+    test_by_class = get_top_word_option()
 
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
+    # Generate word count matrix
     dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
@@ -1344,32 +1315,44 @@ def generate_z_test_top_word(file_manager: FileManager):
         mfw=mfw,
         cull=culling)
 
-    if test_by_class == 'allToPara':  # test for all
-        analysis_result = analyze_all_to_para(dtm_data.values,
-                                              dtm_data.columns.values)
+    # Grab data from data frame
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
+    words = dtm_data.columns.values
+
+    # test for all
+    if test_by_class == 'allToPara':
+        analysis_result = analyze_all_to_para(count_matrix=count_matrix,
+                                              words=words)
         # convert to human readable form
         human_result = []
-        for count, label in enumerate(dtm_data.index.values):
+        for index, label in enumerate(labels):
             header = 'Document "' + label + '" compared to the whole corpus'
-            human_result.append([header, analysis_result[count]])
+            human_result.append([header, analysis_result[index]])
 
-    elif test_by_class == 'classToPara':  # test by class
+    # test by class
+    elif test_by_class == 'classToPara':
         # create division map
         division_map = file_manager.get_class_division_map()
+        class_labels = division_map.index.values
+
+        # check if more than one class exists
         if division_map.shape[0] == 1:
             raise ValueError(" only one class given, cannot do Z-test by "
                              "class, at least 2 classes needed")
-        # divide into group
+
+        # divides into group
         group_values, name_map = group_division(dtm_data, division_map.values)
+
         # test
-        analysis_result = analyze_para_to_group(group_values,
-                                                dtm_data.columns.values)
+        analysis_result = analyze_para_to_group(group_values=group_values,
+                                                words=words)
 
         # convert to human readable form
         human_result = []
         for key in list(analysis_result.keys()):
             file_name = name_map[key[0]][key[1]]
-            comp_class_name = division_map.index.values[key[2]]
+            comp_class_name = class_labels[key[2]]
             if comp_class_name == '':
                 header = 'Document "' + file_name + \
                          '" compared to Class: untitled'
@@ -1381,19 +1364,22 @@ def generate_z_test_top_word(file_manager: FileManager):
     elif test_by_class == 'classToClass':
         # create division map
         division_map = file_manager.get_class_division_map()
+        class_labels = division_map.index.values
+
+        # check if more than one class exists
         if division_map.shape[0] == 1:
             raise ValueError(" only one class given, cannot do Z-test by "
                              "class, at least 2 classes needed")
-        # divide into group
+        # divides into group
         group_values, name_map = group_division(dtm_data, division_map.values)
         # test
-        analysis_result = analyze_group_to_group(group_values,
-                                                 dtm_data.columns.values)
+        analysis_result = analyze_group_to_group(group_values=group_values,
+                                                 words=words)
         # convert to human readable form
         human_result = []
         for key in list(analysis_result.keys()):
-            base_class_name = division_map.index.values[key[0]]
-            comp_class_name = division_map.index.values[key[1]]
+            base_class_name = class_labels[key[0]]
+            comp_class_name = class_labels[key[1]]
             if comp_class_name == '':
                 header = 'Class "' + base_class_name + \
                          '" compared to Class: untitled'
