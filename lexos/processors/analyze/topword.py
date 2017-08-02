@@ -54,11 +54,15 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
     :return: a list of lists, each list represents a group, where each element
              in the list is a list that contain all the lists in the group.
     """
-    # pack the Chunk data in to ChunkMap(because this is fast)
+    # Trap possible empty inputs
     assert np.size(dtm.values) > 0, EMPTY_NP_ARRAY_MESSAGE
     assert np.size(division_map) > 0, EMPTY_NP_ARRAY_MESSAGE
+
+    # initialize
     group_list = []
     label_list = []
+
+    # Create group map
     for _, row in enumerate(division_map):
         group_list.append(dtm.values[row])
         label_list.append(dtm.index.values[row])
@@ -74,9 +78,11 @@ def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
     :param words: words that show up at least one time in the whole corpus.
     :return: a dictionary maps words to z-scores.
     """
+    # initialize
     word_z_score_dict = {}
     row_sum = np.sum(count_list_i).item()
     total_sum = np.sum(count_list_j).item()
+
     for count, word in enumerate(words):
         p_i = count_list_i[count] / row_sum
         p_j = count_list_j[count] / total_sum
@@ -104,6 +110,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
     # initialize the value to return
     all_results = []
     count_matrix_sum = np.sum(count_matrix, axis=0)
+
     # Generate data
     for _, row in enumerate(count_matrix):
         word_z_score_dict = _z_test_word_list_(
@@ -129,8 +136,10 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
              p value), this is word usage of word in group compare to the word
              usage of the same word in another group.
     """
+    # Trap possible empty inputs
     assert group_values, EMPTY_LIST_MESSAGE
     assert np.size(words) > 0, EMPTY_NP_ARRAY_MESSAGE
+
     # initialize the value to return
     all_results = {}  # the value to return
     group_lists = []  # the total word count of each group
@@ -183,8 +192,10 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
                    representing a word, second element is a float representing
                    the corresponding z-score.
     """
+    # Trap possible empty inputs
     assert group_values, EMPTY_LIST_MESSAGE
     assert np.size(words) > 0, EMPTY_NP_ARRAY_MESSAGE
+
     # initialize the value to return
     all_results = {}  # the value to return
     group_lists = []  # the total word count of each group
@@ -207,6 +218,7 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
         word_z_score_dict = _z_test_word_list_(count_list_i=group_comp_list,
                                                count_list_j=group_base_list,
                                                words=words)
+
         # sort the dictionary
         sorted_word_z_score_list = sorted(list(word_z_score_dict.items()),
                                           key=lambda item: abs(item[1]),
