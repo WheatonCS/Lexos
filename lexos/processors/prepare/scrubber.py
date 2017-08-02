@@ -561,12 +561,15 @@ def split_input_word_string(input_string: str) -> List[str]:
 
     input_lines = input_string.split("\n")
 
-    input_words = []
+    input_pieces = []    # list of words and ""
     for line in input_lines:
         line = line.strip()
         # Using re for multiple delimiter splitting
-        line = re.split('[,. ]', line)
-        input_words.extend(line)
+        line = re.split('[,. ]', line)  # maybe change '[,. ]' for punctuation
+        input_pieces.extend(line)
+
+    # get rid of empty strings in input_pieces
+    input_words = [word for word in input_pieces if word != '']
 
     return input_words
 
