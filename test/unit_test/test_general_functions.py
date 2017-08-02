@@ -126,3 +126,9 @@ class TestDecodeBytes:
 
     def test_windows_1251_decoding(self):
         assert decode_bytes('Zемфира'.encode()) == 'Zемфира'
+
+    def test_utf16_be_decoding(self):
+        assert decode_bytes("test".encode('utf-16-be')) == "test"
+
+    def test_utf16_le_decoding(self):
+        assert decode_bytes("test".encode('utf-16-le')) == "test"

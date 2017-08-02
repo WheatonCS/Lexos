@@ -219,4 +219,4 @@ def decode_bytes(raw_bytes: bytes) -> str:
         # Grab the file contents, which were encoded/decoded automatically
         # into python's format
         decoded_string = raw_bytes.decode(encoding_type)
-    return decoded_string
+    return decoded_string.replace("\x00", "")
