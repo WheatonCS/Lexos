@@ -596,7 +596,6 @@ def generate_k_means_pca(file_manager: FileManager):
         n_gram_size=ngram_size,
         use_freq=False,
         grey_word=grey_word,
-        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
@@ -683,7 +682,6 @@ def generate_k_means_voronoi(file_manager: FileManager):
         n_gram_size=ngram_size,
         use_freq=False,
         grey_word=grey_word,
-        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
