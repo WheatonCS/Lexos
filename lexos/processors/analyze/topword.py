@@ -12,7 +12,8 @@ from typing import List, Dict
 import numpy as np
 import pandas as pd
 
-from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE, \
+    EMPTY_NP_ARRAY_MESSAGE
 
 
 # TODO: Fix this function
@@ -54,8 +55,8 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
              in the list is a list that contain all the lists in the group.
     """
     # pack the Chunk data in to ChunkMap(because this is fast)
-    assert not dtm.empty, EMPTY_LIST_MESSAGE
-    assert division_map.size > 0, EMPTY_LIST_MESSAGE
+    assert np.size(dtm.values) > 0, EMPTY_NP_ARRAY_MESSAGE
+    assert np.size(division_map) > 0, EMPTY_NP_ARRAY_MESSAGE
     group_list = []
     label_list = []
     for _, row in enumerate(division_map):
@@ -99,7 +100,7 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
              segment and it is sorted via z_score, each element array is a
              tuple: (word, corresponding z_score).
     """
-    assert np.size(count_matrix) > 0, EMPTY_LIST_MESSAGE
+    assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
     # initialize the value to return
     all_results = []
     count_matrix_sum = np.sum(count_matrix, axis=0)
@@ -114,8 +115,8 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
     return all_results
 
 
-def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> \
-        Dict[dict]:
+def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
+        -> Dict[dict]:
     """Analyzes each single word compare to all the other group.
 
     :param group_values: a list of lists, where each list contains an matrix
@@ -128,7 +129,8 @@ def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> \
              p value), this is word usage of word in group compare to the word
              usage of the same word in another group.
     """
-
+    assert group_values, EMPTY_LIST_MESSAGE
+    assert np.size(words) > 0, EMPTY_NP_ARRAY_MESSAGE
     # initialize the value to return
     all_results = {}  # the value to return
     group_lists = []  # the total word count of each group
@@ -167,8 +169,8 @@ def analyze_para_to_group(group_values: np.ndarray, words: np.ndarray) -> \
     return all_results
 
 
-def analyze_group_to_group(group_values: np.ndarray, words: np.ndarray) -> \
-        dict:
+def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
+        -> dict:
     """Analyzes the group compare with each other groups.
 
     :param group_values: a list of lists, where each list contains an matrix
@@ -181,7 +183,8 @@ def analyze_group_to_group(group_values: np.ndarray, words: np.ndarray) -> \
                    representing a word, second element is a float representing
                    the corresponding z-score.
     """
-
+    assert group_values, EMPTY_LIST_MESSAGE
+    assert np.size(words) > 0, EMPTY_NP_ARRAY_MESSAGE
     # initialize the value to return
     all_results = {}  # the value to return
     group_lists = []  # the total word count of each group
@@ -206,10 +209,10 @@ def analyze_group_to_group(group_values: np.ndarray, words: np.ndarray) -> \
                                                words=words)
         # sort the dictionary
         sorted_word_z_score_list = sorted(list(word_z_score_dict.items()),
-                                               key=lambda item: abs(item[1]),
-                                               reverse=True)
+                                          key=lambda item: abs(item[1]),
+                                          reverse=True)
         # pack the sorted result in sorted list
         all_results.update(
             {(group_comp_index, group_base_index):
-                sorted_word_z_score_list})
+                 sorted_word_z_score_list})
     return all_results
