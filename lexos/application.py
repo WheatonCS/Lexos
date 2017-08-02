@@ -1,12 +1,14 @@
+import json
 import os
 import re
 import time
 
-from flask import Flask
+from flask import Flask, request, render_template
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
 import lexos.helpers.constants
+from lexos.helpers.exceptions import LexosException
 from lexos.interfaces.base_interface import base_view
 from lexos.interfaces.bubble_viz_interface import viz_view
 from lexos.interfaces.clustering_interface import cluster_view
@@ -96,6 +98,31 @@ def nl2br(eval_ctx, value):
         result = Markup(result)
     return result
 
+
+# ==== add error handlers ====
+@app.errorhandler(404)
+def page_not_found(_):
+    """Custom 404 Page"""
+    app.logger.error('Page not found: %s', request.path)
+    return render_template('404.html'), 404
+
+
+@app.error_handlers(Exception)
+def unhandled_exception(error):
+    """handles internal server errors
+
+    Send all the LexosException to the frontend
+    for all the other Exceptions,
+    we will just render the internal server error (500) page
+    """
+    # if we want to send this backend error to the front end
+    if isinstance(error, LexosException):
+        ret_data = {"lexosException": str(error)}
+        return json.dumps(ret_data)
+
+    # if flask raises this error
+    else:
+        render_template("500.html")
 
 if __name__ == '__main__':
     app.run()
