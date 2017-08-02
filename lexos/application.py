@@ -111,9 +111,9 @@ def page_not_found(_):
 def unhandled_exception(error):
     """handles internal server errors
 
-    Send all the LexosException to the frontend
-    for all the other Exceptions,
-    we will just render the internal server error (500) page
+    Send all the LexosException to the frontend.
+    For all the other Exceptions,
+    we will just render the internal server error (500) page.
     """
     # if we want to send this backend error to the front end
     if isinstance(error, LexosException):
@@ -123,6 +123,7 @@ def unhandled_exception(error):
     # if flask raises this error
     else:
         render_template("500.html")
+
 
 if __name__ == '__main__':
     app.run()
