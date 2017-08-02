@@ -188,7 +188,7 @@
                 {% endif %}
                     <div class="topwordFileTable">
                         {% for filename in classmap.columns.values %}
-                            {%  if classmap[filename][classmap.index.values[i]] == 1 %}
+                            {%  if classmap[filename][classmap.index.values[i]] %}
                                 <p class="topwordFile">{{ filename }}</p>
                             {% endif %}
                         {% endfor %}
