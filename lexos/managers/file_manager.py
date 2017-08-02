@@ -1360,20 +1360,29 @@ class FileManager:
 
     def get_class_division_map(self):
         """:return: a panda frame that contains class division map."""
-
-        # create division map
-        files = self.get_active_files()
+        # initialize
         temp_labels = []
         temp_classes = []
+
+        # active files labels and classes
+        files = self.get_active_files()
         for file in files:
             temp_labels.append(file.label)
             if file.class_label not in temp_classes:
                 temp_classes.append(file.class_label)
+        label_length = len(temp_labels)
+        class_length = len(temp_classes)
+
+        # initialize class division map
         division_map = pd.DataFrame(
-            data=np.zeros((len(temp_classes), len(temp_labels)), dtype=bool),
-            index=temp_classes, columns=temp_labels)
+            data=np.zeros((label_length,class_length), dtype=bool),
+            index=temp_classes,
+            columns=temp_labels)
+
+        # set correct boolean value for each file
         for file in files:
             division_map[file.label][file.class_label] = True
+
         return division_map
 
     def get_previews_of_all(self):
