@@ -77,9 +77,7 @@ def multi_cloud():
 # Tells Flask to load this function when '/doMulticloud' is called
 @multi_cloud_view.route("/doMulticloud", methods=["GET", "POST"])
 def do_multicloud():
-    """
-
-    :return: a json object with all the word counts
+    """:return: a json object with all the word counts
     """
     # Get the file manager, sorted labels, and tokenization options
     file_manager = utility.load_file_manager()
