@@ -23,25 +23,27 @@ def handle_special_characters(text: str) -> str:
     option_list = request.form['entityrules']
 
     if option_list in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
+        conversion_dict = {}
+
         if option_list == 'doe-sgml':
-            character_entities = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;',
-                                  '&T;', '&E;', '&oe;', '&amp;', '&egrave;',
-                                  '&eacute;', '&auml;', '&ouml;', '&uuml;',
-                                  '&amacron;', '&cmacron;', '&emacron;',
-                                  '&imacron;', '&nmacron;', '&omacron;',
-                                  '&pmacron;', '&qmacron;', '&rmacron;',
-                                  '&lt;', '&gt;', '&lbar;', '&tbar;', '&bbar;']
-            unicode_characters = ['æ', 'ð', 'þ', 'ę', 'Æ', 'Ð', 'Þ', 'Ę',
-                                  'œ', '⁊', 'è', 'é', 'ä', 'ö', 'ü', 'ā',
-                                  'c̄', 'ē', 'ī', 'n̄', 'ō', 'p̄', 'q̄',
-                                  'r̄', '<', '>', 'ł', 'ꝥ', 'ƀ']
+            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                               '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
+                               '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
+                               '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
+                               '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
+                               '&amacron;': 'ā', '&cmacron;': 'c̄',
+                               '&emacron;': 'ē', '&imacron;': 'ī',
+                               '&nmacron;': 'n̄', '&omacron;': 'ō',
+                               '&pmacron;': 'p̄', '&qmacron;': 'q̄',
+                               '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
+                               '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
 
         elif option_list == 'early-english-html':
-            character_entities = ['&ae;', '&d;', '&t;', '&e;', '&AE;', '&D;',
-                                  '&T;', '&#541;', '&#540;', '&E;', '&amp;',
-                                  '&lt;', '&gt;', '&#383;']
-            unicode_characters = ['æ', 'ð', 'þ', '\u0119', 'Æ', 'Ð', 'Þ', 'ȝ',
-                                  'Ȝ', 'Ę', '&', '<', '>', 'ſ']
+            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                               '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
+                               '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
+                               '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
+                               '&gt;': '>', '&#383;': 'ſ'}
 
         elif option_list == 'MUFI-3':
             # assign current working path to variable
@@ -60,8 +62,6 @@ def handle_special_characters(text: str) -> str:
                 constants.RESOURCE_DIR,
                 constants.MUFI_3_FILENAME)
 
-            character_entities = []
-            unicode_characters = []
             with open(mufi3_path, encoding='utf-8') as MUFI_3:
 
                 # put the first two columns of the file into parallel arrays
@@ -71,10 +71,7 @@ def handle_special_characters(text: str) -> str:
                     value = pieces[1].rstrip()
 
                     if value[-1:] == ';':
-                        # put the value in the array for the characters
-                        character_entities.append(value)
-                        # put the key in the array for the unicode
-                        unicode_characters.append(key)
+                        conversion_dict[key] = value
 
         elif option_list == 'MUFI-4':
             # assign current working path to variable
@@ -93,8 +90,6 @@ def handle_special_characters(text: str) -> str:
                 constants.RESOURCE_DIR,
                 constants.MUFI_4_FILENAME)
 
-            character_entities = []
-            unicode_characters = []
             with open(mufi4_path, encoding='utf-8') as MUFI_4:
 
                 for line in MUFI_4:
@@ -104,13 +99,9 @@ def handle_special_characters(text: str) -> str:
                     value = pieces[1].rstrip()
 
                     if value[-1:] == ';':
-                        # put the value in the array for the characters
-                        character_entities.append(value)
-                        # put the key in the array for the unicode
-                        unicode_characters.append(key)
+                        conversion_dict[key] = value
 
-        r = make_replacer(dict(list(zip(
-            character_entities, unicode_characters))))
+        r = make_replacer(conversion_dict)
         # r is a function created by make_replacer(), _do_replace(), and
         # replace().
         # do_replace() returns the new char to use when called with the char to
