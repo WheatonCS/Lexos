@@ -1,5 +1,10 @@
 {
   "extends": "standard",
+
+  "rules":{
+    "space-before-function-paren": "error"
+  },
+
   "env": {
     "browser": true,
     "commonjs": true,
