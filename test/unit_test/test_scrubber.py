@@ -355,7 +355,7 @@ class TestDeleteWords:
     def test_delete_words(self):
         assert delete_words(
             self.test_string, ["Many", "words", "written", "all"]) == \
-               " were , but not many of the said much at ."
+            " were , but not many of the said much at ."
         assert delete_words(self.test_string, [""]) == self.test_string
         assert delete_words(self.test_string, []) == self.test_string
         assert delete_words("", ["words"]) == ""
