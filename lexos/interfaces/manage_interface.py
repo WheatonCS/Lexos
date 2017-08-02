@@ -88,7 +88,7 @@ def manage():
 def select_all():
     """selects all files
 
-    :return: string indicating that it has succeeded 
+    :return: string indicating that it has succeeded
     """
     file_manager = utility.load_file_manager()
     file_manager.enable_all()
@@ -100,7 +100,7 @@ def select_all():
 def deselect_all():
     """deletes all files
 
-    :return: string indicating that it has succeeded 
+    :return: string indicating that it has succeeded
     """
     file_manager = utility.load_file_manager()
     file_manager.disable_all()
