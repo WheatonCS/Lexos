@@ -34,15 +34,7 @@ files:  A dictionary holding the LexosFile objects, each representing an
 
 class FileManager:
     def __init__(self):
-        """ Constructor:
-        Creates an empty file manager.
-
-        Args:
-            None
-
-        Returns:
-            FileManager object with no files.
-        """
+        """Constructor: Creates an empty FileManager (object with no files)."""
         self._files = {}
         self.next_id = 0
 
@@ -55,23 +47,19 @@ class FileManager:
     def files(self) -> Dict[int, LexosFile]:
         """A property for private attribute: _files.
 
-        :return: a dict map file id to lexos_files
+        :return: a dict map file id to lexos_files.
         """
         return self._files
 
     def add_file(self, original_filename: str, file_name: str,
                  file_string: str) -> int:
-        """
-        Adds a file to the FileManager,
-        identifying the new file with the next ID to be used.
+        """Adds a file to the FileManager.
 
-        Args:
-            original_filename: the original file name of the uploaded file.
-            file_name: The file name we store.
-            file_string: The string contents of the text.
-
-        Returns:
-            The id of the newly added file.
+        The new file identifies with the next ID to be used.
+        :param original_filename: the original file name of the uploaded file.
+        :param file_name: the file name we store.
+        :param file_string: the string contents of the text.
+        :return: the id of the newly added file.
         """
         # solve the problem that there is file with the same name
         exist_clone_file = True
@@ -98,15 +86,10 @@ class FileManager:
         return new_file.id
 
     def delete_files(self, file_ids: List[int]):
-        """
-        Deletes all the files that have id in IDs
+        """Deletes all the files that have id in IDs
 
-        Args:
-            file_ids: an array contain all the id of the files need to be
-                deleted
-
-        Returns:
-            None
+        :param file_ids: an array containing all the id of the files that need
+                         to be deleted
         """
         for file_id in file_ids:
             file_id = int(file_id)  # in case that the id is not int
