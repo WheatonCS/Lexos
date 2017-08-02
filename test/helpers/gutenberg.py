@@ -1,4 +1,5 @@
-#
+# This file is used by the TestHandleGutenberg class in
+#   test.unit_test.test_scrubber.py
 
 FRONT_PLATE = "'The Project Gutenberg EBook of Pride and Prejudice, by Jane" \
               " Austen\n\nThis eBook is for the use of anyone anywhere at no" \
@@ -10,8 +11,9 @@ FRONT_PLATE = "'The Project Gutenberg EBook of Pride and Prejudice, by Jane" \
               " #1342]\nRelease Date: June, 1998\nLast Updated: October 17," \
               " 2016\n\nLanguage: English\n\nCharacter set encoding: " \
               "UTF-8\n\n*** START OF THIS PROJECT GUTENBERG EBOOK PRIDE " \
-              "AND PREJUDICE ***\n\nProduced by Anonymous Volunteers\n\n" \
-              "PRIDE AND PREJUDICE\n\nBy Jane Austen\n\n"
+              "AND PREJUDICE ***"
+FRONT_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND PREJUDICE" \
+              "\n\nBy Jane Austen\n\n"
 TEXT_NEITHER = "Chapter 1\n\nIt is a truth universally acknowledged, that a" \
                " single man in possession\nof a good fortune, must be in" \
                " want of a wife.\n\n<much text goes here>\n\nWith the" \
@@ -38,6 +40,6 @@ BACK_PLATE = "End of the Project Gutenberg EBook of Pride and Prejudice, by" \
              " to the Project Gutenberg Literary\nArchive Foundation, how to" \
              " help produce our new eBooks, and how to\nsubscribe to our" \
              " email newsletter to hear about new eBooks.\n\n"
-TEXT_FRONT = FRONT_PLATE + TEXT_NEITHER
+TEXT_FRONT = FRONT_PLATE + FRONT_EXTRA + TEXT_NEITHER
 TEXT_BACK = TEXT_NEITHER + BACK_PLATE
 TEXT_BOTH = TEXT_FRONT + BACK_PLATE
