@@ -24,7 +24,9 @@
     "smartmenus": "^1.0.1",
     "jquery": "^2.2.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^4.3.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
