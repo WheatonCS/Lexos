@@ -701,7 +701,7 @@ def handle_gutenberg(text: str) -> str:
     """Removes Project Gutenberg boilerplate from text.
 
     :param text: A Project Gutenberg document.
-    :return: The input text document without the boilerplate.
+    :return: The input text document without the Gutenberg boilerplate.
     """
 
     # find end of front boiler plate, assuming something like:
@@ -873,13 +873,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             return orig_text
 
     # -- 2. special characters -----------------------------------------------
-    text = call_replacement_handler(text=text,
-                                    replacer_string=sc_file_string,
-                                    is_lemma=False,
-                                    manual_replacer_string=sc_manual,
-                                    cache_folder=cache_folder,
-                                    cache_file_names=cache_filenames,
-                                    cache_number=2)
+    text = call_replacement_handler(
+        text=text, replacer_string=sc_file_string, is_lemma=False,
+        manual_replacer_string=sc_manual, cache_folder=cache_folder,
+        cache_file_names=cache_filenames, cache_number=2)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------
     if tags:  # If remove tags is checked:
@@ -920,24 +917,18 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 7. consolidations ---------------------------------------------------
     def consolidation_function(orig_text):
 
-        return call_replacement_handler(text=orig_text,
-                                        replacer_string=cons_file_string,
-                                        is_lemma=False,
-                                        manual_replacer_string=cons_manual,
-                                        cache_folder=cache_folder,
-                                        cache_file_names=cache_filenames,
-                                        cache_number=0)
+        return call_replacement_handler(
+            text=orig_text, replacer_string=cons_file_string, is_lemma=False,
+            manual_replacer_string=cons_manual, cache_folder=cache_folder,
+            cache_file_names=cache_filenames, cache_number=0)
 
     # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text):
 
-        return call_replacement_handler(text=orig_text,
-                                        replacer_string=lem_file_string,
-                                        is_lemma=True,
-                                        manual_replacer_string=lem_manual,
-                                        cache_folder=cache_folder,
-                                        cache_file_names=cache_filenames,
-                                        cache_number=1)
+        return call_replacement_handler(
+            text=orig_text, replacer_string=lem_file_string, is_lemma=True,
+            manual_replacer_string=lem_manual, cache_folder=cache_folder,
+            cache_file_names=cache_filenames, cache_number=1)
 
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text):
