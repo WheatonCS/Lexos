@@ -105,7 +105,6 @@ class TestStripLeadBlankLines:
         assert list(test_queue_multi_blanks.queue) == ["test"]
 
 
-
 class TestStripLeadChars:
     def test_lead_chars_regular(self):
         # create test piece in list of chars
