@@ -291,8 +291,9 @@ def generate_statistics(file_manager: FileManager) -> \
 
     # helper function gets information for each file
     def get_file_info(row_index, label):
-        return information.FileInformation(count_list=count_matrix[row_index, :],
-                                           file_name=label)
+        return information.FileInformation(
+            count_list=count_matrix[row_index, :],
+            file_name=label)
 
     # put information of each file into a list
     file_info_list = [get_file_info(row_index=ind, label=label)
