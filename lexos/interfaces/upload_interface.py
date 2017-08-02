@@ -68,6 +68,10 @@ def upload():
 
 @upload_view.route("/scrape", methods=["GET", "POST"])
 def scrape():
+    """scraps the urls an generates text file from each url
+
+    :return: json object with a string that indicates that is has succeeded
+    """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     if request.method == "GET":
