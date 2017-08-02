@@ -16,9 +16,7 @@ top_words_view = Blueprint('top_words', __name__)
 # Tells Flask to load this function when someone is at '/topword'
 @top_words_view.route("/topword", methods=["GET", "POST"])
 def top_words():
-    """
-    Handles the topword page functionality.
-    """
+    """Handles the topword page functionality."""
 
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
@@ -36,15 +34,9 @@ def top_words():
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
-        # get the class label and eliminate the id (this is not the unique id
-        # in file_manager)
+        # get the class division map and number of existing classes
         class_division_map = file_manager.get_class_division_map()
         num_class = class_division_map.shape[0]
-        # get number of class
-#        try:
-#            num_class = len(class_division_map[1])
-#        except IndexError:
-#            num_class = 0
 
         return render_template(
             'topword.html',
@@ -70,8 +62,8 @@ def top_words():
                 'the value of request.form["testInput"] '
                 'cannot be understood by the backend')
 
-        result = utility.generate_z_test_top_word(
-            file_manager)  # get the topword test result
+        # get the topword test result
+        result = utility.generate_z_test_top_word(file_manager)
 
         if 'get-topword' in request.form:  # download topword
             path = utility.get_top_word_csv(result,
@@ -85,7 +77,7 @@ def top_words():
                 as_attachment=True)
 
         else:
-            # get the number of class
+            # get the number of existing classes
             num_class = file_manager.get_class_division_map().shape[0]
 
             # only give the user a preview of the topWord
