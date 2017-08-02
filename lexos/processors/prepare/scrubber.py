@@ -622,20 +622,21 @@ def keep_words(text: str, non_removal_string: str) -> str:
 
     split_lines = text.split("\n")
 
-    text_list = []  # list containing all words in text
+    text_list = []  # list of words and ""
     for line in split_lines:
         line = line.strip()
-        # Using re for multiple delimiter splitting:  any whitespace(\s) or any
-        # punctuation character
+        # Using re for multiple delimiter splitting on whitespace (\s) and
+        # punctuation
         split_pattern = '\s|' + punctuation
         token_regex = re.compile(split_pattern, re.UNICODE)
         line = re.split(token_regex, line)
         text_list.extend(line)
 
     # get rid of empty strings in text_list
-    text_list = [word for word in text_list if word != '']
+    word_list = [word for word in text_list if word != '']
 
-    remove_list = [word for word in text_list if word not in keep_list]
+    # remove_list is a copy of word_list without the keepwords
+    remove_list = [word for word in word_list if word not in keep_list]
     scrubbed_text = delete_words(text, remove_list)
 
     return scrubbed_text
