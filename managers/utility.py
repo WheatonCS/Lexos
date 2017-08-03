@@ -1505,10 +1505,12 @@ def xmlHandlingOptions(data=False):
             if key in tags:
                 dataValues = data[key].split(',')
                 session_manager.session['xmlhandlingoptions'][key] = {"action": dataValues[0], "attribute": data["attributeValue"+key]}
+                session_manager.session.modified = True
 
     for key in session_manager.session['xmlhandlingoptions'].keys():
         if key not in tags: #makes sure that all current tags are in the active docs
             del session_manager.session['xmlhandlingoptions'][key]
+            session_manager.session.modified = True
 
 # Gets called from cluster() in lexos.py
 def generateDendrogramFromAjax(fileManager, leq):

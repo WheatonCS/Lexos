@@ -1826,36 +1826,74 @@ def getTagsTable():
 
     utility.xmlHandlingOptions()
     s = ''
-    keys = session['xmlhandlingoptions'].keys()
+    keys = list(session['xmlhandlingoptions'].keys())
     keys = humansorted(keys)
 
     for key in keys:
-        b = '<select name="'+key+'">'
-        if session['xmlhandlingoptions'][key][u'action']== ur'remove-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '" selected="selected">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"]== ur'replace-element':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '" selected="selected">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        elif session['xmlhandlingoptions'][key]["action"] == ur'leave-alone':
-            b += '<option value="remove-tag,' + key + '">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '" selected="selected">Leave Tag Alone</option>'
-        else:
-            b += '<option value="remove-tag,' + key + '" selected="selected">Remove Tag Only</option>'
-            b += '<option value="remove-element,' + key + '">Remove Element and All Its Contents</option>'
-            b += '<option value="replace-element,' + key + '">Replace Element and Its Contents with Attribute Value</option>'
-            b += '<option value="leave-alone,' + key + '">Leave Tag Alone</option>'
-        b += '</select>'
-        c = 'Attribute: <input type="text" name="attributeValue'+key+'"  value="'+session['xmlhandlingoptions'][key]["attribute"]+'"/>'
-        s += "<tr><td>" +key+ "</td><td>" + b + "</td><td>" + c + "</td></tr>"
+        b = '<select name="' + key + '">'
 
-    return json.dumps(s)
+        if session['xmlhandlingoptions'][key]['action'] == r'remove-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '" selected="selected">' \
+                 'Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents with Attribute Value' \
+                 '</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+
+        elif session['xmlhandlingoptions'][key]["action"] == 'replace-element':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '" selected="selected">Replace Element and Its ' \
+                 'Contents with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+
+        elif session['xmlhandlingoptions'][key]["action"] == r'leave-alone':
+            b += '<option value="remove-tag,' + key + \
+                 '">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents ' \
+                 'with Attribute Value</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '" selected="selected">Leave Tag Alone</option>'
+        else:
+            b += '<option value="remove-tag,' + key + \
+                 '" selected="selected">Remove Tag Only</option>'
+            b += '<option value="remove-element,' + key + \
+                 '">Remove Element and All Its Contents</option>'
+            b += '<option value="replace-element,' + key + \
+                 '">Replace Element and Its Contents with Attribute Value' \
+                 '</option>'
+            b += '<option value="leave-alone,' + key + \
+                 '">Leave Tag Alone</option>'
+        b += '</select>'
+        c = 'Attribute: <input type="text" name="attributeValue' + key + \
+            '"  value="' + session['xmlhandlingoptions'][key]["attribute"] + \
+            '"/>'
+        s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
+             "</td></tr>"
+
+    response = {"menu": s, "selected-options": "multiple"}
+
+    # Count the number of actions and change selected-options to 
+    # the selected option if they are all the same.
+    num_actions = []
+    for item in session['xmlhandlingoptions'].items():
+        num_actions.append(item[1]["action"])
+    num_actions = list(set(num_actions))
+    if len(num_actions) == 1:
+        response["selected-options"] = num_actions[0]+",allTags"
+
+    return json.dumps(response)
 
 @app.route("/setAllTagsTable", methods=["GET", "POST"])
 def setAllTagsTable():
