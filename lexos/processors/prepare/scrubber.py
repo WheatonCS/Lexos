@@ -375,7 +375,7 @@ def get_remove_punctuation_map(
     # 1. make (or load) a remove_punctuation_map
     # 2. if "keep apostrophes" box is checked
     # 3  remove all apostrophes (single quotes) except:
-    #       possessives (joe's),
+    #       singular possessives (joe's),
     #       contractions (i'll),
     # 4. delete the rest of the punctuation
 
