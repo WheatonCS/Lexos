@@ -741,6 +741,18 @@ def handle_gutenberg(text: str) -> str:
 def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
                                cache_options: List[str], cache_folder: str,
                                ) -> List[str]:
+    """Gathers all the strings used by the "Additional Options" scrub section.
+
+    :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
+        containing the additional scrubbing option files that have been
+        uploaded.
+    :param cache_options: A list of strings representing additional options
+        that have been chosen by the user.
+    :param cache_folder: A string representing the path of the cache folder.
+    :return: An array containing strings of all the additional scrubbing
+        option text fields and files.
+    """
+
     cache_filenames = sorted(
         ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
     file_strings = {}
@@ -762,16 +774,16 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
             else:
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
-    # Create an array of prepared files:
+    # Create an array of option strings:
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
     #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
-    all_files = [file_strings[0], file_strings[1], file_strings[2],
-                 file_strings[3], request.form['manualconsolidations'],
-                 request.form['manuallemmas'],
-                 request.form['manualspecialchars'],
-                 request.form['manualstopwords']]
+    all_options = [file_strings[0], file_strings[1], file_strings[2],
+                   file_strings[3], request.form['manualconsolidations'],
+                   request.form['manuallemmas'],
+                   request.form['manualspecialchars'],
+                   request.form['manualstopwords']]
 
-    return all_files
+    return all_options
 
 
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
@@ -802,8 +814,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     :param tabs: A boolean indicating whether tabs should be removed.
     :param new_lines: A boolean indicating whether newlines should be removed.
     :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
-        containing the optional files that have been uploaded for additional
-        scrubbing.
+        containing the additional scrubbing option files that have been
+        uploaded.
     :param cache_options: A list of strings representing additional options
         that have been chosen by the user.
     :param cache_folder: A string representing the path of the cache folder.
