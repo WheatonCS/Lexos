@@ -183,19 +183,6 @@ class FileManager:
         else:
             l_file.enable()
 
-    def togglify(self, file_ids: List[int]):
-        """Sets state to active for fileIDs set in the UI.
-
-        :param file_ids: list of fileIDs selected in the UI.
-        """
-
-        for file_id in file_ids:
-            file_id = int(file_id)
-            l_file = self.files[file_id]
-            l_file.enable()
-
-        # TODO: rename this function
-
     def enable_files(self, file_ids: List[int]):
         """Sets state to active for fileIDs set in the UI.
 
