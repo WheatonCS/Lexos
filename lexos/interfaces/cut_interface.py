@@ -16,10 +16,10 @@ cutter_view = Blueprint('cutter', __name__)
 
 @cutter_view.route("/cut", methods=["GET", "POST"])
 def cut():
-    """ Handles the functionality of the cut page. It cuts the files into
-    various segments depending on the specifications chosen by the user, and
-    sends the text segments.
+    """ Handles the functionality of the cut page.
 
+    It cuts the files into various segments depending on the specifications
+    chosen by the user, and sends the text segments.
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
