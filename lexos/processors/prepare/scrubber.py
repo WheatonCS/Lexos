@@ -268,12 +268,7 @@ def handle_tags(text: str) -> str:
 
     text = re.sub('[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
     text = re.sub(r"(<\?.*?>)", "", text)    # Remove xml declarations
-    text = re.sub(r"(<\!--.*?-->)", "", text)    # Remove comments
-
-    # <!DOCTYPE  matches the string "<!DOCTYPE"
-    # [^>[]*     matches anything up to a ">" or "["
-    # \[[^]]*\]? matches an optional section surrounded by "[]"
-    # >          matches the string ">"
+    text = re.sub(r"(<!--.*?-->)", "", text)    # Remove comments
 
     # This matches the DOCTYPE and all internal entity declarations
     doctype = re.compile(r"<!DOCTYPE.*?>", re.DOTALL)
