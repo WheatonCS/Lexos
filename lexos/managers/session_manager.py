@@ -11,28 +11,17 @@ from lexos.helpers import constants as const
 
 
 def session_folder() -> str:
-    """
-    Generates and returns the file path for the session folder.
+    """Generates and returns the file path for the session folder.
 
-    Args:
-        None
-
-    Returns:
-        The file path for the session folder.
+    :return: the file path for the session folder.
     """
+
     return os.path.join(const.UPLOAD_FOLDER, session['id'])
 
 
 def reset():
-    """
-    Resets the current session, deleting the old folder and creating a new one.
+    """Resets current session, deleting old folder and creating a new one."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     try:
         print('\nWiping session (' + session['id'] + ') and old files...')
         rmtree(os.path.join(const.UPLOAD_FOLDER, session['id']))
@@ -46,15 +35,9 @@ def reset():
 
 
 def init():
-    """
-    Initializes the new session using a random id and creates a new session
-    folder and file manager.
+    """Initializes new session & creates new session folder & file manager.
 
-    Args:
-        None
-
-    Returns:
-        None
+    New session initialized using a random id.
     """
 
     folder_created = False
@@ -88,10 +71,8 @@ def init():
 
 
 def fix():
-    """
-    this function fix the problem of outdated session
+    """This function fixes the problem of outdated session."""
 
-    """
     try:
         if not os.path.isfile(
             os.path.join(
@@ -109,32 +90,23 @@ def fix():
 
 
 def save(path: str):
-    """
-    Pickle session into a specific path
+    """Pickle session into a specific path.
 
-    Args:
-        path: the path you want to put session.p into
-
-    Returns:
-        None
+    :param path: the path you want to put session.p into.
     """
+
     path = os.path.join(path, const.SESSION_FILENAME)
     session_copy = deep_copy_session()
     pickle.dump(session_copy, open(path, 'wb'))
 
 
 def load():
-    """
-    Merges the session of the session you uploaded with the current session
-    (all the settings contained in the session you upload will replace the
-    settings in current session)
+    """Merges the session of the session you uploaded with the current session.
 
-    Args:
-        None
-
-    Returns:
-        None
+    All the settings contained in the session you upload will replace the
+    settings in current session.
     """
+
     path = os.path.join(session_folder(), const.SESSION_FILENAME)
     new_session = pickle.load(open(path, 'rb'))
     for key in new_session:
@@ -145,15 +117,11 @@ def load():
 
 
 def deep_copy_session() -> dict:
-    """
-    Creates a deep copy of the current session
+    """Creates a deep copy of the current session.
 
-    Args:
-        None
-
-    Returns:
-        the copy of the session
+    :return: the copy of the session.
     """
+
     result = {}
     for key in list(session.keys()):
         result[key] = session[key]
@@ -161,16 +129,11 @@ def deep_copy_session() -> dict:
 
 
 def cache_alteration_files():
-    """
-    Stores all alteration files (uploaded on the scrub page) from request.form
-    in the session cookie object.
+    """Stores all alteration files in the session cookie object.
 
-    Args:
-        None
-
-    Returns:
-        None
+    All alteration files (uploaded on the scrub page) are from request.form.
     """
+
     for uploadFile in request.files:
         file_name = request.files[uploadFile].filename
         if file_name != '':
@@ -180,15 +143,8 @@ def cache_alteration_files():
 
 
 def cache_scrub_options():
-    """
-    Stores all scrubbing options from request.form in the session cookie object
+    """Stores scrubbing options from request.form in session cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     for box in const.SCRUBBOXES:
         session['scrubbingoptions'][box] = (box in request.form)
 
@@ -205,15 +161,8 @@ def cache_scrub_options():
 
 
 def cache_cutting_options():
-    """
-    Stores all cutting options from request.form in the session cookie object.
+    """Stores cutting options from request.form in session cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     session['cuttingoptions'] = {
         'cutType': request.form['cutType'],
 
@@ -230,15 +179,8 @@ def cache_cutting_options():
 
 
 def cache_csv_options():
-    """
-    Stores all cutting options from request.form in the session cookie object.
+    """Stores cutting options from request.form in session cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     if request.json:
         session['csvoptions'] = {
             'csvorientation': request.json['csvorientation'],
@@ -258,16 +200,8 @@ def cache_csv_options():
 
 
 def cache_analysis_option():
-    """
-    Stores all base_analyze options from request.form in the session cookie
-    object.
+    """Stores base_analyze options from request.form in sess cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     if request.json:
         # check boxes
         for box in const.ANALYZEBOXES:
@@ -289,16 +223,8 @@ def cache_analysis_option():
 
 
 def cache_rw_analysis_option():
-    """
-    Stores all rolling window options from request.form in the session cookie
-    object.
+    """Stores rolling window options frm request.form in sess cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     # check boxes
     for box in const.RWBOXES:
         session['rwoption'][box] = (box in request.form)
@@ -310,31 +236,18 @@ def cache_rw_analysis_option():
 
 
 def cache_cloud_option():
-    """
-    Stores all the global cloud options from request.form in the session cookie
-     object. see constant.CLOUDLIST for more
+    """Stores global cloud options from request.form in session cookie object.
 
-    Args:
-        None
-
-    Returns:
-        None
+    See constant.CLOUDLIST for more.
     """
+
     # list
     for list in const.CLOUDLIST:
         session['cloudoption'][list] = request.form.getlist(list)
 
 
 def cache_multi_cloud_options():
-    """
-    stores filename if uploading topic file to use for multicloud
-
-    Args:
-        None
-
-    Returns:
-        None
-    """
+    """Stores filename if uploading topic file to use for multicloud."""
 
     for request_input in const.MULTICLOUDINPUTS:
 
@@ -356,16 +269,8 @@ def cache_multi_cloud_options():
 
 
 def cache_bubble_viz_option():
-    """
-    Stores all Bubble Viz options from request.form in the session cookie
-    object.
+    """Stores Bubble Viz options from request.form in session cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     for box in const.BUBBLEVIZBOX:
         session['bubblevisoption'][box] = (box in request.form)
     for request_input in const.BUBBLEVIZINPUT:
@@ -375,32 +280,22 @@ def cache_bubble_viz_option():
 
 
 def cache_statistic_option():
-    """
-    Stores all the global cloud options from request.form in the session cookie
-    object. see constant.CLOUDLIST for more
+    """Stores global cloud options from request.form in session cookie object.
 
-    Args:
-        None
-
-    Returns:
-        None
+    See constant.CLOUDLIST for more.
     """
+
     # list
     for list in const.STATISTIC_LIST:
         session['statisticoption'][list] = request.form.getlist(list)
 
 
 def cache_hierarchy_option():
-    """
-    Stores all Hierarchy Clustering options from request.form in the session
-    cookie object.
+    """Stores all Hierarchy Clustering options in the session cookie object.
 
-    Args:
-        None
-
-    Returns:
-        None
+    These options were from request.form.
     """
+
     if request.json:
         opts = request.json
     else:
@@ -415,15 +310,8 @@ def cache_hierarchy_option():
 
 
 def cache_k_mean_option():
-    """
-    Stores all Kmean options from request.form in the session cookie object.
+    """Stores Kmean options from request.form in the session cookie object."""
 
-    Args:
-        None
-
-    Returns:
-        None
-    """
     for request_input in const.KMEANINPUT:
         session['kmeanoption'][request_input] = (
             request.form[request_input] if input in request.form
@@ -431,15 +319,7 @@ def cache_k_mean_option():
 
 
 def cache_sim_options():
-    """
-    stores filename if uploading topic file to use for multicloud
-
-    Args:
-        None
-
-    Returns:
-        None
-    """
+    """Stores filename if uploading topic file to use for multicloud."""
 
     for box in const.SIMBOX:
         session['similarities'][box] = (box in request.form)
@@ -450,15 +330,7 @@ def cache_sim_options():
 
 
 def cache_top_word_options():
-    """
-    stores filename if uploading topic file to use for top word
-
-    Args:
-        None
-
-    Returns:
-        None
-    """
+    """Stores filename if uploading topic file to use for top word."""
 
     for request_input in const.TOPWORDINPUT:
         session['topwordoption'][request_input] = (
@@ -467,16 +339,11 @@ def cache_top_word_options():
 
 
 def cache_general_settings():
-    """
-    Stores all general settings options from request.json in the session cookie
-    object.
+    """Stores all general settings options in the session cookie object.
 
-    Args:
-        None
-
-    Returns:
-        None
+    These options were from request.json.
     """
+
     # for setting in constants.GENERALSETTINGS:
     if request.json:
         session['generalsettings']["beta_onbox"] = request.json["beta_onbox"]
