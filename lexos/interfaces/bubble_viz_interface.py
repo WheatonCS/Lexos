@@ -18,8 +18,7 @@ viz_view = Blueprint('viz', __name__)
 # Tells Flask to load this function when someone is at '/viz'
 @viz_view.route("/viz", methods=["GET", "POST"])
 def viz():
-    """Handles the functionality on the alternate bubbleViz page with
-    performance improvements.
+    """Handles the functionality on the alternate bubbleViz page.
 
     :returns: a response object (often a render_template call) to flask and
     eventually to the browser.
