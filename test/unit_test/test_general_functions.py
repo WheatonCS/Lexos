@@ -101,9 +101,8 @@ class TestApplyFunctionExcludeTags:
     def test_two_functions(self):
         assert apply_function_exclude_tags(
             self.input_str, [str.upper, self.dummy_function]) == '<tag>' \
-                                                                    'ASDF' \
-                                                                    'ASDF' \
-                                                                    '</tag>'
+                                                                 'ASDFASDF' \
+                                                                 '</tag>'
 
     def test_multiple_functions(self):
         assert apply_function_exclude_tags(
