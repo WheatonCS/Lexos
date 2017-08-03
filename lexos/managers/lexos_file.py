@@ -11,34 +11,25 @@ from lexos.processors.prepare import cutter
 
 from lexos.processors.prepare import scrubber
 
-"""
-LexosFile:
+"""Class for an object to hold all information about a specific uploaded file.
 
-Description:
-    Class for an object to hold all information about a specific uploaded file.
-    Each uploaded file will be stored in a unique object, and accessed through
-    the FileManager files dictionary.
-
-Major data attributes:
-contents: A string that (sometimes) contains the text contents of the file.
-            Most of the time
+Each uploaded file will be stored in a unique object, and accessed through the
+FileManager files dictionary. A major data attribute of this class isa string 
+that (sometimes) contains the text contents of the file (Most of the time).
 """
 
 
 class LexosFile:
     def __init__(self, original_filename: str,
                  file_name: str, file_string: str, file_id: int):
-        """ Constructor
-        Creates a new LexosFile object from the information passed in, and
-        performs some preliminary processing.
+        """Constructor: Creates a new LexosFile object.
 
-        Args:
-            file_name: File name of the originally uploaded file.
-            file_string: Contents of the file's text.
-            file_id: The ID to assign to the new file.
-
-        Returns:
-            The newly constructed LexosFile object.
+        This newly constructed LexosFile object is created from the information
+        passed in, and performs some preliminary processing.
+        :param original_filename:
+        :param file_name: file name of the originally uploaded file.
+        :param file_string: contents of the file's text.
+        :param file_id: the ID to assign to the new file.
         """
 
         self.doc_type = 'text'  # default doc type
@@ -67,28 +58,16 @@ class LexosFile:
         self.options = {}
 
     def clean_and_delete(self):
-        """
-        Handles everything necessary for the LexosFile object to be deleted
-        cleanly, after this method has been called.
+        """Handles everything necessary for LexosFile object to be deleted."""
 
-        Args:
-
-        Returns:
-            None
-        """
         # Delete the file on the hard drive where the LexosFile saves its
         # contents string
         remove(self.save_path)
 
     def load_contents(self) -> str:
-        """
-        Loads the contents of the file from the hard drive.
+        """Loads the contents of the file from the hard drive.
 
-        Args:
-            None
-
-        Returns:
-            The string of the file contents.
+        :return: the string of the file contents.
         """
 
         # reading content
@@ -97,28 +76,22 @@ class LexosFile:
         return content
 
     def save_contents(self, file_contents: str):
-        """
-        Saves the contents of the file to the hard drive, possibly overwriting
-        the old version.
+        """Saves the contents of the file to the hard drive.
 
-        Args:
-            file_contents: The string with the contents of the file to be saved
-
-        Returns:
-            None
+        This may possibly be overwriting the old version.
+        :param file_contents: the string with the contents of the file to be
+                              saved.
         """
+
         open(self.save_path, 'w', encoding='utf-8').write(file_contents)
 
     def set_type_from(self, extension: str, file_contents: str):
-        """
-        Sets the type of the file from the file's extension and contents.
+        """Sets the type of the file from the file's extension and contents.
 
-        Args:
-            None
-
-        Returns:
-            None
+        :param extension:
+        :param file_contents:
         """
+
         doe_pattern = re.compile("<publisher>Dictionary of Old English")
 
         if doe_pattern.search(file_contents) is not None:
@@ -137,66 +110,52 @@ class LexosFile:
             self.doc_type = 'text'
 
     @staticmethod
-    def check_for_tags(file_contents: str):
-        """
-        Checks the file for tags.
+    def check_for_tags(file_contents: str) -> bool:
+        """Checks the file for tags.
 
-        Args:
-            None
-
-        Returns:
-            A boolean representing the presence of tags in the contents.
+        :param file_contents:
+        :return: a boolean representing the presence of tags in the contents.
         """
+
         if re.search('<.*>', file_contents):
             return True
         else:
             return False
 
     @staticmethod
-    def check_for_gutenberg(file_contents: str):
-        """
-        Checks if file is from Project Gutenberg
+    def check_for_gutenberg(file_contents: str) -> bool:
+        """Checks if file is from Project Gutenberg.
 
-        Args:
-            None
-
-        Returns:
-            A boolean representing if file is from Project Gutenberg
-            :param file_contents:
-            :return:
+        :param file_contents:
+        :return: a boolean representing if file is from Project Gutenberg.
         """
+
         if re.search('Project Gutenberg', file_contents):
             return True
         else:
             return False
 
     def generate_preview(self, text_string: str = "") -> str:
-        """
-        Generates a preview either from the provided text string or from the
+        """Generates a preview.
+
+        This preview will come from either the provided text string or from the
         contents on the disk.
-
-        Args:
-            text_string: Optional argument of a string from which to create the
-                preview.
-
-        Returns:
-            A string containing a preview of the larger string.
+        :param text_string: optional argument of a string from which to create
+                            the preview.
+        :return: a string containing a preview of the larger string.
         """
+
         if text_string is "":
             return general_functions.make_preview_from(self.load_contents())
         else:
             return general_functions.make_preview_from(text_string)
 
     def get_preview(self) -> str:
-        """
-        Gets the previews, and loads it before if necessary.
+        """Gets the previews, and loads it before if necessary.
 
-        Args:
-            None
-
-        Returns:
-            The preview string of the contents of the file.
+        :return: the preview string of the contents of the file.
         """
+
         if self.contents_preview == '':
             self.contents_preview = self.generate_preview()
 
@@ -215,40 +174,28 @@ class LexosFile:
         self.contents_preview = ''
 
     def set_class_label(self, class_label: str):
-        """
-        Assigns the class label to the file.
+        """Assigns the class label to the file.
 
-        Args:
-            class_label= the label to be assigned to the file
-
-        Returns:
-            None
+        :param class_label: the label to be assigned to the file.
         """
+
         self.class_label = class_label
 
     def set_name(self, filename: str):
-        """
-        Assigns the class label to the file.
+        """Assigns the class label to the file.
 
-        Args:
-            filename= the filename to be assigned to the file
-
-        Returns:
-            None
+        :param filename: the filename to be assigned to the file.
         """
+
         self.name = filename
 
     def get_scrub_options(self) -> Dict[str, object]:
-        """
-        Gets the options for scrubbing from the request.form and returns it in
-        a formatted dictionary.
+        """Gets the options for scrubbing from the request.form.
 
-        Args:
-            None
-
-        Returns:
-            A dictionary of the chosen options for scrubbing a file.
+        :return: a formatted dictionary of the chosen options for scrubbing a
+                 file.
         """
+
         scrub_options = {}
 
         for upload_file in constants.OPTUPLOADNAMES:
@@ -269,17 +216,12 @@ class LexosFile:
         return scrub_options
 
     def scrub_contents(self, saving_changes: bool) -> str:
-        """
-        Scrubs the contents of the file according to the options chosen by the
-        user, saves the changes or doesn't,
-        and returns a preview of the changes either way.
+        """ Scrubs the contents of the file according to the user's options
 
-        Args:
-            saving_changes: Boolean saying whether or not to save the changes
-                            made.
-
-        Returns:
-            Returns a preview string of the possibly changed file.
+        May save the changes or not.
+        :param saving_changes: boolean saying whether or not to save the
+                               changes made.
+        :return: a preview string of the possibly changed file.
         """
 
         cache_options = []
@@ -323,28 +265,18 @@ class LexosFile:
         return text_string
 
     def save_scrub_options(self):
-        """
-        Saves the scrubbing options into the LexosFile object's metadata.
+        """Saves the scrubbing options into the LexosFile object's metadata."""
 
-        Args:
-            None
-
-        Returns:
-            None
-        """
         self.options['scrub'] = self.get_scrub_options()
 
     def set_scrub_options_from(self, parent: 'LexosFile'):
-        """
-        Sets the scrubbing options from another file, most often the parent
-            file that a child file was cut from.
+        """Sets the scrubbing options from another file.
 
-        Args:
-            None
-
-        Returns:
-            None
+        Most often the scrubbing options come from the parent file that a
+        child file was cut from.
+        :param parent:
         """
+
         if "scrub" not in self.options:
             self.options['scrub'] = {}
             if "scrub" in parent.options:
@@ -353,15 +285,11 @@ class LexosFile:
                 parent.options['scrub'] = {}
 
     def cut_contents(self) -> str:
-        """
-        Cuts the contents of the file according to options chosen by the user.
+        """Cuts contents of the file according to options chosen by the user.
 
-        Args:
-            None
-
-        Returns:
-            The substrings that the file contents have been cut up into.
+        :return: the substrings that the file contents have been cut up into.
         """
+
         text_string = self.load_contents()
 
         # From Lexos 3.1, trim white space at start and end of the string.
@@ -387,17 +315,15 @@ class LexosFile:
         return text_strings
 
     def get_cutting_options(self, override_id: int=None):
-        """
-        Gets the cutting options for a specific file, or if not defined, then
-        grabs the overall options, from the request.form.
+        """Gets the cutting options for a specific file.
 
-        Args:
-            override_id: An id for which to grab the options instead of the
-                object's id.
-
-        Returns:
-            A tuple of options for cutting the files.
+        If cutting options not defined, then grabs the overall options, from
+        the request.form.
+        :param override_id: an id for which to grab the options instead of the
+                            object's id.
+        :return: a tuple of options for cutting the files.
         """
+
         if override_id is None:
             file_id = self.id
         else:
@@ -428,16 +354,12 @@ class LexosFile:
         return cutting_value, cutting_type, overlap, last_prop
 
     def save_cut_options(self, parent_id: int):
-        """
-        Saves the cutting options into the LexosFile object's metadata.
+        """Saves the cutting options into the LexosFile object's metadata.
 
-        Args:
-            parent_id: The id of the parent file from which this file has been
-                        cut.
-
-        Returns:
-            None
+        :param parent_id: the id of the parent file from which this file has
+                          been cut.
         """
+
         cutting_value, cutting_type, overlap, last_prop = \
             self.get_cutting_options(parent_id)
 
@@ -450,54 +372,38 @@ class LexosFile:
         self.options['cut']['last_chunk_prop'] = last_prop
 
     def num_letters(self) -> int:
-        """
-        Gets the number of letters in the file.
+        """Gets the number of letters in the file.
 
-        Args:
-            None
-
-        Returns:
-            Number of letters in the file.
+        :return: number of letters in the file.
         """
+
         length = len(self.load_contents())
         return length
 
     def num_words(self) -> int:
-        """
-        Gets the number of words in the file.
+        """Gets the number of words in the file.
 
-        Args:
-            None
-
-        Returns:
-            Number of words in the file.
+        :return: number of words in the file.
         """
+
         length = len(self.load_contents().split())
         return length
 
     def num_lines(self) -> int:
-        """
-        Gets the number of lines in the file.
+        """Gets the number of lines in the file.
 
-        Args:
-            None
-
-        Returns:
-            Number of lines in the file.
+        :return: number of lines in the file.
         """
+
         length = len(self.load_contents().split('\n'))
         return length
 
     def get_word_counts(self) -> Dict[str, int]:
-        """
-        Gets the dictionary of { word: word_count }'s in the file.
+        """Gets the dictionary of { word: word_count }'s in the file.
 
-        Args:
-            None
-
-        Returns:
-            The word count dictionary for this file.
+        :return: the word count dictionary for this file.
         """
+
         from collections import Counter
 
         word_count_dict = dict(Counter(self.load_contents().split()))
@@ -505,30 +411,25 @@ class LexosFile:
 
     # TODO: Legacy code
     def generate_d3_json_object(self, word_label, count_label):
-        """
-        Generates a JSON object for d3 from the word counts of the file.
+        """ Generates a JSON object for d3 from the word counts of the file.
 
-        Args:
-            word_label: Label to use for identifying words in the sub-objects.
-            count_label: Label to use for identifying counts in the sub-objects
-
-        Returns:
-            The resultant JSON object, formatted for d3.
+        :param word_label: label to use for identifying words in the
+                           sub-objects.
+        :param count_label: label to use for identifying counts in the
+                            sub-objects.
+        :return: the resultant JSON object, formatted for d3.
         """
+
         word_counts = self.get_word_counts()
         return general_functions.generate_d3_object(
             word_counts, self.label, word_label, count_label)
 
     def get_legend(self) -> str:
-        """
-        Generates the legend for the file, for use in the dendrogram.
+        """Generates the legend for the file, for use in the dendrogram.
 
-        Args:
-            None
-
-        Returns:
-            A string with the legend information for the file.
+        :return: a string with the legend information for the file.
         """
+
         # Switch to Ajax if necessary
         if request.json:
             opts = request.json
