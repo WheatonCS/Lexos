@@ -20,9 +20,9 @@ upload_view = Blueprint('upload', __name__)
 
 @upload_view.route("/upload", methods=["GET", "POST"])
 def upload():
-    """Handles the functionality of the upload page. It uploads files to be
-    used in the current session.
+    """Handles the functionality of the upload page.
 
+    It uploads files to be used in the current session.
     :return: a response object (often a render_template call) to flask and
      eventually to the browser.
     """
@@ -46,7 +46,7 @@ def upload():
 
     # X-FILENAME is the flag to signify a file upload
     if 'X-FILENAME' in request.headers:
-      
+
         # File upload through javascript
         file_manager = utility.load_file_manager()
         # --- check file name ---
