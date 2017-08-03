@@ -155,14 +155,14 @@ def get_tags_table():
 
     response = {"menu": s, "selected-options": "multiple"}
 
-    # Count the number of actions and change selected-options to 
+    # Count the number of actions and change selected-options to
     # the selected option if they are all the same.
     num_actions = []
     for item in session['xmlhandlingoptions'].items():
         num_actions.append(item[1]["action"])
     num_actions = list(set(num_actions))
     if len(num_actions) == 1:
-        response["selected-options"] = num_actions[0]+",allTags"
+        response["selected-options"] = num_actions[0] + ",allTags"
 
     return json.dumps(response)
 
