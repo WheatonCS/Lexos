@@ -18,9 +18,9 @@ word_cloud_view = Blueprint('word_cloud', __name__)
 # Tells Flask to load this function when someone is at '/wordcloud'
 @word_cloud_view.route("/wordcloud", methods=["GET", "POST"])
 def word_cloud():
-    """Handles the functionality on the visualisation page -- a prototype for
-    displaying single word cloud graphs.
+    """Handles the functionality on the visualisation page.
 
+    a prototype for displaying single word cloud graphs.
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
