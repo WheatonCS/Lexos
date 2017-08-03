@@ -149,7 +149,7 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
 
     # find the total word count of each group
     group_lists = [np.sum(value, axis=0)
-                    for _, value in enumerate(group_values)]
+                   for _, value in enumerate(group_values)]
 
     # find number of groups
     num_group = len(group_lists)
