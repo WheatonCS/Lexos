@@ -17,9 +17,10 @@ manage_view = Blueprint('manage', __name__)
 # Tells Flask to load this function when someone is at '/select'
 @manage_view.route("/manage", methods=["GET", "POST"])
 def manage():
-    """Handles the functionality of the select page. Its primary role is to
-    activate/deactivate specific files depending on the user's input.
+    """Handles the functionality of the select page.
 
+    Its primary role is to activate/deactivate specific files depending on the
+    user's input.
     :return: a response object (often a render_template call) to flask
     and eventually to the browser.
     """
