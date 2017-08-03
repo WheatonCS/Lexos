@@ -25,6 +25,7 @@
     "jquery": "^2.2.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "eslint": "^4.3.0"
   },
   "scripts": {
