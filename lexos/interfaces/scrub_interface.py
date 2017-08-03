@@ -153,7 +153,18 @@ def get_tags_table():
         s += "<tr><td>" + key + "</td><td>" + b + "</td><td>" + c + \
              "</td></tr>"
 
-    return json.dumps(s)
+    response = {"menu": s, "selected-options": "multiple"}
+
+    # Count the number of actions and change selected-options to
+    # the selected option if they are all the same.
+    num_actions = []
+    for item in session['xmlhandlingoptions'].items():
+        num_actions.append(item[1]["action"])
+    num_actions = list(set(num_actions))
+    if len(num_actions) == 1:
+        response["selected-options"] = num_actions[0] + ",allTags"
+
+    return json.dumps(response)
 
 
 @scrubber_view.route("/setAllTagsTable", methods=["GET", "POST"])
@@ -164,6 +175,7 @@ def set_all_tags_table():
     s = ''
     data = data.split(',')
     keys = sorted(session['xmlhandlingoptions'].keys())
+
     for key in keys:
         b = '<select name="' + key + '">'
         if data[0] == 'remove-element':
