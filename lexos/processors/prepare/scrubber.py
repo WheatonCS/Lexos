@@ -738,6 +738,42 @@ def handle_gutenberg(text: str) -> str:
     return text
 
 
+def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
+                               cache_options: List[str], cache_folder: str,
+                               ) -> List[str]:
+    cache_filenames = sorted(
+        ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
+    file_strings = {}
+
+    for i, key in enumerate(sorted(opt_uploads)):
+        if opt_uploads[key].filename != '':
+            file_content = opt_uploads[key].read()
+            if isinstance(file_content, bytes):
+                file_strings[i] = general_functions.decode_bytes(
+                    raw_bytes=file_content)
+            else:
+                file_strings[i] = file_content
+            opt_uploads[key].seek(0)
+        else:
+            file_strings[i] = ""
+            if key.strip('[]') in cache_options:
+                file_strings[i] = load_cached_file_string(
+                    cache_folder, cache_filenames[i])
+            else:
+                session['scrubbingoptions']['optuploadnames'][key] = ''
+
+    # Create an array of prepared files:
+    # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
+    #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
+    all_files = [file_strings[0], file_strings[1], file_strings[2],
+                 file_strings[3], request.form['manualconsolidations'],
+                 request.form['manuallemmas'],
+                 request.form['manualspecialchars'],
+                 request.form['manualstopwords']]
+
+    return all_files
+
+
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
           white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
