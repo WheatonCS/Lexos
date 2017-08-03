@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
-    EMPTY_LIST_MESSAGE
+    EMPTY_LIST_MESSAGE, SEG_NON_POSITIVE_MESSAGE
 from lexos.processors.analyze.topword import _z_test_, analyze_all_to_para, \
     group_division, analyze_para_to_group, analyze_group_to_group
 
@@ -13,9 +13,17 @@ class TestZTest:
         assert round(_z_test_(p1=0.3, pt=0.1, n1=100, nt=100), 2) == 3.54
 
     def test_special_case(self):
-        assert _z_test_(p1=0.1, pt=0.3, n1=0, nt=0) == "Insignificant"
-        assert _z_test_(p1=0.1, pt=0.3, n1=100, nt=0) == "Insignificant"
-        assert _z_test_(p1=0.1, pt=0.3, n1=0, nt=100) == "Insignificant"
+        try:
+            _ = _z_test_(p1=0.1, pt=0.3, n1=100, nt=0)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
+
+        try:
+            _ = _z_test_(p1=0.1, pt=0.3, n1=0, nt=100)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
 
 # Create test suite for next part of test
@@ -41,7 +49,7 @@ class TestAnalyzeAllToPara:
         try:
             _ = analyze_all_to_para(count_matrix=empty_data.values,
                                     words=empty_data.columns.values)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
 
@@ -66,13 +74,13 @@ class TestGroupDivision:
     def test_special_case(self):
         try:
             _ = group_division(dtm=empty_data, division_map=group_map)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
 
         try:
             _ = group_division(dtm=dtm_data_one, division_map=group_map_empty)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
 
@@ -104,14 +112,14 @@ class TestAnalyzeParaToGroup:
         try:
             _ = analyze_para_to_group(group_values=empty_group,
                                       words=words)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
             _ = analyze_para_to_group(group_values=group_para_list_one,
                                       words=empty_words)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
 
@@ -128,13 +136,13 @@ class TestGroupToGroup:
         try:
             _ = analyze_group_to_group(group_values=empty_group,
                                        words=words)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
             _ = analyze_group_to_group(group_values=group_para_list_one,
                                        words=empty_words)
-            raise AssertionError("Empty input error message did not raise")
+            raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
