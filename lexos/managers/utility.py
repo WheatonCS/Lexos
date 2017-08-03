@@ -1675,6 +1675,7 @@ def xml_handling_options(data: dict = {}):
             del session_manager.session['xmlhandlingoptions'][key]
             session_manager.session.modified = True
 
+
 # Gets called from cluster() in lexos_core.py
 def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     """
