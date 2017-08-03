@@ -1274,9 +1274,8 @@ def generate_sims_csv(file_manager: FileManager):
             "The rankings are determined by 'distance between documents' "
             "where small distances (near zero) represent documents that are "
             "'similar' and unlike documents have distances closer to one.\n")
-        outFile.write("Selected Comparison Document: " + delimiter +
-                      str(file_manager.get_active_labels()[int(comp_file_id)])
-                      + '\n')
+        outFile.write("Selected Comparison Document: " + delimiter + str(
+            file_manager.get_active_labels()[int(comp_file_id)]) + '\n')
     outFile.close()
     with open(out_file_path, 'a') as final:
         score_name_data_frame.to_csv(final)
