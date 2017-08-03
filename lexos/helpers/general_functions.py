@@ -184,7 +184,6 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     :param functions: a list of functions to apply to input_string
     :return: striped text
     """
-    # type: (str, list) -> str
     striped_text = ''
     tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
     tags = re.findall(tag_pattern, input_string)
