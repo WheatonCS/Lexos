@@ -417,7 +417,7 @@ def get_remove_punctuation_map(
         # OR apos surrounded by non-word characters
         # |(?<=[^\w])'+(?=[^\w])
         pattern = re.compile(
-            r"(?<=[\w])'+(?=[^\w])|(?<=[^\w])'+(?=[\w])|(?<=[^\w])'+(?=[^\w])",
+            r"(?<=[^\w])'+|'+(?=[^\w])",
             re.UNICODE)
 
         # replace all external or floating apos with empty strings
