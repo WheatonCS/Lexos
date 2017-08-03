@@ -423,7 +423,8 @@ def get_remove_punctuation_map(
         #     apos. next to each other, because they count as non-word
         pattern = re.compile(r"(?<=[^\w])'|'(?=[^\w])", re.UNICODE)
 
-        # replace all external or floating apos with empty strings
+        # apply the pattern to replace all external or floating apos with
+        # empty strings
         text = str(re.sub(pattern, r"", text))
 
         # apos (UTF-8: 39) is deleted from the remove_punctuation_map
