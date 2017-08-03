@@ -17,9 +17,9 @@ rwa_view = Blueprint("rowlling_windows", __name__)
 # Tells Flask to load this function when someone is at '/rollingwindow'
 @rwa_view.route("/rollingwindow", methods=["GET", "POST"])
 def rolling_window():
-    """Handles the functionality on the rollingwindow page. It analyzes the
-    various texts using a rolling window of analysis.
+    """Handles the functionality on the rollingwindow page.
 
+    It analyzes the various texts using a rolling window of analysis.
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
