@@ -195,7 +195,7 @@ class FileManager:
             l_file.enable()
 
     def disable_files(self, file_ids: List[int]):
-        """Sets state to active for fileIDs set in the UI.
+        """Sets state to inactive for fileIDs set in the UI.
 
         :param file_ids: list of fileIDs selected in the UI.
         """
@@ -246,6 +246,7 @@ class FileManager:
 
     def handle_upload_workspace(self):
         """Handles the session when you upload a workspace (.lexos) file."""
+
         # save .lexos file
         save_path = os.path.join(constants.UPLOAD_FOLDER,
                                  constants.WORKSPACE_DIR)
@@ -285,6 +286,7 @@ class FileManager:
 
     def update_workspace(self):
         """Updates the whole work space."""
+
         # update the savepath of each file
         for l_file in list(self.files.values()):
             l_file.savePath = pathjoin(
@@ -443,8 +445,9 @@ class FileManager:
     def check_actives_tags(self) -> Tuple[bool, bool, bool]:
         """Checks the tags of the active files for DOE/XML/HTML/SGML tags.
 
-        :return: two booleans, the first signifying the presence of any type of
-                 tags, the secondKeyWord the presence of DOE tags.
+        :return: three booleans, the first signifying the presence of any type
+                 of tags, the secondKeyWord the presence of DOE tags, the third
+                 signifying the presence of gutenberg tags.
         """
         found_tags = False
         found_doe = False
@@ -996,7 +999,8 @@ class FileManager:
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
                           n_gram_size: int, use_freq: bool, grey_word: bool,
-                          mfw: bool, cull: bool, round_decimal: bool=False):
+                          mfw: bool, cull: bool,
+                          round_decimal: bool=False) -> List[list]:
         """Gets a matrix properly formatted for output to a CSV file.
 
         This CSV file will include labels along the top and side for the words
@@ -1263,7 +1267,7 @@ class FileManager:
 
         return division_map, name_map, class_label_map
 
-    def get_previews_of_all(self):
+    def get_previews_of_all(self) -> List[dict]:
         """Creates a formatted list of previews from every file.
 
         Each preview on this formatted list of previews is made from every
