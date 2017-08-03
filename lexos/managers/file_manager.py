@@ -16,25 +16,20 @@ import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 from lexos.managers.lexos_file import LexosFile
 
-"""
-FileManager:
+"""Class for an object to hold all info about a user's files & choices in Lexos
 
-Description:
-    Class for an object to hold all information about a user's files and
-    choices throughout Lexos.
-    Each user will have their own unique instance of the FileManager.
-
-Major data attributes:
-files:  A dictionary holding the LexosFile objects, each representing an
-        uploaded file to be used in Lexos. The key for the dictionary is the
-        unique ID of the file, with the value being the corresponding LexosFile
-        object.
+Each user will have their own unique instance of the FileManager. A major data 
+attribute of this class is a dictionary holding the LexosFile objects, each 
+representing an uploaded file to be used in Lexos. The key for the dictionary 
+is the unique ID of the file, with the value being the corresponding LexosFile
+object.
 """
 
 
 class FileManager:
     def __init__(self):
         """Constructor: Creates an empty FileManager (object with no files)."""
+
         self._files = {}
         self.next_id = 0
 
@@ -126,11 +121,13 @@ class FileManager:
 
     def disable_all(self):
         """Disables every file in the file manager."""
+
         for l_file in list(self.files.values()):
             l_file.disable()
 
     def enable_all(self):
         """Enables every file in the file manager."""
+
         for l_file in list(self.files.values()):
             l_file.enable()
 
