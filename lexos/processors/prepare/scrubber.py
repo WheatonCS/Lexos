@@ -13,6 +13,48 @@ from lexos.helpers import constants as constants, \
     general_functions as general_functions
 
 
+def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
+    """
+
+    :param mode:
+    :return:
+    """
+
+    if mode == "MUFI-3":
+        filename = constants.MUFI_3_FILENAME
+    elif mode == "MUFI-4":
+        filename = constants.MUFI_3_FILENAME
+    else:
+        return {"": ""}
+
+    # assign current working path to variable
+    cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Go up two levels (2x break path name into two parts, where
+    # cur_file_dir path is everything but the last component)
+    # discard: tail of path to be removed
+    cur_file_dir, discard = os.path.split(cur_file_dir)
+    cur_file_dir, discard = os.path.split(cur_file_dir)
+
+    # Create full pathname to find the .tsv in resources
+    # directory
+    mode_path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, filename)
+
+    conversion_dict = {}
+    with open(mode_path, encoding='utf-8') as input_file:
+
+        # put the first two columns of the file into parallel arrays
+        for line in input_file:
+            pieces = line.split('\t')
+            key = pieces[0]
+            value = pieces[1].rstrip()
+
+            if value[-1:] == ';':
+                conversion_dict[key] = value
+
+    return conversion_dict
+
+
 def handle_special_characters(text: str) -> str:
     """Replaces encoded characters with their corresponding unicode characters.
 
