@@ -1677,10 +1677,7 @@ def xml_handling_options(data: dict = {}):
 
 # Gets called from cluster() in lexos_core.py
 def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
-
-
-    """
-    Generates dendrogram image and PDF from the active files.
+    """Generates dendrogram image and PDF from the active files.
 
     Args:
         None
@@ -1689,7 +1686,6 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         Total number of PDF pages, ready to calculate the height of the
         embedded PDF on screen
     """
-
 
     from sklearn.metrics.pairwise import euclidean_distances
     from scipy.cluster.hierarchy import ward, dendrogram
