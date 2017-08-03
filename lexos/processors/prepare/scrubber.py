@@ -410,15 +410,18 @@ def get_remove_punctuation_map(
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
 
-        # If apos preceded by word character and followed by non-word character
-        # (?<=[\w])'+(?=[^\w])
-        # OR apos preceded by non-word character and followed by word character
-        # |(?<=[^\w])'+(?=[\w])
-        # OR apos surrounded by non-word characters
-        # |(?<=[^\w])'+(?=[^\w])
-        pattern = re.compile(
-            r"(?<=[^\w])'+|'+(?=[^\w])",
-            re.UNICODE)
+        # If apos preceded by a non-word character: (?<=[^\w])'
+        # OR apos followed by a non-word character: |'(?=[^\w])
+
+        # Using " " to represent non-word whitespace, "w" to represent a word
+        #     character, and "***" to represent any sequence of any characters,
+        #     this pattern will match:
+        # 1) ***w' *** because the apostrophe is followed by a non-word
+        # 2) *** 'w*** because the apostrophe follows a non-word
+        # 3) *** ' *** because the apos. follows AND is followed by non-words
+        # This will also work for apos. next to other punctuation and multiple
+        #     apos. next to each other, because they count as non-word
+        pattern = re.compile(r"(?<=[^\w])'|'(?=[^\w])", re.UNICODE)
 
         # replace all external or floating apos with empty strings
         text = str(re.sub(pattern, r"", text))
