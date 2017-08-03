@@ -15,9 +15,10 @@ sim_view = Blueprint('sim_query', __name__)
 # Tells Flask to load this function when someone is at '/extension'
 @sim_view.route("/similarity", methods=["GET", "POST"])
 def similarity():
-    """Handles the similarity query page functionality. Returns ranked list of
-    files and their cosine similarities to a comparison document.
+    """Handles the similarity query page functionality.
 
+    Returns ranked list of files and their cosine similarities to a comparison
+    document.
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
