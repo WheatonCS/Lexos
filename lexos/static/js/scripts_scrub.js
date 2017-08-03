@@ -122,6 +122,7 @@ $(function () {
           $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
         },
         success: function (response) {
+          var selection = $('#allTags option:selected').val()
           $('#tagTable').empty().remove()
 				    var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
 			    	$('#xmlModalBody').append(t)
@@ -136,6 +137,7 @@ $(function () {
                  	$('#tagTable').append('<tbody></tbody>')
 		    		$('#tagTable tbody').append(response)
                  	$('#xmlModalStatus').remove()
+            $("#allTags option[value='"+selection+"']").prop("selected", true)
 	    			var value = $('#myselect option:selected').val()
 	    			var text = $('#myselect option:selected').text()
         },
@@ -183,8 +185,11 @@ $(function () {
         select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
         $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
             	$('#tagTable').append('<tbody></tbody>')
-        $('#tagTable tbody').append(j)
+        $('#tagTable tbody').append(j["menu"])
             	$('#xmlModalStatus').remove()
+        if (j["selected-options"] != "multiple") {
+          $("#allTags option[value='"+j["selected-options"]+"']").prop("selected", true)
+        }
         var value = $('#myselect option:selected').val()
         var text = $('#myselect option:selected').text()
       },
