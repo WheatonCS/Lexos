@@ -6,24 +6,22 @@
 # follows normal distribution
 
 import itertools
-from cmath import sqrt
 from typing import List
 
 import numpy as np
 import pandas as pd
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE, \
-    EMPTY_NP_ARRAY_MESSAGE
+    EMPTY_NP_ARRAY_MESSAGE, SEG_NON_POSITIVE_MESSAGE
 
 
-# TODO: Fix this function
 def _z_test_(p1, pt, n1, nt):
-    """Examines if a particular word is an anomaly
+    """Examines if a particular word is an anomaly.
 
     while examining, this function compares the probability of a word's
     occurrence in one particular chunk to the probability of the same word's
     occurrence in the rest of the chunks. Usually we report a word as an
-    anomaly if the return value is smaller than -1.96 or bigger than 1.96
+    anomaly if the return value is smaller than -1.96 or bigger than 1.96.
     :param p1: the probability of a word's occurrence in a particular chunk:
                Number of word occurrence in the chunk/
                total word count in the chunk
@@ -31,18 +29,19 @@ def _z_test_(p1, pt, n1, nt):
                (or the whole passage)
                Number of word occurrence in all the chunk/
                total word count in all the chunk
-    :param n1: the number of total words in the chunk we care about
-    :param nt: the number of total words in all the chunk selected
+    :param n1: the number of total words in the chunk we care about.
+    :param nt: the number of total words in all the chunk selected.
     :return: the probability that the particular word in a particular chunk is
-             NOT an anomaly
+             NOT an anomaly.
     """
-    try:
-        p = (p1 * n1 + pt * nt) / (n1 + nt)
-        standard_error = sqrt(p * (1 - p) * ((1 / n1) + (1 / nt)))
-        z_scores = (p1 - pt) / standard_error
-        return z_scores
-    except ZeroDivisionError:
-        return 'Insignificant'
+    assert n1 > 0, SEG_NON_POSITIVE_MESSAGE
+    assert nt > 0, SEG_NON_POSITIVE_MESSAGE
+    p = (p1 * n1 + pt * nt) / (n1 + nt)
+    standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt)))**0.5
+    if standard_error == 0:
+        return 0
+    else:
+        return round((p1 - pt) / standard_error, 4)
 
 
 def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
@@ -62,8 +61,7 @@ def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
     for index, word in enumerate(words):
         p_i = count_list_i[index] / row_sum
         p_j = count_list_j[index] / total_sum
-        z_score = round(
-            _z_test_(p1=p_i, pt=p_j, n1=row_sum, nt=total_sum), 4)
+        z_score = _z_test_(p1=p_i, pt=p_j, n1=row_sum, nt=total_sum)
         # get rid of the insignificant results
         # insignificant means those with absolute values smaller than 1.96
         if abs(z_score) >= 1.96:
