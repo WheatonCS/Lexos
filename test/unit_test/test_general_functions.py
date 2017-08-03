@@ -87,27 +87,42 @@ class TestHtmlEscape:
 
 
 class TestApplyFunctionExcludeTags:
-    input_str = "<tag>asdf</tag>"
 
     def dummy_function(self, input_string):
         return input_string + input_string
 
     def test_one_function(self):
+        input_str = "<tag>asdf</tag>"
         assert apply_function_exclude_tags(
-            self.input_str, [self.dummy_function]) == '<tag>asdfasdf</tag>'
+            input_str, [self.dummy_function]) == '<tag>asdfasdf</tag>'
         assert apply_function_exclude_tags(
-            self.input_str, [str.upper]) == '<tag>ASDF</tag>'
+            input_str, [str.upper]) == '<tag>ASDF</tag>'
 
     def test_two_functions(self):
+        input_str = "<tag>asdf</tag>"
         assert apply_function_exclude_tags(
-            self.input_str, [str.upper, self.dummy_function]) == '<tag>' \
-                                                                 'ASDFASDF' \
-                                                                 '</tag>'
+            input_str, [str.upper, self.dummy_function]) == '<tag>' \
+                                                            'ASDFASDF' \
+                                                            '</tag>'
 
     def test_multiple_functions(self):
         assert apply_function_exclude_tags(
             '<tag>asdf</tag>', [str.upper, str.lower,
                                 self.dummy_function]) == '<tag>asdfasdf</tag>'
+
+    def test_empty_string(self):
+        input_str = ""
+        assert apply_function_exclude_tags(
+            input_str, [self.dummy_function]) == ''
+        assert apply_function_exclude_tags(
+            input_str, [str.upper]) == ''
+
+    def test_tags_only(self):
+        input_str = "<tag></tag>"
+        assert apply_function_exclude_tags(
+            input_str, [self.dummy_function]) == '<tag></tag>'
+        assert apply_function_exclude_tags(
+            input_str, [str.upper]) == '<tag></tag>'
 
 
 class TestDecodeBytes:
