@@ -18,12 +18,11 @@ import lexos.processors.analyze.information as information
 import lexos.processors.analyze.similarity as similarity
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
-from lexos.helpers.general_functions import matrix_to_dict
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 from lexos.processors.analyze import dendrogrammer
-from lexos.processors.analyze.topword import test_all_to_para, \
-    group_division, test_para_to_group, test_group_to_group
+from lexos.processors.analyze.topword import analyze_all_to_para, \
+    group_division, analyze_para_to_group, analyze_group_to_group
 
 
 def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
@@ -276,7 +275,7 @@ def generate_statistics(file_manager: FileManager) -> \
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix, _, labels = file_manager.get_matrix(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
@@ -287,11 +286,11 @@ def generate_statistics(file_manager: FileManager) -> \
         cull=culling)
 
     file_info_list = []
-    for count, label in enumerate(labels):
+    for count, label in enumerate(dtm_data.index.values):
         file_info_list.append(information.FileInformation(
-            count_list=count_matrix[count, :], file_name=label))
-    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
-                                                labels=labels)
+            count_list=dtm_data.values[count, :], file_name=label))
+    corpus_info = information.CorpusInformation(count_matrix=dtm_data.values,
+                                                labels=dtm_data.index.values)
     return file_info_list, corpus_info
 
 
@@ -1279,134 +1278,81 @@ def generate_sims_csv(file_manager: FileManager):
 
 
 def get_top_word_option():
+    """Gets the top word options from the front-end.
+
+    :return: test_by_class: option for proportional z test to see whether to
+             use test by files or by classes
     """
-    Gets the top word options from the front-end
-
-    Args:
-        None
-
-    Returns:
-        test_by_class: option for proportional z test to see whether to use
-                testgroup() or testall()
-                see analyze/topword.py testgroup() and testall() for more
-        option: the wordf ilter to determine what word to send to the topword
-                analysis
-                    see analyze/topword.py testgroup() and testall() for more
-        high: the Highest Proportion that sent to topword analysis
-        low: the Lowest Proportion that sent to topword analysis
-    """
-
     if 'testInput' in request.form:  # when do KW this is not in request.form
         test_by_class = request.form['testInput']
     else:
         test_by_class = None
 
-    outlier_method = \
-        'StdE' if request.form['outlierMethodType'] == 'stdErr' else 'IQR'
-
-    # begin get option
-    low = 0.0  # init low
-    high = 1.0  # init high
-
-    if outlier_method == 'StdE':
-        outlier_range = request.form["outlierTypeStd"]
-    else:
-        outlier_range = request.form["outlierTypeIQR"]
-
-    if request.form['groupOptionType'] == 'all':
-        option = 'CustomP'
-    elif request.form['groupOptionType'] == 'bio':
-        option = outlier_range + outlier_method
-    else:
-        if request.form['useFreq'] == 'RC':
-            option = 'CustomR'
-            high = int(request.form['upperboundRC'])
-            low = int(request.form['lowerboundRC'])
-        else:
-            option = 'CustomP'
-            high = float(request.form['upperboundPC'])
-            low = float(request.form['lowerboundPC'])
-
-    return test_by_class, option, low, high
+    return test_by_class
 
 
 def generate_z_test_top_word(file_manager: FileManager):
+    """Generates the z-test top word results based on user options.
+
+    :param file_manager: A FileManager object (see managers/file_manager.py).
+    :return: A dictionary containing the Z-test results.
     """
-
-    All paragraphs are really references to documents. The UI has been updated
-    to "documents" but all the variables below still use paragraphs.
-
-    Generates the Z-test Topwod results based on user options
-
-    Args:
-        file_manager:
-
-    Returns:
-        A dictionary containing the Z-test results
-    """
-
-    test_by_class, option, low, high = get_top_word_option()
+    # Initialize
+    test_by_class = get_top_word_option()
 
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
         show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    # Generate word count matrix
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=n_gram_size,
         use_freq=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=culling)
-    word_lists = matrix_to_dict(count_matrix)
 
-    if test_by_class == 'allToPara':  # test for all
+    # Grab data from data frame
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
+    words = dtm_data.columns.values
 
-        analysis_result = test_all_to_para(
-            word_lists, option=option, low=low, high=high)
-
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                if request.form["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.form["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
-
+    # test for all
+    if test_by_class == 'allToPara':
+        analysis_result = analyze_all_to_para(count_matrix=count_matrix,
+                                              words=words)
         # convert to human readable form
         human_result = []
-        for i in range(len(analysis_result)):
-            header = 'Document "' + \
-                     temp_labels[i] + '" compared to the whole corpus'
-            human_result.append([header, analysis_result[i]])
+        for index, label in enumerate(labels):
+            header = 'Document "' + label + '" compared to the whole corpus'
+            human_result.append([header, analysis_result[index]])
 
-    elif test_by_class == 'classToPara':  # test by class
-
+    # test by class
+    elif test_by_class == 'classToPara':
         # create division map
-        division_map, name_map, class_label_map = \
-            file_manager.get_class_division_map()
+        division_map = file_manager.get_class_division_map()
+        class_labels = division_map.index.values
 
-        if len(division_map) == 1:
-            raise ValueError(
-                'only one class given, cannot do Z-test by class, '
-                'at least 2 classes needed')
+        # check if more than one class exists
+        if division_map.shape[0] == 1:
+            raise ValueError(" only one class given, cannot do Z-test by "
+                             "class, at least 2 classes needed")
 
-        # divide into group
-        group_word_lists = group_division(word_lists, division_map)
+        # divides into group
+        group_values, name_map = group_division(dtm_data, division_map.values)
 
         # test
-        analysis_result = test_para_to_group(
-            group_word_lists, option=option, low=low, high=high)
+        analysis_result = analyze_para_to_group(group_values=group_values,
+                                                words=words)
 
         # convert to human readable form
         human_result = []
         for key in list(analysis_result.keys()):
             file_name = name_map[key[0]][key[1]]
-            comp_class_name = class_label_map[key[2]]
+            comp_class_name = class_labels[key[2]]
             if comp_class_name == '':
                 header = 'Document "' + file_name + \
                          '" compared to Class: untitled'
@@ -1417,26 +1363,23 @@ def generate_z_test_top_word(file_manager: FileManager):
 
     elif test_by_class == 'classToClass':
         # create division map
-        division_map, name_map, class_label_map = \
-            file_manager.get_class_division_map()
+        division_map = file_manager.get_class_division_map()
+        class_labels = division_map.index.values
 
-        if len(division_map) == 1:
-            raise ValueError(
-                'only one class given, cannot do Z-test By class, '
-                'at least 2 class needed')
-
-        # divide into group
-        group_word_lists = group_division(word_lists, division_map)
-
+        # check if more than one class exists
+        if division_map.shape[0] == 1:
+            raise ValueError(" only one class given, cannot do Z-test by "
+                             "class, at least 2 classes needed")
+        # divides into group
+        group_values, name_map = group_division(dtm_data, division_map.values)
         # test
-        analysis_result = test_group_to_group(
-            group_word_lists, option=option, low=low, high=high)
-
+        analysis_result = analyze_group_to_group(group_values=group_values,
+                                                 words=words)
         # convert to human readable form
         human_result = []
         for key in list(analysis_result.keys()):
-            base_class_name = class_label_map[key[0]]
-            comp_class_name = class_label_map[key[1]]
+            base_class_name = class_labels[key[0]]
+            comp_class_name = class_labels[key[1]]
             if comp_class_name == '':
                 header = 'Class "' + base_class_name + \
                          '" compared to Class: untitled'
@@ -1454,34 +1397,27 @@ def generate_z_test_top_word(file_manager: FileManager):
 
 
 def get_top_word_csv(test_results, csv_header):
+    """Writes the generated top word results to an output CSV file.
+
+    :param test_results: analysis result generated by function
+                         generate_z_test_top_word().
+    :param csv_header: header of the csv file.
+    :returns: path of the generated CSV file.
     """
-    Write the generated topword results to an output CSV file
-
-    Args:
-        test_results: Analysis Result generated by either generateKWTopwords()
-                        or GenerateZTestTopWord()
-        TestMethod: 'paraToClass' - proportional z-test for class,
-                    'paraToAll' - proportional z-test for all,
-                    'classToClass' - Kruskal Wallis test for class
-
-    Returns:
-        Path of the generated CSV file
-    """
-
     # make the path
     result_folder_path = os.path.join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
+
     try:
         # attempt to make the save path directory
         os.makedirs(result_folder_path)
     except OSError:
         pass
-    save_path = os.path.join(
-        result_folder_path,
-        constants.TOPWORD_CSV_FILE_NAME)
-    delimiter = ','
+    save_path = os.path.join(result_folder_path,
+                             constants.TOPWORD_CSV_FILE_NAME)
 
+    delimiter = ','
     csv_content = csv_header + '\n'  # add a header
 
     for result in test_results:
@@ -1496,6 +1432,7 @@ def get_top_word_csv(test_results, csv_header):
 
     with open(save_path, 'w', encoding='utf-8') as f:
         f.write(csv_content)
+
     return save_path
 
 

@@ -8,6 +8,7 @@ from os.path import join as pathjoin
 from typing import List, Tuple, Dict
 
 import numpy as np
+import pandas as pd
 from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
@@ -845,8 +846,7 @@ class FileManager:
     def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
                    norm_option: str, only_char_grams_within_words: bool,
                    n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
-                   round_decimal: bool=False) -> \
-            (np.ndarray, np.ndarray, np.ndarray):
+                   round_decimal: bool=False) -> pd.DataFrame:
         # TODO: remove round_decimal
         """Get the document term matrix (DTM) of all the active files
 
@@ -873,8 +873,9 @@ class FileManager:
                                 is fixed to 6 decimal places
                                 (so far only used in tokenizer)
         :return:
-            Returns the sparse matrix and a list of lists representing the
-            matrix of data.
+            a panda data frame with:
+            - the index (row) as the segment names (temp_labels)
+            - the column as words
         """
 
         active_files = self.get_active_files()
@@ -1040,7 +1041,12 @@ class FileManager:
         if round_decimal:
             final_matrix = np.round(final_matrix, decimals=6)
 
-        return final_matrix, words, temp_labels
+        # pack the data into a data frame
+        dtm_data_frame = pd.DataFrame(data=final_matrix,
+                                      index=temp_labels,
+                                      columns=words)
+
+        return dtm_data_frame
 
     @staticmethod
     def get_most_frequent_word(lower_rank_bound: int,
@@ -1353,59 +1359,31 @@ class FileManager:
         return count_matrix
 
     def get_class_division_map(self):
+        """:return: a panda frame that contains class division map."""
+        # initialize
+        temp_labels = []
+        temp_classes = []
 
-        # TODO: get rid of this horrible function
-        """
-        Args:
-
-        Returns:
-            division_map:
-            name_map:
-            class_label_map:
-        """
-        # create division map
-        division_map = [[0]]  # initialize the division map (at least one file)
+        # active files labels and classes
         files = self.get_active_files()
-        try:
-            # try to get temp label
-            name_map = [[request.form["file_" + str(files[0].id)]]]
-        except KeyError:
-            try:
-                name_map = [[files[0].label]]  # user send a get request.
-            except IndexError:
-                return []  # there is no active file
-        class_label_map = [files[0].class_label]
+        for file in files:
+            temp_labels.append(file.label)
+            if file.class_label not in temp_classes:
+                temp_classes.append(file.class_label)
+        label_length = len(temp_labels)
+        class_length = len(temp_classes)
 
-        # because 0 is defined in the initialize
-        for file_id in range(1, len(files)):
+        # initialize class division map
+        division_map = pd.DataFrame(
+            data=np.zeros((class_length, label_length), dtype=bool),
+            index=temp_classes,
+            columns=temp_labels)
 
-            inside_existing_group = False
+        # set correct boolean value for each file
+        for file in files:
+            division_map[file.label][file.class_label] = True
 
-            for i in range(len(division_map)):  # for group in division map
-                for existing_id in division_map[i]:
-                    if files[existing_id].class_label == \
-                            files[file_id].class_label:
-                        division_map[i].append(file_id)
-                        try:
-                            # try to get temp label
-                            name_map[i].append(
-                                request.form["file_" + str(files[file_id].id)])
-                        except KeyError:
-                            name_map[i].append(files[file_id].label)
-                        inside_existing_group = True
-                        break
-
-            if not inside_existing_group:
-                division_map.append([file_id])
-                try:
-                    # try to get temp label
-                    name_map.append(
-                        [request.form["file_" + str(files[file_id].id)]])
-                except KeyError:
-                    name_map.append([files[file_id].label])
-                class_label_map.append(files[file_id].class_label)
-
-        return division_map, name_map, class_label_map
+        return division_map
 
     def get_previews_of_all(self):
         """
