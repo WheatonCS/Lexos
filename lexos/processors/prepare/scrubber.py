@@ -740,7 +740,7 @@ def handle_gutenberg(text: str) -> str:
 
 def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
                                cache_options: List[str], cache_folder: str,
-                               ) -> List[str]:
+                               cache_filenames: List[str]) -> List[str]:
     """Gathers all the strings used by the "Additional Options" scrub section.
 
     :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
@@ -749,14 +749,13 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     :param cache_options: A list of strings representing additional options
         that have been chosen by the user.
     :param cache_folder: A string representing the path of the cache folder.
+    :param cache_filenames: A list of filename strings that will be used to
+        load and save the user's selections.
     :return: An array containing strings of all the additional scrubbing
         option text fields and files.
     """
 
-    cache_filenames = sorted(
-        ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
     file_strings = {}
-
     for i, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename != '':
             file_content = opt_uploads[key].read()
@@ -825,38 +824,22 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     cache_filenames = sorted(
         ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
-    file_strings = {}
-
-    for i, key in enumerate(sorted(opt_uploads)):
-        if opt_uploads[key].filename != '':
-            file_content = opt_uploads[key].read()
-            if isinstance(file_content, bytes):
-                file_strings[i] = general_functions.decode_bytes(
-                    raw_bytes=file_content)
-            else:
-                file_strings[i] = file_content
-            opt_uploads[key].seek(0)
-        else:
-            file_strings[i] = ""
-            if key.strip('[]') in cache_options:
-                file_strings[i] = load_cached_file_string(
-                    cache_folder, cache_filenames[i])
-            else:
-                session['scrubbingoptions']['optuploadnames'][key] = ''
+    option_strings = prepare_additional_options(
+        opt_uploads, cache_options, cache_folder, cache_filenames)
 
     # handle uploaded FILES: consolidations, lemmas, special characters,
     # stop-keep words
-    cons_file_string = file_strings[0]
-    lem_file_string = file_strings[1]
-    sc_file_string = file_strings[2]
-    sw_kw_file_string = file_strings[3]
+    cons_file_string = option_strings[0]
+    lem_file_string = option_strings[1]
+    sc_file_string = option_strings[2]
+    sw_kw_file_string = option_strings[3]
 
     # handle manual entries: consolidations, lemmas, special characters,
     # stop-keep words
-    cons_manual = request.form['manualconsolidations']
-    lem_manual = request.form['manuallemmas']
-    sc_manual = request.form['manualspecialchars']
-    sw_kw_manual = request.form['manualstopwords']
+    cons_manual = option_strings[4]
+    lem_manual = option_strings[5]
+    sc_manual = option_strings[6]
+    sw_kw_manual = option_strings[7]
 
     # Scrubbing order:
     #
