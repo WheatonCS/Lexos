@@ -275,9 +275,8 @@ def handle_tags(text: str) -> str:
     # \[[^]]*\]? matches an optional section surrounded by "[]"
     # >          matches the string ">"
 
-    # This matches the DOCTYPE and all internal entity declarations. To get
-    # just the entity declarations, use r"(\[[^]]*\])?"
-    doctype = re.compile(r"<!DOCTYPE[^>[]*\[[^]]*\]?>")
+    # This matches the DOCTYPE and all internal entity declarations
+    doctype = re.compile(r"<!DOCTYPE.*?>", re.DOTALL)
     text = re.sub(doctype, "", text)    # Remove DOCTYPE declarations
 
     if 'xmlhandlingoptions' in session:  # Should always be true
