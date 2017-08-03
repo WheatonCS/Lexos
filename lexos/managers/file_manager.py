@@ -497,7 +497,7 @@ class FileManager:
             -> List[list]:
         """Helper function used to remove less frequent words.
 
-        The helper function used in the getMatrix() method to remove less
+        The helper function used in the get_matrix_deprec() method to remove less
         frequent words, or GreyWord (non-functioning words). This function
         takes in 2 word count matrices (one of them may be in proportion) and
         calculates the boundary of the low frequency word with the
@@ -527,20 +527,20 @@ class FileManager:
                               its row represents a chunk and the column
                               represents a word.
                               it contains the word count (might be proportional
-                              depends on :param useFreq in function
-                              getMatrix()) of a particular word in a particular
+                              depends on :param use_freq in function
+                              get_matrix_deprec()) of a particular word in a particular
                               chunk.
         :param count_matrix: its row represents a chunk and the column
                              represents a word.
                              it contains the word count (might be proportional
-                             depends on :param useFreq in function getMatrix())
+                             depends on :param use_freq in function get_matrix_deprec())
                              of a particular word in a particular chunk
         :return: a matrix with a header in the 0 row and the 0 column.
                  its row represents a chunk and the column represents a word.
                  it contains the word count (might be proportional depends on
-                 :param useFreq in function getMatrix()) of a particular word
+                 :param use_freq in function get_matrix_deprec()) of a particular word
                  in a particular chunk.
-                 this matrix does not contain GreyWord.
+                 this matrix does not contain grey_word.
         """
 
         # find boundary
@@ -571,16 +571,16 @@ class FileManager:
             -> List[list]:
         """Deletes all words found in less than the lower_bound # of documents.
 
-        This function is a helper function of the getMatrix() function.
+        This function is a helper function of the get_matrix_deprec() function.
         This function will delete (make count 0) all the words that appear in
         strictly less than the lower_bound number of documents.
         (If the lower_bound is 2, all the words only appearing in 1 document
         will be deleted.)
-        :param result_matrix: the Matrix that the getMatrix() function needs to
+        :param result_matrix: the Matrix that the get_matrix_deprec() function needs to
                               return (might contain Porp, Count or weighted
                               depending on user's choice).
         :param count_matrix: the Matrix that only contains word counts.
-        :return: a new ResultMatrix (might contain Porp, Count or weighted
+        :return: a new result_matrix (might contain Porp, Count or weighted
                  depending on user's choice).
         """
         if request.json:
@@ -603,16 +603,16 @@ class FileManager:
                                   count_matrix: List[list]) -> List[list]:
         """Ranks all the words by word count and deletes low ranking words.
 
-        This function is a helper function of the getMatrix() function.
+        This function is a helper function of the get_matrix_deprec() function.
         This function will rank all the words by word count (across all the
         segments) and then delete (make count 0) all the words that has ranking
         lower than lower_rank_bound (tie will be kept).
 
-        :param result_matrix: the Matrix that the getMatrix() function
+        :param result_matrix: the Matrix that the get_matrix_deprec() function
                needs to return (might contain Porp, Count or weighted depending
                on user's choice).
         :param count_matrix: the Matrix that only contains word counts.
-        :return: a new ResultMatrix (might contain Porp, Count
+        :return: a new result_matrix (might contain Porp, Count
                  or weighted depending on user's choice) (Unsorted).
         """
         if request.json:
