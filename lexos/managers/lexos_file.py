@@ -2,7 +2,7 @@ import re
 import textwrap
 from os import remove
 from os.path import join as pathjoin
-from typing import Dict
+from typing import Dict, Tuple
 
 from flask import request
 from lexos.helpers import general_functions, constants
@@ -274,7 +274,8 @@ class LexosFile:
 
         Most often the scrubbing options come from the parent file that a
         child file was cut from.
-        :param parent:
+        :param parent: a LexosFile object that contains the scrubbing
+                       options (and more information) for the parent file.
         """
 
         if "scrub" not in self.options:
@@ -314,7 +315,8 @@ class LexosFile:
 
         return text_strings
 
-    def get_cutting_options(self, override_id: int=None):
+    def get_cutting_options(self, override_id: int=None) -> Tuple[str, str,
+                                                                  str, str]:
         """Gets the cutting options for a specific file.
 
         If cutting options not defined, then grabs the overall options, from
