@@ -16,7 +16,7 @@ import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 from lexos.managers.lexos_file import LexosFile
 
-"""Class for an object to hold all info about a user's files & choices in Lexos
+"""Class for an object to hold all info about user's files & choices in Lexos.
 
 Each user will have their own unique instance of the FileManager. A major data 
 attribute of this class is a dictionary holding the LexosFile objects, each 
@@ -44,6 +44,7 @@ class FileManager:
 
         :return: a dict map file id to lexos_files.
         """
+
         return self._files
 
     def add_file(self, original_filename: str, file_name: str,
@@ -56,6 +57,7 @@ class FileManager:
         :param file_string: the string contents of the text.
         :return: the id of the newly added file.
         """
+
         # solve the problem that there is file with the same name
         exist_clone_file = True
         while exist_clone_file:
@@ -86,6 +88,7 @@ class FileManager:
         :param file_ids: an array containing all the id of the files that need
                          to be deleted.
         """
+
         for file_id in file_ids:
             file_id = int(file_id)  # in case that the id is not int
             self.files[file_id].clean_and_delete()
@@ -96,6 +99,7 @@ class FileManager:
 
         :return: a list of LexosFile objects.
         """
+
         active_files = []
 
         for lFile in list(self.files.values()):
@@ -111,6 +115,7 @@ class FileManager:
         LexosFile object before removing it from the dictionary.
         :return: list of deleted file_ids.
         """
+
         file_ids = []
         for file_id, l_file in list(self.files.items()):
             if l_file.active:
@@ -139,6 +144,7 @@ class FileManager:
         :return: a formatted list with an entry (tuple) for every active file,
                  containing the preview information.
         """
+
         previews = []
 
         for l_file in self.files.values():
@@ -159,6 +165,7 @@ class FileManager:
         :return: a formatted list with an entry (tuple) for every inactive
                  file, containing the preview information.
         """
+
         previews = []
 
         for l_file in list(self.files.values()):
@@ -305,6 +312,7 @@ class FileManager:
         :return: a formatted list with an entry (tuple) for every active file,
                  containing the preview information.
         """
+
         previews = []
 
         for l_file in list(self.files.values()):
@@ -326,6 +334,7 @@ class FileManager:
         :return: a formatted list with an entry (tuple) for every active file,
                  containing the preview information.
         """
+
         active_files = []
         for l_file in list(self.files.values()):
             if l_file.active:
@@ -373,6 +382,7 @@ class FileManager:
         :return: zipped archive to send to the user, created with Flask's
                  send_file.
         """
+
         zip_stream = io.BytesIO()
         zip_file = zipfile.ZipFile(file=zip_stream, mode='w')
         for l_file in list(self.files.values()):
@@ -398,6 +408,7 @@ class FileManager:
 
         :return: the path of the zipped workspace
         """
+
         # initialize the save path
         save_path = os.path.join(
             constants.UPLOAD_FOLDER,
@@ -449,6 +460,7 @@ class FileManager:
                  of tags, the secondKeyWord the presence of DOE tags, the third
                  signifying the presence of gutenberg tags.
         """
+
         found_tags = False
         found_doe = False
         found_gutenberg = False
@@ -478,6 +490,7 @@ class FileManager:
         :param file_id: the id of the file for which to change the label.
         :param file_label: the label to set the file to.
         """
+
         self.files[file_id] = file_label
 
     def get_active_labels(self) -> Dict[int, str]:
@@ -485,6 +498,7 @@ class FileManager:
 
         :return: a dictionary of the currently active files' labels.
         """
+
         labels = {}
         for l_file in list(self.files.values()):
             if l_file.active:
@@ -583,6 +597,7 @@ class FileManager:
         :return: a new result_matrix (might contain Porp, Count or weighted
                  depending on user's choice).
         """
+
         if request.json:
             lower_bound = int(request.json['cullnumber'])
         else:
@@ -615,6 +630,7 @@ class FileManager:
         :return: a new result_matrix (might contain Porp, Count
                  or weighted depending on user's choice) (Unsorted).
         """
+
         if request.json:
             lower_rank_bound = int(request.json['mfwnumber'])
         else:
@@ -667,6 +683,7 @@ class FileManager:
             culling: a boolean the a boolean to show whether to apply culling
                         to the Matrix (see self.culling method for more)
         """
+
         n_gram_size = int(request.form['tokenSize'])
         use_word_tokens = request.form['tokenType'] == 'word'
         try:
@@ -1276,6 +1293,7 @@ class FileManager:
         :return: a list of dictionaries with preview information for every
                  file.
         """
+
         previews = []
 
         for l_file in list(self.files.values()):
@@ -1297,6 +1315,7 @@ class FileManager:
         This is done by calling the delete method on the LexosFile object
         before removing it from the dictionary.
         """
+
         for file_id, l_file in list(self.files.items()):
             l_file.clean_and_delete()
             del self.files[file_id]  # Delete the entry
