@@ -19,11 +19,10 @@ cluster_view = Blueprint('cluster', __name__)
 # Tells Flask to load this function when someone is at '/dendrogramimage'
 @cluster_view.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogram_image():
-    """Reads the png image of the dendrogram and displays it on the web
-    browser.
+    """Reads the png image of the dendrogram and displays it on the browser.
+
     *dendrogramimage() linked to in analysis.html, displaying the
     dendrogram.png
-
     :return: a response object with the dendrogram png to flask and
     eventually to the browser.
     """
@@ -40,9 +39,9 @@ def dendrogram_image():
 # Tells Flask to load this function when someone is at '/kmeans'
 @cluster_view.route("/kmeans", methods=["GET", "POST"])
 def k_means():
-    """Handles the functionality on the kmeans page. It analyzes the various
-    texts and displays the class label of the files.
+    """Handles the functionality on the kmeans page.
 
+    It analyzes the various texts and displays the class label of the files.
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
@@ -122,8 +121,8 @@ def k_means():
 @cluster_view.route("/kmeansimage", methods=["GET", "POST"])
 def k_means_image():
     """Reads the png image of the kmeans and displays it on the web browser.
-    *kmeansimage() linked to in analysis.html, displaying the kmeansimage.png
 
+    *kmeansimage() linked to in analysis.html, displaying the kmeansimage.png
     :return: a response object with the kmeansimage png to flask and
      eventually to the browser.
     """
@@ -159,7 +158,7 @@ def big_pca():
 # Tells Flask to load this function when someone is at '/cluster'
 @cluster_view.route("/cluster", methods=["GET", "POST"])
 def cluster():
-    """Handles the functionality on the cluster page
+    """Handles the functionality on the cluster page.
 
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
@@ -278,7 +277,7 @@ def cluster():
 # Tells Flask to load this function when someone is at '/cluster-old'
 @cluster_view.route("/cluster-old", methods=["GET", "POST"])
 def cluster_old():
-    """Handles the functionality on the cluster-old page
+    """Handles the functionality on the cluster-old page.
 
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
