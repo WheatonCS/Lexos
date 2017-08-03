@@ -15,7 +15,7 @@ stats_view = Blueprint('statistics', __name__)
 # Tells Flask to load this function when someone is at '/statsgenerator'
 @stats_view.route("/statistics", methods=["GET", "POST"])
 def statistics():
-    """Handles the functionality on the Statistics page
+    """Handles the functionality on the Statistics page.
 
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.

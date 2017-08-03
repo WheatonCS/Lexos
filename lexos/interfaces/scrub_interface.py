@@ -19,9 +19,9 @@ scrubber_view = Blueprint('scrubber', __name__)
 @scrubber_view.route("/scrub", methods=["GET", "POST"])
 def scrub():
     # Are you looking for scrubber.py?
-    """Handles the functionality of the scrub page. 
+    """Handles the functionality of the scrub page.
 
-    It scrubs the files depending on the specifications chosen by the user, 
+    It scrubs the files depending on the specifications chosen by the user,
     with an option to download the scrubbed files.
     :return: a response object (often a render_template call) to flask and
      eventually to the browser.
@@ -79,7 +79,7 @@ def do_scrubbing():
 # Tells Flask to load this function when someone is at '/downloadScrubbing'
 @scrubber_view.route("/downloadScrubbing", methods=["GET", "POST"])
 def download_scrubbing():
-    """downloads scrubbed files
+    """downloads scrubbed files.
 
     :return: a .zip with all the scrubbed files
     """
@@ -164,7 +164,7 @@ def get_tags_table():
 
 @scrubber_view.route("/setAllTagsTable", methods=["GET", "POST"])
 def set_all_tags_table():
-    """sets all the tags options
+    """sets all the tags options.
 
     :return: json object with the result html
     """
@@ -236,7 +236,7 @@ def xml():
 
 @scrubber_view.route("/removeUploadLabels", methods=["GET", "POST"])
 def remove_upload_labels():
-    """Removes Scrub upload files from the session when the labels are clicked
+    """Removes Scrub upload files from the session when the labels are clicked.
 
     :return: string indicating that it has succeeded
     """

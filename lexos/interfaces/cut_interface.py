@@ -65,7 +65,7 @@ def cut():
 
 @cutter_view.route("/downloadCutting", methods=["GET", "POST"])
 def download_cutting():
-    """downloads cut files
+    """downloads cut files.
 
     :return: a .zip with all the cut files
     """
@@ -77,7 +77,7 @@ def download_cutting():
 
 @cutter_view.route("/doCutting", methods=["GET", "POST"])
 def do_cutting():
-    """cuts the files
+    """cuts the files.
 
     :return: cut files and their preview in a json object
     """

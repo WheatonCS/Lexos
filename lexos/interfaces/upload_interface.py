@@ -70,7 +70,7 @@ def upload():
 
 @upload_view.route("/scrape", methods=["GET", "POST"])
 def scrape():
-    """scraps the urls an generates text file from each url
+    """scraps the urls an generates text file from each url.
 
     :return: json object with a string that indicates that is has succeeded
     """

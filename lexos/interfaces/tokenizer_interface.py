@@ -21,7 +21,7 @@ tokenizer_view = Blueprint('tokenizer', __name__)
 # Tells Flask to load this function when someone is at '/tokenizer'
 @tokenizer_view.route("/tokenizer", methods=["GET", "POST"])
 def tokenizer():
-    """Handles the functionality on the tokenizer page
+    """Handles the functionality on the tokenizer page.
 
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
@@ -428,8 +428,9 @@ def get_tokenizer_csv():
 
 @tokenizer_view.route("/getTenRows", methods=["GET", "POST"])
 def get_ten_rows():
-    """:return: a json object with the first ten rows of a
-    DTM. Works only on POST.
+    """:return: a json object with the first ten rows of a DTM.
+
+    Works only on POST.
     """
     import pandas as pd
     from operator import itemgetter

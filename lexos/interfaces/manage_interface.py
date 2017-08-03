@@ -87,7 +87,7 @@ def manage():
 
 @manage_view.route("/selectAll", methods=["GET", "POST"])
 def select_all():
-    """selects all files
+    """selects all files.
 
     :return: string indicating that it has succeeded
     """
@@ -99,7 +99,7 @@ def select_all():
 
 @manage_view.route("/deselectAll", methods=["GET", "POST"])
 def deselect_all():
-    """deletes all files
+    """deletes all files.
 
     :return: string indicating that it has succeeded
     """
@@ -111,7 +111,7 @@ def deselect_all():
 
 @manage_view.route("/downloadDocuments", methods=["GET", "POST"])
 def download_documents():
-    """downloads all selected files
+    """downloads all selected files.
 
     :return: a .zip file congaing all selected files
     """
@@ -161,7 +161,7 @@ def get_previews():
 
 @manage_view.route("/setLabel", methods=["GET", "POST"])
 def set_label():
-    """sets the label of a file
+    """sets the label of a file.
 
     :return: string indicating that it has succeeded
     """
@@ -176,7 +176,7 @@ def set_label():
 
 @manage_view.route("/setClass", methods=["GET", "POST"])
 def set_class():
-    """sets a class
+    """sets a class.
 
     :return: string indicating that it has succeeded
     """
@@ -221,7 +221,8 @@ def set_class_selected():
 
 @manage_view.route("/mergeDocuments", methods=["GET", "POST"])
 def merge_documents():
-    """:return: json object with the new file's id and preview"""
+    """:return: json object with the new file's id and preview
+    """
     print("Merging...")
     file_manager = utility.load_file_manager()
     file_manager.disable_all()

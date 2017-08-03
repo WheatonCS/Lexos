@@ -85,7 +85,7 @@ def reset():
     """ Resets the session and initializes a new one.
 
     It resets and initialize a new one every time the reset URL is used (either
-    manually or via the "Reset" button)
+    manually or via the "Reset" button).
     :return a response object (often a render_template call) to flask and
      eventually to the browser.
     """
