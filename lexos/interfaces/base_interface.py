@@ -14,9 +14,9 @@ base_view = Blueprint('base', __name__)
 
 
 def detect_active_docs() -> int:
-    """detects the number of active documents. This function can be called at
-    the beginning of each tool.
+    """detects the number of active documents.
 
+    This function can be called at the beginning of each tool.
     :return number of active documents
     """
     # TODO: this function should probably be moved to file_manager.py
@@ -45,9 +45,9 @@ def detect_active_docs_by_ajax() -> str:
 @base_view.route("/nosession", methods=["GET", "POST"])
 def no_session():
     """loads a redirection message that redirects to upload.
+
     If the user reaches a page without an active session, this function will
     loads a screen with a redirection message that redirects to Upload.
-
     :return template that contains redirection
     """
     # TODO: cannot find the template file nosession.html, maybe a typo?
@@ -57,8 +57,8 @@ def no_session():
 @base_view.route("/", methods=["GET"])
 def base():
     """handles redirection to other pages.
-    Note that this function page behavior for the base url ('/') of the site.
 
+    Note that this function page behavior for the base url ('/') of the site.
     :return a response object(often a render_template call) to flask and
     eventually to the browser.
     """
@@ -68,8 +68,8 @@ def base():
 @base_view.route("/downloadworkspace", methods=["GET"])
 def download_workspace():
     """Downloads workspace that stores all the session contents.
-    Note that the workspace can be uploaded and restore all the workspace.
 
+    Note that the workspace can be uploaded and restore all the workspace.
     :return workspace
     """
     file_manager = utility.load_file_manager()
@@ -83,9 +83,9 @@ def download_workspace():
 @base_view.route("/reset", methods=["GET"])
 def reset():
     """ Resets the session and initializes a new one.
+
     It resets and initialize a new one every time the reset URL is used (either
     manually or via the "Reset" button)
-
     :return a response object (often a render_template call) to flask and
      eventually to the browser.
     """
