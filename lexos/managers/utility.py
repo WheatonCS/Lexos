@@ -1228,18 +1228,10 @@ def generate_similarities(file_manager: FileManager) -> pd.DataFrame:
         cull=cull,
         round_decimal=False)
 
-    # extract the raw matrix from dataframe
-    final_matrix = dtm_data_frame.values
-    # extract the row header from dataframe
-    temp_labels = np.array(np.delete(dtm_data_frame.index, comp_file_index))
-
     # call similarity.py to generate the similarity list
-    docs_score, docs_name = similarity.similarity_maker(
-        final_matrix, comp_file_index, temp_labels)
+    score_name_data_frame = similarity.similarity_maker(
+        dtm_data_frame, comp_file_index)
 
-    docs_score = docs_score.reshape(docs_score.size, 1)
-    score_name_data_frame = pd.DataFrame(docs_score, index=docs_name,
-                                         columns=["Cosine similarity"])
     return score_name_data_frame
 
 
