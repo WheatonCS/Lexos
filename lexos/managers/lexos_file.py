@@ -203,28 +203,14 @@ class LexosFile:
         return self.contents_preview
 
     def enable(self):
-        """
-        Enables the file, re-generating the preview.
+        """Enables the file, re-generating the preview."""
 
-        Args:
-            None
-
-        Returns:
-            None
-        """
         self.active = True
         self.contents_preview = self.generate_preview()
 
     def disable(self):
-        """
-        Disables the file, emptying the preview.
+        """Disables the file, emptying the preview."""
 
-        Args:
-            None
-
-        Returns:
-            None
-        """
         self.active = False
         self.contents_preview = ''
 
