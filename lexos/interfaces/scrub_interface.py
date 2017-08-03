@@ -19,10 +19,10 @@ scrubber_view = Blueprint('scrubber', __name__)
 @scrubber_view.route("/scrub", methods=["GET", "POST"])
 def scrub():
     # Are you looking for scrubber.py?
-    """Handles the functionality of the scrub page. It scrubs the files
-    depending on the specifications chosen by the user, with an option to
-    download the scrubbed files.
+    """Handles the functionality of the scrub page. 
 
+    It scrubs the files depending on the specifications chosen by the user, 
+    with an option to download the scrubbed files.
     :return: a response object (often a render_template call) to flask and
      eventually to the browser.
     """
