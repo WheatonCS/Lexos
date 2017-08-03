@@ -458,7 +458,7 @@ class FileManager:
 
         :return: three booleans, the first signifying the presence of any type
                  of tags, the secondKeyWord the presence of DOE tags, the third
-                 signifying the presence of gutenberg tags.
+                 signifying the presence of gutenberg tags/boilerplate.
         """
 
         found_tags = False
