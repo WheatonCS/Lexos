@@ -82,7 +82,7 @@
 				<option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>k-means++</option>
 				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
 			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="'k-means++' selects initial cluster centers for k-means clustering in a smart way to speed up convergence. The 'random' chooses k observations (rows) at random from data for the initial centroids." style="font-size:12px;"></i>
+			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="'k-means++' selects initial cluster centers for k-means clustering using a weighted probability distribution to speed up convergence. The 'random' option chooses k observations (rows) at random from data for the initial centroids." style="font-size:12px;"></i>
 		</label>
 
 		<label for="n_init">Number of Iterations with Different Centroids:
