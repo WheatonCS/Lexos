@@ -326,6 +326,48 @@ class TestProcessTagReplaceOptions:
         assert process_tag_replace_options(
             self.no_end, "second", action, attribute) == self.no_end
 
+    def test_process_tag_rep_options_leave_tag(self):
+        action = "leave-alone"
+        attribute = ""
+
+        assert process_tag_replace_options(
+            self.tag_text, "first", action, attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.tag_text, "second", action, attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.no_end, "first", action, attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.no_end, "second", action, attribute) == self.no_end
+
+    def test_process_tag_rep_options_other(self):
+        action = "remove-tag"
+        attribute = ""
+
+        assert process_tag_replace_options(
+            self.tag_text, "first", "fake-option", attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.tag_text, "second", "fake-option", attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.no_end, "first", "fake-option", attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.no_end, "second", "fake-option", attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.tag_text, "Text", action, attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.tag_text, " ", action, attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.tag_text, "", action, attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.tag_text, ".", action, attribute) == self.tag_text
+        assert process_tag_replace_options(
+            self.no_end, "Text", action, attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.no_end, " ", action, attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.no_end, "", action, attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.no_end, ".", action, attribute) == self.no_end
+
 
 # handle_tags
 

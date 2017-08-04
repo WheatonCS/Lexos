@@ -313,8 +313,8 @@ def handle_tags(text: str) -> str:
     """Handles tags that are found in the text.
 
     Useless tags (header tags) are deleted and depending on the specifications
-    chosen by the user, words between meaningful tags (corr, foreign) are
-    either kept or deleted.
+        chosen by the user, words between meaningful tags (corr, foreign) are
+        either kept or deleted.
     :param text: A unicode string representing the whole text that is being
         manipulated.
     :return: A unicode string representing the text after deletion of the tags.
