@@ -142,7 +142,8 @@ class FileManager:
         Each preview on this formatted list of previews is made from every
         individual active file located in the file manager.
         :return: a formatted list with an entry (tuple) for every active file,
-                 containing the preview information.
+                 containing the preview information (the file id, name, label
+                 and preview).
         """
 
         previews = []
@@ -163,7 +164,8 @@ class FileManager:
         Each preview on this formatted list of previews is made from every
         individual inactive file located in the file manager.
         :return: a formatted list with an entry (tuple) for every inactive
-                 file, containing the preview information.
+                 file, containing the preview information (the file id, name,
+                 label and preview).
         """
 
         previews = []
@@ -310,7 +312,8 @@ class FileManager:
         :param saving_changes: a boolean saying whether or not to save the
                                changes made.
         :return: a formatted list with an entry (tuple) for every active file,
-                 containing the preview information.
+                 containing the preview information (the file id, label, class
+                 label, and scrubbed contents preview).
         """
 
         previews = []
@@ -332,7 +335,8 @@ class FileManager:
         :param saving_changes: a boolean saying whether or not to save the
                                changes made.
         :return: a formatted list with an entry (tuple) for every active file,
-                 containing the preview information.
+                 containing the preview information (the file id, label, class
+                 label, and cut contents preview).
         """
 
         active_files = []
@@ -511,8 +515,8 @@ class FileManager:
             -> List[list]:
         """Helper function used to remove less frequent words.
 
-        The helper function used in the get_matrix_deprec() method to remove less
-        frequent words, or GreyWord (non-functioning words). This function
+        The helper function used in the get_matrix_deprec() method to remove
+        less frequent words, or GreyWord (non-functioning words). This function
         takes in 2 word count matrices (one of them may be in proportion) and
         calculates the boundary of the low frequency word with the
         following function:
@@ -542,18 +546,19 @@ class FileManager:
                               represents a word.
                               it contains the word count (might be proportional
                               depends on :param use_freq in function
-                              get_matrix_deprec()) of a particular word in a particular
-                              chunk.
+                              get_matrix_deprec()) of a particular word in a
+                              particular chunk.
         :param count_matrix: its row represents a chunk and the column
                              represents a word.
                              it contains the word count (might be proportional
-                             depends on :param use_freq in function get_matrix_deprec())
-                             of a particular word in a particular chunk
+                             depends on :param use_freq in function
+                             get_matrix_deprec()) of a particular word in a
+                             particular chunk.
         :return: a matrix with a header in the 0 row and the 0 column.
                  its row represents a chunk and the column represents a word.
-                 it contains the word count (might be proportional depends on
-                 :param use_freq in function get_matrix_deprec()) of a particular word
-                 in a particular chunk.
+                 it contains the word count (might be proportional depends
+                 on :param use_freq in function get_matrix_deprec()) of a
+                 particular word in a particular chunk.
                  this matrix does not contain grey_word.
         """
 
@@ -590,9 +595,9 @@ class FileManager:
         strictly less than the lower_bound number of documents.
         (If the lower_bound is 2, all the words only appearing in 1 document
         will be deleted.)
-        :param result_matrix: the Matrix that the get_matrix_deprec() function needs to
-                              return (might contain Porp, Count or weighted
-                              depending on user's choice).
+        :param result_matrix: the Matrix that the get_matrix_deprec() function
+                              needs to return (might contain Porp, Count or
+                              weighted depending on user's choice).
         :param count_matrix: the Matrix that only contains word counts.
         :return: a new result_matrix (might contain Porp, Count or weighted
                  depending on user's choice).
@@ -658,30 +663,36 @@ class FileManager:
         return result_matrix
 
     @staticmethod
-    def get_matrix_options():
+    def get_matrix_options() -> Tuple[int, bool, bool, bool, str, bool, bool,
+                                      bool, bool, bool]:
         """Gets all the options that are used to generate the matrices from GUI
 
         :return:
-            use_word_tokens: A boolean: True if 'word' tokens; False if 'char'
-                        tokens
-            use_tfidf: A boolean: True if the user wants to use "TF/IDF"
-                        (weighted counts) to normalize
-            norm_option: A string representing distance metric options: only
-                        applicable to "TF/IDF", otherwise "N/A"
-            onlyCharGramWithinWords: True if 'char' tokens but only want to
-                        count tokens "inside" words
             n_gram_size: int for size of ngram (either n-words or n-chars,
-                        depending on use_word_tokens)
-            use_freq: A boolean saying whether or not to use the frequency
-                        (count / total), as opposed to the raw counts,
-                        for the count data.
-            grey_word: A boolean (default is False): True if the user wants to
-                        use greyword to normalize
+                         depending on use_word_tokens)
+            use_word_tokens: a boolean that is True if 'word' tokens; False if
+                            'char' tokens
+            use_freq: a boolean saying whether or not to use the frequency
+                      (count / total), as opposed to the raw counts,
+                      for the count data.
+            use_tfidf: a boolean that is True if the user wants to use "TF/IDF"
+                       (weighted counts) to normalize
+            norm_option: a string representing distance metric options: only
+                         applicable to "TF/IDF", otherwise "N/A"
+            grey_word: a boolean (default is False) that is True if the user
+                       wants to use greyword to normalize
+            show_deleted_word: a boolean that is True if the user want to use
+                               greyword to normalize or the user wants to
+                               apply most_frequent_word or culling to the
+                               Matrix...
+            only_char_grams_within_words: a boolean that is True if 'char'
+                                          tokens but only want to count tokens
+                                          "inside" words
             most_frequent_word: a boolean to show whether to apply
-                        MostFrequentWord to the Matrix
-                        (see self.mostFrequenWord method for more)
+                                most_frequent_word to the Matrix
+                                (see self.mostFrequenWord method for more)
             culling: a boolean the a boolean to show whether to apply culling
-                        to the Matrix (see self.culling method for more)
+                     to the Matrix (see self.culling method for more)
         """
 
         n_gram_size = int(request.form['tokenSize'])
@@ -726,21 +737,21 @@ class FileManager:
     def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
                    norm_option: str, only_char_grams_within_words: bool,
                    n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
-                   round_decimal: bool=False) -> \
-            (np.ndarray, np.ndarray, np.ndarray):
+                   round_decimal: bool=False) -> Tuple[np.ndarray,
+                                                       np.ndarray, np.ndarray]:
         # TODO: remove round_decimal
         """Get the document term matrix (DTM) of all the active files
 
         Uses scikit-learn's CountVectorizer class to produce the DTM.
-        :param use_word_tokens: True if 'word' tokens; False if
-                                'char' tokens
-        :param use_tfidf: True if the user wants to use "TF/IDF"
-                          (weighted counts) to normalize
+        :param use_word_tokens: a boolean that is True if 'word' tokens; False
+                                if 'char' tokens
+        :param use_tfidf: a boolean that is True if the user wants to use
+                          "TF/IDF" (weighted counts) to normalize
         :param norm_option: a string representing distance metric options: only
                             applicable to "TF/IDF", otherwise "N/A"
-        :param only_char_grams_within_words: True if 'char' tokens but only
-                                             want to count tokens "inside"
-                                             words
+        :param only_char_grams_within_words: a boolean that is True if 'char'
+                                             tokens but only want to count
+                                             tokens "inside" words
         :param n_gram_size: int for size of ngram (either n-words or n-chars,
                             depending on useWordTokens)
         :param use_freq: a boolean saying whether or not to use the frequency
@@ -753,8 +764,10 @@ class FileManager:
         :param round_decimal: a boolean (default is False): True if the float
                               is fixed to 6 decimal places
                               (so far only used in tokenizer)
-        :return: the sparse matrix and a list of lists representing the
-                 matrix of data.
+        :return: the sparse matrix, a list of lists representing the
+                 matrix of data (e.g., word-grams or char-grams) and the list
+                 of lists representing the matrix of temporary labels of the
+                 active files.
         """
 
         active_files = self.get_active_files()
@@ -933,8 +946,8 @@ class FileManager:
         The new count matrix will consists of only the most frequent words in
         the whole corpus.
         :param lower_rank_bound: the lowest rank to remain in the matrix
-                                 (the rank is determined by the word's number of
-                                 appearance in the whole corpus)
+                                 (the rank is determined by the word's number
+                                 of appearance in the whole corpus)
                                  (ranked from high to low)
         :param count_matrix: the raw count matrix,
                              the row are for each segments
@@ -942,9 +955,7 @@ class FileManager:
         :param final_matrix: the processed raw count matrix
                              (use proportion, use tf-idf, etc.)
         :param words: an array of all the words
-        :return:
-            - the culled final matrix
-            - the culled words
+        :return: the culled final matrix and the most frequent words array
         """
 
         # get the word counts for corpus (1D array)
@@ -983,9 +994,7 @@ class FileManager:
                              (use proportion, use tf-idf, etc.)
         :param words: an array of all the unique words
                       (column header of final_matrix)
-        :return:
-            - the culled final matrix
-            - the culled words array
+        :return: the culled final matrix and the culled words array
         """
 
         # create a bool matrix to indicate whether a word is in a segment
@@ -1045,8 +1054,8 @@ class FileManager:
         :param round_decimal: (default is False) True if the float is
                               fixed to 6 decimal places
                               (so far only used in tokenizer)
-        :return: the sparse matrix and a list of lists representing the
-                 matrix of data.
+        :return: list of lists representing the matrix of data with
+                 [rows: fileNames, columns: words].
         """
 
         active_files = self.get_active_files()
