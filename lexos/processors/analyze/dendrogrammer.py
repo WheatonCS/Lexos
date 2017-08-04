@@ -12,6 +12,8 @@ from scipy.spatial.distance import pdist
 from sklearn import metrics
 
 from lexos.helpers import constants as const
+from lexos.helpers.error_messages import EMPTY_STRING_MESSAGE, \
+    EMPTY_LIST_MESSAGE
 
 os.environ['MPLCONFIGDIR'] = os.path.join(
     const.UPLOAD_FOLDER, '.matplotlibs')
@@ -68,6 +70,12 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
     for a given word (in decimal form) for each segment of text.
     :return: distance_list: A list of all the distances in the dendrogram
     """
+
+    # precondition
+    assert len(linkage_method) != 0, EMPTY_STRING_MESSAGE
+    assert len(distance_metric) != 0, EMPTY_STRING_MESSAGE
+    assert len(dendro_matrix) != 0, EMPTY_LIST_MESSAGE
+
     # values are the same from the previous ones, but the formats are slightly
     # different for dendrogram
     y = pdist(dendro_matrix, distance_metric)
@@ -107,7 +115,6 @@ def get_silhouette_score(dendro_matrix: List,
               silhouette score if using Monocrit criterion
              -threshold: float/integer/string, threshold (t) value that users
               entered, equals to 'N/A' if users leave the field blank
-
     """
     # Switch to request.json if necessary
     if request.json:
@@ -224,8 +231,8 @@ def get_silhouette_score(dendro_matrix: List,
 def get_augmented_dendrogram(*args, **kwargs):
     """Generate the branch height legend in dendrogram.
 
-    :param args:
-    :param kwargs:
+    :param args
+    :param kwargs
     """
 
     ddata = hierarchy.dendrogram(*args, **kwargs)
@@ -248,6 +255,11 @@ def get_augmented_dendrogram(*args, **kwargs):
 
 
 def trim(im):
+    """ crop the dendrogram generated in dendrogram function
+
+    :param im: a png image
+    :return: im.crop(bbox): cropped image
+    """
     bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
     diff = ImageChops.difference(im, bg)
     diff = ImageChops.add(diff, diff, 2.0, -100)
@@ -294,7 +306,8 @@ def dendrogram(
     :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
            is checked
 
-   :return: -total_pdf_page_number: integer, total number of pages of the PDF.
+   :return:
+            -total_pdf_page_number: integer, total number of pages of the PDF.
             -score: float, silhouette score
             -inconsistent_max: float, upper bound of threshold to calculate
              silhouette score if using Inconsistent criterion
