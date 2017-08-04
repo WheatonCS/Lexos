@@ -1,7 +1,9 @@
+from typing import List
+
 import numpy as np
 
 
-def topic_json_maker(mallet_path):
+def topic_json_maker(mallet_path: str) -> List[dict]:
     # Configuration
     in_path = mallet_path  # Insert the path to the Mallet file here
     # Top N number of words in each topic that will appear in output
