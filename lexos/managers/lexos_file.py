@@ -270,7 +270,7 @@ class LexosFile:
 
         self.options['scrub'] = self.get_scrub_options()
 
-    def set_scrub_options_from(self, parent: 'LexosFile'):
+    def set_scrub_options_from(self, parent: LexosFile):
         """Sets the scrubbing options from another file.
 
         Most often the scrubbing options come from the parent file that a
