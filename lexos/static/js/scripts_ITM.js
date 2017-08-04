@@ -86,35 +86,38 @@ function handleError (XMLHttpRequest, textStatus, errorThrown) {
 }
 
 function processData (data, type, url) {
-  var title = ''
+  var title = '_'
+  var content = '_'
+  var videoUrl = '_'
   for (var nodeProp in data) {
     var node = data[nodeProp]
+    console.log(JSON.stringify(node))
     var contentPath = node['http://rdfs.org/sioc/ns#content']
     if (node['http://purl.org/dc/terms/title'] != null) {
       title = node['http://purl.org/dc/terms/title'][0].value
       // url = node['http://purl.org/dc/terms/isVersionOf'][0].value
     }
     if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
-      var videoUrl = node['http://simile.mit.edu/2003/10/ontologies/artstor#url'][0].value
+      videoUrl = node['http://simile.mit.edu/2003/10/ontologies/artstor#url'][0].value
       // url = node['http://purl.org/dc/terms/isVersionOf'][0].value
     }
     if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
       // url = node['http://purl.org/dc/terms/isVersionOf'][0].value
     }
     if (contentPath != null) {
-      var content = contentPath[0].value
+      content = contentPath[0].value
       content = content.replace(new RegExp('\r?\n\r?\n', 'g'), '<br><br>') // Replace line breaks
     } else {
-      content = ''
+      content = '_'
     }
     // Hack to make sure the loop stops once Lexos gets the information it needs
-    if (title !== '') {
+    if (title !== '_') {
       console.log('Displaying content with the following information:')
       console.log('content:' + content)
       console.log('title:' + title)
       console.log('url:' + url)
       console.log('type:' + type)
-      console.log('videoURL:' + videoURL)
+      console.log('videoURL:' + videoUrl)
       displayITMcontent(content, title, url, type, videoUrl)
     }
   }
@@ -167,13 +170,14 @@ function displayITMcontent (content, title, url, type, videoUrl) {
       } else {
         $('#itm-content').append('<h4>' + errorMsg + '</h4></div>')
       }
-      console.log('Launching modal.')
+      console.log('Bad modal launch.')
       $('#ITM-modal').modal()
       $('#dialog-status').hide()
       break
 
     // Works only with YouTube videos
     case 'video-dialog':
+      $('#dialog-status').show()
       console.log('Display type is a video modal.')
       var youtubeUrl = videoUrl.replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/')
       titleLink = '<a href="' + url + '" target="_blank">' + title + '</a>'
@@ -186,7 +190,7 @@ function displayITMcontent (content, title, url, type, videoUrl) {
       } else {
         $('#itm-content').append('<h4>' + errorMsg + '</h4></div>')
       }
-      console.log('Launching video in modal.')
+      console.log('Launch video modal.')
       $('#ITM-modal').modal()
       $('#dialog-status').hide()
       break
@@ -245,14 +249,21 @@ $(document).ready(function () {
   })
 
   /* Populate a Bootstrap modal */
-  $('#ITM-modal').on('show.bs.modal', function (e) {
-    var button = $(e.relatedTarget) // Button that triggered the modal
-    var slug = button.data('slug') // Extract info from data-slug attribute
-    var type = button.data('type') // Extract info from data-type attribute
+//   $('#ITM-modal').on('show.bs.modal', function (e) {
+//     var button = $(e.relatedTarget) // Button that triggered the modal
+//     var slug = button.data('slug') // Extract info from data-slug attribute
+//     var type = button.data('type') // Extract info from data-type attribute
+//     $('#dialog-status').show()
+//     console.log('Calling API after opening Bootstrap modal.')
+//     callAPI(slug, type)
+//     // callAPI("best-practices", "dialog");
+//   })
+  $('.bttn-video').on('click', function (e) {
+    var slug = $(this).children().first().data('slug') // Extract info from data-slug attribute
+    var type = $(this).children().first().data('type') // Extract info from data-type attribute
     $('#dialog-status').show()
-    console.log('Calling API after opening Bootstrap modal.')
+    console.log('Calling API after click with slug "' + slug + '" and type "' + type + '".')
     callAPI(slug, type)
-    // callAPI("best-practices", "dialog");
   })
 
   /* Empty a Bootstrap modal */
