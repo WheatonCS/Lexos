@@ -24,28 +24,30 @@ from lexos.interfaces.upload_interface import upload_view
 from lexos.interfaces.word_cloud_interface import word_cloud_view
 
 
-def install_secret_key(file_name='secret_key'):
+def get_secret_key(file_name: str = 'secret_key') -> bytes:
+    """Creates an encryption key for a secure session.
+
+    :param: file_name: A string representing the secret key.
+    :return: the bytes of the secret key
     """
-    Creates an encryption key for a secure session.
-    Args:
-        file_name: A string representing the secret key.
-    Returns:
-        None
-    """
-    file_name = os.path.join(app.static_folder, file_name)
-    try:
-        app.config['SECRET_KEY'] = open(file_name, 'rb').read()
-    except IOError:
-        print('Error: No secret key. Create it with:')
-        if not os.path.isdir(os.path.dirname(file_name)):
-            print('mkdir -p', os.path.dirname(file_name))
-        print('head -c 24 /dev/urandom >', file_name)
-        sys.exit(1)
+    file_full_name = os.path.join(app.static_folder, file_name)
+
+    if os.path.isfile(file_full_name):
+        return open(file_full_name, 'rb').read()
+
+    else:
+        print('secret key not found, creating secret key')
+
+        # create secrete key
+        open(file_full_name, 'wb').write(os.urandom(24))
+
+        return open(file_full_name, 'rb').read()
 
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 app.config['MAX_CONTENT_LENGTH'] = lexos.helpers.constants.MAX_FILE_SIZE
+app.config['SECRET_KEY'] = get_secret_key()
 # open debugger when we are not on the server
 app.debug = not lexos.helpers.constants.IS_SERVER
 app.jinja_env.filters['type'] = type
@@ -54,7 +56,6 @@ app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
-install_secret_key()  # create the secret key
 
 # register all the blue prints
 # they helps us to manage groups of views
@@ -75,36 +76,6 @@ app.register_blueprint(stats_view)
 app.register_blueprint(tokenizer_view)
 app.register_blueprint(top_words_view)
 app.register_blueprint(word_cloud_view)
-
-
-def int_key(s):
-    """
-    Returns the key to sort by.
-
-    Args:
-        A key
-
-    Returns:
-        A key converted into an int if applicable
-    """
-    if isinstance(s, tuple):
-        s = s[0]
-    return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-                 for part in re.split(r'([0-9]+)', s))
-
-
-@app.template_filter('natsort')
-def natsort(l):
-    """
-    Sorts lists in human order (10 comes after 2, even when both are strings)
-
-    Args:
-        A list
-
-    Returns:
-        A sorted list
-    """
-    return sorted(l, key=int_key)
 
 
 # http://flask.pocoo.org/snippets/28/
