@@ -85,27 +85,35 @@ function handleError(XMLHttpRequest, textStatus, errorThrown) {
     $('#error-modal').modal(); 
 }
 
-function processData(data, type, url) {
-    for (var nodeProp in data) {
-        node = data[nodeProp]
-        content_path = node['http://rdfs.org/sioc/ns#content'];
-        if (node['http://purl.org/dc/terms/title'] != null) {
-            var title = node['http://purl.org/dc/terms/title'][0].value;
-            var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
-        }
-        if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
-            var video_url = node['http://simile.mit.edu/2003/10/ontologies/artstor#url'][0].value;
-            //var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
-        }
-        if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
-            var url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
-        }
-        if (content_path != null) {
-            var content = content_path[0].value;
-            content = content.replace(new RegExp('\r?\n\r?\n','g'), '<br><br>'); // Replace line breaks
-        }
+function processData (data, type, url) {
+  var title = '';
+  var content = '';
+  var videoUrl = '';
+  for (var nodeProp in data) {
+    var node = data[nodeProp];
+    var contentPath = node['http://rdfs.org/sioc/ns#content'];
+    if (node['http://purl.org/dc/terms/title'] != null) {
+      title = node['http://purl.org/dc/terms/title'][0].value;
+      // url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
     }
-    displayITMcontent(content, title, url, type, video_url);
+    if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
+      videoUrl = node['http://simile.mit.edu/2003/10/ontologies/artstor#url'][0].value;
+      // url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
+    }
+    if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
+      // url = node['http://purl.org/dc/terms/isVersionOf'][0].value;
+    }
+    if (contentPath != null) {
+      content = contentPath[0].value;
+      content = content.replace(new RegExp('\r?\n\r?\n', 'g'), '<br><br>'); // Replace line breaks
+    } else {
+      content = '';
+    }
+    // Hack to make sure the loop stops once Lexos gets the information it needs
+    if (title !== '') {
+      displayITMcontent(content, title, url, type, videoUrl);
+    }
+  }
 }
 
 function displayITMcontent(content, title, url, type, video_url) {
@@ -150,6 +158,7 @@ function displayITMcontent(content, title, url, type, video_url) {
         else {
             $("#itm-content").append('<h4>'+error_msg+'</h4></div>');            
         }
+        $('#ITM-modal').modal();
         $("#dialog-status").hide();
         break;
 
@@ -166,7 +175,8 @@ function displayITMcontent(content, title, url, type, video_url) {
         }
         else {
             $("#itm-content").append('<h4>'+error_msg+'</h4></div>');            
-        }        
+        }
+        $('#ITM-modal').modal();        
         $("#dialog-status").hide();
         break;
     }
@@ -223,30 +233,29 @@ $(document).ready(function() {
         }
     });
 
-    /* Populate a Bootstrap modal */
-    $('#ITM-modal').on('show.bs.modal', function(e) {
-        var button = $(e.relatedTarget) // Button that triggered the modal
-        var slug = button.data('slug'); // Extract info from data-slug attribute
-        var type = button.data('type'); // Extract info from data-type attribute
-        $("#dialog-status").show();
-        callAPI(slug, type);
-        //callAPI("best-practices", "dialog");
-    });
+  /* Populate a Bootstrap modal */
+  $('.bttn-video').on('click', function (e) {
+    var slug = $(this).children().first().data('slug'); // Extract info from data-slug attribute
+    var type = $(this).children().first().data('type'); // Extract info from data-type attribute
+    $('#dialog-status').show();
+    callAPI(slug, type);
+  })
 
-    /* Empty a Bootstrap modal */
-    $('#ITM-modal').on('hide.bs.modal', function() {
-        $('#ITM-modal').removeData('bs.modal');
-        icon = $('#dialog-status').parent().html();
-        $('#ITM-modal .modal-body').html("");
-        $('#ITM-modal .modal-body').html(icon);
-        $("#dialog-status").hide();
-        callAPI("best-practices", "dialog");
-    });
+  /* Empty a Bootstrap modal */
+  $('#ITM-modal').on('hide.bs.modal', function () {
+    $('#ITM-modal').removeData('bs.modal');
+    var icon = $('#dialog-status').parent().html();
+    $('#ITM-modal .modal-body').html('');
+    $('#ITM-modal .modal-body').html(icon);
+    $('#dialog-status').hide();
+  })
 
-    /* Handle Show Video Button in Bootstrap Modal */
-/*    $('#show-video').click(function() {
-        callAPI("how-to-read-a-dendrogram", "video-dialog")
-    });*/
+  /* Handle Show Video Button in Bootstrap Modal */
+//   $('.bttn-video').click(function (e) {
+//     e.preventDefault();
+//     var slug = $(this).children().first().attr('data-slug');
+//     // callAPI(slug, 'video-dialog');
+//   });
 });
 
 /* Initialise Bootstrap Modal */
