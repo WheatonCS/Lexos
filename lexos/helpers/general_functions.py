@@ -225,7 +225,8 @@ def decode_bytes(raw_bytes: bytes) -> bytes:
             decoded_string = raw_bytes.decode(encoding_type)
         except UnicodeDecodeError:
             encoding_detect = chardet.detect(
-                raw_bytes[:constants.MIN_ENCODING_DETECT])  # Detect the encoding
+                raw_bytes[:constants.MIN_ENCODING_DETECT])
+            # Detect the encoding
             encoding_type = encoding_detect['encoding']
             # Grab the file contents, which were encoded/decoded automatically
             # into python's format
