@@ -3,7 +3,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_punctuation_string, get_remove_punctuation_map, \
     get_remove_digits_map, call_replacement_handler, get_all_punctuation_map, \
     delete_words, handle_gutenberg, split_input_word_string, \
-    get_special_char_dict_from_file
+    get_special_char_dict_from_file, process_tag_replace_options
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -261,9 +261,28 @@ class TestCallReplacementHandler:
 
 
 class TestProcessTagReplaceOptions:
+    tag_text = "Text before tags.\n<first> Some text in the first tag " \
+               "</first>\nText between the tags.\n<second tag_num= \"2-nd " \
+               "tag's num\">Other text in the second tag</second>\nText" \
+               " after the tags."
+    no_end = "The ending <first> tags here <first> are a bit <second> messed" \
+             " up."
 
-    def test_process_tag_replace_options(self):
-        pass
+    def test_process_tag_replace_options_remove(self):
+        action = "remove-tag"
+
+        assert process_tag_replace_options(self.tag_text, "first", action) == \
+            "Text before tags.\n  Some text in the first tag  \nText " \
+            "between the tags.\n<second tag_num= \"2-nd tag's num\">Other" \
+            " text in the second tag</second>\nText after the tags."
+        assert process_tag_replace_options(self.tag_text, "second", action)\
+            == "Text before tags.\n<first> Some text in the first tag " \
+            "</first>\nText between the tags.\n Other text in the second " \
+            "tag \nText after the tags."
+        assert process_tag_replace_options(self.no_end, "first", action) \
+            == "The ending   tags here   are a bit <second> messed up."
+        assert process_tag_replace_options(self.no_end, "second", action) \
+            == "The ending <first> tags here <first> are a bit   messed up."
 
 
 # handle_tags
