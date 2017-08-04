@@ -12,7 +12,6 @@ def topic_json_maker(mallet_path: str) -> List[dict]:
     :return: a list of d3 json dict
     """
     # Configuration
-    in_path = mallet_path  # Insert the path to the Mallet file here
     # Top N number of words in each topic that will appear in output
     num_top_words = 100
     mallet_vocab = []
@@ -21,7 +20,7 @@ def topic_json_maker(mallet_path: str) -> List[dict]:
 
     # Calculate the number of topics in the model
     n_topics = []
-    with open(in_path, encoding='utf-8') as data:
+    with open(mallet_path, encoding='utf-8') as data:
         for line in data:
             try:
                 l = line.rstrip().split(' ')  # Split the line on spaces
@@ -45,7 +44,7 @@ def topic_json_maker(mallet_path: str) -> List[dict]:
     num_topics = max(n_topics) + 1
 
     # Re-shape the file data
-    with open(in_path, encoding='utf-8') as f:
+    with open(mallet_path, encoding='utf-8') as f:
         for line in f:
             l = line.rstrip().split(' ')
             word = l[1]
