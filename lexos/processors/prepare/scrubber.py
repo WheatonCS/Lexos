@@ -14,10 +14,11 @@ from lexos.helpers import constants as constants, \
 
 
 def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
-    """
+    """Builds special character conversion dictionaries from resource files.
 
-    :param mode:
-    :return:
+    :param mode: A string which specifies which character set to use.
+    :return: A dictionary with all of the character entities in the chosen
+        mode mapped to their unicode versions.
     """
 
     if mode == "MUFI-3":
@@ -43,7 +44,7 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     conversion_dict = {}
     with open(mode_path, encoding='utf-8') as input_file:
 
-        # put the first two columns of the file into parallel arrays
+        # put the first two columns of the file into a dictionary
         for line in input_file:
             pieces = line.split('\t')
             key = pieces[0]
