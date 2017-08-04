@@ -58,7 +58,7 @@ def translate_den_options() -> (bool, str, str):
 
 def get_dendro_distances(linkage_method: str, distance_metric: str,
                          dendro_matrix: List[List]) -> List:
-    """calculate the distances in the dendrogram
+    """Calculate the distances in the dendrogram.
 
     Use the word frequencies in the given text segments to calculate distance
     in a dendrogram
@@ -254,8 +254,8 @@ def get_augmented_dendrogram(*args, **kwargs):
             1.1))
 
 
-def trim(im):
-    """ crop the dendrogram generated in dendrogram function
+def trim(im: Image.Image) -> Image.Image:
+    """Crop the dendrogram generated in dendrogram function.
 
     :param im: a png image
     :return: im.crop(bbox): cropped image
