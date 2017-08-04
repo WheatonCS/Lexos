@@ -1,5 +1,2 @@
 recursive-exclude test *
-recursive-include lexos/templates *
-recursive-include lexos/static *
-recursive-include lexos/resources *
-include lexos/config.cfg
+recursive-include lexos *
