@@ -21,12 +21,14 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
         mode mapped to their unicode versions.
     """
 
+    conversion_dict = {}
+
     if mode == "MUFI-3":
         filename = constants.MUFI_3_FILENAME
     elif mode == "MUFI-4":
         filename = constants.MUFI_3_FILENAME
     else:
-        return {"": ""}
+        return conversion_dict
 
     # assign current working path to variable
     cur_file_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,7 +43,6 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     # directory
     mode_path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, filename)
 
-    conversion_dict = {}
     with open(mode_path, encoding='utf-8') as input_file:
 
         # put the first two columns of the file into a dictionary
@@ -66,7 +67,6 @@ def handle_special_characters(text: str) -> str:
     option_list = request.form['entityrules']
 
     if option_list in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
-        conversion_dict = {}
 
         if option_list == 'doe-sgml':
             conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
@@ -88,61 +88,8 @@ def handle_special_characters(text: str) -> str:
                                '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
                                '&gt;': '>', '&#383;': 'ſ'}
 
-        elif option_list == 'MUFI-3':
-            # assign current working path to variable
-            cur_file_dir = os.path.dirname(os.path.abspath(__file__))
-
-            # Go up two levels (2x break path name into two parts, where
-            # cur_file_dir path is everything but the last component)
-            # discard: tail of path to be removed
-            cur_file_dir, discard = os.path.split(cur_file_dir)
-            cur_file_dir, discard = os.path.split(cur_file_dir)
-
-            # Create full pathname to find MUFI_3_DICT.tsv in resources
-            # directory
-            mufi3_path = os.path.join(
-                cur_file_dir,
-                constants.RESOURCE_DIR,
-                constants.MUFI_3_FILENAME)
-
-            with open(mufi3_path, encoding='utf-8') as MUFI_3:
-
-                # put the first two columns of the file into parallel arrays
-                for line in MUFI_3:
-                    pieces = line.split('\t')
-                    key = pieces[0]
-                    value = pieces[1].rstrip()
-
-                    if value[-1:] == ';':
-                        conversion_dict[key] = value
-
-        elif option_list == 'MUFI-4':
-            # assign current working path to variable
-            cur_file_dir = os.path.dirname(os.path.abspath(__file__))
-
-            # Go up two levels (2x break path name into two parts, where
-            # cur_file_dir path is everything but the last component)
-            # discard: tail of path to be removed
-            cur_file_dir, discard = os.path.split(cur_file_dir)
-            cur_file_dir, discard = os.path.split(cur_file_dir)
-
-            # Create full pathname to find MUFI_4_DICT.tsv in resources
-            # directory
-            mufi4_path = os.path.join(
-                cur_file_dir,
-                constants.RESOURCE_DIR,
-                constants.MUFI_4_FILENAME)
-
-            with open(mufi4_path, encoding='utf-8') as MUFI_4:
-
-                for line in MUFI_4:
-                    # divide columns of .tsv file into two separate arrays
-                    pieces = line.split('\t')
-                    key = pieces[0]
-                    value = pieces[1].rstrip()
-
-                    if value[-1:] == ';':
-                        conversion_dict[key] = value
+        else:
+            conversion_dict = get_special_char_dict_from_file(option_list)
 
         r = make_replacer(conversion_dict)
         # r is a function created by make_replacer(), _do_replace(), and
