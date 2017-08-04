@@ -270,33 +270,43 @@ class TestProcessTagReplaceOptions:
 
     def test_process_tag_replace_options_remove_tag(self):
         action = "remove-tag"
+        attribute = ""
 
-        assert process_tag_replace_options(self.tag_text, "first", action) == \
-            "Text before tags.\n  Some text in the first tag  \nText " \
-            "between the tags.\n<second tag_num= \"2-nd tag's num\">Other" \
-            " text in the second tag</second>\nText after the tags."
-        assert process_tag_replace_options(self.tag_text, "second", action)\
-            == "Text before tags.\n<first> Some text in the first tag " \
-            "</first>\nText between the tags.\n Other text in the second " \
-            "tag \nText after the tags."
-        assert process_tag_replace_options(self.no_end, "first", action) \
-            == "The ending   tags here   are a bit <second> messed up."
-        assert process_tag_replace_options(self.no_end, "second", action) \
-            == "The ending <first> tags here <first> are a bit   messed up."
+        assert process_tag_replace_options(
+            self.tag_text, "first", action, attribute) == \
+            "Text before tags.\n  Some text in the first tag  \nText between" \
+            " the tags.\n<second tag_num= \"2-nd tag's num\">Other text in " \
+            "the second tag</second>\nText after the tags."
+        assert process_tag_replace_options(
+            self.tag_text, "second", action, attribute) == \
+            "Text before tags.\n<first> Some text in the first tag " \
+            "</first>\nText between the tags.\n Other text in the second tag" \
+            " \nText after the tags."
+        assert process_tag_replace_options(
+            self.no_end, "first", action, attribute) == \
+            "The ending   tags here   are a bit <second> messed up."
+        assert process_tag_replace_options(
+            self.no_end, "second", action, attribute) == \
+            "The ending <first> tags here <first> are a bit   messed up."
 
     def test_process_tag_replace_options_remove_element(self):
         action = "remove-element"
+        attribute = ""
 
-        assert process_tag_replace_options(self.tag_text, "first", action) \
-            == "Text before tags.\n \nText between the tags.\n<second tag_" \
-               "num= \"2-nd tag's num\">Other text in the second " \
-               "tag</second>\nText after the tags."
-        assert process_tag_replace_options(self.tag_text, "second", action) \
-            == "Text before tags.\n<first> Some text in the first tag " \
-               "</first>\nText between the tags.\n \nText after the tags."
-        assert process_tag_replace_options(self.no_end, "first", action) == \
+        assert process_tag_replace_options(
+            self.tag_text, "first", action, attribute) == \
+            "Text before tags.\n \nText between the tags.\n<second tag_num= " \
+            "\"2-nd tag's num\">Other text in the second tag</second>\nText " \
+            "after the tags."
+        assert process_tag_replace_options(
+            self.tag_text, "second", action, attribute) == \
+            "Text before tags.\n<first> Some text in the first tag " \
+            "</first>\nText between the tags.\n \nText after the tags."
+        assert process_tag_replace_options(
+            self.no_end, "first", action, attribute) == \
             self.no_end
-        assert process_tag_replace_options(self.no_end, "second", action) \
+        assert process_tag_replace_options(
+            self.no_end, "second", action, attribute) \
             == self.no_end
 
 

@@ -243,7 +243,8 @@ def call_replacement_handler(
     return text
 
 
-def process_tag_replace_options(orig_text: str, tag: str, action: str) -> str:
+def process_tag_replace_options(orig_text: str, tag: str, action: str,
+                                attribute: str) -> str:
     """Replaces html-style tags in text files according to user options.
 
     :param orig_text: The user's text containing the original tag.
@@ -251,6 +252,8 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str) -> str:
     :param action: A string specifying the action to be performed on the tag.
         Action options are remove the tag, remove the element and contents,
         replace the element and contents with a value, or leave the tag as-is.
+    :param attribute: A value that will replace the tag when the "replace
+        with attribute" option is chosen.
     :return: The user's text, after the specified tag is processed.
     """
 
@@ -289,7 +292,6 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str) -> str:
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
     elif action == "replace-element":
-        attribute = session['xmlhandlingoptions'][tag]["attribute"]
         pattern = re.compile(
             "<\s*" +
             re.escape(tag) +
@@ -332,7 +334,8 @@ def handle_tags(text: str) -> str:
         # each tag:
         for tag in session['xmlhandlingoptions']:
             action = session['xmlhandlingoptions'][tag]["action"]
-            text = process_tag_replace_options(text, tag, action)
+            attribute = session['xmlhandlingoptions'][tag]["attribute"]
+            text = process_tag_replace_options(text, tag, action, attribute)
 
         # One last catch-all- removes extra whitespace from all the removed
         # tags
