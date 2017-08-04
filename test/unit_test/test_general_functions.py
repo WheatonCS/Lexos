@@ -3,6 +3,7 @@ from lexos.helpers.general_functions import get_encoding, make_preview_from, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
 import codecs
 import os
+from lexos.helpers.constants import TMP_FOLDER
 
 
 class TestGeneralFunctions:
@@ -157,7 +158,7 @@ class TestDecodeBytes:
 
     def test_utf16_le_decoding(self):
         input_string = "test"
-        file_path = "/tmp/test_utf16_le_decoding.txt"
+        file_path = TMP_FOLDER + "/test_utf16_le_decoding.txt"
         with open(file_path, "w") as file:
             file.write(str(codecs.BOM_UTF16_LE))
             file.write(str(input_string.encode("utf-16-le")))
