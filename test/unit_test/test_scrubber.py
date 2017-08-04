@@ -406,6 +406,9 @@ class TestDeleteWords:
         assert delete_words("", []) == ""
 
 
+# handle_stop_words_keep_words_string
+
+
 class TestRemoveStopwords:
     test_string = "This is a long story. It is time for this story to end."
 
@@ -518,6 +521,7 @@ class TestGetRemoveWhitespaceMap:
             {ord(' '): None, ord('\t'): None, ord('\n'):
                 None, ord('\r'): None}
 
+
 # cache_filestring
 
 # load_cached_filestring
@@ -547,5 +551,8 @@ class TestHandleGutenberg:
         assert handle_gutenberg(
             "This text is copyright Joe Schmoe.\n\nDone.") == \
             "This text is copyright Joe Schmoe.\n\nDone."
+
+
+# prepare_additional_options
 
 # scrub
