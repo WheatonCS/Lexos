@@ -66,7 +66,7 @@ def base():
 
 @base_view.route("/downloadworkspace", methods=["GET"])
 def download_workspace():
-    """Downloads workspace that stores all the session contents.
+    """send the workspace file (.lexos) to the user.
 
     Note that the workspace can be uploaded and restore all the workspace.
     :return: send workspace to the user

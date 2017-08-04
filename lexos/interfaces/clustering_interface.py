@@ -23,8 +23,7 @@ def dendrogram_image():
 
     *dendrogramimage() linked to in analysis.html, displaying the
     dendrogram.png
-    :return: a response object with the dendrogram png to flask and
-    eventually to the browser.
+    :return: a response object with the dendrogram png
     """
     # dendrogramimage() is called in analysis.html, displaying the
     # dendrogram.png (if session['dengenerated'] != False).
@@ -170,8 +169,7 @@ def big_pca():
 def cluster():
     """Handles the functionality on the cluster page.
 
-    :return: a response object (often a render_template call) to flask and
-    eventually to the browser.
+    :return: a response object (often a render_template call)
     """
     import random
     leq = '≤'
@@ -289,8 +287,7 @@ def cluster():
 def cluster_old():
     """Handles the functionality on the cluster-old page.
 
-    :return: a response object (often a render_template call) to flask and
-    eventually to the browser.
+    :return: a response object (often a render_template call)
     """
     import random
     leq = '≤'
