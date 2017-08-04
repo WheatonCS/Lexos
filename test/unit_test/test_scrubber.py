@@ -268,7 +268,7 @@ class TestProcessTagReplaceOptions:
     no_end = "The ending <first> tags here <first> are a bit <second> messed" \
              " up."
 
-    def test_process_tag_replace_options_remove_tag(self):
+    def test_process_tag_rep_options_remove_tag(self):
         action = "remove-tag"
         attribute = ""
 
@@ -289,7 +289,7 @@ class TestProcessTagReplaceOptions:
             self.no_end, "second", action, attribute) == \
             "The ending <first> tags here <first> are a bit   messed up."
 
-    def test_process_tag_replace_options_remove_element(self):
+    def test_process_tag_rep_options_remove_element(self):
         action = "remove-element"
         attribute = ""
 
@@ -303,11 +303,28 @@ class TestProcessTagReplaceOptions:
             "Text before tags.\n<first> Some text in the first tag " \
             "</first>\nText between the tags.\n \nText after the tags."
         assert process_tag_replace_options(
-            self.no_end, "first", action, attribute) == \
-            self.no_end
+            self.no_end, "first", action, attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, "second", action, attribute) \
-            == self.no_end
+            self.no_end, "second", action, attribute) == self.no_end
+
+    def test_process_tag_rep_options_replace_element(self):
+        action = "replace-element"
+        attribute = "a very nice attribute"
+
+        assert process_tag_replace_options(
+            self.tag_text, "first", action, attribute) == \
+            "Text before tags.\na very nice attribute\nText between the " \
+            "tags.\n<second tag_num= \"2-nd tag's num\">Other text in the " \
+            "second tag</second>\nText after the tags."
+        assert process_tag_replace_options(
+            self.tag_text, "second", action, attribute) == \
+            "Text before tags.\n<first> Some text in the first tag " \
+            "</first>\nText between the tags.\na very nice attribute\nText " \
+            "after the tags."
+        assert process_tag_replace_options(
+            self.no_end, "first", action, attribute) == self.no_end
+        assert process_tag_replace_options(
+            self.no_end, "second", action, attribute) == self.no_end
 
 
 # handle_tags
