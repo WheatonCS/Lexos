@@ -1,6 +1,4 @@
-# This file is used by the TestMakeReplacer, TestGetRemovePunctuationMap,
-#   TestGetRemoveDigitsMap, and TestGetPunctuationString classes in
-#   test.unit_test.test_scrubber.py
+# This file is used by various classes in test.unit_test.test_scrubber.py
 # This file is NOT to be used for character processing in the Lexos app proper!
 
 EE_HTML = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę', '&AE;': 'Æ',
