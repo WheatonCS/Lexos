@@ -45,8 +45,9 @@ def similarity_maker(dtm_data_frame: pd.DataFrame, comp_file_index: int) -> \
     # round the score array to 4 decimals
     final_score_array = np.round(sorted_score_array, decimals=4)
 
-    # sort the
-    final_name_array = docs_name_array[docs_score_array.argsort()]
+    # sort the name array in terms of the score array
+    sorted_score_array_index = docs_score_array.argsort()
+    final_name_array = docs_name_array[sorted_score_array_index]
 
     # pack the scores and names in data_frame
     score_name_data_frame = pd.DataFrame(final_score_array,
