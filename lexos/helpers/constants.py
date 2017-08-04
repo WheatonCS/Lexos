@@ -95,6 +95,8 @@ OPTUPLOADNAMES = (
 # for xml handling
 
 # for cut
+WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
+
 CUTINPUTAREAS = (
     'cut_type',
     'lastprop',

@@ -1,0 +1,41 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap-switch": "^3.3.4",
+    "bootstrap-contextmenu": "1.0.0",
+    "bootstrap": "^3.3.7",
+    "d3-cloud": "^1.2.4",
+    "canvg": "canvg/canvg#v1.4",
+    "datatables.net": "^1.10.15",
+    "datatables.net-buttons": "^1.3.1",
+    "datatables.net-bs": "^1.10.15",
+    "datatables.net-buttons-bs": "^1.3.1",
+    "datatables.net-fixedcolumns": "^3.2.2",
+    "datatables.net-fixedcolumns-bs": "^3.2.2",
+    "datatables.net-select": "^1.2.2",
+    "datatables.net-fixedheader": "^3.1.2",
+    "datatables.net-fixedheader-bs": "^3.1.2",
+    "datatables.net-select-bs": "^1.2.2",
+    "d3": "^3.5.17",
+    "font-awesome": "^4.7.0",
+    "smartmenus": "^1.0.1",
+    "jquery": "^2.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
