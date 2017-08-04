@@ -105,12 +105,12 @@ function processData (data, type, url) {
     if (node['http://simile.mit.edu/2003/10/ontologies/artstor#url'] != null) {
       // url = node['http://purl.org/dc/terms/isVersionOf'][0].value
     }
-    // if (contentPath != null) {
-    //   content = contentPath[0].value
-    //   content = content.replace(new RegExp('\r?\n\r?\n', 'g'), '<br><br>') // Replace line breaks
-    // } else {
-    //   content = '_'
-    // }
+    if (contentPath != null) {
+      content = contentPath[0].value
+      content = content.replace(new RegExp('\r?\n\r?\n', 'g'), '<br><br>') // Replace line breaks
+    } else {
+      content = '_'
+    }
     // Hack to make sure the loop stops once Lexos gets the information it needs
     if (title !== '_') {
       console.log('Displaying content with the following information:')
