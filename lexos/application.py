@@ -107,7 +107,7 @@ def page_not_found(_):
     return render_template('404.html'), 404
 
 
-@app.error_handlers(Exception)
+@app.errorhandler(Exception)
 def unhandled_exception(error):
     """handles internal server errors
 
