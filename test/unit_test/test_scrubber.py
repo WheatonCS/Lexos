@@ -444,6 +444,8 @@ class TestKeepWords:
         assert keep_words(self.test_string, "missing") == " "
         assert keep_words(self.test_string, "") == \
             keep_words(self.test_string, "missing")
+        assert keep_words(self.test_string, " ") == \
+            keep_words(self.test_string, "")
         assert keep_words(self.test_string, "text") == " text text "
         assert keep_words(self.test_string, "Test, here, is") == \
             "Test is here"
