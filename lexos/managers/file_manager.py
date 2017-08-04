@@ -999,19 +999,15 @@ class FileManager:
 
         # need to get at the entire matrix and not sparse matrix
         raw_count_matrix = doc_term_sparse_matrix.toarray()
-
-        if use_freq:
-            sum_pre_file = raw_count_matrix.sum(axis=1)
-            # this feature is called Broadcasting in numpy
-            # see this:
-            # https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
-            final_matrix = \
-                (raw_count_matrix.transpose() / sum_pre_file).transpose()
-        else:
-            final_matrix = raw_count_matrix
-
         # snag all features (e.g., word-grams or char-grams) that were counted
         words = count_vector.get_feature_names()
+        # pack the data into a data frame
+        dtm_data_frame = pd.DataFrame(data=raw_count_matrix,
+                                      index=temp_labels,
+                                      columns=words)
+
+        if use_freq:
+            dtm_data_frame = dtm_data_frame.mean(axis=1)
 
         if cull:
             # get the lower bound for culling
@@ -1020,10 +1016,9 @@ class FileManager:
             else:
                 least_num_seg = int(request.form['cullnumber'])
 
-            final_matrix, words = self.get_culled_matrix(
+            dtm_data_frame = self.get_culled_matrix(
                 least_num_seg=least_num_seg,
-                final_matrix=final_matrix,
-                words=words
+                dtm_data_frame=dtm_data_frame
             )
         if mfw:
 
@@ -1040,11 +1035,6 @@ class FileManager:
             )
         if round_decimal:
             final_matrix = np.round(final_matrix, decimals=6)
-
-        # pack the data into a data frame
-        dtm_data_frame = pd.DataFrame(data=final_matrix,
-                                      index=temp_labels,
-                                      columns=words)
 
         return dtm_data_frame
 
@@ -1097,18 +1087,15 @@ class FileManager:
 
     @staticmethod
     def get_culled_matrix(least_num_seg: int,
-                          final_matrix: np.ndarray,
-                          words: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+                          dtm_data_frame: pd.DataFrame) \
+            -> pd.DataFrame:
         """Gets the culled final_matrix and culled words.
 
         gives a matrix that only contains the words that appears in more than
         `least_num_seg` segments.
         :param least_num_seg: least number of segment the word needs to appear
                                 in to be kept.
-        :param final_matrix: the processed raw count matrix
-                                (use proportion, use tf-idf, etc.)
-        :param words: an array of all the unique words
-                        (column header of final_matrix)
+        :param dtm_data_frame: the dtm in forms of panda dataframes
         :return:
             - the culled final matrix
             - the culled words array
@@ -1118,26 +1105,22 @@ class FileManager:
         # at the line of segment s and the column of word w,
         # if the value is True, then means w is in s
         # otherwise means w is not in s
-        is_in_matrix = np.array(final_matrix, dtype=bool)
+        is_in_data_frame = dtm_data_frame.astype(bool)
 
         # summing the boolean array gives an int, which indicates how many
         # True there are in that array.
-        # this is an array, indicating each word is in how many segments
+        # this is an series, indicating each word is in how many segments
         # this array is a parallel array of words
-        words_in_num_seg_list = is_in_matrix.sum(axis=0)
+        # noinspection PyUnresolvedReferences
+        words_in_num_seg_series = is_in_data_frame.sum(axis=0)
 
         # get the index of all the words needs to remain
         # this is an array of int
-        remain_word_index = np.where(words_in_num_seg_list >= least_num_seg)
+        dtm_data_frame = dtm_data_frame.loc[
+            words_in_num_seg_series >= least_num_seg
+        ]
 
-        # apply the index to get the culled final matrix
-        # and the culled words array
-        culled_final_matrix = np.take(final_matrix,
-                                      indices=remain_word_index,
-                                      axis=1)
-        culled_words = words[remain_word_index]
-
-        return culled_final_matrix, culled_words
+        return dtm_data_frame
 
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
