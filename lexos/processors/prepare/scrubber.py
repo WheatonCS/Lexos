@@ -48,10 +48,10 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
         # put the first two columns of the file into a dictionary
         for line in input_file:
             pieces = line.split('\t')
-            key = pieces[0]
-            value = pieces[1].rstrip()
+            value = pieces[0]
+            key = pieces[1].rstrip()
 
-            if value[-1:] == ';':
+            if key[-1:] == ';':
                 conversion_dict[key] = value
 
     return conversion_dict
