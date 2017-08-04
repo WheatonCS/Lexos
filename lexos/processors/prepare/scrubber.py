@@ -385,9 +385,7 @@ def get_remove_punctuation_map(
             pass
         pickle.dump(
             remove_punctuation_map,
-            open(
-                punctuation_filename,
-                'wb'))  # Cache
+            open(punctuation_filename, 'wb'))  # Cache
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
@@ -465,8 +463,7 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     """
 
     digit_filename = os.path.join(
-        constants.UPLOAD_FOLDER,
-        "cache/digitmap.p")  # Localhost path (relative)
+        constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Relative localhost path
 
     # if digit map has already been generated
     if os.path.exists(digit_filename):
