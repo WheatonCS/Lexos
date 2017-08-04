@@ -17,4 +17,5 @@ WINDOW_SIZE_LARGE_MESSAGE = "The window size must be less than or equal to" \
                             " the length of the given document"
 INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
-EMPTY_NP_ARRAY_MESSAGE = "the numpy array should not be empty"
+EMPTY_NP_ARRAY_MESSAGE = "The input numpy array should not be empty, since" \
+    "the input file should not be empty."
