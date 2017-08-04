@@ -1,6 +1,8 @@
 from lexos.helpers.general_functions import get_encoding, make_preview_from, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
+import codecs
+import os
 
 
 class TestGeneralFunctions:
@@ -142,7 +144,25 @@ class TestDecodeBytes:
         assert decode_bytes('Zемфира'.encode()) == 'Zемфира'
 
     def test_utf16_be_decoding(self):
-        assert decode_bytes("test".encode('utf-16-be')) == "test"
+        input_string = "test"
+        file_path = "/tmp/test_utf16_be_decoding.txt"
+        with open(file_path, "w") as file:
+            file.write(str(codecs.BOM_UTF16_BE))
+            file.write(str(input_string.encode("utf-16-be")))
+        with open(file_path, "r") as file:
+            encoded_string = file.read()
+        file.close()
+        os.remove(file_path)
+        assert decode_bytes(encoded_string) == input_string
 
     def test_utf16_le_decoding(self):
-        assert decode_bytes("test".encode('utf-16-le')) == "test"
+        input_string = "test"
+        file_path = "/tmp/test_utf16_le_decoding.txt"
+        with open(file_path, "w") as file:
+            file.write(str(codecs.BOM_UTF16_LE))
+            file.write(str(input_string.encode("utf-16-le")))
+        with open(file_path, "r") as file:
+            encoded_string = file.read()
+        file.close()
+        os.remove(file_path)
+        assert decode_bytes(encoded_string) == input_string
