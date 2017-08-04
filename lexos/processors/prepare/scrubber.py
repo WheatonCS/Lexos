@@ -572,6 +572,26 @@ def delete_words(text: str, remove_list: List[str]) -> str:
     return scrubbed_text
 
 
+def handle_stop_keep_words_string(sw_kw_file_string: str, sw_kw_manual: str,
+                                  cache_folder: str, cache_filenames: List[str]
+                                  ) -> str:
+    """Caches stop/keep word files and merges file strings with manual strings.
+
+    :param sw_kw_file_string: The uploaded sw/kw file as a string.
+    :param sw_kw_manual: The sw/kw string from the manual text field.
+    :param cache_folder: A string representing the path of the cache folder.
+    :param cache_filenames: A list of filename strings that will be used to
+        load and save the user's sw/kw input.
+    :return: The combined string of the manual and file sw/kw strings.
+    """
+
+    if sw_kw_file_string:  # file_strings[3] == stop/keep words
+        cache_filestring(sw_kw_file_string, cache_folder, cache_filenames[3])
+    word_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
+
+    return word_string
+
+
 def remove_stopwords(text: str, removal_string: str) -> str:
     """Removes stopwords from the text.
 
