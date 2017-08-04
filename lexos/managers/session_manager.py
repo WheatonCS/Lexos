@@ -179,7 +179,7 @@ def cache_cutting_options():
 
 
 def cache_csv_options():
-    """Stores cutting options from request.form in session cookie object."""
+    """Stores csv options from request.form in session cookie object."""
 
     if request.json:
         session['csvoptions'] = {
@@ -280,9 +280,9 @@ def cache_bubble_viz_option():
 
 
 def cache_statistic_option():
-    """Stores global cloud options from request.form in session cookie object.
+    """Stores statistics options from request.form in session cookie object.
 
-    See constant.CLOUDLIST for more.
+    See constant.STATISTIC_LIST for more.
     """
 
     # list
@@ -319,7 +319,7 @@ def cache_k_mean_option():
 
 
 def cache_sim_options():
-    """Stores filename if uploading topic file to use for multicloud."""
+    """Stores filename if uploading topic file to use for similarity query."""
 
     for box in const.SIMBOX:
         session['similarities'][box] = (box in request.form)
