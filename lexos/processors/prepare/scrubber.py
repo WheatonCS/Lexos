@@ -243,6 +243,60 @@ def call_replacement_handler(
     return text
 
 
+def process_tag_replace_options(orig_text, tag, action):
+    # in GUI:  Remove Tag Only
+    if action == "remove-tag":
+
+        # searching for variants this specific tag:  <tag> ...
+        pattern = re.compile(
+            '<(?:' +
+            tag +
+            '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
+            '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' +
+            tag +
+            '\s*/?)>',
+            re.MULTILINE | re.DOTALL | re.UNICODE)
+
+        # substitute all matching patterns with one space
+        processed_text = re.sub(pattern, " ", orig_text)
+
+    # in GUI:  Remove Element and All Its Contents
+    elif action == "remove-element":
+        # <[whitespaces] TAG [SPACE attributes]>contents
+        # </[whitespaces]TAG>
+        # as applied across newlines, (re.MULTILINE), on re.UNICODE,
+        # and .* includes newlines (re.DOTALL)
+        pattern = re.compile(
+            "<\s*" +
+            re.escape(tag) +
+            "( .+?>|>).+?</\s*" +
+            re.escape(tag) +
+            ">",
+            re.MULTILINE | re.DOTALL | re.UNICODE)
+
+        # substitute all matching patterns with one space
+        processed_text = re.sub(pattern, " ", orig_text)
+
+    # in GUI:  Replace Element and Its Contents with Attribute Value
+    elif action == "replace-element":
+        attribute = session['xmlhandlingoptions'][tag]["attribute"]
+        pattern = re.compile(
+            "<\s*" +
+            re.escape(tag) +
+            ".*?>.+?<\/\s*" +
+            re.escape(tag) +
+            ".*?>",
+            re.MULTILINE | re.DOTALL | re.UNICODE)
+
+        # substitute all matching patterns with one space
+        processed_text = re.sub(pattern, attribute, orig_text)
+
+    else:
+        processed_text = orig_text    # Leave Tag Alone
+
+    return processed_text
+
+
 def handle_tags(text: str) -> str:
     """Handles tags that are found in the text.
 
@@ -268,56 +322,7 @@ def handle_tags(text: str) -> str:
         # each tag:
         for tag in session['xmlhandlingoptions']:
             action = session['xmlhandlingoptions'][tag]["action"]
-
-            # in GUI:  Remove Tag Only
-            if action == "remove-tag":
-
-                # searching for variants this specific tag:  <tag> ...
-                pattern = re.compile(
-                    '<(?:' +
-                    tag +
-                    '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
-                    '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' +
-                    tag +
-                    '\s*/?)>',
-                    re.MULTILINE | re.DOTALL | re.UNICODE)
-
-                # substitute all matching patterns with one space
-                text = re.sub(pattern, " ", text)
-
-            # in GUI:  Remove Element and All Its Contents
-            elif action == "remove-element":
-                # <[whitespaces] TAG [SPACE attributes]>contents
-                # </[whitespaces]TAG>
-                # as applied across newlines, (re.MULTILINE), on re.UNICODE,
-                # and .* includes newlines (re.DOTALL)
-                pattern = re.compile(
-                    "<\s*" +
-                    re.escape(tag) +
-                    "( .+?>|>).+?</\s*" +
-                    re.escape(tag) +
-                    ">",
-                    re.MULTILINE | re.DOTALL | re.UNICODE)
-
-                # substitute all matching patterns with one space
-                text = re.sub(pattern, " ", text)
-
-            # in GUI:  Replace Element and Its Contents with Attribute Value
-            elif action == "replace-element":
-                attribute = session['xmlhandlingoptions'][tag]["attribute"]
-                pattern = re.compile(
-                    "<\s*" +
-                    re.escape(tag) +
-                    ".*?>.+?<\/\s*" +
-                    re.escape(tag) +
-                    ".*?>",
-                    re.MULTILINE | re.DOTALL | re.UNICODE)
-
-                # substitute all matching patterns with one space
-                text = re.sub(pattern, attribute, text)
-
-            else:
-                pass  # Leave Tag Alone
+            text = process_tag_replace_options(text, tag, action)
 
         # One last catch-all- removes extra whitespace from all the removed
         # tags
