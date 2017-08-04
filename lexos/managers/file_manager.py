@@ -1020,30 +1020,29 @@ class FileManager:
                 least_num_seg=least_num_seg,
                 dtm_data_frame=dtm_data_frame
             )
-        if mfw:
 
+        if mfw:
             if request.json:
                 lower_rank_bound = int(request.json['mfwnumber'])
             else:
                 lower_rank_bound = int(request.form['mfwnumber'])
 
-            final_matrix, words = self.get_most_frequent_word(
+            dtm_data_frame = self.get_most_frequent_word(
                 lower_rank_bound=lower_rank_bound,
-                final_matrix=final_matrix,
-                count_matrix=raw_count_matrix,
-                words=words
+                dtm_data_frame=dtm_data_frame,
+                count_matrix=raw_count_matrix
             )
+
         if round_decimal:
-            final_matrix = np.round(final_matrix, decimals=6)
+            dtm_data_frame = dtm_data_frame.round(decimals=6)
 
         return dtm_data_frame
 
     @staticmethod
     def get_most_frequent_word(lower_rank_bound: int,
                                count_matrix: np.ndarray,
-                               final_matrix: np.ndarray,
-                               words: np.ndarray) -> Tuple[np.ndarray,
-                                                           np.ndarray]:
+                               dtm_data_frame: pd.DataFrame) \
+            -> pd.DataFrame:
         """Gets the most frequent words in final_matrix and words.
 
         The new count matrix will consists of only the most frequent words in
@@ -1080,10 +1079,9 @@ class FileManager:
         # use the most frequent index to get out most frequent words
         # this feature is called index array:
         # https://docs.scipy.org/doc/numpy/user/basics.indexing.html
-        mfw_final_matrix = final_matrix[most_frequent_index]
-        most_frequent_words = words[most_frequent_index]
+        dtm_data_frame = dtm_data_frame.iloc[most_frequent_index]
 
-        return mfw_final_matrix, most_frequent_words
+        return dtm_data_frame
 
     @staticmethod
     def get_culled_matrix(least_num_seg: int,
