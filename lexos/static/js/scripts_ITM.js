@@ -68,8 +68,6 @@ function callAPI (slug, type) {
     url: url,
     dataType: 'jsonp',
     success: function (data) {
-      console.log('Data received from server. Processing...')
-      alert(JSON.stringify(data))
       processData(data, type, url)
     },
     error: handleError
@@ -87,12 +85,11 @@ function handleError (XMLHttpRequest, textStatus, errorThrown) {
 }
 
 function processData (data, type, url) {
-  var title = '_'
-  var content = '_'
-  var videoUrl = '_'
+  var title = ''
+  var content = ''
+  var videoUrl = ''
   for (var nodeProp in data) {
     var node = data[nodeProp]
-    console.log(JSON.stringify(node))
     var contentPath = node['http://rdfs.org/sioc/ns#content']
     if (node['http://purl.org/dc/terms/title'] != null) {
       title = node['http://purl.org/dc/terms/title'][0].value
@@ -109,28 +106,16 @@ function processData (data, type, url) {
       content = contentPath[0].value
       content = content.replace(new RegExp('\r?\n\r?\n', 'g'), '<br><br>') // Replace line breaks
     } else {
-      content = '_'
+      content = ''
     }
     // Hack to make sure the loop stops once Lexos gets the information it needs
-    if (title !== '_') {
-      console.log('Displaying content with the following information:')
-      console.log('content:' + content)
-      console.log('title:' + title)
-      console.log('url:' + url)
-      console.log('type:' + type)
-      console.log('videoURL:' + videoUrl)
+    if (title !== '') {
       displayITMcontent(content, title, url, type, videoUrl)
     }
   }
 }
 
 function displayITMcontent (content, title, url, type, videoUrl) {
-//   console.log('content:' + content)
-//   console.log('title:' + title)
-//   console.log('url:' + url)
-//   console.log('type:' + type)
-//   console.log('videoUrl:' + videoUrl)
-
   // Replace Scalar internal links with urls to Scalar
   content = content.replace(/<a href="/g, '<a href="http://scalar.usc.edu/works/lexos/')
   content = content.replace(/http:\/\/http:\/\/scalar.usc.edu\/works\/lexos\//g, 'http://')
@@ -160,7 +145,6 @@ function displayITMcontent (content, title, url, type, videoUrl) {
       break
 
     case 'dialog':
-      console.log('Display type is a modal.')
       titleLink = '<a href="' + url + '" target="_blank">' + title + '</a>'
       $('#ITM-modal .modal-title').html(titleLink)
       var msg = '<h4>This is just a sample modal. Ultimately, it will open a settings dialog, but for now it can be used as a trigger to display <em>In the Margins</em> content. Click the <strong>Show Video</strong> button to see some sample video content.</h4>'
@@ -171,7 +155,6 @@ function displayITMcontent (content, title, url, type, videoUrl) {
       } else {
         $('#itm-content').append('<h4>' + errorMsg + '</h4></div>')
       }
-      console.log('Bad modal launch.')
       $('#ITM-modal').modal()
       $('#dialog-status').hide()
       break
@@ -179,7 +162,6 @@ function displayITMcontent (content, title, url, type, videoUrl) {
     // Works only with YouTube videos
     case 'video-dialog':
       $('#dialog-status').show()
-      console.log('Display type is a video modal.')
       var youtubeUrl = videoUrl.replace('https://www.youtube.com/watch?v=', 'https://www.youtube.com/embed/')
       titleLink = '<a href="' + url + '" target="_blank">' + title + '</a>'
       $('#ITM-modal .modal-title').html(titleLink)
@@ -191,7 +173,6 @@ function displayITMcontent (content, title, url, type, videoUrl) {
       } else {
         $('#itm-content').append('<h4>' + errorMsg + '</h4></div>')
       }
-      console.log('Launch video modal.')
       $('#ITM-modal').modal()
       $('#dialog-status').hide()
       break
@@ -244,26 +225,15 @@ $(document).ready(function () {
     doAnimation(container, containerWidth, side, status)
     if (status === 'closed') {
       $('#panel-status').show()
-      console.log('Calling API from ITM panel')
       callAPI(slug, 'panel')
     }
   })
 
   /* Populate a Bootstrap modal */
-//   $('#ITM-modal').on('show.bs.modal', function (e) {
-//     var button = $(e.relatedTarget) // Button that triggered the modal
-//     var slug = button.data('slug') // Extract info from data-slug attribute
-//     var type = button.data('type') // Extract info from data-type attribute
-//     $('#dialog-status').show()
-//     console.log('Calling API after opening Bootstrap modal.')
-//     callAPI(slug, type)
-//     // callAPI("best-practices", "dialog");
-//   })
   $('.bttn-video').on('click', function (e) {
     var slug = $(this).children().first().data('slug') // Extract info from data-slug attribute
     var type = $(this).children().first().data('type') // Extract info from data-type attribute
     $('#dialog-status').show()
-    console.log('Calling API after click with slug "' + slug + '" and type "' + type + '".')
     callAPI(slug, type)
   })
 
@@ -274,8 +244,6 @@ $(document).ready(function () {
     $('#ITM-modal .modal-body').html('')
     $('#ITM-modal .modal-body').html(icon)
     $('#dialog-status').hide()
-    console.log('Hiding Bootsrap modal.')
-    // callAPI('best-practices', 'dialog')
   })
 
   /* Handle Show Video Button in Bootstrap Modal */
