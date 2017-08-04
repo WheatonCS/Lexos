@@ -259,6 +259,13 @@ class TestCallReplacementHandler:
             self.cache_filenames, 1) == replacement_handler(
             self.text_string, self.lemma_string, True)
 
+
+class TestProcessTagReplaceOptions:
+
+    def test_process_tag_replace_options(self):
+        pass
+
+
 # handle_tags
 
 
