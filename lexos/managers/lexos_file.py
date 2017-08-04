@@ -2,7 +2,7 @@ import re
 import textwrap
 from os import remove
 from os.path import join as pathjoin
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 from flask import request
 from lexos.helpers import general_functions, constants
@@ -26,7 +26,7 @@ class LexosFile:
 
         This newly constructed LexosFile object is created from the information
         passed in, and performs some preliminary processing.
-        :param original_filename:
+        :param original_filename: file name of the originally uploaded file.
         :param file_name: file name of the originally uploaded file.
         :param file_string: contents of the file's text.
         :param file_id: the ID to assign to the new file.
@@ -88,8 +88,9 @@ class LexosFile:
     def set_type_from(self, extension: str, file_contents: str):
         """Sets the type of the file from the file's extension and contents.
 
-        :param extension:
-        :param file_contents:
+        :param extension: a string indicating the file extension (format) of
+                          the file
+        :param file_contents: contents of the file's text.
         """
 
         doe_pattern = re.compile("<publisher>Dictionary of Old English")
@@ -113,7 +114,7 @@ class LexosFile:
     def check_for_tags(file_contents: str) -> bool:
         """Checks the file for tags.
 
-        :param file_contents:
+        :param file_contents: contents of the file's text.
         :return: a boolean representing the presence of tags in the contents.
         """
 
@@ -126,7 +127,7 @@ class LexosFile:
     def check_for_gutenberg(file_contents: str) -> bool:
         """Checks if file is from Project Gutenberg.
 
-        :param file_contents:
+        :param file_contents: contents of the file's text.
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
@@ -412,7 +413,9 @@ class LexosFile:
         return word_count_dict
 
     # TODO: Legacy code
-    def generate_d3_json_object(self, word_label, count_label):
+    def generate_d3_json_object(self, word_label: str,
+                                count_label: str) -> Dict[
+                                str, List[Dict[str, int]]]:
         """ Generates a JSON object for d3 from the word counts of the file.
 
         :param word_label: label to use for identifying words in the
