@@ -26,7 +26,7 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     if mode == "MUFI-3":
         filename = constants.MUFI_3_FILENAME
     elif mode == "MUFI-4":
-        filename = constants.MUFI_3_FILENAME
+        filename = constants.MUFI_4_FILENAME
     else:
         return conversion_dict
 

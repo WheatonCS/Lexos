@@ -2,8 +2,20 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
     get_punctuation_string, get_remove_punctuation_map, \
     get_remove_digits_map, call_replacement_handler, get_all_punctuation_map, \
-    delete_words, handle_gutenberg, split_input_word_string
+    delete_words, handle_gutenberg, split_input_word_string, \
+    get_special_char_dict_from_file
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
+
+
+class TestGetSpecialCharDictFromFile:
+
+    def test_get_special_char_dict_from_file(self):
+        assert get_special_char_dict_from_file("MADEUP-6") == {}
+        assert get_special_char_dict_from_file("MUFI-3") == chars.MUFI3
+        assert get_special_char_dict_from_file("MUFI-4") == chars.MUFI4
+        # This dictionary is made in handle_special_characters()
+        assert get_special_char_dict_from_file("doe-sgml") == {}
+
 
 # handle_special_characters
 
