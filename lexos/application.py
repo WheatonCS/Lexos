@@ -100,5 +100,8 @@ def nl2br(eval_ctx, value):
 
 def run():
     """Run lexos."""
-    app.run()
+    try:
+        sys.exit(app.run())
+    except KeyboardInterrupt:
+        print('Exiting lexos. Bye!')
 
