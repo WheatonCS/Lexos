@@ -1343,7 +1343,7 @@ class FileManager:
 
         return count_matrix
 
-    def get_class_division_map(self):
+    def get_class_division_map(self) -> pd.DataFrame:
         """:return: a panda frame that contains class division map."""
         # initialize
         temp_labels = []
