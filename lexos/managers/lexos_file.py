@@ -26,8 +26,8 @@ class LexosFile:
 
         This newly constructed LexosFile object is created from the information
         passed in, and performs some preliminary processing.
-        :param original_filename: file name of the originally uploaded file.
-        :param file_name: file name of the originally uploaded file.
+        :param original_filename: the original file name of the uploaded file.
+        :param file_name: the file name we store.
         :param file_string: contents of the file's text.
         :param file_id: the ID to assign to the new file.
         """
