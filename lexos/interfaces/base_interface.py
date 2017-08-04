@@ -17,7 +17,7 @@ def detect_active_docs() -> int:
     """detects the number of active documents.
 
     This function can be called at the beginning of each tool.
-    :return number of active documents
+    :return: number of active documents
     """
     # TODO: this function should probably be moved to file_manager.py
     if session:
@@ -36,7 +36,7 @@ def detect_active_docs() -> int:
 def detect_active_docs_by_ajax() -> str:
     """Calls detectActiveDocs() from an ajax request.
 
-    :return the response in string
+    :return: the response in string
     """
     num_active_docs = detect_active_docs()
     return str(num_active_docs)
@@ -48,7 +48,7 @@ def no_session():
 
     If the user reaches a page without an active session, this function will
     loads a screen with a redirection message that redirects to Upload.
-    :return template that contains redirection
+    :return: template that contains redirection
     """
     # TODO: cannot find the template file nosession.html, maybe a typo?
     return render_template('nosession.html', numActiveDocs=0)
@@ -59,8 +59,7 @@ def base():
     """handles redirection to other pages.
 
     Note that this function page behavior for the base url ('/') of the site.
-    :return a response object(often a render_template call) to flask and
-    eventually to the browser.
+    :return: a redirect to upload
     """
     return redirect(url_for('upload.upload'))
 
@@ -70,7 +69,7 @@ def download_workspace():
     """Downloads workspace that stores all the session contents.
 
     Note that the workspace can be uploaded and restore all the workspace.
-    :return workspace
+    :return: send workspace to the user
     """
     file_manager = utility.load_file_manager()
     path = file_manager.zip_workspace()
@@ -86,8 +85,7 @@ def reset():
 
     It resets and initialize a new one every time the reset URL is used (either
     manually or via the "Reset" button).
-    :return a response object (often a render_template call) to flask and
-     eventually to the browser.
+    :return: a redirect to upload
     """
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
