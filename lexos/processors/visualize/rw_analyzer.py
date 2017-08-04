@@ -175,7 +175,7 @@ def a_word_line(split_list, keyword, window_size):
                 count += 1
 
     # Create list with initial value
-    averages = [float(count) / window_word_length]
+    averages = [float(count) / window_size]
 
     while window_end < len(lines):
         # Adds one to count if a new match enters the window
