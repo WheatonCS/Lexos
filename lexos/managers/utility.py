@@ -4,10 +4,11 @@ import pickle
 import re
 import textwrap
 from os import makedirs
-from os.path import join as pathjoin
+from os.path import join as path_join
 from typing import List, Tuple, Dict
 
 import numpy as np
+import pandas as pd
 from flask import request
 
 import lexos.helpers.constants as constants
@@ -207,12 +208,12 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     count_matrix[0] = [''] + ['"' + word + '"' for word in count_matrix[0][1:]]
     count_matrix = list(zip(*count_matrix))  # transpose the matrix back
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
-    out_file_path = pathjoin(folder_path, 'results' + extension)
+    out_file_path = path_join(folder_path, 'results' + extension)
 
     # Write results to output file, and write class labels depending on
     # transpose
@@ -284,13 +285,23 @@ def generate_statistics(file_manager: FileManager) -> \
         use_freq=False,
         mfw=mfw,
         cull=culling)
+    # grab data from data frame
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
 
-    file_info_list = []
-    for count, label in enumerate(dtm_data.index.values):
-        file_info_list.append(information.FileInformation(
-            count_list=dtm_data.values[count, :], file_name=label))
-    corpus_info = information.CorpusInformation(count_matrix=dtm_data.values,
-                                                labels=dtm_data.index.values)
+    # helper function gets information for each file
+    def get_file_info(row_index, label):
+        return information.FileInformation(
+            count_list=count_matrix[row_index, :],
+            file_name=label)
+
+    # put information of each file into a list
+    file_info_list = [get_file_info(row_index=ind, label=label)
+                      for ind, label in enumerate(labels)]
+
+    # get information of the whole corpus
+    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
+                                                labels=labels)
     return file_info_list, corpus_info
 
 
@@ -481,13 +492,13 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         newick = get_newick(t, "", t.dist, temp_labels)
 
         # create folder to save graph
-        folder = pathjoin(
+        folder = path_join(
             session_manager.session_folder(),
             constants.RESULTS_FOLDER)
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        f = open(pathjoin(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
+        f = open(path_join(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
         f.write(newick)
         f.close()
 
@@ -538,7 +549,7 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
 
     legend = get_dendrogram_legend(file_manager, distance_list)
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
@@ -640,7 +651,7 @@ def generate_k_means_pca(file_manager: FileManager):
     for i in range(1, len(file_name_list)):
         file_name_str += "#" + file_name_list[i]
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
@@ -726,7 +737,7 @@ def generate_k_means_voronoi(file_manager: FileManager):
     for i in range(1, len(file_name_list)):
         file_name_str += "#" + file_name_list[i]
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
@@ -922,12 +933,12 @@ def generate_rw_matrix_plot(data_points: List[List[List[int]]],
     extension = '.csv'
     deliminator = ','
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
-    out_file_path = pathjoin(folder_path, 'RWresults' + extension)
+    out_file_path = path_join(folder_path, 'RWresults' + extension)
 
     max_len = 0
     for i in range(len(data_points)):
@@ -970,12 +981,12 @@ def generate_rw_matrix(data_list):
     extension = '.csv'
     deliminator = ','
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
-    out_file_path = pathjoin(folder_path, 'RWresults' + extension)
+    out_file_path = path_join(folder_path, 'RWresults' + extension)
 
     rows = ["" for _ in range(len(data_list[0]))]
 
@@ -1085,8 +1096,8 @@ def generate_mc_json_obj(file_manager: FileManager):
         constants.MALLET_OUTPUT_FILE_NAME)
     try:
         makedirs(
-            pathjoin(session_manager.session_folder(),
-                     constants.RESULTS_FOLDER))
+            path_join(session_manager.session_folder(),
+                      constants.RESULTS_FOLDER))
         # attempt to make the result dir
     except FileExistsError:
         pass  # result dir already exists
@@ -1181,7 +1192,7 @@ def generate_mc_json_obj(file_manager: FileManager):
     return json_obj
 
 
-def generate_similarities(file_manager: FileManager) -> (str, str):
+def generate_similarities(file_manager: FileManager) -> pd.DataFrame:
     """Generates cosine similarity rankings between comparison files
 
     :param file_manager: a class for an object to hold all information of
@@ -1201,33 +1212,28 @@ def generate_similarities(file_manager: FileManager) -> (str, str):
     cull = 'cullcheckbox' in request.form
     mfw = 'mfwcheckbox' in request.form
 
-    if file_manager.files.get(comp_file_id) is not None:
-        comp_file_index = list(file_manager.files.keys()).index(comp_file_id)
-    # to check if we find the index.
+    if int(comp_file_id) in file_manager.files.keys():
+        comp_file_index = int(comp_file_id)
     else:
         raise ValueError('input comparison file id cannot be found '
                          'in filemanager')
 
-    final_matrix, words, temp_labels = file_manager.get_matrix(
+    dtm_data_frame = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option="N/A",
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
-        round_decimal=False,
         mfw=mfw,
-        cull=cull)
+        cull=cull,
+        round_decimal=False)
 
     # call similarity.py to generate the similarity list
-    docs_score, docs_name = similarity.similarity_maker(
-        final_matrix, comp_file_index, temp_labels)
+    score_name_data_frame = similarity.similarity_maker(
+        dtm_data_frame, comp_file_index)
 
-    # concatinates lists as strings with *** deliminator
-    # so that the info can be passed successfully through the
-    # html/javascript later on
-    return "***".join(str(score) for score in docs_score),\
-           "***".join(str(name) for name in docs_name)
+    return score_name_data_frame
 
 
 def generate_sims_csv(file_manager: FileManager):
@@ -1243,38 +1249,38 @@ def generate_sims_csv(file_manager: FileManager):
     """
     extension = '.csv'
 
-    cosine_sims, document_name = generate_similarities(file_manager)
+    score_name_data_frame = generate_similarities(file_manager)
 
     delimiter = ','
 
-    cosine_sims = cosine_sims.split("***")
-    document_name = document_name.split("***")
-
-    folder_path = pathjoin(
+    # get the path of the folder to save result
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
-    out_file_path = pathjoin(folder_path, 'results' + extension)
+
+    # get the saved file path
+    out_file_path = path_join(folder_path, 'results' + extension)
+
     comp_file_id = request.form['uploadname']
 
-    with open(out_file_path, 'w', encoding='utf-8') as outFile:
+    # write the header to the file
+    with open(out_file_path, 'w') as out_file:
 
-        outFile.write("Similarity Rankings:" + '\n')
-        outFile.write(
+        out_file.write("Similarity Rankings:" + '\n')
+
+        out_file.write(
             "The rankings are determined by 'distance between documents' "
             "where small distances (near zero) represent documents that are "
             "'similar' and unlike documents have distances closer to one.\n")
 
-        outFile.write("Selected Comparison Document: " + delimiter +
-                      str(file_manager.get_active_labels()[int(comp_file_id)]))
-        outFile.write("Rank," + "Document," + "Cosine Similarity" + '\n')
+        out_file.write("Selected Comparison Document: " + delimiter + str(
+            file_manager.get_active_labels()[int(comp_file_id)]) + '\n')
 
-        for i in range(0, (len(cosine_sims) - 1)):
-            outFile.write(str(i + 1) + delimiter +
-                          document_name[i] + delimiter + cosine_sims[i] + '\n')
-
-    outFile.close()
+    # append the dataframe to the file
+    with open(out_file_path, 'a') as f:
+        score_name_data_frame.to_csv(f)
 
     return out_file_path, extension
 
@@ -1731,14 +1737,14 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         newick = get_newick(t, "", t.dist, temp_labels)
 
         # create folder to save graph
-        folder = pathjoin(
+        folder = path_join(
             session_manager.session_folder(),
             constants.RESULTS_FOLDER)
         if not os.path.isdir(folder):
             makedirs(folder)
 
         f = open(
-            pathjoin(
+            path_join(
                 folder,
                 constants.DENDROGRAM_NEWICK_FILENAME),
             'w',
@@ -1793,7 +1799,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
 
     legend = get_dendrogram_legend(file_manager, distance_list)
 
-    folder_path = pathjoin(
+    folder_path = path_join(
         session_manager.session_folder(),
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
