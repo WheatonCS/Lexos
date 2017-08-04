@@ -226,9 +226,7 @@ def call_replacement_handler(
         # Lemmas:         cache_number = 1
         # Special chars:  cache_number = 2
         cache_filestring(
-            replacer_string,
-            cache_folder,
-            cache_file_names[cache_number])
+            replacer_string, cache_folder, cache_file_names[cache_number])
         replacement_line_string = replacer_string
     elif not replacer_string and manual_replacer_string:
         replacement_line_string = manual_replacer_string
@@ -956,9 +954,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         if request.form['sw_option'] == "stop":
             if sw_kw_file_string:  # file_strings[3] == stop/keep words
                 cache_filestring(
-                    sw_kw_file_string,
-                    cache_folder,
-                    cache_filenames[3])
+                    sw_kw_file_string, cache_folder, cache_filenames[3])
                 removal_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
                 return remove_stopwords(orig_text, removal_string)
             elif sw_kw_manual:
@@ -969,9 +965,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         elif request.form['sw_option'] == "keep":
             if sw_kw_file_string:  # file_strings[3] == stop/keep words
                 cache_filestring(
-                    sw_kw_file_string,
-                    cache_folder,
-                    cache_filenames[3])
+                    sw_kw_file_string, cache_folder, cache_filenames[3])
                 keep_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
                 return keep_words(orig_text, keep_string)
             elif sw_kw_manual:
