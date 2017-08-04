@@ -243,7 +243,17 @@ def call_replacement_handler(
     return text
 
 
-def process_tag_replace_options(orig_text, tag, action):
+def process_tag_replace_options(orig_text: str, tag: str, action: str) -> str:
+    """Replaces html-style tags in text files according to user options.
+
+    :param orig_text: The user's text containing the original tag.
+    :param tag: The particular tag to be processed.
+    :param action: A string specifying the action to be performed on the tag.
+        Action options are remove the tag, remove the element and contents,
+        replace the element and contents with a value, or leave the tag as-is.
+    :return: The user's text, after the specified tag is processed.
+    """
+
     # in GUI:  Remove Tag Only
     if action == "remove-tag":
 
