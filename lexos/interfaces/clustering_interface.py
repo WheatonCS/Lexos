@@ -137,6 +137,11 @@ def k_means_image():
 
 @cluster_view.route("/small_PCA", methods=["GET", "POST"])
 def small_pca():
+    """Reads the small image of the PCA and displays it on the web browser.
+
+    :return: a response object with the small PCA as a png to flask and
+    eventually to the browser.
+    """
     if constants.PCA_SMALL_GRAPH_FILENAME:
         folder = path_join(
             session_manager.session_folder(),
@@ -147,6 +152,11 @@ def small_pca():
 
 @cluster_view.route("/big_PCA", methods=["GET", "POST"])
 def big_pca():
+    """Reads the big image of the PCA and displays it on the web browser.
+
+    :return: a response object with the big PCA as a png to flask and
+    eventually to the browser.
+    """
     if constants.PCA_BIG_GRAPH_FILENAME:
         folder = path_join(
             session_manager.session_folder(),
