@@ -200,7 +200,7 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     return striped_text
 
 
-def decode_bytes(raw_bytes: bytes) -> bytes:
+def decode_bytes(raw_bytes: bytes) -> str:
     """decode the raw bytes, typically used to decode `request.file`
 
     :param raw_bytes: the bytes you get and want to decode to string
