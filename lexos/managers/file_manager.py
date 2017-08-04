@@ -1006,9 +1006,11 @@ class FileManager:
                                       index=temp_labels,
                                       columns=words)
 
+        # change the dtm to proportion
         if use_freq:
             dtm_data_frame = dtm_data_frame.mean(axis=1)
 
+        # apply culling to dtm
         if cull:
             # get the lower bound for culling
             if request.json:
@@ -1021,6 +1023,7 @@ class FileManager:
                 dtm_data_frame=dtm_data_frame
             )
 
+        # only leaves the most frequent words in dtm
         if mfw:
             if request.json:
                 lower_rank_bound = int(request.json['mfwnumber'])
@@ -1033,6 +1036,7 @@ class FileManager:
                 count_matrix=raw_count_matrix
             )
 
+        # round the decimal in dtm
         if round_decimal:
             dtm_data_frame = dtm_data_frame.round(decimals=6)
 
@@ -1043,7 +1047,7 @@ class FileManager:
                                count_matrix: np.ndarray,
                                dtm_data_frame: pd.DataFrame) \
             -> pd.DataFrame:
-        """Gets the most frequent words in final_matrix and words.
+        """ Gets the most frequent words in final_matrix and words.
 
         The new count matrix will consists of only the most frequent words in
         the whole corpus.
@@ -1054,12 +1058,11 @@ class FileManager:
         :param count_matrix: the raw count matrix,
                                 the row are for each segments
                                 the column are for each words
-        :param final_matrix: the processed raw count matrix
-                                (use proportion, use tf-idf, etc.)
-        :param words: an array of all the words
+        :param dtm_data_frame: the dtm in the form of panda data frame.
+                                the indices(rows) are segment names
+                                the columns are words.
         :return:
-            - the culled final matrix
-            - the culled words
+            dtm data frame with only the most frequent words
         """
 
         # get the word counts for corpus (1D array)
@@ -1093,10 +1096,11 @@ class FileManager:
         `least_num_seg` segments.
         :param least_num_seg: least number of segment the word needs to appear
                                 in to be kept.
-        :param dtm_data_frame: the dtm in forms of panda dataframes
+        :param dtm_data_frame: the dtm in forms of panda data frames.
+                                the indices(rows) are segment names
+                                the columns are words.
         :return:
-            - the culled final matrix
-            - the culled words array
+             the culled dtm data frame
         """
 
         # create a bool matrix to indicate whether a word is in a segment
