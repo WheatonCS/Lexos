@@ -971,28 +971,19 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text):
+        file_and_manual = handle_stop_keep_words_string(
+            sw_kw_file_string, sw_kw_manual, cache_folder, cache_filenames)
+
+        # if file_and_manual does not contain words there is no issue calling
+        # remove_stopwords()
         if request.form['sw_option'] == "stop":
-            if sw_kw_file_string:  # file_strings[3] == stop/keep words
-                cache_filestring(
-                    sw_kw_file_string, cache_folder, cache_filenames[3])
-                removal_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
-                return remove_stopwords(orig_text, removal_string)
-            elif sw_kw_manual:
-                removal_string = sw_kw_manual
-                return remove_stopwords(orig_text, removal_string)
-            else:
-                return orig_text
-        elif request.form['sw_option'] == "keep":
-            if sw_kw_file_string:  # file_strings[3] == stop/keep words
-                cache_filestring(
-                    sw_kw_file_string, cache_folder, cache_filenames[3])
-                keep_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
-                return keep_words(orig_text, keep_string)
-            elif sw_kw_manual:
-                keep_string = sw_kw_manual
-                return keep_words(orig_text, keep_string)
-            else:
-                return orig_text
+            return remove_stopwords(orig_text, file_and_manual)
+
+        # but all the text would be deleted if we called keep_words()
+        # "\n" comes from '\n'.join(["", ""])
+        elif request.form['sw_option'] == "keep" and file_and_manual != "\n":
+            return keep_words(orig_text, file_and_manual)
+
         else:
             return orig_text
 
