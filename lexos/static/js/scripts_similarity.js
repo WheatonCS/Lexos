@@ -1,5 +1,5 @@
 $(function () {
-	// Hide unnecessary divs for DTM
+  // Hide unnecessary divs for DTM
   var newLabelsLocation = $('#normalize-options').parent()
   var newNormalizeLocation = $('#temp-label-div').parent()
   var tempNormalize = $('#normalize-options').html()
@@ -12,26 +12,26 @@ $(function () {
   newNormalizeLocation.append(newNormalize)
 
   $('#normalize-options').hide()
-	/* $("#culling-options").hide(); */
+  /* $("#culling-options").hide(); */
 
-//   $("#normalize-options").empty().html($("#temp-label-div").html());
-//   $("#temp-label-div").empty().html(tempContent);
-	// $("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
+  //   $("#normalize-options").empty().html($("#temp-label-div").html());
+  //   $("#temp-label-div").empty().html(tempContent);
+  // $("#temp-label-div").css("position","relative").css("left","-10px").css("top","0px");
 
-	// Error handling before submit
+  // Error handling before submit
   $('#getsims').click(function () {
     if ($('#num_active_files').val() < 2) {
       $('#error-message').text('You must have at least 2 active documents to proceed!')
       $('#error-message').show().fadeOut(3000)
       return false
     } else {
-      $('#status-analyze').css({'visibility': 'visible', 'z-index': '400000'})
+      $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
       return true
     }
   })
 
-	// Display selected document name on screen
-  function makeFilenameStr (fileID) {
+  // Display selected document name on screen
+  function makeFilenameStr(fileID) {
     var selectedFilename = 'Selected Document: ' + documentLabels[fileID]
     $('#selectedDocument').text(selectedFilename)
   }
@@ -40,7 +40,7 @@ $(function () {
     makeFilenameStr($('input[type=radio]:checked').val())
   }
 
-  function createList () {
+  function createList() {
     var columnValues = []
     var rows = (docsListScore.length - 1)
     for (i = 0; i < rows; i++) {
@@ -49,17 +49,17 @@ $(function () {
       valStr = '<tr><td>' + j.toString() + '</td><td>' + docsListName[i] + '</td><td>' + docsListScore[i].toString() + '</td></tr>'
       $('#simtable tbody').append(valStr)
     }
-		// $("#status-analyze").css({"visibility":"hidden"});
+    // $("#status-analyze").css({"visibility":"hidden"});
 
-	    $('#simtable').DataTable({
-	        'paging': true,
-	        'searching': true,
-	        'ordering': true,
-	        'info': true,
-	        'language': {
-          'lengthMenu': 'Display _MENU_ documents per page'
-    		}
-	    })
+    $('#simtable').DataTable({
+      'paging': true,
+      'searching': true,
+      'ordering': true,
+      'info': true,
+      'language': {
+        'lengthMenu': 'Display _MENU_ documents per page'
+      }
+    })
   }
 
   if (docsListScore != '') {
