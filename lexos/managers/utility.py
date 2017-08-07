@@ -1352,21 +1352,10 @@ def generate_z_test_top_word(file_manager: FileManager):
         group_values, name_map = group_division(dtm_data, division_map.values)
 
         # test
-        analysis_result = analyze_para_to_group(group_values=group_values,
-                                                words=words)
-
-        # convert to human readable form
-        human_result = []
-        for key in list(analysis_result.keys()):
-            file_name = name_map[key[0]][key[1]]
-            comp_class_name = class_labels[key[2]]
-            if comp_class_name == '':
-                header = 'Document "' + file_name + \
-                         '" compared to Class: untitled'
-            else:
-                header = 'Document "' + file_name + '" compared to Class: "' +\
-                         comp_class_name + '"'
-            human_result.append([header, analysis_result[key]])
+        human_result = analyze_para_to_group(group_values=group_values,
+                                             words=words,
+                                             name_map=name_map,
+                                             class_labels=class_labels)
 
     elif test_by_class == 'classToClass':
         # create division map
