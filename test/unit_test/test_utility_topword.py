@@ -34,21 +34,31 @@ dtm_data_two = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
                             index=np.array(["F1", "F2"]),
                             columns=np.array(["A", "B", "C", "D"]))
 empty_data = pd.DataFrame(data=[], index=[], columns=[])
+labels = np.array(["file_one.txt", "file_two.txt"])
 
 
 class TestAnalyzeAllToPara:
     def test_normal_case(self):
         assert analyze_all_to_para(
             count_matrix=dtm_data_one.values,
-            words=dtm_data_one.columns.values) == [[], []]
+            words=dtm_data_one.columns.values,
+            labels=labels) == [('Document "file_one.txt" compared to the '
+                                'whole corpus', []),
+                               ('Document "file_two.txt" compared to the '
+                                'whole corpus', [])]
         assert analyze_all_to_para(
             count_matrix=dtm_data_two.values,
-            words=dtm_data_two.columns.values) == [[("D", -2.1483)], []]
+            words=dtm_data_two.columns.values,
+            labels=labels) == [('Document "file_one.txt" compared to the '
+                                'whole corpus', [('D', -2.1483)]),
+                               ('Document "file_two.txt" compared to the '
+                                'whole corpus', [])]
 
     def test_special_case(self):
         try:
             _ = analyze_all_to_para(count_matrix=empty_data.values,
-                                    words=empty_data.columns.values)
+                                    words=empty_data.columns.values,
+                                    labels=labels)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
@@ -95,30 +105,48 @@ group_para_list_one = \
 group_para_list_two = \
     [np.array([(1, 1, 0, 0, 0, 0, 0, 0), (0, 0, 1, 1, 0, 0, 0, 0)]),
      np.array([(0, 0, 0, 0, 1, 1, 0, 0), (0, 0, 0, 0, 0, 0, 1, 10)])]
+class_labels = np.array(["file_one.txt", "file_two.txt"])
+name_map = [np.array(["F1.txt", "F2.txt"]), np.array(["F3.txt", "F4.txt"])]
 
 
 class TestAnalyzeParaToGroup:
     def test_normal_case(self):
         assert analyze_para_to_group(group_values=group_para_list_one,
-                                     words=words) == \
-            {(0, 0, 1): [], (0, 1, 1): [], (1, 0, 0): [], (1, 1, 0): []}
+                                     words=words,
+                                     name_map=name_map,
+                                     class_labels=class_labels) == \
+            [('Document "F1.txt" compared to Class: file_two.txt', []),
+             ('Document "F2.txt" compared to Class: file_two.txt', []),
+             ('Document "F3.txt" compared to Class: file_one.txt', []),
+             ('Document "F4.txt" compared to Class: file_one.txt', [])]
+
         assert analyze_para_to_group(group_values=group_para_list_two,
-                                     words=words) == \
-            {(0, 0, 1): [('A', 2.639), ('B', 2.639), ('H', -2.1483)],
-             (0, 1, 1): [('C', 2.639), ('D', 2.639), ('H', -2.1483)],
-             (1, 0, 0): [], (1, 1, 0): [('H', 3.3029)]}
+                                     words=words,
+                                     name_map=name_map,
+                                     class_labels=class_labels) == \
+            [('Document "F1.txt" compared to Class: file_two.txt',
+              [('A', 2.639), ('B', 2.639), ('H', -2.1483)]),
+             ('Document "F2.txt" compared to Class: file_two.txt',
+              [('C', 2.639), ('D', 2.639), ('H', -2.1483)]),
+             ('Document "F3.txt" compared to Class: file_one.txt', []),
+             ('Document "F4.txt" compared to Class: file_one.txt',
+              [('H', 3.3029)])]
 
     def test_special_case(self):
         try:
             _ = analyze_para_to_group(group_values=empty_group,
-                                      words=words)
+                                      words=words,
+                                      name_map=name_map,
+                                      class_labels=class_labels)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
             _ = analyze_para_to_group(group_values=group_para_list_one,
-                                      words=empty_words)
+                                      words=empty_words,
+                                      name_map=name_map,
+                                      class_labels=class_labels)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
@@ -127,22 +155,28 @@ class TestAnalyzeParaToGroup:
 class TestGroupToGroup:
     def test_normal_case(self):
         assert analyze_group_to_group(group_values=group_para_list_one,
-                                      words=words) == {(0, 1): []}
+                                      words=words,
+                                      class_labels=class_labels) == \
+            [('Class "file_one.txt" compared to Class: file_two.txt', [])]
         assert analyze_group_to_group(group_values=group_para_list_two,
-                                      words=words) == \
-            {(0, 1): [('H', -2.7336)]}
+                                      words=words,
+                                      class_labels=class_labels) == \
+            [('Class "file_one.txt" compared to Class: file_two.txt',
+             [('H', -2.7336)])]
 
     def test_special_case(self):
         try:
             _ = analyze_group_to_group(group_values=empty_group,
-                                       words=words)
+                                       words=words,
+                                       class_labels=class_labels)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
             _ = analyze_group_to_group(group_values=group_para_list_one,
-                                       words=empty_words)
+                                       words=empty_words,
+                                       class_labels=class_labels)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_NP_ARRAY_MESSAGE
