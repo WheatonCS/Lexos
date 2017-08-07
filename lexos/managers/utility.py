@@ -1285,7 +1285,7 @@ def generate_sims_csv(file_manager: FileManager):
     return out_file_path, extension
 
 
-def get_top_word_option():
+def get_top_word_option() -> str:
     """Gets the top word options from the front-end.
 
     :return: test_by_class: option for proportional z test to see whether to
