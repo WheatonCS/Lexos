@@ -1,3 +1,5 @@
+"""This file is used for pip install"""
+
 from setuptools import setup, find_packages
 from proj_info import SHORT_NAME, VERSION, ABOUT_URL, AUTHOR, LICENSE_TYPE, \
     SHORT_DESCRIPTION, LONG_DESCRIPTION
