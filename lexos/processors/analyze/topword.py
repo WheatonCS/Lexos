@@ -101,13 +101,14 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
     return group_list, label_list
 
 
-def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
-        List[list]:
+def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray,
+                        labels: np.ndarray) -> List[Tuple[str, list]]:
     """Analyzes each single word compare to the total documents
 
     :param count_matrix: a 2D numpy array where each row contains the word
                          count of the corresponding file.
     :param words: words that show up at least one time in the whole corpus.
+    :param labels: file name of each file
     :return: an array where each element of array is an array, represents a
              segment and it is sorted via z_score, each element array is a
              tuple: (word, corresponding z_score).
@@ -118,12 +119,19 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
     count_matrix_sum = np.sum(count_matrix, axis=0)
 
     # generate data
-    all_results = [_z_test_word_list_(count_list_i=row,
-                                      count_list_j=count_matrix_sum,
-                                      words=words)
-                   for _, row in enumerate(count_matrix)]
+    analysis_result = [_z_test_word_list_(count_list_i=row,
+                                           count_list_j=count_matrix_sum,
+                                           words=words)
+                        for _, row in enumerate(count_matrix)]
 
-    return all_results
+    # generate header list
+    header_list = ['Document "' + label + '" compared to the whole corpus'
+                   for _, label in enumerate(labels)]
+
+    # put two lists together as a human readable result
+    readable_results = list(zip(header_list, analysis_result))
+
+    return readable_results
 
 
 def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
@@ -171,6 +179,7 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
         group_base_list = group_lists[group_base_index]
 
         # enumerate through all the paragraphs in group_comp_paras
+
         for para_index, paras in enumerate(group_comp_paras):
             word_z_score_dict = _z_test_word_list_(
                 count_list_i=paras,
@@ -187,8 +196,8 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
     return all_results
 
 
-def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
-        -> dict:
+def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray,
+                           class_labels: np.ndarray)-> List[Tuple[str, list]]:
     """Analyzes the group compare with each other groups.
 
     :param group_values: a list of lists, where each list contains an matrix
@@ -204,9 +213,6 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
     # Trap possible empty inputs
     assert group_values, EMPTY_LIST_MESSAGE
     assert np.size(words) > 0, EMPTY_NP_ARRAY_MESSAGE
-
-    # initialize the value to return
-    all_results = {}
 
     # find the total word count of each group
     group_lists = [np.sum(value, axis=0)
@@ -224,18 +230,16 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
     comp_map = [(i_index, j_index)
                 for (i_index, j_index) in comp_map if i_index < j_index]
 
-    for group_comp_index, group_base_index in comp_map:
-        # get data to compare
-        group_comp_list = group_lists[group_comp_index]
-        group_base_list = group_lists[group_base_index]
+    analysis_result = [_z_test_word_list_(count_list_i=group_lists[comp_index],
+                                          count_list_j=group_lists[base_index],
+                                          words=words)
+                       for comp_index, base_index in comp_map]
 
-        # get analysis result
-        word_z_score_dict = _z_test_word_list_(count_list_i=group_comp_list,
-                                               count_list_j=group_base_list,
-                                               words=words)
+    header_list = ['Class "' + class_labels[comp_index] +
+                    '" compared to Class: ' + class_labels[base_index]
+                    for comp_index, base_index in comp_map]
 
+    # put two lists together as a human readable result
+    readable_results = list(zip(header_list, analysis_result))
 
-        all_results.update(
-            {(group_comp_index, group_base_index): word_z_score_dict})
-
-    return all_results
+    return readable_results
