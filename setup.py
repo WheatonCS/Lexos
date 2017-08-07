@@ -1,16 +1,15 @@
 from setuptools import setup, find_packages
+from proj_info import SHORT_NAME, VERSION, ABOUT_URL, AUTHOR, LICENSE_TYPE, \
+    SHORT_DESCRIPTION, LONG_DESCRIPTION
 
 setup(
-    name='Lexos',
-    version="4.0rc1",
-    url='http://wheatoncollege.edu/lexomics/',
-    license='MIT',
-    author='WheatonCS/LexomicsResearch',
-    author_email='',
-    description='Python/Flask-based website for text analysis workflow. '
-                'Previous (stable) release is live at: '
-                'http://lexos.wheatoncollege.edu ',
-    long_description="TODO",
+    name=SHORT_NAME,
+    version=VERSION,
+    url=ABOUT_URL,
+    license=LICENSE_TYPE,
+    author=AUTHOR,
+    description=SHORT_DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
     packages=find_packages('.'),
     include_package_data=True,
     zip_safe=False,
