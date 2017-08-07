@@ -5,7 +5,7 @@ import re
 import textwrap
 from os import makedirs
 from os.path import join as path_join
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 
 import numpy as np
 import pandas as pd
@@ -307,15 +307,14 @@ def generate_statistics(file_manager: FileManager) -> \
 
 
 def get_dendrogram_legend(file_manager: FileManager,
-                          distance_list: List[float]) -> str:
-    """
-    Generates the legend for dendrogram from the active files.
+                          distance_list: np.ndarray) -> str:
+    """Generates the legend for dendrogram from the active files.
 
-    Args:
-        None
-
-    Returns:
-        A string with all the formatted information of the legend.
+    :param file_manager: a class for an object to hold all information of
+                         user's files and manage the files according to users's
+                         choices.
+    :param distance_list: A list of all the distances in the dendrogram
+    :return: A string with all the formatted information of the legend.
     """
     # Switch to Ajax if necessary
     if request.json:
@@ -379,16 +378,37 @@ def get_newick(node, newick, parent_dist, leaf_names):
 
 
 # Gets called from cluster() in lexos_core.py
-def generate_dendrogram(file_manager: FileManager, leq: str):
-    """
-    Generates dendrogram image and PDF from the active files.
+def generate_dendrogram(file_manager: FileManager, leq: str) \
+    -> (int, int, int, int, int, int, int, int, Union[float, int, str],
+        str, str, str, str, Dict):
+    """Generates dendrogram image and PDF from the active files.
 
-    Args:
-        None
-
-    Returns:
-        Total number of PDF pages, ready to calculate the height of the
-        embedded PDF on screen
+    :param file_manager: a class for an object to hold all information of
+                        user's files and manage the files according to users's
+                        choices.
+    :param leq: a string symbol '≤'
+    :return:
+            - total_pdf_page_number: integer, total number of pages of the PDF.
+            - score: float, silhouette score
+            - inconsistent_max: float, upper bound of threshold to calculate
+              silhouette score if using Inconsistent criterion
+            - maxclust_max: integer, upper bound of threshold to calculate
+            - silhouette score  if using Maxclust criterion
+            - distance_max: float, upper bound of threshold to calculate
+              silhouette score if using Distance criterion
+            - distance_min: float, lower bound of threshold to calculate
+              silhouette score if using Distance criterion
+            - monocrit_max: float, upper bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+            - monocrit_min: float, lower bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+            - threshold: float/integer/string, threshold (t) value that users
+              entered, equals to 'N/A' if users leave the field blank
+            - inconsistent_op: string,
+            - maxclust_op
+            - distance_op
+            - monocrit_op
+            - threshold_ops
     """
     from sklearn.metrics.pairwise import euclidean_distances
     from scipy.cluster.hierarchy import ward, dendrogram
@@ -514,7 +534,6 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=n_gram_size,
         use_freq=use_freq,
-        grey_word=grey_word,
         mfw=mfw,
         cull=culling)
 
@@ -1697,6 +1716,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         Total number of PDF pages, ready to calculate the height of the
         embedded PDF on screen
     """
+    from sklearn.feature_extraction.text import CountVectorizer
     from sklearn.metrics.pairwise import euclidean_distances
     from scipy.cluster.hierarchy import ward, dendrogram
     from scipy.spatial.distance import pdist
@@ -1705,30 +1725,31 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
 
     import matplotlib.pyplot as plt
 
-    if 'getdendro' in request.json:
-        label_dict = file_manager.get_active_labels()
-        labels = []
-        for ind, label in list(label_dict.items()):
-            labels.append(label)
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, \
+        grey_word, show_grey_word, only_char_grams_within_words, mfw, \
+        culling = file_manager.get_matrix_options_from_ajax()
 
+    dtm_data_frame = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=use_tfidf,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=n_gram_size,
+        use_freq=use_freq,
+        mfw=mfw,
+        cull=culling,
+        round_decimal=False)
+
+    if 'getdendro' in request.json:
         # Get options from request.json
         orientation = str(request.json['orientation'])
         linkage = str(request.json['linkage'])
         metric = str(request.json['metric'])
 
         # Get active files
-        all_contents = []  # list of strings-of-text for each segment
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                content_element = l_file.load_contents()
-                all_contents.append(content_element)
-
-                if request.json["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.json["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
+        all_contents = np.array([l_file.load_contents() for l_file in
+                                 file_manager.files.values() if l_file.active])
+        temp_labels = dtm_data_frame.index
 
         # More options
         n_gram_size = int(request.json['tokenSize'])
@@ -1745,8 +1766,6 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
             token_type = 'char'
             if only_char_grams_within_words:
                 token_type = 'char_wb'
-
-        from sklearn.feature_extraction.text import CountVectorizer
 
         vectorizer = CountVectorizer(
             input='content',
@@ -1815,21 +1834,6 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         f.write(newick)
         f.close()
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_from_ajax()
-
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=use_tfidf,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=use_freq,
-        grey_word=grey_word,
-        mfw=mfw,
-        cull=culling)
-
     # Gets options from request.json and uses options to generate the
     # dendrogram (with the legends) in a PDF file
     orientation = str(request.json['orientation'])
@@ -1847,15 +1851,8 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     if 'dendroLegends' in request.json:
         show_dendro_legends = request.json['dendroLegends'] == 'on'
 
-    dendro_matrix = []
-    file_number = len(count_matrix)
-    total_words = len(count_matrix[0])
-
-    for row in range(1, file_number):
-        word_count = []
-        for col in range(1, total_words):
-            word_count.append(count_matrix[row][col])
-        dendro_matrix.append(word_count)
+    dendro_matrix_data = np.array(dtm_data_frame.values)
+    dendro_matrix = dendro_matrix_data.reshape(len(dendro_matrix_data), 1)
 
     distance_list = dendrogrammer.get_dendro_distances(
         linkage, metric, dendro_matrix)
@@ -1867,6 +1864,8 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
+
+    temp_labels = dtm_data_frame.index
 
     pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
         distance_min, monocrit_max, monocrit_min, threshold = \

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import textwrap
-from typing import List, Union
+from typing import Union
 
+import numpy as np
 from PIL import Image, ImageChops
 from flask import request
 from matplotlib import pyplot
@@ -57,7 +58,7 @@ def translate_den_options() -> (bool, str, str):
 
 
 def get_dendro_distances(linkage_method: str, distance_metric: str,
-                         dendro_matrix: List[List]) -> List:
+                         dendro_matrix: np.ndarray) -> np.ndarray:
     """Calculate the distances in the dendrogram.
 
     Use the word frequencies in the given text segments to calculate distance
@@ -80,17 +81,18 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
     # different for dendrogram
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
-    distance_list = [round(float(z[i][2]), 5) for i in range(0, len(z))]
+    distance_list = np.array(
+        [round(float(z[i][2]), 5) for i in range(0, len(z))])
 
     return distance_list
 
 
-def get_silhouette_score(dendro_matrix: List,
+def get_silhouette_score(dendro_matrix: np.ndarray,
                          distance_metric: str,
                          linkage_method: str,
-                         labels: List[str]) -> (str, str, float, int, float,
-                                                float, float, float,
-                                                Union[float, int, str]):
+                         labels: np.ndarray) -> (str, str, float, int, float,
+                                                 float, float, float,
+                                                 Union[float, int, str]):
     """Generate silhoutte score based on hierarchical clustering.
 
     :param dendro_matrix: list, occurrence of words in different files
@@ -275,8 +277,8 @@ def dendrogram(
         pruning: int,
         linkage_method: str,
         distance_metric: str,
-        labels: List[str],
-        dendro_matrix: List[List],
+        labels: np.ndarray,
+        dendro_matrix: np.ndarray,
         legend: str,
         folder: str,
         augmented_dendrogram: bool,
@@ -305,24 +307,23 @@ def dendrogram(
            Dendrogram" is checked
     :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
            is checked
-
-   :return:
-            -total_pdf_page_number: integer, total number of pages of the PDF.
-            -score: float, silhouette score
-            -inconsistent_max: float, upper bound of threshold to calculate
-             silhouette score if using Inconsistent criterion
-            -maxclust_max: integer, upper bound of threshold to calculate
-            -silhouette score  if using Maxclust criterion
-            -distance_max: float, upper bound of threshold to calculate
-             silhouette score if using Distance criterion
-            -distance_min: float, lower bound of threshold to calculate
-             silhouette score if using Distance criterion
-            -monocrit_max: float, upper bound of threshold to calculate
-             silhouette score if using Monocrit criterion
-            -monocrit_min: float, lower bound of threshold to calculate
-             silhouette score if using Monocrit criterion
-            -threshold: float/integer/string, threshold (t) value that users
-             entered, equals to 'N/A' if users leave the field blank
+    :return:
+            - total_pdf_page_number: integer, total number of pages of the PDF.
+            - score: float, silhouette score
+            - inconsistent_max: float, upper bound of threshold to calculate
+              silhouette score if using Inconsistent criterion
+            - maxclust_max: integer, upper bound of threshold to calculate
+            - silhouette score  if using Maxclust criterion
+            - distance_max: float, upper bound of threshold to calculate
+              silhouette score if using Distance criterion
+            - distance_min: float, lower bound of threshold to calculate
+              silhouette score if using Distance criterion
+            - monocrit_max: float, upper bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+            - monocrit_min: float, lower bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+            - threshold: float/integer/string, threshold (t) value that users
+              entered, equals to 'N/A' if users leave the field blank
     """
 
     # Generating silhouette score
@@ -336,9 +337,7 @@ def dendrogram(
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
 
-    distance_list = []
-    for i in range(0, len(z)):
-        distance_list.append(z[i][2])
+    distance_list = np.array([z[i][2] for i in range(0, len(z))])
 
     legend_page = 0
 
@@ -369,17 +368,13 @@ def dendrogram(
     line_total = len(legend_list)  # total number of lines of legends
 
     # for file names in unicode
-    new_labels = []
-    for file_name in labels:
-        file_name = file_name
-        new_labels.append(file_name)
-
+    new_labels = np.array([file_name for file_name in labels])
     labels = new_labels
 
-    page_name_list = []
-
+    # generate page_name_list
     page_num = 1
     max_legend_length_first_page = 17
+    page_name_list = []
     page_name = pyplot.figure(figsize=(10, 15))  # area for dendrogram
     page_name_list.append(page_name)
 
