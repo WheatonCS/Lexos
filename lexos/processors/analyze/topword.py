@@ -6,7 +6,7 @@
 # follows normal distribution
 
 import itertools
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -45,19 +45,21 @@ def _z_test_(p1, pt, n1, nt):
 
 
 def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
-                       words: np.ndarray) -> dict:
+                       words: np.ndarray) -> List[Tuple[str, int]]:
     """Processes z-test on all the words of two input word lists.
 
     :param count_list_i: first word list, a numpy arrant contains word counts.
     :param count_list_j: second word list, a numpy arrant contains word counts.
     :param words: words that show up at least one time in the whole corpus.
-    :return: a dictionary maps words to z-scores.
+    :return: a list that is sorted by z-scores contains tuples, where each type
+             maps a word to its z-score.
     """
     # initialize
     word_z_score_dict = {}
     row_sum = np.sum(count_list_i).item()
     total_sum = np.sum(count_list_j).item()
 
+    # analyze
     for index, word in enumerate(words):
         p_i = count_list_i[index] / row_sum
         p_j = count_list_j[index] / total_sum
@@ -66,7 +68,13 @@ def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
         # insignificant means those with absolute values smaller than 1.96
         if abs(z_score) >= 1.96:
             word_z_score_dict.update({word: z_score})
-    return word_z_score_dict
+
+    # sort the dictionary by the z-scores from larger to smaller
+    sorted_word_z_score_list = sorted(list(word_z_score_dict.items()),
+                                      key=lambda item: abs(item[1]),
+                                      reverse=True)
+
+    return sorted_word_z_score_list
 
 
 def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
@@ -106,22 +114,14 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray) -> \
     """
     assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
 
-    # initialize the value to return
-    all_results = []
+    # initialize
     count_matrix_sum = np.sum(count_matrix, axis=0)
 
     # generate data
-    for _, row in enumerate(count_matrix):
-        # get analysis result
-        word_z_score_dict = _z_test_word_list_(count_list_i=row,
-                                               count_list_j=count_matrix_sum,
-                                               words=words)
-
-        # sort result and put into result list
-        sorted_list = sorted(list(word_z_score_dict.items()),
-                             key=lambda item: abs(item[1]),
-                             reverse=True)
-        all_results.append(sorted_list)
+    all_results = [_z_test_word_list_(count_list_i=row,
+                                      count_list_j=count_matrix_sum,
+                                      words=words)
+                   for _, row in enumerate(count_matrix)]
 
     return all_results
 
@@ -178,15 +178,11 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
                 words=words)
 
             # sort the dictionary
-            sorted_word_z_score_tuple_list = sorted(
-                list(word_z_score_dict.items()),
-                key=lambda item: abs(item[1]),
-                reverse=True)
 
             # pack the sorted result in sorted list
             all_results.update(
                 {(group_comp_index, para_index, group_base_index):
-                 sorted_word_z_score_tuple_list})
+                     word_z_score_dict})
 
     return all_results
 
@@ -238,12 +234,8 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray) \
                                                count_list_j=group_base_list,
                                                words=words)
 
-        # sort the dictionary
-        sorted_word_z_score_list = sorted(list(word_z_score_dict.items()),
-                                          key=lambda item: abs(item[1]),
-                                          reverse=True)
-        # pack the sorted result in sorted list
+
         all_results.update(
-            {(group_comp_index, group_base_index): sorted_word_z_score_list})
+            {(group_comp_index, group_base_index): word_z_score_dict})
 
     return all_results
