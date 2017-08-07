@@ -4,7 +4,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_remove_digits_map, call_replacement_handler, get_all_punctuation_map, \
     delete_words, handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
-    get_decoded_file
+    get_decoded_file, scrub_select_apos
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -381,7 +381,12 @@ class TestGetAllPunctuationMap:
 
 class TestScrubSelectApos:
     def test_scrub_select_apos(self):
-        pass
+        assert scrub_select_apos(
+            "Tes't test' ' 'test tes''t test'' '' ''test") == \
+            "Tes't test  test test test  test"
+        assert scrub_select_apos("Test test") == "Test test"
+        assert scrub_select_apos("' ") == " "
+        assert scrub_select_apos("'") == "'"
 
 
 class TestConsolidateHyphens:
