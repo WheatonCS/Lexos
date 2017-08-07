@@ -109,16 +109,15 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray,
                          count of the corresponding file.
     :param words: words that show up at least one time in the whole corpus.
     :param labels: file name of each file
-    :return: an array where each element of array is an array, represents a
-             segment and it is sorted via z_score, each element array is a
-             tuple: (word, corresponding z_score).
+    :return: a list of tuples, each tuple contains a human readable header and
+             corresponding analysis result
     """
     assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
 
     # initialize
     count_matrix_sum = np.sum(count_matrix, axis=0)
 
-    # generate data
+    # generate analysis result
     analysis_result = [_z_test_word_list_(count_list_i=row,
                                            count_list_j=count_matrix_sum,
                                            words=words)
@@ -203,12 +202,9 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray,
     :param group_values: a list of lists, where each list contains an matrix
                          that represents the word count of an existing class.
     :param words: words that show up at least one time in the whole corpus.
-    :return: a dictionary of a tuple mapped to a list:
-             tuple: contains the index of the two groups to be compared
-             list: a list of tuples represent the comparison result of the two
-                   index that first element in the tuple is a string,
-                   representing a word, second element is a float representing
-                   the corresponding z-score.
+    :param class_labels: label of each class
+    :return: a list of tuples, each tuple contains a human readable header and
+             corresponding analysis result
     """
     # Trap possible empty inputs
     assert group_values, EMPTY_LIST_MESSAGE
@@ -230,11 +226,13 @@ def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray,
     comp_map = [(i_index, j_index)
                 for (i_index, j_index) in comp_map if i_index < j_index]
 
+    # generate analysis result
     analysis_result = [_z_test_word_list_(count_list_i=group_lists[comp_index],
                                           count_list_j=group_lists[base_index],
                                           words=words)
                        for comp_index, base_index in comp_map]
 
+    # generate header list
     header_list = ['Class "' + class_labels[comp_index] +
                     '" compared to Class: ' + class_labels[base_index]
                     for comp_index, base_index in comp_map]
