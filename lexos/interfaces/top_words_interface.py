@@ -2,8 +2,8 @@ from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
-from lexos.managers import utility, session_manager as session_manager
 from lexos.interfaces.base_interface import detect_active_docs
+from lexos.managers import utility, session_manager as session_manager
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -33,14 +33,11 @@ def top_words():
             session['topwordoption'] = constants.DEFAULT_TOPWORD_OPTIONS
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        # get the class label and eliminate the id (this is not the unique id
-        # in file_manager)
-        class_division_map = file_manager.get_class_division_map()[1:]
-        # get number of class
-        try:
-            num_class = len(class_division_map[1])
-        except IndexError:
-            num_class = 0
+
+        # get the class division map and number of existing classes
+        class_division_map = file_manager.get_class_division_map()
+        num_class = class_division_map.shape[0]
+
         return render_template(
             'topword.html',
             labels=labels,
@@ -62,8 +59,9 @@ def top_words():
             raise IOError(
                 'the value of request.form["testInput"] '
                 'cannot be understood by the backend')
-        result = utility.generate_z_test_top_word(
-            file_manager)  # get the topword test result
+        # get the topword test result
+        result = utility.generate_z_test_top_word(file_manager)
+
         if 'get-topword' in request.form:  # download topword
             path = utility.get_top_word_csv(result, csv_header=header)
             session_manager.cache_analysis_option()
@@ -73,8 +71,9 @@ def top_words():
                 attachment_filename=constants.TOPWORD_CSV_FILE_NAME,
                 as_attachment=True)
         else:
-            # get the number of class
-            num_class = len(file_manager.get_class_division_map()[2])
+            # get the number of existing classes
+            num_class = file_manager.get_class_division_map().shape[0]
+
             # only give the user a preview of the topWord
             for i in range(len(result)):
                 if len(result[i][1]) > 20:
