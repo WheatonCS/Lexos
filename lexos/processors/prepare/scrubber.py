@@ -646,8 +646,8 @@ def keep_words(text: str, non_removal_string: str) -> str:
         # punctuation
         split_pattern = '\s|' + punctuation
         token_regex = re.compile(split_pattern, re.UNICODE)
-        line = re.split(token_regex, line)
-        text_list.extend(line)
+        tokens = re.split(token_regex, line)
+        text_list.extend(tokens)
 
     # get rid of empty strings in text_list
     word_list = [word for word in text_list if word != '']
