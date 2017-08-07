@@ -101,7 +101,8 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
     return group_list, label_list
 
 
-def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray,
+def analyze_all_to_para(count_matrix: np.ndarray,
+                        words: np.ndarray,
                         labels: np.ndarray) -> List[Tuple[str, list]]:
     """Analyzes each single word compare to the total documents
 
@@ -133,8 +134,10 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray,
     return readable_results
 
 
-def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray,
-                          name_map: np.ndarray, class_labels: np.ndarray) \
+def analyze_para_to_group(group_values: List[np.ndarray],
+                          words: np.ndarray,
+                          name_map: List[np.ndarray],
+                          class_labels: np.ndarray) \
         -> List[Tuple[str, list]]:
     """Analyzes each single word compare to all the other group.
 
@@ -196,7 +199,8 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray,
     return readable_result
 
 
-def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray,
+def analyze_group_to_group(group_values: List[np.ndarray],
+                           words: np.ndarray,
                            class_labels: np.ndarray)-> List[Tuple[str, list]]:
     """Analyzes the group compare with each other groups.
 
