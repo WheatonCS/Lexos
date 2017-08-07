@@ -340,16 +340,77 @@ def get_all_punctuation_map() -> Dict[int, type(None)]:
     return punctuation_map
 
 
-def consolidate_apos():
-    pass
+def scrub_select_apos(text: str) -> str:
+    """Scrubs all non-word-internal apostrophes from a text.
+
+    :param text: The string to be scrubbed of external apostrophes.
+    :return: The text string, now with only internal apostrophes.
+    """
+
+    # If apos preceded by a non-word character: (?<=[^\w])'
+    # OR apos followed by a non-word character: |'(?=[^\w])
+
+    # Using " " to represent non-word whitespace, "w" to represent a word
+    #     character, and "***" to represent any sequence of any characters,
+    #     this pattern will match:
+    # 1) ***w' *** because the apostrophe is followed by a non-word
+    # 2) *** 'w*** because the apostrophe follows a non-word
+    # 3) *** ' *** because the apos. follows AND is followed by non-words
+    # This will also work for apos. next to other punctuation and multiple
+    #     apos. next to each other, because they count as non-word
+
+    pattern = re.compile(r"(?<=[^\w])'|'(?=[^\w])", re.UNICODE)
+
+    # apply the pattern to replace all external or floating apos with
+    # empty strings
+    scrubbed_text = str(re.sub(pattern, r"", text))
+
+    return scrubbed_text
 
 
-def consolidate_hyphens():
-    pass
+def consolidate_hyphens(text: str) -> str:
+    """Converts all hyphens in a text to the minus sign (-).
+
+    :param text: A string which should have hyphens converted.
+    :return: The text string after all hyphens have been replaced.
+    """
+
+    # All UTF-8 values (hex) for different hyphens and dashes, except the
+    # math minus symbol
+    # All unicode dashes have 'Pd'
+    hyphen_values = ['\u058A', '\u05BE', '\u2010', '\u2011', '\u2012',
+                     '\u2013', '\u2014', '\u2015', '\uFE58', '\uFE63',
+                     '\uFF0D', '\u1400', '\u1806', '\u2E17', '\u2E1A',
+                     '\u2E3A', '\u2E3B', '\u2E40', '\u301C', '\u3030',
+                     '\u30A0', '\uFE31', '\uFE32']
+
+    # hex 002D corresponds to the minus symbol (decimal 45)
+    chosen_hyphen_value = '\u002D'
+
+    # convert all those types of hyphens into the ascii minus
+    for value in hyphen_values:
+        text = text.replace(value, chosen_hyphen_value)
+
+    return text
 
 
-def consolidate_ampers():
-    pass
+def consolidate_ampers(text: str) -> str:
+    """Converts all ampersands in a text to a single one (&).
+
+    :param text: A string which should have ampersands converted.
+    :return: The text string after all ampersands have been replaced.
+    """
+
+    amper_values = ["\uFF06", "\u214B", "\U0001F674", "\uFE60", "\u0026",
+                    "\U0001F675", "\u06FD", "\U000E0026"]
+
+    chosen_amper_value = "\u0026"
+
+    # Change all ampersands to one type of ampersand
+    for value in amper_values:
+        text = text.replace(value, chosen_amper_value)
+
+    return text
 
 
 def get_remove_punctuation_map(
@@ -370,14 +431,6 @@ def get_remove_punctuation_map(
         second is a dictionary that contains all the punctuation that should be
         removed mapped to None.
     """
-
-    # follow this sequence:
-    # 1. make (or load) a remove_punctuation_map
-    # 2. if "keep apostrophes" box is checked
-    # 3  remove all apostrophes (single quotes) except:
-    #       singular possessives (joe's),
-    #       contractions (i'll),
-    # 4. delete the rest of the punctuation
 
     punctuation_filename = os.path.join(
         constants.UPLOAD_FOLDER,
@@ -401,60 +454,22 @@ def get_remove_punctuation_map(
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
-
-        # If apos preceded by a non-word character: (?<=[^\w])'
-        # OR apos followed by a non-word character: |'(?=[^\w])
-
-        # Using " " to represent non-word whitespace, "w" to represent a word
-        #     character, and "***" to represent any sequence of any characters,
-        #     this pattern will match:
-        # 1) ***w' *** because the apostrophe is followed by a non-word
-        # 2) *** 'w*** because the apostrophe follows a non-word
-        # 3) *** ' *** because the apos. follows AND is followed by non-words
-        # This will also work for apos. next to other punctuation and multiple
-        #     apos. next to each other, because they count as non-word
-        pattern = re.compile(r"(?<=[^\w])'|'(?=[^\w])", re.UNICODE)
-
-        # apply the pattern to replace all external or floating apos with
-        # empty strings
-        text = str(re.sub(pattern, r"", text))
+        text = scrub_select_apos(text)
 
         # apos (UTF-8: 39) is deleted from the remove_punctuation_map
         del remove_punctuation_map[39]
 
     # If Remove All Punctuation and Keep Hyphens are ticked
     if hyphen:
+        text = consolidate_hyphens(text)
 
-        # All UTF-8 values (hex) for different hyphens and dashes, except the
-        # math minus symbol
-        # All unicode dashes have 'Pd'
-        hyphen_values = ['\u058A', '\u05BE', '\u2010', '\u2011', '\u2012',
-                         '\u2013', '\u2014', '\u2015', '\uFE58', '\uFE63',
-                         '\uFF0D', '\u1400', '\u1806', '\u2E17', '\u2E1A',
-                         '\u2E3A', '\u2E3B', '\u2E40', '\u301C', '\u3030',
-                         '\u30A0', '\uFE31', '\uFE32']
-
-        # hex 002D corresponds to the minus symbol (decimal 45)
-        chosen_hyphen_value = '\u002D'
-
-        # convert all those types of hyphens into the ascii minus
-        for value in hyphen_values:
-            text = text.replace(value, chosen_hyphen_value)
         # now that all those hyphens are the ascii minus, delete it from the
         # map so no hyphens will be scrubbed from the text
         del remove_punctuation_map[45]
 
     # If Remove All Punctuation and Keep Ampersands are ticked
     if amper:
-
-        amper_values = ["\uFF06", "\u214B", "\U0001F674", "\uFE60", "\u0026",
-                        "\U0001F675", "\u06FD", "\U000E0026"]
-
-        chosen_amper_value = "\u0026"
-
-        # Change all ampersands to one type of ampersand
-        for value in amper_values:
-            text = text.replace(value, chosen_amper_value)
+        text = consolidate_ampers(text)
 
         # Delete chosen ampersand from remove_punctuation_map
         del remove_punctuation_map[38]
