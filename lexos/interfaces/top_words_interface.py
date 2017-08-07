@@ -46,6 +46,7 @@ def top_words():
             topwordsgenerated='class_div',
             itm='topwords',
             numActiveDocs=num_active_docs)
+
     if request.method == "POST":
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
