@@ -466,8 +466,8 @@ def get_remove_punctuation_map(
         # Delete chosen ampersand from remove_punctuation_map
         del remove_punctuation_map[38]
 
-    # this function has the side-effect of altering the text (both for apos
-    # and hyphens), thus the updated text must be returned
+    # this function has the side-effect of altering the text, thus the
+    # updated text must be returned
     return text, remove_punctuation_map
 
 
