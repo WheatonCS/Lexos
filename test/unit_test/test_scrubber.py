@@ -379,6 +379,21 @@ class TestGetAllPunctuationMap:
         assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
 
 
+class TestScrubSelectApos:
+    def test_scrub_select_apos(self):
+        pass
+
+
+class TestConsolidateHyphens:
+    def test_consolidate_hyphens(self):
+        pass
+
+
+class TestConsolidateAmpers:
+    def test_consolidate_ampers(self):
+        pass
+
+
 class TestGetRemovePunctuationMap:
 
     def test_get_remove_punct_map_no_cache(self):
