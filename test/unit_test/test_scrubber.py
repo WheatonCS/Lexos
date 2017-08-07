@@ -4,7 +4,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_remove_digits_map, call_replacement_handler, get_all_punctuation_map, \
     delete_words, handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
-    get_decoded_file, scrub_select_apos
+    get_decoded_file, scrub_select_apos, consolidate_hyphens
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -391,7 +391,14 @@ class TestScrubSelectApos:
 
 class TestConsolidateHyphens:
     def test_consolidate_hyphens(self):
-        pass
+        assert consolidate_hyphens(
+            "Tes\u058At test\u2011 \u2012 \u2014test tes\uFE58\uFF0Dt "
+            "test\u1400\u2E3A \u2E40\u2E17 \u3030\uFE31test "
+            "tes\uFE32\u2E3B\u2013t test\u05BE\uFE63\u30A0 \u301C-\u2E1A\u2010"
+            " \u2015\u1806") == "Tes-t test- - -test tes--t test-- -- " \
+                                "--test tes---t test--- ---- --"
+        assert consolidate_hyphens("Test test") == "Test test"
+        assert consolidate_hyphens("") == ""
 
 
 class TestConsolidateAmpers:
