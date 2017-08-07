@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List, Dict, Callable, Match
+from typing import List, Dict, Callable, Match, Union
 
 from flask import request, session
 from werkzeug.datastructures import FileStorage
@@ -759,6 +759,20 @@ def handle_gutenberg(text: str) -> str:
     return text
 
 
+def get_decoded_file(file_content: Union[bytes, str]) -> str:
+    """Converts bytes file content to python strings.
+
+    :param file_content: The raw file content, which may be a bytes object or
+        a string.
+    :return: The file content as a string.
+    """
+
+    if isinstance(file_content, bytes):
+        return general_functions.decode_bytes(raw_bytes=file_content)
+    else:
+        return file_content
+
+
 def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
                                cache_options: List[str], cache_folder: str,
                                cache_filenames: List[str]) -> List[str]:
@@ -781,12 +795,7 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         filename = opt_uploads[key].filename
         if filename:
             file_content = opt_uploads[key].read()
-            content_is_bytes = isinstance(file_content, bytes)
-            if content_is_bytes:
-                file_strings[index] = general_functions.decode_bytes(
-                    raw_bytes=file_content)
-            else:
-                file_strings[index] = file_content
+            file_strings[index] = get_decoded_file(file_content)
             opt_uploads[key].seek(0)
         else:
             if key.strip('[]') in cache_options:
