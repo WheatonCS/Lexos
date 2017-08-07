@@ -1,32 +1,49 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="Lexos",
+    name='Lexos',
     version="4.0rc1",
-    description="Python/Flask-based website for text analysis workflow.",
-    long_description="""TODO""",
-    author="WheatonCS/LexomicsResearch",
-    url="http://wheatoncollege.edu/lexomics/introduction-lexomics/",
-    download_url="TODO",
-    license="MIT",
+    url='http://wheatoncollege.edu/lexomics/',
+    license='MIT',
+    author='WheatonCS/LexomicsResearch',
+    author_email='',
+    description='Python/Flask-based website for text analysis workflow. '
+                'Previous (stable) release is live at: '
+                'http://lexos.wheatoncollege.edu ',
+    long_description="TODO",
+    packages=find_packages('.'),
     include_package_data=True,
-    packages=find_packages(),
-    entry_points={
-        'console_scripts': [
-            'lexos = lexos.application:run'
-        ]
-    },
+    zip_safe=False,
+    platforms='any',
     install_requires=[
         'flask',
         'numpy',
         'scikit-learn',
         'scipy',
+        'pandas',
+        'gensim',
         'beautifulsoup4',
         'lxml',
         'matplotlib',
         'chardet',
         'natsort',
-        'plotly',
-        'gensim'
-    ]
+        'plotly'
+    ],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Education',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Education :: Text Processing :: Utilities'
+    ],
+    entry_points='''
+        [console_scripts]
+        lexos=lexos.application:run
+    '''
 )
