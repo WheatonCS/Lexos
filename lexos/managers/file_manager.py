@@ -1008,7 +1008,7 @@ class FileManager:
 
         # change the dtm to proportion
         if use_freq:
-            dtm_data_frame = dtm_data_frame.mean(axis=1)
+            dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum)
 
         # apply culling to dtm
         if cull:
