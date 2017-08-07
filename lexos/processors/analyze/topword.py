@@ -133,26 +133,27 @@ def analyze_all_to_para(count_matrix: np.ndarray, words: np.ndarray,
     return readable_results
 
 
-def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
-        -> dict:
+def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray,
+                          name_map: np.ndarray, class_labels: np.ndarray) \
+        -> List[Tuple[str, list]]:
     """Analyzes each single word compare to all the other group.
 
     :param group_values: a list of lists, where each list contains an matrix
                          that represents the word count of an existing class.
     :param words: words that show up at least one time in the whole corpus.
-    :return: an array where each element of array is a dictionary maps a tuple
-             to a list tuple consists of 3 elements (group number 1, list
-             number, group number 2).
-             The list contains tuples and sorted by p value: tuple means (word,
-             p value), this is word usage of word in group compare to the word
-             usage of the same word in another group.
+    :param class_labels: file name of each file
+    :param name_map: a 2D matrix that maps each file name to its corresponding
+                     class
+    :return: a list of tuples, each tuple contains a human readable header and
+             corresponding analysis result
     """
     # Trap possible empty inputs
     assert group_values, EMPTY_LIST_MESSAGE
     assert np.size(words) > 0, EMPTY_NP_ARRAY_MESSAGE
 
     # initialize the value to return
-    all_results = {}
+    analysis_result = []
+    header_list = []
 
     # find the total word count of each group
     group_lists = [np.sum(value, axis=0)
@@ -171,28 +172,28 @@ def analyze_para_to_group(group_values: List[np.ndarray], words: np.ndarray) \
                 for (i_index, j_index) in comp_map if i_index != j_index]
 
     # compare each paragraph in group_comp to group_base
-    for group_comp_index, group_base_index in comp_map:
-        # gives all the paragraphs in the group in a array
-        group_comp_paras = group_values[group_comp_index]
-        # the word list of base group
-        group_base_list = group_lists[group_base_index]
+    for comp_index, base_index in comp_map:
+        comp_para = group_values[comp_index]
 
-        # enumerate through all the paragraphs in group_comp_paras
+        # generate analysis data
+        temp_analysis_result = [_z_test_word_list_(
+            count_list_i=paras,
+            count_list_j=group_lists[base_index],
+            words=words)
+            for para_index, paras in enumerate(comp_para)]
 
-        for para_index, paras in enumerate(group_comp_paras):
-            word_z_score_dict = _z_test_word_list_(
-                count_list_i=paras,
-                count_list_j=group_base_list,
-                words=words)
+        # generate header
+        temp_header = ['Document "' + name_map[comp_index][para_index] +
+                         '" compared to Class: ' + class_labels[base_index]
+                        for para_index, _ in enumerate(comp_para)]
 
-            # sort the dictionary
+        analysis_result += temp_analysis_result
+        header_list += temp_header
 
-            # pack the sorted result in sorted list
-            all_results.update(
-                {(group_comp_index, para_index, group_base_index):
-                     word_z_score_dict})
+    # put result together in a readable list
+    readable_result = list(zip(header_list, analysis_result))
 
-    return all_results
+    return readable_result
 
 
 def analyze_group_to_group(group_values: List[np.ndarray], words: np.ndarray,
