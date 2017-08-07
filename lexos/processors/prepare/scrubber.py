@@ -790,7 +790,7 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         option text fields and files.
     """
 
-    file_strings = {}
+    file_strings = []
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
             file_content = opt_uploads[key].read()
