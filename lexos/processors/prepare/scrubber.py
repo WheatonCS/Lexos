@@ -792,18 +792,16 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
 
     file_strings = {}
     for index, key in enumerate(sorted(opt_uploads)):
-        filename = opt_uploads[key].filename
-        if filename:
+        if opt_uploads[key].filename:
             file_content = opt_uploads[key].read()
             file_strings[index] = get_decoded_file(file_content)
             opt_uploads[key].seek(0)
+        elif key.strip('[]') in cache_options:
+            file_strings[index] = load_cached_file_string(
+                cache_folder, cache_filenames[index])
         else:
-            if key.strip('[]') in cache_options:
-                file_strings[index] = load_cached_file_string(
-                    cache_folder, cache_filenames[index])
-            else:
-                file_strings[index] = ""
-                session['scrubbingoptions']['optuploadnames'][key] = ''
+            session['scrubbingoptions']['optuploadnames'][key] = ''
+            file_strings[index] = ""
 
     # Create an array of option strings:
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
