@@ -33,15 +33,13 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     # assign current working path to variable
     cur_file_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Go up two levels (2x break path name into two parts, where
-    # cur_file_dir path is everything but the last component)
-    # discard: tail of path to be removed
-    cur_file_dir, discard = os.path.split(cur_file_dir)
-    cur_file_dir, discard = os.path.split(cur_file_dir)
+    # Go up two levels by splitting the path into two parts and discarding
+    # everything after the rightmost slash
+    up_one_level, _ = os.path.split(cur_file_dir)
+    up_two_levels, _ = os.path.split(up_one_level)
 
-    # Create full pathname to find the .tsv in resources
-    # directory
-    mode_path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, filename)
+    # Create full pathname to find the .tsv in resources directory
+    mode_path = os.path.join(up_two_levels, constants.RESOURCE_DIR, filename)
 
     with open(mode_path, encoding='utf-8') as input_file:
         columns = {}
