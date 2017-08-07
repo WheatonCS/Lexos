@@ -1,100 +1,47 @@
 /*@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
 */
-/* latin-ext */
+/*!
+  Lato font.
+*/
+/* Lato (normal, regular) */
 @font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url(../fonts/lato/Lato-Light-Lat-Ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url(../fonts/lato/Lato-Light.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
+  font-family: Lato;
   font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/lato/Lato-Regular-Lat-Ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
   font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff") format("woff");
+}
+/* Lato (normal, italic) */
+@font-face {
+  font-family: Lato;
   font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/lato/Lato-Regular.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+  font-style: italic;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff") format("woff");
 }
-/* latin-ext */
+/* Lato (bold, regular) */
 @font-face {
-  font-family: 'Lato';
-  font-style: normal;
+  font-family: Lato;
   font-weight: 700;
-  src: local('Lato Bold'), local('Lato-Bold'), url(../fonts/lato/Lato-Bold-Lat-Ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
   font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff") format("woff");
+}
+/* Lato (bold, italic) */
+@font-face {
+  font-family: Lato;
   font-weight: 700;
-  src: local('Lato Bold'), local('Lato-Bold'), url(../fonts/lato/Lato-Bold.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+  font-style: italic;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff") format("woff");
 }
-/* latin-ext */
+/* Lato (black, regular) */
 @font-face {
-  font-family: 'Lato';
-  font-style: normal;
+  font-family: Lato;
   font-weight: 900;
-  src: local('Lato Black'), local('Lato-Black'), url(../fonts/lato/Lato-Black-Lat-Ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
   font-style: normal;
-  font-weight: 900;
-  src: local('Lato Black'), local('Lato-Black'), url(../fonts/lato/Lato-Black.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Lato Italic'), local('Lato-Italic'), url(../fonts/lato/Lato-Italic-Lat-Ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Lato Italic'), local('Lato-Italic'), url(../fonts/lato/Lato-Italic.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
-}
-/* latin-ext */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: 700;
-  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url(../fonts/lato/Lato-BoldItalic-Lat-Ext.woff2) format('woff2');
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-  font-family: 'Lato';
-  font-style: italic;
-  font-weight: 700;
-  src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url(../fonts/lato/Lato-BoldItalic.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-black/lato-black.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-black/lato-black.woff") format("woff");
 }
 
 /* ================== ELEMENT STYLING ============================ */
