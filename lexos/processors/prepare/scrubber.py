@@ -433,8 +433,7 @@ def get_remove_punctuation_map(
     """
 
     punctuation_filename = os.path.join(
-        constants.UPLOAD_FOLDER,
-        "cache/punctuationmap.p")  # Localhost path (relative)
+        constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path
 
     # Map of punctuation to be removed
     if os.path.exists(punctuation_filename):
@@ -449,35 +448,30 @@ def get_remove_punctuation_map(
         except FileExistsError:
             pass
         pickle.dump(
-            remove_punctuation_map,
-            open(punctuation_filename, 'wb'))  # Cache
+            remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
         text = scrub_select_apos(text)
-
-        # apos (UTF-8: 39) is deleted from the remove_punctuation_map
-        del remove_punctuation_map[39]
+        del remove_punctuation_map[39]    # No further apos will be scrubbed
 
     # If Remove All Punctuation and Keep Hyphens are ticked
     if hyphen:
         text = consolidate_hyphens(text)
 
-        # now that all those hyphens are the ascii minus, delete it from the
+        # Now that all those hyphens are the ascii minus, delete it from the
         # map so no hyphens will be scrubbed from the text
         del remove_punctuation_map[45]
 
     # If Remove All Punctuation and Keep Ampersands are ticked
     if amper:
         text = consolidate_ampers(text)
-
-        # Delete chosen ampersand from remove_punctuation_map
-        del remove_punctuation_map[38]
+        del remove_punctuation_map[38]    # Delete chosen amper from map
 
     if previewing:
         del remove_punctuation_map[8230]    # ord(…)
 
-    # this function has the side-effect of altering the text, thus the
+    # This function has the side-effect of altering the text, thus the
     # updated text must be returned
     return text, remove_punctuation_map
 
