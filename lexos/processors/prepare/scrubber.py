@@ -340,6 +340,18 @@ def get_all_punctuation_map() -> Dict[int, type(None)]:
     return punctuation_map
 
 
+def consolidate_apos():
+    pass
+
+
+def consolidate_hyphens():
+    pass
+
+
+def consolidate_ampers():
+    pass
+
+
 def get_remove_punctuation_map(
         text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
         ) -> (str, Dict[int, type(None)]):
@@ -410,9 +422,6 @@ def get_remove_punctuation_map(
         # apos (UTF-8: 39) is deleted from the remove_punctuation_map
         del remove_punctuation_map[39]
 
-    if previewing:
-        del remove_punctuation_map[8230]    # ord(…)
-
     # If Remove All Punctuation and Keep Hyphens are ticked
     if hyphen:
 
@@ -449,6 +458,9 @@ def get_remove_punctuation_map(
 
         # Delete chosen ampersand from remove_punctuation_map
         del remove_punctuation_map[38]
+
+    if previewing:
+        del remove_punctuation_map[8230]    # ord(…)
 
     # this function has the side-effect of altering the text, thus the
     # updated text must be returned
