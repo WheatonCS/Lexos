@@ -778,20 +778,22 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
 
     file_strings = {}
     for index, key in enumerate(sorted(opt_uploads)):
-        if opt_uploads[key].filename != '':
+        filename = opt_uploads[key].filename
+        if filename:
             file_content = opt_uploads[key].read()
-            if isinstance(file_content, bytes):
+            content_is_bytes = isinstance(file_content, bytes)
+            if content_is_bytes:
                 file_strings[index] = general_functions.decode_bytes(
                     raw_bytes=file_content)
             else:
                 file_strings[index] = file_content
             opt_uploads[key].seek(0)
         else:
-            file_strings[index] = ""
             if key.strip('[]') in cache_options:
                 file_strings[index] = load_cached_file_string(
                     cache_folder, cache_filenames[index])
             else:
+                file_strings[index] = ""
                 session['scrubbingoptions']['optuploadnames'][key] = ''
 
     # Create an array of option strings:
