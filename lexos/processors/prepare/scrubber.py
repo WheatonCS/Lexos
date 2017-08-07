@@ -257,48 +257,32 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
 
     # in GUI:  Remove Tag Only
     if action == "remove-tag":
-
         # searching for variants this specific tag:  <tag> ...
         pattern = re.compile(
-            '<(?:' +
-            tag +
-            '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
-            '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' +
-            tag +
-            '\s*/?)>',
-            re.MULTILINE | re.DOTALL | re.UNICODE)
+            '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
+            '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
+            '\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
 
         # substitute all matching patterns with one space
         processed_text = re.sub(pattern, " ", orig_text)
 
     # in GUI:  Remove Element and All Its Contents
     elif action == "remove-element":
-        # <[whitespaces] TAG [SPACE attributes]>contents
-        # </[whitespaces]TAG>
+        # <[whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
         # as applied across newlines, (re.MULTILINE), on re.UNICODE,
         # and .* includes newlines (re.DOTALL)
         pattern = re.compile(
-            "<\s*" +
-            re.escape(tag) +
-            "( .+?>|>).+?</\s*" +
-            re.escape(tag) +
-            ">",
-            re.MULTILINE | re.DOTALL | re.UNICODE)
+            "<\s*" + re.escape(tag) + "( .+?>|>).+?</\s*" + re.escape(tag) +
+            ">", re.MULTILINE | re.DOTALL | re.UNICODE)
 
-        # substitute all matching patterns with one space
         processed_text = re.sub(pattern, " ", orig_text)
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
     elif action == "replace-element":
         pattern = re.compile(
-            "<\s*" +
-            re.escape(tag) +
-            ".*?>.+?<\/\s*" +
-            re.escape(tag) +
-            ".*?>",
+            "<\s*" + re.escape(tag) + ".*?>.+?</\s*" + re.escape(tag) + ".*?>",
             re.MULTILINE | re.DOTALL | re.UNICODE)
 
-        # substitute all matching patterns with one space
         processed_text = re.sub(pattern, attribute, orig_text)
 
     else:
