@@ -656,6 +656,12 @@ class TestHandleGutenberg:
             "This text is copyright Joe Schmoe.\n\nDone."
 
 
+class TestGetDecodedFile:
+
+    def test_get_decoded_file(self):
+        pass
+
+
 # prepare_additional_options
 
 # scrub
