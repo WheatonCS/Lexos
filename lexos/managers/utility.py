@@ -1330,19 +1330,18 @@ def generate_z_test_top_word(file_manager: FileManager):
 
     # test for all
     if test_by_class == 'allToPara':
-        analysis_result = analyze_all_to_para(count_matrix=count_matrix,
-                                              words=words)
-        # convert to human readable form
-        human_result = []
-        for index, label in enumerate(labels):
-            header = 'Document "' + label + '" compared to the whole corpus'
-            human_result.append([header, analysis_result[index]])
+        human_result = analyze_all_to_para(count_matrix=count_matrix,
+                                              words=words,
+                                              labels=labels)
 
     # test by class
     elif test_by_class == 'classToPara':
         # create division map
         division_map = file_manager.get_class_division_map()
         class_labels = division_map.index.values
+        # initialize class labels
+        if "" in class_labels:
+            class_labels[np.where(class_labels == "")] = "untitled"
 
         # check if more than one class exists
         if division_map.shape[0] == 1:
@@ -1373,6 +1372,9 @@ def generate_z_test_top_word(file_manager: FileManager):
         # create division map
         division_map = file_manager.get_class_division_map()
         class_labels = division_map.index.values
+        # initialize class labels
+        if "" in class_labels:
+            class_labels[np.where(class_labels == "")] = "untitled"
 
         # check if more than one class exists
         if division_map.shape[0] == 1:
@@ -1381,20 +1383,9 @@ def generate_z_test_top_word(file_manager: FileManager):
         # divides into group
         group_values, name_map = group_division(dtm_data, division_map.values)
         # test
-        analysis_result = analyze_group_to_group(group_values=group_values,
-                                                 words=words)
-        # convert to human readable form
-        human_result = []
-        for key in list(analysis_result.keys()):
-            base_class_name = class_labels[key[0]]
-            comp_class_name = class_labels[key[1]]
-            if comp_class_name == '':
-                header = 'Class "' + base_class_name + \
-                         '" compared to Class: untitled'
-            else:
-                header = 'Class "' + base_class_name + \
-                         '" compared to Class: "' + comp_class_name + '"'
-            human_result.append([header, analysis_result[key]])
+        human_result = analyze_group_to_group(group_values=group_values,
+                                              words=words,
+                                              class_labels=class_labels)
 
     else:
         raise ValueError(
