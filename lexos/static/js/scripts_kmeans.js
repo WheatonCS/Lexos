@@ -1,17 +1,17 @@
 $(function () {
-	// Show the silhouette score results based whether the results are shown
+  // Show the silhouette score results based whether the results are shown
   if ($('#kmeansresults').length) {
     $('#silhouetteResults').show()
   } else {
     $('#silhouetteResults').hide()
   }
-  function doAjax (action) {
+  function doAjax(action) {
     $.ajax({
       'complete': function (response) {
         rand = Math.round(Math.random() * 100) + 1
         $('#plotlyFrame').attr('src', $('#plotlyFrame').attr('src') + '?' + rand)
         $('#plotlyFrame').hide()
-            // Handle labels separately (eventual solution to the Unicode problem)
+        // Handle labels separately (eventual solution to the Unicode problem)
         $.each(response['responseJSON']['labels'], function (index, label) {
           lb.push(label)
         })
@@ -23,9 +23,9 @@ $(function () {
         $('.PCAImage').html(bdiv)
       }
     }// end ajax
-	)
+    )
   }
-	// Hide unnecessary divs for DTM
+  // Hide unnecessary divs for DTM
   var newLabelsLocation = $('#normalize-options').parent()
   var newNormalizeLocation = $('#temp-label-div').parent()
   var tempNormalize = $('#normalize-options').html()
@@ -46,38 +46,38 @@ $(function () {
     $(this).next().collapse('toggle')
   })
 
-	// $("#normalize-options").css({"visibility":"hidden"});
+  // $("#normalize-options").css({"visibility":"hidden"});
 
   $('#getkmeans').click(function (e) {
-		// Display the processing icon
-    $('#status-analyze').css({'visibility': 'visible', 'z-index': '400000'})
+    // Display the processing icon
+    $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
 
-		// Get variable values from the DOM
+    // Get variable values from the DOM
     var activeFiles = $('#num_active_files').val()
     var nclusters = $('#nclusters').val()
     var max_iter = $('#max_iter').val()
-    var n_init 	  = $('#n_init').val()
-    var tol 	  = $('#tolerance').val()
+    var n_init = $('#n_init').val()
+    var tol = $('#tolerance').val()
 
-		// Error messages
+    // Error messages
     var err1 = '<p>K-means requires at least 2 active documents.</p>'
     var err2 = '<p>The number of clusters (K value) must not be larger than the number of active files!</p>'
     var err3 = '<p>Invalid input. Make sure the input is an integer.</p>'
     var err4 = '<p>Invalid input. The relative tolerance must be a decimal.</p>'
 
-		// Less than 2 active documents
+    // Less than 2 active documents
     if (activeFiles < 2) {
       e.preventDefault()
       $('#error-modal .modal-body').html(err1)
       $('#error-modal').modal()
     }
-		// K is larger than the number of active documents
+    // K is larger than the number of active documents
     else if (nclusters > totalFileNumber) {
       e.preventDefault()
       $('#error-modal .modal-body').html(err2)
       $('#error-modal').modal()
     }
-		// Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
+    // Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
     else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)) {
       e.preventDefault()
       $('#error-modal .modal-body').html(err3)
@@ -91,14 +91,14 @@ $(function () {
       $('#error-modal .modal-body').html(err4)
       $('#error-modal').modal()
     } else {
-			// $("form").submit();
+      // $("form").submit();
     }
     $('#error-modal').on('hidden.bs.modal', function () {
       $('#status-analyze').fadeOut()
     })
   })
 
-  function createDictionary () {
+  function createDictionary() {
     var ChunkSetDict = new Array()
 
     for (key = 0; key < KValue; key++) {
@@ -112,34 +112,34 @@ $(function () {
     return ChunkSetDict
   };// end createDictionary
 
-  function createTable (ChunkSetDict) {
+  function createTable(ChunkSetDict) {
     if ($('#kmeansresultscheck').text() == 'True') {
       $('#kmeansresults').removeClass('hidden')
       $('#kmeansresultscheck').text('')
 
-			// for each different cluster
+      // for each different cluster
       var maxCluster = ChunkSetDict.length
       var j = 1
       for (var i = 0; i < maxCluster; i++) {
         var listOfFilesInThisCluster = ChunkSetDict[i]
-				// make rows
+        // make rows
         for (nextFile = 0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
           var row = $('<tr id="text' + j + '-toggle"></tr>')
-					 .css('backgroundColor', colorChart[i])
-					 .css('opacity', 1.0)
-						.attr('class', listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
-					 .appendTo('#basicTable tbody')
+            .css('backgroundColor', colorChart[i])
+            .css('opacity', 1.0)
+            .attr('class', listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
+            .appendTo('#basicTable tbody')
           $('<td style="text-align:center;"/>').text(i).appendTo(row)
           $('<td style="text-align:left;"/>')
-					.text(listOfFilesInThisCluster[nextFile])
-					.appendTo(row)
+            .text(listOfFilesInThisCluster[nextFile])
+            .appendTo(row)
           j += 1
         }// end for nextFile
       }// end for each row
     } // end if
   }// end createTable()
 
-	// The if clause prevents functions from running on initial page load
+  // The if clause prevents functions from running on initial page load
   if (dataset.length > 0) {
     ChunkSetDict = createDictionary()
     createTable(ChunkSetDict)
@@ -150,23 +150,23 @@ $(function () {
     'placement': 'right'
   })
 
-	// Handle table mouseovers for Voronoi points
+  // Handle table mouseovers for Voronoi points
   $('#basicTable tbody tr')
-		.mouseenter(function () {
-  $(this).css('opacity', '0.6')
-  id = $(this).attr('class')
-  point = '.P' + id
-  text = '.T' + id
-  $(point).appendTo('#voronoi')
-  $(text).appendTo('#voronoi')
-  $(point).css('fill', 'yellow')
-  $(point).tooltip('show')
-	  	})
-		.mouseleave(function () {
-  $(this).css('opacity', '1.0')
-  id = $(this).attr('class')
-  point = '.P' + id
-  $(point).css('fill', 'red')
-  $(point).tooltip('hide')
-	  	})
+    .mouseenter(function () {
+      $(this).css('opacity', '0.6')
+      id = $(this).attr('class')
+      point = '.P' + id
+      text = '.T' + id
+      $(point).appendTo('#voronoi')
+      $(text).appendTo('#voronoi')
+      $(point).css('fill', 'yellow')
+      $(point).tooltip('show')
+    })
+    .mouseleave(function () {
+      $(this).css('opacity', '1.0')
+      id = $(this).attr('class')
+      point = '.P' + id
+      $(point).css('fill', 'red')
+      $(point).tooltip('hide')
+    })
 })
