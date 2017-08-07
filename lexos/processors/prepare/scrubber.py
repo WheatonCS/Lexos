@@ -44,15 +44,15 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     mode_path = os.path.join(cur_file_dir, constants.RESOURCE_DIR, filename)
 
     with open(mode_path, encoding='utf-8') as input_file:
-
-        # put the first two columns of the file into a dictionary
+        columns = {}
         for line in input_file:
             pieces = line.split('\t')
-            value = pieces[0]
-            key = pieces[1].rstrip()
 
-            if key[-1:] == ';':
-                conversion_dict[key] = value
+            # put the first two columns of the file into a dictionary
+            columns[pieces[1].rstrip()] = pieces[0]
+            # keep only the pairs with a valid entity name
+            conversion_dict = {key: columns[key] for key in columns
+                               if key[-1:] == ";"}
 
     return conversion_dict
 
@@ -790,7 +790,7 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         option text fields and files.
     """
 
-    file_strings = []
+    file_strings = {}
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
             file_content = opt_uploads[key].read()
