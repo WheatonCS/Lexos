@@ -273,7 +273,7 @@ class TestCallReplacementHandler:
             cache_file_names=self.cache_filenames, cache_number=2) == \
             replacement_handler(
             text=self.text_string, replacer_string=self.special_string,
-                is_lemma=False)
+            is_lemma=False)
         assert call_replacement_handler(
             text=self.text_string, replacer_string=self.consol_string,
             is_lemma=False, manual_replacer_string="",
@@ -287,7 +287,7 @@ class TestCallReplacementHandler:
             cache_file_names=self.cache_filenames, cache_number=0) == \
             replacement_handler(
             text=self.text_string, replacer_string=self.consol_string,
-                is_lemma=False)
+            is_lemma=False)
         assert call_replacement_handler(
             text=self.text_string, replacer_string=self.lemma_string,
             is_lemma=True, manual_replacer_string="",
@@ -301,7 +301,7 @@ class TestCallReplacementHandler:
             cache_file_names=self.cache_filenames, cache_number=1) == \
             replacement_handler(
             text=self.text_string, replacer_string=self.lemma_string,
-                is_lemma=True)
+            is_lemma=True)
 
     def test_call_replacement_handler_with_manual_replacer(self):
         assert call_replacement_handler(
@@ -477,34 +477,34 @@ class TestGetAllPunctuationMap:
 class TestScrubSelectApos:
     def test_scrub_select_apos(self):
         assert scrub_select_apos(
-            "Tes't test' ' 'test tes''t test'' '' ''test") == \
+            text="Tes't test' ' 'test tes''t test'' '' ''test") == \
             "Tes't test  test test test  test"
-        assert scrub_select_apos("Test test") == "Test test"
-        assert scrub_select_apos("' ") == " "
-        assert scrub_select_apos("'") == "'"
-        assert scrub_select_apos("") == ""
+        assert scrub_select_apos(text="Test test") == "Test test"
+        assert scrub_select_apos(text="' ") == " "
+        assert scrub_select_apos(text="'") == "'"
+        assert scrub_select_apos(text="") == ""
 
 
 class TestConsolidateHyphens:
     def test_consolidate_hyphens(self):
         assert consolidate_hyphens(
-            "Tes\u058At test\u2011 \u2012 \u2014test tes\uFE58\uFF0Dt "
+            text="Tes\u058At test\u2011 \u2012 \u2014test tes\uFE58\uFF0Dt "
             "test\u1400\u2E3A \u2E40\u2E17 \u3030\uFE31test "
             "tes\uFE32\u2E3B\u2013t test\u05BE\uFE63\u30A0 \u301C-\u2E1A\u2010"
             " \u2015\u1806") == "Tes-t test- - -test tes--t test-- -- " \
                                 "--test tes---t test--- ---- --"
-        assert consolidate_hyphens("Test test") == "Test test"
-        assert consolidate_hyphens("") == ""
+        assert consolidate_hyphens(text="Test test") == "Test test"
+        assert consolidate_hyphens(text="") == ""
 
 
 class TestConsolidateAmpers:
     def test_consolidate_ampers(self):
         assert consolidate_ampers(
-            "Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
+            text="Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
             "test\U000E0026\u0026 \uFF06") == "Tes&t test& & &test tes&&t " \
                                               "test&& &"
-        assert consolidate_ampers("Test test") == "Test test"
-        assert consolidate_ampers("") == ""
+        assert consolidate_ampers(text="Test test") == "Test test"
+        assert consolidate_ampers(text="") == ""
 
 
 class TestGetRemovePunctuationMap:
@@ -602,17 +602,22 @@ class TestGetPunctuationString:
 class TestSplitInputWordString:
 
     def test_split_input_word_str_with_words(self):
-        assert split_input_word_string("\nThis\nstring\n\nhas\nnewlines\n\n") \
+        assert split_input_word_string(
+            input_string="\nThis\nstring\n\nhas\nnewlines\n\n") \
             == ["This", "string", "has", "newlines"]
-        assert split_input_word_string(",This,string,,has,commas,,") == \
+        assert split_input_word_string(
+            input_string=",This,string,,has,commas,,") == \
             ["This", "string", "has", "commas"]
-        assert split_input_word_string(".This.string..has.periods..") == \
+        assert split_input_word_string(
+            input_string=".This.string..has.periods..") == \
             ["This", "string", "has", "periods"]
-        assert split_input_word_string(" This string  has spaces  ") == \
+        assert split_input_word_string(
+            input_string=" This string  has spaces  ") == \
             ["This", "string", "has", "spaces"]
         assert split_input_word_string(
-            "\n., This,.string\n,, has.\n.some, of,. \neverything \n..") == \
-            ["This", "string", "has", "some", "of", "everything"]
+            input_string="\n., This,.string\n,, has.\n.some, of,. "
+                         "\neverything \n..") == ["This", "string", "has",
+                                                  "some", "of", "everything"]
 
     def test_split_input_word_str_no_words(self):
         assert split_input_word_string("") == []
@@ -762,26 +767,28 @@ class TestGetRemoveWhitespaceMap:
 class TestHandleGutenberg:
 
     def test_handle_gutenberg_match(self):
-        assert handle_gutenberg(guten.TEXT_FRONT_PLATE) == \
+        assert handle_gutenberg(text=guten.TEXT_FRONT_PLATE) == \
             guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
-        assert handle_gutenberg(guten.TEXT_FRONT_COPY) == guten.TEXT_NEITHER
-        assert handle_gutenberg(guten.TEXT_BACK) == guten.TEXT_NEITHER
-        assert handle_gutenberg(guten.TEXT_BOTH_PLATE) == \
+        assert handle_gutenberg(text=guten.TEXT_FRONT_COPY) == \
+            guten.TEXT_NEITHER
+        assert handle_gutenberg(text=guten.TEXT_BACK) == guten.TEXT_NEITHER
+        assert handle_gutenberg(text=guten.TEXT_BOTH_PLATE) == \
             guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
-        assert handle_gutenberg(guten.TEXT_BOTH_COPY) == guten.TEXT_NEITHER
+        assert handle_gutenberg(text=guten.TEXT_BOTH_COPY) == \
+            guten.TEXT_NEITHER
         assert handle_gutenberg(
-            "This text is Copyright Joe Schmoe.\n\n\nDone.") == "Done."
+            text="This text is Copyright Joe Schmoe.\n\n\nDone.") == "Done."
         assert handle_gutenberg(
-            "This text is copyright Joe Schmoe.\n\n\nDone.") == "Done."
+            text="This text is copyright Joe Schmoe.\n\n\nDone.") == "Done."
 
     def test_handle_gutenberg_no_match(self):
-        assert handle_gutenberg(guten.TEXT_NEITHER) == guten.TEXT_NEITHER
-        assert handle_gutenberg("") == ""
+        assert handle_gutenberg(text=guten.TEXT_NEITHER) == guten.TEXT_NEITHER
+        assert handle_gutenberg(text="") == ""
         assert handle_gutenberg(
-            "This text is copyright\nJoe Schmoe.\n\n\nDone.") == \
+            text="This text is copyright\nJoe Schmoe.\n\n\nDone.") == \
             "This text is copyright\nJoe Schmoe.\n\n\nDone."
         assert handle_gutenberg(
-            "This text is copyright Joe Schmoe.\n\nDone.") == \
+            text="This text is copyright Joe Schmoe.\n\nDone.") == \
             "This text is copyright Joe Schmoe.\n\nDone."
 
 
@@ -791,9 +798,9 @@ class TestGetDecodedFile:
     utf_16 = string.encode("UTF-16")
 
     def test_get_decoded_file(self):
-        assert get_decoded_file(self.string) == self.string
-        assert get_decoded_file(self.utf_8) == self.string
-        assert get_decoded_file(self.utf_16) == self.string
+        assert get_decoded_file(file_content=self.string) == self.string
+        assert get_decoded_file(file_content=self.utf_8) == self.string
+        assert get_decoded_file(file_content=self.utf_16) == self.string
 
 
 # prepare_additional_options
