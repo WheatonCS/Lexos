@@ -124,10 +124,10 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
     else:
         opts = request.form
 
-    active_files = len(labels) - 1
+    active_files_num = len(labels) - 1
 
     # since number of labels should be more than 2 and less than n_samples - 1
-    if active_files > 2:
+    if active_files_num > 2:
         y = metrics.pairwise.pairwise_distances(
             dendro_matrix, metric=distance_metric)
         z = hierarchy.linkage(y, method=linkage_method)
@@ -139,27 +139,17 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
 
         # 'inconsistent' range
         r = hierarchy.inconsistent(z, 2)
-        inconsistent_max = r[-1][-1]
-        slen = len('%.*f' % (2, inconsistent_max))
-        inconsistent_max = float(str(inconsistent_max)[:slen])
+        inconsistent_max = np.round(r[-1][-1], 2)
 
         # 'distance' range
         d = hierarchy.cophenet(z)
-        distance_max = d.max()
-        slen = len('%.*f' % (2, distance_max))
-        distance_max = float(str(distance_max)[:slen])
-        distance_min = d.min() + 0.01
-        slen = len('%.*f' % (2, distance_min))
-        distance_min = float(str(distance_min)[:slen])
+        distance_max = np.round(np.amax(d), 2)
+        distance_min = np.round(np.amin(d) + 0.01, 2)
 
         # 'monocrit' range
         mr = hierarchy.maxRstat(z, r, 0)
-        monocrit_max = mr.max()
-        slen = len('%.*f' % (2, monocrit_max))
-        monocrit_max = float(str(monocrit_max)[:slen])
-        monocrit_min = mr.min() + 0.01
-        slen = len('%.*f' % (2, monocrit_min))
-        monocrit_min = float(str(monocrit_min)[:slen])
+        monocrit_max = np.round(np.amax(mr), 2)
+        monocrit_min = np.round(np.amin(mr) + 0.01, 2)
 
         threshold = opts['threshold']
         if threshold == '':
