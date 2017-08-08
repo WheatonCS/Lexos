@@ -145,9 +145,9 @@ class TestDecodeBytes:
         assert decode_bytes('Zемфира'.encode()) == 'Zемфира'
 
     def test_utf16_be_decoding(self):
-        input_string = "test".encode("utf-16-be")
+        input_string = 'test'.encode('utf-16-be')
         assert decode_bytes(input_string) == input_string.decode()
 
     def test_utf16_le_decoding(self):
-        input_string = "test".encode("utf-16-le")
+        input_string = 'test'.encode('utf-16-le')
         assert decode_bytes(input_string) == input_string.decode()
