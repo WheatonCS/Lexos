@@ -143,8 +143,8 @@ class TestDecodeBytes:
 
     def test_utf16_be_decoding(self):
         input_string = 'test'.encode('utf-16-be')
-        assert decode_bytes(input_string) == input_string.decode()
+        assert decode_bytes(input_string) == 'test'
 
     def test_utf16_le_decoding(self):
         input_string = 'test'.encode('utf-16-le')
-        assert decode_bytes(input_string) == input_string.decode()
+        assert decode_bytes(input_string) == 'test'
