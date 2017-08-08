@@ -197,15 +197,15 @@ def replacement_handler(
 
 
 def call_replacement_handler(
-        text: str, replacer_string: str, is_lemma: bool,
+        text: str, file_replacer_string: str, is_lemma: bool,
         manual_replacer_string: str, cache_folder: str,
         cache_file_names: List[str], cache_number: int) -> str:
     """Performs pre-processing before calling replacement_handler().
 
     :param text: A unicode string representing the whole text that is being
         manipulated.
-    :param replacer_string: A string representing what to the user wants to
-        replace and what the user wants to replace it with, taken from the
+    :param file_replacer_string: A string representing what to the user wants
+        to replace and what the user wants to replace it with, taken from the
         uploaded file (and not the text field).
     :param is_lemma: A boolean indicating whether or not the replacement line
         is for a lemma.
@@ -219,20 +219,20 @@ def call_replacement_handler(
     """
 
     replacement_line_string = ''
-    if replacer_string and not manual_replacer_string:
+    if file_replacer_string and not manual_replacer_string:
         # Consolidations: cache_number = 0
         # Lemmas:         cache_number = 1
         # Special chars:  cache_number = 2
         cache_filestring(
-            file_string=replacer_string, cache_folder=cache_folder,
+            file_string=file_replacer_string, cache_folder=cache_folder,
             filename=cache_file_names[cache_number])
-        replacement_line_string = replacer_string
-    elif not replacer_string and manual_replacer_string:
+        replacement_line_string = file_replacer_string
+    elif not file_replacer_string and manual_replacer_string:
         replacement_line_string = manual_replacer_string
-    elif replacer_string and manual_replacer_string:
+    elif file_replacer_string and manual_replacer_string:
         replacement_line_string = '\n'.join(
-            [replacer_string, manual_replacer_string])
-    else:        # not replacer_string and not manual_replacer_string
+            [file_replacer_string, manual_replacer_string])
+    else:        # not file_replacer_string and not manual_replacer_string
         text = handle_special_characters(text)
 
     if replacement_line_string != '':
@@ -954,7 +954,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 2. special characters -----------------------------------------------
     text = call_replacement_handler(
-        text=text, replacer_string=sc_file_string, is_lemma=False,
+        text=text, file_replacer_string=sc_file_string, is_lemma=False,
         manual_replacer_string=sc_manual, cache_folder=cache_folder,
         cache_file_names=cache_filenames, cache_number=2)
 
@@ -1011,7 +1011,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """
 
         return call_replacement_handler(
-            text=orig_text, replacer_string=cons_file_string, is_lemma=False,
+            text=orig_text, file_replacer_string=cons_file_string, is_lemma=False,
             manual_replacer_string=cons_manual, cache_folder=cache_folder,
             cache_file_names=cache_filenames, cache_number=0)
 
@@ -1025,7 +1025,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """
 
         return call_replacement_handler(
-            text=orig_text, replacer_string=lem_file_string, is_lemma=True,
+            text=orig_text, file_replacer_string=lem_file_string, is_lemma=True,
             manual_replacer_string=lem_manual, cache_folder=cache_folder,
             cache_file_names=cache_filenames, cache_number=1)
 
