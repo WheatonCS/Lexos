@@ -12,11 +12,11 @@ from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 class TestGetSpecialCharDictFromFile:
 
     def test_get_special_char_dict_from_file(self):
-        assert get_special_char_dict_from_file("MADEUP-6") == {}
-        assert get_special_char_dict_from_file("MUFI-3") == chars.MUFI3
-        assert get_special_char_dict_from_file("MUFI-4") == chars.MUFI4
+        assert get_special_char_dict_from_file(mode="MADEUP-6") == {}
+        assert get_special_char_dict_from_file(mode="MUFI-3") == chars.MUFI3
+        assert get_special_char_dict_from_file(mode="MUFI-4") == chars.MUFI4
         # This dictionary is made in handle_special_characters()
-        assert get_special_char_dict_from_file("doe-sgml") == {}
+        assert get_special_char_dict_from_file(mode="doe-sgml") == {}
 
 
 # handle_special_characters
@@ -26,7 +26,7 @@ class TestMakeReplacer:
     not_special_string = "This string contains no special chars?!\nWow."
 
     def test_make_replacer_doe_sgml(self):
-        r = make_replacer(chars.DOE_SGML)
+        r = make_replacer(replacements=chars.DOE_SGML)
         assert r(self.not_special_string) == self.not_special_string
         assert r(chars.DOE_SGML_KEYS) == chars.DOE_SGML_VALS
         assert r(
@@ -35,7 +35,7 @@ class TestMakeReplacer:
             "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
 
     def test_make_replacer_early_english_html(self):
-        r = make_replacer(chars.EE_HTML)
+        r = make_replacer(replacements=chars.EE_HTML)
         assert r(self.not_special_string) == self.not_special_string
         assert r(chars.EE_HTML_KEYS) == chars.EE_HTML_VALS
         assert r(
@@ -44,7 +44,7 @@ class TestMakeReplacer:
             "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
 
     def test_make_replacer_mufi_3(self):
-        r = make_replacer(chars.MUFI3)
+        r = make_replacer(replacements=chars.MUFI3)
         assert r(self.not_special_string) == self.not_special_string
         assert r(chars.MUFI3_KEYS) == chars.MUFI3_VALS
         assert r(
@@ -53,7 +53,7 @@ class TestMakeReplacer:
             "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
 
     def test_make_replacer_mufi_4(self):
-        r = make_replacer(chars.MUFI4)
+        r = make_replacer(replacements=chars.MUFI4)
         assert r(self.not_special_string) == self.not_special_string
         assert r(chars.MUFI4_KEYS) == chars.MUFI4_VALS
         assert r(
@@ -68,7 +68,8 @@ class TestMakeReplacer:
         #  menu on the front end.
         # That means these test cases cannot occur under normal usage, but
         # the fact make_replacer() still works is reassuring
-        r = make_replacer({'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'})
+        r = make_replacer(
+            replacements={'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'})
         assert r("ythklsv") == "ythklsv"
         assert r("aeiou") == "zqwpx"
         assert r("Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;") == \
@@ -79,31 +80,44 @@ class TestReplacementHandler:
     test_string = "Test string is testing"
 
     def test_not_lemma_normal(self):
-        assert replacement_handler(self.test_string, "s:f", False) == \
-            "Teft ftring if tefting"
-        assert replacement_handler(self.test_string, "s,f", False) == \
-            replacement_handler(self.test_string, "s:f", False)
-        assert replacement_handler(self.test_string, "i,e:a", False) \
-            == "Tast strang as tastang"
-        assert replacement_handler(self.test_string, "i,e,a", False) == \
-            replacement_handler(self.test_string, "i,e:a", False)
-        assert replacement_handler(self.test_string, "a:i,e", False) == \
-            replacement_handler(self.test_string, "i,e:a", False)
-        assert replacement_handler(self.test_string, "q:z", False) == \
-            self.test_string
-        assert replacement_handler(self.test_string, "t:l", False) == \
-            "Tesl slring is lesling"
-        assert replacement_handler(self.test_string, "t:t", False) == \
-            self.test_string
-        assert replacement_handler(self.test_string, " r : t ", False) == \
-            "Test stting is testing"
-        assert replacement_handler(self.test_string, "e:b \n i:o ", False) == \
-            "Tbst strong os tbstong"
-        assert replacement_handler(self.test_string, "n:t\nt:x", False) == \
-            "Tesx sxrixg is xesxixg"
         assert replacement_handler(
-            self.test_string, "T,e,s,t,r,i,n,g:p\np:q", False) == \
-            "qqqq qqqqqq qq qqqqqqq"
+            text=self.test_string, replacer_string="s:f", is_lemma=False) == \
+            "Teft ftring if tefting"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="s,f", is_lemma=False) == \
+            replacement_handler(self.test_string, "s:f", False)
+        assert replacement_handler(
+            text=self.test_string, replacer_string="i,e:a", is_lemma=False) \
+            == "Tast strang as tastang"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="i,e,a", is_lemma=False)\
+            == replacement_handler(
+                text=self.test_string, replacer_string="i,e:a", is_lemma=False)
+        assert replacement_handler(
+            text=self.test_string, replacer_string="a:i,e", is_lemma=False)\
+            == replacement_handler(
+                text=self.test_string, replacer_string="i,e:a", is_lemma=False)
+        assert replacement_handler(
+            text=self.test_string, replacer_string="q:z", is_lemma=False) == \
+            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string="t:l", is_lemma=False) == \
+            "Tesl slring is lesling"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="t:t", is_lemma=False) == \
+            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string=" r : t ", is_lemma=False)\
+            == "Test stting is testing"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="e:b \n i:o ",
+            is_lemma=False) == "Tbst strong os tbstong"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="n:t\nt:x", is_lemma=False)\
+            == "Tesx sxrixg is xesxixg"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:q",
+            is_lemma=False) == "qqqq qqqqqq qq qqqqqqq"
 
     def test_not_lemma_incorrect_replacer(self):
         assert replacement_handler(self.test_string, "g:", False) == \
