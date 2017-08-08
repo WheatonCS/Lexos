@@ -146,7 +146,7 @@ class TestDecodeBytes:
 
     def test_utf16_be_decoding(self):
         input_string = "test"
-        file_path = "/tmp/test_utf16_be_decoding.txt"
+        file_path = TMP_FOLDER + "/test_utf16_be_decoding.txt"
         with open(file_path, "w") as file:
             file.write(str(codecs.BOM_UTF16_BE))
             file.write(str(input_string.encode("utf-16-be")))
