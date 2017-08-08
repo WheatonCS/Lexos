@@ -2,6 +2,8 @@ import errno
 import os
 import re
 import shutil
+from zipfile import ZipFile
+
 import chardet
 import lexos.helpers.constants as constants
 
@@ -51,7 +53,7 @@ def generate_d3_object(word_counts: dict, object_label: str,
     return json_object
 
 
-def zip_dir(dir: str, ziph: object):
+def zip_dir(dir: str, ziph: ZipFile):
     """zip all the file in path into a zipfile type ziph
 
     :param dir: The directory that you want to zip
