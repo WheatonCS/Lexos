@@ -92,11 +92,11 @@ class TestReplacementHandler:
         assert replacement_handler(
             text=self.test_string, replacer_string="i,e,a", is_lemma=False)\
             == replacement_handler(
-                text=self.test_string, replacer_string="i,e:a", is_lemma=False)
+            text=self.test_string, replacer_string="i,e:a", is_lemma=False)
         assert replacement_handler(
             text=self.test_string, replacer_string="a:i,e", is_lemma=False)\
             == replacement_handler(
-                text=self.test_string, replacer_string="i,e:a", is_lemma=False)
+            text=self.test_string, replacer_string="i,e:a", is_lemma=False)
         assert replacement_handler(
             text=self.test_string, replacer_string="q:z", is_lemma=False) == \
             self.test_string
@@ -120,86 +120,124 @@ class TestReplacementHandler:
             is_lemma=False) == "qqqq qqqqqq qq qqqqqqq"
 
     def test_not_lemma_incorrect_replacer(self):
-        assert replacement_handler(self.test_string, "g:", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string="g:", is_lemma=False) == \
             "Test strin is testin"
-        assert replacement_handler(self.test_string, ":", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string=":", is_lemma=False) == \
             self.test_string
-        assert replacement_handler(self.test_string, ",", False) == \
-            replacement_handler(self.test_string, ":", False)
-        assert replacement_handler(self.test_string, "", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string=",", is_lemma=False) == \
+            replacement_handler(
+            text=self.test_string, replacer_string=":", is_lemma=False)
+        assert replacement_handler(
+            text=self.test_string, replacer_string="", is_lemma=False) == \
             self.test_string
-        assert replacement_handler(self.test_string, "k", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string="k", is_lemma=False) == \
             "kTkeksktk ksktkrkiknkgk kiksk ktkeksktkiknkgk"
-        assert replacement_handler(self.test_string, ":k", False) == \
-            replacement_handler(self.test_string, "k", False)
+        assert replacement_handler(
+            text=self.test_string, replacer_string=":k", is_lemma=False) == \
+            replacement_handler(
+            text=self.test_string, replacer_string="k", is_lemma=False)
         assert replacement_handler(self.test_string, "i", False) == \
             "iTieisiti isitiriiinigi iiisi itieisitiiinigi"
-        assert replacement_handler(self.test_string, " ", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string=" ", is_lemma=False) == \
             self.test_string
         assert replacement_handler(self.test_string, "ab", False) == \
             self.test_string
-        assert replacement_handler(self.test_string, "nv", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string="nv", is_lemma=False) == \
             "Test strinvg is testinvg"
         assert replacement_handler(self.test_string, "vn", False) == \
             self.test_string
         assert replacement_handler(
-            self.test_string, "T,e,s,t,r,i,n,g:p\np:", False) == "   "
-        assert replacement_handler(self.test_string, "t::w", False) == \
+            text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
+            is_lemma=False) == "   "
+        assert replacement_handler(
+            text=self.test_string, replacer_string="t::w", is_lemma=False) == \
             "Tesw swring is weswing"
-        assert replacement_handler(self.test_string, "t,,w", False) == \
+        assert replacement_handler(
+            text=self.test_string, replacer_string="t,,w", is_lemma=False) == \
             "wTwewswww wswwwrwiwnwgw wiwsw wwwewswwwiwnwgw"
-        assert replacement_handler(self.test_string, "s,t:u,v", False) == \
-            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string="s,t:u,v",
+            is_lemma=False) == self.test_string
 
     def test_not_lemma_spacing(self):
-        assert replacement_handler("", "", False) == ""
-        assert replacement_handler("", "a:b", False) == ""
-        assert replacement_handler(" test test ", "e:u", False) == \
+        assert replacement_handler(
+            text="", replacer_string="", is_lemma=False) == ""
+        assert replacement_handler(
+            text="", replacer_string="a:b", is_lemma=False) == ""
+        assert replacement_handler(
+            text=" test test ", replacer_string="e:u", is_lemma=False) == \
             " tust tust "
-        assert replacement_handler("\nt", "t,s", False) == "\ns"
-        assert replacement_handler("\nt", "a:b", False) == "\nt"
-        assert replacement_handler(" ", "r", False) == "r r"
+        assert replacement_handler(
+            text="\nt", replacer_string="t,s", is_lemma=False) == "\ns"
+        assert replacement_handler(
+            text="\nt", replacer_string="a:b", is_lemma=False) == "\nt"
+        assert replacement_handler(
+            text=" ", replacer_string="r", is_lemma=False) == "r r"
 
     def test_is_lemma_same(self):
-        assert replacement_handler(self.test_string, "string:thread", True) ==\
-            "Test thread is testing"
         assert replacement_handler(
-            "Test test testing test test", "test:work", True) == \
-            "Test work testing work work"
+            text=self.test_string, replacer_string="string:thread",
+            is_lemma=True) == "Test thread is testing"
         assert replacement_handler(
-            self.test_string, "Test,testing:working", True) == \
-            "working string is working"
+            text="Test test testing test test", replacer_string="test:work",
+            is_lemma=True) == "Test work testing work work"
         assert replacement_handler(
-            self.test_string, "working:Test,testing", True) == \
-            replacement_handler(self.test_string, "Test,testing:working", True)
-        assert replacement_handler("aaaaaawordaaaaaa", "word", True) == \
-            "aaaaaawordaaaaaa"
+            text=self.test_string, replacer_string="Test,testing:working",
+            is_lemma=True) == "working string is working"
         assert replacement_handler(
-            self.test_string, "Test,is,testing:string\nstring:foo", True) == \
-            "foo foo foo foo"
+            text=self.test_string, replacer_string="working:Test,testing",
+            is_lemma=True) == replacement_handler(
+            text=self.test_string, replacer_string="Test,testing:working",
+            is_lemma=True)
         assert replacement_handler(
-            "lotsssssss\nof\ntexxxxxxxt", "of:more", True) == \
-            "lotsssssss\nmore\ntexxxxxxxt"
-        assert replacement_handler(" test ", "test:text", True) == " text "
+            text="aaaaaawordaaaaaa", replacer_string="word", is_lemma=True) \
+            == "aaaaaawordaaaaaa"
+        assert replacement_handler(
+            text=self.test_string,
+            replacer_string="Test,is,testing:string\nstring:foo",
+            is_lemma=True) == "foo foo foo foo"
+        assert replacement_handler(
+            text="lotsssssss\nof\ntexxxxxxxt", replacer_string="of:more",
+            is_lemma=True) == "lotsssssss\nmore\ntexxxxxxxt"
+        assert replacement_handler(
+            text=" test ", replacer_string="test:text", is_lemma=True) == \
+            " text "
 
     def test_is_lemma_incorrect_replacer(self):
         assert replacement_handler(
-            self.test_string, "Test,testing,working", True) == \
-            replacement_handler(self.test_string, "Test,testing:working", True)
-        assert replacement_handler(self.test_string, "is:", True) == \
-            "Test string  testing"
-        assert replacement_handler(self.test_string, "word", True) == \
-            self.test_string
-        assert replacement_handler(self.test_string, ":word", True) == \
-            "wordTestword wordstringword wordisword wordtestingword"
-        assert replacement_handler(self.test_string, "is::word", True) == \
-            replacement_handler(self.test_string, "is:word", True)
-        assert replacement_handler(self.test_string, ":", True) == \
-            self.test_string
-        assert replacement_handler(self.test_string, ",", True) == \
-            replacement_handler(self.test_string, ":", True)
+            text=self.test_string, replacer_string="Test,testing,working",
+            is_lemma=True) == replacement_handler(
+            text=self.test_string, replacer_string="Test,testing:working",
+            is_lemma=True)
         assert replacement_handler(
-            self.test_string, "is,string:how,what", True) == self.test_string
+            text=self.test_string, replacer_string="is:", is_lemma=True) == \
+            "Test string  testing"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="word", is_lemma=True) == \
+            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string=":word", is_lemma=True) == \
+            "wordTestword wordstringword wordisword wordtestingword"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="is::word", is_lemma=True)\
+            == replacement_handler(
+            text=self.test_string, replacer_string="is:word", is_lemma=True)
+        assert replacement_handler(
+            text=self.test_string, replacer_string=":", is_lemma=True) == \
+            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string=",", is_lemma=True) == \
+            replacement_handler(
+                text=self.test_string, replacer_string=":", is_lemma=True)
+        assert replacement_handler(
+            text=self.test_string, replacer_string="is,string:how,what",
+            is_lemma=True) == self.test_string
 
 
 class TestCallReplacementHandler:
