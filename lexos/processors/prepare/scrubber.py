@@ -921,10 +921,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 1. lower ------------------------------------------------------------
     if lower:  # user want to ignore case
         def to_lower_function(orig_text):
-            """
+            """Removes capital letters from a text.
 
-            :param orig_text:
-            :return:
+            :param orig_text: A mixed-case string.
+            :return: The text with all caps converted to lowercase.
             """
 
             return orig_text.lower()
@@ -944,10 +944,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     else:
         def to_lower_function(orig_text):
-            """
+            """Returns the string it is passed.
 
-            :param orig_text:
-            :return:
+            :param orig_text: A text string.
+            :return: orig_text, unchanged.
             """
 
             return orig_text
@@ -993,20 +993,21 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # create a remove function
     def total_removal_function(orig_text):
-        """
+        """Removes the characters specified by total_removal_map.
 
-        :param orig_text:
-        :return:
+        :param orig_text: A text string.
+        :return: The text string, with removal characters deleted.
         """
 
         return orig_text.translate(total_removal_map)
 
     # -- 7. consolidations ---------------------------------------------------
     def consolidation_function(orig_text):
-        """
+        """Replaces characters according to user input strings.
 
-        :param orig_text:
-        :return:
+        :param orig_text: A text string.
+        :return: The text with characters swapped according to cons_file_string
+            and cons_manual.
         """
 
         return call_replacement_handler(
@@ -1016,12 +1017,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text):
+        """Replaces words according to user input strings.
 
+        :param orig_text: A text string.
+        :return: The text with words swapped according to lem_file_string and
+            lem_manual.
         """
 
-        :param orig_text:
-        :return:
-        """
         return call_replacement_handler(
             text=orig_text, replacer_string=lem_file_string, is_lemma=True,
             manual_replacer_string=lem_manual, cache_folder=cache_folder,
@@ -1029,10 +1031,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text):
-        """
+        """Deletes certain words according to user input strings.
 
-        :param orig_text:
-        :return:
+        :param orig_text: A text string.
+        :return: If "stop" was chosen, returns the text with all words in
+            sw_kw_file_string and sw_kw_manual deleted. If "keep" was chosen,
+            returns the text with all words not in sw_kw_file_string and
+            sw_kw_manual deleted.
         """
 
         file_and_manual = handle_stop_keep_words_string(
