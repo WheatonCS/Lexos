@@ -124,7 +124,7 @@ def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
 
         return replacements[mo.group()]
 
-    def replace(s: str) -> str:
+    def replacer(s: str) -> str:
         """Makes function to return text replaced with replacements dictionary.
 
         :param s: A string containing the file contents.
@@ -133,7 +133,7 @@ def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
 
         return locator.sub(_do_replace, s)
 
-    return replace
+    return replacer
 
 
 def replacement_handler(
