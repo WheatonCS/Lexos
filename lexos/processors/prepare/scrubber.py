@@ -825,7 +825,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
           white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
           opt_uploads: Dict[str, FileStorage], cache_options: List[str],
-          cache_folder: str, previewing: bool = False):
+          cache_folder: str, previewing: bool = False) -> str:
     """Scrubs the text according to the specifications chosen by the user.
 
     This function calls call_rlhandler, handle_tags(), remove_punctuation(),
@@ -921,6 +921,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 1. lower ------------------------------------------------------------
     if lower:  # user want to ignore case
         def to_lower_function(orig_text):
+            """
+
+            :param orig_text:
+            :return:
+            """
+
             return orig_text.lower()
 
         # since lower is ON, apply lowercase to other options
@@ -938,6 +944,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     else:
         def to_lower_function(orig_text):
+            """
+
+            :param orig_text:
+            :return:
+            """
+
             return orig_text
 
     # -- 2. special characters -----------------------------------------------
@@ -981,10 +993,21 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # create a remove function
     def total_removal_function(orig_text):
+        """
+
+        :param orig_text:
+        :return:
+        """
+
         return orig_text.translate(total_removal_map)
 
     # -- 7. consolidations ---------------------------------------------------
     def consolidation_function(orig_text):
+        """
+
+        :param orig_text:
+        :return:
+        """
 
         return call_replacement_handler(
             text=orig_text, replacer_string=cons_file_string, is_lemma=False,
@@ -994,6 +1017,11 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text):
 
+        """
+
+        :param orig_text:
+        :return:
+        """
         return call_replacement_handler(
             text=orig_text, replacer_string=lem_file_string, is_lemma=True,
             manual_replacer_string=lem_manual, cache_folder=cache_folder,
@@ -1001,6 +1029,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text):
+        """
+
+        :param orig_text:
+        :return:
+        """
+
         file_and_manual = handle_stop_keep_words_string(
             sw_kw_file_string, sw_kw_manual, cache_folder, cache_filenames)
 
