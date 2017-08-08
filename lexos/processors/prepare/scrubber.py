@@ -920,7 +920,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 1. lower ------------------------------------------------------------
     if lower:  # user want to ignore case
-        def to_lower_function(orig_text):
+        def to_lower_function(orig_text: str) -> str:
             """Removes capital letters from a text.
 
             :param orig_text: A mixed-case string.
@@ -943,7 +943,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         sw_kw_manual = sw_kw_manual.lower()
 
     else:
-        def to_lower_function(orig_text):
+        def to_lower_function(orig_text: str) -> str:
             """Returns the string it is passed.
 
             :param orig_text: A text string.
@@ -992,7 +992,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     total_removal_map.update(remove_whitespace_map)
 
     # create a remove function
-    def total_removal_function(orig_text):
+    def total_removal_function(orig_text: str) -> str:
         """Removes the characters specified by total_removal_map.
 
         :param orig_text: A text string.
@@ -1002,7 +1002,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         return orig_text.translate(total_removal_map)
 
     # -- 7. consolidations ---------------------------------------------------
-    def consolidation_function(orig_text):
+    def consolidation_function(orig_text: str) -> str:
         """Replaces characters according to user input strings.
 
         :param orig_text: A text string.
@@ -1016,7 +1016,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             cache_file_names=cache_filenames, cache_number=0)
 
     # -- 8. lemmatize --------------------------------------------------------
-    def lemmatize_function(orig_text):
+    def lemmatize_function(orig_text: str) -> str:
         """Replaces words according to user input strings.
 
         :param orig_text: A text string.
@@ -1030,7 +1030,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             cache_file_names=cache_filenames, cache_number=1)
 
     # -- 9. stop words/keep words --------------------------------------------
-    def stop_keep_words_function(orig_text):
+    def stop_keep_words_function(orig_text: str) -> str:
         """Deletes certain words according to user input strings.
 
         :param orig_text: A text string.
