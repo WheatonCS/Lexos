@@ -239,7 +239,7 @@ def decode_bytes(raw_bytes: bytes) -> str:
         decoded_str = __try_decode_bytes__(raw_bytes)
 
     except (UnicodeDecodeError, TypeError):
-        raise LexosException('chardet fail to detect encoding of your file,'
+        raise LexosException('chardet fail to detect encoding of your file, '
                              'please make sure your file is in utf-8 encoding')
 
     return decoded_str
