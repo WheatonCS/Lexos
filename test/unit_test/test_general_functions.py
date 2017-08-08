@@ -1,7 +1,6 @@
 from lexos.helpers.general_functions import get_encoding, make_preview_from, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
-from test.helpers.file_path import CHINESE_ENCODING_TEST_FILE
 
 
 class TestGeneralFunctions:
