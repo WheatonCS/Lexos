@@ -1,6 +1,7 @@
 from lexos.helpers.general_functions import get_encoding, make_preview_from, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
+from test.helpers.file_path import CHINESE_ENCODING_TEST_FILE
 
 
 class TestGeneralFunctions:
@@ -142,11 +143,3 @@ class TestDecodeBytes:
         input_str = 'сегодняшнее домашнее задание.' \
                     ' Настенные часы висят на стене. '
         assert decode_bytes(input_str.encode('windows-1251')) == input_str
-
-    def test_utf16_be_decoding(self):
-        input_string = 'test'.encode('utf-16-be')
-        assert decode_bytes(input_string) == 'test'
-
-    def test_utf16_le_decoding(self):
-        input_string = 'test'.encode('utf-16-le')
-        assert decode_bytes(input_string) == 'test'
