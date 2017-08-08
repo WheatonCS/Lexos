@@ -145,25 +145,9 @@ class TestDecodeBytes:
         assert decode_bytes('Zемфира'.encode()) == 'Zемфира'
 
     def test_utf16_be_decoding(self):
-        input_string = "test"
-        file_path = TMP_FOLDER + "/test_utf16_be_decoding.txt"
-        with open(file_path, "w") as file:
-            file.write(str(codecs.BOM_UTF16_BE))
-            file.write(str(input_string.encode("utf-16-be")))
-        with open(file_path, "r") as file:
-            encoded_string = file.read()
-        file.close()
-        os.remove(file_path)
-        assert decode_bytes(encoded_string) == input_string
+        input_string = "test".encode("utf-16-be")
+        assert decode_bytes(input_string) == input_string.decode()
 
     def test_utf16_le_decoding(self):
-        input_string = "test"
-        file_path = TMP_FOLDER + "/test_utf16_le_decoding.txt"
-        with open(file_path, "w") as file:
-            file.write(str(codecs.BOM_UTF16_LE))
-            file.write(str(input_string.encode("utf-16-le")))
-        with open(file_path, "r") as file:
-            encoded_string = file.read()
-        file.close()
-        os.remove(file_path)
-        assert decode_bytes(encoded_string) == input_string
+        input_string = "test".encode("utf-16-le")
+        assert decode_bytes(input_string) == input_string.decode()
