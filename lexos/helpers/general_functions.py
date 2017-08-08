@@ -237,7 +237,7 @@ def decode_bytes(raw_bytes: bytes) -> str:
     :return: A decoded string
     """
     try:
-        decoded_str = __try_decode_bytes__(raw_bytes)
+        decoded_str = _try_decode_bytes_(raw_bytes)
 
     except (UnicodeDecodeError, TypeError):
         raise LexosException('chardet fail to detect encoding of your file, '
