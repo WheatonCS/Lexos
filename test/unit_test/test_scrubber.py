@@ -5,7 +5,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     delete_words, handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     get_decoded_file, scrub_select_apos, consolidate_hyphens, \
-    consolidate_ampers
+    consolidate_ampers, handle_stop_keep_words_string
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -546,6 +546,7 @@ class TestGetAllPunctuationMap:
 
 
 class TestScrubSelectApos:
+
     def test_scrub_select_apos(self):
         assert scrub_select_apos(
             text="Tes't test' ' 'test tes''t test'' '' ''test") == \
@@ -557,6 +558,7 @@ class TestScrubSelectApos:
 
 
 class TestConsolidateHyphens:
+
     def test_consolidate_hyphens(self):
         assert consolidate_hyphens(
             text="Tes\u058At test\u2011 \u2012 \u2014test tes\uFE58\uFF0Dt "
@@ -569,6 +571,7 @@ class TestConsolidateHyphens:
 
 
 class TestConsolidateAmpers:
+
     def test_consolidate_ampers(self):
         assert consolidate_ampers(
             text="Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
@@ -714,7 +717,31 @@ class TestDeleteWords:
         assert delete_words("", []) == ""
 
 
-# handle_stop_words_keep_words_string
+class TestHandleStopKeepWordsString:
+
+    def test_handle_stop_keep_words_string(self):
+        string1 = "and. the\n who,how why"
+        string2 = "what where, but. of,\nnot,for"
+        cache_folder = \
+            '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+        cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+                           'stopwords.p']
+
+        assert handle_stop_keep_words_string(
+            sw_kw_file_string="", sw_kw_manual="", cache_folder=cache_folder,
+            cache_filenames=cache_filenames) == "\n"
+        assert handle_stop_keep_words_string(
+            sw_kw_file_string=string1, sw_kw_manual="",
+            cache_folder=cache_folder, cache_filenames=cache_filenames) == \
+            string1 + "\n"
+        assert handle_stop_keep_words_string(
+            sw_kw_file_string="", sw_kw_manual=string2,
+            cache_folder=cache_folder, cache_filenames=cache_filenames) == \
+            "\n" + string2
+        assert handle_stop_keep_words_string(
+            sw_kw_file_string=string1, sw_kw_manual=string2,
+            cache_folder=cache_folder, cache_filenames=cache_filenames) == \
+            string1 + "\n" + string2
 
 
 class TestRemoveStopwords:
