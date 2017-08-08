@@ -87,9 +87,9 @@ def handle_special_characters(text: str) -> str:
                                '&gt;': '>', '&#383;': 'ſ'}
 
         else:
-            conversion_dict = get_special_char_dict_from_file(option_list)
+            conversion_dict = get_special_char_dict_from_file(mode=option_list)
 
-        r = make_replacer(conversion_dict)
+        r = make_replacer(replacements=conversion_dict)
         # r is a function created by make_replacer(), _do_replace(), and
         # replace().
         # do_replace() returns the new char to use when called with the char to
@@ -224,7 +224,8 @@ def call_replacement_handler(
         # Lemmas:         cache_number = 1
         # Special chars:  cache_number = 2
         cache_filestring(
-            replacer_string, cache_folder, cache_file_names[cache_number])
+            file_string=replacer_string, cache_folder=cache_folder,
+            filename=cache_file_names[cache_number])
         replacement_line_string = replacer_string
     elif not replacer_string and manual_replacer_string:
         replacement_line_string = manual_replacer_string
@@ -232,11 +233,12 @@ def call_replacement_handler(
         replacement_line_string = '\n'.join(
             [replacer_string, manual_replacer_string])
     else:        # not replacer_string and not manual_replacer_string
-        text = handle_special_characters(text)
+        text = handle_special_characters(text=text)
 
     if replacement_line_string != '':
         text = replacement_handler(
-            text, replacement_line_string, is_lemma=is_lemma)
+            text=text, replacer_string=replacement_line_string,
+            is_lemma=is_lemma)
 
     return text
 
