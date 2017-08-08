@@ -8,5 +8,5 @@ TEST_SUITE_PATH = path_join(__current_file_dir__, '..', 'test_suite')
 
 UPLOAD_TEST_SUITE_PATH = path_join(TEST_SUITE_PATH, 'Upload')
 
-ENCODING_TEST_SUITE_PATH = path_join(UPLOAD_TEST_SUITE_PATH, 'encoding')
+ENCODING_TEST_SUITE_PATH = path_join(UPLOAD_TEST_SUITE_PATH, 'encodings')
 CHINESE_ENCODING_TEST_FILE = path_join(ENCODING_TEST_SUITE_PATH, 'chinese')
