@@ -4,7 +4,6 @@ import re
 import shutil
 import chardet
 import lexos.helpers.constants as constants
-import codecs
 
 
 def get_encoding(input_string: str) -> str:
