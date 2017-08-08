@@ -1011,9 +1011,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """
 
         return call_replacement_handler(
-            text=orig_text, file_replacer_string=cons_file_string, is_lemma=False,
-            manual_replacer_string=cons_manual, cache_folder=cache_folder,
-            cache_file_names=cache_filenames, cache_number=0)
+            text=orig_text, file_replacer_string=cons_file_string,
+            is_lemma=False, manual_replacer_string=cons_manual,
+            cache_folder=cache_folder, cache_file_names=cache_filenames,
+            cache_number=0)
 
     # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text: str) -> str:
@@ -1025,9 +1026,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """
 
         return call_replacement_handler(
-            text=orig_text, file_replacer_string=lem_file_string, is_lemma=True,
-            manual_replacer_string=lem_manual, cache_folder=cache_folder,
-            cache_file_names=cache_filenames, cache_number=1)
+            text=orig_text, file_replacer_string=lem_file_string,
+            is_lemma=True, manual_replacer_string=lem_manual,
+            cache_folder=cache_folder, cache_file_names=cache_filenames,
+            cache_number=1)
 
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text: str) -> str:
