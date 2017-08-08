@@ -48,7 +48,7 @@ def no_session():
 
     If the user reaches a page without an active session, this function will
     loads a screen with a redirection message that redirects to Upload.
-    :return template that contains redirection
+    :return: template that contains redirection
     """
     # TODO: cannot find the template file nosession.html, maybe a typo?
     return render_template('nosession.html', numActiveDocs=0)
@@ -58,7 +58,7 @@ def no_session():
 def base():
     """handles redirection to other pages.
 
-    this function handles page behavior for the base url ('/') of the site.
+    Note that this function page behavior for the base url ('/') of the site.
     :return: a redirect to upload
     """
     return redirect(url_for('upload.upload'))

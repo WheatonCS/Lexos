@@ -18,10 +18,10 @@ viz_view = Blueprint('viz', __name__)
 # Tells Flask to load this function when someone is at '/viz'
 @viz_view.route("/viz", methods=["GET", "POST"])
 def viz():
-    """ handles the functionality on the alternate bubbleViz page
+    """Handles the functionality on the alternate bubbleViz page.
 
-    This function handles the functionality with performance improvements.
-    :return a response object (often a render_template call)
+    :return: a response object (often a render_template call) to flask and
+    eventually to the browser.
     """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
