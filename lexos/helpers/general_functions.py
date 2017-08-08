@@ -5,6 +5,7 @@ import shutil
 from zipfile import ZipFile
 
 import chardet
+
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
 
@@ -200,7 +201,7 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     return striped_text
 
 
-def __try_decode_bytes__(raw_bytes: bytes) -> str:
+def _try_decode_bytes_(raw_bytes: bytes) -> str:
     """helper function for decode_byte,try to decode the raw bytes
 
     :param raw_bytes: the bytes you get and want to decode to string
