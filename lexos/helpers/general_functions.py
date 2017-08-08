@@ -6,6 +6,7 @@ from zipfile import ZipFile
 
 import chardet
 import lexos.helpers.constants as constants
+from lexos.helpers.exceptions import LexosException
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -199,8 +200,8 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     return striped_text
 
 
-def decode_bytes(raw_bytes: bytes) -> str:
-    """decode the raw bytes, typically used to decode `request.file`
+def __try_decode_bytes__(raw_bytes: bytes) -> str:
+    """helper function for decode_byte,try to decode the raw bytes
 
     :param raw_bytes: the bytes you get and want to decode to string
     :return: A decoded string
@@ -210,6 +211,10 @@ def decode_bytes(raw_bytes: bytes) -> str:
         raw_bytes[:constants.MIN_ENCODING_DETECT])
     # get the encoding
     encoding_type = encoding_detect['encoding']
+
+    if encoding_type is None:
+        encoding_detect = chardet.detect(raw_bytes)
+        encoding_type = encoding_detect['encoding']
 
     try:
         # try to decode the string using the encoding we get
@@ -222,3 +227,19 @@ def decode_bytes(raw_bytes: bytes) -> str:
         decoded_string = raw_bytes.decode(encoding_type)
 
     return decoded_string
+
+
+def decode_bytes(raw_bytes: bytes) -> str:
+    """Decode the raw byte into a string
+
+    :param raw_bytes: the bytes you get and want to decode to string
+    :return: A decoded string
+    """
+    try:
+        decoded_str = __try_decode_bytes__(raw_bytes)
+
+    except (UnicodeDecodeError, TypeError):
+        raise LexosException('chardet fail to detect encoding of your file,'
+                             'please make sure your file is in utf-8 encoding')
+
+    return decoded_str
