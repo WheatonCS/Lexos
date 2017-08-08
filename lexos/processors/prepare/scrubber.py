@@ -233,12 +233,11 @@ def call_replacement_handler(
         replacement_line_string = '\n'.join(
             [replacer_string, manual_replacer_string])
     else:        # not replacer_string and not manual_replacer_string
-        text = handle_special_characters(text=text)
+        text = handle_special_characters(text)
 
     if replacement_line_string != '':
         text = replacement_handler(
-            text=text, replacer_string=replacement_line_string,
-            is_lemma=is_lemma)
+            text, replacer_string=replacement_line_string, is_lemma=is_lemma)
 
     return text
 
@@ -606,7 +605,9 @@ def handle_stop_keep_words_string(sw_kw_file_string: str, sw_kw_manual: str,
     """
 
     if sw_kw_file_string:  # file_strings[3] == stop/keep words
-        cache_filestring(sw_kw_file_string, cache_folder, cache_filenames[3])
+        cache_filestring(file_string=sw_kw_file_string,
+                         cache_folder=cache_folder,
+                         filename=cache_filenames[3])
     word_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
 
     return word_string
@@ -622,7 +623,7 @@ def remove_stopwords(text: str, removal_string: str) -> str:
         the stopwords chosen by the user.
     """
 
-    remove_list = split_input_word_string(removal_string)
+    remove_list = split_input_word_string(input_string=removal_string)
     scrubbed_text = delete_words(text, remove_list)
 
     return scrubbed_text
@@ -643,7 +644,7 @@ def keep_words(text: str, non_removal_string: str) -> str:
 
     # a list containing the words in non_removal_string without punctuation
     # or whitespace
-    keep_list = split_input_word_string(non_removal_string)
+    keep_list = split_input_word_string(input_string=non_removal_string)
 
     split_lines = text.split("\n")
     text_list = []  # list of words and ""
@@ -1006,12 +1007,14 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         # if file_and_manual does not contain words there is no issue calling
         # remove_stopwords()
         if request.form['sw_option'] == "stop":
-            return remove_stopwords(orig_text, file_and_manual)
+            return remove_stopwords(
+                text=orig_text, removal_string=file_and_manual)
 
         # but all the text would be deleted if we called keep_words()
         # "\n" comes from '\n'.join(["", ""])
         elif request.form['sw_option'] == "keep" and file_and_manual != "\n":
-            return keep_words(orig_text, file_and_manual)
+            return keep_words(
+                text=orig_text, non_removal_string=file_and_manual)
 
         else:
             return orig_text
