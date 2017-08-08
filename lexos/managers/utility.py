@@ -418,6 +418,21 @@ def generate_dendrogram(file_manager: FileManager, leq: str) \
 
     import matplotlib.pyplot as plt
 
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, \
+        grey_word, show_grey_word, only_char_grams_within_words, mfw, \
+        culling = file_manager.get_matrix_options()
+
+    dtm_data_frame = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=use_tfidf,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=n_gram_size,
+        use_freq=use_freq,
+        mfw=mfw,
+        cull=culling,
+        round_decimal=False)
+
     if 'getdendro' in request.form:
         label_dict = file_manager.get_active_labels()
         labels = []
@@ -523,20 +538,6 @@ def generate_dendrogram(file_manager: FileManager, leq: str) \
         f.write(newick)
         f.close()
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options()
-
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=use_tfidf,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=use_freq,
-        mfw=mfw,
-        cull=culling)
-
     # Gets options from request.form and uses options to generate the
     # dendrogram (with the legends) in a PDF file
     orientation = str(request.form['orientation'])
@@ -554,15 +555,8 @@ def generate_dendrogram(file_manager: FileManager, leq: str) \
     if 'dendroLegends' in request.form:
         show_dendro_legends = request.form['dendroLegends'] == 'on'
 
-    dendro_matrix = []
-    file_number = len(count_matrix)
-    total_words = len(count_matrix[0])
-
-    for row in range(1, file_number):
-        word_count = []
-        for col in range(1, total_words):
-            word_count.append(count_matrix[row][col])
-        dendro_matrix.append(word_count)
+    dendro_matrix = dtm_data_frame.values
+    temp_labels = np.array(dtm_data_frame.index)
 
     distance_list = dendrogrammer.get_dendro_distances(
         linkage, metric, dendro_matrix)
