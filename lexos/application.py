@@ -132,4 +132,3 @@ def run():
         sys.exit(app.run())
     except KeyboardInterrupt:
         print('Exiting lexos. Bye!')
-
