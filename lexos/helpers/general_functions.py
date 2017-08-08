@@ -205,18 +205,20 @@ def decode_bytes(raw_bytes: bytes) -> str:
     :param raw_bytes: the bytes you get and want to decode to string
     :return: A decoded string
     """
+    # Detect the encoding with only the first couple of bytes
+    encoding_detect = chardet.detect(
+        raw_bytes[:constants.MIN_ENCODING_DETECT])
+    # get the encoding
+    encoding_type = encoding_detect['encoding']
+
     try:
-        # try to use utf-8 to decode first
-        encoding_type = "utf-8"
-        # Grab the file contents, which were encoded/decoded automatically
-        # into python's format
+        # try to decode the string using the encoding we get
         decoded_string = raw_bytes.decode(encoding_type)
+
     except UnicodeDecodeError:
-        encoding_detect = chardet.detect(
-            raw_bytes[:constants.MIN_ENCODING_DETECT])
-        # Detect the encoding
+        # if decoding failed, we use all the bytes to detect encoding
+        encoding_detect = chardet.detect(raw_bytes)
         encoding_type = encoding_detect['encoding']
-        # Grab the file contents, which were encoded/decoded automatically
-        # into python's format
         decoded_string = raw_bytes.decode(encoding_type)
+
     return decoded_string
