@@ -1699,16 +1699,46 @@ def xml_handling_options(data: dict = {}):
 
 
 # Gets called from cluster() in lexos_core.py
-def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
-    """
-    Generates dendrogram image and PDF from the active files.
+def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
+    -> (int, int, int, int, int, int, int, int, Union[float, int, str],
+        str, str, str, str, Dict):
+    """Generates dendrogram image and PDF from the active files.
 
-    Args:
-        None
-
-    Returns:
-        Total number of PDF pages, ready to calculate the height of the
-        embedded PDF on screen
+    :param file_manager: a class for an object to hold all information of
+                        user's files and manage the files according to users's
+                        choices.
+    :param leq: a string symbol '≤'
+    :return:
+            - total_pdf_page_number: integer, total number of pages of the PDF.
+            - score: float, silhouette score
+            - inconsistent_max: float, upper bound of threshold to calculate
+              silhouette score if using Inconsistent criterion
+            - maxclust_max: integer, upper bound of threshold to calculate
+            - silhouette score  if using Maxclust criterion
+            - distance_max: float, upper bound of threshold to calculate
+              silhouette score if using Distance criterion
+            - distance_min: float, lower bound of threshold to calculate
+              silhouette score if using Distance criterion
+            - monocrit_max: float, upper bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+            - monocrit_min: float, lower bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+            - threshold: float/integer/string, threshold (t) value that users
+              entered, equals to 'N/A' if users leave the field blank
+            - inconsistent_op: string, the range of t below upper bound of
+                               threshold to calculate silhouette score if using
+                               Inconsistent criterion
+            - maxclust_op: string, the range of t below upper bound of
+                           threshold to calculate silhouette score if using
+                           Maxclust criterion
+            - distance_op: string, the range of t between upper and lower bound
+                           of threshold to calculate silhouette score if using
+                           Distance criterion
+            - monocrit_op: string, the range of t between upper and lower bound
+                           of threshold to calculate silhouette score if using
+                           Monocrit criterion
+            - threshold_ops: a dictionary which contains maxclust_op,
+                             distance_op and monocrit_op
     """
     from sklearn.feature_extraction.text import CountVectorizer
     from sklearn.metrics.pairwise import euclidean_distances
