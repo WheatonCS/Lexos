@@ -1330,7 +1330,7 @@ def generate_z_test_top_word(file_manager: FileManager):
 
     # test for all
     if test_by_class == 'allToPara':
-        human_result = analyze_all_to_para(count_matrix=count_matrix,
+        analysis_result = analyze_all_to_para(count_matrix=count_matrix,
                                               words=words,
                                               labels=labels)
 
@@ -1352,10 +1352,10 @@ def generate_z_test_top_word(file_manager: FileManager):
         group_values, name_map = group_division(dtm_data, division_map.values)
 
         # test
-        human_result = analyze_para_to_group(group_values=group_values,
-                                             words=words,
-                                             name_map=name_map,
-                                             class_labels=class_labels)
+        analysis_result = analyze_para_to_group(group_values=group_values,
+                                                words=words,
+                                                name_map=name_map,
+                                                class_labels=class_labels)
 
     elif test_by_class == 'classToClass':
         # create division map
@@ -1372,16 +1372,16 @@ def generate_z_test_top_word(file_manager: FileManager):
         # divides into group
         group_values, name_map = group_division(dtm_data, division_map.values)
         # test
-        human_result = analyze_group_to_group(group_values=group_values,
-                                              words=words,
-                                              class_labels=class_labels)
+        analysis_result = analyze_group_to_group(group_values=group_values,
+                                                 words=words,
+                                                 class_labels=class_labels)
 
     else:
         raise ValueError(
             'the post parameter of testbyclass cannot be understood by the '
             'backend see utility.GenerateZTestTopWord for more')
 
-    return human_result
+    return analysis_result
 
 
 def get_top_word_csv(test_results, csv_header):

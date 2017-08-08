@@ -120,18 +120,18 @@ def analyze_all_to_para(count_matrix: np.ndarray,
 
     # generate analysis result
     analysis_result = [_z_test_word_list_(count_list_i=row,
-                                           count_list_j=count_matrix_sum,
-                                           words=words)
-                        for _, row in enumerate(count_matrix)]
+                                          count_list_j=count_matrix_sum,
+                                          words=words)
+                       for _, row in enumerate(count_matrix)]
 
     # generate header list
     header_list = ['Document "' + label + '" compared to the whole corpus'
                    for _, label in enumerate(labels)]
 
     # put two lists together as a human readable result
-    readable_results = list(zip(header_list, analysis_result))
+    readable_result = list(zip(header_list, analysis_result))
 
-    return readable_results
+    return readable_result
 
 
 def analyze_para_to_group(group_values: List[np.ndarray],
@@ -187,8 +187,8 @@ def analyze_para_to_group(group_values: List[np.ndarray],
 
         # generate header
         temp_header = ['Document "' + name_map[comp_index][para_index] +
-                         '" compared to Class: ' + class_labels[base_index]
-                        for para_index, _ in enumerate(comp_para)]
+                       '" compared to Class: ' + class_labels[base_index]
+                       for para_index, _ in enumerate(comp_para)]
 
         analysis_result += temp_analysis_result
         header_list += temp_header
@@ -239,10 +239,10 @@ def analyze_group_to_group(group_values: List[np.ndarray],
 
     # generate header list
     header_list = ['Class "' + class_labels[comp_index] +
-                    '" compared to Class: ' + class_labels[base_index]
-                    for comp_index, base_index in comp_map]
+                   '" compared to Class: ' + class_labels[base_index]
+                   for comp_index, base_index in comp_map]
 
     # put two lists together as a human readable result
-    readable_results = list(zip(header_list, analysis_result))
+    readable_result = list(zip(header_list, analysis_result))
 
-    return readable_results
+    return readable_result
