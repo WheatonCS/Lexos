@@ -1749,10 +1749,12 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
 
     import matplotlib.pyplot as plt
 
+    # Gets options from request.json
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, \
         grey_word, show_grey_word, only_char_grams_within_words, mfw, \
         culling = file_manager.get_matrix_options_from_ajax()
 
+    # get a data frame containing raw matrix of word counts and file names
     dtm_data_frame = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=use_tfidf,
@@ -1808,6 +1810,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
         doc_term_sparse_matrix = vectorizer.fit_transform(all_contents)
         dtm = doc_term_sparse_matrix.toarray()
 
+        # Plots the hierarchical clustering as a dendrogram.
         if orientation == "left":
             orientation = "right"
         if orientation == "top":
@@ -1858,8 +1861,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
         f.write(newick)
         f.close()
 
-    # Gets options from request.json and uses options to generate the
-    # dendrogram (with the legends) in a PDF file
+    # uses options to generate the dendrogram (with the legends) in a PDF file
     orientation = str(request.json['orientation'])
     title = request.json['title']
     pruning = request.json['pruning']
@@ -1875,8 +1877,10 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
     if 'dendroLegends' in request.json:
         show_dendro_legends = request.json['dendroLegends'] == 'on'
 
+    # get raw matrix from dtm_data_frame
     dendro_matrix = np.array(dtm_data_frame.values)
 
+    # generate dendrogram distances list
     distance_list = dendrogrammer.get_dendro_distances(
         linkage, metric, dendro_matrix)
 
@@ -1897,6 +1901,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
                                  folder_path, augmented_dendrogram,
                                  show_dendro_legends)
 
+    # generate range of t
     inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
     maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
     distance_op = str(distance_min) + " " + leq + " t " + \
