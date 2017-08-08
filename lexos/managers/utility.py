@@ -1845,8 +1845,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     if 'dendroLegends' in request.json:
         show_dendro_legends = request.json['dendroLegends'] == 'on'
 
-    dendro_matrix_data = np.array(dtm_data_frame.values)
-    dendro_matrix = dendro_matrix_data.reshape(len(dendro_matrix_data), 1)
+    dendro_matrix = np.array(dtm_data_frame.values)
 
     distance_list = dendrogrammer.get_dendro_distances(
         linkage, metric, dendro_matrix)
