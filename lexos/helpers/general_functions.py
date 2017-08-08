@@ -100,7 +100,7 @@ def merge_list(word_lists: list) -> dict:
 
 def load_stastic(input_string: str) -> dict:
     """convert an ALREADY SCRUBBED chunk of file(string) into a WordLists.
-    
+
     see the document for 'test' function.
     :param input_string: a string contain an AlREADY SCRUBBED file
     :return: a WordLists: Array type
