@@ -1,9 +1,6 @@
 from lexos.helpers.general_functions import get_encoding, make_preview_from, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
-import codecs
-import os
-from lexos.helpers.constants import TMP_FOLDER
 
 
 class TestGeneralFunctions:
