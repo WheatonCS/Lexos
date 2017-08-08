@@ -207,7 +207,49 @@ class TestCallReplacementHandler:
 
     # No test with neither because handle_special_characters() uses requests
 
-    # No test for having only regular replacer_string because of caching
+    def test_call_replacement_handler_with_file_replacer(self):
+        assert call_replacement_handler(
+            text=self.text_string, replacer_string=self.special_string,
+            is_lemma=False, manual_replacer_string="",
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=2) == \
+            self.after_special
+        assert call_replacement_handler(
+            text=self.text_string, replacer_string=self.special_string,
+            is_lemma=False, manual_replacer_string="",
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=2) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.special_string,
+                is_lemma=False)
+        assert call_replacement_handler(
+            text=self.text_string, replacer_string=self.consol_string,
+            is_lemma=False, manual_replacer_string="",
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=0) == \
+            self.after_consol
+        assert call_replacement_handler(
+            text=self.text_string, replacer_string=self.consol_string,
+            is_lemma=False, manual_replacer_string="",
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=0) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.consol_string,
+                is_lemma=False)
+        assert call_replacement_handler(
+            text=self.text_string, replacer_string=self.lemma_string,
+            is_lemma=True, manual_replacer_string="",
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=1) == \
+            self.after_lemma
+        assert call_replacement_handler(
+            text=self.text_string, replacer_string=self.lemma_string,
+            is_lemma=True, manual_replacer_string="",
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=1) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.lemma_string,
+                is_lemma=True)
 
     def test_call_replacement_handler_with_manual_replacer(self):
         assert call_replacement_handler(
