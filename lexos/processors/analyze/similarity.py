@@ -31,7 +31,7 @@ def similarity_maker(dtm_data_frame: pd.DataFrame, comp_file_index: int) -> \
     # get an array of file index in filemanager.files
     num_row = len(dtm_data_frame.index)
     other_file_indexes = np.asarray([file_index for file_index in range(
-        num_row)if file_index != comp_file_index])
+        num_row) if file_index != comp_file_index])
 
     # construct an array of scores
     docs_score_array = np.asarray([dist[file_index, comp_file_index]

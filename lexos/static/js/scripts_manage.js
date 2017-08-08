@@ -1,85 +1,89 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(document).ready(function () {
-/* #### INITIATE MAIN DATATABLE #### */
-	//* Change the element name and test whether the table variable persists
+  /* #### INITIATE MAIN DATATABLE #### */
+  //* Change the element name and test whether the table variable persists
 
   table = $('#demo').DataTable({
-	    	paging: true,
-	    	scrollY: 400,
-	    	autoWidth: false,
-	    	searching: true,
-	    	destroy: true,
-    		ordering: true,
-    		select: true,
-	        initComplete: function () {
-	            // enables area selection extension
-	            $('#demo').AreaSelect()
-	        },
-    lengthMenu: [ [5, 10, 25, 50, -1], [5, 10, 25, 50, 'All'] ],
-    		pageLength: 5,
-    		scrollCollapse: true,
-    		dom: "<'row'<'col-sm-6'l><'col-sm-6 pull-right'f>>" +
-			"<'row'<'col-sm-12'rt>>" +
-			"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-    		buttons: [
-        		'copy', 'excel', 'pdf'
-    		],
-    		language: {
+    paging: true,
+    scrollY: 400,
+    autoWidth: false,
+    searching: true,
+    destroy: true,
+    ordering: true,
+    select: true,
+    initComplete: function () {
+      // enables area selection extension
+      $('#demo').AreaSelect()
+    },
+    lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
+    pageLength: 5,
+    scrollCollapse: true,
+    dom: "<'row'<'col-sm-6'l><'col-sm-6 pull-right'f>>" +
+    "<'row'<'col-sm-12'rt>>" +
+    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    buttons: [
+      'copy', 'excel', 'pdf'
+    ],
+    language: {
       lengthMenu: 'Display _MENU_ documents',
       info: 'Showing _START_ to _END_ of _TOTAL_ documents',
       zeroRecords: 'No documents to display',
       select: {
-            		rows: ''
-        		}
+        rows: ''
+      }
     },
     columnDefs: [
-				{width: '15', sortable: false, class: 'index', targets: 0},
-				{width: '150', type: 'natural', targets: [1, 2, 3]}
-//				{width: "150", type: 'natural', targets: "_all"},
+      { width: '15', sortable: false, class: 'index', targets: 0 },
+      { width: '150', type: 'natural', targets: [1, 2, 3] }
+      //				{width: "150", type: 'natural', targets: "_all"},
     ],
-    order: [[ 1, 'asc' ]]
+    order: [[1, 'asc']]
   })
 
   var selectee = table.rows('.selected').data().length
-	// console.log($('.dataTables_info'));
+  // console.log($('.dataTables_info'));
 
-/* table.on('page.dt', function() {
-	table.state.clear();
-	window.location.reload();
-}); */
+  /* table.on('page.dt', function() {
+    table.state.clear();
+    window.location.reload();
+  }); */
 
-	// Draw the index column
+  // Draw the index column
   table.on('order.dt search.dt', function () {
     table
-		.column(0, {
-  search: 'applied',
-  order: 'applied'}
-			)
-		.nodes()
-		.each(function (cell, i) {
-  cell.innerHTML = i + 1
-})
+      .column(0, {
+        search: 'applied',
+        order: 'applied'
+      }
+      )
+      .nodes()
+      .each(function (cell, i) {
+        cell.innerHTML = i + 1
+      })
   })
-	.draw()
+    .draw()
 
-	// Make all columns searchable
+  // Make all columns searchable
   table.on('order.dt search.dt', function () {
     table
-		.column(1, {
-  search: 'applied',
-  order: 'applied'}
-			)
-		.column(2, {
-  search: 'applied',
-  order: 'applied'}
-			)
-		.column(3, {
-  search: 'applied',
-  order: 'applied'}
-			)
+      .column(1, {
+        search: 'applied',
+        order: 'applied'
+      }
+      )
+      .column(2, {
+        search: 'applied',
+        order: 'applied'
+      }
+      )
+      .column(3, {
+        search: 'applied',
+        order: 'applied'
+      }
+      )
   })
-	.nodes()
-	.draw()
+    .nodes()
+    .draw()
 
 	/* Add all rows with .selected to the DataTables activeRows array
 	   It does not appear that this array needs to be maintained after
@@ -97,116 +101,116 @@ $(document).ready(function () {
   })
   var numberOfFileDone = parseInt($('.fa-folder-open-o')[0].id)
   $('.col-sm-5').append("<p style='display:inline; float:left; width:200px !important;' id='name'></p>")
-	// Data tables active documents counter wasn't
-	// I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
-	// NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
+  // Data tables active documents counter wasn't
+  // I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
+  // NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
 
-	// Handle select events
+  // Handle select events
   table
-        .on('select', function (e, dt, type, indexes) {
-        	// Get selected rows as a jQuery object
-          var selected_rows = table.rows(indexes).nodes().to$()
-            // Call the ajax function
-          enableRows(selected_rows)
-          handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
-          $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
-          document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // add the correct counter text to the p
-          $('#bttn-downloadSelectedDocs').show()
-        })
-        .on('deselect', function (e, dt, type, indexes) {
-        	// Get deselected rows as a jQuery object
-          var deselected_rows = table.rows(indexes).nodes().to$()
-            // Call the ajax function
-          disableRows(deselected_rows)
-          handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
-          document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // same as the other one
-          $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
-          if (table.rows('.selected').data().length == 0) {
-            $('#bttn-downloadSelectedDocs').hide()
-          }
-        })
+    .on('select', function (e, dt, type, indexes) {
+      // Get selected rows as a jQuery object
+      var selected_rows = table.rows(indexes).nodes().to$()
+      // Call the ajax function
+      enableRows(selected_rows)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
+      $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
+      document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // add the correct counter text to the p
+      $('#bttn-downloadSelectedDocs').show()
+    })
+    .on('deselect', function (e, dt, type, indexes) {
+      // Get deselected rows as a jQuery object
+      var deselected_rows = table.rows(indexes).nodes().to$()
+      // Call the ajax function
+      disableRows(deselected_rows)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
+      document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // same as the other one
+      $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
+      if (table.rows('.selected').data().length == 0) {
+        $('#bttn-downloadSelectedDocs').hide()
+      }
+    })
 
-	    // Area Select events callback
-	    $('#demo').DataTable()
-	        .on('select', function (e, dt, type, indexes) {
-	            if (type === 'row') {
-	                    var data = $('#demo').DataTable().rows(indexes).data()[0]
-	                    // console.info("select", data);
-	                }
-	        })
-	        .on('deselect', function (e, dt, type, indexes) {
-	            if (type === 'row') {
-	                var data = $('#demo').DataTable().rows(indexes).data()
-	               // console.info("deselect", data);
-	            }
-	        })
+  // Area Select events callback
+  $('#demo').DataTable()
+    .on('select', function (e, dt, type, indexes) {
+      if (type === 'row') {
+        var data = $('#demo').DataTable().rows(indexes).data()[0]
+        // console.info("select", data);
+      }
+    })
+    .on('deselect', function (e, dt, type, indexes) {
+      if (type === 'row') {
+        var data = $('#demo').DataTable().rows(indexes).data()
+        // console.info("deselect", data);
+      }
+    })
 
   document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // default, the other ones are dynamic on select and deselect
   $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
 
-/* #### END OF TABLE INITIATION #### */
+  /* #### END OF TABLE INITIATION #### */
 
-/* #### DEFINE CONTEXT MENU #### */
+  /* #### DEFINE CONTEXT MENU #### */
 
-	// Get the number of rows, selected or unselected, for context menu
+  // Get the number of rows, selected or unselected, for context menu
   var num_rows = table.rows().ids().length
-  var num_rows_selected = table.rows({selected: true}).ids().length
+  var num_rows_selected = table.rows({ selected: true }).ids().length
   handleSelectButtons(num_rows, num_rows_selected)
 
   $('#demo').contextmenu({
-	  target: '#context-menu',
-	  scopes: 'td',
-	  before: function () {
-	  	prepareContextMenu()
-	  },
-	  onItem: function (cell, e) {
-	    // Use if scopes = tr
-	    var target = cell.parent().attr('id')
-	    action = $(e.target).attr('data-context')
-    switch (action) {
-		    case 'preview':
-		        showPreviewText(target)
-		        break
-		    case 'edit_doc_name':
-		    	editName(target)
-		        break
-		    case 'edit_doc_class':
-		    	editClass(target)
-		        break
-		    case 'clone_doc':
-		    	// clone(target);
-		        break
-		    case 'delete_doc':
-		    	deleteDoc(target)
-		        break
-		    case 'select_all':
-		    	selectAll()
-		        break
-		    case 'deselect_all':
-		    	deselectAll()
-		        break
-		    case 'merge_selected':
-		    	selected_rows = table.rows({selected: true}).nodes().to$()
-		    	mergeSelected(cell, selected_rows)
-		        break
-		    case 'apply_class_selected':
-		    	selected_rows = table.rows({selected: true}).nodes().to$()
-		    	applyClassSelected(cell, selected_rows)
-		        break
-		    case 'delete_all_selected':
-		    	selected_rows = table.rows({selected: true}).nodes().to$()
-		    	deleteAllSelected(selected_rows)
-		        break
+    target: '#context-menu',
+    scopes: 'td',
+    before: function () {
+      prepareContextMenu()
+    },
+    onItem: function (cell, e) {
+      // Use if scopes = tr
+      var target = cell.parent().attr('id')
+      action = $(e.target).attr('data-context')
+      switch (action) {
+        case 'preview':
+          showPreviewText(target)
+          break
+        case 'edit_doc_name':
+          editName(target)
+          break
+        case 'edit_doc_class':
+          editClass(target)
+          break
+        case 'clone_doc':
+          // clone(target);
+          break
+        case 'delete_doc':
+          deleteDoc(target)
+          break
+        case 'select_all':
+          selectAll()
+          break
+        case 'deselect_all':
+          deselectAll()
+          break
+        case 'merge_selected':
+          selected_rows = table.rows({ selected: true }).nodes().to$()
+          mergeSelected(cell, selected_rows)
+          break
+        case 'apply_class_selected':
+          selected_rows = table.rows({ selected: true }).nodes().to$()
+          applyClassSelected(cell, selected_rows)
+          break
+        case 'delete_all_selected':
+          selected_rows = table.rows({ selected: true }).nodes().to$()
+          deleteAllSelected(selected_rows)
+          break
+      }
     }
-	  }
   })
 
-	// Refresh context menu on show
+  // Refresh context menu on show
   $('#context-menu').on('show.bs.context', function () {
     prepareContextMenu()
   })
 
-// When the save button is clicked, call the save function
+  // When the save button is clicked, call the save function
   $('#save').click(function () {
     merge = $('#merge').val()
     row_id = $('#tmp-row').val()
@@ -225,28 +229,28 @@ $(document).ready(function () {
       } else {
         saveMultiple(row_ids, column, value)
       }
-    }		else {
+    } else {
       saveOne(row_id, column, value)
     }
   })
 
-// When the Delete Selected button is clicked, call the deletion function
+  // When the Delete Selected button is clicked, call the deletion function
   $('#delete').click(function () {
-    selected_rows = table.rows({selected: true}).nodes().to$()
+    selected_rows = table.rows({ selected: true }).nodes().to$()
     deleteAllSelected(selected_rows)
   })
 
-	// Trigger selection buttons
+  // Trigger selection buttons
   $('#selectAllDocs').click(function () { selectAll() })
   $('#disableAllDocs').click(function () { deselectAll() })
   $('#deleteSelectedDocs').click(function () {
-    selected_rows = table.rows({selected: true}).nodes().to$()
+    selected_rows = table.rows({ selected: true }).nodes().to$()
     deleteAllSelected(selected_rows)
   })
 
-	// Remove the footer from alert modals when hidden
+  // Remove the footer from alert modals when hidden
   $('#alert-modal').on('hidden.bs.modal', function (e) {
-	  	$('#alert-modal .modal-footer').remove()
+    $('#alert-modal .modal-footer').remove()
   })
 })
 /* #### END OF $(DOCUMENT).REAoDY() SCRIPTS #### */
@@ -255,7 +259,7 @@ $(document).ready(function () {
 
 // Handle the milestone checkbox in the document merge modal
 $(document).on('change', $('#addMilestone'), function () {
-  	$('#milestoneField').toggle()
+  $('#milestoneField').toggle()
 })
 
 /* #### END OF SUPPORT FOR DYNAMICALLY CREATED ELEMENTS #### */
@@ -264,12 +268,12 @@ $(document).on('change', $('#addMilestone'), function () {
 
 /* #### toggleActiveDocsIcon() #### */
 // Shows or hides the Active Documents icon in response to the table state
-function toggleActiveDocsIcon () {
-	// Hide the active docs icon if there are no docs selected
-  if (table.rows({selected: true}).ids().length < 1) {
+function toggleActiveDocsIcon() {
+  // Hide the active docs icon if there are no docs selected
+  if (table.rows({ selected: true }).ids().length < 1) {
     $('.fa-folder-open-o').fadeOut(200)
   } else {
-    $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows({selected: true}).ids().length + ' active document(s)'
+    $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows({ selected: true }).ids().length + ' active document(s)'
     $('.fa-folder-open-o').fadeIn(200)
   }
 }
@@ -277,14 +281,14 @@ function toggleActiveDocsIcon () {
 
 /* #### selectAll() #### */
 // Sets the selected status of all documents in the File Manager and UI to selected.
-function selectAll () {
+function selectAll() {
   $.ajax({
     type: 'POST',
     url: '/selectAll',
     success: function (response) {
-			// Select All Rows in the UI
+      // Select All Rows in the UI
       table.rows().select()
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       toggleActiveDocsIcon()
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -298,14 +302,14 @@ function selectAll () {
 
 /* #### deselectAll() #### */
 // Sets the selected status of all documents in the File Manager and UI to deselected.
-function deselectAll () {
+function deselectAll() {
   $.ajax({
     type: 'POST',
     url: '/deselectAll',
     success: function (response) {
-			// Deselect All Rows in the UI
+      // Deselect All Rows in the UI
       table.rows().deselect()
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       toggleActiveDocsIcon()
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -319,15 +323,15 @@ function deselectAll () {
 
 /* #### enableRows() #### */
 // Enables selected rows in the File Manager and sets UI to selected.
-function enableRows (selected_rows) {
+function enableRows(selected_rows) {
   var file_ids = []
   selected_rows.each(function (index) {
-    	file_ids.push($(this).attr('id'))
+    file_ids.push($(this).attr('id'))
   })
 
-    // Ensure file_ids contains unique entries
+  // Ensure file_ids contains unique entries
   file_ids = unique(file_ids)
-    // Convert the file_ids list to a json string for sending
+  // Convert the file_ids list to a json string for sending
   data = JSON.stringify(file_ids)
   $.ajax({
     type: 'POST',
@@ -336,7 +340,7 @@ function enableRows (selected_rows) {
     contentType: 'application/json;charset=UTF-8',
     cache: false,
     success: function (response) {
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       toggleActiveDocsIcon()
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -350,14 +354,14 @@ function enableRows (selected_rows) {
 
 /* #### disableRows() #### */
 // Disables selected rows in the File Manager and sets UI to deselected.
-function disableRows (deselected_rows) {
+function disableRows(deselected_rows) {
   var file_ids = []
   deselected_rows.each(function (index) {
-    	file_ids.push($(this).attr('id'))
+    file_ids.push($(this).attr('id'))
   })
-    // Ensure file_ids contains unique entries
+  // Ensure file_ids contains unique entries
   file_ids = unique(file_ids)
-    // Convert the file_ids list to a json string for sending
+  // Convert the file_ids list to a json string for sending
   data = JSON.stringify(file_ids)
   $.ajax({
     type: 'POST',
@@ -366,7 +370,7 @@ function disableRows (deselected_rows) {
     contentType: 'application/json;charset=UTF-8',
     cache: false,
     success: function (response) {
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       toggleActiveDocsIcon()
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -380,7 +384,7 @@ function disableRows (deselected_rows) {
 
 /* #### showPreviewText() #### */
 //* Opens modal containing the document preview text.
-function showPreviewText (row_id) {
+function showPreviewText(row_id) {
   $.ajax({
     type: 'POST',
     url: '/getPreview',
@@ -390,9 +394,9 @@ function showPreviewText (row_id) {
       response = JSON.parse(response)
       title = 'Preview of <b>' + response['label'] + '</b>'
       text = response['previewText']
-			// Encode tags as HTML entities
+      // Encode tags as HTML entities
       text = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-			//* To Do: Convert tagged texts to strings
+      //* To Do: Convert tagged texts to strings
       $('.modal-title').html(title)
       $('#preview_text').html(text)
       $('#preview').modal()
@@ -407,7 +411,7 @@ function showPreviewText (row_id) {
 /* #### END OF showPreviewText() #### */
 
 /* #### editName() #### */
-function editName (row_id) {
+function editName(row_id) {
   $('#edit-form').remove()
   cell_name = $('#' + row_id).find('td:eq(1)').text()
   var form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cell_name + '">'
@@ -420,7 +424,7 @@ function editName (row_id) {
 /* #### END OF editName() #### */
 
 /* #### editClass() #### */
-function editClass (row_id) {
+function editClass(row_id) {
   $('#edit-form').remove()
   doc_name = $('#' + row_id).find('td:eq(1)').text()
   cell_value = $('#' + row_id).find('td:eq(2)').text()
@@ -434,7 +438,7 @@ function editClass (row_id) {
 /* #### END OF editClass() #### */
 
 /* #### mergeSelected() #### */
-function mergeSelected (cell, selected_rows) {
+function mergeSelected(cell, selected_rows) {
   row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
@@ -457,7 +461,7 @@ function mergeSelected (cell, selected_rows) {
 /* #### END OF mergeSelected() #### */
 
 /* #### applyClassSelected() #### */
-function applyClassSelected (cell, selected_rows) {
+function applyClassSelected(cell, selected_rows) {
   row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
@@ -476,8 +480,8 @@ function applyClassSelected (cell, selected_rows) {
 
 /* #### mergeDocuments() #### */
 // Helper function saves value in edit dialog and updates table with a new document
-function mergeDocuments (row_ids, column, source, value, milestone) {
-	// Validation - make sure the document name is not left blank
+function mergeDocuments(row_ids, column, source, value, milestone) {
+  // Validation - make sure the document name is not left blank
   if (value == '') {
     msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
     msg += "<p>Make sure you don't leave the New Document Name field blank.</p>"
@@ -486,11 +490,11 @@ function mergeDocuments (row_ids, column, source, value, milestone) {
     return false
   }
 
-	// Prepare data and request
+  // Prepare data and request
   url = '/mergeDocuments'
   data = JSON.stringify([row_ids, value, source, milestone])
 
-	// Do Ajax
+  // Do Ajax
   $.ajax({
     type: 'POST',
     url: url,
@@ -501,21 +505,21 @@ function mergeDocuments (row_ids, column, source, value, milestone) {
       var table = $('#demo').DataTable()
       response = JSON.parse(response)
       var newIndex = response[0]
-			// var newIndex = parseInt(row_ids.slice(-1)[0])+1;
+      // var newIndex = parseInt(row_ids.slice(-1)[0])+1;
       table.rows().deselect()
       text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
       var rowNode = table.row
-			    .add([newIndex, value, '', source, text])
-			    .draw(false)
-			    .node()
+        .add([newIndex, value, '', source, text])
+        .draw(false)
+        .node()
       table.rows(newIndex).select() // This automatically calls enableRows()
       $(rowNode)
-				.attr('id', newIndex)
-				.addClass('selected')
+        .attr('id', newIndex)
+        .addClass('selected')
       $(rowNode).children().first().css('text-align', 'right')
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
-			// toggleActiveDocsIcon();
+      // toggleActiveDocsIcon();
       $('#edit-modal').modal('hide')
       $('#edit-form').remove()
     },
@@ -531,12 +535,12 @@ function mergeDocuments (row_ids, column, source, value, milestone) {
 
 /* #### saveMultiple() #### */
 // Helper function saves value in edit dialog and updates table for multiple rows
-function saveMultiple (row_ids, column, value) {
-	// Prepare data and request
+function saveMultiple(row_ids, column, value) {
+  // Prepare data and request
   url = '/setClassSelected'
   data = JSON.stringify([row_ids, value])
 
-	// Do Ajax
+  // Do Ajax
   $.ajax({
     type: 'POST',
     url: url,
@@ -545,7 +549,7 @@ function saveMultiple (row_ids, column, value) {
     cache: false,
     success: function (response) {
       row_ids = JSON.parse(response)
-			// Update the UI
+      // Update the UI
       var reloadPage = false
       $.each(row_ids, function (i) {
         id = '#' + row_ids[i]
@@ -556,7 +560,7 @@ function saveMultiple (row_ids, column, value) {
       })
       $('#edit-modal').modal('hide')
       $('#edit-form').remove()
-			// Ugly hack to make sure rows are updated across table pages
+      // Ugly hack to make sure rows are updated across table pages
       if (reloadPage == true) {
         window.location.reload()
       } else {
@@ -576,8 +580,8 @@ function saveMultiple (row_ids, column, value) {
 
 /* #### saveOne() #### */
 // Helper function saves value in edit dialog and updates table
-function saveOne (row_id, column, value) {
-	// Validation - make sure the document name is not left blank
+function saveOne(row_id, column, value) {
+  // Validation - make sure the document name is not left blank
   if (column == 1 && value == '') {
     msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
     msg += "<p>Make sure you don't leave the field blank.</p>"
@@ -588,7 +592,7 @@ function saveOne (row_id, column, value) {
     return false
   }
 
-	// Prepare data and request
+  // Prepare data and request
   data = JSON.stringify([row_id, value])
   url = ''
   switch (column) {
@@ -602,7 +606,7 @@ function saveOne (row_id, column, value) {
       break
   }
 
-	// Do Ajax
+  // Do Ajax
   $.ajax({
     type: 'POST',
     url: url,
@@ -610,7 +614,7 @@ function saveOne (row_id, column, value) {
     contentType: 'application/json;charset=UTF-8',
     cache: false,
     success: function (response) {
-			// Update the UI
+      // Update the UI
       cell = 'td:eq(' + column + ')'
       $('#' + row_id).find(cell).text(value)
       $('#edit-modal').modal('hide')
@@ -631,11 +635,11 @@ function saveOne (row_id, column, value) {
 
 /* #### deleteOne() #### */
 // Helper function deletes selected row and updates table
-function deleteOne (row_id) {
-	// alert("Delete: " + row_id);
+function deleteOne(row_id) {
+  // alert("Delete: " + row_id);
   url = '/deleteOne'
 
-	// Do Ajax
+  // Do Ajax
   $.ajax({
     type: 'POST',
     url: url,
@@ -643,10 +647,10 @@ function deleteOne (row_id) {
     contentType: 'charset=UTF-8',
     cache: false,
     success: function (response) {
-			// Update the UI
+      // Update the UI
       id = '#' + row_id
       table.row(id).remove()
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       toggleActiveDocsIcon()
       table.draw()
     },
@@ -661,7 +665,7 @@ function deleteOne (row_id) {
 /* #### END OF deleteOne() #### */
 
 /* #### deleteDoc() #### */
-function deleteDoc (row_id) {
+function deleteDoc(row_id) {
   doc_name = $('#' + row_id).find('td:eq(1)').text()
   html = '<p>Are you sure you wish to delete <b>' + doc_name + '</b>?</p>'
   html += '<span id="deleteId" style="display:none;">' + row_id + '</span>'
@@ -669,19 +673,19 @@ function deleteDoc (row_id) {
   $('#delete-modal .modal-body').html(html)
   $('#delete-modal .modal-body').append(footer)
   $('#delete-modal').modal()
-		.one('click', '#confirm-delete-bttn', function () {
-  row_id = $('#deleteId').text()
-  deleteOne(row_id)
-})
+    .one('click', '#confirm-delete-bttn', function () {
+      row_id = $('#deleteId').text()
+      deleteOne(row_id)
+    })
 }
 /* #### END OF deleteDoc() #### */
 
 /* #### deleteSelected() #### */
 // Helper function deletes selected rows and updates table
-function deleteSelected (row_ids) {
+function deleteSelected(row_ids) {
   url = '/deleteSelected'
 
-	// Do Ajax
+  // Do Ajax
   $.ajax({
     type: 'POST',
     url: url,
@@ -689,14 +693,14 @@ function deleteSelected (row_ids) {
     contentType: 'charset=UTF-8',
     cache: false,
     success: function (response) {
-			// Update the UI
+      // Update the UI
       row_ids = JSON.parse(response)
-			// row_ids = row_ids.split(",");
+      // row_ids = row_ids.split(",");
       $.each(row_ids, function (i) {
         id = '#' + row_ids[i]
-		  		table.row(id).remove()
+        table.row(id).remove()
       })
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons(table.rows().ids().length, table.rows({ selected: true }).ids().length)
       toggleActiveDocsIcon()
       table.draw()
     },
@@ -711,7 +715,7 @@ function deleteSelected (row_ids) {
 /* #### END OF deleteSelected() #### */
 
 /* #### deleteAllSelected() #### */
-function deleteAllSelected (selected_rows) {
+function deleteAllSelected(selected_rows) {
   row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
@@ -723,16 +727,16 @@ function deleteAllSelected (selected_rows) {
   $('#delete-modal .modal-body').html(html)
   $('#delete-modal .modal-body').append(footer)
   $('#delete-modal').modal()
-		.one('click', '#confirm-delete-bttn', function () {
-  row_ids = $('#deleteIds').text()
-  deleteSelected(row_ids)
-})
+    .one('click', '#confirm-delete-bttn', function () {
+      row_ids = $('#deleteIds').text()
+      deleteSelected(row_ids)
+    })
 }
 /* #### END OF deleteAllSelected #### */
 
 /* #### unique() #### */
 // Helper function ensures id lists have no duplicates
-function unique (array) {
+function unique(array) {
   return $.grep(array, function (el, index) {
     return index === $.inArray(el, array)
   })
@@ -742,16 +746,16 @@ function unique (array) {
 // Helper function to change configure the context menu based on
 // the number of rows currently selected
 
-function prepareContextMenu () {
-		// Refresh all options
+function prepareContextMenu() {
+  // Refresh all options
   $('#context-menu').find('li').removeClass('disabled')
   $('#context-menu').find('li').find('a').removeProp('disabled')
 
-		// Comparison values
+  // Comparison values
   num_rows = table.rows().ids().length
-  num_rows_selected = table.rows({selected: true}).ids().length
+  num_rows_selected = table.rows({ selected: true }).ids().length
 
-		// Set config options -- Numbers refer to li elements, including dividers
+  // Set config options -- Numbers refer to li elements, including dividers
   switch (true) {
     case num_rows_selected == 0: // No rows selected
       opts = [6, 8, 9]
@@ -769,7 +773,7 @@ function prepareContextMenu () {
       opts = []
   }
 
-		// Disable configured options
+  // Disable configured options
   $.each(opts, function (k, opt) {
     $('#context-menu').find('li').eq(opt).attr('class', 'disabled')
     $('#context-menu').find('li').eq(opt).find('a').prop('disabled', true)
@@ -779,10 +783,10 @@ function prepareContextMenu () {
 
 /* #### handleSelectButtons() #### */
 // Helper function to change state of selection buttons on events
-function handleSelectButtons (num_rows, num_rows_selected) {
+function handleSelectButtons(num_rows, num_rows_selected) {
   if (table.rows('.selected').data().length == 0) {
     $('#selectAllDocs').prop('disabled', false)
-			// $("#disableAllDocs").prop("disabled", true);
+    // $("#disableAllDocs").prop("disabled", true);
     $('#deleteSelectedDocs').prop('disabled', true)
   } else {
     if (table.rows('.selected').data().length == num_rows) {
