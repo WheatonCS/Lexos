@@ -261,13 +261,13 @@ class TestCallReplacementHandler:
 
     def test_call_replacement_handler_with_file_replacer(self):
         assert call_replacement_handler(
-            text=self.text_string, replacer_string=self.special_string,
+            text=self.text_string, file_replacer_string=self.special_string,
             is_lemma=False, manual_replacer_string="",
             cache_folder=self.cache_folder,
             cache_file_names=self.cache_filenames, cache_number=2) == \
             self.after_special
         assert call_replacement_handler(
-            text=self.text_string, replacer_string=self.special_string,
+            text=self.text_string, file_replacer_string=self.special_string,
             is_lemma=False, manual_replacer_string="",
             cache_folder=self.cache_folder,
             cache_file_names=self.cache_filenames, cache_number=2) == \
@@ -275,13 +275,13 @@ class TestCallReplacementHandler:
             text=self.text_string, replacer_string=self.special_string,
             is_lemma=False)
         assert call_replacement_handler(
-            text=self.text_string, replacer_string=self.consol_string,
+            text=self.text_string, file_replacer_string=self.consol_string,
             is_lemma=False, manual_replacer_string="",
             cache_folder=self.cache_folder,
             cache_file_names=self.cache_filenames, cache_number=0) == \
             self.after_consol
         assert call_replacement_handler(
-            text=self.text_string, replacer_string=self.consol_string,
+            text=self.text_string, file_replacer_string=self.consol_string,
             is_lemma=False, manual_replacer_string="",
             cache_folder=self.cache_folder,
             cache_file_names=self.cache_filenames, cache_number=0) == \
@@ -289,13 +289,13 @@ class TestCallReplacementHandler:
             text=self.text_string, replacer_string=self.consol_string,
             is_lemma=False)
         assert call_replacement_handler(
-            text=self.text_string, replacer_string=self.lemma_string,
+            text=self.text_string, file_replacer_string=self.lemma_string,
             is_lemma=True, manual_replacer_string="",
             cache_folder=self.cache_folder,
             cache_file_names=self.cache_filenames, cache_number=1) == \
             self.after_lemma
         assert call_replacement_handler(
-            text=self.text_string, replacer_string=self.lemma_string,
+            text=self.text_string, file_replacer_string=self.lemma_string,
             is_lemma=True, manual_replacer_string="",
             cache_folder=self.cache_folder,
             cache_file_names=self.cache_filenames, cache_number=1) == \
@@ -305,55 +305,97 @@ class TestCallReplacementHandler:
 
     def test_call_replacement_handler_with_manual_replacer(self):
         assert call_replacement_handler(
-            self.text_string, "", False, self.special_string,
-            self.cache_folder, self.cache_filenames, 2) == self.after_special
+            text=self.text_string, file_replacer_string="", is_lemma=False,
+            manual_replacer_string=self.special_string,
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=2) == \
+            self.after_special
         assert call_replacement_handler(
-            self.text_string, "", False, self.special_string,
-            self.cache_folder, self.cache_filenames, 2) == replacement_handler(
-            self.text_string, self.special_string, False)
+            text=self.text_string, file_replacer_string="", is_lemma=False,
+            manual_replacer_string=self.special_string,
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=2) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.special_string,
+            is_lemma=False)
         assert call_replacement_handler(
-            self.text_string, "", False, self.consol_string,
-            self.cache_folder, self.cache_filenames, 0) == self.after_consol
+            text=self.text_string, file_replacer_string="", is_lemma=False,
+            manual_replacer_string=self.consol_string,
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=0) == \
+            self.after_consol
         assert call_replacement_handler(
-            self.text_string, "", False, self.consol_string,
-            self.cache_folder, self.cache_filenames, 0) == replacement_handler(
-            self.text_string, self.consol_string, False)
+            text=self.text_string, file_replacer_string="", is_lemma=False,
+            manual_replacer_string=self.consol_string,
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=0) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.consol_string,
+            is_lemma=False)
         assert call_replacement_handler(
-            self.text_string, "", True, self.lemma_string,
-            self.cache_folder, self.cache_filenames, 1) == self.after_lemma
+            text=self.text_string, file_replacer_string="", is_lemma=True,
+            manual_replacer_string=self.lemma_string,
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=1) == \
+            self.after_lemma
         assert call_replacement_handler(
-            self.text_string, "", True, self.lemma_string,
-            self.cache_folder, self.cache_filenames, 1) == replacement_handler(
-            self.text_string, self.lemma_string, True)
+            text=self.text_string, file_replacer_string="", is_lemma=True,
+            manual_replacer_string=self.lemma_string,
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=1) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.lemma_string,
+            is_lemma=True)
 
     def test_call_replacement_handler_with_both_replacers(self):
         assert call_replacement_handler(
-            self.text_string, self.split_special_string[0], False,
-            self.split_special_string[1], self.cache_folder,
-            self.cache_filenames, 2) == self.after_special
+            text=self.text_string,
+            file_replacer_string=self.split_special_string[0], is_lemma=False,
+            manual_replacer_string=self.split_special_string[1],
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=2) == \
+            self.after_special
         assert call_replacement_handler(
-            self.text_string, self.split_special_string[0], False,
-            self.split_special_string[1], self.cache_folder,
-            self.cache_filenames, 2) == replacement_handler(
-            self.text_string, self.special_string, False)
+            text=self.text_string,
+            file_replacer_string=self.split_special_string[0], is_lemma=False,
+            manual_replacer_string=self.split_special_string[1],
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=2) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.special_string,
+            is_lemma=False)
         assert call_replacement_handler(
-            self.text_string, self.split_consol_string[0], False,
-            self.split_consol_string[1], self.cache_folder,
-            self.cache_filenames, 0) == self.after_consol
+            text=self.text_string,
+            file_replacer_string=self.split_consol_string[0], is_lemma=False,
+            manual_replacer_string=self.split_consol_string[1],
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=0) == \
+            self.after_consol
         assert call_replacement_handler(
-            self.text_string, self.split_consol_string[0], False,
-            self.split_consol_string[1], self.cache_folder,
-            self.cache_filenames, 0) == replacement_handler(
-            self.text_string, self.consol_string, False)
+            text=self.text_string,
+            file_replacer_string=self.split_consol_string[0], is_lemma=False,
+            manual_replacer_string=self.split_consol_string[1],
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=0) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.consol_string,
+            is_lemma=False)
         assert call_replacement_handler(
-            self.text_string, self.split_lemma_string[0], True,
-            self.split_lemma_string[1], self.cache_folder,
-            self.cache_filenames, 1) == self.after_lemma
+            text=self.text_string,
+            file_replacer_string=self.split_lemma_string[0], is_lemma=True,
+            manual_replacer_string=self.split_lemma_string[1],
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=1) == \
+            self.after_lemma
         assert call_replacement_handler(
-            self.text_string, self.split_lemma_string[0], True,
-            self.split_lemma_string[1], self.cache_folder,
-            self.cache_filenames, 1) == replacement_handler(
-            self.text_string, self.lemma_string, True)
+            text=self.text_string,
+            file_replacer_string=self.split_lemma_string[0], is_lemma=True,
+            manual_replacer_string=self.split_lemma_string[1],
+            cache_folder=self.cache_folder,
+            cache_file_names=self.cache_filenames, cache_number=1) == \
+            replacement_handler(
+            text=self.text_string, replacer_string=self.lemma_string,
+            is_lemma=True)
 
 
 class TestProcessTagReplaceOptions:
@@ -369,100 +411,129 @@ class TestProcessTagReplaceOptions:
         attribute = ""
 
         assert process_tag_replace_options(
-            self.tag_text, "first", action, attribute) == \
-            "Text before tags.\n  Some text in the first tag  \nText between" \
-            " the tags.\n<second tag_num= \"2-nd tag's num\">Other text in " \
-            "the second tag</second>\nText after the tags."
+            orig_text=self.tag_text, tag="first", action=action,
+            attribute=attribute) == "Text before tags.\n  Some text in the " \
+                                    "first tag  \nText between the tags." \
+                                    "\n<second tag_num= \"2-nd tag's num\">" \
+                                    "Other text in the second tag</second>\n" \
+                                    "Text after the tags."
         assert process_tag_replace_options(
-            self.tag_text, "second", action, attribute) == \
-            "Text before tags.\n<first> Some text in the first tag " \
-            "</first>\nText between the tags.\n Other text in the second tag" \
-            " \nText after the tags."
+            orig_text=self.tag_text, tag="second", action=action,
+            attribute=attribute) == "Text before tags.\n<first> Some text in" \
+                                    " the first tag </first>\nText between" \
+                                    " the tags.\n Other text in the second " \
+                                    "tag \nText after the tags."
         assert process_tag_replace_options(
-            self.no_end, "first", action, attribute) == \
-            "The ending   tags here   are a bit <second> messed up."
+            orig_text=self.no_end, tag="first", action=action,
+            attribute=attribute) == "The ending   tags here   are a bit " \
+                                    "<second> messed up."
         assert process_tag_replace_options(
-            self.no_end, "second", action, attribute) == \
-            "The ending <first> tags here <first> are a bit   messed up."
+            orig_text=self.no_end, tag="second", action=action,
+            attribute=attribute) == "The ending <first> tags here <first> " \
+                                    "are a bit   messed up."
 
     def test_process_tag_rep_options_remove_element(self):
         action = "remove-element"
         attribute = ""
 
         assert process_tag_replace_options(
-            self.tag_text, "first", action, attribute) == \
-            "Text before tags.\n \nText between the tags.\n<second tag_num= " \
-            "\"2-nd tag's num\">Other text in the second tag</second>\nText " \
-            "after the tags."
+            orig_text=self.tag_text, tag="first", action=action,
+            attribute=attribute) == "Text before tags.\n \nText between the" \
+                                    " tags.\n<second tag_num= \"2-nd tag's " \
+                                    "num\">Other text in the second tag" \
+                                    "</second>\nText after the tags."
         assert process_tag_replace_options(
-            self.tag_text, "second", action, attribute) == \
-            "Text before tags.\n<first> Some text in the first tag " \
-            "</first>\nText between the tags.\n \nText after the tags."
+            orig_text=self.tag_text, tag="second", action=action,
+            attribute=attribute) == "Text before tags.\n<first> Some text in" \
+                                    " the first tag </first>\nText between " \
+                                    "the tags.\n \nText after the tags."
         assert process_tag_replace_options(
-            self.no_end, "first", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="first", action=action,
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, "second", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="second", action=action,
+            attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_replace_element(self):
         action = "replace-element"
         attribute = "a very nice attribute"
 
         assert process_tag_replace_options(
-            self.tag_text, "first", action, attribute) == \
-            "Text before tags.\na very nice attribute\nText between the " \
-            "tags.\n<second tag_num= \"2-nd tag's num\">Other text in the " \
-            "second tag</second>\nText after the tags."
+            orig_text=self.tag_text, tag="first", action=action,
+            attribute=attribute) == "Text before tags.\na very nice " \
+                                    "attribute\nText between the tags." \
+                                    "\n<second tag_num= \"2-nd tag's num\">" \
+                                    "Other text in the second tag</second>\n" \
+                                    "Text after the tags."
         assert process_tag_replace_options(
-            self.tag_text, "second", action, attribute) == \
-            "Text before tags.\n<first> Some text in the first tag " \
-            "</first>\nText between the tags.\na very nice attribute\nText " \
-            "after the tags."
+            orig_text=self.tag_text, tag="second", action=action,
+            attribute=attribute) == "Text before tags.\n<first> Some text in" \
+                                    " the first tag </first>\nText "\
+                                    "between the tags.\na very nice " \
+                                    "attribute\nText after the tags."
         assert process_tag_replace_options(
-            self.no_end, "first", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="first", action=action,
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, "second", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="second", action=action,
+            attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_leave_tag(self):
         action = "leave-alone"
         attribute = ""
 
         assert process_tag_replace_options(
-            self.tag_text, "first", action, attribute) == self.tag_text
+            orig_text=self.tag_text, tag="first", action=action,
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.tag_text, "second", action, attribute) == self.tag_text
+            orig_text=self.tag_text, tag="second", action=action,
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.no_end, "first", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="first", action=action,
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, "second", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="second", action=action,
+            attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_other(self):
         action = "remove-tag"
         attribute = ""
 
         assert process_tag_replace_options(
-            self.tag_text, "first", "fake-option", attribute) == self.tag_text
+            orig_text=self.tag_text, tag="first", action="fake-option",
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.tag_text, "second", "fake-option", attribute) == self.tag_text
+            orig_text=self.tag_text, tag="second", action="fake-option",
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.no_end, "first", "fake-option", attribute) == self.no_end
+            orig_text=self.no_end, tag="first", action="fake-option",
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, "second", "fake-option", attribute) == self.no_end
+            orig_text=self.no_end, tag="second", action="fake-option",
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
-            self.tag_text, "Text", action, attribute) == self.tag_text
+            orig_text=self.tag_text, tag="Text", action=action,
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.tag_text, " ", action, attribute) == self.tag_text
+            orig_text=self.tag_text, tag=" ", action=action,
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.tag_text, "", action, attribute) == self.tag_text
+            orig_text=self.tag_text, tag="", action=action,
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.tag_text, ".", action, attribute) == self.tag_text
+            orig_text=self.tag_text, tag=".", action=action,
+            attribute=attribute) == self.tag_text
         assert process_tag_replace_options(
-            self.no_end, "Text", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="Text", action=action,
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
             self.no_end, " ", action, attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, "", action, attribute) == self.no_end
+            orig_text=self.no_end, tag="", action=action,
+            attribute=attribute) == self.no_end
         assert process_tag_replace_options(
-            self.no_end, ".", action, attribute) == self.no_end
+            orig_text=self.no_end, tag=".", action=action,
+            attribute=attribute) == self.no_end
 
 
 # handle_tags
