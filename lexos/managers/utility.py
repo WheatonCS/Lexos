@@ -1740,7 +1740,6 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
             - threshold_ops: a dictionary which contains maxclust_op,
                              distance_op and monocrit_op
     """
-    from sklearn.feature_extraction.text import CountVectorizer
     from sklearn.metrics.pairwise import euclidean_distances
     from scipy.cluster.hierarchy import ward, dendrogram
     from scipy.spatial.distance import pdist
@@ -1766,49 +1765,15 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
         cull=culling,
         round_decimal=False)
 
+    # get values(raw matrix) and index(file names) from data frame
+    dtm = dtm_data_frame.values
+    temp_labels = dtm_data_frame.index
+
     if 'getdendro' in request.json:
         # Get options from request.json
         orientation = str(request.json['orientation'])
         linkage = str(request.json['linkage'])
         metric = str(request.json['metric'])
-
-        # Get active files
-        all_contents = np.array([l_file.load_contents() for l_file in
-                                 file_manager.files.values() if l_file.active])
-        temp_labels = dtm_data_frame.index
-
-        # More options
-        n_gram_size = int(request.json['tokenSize'])
-        use_word_tokens = request.json['tokenType'] == 'word'
-        only_char_grams_within_words = False
-        if not use_word_tokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count
-            # front and end markers as ' ' if this is true
-            only_char_grams_within_words = 'inWordsOnly' in request.json
-
-        if use_word_tokens:
-            token_type = 'word'
-        else:
-            token_type = 'char'
-            if only_char_grams_within_words:
-                token_type = 'char_wb'
-
-        vectorizer = CountVectorizer(
-            input='content',
-            encoding='utf-8',
-            min_df=1,
-            analyzer=token_type,
-            token_pattern=r'(?u)\b[\w\']+\b',
-            ngram_range=(
-                n_gram_size,
-                n_gram_size),
-            stop_words=[],
-            dtype=float,
-            max_df=1.0)
-
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = vectorizer.fit_transform(all_contents)
-        dtm = doc_term_sparse_matrix.toarray()
 
         # Plots the hierarchical clustering as a dendrogram.
         if orientation == "left":
@@ -1852,12 +1817,8 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        f = open(
-            path_join(
-                folder,
-                constants.DENDROGRAM_NEWICK_FILENAME),
-            'w',
-            encoding='utf-8')
+        f = open(path_join(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w',
+                 encoding='utf-8')
         f.write(newick)
         f.close()
 
@@ -1877,12 +1838,9 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
     if 'dendroLegends' in request.json:
         show_dendro_legends = request.json['dendroLegends'] == 'on'
 
-    # get raw matrix from dtm_data_frame
-    dendro_matrix = np.array(dtm_data_frame.values)
-
     # generate dendrogram distances list
     distance_list = dendrogrammer.get_dendro_distances(
-        linkage, metric, dendro_matrix)
+        linkage, metric, dtm)
 
     legend = get_dendrogram_legend(file_manager, distance_list)
 
@@ -1897,7 +1855,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
     pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
         distance_min, monocrit_max, monocrit_min, threshold = \
         dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
-                                 temp_labels, dendro_matrix, legend,
+                                 temp_labels, dtm, legend,
                                  folder_path, augmented_dendrogram,
                                  show_dendro_legends)
 
