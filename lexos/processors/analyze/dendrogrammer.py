@@ -231,8 +231,10 @@ def get_silhouette_score(dendro_matrix: List,
 def get_augmented_dendrogram(*args, **kwargs):
     """Generate the branch height legend in dendrogram.
 
-    :param args
-    :param kwargs
+    :param args: The linkage matrix encoding the hierarchical clustering to
+                 render as a dendrogram.
+    :param kwargs: A dictionary which contains options of truncate_mode,
+                   labels, leaf_rotation, orientation, show_leaf_counts
     """
 
     ddata = hierarchy.dendrogram(*args, **kwargs)
