@@ -182,7 +182,7 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
             z, t=threshold, criterion=criterion, monocrit=monocrit)
 
         # this means all the files are divided into only 1 or less cluster
-        if len(set(score_label)) <= 1:
+        if score_label.size <= 1:
             silhouette_score = "Silhouette Score: Invalid for only 1 cluster."
             silhouette_annotation = "Your documents have been grouped within" \
                                     " a single cluseter because they are too "\
@@ -328,8 +328,6 @@ def dendrogram(
     # different for dendrogram
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
-
-    distance_list = np.array([z[i][2] for i in range(0, len(z))])
 
     legend_page = 0
 
