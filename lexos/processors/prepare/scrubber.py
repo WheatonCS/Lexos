@@ -62,11 +62,11 @@ def handle_special_characters(text: str) -> str:
     :return: The text string, now containing unicode character equivalents.
     """
 
-    option_list = request.form['entityrules']
+    char_set = request.form['entityrules']
 
-    if option_list in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
+    if char_set in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
 
-        if option_list == 'doe-sgml':
+        if char_set == 'doe-sgml':
             conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
                                '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
                                '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
@@ -79,7 +79,7 @@ def handle_special_characters(text: str) -> str:
                                '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
                                '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
 
-        elif option_list == 'early-english-html':
+        elif char_set == 'early-english-html':
             conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
                                '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
                                '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
@@ -87,7 +87,7 @@ def handle_special_characters(text: str) -> str:
                                '&gt;': '>', '&#383;': 'ſ'}
 
         else:
-            conversion_dict = get_special_char_dict_from_file(mode=option_list)
+            conversion_dict = get_special_char_dict_from_file(mode=char_set)
 
         r = make_replacer(replacements=conversion_dict)
         # r is a function created by make_replacer(), _do_replace(), and
