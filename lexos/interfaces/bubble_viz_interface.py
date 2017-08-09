@@ -20,7 +20,7 @@ viz_view = Blueprint('viz', __name__)
 def viz():
     """Handles the functionality on the alternate bubbleViz page.
 
-    :returns: a response object (often a render_template call) to flask and
+    :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
     # Detect the number of active documents.
