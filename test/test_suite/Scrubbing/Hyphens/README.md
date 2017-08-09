@@ -3,7 +3,7 @@ Hyphens
 
 This folder contains files for testing the hyphens function.
 
-####Test file: hyphens.txt
+## Test file: hyphens.txt
 
 0. UPLOAD hyphens.txt
 

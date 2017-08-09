@@ -3,7 +3,7 @@ Digits
 
 This folder has files to test the Remove Digits functionality
 
-####Test file: allDigits.txt
+## Test file: allDigits.txt
 
 0. UPLOAD allDigits.txt
 

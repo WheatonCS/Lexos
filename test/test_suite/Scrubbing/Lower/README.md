@@ -3,7 +3,7 @@ Lower
 
 This folder has files for testing Make Lowercase functionality
 
-####Test file: lower.txt
+## Test file: lower.txt
 
 0. UPLOAD lower.txt
 
@@ -15,7 +15,7 @@ This folder has files for testing Make Lowercase functionality
 Results:
 - file content: upper -> lower case thorn þ þ eth ð ð ƥ ƥ ƨ ƨ m m ï ï ā ā œ œ ƃ ƃ ǟ ǟ ǿ ǿ ɣ ɣ e e ψ ψ ή ή z z
 
-####Test file: lowerTest1.txt
+## Test file: lowerTest1.txt
 
 0. UPLOAD lowerTest1.txt
 
@@ -28,7 +28,7 @@ Results:
 - file content: uppercase: a æ b c d ð e f ᵹ/g h i l m n o p r s t þ u ƿ/w x y
                 lowercase: a æ b c d ð e f ᵹ/g h i l m n o p r s/ſ t þ u ƿ/w x y
 
-####Test file: greekTest.txt
+## Test file: greekTest.txt
 
 0. UPLOAD greekTest.txt
 
@@ -41,7 +41,7 @@ Results:
 - file content: uppercase: α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω 
                 lowercase: α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς/σ τ υ φ χ ψ ω
 
-####Test file: spanishTest.txt
+## Test file: spanishTest.txt
 
 0. UPLOAD spanishTest.txt
 

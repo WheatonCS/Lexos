@@ -3,7 +3,7 @@ Lemmas
 
 This folder has files for testing consolidation functionality
 
-####Test file: experiment.txt
+## Test file: experiment.txt
 
 0. UPLOAD experiment.txt
 
