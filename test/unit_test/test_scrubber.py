@@ -12,11 +12,21 @@ from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 class TestGetSpecialCharDictFromFile:
 
     def test_get_special_char_dict_from_file(self):
-        assert get_special_char_dict_from_file(mode="MADEUP-6") == {}
         assert get_special_char_dict_from_file(mode="MUFI-3") == chars.MUFI3
         assert get_special_char_dict_from_file(mode="MUFI-4") == chars.MUFI4
-        # This dictionary is made in handle_special_characters()
-        assert get_special_char_dict_from_file(mode="doe-sgml") == {}
+        try:
+            get_special_char_dict_from_file(mode="MADEUP-6")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError
+        # This option should be processed by handle_special_characters() only
+        try:
+            get_special_char_dict_from_file(mode="doe-sgml")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError
 
 
 # handle_special_characters
