@@ -3,7 +3,7 @@ Ampersand
 
 Tests keep Ampersands
 
-####Test file: Ampersands_text.txt
+##Test file: Ampersands_text.txt
 
 0. UPLOAD Ampersands_text.txt
 
