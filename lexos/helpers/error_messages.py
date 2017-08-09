@@ -17,3 +17,5 @@ WINDOW_SIZE_LARGE_MESSAGE = "The window size must be less than or equal to" \
                             " the length of the given document"
 INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
+NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Colon error on one or more replacement " \
+                                    "lines. Please consult input format"

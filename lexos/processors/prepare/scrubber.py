@@ -11,6 +11,7 @@ from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
+from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE
 from lexos.helpers.exceptions import LexosException
 
 
@@ -158,8 +159,7 @@ def replacement_handler(
     for replacement_line in replacement_lines:
         # If there is no colon on a line, replace the last comma with a colon
         if replacement_line.count(':') != 1:
-            raise LexosException("Colon error on one or more replacement "
-                                 "lines. Please consult input format")
+            raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
 
         # At the end of this section, each element_list is a list of two lists.
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
