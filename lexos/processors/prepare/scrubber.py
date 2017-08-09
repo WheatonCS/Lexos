@@ -161,23 +161,14 @@ def replacement_handler(
         if replacement_line.count(':') != 1:
             raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
 
-        # At the end of this section, each replacements_list is a list of two
-        # lists.
-        # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
-        replacements_list = [element.split(",") for element in
-                             replacement_line.split(':')]
+        # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
+        replace_from_str, replace_to_str = replacement_line.split(':')
 
-        if len(replacements_list[1]) != 1:
+        # Not valid inputs -- "a:b,c" or "a,b:c,d"
+        if ',' in replace_to_str:
             raise LexosException(REPLACEMENT_RIGHT_OPERAND_MESSAGE)
-        elif len(replacements_list[0]) == 1:
-            replacer = replacements_list.pop()[0]
-        # 2+ items -> 1 item, ex. "cat, wildebeest: dog"
-        else:
-            replacer = replacements_list.pop()[0]
 
-        # With the replacer popped, the remainder of replacements_list is text
-        # that needs to be replaced
-        to_replace = replacements_list[0]
+        replace_from_list = replace_from_str.split(",")
 
         # Lemmas are words with boundary space, other replacements are chars
         if is_lemma:
@@ -185,9 +176,9 @@ def replacement_handler(
         else:
             edge = ''
 
-        for change_me in to_replace:
+        for change_me in replace_from_list:
             the_regex = re.compile(edge + change_me + edge, re.UNICODE)
-            text = the_regex.sub(replacer, text)
+            text = the_regex.sub(replace_to_str, text)
 
     return text
 
