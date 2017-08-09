@@ -222,7 +222,7 @@ def call_replacement_handler(
         replacement_line_string = manual_replacer_string
     elif file_replacer_string and manual_replacer_string:
         replacement_line_string = file_replacer_string + "\n" + \
-                                  manual_replacer_string
+            manual_replacer_string
     else:        # not file_replacer_string and not manual_replacer_string
         text = handle_special_characters(text)
 
