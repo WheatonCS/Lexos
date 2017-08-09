@@ -11,7 +11,8 @@ from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
-from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE
+from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 
 
@@ -165,19 +166,15 @@ def replacement_handler(
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
         replacements_list = [element.split(",") for element in
                              replacement_line.split(':')]
+        if len(replacements_list[1]) != 1:
+            raise LexosException(REPLACEMENT_RIGHT_OPERAND_MESSAGE)
 
         # 1 item -> 1 item, ex. "cat: dog"
         if len(replacements_list[0]) == 1 and len(replacements_list[1]) == 1:
             replacer = replacements_list.pop()[0]
-        # 1 item <- 2+ items, ex. "dog: cat, wildebeest"
-        elif len(replacements_list[0]) == 1:
-            replacer = replacements_list.pop(0)[0]
         # 2+ items -> 1 item, ex. "cat, wildebeest: dog"
         elif len(replacements_list[1]) == 1:
             replacer = replacements_list.pop()[0]
-        # Do nothing, ex. "cat, wildebeest: dog, three-toed sloth"
-        else:
-            return text
 
         # With the replacer popped, the remainder of replacements_list is text
         # that needs to be replaced

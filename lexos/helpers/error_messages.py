@@ -19,3 +19,6 @@ INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
 NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Colon error on one or more replacement " \
                                     "lines. Please consult input format"
+REPLACEMENT_RIGHT_OPERAND_MESSAGE = "Too many values on right side of " \
+                                    "replacement string. Please consult " \
+                                    "input format"
