@@ -123,7 +123,7 @@ class TestReplacementHandler:
             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:q",
             is_lemma=False) == "qqqq qqqqqq qq qqqqqqq"
 
-    def test_not_lemma_incorrect_replacer(self):
+    def test_not_lemma_incomplete_replacer(self):
         assert replacement_handler(
             text=self.test_string, replacer_string="g:", is_lemma=False) == \
             "Test strin is testin"
@@ -136,53 +136,47 @@ class TestReplacementHandler:
         assert replacement_handler(
             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
             is_lemma=False) == "   "
-
+        assert replacement_handler(
+            text=self.test_string, replacer_string="", is_lemma=False) == \
+            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string=" ", is_lemma=False) == \
+            self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string="\n", is_lemma=False) == \
+            self.test_string
+        # Missing/too many colons
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="s,f", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
-
         try:
             replacement_handler(
                 text=self.test_string, replacer_string=",", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
-
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="k", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
-
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="t:u:w", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
-
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="t::w", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
-
-        try:
-            replacement_handler(
-                text=self.test_string, replacer_string=" ", is_lemma=False)
-        except LexosException as excep:
-            assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
-
-        # assert replacement_handler(
-        #     text=self.test_string, replacer_string="", is_lemma=False) == \
-        #     self.test_string
-
+        # Too many arguments on right of colon
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="a:i,e", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
-
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="s,t:u,v",

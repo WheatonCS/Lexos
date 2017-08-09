@@ -158,6 +158,10 @@ def replacement_handler(
     replacement_lines = replacer_string.split('\n')
 
     for replacement_line in replacement_lines:
+        # Handle excess blank lines in file, etc.
+        if replacement_line == "":
+            return text
+
         if replacement_line.count(':') != 1:
             raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
 
