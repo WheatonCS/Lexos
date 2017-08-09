@@ -99,24 +99,24 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
     :param distance_metric: string, style of distance metric in the dendrogram
     :param linkage_method: string, style of linkage method in the dendrogram
     :param labels: list, file names
-    :return: -silhouette_score: string, containing the result of silhouette
-              score
-             -silhouette_annotation: string, annotation of the silhouette score
-             -score: float, silhouette score
-             -inconsistent_max: float, upper bound of threshold to calculate
-              silhouette score if using Inconsistent criterion
-             -maxclust_max: integer, upper bound of threshold to calculate
-              silhouette score if using Maxclust criterion
-             -distance_max: float, upper bound of threshold to calculate
-              silhouette score if using Distance criterion
-             -distance_min: float, lower bound of threshold to calculate
-              silhouette score if using Distance criterion
-             -monocrit_max: float, upper bound of threshold to calculate
-              silhouette score if using Monocrit criterion
-             -monocrit_min: float, lower bound of threshold to calculate
-              silhouette score if using Monocrit criterion
-             -threshold: float/integer/string, threshold (t) value that users
-              entered, equals to 'N/A' if users leave the field blank
+    :return: - silhouette_score: string, containing the result of silhouette
+               score
+             - silhouette_annotation: string, annotation of the silhouette score
+             - score: float, silhouette score
+             - inconsistent_max: float, upper bound of threshold to calculate
+               silhouette score if using Inconsistent criterion
+             - maxclust_max: integer, upper bound of threshold to calculate
+               silhouette score if using Maxclust criterion
+             - distance_max: float, upper bound of threshold to calculate
+               silhouette score if using Distance criterion
+             - distance_min: float, lower bound of threshold to calculate
+               silhouette score if using Distance criterion
+             - monocrit_max: float, upper bound of threshold to calculate
+               silhouette score if using Monocrit criterion
+             - monocrit_min: float, lower bound of threshold to calculate
+               silhouette score if using Monocrit criterion
+             - threshold: float/integer/string, threshold (t) value that users
+               entered, equals to 'N/A' if users leave the field blank
     """
     # Switch to request.json if necessary
     if request.json:
@@ -485,11 +485,9 @@ def dendrogram(
 
     # saves dendrogram as a .png
     files = [str(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))]
-    i = 0
     if legend_page > 0:
-        while i < legend_page:
+        for i in range(0, legend_page):
             files.append(str(os.path.join(folder, "legend" + str(i) + ".png")))
-            i += 1
 
         result = Image.new("RGB", (1000, 1500 * (legend_page + 1)))
 
