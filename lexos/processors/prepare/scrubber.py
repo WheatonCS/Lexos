@@ -221,8 +221,8 @@ def call_replacement_handler(
     elif not file_replacer_string and manual_replacer_string:
         replacement_line_string = manual_replacer_string
     elif file_replacer_string and manual_replacer_string:
-        replacement_line_string = '\n'.join(
-            [file_replacer_string, manual_replacer_string])
+        replacement_line_string = file_replacer_string + "\n" + \
+                                  manual_replacer_string
     else:        # not file_replacer_string and not manual_replacer_string
         text = handle_special_characters(text)
 
@@ -599,7 +599,7 @@ def handle_stop_keep_words_string(sw_kw_file_string: str, sw_kw_manual: str,
         cache_filestring(file_string=sw_kw_file_string,
                          cache_folder=cache_folder,
                          filename=cache_filenames[3])
-    word_string = '\n'.join([sw_kw_file_string, sw_kw_manual])
+    word_string = sw_kw_file_string + "\n" + sw_kw_manual
 
     return word_string
 
@@ -1045,7 +1045,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
                 text=orig_text, removal_string=file_and_manual)
 
         # but all the text would be deleted if we called keep_words()
-        # "\n" comes from '\n'.join(["", ""])
+        # "\n" comes from "" + "\n" + ""
         elif request.form['sw_option'] == "keep" and file_and_manual != "\n":
             return keep_words(
                 text=orig_text, non_removal_string=file_and_manual)
