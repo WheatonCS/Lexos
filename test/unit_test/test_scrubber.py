@@ -1,4 +1,5 @@
-from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE
+from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 from lexos.processors.prepare.scrubber import replacement_handler, \
     remove_stopwords, keep_words, get_remove_whitespace_map, make_replacer, \
@@ -101,10 +102,6 @@ class TestReplacementHandler:
             text=self.test_string, replacer_string="i,e:a", is_lemma=False) \
             == "Tast strang as tastang"
         assert replacement_handler(
-            text=self.test_string, replacer_string="a:i,e", is_lemma=False)\
-            == replacement_handler(
-            text=self.test_string, replacer_string="i,e:a", is_lemma=False)
-        assert replacement_handler(
             text=self.test_string, replacer_string="q:z", is_lemma=False) == \
             self.test_string
         assert replacement_handler(
@@ -133,6 +130,12 @@ class TestReplacementHandler:
         assert replacement_handler(
             text=self.test_string, replacer_string=":", is_lemma=False) == \
             self.test_string
+        assert replacement_handler(
+            text=self.test_string, replacer_string=":k", is_lemma=False) == \
+            "kTkeksktk ksktkrkiknkgk kiksk ktkeksktkiknkgk"
+        assert replacement_handler(
+            text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
+            is_lemma=False) == "   "
 
         try:
             replacement_handler(
@@ -174,15 +177,18 @@ class TestReplacementHandler:
         #     text=self.test_string, replacer_string="", is_lemma=False) == \
         #     self.test_string
 
-        assert replacement_handler(
-            text=self.test_string, replacer_string=":k", is_lemma=False) == \
-            "kTkeksktk ksktkrkiknkgk kiksk ktkeksktkiknkgk"
-        assert replacement_handler(
-            text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
-            is_lemma=False) == "   "
-        assert replacement_handler(
-            text=self.test_string, replacer_string="s,t:u,v",
-            is_lemma=False) == self.test_string
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string="a:i,e", is_lemma=False)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
+
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string="s,t:u,v",
+                is_lemma=False)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
 
     # def test_not_lemma_spacing(self):
     #     assert replacement_handler(
