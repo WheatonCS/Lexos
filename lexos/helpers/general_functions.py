@@ -2,11 +2,15 @@ import errno
 import os
 import re
 import shutil
+from zipfile import ZipFile
+
 import chardet
+
 import lexos.helpers.constants as constants
+from lexos.helpers.exceptions import LexosException
 
 
-def get_encoding(input_string: str) -> str:
+def get_encoding(input_string: bytes) -> str:
     """Uses chardet to return the encoding type of a string.
 
     :param input_string: A string.
@@ -51,7 +55,7 @@ def generate_d3_object(word_counts: dict, object_label: str,
     return json_object
 
 
-def zip_dir(dir: str, ziph: object):
+def zip_dir(dir: str, ziph: ZipFile):
     """zip all the file in path into a zipfile type ziph
 
     :param dir: The directory that you want to zip
@@ -197,24 +201,46 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     return striped_text
 
 
+def _try_decode_bytes_(raw_bytes: bytes) -> str:
+    """helper function for decode_byte,try to decode the raw bytes
+
+    :param raw_bytes: the bytes you get and want to decode to string
+    :return: A decoded string
+    """
+    # Detect the encoding with only the first couple of bytes
+    encoding_detect = chardet.detect(
+        raw_bytes[:constants.MIN_ENCODING_DETECT])
+    # get the encoding
+    encoding_type = encoding_detect['encoding']
+
+    if encoding_type is None:
+        encoding_detect = chardet.detect(raw_bytes)
+        encoding_type = encoding_detect['encoding']
+
+    try:
+        # try to decode the string using the encoding we get
+        decoded_string = raw_bytes.decode(encoding_type)
+
+    except UnicodeDecodeError:
+        # if decoding failed, we use all the bytes to detect encoding
+        encoding_detect = chardet.detect(raw_bytes)
+        encoding_type = encoding_detect['encoding']
+        decoded_string = raw_bytes.decode(encoding_type)
+
+    return decoded_string
+
+
 def decode_bytes(raw_bytes: bytes) -> str:
-    """decode the raw bytes, typically used to decode `request.file`
+    """Decode the raw byte into a string
 
     :param raw_bytes: the bytes you get and want to decode to string
     :return: A decoded string
     """
     try:
-        # try to use utf-8 to decode first
-        encoding_type = "utf-8"
-        # Grab the file contents, which were encoded/decoded automatically
-        # into python's format
-        decoded_string = raw_bytes.decode(encoding_type)
-    except UnicodeDecodeError:
-        encoding_detect = chardet.detect(
-            raw_bytes[:constants.MIN_ENCODING_DETECT])
-        # Detect the encoding
-        encoding_type = encoding_detect['encoding']
-        # Grab the file contents, which were encoded/decoded automatically
-        # into python's format
-        decoded_string = raw_bytes.decode(encoding_type)
-    return decoded_string
+        decoded_str = _try_decode_bytes_(raw_bytes)
+
+    except (UnicodeDecodeError, TypeError):
+        raise LexosException('chardet fail to detect encoding of your file, '
+                             'please make sure your file is in utf-8 encoding')
+
+    return decoded_str

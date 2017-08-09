@@ -1,12 +1,15 @@
 Ampersand
 ==========
 
-# Summary
-This folder has 2 files: README.md and Ampersands_text.txt
+Tests keep Ampersands
 
-## README.md
-This file
+## Test file: Ampersands_text.txt
 
-## Ampersands_text.txt
-This file contains a string that tests keep Ampersands in all possible situations
+0. UPLOAD Ampersands_text.txt
+
+1. SCRUB: 
+    - Remove all Punct
+    - Make Lowercase
+    - Remove Digits
+    - Keep Ampersands
 

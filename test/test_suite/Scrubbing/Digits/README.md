@@ -1,28 +1,16 @@
 Digits
 ==========
 
-# Summary
-This folder has 7 files: README.md, allDigits.txt, digits.txt, 
-digits_Chinese.txt, digits_easterArabic.txt, numberLetter.txt, and 
-test all digits.txt
+This folder has files to test the Remove Digits functionality
 
-## README.md
-This file
+## Test file: allDigits.txt
 
-## allDigits.txt
-This file contains a list of all digits
+0. UPLOAD allDigits.txt
 
-## digits.txt
-This file contains a string to test digits for 0 to 9
+1. SCRUB: 
+    - Remove all Punct (optional)
+    - Make Lowercase (optional)
+    - Remove Digits
 
-## digits_Chinese.txt
-This file contains a string to test chinese digits
-
-## digits_easterArabic.txt
-This file contains a string to test easter arabic digits
-
-## numberLetter.txt
-This file contains a list of number letters
-
-## test all digits.txt
-this file contains a string that tests all digits
+Results:
+- file content: abc

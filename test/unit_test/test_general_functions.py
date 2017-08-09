@@ -136,15 +136,9 @@ class TestDecodeBytes:
         assert decode_bytes(u'España'.encode('utf-8')) == 'España'
 
     def test_iso8859_1_decoding(self):
-        assert decode_bytes('Äpple'.encode()) == 'Äpple'
+        assert decode_bytes('Äpple'.encode('iso-8859-1')) == 'Äpple'
 
     def test_windows_1251_decoding(self):
-        assert decode_bytes('Zемфира'.encode()) == 'Zемфира'
-
-    def test_utf16_be_decoding(self):
-        input_string = 'test'.encode('utf-16-be')
-        assert decode_bytes(input_string) == input_string.decode()
-
-    def test_utf16_le_decoding(self):
-        input_string = 'test'.encode('utf-16-le')
-        assert decode_bytes(input_string) == input_string.decode()
+        input_str = 'сегодняшнее домашнее задание.' \
+                    ' Настенные часы висят на стене. '
+        assert decode_bytes(input_str.encode('windows-1251')) == input_str
