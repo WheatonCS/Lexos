@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import textwrap
+from typing import List, Union
 
 from PIL import Image, ImageChops
 from flask import request
@@ -11,23 +12,20 @@ from scipy.spatial.distance import pdist
 from sklearn import metrics
 
 from lexos.helpers import constants as const
+from lexos.helpers.error_messages import EMPTY_STRING_MESSAGE, \
+    EMPTY_LIST_MESSAGE
 
 os.environ['MPLCONFIGDIR'] = os.path.join(
     const.UPLOAD_FOLDER, '.matplotlibs')
 
 
-def translate_den_options():
-    """
-    Translate dendrogram options for users for legends.
+def translate_den_options() -> (bool, str, str):
+    """Translate dendrogram options for users for legends.
 
-    Args:
-        None
-
-    Returns:
-        need_translate: boolean, true if user chooses Distance Metric OR
-            Normalize Type different than default values
-        translate_metric: string, user's choice on Distance Metric
-        translate_dvf: string, user's choice on Normalize Type
+    :return: -need_translate: boolean, true if user chooses Distance Metric OR
+              Normalize Type different than default values
+             -translate_metric: string, user's choice on Distance Metric
+             -translate_dvf: string, user's choice on Normalize Type
     """
     # Switch to Ajax if necessary
     if request.json:
@@ -58,65 +56,65 @@ def translate_den_options():
     return need_translate, translate_metric, translate_dvf
 
 
-def get_dendro_distances(linkage_method, distance_metric, dendro_matrix):
-    """
-    Creates a dendrogram using the word frequencies in the given text segments
-    and saves the dendrogram as pdf file and a png image.
+def get_dendro_distances(linkage_method: str, distance_metric: str,
+                         dendro_matrix: List[List]) -> List:
+    """Calculate the distances in the dendrogram.
 
-    Args:
-        linkage_method: A string representing the grouping style of the clades
-                in the dendrogram.
-        distance_metric: A string representing the style of the distance
-                between leaves in the dendrogram.
-        dendro_matrix: A list where each item is a list of frequencies for a
-                given word (in decimal form) for each segment of text.
-    Returns:
-        distance_list: A list of all the distances in the dendrogram
-        """
+    Use the word frequencies in the given text segments to calculate distance
+    in a dendrogram
+    :param linkage_method: A string representing the grouping style of
+    the clades in the dendrogram.
+    :param distance_metric: A string representing the style of the distance
+    between leaves in the dendrogram.
+    :param dendro_matrix: A list where each item is a list of frequencies
+    for a given word (in decimal form) for each segment of text.
+    :return: distance_list: A list of all the distances in the dendrogram
+    """
+
+    # precondition
+    assert len(linkage_method) != 0, EMPTY_STRING_MESSAGE
+    assert len(distance_metric) != 0, EMPTY_STRING_MESSAGE
+    assert len(dendro_matrix) != 0, EMPTY_LIST_MESSAGE
 
     # values are the same from the previous ones, but the formats are slightly
     # different for dendrogram
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
-
-    distance_list = []
-    for i in range(0, len(z)):
-        temp = z[i][2]
-        rounded_dist = round(temp, 5)
-        distance_list.append(rounded_dist)
+    distance_list = [round(float(z[i][2]), 5) for i in range(0, len(z))]
 
     return distance_list
 
 
-def get_silhouette_score(dendro_matrix, distance_metric, linkage_method,
-                         labels):
-    """
-    Generate silhoutte score based on hierarchical clustering.
+def get_silhouette_score(dendro_matrix: List,
+                         distance_metric: str,
+                         linkage_method: str,
+                         labels: List[str]) -> (str, str, float, int, float,
+                                                float, float, float,
+                                                Union[float, int, str]):
+    """Generate silhoutte score based on hierarchical clustering.
 
-    Args:
-        dendro_matrix: list, occurence of words in different files
-        distance_metric: string, style of distance metric in the dendrogram
-        linkage_method: string, style of linkage method in the dendrogram
-        labels: list, file names
-
-    Returns:
-        silhouette_score: string, containing the result of silhouette score
-        silhouette_annotation: string, annotation of the silhouette score
-        score: float, silhouette score
-        inconsistent_max: float, upper bound of threshold to calculate
-                silhouette score if using Inconsistent criterion
-        maxclust_max: integer, upper bound of threshold to calculate
-                silhouette score if using Maxclust criterion
-        distance_max: float, upper bound of threshold to calculate
-                silhouette score if using Distance criterion
-        distance_min: float, lower bound of threshold to calculate
-                silhouette score if using Distance criterion
-        monocrit_max: float, upper bound of threshold to calculate
-                silhouette score if using Monocrit criterion
-        monocrit_min: float, lower bound of threshold to calculate
-                silhouette score if using Monocrit criterion
-        threshold: float/integer/string, threshold (t) value that users
-                entered, equals to 'N/A' if users leave the field blank
+    :param dendro_matrix: list, occurrence of words in different files
+    :param distance_metric: string, style of distance metric in the dendrogram
+    :param linkage_method: string, style of linkage method in the dendrogram
+    :param labels: list, file names
+    :return: -silhouette_score: string, containing the result of silhouette
+              score
+             -silhouette_annotation: string, annotation of the silhouette score
+             -score: float, silhouette score
+             -inconsistent_max: float, upper bound of threshold to calculate
+              silhouette score if using Inconsistent criterion
+             -maxclust_max: integer, upper bound of threshold to calculate
+              silhouette score if using Maxclust criterion
+             -distance_max: float, upper bound of threshold to calculate
+              silhouette score if using Distance criterion
+             -distance_min: float, lower bound of threshold to calculate
+              silhouette score if using Distance criterion
+             -monocrit_max: float, upper bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+             -monocrit_min: float, lower bound of threshold to calculate
+              silhouette score if using Monocrit criterion
+             -threshold: float/integer/string, threshold (t) value that users
+              entered, equals to 'N/A' if users leave the field blank
     """
     # Switch to request.json if necessary
     if request.json:
@@ -231,14 +229,12 @@ def get_silhouette_score(dendro_matrix, distance_metric, linkage_method,
 
 
 def get_augmented_dendrogram(*args, **kwargs):
-    """
-    Generate the branch height legend in dendrogram.
+    """Generate the branch height legend in dendrogram.
 
-    Args:
-        None
-
-    Returns:
-        None
+    :param args: The linkage matrix encoding the hierarchical clustering to
+                 render as a dendrogram.
+    :param kwargs: A dictionary which contains options of truncate_mode,
+                   labels, leaf_rotation, orientation, show_leaf_counts
     """
 
     ddata = hierarchy.dendrogram(*args, **kwargs)
@@ -260,7 +256,12 @@ def get_augmented_dendrogram(*args, **kwargs):
             1.1))
 
 
-def trim(im):
+def trim(im: Image.Image) -> Image.Image:
+    """Crop the dendrogram generated in dendrogram function.
+
+    :param im: a png image
+    :return: im.crop(bbox): cropped image
+    """
     bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
     diff = ImageChops.difference(im, bg)
     diff = ImageChops.add(diff, diff, 2.0, -100)
@@ -271,61 +272,58 @@ def trim(im):
 
 # Gets called from generateDendrogram() in utility.py
 def dendrogram(
-        orientation,
-        title,
-        pruning,
-        linkage_method,
-        distance_metric,
-        labels,
-        dendro_matrix,
-        legend,
-        folder,
-        augmented_dendrogram,
-        show_dendro_legends):
-    """
-    Creates a dendrogram using the word frequencies in the given text segments
-    and saves the
-    dendrogram as pdf file and a png image.
+        orientation: str,
+        title: str,
+        pruning: int,
+        linkage_method: str,
+        distance_metric: str,
+        labels: List[str],
+        dendro_matrix: List[List],
+        legend: str,
+        folder: str,
+        augmented_dendrogram: bool,
+        show_dendro_legends: bool) -> (int, float, float, int, float, float,
+                                       float, float, Union[int, float, str]):
+    """Create a dendrogram and save it as pdf file and a png image.
 
-    Args:
-        orientation: A string representing the orientation of the dendrogram.
-        title: A unicode string representing the title of the dendrogram,
-                depending on the user's input.
-        pruning: An integer representing the number of leaves to be cut off,
-                starting from the top (defaults to 0).
-        linkage_method: A string representing the grouping style of the clades
-                in the dendrogram.
-        distance_metric: A string representing the style of the distance
-                between leaves in the dendrogram.
-        labels: A list of strings representing the name of each text segment.
-        dendro_matrix: A list where each item is a list of frequencies for a
-                given word (in decimal form) for each segment of text.
-        legend: A string of all legends
-        folder: A string representing the path name to the folder where the pdf
-                and png files
-                of the dendrogram will be stored.
-        augmented_dendrogram: A boolean, True if "Show Branch Height in
-                Dendrogram" is checked
-        show_dendro_legends: boolean, True if "Show Legends in Dendrogram" is
-                checked
+    Use the word frequencies in the given text segments to create dendrogram
 
-    Returns:
-        total_pdf_page_number: integer, total number of pages of the PDF.
-        score: float, silhouette score
-        inconsistent_max: float, upper bound of threshold to calculate
-                silhouette score if using Inconsistent criterion
-        maxclust_max: integer, upper bound of threshold to calculate
-                silhouette score  if using Maxclust criterion
-        distance_max: float, upper bound of threshold to calculate
-                silhouette score if using Distance criterion
-        distance_min: float, lower bound of threshold to calculate
-                silhouette score if using Distance criterion
-        monocrit_max: float, upper bound of threshold to calculate
-                silhouette score if using Monocrit criterion
-        monocrit_min: float, lower bound of threshold to calculate
-                silhouette score if using Monocrit criterion
-        threshold: float/integer/string, threshold (t) value that users
-                entered, equals to 'N/A' if users leave the field blank
+    :param orientation: A string of the orientation of the dendrogram.
+    :param title: A unicode string representing the title of the dendrogram,
+           depending on the user's input.
+    :param pruning: An integer representing the number of leaves to be cut off,
+           starting from the top (defaults to 0).
+    :param linkage_method: A string representing the grouping style of the
+           clades in the dendrogram.
+    :param distance_metric: A string representing the style of the distance
+           between leaves in the dendrogram.
+    :param labels: A list of strings of the name of each text segment.
+    :param dendro_matrix: A list where each item is a list of frequencies for a
+           given word (in decimal) for each segment of text.
+    :param legend: A string of all legends
+    :param folder: A string representing the path name to the folder where the
+           pdf and png files of the dendrogram will be stored.
+    :param augmented_dendrogram: A boolean, True if "Show Branch Height in
+           Dendrogram" is checked
+    :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
+           is checked
+    :return:
+            -total_pdf_page_number: integer, total number of pages of the PDF.
+            -score: float, silhouette score
+            -inconsistent_max: float, upper bound of threshold to calculate
+             silhouette score if using Inconsistent criterion
+            -maxclust_max: integer, upper bound of threshold to calculate
+            -silhouette score  if using Maxclust criterion
+            -distance_max: float, upper bound of threshold to calculate
+             silhouette score if using Distance criterion
+            -distance_min: float, lower bound of threshold to calculate
+             silhouette score if using Distance criterion
+            -monocrit_max: float, upper bound of threshold to calculate
+             silhouette score if using Monocrit criterion
+            -monocrit_min: float, lower bound of threshold to calculate
+             silhouette score if using Monocrit criterion
+            -threshold: float/integer/string, threshold (t) value that users
+             entered, equals to 'N/A' if users leave the field blank
     """
 
     # Generating silhouette score
