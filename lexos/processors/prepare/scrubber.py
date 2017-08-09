@@ -166,14 +166,13 @@ def replacement_handler(
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
         replacements_list = [element.split(",") for element in
                              replacement_line.split(':')]
+
         if len(replacements_list[1]) != 1:
             raise LexosException(REPLACEMENT_RIGHT_OPERAND_MESSAGE)
-
-        # 1 item -> 1 item, ex. "cat: dog"
-        if len(replacements_list[0]) == 1 and len(replacements_list[1]) == 1:
+        elif len(replacements_list[0]) == 1:
             replacer = replacements_list.pop()[0]
         # 2+ items -> 1 item, ex. "cat, wildebeest: dog"
-        elif len(replacements_list[1]) == 1:
+        else:
             replacer = replacements_list.pop()[0]
 
         # With the replacer popped, the remainder of replacements_list is text
