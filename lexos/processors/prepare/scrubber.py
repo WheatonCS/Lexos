@@ -160,10 +160,11 @@ def replacement_handler(
         if replacement_line.count(':') != 1:
             raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
 
-        # At the end of this section, each element_list is a list of two lists.
+        # At the end of this section, each replacements_list is a list of two
+        # lists.
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
-        replacements_list = [element.split(",") for index, element in
-                             enumerate(replacement_line.split(':'))]
+        replacements_list = [element.split(",") for element in
+                             replacement_line.split(':')]
 
         # 1 item -> 1 item, ex. "cat: dog"
         if len(replacements_list[0]) == 1 and len(replacements_list[1]) == 1:
