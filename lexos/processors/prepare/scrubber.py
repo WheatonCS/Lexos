@@ -157,7 +157,7 @@ def replacement_handler(
     replacement_lines = replacer_string.split('\n')
 
     for replacement_line in replacement_lines:
-        # If there is no colon on a line, replace the last comma with a colon
+        # There must be exactly one colon per line
         if replacement_line.count(':') != 1:
             raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
 
