@@ -101,7 +101,8 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
     :param labels: list, file names
     :return: - silhouette_score: string, containing the result of silhouette
                score
-             - silhouette_annotation: string, annotation of the silhouette score
+             - silhouette_annotation: string, annotation of the silhouette
+               score
              - score: float, silhouette score
              - inconsistent_max: float, upper bound of threshold to calculate
                silhouette score if using Inconsistent criterion
