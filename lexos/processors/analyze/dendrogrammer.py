@@ -484,9 +484,7 @@ def dendrogram(
                 legend_page += 1
 
     # saves dendrogram as a .png
-
     files = [str(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))]
-
     i = 0
     if legend_page > 0:
         while i < legend_page:
