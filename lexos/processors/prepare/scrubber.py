@@ -28,7 +28,7 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     elif mode == "MUFI-4":
         filename = constants.MUFI_4_FILENAME
     else:
-        return conversion_dict
+        raise ValueError
 
     # assign current working path to variable
     cur_file_dir = os.path.dirname(os.path.abspath(__file__))
