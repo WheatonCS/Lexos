@@ -11,6 +11,7 @@ from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
+from lexos.helpers.exceptions import LexosException
 
 
 def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
@@ -156,10 +157,9 @@ def replacement_handler(
 
     for replacement_line in replacement_lines:
         # If there is no colon on a line, replace the last comma with a colon
-        if replacement_line.find(':') == -1:
-            last_comma = replacement_line.rfind(',')
-            replacement_line = replacement_line[:last_comma] + \
-                ':' + replacement_line[last_comma + 1:]
+        if replacement_line.count(':') != 1:
+            raise LexosException("Colon error on one or more replacement "
+                                 "lines. Please consult input format")
 
         # At the end of this section, each element_list is a list of two lists.
         # Example: "a,b,c,d:e" will produce [['a', 'b', 'c', 'd'], ['e']]
