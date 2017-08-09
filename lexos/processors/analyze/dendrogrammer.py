@@ -239,13 +239,9 @@ def get_augmented_dendrogram(*args, **kwargs):
             pyplot.annotate("%0.4g" % y, (x, y), xytext=(0, -8),
                             textcoords='offset points',
                             va='top', ha='center', size='small')
-    pyplot.legend(
-        p,
-        ['the branch height legend'],
-        numpoints=1,
-        bbox_to_anchor=(
-            1.1,
-            1.1))
+
+    pyplot.legend(p, ['the branch height legend'], numpoints=1,
+                  bbox_to_anchor=(1.1, 1.1))
 
 
 def trim(im: Image.Image) -> Image.Image:
@@ -374,6 +370,7 @@ def dendrogram(
 
     pyplot.title(str_wrap_title, fontsize=const.DENDRO_TITLE_FONT_SIZE)
 
+    # get augmented dendrogram if requested
     if augmented_dendrogram:
         get_augmented_dendrogram(
             z,
@@ -444,10 +441,7 @@ def dendrogram(
 
             line_left = line_total - max_legend_length_first_page
 
-            pyplot.savefig(
-                os.path.join(
-                    folder,
-                    const.DENDROGRAM_PNG_FILENAME))
+            pyplot.savefig(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))
 
             while line_left > 0:
                 # creates next PDF page for the legends
@@ -484,12 +478,9 @@ def dendrogram(
 
                 line_left -= const.DENDRO_MAX_LINES_PER_PAGE
 
-                pyplot.savefig(
-                    os.path.join(
-                        folder,
-                        "legend" +
-                        str(legend_page) +
-                        ".png"))
+                pyplot.savefig(os.path.join(folder, "legend"
+                                            + str(legend_page)
+                                            + ".png"))
                 legend_page += 1
 
     # saves dendrogram as a .png
