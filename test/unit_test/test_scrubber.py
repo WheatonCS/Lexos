@@ -164,11 +164,14 @@ class TestReplacementHandler:
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
 
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string=" ", is_lemma=False)
+        except LexosException as excep:
+            assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
+
         # assert replacement_handler(
         #     text=self.test_string, replacer_string="", is_lemma=False) == \
-        #     self.test_string
-        # assert replacement_handler(
-        #     text=self.test_string, replacer_string=" ", is_lemma=False) == \
         #     self.test_string
 
         assert replacement_handler(
