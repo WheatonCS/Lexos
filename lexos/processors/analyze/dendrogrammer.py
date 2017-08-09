@@ -307,8 +307,7 @@ def dendrogram(
            Dendrogram" is checked
     :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
            is checked
-
-   :return:
+    :return:
             -total_pdf_page_number: integer, total number of pages of the PDF.
             -score: float, silhouette score
             -inconsistent_max: float, upper bound of threshold to calculate
