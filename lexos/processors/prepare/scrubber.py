@@ -154,8 +154,8 @@ def replacement_handler(
 
     # Remove spaces in replacement string for consistent format, then split the
     # individual replacements to be made
-    replacer_string = re.sub(' ', '', replacer_string)
-    replacement_lines = replacer_string.split('\n')
+    no_space_replacer = replacer_string.translate({ord(" "): None})
+    replacement_lines = no_space_replacer.split('\n')
 
     for replacement_line in replacement_lines:
         # Handle excess blank lines in file, etc.
