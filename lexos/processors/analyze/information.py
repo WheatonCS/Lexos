@@ -66,17 +66,6 @@ class CorpusInformation:
         # different from others(too large or too small) analyzed by using iqr
         self.anomaly_iqr = file_anomaly_iqr
 
-    def list_stats(self):
-        """Print all the statistics in a good manner."""
-        print()
-        print('average:', self.average, ' standard error:', self.std_deviation)
-        print('document size anomaly calculated using standard error:',
-              self.anomaly_std_err)
-        print('median:', self.median, ' Q1:', self.q1, ' Q3:', self.q3,
-              ' IQR', self.iqr)
-        print('document size anomaly calculated using IQR:',
-              self.anomaly_iqr)
-
     def plot(self, path):
         """Plot a bar chart to represent the statistics.
 
@@ -129,25 +118,6 @@ class FileInformation:
         self.q3 = q3
         self.iqr = q3 - q1
         self.hapax = ((count_list == 1).sum())
-
-    def list_stat(self):
-        """Print all the statistics in a good manner."""
-
-        print()
-        print('information for', "'" + self.file_name + "'")
-        print('total word count:', self.total_word_count)
-        print('1. in term of word count:')
-        print('    average:', self.average, ' standard error:',
-              self.std_deviation)
-        print('    median:', self.median, ' Q1:', self.q1, ' Q3:', self.q3,
-              ' IQR', self.iqr)
-        print('2. in term of probability')
-        print('    average:', self.average / self.total_word_count,
-              ' standard error:', self.std_deviation / self.total_word_count)
-        print('    median:', self.median / self.total_word_count,
-              ' Q1:', self.q1 / self.total_word_count,
-              ' Q3:', self.q3 / self.total_word_count,
-              ' IQR', self.iqr / self.total_word_count)
 
     def plot(self, path, num_bins=0):
         """draw a histogram to represent the data

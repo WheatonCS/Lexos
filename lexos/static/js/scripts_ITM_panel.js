@@ -59,15 +59,15 @@ function toggleArrow(side){
 
 /* Document Ready Functions */
 $(document).ready(function () {
-    /* ITM Panel Setup */
-/*    var container = $("#toggler").parent();
-    var containerWidth = container.width();
-    container.css({left:-(containerWidth+32)});
-    container.attr('data-status', 'closed'); */
+  /* ITM Panel Setup */
+  /*    var container = $("#toggler").parent();
+      var containerWidth = container.width();
+      container.css({left:-(containerWidth+32)});
+      container.attr('data-status', 'closed'); */
 
-    /* ITM Panel Toggle Events */
-    /* Note: This function currently only works with side-panel toggle icon.
-       To enable the use of other triggers, a class trigger should be used. */
+  /* ITM Panel Toggle Events */
+  /* Note: This function currently only works with side-panel toggle icon.
+     To enable the use of other triggers, a class trigger should be used. */
   $('#cog-toggler').click(function (e) {
     e.preventDefault()
     $('#settings-modal').modal('hide')
@@ -92,17 +92,17 @@ $(document).ready(function () {
     }
   })
 
-    /* Populate a Bootstrap modal */
+  /* Populate a Bootstrap modal */
   $('#ITM-modal').on('show.bs.modal', function (e) {
     var button = $(e.relatedTarget) // Button that triggered the modal
     var slug = button.data('slug') // Extract info from data-slug attribute
     var type = button.data('type') // Extract info from data-type attribute
     $('#dialog-status').show()
     callAPI(slug, type)
-        // callAPI("best-practices", "dialog");
+    // callAPI("best-practices", "dialog");
   })
 
-    /* Empty a Bootstrap modal */
+  /* Empty a Bootstrap modal */
   $('#ITM-modal').on('hide.bs.modal', function () {
     $('#ITM-modal').removeData('bs.modal')
     icon = $('#dialog-status').parent().html()
@@ -112,10 +112,10 @@ $(document).ready(function () {
     callAPI('best-practices', 'dialog')
   })
 
-    /* Handle Show Video Button in Bootstrap Modal */
-/*    $('#show-video').click(function() {
-        callAPI("how-to-read-a-dendrogram", "video-dialog")
-    }); */
+  /* Handle Show Video Button in Bootstrap Modal */
+  /*    $('#show-video').click(function() {
+          callAPI("how-to-read-a-dendrogram", "video-dialog")
+      }); */
 })
 
 /* Initialise Bootstrap Modal */

@@ -1,9 +1,9 @@
 $(document).ready(function () {
-	//  Dynamically change the height of the embedded PDF
-	// $("#pdf").height(pdfPageNumber * 1400);
+  //  Dynamically change the height of the embedded PDF
+  // $("#pdf").height(pdfPageNumber * 1400);
   $('.dendroImage').height(pdfPageNumber * 120 + 'vh')
 
-	// Show the silhouette score results based on the PDF height
+  // Show the silhouette score results based on the PDF height
   if ($('#pdf').height() == 0) {
     $('#silhouetteResults').hide()
     $('#dendrodownload').hide()
@@ -20,25 +20,25 @@ $(document).ready(function () {
     $('#download').show()
   }
 
-	// Events after 'Get Dendrogram' is clicked, handle exceptions
+  // Events after 'Get Dendrogram' is clicked, handle exceptions
   $('#getdendro, #dendrodownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload, #download').on('click', function () {
     var err1 = 'A dendrogram requires at least 2 active documents to be created.'
-	    var err2 = 'Invalid Threshold.'
-	    var err3 = 'Invalid number of leaves.'
+    var err2 = 'Invalid Threshold.'
+    var err3 = 'Invalid number of leaves.'
     var activeFiles = $('#num_active_files').val()
-    $('#status-analyze').css({'visibility': 'visible', 'z-index': '400000'})
+    $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
 
     if (activeFiles < 2) {
-      $('#status-analyze').css({'visibility': 'hidden'})
-	        $('#error-modal-message').html(err1)
-	        $('#error-modal').modal()
+      $('#status-analyze').css({ 'visibility': 'hidden' })
+      $('#error-modal-message').html(err1)
+      $('#error-modal').modal()
       return false
     } else {
       var pruning = $('#pruning').val()
       if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
-        $('#status-analyze').css({'visibility': 'hidden'})
-		        $('#error-modal-message').html(err3)
-		        $('#error-modal').modal()
+        $('#status-analyze').css({ 'visibility': 'hidden' })
+        $('#error-modal-message').html(err3)
+        $('#error-modal').modal()
         return false
       }
 
@@ -48,43 +48,43 @@ $(document).ready(function () {
         if ((thresholdValue >= 0 && thresholdValue <= inconsistentMax) || (thresholdValue == '')) {
           return true
         } else {
-          $('#status-analyze').css({'visibility': 'hidden'})
-			        $('#error-modal-message').html(err2)
-			        $('#error-modal').modal()
+          $('#status-analyze').css({ 'visibility': 'hidden' })
+          $('#error-modal-message').html(err2)
+          $('#error-modal').modal()
           return false
         }
-      }			else if (cOption == 'maxclust') {
+      } else if (cOption == 'maxclust') {
         if ((thresholdValue >= 2 && thresholdValue <= maxclustMax) || (thresholdValue == '')) {
           return true
         } else {
-          $('#status-analyze').css({'visibility': 'hidden'})
-			        $('#error-modal-message').html(err2)
-			        $('#error-modal').modal()
-			        return false
+          $('#status-analyze').css({ 'visibility': 'hidden' })
+          $('#error-modal-message').html(err2)
+          $('#error-modal').modal()
+          return false
         }
-      }			else if (cOption == 'distance') {
+      } else if (cOption == 'distance') {
         if ((thresholdValue >= distanceMin && thresholdValue <= distanceMax) || (thresholdValue == '')) {
           return true
         } else {
-          $('#status-analyze').css({'visibility': 'hidden'})
-			        $('#error-modal-message').html(err2)
-			        $('#error-modal').modal()
+          $('#status-analyze').css({ 'visibility': 'hidden' })
+          $('#error-modal-message').html(err2)
+          $('#error-modal').modal()
           return false
         }
-      }			else if (cOption == 'monocrit') {
+      } else if (cOption == 'monocrit') {
         if ((thresholdValue >= monocritMin && thresholdValue <= monocritMax) || (thresholdValue == '')) {
           return true
         } else {
-          $('#status-analyze').css({'visibility': 'hidden'})
-			        $('#error-modal-message').html(err2)
-			        $('#error-modal').modal()
+          $('#status-analyze').css({ 'visibility': 'hidden' })
+          $('#error-modal-message').html(err2)
+          $('#error-modal').modal()
           return false
         }
       }
     }
   })
 
-	// Update threshold values
+  // Update threshold values
   $('#threshold').each(function () {
     var default_value = this.value
     $(this).focus(function () {
@@ -93,7 +93,7 @@ $(document).ready(function () {
       }
     })
   })
-	// Calculate the threshold values based on criterions
+  // Calculate the threshold values based on criterions
   var inconsistentrange = '0 ≤ t ≤ '
   var maxclustRange = '2 ≤ t ≤ '
   var range = ' ≤ t ≤ '
@@ -111,7 +111,7 @@ $(document).ready(function () {
   var distanceOp = distanceMinStr.concat(range, distanceMaxStr)
   var monocritOp = monocritMinStr.concat(range, monocritMaxStr)
 
-  var placeholderText = {'Inconsistent': inconsistentOp, 'Maxclust': maxclustOp, 'Distance': distanceOp, 'Monocrit': monocritOp}
+  var placeholderText = { 'Inconsistent': inconsistentOp, 'Maxclust': maxclustOp, 'Distance': distanceOp, 'Monocrit': monocritOp }
 
   $('#criterion').on('change', function () {
     var selectedVal = $('#criterion').find(':selected').text()

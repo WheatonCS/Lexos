@@ -25,14 +25,14 @@ $(document).ready(function () {
 })
 
 $(function () {
-	// Load the Scalar API and cache it.
-/*	$.ajax({
-		url: "/static/lib/scalarapi.js",
-		dataType: "script",
-		cache: true
-	}); */
+  // Load the Scalar API and cache it.
+  /*	$.ajax({
+          url: "/static/lib/scalarapi.js",
+          dataType: "script",
+          cache: true
+      }); */
 
-	// Initialise tooltips
+  // Initialise tooltips
 	/* Note: The standard Lexos tooltip will have the following html:
 
 	   <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip"\
@@ -45,7 +45,7 @@ $(function () {
 
   $('[data-toggle="tooltip"]').tooltip()
 
-	// Initialise popovers -- mouseleave handling from http://www.bootply.com/98529
+  // Initialise popovers -- mouseleave handling from http://www.bootply.com/98529
 
 	/* Note: The standard Lexos popover will have the following html:
 
@@ -57,13 +57,13 @@ $(function () {
 	   @title may be used to give the popover a header.
 	*/
 
-  	$('[data-toggle=popover]').popover({
-	  	trigger: 'manual',
-	  	animate: false,
-	  	html: true,
-	  	placement: 'right',
-	  	template:
-	  	  '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide();});">\
+  $('[data-toggle=popover]').popover({
+    trigger: 'manual',
+    animate: false,
+    html: true,
+    placement: 'right',
+    template:
+    '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide();});">\
 			<div class="arrow"></div>\
 			<h3 class="popover-title"></h3>\
 			<div class="popover-content"><p></p></div>\
@@ -76,7 +76,7 @@ $(function () {
 })
 
 $(function () {
-	// Handle exceptions for submitting forms and display error messages on screen
+  // Handle exceptions for submitting forms and display error messages on screen
   $('form').attr('method', 'post')
   $('form').submit(function () {
     $('#num_active_files').val()
@@ -88,36 +88,36 @@ $(function () {
     }
   })
 
-	// Add "selected" class to parent of selected link
+  // Add "selected" class to parent of selected link
   $('.sublist li .selected').parents('.headernavitem').addClass('selected')
 
-	// display/hide expandable divs here
+  // display/hide expandable divs here
   $('.has-expansion .icon-arrow-right').click(function () {
     $(this).toggleClass('showing')
 
     $(this).parent('legend').siblings('.expansion').slideToggle(500)
   })
 
-	// Gray out all disabled inputs
+  // Gray out all disabled inputs
   $.each($('input'), function () {
     if ($(this).prop('disabled')) {
       $(this).parent('label').addClass('disabled')
     }
   })
 
-	// Redirect all clicks on "Upload Buttons" to their file upload input
+  // Redirect all clicks on "Upload Buttons" to their file upload input
   $('.upload-bttn').click(function () {
     $(this).siblings('input[type=file]').click()
   })
 
-	// Show the nested submenu of clustering when mouse hover over the corresponding navbar, otherwise hide the nested menu
+  // Show the nested submenu of clustering when mouse hover over the corresponding navbar, otherwise hide the nested menu
   $('#clustering-menu, #clustering-submenu').mouseover(function () {
-    $('#clustering-submenu').css({'opacity': 1, 'visibility': 'visible'})
+    $('#clustering-submenu').css({ 'opacity': 1, 'visibility': 'visible' })
   }).mouseleave(function () {
-    $('#clustering-submenu').css({'opacity': 0, 'visibility': 'hidden'})
+    $('#clustering-submenu').css({ 'opacity': 0, 'visibility': 'hidden' })
   })
 
-	// Highlight the nested label of the navBar when nested pages are active
+  // Highlight the nested label of the navBar when nested pages are active
   if ($('.nestedElement').hasClass('selected')) {
     $('.nestedLabel').addClass('selected')
   }
@@ -129,23 +129,23 @@ $(function () {
       form[field.name] = field.value || ''
     })
 
-   		if ($('#beta_onbox').is(':checked')) {
-   			form['beta_onbox'] = true
-   		}   		else {
-   			$.extend(form, {'beta_onbox': false})
-   		}
+    if ($('#beta_onbox').is(':checked')) {
+      form['beta_onbox'] = true
+    } else {
+      $.extend(form, { 'beta_onbox': false })
+    }
     $.ajax({
-		  'url': '/updatesettings',
-		  'type': 'POST',
+      'url': '/updatesettings',
+      'type': 'POST',
       'contentType': 'application/json; charset=utf-8',
       'dataType': 'json',
-		  'data': JSON.stringify(form),
-		  'error': function () {
-		  	alert('Error! Your settings could not be saved.')
-  }
+      'data': JSON.stringify(form),
+      'error': function () {
+        alert('Error! Your settings could not be saved.')
+      }
     }).done(function (response) {
       window.location = window.location.pathname
-			// console.log("Response: "+JSON.stringify(response));
+      // console.log("Response: "+JSON.stringify(response));
     })
   })
 })
@@ -158,12 +158,12 @@ function getFormValues () {
   var formData = new FormData($('form')[0])
 
   $.ajax({
-	  url: '/previewScrubbing',
-	  type: 'POST',
-	  processData: false, // important
-	  contentType: false, // important
-	  data: formData,
-	  'error': function () { alert('error') }
+    url: '/previewScrubbing',
+    type: 'POST',
+    processData: false, // important
+    contentType: false, // important
+    data: formData,
+    'error': function () { alert('error') }
   }).done(function (response) {
     response = JSON.parse(response)
     return response

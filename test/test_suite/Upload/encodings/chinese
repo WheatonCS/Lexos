@@ -1,0 +1,81 @@
+**Current file obey CC-BY-SA Licence**
+
+作者：帅气可爱魔理沙
+链接：https://www.zhihu.com/question/39932462/answer/187267082
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+因为这些被遗忘的语言，还在诉说他们的故事啊。
+
+
+去自然化
+1978年，为了记录下编程语言的发展，展开了会议<History of Programming Language>。
+这某种意义上，算是PL的‘华山论剑’-
+天下各路PL中极小数强者，聚集（语言不会走路，是这些语言的设计师&实现者聚集）。
+13个入选的语言中，5个有图灵奖得主参与！（APL, Algol, Fortran, Lisp, Simula）
+这等豪华阵容，只怕再也凑不出。
+当然，没有什么比武。不过，之后又举办了两次HOPL，总计三次，真是个美妙的巧合啊。
+
+在这个大会上，Opening是Grace Hopper，Cobol的主刀。
+我读到这的时候，也很不解。
+Cobol何德何能，为何能占着Opening，这位置上面的5个‘图灵奖语言’那个不更有资格？
+她说：“我被你们震惊到了。你们都是权威，然而我这辈子花了20年去跟权威作斗争！PL早期中我们最常听到的话是‘编程计算机的唯一方法是8进制。’（省略）在那时，权威跟我们说，用计算机编程是不可能的，计算机唯一能做的只有算术。”
+
+一个编程语言，条件判断靠if else，自指用递归，组成更大的数据类型用struct。。。
+这几个构造如此天经地义，导致看上去没有任何其他alternative：还能怎么弄。
+然而，连‘编程语言’在当时很多人眼中都是不可能，这些构造又怎么可能‘自然’呢？
+if else，是1960左右，John Mccarthy发明，并且加入Algol 60。
+在此以前，Fortran只有if后面跟着一个int表达式，然后跟着三个整数-跳转的行号！
+（没错，goto在当时是跳转到行号的）
+当然，Fortran也一样被‘权威’看不起，认为‘一切高级编程语言都很慢，不够用’。
+听上去像不像C语言程序员嘲笑其他高级语言慢？
+这就是学历史的另一个好处：知道什么论点会被历史的车轮碾压。
+PL的递归，是同时由John Mccarthy发明的。值得一提的是，这特性差点没进Algol 60。
+至于struct，一开始只有Cobol才有，到了近8年后，到了Algol 68，才传播到各个语言。
+函数式程序员别得意，John自己也搞不懂啥是Lambda Calculus，到了1964 Peter Landin才指出Lambda Calculus可以用来编程。
+而事实上，if else, recursion, struct, lambda，全部都有人改过，并且投入使用。
+
+把if else改成if ... else if ... else if ... （没有最终else），然后不规定同时满足多个条件时，进入那个分支（non determinism），就有Dijkstra的Guard Command Language。这个语言可以由于是不确定的，可以用来组合多线程的blocking channel（见Concepts of Programming Languages）。有趣的是，Dijkstra发明的时候，没想这么多，只是因为单纯的‘if else不对称，好丑’而去改。
+
+递归则可以完全去掉，改由recursion scheme（list的foldr或者相近的，但是更复杂的，构造/使用数据结构的高阶函数）。用recursion scheme的人，有时候会说‘无限制的递归就是新的goto’。这是因为对于用了递归的程序，要证明这程序的属性，只能用归纳法，而如果用recursion scheme，就能用事先（通过归纳法）证明的引理去辅助证明。打个比方，如果你用list上的map，而不是手动递归，你写程序的时候就能引用定理map f . map g = map (f . g)。（注：map不是recursion scheme）
+
+至于struct，在Algol 68中，就提供了Algebraic Data Type。除了‘类型T能通过给人类型X跟类型Y的值来构造’以外，还有‘类型T能通过给入类型X或类型Y的值来构造’。这跟union有点像，但是会记下是‘或的那边’，换句话说，是disjoint union。这特性是用来描述AST（Abstract Syntax Tree）的首选，所以基本上所有钟爱元编程的静态类型语言（如ML，Haskell）都有。
+
+而lambda calculus中的arrow type，在linear logic（一种限制所有资源都必须使用刚好一次的逻辑系统）中，则可以拆分成两个更细的construct：a -> b = !a -o b。其中，!x代表可以任意复制的x，x -o y代表给入一个x，消耗之，输出一个y。!a -o b则表明，给入可以任意复制的a，消耗之，输出一个b。由于a可以任意复制，所以消耗了不要紧，换句话说这就是给入a，输出b。（见A Taste Of Linear Logic）同时，在OO界，Luca由于Lambda Calculus的限制，难以用之模拟class，object，subtyping，于是自己发明了另一套calculus - Object Calculus（见A Theory of Object）。
+
+还有一个怪胎，APL-这语言里面抛弃了这些概念，一切都通过对数组的变换来完成。（其实还是有的，不过不提倡使用）
+
+不学历史，很容易认为这些东西生来如此，没什么好改的-尽管计算机的发明还不到100年！
+同时，看着这些先驱开天辟地，创造一切，有莫名的史诗感，说不出的好受。
+
+
+提取精华
+等你学了点历史，对编程语言的可塑性有更深刻理解，并且开始假想基本构造的更多形式的时候，你就到达破而后立的‘破’了。当然，破而后立，你还需要会写Parser/Compiler/Interpreter/VM，会弄类型系统，宏，等等。。。
+
+
+然而，这还不够。
+一个语言，首先是一种编程方法，一套认为人类如何编程最高效的理论，然后才是围绕着这个理论而生的feature。世界上绝大部分（不是完全没人用）的语言，如Algol, Cobol, Fortran, APL, C, C++, Python, Perl, Scheme, Haskell, Smalltalk, CPL。。。都有这东西。
+在C++中，这叫Design Philosophy, 在Python中，称作是pythonic，Smalltalk中，是Design Principle。。。我们统称之为Principle。没有Principle，造出的语言，只能是旧有语言的无机混合，看上去很好，然而没有新意。
+Principle是一个语言的内核。有了Principle，可以用之更改过往的语言construct，得出一个全新的语言。在The Essence of Algol中，John Reynold就是从一个他认为是Algol中很重要的部分，慢慢推出各种construct，得出一个小而全的Algol。
+要注意，Principle并不是为了推出Feature。相反，是Feature为Principle服务。换句话说，如果一个语言中，有跟Principle不匹配的Feature，要做减法，砍掉Feature。
+比如说，Structured Programming认为，由于测试不可能保证正确性，我们需要用Hoare Logic推出程序的正确性。但是，与其正推，我们可以一步步的从终止条件倒推，到最后，从证明中取出程序（又或者说，证明就是程序）。这叫做Stepwise refinement，而Structured Programming舍弃goto，不是因为‘Structured Programming = Programming without goto’，而是Stepwise Refinement恰巧不支持Goto而已。盲目的去掉Goto，是治标不治本。
+Functional Programming则认为，大的程序最好由小的，相互独立的程序（两个程序的用途都可以跟另一个分开）组合得出。如果程序A会影响程序B，就不是相互独立的，所以FP不提倡Effect。在FP中，独立组合性是治本，移除&控制Effect是治标。
+除了Paradigm的Principle，每个语言自己也有各自的Principle-Smalltalk的是Design Principles Behind Smalltalk，APL的是Notation as a Tool of Thought，Algol的是The Essence of Algol。学习PL史，是发现Principle，并观察Principle如何慢慢构造一个语言。
+
+
+正本清源
+除了发现Principle，并观察Principle的发展，影响，可以反着，研究Principle如何诞生。
+这样做，可以明白一个Principle的本质，又或者可以自己照猫画虎，搞出自己的Principle。
+往往，这样做会走出PL，甚至CS的边界。
+Logo对smalltalk有很大的影响（如Alan Kay对Personal Computing的理解就被Logo影响了，见Early History of Smalltalk），而Logo的3 Principle（Principle of Power，即学即用，Principle of Continuity，学的东西跟以往的东西有紧密连接，Principle of Culture，社区中其他人日常生活会接触到学的东西），则来自Jean Piaget的认知发展理论。
+同时，这些Principle的来源，说不定自身就很有启发性，找到了，就是攒到了。
+比如说，说远一些，Robert Harper发现了，就算是有bug的程序，也可以用formal verification的方式看待之。只不过，这时候证明就无法完成。然后，通过审视证明为何无法完成，就知道bug在那，而无需要写测试瞎猜。这叫Proof Directed Debugging。
+这方法，来自于数学/哲学的著作，Proofs and Refutations。这本书讲了数学证明的发展史，并且论述，数学证明并不是通过Formal Proof得出的，而是通过trial and error。在此以前，我还以为数学的发展是通过Formal Proof&Informal Hole的，现在才明白除了写证明，还有下定义，找猜想，generalize，debug证明等等，也托这的福，找到了Abductive reasoning。而这，仅仅因为我看Proof Directed Debugging的时候查查这的历史。
+
+
+爽！
+一方面，查历史就像探宝一样，往往会在意想不到的地方跳出惊人的事件：比如说，易语言的近似物在早近30年前，就已经出现了 - 由于Algol不限字符集，在1972就有一个叫Chinese Algol的方言。当然，还有更重要的，比如说设计CPL，C的前前前身的人，据说对ISWIM有不小的影响。
+
+另一方面，丘处机为什么要路过牛家村？
+
+历史学得越多，就会越来越发现当下的巧合，然后去幻想平行世界的展开。其中，最可惜的是，1948年就有一个跟得上60年代的语言 - Plankalkül。这是最早的，有if/struct/loop等的语言，足足超前了Algol/Lisp/Cobol/Fortran 10年！如果这语言更早被更多人知道，又或者Algol 60没有引入递归，又或者John Mccarthy, Alan Kay, Dijkstra, Seymour Papert, John Backus等人改行。。。不知道那样，我们现在会在用什么语言呢。
