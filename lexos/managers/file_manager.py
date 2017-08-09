@@ -471,13 +471,13 @@ class FileManager:
 
         return previews
 
-    def zip_active_files(self, file_name: str):
+    def zip_active_files(self, zip_file_name: str):
         """
         Sends a zip file containing files containing the contents of the active
         files.
 
         Args:
-            file_name: Name to assign to the zipped file.
+            zip_file_name: Name to assign to the zipped file.
 
         Returns:
             Zipped archive to send to the user, created with Flask's send_file.
@@ -487,19 +487,19 @@ class FileManager:
         for l_file in list(self.files.values()):
             if l_file.active:
                 # Make sure the filename has an extension
-                file_name = l_file.name
-                if not file_name.endswith('.txt'):
-                    file_name = file_name + '.txt'
+                l_file_name = l_file.name
+                if not l_file_name.endswith('.txt'):
+                    l_file_name = l_file_name + '.txt'
                 zip_file.write(
                     l_file.save_path,
-                    arcname=file_name,
+                    arcname=l_file_name,
                     compress_type=zipfile.ZIP_STORED)
         zip_file.close()
         zip_stream.seek(0)
 
         return send_file(
             zip_stream,
-            attachment_filename=file_name,
+            attachment_filename=zip_file_name,
             as_attachment=True)
 
     def zip_workspace(self) -> str:
@@ -1008,7 +1008,9 @@ class FileManager:
 
         # change the dtm to proportion
         if use_freq:
-            dtm_data_frame = dtm_data_frame.mean(axis=1)
+            # apply the proportion function to each row
+            dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
+                                                  axis=1)
 
         # apply culling to dtm
         if cull:

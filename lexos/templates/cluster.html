@@ -51,7 +51,7 @@ $(document).ready( function () {
 				<option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>Canberra</option>
 				<option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>Braycurtis</option>
 			</select>
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content="Different methods for measuring the distance (difference) between documents. See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric</a>." style="padding-left:4px;font-size:18px;"></i>
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content="Different methods for measuring the distance (differences) between documents. See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric</a>." style="padding-left:4px;font-size:18px;"></i>
 		</label>
 
 		<label for="linkage">Linkage Method:

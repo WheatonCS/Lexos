@@ -1,0 +1,2 @@
+class LexosException(Exception):
+    pass
