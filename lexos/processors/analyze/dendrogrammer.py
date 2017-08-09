@@ -478,9 +478,9 @@ def dendrogram(
 
                 line_left -= const.DENDRO_MAX_LINES_PER_PAGE
 
-                pyplot.savefig(os.path.join(folder, "legend"
-                                            + str(legend_page)
-                                            + ".png"))
+                pyplot.savefig(os.path.join(folder, "legend" +
+                                            str(legend_page) +
+                                            ".png"))
                 legend_page += 1
 
     # saves dendrogram as a .png
