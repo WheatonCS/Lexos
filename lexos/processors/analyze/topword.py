@@ -19,20 +19,20 @@ def _z_test_(p1, pt, n1, nt):
     """Examines if a particular word is an anomaly.
 
     while examining, this function compares the probability of a word's
-    occurrence in one particular chunk to the probability of the same word's
-    occurrence in the rest of the chunks. Usually we report a word as an
+    occurrence in one particular segment to the probability of the same word's
+    occurrence in the rest of the segments. Usually we report a word as an
     anomaly if the return value is smaller than -1.96 or bigger than 1.96.
-    :param p1: the probability of a word's occurrence in a particular chunk:
-               Number of word occurrence in the chunk/
-               total word count in the chunk
-    :param pt: the probability of a word's occurrence in all the chunks
+    :param p1: the probability of a word's occurrence in a particular segment:
+               Number of word occurrence in the segment/
+               total word count in the segment
+    :param pt: the probability of a word's occurrence in all the segments
                (or the whole passage)
-               Number of word occurrence in all the chunk/
-               total word count in all the chunk
-    :param n1: the number of total words in the chunk we care about.
-    :param nt: the number of total words in all the chunk selected.
-    :return: the probability that the particular word in a particular chunk is
-             NOT an anomaly.
+               Number of word occurrence in all the segment/
+               total word count in all the segment
+    :param n1: the number of total words in the segment we care about.
+    :param nt: the number of total words in all the segment selected.
+    :return: the probability that the particular word in a particular segment
+                is NOT an anomaly.
     """
     assert n1 > 0, SEG_NON_POSITIVE_MESSAGE
     assert nt > 0, SEG_NON_POSITIVE_MESSAGE
