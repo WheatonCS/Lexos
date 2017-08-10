@@ -1,14 +1,17 @@
 Hyphens
 =======
 
-# Summary
 This folder contains files for testing the hyphens function.
 
-## hyphens.txt
-This file contains a sentence with hyphens in different locations.
+## Test file: hyphens.txt
 
-## puncPc.txt
-This file contains all of the characters in the unicode category of Punctuation, Connector [Pc]
+0. UPLOAD hyphens.txt
 
-## puncPd.txt
-This file contains all of the characters in the unicode category of Punctuation, Dash [Pd]
+1. SCRUB: 
+    - Remove all Punct
+    - Make Lowercase (optional)
+    - Remove Digits (optional)
+    - Keep Hyphens
+
+Results:
+- file content: -Hyphens a-test --- to s-ee if they are kept--- black-bird

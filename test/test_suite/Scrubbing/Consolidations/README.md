@@ -1,12 +1,16 @@
 Consolidations
 ==============
 
-# Summary
 This folder has files for testing consolidation functionality
 
-## consolidations_for_test1.txt
-This file contains the consolidations for test1 (uploaded to consolidations within scrubbing options)
+## Test file: experiment.txt
 
-## test1.txt
-Contains the text of Mary Had a Little Lamb (uploaded to the 'upload' page)
+0. UPLOAD experiment.txt
 
+1. SCRUB: 
+    - deselect Remove all Punct
+    - deselect Make Lowercase
+    - deselect Remove Digits
+    
+2. CONSOLIDATIONS:
+    - Upload consolidations_for_experiment.txt
