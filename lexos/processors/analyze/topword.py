@@ -38,7 +38,7 @@ def _z_test_(p1, pt, n1, nt):
     assert nt > 0, SEG_NON_POSITIVE_MESSAGE
     p = (p1 * n1 + pt * nt) / (n1 + nt)
     standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt)))**0.5
-    if standard_error == 0:
+    if np.isclose([standard_error], [0]):
         return 0
     else:
         return round((p1 - pt) / standard_error, 4)
@@ -82,7 +82,11 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
     """Divides the word counts into groups via the group map.
 
     :param dtm: pandas data frame that contains the word count matrix.
-    :param division_map: a numpy matrix represents the group map.
+    :param division_map: a numpy matrix represents the group map, where the
+                         index represents the class names and the column
+                         contains file name of each file. The matrix contains
+                         boolean values to determine which class each file
+                         belongs to.
     :return: a list of lists, each list represents a group, where each element
              in the list is a list that contain all the lists in the group.
     """
@@ -104,14 +108,14 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
 def analyze_all_to_para(count_matrix: np.ndarray,
                         words: np.ndarray,
                         labels: np.ndarray) -> List[Tuple[str, list]]:
-    """Analyzes each single word compare to the total documents
+    """Analyzes each single word compare to the total documents.
 
     :param count_matrix: a 2D numpy array where each row contains the word
                          count of the corresponding file.
     :param words: words that show up at least one time in the whole corpus.
-    :param labels: file name of each file
+    :param labels: file name of each file.
     :return: a list of tuples, each tuple contains a human readable header and
-             corresponding analysis result
+             corresponding analysis result.
     """
     assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
 
@@ -144,11 +148,11 @@ def analyze_para_to_group(group_values: List[np.ndarray],
     :param group_values: a list of lists, where each list contains an matrix
                          that represents the word count of an existing class.
     :param words: words that show up at least one time in the whole corpus.
-    :param class_labels: file name of each file
+    :param class_labels: file name of each file.
     :param name_map: a 2D matrix that maps each file name to its corresponding
-                     class
+                     class.
     :return: a list of tuples, each tuple contains a human readable header and
-             corresponding analysis result
+             corresponding analysis result.
     """
     # Trap possible empty inputs
     assert group_values, EMPTY_LIST_MESSAGE
