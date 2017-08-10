@@ -381,15 +381,11 @@ class FileManager:
         return previews
 
     def zip_active_files(self, zip_file_name: str):
-        """
-        Sends a zip file containing files containing the contents of the active
-        files.
+        """Sends a zip file of files containing contents of the active files.
 
-        Args:
-            zip_file_name: Name to assign to the zipped file.
-
-        Returns:
-            Zipped archive to send to the user, created with Flask's send_file.
+        :param zip_file_name: Name to assign to the zipped file.
+        :return: zipped archive to send to the user, created with Flask's
+                     send_file.
         """
 
         zip_stream = io.BytesIO()
