@@ -1,4 +1,5 @@
 import re
+import math
 from typing import List
 
 from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
@@ -13,16 +14,13 @@ def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int) \
     :param input_list: the segment list that split the contents of the file.
     :param seg_size: the size of the segment.
     :param overlap: the min proportional size that the last segment has to be.
-    :return a list of list(segment) that the text has been cut into, which
-            does not go through the last proportion size calculation.
+    :return a list of list(segment) that the text has been cut into, which has
+    not go through the last proportion size calculation.
     """
 
     start_point_distance = seg_size - overlap
-    num_segment = len(input_list) / start_point_distance
-    int_num_segment = int(num_segment)
-
-    if float(int_num_segment) != num_segment:
-        int_num_segment = int_num_segment + 1
+    num_stop_point = (len(input_list) - seg_size) / start_point_distance
+    num_segment = int(math.ceil(num_stop_point) + 1)
 
     def get_single_seg(index):
         """Helper to get one single segment with index: index.
@@ -33,7 +31,7 @@ def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int) \
         return input_list[start_point_distance * index:
                           start_point_distance * index + seg_size]
 
-    return [get_single_seg(index) for index in range(int_num_segment)]
+    return [get_single_seg(index) for index in range(num_segment)]
 
 
 def cut_list_with_last_prop(input_list: list, seg_size: int,
