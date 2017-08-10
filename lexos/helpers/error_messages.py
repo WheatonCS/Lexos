@@ -18,3 +18,4 @@ WINDOW_SIZE_LARGE_MESSAGE = "The window size must be less than or equal to" \
 INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
 EMPTY_STRING_MESSAGE = "the string should not be empty"
+WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
