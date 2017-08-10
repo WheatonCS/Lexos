@@ -177,12 +177,6 @@ class TestAStringWordLine:
 
 class TestAWordWord:
     def test_a_word_word_basic(self):
-        try:
-            _ = a_word_word(split_list=[], keyword="test",
-                            window_size=1)
-            raise AssertionError("did not throw error")
-        except AssertionError as error:
-            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert a_word_word(split_list=[""], keyword="test",
                            window_size=1) == [0]
         assert a_word_word(split_list=["test", "test"], keyword="test",
@@ -222,6 +216,12 @@ class TestAWordWord:
 
     def test_a_word_word_window_bigger(self):
         try:
+            _ = a_word_word(split_list=[], keyword="test",
+                            window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
+        try:
             _ = a_word_word(split_list=["test", "test"], keyword="test",
                             window_size=3)
             raise AssertionError("did not throw error")
@@ -241,12 +241,6 @@ class TestAWordWord:
 
 class TestAWordLine:
     def test_a_word_line_basic(self):
-        try:
-            _ = a_word_line(split_list=[], keyword="test",
-                            window_size=1)
-            raise AssertionError("did not throw error")
-        except AssertionError as error:
-            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert a_word_line(split_list=[""], keyword="test",
                            window_size=1) == [0]
         assert a_word_line(split_list=["test"], keyword="test",
@@ -295,6 +289,12 @@ class TestAWordLine:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
     def test_a_word_line_window_bigger(self):
+        try:
+            _ = a_word_line(split_list=[], keyword="test",
+                            window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         try:
             _ = a_word_line(split_list=["hello test", "hello world"],
                             keyword="test", window_size=3)
@@ -574,12 +574,6 @@ class TestRStringWordLine:
 
 class TestRWordWord:
     def test_r_word_word_basic(self):
-        try:
-            _ = r_word_word(split_list=[], first_word="test",
-                            second_word="hello", window_size=1)
-            raise AssertionError("did not throw error")
-        except AssertionError as error:
-            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert r_word_word(split_list=[""], first_word="test",
                            second_word="hello", window_size=1) == [0]
         assert r_word_word(split_list=["test", "hello"], first_word="test",
@@ -626,6 +620,12 @@ class TestRWordWord:
 
     def test_r_word_word_window_bigger(self):
         try:
+            _ = r_word_word(split_list=[], first_word="test",
+                            second_word="hello", window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
+        try:
             _ = r_word_word(split_list=["test", "hello"], first_word="hello",
                             second_word="test", window_size=3)
             raise AssertionError("did not throw error")
@@ -645,12 +645,6 @@ class TestRWordWord:
 
 class TestRWordLine:
     def test_r_word_line_basic(self):
-        try:
-            _ = r_word_line(split_list=[], first_word="test",
-                            second_word="hello", window_size=1)
-            raise AssertionError("did not throw error")
-        except AssertionError as error:
-            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         assert r_word_line(split_list=[""], first_word="test",
                            second_word="hello", window_size=1) == [0]
         assert r_word_line(split_list=["test"], first_word="test",
@@ -697,6 +691,12 @@ class TestRWordLine:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
     def test_r_word_line_window_bigger(self):
+        try:
+            _ = r_word_line(split_list=[], first_word="test",
+                            second_word="hello", window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
         try:
             _ = r_word_line(split_list=["hello test", "hello world"],
                             first_word="test", second_word="hello",
