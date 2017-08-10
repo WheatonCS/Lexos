@@ -19,3 +19,4 @@ INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
     "number, words or milestone"
 EMPTY_NP_ARRAY_MESSAGE = "The input numpy array should not be empty, since" \
     "the input file should not be empty."
+EMPTY_STRING_MESSAGE = "the string should not be empty"
