@@ -901,8 +901,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         file_string=sc_file_string, manual_string=sc_manual,
         cache_folder=cache_folder, cache_filenames=cache_filenames,
         cache_number=2)
-    text = replacement_handler(
-        text=text, replacer_string=merged_string, is_lemma=False)
+
+    # "\n" comes from "" + "\n" + ""
+    if merged_string == "\n":
+        text = handle_special_characters(text)
+    else:
+        text = replacement_handler(
+            text=text, replacer_string=merged_string, is_lemma=False)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------
     if tags:  # If remove tags is checked:
