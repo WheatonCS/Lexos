@@ -155,14 +155,13 @@ def replacement_handler(
     # Remove spaces in replacement string for consistent format, then split the
     # individual replacements to be made
     no_space_replacer = replacer_string.translate({ord(" "): None})
-    replacement_lines = no_space_replacer.split('\n')
+
+    # Handle excess blank lines in file, etc.
+    replacement_lines = [token for token in no_space_replacer.split('\n')
+                         if token != ""]
 
     for replacement_line in replacement_lines:
-        # Handle excess blank lines in file, etc.
-        if replacement_line == "":
-            return text
-
-        if replacement_line.count(':') != 1:
+        if replacement_line and replacement_line.count(':') != 1:
             raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
 
         # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
