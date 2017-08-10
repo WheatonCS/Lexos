@@ -23,7 +23,7 @@ STEP:
     - Count Type = Rolling Ratio
     - Window Type = Window of Words
     - Token Type = Strings
-    - Seach Tokens  þ:ð
+    - Search Tokens  þ:ð
     - Window Size = 1000
     - (Optional) Hide Individual Points (sacrifices extra info for increased speed and readability)
     - (Optional) Black and White Only (If you wanted to download the SVG for publishing in a journal)
