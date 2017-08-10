@@ -7,9 +7,14 @@ from os import makedirs
 from os.path import join as path_join
 from typing import List, Tuple, Dict, Union
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from flask import request
+from scipy.cluster import hierarchy
+from scipy.cluster.hierarchy import ward, dendrogram
+from scipy.spatial.distance import pdist
+from sklearn.metrics.pairwise import euclidean_distances
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -1740,13 +1745,6 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
             - threshold_ops: a dictionary which contains maxclust_op,
                              distance_op and monocrit_op
     """
-    from sklearn.metrics.pairwise import euclidean_distances
-    from scipy.cluster.hierarchy import ward, dendrogram
-    from scipy.spatial.distance import pdist
-    from scipy.cluster import hierarchy
-    from os import makedirs
-
-    import matplotlib.pyplot as plt
 
     # Gets options from request.json
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, \
