@@ -38,13 +38,13 @@ class TestAStringLetter:
         try:
             _ = a_string_letter(file_string="test", key_letter="t",
                                 window_size=0, token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = a_string_letter(file_string="test", key_letter="t",
                                 window_size=-1, token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -120,13 +120,13 @@ class TestAStringWordLine:
         try:
             _ = a_string_word_line(split_list=["test"], key_letter="t",
                                    window_size=0, token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = a_string_word_line(split_list=["test"], key_letter="t",
                                    window_size=-1, token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -210,13 +210,13 @@ class TestAWordWord:
         try:
             _ = a_word_word(split_list=["test", "test"], keyword="test",
                             window_size=0)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = a_word_word(split_list=["test", "test"], keyword="test",
                             window_size=-1)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -284,13 +284,13 @@ class TestAWordLine:
         try:
             _ = a_word_line(split_list=["hello test", "hi there"],
                             keyword="test", window_size=0)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = a_word_line(split_list=["hello test", "hi there"],
                             keyword="test", window_size=-1)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -359,14 +359,14 @@ class TestRStringLetter:
             _ = r_string_letter(file_string="test", first_string="t",
                                 second_string="s", window_size=0,
                                 token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = r_string_letter(file_string="test", first_string="t",
                                 second_string="s", window_size=-1,
                                 token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -476,14 +476,14 @@ class TestRStringWordLine:
             _ = r_string_word_line(split_list=["testt"],
                                    first_string="t", second_string="s",
                                    window_size=0, token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = r_string_word_line(split_list=["testt"],
                                    first_string="t", second_string="s",
                                    window_size=-1, token_type="string")
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -614,13 +614,13 @@ class TestRWordWord:
         try:
             _ = r_word_word(split_list=["test", "hello"], first_word="test",
                             second_word="hello", window_size=0)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = r_word_word(split_list=["test", "hello"], first_word="test",
                             second_word="hello", window_size=-1)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -685,14 +685,14 @@ class TestRWordLine:
             _ = r_word_line(split_list=["hello test", "hello world"],
                             first_word="test", second_word="hello",
                             window_size=0)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
             _ = r_word_line(split_list=["hello test", "hello world"],
                             first_word="test", second_word="hello",
                             window_size=-1)
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
 
@@ -970,7 +970,7 @@ class TestRWAnalyze:
                            count_type='average', token_type='string',
                            window_type='letter', key_word='t',
                            second_key_word='', window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -979,7 +979,7 @@ class TestRWAnalyze:
                            count_type='average', token_type='string',
                            window_type='word', key_word='t',
                            second_key_word='', window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -988,7 +988,7 @@ class TestRWAnalyze:
                            count_type='average', token_type='word',
                            window_type='word', key_word='test',
                            second_key_word='', window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -1000,7 +1000,7 @@ class TestRWAnalyze:
                            token_type='word', window_type='line',
                            key_word='test', second_key_word='',
                            window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -1008,7 +1008,7 @@ class TestRWAnalyze:
                            count_type='ratio', token_type='string',
                            window_type='letter', key_word='t',
                            second_key_word='s', window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -1018,7 +1018,7 @@ class TestRWAnalyze:
                            token_type='string', window_type='word',
                            key_word='t', second_key_word='s',
                            window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -1027,7 +1027,7 @@ class TestRWAnalyze:
                            count_type='ratio', token_type='word',
                            window_type='word', key_word='test',
                            second_key_word='hello', window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
         try:
@@ -1039,6 +1039,6 @@ class TestRWAnalyze:
                            token_type='word', window_type='line',
                            key_word='test', second_key_word='hello',
                            window_size_str='0')
-            raise AssertionError("did not throw error")
+            raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
             assert str(error) == WINDOW_NON_POSITIVE_MESSAGE
