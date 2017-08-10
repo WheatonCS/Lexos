@@ -150,6 +150,9 @@ def a_word_line(split_list: List[str], keyword: str,
     :param window_size: the number of lines to have in the window
     :return: List of averages, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
