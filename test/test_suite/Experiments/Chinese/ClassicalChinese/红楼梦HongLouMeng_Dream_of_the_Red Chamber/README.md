@@ -59,7 +59,7 @@ Steps:
 
     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title
-    (c) Choose Tokenize - 2 - gram, by Characters, check the box Only within words
+    (c) Choose Tokenize - 2 - gram, by Characters
     (d) Choose normalize - Proportional Counts (default)
     (e) Get Dendrogram
     (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
