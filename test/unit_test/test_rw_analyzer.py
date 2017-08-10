@@ -747,9 +747,9 @@ class TestRWAnalyze:
                           token_type='word', window_type='line',
                           key_word='test', second_key_word='',
                           window_size_str='1') == (
-                   [[1.0, 1.0, 0]],
-                   "Average number of test's in a window of 1 lines.",
-                   "First line in window", "Average")
+            [[1.0, 1.0, 0]],
+            "Average number of test's in a window of 1 lines.",
+            "First line in window", "Average")
         assert rw_analyze(file_string="test", count_type='ratio',
                           token_type='string', window_type='letter',
                           key_word='t', second_key_word='s',
@@ -787,9 +787,9 @@ class TestRWAnalyze:
                           token_type='word', window_type='line',
                           key_word='test', second_key_word='',
                           window_size_str='1') == (
-                   [[1.0, 1.0, 0]],
-                   "Average number of test's in a window of 1 lines.",
-                   "First line in window", "Average")
+            [[1.0, 1.0, 0]],
+            "Average number of test's in a window of 1 lines.",
+            "First line in window", "Average")
         assert rw_analyze(file_string="hello test\n hello world\n this is a"
                                       " test", count_type='ratio',
                           token_type='word', window_type='line',
@@ -858,9 +858,9 @@ class TestRWAnalyze:
                           token_type='word', window_type='line',
                           key_word='test', second_key_word='',
                           window_size_str='4') == (
-                   [[1.0, 1.0, 0]],
-                   "Average number of test's in a window of 1 lines.",
-                   "First line in window", "Average")
+            [[1.0, 1.0, 0]],
+            "Average number of test's in a window of 1 lines.",
+            "First line in window", "Average")
         assert rw_analyze(file_string="test", count_type='ratio',
                           token_type='string', window_type='letter',
                           key_word='t', second_key_word='s',
@@ -924,9 +924,9 @@ class TestRWAnalyze:
                           token_type='word', window_type='line',
                           key_word='test', second_key_word='',
                           window_size_str='2') == (
-                   [[0.5, 0, 0, 0, 0.5, 1.0, 1.5, 1.5, 0.5, 0, 0]],
-                   "Average number of test's in a window of 2 lines.",
-                   "First line in window", "Average")
+            [[0.5, 0, 0, 0, 0.5, 1.0, 1.5, 1.5, 0.5, 0, 0]],
+            "Average number of test's in a window of 2 lines.",
+            "First line in window", "Average")
         assert rw_analyze(file_string="test test te",
                           count_type='ratio', token_type='string',
                           window_type='letter', key_word='t',
