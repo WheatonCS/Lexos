@@ -187,52 +187,6 @@ def replacement_handler(
     return text
 
 
-def call_replacement_handler(
-        text: str, file_replacer_string: str, is_lemma: bool,
-        manual_replacer_string: str, cache_folder: str,
-        cache_file_names: List[str], cache_number: int) -> str:
-    """Performs pre-processing before calling replacement_handler().
-
-    :param text: A unicode string representing the whole text that is being
-        manipulated.
-    :param file_replacer_string: A string representing what to the user wants
-        to replace and what the user wants to replace it with, taken from the
-        uploaded file (and not the text field).
-    :param is_lemma: A boolean indicating whether or not the replacement line
-        is for a lemma.
-    :param manual_replacer_string: A string representing the manual input field
-        in scrub.html.
-    :param cache_folder: A string representing the path to the cache folder.
-    :param cache_file_names: A list of the cached filenames.
-    :param cache_number: An integer representing the position (index) of a file
-        in cache_filenames.
-    :return: The text string after the replacements have taken place.
-    """
-
-    replacement_line_string = ''
-    if file_replacer_string and not manual_replacer_string:
-        # Consolidations: cache_number = 0
-        # Lemmas:         cache_number = 1
-        # Special chars:  cache_number = 2
-        cache_filestring(
-            file_string=file_replacer_string, cache_folder=cache_folder,
-            filename=cache_file_names[cache_number])
-        replacement_line_string = file_replacer_string
-    elif not file_replacer_string and manual_replacer_string:
-        replacement_line_string = manual_replacer_string
-    elif file_replacer_string and manual_replacer_string:
-        replacement_line_string = file_replacer_string + "\n" + \
-            manual_replacer_string
-    else:        # not file_replacer_string and not manual_replacer_string
-        text = handle_special_characters(text)
-
-    if replacement_line_string != '':
-        text = replacement_handler(
-            text, replacer_string=replacement_line_string, is_lemma=is_lemma)
-
-    return text
-
-
 def process_tag_replace_options(orig_text: str, tag: str, action: str,
                                 attribute: str) -> str:
     """Replaces html-style tags in text files according to user options.
@@ -578,26 +532,28 @@ def delete_words(text: str, remove_list: List[str]) -> str:
     return scrubbed_text
 
 
-def handle_stop_keep_words_string(sw_kw_file_string: str, sw_kw_manual: str,
-                                  cache_folder: str, cache_filenames: List[str]
-                                  ) -> str:
-    """Caches stop/keep word files and merges file strings with manual strings.
+def merge_file_and_manual_strings(file_string: str, manual_string: str,
+                                  cache_folder: str,
+                                  cache_filenames: List[str],
+                                  cache_number: int) -> str:
+    """Caches uploaded files and merges file strings with manual strings.
 
-    :param sw_kw_file_string: The uploaded sw/kw file as a string.
-    :param sw_kw_manual: The sw/kw string from the manual text field.
+    :param file_string: The user's uploaded file.
+    :param manual_string: The input from a text field.
     :param cache_folder: A string representing the path of the cache folder.
     :param cache_filenames: A list of filename strings that will be used to
         load and save the user's sw/kw input.
-    :return: The combined string of the manual and file sw/kw strings.
+    :param cache_number: The index of the relevant file in cache_filenames.
+    :return: The combination of the text field and file strings.
     """
 
-    if sw_kw_file_string:  # file_strings[3] == stop/keep words
-        cache_filestring(file_string=sw_kw_file_string,
+    if file_string:
+        cache_filestring(file_string=file_string,
                          cache_folder=cache_folder,
-                         filename=cache_filenames[3])
-    word_string = sw_kw_file_string + "\n" + sw_kw_manual
+                         filename=cache_filenames[cache_number])
+    merged_string = file_string + "\n" + manual_string
 
-    return word_string
+    return merged_string
 
 
 def remove_stopwords(text: str, removal_string: str) -> str:
@@ -942,10 +898,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             return orig_text
 
     # -- 2. special characters -----------------------------------------------
-    text = call_replacement_handler(
-        text=text, file_replacer_string=sc_file_string, is_lemma=False,
-        manual_replacer_string=sc_manual, cache_folder=cache_folder,
-        cache_file_names=cache_filenames, cache_number=2)
+    merged_string = merge_file_and_manual_strings(
+        file_string=sc_file_string, manual_string=sc_manual,
+        cache_folder=cache_folder, cache_filenames=cache_filenames,
+        cache_number=2)
+    text = replacement_handler(
+        text=text, replacer_string=merged_string, is_lemma=False)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------
     if tags:  # If remove tags is checked:
@@ -999,11 +957,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             and cons_manual.
         """
 
-        return call_replacement_handler(
-            text=orig_text, file_replacer_string=cons_file_string,
-            is_lemma=False, manual_replacer_string=cons_manual,
-            cache_folder=cache_folder, cache_file_names=cache_filenames,
+        replacer_string = merge_file_and_manual_strings(
+            file_string=cons_file_string, manual_string=cons_manual,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=0)
+        return replacement_handler(
+            text=orig_text, replacer_string=replacer_string, is_lemma=False)
 
     # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text: str) -> str:
@@ -1014,11 +973,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             lem_manual.
         """
 
-        return call_replacement_handler(
-            text=orig_text, file_replacer_string=lem_file_string,
-            is_lemma=True, manual_replacer_string=lem_manual,
-            cache_folder=cache_folder, cache_file_names=cache_filenames,
+        replacer_string = merge_file_and_manual_strings(
+            file_string=lem_file_string, manual_string=lem_manual,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=1)
+        return replacement_handler(
+            text=orig_text, replacer_string=replacer_string, is_lemma=True)
 
     # -- 9. stop words/keep words --------------------------------------------
     def stop_keep_words_function(orig_text: str) -> str:
@@ -1031,8 +991,10 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             sw_kw_manual deleted.
         """
 
-        file_and_manual = handle_stop_keep_words_string(
-            sw_kw_file_string, sw_kw_manual, cache_folder, cache_filenames)
+        file_and_manual = merge_file_and_manual_strings(
+            file_string=sw_kw_file_string, manual_string=sw_kw_manual,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=3)
 
         # if file_and_manual does not contain words there is no issue calling
         # remove_stopwords()

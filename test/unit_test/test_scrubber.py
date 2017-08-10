@@ -8,7 +8,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     delete_words, handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     get_decoded_file, scrub_select_apos, consolidate_hyphens, \
-    consolidate_ampers, handle_stop_keep_words_string, call_replacement_handler
+    consolidate_ampers, merge_file_and_manual_strings
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -259,162 +259,162 @@ class TestReplacementHandler:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
 
 
-class TestCallReplacementHandler:
-    text_string = "This is... Some (random), te-xt I 'wrote'! Isn't it nice?"
-    special_string = "-:_\n!:*\nn:ñ\na:@"
-    consol_string = "o:u\nt,x:y\nI:i"
-    lemma_string = "I,it:she\nrandom:interesting"
-    split_special_string = ["-:_\n!:*", "n:ñ\na:@"]
-    split_consol_string = ["o:u\nt,x:y", "I:i"]
-    split_lemma_string = ["I,it:she", "random:interesting"]
-    cache_folder = \
-        '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-    cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-                       'stopwords.p']
-    after_special = "This is... Some (r@ñdom), te_xt I 'wrote'* Isñ't it ñice?"
-    after_consol = "This is... Sume (randum), ye-yy i 'wruye'! isn'y iy nice?"
-    after_lemma = "This is... Some (interesting), te-xt she 'wrote'! Isn't " \
-                  "she nice?"
-
-    # No test with neither because handle_special_characters() uses requests
-
-    def test_call_replacement_handler_with_file_replacer(self):
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string=self.special_string,
-            is_lemma=False, manual_replacer_string="",
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=2) == \
-            self.after_special
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string=self.special_string,
-            is_lemma=False, manual_replacer_string="",
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=2) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.special_string,
-            is_lemma=False)
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string=self.consol_string,
-            is_lemma=False, manual_replacer_string="",
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=0) == \
-            self.after_consol
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string=self.consol_string,
-            is_lemma=False, manual_replacer_string="",
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=0) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.consol_string,
-            is_lemma=False)
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string=self.lemma_string,
-            is_lemma=True, manual_replacer_string="",
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=1) == \
-            self.after_lemma
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string=self.lemma_string,
-            is_lemma=True, manual_replacer_string="",
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=1) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.lemma_string,
-            is_lemma=True)
-
-    def test_call_replacement_handler_with_manual_replacer(self):
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string="", is_lemma=False,
-            manual_replacer_string=self.special_string,
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=2) == \
-            self.after_special
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string="", is_lemma=False,
-            manual_replacer_string=self.special_string,
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=2) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.special_string,
-            is_lemma=False)
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string="", is_lemma=False,
-            manual_replacer_string=self.consol_string,
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=0) == \
-            self.after_consol
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string="", is_lemma=False,
-            manual_replacer_string=self.consol_string,
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=0) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.consol_string,
-            is_lemma=False)
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string="", is_lemma=True,
-            manual_replacer_string=self.lemma_string,
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=1) == \
-            self.after_lemma
-        assert call_replacement_handler(
-            text=self.text_string, file_replacer_string="", is_lemma=True,
-            manual_replacer_string=self.lemma_string,
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=1) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.lemma_string,
-            is_lemma=True)
-
-    def test_call_replacement_handler_with_both_replacers(self):
-        assert call_replacement_handler(
-            text=self.text_string,
-            file_replacer_string=self.split_special_string[0], is_lemma=False,
-            manual_replacer_string=self.split_special_string[1],
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=2) == \
-            self.after_special
-        assert call_replacement_handler(
-            text=self.text_string,
-            file_replacer_string=self.split_special_string[0], is_lemma=False,
-            manual_replacer_string=self.split_special_string[1],
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=2) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.special_string,
-            is_lemma=False)
-        assert call_replacement_handler(
-            text=self.text_string,
-            file_replacer_string=self.split_consol_string[0], is_lemma=False,
-            manual_replacer_string=self.split_consol_string[1],
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=0) == \
-            self.after_consol
-        assert call_replacement_handler(
-            text=self.text_string,
-            file_replacer_string=self.split_consol_string[0], is_lemma=False,
-            manual_replacer_string=self.split_consol_string[1],
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=0) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.consol_string,
-            is_lemma=False)
-        assert call_replacement_handler(
-            text=self.text_string,
-            file_replacer_string=self.split_lemma_string[0], is_lemma=True,
-            manual_replacer_string=self.split_lemma_string[1],
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=1) == \
-            self.after_lemma
-        assert call_replacement_handler(
-            text=self.text_string,
-            file_replacer_string=self.split_lemma_string[0], is_lemma=True,
-            manual_replacer_string=self.split_lemma_string[1],
-            cache_folder=self.cache_folder,
-            cache_file_names=self.cache_filenames, cache_number=1) == \
-            replacement_handler(
-            text=self.text_string, replacer_string=self.lemma_string,
-            is_lemma=True)
+# class TestCallReplacementHandler:
+#     text_string = "This is... Some (random), te-xt I 'wrote'! Isn't it nice?"
+#     special_string = "-:_\n!:*\nn:ñ\na:@"
+#     consol_string = "o:u\nt,x:y\nI:i"
+#     lemma_string = "I,it:she\nrandom:interesting"
+#     split_special_string = ["-:_\n!:*", "n:ñ\na:@"]
+#     split_consol_string = ["o:u\nt,x:y", "I:i"]
+#     split_lemma_string = ["I,it:she", "random:interesting"]
+#     cache_folder = \
+#         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+#     cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+#                        'stopwords.p']
+#     after_special = "This is... Some (r@ñdom), te_xt I 'wrote'* Isñ't it ñice?"
+#     after_consol = "This is... Sume (randum), ye-yy i 'wruye'! isn'y iy nice?"
+#     after_lemma = "This is... Some (interesting), te-xt she 'wrote'! Isn't " \
+#                   "she nice?"
+#
+#     # No test with neither because handle_special_characters() uses requests
+#
+#     def test_call_replacement_handler_with_file_replacer(self):
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string=self.special_string,
+#             is_lemma=False, manual_replacer_string="",
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=2) == \
+#             self.after_special
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string=self.special_string,
+#             is_lemma=False, manual_replacer_string="",
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=2) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.special_string,
+#             is_lemma=False)
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string=self.consol_string,
+#             is_lemma=False, manual_replacer_string="",
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=0) == \
+#             self.after_consol
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string=self.consol_string,
+#             is_lemma=False, manual_replacer_string="",
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=0) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.consol_string,
+#             is_lemma=False)
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string=self.lemma_string,
+#             is_lemma=True, manual_replacer_string="",
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=1) == \
+#             self.after_lemma
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string=self.lemma_string,
+#             is_lemma=True, manual_replacer_string="",
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=1) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.lemma_string,
+#             is_lemma=True)
+#
+#     def test_call_replacement_handler_with_manual_replacer(self):
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string="", is_lemma=False,
+#             manual_replacer_string=self.special_string,
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=2) == \
+#             self.after_special
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string="", is_lemma=False,
+#             manual_replacer_string=self.special_string,
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=2) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.special_string,
+#             is_lemma=False)
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string="", is_lemma=False,
+#             manual_replacer_string=self.consol_string,
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=0) == \
+#             self.after_consol
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string="", is_lemma=False,
+#             manual_replacer_string=self.consol_string,
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=0) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.consol_string,
+#             is_lemma=False)
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string="", is_lemma=True,
+#             manual_replacer_string=self.lemma_string,
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=1) == \
+#             self.after_lemma
+#         assert call_replacement_handler(
+#             text=self.text_string, file_replacer_string="", is_lemma=True,
+#             manual_replacer_string=self.lemma_string,
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=1) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.lemma_string,
+#             is_lemma=True)
+#
+#     def test_call_replacement_handler_with_both_replacers(self):
+#         assert call_replacement_handler(
+#             text=self.text_string,
+#             file_replacer_string=self.split_special_string[0], is_lemma=False,
+#             manual_replacer_string=self.split_special_string[1],
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=2) == \
+#             self.after_special
+#         assert call_replacement_handler(
+#             text=self.text_string,
+#             file_replacer_string=self.split_special_string[0], is_lemma=False,
+#             manual_replacer_string=self.split_special_string[1],
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=2) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.special_string,
+#             is_lemma=False)
+#         assert call_replacement_handler(
+#             text=self.text_string,
+#             file_replacer_string=self.split_consol_string[0], is_lemma=False,
+#             manual_replacer_string=self.split_consol_string[1],
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=0) == \
+#             self.after_consol
+#         assert call_replacement_handler(
+#             text=self.text_string,
+#             file_replacer_string=self.split_consol_string[0], is_lemma=False,
+#             manual_replacer_string=self.split_consol_string[1],
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=0) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.consol_string,
+#             is_lemma=False)
+#         assert call_replacement_handler(
+#             text=self.text_string,
+#             file_replacer_string=self.split_lemma_string[0], is_lemma=True,
+#             manual_replacer_string=self.split_lemma_string[1],
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=1) == \
+#             self.after_lemma
+#         assert call_replacement_handler(
+#             text=self.text_string,
+#             file_replacer_string=self.split_lemma_string[0], is_lemma=True,
+#             manual_replacer_string=self.split_lemma_string[1],
+#             cache_folder=self.cache_folder,
+#             cache_file_names=self.cache_filenames, cache_number=1) == \
+#             replacement_handler(
+#             text=self.text_string, replacer_string=self.lemma_string,
+#             is_lemma=True)
 
 
 class TestProcessTagReplaceOptions:
@@ -736,31 +736,32 @@ class TestDeleteWords:
         assert delete_words("", []) == ""
 
 
-class TestHandleStopKeepWordsString:
+class TestMergeFileAndManualStrings:
 
-    def test_handle_stop_keep_words_string(self):
+    def test_merge_file_and_manual_strings(self):
         string1 = "and. the\n who,how why"
         string2 = "what where, but. of,\nnot,for"
         cache_folder = \
             '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
         cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
                            'stopwords.p']
+        cache_number = 1
 
-        assert handle_stop_keep_words_string(
-            sw_kw_file_string="", sw_kw_manual="", cache_folder=cache_folder,
-            cache_filenames=cache_filenames) == "\n"
-        assert handle_stop_keep_words_string(
-            sw_kw_file_string=string1, sw_kw_manual="",
-            cache_folder=cache_folder, cache_filenames=cache_filenames) == \
-            string1 + "\n"
-        assert handle_stop_keep_words_string(
-            sw_kw_file_string="", sw_kw_manual=string2,
-            cache_folder=cache_folder, cache_filenames=cache_filenames) == \
-            "\n" + string2
-        assert handle_stop_keep_words_string(
-            sw_kw_file_string=string1, sw_kw_manual=string2,
-            cache_folder=cache_folder, cache_filenames=cache_filenames) == \
-            string1 + "\n" + string2
+        assert merge_file_and_manual_strings(
+            file_string="", manual_string="", cache_folder=cache_folder,
+            cache_filenames=cache_filenames, cache_number=cache_number) == "\n"
+        assert merge_file_and_manual_strings(
+            file_string=string1, manual_string="",
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=cache_number) == string1 + "\n"
+        assert merge_file_and_manual_strings(
+            file_string="", manual_string=string2,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=cache_number) == "\n" + string2
+        assert merge_file_and_manual_strings(
+            file_string=string1, manual_string=string2,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=cache_number) == string1 + "\n" + string2
 
 
 class TestRemoveStopwords:
