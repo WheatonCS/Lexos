@@ -1,5 +1,5 @@
 from lexos.processors.visualize.rw_analyzer import a_string_letter,\
-    a_string_word_line, a_word_word, r_string_letter,\
+    a_string_word_line, a_word_word, a_word_line, r_string_letter,\
     r_string_word_line, r_word_word, r_word_line, rw_analyze
 
 from lexos.helpers.error_messages import WINDOW_SIZE_LARGE_MESSAGE
@@ -196,12 +196,64 @@ class TestAWordWord:
                            window_size=1) == [0, 0]
 
 
-# class TestAWordLine:
-#   def test_a_word_line(self):
-#       assert a_word_line(split_list=["this is one test line",
-#                                      "testing test one two three",
-#                                      "hello world"], keyword="test",
-#                          window_size=1) == [1.0, 2.0, 0]
+class TestAWordLine:
+    def test_a_word_line_basic(self):
+        try:
+            _ = a_word_line(split_list=[], keyword="test",
+                            window_size=1)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
+        assert a_word_line(split_list=[""], keyword="test",
+                           window_size=1) == [0]
+        assert a_word_line(split_list=["test"], keyword="test",
+                           window_size=1) == [1.0]
+        assert a_word_line(split_list=["hello test"], keyword="test",
+                           window_size=1) == [1.0]
+        assert a_word_line(split_list=["hello test", "hi there"],
+                           keyword="test", window_size=1) == [1.0, 0]
+        assert a_word_line(split_list=["hello world", "test test"],
+                           keyword="test", window_size=1) == [0, 2.0]
+        assert a_word_line(split_list=["hello test", "test test"],
+                           keyword="test", window_size=1) == [1.0, 2.0]
+        assert a_word_line(split_list=["this is one test line",
+                                       "testing test one two three",
+                                       "hello world"], keyword="test",
+                           window_size=1) == [1.0, 1.0, 0]
+
+    def test_a_word_line_play_window(self):
+        assert a_word_line(split_list=["hello test", "hi there"],
+                           keyword="test", window_size=2) == [0.5]
+        assert a_word_line(split_list=["hello world", "test test"],
+                           keyword="test", window_size=2) == [1.0]
+        assert a_word_line(split_list=["hello test", "test test"],
+                           keyword="test", window_size=2) == [1.5]
+        assert a_word_line(split_list=["this is one test line",
+                                       "testing test one two three",
+                                       "hello world"], keyword="test",
+                           window_size=2) == [1.0, 0.5]
+        assert a_word_line(split_list=["this is one test line",
+                                       "testing test one two three",
+                                       "hello world"], keyword="test",
+                           window_size=3) == [0.6666666666666666]
+
+    def test_a_word_line_window_bigger(self):
+        try:
+            _ = a_word_line(split_list=["hello test", "hello world"],
+                            keyword="test", window_size=3)
+            raise AssertionError("did not throw error")
+        except AssertionError as error:
+            assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
+
+    def test_a_word_line_regex_cannot_do(self):
+        assert a_word_line(split_list=["hello test", "test test"],
+                           keyword="^t", window_size=1) == [0, 0]
+        assert a_word_line(split_list=["hello test", "test test"],
+                           keyword="t$", window_size=1) == [0, 0]
+        assert a_word_line(split_list=["hello test", "test test"],
+                           keyword=".", window_size=1) == [0, 0]
+        assert a_word_line(split_list=["hello test", "test test"],
+                           keyword="^t.*t$", window_size=1) == [0, 0]
 
 
 class TestRStringLetter:
@@ -514,7 +566,7 @@ class TestRWordLine:
                                        "this is a test"], first_word="hello",
                            second_word="test", window_size=1) == [0.5, 1.0, 0]
 
-    def test_r_word_word_play_window(self):
+    def test_r_word_line_play_window(self):
         assert r_word_line(split_list=["hello test", "hello world"],
                            first_word="test", second_word="hello",
                            window_size=2) == [0.3333333333333333]
@@ -535,7 +587,7 @@ class TestRWordLine:
         except AssertionError as error:
             assert str(error) == WINDOW_SIZE_LARGE_MESSAGE
 
-    def test_r_word_word_regex_cannot_do(self):
+    def test_r_word_line_regex_cannot_do(self):
         assert r_word_line(split_list=["hello test", "hello world"],
                            first_word="^t", second_word="hello",
                            window_size=1) == [0, 0]
@@ -571,7 +623,15 @@ class TestRWAnalyze:
                           window_size_str='1') == (
             [[1.0, 1.0]], "Average number of test's in a window of 1 words.",
             "First word in window", "Average")
-        # leave this space for test on a_word_line
+        assert rw_analyze(file_string="this is one test line\r testing test"
+                                      " one two three\r hello world",
+                          count_type='average',
+                          token_type='word', window_type='line',
+                          key_word='test', second_key_word='',
+                          window_size_str='1') == (
+                   [[1.0, 1.0, 0]],
+                   "Average number of test's in a window of 1 lines.",
+                   "First line in window", "Average")
         assert rw_analyze(file_string="test", count_type='ratio',
                           token_type='string', window_type='letter',
                           key_word='t', second_key_word='s',
@@ -603,6 +663,15 @@ class TestRWAnalyze:
             " window of 1 lines.", "First line in window", "Ratio")
 
     def test_rw_analyze_different_line_split(self):
+        assert rw_analyze(file_string="this is one test line\n testing test"
+                                      " one two three\n hello world",
+                          count_type='average',
+                          token_type='word', window_type='line',
+                          key_word='test', second_key_word='',
+                          window_size_str='1') == (
+                   [[1.0, 1.0, 0]],
+                   "Average number of test's in a window of 1 lines.",
+                   "First line in window", "Average")
         assert rw_analyze(file_string="hello test\n hello world\n this is a"
                                       " test", count_type='ratio',
                           token_type='word', window_type='line',
@@ -665,7 +734,15 @@ class TestRWAnalyze:
             [[1.0, 1.0]],
             "Average number of test's in a window of 1 words.",
             "First word in window", "Average")
-        # leave this space for test on a_word_line
+        assert rw_analyze(file_string="this is one test line\r testing test"
+                                      " one two three\r hello world",
+                          count_type='average',
+                          token_type='word', window_type='line',
+                          key_word='test', second_key_word='',
+                          window_size_str='2') == (
+                   [[1.0, 1.0, 0]],
+                   "Average number of test's in a window of 1 lines.",
+                   "First line in window", "Average")
         assert rw_analyze(file_string="test", count_type='ratio',
                           token_type='string', window_type='letter',
                           key_word='t', second_key_word='s',
@@ -721,7 +798,17 @@ class TestRWAnalyze:
             [[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]],
             "Average number of test's in a window of 2 words.",
             "First word in window", "Average")
-        # leave this space for test on a_word_line
+        assert rw_analyze(file_string="hello test\r hello hello\r hello"
+                                      " world\r this is\r a really cool\r "
+                                      "test\r hello test\r test test\r another"
+                                      " test\r ten\r hello\r twelve lines",
+                          count_type='average',
+                          token_type='word', window_type='line',
+                          key_word='test', second_key_word='',
+                          window_size_str='2') == (
+                   [[0.5, 0, 0, 0, 0.5, 1.0, 1.5, 1.5, 0.5, 0, 0]],
+                   "Average number of test's in a window of 2 lines.",
+                   "First line in window", "Average")
         assert rw_analyze(file_string="test test te",
                           count_type='ratio', token_type='string',
                           window_type='letter', key_word='t',
