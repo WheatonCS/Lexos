@@ -12,17 +12,17 @@
 
     <!-- === jQuery Core === -->
 	{% if config['LOCAL_MODE'] == True %}
-    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery/jquery-2.2.4.min.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}?ver={{version}}"></script>
 	{% else %}
-	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 	{% endif %}
 
 	<!-- === Load jQuery UI only for selected pages === -->
 	{% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
 	{% if active_page in needs_jQuery_ui %}
 		{% if config['LOCAL_MODE'] == True %}
-		<link rel="stylesheet" href="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.theme.min.css') }}?ver={{version}}">
-	    <script type="text/javascript" src="{{ url_for('static', filename='lib/jquery-ui-1.11.4/jquery-ui.min.js') }}?ver={{version}}"></script>
+		<link rel="stylesheet" href="{{ url_for('static', filename='node_modules/jquery-ui/themes/base/jquery-ui.min.css') }}?ver={{version}}">
+	    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/jquery-ui/jquery-ui.min.js') }}?ver={{version}}"></script>
 		{% else %}
 		<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -33,31 +33,32 @@
 	{% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans', 'rollingwindow'] -%}
 	{% if active_page in needs_d3 %}
 		{% if config['LOCAL_MODE'] == True %}
-	    <script type="text/javascript" src="{{ url_for('static', filename='lib/d3/d3.min.js') }}?ver={{version}}"></script>
+	    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/d3/d3.min.js') }}?ver={{version}}"></script>
 		{% else %}
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 		{% endif %}
 	{% endif %}
 
     <!-- === Bootstrap === -->
 	{% if config['LOCAL_MODE'] == True %}
-	<link rel="stylesheet" href="{{ url_for('static', filename='lib/bootstrap-3.3.6/css/bootstrap.min.css') }}?ver={{version}}">
-	<script type="text/javascript" src="{{ url_for('static', filename='lib/bootstrap-3.3.6/js/bootstrap.min.js') }}?ver={{version}}"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}?ver={{version}}">
+	<script type="text/javascript" src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.min.js') }}?ver={{version}}"></script>
 	{% else %}
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	{% endif %}
 
     <!-- === SmartMenus jQuery plugin CSS === -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='lib/smartmenus/css/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='lib/smartmenus/js/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/smartmenus/dist/jquery.smartmenus.min.js') }}?ver={{version}}"></script>
     <!-- SmartMenus jQuery Bootstrap Addon -->
-    <script type="text/javascript" src="{{ url_for('static', filename='lib/smartmenus/js/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js') }}?ver={{version}}"></script>
 
     <!-- === Font Awesome === -->
-	{% if config['LOCAL_MODE'] == True %}	<link rel="stylesheet" href="{{ url_for('static', filename='lib/font-awesome-4.6.3/css/font-awesome.min.css') }}?ver={{version}}">
+	{% if config['LOCAL_MODE'] == True %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='node_modules/font-awesome/css/font-awesome.min.css') }}?ver={{version}}">
 	{% else %}
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	{% endif %}
 
 	<!-- Lexos Scripts -->

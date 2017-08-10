@@ -1,12 +1,14 @@
+import json
 import os
 import re
 import time
 
-from flask import Flask
+from flask import Flask, request, render_template
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
 import lexos.helpers.constants
+from lexos.helpers.exceptions import LexosException
 from lexos.interfaces.base_interface import base_view
 from lexos.interfaces.bubble_viz_interface import viz_view
 from lexos.interfaces.clustering_interface import cluster_view
@@ -77,36 +79,6 @@ app.register_blueprint(top_words_view)
 app.register_blueprint(word_cloud_view)
 
 
-def int_key(s):
-    """
-    Returns the key to sort by.
-
-    Args:
-        A key
-
-    Returns:
-        A key converted into an int if applicable
-    """
-    if isinstance(s, tuple):
-        s = s[0]
-    return tuple(int(part) if re.match(r'[0-9]+$', part) else part
-                 for part in re.split(r'([0-9]+)', s))
-
-
-@app.template_filter('natsort')
-def natsort(l):
-    """
-    Sorts lists in human order (10 comes after 2, even when both are strings)
-
-    Args:
-        A list
-
-    Returns:
-        A sorted list
-    """
-    return sorted(l, key=int_key)
-
-
 # http://flask.pocoo.org/snippets/28/
 # http://stackoverflow.com/questions/12523725/
 # why-is-this-jinja-nl2br-filter-escaping-brs-but-not-ps
@@ -125,6 +97,32 @@ def nl2br(eval_ctx, value):
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
+
+
+# ==== add error handlers ====
+@app.errorhandler(404)
+def page_not_found(_):
+    """Custom 404 Page"""
+    app.logger.error('Page not found: %s', request.path)
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(Exception)
+def unhandled_exception(error):
+    """handles internal server errors
+
+    Send all the LexosException to the frontend.
+    For all the other Exceptions,
+    we will just render the internal server error (500) page.
+    """
+    # if we want to send this backend error to the front end
+    if isinstance(error, LexosException):
+        ret_data = {"lexosException": str(error)}
+        return json.dumps(ret_data)
+
+    # if flask raises this error
+    else:
+        render_template("500.html")
 
 
 if __name__ == '__main__':

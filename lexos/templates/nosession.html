@@ -2,7 +2,7 @@
 {% set active_page = 'nosession' %}
 
 {% block head %}
-<meta http-equiv="refresh" content="5;URL='{{ url_for('upload') }}'" />
+<meta http-equiv="refresh" content="5;URL='{{ url_for('upload.upload') }}'" />
 {% endblock %}
 
 {% block title %}redirect{% endblock %}
@@ -12,7 +12,7 @@
 	<div class="col-md-12">
 		<div style="width:80%;margin:100px auto;">
 			<h3>This page requires an active session. Lexos is redirecting you to the Upload screen.</h3>
-			<h3>If you are not redirected in 5 seconds, click <a href="{{ url_for('upload') }}">here</a>.</h3>
+			<h3>If you are not redirected in 5 seconds, click <a href="{{ url_for('upload.upload') }}">here</a>.</h3>
 		</div>
 	</div>
 </div>

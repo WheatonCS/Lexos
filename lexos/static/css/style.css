@@ -1,8 +1,52 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
+/*@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
+*/
+/*!
+  Lato font.
+*/
+/* Lato (normal, regular) */
+@font-face {
+  font-family: Lato;
+  font-weight: 400;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-normal/lato-normal.woff") format("woff");
+}
+/* Lato (normal, italic) */
+@font-face {
+  font-family: Lato;
+  font-weight: 400;
+  font-style: italic;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-normal-italic/lato-normal-italic.woff") format("woff");
+}
+/* Lato (bold, regular) */
+@font-face {
+  font-family: Lato;
+  font-weight: 700;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-bold/lato-bold.woff") format("woff");
+}
+/* Lato (bold, italic) */
+@font-face {
+  font-family: Lato;
+  font-weight: 700;
+  font-style: italic;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-bold-italic/lato-bold-italic.woff") format("woff");
+}
+/* Lato (black, regular) */
+@font-face {
+  font-family: Lato;
+  font-weight: 900;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url("../node_modules/lato-font/fonts/lato-black/lato-black.woff2") format("woff2"), url("../node_modules/lato-font/fonts/lato-black/lato-black.woff") format("woff");
+}
 
 /* ================== ELEMENT STYLING ============================ */
 body {
-  font-family: "Lato", sans-serif;
+  font-family: "LatoLatin", sans-serif;
   font-size: 14px;
   margin: 0;
   padding: 0;
@@ -255,7 +299,7 @@ input[type="file"] {
   display: none;
   color: red;
   position: fixed;
-  font-size: 20px;  
+  font-size: 20px;
   left: 460px;
   top: 90px;
 }
@@ -264,7 +308,7 @@ input[type="file"] {
   display: block;
   width: 100%;
   font-size: 20px;
-  
+
   text-align: center;
   color: red;
 }
@@ -274,7 +318,7 @@ input[type="file"] {
 
 .line {
   fill: none;
-  stroke-width: 1.5px; 
+  stroke-width: 1.5px;
 }
 
 .line2 {
@@ -509,10 +553,10 @@ footer {
 #banner { background-color: white;}
 
 /* ================== BOOTSTRAP NAVBAR STYLING ============================= */
-#topnavbar.affix { 
+#topnavbar.affix {
   position: fixed;
   top: 0;
-  width: 100%; 
+  width: 100%;
 }
 
 /* Override default Bootstrap styles with Lexos styles */
@@ -806,7 +850,7 @@ input[type="text"]#tagfield:focus {
   font-size: 17px;
   width: calc(80% - 4px - 5px);
   white-space: nowrap;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
   border: 2px solid rgba(255, 255, 255, 0.0); /* Placeholder for border */
   overflow: hidden;
   -webkit-border-radius: 6px;
@@ -1057,7 +1101,7 @@ http://blog.craigsworks.com/bootstrap-3-disabled-dropdown-links/ **/
 /* Mimic cursor style from native .dropdown-menu > .disabled > a{} styles,
 since `pointer-events: none` kills the cursor state, too.  */
 .dropdown-menu > .disabled {
- cursor: not-allowed; 
+ cursor: not-allowed;
 }
 
 .dropdown-menu > .disabled > a {
@@ -1083,7 +1127,7 @@ since `pointer-events: none` kills the cursor state, too.  */
 }
 
 /* Keeps column width constant */
-#doc-name span {word-wrap: break-word !important} 
+#doc-name span {word-wrap: break-word !important}
 tr.selected {
   background-color: #C8FFC8 !important;
   color: #000000 !important;
@@ -1129,7 +1173,7 @@ input[type="search"]{
 
 #prepare-options.fixed {
   position: fixed;
-  top: 0; 
+  top: 0;
 }
 
 #prepare-previews {
@@ -1170,7 +1214,7 @@ input[type="search"]{
   clear: left;
   float: left;
   white-space: pre-wrap; /* Used to show the newlines in the text */
-  /* Wrap long strings -- we may have to add these classes dynamically when 
+  /* Wrap long strings -- we may have to add these classes dynamically when
      because they may break the effects of white-space: pre-wrap. */
   word-break: break-all;
   white-space: normal;
@@ -1188,14 +1232,14 @@ input[type="search"]{
 /* ================== SCRUB STYLING ============================== */
 
 #normalscrubbingoptions {
-  /*float: left;*/ 
+  /*float: left;*/
 }
 
 #mainscruboptions {
   /*float: left;*/
 }
 
-#whitespace { 
+#whitespace {
   margin-left:20px;
 }
 
@@ -1385,7 +1429,7 @@ textarea.manualinput {
 }
 
 .individualcuttingoptionstitle {
-  width: 100%;  
+  width: 100%;
 }
 
 .filechunk {
@@ -1521,7 +1565,7 @@ textarea.manualinput {
   background-color: #c8ebf0;
   opacity: 0.3;
   height: 75px;
-  width:300px; 
+  width:300px;
   position:absolute;
   left: 50%;
   top: 50%;
@@ -1569,7 +1613,7 @@ textarea.manualinput {
   width: 50px;
 }
 
-#vis text:hover { 
+#vis text:hover {
   opacity: .7 !important;
 }
 
@@ -1578,78 +1622,78 @@ textarea.manualinput {
   padding: 0 10px;
 }
 
-#presets a.first { 
-  border-left: none; 
+#presets a.first {
+  border-left: none;
 }
 
-#keyword { 
-  width: 300px; 
+#keyword {
+  width: 300px;
 }
 
-#fetcher { 
-  width: 500px; 
+#fetcher {
+  width: 500px;
 }
 
-#keyword, #go { 
-  font-size: 1.5em; 
+#keyword, #go {
+  font-size: 1.5em;
 }
 
-#text { 
-  width: 100%; 
-  height: 100px; 
+#text {
+  width: 100%;
+  height: 100px;
 }
 
-p.copy { 
-  font-size: small; 
+p.copy {
+  font-size: small;
 }
 
-hr { 
-  border: none; 
-  border-bottom: solid #ccc 1px; 
+hr {
+  border: none;
+  border-bottom: solid #ccc 1px;
 }
 
-a.active { 
-  text-decoration: none; 
-  color: #000; 
-  font-weight: bold; 
-  cursor: pointer; 
+a.active {
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-#angles line, #angles path, #angles circle { 
-  stroke: #666; 
+#angles line, #angles path, #angles circle {
+  stroke: #666;
 }
 
-#angles text { 
-  fill: #333; 
+#angles text {
+  fill: #333;
 }
 
-#angles path.drag { 
-  fill: #666; 
-  cursor: move; 
+#angles path.drag {
+  fill: #666;
+  cursor: move;
 }
 
-#angles { 
-  text-align: center; 
-  margin: 0 auto; 
-  width: 350px; 
+#angles {
+  text-align: center;
+  margin: 0 auto;
+  width: 350px;
 }
 
-#angles input { 
-  width: 42px; 
+#angles input {
+  width: 42px;
 }
 
 #wordcloudoptionswrapper label {
   display: inline;
 }
 
-#status { 
-  font-size: 24px; 
-  color: red; 
-  position:absolute; 
-  top: 450px; 
-  left: 320px; 
-  padding: 6px; 
-  border: 1px solid red; 
+#status {
+  font-size: 24px;
+  color: red;
+  position:absolute;
+  top: 450px;
+  left: 320px;
+  padding: 6px;
+  border: 1px solid red;
   background: #FFFFFF;
   transition: 0.25s;
   z-index: 50000;
@@ -1814,10 +1858,10 @@ select#orientation {
   display: none;
   color: black;
   position: absolute;
-  font-size: 13px; 
+  font-size: 13px;
   line-height: 2px;
   color: #303030;
-  padding: 1px 10px; 
+  padding: 1px 10px;
   margin-top:1px;
   left:230px;
   top:460px;
@@ -1845,7 +1889,7 @@ select#orientation {
   overflow:auto;
   width: 27%;
   margin-top: 10px;
-  padding: 10px 4px 4px 4px;  
+  padding: 10px 4px 4px 4px;
 }
 
 #kmeansresultsRight {
@@ -1870,13 +1914,13 @@ select#orientation {
   background-color: white;
 }
 
-#basicTable th { 
+#basicTable th {
   padding: 9px;
   text-align: center;
   vertical-align: top;
 }
 
-#basicTable td { 
+#basicTable td {
   padding: 8px;
   text-align: center;
 }
@@ -1978,8 +2022,8 @@ select#orientation {
 }
 
 #simstable{
-  overflow: auto; 
-  max-width: 100%; 
+  overflow: auto;
+  max-width: 100%;
   max-height:300px;
   text-align: center;
 }
@@ -2135,7 +2179,7 @@ table {
 }
 
 /* ================== IN THE MARGINS STYLING =============================== */
-.slideout-menu { 
+.slideout-menu {
   padding: 5px;
   height: 99%;
   overflow: auto;
@@ -2176,7 +2220,7 @@ table {
   height: 32px;
 }
 #status-prepare, #status-analyze, #status-visualize {
-  font-size: 18px; 
+  font-size: 18px;
   width: 66px;
   height: 66px;
   margin: auto;
@@ -2187,7 +2231,7 @@ table {
   visibility: hidden;
   transition: 0.25s;
   z-index: 10000px;
-  background:rgba( 255, 255, 255, .4 ) 
+  background:rgba( 255, 255, 255, .4 )
               50% 50% ;
 }
 #status-prepare img, #status-analyze img, #status-visualize img {

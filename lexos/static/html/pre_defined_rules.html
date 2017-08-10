@@ -51,24 +51,24 @@ $(document).ready(function() {
     		$("#commentary").html('').hide();
     	}
         table.ajax.url($(this).attr("href")).load();
-		$(".dataTables_wrapper").show();		
+		$(".dataTables_wrapper").show();
 	});
 });
 </script>
 
 <style type="text/css">
-/* @font-face rule syntax courtesy Charles W. Borchers, IV/Southeastern Louisiana University 
+/* @font-face rule syntax courtesy Charles W. Borchers, IV/Southeastern Louisiana University
 /* (http://english.selu.edu/humanitiesonline/kempe). */
-/* Cross-browser support REQUIRES that 1) the style sheet containing the @font-face rule(s), 
-/* 2) the font(s) referenced by the rule(s), and 3) the Web page(s) that will use them share 
+/* Cross-browser support REQUIRES that 1) the style sheet containing the @font-face rule(s),
+/* 2) the font(s) referenced by the rule(s), and 3) the Web page(s) that will use them share
 /* the SAME folder. */
 @font-face {
 font-family: Junicode;
-src: url('../lib/junicode/Junicode.ttf'); /* Embedded Font Type REQUIRED by IE8 ??? */
+src: url('../fonts/junicode/Junicode.ttf'); /* Embedded Font Type REQUIRED by IE8 ??? */
 }
 @font-face {
 font-family: Junicode;
-src: url('../lib/junicode/Junicode.woff'); /* Embedded Font Type Used by Other Browsers */
+src: url('../fonts/junicode/Junicode.woff'); /* Embedded Font Type Used by Other Browsers */
 }
 
 /* Main Page Font */
