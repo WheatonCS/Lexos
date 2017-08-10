@@ -35,10 +35,10 @@ Steps:
 	(g) Set Special Characters to Dictionary of Old English (sgml)
 
     Apply Scrubbing
-(2) CUT Daniel into Segment Size: 450 word chunks, zero Overlap, 50% Last Proportion;
+(2) CUT:
+    (a) Daniel into Segment Size: 450 word chunks, zero Overlap, 50% Last Proportion;
     (this will lead to ten chunks of Daniel)
-
-(3) CUT Azarias into Number of Segments: one(1) chunk
+    (b) Azarias into Number of Segments: one(1) chunk
 
 	Apply Cuts
 (4) ANALYZE - Dendrogram

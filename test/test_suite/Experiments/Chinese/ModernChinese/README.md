@@ -15,18 +15,18 @@ should be able to produce a dendrogram as shown in ResultsToExpect/.
 ###Sample Files:
 Ba Jin's Turbulent Stream Trilogy
 
-(1) Ba Jin: The Family (1933).txt
-(2) Ba Jin: Spring (1938).txt
-(3) Ba Jin: Autumn (1940).txt
+(1) BaJin_TheFamily_1933.txt
+(2) BaJin_Spring_1938.txt
+(3) BaJin_Autumn_1940.txt
 
 Ba Jin's Love Trilogy
 
-(4) Ba Jin: Fog (1931).txt
-(5) Ba Jin: Rain (1933).txt
-(6) Ba Jin: Lightning (1935).txt
+(4) BaJin_Fog_1931.txt
+(5) BaJin_Rain_1933.txt
+(6) BaJin_Lightning_1935.txt
 
-(7) Jia Pingwa: Missing Wolves (2000).txt
-(8) Jia Pingwa: Shaanxi Opera (2005).txt
+(7) JiaPingwa_MissingWolves_2000.txt
+(8) JiaPingwa_ShaanxiOpera _2005.txt
 
 
 Steps:
@@ -35,7 +35,7 @@ Steps:
 
 (1) SCRUB 
 
-    (a) Move punctuation
+    (a) Remove punctuation
     (b) Remove Digits
     (c) Apply Scrubbing
 (2) CUT 
@@ -47,7 +47,7 @@ Steps:
 
     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title
-    (c) Tokenize: 2-gram by Characters Only within words
+    (c) Tokenize: 2-gram by Characters
     (d) Normalize: Weighted Counts (TF/IDF) 
     (e) Get Dendrogram
     (f) Compare your result with the .pdf found in the 

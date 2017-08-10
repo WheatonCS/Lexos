@@ -28,16 +28,16 @@ Steps:
 =====================================================================
 (0) UPLOAD 
 
-    (a) 九歌JiuGe(Zhanguo).txt 
-    (b) 离骚LiSao(Zhanguo).txt 
-    (c) 孔子世家KongZiShiJia(Han).txt
-    (d) 项羽本纪XiangYuBenJi(Han).txt
-    (e) 长恨歌ChangHenGe(Tang).txt
-    (f) 琵琶行PiPaXing(Tang).txt 
-    (g) 赤壁赋ChiBiFu(Song).txt
-    (h) 后赤壁赋HouChiBiFu(Song).txt
-    (i) 窦娥冤DouEYuan(Yuan).txt
-    (j) 西厢记XiXiangJi(Yuan).txt
+    (1) 九歌JiuGe(Zhanguo).txt 
+    (2) 后赤壁赋HouChiBiFu(Song).txt
+    (3) 孔子世家KongZiShiJia(Han).txt
+    (4) 琵琶行PiPaXing(Tang).txt
+    (5) 离骚LiSao(Zhanguo).txt
+    (6) 窦娥冤DouEYuan(Yuan).txt
+    (7) 西厢记XiXiangJi(Yuan).txt
+    (8) 赤壁赋ChiBiFu(Song).txt
+    (9) 项羽本纪XiangYuBenJi(Han).txt
+    (10)长恨歌ChangHenGe(Tang).txt 
 
 (1) SCRUB both:
 
@@ -49,7 +49,7 @@ Steps:
 
      (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
      (b) Give a Title
-     (c) Choose Tokenize - 1 - gram, by Characters, check the box Only within words
+     (c) Choose Tokenize - 1 - gram, by Characters
      (d) Choose normalize - Proportional Counts
      (e) Get Dendrogram
      (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
