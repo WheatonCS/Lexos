@@ -50,7 +50,7 @@ def cut_list_with_last_prop(input_list: list, seg_size: int,
     elif last_prop > float(len(input_list[-1]) / seg_size):
 
         input_list[-2].extend(input_list[-1])
-        input_list.remove(input_list[-1])
+        input_list.pop()
         return input_list
 
     else:
@@ -163,7 +163,7 @@ def cut_by_lines(text: str, seg_size: int, overlap: int, last_prop: float) \
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
     # split text by new line while keeping all the whitespace
-    seg_list = re.split("(\n+)", text)
+    seg_list = text.splitlines(keepends=True)
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
@@ -219,7 +219,7 @@ def cut_by_milestone(text: str, milestone: str) -> List[str]:
     assert len(milestone) > 0, EMPTY_MILESTONE_MESSAGE
 
     # split text by milestone string
-    final_seg_list = text.split(milestone)
+    final_seg_list = text.split(sep=milestone)
     return final_seg_list
 
 
