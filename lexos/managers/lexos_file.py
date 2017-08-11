@@ -13,8 +13,8 @@ from lexos.processors.prepare import scrubber
 
 """Class for an object to hold all information about a specific uploaded file.
 
-Each uploaded file will be stored in a unique object, and accessed through the 
-FileManager files dictionary. A major data attribute of this class isa string 
+Each uploaded file will be stored in a unique object, and accessed through the
+FileManager files dictionary. A major data attribute of this class is a string
 that (sometimes) contains the text contents of the file (Most of the time).
 """
 
@@ -415,7 +415,7 @@ class LexosFile:
     # TODO: Legacy code
     def generate_d3_json_object(self, word_label: str,
                                 count_label: str) -> Dict[
-        str, List[Dict[str, int]]]:
+            str, List[Dict[str, int]]]:
         """ Generates a JSON object for d3 from the word counts of the file.
 
         :param word_label: label to use for identifying words in the
