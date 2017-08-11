@@ -1327,7 +1327,37 @@ class FileManager:
 
     # Experimental for Tokenizer
     @staticmethod
-    def get_matrix_options_from_ajax():
+    def get_matrix_options_from_ajax() -> Tuple[int, bool, bool, bool, str,
+                                                bool, bool, bool, bool, bool]:
+        """Gets all the options that are used to generate the matrices from GUI
+
+        :return:
+            n_gram_size: int for size of ngram (either n-words or n-chars,
+                         depending on use_word_tokens)
+            use_word_tokens: a boolean that is True if 'word' tokens; False if
+                            'char' tokens
+            use_freq: a boolean saying whether or not to use the frequency
+                      (count / total), as opposed to the raw counts,
+                      for the count data.
+            use_tfidf: a boolean that is True if the user wants to use "TF/IDF"
+                       (weighted counts) to normalize
+            norm_option: a string representing distance metric options: only
+                         applicable to "TF/IDF", otherwise "N/A"
+            grey_word: a boolean (default is False) that is True if the user
+                       wants to use greyword to normalize
+            show_deleted_word: a boolean that is True if the user want to use
+                               greyword to normalize or the user wants to
+                               apply most_frequent_word or culling to the
+                               Matrix...
+            only_char_grams_within_words: a boolean that is True if 'char'
+                                          tokens but only want to count tokens
+                                          "inside" words
+            most_frequent_word: a boolean to show whether to apply
+                                most_frequent_word to the Matrix
+                                (see self.mostFrequenWord method for more)
+            culling: a boolean the a boolean to show whether to apply culling
+                     to the Matrix (see self.culling method for more)
+        """
 
         if request.json:
             data = request.json
