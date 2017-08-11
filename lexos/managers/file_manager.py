@@ -682,10 +682,7 @@ class FileManager:
                          applicable to "TF/IDF", otherwise "N/A"
             grey_word: a boolean (default is False) that is True if the user
                        wants to use greyword to normalize
-            show_deleted_word: a boolean that is True if the user want to use
-                               greyword to normalize or the user wants to
-                               apply most_frequent_word or culling to the
-                               Matrix...
+            show_deleted_word: deprecated option
             only_char_grams_within_words: a boolean that is True if 'char'
                                           tokens but only want to count tokens
                                           "inside" words
@@ -1050,8 +1047,9 @@ class FileManager:
         :param round_decimal: (default is False) True if the float is
                               fixed to 6 decimal places
                               (so far only used in tokenizer)
-        :return: list of lists representing the matrix of data with
-                 [rows: fileNames, columns: words].
+        :return:
+            - the index (row) as the segment names (temp_labels)
+            - the column as words
         """
 
         active_files = self.get_active_files()
@@ -1345,10 +1343,7 @@ class FileManager:
                          applicable to "TF/IDF", otherwise "N/A"
             grey_word: a boolean (default is False) that is True if the user
                        wants to use greyword to normalize
-            show_deleted_word: a boolean that is True if the user want to use
-                               greyword to normalize or the user wants to
-                               apply most_frequent_word or culling to the
-                               Matrix...
+            show_deleted_word: deprecated option
             only_char_grams_within_words: a boolean that is True if 'char'
                                           tokens but only want to count tokens
                                           "inside" words
