@@ -519,16 +519,24 @@ def delete_words(text: str, remove_list: List[str]) -> str:
         remove_list.
     """
 
-    # Create regex pattern
+    # Create center of the regex pattern.
+    # ["User", "words", here"] => "User|words|here"
     remove_string = "|".join(remove_list)
-    # Compile pattern with bordering \b markers to demark only full words
-    pattern = re.compile(r'\b(' + remove_string + r')\b', re.UNICODE)
-    # Swap target words for empty string
-    scrubbed_text = pattern.sub('', text)
 
-    # Replace multiple spaces with a single one
-    scrubbed_text = re.sub(' +', ' ', scrubbed_text)
-    return scrubbed_text
+    if remove_string:
+        # Produces the pattern (^|\s)(User|words|here)(?=\s|$)
+
+        # (^|\s) -- If the word begins the string OR is preceded by a space,
+        # (User|words|here) -- AND it appears in the list exactly,
+        # (?=\s|$) -- AND it is followed by a space OR ends the string...
+        pattern = re.compile(r'(^|\s)(' + remove_string + r')(?=\s|$)',
+                             re.UNICODE)
+
+        # ...Then swap the word and the preceding (but not following) space for
+        # an empty string
+        text = pattern.sub("", text)
+
+    return text
 
 
 def merge_file_and_manual_strings(file_string: str, manual_string: str,
