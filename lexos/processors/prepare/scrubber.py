@@ -504,7 +504,7 @@ def split_input_word_string(input_string: str) -> List[str]:
     # A list of all words delimited by commas, periods, spaces, and newlines
     input_words = [word
                    for line in input_lines
-                   for word in re.split('[,. ]', line.strip())
+                   for word in re.split('[, ]', line.strip())
                    if word != '']
 
     return input_words
@@ -600,11 +600,7 @@ def keep_words(text: str, non_removal_string: str) -> str:
     text_list = []  # list of words and ""
     for line in split_lines:
         line = line.strip()
-        # Using re for multiple delimiter splitting on whitespace (\s) and
-        # punctuation
-        split_pattern = '\s|' + punctuation
-        token_regex = re.compile(split_pattern, re.UNICODE)
-        tokens = re.split(token_regex, line)
+        tokens = re.split('\s', line, re.UNICODE)
         text_list.extend(tokens)
 
     # get rid of empty strings in text_list

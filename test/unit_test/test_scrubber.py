@@ -633,25 +633,25 @@ class TestSplitInputWordString:
         assert split_input_word_string(
             input_string=",This,string,,has,commas,,") == \
             ["This", "string", "has", "commas"]
-        assert split_input_word_string(
-            input_string=".This.string..has.periods..") == \
-            ["This", "string", "has", "periods"]
+        # assert split_input_word_string(
+        #     input_string=".This.string..has.periods..") == \
+        #     ["This", "string", "has", "periods"]
         assert split_input_word_string(
             input_string=" This string  has spaces  ") == \
             ["This", "string", "has", "spaces"]
-        assert split_input_word_string(
-            input_string="\n., This,.string\n,, has.\n.some, of,. "
-                         "\neverything \n..") == ["This", "string", "has",
-                                                  "some", "of", "everything"]
+        # assert split_input_word_string(
+        #     input_string="\n., This,.string\n,, has.\n.some, of,. "
+        #                  "\neverything \n..") == ["This", "string", "has",
+        #                                           "some", "of", "everything"]
 
     def test_split_input_word_str_no_words(self):
         assert split_input_word_string("") == []
         assert split_input_word_string("\n") == []
         assert split_input_word_string(",") == []
-        assert split_input_word_string(".") == []
+        # assert split_input_word_string(".") == []
         assert split_input_word_string(" ") == []
-        assert split_input_word_string(
-            "\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == []
+        # assert split_input_word_string(
+        #     "\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == []
 
 
 class TestDeleteWords:
@@ -698,31 +698,35 @@ class TestMergeFileAndManualStrings:
 
 class TestRemoveStopwords:
     test_string = "This is a 'long' story. It is time for this long story " \
-                  "to end to-night."
+                  "to end to-night. end."
 
     def test_remove_stopwords_normal(self):
         assert remove_stopwords(self.test_string, "is") == \
-            "This a 'long' story. It time for this long story to end to-night."
+            "This a 'long' story. It time for this long story to end " \
+            "to-night. end."
         assert remove_stopwords(self.test_string, "This") == \
             " is a 'long' story. It is time for this long story to end " \
-            "to-night."
+            "to-night. end."
         assert remove_stopwords(self.test_string, "this") == \
             "This is a 'long' story. It is time for long story to end " \
-            "to-night."
+            "to-night. end."
         assert remove_stopwords(self.test_string, "This,this") == \
-            " is a 'long' story. It is time for long story to end to-night."
-        assert remove_stopwords(self.test_string, "is, a.for\nend") == \
-            "This 'long' story. It time this long story to to-night."
+            " is a 'long' story. It is time for long story to end " \
+            "to-night. end."
+        assert remove_stopwords(self.test_string, "is,this\na, for") == \
+            "This 'long' story. It time long story to end to-night. end."
         assert remove_stopwords(self.test_string, "story") == \
-            "This is a 'long' story. It is time for this long to end to-night."
+            "This is a 'long' story. It is time for this long to end " \
+            "to-night. end."
         assert remove_stopwords(self.test_string, "long,to") == \
-            "This is a 'long' story. It is time for this story end to-night."
+            "This is a 'long' story. It is time for this story end " \
+            "to-night. end."
 
     def test_remove_stopwords_edge(self):
         assert remove_stopwords(self.test_string, "") == self.test_string
         assert remove_stopwords(self.test_string, " ") == self.test_string
         assert remove_stopwords("test\nstring", "\n") == "test\nstring"
-        assert remove_stopwords(self.test_string, ".") == self.test_string
+        # assert remove_stopwords(self.test_string, ".") == self.test_string
         assert remove_stopwords("test", "test") == ""
         assert remove_stopwords("   test   ", "test") == "     "
         assert remove_stopwords("\ntest\n", "test") == "\n"
@@ -730,7 +734,7 @@ class TestRemoveStopwords:
         assert remove_stopwords("Another test", "test, test, test") == \
             "Another"
         assert remove_stopwords(self.test_string, "This\nend.\nfor") == \
-            " is a 'long' story. It is time this long story to to-night."
+            " is a 'long' story. It is time this long story to end to-night."
         assert remove_stopwords(self.test_string, "This long story") == \
             remove_stopwords(self.test_string, "This,long,story")
 
@@ -755,8 +759,6 @@ class TestKeepWords:
             "Test text text"
         assert keep_words(self.test_string, "Test missing text") == \
             keep_words(self.test_string, "Test,missing,text")
-        assert keep_words(self.test_string, "Test.missing.text") == \
-            keep_words(self.test_string, "Test,missing,text")
         assert keep_words(self.test_string, "Test\nmissing\ntext") == \
             keep_words(self.test_string, "Test,missing,text")
         assert keep_words("Word word word word gone word", "word") == \
@@ -764,19 +766,19 @@ class TestKeepWords:
         assert keep_words(self.test_string, self.test_string) == \
             self.test_string
 
-    # def test_keep_words_punctuation(self):
-    #     assert keep_words(self.test_string_period, "here") == ""
-    #     assert keep_words(self.test_string_period, "here.") == " here."
-    #     assert keep_words(self.test_string_period, "") == ""
-    #     assert keep_words("there is some?text here", "some?text\nhere") ==\
-    #         " some?text here"
-    #     assert keep_words("there is some?text here", "some\ntext\nhere") \
-    #         == " here"
-    #     assert keep_words("there is some.text here", "some.text\nhere") ==\
-    #         " some.text here"
-    #     assert keep_words(
-    #         self.test_string_period, self.test_string_period) == \
-    #         self.test_string_period
+    def test_keep_words_punctuation(self):
+        assert keep_words(self.test_string_period, "here") == ""
+        assert keep_words(self.test_string_period, "here.") == " here."
+        assert keep_words(self.test_string_period, "") == ""
+        assert keep_words("there is some-text here", "some-text\nhere") ==\
+            " some-text here"
+        assert keep_words("there is some-text here", "some\ntext\nhere") \
+            == " here"
+        assert keep_words("there is some.text here", "some.text\nhere") ==\
+            " some.text here"
+        assert keep_words(
+            self.test_string_period, self.test_string_period) == \
+            self.test_string_period
 
 
 class TestGetRemoveWhitespaceMap:
