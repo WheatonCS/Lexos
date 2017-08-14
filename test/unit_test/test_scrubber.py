@@ -8,7 +8,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     delete_words, handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     get_decoded_file, scrub_select_apos, consolidate_hyphens, \
-    consolidate_ampers, merge_file_and_manual_strings
+    consolidate_ampers, merge_file_and_manual_strings, remove_stopwords
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -695,40 +695,45 @@ class TestMergeFileAndManualStrings:
             cache_number=cache_number) == string1 + "\n" + string2
 
 
-# class TestRemoveStopwords:
-#     test_string = "This is a long story. It is time for this story to end."
-#
-#     def test_remove_stopwords_normal(self):
-#         assert remove_stopwords(self.test_string, "to") == \
-#             "This is a long story. It is time for this story end."
-#         assert remove_stopwords(self.test_string, "This") == \
-#             " is a long story. It is time for this story to end."
-#         assert remove_stopwords(self.test_string, "this") == \
-#             "This is a long story. It is time for story to end."
-#         assert remove_stopwords(self.test_string, "This,this") == \
-#             " is a long story. It is time for story to end."
-#         assert remove_stopwords(self.test_string, "is, a.for\nto") == \
-#             "This long story. It time this story end."
-#         assert remove_stopwords(self.test_string, "end") == \
-#             "This is a long story. It is time for this story to ."
-#
-#     def test_remove_stopwords_edge(self):
-#         assert remove_stopwords(self.test_string, "") == self.test_string
-#         assert remove_stopwords(self.test_string, " ") == self.test_string
-#         assert remove_stopwords("test\nstring", "\n") == "test\nstring"
-#         assert remove_stopwords(self.test_string, ".") == self.test_string
-#         assert remove_stopwords("test", "test") == ""
-#         assert remove_stopwords("   test   ", "test") == " "
-#         assert remove_stopwords("\ntest\n", "test") == "\n\n"
-#         assert remove_stopwords("Test this code", "Test,this,code") == " "
-#         assert remove_stopwords("Another test", "test, test, test") == \
-#             "Another "
-#         assert remove_stopwords(self.test_string, "This\nend.\nfor") == \
-#             " is a long story. It is time this story to ."
-#         assert remove_stopwords(self.test_string, "This long story") == \
-#             remove_stopwords(self.test_string, "This,long,story")
-#
-#
+class TestRemoveStopwords:
+    test_string = "This is a 'long' story. It is time for this long story " \
+                  "to end to-night."
+
+    def test_remove_stopwords_normal(self):
+        assert remove_stopwords(self.test_string, "is") == \
+            "This a 'long' story. It time for this long story to end to-night."
+        assert remove_stopwords(self.test_string, "This") == \
+            " is a 'long' story. It is time for this long story to end " \
+            "to-night."
+        assert remove_stopwords(self.test_string, "this") == \
+            "This is a 'long' story. It is time for long story to end " \
+            "to-night."
+        assert remove_stopwords(self.test_string, "This,this") == \
+            " is a 'long' story. It is time for long story to end to-night."
+        assert remove_stopwords(self.test_string, "is, a.for\nend") == \
+            "This 'long' story. It time this long story to to-night."
+        assert remove_stopwords(self.test_string, "story") == \
+            "This is a 'long' story. It is time for this long to end to-night."
+        assert remove_stopwords(self.test_string, "long,to") == \
+            "This is a 'long' story. It is time for this story end to-night."
+
+    def test_remove_stopwords_edge(self):
+        assert remove_stopwords(self.test_string, "") == self.test_string
+        assert remove_stopwords(self.test_string, " ") == self.test_string
+        assert remove_stopwords("test\nstring", "\n") == "test\nstring"
+        assert remove_stopwords(self.test_string, ".") == self.test_string
+        assert remove_stopwords("test", "test") == ""
+        assert remove_stopwords("   test   ", "test") == "     "
+        assert remove_stopwords("\ntest\n", "test") == "\n"
+        assert remove_stopwords("Test this code", "Test,this,code") == ""
+        assert remove_stopwords("Another test", "test, test, test") == \
+            "Another"
+        assert remove_stopwords(self.test_string, "This\nend.\nfor") == \
+            " is a 'long' story. It is time this long story to to-night."
+        assert remove_stopwords(self.test_string, "This long story") == \
+            remove_stopwords(self.test_string, "This,long,story")
+
+
 # class TestKeepWords:
 #     test_string = "Test text is this text here"
 #     test_string_period = test_string + "."
