@@ -1,5 +1,3 @@
-from queue import Queue
-
 from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
     NEG_OVERLAP_LAST_PROP_MESSAGE, LARGER_SEG_SIZE_MESSAGE, \
     INVALID_CUTTING_TYPE_MESSAGE, \
@@ -99,7 +97,7 @@ class TestCutByWords:
                             last_prop=1) == ["testtest"]
         assert cut_by_words(text="helloworld helloworld", seg_size=1,
                             overlap=0, last_prop=1) == [
-                            "helloworld ", "helloworld"]
+            "helloworld ", "helloworld"]
 
     def test_cut_by_words_overlap(self):
         assert cut_by_words(text="test test test", seg_size=2, overlap=1,
@@ -265,8 +263,8 @@ class TestCutByNumbers:
 
     def test_cut_by_number_lines(self):
         assert cut_by_number(
-            text=
-            "Latinisalanguagewithnospaces\nYoumayfindthisdifficulttoread!",
+            text="Latinisalanguagewithnospaces\n"
+                 "Youmayfindthisdifficulttoread!",
             num_segment=2) == ["Latinisalanguagewithnospaces\n",
                                "Youmayfindthisdifficulttoread!"]
 
@@ -330,7 +328,7 @@ class TestCutByMileStone:
         assert cut_by_milestone(text="test\ntest", milestone="t") == [
             "", "es", "\n", "es", ""]
         assert cut_by_milestone(text="ABAAB", milestone="A") \
-            == ["", "B", "",  "B"]
+            == ["", "B", "", "B"]
 
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
@@ -367,7 +365,7 @@ class TestCutterFunction:
     # this unit test DOES NOT work
     def test_cutter_blank(self):
         assert cut(text=" ", cutting_value="1", cutting_type="words",
-                    overlap="0", last_prop_percent="100%") == [""]
+                   overlap="0", last_prop_percent="100%") == [""]
         assert cut(text="\n", cutting_value="1", cutting_type="lines",
                    overlap="0", last_prop_percent="100%") == ["\n"]
 
@@ -376,8 +374,7 @@ class TestCutterFunction:
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value="1",
                    cutting_type="lines", overlap="0",
-                   last_prop_percent="100%") == \
-               ["test\n", "test\n", "test"]
+                   last_prop_percent="100%") == ["test\n", "test\n", "test"]
         assert cut(text=" test", cutting_value="1", cutting_type="words",
                    overlap="0", last_prop_percent="100%") == ["test"]
         assert cut(text="   \ntest", cutting_value="1", cutting_type="lines",
