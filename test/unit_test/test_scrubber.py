@@ -633,25 +633,26 @@ class TestSplitInputWordString:
         assert split_input_word_string(
             input_string=",This,string,,has,commas,,") == \
             ["This", "string", "has", "commas"]
-        # assert split_input_word_string(
-        #     input_string=".This.string..has.periods..") == \
-        #     ["This", "string", "has", "periods"]
+        assert split_input_word_string(
+            input_string=".This.string..has.periods..") == \
+            [".This.string..has.periods.."]
         assert split_input_word_string(
             input_string=" This string  has spaces  ") == \
             ["This", "string", "has", "spaces"]
-        # assert split_input_word_string(
-        #     input_string="\n., This,.string\n,, has.\n.some, of,. "
-        #                  "\neverything \n..") == ["This", "string", "has",
-        #                                           "some", "of", "everything"]
+        assert split_input_word_string(
+            input_string="\n., This,.string\n,, has.\n.some, of,. "
+                         "\neverything \n..") == [".", "This", ".string",
+                                                  "has.", ".some", "of", ".",
+                                                  "everything", ".."]
 
     def test_split_input_word_str_no_words(self):
         assert split_input_word_string("") == []
         assert split_input_word_string("\n") == []
         assert split_input_word_string(",") == []
-        # assert split_input_word_string(".") == []
         assert split_input_word_string(" ") == []
-        # assert split_input_word_string(
-        #     "\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == []
+        assert split_input_word_string(
+            "\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
+            ["..", ".", ".", ".", "..."]
 
 
 class TestDeleteWords:
@@ -726,7 +727,6 @@ class TestRemoveStopwords:
         assert remove_stopwords(self.test_string, "") == self.test_string
         assert remove_stopwords(self.test_string, " ") == self.test_string
         assert remove_stopwords("test\nstring", "\n") == "test\nstring"
-        # assert remove_stopwords(self.test_string, ".") == self.test_string
         assert remove_stopwords("test", "test") == ""
         assert remove_stopwords("   test   ", "test") == "     "
         assert remove_stopwords("\ntest\n", "test") == "\n"
