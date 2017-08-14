@@ -1487,7 +1487,7 @@ def xml_handling_options(data: dict = {}):
 
 
 # Gets called from cluster() in lexos_core.py
-def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
+def generate_dendrogram_from_ajax(file_manager: FileManager) \
     -> (int, int, int, int, int, int, int, int, Union[float, int, str],
         str, str, str, str, Dict):
     """Generates dendrogram image and PDF from the active files.
@@ -1646,13 +1646,13 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str) \
                                      show_dendro_legends=show_dendro_legends)
 
         # generate range of t
-        inconsistent_op = "0 " + leq + " t " + leq + " " + \
+        inconsistent_op = "0 " + '≤' + " t " + '≤' + " " + \
                           str(inconsistent_max)
-        maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
-        distance_op = str(distance_min) + " " + leq + " t " + \
-            leq + " " + str(distance_max)
-        monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-            leq + " " + str(monocrit_max)
+        maxclust_op = "2 " + '≤' + " t " + '≤' + " " + str(maxclust_max)
+        distance_op = str(distance_min) + " " + '≤' + " t " + \
+            '≤' + " " + str(distance_max)
+        monocrit_op = str(monocrit_min) + " " + '≤' + " t " + \
+            '≤' + " " + str(monocrit_max)
 
         threshold_ops = {
             "inconsistent": inconsistent_op,
