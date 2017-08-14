@@ -2,7 +2,7 @@ import re
 import textwrap
 from os import remove
 from os.path import join as pathjoin
-from typing import Dict
+from typing import Dict, List
 
 from flask import request
 from lexos.helpers import general_functions, constants
