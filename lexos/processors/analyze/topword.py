@@ -55,7 +55,7 @@ def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
              maps a word to its z-score.
     """
     # initialize
-    word_z_score_dict = {}
+    word_z_score_list = []
     row_sum = np.sum(count_list_i).item()
     total_sum = np.sum(count_list_j).item()
 
@@ -67,11 +67,11 @@ def _z_test_word_list_(count_list_i: np.ndarray, count_list_j: np.ndarray,
         # get rid of the insignificant results
         # insignificant means those with absolute values smaller than 1.96
         if abs(z_score) >= 1.96:
-            word_z_score_dict.update({word: z_score})
+            word_z_score_list.append((word, z_score))
 
     # sort the dictionary by the z-scores from larger to smaller
-    sorted_word_z_score_list = sorted(list(word_z_score_dict.items()),
-                                      key=lambda item: abs(item[1]),
+    sorted_word_z_score_list = sorted(word_z_score_list,
+                                      key=lambda tup: abs(tup[1]),
                                       reverse=True)
 
     return sorted_word_z_score_list
@@ -205,7 +205,7 @@ def analyze_para_to_group(group_values: List[np.ndarray],
 
 def analyze_group_to_group(group_values: List[np.ndarray],
                            words: np.ndarray,
-                           class_labels: np.ndarray)-> List[Tuple[str, list]]:
+                           class_labels: np.ndarray) -> List[Tuple[str, list]]:
     """Analyzes the group compare with each other groups.
 
     :param group_values: a list of lists, where each list contains an matrix
