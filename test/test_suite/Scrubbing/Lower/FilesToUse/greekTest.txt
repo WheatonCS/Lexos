@@ -1,5 +1,5 @@
-﻿Greek Uppercase letters: 
+﻿Uppercase:
 Α  Β  Γ  Δ  Ε  Ζ  Η  Θ  Ι  Κ  Λ  Μ  Ν  Ξ  Ο  Π  Ρ  Σ  Τ  Υ  Φ  Χ  Ψ  Ω
 
-Greek lowercase letters: 
+lowercase:
 α  β  γ  δ  ε  ζ  η  θ  ι  κ  λ  μ  ν  ξ  ο  π  ρ ς/σ τ  υ  φ  χ  ψ  ω
