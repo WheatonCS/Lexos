@@ -179,7 +179,7 @@ def aWordLine(splitList, keyWord, windowSize):
                 count += 1
 
     # Create list with initial value
-    averages = [float(count) / windowWordLength]
+    averages = [float(count) / windowSize]
 
     while windowEnd < len(lines):
         for word in lines[windowEnd]:  # Adds one to count if a new match enters the window
