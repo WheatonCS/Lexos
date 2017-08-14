@@ -9,7 +9,7 @@ from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
 
 def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
                           last_prop: float) -> List[list]:
-    """Helper to get all the segments of input_list.
+    """Cut the split list of text
 
 
     :param last_prop: the last segment size / other segment size.
@@ -95,8 +95,8 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
     return final_seg_list
 
 
-def cut_by_words(text: str, seg_size: int, overlap: int, last_prop: float) \
-                ->List[str]:
+def cut_by_words(text: str, seg_size: int, overlap: int,
+                 last_prop: float) -> List[str]:
     """Cut the input text into segments by words.
 
     Cuts the text into equally sized segments, where the segment size is
@@ -129,8 +129,8 @@ def cut_by_words(text: str, seg_size: int, overlap: int, last_prop: float) \
     return final_seg_list
 
 
-def cut_by_lines(text: str, seg_size: int, overlap: int, last_prop: float) \
-                 ->List[str]:
+def cut_by_lines(text: str, seg_size: int, overlap: int,
+                 last_prop: float) -> List[str]:
     """Cut the input text into segments by lines.
 
     The size of the segment is measured by counts of lines, with an option for
@@ -179,7 +179,7 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     # split text by words while stripping all the whitespace
     seg_list = re.findall("\S+\s*", text)
     # the length of every chunk
-    seg_size = len(seg_list) / (num_segment+1)
+    seg_size = len(seg_list) / (num_segment + 1)
     int_seg_size = int(math.ceil(seg_size))
 
     # add sub-lists(chunks) to final list
@@ -227,9 +227,9 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     :param cutting_type: A string representing which cutting method to use.
     :param overlap: A unicode string representing the number of words to be
            overlapped between each text segment.
-    :param last_prop_percent: A unicode string representing the minimum proportion
-           percentage the last segment has to be to not get assimilated by
-           the previous.
+    :param last_prop_percent: A unicode string representing the minimum
+           proportion percentage the last segment has to be to not get
+           assimilated by the previous.
     :return A list of strings, each representing a segment of the original.
     """
 
