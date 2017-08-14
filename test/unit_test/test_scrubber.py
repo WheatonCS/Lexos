@@ -8,7 +8,8 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     delete_words, handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     get_decoded_file, scrub_select_apos, consolidate_hyphens, \
-    consolidate_ampers, merge_file_and_manual_strings, remove_stopwords
+    consolidate_ampers, merge_file_and_manual_strings, remove_stopwords, \
+    keep_words
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -734,47 +735,48 @@ class TestRemoveStopwords:
             remove_stopwords(self.test_string, "This,long,story")
 
 
-# class TestKeepWords:
-#     test_string = "Test text is this text here"
-#     test_string_period = test_string + "."
-#
-#     def test_keep_words_normal(self):
-#         assert keep_words(self.test_string, "is") == " is "
-#         assert keep_words(self.test_string, "Test") == "Test "
-#         assert keep_words(self.test_string, "here") == " here"
-#         assert keep_words(self.test_string, "missing") == " "
-#         assert keep_words(self.test_string, "") == \
-#             keep_words(self.test_string, "missing")
-#         assert keep_words(self.test_string, " ") == \
-#             keep_words(self.test_string, "")
-#         assert keep_words(self.test_string, "text") == " text text "
-#         assert keep_words(self.test_string, "Test, here, is") == \
-#             "Test is here"
-#         assert keep_words(self.test_string, "Test,missing,text") == \
-#             "Test text text "
-#         assert keep_words(self.test_string, "Test missing text") == \
-#             keep_words(self.test_string, "Test,missing,text")
-#         assert keep_words(self.test_string, "Test.missing.text") == \
-#             keep_words(self.test_string, "Test,missing,text")
-#         assert keep_words(self.test_string, "Test\nmissing\ntext") == \
-#             keep_words(self.test_string, "Test,missing,text")
-#         assert keep_words("Word word word word gone", "word") == \
-#             " word word word "
-#         assert keep_words(self.test_string, self.test_string) == \
-#             self.test_string
-#
-#     def test_keep_words_punctuation(self):
-#         assert keep_words(self.test_string_period, "here") == " here."
-#         assert keep_words(self.test_string_period, "") == " ."
-#         assert keep_words("there is some?text here", "some?text\nhere") ==\
-#             " ? here"
-#         assert keep_words("there is some?text here", "some\ntext\nhere") \
-#             == " some?text here"
-#         assert keep_words("there is some.text here", "some.text\nhere") ==\
-#             " some.text here"
-#         assert keep_words(
-#             self.test_string_period, self.test_string_period) == \
-#             self.test_string_period
+class TestKeepWords:
+    test_string = "Test text is this text here"
+    test_string_period = test_string + "."
+
+    def test_keep_words_normal(self):
+        assert keep_words(self.test_string, "is") == " is"
+        assert keep_words(self.test_string, "Test") == "Test"
+        assert keep_words(self.test_string, "here") == " here"
+        assert keep_words(self.test_string, "missing") == ""
+        assert keep_words(self.test_string, "") == \
+            keep_words(self.test_string, "missing")
+        assert keep_words(self.test_string, " ") == \
+            keep_words(self.test_string, "")
+        assert keep_words(self.test_string, "text") == " text text"
+        assert keep_words(self.test_string, "Test, here, is") == \
+            "Test is here"
+        assert keep_words(self.test_string, "Test,missing,text") == \
+            "Test text text"
+        assert keep_words(self.test_string, "Test missing text") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words(self.test_string, "Test.missing.text") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words(self.test_string, "Test\nmissing\ntext") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words("Word word word word gone word", "word") == \
+            " word word word word"
+        assert keep_words(self.test_string, self.test_string) == \
+            self.test_string
+
+    # def test_keep_words_punctuation(self):
+    #     assert keep_words(self.test_string_period, "here") == ""
+    #     assert keep_words(self.test_string_period, "here.") == " here."
+    #     assert keep_words(self.test_string_period, "") == ""
+    #     assert keep_words("there is some?text here", "some?text\nhere") ==\
+    #         " some?text here"
+    #     assert keep_words("there is some?text here", "some\ntext\nhere") \
+    #         == " here"
+    #     assert keep_words("there is some.text here", "some.text\nhere") ==\
+    #         " some.text here"
+    #     assert keep_words(
+    #         self.test_string_period, self.test_string_period) == \
+    #         self.test_string_period
 
 
 class TestGetRemoveWhitespaceMap:
