@@ -17,19 +17,21 @@ import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 from lexos.managers.lexos_file import LexosFile
 
-"""Class for an object to hold all info about user's files & choices in Lexos.
-
-Each user will have their own unique instance of the FileManager. A major data
-attribute of this class is a dictionary holding the LexosFile objects, each
-representing an uploaded file to be used in Lexos. The key for the dictionary
-is the unique ID of the file, with the value being the corresponding LexosFile
-object.
+"""
 """
 
 
 class FileManager:
     def __init__(self):
-        """Constructor: Creates an empty FileManager (object with no files)."""
+        """Constructor: Creates an empty FileManager (object with no files).
+
+        Class for an object to hold all info about user's files & choices in
+        Lexos. Each user will have their own unique instance of the
+        FileManager. A major data attribute of this class is a dictionary
+        holding the LexosFile objects, each representing an uploaded file to be
+        used in Lexos. The key for the dictionary is the unique ID of the file,
+        with the value being the corresponding LexosFile object.
+        """
 
         self._files = {}
         self.next_id = 0
@@ -194,7 +196,7 @@ class FileManager:
             l_file.enable()
 
     def enable_files(self, file_ids: List[int]):
-        """Sets state to active for fileIDs set in the UI.
+        """Enables a list of Lexos files.
 
         :param file_ids: list of fileIDs selected in the UI.
         """
@@ -205,7 +207,7 @@ class FileManager:
             l_file.enable()
 
     def disable_files(self, file_ids: List[int]):
-        """Sets state to inactive for fileIDs set in the UI.
+        """Disables a list of Lexos files.
 
         :param file_ids: list of fileIDs selected in the UI.
         """
