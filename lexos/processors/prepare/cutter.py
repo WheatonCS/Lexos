@@ -186,7 +186,7 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     if seg_size != 0:
         final_seg_list = cut_list_with_overlap(
             input_list=seg_list, norm_seg_size=int_seg_size, overlap=0,
-            last_prop=0)
+            last_prop=1)
     else:
         final_seg_list = seg_list
 
