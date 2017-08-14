@@ -25,7 +25,10 @@ def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int,
     num_stop_point = \
         (input_list_length - seg_size*last_prop) / start_point_distance
 
-    num_segment = int(math.ceil(num_stop_point) + 1)
+    if num_stop_point > 0:
+        num_segment = int(math.ceil(num_stop_point) + 1)
+    else:
+        num_segment = 1
 
     def get_single_seg(index):
         """Helper to get one single segment with index: index.
