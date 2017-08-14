@@ -240,44 +240,65 @@ class TestCutByLines:
 class TestCutByNumbers:
     def test_cut_by_number_normal(self):
         assert cut_by_number(text="Text", num_segment=1) == ["Text"]
-        assert cut_by_number(text="This text has five words", num_segment=5) == \
-            ["This ", "text ", "has ", "five ", "words"]
-        assert cut_by_number(text="Odd number of words in this text", num_segment=6) == \
-            ["Odd ", "number ", "of ", "words ", "in ", "this text"]
-        assert cut_by_number(text="Almost enough words here but not quite", num_segment=4) == \
-            ["Almost enough ", "words here ", "but not ", "quite"]
+
+        assert cut_by_number(text="This text has five words",
+                             num_segment=5) == ["This ", "text ", "has ",
+                                                "five ", "words"]
+
+        assert cut_by_number(text="Odd number of words in this text",
+                             num_segment=6) == ["Odd ", "number ", "of ",
+                                                "words ", "in ", "this text"]
+
+        assert cut_by_number(text="Almost enough words here but not quite",
+                             num_segment=4) == ["Almost enough ",
+                                                "words here ", "but not ",
+                                                "quite"]
 
     def test_cut_by_number_spacing(self):
-        assert cut_by_number(text="Hanging space ", num_segment=2) == ["Hanging ", "space "]
-        assert cut_by_number(text="Other  whitespace\n is\tfine!\n\n", num_segment=4) == \
-            ["Other  ", "whitespace\n ", "is\t", "fine!\n\n"]
-        assert cut_by_number(text="      <-There are six spaces here", num_segment=5) == \
-            ["<-There ", "are ", "six ", "spaces ", "here"]
+        assert cut_by_number(text="Hanging space ", num_segment=2) == [
+            "Hanging ", "space "]
+
+        assert cut_by_number(text="Other  whitespace\n is\tfine!\n\n",
+                             num_segment=4) == ["Other  ", "whitespace\n ",
+                                                "is\t", "fine!\n\n"]
+
+        assert cut_by_number(text="      <-There are six spaces here",
+                             num_segment=5) == ["<-There ", "are ", "six ",
+                                                "spaces ", "here"]
 
     def test_cut_by_number_lines(self):
         assert cut_by_number(
-            text="Latinisalanguagewithnospaces\nYoumayfindthisdifficulttoread!", num_segment=2)\
-            == ["Latinisalanguagewithnospaces\n",
-                "Youmayfindthisdifficulttoread!"]
-        assert cut_by_number(text="line\nline\nline\nline\nline", num_segment=2) == \
-            ["line\nline\n", "line\nline\nline"]
+            text=
+            "Latinisalanguagewithnospaces\nYoumayfindthisdifficulttoread!",
+            num_segment=2) == ["Latinisalanguagewithnospaces\n",
+                               "Youmayfindthisdifficulttoread!"]
+
+        assert cut_by_number(text="line\nline\nline\nline\nline",
+                             num_segment=2) == ["line\nline\n",
+                                                "line\nline\nline"]
+
         assert cut_by_number(text="Languageswithoutanyspacesmayhave\n"
                              "uneven\nchunks", num_segment=3) == \
             ["Languageswithoutanyspacesmayhave\n", "uneven\n", "chunks"]
-        assert cut_by_number(text="RemovewhitespaceonChinese?", num_segment=3) == \
-            ["RemovewhitespaceonChinese?"]
-        assert cut_by_number(text="Ithinkthisiswhy\u3000Chinesetextcanbesplit", num_segment=2) \
+
+        assert cut_by_number(text="RemovewhitespaceonChinese?",
+                             num_segment=3) == ["RemovewhitespaceonChinese?"]
+
+        assert cut_by_number(text="Ithinkthisiswhy\u3000Chinesetextcanbesplit",
+                             num_segment=2) \
             == ["Ithinkthisiswhy\u3000", "Chinesetextcanbesplit"]
 
     def test_cut_by_number_excess_chunks(self):
-        assert cut_by_number(text="This text has too few words!", num_segment=10) == \
+        assert cut_by_number(text="This text has too few words!",
+                             num_segment=10) == \
             ["This ", "text ", "has ", "too ", "few ", "words!"]
         assert cut_by_number(text="Safe!", num_segment=1000) == ["Safe!"]
         assert cut_by_number(text="", num_segment=1000000) == []
-        assert cut_by_number(text="Reeeeeeeeeeeeeeeeeeeeeeeally long word", num_segment=6) == \
+        assert cut_by_number(text="Reeeeeeeeeeeeeeeeeeeeeeeally long word",
+                             num_segment=6) == \
             ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
-        assert cut_by_number(text="\n\n\n\n\nword\n\n\n\n\n", num_segment=11) == \
-            ["word\n\n\n\n\n"]
+        assert cut_by_number(text="\n\n\n\n\nword\n\n\n\n\n",
+                             num_segment=11) == ["word\n\n\n\n\n"]
 
     def test_cut_by_number_bad_math(self):
         # Divide by zero exception

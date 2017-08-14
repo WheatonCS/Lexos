@@ -7,10 +7,11 @@ from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
     EMPTY_MILESTONE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE
 
 
-def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int) \
-        -> List[list]:
+def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int,
+                          last_prop: float) -> List[list]:
     """Helper to get all the segments of input_list.
 
+    :param last_prop: the last segment size / other segment size.
     :param input_list: the segment list that split the contents of the file.
     :param seg_size: the size of the segment.
     :param overlap: the min proportional size that the last segment has to be.
@@ -19,7 +20,11 @@ def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int) \
     """
 
     start_point_distance = seg_size - overlap
-    num_stop_point = (len(input_list) - seg_size) / start_point_distance
+
+    input_list_length = len(input_list)
+    num_stop_point = \
+        (input_list_length - seg_size*last_prop) / start_point_distance
+
     num_segment = int(math.ceil(num_stop_point) + 1)
 
     def get_single_seg(index):
@@ -32,29 +37,6 @@ def cut_list_with_overlap(input_list: list, seg_size: int, overlap: int) \
                           start_point_distance * index + seg_size]
 
     return [get_single_seg(index) for index in range(num_segment)]
-
-
-def cut_list_with_last_prop(input_list: list, seg_size: int,
-                            last_prop: float) -> List[list]:
-    """Helper to merge the last segment to the previous segment.
-
-    :param input_list: the list that contains the content of the text.
-    :param last_prop: the input value of the proportional size of the
-           last segment.
-    :param seg_size: the size of the segment.
-    :return list that merged the last segment.
-    """
-    if len(input_list) <= 1:
-        return input_list
-
-    elif last_prop > float(len(input_list[-1]) / seg_size):
-
-        input_list[-2].extend(input_list[-1])
-        input_list.pop()
-        return input_list
-
-    else:
-        return input_list
 
 
 def join_sublist_element(input_list: list) -> List[str]:
@@ -78,8 +60,7 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
     :param text: the string with the contents of the file.
     :param seg_size: the segment size, in characters.
     :param overlap: the number of characters to overlap between segments.
-    :param last_prop: the min proportional size that the last segment has
-           to be.
+    :param last_prop: the last segment size / other segment size.
     :return: a list of list(segment) that the text has been cut into.
     """
 
@@ -93,11 +74,9 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
-                                           seg_size=seg_size, overlap=overlap)
-
-    # check for last_prop
-    cut_list_with_last_prop(input_list=final_seg_list, seg_size=seg_size,
-                            last_prop=last_prop)
+                                           seg_size=seg_size,
+                                           overlap=overlap,
+                                           last_prop=last_prop)
 
     # join characters in each sublist
     final_seg_list = join_sublist_element(input_list=final_seg_list)
@@ -115,8 +94,7 @@ def cut_by_words(text: str, seg_size: int, overlap: int, last_prop: float) \
     :param text: the string with the contents of the file.
     :param seg_size: the segment size, in words.
     :param overlap: the number of words to overlap between segments.
-    :param last_prop: the min proportional size that the last segment
-           has to be.
+    :param last_prop: the last segment size / other segment size.
     :return: a list of list(segment) that the text has been cut into.
     """
 
@@ -130,11 +108,9 @@ def cut_by_words(text: str, seg_size: int, overlap: int, last_prop: float) \
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
-                                           seg_size=seg_size, overlap=overlap)
-
-    # check for last_prop
-    cut_list_with_last_prop(input_list=final_seg_list, seg_size=seg_size,
-                            last_prop=last_prop)
+                                           seg_size=seg_size,
+                                           overlap=overlap,
+                                           last_prop=last_prop)
 
     # join words in each sublist
     final_seg_list = join_sublist_element(input_list=final_seg_list)
@@ -152,8 +128,7 @@ def cut_by_lines(text: str, seg_size: int, overlap: int, last_prop: float) \
     :param text: the string with the contents of the file.
     :param seg_size: the segment size, in lines.
     :param overlap: the number of lines to overlap between segments.
-    :param last_prop: the min proportional size that the last segment
-           has to be.
+    :param last_prop: the last segment size / other segment size.
     :return: a list of list(segment) that the text has been cut into.
     """
 
@@ -167,11 +142,9 @@ def cut_by_lines(text: str, seg_size: int, overlap: int, last_prop: float) \
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
-                                           seg_size=seg_size, overlap=overlap)
-
-    # check for last_prop
-    cut_list_with_last_prop(input_list=final_seg_list, seg_size=seg_size,
-                            last_prop=last_prop)
+                                           seg_size=seg_size,
+                                           overlap=overlap,
+                                           last_prop=last_prop)
 
     # join lines in each sublist
     final_seg_list = join_sublist_element(input_list=final_seg_list)
@@ -201,7 +174,7 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     # add sub-lists(chunks) to final list
     if seg_size != 0:
         final_seg_list = cut_list_with_overlap(
-            input_list=seg_list, seg_size=int_seg_size, overlap=0)
+            input_list=seg_list, seg_size=int_seg_size, overlap=0, last_prop=0)
     else:
         final_seg_list = seg_list
 
