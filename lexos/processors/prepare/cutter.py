@@ -9,9 +9,12 @@ from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
 
 def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
                           last_prop: float) -> List[list]:
-    """Cut the split list of text
+    """Cut the split list of text into list that contains sub-lists.
 
-
+    This function takes care of both overlap and last proportion with the input
+    list and the segment size. The function calculates the number of segment
+    with the overlap value and then use it as indexing to capture all the
+    sub-lists with the get_single_seg helper function.
     :param last_prop: the last segment size / other segment size.
     :param input_list: the segment list that split the contents of the file.
     :param norm_seg_size: the size of the segment.
@@ -20,39 +23,52 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
     not go through the last proportion size calculation.
     """
 
+    # get the distance of each segment's start-point index in the list
     start_point_distance = norm_seg_size - overlap
 
     input_list_length = len(input_list)
+
+    # get the number of segment ending point while stripping the last segment
     num_stop_point = \
         (input_list_length - norm_seg_size * last_prop) / start_point_distance
 
+    # define number segment and let it equals to one if only one segment
     if num_stop_point > 0:
         num_segment = int(math.ceil(num_stop_point) + 1)
     else:
         num_segment = 1
 
     def get_single_seg(index: int, is_last_prop: bool) -> List[list]:
-        """Helper to get one single segment with index: index.
+        """Helper to get one single segment with index.
 
+        This function first evaluate whether the segment is the last one and
+        grab different segment according to the result, and returns sub-lists
+        while index is in the range of number of segment.
         :param is_last_prop:
         :param index: the index of the segment in the final segment list.
         :return single segment in the input_list based on index.
         """
+
+        # define current segment size based on whether is the last segment
         if is_last_prop:
             cur_seg_size = int(norm_seg_size * last_prop)
         else:
             cur_seg_size = norm_seg_size
 
+        # return single segment using index
         return input_list[start_point_distance * index:
                           start_point_distance * index + cur_seg_size]
 
+    # return the whole list of segment while evaluating whether is last segment
     return [get_single_seg(index, True if index == num_segment - 1 else False)
             for index in range(num_segment)]
 
 
 def join_sublist_element(input_list: list) -> List[str]:
-    """Helper to join elements in each sublist into string.
+    """Join elements in each sublist into string.
 
+    This function joins all the element(chars) in each sub-lists together, and
+    turns every sub-lists to one element in the overall list.
     The sublist will turned into a string with all the same elements as before.
     :param input_list: the returned list after cut
     :return: the list that contains all the segments as strings.
@@ -214,6 +230,7 @@ def cut_by_milestone(text: str, milestone: str) -> List[str]:
 
     # split text by milestone string
     final_seg_list = text.split(sep=milestone)
+
     return final_seg_list
 
 
