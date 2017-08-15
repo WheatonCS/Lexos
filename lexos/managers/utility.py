@@ -682,14 +682,13 @@ def generate_k_means_voronoi(file_manager: FileManager):
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=culling)
 
