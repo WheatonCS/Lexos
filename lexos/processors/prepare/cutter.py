@@ -26,20 +26,16 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
     # get the distance between starts of each two adjacent segments
     seg_start_distance = norm_seg_size - overlap
 
-    input_list_length = len(input_list)
+    # the length of the list excluding the last segment
+    length_exclude_last = len(input_list) - norm_seg_size * last_prop
 
-    # get the number of segments excluding the last segment.
-    # it determines by the length without the last segment divided by the
-    # distance between each start-point
-    num_seg_start = \
-        (input_list_length - norm_seg_size * last_prop) / seg_start_distance
+    # the total number of segments after cut
+    # the `+ 1` is to add back the last segments
+    num_segment = \
+        int(length_exclude_last / seg_start_distance) + 1
 
-    # define the number segment based on the number of ending-point
-    # the number of stop-point plus last segment(one) equals segment number
-    # let it equals to one if only one segment (no stop point within the list)
-    if num_seg_start > 0:
-        num_segment = int(num_seg_start) + 1
-    else:
+    # need at least one segment
+    if num_segment < 1:
         num_segment = 1
 
     def get_single_seg(index: int, is_last_prop: bool) -> List[List[str]]:
@@ -62,8 +58,9 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
                               seg_start_distance * index + norm_seg_size]
 
     # return the whole list of segment while evaluating whether is last segment
-    return [get_single_seg(
-        index=index, is_last_prop=True if index == num_segment - 1 else False)
+    return [
+        get_single_seg(index=index,
+                       is_last_prop=True if index == num_segment-1 else False)
         for index in range(num_segment)]
 
 
