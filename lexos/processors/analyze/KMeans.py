@@ -7,7 +7,8 @@ from sklearn import metrics
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 
-from lexos import helpers as constants
+from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
+    PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME
 
 
 def get_centroid(xs, ys):
@@ -141,6 +142,7 @@ def get_k_means_pca(
     #                   useful for debugging
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
     #             -2 : all CPUs but one are used.
+    k = int(k)
 
     number_only_matrix = matrix.tolist()
 
@@ -195,7 +197,7 @@ def get_k_means_pca(
         plt.text(x, y, name, color=color)
 
     # save the plot
-    plt.savefig(pathjoin(folder_path, constants.KMEANS_GRAPH_FILENAME))
+    plt.savefig(pathjoin(folder_path, KMEANS_GRAPH_FILENAME))
 
     # close the plot so next one doesn't plot over the last one
     plt.close()
@@ -268,7 +270,7 @@ def get_k_means_pca(
     sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
     sm_html = html.replace("___", sm_div)
 
-    html_file = open(pathjoin(folder_path, constants.PCA_SMALL_GRAPH_FILENAME),
+    html_file = open(pathjoin(folder_path, PCA_SMALL_GRAPH_FILENAME),
                      "w",
                      encoding='utf-8')
     html_file.write(sm_html)
@@ -281,7 +283,7 @@ def get_k_means_pca(
     lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
     lg_html = html.replace("___", lg_div)
 
-    html_file = open(pathjoin(folder_path, constants.PCA_BIG_GRAPH_FILENAME),
+    html_file = open(pathjoin(folder_path, PCA_BIG_GRAPH_FILENAME),
                      "w",
                      encoding='utf-8')
     html_file.write(lg_html)
@@ -292,15 +294,14 @@ def get_k_means_pca(
     return best_index, silhouette_score, color_chart
 
 
-def get_k_means_voronoi(
-        matrix,
-        k,
-        max_iter,
-        init_method,
-        n_init,
-        tolerance,
-        metric_dist,
-        file_names):
+def get_k_means_voronoi(matrix,
+                        k,
+                        n_init,
+                        max_iter,
+                        tolerance,
+                        init_method,
+                        metric_dist,
+                        labels):
     """
     Generate an array of centroid index based on the active files, list of
     points for the centroids, and a list of points for the chunks.
@@ -314,7 +315,7 @@ def get_k_means_voronoi(
         n_init: int, number of iterations with different centroids
         tolerance: float, relative tolerance, inertia to declare convergence
         metric_dist: str, method of the distance metrics
-        file_names: list of active files
+        labels: list of active files
 
 
     Returns:
@@ -414,7 +415,7 @@ def get_k_means_voronoi(
     max_x = max(transXs)
     text_data = []
     for i in range(0, len(orig_xs)):
-        temp = text_attrs_dictionary(file_names[i], transXs[i], transYs[i])
+        temp = text_attrs_dictionary(labels[i], transXs[i], transYs[i])
         text_data.append(temp)
 
     # Make a color gradient with k colors
