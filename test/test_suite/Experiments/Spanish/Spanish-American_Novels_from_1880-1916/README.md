@@ -19,7 +19,7 @@ Collection of 19th Century Spanish-American Novels (1880-1916), edited by Ulrike
 |Gutiérrez, Eduardo          |Los montoneros                                |
 |Holmberg, Eduardo Ladislao  |La bolsa de huesos                            |
 |Holmberg, Eduardo Ladislao  |Nelly                                         |
-|Holmberg, Eduardo Ladislao  |Viaje maravilloso del Señor                   |
+|Holmberg, Eduardo Ladislao  |Viaje maravilloso del Señor Nic-Nac           |
 |Payró, Roberto              |Divertidas aventuras del nieto de Juan Moreira|
 |Payró, Roberto              |El casamiento de Laucha                       |
 |Payró, Roberto              |El falso Inca                                 |
