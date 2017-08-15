@@ -20,8 +20,9 @@ from lexos.managers.lexos_file import LexosFile
 
 class FileManager:
     def __init__(self):
-        """Class for an object to hold all info about user's files & choices in
-        Lexos. Each user will have their own unique instance of the
+        """Class for object to hold info about user's files & choices in Lexos.
+
+        Each user will have their own unique instance of the
         FileManager. A major data attribute of this class is a dictionary
         holding the LexosFile objects, each representing an uploaded file to be
         used in Lexos. The key for the dictionary is the unique ID of the file,
