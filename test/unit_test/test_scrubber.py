@@ -766,6 +766,8 @@ class TestKeepWords:
             " word word word word"
         assert keep_words(self.test_string, self.test_string) == \
             self.test_string
+        assert keep_words(self.test_string, "is, this") == \
+            remove_stopwords(self.test_string, "Test, text, here")
 
     def test_keep_words_punctuation(self):
         assert keep_words(self.test_string_period, "here") == ""

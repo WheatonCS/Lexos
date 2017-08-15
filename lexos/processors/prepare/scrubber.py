@@ -493,7 +493,7 @@ def split_input_word_string(input_string: str) -> List[str]:
     """Breaks word string inputs into lists of words.
 
     Word strings are a series of words delimited by newlines, commas, and
-        periods. The raw input of the stop words field from the browser is
+       spaces. The raw input of the stop words field from the browser is
         one example.
     :param input_string: A string of words input by the user.
     :return: A list of the user's string broken up into words.
@@ -501,7 +501,7 @@ def split_input_word_string(input_string: str) -> List[str]:
 
     input_lines = input_string.split("\n")
 
-    # A list of all words delimited by commas, periods, spaces, and newlines
+    # A list of all words delimited by commas, spaces, and newlines
     input_words = [word
                    for line in input_lines
                    for word in re.split('[, ]', line.strip())
