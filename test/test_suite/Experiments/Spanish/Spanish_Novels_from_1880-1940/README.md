@@ -2,27 +2,27 @@ Corpus of Spanish Novel from 1880-1940, edited by José Calvo Tello. Würzburg: 
 
 |Author               |Title                |
 |---------------------|---------------------|
-|Leopoldo Alas        |Cuesta abajo         |
-|Leopoldo Alas        |La Regenta           |
-|Leopoldo Alas        |Su único hijo        |
-|Emilia Pardo Bazán   |La piedra angular    |
-|Emilia Pardo Bazán   |La sirena negra      |
-|Emilia Pardo Bazán   |Los pazos de Ulloa   |
-|Vicente Blasco Ibáñez|Arroz y Tartana      |
-|Vicente Blasco Ibáñez|La Barraca           |
-|Vicente Blasco Ibáñez|La Bodega            |
-|Benito Pérez Galdós  |La de Bringas        |
-|Benito Pérez Galdós  |Misericordia         |
-|Benito Pérez Galdós  |Tristana             |
-|Gabriel Miró         |Del vivir            |
-|Gabriel Miró         |Hilván de escenas    |
-|Gabriel Miró         |La novela de mi amigo|
-|José María de Pereda |Pedro Sánchez        |
-|José María de Pereda |Peñas arriba         |
-|José María de Pereda |Sotileza             |
-|Jacinto Octavio Picón|Dulce y sabrosa      |
-|Jacinto Octavio Picón|Juan Vulgar          |
-|Jacinto Octavio Picón|Lázaro               |
-|Juan Valera          |Genio y figura...    |
-|Juan Valera          |Juanita la Larga     |
-|Juan Valera          |Morsamor             |
+|Alas, Leopoldo        |Cuesta abajo         |
+|Alas, Leopoldo        |La Regenta           |
+|Alas, Leopoldo        |Su único hijo        |
+|Bazán, Emilia Pardo   |La piedra angular    |
+|Bazán, Emilia Pardo   |La sirena negra      |
+|Bazán, Emilia Pardo   |Los pazos de Ulloa   |
+|Blasco Ibáñez, Vicente|Arroz y Tartana      |
+|Blasco Ibáñez, Vicente|La Barraca           |
+|Blasco Ibáñez, Vicente|La Bodega            |
+|Galdós, Benito Pérez  |La de Bringas        |
+|Galdós, Benito Pérez  |Misericordia         |
+|Galdós, Benito Pérez  |Tristana             |
+|Miró, Gabriel         |Del vivir            |
+|Miró, Gabriel         |Hilván de escenas    |
+|Miró, Gabriel         |La novela de mi amigo|
+|Pereda, José María de |Pedro Sánchez        |
+|Pereda, José María de |Peñas arriba         |
+|Pereda, José María de |Sotileza             |
+|Picón, Jacinto Octavio|Dulce y sabrosa      |
+|Picón, Jacinto Octavio|Juan Vulgar          |
+|Picón, Jacinto Octavio|Lázaro               |
+|Valera, Juan          |Genio y figura...    |
+|Valera, Juan          |Juanita la Larga     |
+|Valera, Juan          |Morsamor             |
