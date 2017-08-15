@@ -19,7 +19,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABAB", seg_size=2, overlap=0,
                                  last_prop=1) == ["AB", "AB", "AB", "AB"]
         assert cut_by_characters(text="ABABABAB", seg_size=3, overlap=0,
-                                 last_prop=1) == ["ABA", "BAB", "AB"]
+                                 last_prop=1) == ["ABA", "BABAB"]
         assert cut_by_characters(text="A", seg_size=100, overlap=0,
                                  last_prop=5) == ["A"]
 
@@ -37,7 +37,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=0.2) == ["ABABA", "BABAB", "A"]
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
-                                 last_prop=0.21) == ["ABABA", "BABAB", "A"]
+                                 last_prop=0.21) == ["ABABA", "BABABA"]
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=2) == ["ABABA", "BABABA"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
