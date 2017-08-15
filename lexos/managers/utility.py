@@ -616,7 +616,7 @@ def generate_k_means_pca(file_manager: FileManager):
 
     # Gets options from request.form and uses options to generate the K-mean
     # results
-    k_value = len(file_manager.get_active_files()) / 2  # default K value
+    k_value = int(len(file_manager.get_active_files()) / 2)  # default K value
     max_iter = 300  # default number of iterations
     init_method = request.form['init']
     n_init = 300
@@ -659,6 +659,8 @@ def generate_k_means_pca(file_manager: FileManager):
         matrix, k_value, max_iter, init_method, n_init, tolerance, metric_dist,
         file_name_list, folder_path)
 
+    print("Break")
+
     return kmeans_index, siltt_score, file_name_str, k_value, color_chart
 
 
@@ -699,18 +701,16 @@ def generate_k_means_voronoi(file_manager: FileManager):
 
     # gets options for generating the K-mean results
     # sets all values as default
-    n_init = 300
-    max_iter = 300
-    tolerance = 1e-4
+    n_init = constants.N_INIT
+    max_iter = constants.MAX_ITER
+    tolerance = constants.TOLERANCE
     k_value = np.size(labels) / 2
     init_method = request.form['init']
 
     # gets possible existing values from request.form
-    if (request.form['nclusters'] != '') and (
-            int(request.form['nclusters']) != k_value):
+    if request.form['nclusters'] != '':
         k_value = int(request.form['nclusters'])
-    if (request.form['max_iter'] != '') and (
-            int(request.form['max_iter']) != max_iter):
+    if request.form['max_iter'] != '':
         max_iter = int(request.form['max_iter'])
     if request.form['n_init'] != '':
         n_init = int(request.form['n_init'])
@@ -725,8 +725,14 @@ def generate_k_means_voronoi(file_manager: FileManager):
 
     kmeans_index, siltt_score, color_chart, final_points_list, \
         final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
-            count_matrix, k_value, max_iter, init_method, n_init, tolerance,
-            metric_dist, labels)
+            matrix=count_matrix,
+            k=k_value,
+            n_init=n_init,
+            max_iter=max_iter,
+            tolerance=tolerance,
+            init_method=init_method,
+            metric_dist=metric_dist,
+            labels=labels)
 
     return kmeans_index, siltt_score, labels_str, k_value, color_chart, \
         final_points_list, final_centroids_list, text_data, max_x
