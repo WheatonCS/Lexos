@@ -87,8 +87,9 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
                          contains file name of each file. The matrix contains
                          boolean values to determine which class each file
                          belongs to.
-    :return: a list of lists, each list represents a group, where each element
-             in the list is a list that contain all the lists in the group.
+    :return: a list that contains 2D numpy matrix that each matrix represents
+             the word count of a group, and another list that contains numpy
+             arrays that each array contains names of files within a group
     """
     # Trap possible empty inputs
     assert np.size(dtm.values) > 0, EMPTY_NP_ARRAY_MESSAGE
