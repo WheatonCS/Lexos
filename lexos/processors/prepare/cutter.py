@@ -194,22 +194,22 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
 
     # split text by words while stripping all the whitespace
     seg_list = re.findall("\S+\s*", text)
-    # the length of every chunk
-    seg_size = len(seg_list) / (num_segment + 1)
-    int_seg_size = int(math.ceil(seg_size))
 
-    # add sub-lists(chunks) to final list
-    if seg_size != 0:
+    # if seg_list is none empty
+    if seg_list:
+
+        # the length of every chunk
+        seg_size = len(seg_list) / (num_segment + 1)
+        int_seg_size = int(math.ceil(seg_size))
+
+        # cut the seg_list
         final_seg_list = cut_list_with_overlap(
             input_list=seg_list, norm_seg_size=int_seg_size, overlap=0,
             last_prop=1)
+
+    # if the seg_list is empty
     else:
         final_seg_list = seg_list
-
-    # check for last_prop
-    if len(final_seg_list) > num_segment:
-        final_seg_list[-2].extend(final_seg_list[-1])
-        final_seg_list.pop()
 
     # join words in each sublist
     final_seg_list = join_sublist_element(input_list=final_seg_list)
