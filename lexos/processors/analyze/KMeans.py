@@ -8,7 +8,7 @@ from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 
 from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
-    PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME
+    PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 
 
 def get_centroid(xs, ys):
@@ -56,23 +56,19 @@ def text_attrs_dictionary(title, x, y):
     return attr_dict
 
 
-def get_silhouette_on_k_means(labels, matrix, metric_dist):
+def _get_silhouette_score_(matrix, labels, metric_dist):
+
+    """Generates silhouette score based on the KMeans algorithm.
+
+    :param matrix: a 2D numpy matrix contains word counts
+    :param labels: a numpy array contains labels of each point
+    :param metric_dist: a string represents method of the distance metric
+    :return: float, the calculated silhouette score
     """
-    Generate the silhouette score based on the KMeans algorithm.
-
-    Args:
-        labels: a list, class label of different files
-        matrix: a matrix representing the counts of words in files
-        metric_dist: str, method of the distance metrics
-
-    Returns:
-        silhouette_score: float, silhouette score
-    """
-
-    silhouette_score = metrics.silhouette_score(matrix, labels,
+    silhouette_score = metrics.silhouette_score(X=matrix,
+                                                labels=labels,
                                                 metric=metric_dist)
-    silhouette_score = round(silhouette_score, 4)
-    return silhouette_score
+    return round(silhouette_score, ROUND_DIGIT)
 
 
 # Gets called from generateKMeansPCA() in utility.py
@@ -209,8 +205,8 @@ def get_k_means_pca(
     else:
         kmeans.fit(number_only_matrix)
         labels = kmeans.labels_  # for silhouette score
-        silhouette_score = get_silhouette_on_k_means(labels, matrix,
-                                                     metric_dist)
+        silhouette_score = _get_silhouette_score_(labels, matrix,
+                                                  metric_dist)
 
     # make a string of rgb tuples to send to the javascript separated by #
     # cause jinja hates lists of strings
@@ -469,8 +465,8 @@ def get_k_means_voronoi(matrix,
     else:
         k_means.fit(matrix)
         k_labels = k_means.labels_  # for silhouette score
-        silhouette_score = get_silhouette_on_k_means(k_labels, matrix,
-                                                     metric_dist)
+        silhouette_score = _get_silhouette_score_(k_labels, matrix,
+                                                  metric_dist)
 
     return best_index, silhouette_score, color_chart, final_points_list, \
            final_centroids_list, text_data, max_x
