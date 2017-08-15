@@ -2,10 +2,9 @@ from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
     REPLACEMENT_RIGHT_OPERAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 from lexos.processors.prepare.scrubber import replacement_handler, \
-    get_remove_whitespace_map, make_replacer, \
-    get_punctuation_string, get_remove_punctuation_map, \
-    get_remove_digits_map, get_all_punctuation_map, \
-    delete_words, handle_gutenberg, split_input_word_string, \
+    get_remove_whitespace_map, make_replacer, get_remove_punctuation_map, \
+    get_remove_digits_map, get_all_punctuation_map, delete_words, \
+    handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     get_decoded_file, scrub_select_apos, consolidate_hyphens, \
     consolidate_ampers, merge_file_and_manual_strings, remove_stopwords, \
@@ -616,12 +615,6 @@ class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_cache(self):
         assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
-
-
-class TestGetPunctuationString:
-
-    def test_get_punct_str_no_cache(self):
-        assert get_punctuation_string() == "[" + chars.PUNCT_SYMBOL_VALS + " ]"
 
 
 class TestSplitInputWordString:

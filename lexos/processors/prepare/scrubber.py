@@ -458,37 +458,6 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     return remove_digit_map
 
 
-def get_punctuation_string() -> str:
-    """Generates a string containing a regex pattern of all punctuation.
-
-    :return: The punctuation string.
-    """
-
-    punctuation_filename = os.path.join(
-        constants.UPLOAD_FOLDER,
-        "cache/punctuationmap.p")  # Localhost path (relative)
-
-    # Map of punctuation to split on
-    if os.path.exists(punctuation_filename):
-        all_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
-    else:
-        all_punctuation_map = get_all_punctuation_map()
-
-    try:
-        cache_path = os.path.dirname(punctuation_filename)
-        os.makedirs(cache_path)
-    except FileExistsError:
-        pass
-    pickle.dump(
-        all_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
-
-    # The resulting string looks like "[,.?!@<more punctuation here>^&* ]"
-    all_punctuation_str = "".join(chr(key) for key in all_punctuation_map)
-    punctuation_regex = "[" + all_punctuation_str + " ]"
-
-    return punctuation_regex
-
-
 def split_input_word_string(input_string: str) -> List[str]:
     """Breaks word string inputs into lists of words.
 
@@ -589,8 +558,6 @@ def keep_words(text: str, non_removal_string: str) -> str:
     :return: A unicode string representing the text that has been stripped of
         everything but the words chosen by the user.
     """
-
-    punctuation = get_punctuation_string()
 
     # a list containing the words in non_removal_string without punctuation
     # or whitespace
