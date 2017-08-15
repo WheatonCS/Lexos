@@ -703,7 +703,7 @@ def generate_k_means_voronoi(file_manager: FileManager):
     n_init = constants.N_INIT
     max_iter = constants.MAX_ITER
     tolerance = constants.TOLERANCE
-    k_value = np.size(labels) / 2
+    k_value = int(np.size(labels) / 2)
     init_method = request.form['init']
 
     # gets possible existing values from request.form
