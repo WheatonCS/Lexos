@@ -1623,7 +1623,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
         with open(newick_file_fullname, 'w', encoding='utf-8') as f:
             f.write(newick)
 
-        # -- generate the dendrogram (with the legends) in a PDF file ---------
+        # -- generate the dendrogram (with the legends) -----------------------
         # get dendrogram distances list
         distance_list = dendrogrammer.get_dendro_distances(
             linkage, metric, dtm)
