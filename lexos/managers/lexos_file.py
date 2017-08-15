@@ -21,7 +21,6 @@ class LexosFile:
         through the FileManager files dictionary. A major data attribute of
         this class is a string that (sometimes) contains the text contents of
         the file (Most of the time).
-
         This newly constructed LexosFile object is created from the information
         passed in, and performs some preliminary processing.
         :param original_filename: the original file name of the uploaded file.
