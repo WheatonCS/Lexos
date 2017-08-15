@@ -11,18 +11,16 @@ from lexos.processors.prepare import cutter
 
 from lexos.processors.prepare import scrubber
 
-"""Class for an object to hold all information about a specific uploaded file.
-
-Each uploaded file will be stored in a unique object, and accessed through the
-FileManager files dictionary. A major data attribute of this class is a string
-that (sometimes) contains the text contents of the file (Most of the time).
-"""
-
 
 class LexosFile:
     def __init__(self, original_filename: str,
                  file_name: str, file_string: str, file_id: int):
-        """Constructor: Creates a new LexosFile object.
+        """Class for an object to hold all info about a specific uploaded file.
+
+        Each uploaded file will be stored in a unique object, and accessed
+        through the FileManager files dictionary. A major data attribute of
+        this class is a string that (sometimes) contains the text contents of
+        the file (Most of the time).
 
         This newly constructed LexosFile object is created from the information
         passed in, and performs some preliminary processing.
