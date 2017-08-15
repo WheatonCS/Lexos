@@ -625,7 +625,6 @@ class FileManager:
         This function will rank all the words by word count (across all the
         segments) and then delete (make count 0) all the words that has ranking
         lower than lower_rank_bound (tie will be kept).
-
         :param result_matrix: the Matrix that the get_matrix_deprec() function
                needs to return (might contain Porp, Count or weighted depending
                on user's choice).
