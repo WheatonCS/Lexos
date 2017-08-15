@@ -183,8 +183,8 @@ def cluster():
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = file_manager.get_active_labels()
         threshold_ops = {}
+        labels = file_manager.get_active_labels()
         return render_template(
             'cluster.html',
             labels=labels,
