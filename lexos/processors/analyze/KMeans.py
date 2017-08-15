@@ -12,7 +12,6 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
 
 
 def get_centroid(xs, ys):
-
     if len(xs) is not 0:
         centroid_x = sum(xs) / len(xs)
     else:
@@ -26,7 +25,6 @@ def get_centroid(xs, ys):
 
 
 def translate_points_to_positive(xs, ys, trans_x, trans_y):
-
     coord_list = []
     for i in range(0, len(xs)):
         xs[i] += trans_x
@@ -37,7 +35,6 @@ def translate_points_to_positive(xs, ys, trans_x, trans_y):
 
 
 def translate_coords_to_positive(xs, ys, trans_x, trans_y):
-
     for i in range(0, len(xs)):
         xs[i] += trans_x
         ys[i] += trans_y
@@ -45,7 +42,6 @@ def translate_coords_to_positive(xs, ys, trans_x, trans_y):
 
 
 def translate_centroids_to_positive(coords, trans_x, trans_y):
-
     coord_list = []
     for i in range(0, len(coords)):
         coords[i][0] += trans_x
@@ -56,7 +52,6 @@ def translate_centroids_to_positive(coords, trans_x, trans_y):
 
 
 def text_attrs_dictionary(title, x, y):
-
     attr_dict = {"x": x, "y": y, "title": title}
     return attr_dict
 
@@ -79,19 +74,20 @@ def get_silhouette_on_k_means(labels, matrix, metric_dist):
     silhouette_score = round(silhouette_score, 4)
     return silhouette_score
 
+
 # Gets called from generateKMeansPCA() in utility.py
 
 
 def get_k_means_pca(
-        matrix,
-        k,
-        max_iter,
-        init_method,
-        n_init,
-        tolerance,
-        metric_dist,
-        file_names,
-        folder_path):
+    matrix,
+    k,
+    max_iter,
+    init_method,
+    n_init,
+    tolerance,
+    metric_dist,
+    file_names,
+    folder_path):
     """
     Generate an array of centroid index based on the active files.
 
@@ -239,7 +235,7 @@ def get_k_means_pca(
     trace = Scatter(x=xs, y=ys, text=file_names,
                     textfont=dict(color=plotly_colors),
                     name=file_names, mode='markers+text',
-                    marker=dict(color=plotly_colors, line=dict(width=1,)),
+                    marker=dict(color=plotly_colors, line=dict(width=1, )),
                     textposition='right')
 
     data = Data([trace])
@@ -328,22 +324,16 @@ def get_k_means_voronoi(matrix,
         max_x: the maximum x value used to set bounds in javascript
     """
 
-    k = int(k)  # cast k to int
-
-    number_only_matrix = matrix.tolist()
-
-    # xy coordinates for each chunk
+    # finds xy coordinates for each segment
     reduced_data = PCA(n_components=2).fit_transform(matrix)
 
-    # n_init statically set to 300 for now. Probably should be determined
-    # based on number of active files
-    kmeans = KMeans(
-        init=init_method,
-        n_clusters=k,
-        n_init=n_init,
-        tol=tolerance,
-        max_iter=max_iter)
-    kmeans_index = kmeans.fit_predict(reduced_data)
+    # TODO: n_init probably should be determined based on number of files
+    k_means = KMeans(init=init_method,
+                     max_iter=max_iter,
+                     tol=tolerance,
+                     n_init=n_init,
+                     n_clusters=k)
+    kmeans_index = k_means.fit_predict(reduced_data)
     best_index = kmeans_index.tolist()
     full_coord_list = reduced_data.tolist()
 
@@ -469,19 +459,18 @@ def get_k_means_voronoi(matrix,
     # tracking action (D3)
     final_centroids_list.insert(0, [-500, -500])
 
-    inequality = '≤'
     if k <= 2:
-        silhouette_score = "N/A [Not available for K " + inequality + " 2]"
+        silhouette_score = "N/A [Not available for K ≤ 2]"
 
     elif k > (matrix.shape[0] - 1):
         silhouette_score = \
             'N/A [Not available if (K value) > (number of active files -1)]'
 
     else:
-        kmeans.fit(number_only_matrix)
-        labels = kmeans.labels_  # for silhouette score
-        silhouette_score = get_silhouette_on_k_means(labels, matrix,
+        k_means.fit(matrix)
+        k_labels = k_means.labels_  # for silhouette score
+        silhouette_score = get_silhouette_on_k_means(k_labels, matrix,
                                                      metric_dist)
 
     return best_index, silhouette_score, color_chart, final_points_list, \
-        final_centroids_list, text_data, max_x
+           final_centroids_list, text_data, max_x
