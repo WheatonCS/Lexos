@@ -193,26 +193,43 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     assert num_segment > 0, NON_POSITIVE_SEGMENT_MESSAGE
 
     # split text by words while stripping all the whitespace
-    seg_list = re.findall("\S+\s*", text)
+    words_list = re.findall("\S+\s*", text)
+    total_num_words = len(words_list)
 
-    # if seg_list is none empty
-    if seg_list:
+    # the length of normal chunk
+    norm_seg_size = int(total_num_words / num_segment)
 
-        # the length of every chunk
-        seg_size = len(seg_list) / (num_segment + 1)
-        int_seg_size = int(math.ceil(seg_size))
+    # long segment will have one more words in them than norm_seg_size
+    num_long_seg = total_num_words % num_segment
+    long_seg_size = norm_seg_size + 1
 
-        # cut the seg_list
-        final_seg_list = cut_list_with_overlap(
-            input_list=seg_list, norm_seg_size=int_seg_size, overlap=0,
-            last_prop=1)
+    def get_single_seg(index: int) -> List[str]:
+        """Helper to get one single segment with index.
 
-    # if the seg_list is empty
-    else:
-        final_seg_list = seg_list
+        This function first evaluate whether the segment is the last one and
+        grab different segment according to the result, and returns sub-lists
+        while index is in the range of number of segment.
+        :param index: the index of the segment in the final segment list.
+        :return single segment in the input_list based on index.
+        """
+
+        if index < num_long_seg:
+
+            return words_list[long_seg_size * index:
+                              long_seg_size * index + long_seg_size]
+        else:
+
+            num_norm_seg_in_front = index - num_long_seg
+
+            start = long_seg_size * num_long_seg + \
+                norm_seg_size * num_norm_seg_in_front
+
+            return words_list[start: start + norm_seg_size]
+
+    seg_list = [get_single_seg(index) for index in range(num_segment)]
 
     # join words in each sublist
-    final_seg_list = join_sublist_element(input_list=final_seg_list)
+    final_seg_list = join_sublist_element(input_list=seg_list)
 
     return final_seg_list
 
