@@ -1617,6 +1617,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
         if not os.path.isdir(folder):
             makedirs(folder)
 
+        # write newick in file
         newick_file_fullname = path_join(folder,
                                          constants.DENDROGRAM_NEWICK_FILENAME)
         with open(newick_file_fullname, 'w', encoding='utf-8') as f:
@@ -1630,6 +1631,11 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
         # get dendrogram lengend
         legend = get_dendrogram_legend(file_manager=file_manager,
                                        distance_list=distance_list)
+
+        folder_path = path_join(session_manager.session_folder(),
+                                constants.RESULTS_FOLDER)
+        if not os.path.isdir(folder_path):
+            makedirs(folder_path)
 
         pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
             distance_min, monocrit_max, monocrit_min, threshold = \
