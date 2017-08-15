@@ -806,8 +806,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # 2. consolidation
     # 3. lemmatize
     # 4. stop words
-    # 5. remove punctuation digits, whitespace without changing all the content
-    #    in the tag
+    # 5. remove punctuation, digits, and whitespace without changing all the
+    # content in the tag
     #
 
     # -- 0. Gutenberg --------------------------------------------------------
