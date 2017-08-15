@@ -23,22 +23,22 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
     not go through the last proportion size calculation.
     """
 
-    # get the distance of each segment's start-point index in the list
-    start_point_distance = norm_seg_size - overlap
+    # get the distance between starts of each two adjacent segments
+    seg_start_distance = norm_seg_size - overlap
 
     input_list_length = len(input_list)
 
-    # get the number of segment ending-point within the length of input_list
+    # get the number of segments excluding the last segment.
     # it determines by the length without the last segment divided by the
     # distance between each start-point
-    num_stop_point = \
-        (input_list_length - norm_seg_size * last_prop) / start_point_distance
+    num_seg_start = \
+        (input_list_length - norm_seg_size * last_prop) / seg_start_distance
 
     # define the number segment based on the number of ending-point
     # the number of stop-point plus last segment(one) equals segment number
     # let it equals to one if only one segment (no stop point within the list)
-    if num_stop_point > 0:
-        num_segment = int(math.ceil(num_stop_point) + 1)
+    if num_seg_start > 0:
+        num_segment = int(num_seg_start) + 1
     else:
         num_segment = 1
 
@@ -56,13 +56,10 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
 
         # define current segment size based on whether it is the last segment
         if is_last_prop:
-            cur_seg_size = int(norm_seg_size * last_prop)
+            return input_list[seg_start_distance * index:]
         else:
-            cur_seg_size = norm_seg_size
-
-        # return single segment using index
-        return input_list[start_point_distance * index:
-                          start_point_distance * index + cur_seg_size]
+            return input_list[seg_start_distance * index:
+                              seg_start_distance * index + norm_seg_size]
 
     # return the whole list of segment while evaluating whether is last segment
     return [get_single_seg(
