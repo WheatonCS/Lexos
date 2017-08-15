@@ -39,7 +39,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=0.21) == ["ABABA", "BABABA"]
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
-                                 last_prop=2) == ["ABABA", "BABABA"]
+                                 last_prop=2) == ["ABABABABABA"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=2) == ["ABC", "DEF", "GHIJKL"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
@@ -121,11 +121,9 @@ class TestCutByWords:
 
     def test_cut_by_words_proportion(self):
         assert cut_by_words(text="test test test", seg_size=2, overlap=0,
-                            last_prop=1) == ["test test ", "test"]
+                            last_prop=1) == ["test test test"]
         assert cut_by_words(text="test test test", seg_size=2, overlap=0,
                             last_prop=.5) == ["test test ", "test"]
-        assert cut_by_words(text="test test test", seg_size=2, overlap=0,
-                            last_prop=1) == ["test test ", "test"]
         assert cut_by_words(text="test test test", seg_size=2, overlap=0,
                             last_prop=1.5) == ["test test test"]
         assert cut_by_words(text="test test test", seg_size=2, overlap=0,
@@ -138,10 +136,10 @@ class TestCutByWords:
             "test test ", "test test ", "test"]
         assert cut_by_words(text="test test test test test", seg_size=2,
                             overlap=0, last_prop=1) == [
-            "test test ", "test test ", "test"]
+            "test test ", "test test test"]
         assert cut_by_words(text="test test test test test", seg_size=3,
                             overlap=0, last_prop=1) == [
-            "test test test ", "test test"]
+            "test test test test test"]
 
     def test_cut_by_words_zero_chunks_precondition(self):
         try:
@@ -243,8 +241,9 @@ class TestCutByNumbers:
                                                 "five ", "words"]
 
         assert cut_by_number(text="Odd number of words in this text",
-                             num_segment=6) == ["Odd ", "number ", "of ",
-                                                "words ", "in ", "this text"]
+                             num_segment=6) == ["Odd number ", "of ",
+                                                "words ", "in ", "this ",
+                                                "text"]
 
         assert cut_by_number(text="Almost enough words here but not quite",
                              num_segment=4) == ["Almost enough ",
@@ -262,6 +261,8 @@ class TestCutByNumbers:
         assert cut_by_number(text="      <-There are six spaces here",
                              num_segment=5) == ["<-There ", "are ", "six ",
                                                 "spaces ", "here"]
+        assert cut_by_number(text="\n\n\n\n\nword\n\n\n\n\n",
+                             num_segment=1) == ["word\n\n\n\n\n"]
 
     def test_cut_by_number_lines(self):
         assert cut_by_number(
@@ -271,31 +272,27 @@ class TestCutByNumbers:
                                "Youmayfindthisdifficulttoread!"]
 
         assert cut_by_number(text="line\nline\nline\nline\nline",
-                             num_segment=2) == ["line\nline\n",
-                                                "line\nline\nline"]
+                             num_segment=2) == ["line\nline\nline\n",
+                                                "line\nline"]
 
         assert cut_by_number(text="Languageswithoutanyspacesmayhave\n"
                              "uneven\nchunks", num_segment=3) == \
             ["Languageswithoutanyspacesmayhave\n", "uneven\n", "chunks"]
-
-        assert cut_by_number(text="RemovewhitespaceonChinese?",
-                             num_segment=3) == ["RemovewhitespaceonChinese?"]
 
         assert cut_by_number(text="Ithinkthisiswhy\u3000Chinesetextcanbesplit",
                              num_segment=2) \
             == ["Ithinkthisiswhy\u3000", "Chinesetextcanbesplit"]
 
     def test_cut_by_number_excess_chunks(self):
+        assert cut_by_number(text="RemovewhitespaceonChinese?",
+                             num_segment=3) == [
+            "RemovewhitespaceonChinese?", '', '']
         assert cut_by_number(text="This text has too few words!",
-                             num_segment=10) == \
-            ["This ", "text ", "has ", "too ", "few ", "words!"]
-        assert cut_by_number(text="Safe!", num_segment=1000) == ["Safe!"]
-        assert cut_by_number(text="", num_segment=1000000) == []
+                             num_segment=8) == \
+            ["This ", "text ", "has ", "too ", "few ", "words!", '', '']
         assert cut_by_number(text="Reeeeeeeeeeeeeeeeeeeeeeeally long word",
                              num_segment=6) == \
-            ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word"]
-        assert cut_by_number(text="\n\n\n\n\nword\n\n\n\n\n",
-                             num_segment=11) == ["word\n\n\n\n\n"]
+            ["Reeeeeeeeeeeeeeeeeeeeeeeally ", "long ", "word", '', '', '']
 
     def test_cut_by_number_bad_math(self):
         # Divide by zero exception
@@ -392,7 +389,7 @@ class TestCutterFunction:
                    overlap="0", last_prop_percent="100%") == ["t", "st"]
         assert cut(text="test\ntesttest", cutting_value="3",
                    cutting_type="number", overlap="0",
-                   last_prop_percent="100%") == ["test\n", "testtest"]
+                   last_prop_percent="100%") == ["test\n", "testtest", ""]
         assert cut(text="test test test", cutting_value="3",
                    cutting_type="number", overlap="0",
                    last_prop_percent="100%") == ["test ", "test ", "test"]
