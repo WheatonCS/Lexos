@@ -724,7 +724,7 @@ def generate_k_means_voronoi(file_manager: FileManager):
 
     kmeans_index, siltt_score, color_chart, final_points_list, \
         final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
-            matrix=count_matrix,
+            count_matrix=count_matrix,
             k=k_value,
             n_init=n_init,
             max_iter=max_iter,
