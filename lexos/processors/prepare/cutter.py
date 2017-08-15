@@ -38,7 +38,7 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
     if num_segment < 1:
         num_segment = 1
 
-    def get_single_seg(index: int, is_last_prop: bool) -> List[List[str]]:
+    def get_single_seg(index: int, is_last_prop: bool) -> list:
         """Helper to get one single segment with index.
 
         This function first evaluate whether the segment is the last one and
