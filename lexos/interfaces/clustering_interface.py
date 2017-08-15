@@ -232,8 +232,8 @@ def cluster():
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
         return send_file(path_join(session_manager.session_folder(),
-                                   constants.RESULTS_FOLDER
-                                   + "dendrogram.pdf"),
+                                   constants.RESULTS_FOLDER +
+                                   "dendrogram.pdf"),
                          attachment_filename=attachment_name,
                          as_attachment=True)
 
@@ -245,8 +245,8 @@ def cluster():
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
         return send_file(path_join(session_manager.session_folder(),
-                                   constants.RESULTS_FOLDER
-                                   + "dendrogram.svg"),
+                                   constants.RESULTS_FOLDER +
+                                   "dendrogram.svg"),
                          attachment_filename=attachment_name,
                          as_attachment=True)
 
@@ -258,8 +258,8 @@ def cluster():
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
         return send_file(path_join(session_manager.session_folder(),
-                                   constants.RESULTS_FOLDER
-                                   + "dendrogram.png"),
+                                   constants.RESULTS_FOLDER +
+                                   "dendrogram.png"),
                          attachment_filename=attachment_name,
                          as_attachment=True)
 
@@ -270,8 +270,8 @@ def cluster():
         session_manager.cache_analysis_option()
         session_manager.cache_hierarchy_option()
         return send_file(path_join(session_manager.session_folder(),
-                                   constants.RESULTS_FOLDER
-                                   + "newNewickStr.txt"),
+                                   constants.RESULTS_FOLDER +
+                                   "newNewickStr.txt"),
                          attachment_filename=attachment_name,
                          as_attachment=True)
 
