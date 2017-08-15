@@ -29,16 +29,18 @@ Steps:
 	(a) Remove punctuation
 	(b) Make Lowercase
 	(c) Remove Digits
-	(d) Scrub Tags (the default is to keep text withinin but remove <corr> and <foreign> tags)
+	(d) Scrub Tags (the default is to keep text within but remove <corr> and <foreign> tags)
 	(e) Load the DAZ_lemma.txt file for Lemmas
 	(f) Load the DAZ_consolidation.txt file for Consolidations
 	(g) Set Special Characters to Dictionary of Old English (sgml)
 
     Apply Scrubbing
 (2) CUT:
-    (a) Daniel into Segment Size: 450 word chunks, zero Overlap, 50% Last Proportion;
+    (a) On the main (left) Default Cutting Options, select Segments/Document and Number of
+    Segments as 1 (for Azarias)
+    (b) For Daniel, select the Individual Options button (on right for Daniel) and a Segment Size: 450 word chunks, 
+    zero Overlap, 50% Last Proportion;
     (this will lead to ten chunks of Daniel)
-    (b) Azarias into Number of Segments: one(1) chunk
 
 	Apply Cuts
 (4) ANALYZE - Dendrogram
