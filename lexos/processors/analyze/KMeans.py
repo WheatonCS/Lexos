@@ -56,7 +56,9 @@ def text_attrs_dictionary(title, x, y):
     return attr_dict
 
 
-def _get_silhouette_score_(matrix, labels, metric_dist):
+def _get_silhouette_score_(matrix: np.ndarray,
+                           labels: np.ndarray,
+                           metric_dist: str) -> float:
 
     """Generates silhouette score based on the KMeans algorithm.
 
