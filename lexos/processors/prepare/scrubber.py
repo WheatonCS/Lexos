@@ -519,9 +519,9 @@ def delete_words(text: str, remove_list: List[str]) -> str:
         remove_list.
     """
 
-    # Create center of the regex pattern.
+    # Create center of the pattern, with non-alphanumerics escaped ("Yay\.")
     # ["User", "words", here"] => "User|words|here"
-    remove_string = "|".join(remove_list)
+    remove_string = "|".join([re.escape(word) for word in remove_list])
 
     if remove_string:
         # Produces the pattern (^|\s)(User|words|here)(?=\s|$)

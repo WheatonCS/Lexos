@@ -737,6 +737,7 @@ class TestRemoveStopwords:
             " is a 'long' story. It is time this long story to end to-night."
         assert remove_stopwords(self.test_string, "This long story") == \
             remove_stopwords(self.test_string, "This,long,story")
+        assert remove_stopwords(self.test_string, ".") == self.test_string
 
 
 class TestKeepWords:
@@ -770,15 +771,19 @@ class TestKeepWords:
         assert keep_words(self.test_string_period, "here") == ""
         assert keep_words(self.test_string_period, "here.") == " here."
         assert keep_words(self.test_string_period, "") == ""
-        assert keep_words("there is some-text here", "some-text\nhere") ==\
-            " some-text here"
-        assert keep_words("there is some-text here", "some\ntext\nhere") \
+        assert keep_words("there is some?text here", "some?text\nhere") ==\
+            " some?text here"
+        assert keep_words("there is some?text here", "some\ntext\nhere") \
             == " here"
         assert keep_words("there is some.text here", "some.text\nhere") ==\
             " some.text here"
+        assert keep_words("there is some-text here", "some\ntext\nhere") == \
+            " here"
         assert keep_words(
             self.test_string_period, self.test_string_period) == \
             self.test_string_period
+        assert keep_words("Can we . use periods .. safely", ".") == " ."
+        assert keep_words("Question mark s? ? ?? ???", "s?") == " s?"
 
 
 class TestGetRemoveWhitespaceMap:
