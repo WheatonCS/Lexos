@@ -161,6 +161,11 @@ KMEANINPUT = (
     'tolerance',
     'KMeans_metric',
     'viz')
+# for kmeans analyzing
+N_INIT = 300
+MAX_ITER = 300
+TOLERANCE = 1e-4
+
 # for similarity query
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
