@@ -582,11 +582,9 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
 
 
 def generate_k_means_pca(file_manager: FileManager):
-    """
-    Generates a table of cluster_number and file name from the active files.
+    """Generates a table of cluster number and file name from the active files.
 
-    Args:
-        None
+    :param file_manager: A FileManager object (see managers/file_manager.py)
 
     Returns:
         kmeans_index: a list of index of the closest center of the file
@@ -668,17 +666,16 @@ def generate_k_means_pca(file_manager: FileManager):
 
 
 def generate_k_means_voronoi(file_manager: FileManager):
-    """
-    Generates a table of cluster_number and file name from the active files.
+    """Generates a table of cluster number and file name from the active files.
 
-    Args:
-        None
+    :param file_manager: A FileManager object (see managers/file_manager.py)
 
     Returns:
         kmeans_index: a list of index of the closest center of the file
         siltt_score: a float of silhouette score based on KMeans algorithm
         file_name_str: a string of file names, separated by '#'
         k_value: an int of the number of K from input
+
     """
 
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
