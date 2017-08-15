@@ -99,8 +99,10 @@ def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
     name_list = dtm.index.values
 
     # create group map
-    group_list = [count_matrix[row] for _, row in enumerate(division_map)]
-    label_list = [name_list[row] for _, row in enumerate(division_map)]
+    # noinspection PyTypeChecker
+    group_list = [count_matrix[row] for row in division_map]
+    # noinspection PyTypeChecker
+    label_list = [name_list[row] for row in division_map]
 
     return group_list, label_list
 
