@@ -648,20 +648,6 @@ class TestSplitInputWordString:
             ["..", ".", ".", ".", "..."]
 
 
-class TestDeleteWords:
-    test_string = "Many words were written, but not many of all the words " \
-                  "said much at all."
-
-    def test_delete_words(self):
-        assert delete_words(
-            self.test_string, ["Many", "words", "written", "all"]) == \
-            " were written, but not many of the said much at all."
-        assert delete_words(self.test_string, [""]) == self.test_string
-        assert delete_words(self.test_string, []) == self.test_string
-        assert delete_words("", ["words"]) == ""
-        assert delete_words("", []) == ""
-
-
 class TestMergeFileAndManualStrings:
 
     def test_merge_file_and_manual_strings(self):
@@ -688,6 +674,20 @@ class TestMergeFileAndManualStrings:
             file_string=string1, manual_string=string2,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=cache_number) == string1 + "\n" + string2
+
+
+class TestDeleteWords:
+    test_string = "Many words were written, but not many of all the words " \
+                  "said much at all."
+
+    def test_delete_words(self):
+        assert delete_words(
+            self.test_string, ["Many", "words", "written", "all"]) == \
+            " were written, but not many of the said much at all."
+        assert delete_words(self.test_string, [""]) == self.test_string
+        assert delete_words(self.test_string, []) == self.test_string
+        assert delete_words("", ["words"]) == ""
+        assert delete_words("", []) == ""
 
 
 class TestRemoveStopwords:

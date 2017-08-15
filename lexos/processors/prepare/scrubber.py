@@ -479,6 +479,30 @@ def split_input_word_string(input_string: str) -> List[str]:
     return input_words
 
 
+def merge_file_and_manual_strings(file_string: str, manual_string: str,
+                                  cache_folder: str,
+                                  cache_filenames: List[str],
+                                  cache_number: int) -> str:
+    """Caches uploaded files and merges file strings with manual strings.
+
+    :param file_string: The user's uploaded file.
+    :param manual_string: The input from a text field.
+    :param cache_folder: A string representing the path of the cache folder.
+    :param cache_filenames: A list of filename strings that will be used to
+        load and save the user's sw/kw input.
+    :param cache_number: The index of the relevant file in cache_filenames.
+    :return: The combination of the text field and file strings.
+    """
+
+    if file_string:
+        cache_filestring(file_string=file_string,
+                         cache_folder=cache_folder,
+                         filename=cache_filenames[cache_number])
+    merged_string = file_string + "\n" + manual_string
+
+    return merged_string
+
+
 def delete_words(text: str, remove_list: List[str]) -> str:
     """Deletes the words in remove_list from the text.
 
@@ -506,30 +530,6 @@ def delete_words(text: str, remove_list: List[str]) -> str:
         text = pattern.sub("", text)
 
     return text
-
-
-def merge_file_and_manual_strings(file_string: str, manual_string: str,
-                                  cache_folder: str,
-                                  cache_filenames: List[str],
-                                  cache_number: int) -> str:
-    """Caches uploaded files and merges file strings with manual strings.
-
-    :param file_string: The user's uploaded file.
-    :param manual_string: The input from a text field.
-    :param cache_folder: A string representing the path of the cache folder.
-    :param cache_filenames: A list of filename strings that will be used to
-        load and save the user's sw/kw input.
-    :param cache_number: The index of the relevant file in cache_filenames.
-    :return: The combination of the text field and file strings.
-    """
-
-    if file_string:
-        cache_filestring(file_string=file_string,
-                         cache_folder=cache_folder,
-                         filename=cache_filenames[cache_number])
-    merged_string = file_string + "\n" + manual_string
-
-    return merged_string
 
 
 def remove_stopwords(text: str, removal_string: str) -> str:
