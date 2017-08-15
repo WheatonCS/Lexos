@@ -199,6 +199,8 @@ class TestCutByLines:
                                                         "test\ntest"]
         assert cut_by_lines(text="test\ntest\ntest", seg_size=1,
                             overlap=0, last_prop=200) == ["test\ntest\ntest"]
+        assert cut_by_lines(text="   \n\ntest", seg_size=1, overlap=0,
+                            last_prop=1) == ["   \n", "\n", "test"]
 
     def test_cut_by_lines_line_ending(self):
         assert cut_by_lines(text="test\rtest", seg_size=1,
