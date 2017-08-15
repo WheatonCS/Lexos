@@ -6,9 +6,8 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_remove_digits_map, get_all_punctuation_map, delete_words, \
     handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
-    get_decoded_file, scrub_select_apos, consolidate_hyphens, \
-    consolidate_ampers, merge_file_and_manual_strings, remove_stopwords, \
-    keep_words
+    scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
+    merge_file_and_manual_strings, remove_stopwords, keep_words
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -851,17 +850,6 @@ class TestHandleGutenberg:
         assert handle_gutenberg(
             text="This text is copyright Joe Schmoe.\n\nDone.") == \
             "This text is copyright Joe Schmoe.\n\nDone."
-
-
-class TestGetDecodedFile:
-    string = "hello world!"
-    utf_8 = string.encode("UTF-8")
-    utf_16 = string.encode("UTF-16")
-
-    def test_get_decoded_file(self):
-        assert get_decoded_file(file_content=self.string) == self.string
-        assert get_decoded_file(file_content=self.utf_8) == self.string
-        assert get_decoded_file(file_content=self.utf_16) == self.string
 
 
 # prepare_additional_options
