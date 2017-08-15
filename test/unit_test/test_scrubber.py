@@ -16,17 +16,15 @@ class TestGetSpecialCharDictFromFile:
     def test_get_special_char_dict_from_file(self):
         assert get_special_char_dict_from_file(mode="MUFI-3") == chars.MUFI3
         assert get_special_char_dict_from_file(mode="MUFI-4") == chars.MUFI4
-
+        # This option should be processed by handle_special_characters() only
         try:
-            get_special_char_dict_from_file(mode="MADEUP-6")
+            get_special_char_dict_from_file(mode="doe-sgml")
         except ValueError:
             pass
         else:
             raise AssertionError
-
-        # This option should be processed by handle_special_characters() only
         try:
-            get_special_char_dict_from_file(mode="doe-sgml")
+            get_special_char_dict_from_file(mode="MADEUP-6")
         except ValueError:
             pass
         else:
@@ -815,8 +813,7 @@ class TestGetRemoveWhitespaceMap:
         # 111
         assert get_remove_whitespace_map(
             spaces=True, tabs=True, new_lines=True) == \
-            {ord(' '): None, ord('\t'): None, ord('\n'):
-                None, ord('\r'): None}
+            {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}
 
 
 # cache_filestring
