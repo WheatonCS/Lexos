@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from os.path import join as pathjoin
+from typing import Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,20 +57,29 @@ def text_attrs_dictionary(title, x, y):
     return attr_dict
 
 
-def _get_silhouette_score_(matrix: np.ndarray,
-                           labels: np.ndarray,
-                           metric_dist: str) -> float:
+def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
+                           metric_dist: str) -> Union[str, float]:
     """Generates silhouette score based on the KMeans algorithm.
 
-    :param matrix: a 2D numpy matrix contains word counts
-    :param labels: a numpy array contains labels of each point
-    :param metric_dist: a string represents method of the distance metric
-    :return: float, the calculated silhouette score
+    This function returns a proper message if it is under the condition where
+    it cannot perform the calculation on finding silhouette score
+    :param k: k-value for k-means analysis
+    :param matrix: a 2D numpy matrix that contains word counts
+    :param k_means: a KMeans class object
+    :param metric_dist: method of the distance metric
+    :return: the calculated silhouette score or a proper message if the
+             conditions for calculation were not met
     """
-    silhouette_score = metrics.silhouette_score(X=matrix,
-                                                labels=labels,
-                                                metric=metric_dist)
-    return round(silhouette_score, ROUND_DIGIT)
+    if k <= 2:
+        return "N/A [Not available for K ≤ 2]"
+    elif k > (matrix.shape[0] - 1):
+        return "N/A [Not available if (K value) > (number of active files -1)]"
+    else:
+        labels = k_means.fit(matrix).labels_
+        silhouette_score = metrics.silhouette_score(X=matrix,
+                                                    labels=labels,
+                                                    metric=metric_dist)
+        return round(silhouette_score, ROUND_DIGIT)
 
 
 # Gets called from generateKMeansPCA() in utility.py
@@ -195,19 +205,10 @@ def get_k_means_pca(
     # close the plot so next one doesn't plot over the last one
     plt.close()
 
-    # trap bad silhouette score input
-    if k <= 2:
-        silhouette_score = "N/A [Not available for K " + inequality + " 2]"
-
-    elif k > (matrix.shape[0] - 1):
-        silhouette_score = \
-            'N/A [Not available if (K value) > (number of active files -1)]'
-
-    else:
-        kmeans.fit(number_only_matrix)
-        labels = kmeans.labels_  # for silhouette score
-        silhouette_score = _get_silhouette_score_(labels, matrix,
-                                                  metric_dist)
+    # calculate silhouette score
+    silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
+                                              metric_dist=metric_dist,
+                                              k_means=k_means)
 
     # make a string of rgb tuples to send to the javascript separated by #
     # cause jinja hates lists of strings
@@ -287,7 +288,7 @@ def get_k_means_pca(
     return best_index, silhouette_score, color_chart
 
 
-def get_k_means_voronoi(matrix: np.ndarray,
+def get_k_means_voronoi(count_matrix: np.ndarray,
                         k: int,
                         n_init: int,
                         max_iter: int,
@@ -299,7 +300,7 @@ def get_k_means_voronoi(matrix: np.ndarray,
 
     This function also finds a list of points for the centroids, and a list of
     points for the segments.
-    :param matrix: a 2D numpy matrix contains the word counts
+    :param count_matrix: a 2D numpy matrix contains the word counts
     :param k: k value-for k-means analysis
     :param n_init: number of iterations with different centroids
     :param max_iter: maximum number of iterations
@@ -315,11 +316,10 @@ def get_k_means_voronoi(matrix: np.ndarray,
         final_centroids_list: list of xy coords for each centroid
         text_data: dicitonary of labels, xcoord, and ycoord
         max_x: the maximum x value used to set bounds in javascript
-
     """
 
     # finds xy coordinates for each segment
-    reduced_data = PCA(n_components=2).fit_transform(matrix)
+    reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
     # TODO: n_init probably should be determined based on number of files
     k_means = KMeans(init=init_method,
@@ -453,18 +453,10 @@ def get_k_means_voronoi(matrix: np.ndarray,
     # tracking action (D3)
     final_centroids_list.insert(0, [-500, -500])
 
-    if k <= 2:
-        silhouette_score = "N/A [Not available for K ≤ 2]"
-
-    elif k > (matrix.shape[0] - 1):
-        silhouette_score = \
-            'N/A [Not available if (K value) > (number of active files -1)]'
-
-    else:
-        k_means.fit(matrix)
-        k_labels = k_means.labels_  # for silhouette score
-        silhouette_score = _get_silhouette_score_(k_labels, matrix,
-                                                  metric_dist)
+    # calculate silhouette score
+    silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
+                                              metric_dist=metric_dist,
+                                              k_means=k_means)
 
     return best_index, silhouette_score, color_chart, final_points_list, \
            final_centroids_list, text_data, max_x
