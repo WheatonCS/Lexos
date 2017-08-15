@@ -176,7 +176,6 @@ def cluster():
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
 
-    # -- request.method -------------------------------------------------------
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
