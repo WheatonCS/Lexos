@@ -287,14 +287,14 @@ def get_k_means_pca(
     return best_index, silhouette_score, color_chart
 
 
-def get_k_means_voronoi(matrix,
-                        k,
-                        n_init,
-                        max_iter,
-                        tolerance,
-                        init_method,
-                        metric_dist,
-                        labels):
+def get_k_means_voronoi(matrix: np.ndarray,
+                        k: int,
+                        n_init: int,
+                        max_iter: int,
+                        tolerance: float,
+                        init_method: str,
+                        metric_dist: str,
+                        labels: np.ndarray):
     """Generates an array of centroid index based on the active files.
 
     This function also finds a list of points for the centroids, and a list of
@@ -308,19 +308,6 @@ def get_k_means_voronoi(matrix,
     :param metric_dist: method of the distance metrics
     :param labels: file names of active files
     :return:
-    Args:
-        number_only_matrix: a numpy matrix without file names and word
-        matrix: a python matrix representing the counts of words in files
-        k: int, k-value
-        max_iter: int, maximum number of iterations
-        init_method: str, method of initialization: 'k++' or 'random'
-        n_init: int, number of iterations with different centroids
-        tolerance: float, relative tolerance, inertia to declare convergence
-        metric_dist: str, method of the distance metrics
-        labels: list of active files
-
-
-    Returns:
         best_index: an array of the cluster index for each sample
         silhouette_score: float, silhouette score
         color_chart: string of rgb tuples
