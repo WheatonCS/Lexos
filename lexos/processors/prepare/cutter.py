@@ -28,28 +28,30 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
 
     input_list_length = len(input_list)
 
-    # get the number of segment ending point while stripping the last segment
+    # get the number of segment ending-point despite the last segment
     num_stop_point = \
         (input_list_length - norm_seg_size * last_prop) / start_point_distance
 
-    # define number segment and let it equals to one if only one segment
+    # define the number segment based on the number of ending-point
+    # let it equals to one if only one segment
     if num_stop_point > 0:
         num_segment = int(math.ceil(num_stop_point) + 1)
     else:
         num_segment = 1
 
-    def get_single_seg(index: int, is_last_prop: bool) -> List[list]:
+    def get_single_seg(index: int, is_last_prop: bool) -> List[List[str]]:
         """Helper to get one single segment with index.
 
         This function first evaluate whether the segment is the last one and
         grab different segment according to the result, and returns sub-lists
         while index is in the range of number of segment.
-        :param is_last_prop:
+        :param is_last_prop: the bool value that determine whether the segment
+        is the last one.
         :param index: the index of the segment in the final segment list.
         :return single segment in the input_list based on index.
         """
 
-        # define current segment size based on whether is the last segment
+        # define current segment size based on whether it is the last segment
         if is_last_prop:
             cur_seg_size = int(norm_seg_size * last_prop)
         else:
@@ -60,12 +62,13 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
                           start_point_distance * index + cur_seg_size]
 
     # return the whole list of segment while evaluating whether is last segment
-    return [get_single_seg(index, True if index == num_segment - 1 else False)
-            for index in range(num_segment)]
+    return [get_single_seg(
+        index=index, is_last_prop=True if index == num_segment - 1 else False)
+        for index in range(num_segment)]
 
 
-def join_sublist_element(input_list: list) -> List[str]:
-    """Join elements in each sublist into string.
+def join_sublist_element(input_list: List[List[str]]) -> List[str]:
+    """Join each sublist of chars into string.
 
     This function joins all the element(chars) in each sub-lists together, and
     turns every sub-lists to one element in the overall list.
@@ -79,7 +82,7 @@ def join_sublist_element(input_list: list) -> List[str]:
 
 def cut_by_characters(text: str, seg_size: int, overlap: int,
                       last_prop: float) ->List[str]:
-    """Cut the input text into segments by characters.
+    """Cut the input text into segments by number of chars in each segment.
 
     Where the segment size is measured by counts of characters, with an option
     for an amount of overlap between segments and a minimum proportion
@@ -113,7 +116,7 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
 
 def cut_by_words(text: str, seg_size: int, overlap: int,
                  last_prop: float) -> List[str]:
-    """Cut the input text into segments by words.
+    """Cut the input text into segments by number of words in each segment.
 
     Cuts the text into equally sized segments, where the segment size is
     measured by counts of words, with an option for an amount of overlap
@@ -147,7 +150,7 @@ def cut_by_words(text: str, seg_size: int, overlap: int,
 
 def cut_by_lines(text: str, seg_size: int, overlap: int,
                  last_prop: float) -> List[str]:
-    """Cut the input text into segments by lines.
+    """Cut the input text into segments by number of lines in each segment.
 
     The size of the segment is measured by counts of lines, with an option for
     an amount of overlap between segments and a minimum proportion threshold
@@ -218,7 +221,7 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
 
 
 def cut_by_milestone(text: str, milestone: str) -> List[str]:
-    """Cuts the file by milestones
+    """Cuts the file by milestones.
 
     :param text: the string with the contents of the file.
     :param milestone: the milestone word that to cut the text by.
