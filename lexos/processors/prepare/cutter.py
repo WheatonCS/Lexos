@@ -28,12 +28,15 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
 
     input_list_length = len(input_list)
 
-    # get the number of segment ending-point despite the last segment
+    # get the number of segment ending-point within the length of input_list
+    # it determines by the length without the last segment divided by the
+    # distance between each start-point
     num_stop_point = \
         (input_list_length - norm_seg_size * last_prop) / start_point_distance
 
     # define the number segment based on the number of ending-point
-    # let it equals to one if only one segment
+    # the number of stop-point plus last segment(one) equals segment number
+    # let it equals to one if only one segment (no stop point within the list)
     if num_stop_point > 0:
         num_segment = int(math.ceil(num_stop_point) + 1)
     else:
