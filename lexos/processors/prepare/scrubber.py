@@ -597,14 +597,10 @@ def keep_words(text: str, non_removal_string: str) -> str:
     keep_list = split_input_word_string(input_string=non_removal_string)
 
     split_lines = text.split("\n")
-    text_list = []  # list of words and ""
-    for line in split_lines:
-        line = line.strip()
-        tokens = re.split('\s', line, re.UNICODE)
-        text_list.extend(tokens)
-
-    # get rid of empty strings in text_list
-    word_list = [word for word in text_list if word != '']
+    word_list = [word
+                 for line in split_lines
+                 for word in re.split('\s', line, re.UNICODE)
+                 if word != '']
 
     # remove_list is a copy of word_list without the keepwords
     remove_list = [word for word in word_list if word not in keep_list]
