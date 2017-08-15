@@ -3,7 +3,7 @@
 + Ancrene Wisse. Edited by Robert Hasenfratz (2003)
   http://www.lib.rochester.edu/camelot/teams/hasenfratz.htm
 
-+ Hali Meiðhad. From the Middle English Compendium. Edited by O. Cockayne; rev. F.J. Furnivall (1922)
++ Hali MeiÃ°had. From the Middle English Compendium. Edited by O. Cockayne; rev. F.J. Furnivall (1922)
   http://quod.lib.umich.edu/cgi/t/text/text-idx?c=cme;cc=cme;view=toc;idno=HMaid
 
 + Juliana. From the Middle English Compendium. Edited by O. Cockayne (1872)
@@ -55,7 +55,7 @@ Steps:
     (a) Remove punctuation
     (b) Make Lowercase
     (c) Remove Digits
-    (d) Click "Consolidations". Enter "ð,þ" (without the quotation marks)
+    (d) Click "Consolidations". Enter "Ã°,Ã¾" (without the quotation marks)
 
     Apply Scrubbing
 (2) CUT all texts into 700 word chunks.
