@@ -1647,7 +1647,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
                                      labels=temp_labels,
                                      dendro_matrix=dtm,
                                      legend=legend,
-                                     folder=folder,
+                                     folder=folder_path,
                                      augmented_dendrogram=augmented_dendrogram,
                                      show_dendro_legends=show_dendro_legends)
 
