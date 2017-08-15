@@ -1632,11 +1632,6 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
         legend = get_dendrogram_legend(file_manager=file_manager,
                                        distance_list=distance_list)
 
-        folder_path = path_join(session_manager.session_folder(),
-                                constants.RESULTS_FOLDER)
-        if not os.path.isdir(folder_path):
-            makedirs(folder_path)
-
         pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
             distance_min, monocrit_max, monocrit_min, threshold = \
             dendrogrammer.dendrogram(orientation=orientation,
@@ -1647,7 +1642,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
                                      labels=temp_labels,
                                      dendro_matrix=dtm,
                                      legend=legend,
-                                     folder=folder_path,
+                                     folder=folder,
                                      augmented_dendrogram=augmented_dendrogram,
                                      show_dendro_legends=show_dendro_legends)
 
