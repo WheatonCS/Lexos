@@ -48,7 +48,7 @@ Steps:
     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
     (b) Give a Title
     (c) Edit Labels (optional, but recommended)
-    (d) default tokenization (word 1-grams) and normalization (Proportional)
+    (d) default tokenization (token 1-grams) and normalization (Proportional)
     (e) Get Dendrogram
     (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
 
