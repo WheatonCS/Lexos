@@ -328,75 +328,23 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
     # TODO: n_init probably should be determined based on number of files
+    # performs the kmeans analysis
     k_means = KMeans(init=init_method,
                      max_iter=max_iter,
                      tol=tolerance,
                      n_init=n_init,
                      n_clusters=k)
-    kmeans_index = k_means.fit_predict(reduced_data)
-    best_index = kmeans_index.tolist()
-    full_coord_list = reduced_data.tolist()
 
-    centroid_coords = [_get_voronoi_plot_data_(
+    # calculates the centroid points list
+    kmeans_index = k_means.fit_predict(reduced_data)
+    centroid_coordinates = [_get_voronoi_plot_data_(
         data=reduced_data, data_index=np.where(kmeans_index == index))
         for index in np.unique(kmeans_index)]
-    """
-    for index in np.unique(kmeans_index):
-        temp_data = [reduced_data[index]
-                     for index in np.where(kmeans_index == index)]
-        temp_data = temp_data[0].transpose()
-        result = np.average(temp_data, axis=1)
+
+    best_index = kmeans_index.tolist()
 
 
-    # temp_data = [data[index] for index in data_index]
-    # result = np.average(temp_data[0].transpose, axis=1)
 
-
-    # make an array centroid_groups whose elements are the coords that belong
-    # to each centroid
-    i = 1
-    seen = [best_index[0]]
-    # make a list of k lists, one for each cluster
-    centroid_groups = [[] for _ in range(k)]
-    # Group the centroids based on their cluster number
-    centroid_groups[best_index[0]].append((full_coord_list[0]))
-
-    while i < len(best_index):
-        if best_index[i] in seen:
-            centroid_groups[best_index[i]].append(full_coord_list[i])
-            i += 1
-        else:
-            seen.append(best_index[i])
-            centroid_groups[best_index[i]].append(full_coord_list[i])
-            i += 1
-
-    # Separate the x an y coordinates to calculate the centroid
-    xs_list = []
-    ys_list = []
-    for i in range(0, len(centroid_groups)):
-        temp_x_coord_list = []
-        temp_y_coord_list = []
-        for j in range(0, len(centroid_groups[i])):
-            temp_x_coord = centroid_groups[i][j][0]
-            temp_x_coord_list.append(temp_x_coord)
-            temp_y_coord = centroid_groups[i][j][1]
-            temp_y_coord_list.append(temp_y_coord)
-        xs_list.append(temp_x_coord_list)
-        ys_list.append(temp_y_coord_list)
-
-    # calculate the coordinates for the centroid
-    centroid_coords = []
-    for i in range(0, len(xs_list)):
-        if len(xs_list[i]) == 1:
-            # each element in xslist is a list, but we need an int
-            temp1 = xs_list[i][0]
-            # each element in yslist is a list, but we need an int
-            temp2 = ys_list[i][0]
-            centroid_coords.append([temp1, temp2])
-        else:
-            centroid_coord = get_centroid(xs_list[i], ys_list[i])
-            centroid_coords.append(centroid_coord)
-    """
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
     orig_xs = xs.tolist()
@@ -468,7 +416,7 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     final_points_list = translate_points_to_positive(xs, ys, trans_x, trans_y)
 
     final_centroids_list = translate_centroids_to_positive(
-        centroid_coords, trans_x, trans_y)
+        centroid_coordinates, trans_x, trans_y)
 
     # Starts with a dummy point set off the screen to get rid of yellow mouse
     # tracking action (D3)
