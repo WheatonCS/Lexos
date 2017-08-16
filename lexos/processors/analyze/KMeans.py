@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from os.path import join as pathjoin
+from os.path import join as path_join
 from typing import Union
 
 import matplotlib.pyplot as plt
@@ -12,8 +12,10 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 
 
-def _get_voronoi_plot_data_(data: np.ndarray, data_index: np.ndarray):
-    temp_data = [data[item] for _, item in enumerate(data_index)]
+def _get_voronoi_plot_data_(data: np.ndarray,
+                            group_index: np.ndarray) -> np.ndarray:
+
+    temp_data = [data[item] for _, item in enumerate(group_index)]
     result = np.average(temp_data[0].transpose(), axis=1)
     return result
 
@@ -193,7 +195,7 @@ def get_k_means_pca(
         plt.text(x, y, name, color=color)
 
     # save the plot
-    plt.savefig(pathjoin(folder_path, KMEANS_GRAPH_FILENAME))
+    plt.savefig(path_join(folder_path, KMEANS_GRAPH_FILENAME))
 
     # close the plot so next one doesn't plot over the last one
     plt.close()
@@ -257,7 +259,7 @@ def get_k_means_pca(
     sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
     sm_html = html.replace("___", sm_div)
 
-    html_file = open(pathjoin(folder_path, PCA_SMALL_GRAPH_FILENAME),
+    html_file = open(path_join(folder_path, PCA_SMALL_GRAPH_FILENAME),
                      "w",
                      encoding='utf-8')
     html_file.write(sm_html)
@@ -270,7 +272,7 @@ def get_k_means_pca(
     lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
     lg_html = html.replace("___", lg_div)
 
-    html_file = open(pathjoin(folder_path, PCA_BIG_GRAPH_FILENAME),
+    html_file = open(path_join(folder_path, PCA_BIG_GRAPH_FILENAME),
                      "w",
                      encoding='utf-8')
     html_file.write(lg_html)
@@ -325,12 +327,10 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     # calculates the centroid points list
     kmeans_index = k_means.fit_predict(reduced_data)
     centroid_coordinates = [_get_voronoi_plot_data_(
-        data=reduced_data, data_index=np.where(kmeans_index == index))
+        data=reduced_data, group_index=np.where(kmeans_index == index))
         for index in np.unique(kmeans_index)]
 
     best_index = kmeans_index.tolist()
-
-
 
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
