@@ -329,13 +329,32 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
                      n_init=n_init,
                      n_clusters=k)
     kmeans_index = k_means.fit_predict(reduced_data)
+    best_index = kmeans_index.tolist()
 
     # calculates the centroid points list
     centroid_coordinates = [_get_voronoi_plot_data_(
         data=reduced_data, group_index=np.where(kmeans_index == index))
         for index in np.unique(kmeans_index)]
 
-    best_index = kmeans_index.tolist()
+    # generates values to translate x, y coordinates
+    translate_x = abs(min(reduced_data[:, 0])) + 100
+    translate_y = abs(min(reduced_data[:, 1])) + 100
+
+    # create final points coordinates list to plot
+    final_points_list = np.copy(reduced_data)
+    final_points_list[:, 0] += translate_x
+    final_points_list[:, 1] += translate_y
+    max_x = max(final_points_list[:, 0])
+    final_points_list = final_points_list.tolist()
+
+    # create final centroids coordinates list
+    final_centroids_list = [[item[0] + translate_x, item[1] + translate_y]
+                            for index, item in enumerate(centroid_coordinates)]
+    final_centroids_list.insert(0, [-500, -500])
+
+    # create text data
+    text_data = [{"x": item[0], "y": item[1], "title": labels[index]}
+                 for index, item in enumerate(final_points_list)]
 
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -357,11 +376,11 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
         orig_xs, orig_ys, trans_x, trans_y)
 
     # Find the max coordinate to help determine the width (D3)
-    max_x = max(transXs)
-    text_data = []
+    max_x1 = max(transXs)
+    text_data1 = []
     for i in range(0, len(orig_xs)):
         temp = text_attrs_dictionary(labels[i], transXs[i], transYs[i])
-        text_data.append(temp)
+        text_data1.append(temp)
 
     # Make a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
@@ -405,14 +424,14 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
         temp2 = "rgb" + str(temp) + "#"
         color_chart += temp2
 
-    final_points_list = translate_points_to_positive(xs, ys, trans_x, trans_y)
+    final_points_list1 = translate_points_to_positive(xs, ys, trans_x, trans_y)
 
-    final_centroids_list = translate_centroids_to_positive(
+    final_centroids_list1 = translate_centroids_to_positive(
         centroid_coordinates, trans_x, trans_y)
 
     # Starts with a dummy point set off the screen to get rid of yellow mouse
     # tracking action (D3)
-    final_centroids_list.insert(0, [-500, -500])
+    final_centroids_list1.insert(0, [-500, -500])
 
     # calculate silhouette score
     silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
