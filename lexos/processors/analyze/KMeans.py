@@ -12,19 +12,6 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 
 
-def _get_voronoi_plot_data_(data: np.ndarray,
-                            group_index: np.ndarray) -> np.ndarray:
-    """Generate the data needed to be plotted in voronoi analysis method.
-
-    :param data: the reduced data analyzed by the k-means method
-    :param group_index: index for the results that are in the same group
-    :return: the centroid analysis data
-    """
-    temp_data = [data[item] for _, item in enumerate(group_index)]
-    result = np.average(temp_data[0].transpose(), axis=1)
-    return result
-
-
 def translate_points_to_positive(xs, ys, trans_x, trans_y):
     coord_list = []
     for i in range(0, len(xs)):
@@ -80,6 +67,19 @@ def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
                                                     labels=labels,
                                                     metric=metric_dist)
         return round(silhouette_score, ROUND_DIGIT)
+
+
+def _get_voronoi_plot_data_(data: np.ndarray,
+                            group_index: np.ndarray) -> np.ndarray:
+    """Generate the data needed to be plotted in voronoi analysis method.
+
+    :param data: the reduced data analyzed by the k-means method
+    :param group_index: index for the results that are in the same group
+    :return: the centroid analysis data
+    """
+    temp_data = [data[item] for _, item in enumerate(group_index)]
+    result = np.average(temp_data[0].transpose(), axis=1)
+    return result
 
 
 # Gets called from generateKMeansPCA() in utility.py
@@ -328,9 +328,9 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
                      tol=tolerance,
                      n_init=n_init,
                      n_clusters=k)
+    kmeans_index = k_means.fit_predict(reduced_data)
 
     # calculates the centroid points list
-    kmeans_index = k_means.fit_predict(reduced_data)
     centroid_coordinates = [_get_voronoi_plot_data_(
         data=reduced_data, group_index=np.where(kmeans_index == index))
         for index in np.unique(kmeans_index)]
