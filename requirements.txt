@@ -1,6 +1,7 @@
 gensim
 flask-assets
 cssmin
+jsmin
 beautifulsoup4
 chardet
 natsort
