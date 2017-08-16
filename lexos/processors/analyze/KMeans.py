@@ -12,38 +12,6 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 
 
-def translate_points_to_positive(xs, ys, trans_x, trans_y):
-    coord_list = []
-    for i in range(0, len(xs)):
-        xs[i] += trans_x
-        ys[i] += trans_y
-        coord_list.append([xs[i], ys[i]])
-
-    return coord_list
-
-
-def translate_coords_to_positive(xs, ys, trans_x, trans_y):
-    for i in range(0, len(xs)):
-        xs[i] += trans_x
-        ys[i] += trans_y
-    return xs, ys
-
-
-def translate_centroids_to_positive(coords, trans_x, trans_y):
-    coord_list = []
-    for i in range(0, len(coords)):
-        coords[i][0] += trans_x
-        coords[i][1] += trans_y
-        coord_list.append([coords[i][0], coords[i][1]])
-
-    return coord_list
-
-
-def text_attrs_dictionary(title, x, y):
-    attr_dict = {"x": x, "y": y, "title": title}
-    return attr_dict
-
-
 def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
                            metric_dist: str) -> Union[str, float]:
     """Generates silhouette score based on the KMeans algorithm.
