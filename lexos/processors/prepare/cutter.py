@@ -58,8 +58,8 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
 
     # return the whole list of segment while evaluating whether is last segment
     return [get_single_seg(
-                index=index,
-                is_last_prop=True if index == num_segment - 1 else False
+            index=index,
+            is_last_prop=True if index == num_segment - 1 else False
             ) for index in range(num_segment)]
 
 
