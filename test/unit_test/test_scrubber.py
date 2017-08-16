@@ -718,6 +718,9 @@ class TestRemoveStopwords:
         assert remove_stopwords(self.test_string, "long,to") == \
             "This is a 'long' story. It is time for this story end " \
             "to-night. end."
+        assert remove_stopwords(
+            "  Weird \t\t spacing\n\t\nhere   \tin\n\n\nthis\n \t text",
+            "Weird, here, in, text") == "  \t\t spacing\n\t   \n\n\nthis\n \t"
 
     def test_remove_stopwords_edge(self):
         assert remove_stopwords(self.test_string, "") == self.test_string
@@ -767,6 +770,10 @@ class TestKeepWords:
         assert keep_words(
             "Test\u1680unicode\u205Fwhite\u2007spaces\u2001now",
             "unicode, white, now") == "\u1680unicode\u205Fwhite\u2001now"
+        assert keep_words(
+            "Test\nsome\t\tkeep words\n\nwhitespace\tpreservation\nwith  this"
+            "\t sentence \n now", "Test, keep, whitespace, with, this, now") \
+            == "Test\t\tkeep\n\nwhitespace\nwith  this\t \n now"
 
     def test_keep_words_punctuation(self):
         assert keep_words(self.test_string_period, "here") == ""
