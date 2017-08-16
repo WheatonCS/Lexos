@@ -18,19 +18,6 @@ def _get_voronoi_plot_data_(data: np.ndarray, data_index: np.ndarray):
     return result
 
 
-def get_centroid(xs, ys):
-    if len(xs) is not 0:
-        centroid_x = sum(xs) / len(xs)
-    else:
-        centroid_x = 0
-    if len(ys) is not 0:
-        centroid_y = sum(ys) / len(ys)
-    else:
-        centroid_y = 0
-    centroid = [centroid_x, centroid_y]
-    return centroid
-
-
 def translate_points_to_positive(xs, ys, trans_x, trans_y):
     coord_list = []
     for i in range(0, len(xs)):
