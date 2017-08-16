@@ -688,6 +688,9 @@ class TestDeleteWords:
         assert delete_words(
             "Using\u200Aunicode\u3000whitespace\u2004!\u2008?",
             ["Using", "whitespace", "?"]) == "\u200Aunicode\u2004!"
+        assert delete_words(
+            "test test. test? test! test$ test* ^test test",
+            ["test.", "test$", "^test", "test!"]) == "test test? test* test"
 
 
 class TestRemoveStopwords:
