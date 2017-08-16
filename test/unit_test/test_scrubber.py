@@ -1,5 +1,5 @@
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 from lexos.processors.prepare.scrubber import replacement_handler, \
     get_remove_whitespace_map, make_replacer, get_remove_punctuation_map, \
@@ -125,12 +125,6 @@ class TestReplacementHandlerAlone:
             text=self.test_string, replacer_string="g:", is_lemma=False) == \
             "Test strin is testin"
         assert replacement_handler(
-            text=self.test_string, replacer_string=":", is_lemma=False) == \
-            self.test_string
-        assert replacement_handler(
-            text=self.test_string, replacer_string=":k", is_lemma=False) == \
-            "kTkeksktk ksktkrkiknkgk kiksk ktkeksktkiknkgk"
-        assert replacement_handler(
             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
             is_lemma=False) == "   "
         assert replacement_handler(
@@ -180,6 +174,17 @@ class TestReplacementHandlerAlone:
                 is_lemma=False)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
+        # No argument on left of colon
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string=":k", is_lemma=False)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string=":", is_lemma=False)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
 
     def test_not_lemma_spacing(self):
         assert replacement_handler(
@@ -217,12 +222,6 @@ class TestReplacementHandlerAlone:
         assert replacement_handler(
             text=self.test_string, replacer_string="is:", is_lemma=True) == \
             "Test string  testing"
-        # assert replacement_handler(
-        #     text=self.test_string, replacer_string=":word", is_lemma=True) == \
-        #     "wordTestword wordstringword wordisword wordtestingword"
-        assert replacement_handler(
-            text=self.test_string, replacer_string=":", is_lemma=True) == \
-            self.test_string
         # Missing/too many colons
         try:
             replacement_handler(
@@ -254,6 +253,17 @@ class TestReplacementHandlerAlone:
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
+        # No argument on left of colon
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string=":word", is_lemma=True)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
+        try:
+            replacement_handler(
+                text=self.test_string, replacer_string=":", is_lemma=True)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
 
     def test_replacement_handler_regex(self):
         assert replacement_handler(
