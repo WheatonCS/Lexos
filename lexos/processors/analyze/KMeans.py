@@ -14,7 +14,12 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
 
 def _get_voronoi_plot_data_(data: np.ndarray,
                             group_index: np.ndarray) -> np.ndarray:
+    """Generate the data needed to be plotted in voronoi analysis method.
 
+    :param data: the reduced data analyzed by the k-means method
+    :param group_index: index for the results that are in the same group
+    :return: the centroid analysis data
+    """
     temp_data = [data[item] for _, item in enumerate(group_index)]
     result = np.average(temp_data[0].transpose(), axis=1)
     return result
