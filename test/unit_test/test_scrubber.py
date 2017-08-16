@@ -255,12 +255,12 @@ class TestReplacementHandlerAlone:
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
 
-    # def test_replacement_handler_regex(self):
-    #     assert replacement_handler(
-    #         text="words ^words words$ word. wordss words+ words",
-    #         replacer_string="^words:things\nwords$:junk\nword.:stuff\n"
-    #                         "words+:text", is_lemma=True) == \
-    #            "words things junk stuff wordss text words"
+    def test_replacement_handler_regex(self):
+        assert replacement_handler(
+            text="words ^words words$ word. wordss words+ words",
+            replacer_string="^words:things\nwords$:junk\nword.:stuff\n"
+                            "words+:text", is_lemma=True) == \
+               "words things junk stuff wordss text words"
 
 
 class TestReplacementHandlerWithMergeStrings:
