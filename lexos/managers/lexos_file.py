@@ -283,8 +283,9 @@ class LexosFile:
             else:
                 parent.options['scrub'] = {}
 
-    def cut_contents(self) -> str:
-        """Cuts contents of the file according to options chosen by the user.
+    def cut_contents(self) -> List[str]:
+        """
+        Cuts the contents of the file according to options chosen by the user.
 
         :return: the substrings that the file contents have been cut up into.
         """
@@ -309,7 +310,7 @@ class LexosFile:
             cutting_value=cutting_value,
             cutting_type=cutting_type,
             overlap=overlap,
-            last_prop=last_prop)
+            last_prop_percent=last_prop)
 
         return text_strings
 
