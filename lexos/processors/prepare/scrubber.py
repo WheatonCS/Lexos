@@ -175,13 +175,16 @@ def replacement_handler(
 
         # Lemmas are words with boundary space, other replacements are chars
         if is_lemma:
-            edge = r'\b'
+            edge1 = r'(^|\s)('
+            edge2 = r')(?=\s|$)'
         else:
-            edge = ''
+            edge1 = '()'
+            edge2 = '()'
 
         for change_me in replace_from_list:
-            the_regex = re.compile(edge + change_me + edge, re.UNICODE)
-            text = the_regex.sub(replace_to_str, text)
+            the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
+                                   re.UNICODE)
+            text = the_regex.sub('\g<1>' + replace_to_str, text)
 
     return text
 
