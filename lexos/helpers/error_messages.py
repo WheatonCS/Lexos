@@ -23,4 +23,6 @@ NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Colon error on one or more replacement " \
                                     "lines"
 REPLACEMENT_RIGHT_OPERAND_MESSAGE = "Too many values on right side of " \
                                     "replacement string"
+REPLACEMENT_NO_LEFTHAND_MESSAGE = "Missing value on the left side of " \
+                                  "replacement string"
 EMPTY_STRING_MESSAGE = "the string should not be empty"
