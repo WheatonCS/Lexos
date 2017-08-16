@@ -261,6 +261,12 @@ class TestReplacementHandlerAlone:
             replacer_string="^words:things\nwords$:junk\nword.:stuff\n"
                             "words+:text", is_lemma=True) == \
                "words things junk stuff wordss text words"
+        assert replacement_handler(
+            text="Hello there.", replacer_string=".,l:!\n", is_lemma=False) \
+            == "He!!o there!"
+        assert replacement_handler(
+            text="Test^ t$ext te?xt", replacer_string="^:>\n$:%\n?:&",
+            is_lemma=False) == "Test> t%ext te&xt"
 
 
 class TestReplacementHandlerWithMergeStrings:
