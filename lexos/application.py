@@ -48,6 +48,7 @@ def get_secret_key(file_name: str = 'secret_key') -> bytes:
         return open(file_full_name, 'rb').read()
 
 
+# create flask app and add basic configuration
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 app.config['MAX_CONTENT_LENGTH'] = lexos.helpers.constants.MAX_FILE_SIZE
@@ -60,6 +61,7 @@ app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
+
 
 # register all the blue prints
 # they helps us to manage groups of views
@@ -80,6 +82,7 @@ app.register_blueprint(stats_view)
 app.register_blueprint(tokenizer_view)
 app.register_blueprint(top_words_view)
 app.register_blueprint(word_cloud_view)
+
 
 # implement flask webassets
 env = Environment(app)
