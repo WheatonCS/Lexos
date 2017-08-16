@@ -350,37 +350,13 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     # create final centroids coordinates list
     final_centroids_list = [[item[0] + translate_x, item[1] + translate_y]
                             for index, item in enumerate(centroid_coordinates)]
+    # starts with a dummy point set off the screen to get rid of yellow mouse
+    # tracking action (D3)
     final_centroids_list.insert(0, [-500, -500])
 
     # create text data
     text_data = [{"x": item[0], "y": item[1], "title": labels[index]}
                  for index, item in enumerate(final_points_list)]
-
-    xs, ys = reduced_data[:, 0], reduced_data[:, 1]
-
-    orig_xs = xs.tolist()
-    orig_ys = ys.tolist()
-
-    # Looks the same as above but necessary because neither can be manipulated
-    # more than once
-    xs = xs.tolist()
-    ys = ys.tolist()
-
-    # Translate every coordinate to positive as svg starts at top left with
-    # coordinate (0,0)
-
-    trans_x = abs(min(xs)) + 100
-    trans_y = abs(min(ys)) + 100
-
-    transXs, transYs = translate_coords_to_positive(
-        orig_xs, orig_ys, trans_x, trans_y)
-
-    # Find the max coordinate to help determine the width (D3)
-    max_x1 = max(transXs)
-    text_data1 = []
-    for i in range(0, len(orig_xs)):
-        temp = text_attrs_dictionary(labels[i], transXs[i], transYs[i])
-        text_data1.append(temp)
 
     # Make a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
@@ -423,15 +399,6 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
         temp = tuple(ordered_color_list[i])
         temp2 = "rgb" + str(temp) + "#"
         color_chart += temp2
-
-    final_points_list1 = translate_points_to_positive(xs, ys, trans_x, trans_y)
-
-    final_centroids_list1 = translate_centroids_to_positive(
-        centroid_coordinates, trans_x, trans_y)
-
-    # Starts with a dummy point set off the screen to get rid of yellow mouse
-    # tracking action (D3)
-    final_centroids_list1.insert(0, [-500, -500])
 
     # calculate silhouette score
     silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
