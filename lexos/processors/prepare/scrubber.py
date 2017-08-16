@@ -173,10 +173,11 @@ def replacement_handler(
 
         replace_from_list = replace_from_str.split(",")
 
-        # Lemmas are words with boundary space, other replacements are chars
+        # Lemmas are words surrounded by whitespace, while other
+        # replacements are chars
         if is_lemma:
-            edge1 = r'(^|\s)('
-            edge2 = r')(?=\s|$)'
+            edge1 = r'(^|\s)('    # Beginning of the string or whitespace
+            edge2 = r')(?=\s|$)'  # Whitespace or end of the string
         else:
             edge1 = '()'
             edge2 = '()'
@@ -184,6 +185,8 @@ def replacement_handler(
         for change_me in replace_from_list:
             the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
                                    re.UNICODE)
+            # Replaces the second capturing group (change_me) with
+            # replace_to_str and preserves the whitespace in the first group
             text = the_regex.sub('\g<1>' + replace_to_str, text)
 
     return text
