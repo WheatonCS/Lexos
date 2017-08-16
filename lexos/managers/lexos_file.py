@@ -2,7 +2,7 @@ import re
 import textwrap
 from os import remove
 from os.path import join as pathjoin
-from typing import Dict
+from typing import Dict, List
 
 from flask import request
 from lexos.helpers import general_functions, constants
@@ -366,7 +366,7 @@ class LexosFile:
             else:
                 parent.options['scrub'] = {}
 
-    def cut_contents(self) -> str:
+    def cut_contents(self) -> List[str]:
         """
         Cuts the contents of the file according to options chosen by the user.
 
@@ -396,7 +396,7 @@ class LexosFile:
             cutting_value=cutting_value,
             cutting_type=cutting_type,
             overlap=overlap,
-            last_prop=last_prop)
+            last_prop_percent=last_prop)
 
         return text_strings
 
