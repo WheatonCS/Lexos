@@ -12,6 +12,12 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 
 
+def _get_voronoi_plot_data_(data: np.ndarray, data_index: np.ndarray):
+    temp_data = [data[item] for _, item in enumerate(data_index)]
+    result = np.average(temp_data[0].transpose(), axis=1)
+    return result
+
+
 def get_centroid(xs, ys):
     if len(xs) is not 0:
         centroid_x = sum(xs) / len(xs)
@@ -331,6 +337,21 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     best_index = kmeans_index.tolist()
     full_coord_list = reduced_data.tolist()
 
+    centroid_coords = [_get_voronoi_plot_data_(
+        data=reduced_data, data_index=np.where(kmeans_index == index))
+        for index in np.unique(kmeans_index)]
+    """
+    for index in np.unique(kmeans_index):
+        temp_data = [reduced_data[index]
+                     for index in np.where(kmeans_index == index)]
+        temp_data = temp_data[0].transpose()
+        result = np.average(temp_data, axis=1)
+
+
+    # temp_data = [data[index] for index in data_index]
+    # result = np.average(temp_data[0].transpose, axis=1)
+
+
     # make an array centroid_groups whose elements are the coords that belong
     # to each centroid
     i = 1
@@ -375,7 +396,7 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
         else:
             centroid_coord = get_centroid(xs_list[i], ys_list[i])
             centroid_coords.append(centroid_coord)
-
+    """
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
     orig_xs = xs.tolist()
