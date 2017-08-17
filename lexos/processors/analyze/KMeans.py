@@ -17,13 +17,13 @@ def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
     """Generates silhouette score based on the KMeans algorithm.
 
     This function returns a proper message if it is under the condition where
-    it cannot perform the calculation on finding silhouette score
-    :param k: k-value for k-means analysis
-    :param matrix: a 2D numpy matrix that contains word counts
-    :param k_means: a KMeans class object
-    :param metric_dist: method of the distance metric
+    it cannot perform the calculation on finding silhouette score.
+    :param k: k-value for k-means analysis.
+    :param matrix: a 2D numpy matrix that contains word counts.
+    :param k_means: a KMeans class object.
+    :param metric_dist: method of the distance metric.
     :return: the calculated silhouette score or a proper message if the
-             conditions for calculation were not met
+             conditions for calculation were not met.
     """
     if k <= 2:
         return "N/A [Not available for K ≤ 2]"
@@ -258,11 +258,11 @@ def get_k_means_pca(count_matrix: np.ndarray,
 
 def _get_voronoi_plot_data_(data: np.ndarray,
                             group_index: np.ndarray) -> np.ndarray:
-    """Generate the data needed to be plotted in voronoi analysis method.
+    """Generates the data needed to be plotted in voronoi analysis method.
 
-    :param data: the reduced data analyzed by the k-means method
-    :param group_index: index for the results that are in the same group
-    :return: the centroid analysis data
+    :param data: the reduced data analyzed by the k-means method.
+    :param group_index: index for the results that are in the same group.
+    :return: the centroid analysis data.
     """
     temp_data = [data[item] for _, item in enumerate(group_index)]
     result = np.average(temp_data[0].transpose(), axis=1)
@@ -283,14 +283,14 @@ class GetKMeansVoronoi:
 
         This function also finds a list of points for the centroids, and a list
         of points for the segments.
-        :param count_matrix: a 2D numpy matrix contains the word counts
-        :param n_init: number of iterations with different centroids
-        :param k_value: k value-for k-means analysis
-        :param max_iter: maximum number of iterations
-        :param tolerance: relative tolerance, inertia to declare convergence
-        :param init_method: method of initialization: "K++" or "random"
-        :param metric_dist: method of the distance metrics
-        :param labels: file names of active files
+        :param count_matrix: a 2D numpy matrix contains the word counts.
+        :param n_init: number of iterations with different centroids.
+        :param k_value: k value-for k-means analysis.
+        :param max_iter: maximum number of iterations.
+        :param tolerance: relative tolerance, inertia to declare convergence.
+        :param init_method: method of initialization: "K++" or "random".
+        :param metric_dist: method of the distance metrics.
+        :param labels: file names of active files.
         """
         # finds xy coordinates for each segment
         reduced_data = PCA(n_components=2).fit_transform(count_matrix)
