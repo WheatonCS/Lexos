@@ -8,9 +8,10 @@ js-all:
 
 js-lib:
   contents:
+    - node_modules/jquery/dist/jquery.min.js
+    - node_modules/bootstrap/dist/js/bootstrap.min.js
     - node_modules/jquery-ui/ui/**/*.js
     - node_modules/d3/d3.min.js
-    - node_modules/bootstrap/dist/js/bootstrap.min.js
     - node_modules/smartmenus/dist/jquery.smartmenus.min.js
     - node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js
     - js/jquery.dataTables.areaselect.js
