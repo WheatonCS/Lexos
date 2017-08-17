@@ -7,7 +7,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-contextmenu": "1.0.0",
     "bootstrap-switch": "^3.3.4",
-    "canvg": "canvg/canvg#v1.4",
+    "canvg": "git://github.com/canvg/canvg",
     "d3": "^3.5.17",
     "d3-cloud": "^1.2.4",
     "datatables.net": "^1.10.15",
