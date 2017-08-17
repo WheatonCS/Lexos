@@ -1,9 +1,10 @@
 css-all:
   contents:
-    - css/*.css
     - node_modules/jquery-ui/themes/base/*.css
     - node_modules/bootstrap/dist/css/bootstrap.min.css
     - node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css
     - node_modules/font-awesome/css/font-awesome.min.css
+    - css/*.css
+
   filter: cssmin
   output: build/all.css
