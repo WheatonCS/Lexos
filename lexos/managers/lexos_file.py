@@ -128,7 +128,7 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        if re.search('Project Gutenberg', file_contents):
+        if re.search("\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*", file_contents):
             return True
         else:
             return False
