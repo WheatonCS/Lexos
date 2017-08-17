@@ -666,11 +666,12 @@ def generate_k_means_pca(file_manager: FileManager):
 # Gets called from kmeans() in lexos_core.py
 
 
-def generate_k_means_voronoi(file_manager: FileManager):
+def generate_k_means_voronoi(file_manager: FileManager) -> \
+        KMeans.getKMeansVoronoi:
     """Generates a table of cluster number and file name from the active files.
 
     :param file_manager: A FileManager object (see managers/file_manager.py)
-
+    :return:
     Returns:
         kmeans_index: a list of index of the closest center of the file
         siltt_score: a float of silhouette score based on KMeans algorithm
@@ -721,6 +722,7 @@ def generate_k_means_voronoi(file_manager: FileManager):
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
+    # generates the data
     k_means_voronoi_data = KMeans.getKMeansVoronoi(count_matrix=count_matrix,
                                                    n_init=n_init,
                                                    k_value=k_value,
