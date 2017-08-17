@@ -139,6 +139,26 @@ def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
     return replacer
 
 
+def make_replacements(text, replace_from, replace_to, is_lemma):
+    # Lemmas are words surrounded by whitespace, while other
+    # replacements are chars
+    if is_lemma:
+        edge1 = r'(^|\s)('  # Beginning of the string or whitespace
+        edge2 = r')(?=\s|$)'  # Whitespace or end of the string
+    else:
+        edge1 = '()'
+        edge2 = '()'
+
+    for change_me in replace_from:
+        the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
+                               re.UNICODE)
+        # Replaces the second capturing group (change_me) with
+        # replace_to_str and preserves the whitespace in the first group
+        text = the_regex.sub('\g<1>' + replace_to, text)
+
+    return text
+
+
 def replacement_handler(
         text: str, replacer_string: str, is_lemma: bool) -> str:
     """Handles replacement lines found in the scrub-alteration-upload files.
@@ -176,21 +196,9 @@ def replacement_handler(
 
         replace_from_list = replace_from_str.split(",")
 
-        # Lemmas are words surrounded by whitespace, while other
-        # replacements are chars
-        if is_lemma:
-            edge1 = r'(^|\s)('    # Beginning of the string or whitespace
-            edge2 = r')(?=\s|$)'  # Whitespace or end of the string
-        else:
-            edge1 = '()'
-            edge2 = '()'
-
-        for change_me in replace_from_list:
-            the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
-                                   re.UNICODE)
-            # Replaces the second capturing group (change_me) with
-            # replace_to_str and preserves the whitespace in the first group
-            text = the_regex.sub('\g<1>' + replace_to_str, text)
+        text = make_replacements(
+            text=text, replace_from=replace_from_list,
+            replace_to=replace_to_str, is_lemma=is_lemma)
 
     return text
 
