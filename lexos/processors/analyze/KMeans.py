@@ -340,47 +340,6 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
         ordered_color_list1[item] = rgb_tuples[index]
     color_chart = "rgb" + "#rgb".join(map(str, rgb_tuples)) + "#"
 
-    color_list = color_list.tolist()
-
-    # Convert rgba to rgb (all a's are 1 and as such are unnecessary)
-    for rgba in color_list:
-        del rgba[-1]
-
-    # Make the values tuples
-    rgb_tuples = []
-    for i in range(0, len(color_list)):
-        rgb_tuples.append(tuple(color_list[i]))
-
-    # Order the colors based on cluster number so colors in Voronoi correspond
-    # to colors in table
-    seen2 = [best_index[0]]
-
-    no_repeats = [best_index[0]]
-    for i in range(1, len(best_index)):
-        if best_index[i] not in seen2:
-            seen2.append(best_index[i])
-            no_repeats.append(best_index[i])
-
-
-    ordered_color_list = [None] * k
-
-    for i in range(0, len(no_repeats)):
-        ordered_color_list[no_repeats[i]] = color_list[i]
-    color_chart1 = "rgb" + "#rgb".join(map(str, ordered_color_list1)) + "#"
-    # make a string of rgb tuples to send to the javascript separated by #
-    # cause jinja hates lists of strings
-    color_chart = ''
-
-    for i in range(0, len(ordered_color_list)):
-        for j in range(0, 3):
-            # Browser needs rgb tuples with int values 0-255 we have rgb tuples
-            # of floats 0-1
-            ordered_color_list[i][j] = int(ordered_color_list[i][j] * 255)
-
-        temp = tuple(ordered_color_list[i])
-        temp2 = "rgb" + str(temp) + "#"
-        color_chart += temp2
-
     # calculate silhouette score
     silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
                                               metric_dist=metric_dist,
