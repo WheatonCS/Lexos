@@ -2,12 +2,13 @@ from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 from lexos.processors.prepare.scrubber import replacement_string_handler, \
-    get_remove_whitespace_map, make_replacer, get_remove_punctuation_map, \
+    get_remove_whitespace_map, get_remove_punctuation_map, \
     get_remove_digits_map, get_all_punctuation_map, delete_words, \
     handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
-    merge_file_and_manual_strings, remove_stopwords, keep_words
+    merge_file_and_manual_strings, remove_stopwords, keep_words, \
+    replacement_dict_handler
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -33,59 +34,79 @@ class TestGetSpecialCharDictFromFile:
 
 # handle_special_characters
 
+# make_replacements
 
-class TestMakeReplacer:
+
+class TestReplacementDictHandler:
     not_special_string = "This string contains no special chars?!\nWow."
 
-    def test_make_replacer_doe_sgml(self):
-        r = make_replacer(replacements=chars.DOE_SGML)
-        assert r(self.not_special_string) == self.not_special_string
-        assert r(chars.DOE_SGML_KEYS) == chars.DOE_SGML_VALS
-        assert r(
-            "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
-            "characters!&eacute;;") == \
+    def test_dict_handler_doe_sgml(self):
+        assert replacement_dict_handler(
+            text=self.not_special_string, conversion_dict=chars.DOE_SGML) == \
+            self.not_special_string
+        assert replacement_dict_handler(
+            text=chars.DOE_SGML_KEYS, conversion_dict=chars.DOE_SGML) == \
+            chars.DOE_SGML_VALS
+        assert replacement_dict_handler(
+            text="Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
+            "characters!&eacute;;", conversion_dict=chars.DOE_SGML) == \
             "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
 
-    def test_make_replacer_early_english_html(self):
-        r = make_replacer(replacements=chars.EE_HTML)
-        assert r(self.not_special_string) == self.not_special_string
-        assert r(chars.EE_HTML_KEYS) == chars.EE_HTML_VALS
-        assert r(
-            "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
-            "characters!&#383;;") == \
+    def test_dict_handler_early_english_html(self):
+        assert replacement_dict_handler(
+            text=self.not_special_string, conversion_dict=chars.EE_HTML) == \
+            self.not_special_string
+        assert replacement_dict_handler(
+            text=chars.EE_HTML_KEYS, conversion_dict=chars.EE_HTML) == \
+            chars.EE_HTML_VALS
+        assert replacement_dict_handler(
+            text="Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
+            "characters!&#383;;", conversion_dict=chars.EE_HTML) == \
             "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
 
-    def test_make_replacer_mufi_3(self):
-        r = make_replacer(replacements=chars.MUFI3)
-        assert r(self.not_special_string) == self.not_special_string
-        assert r(chars.MUFI3_KEYS) == chars.MUFI3_VALS
-        assert r(
-            "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
-            "special characters!&afinslig;;") == \
-            "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
+    def test_dict_handler_mufi_3(self):
+        assert replacement_dict_handler(
+            text=self.not_special_string, conversion_dict=chars.MUFI3) == \
+            self.not_special_string
+    #     assert replacement_dict_handler(
+    #         text=chars.MUFI3_KEYS, conversion_dict=chars.MUFI3) == \
+    #         chars.MUFI3_VALS
+    #     assert replacement_dict_handler(
+    #         text="Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
+    #         "special characters!&afinslig;;", conversion_dict=chars.MUFI3) == \
+    #         "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
+    #
+    # def test_dict_handler_mufi_4(self):
+    #     assert replacement_dict_handler(
+    #         text=self.not_special_string, conversion_dict=chars.MUFI4) == \
+    #         self.not_special_string
+    #     assert replacement_dict_handler(
+    #         text=chars.MUFI4_KEYS, conversion_dict=chars.MUFI4) == \
+    #         chars.MUFI4_VALS
+    #     assert replacement_dict_handler(
+    #         text="Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith "
+    #              "&circledot; special characters!&shy;;",
+    #         conversion_dict=chars.MUFI4) == "Text. ⸤AlternatingꝊ? \ue436\n" \
+    #                                         "With ◌ special characters!\xad;"
 
-    def test_make_replacer_mufi_4(self):
-        r = make_replacer(replacements=chars.MUFI4)
-        assert r(self.not_special_string) == self.not_special_string
-        assert r(chars.MUFI4_KEYS) == chars.MUFI4_VALS
-        assert r(
-            "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
-            "special characters!&shy;;") == \
-            "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad;"
-
-    def test_make_replacer_other(self):
-        # Note that make_replacer() is currently only called within
+    def test_dict_handler_other(self):
+        # Note that replacement_dict_handler() is currently only called within
         # handle_special_characters(), which itself is only called if neither
         # the text field nor the file upload are used in the special characters
-        #  menu on the front end.
+        # menu on the front end.
         # That means these test cases cannot occur under normal usage, but
-        # the fact make_replacer() still works is reassuring
-        r = make_replacer(
-            replacements={'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'})
-        assert r("ythklsv") == "ythklsv"
-        assert r("aeiou") == "zqwpx"
-        assert r("Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;") == \
-            "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
+        # the fact replacement_dict_handler() still works is reassuring
+
+        custom_dict = {'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'}
+
+        assert replacement_dict_handler(
+            text="ythklsv", conversion_dict=custom_dict) == "ythklsv"
+        assert replacement_dict_handler(
+            text="aeiou", conversion_dict=custom_dict) == "zqwpx"
+        assert replacement_dict_handler(
+            text="Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;",
+            conversion_dict=custom_dict) == "Jklt. zghscbmtlsrp? q\nLvdy x " \
+                                            "jgdtbhn srydvlnmfk!w;"
 
 
 class TestReplacementStringHandlerAlone:
