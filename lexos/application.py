@@ -5,10 +5,9 @@ import time
 import traceback
 
 from flask import Flask, request, render_template
+from flask_assets import Environment, YAMLLoader
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
-from webassets import Bundle, Environment
-from webassets.filter import get_filter
 
 import lexos.helpers.constants
 from lexos.helpers.exceptions import LexosException
@@ -85,23 +84,14 @@ app.register_blueprint(word_cloud_view)
 
 
 # implement flask webassets
-env = Environment(app)
-# let webassets find my css js and lib
-env.load_path = [
-    os.path.join(app.static_folder, 'css'),
-    os.path.join(app.static_folder, 'js'),
-    os.path.join(app.static_folder, 'node_modules'),
-]
-# register a css bundle
-env.register('css_all',
-             Bundle('all.css', filters='cssmin', output='css_all.css'))
-# register our js library and js file
-es2015 = get_filter('babel', presets='es2015')
-env.register('js_all',
-             Bundle('all.node_modules',
-                    Bundle('all.js', filters=es2015),
-                    output='js_all.js')
-             )
+assets = Environment(app)
+
+# register library
+js_loader = YAMLLoader(
+    os.path.join(app.static_folder, 'webasset_bundle_js.yml')
+)
+js_bundles = YAMLLoader.load_bundles(js_loader)
+assets.register('js_all', js_bundles['js-all'])
 
 
 # http://flask.pocoo.org/snippets/28/
