@@ -139,10 +139,18 @@ def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
     return replacer
 
 
-def make_replacements(text, replace_from, replace_to, is_lemma):
-    # Lemmas are words surrounded by whitespace, while other
-    # replacements are chars
-    if is_lemma:
+def make_replacements(text: str, replace_from: List[str], replace_to: str,
+                      is_word: bool) -> str:
+    """Replaces occurrences of words or characters in a text.
+
+    :param text: The text string to be manipulated.
+    :param replace_from: A list of all target words/chars that need replacing.
+    :param replace_to: The single word/char they should be replaced with.
+    :param is_word: Whether the target is a full word vs. a single character.
+    :return: The text with replacements made.
+    """
+
+    if is_word:
         edge1 = r'(^|\s)('  # Beginning of the string or whitespace
         edge2 = r')(?=\s|$)'  # Whitespace or end of the string
     else:
@@ -159,7 +167,7 @@ def make_replacements(text, replace_from, replace_to, is_lemma):
     return text
 
 
-def replacement_handler(
+def replacement_string_handler(
         text: str, replacer_string: str, is_lemma: bool) -> str:
     """Handles replacement lines found in the scrub-alteration-upload files.
 
@@ -198,7 +206,7 @@ def replacement_handler(
 
         text = make_replacements(
             text=text, replace_from=replace_from_list,
-            replace_to=replace_to_str, is_lemma=is_lemma)
+            replace_to=replace_to_str, is_word=is_lemma)
 
     return text
 
@@ -878,7 +886,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     if merged_string == "\n":
         text = handle_special_characters(text)
     else:
-        text = replacement_handler(
+        text = replacement_string_handler(
             text=text, replacer_string=merged_string, is_lemma=False)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------
@@ -937,7 +945,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             file_string=cons_file_string, manual_string=cons_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=0)
-        return replacement_handler(
+        return replacement_string_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=False)
 
     # -- 8. lemmatize --------------------------------------------------------
@@ -953,7 +961,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             file_string=lem_file_string, manual_string=lem_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=1)
-        return replacement_handler(
+        return replacement_string_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=True)
 
     # -- 9. stop words/keep words --------------------------------------------
