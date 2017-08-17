@@ -12,7 +12,8 @@ from werkzeug.datastructures import FileStorage
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE, \
+    INVALID_CHARACTER_MODE_MESSAGE
 from lexos.helpers.exceptions import LexosException
 
 
@@ -67,39 +68,41 @@ def handle_special_characters(text: str) -> str:
 
     char_set = request.form['entityrules']
 
-    if char_set in ('doe-sgml', 'early-english-html', 'MUFI-3', 'MUFI-4'):
+    if char_set == 'doe-sgml':
+        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                           '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
+                           '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
+                           '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
+                           '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
+                           '&amacron;': 'ā', '&cmacron;': 'c̄',
+                           '&emacron;': 'ē', '&imacron;': 'ī',
+                           '&nmacron;': 'n̄', '&omacron;': 'ō',
+                           '&pmacron;': 'p̄', '&qmacron;': 'q̄',
+                           '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
+                           '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
 
-        if char_set == 'doe-sgml':
-            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                               '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
-                               '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
-                               '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
-                               '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
-                               '&amacron;': 'ā', '&cmacron;': 'c̄',
-                               '&emacron;': 'ē', '&imacron;': 'ī',
-                               '&nmacron;': 'n̄', '&omacron;': 'ō',
-                               '&pmacron;': 'p̄', '&qmacron;': 'q̄',
-                               '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
-                               '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
+    elif char_set == 'early-english-html':
+        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                           '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
+                           '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
+                           '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
+                           '&gt;': '>', '&#383;': 'ſ'}
 
-        elif char_set == 'early-english-html':
-            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                               '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
-                               '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
-                               '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
-                               '&gt;': '>', '&#383;': 'ſ'}
+    elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
+        conversion_dict = get_special_char_dict_from_file(mode=char_set)
 
-        else:
-            conversion_dict = get_special_char_dict_from_file(mode=char_set)
+    else:
+        raise LexosException(INVALID_CHARACTER_MODE_MESSAGE)
 
-        r = make_replacer(replacements=conversion_dict)
-        # r is a function created by make_replacer(), _do_replace(), and
-        # replace().
-        # do_replace() returns the new char to use when called with the char to
-        # be replaced. replace() substitutes the characters through repeated
-        # calls to _do_replacer(). This whole functionality is packaged
-        # together in r, which gets applied to the text on the next line.
-        text = r(text)
+    r = make_replacer(replacements=conversion_dict)
+    # r is a function created by make_replacer(), _do_replace(), and
+    # replace().
+    # do_replace() returns the new char to use when called with the char to
+    # be replaced. replace() substitutes the characters through repeated
+    # calls to _do_replacer(). This whole functionality is packaged
+    # together in r, which gets applied to the text on the next line.
+    text = r(text)
+
     return text
 
 
