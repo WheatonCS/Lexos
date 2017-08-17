@@ -594,67 +594,54 @@ def generate_k_means_pca(file_manager: FileManager):
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
-        grey_word=grey_word,
         mfw=mfw,
         cull=culling)
 
-    del count_matrix[0]
-    for row in count_matrix:
-        del row[0]
+    # grab data
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
 
-    matrix = np.array(count_matrix)
-
-    # Gets options from request.form and uses options to generate the K-mean
-    # results
-    k_value = int(len(file_manager.get_active_files()) / 2)  # default K value
-    max_iter = 300  # default number of iterations
+    # gets options for generating the K-mean results
+    # sets all values as default
+    n_init = constants.N_INIT
+    max_iter = constants.MAX_ITER
+    tolerance = constants.TOLERANCE
+    k_value = int(np.size(labels) / 2)
     init_method = request.form['init']
-    n_init = 300
-    tolerance = 1e-4
 
-    if (request.form['nclusters'] != '') and (
-            int(request.form['nclusters']) != k_value):
+    # gets possible existing values from request.form
+    if request.form['nclusters'] != '':
         k_value = int(request.form['nclusters'])
-    if (request.form['max_iter'] != '') and (
-            int(request.form['max_iter']) != max_iter):
+    if request.form['max_iter'] != '':
         max_iter = int(request.form['max_iter'])
     if request.form['n_init'] != '':
         n_init = int(request.form['n_init'])
     if request.form['tolerance'] != '':
         tolerance = float(request.form['tolerance'])
-
     metric_dist = request.form['KMeans_metric']
 
-    file_name_list = []
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                file_name_list.append(l_file.label)
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                file_name_list.append(new_label)
-
-    file_name_str = file_name_list[0]
-
-    for i in range(1, len(file_name_list)):
-        file_name_str += "#" + file_name_list[i]
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
+    folder_path = path_join(session_manager.session_folder(),
+                            constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    kmeans_index, siltt_score, color_chart = KMeans.get_k_means_pca(
-        matrix, k_value, max_iter, init_method, n_init, tolerance, metric_dist,
-        file_name_list, folder_path)
+    kmeans_index, siltt_score, color_chart = \
+        KMeans.get_k_means_pca(count_matrix=count_matrix,
+                               labels=labels,
+                               n_init=n_init,
+                               k_value=k_value,
+                               max_iter=max_iter,
+                               tolerance=tolerance,
+                               init_method=init_method,
+                               folder_path=folder_path,
+                               metric_dist=metric_dist)
 
     print("Break")
 
