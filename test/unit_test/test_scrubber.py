@@ -1,14 +1,13 @@
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
-from lexos.processors.prepare.scrubber import replacement_string_handler, \
-    get_remove_whitespace_map, get_remove_punctuation_map, \
+from lexos.processors.prepare.scrubber import replacement_handler, \
+    get_remove_whitespace_map, make_replacer, get_remove_punctuation_map, \
     get_remove_digits_map, get_all_punctuation_map, delete_words, \
     handle_gutenberg, split_input_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
-    merge_file_and_manual_strings, remove_stopwords, keep_words, \
-    replacement_dict_handler
+    merge_file_and_manual_strings, remove_stopwords, keep_words
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -34,273 +33,253 @@ class TestGetSpecialCharDictFromFile:
 
 # handle_special_characters
 
-# make_replacements
 
-
-class TestReplacementDictHandler:
+class TestMakeReplacer:
     not_special_string = "This string contains no special chars?!\nWow."
 
-    def test_dict_handler_doe_sgml(self):
-        assert replacement_dict_handler(
-            text=self.not_special_string, conversion_dict=chars.DOE_SGML) == \
-            self.not_special_string
-        assert replacement_dict_handler(
-            text=chars.DOE_SGML_KEYS, conversion_dict=chars.DOE_SGML) == \
-            chars.DOE_SGML_VALS
-        assert replacement_dict_handler(
-            text="Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
-            "characters!&eacute;;", conversion_dict=chars.DOE_SGML) == \
+    def test_make_replacer_doe_sgml(self):
+        r = make_replacer(replacements=chars.DOE_SGML)
+        assert r(self.not_special_string) == self.not_special_string
+        assert r(chars.DOE_SGML_KEYS) == chars.DOE_SGML_VALS
+        assert r(
+            "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
+            "characters!&eacute;;") == \
             "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
 
-    def test_dict_handler_early_english_html(self):
-        assert replacement_dict_handler(
-            text=self.not_special_string, conversion_dict=chars.EE_HTML) == \
-            self.not_special_string
-        assert replacement_dict_handler(
-            text=chars.EE_HTML_KEYS, conversion_dict=chars.EE_HTML) == \
-            chars.EE_HTML_VALS
-        assert replacement_dict_handler(
-            text="Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
-            "characters!&#383;;", conversion_dict=chars.EE_HTML) == \
+    def test_make_replacer_early_english_html(self):
+        r = make_replacer(replacements=chars.EE_HTML)
+        assert r(self.not_special_string) == self.not_special_string
+        assert r(chars.EE_HTML_KEYS) == chars.EE_HTML_VALS
+        assert r(
+            "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
+            "characters!&#383;;") == \
             "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
 
-    def test_dict_handler_mufi_3(self):
-        assert replacement_dict_handler(
-            text=self.not_special_string, conversion_dict=chars.MUFI3) == \
-            self.not_special_string
-    #     assert replacement_dict_handler(
-    #         text=chars.MUFI3_KEYS, conversion_dict=chars.MUFI3) == \
-    #         chars.MUFI3_VALS
-    #     assert replacement_dict_handler(
-    #         text="Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
-    #         "special characters!&afinslig;;", conversion_dict=chars.MUFI3) == \
-    #         "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
-    #
-    # def test_dict_handler_mufi_4(self):
-    #     assert replacement_dict_handler(
-    #         text=self.not_special_string, conversion_dict=chars.MUFI4) == \
-    #         self.not_special_string
-    #     assert replacement_dict_handler(
-    #         text=chars.MUFI4_KEYS, conversion_dict=chars.MUFI4) == \
-    #         chars.MUFI4_VALS
-    #     assert replacement_dict_handler(
-    #         text="Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith "
-    #              "&circledot; special characters!&shy;;",
-    #         conversion_dict=chars.MUFI4) == "Text. ⸤AlternatingꝊ? \ue436\n" \
-    #                                         "With ◌ special characters!\xad;"
+    def test_make_replacer_mufi_3(self):
+        r = make_replacer(replacements=chars.MUFI3)
+        assert r(self.not_special_string) == self.not_special_string
+        assert r(chars.MUFI3_KEYS) == chars.MUFI3_VALS
+        assert r(
+            "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
+            "special characters!&afinslig;;") == \
+            "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
 
-    def test_dict_handler_other(self):
-        # Note that replacement_dict_handler() is currently only called within
+    def test_make_replacer_mufi_4(self):
+        r = make_replacer(replacements=chars.MUFI4)
+        assert r(self.not_special_string) == self.not_special_string
+        assert r(chars.MUFI4_KEYS) == chars.MUFI4_VALS
+        assert r(
+            "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
+            "special characters!&shy;;") == \
+            "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad;"
+
+    def test_make_replacer_other(self):
+        # Note that make_replacer() is currently only called within
         # handle_special_characters(), which itself is only called if neither
         # the text field nor the file upload are used in the special characters
-        # menu on the front end.
+        #  menu on the front end.
         # That means these test cases cannot occur under normal usage, but
-        # the fact replacement_dict_handler() still works is reassuring
-
-        custom_dict = {'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'}
-
-        assert replacement_dict_handler(
-            text="ythklsv", conversion_dict=custom_dict) == "ythklsv"
-        assert replacement_dict_handler(
-            text="aeiou", conversion_dict=custom_dict) == "zqwpx"
-        assert replacement_dict_handler(
-            text="Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;",
-            conversion_dict=custom_dict) == "Jklt. zghscbmtlsrp? q\nLvdy x " \
-                                            "jgdtbhn srydvlnmfk!w;"
+        # the fact make_replacer() still works is reassuring
+        r = make_replacer(
+            replacements={'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'})
+        assert r("ythklsv") == "ythklsv"
+        assert r("aeiou") == "zqwpx"
+        assert r("Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;") == \
+            "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 
 
-class TestReplacementStringHandlerAlone:
+class TestReplacementHandlerAlone:
     test_string = "Test string is testing"
 
     def test_not_lemma_normal(self):
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="s:f", is_lemma=False) == \
             "Teft ftring if tefting"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="i,e:a", is_lemma=False) \
             == "Tast strang as tastang"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="q:z", is_lemma=False) == \
             self.test_string
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="t:l", is_lemma=False) == \
             "Tesl slring is lesling"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="t:t", is_lemma=False) == \
             self.test_string
-        assert replacement_string_handler(
-            text=self.test_string, replacer_string=" r : t ", is_lemma=False) \
+        assert replacement_handler(
+            text=self.test_string, replacer_string=" r : t ", is_lemma=False)\
             == "Test stting is testing"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="e:b \n i:o ",
             is_lemma=False) == "Tbst strong os tbstong"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="n:t\nt:x", is_lemma=False)\
             == "Tesx sxrixg is xesxixg"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:q",
             is_lemma=False) == "qqqq qqqqqq qq qqqqqqq"
 
     def test_not_lemma_incomplete_replacer(self):
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="g:", is_lemma=False) == \
             "Test strin is testin"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
             is_lemma=False) == "   "
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="", is_lemma=False) == \
             self.test_string
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string=" ", is_lemma=False) == \
             self.test_string
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="\n", is_lemma=False) == \
             self.test_string
         # Missing/too many colons
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="s,f", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string=",", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="k", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="t:u:w", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="t::w", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         # Too many arguments on right of colon
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="a:i,e", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="s,t:u,v",
                 is_lemma=False)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
         # No argument on left of colon
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string=":k", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string=":", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
 
     def test_not_lemma_spacing(self):
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="", replacer_string="", is_lemma=False) == ""
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="", replacer_string="a:b", is_lemma=False) == ""
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=" test test ", replacer_string="e:u", is_lemma=False) == \
             " tust tust "
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="\nt", replacer_string="a:b", is_lemma=False) == "\nt"
 
     def test_is_lemma_same(self):
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="string:thread",
             is_lemma=True) == "Test thread is testing"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="Test test testing test test", replacer_string="test:work",
             is_lemma=True) == "Test work testing work work"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="Test,testing:working",
             is_lemma=True) == "working string is working"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string,
             replacer_string="Test,is,testing:string\nstring:foo",
             is_lemma=True) == "foo foo foo foo"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="lotsssssss\nof\ntexxxxxxxt", replacer_string="of:more",
             is_lemma=True) == "lotsssssss\nmore\ntexxxxxxxt"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=" test ", replacer_string="test:text", is_lemma=True) == \
             " text "
 
     def test_is_lemma_incomplete_replacer(self):
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.test_string, replacer_string="is:", is_lemma=True) == \
             "Test string  testing"
         # Missing/too many colons
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="Test,testing,working",
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="word", is_lemma=True)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="is::word",
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE
         # Too many arguments on right of colon
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="working:Test,testing",
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string="is,string:how,what",
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE
         # No argument on left of colon
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string=":word", is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
         try:
-            replacement_string_handler(
+            replacement_handler(
                 text=self.test_string, replacer_string=":", is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE
 
     def test_replacement_handler_regex(self):
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="words ^words words$ word. wordss words+ words",
             replacer_string="^words:things\nwords$:junk\nword.:stuff\n"
-            "words+:text", is_lemma=True) == \
-            "words things junk stuff wordss text words"
-        assert replacement_string_handler(
+                            "words+:text", is_lemma=True) == \
+               "words things junk stuff wordss text words"
+        assert replacement_handler(
             text="Hello there.", replacer_string=".,l:!\n", is_lemma=False) \
             == "He!!o there!"
-        assert replacement_string_handler(
+        assert replacement_handler(
             text="Test^ t$ext te?xt", replacer_string="^:>\n$:%\n?:&",
             is_lemma=False) == "Test> t%ext te&xt"
 
 
-class TestReplacementStringHandlerWithMergeStrings:
+class TestReplacementHandlerWithMergeStrings:
     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
     cache_folder = \
         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
@@ -326,13 +305,13 @@ class TestReplacementStringHandlerWithMergeStrings:
         after_special = "This is... Some (r@ñdom) te_xt I 'wrote'~ Isñ't " \
                         "it ñice?"
 
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=file_special_string,
             is_lemma=False) == after_special
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=manual_special_string,
             is_lemma=False) == after_special
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=split_special_string,
             is_lemma=False) == after_special
 
@@ -352,13 +331,13 @@ class TestReplacementStringHandlerWithMergeStrings:
         after_consol = "This is... Sume (randum) ye-yy i 'wruye'! isn'y iy" \
                        " nice?"
 
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=file_consol_string,
             is_lemma=False) == after_consol
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=manual_consol_string,
             is_lemma=False) == after_consol
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=split_consol_string,
             is_lemma=False) == after_consol
 
@@ -378,13 +357,13 @@ class TestReplacementStringHandlerWithMergeStrings:
         after_lemma = "This is... Some (interesting) te-xt she 'wrote'! " \
                       "Isn't she nice?"
 
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=file_lemma_string,
             is_lemma=True) == after_lemma
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=manual_lemma_string,
             is_lemma=True) == after_lemma
-        assert replacement_string_handler(
+        assert replacement_handler(
             text=self.text_string, replacer_string=split_lemma_string,
             is_lemma=True) == after_lemma
 
@@ -746,60 +725,45 @@ class TestRemoveStopwords:
                   "to end to-night. end."
 
     def test_remove_stopwords_normal(self):
-        assert remove_stopwords(text=self.test_string, removal_string="is")\
-            == "This a 'long' story. It time for this long story to end " \
-               "to-night. end."
-        assert remove_stopwords(text=self.test_string, removal_string="This") \
-            == " is a 'long' story. It is time for this long story to end " \
-               "to-night. end."
-        assert remove_stopwords(text=self.test_string, removal_string="this") \
-            == "This is a 'long' story. It is time for long story to end " \
-               "to-night. end."
-        assert remove_stopwords(
-            text=self.test_string, removal_string="This,this") == \
+        assert remove_stopwords(self.test_string, "is") == \
+            "This a 'long' story. It time for this long story to end " \
+            "to-night. end."
+        assert remove_stopwords(self.test_string, "This") == \
+            " is a 'long' story. It is time for this long story to end " \
+            "to-night. end."
+        assert remove_stopwords(self.test_string, "this") == \
+            "This is a 'long' story. It is time for long story to end " \
+            "to-night. end."
+        assert remove_stopwords(self.test_string, "This,this") == \
             " is a 'long' story. It is time for long story to end " \
             "to-night. end."
-        assert remove_stopwords(
-            text=self.test_string, removal_string="is,this\na, for") == \
+        assert remove_stopwords(self.test_string, "is,this\na, for") == \
             "This 'long' story. It time long story to end to-night. end."
-        assert remove_stopwords(
-            text=self.test_string, removal_string="story") == \
+        assert remove_stopwords(self.test_string, "story") == \
             "This is a 'long' story. It is time for this long to end " \
             "to-night. end."
-        assert remove_stopwords(
-            text=self.test_string, removal_string="long,to") == \
+        assert remove_stopwords(self.test_string, "long,to") == \
             "This is a 'long' story. It is time for this story end " \
             "to-night. end."
         assert remove_stopwords(
-            text="  Weird \t\t spacing\n\t\nhere   \tin\n\n\nthis\n \t text",
-            removal_string="Weird, here, in, text") == \
-            "  \t\t spacing\n\t   \n\n\nthis\n \t"
+            "  Weird \t\t spacing\n\t\nhere   \tin\n\n\nthis\n \t text",
+            "Weird, here, in, text") == "  \t\t spacing\n\t   \n\n\nthis\n \t"
 
     def test_remove_stopwords_edge(self):
-        assert remove_stopwords(text=self.test_string, removal_string="") == \
-            self.test_string
-        assert remove_stopwords(text=self.test_string, removal_string=" ") == \
-            self.test_string
-        assert remove_stopwords(text="test\nstring", removal_string="\n") == \
-            "test\nstring"
-        assert remove_stopwords(text="test", removal_string="test") == ""
-        assert remove_stopwords(text="   test   ", removal_string="test") == \
-            "     "
-        assert remove_stopwords(text="\ntest\n", removal_string="test") == "\n"
-        assert remove_stopwords(
-            text="Test this code", removal_string="Test,this,code") == ""
-        assert remove_stopwords(
-            text="Another test", removal_string="test, test, test") == \
+        assert remove_stopwords(self.test_string, "") == self.test_string
+        assert remove_stopwords(self.test_string, " ") == self.test_string
+        assert remove_stopwords("test\nstring", "\n") == "test\nstring"
+        assert remove_stopwords("test", "test") == ""
+        assert remove_stopwords("   test   ", "test") == "     "
+        assert remove_stopwords("\ntest\n", "test") == "\n"
+        assert remove_stopwords("Test this code", "Test,this,code") == ""
+        assert remove_stopwords("Another test", "test, test, test") == \
             "Another"
-        assert remove_stopwords(
-            text=self.test_string, removal_string="This\nend.\nfor") == \
+        assert remove_stopwords(self.test_string, "This\nend.\nfor") == \
             " is a 'long' story. It is time this long story to end to-night."
-        assert remove_stopwords(
-            text=self.test_string, removal_string="This long story") == \
-            remove_stopwords(
-            text=self.test_string, removal_string="This,long,story")
-        assert remove_stopwords(text=self.test_string, removal_string=".") == \
-            self.test_string
+        assert remove_stopwords(self.test_string, "This long story") == \
+            remove_stopwords(self.test_string, "This,long,story")
+        assert remove_stopwords(self.test_string, ".") == self.test_string
 
 
 class TestKeepWords:
@@ -807,83 +771,54 @@ class TestKeepWords:
     test_string_period = test_string + "."
 
     def test_keep_words_normal(self):
-        assert keep_words(text=self.test_string, non_removal_string="is") == \
-            " is"
-        assert keep_words(text=self.test_string, non_removal_string="Test") \
-            == "Test"
-        assert keep_words(text=self.test_string, non_removal_string="here") \
-            == " here"
-        assert keep_words(text=self.test_string, non_removal_string="missing")\
-            == ""
-        assert keep_words(text=self.test_string, non_removal_string="") == \
-            keep_words(text=self.test_string, non_removal_string="missing")
-        assert keep_words(text=self.test_string, non_removal_string=" ") == \
-            keep_words(text=self.test_string, non_removal_string="")
-        assert keep_words(text=self.test_string, non_removal_string="text") \
-            == " text text"
-        assert keep_words(
-            text=self.test_string, non_removal_string="Test, here, is") == \
+        assert keep_words(self.test_string, "is") == " is"
+        assert keep_words(self.test_string, "Test") == "Test"
+        assert keep_words(self.test_string, "here") == " here"
+        assert keep_words(self.test_string, "missing") == ""
+        assert keep_words(self.test_string, "") == \
+            keep_words(self.test_string, "missing")
+        assert keep_words(self.test_string, " ") == \
+            keep_words(self.test_string, "")
+        assert keep_words(self.test_string, "text") == " text text"
+        assert keep_words(self.test_string, "Test, here, is") == \
             "Test is here"
-        assert keep_words(
-            text=self.test_string, non_removal_string="Test,missing,text") == \
+        assert keep_words(self.test_string, "Test,missing,text") == \
             "Test text text"
-        assert keep_words(
-            text=self.test_string, non_removal_string="Test missing text") == \
-            keep_words(
-            text=self.test_string, non_removal_string="Test,missing,text")
-        assert keep_words(
-            text=self.test_string, non_removal_string="Test\nmissing\ntext")\
-            == keep_words(
-            text=self.test_string, non_removal_string="Test,missing,text")
-        assert keep_words(
-            text="Word word word word gone word", non_removal_string="word") \
-            == " word word word word"
-        assert keep_words(
-            text=self.test_string, non_removal_string=self.test_string) == \
+        assert keep_words(self.test_string, "Test missing text") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words(self.test_string, "Test\nmissing\ntext") == \
+            keep_words(self.test_string, "Test,missing,text")
+        assert keep_words("Word word word word gone word", "word") == \
+            " word word word word"
+        assert keep_words(self.test_string, self.test_string) == \
             self.test_string
+        assert keep_words(self.test_string, "is, this") == \
+            remove_stopwords(self.test_string, "Test, text, here")
         assert keep_words(
-            text=self.test_string, non_removal_string="is, this") == \
-            remove_stopwords(
-            text=self.test_string, removal_string="Test, text, here")
+            "Test\u1680unicode\u205Fwhite\u2007spaces\u2001now",
+            "unicode, white, now") == "\u1680unicode\u205Fwhite\u2001now"
         assert keep_words(
-            text="Test\u1680unicode\u205Fwhite\u2007spaces\u2001now",
-            non_removal_string="unicode, white, now") == \
-            "\u1680unicode\u205Fwhite\u2001now"
-        assert keep_words(
-            text="Test\nsome\t\tkeep words\n\nwhitespace\tpreservation"
-                 "\nwith  this\t sentence \n now",
-            non_removal_string="Test, keep, whitespace, with, this, now") \
+            "Test\nsome\t\tkeep words\n\nwhitespace\tpreservation\nwith  this"
+            "\t sentence \n now", "Test, keep, whitespace, with, this, now") \
             == "Test\t\tkeep\n\nwhitespace\nwith  this\t \n now"
 
     def test_keep_words_punctuation(self):
+        assert keep_words(self.test_string_period, "here") == ""
+        assert keep_words(self.test_string_period, "here.") == " here."
+        assert keep_words(self.test_string_period, "") == ""
+        assert keep_words("there is some?text here", "some?text\nhere") ==\
+            " some?text here"
+        assert keep_words("there is some?text here", "some\ntext\nhere") \
+            == " here"
+        assert keep_words("there is some.text here", "some.text\nhere") ==\
+            " some.text here"
+        assert keep_words("there is some-text here", "some\ntext\nhere") == \
+            " here"
         assert keep_words(
-            text=self.test_string_period, non_removal_string="here") == ""
-        assert keep_words(
-            text=self.test_string_period, non_removal_string="here.") == \
-            " here."
-        assert keep_words(
-            text=self.test_string_period, non_removal_string="") == ""
-        assert keep_words(
-            text="there is some?text here",
-            non_removal_string="some?text\nhere") == " some?text here"
-        assert keep_words(
-            text="there is some?text here",
-            non_removal_string="some\ntext\nhere") == " here"
-        assert keep_words(
-            text="there is some.text here",
-            non_removal_string="some.text\nhere") == " some.text here"
-        assert keep_words(
-            text="there is some-text here",
-            non_removal_string="some\ntext\nhere") == " here"
-        assert keep_words(
-            text=self.test_string_period,
-            non_removal_string=self.test_string_period) == \
+            self.test_string_period, self.test_string_period) == \
             self.test_string_period
-        assert keep_words(
-            text="Can we . use periods .. safely", non_removal_string=".") == \
-            " ."
-        assert keep_words(
-            text="Question mark s? ? ?? ???", non_removal_string="s?") == " s?"
+        assert keep_words("Can we . use periods .. safely", ".") == " ."
+        assert keep_words("Question mark s? ? ?? ???", "s?") == " s?"
 
 
 class TestGetRemoveWhitespaceMap:

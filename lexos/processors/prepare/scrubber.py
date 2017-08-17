@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List, Dict
+from typing import List, Dict, Callable, Match
 
 from flask import request, session
 from werkzeug.datastructures import FileStorage
@@ -12,8 +12,7 @@ from werkzeug.datastructures import FileStorage
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE, \
-    INVALID_CHARACTER_MODE_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 
 
@@ -92,63 +91,57 @@ def handle_special_characters(text: str) -> str:
         conversion_dict = get_special_char_dict_from_file(mode=char_set)
 
     else:
-        raise LexosException(INVALID_CHARACTER_MODE_MESSAGE)
+        raise LexosException()
 
-    text = replacement_dict_handler(text, conversion_dict)
+    r = make_replacer(replacements=conversion_dict)
+    # r is a function created by make_replacer(), _do_replace(), and
+    # replace().
+    # do_replace() returns the new char to use when called with the char to
+    # be replaced. replace() substitutes the characters through repeated
+    # calls to _do_replacer(). This whole functionality is packaged
+    # together in r, which gets applied to the text on the next line.
+    text = r(text)
 
     return text
 
 
-def make_replacements(text: str, replace_from: List[str], replace_to: str,
-                      is_lemma: bool) -> str:
-    """Replaces occurrences of words or characters in a text.
+def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
+    """Makes a function to alter text according to the replacements dictionary.
 
-    :param text: The text string to be manipulated.
-    :param replace_from: A list of all target words/chars that need replacing.
-    :param replace_to: The single word/char they should be replaced with.
-    :param is_lemma: Whether the target is a full word vs. a single character.
-    :return: The text with replacements made.
+    :param replacements: A dictionary where the keys are the strings of encoded
+        ascii characters and the values are the encoded unicode characters.
+    :return: The replace function that actually does the replacing.
     """
 
-    # Lemmas are words surrounded by whitespace, while other
-    # replacements are chars
-    if is_lemma:
-        edge1 = r'(^|\s)('  # Beginning of the string or whitespace
-        edge2 = r')(?=\s|$)'  # Whitespace or end of the string
-    else:
-        edge1 = '()'
-        edge2 = '()'
+    # create a regular expression object
+    locator = re.compile('|'.join(re.escape(k)
+                                  for k in replacements), re.UNICODE)
 
-    for change_me in replace_from:
-        the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
-                               re.UNICODE)
-        # Replaces the second capturing group (change_me) with
-        # replace_to_str and preserves the whitespace in the first group
-        text = the_regex.sub('\g<1>' + replace_to, text)
+    def _do_replace(mo: Match) -> str:
+        """
+        Creates a function to return an object according to the replacements
+        dictionary.
 
-    return text
+        :param mo: The replacement character as a regex match object, to be
+            used as a key
+        return: The matching value, a string from the replacements dictionary
+        """
 
+        return replacements[mo.group()]
 
-def replacement_dict_handler(text: str,
-                             conversion_dict: Dict[str, str]) -> str:
-    """Handles special character replacement dicts from the drop-down menu.
+    def replacer(s: str) -> str:
+        """Makes function to return text replaced with replacements dictionary.
 
-    :param text: A text string containing character entities.
-    :param conversion_dict: A dictionary mapping character entities to
-        unicode characters.
-    :return: The text with all entities replaced with the corresponding
-        unicode characters.
-    """
+        :param s: A string containing the file contents.
+        :return: The text after replacement.
+        """
 
-    for key in conversion_dict:
-        text = make_replacements(
-            text=text, replace_from=[key], replace_to=conversion_dict[key],
-            is_lemma=False)
+        return locator.sub(_do_replace, s)
 
-    return text
+    return replacer
 
 
-def replacement_string_handler(
+def replacement_handler(
         text: str, replacer_string: str, is_lemma: bool) -> str:
     """Handles replacement lines found in the scrub-alteration-upload files.
 
@@ -185,9 +178,21 @@ def replacement_string_handler(
 
         replace_from_list = replace_from_str.split(",")
 
-        text = make_replacements(
-            text=text, replace_from=replace_from_list,
-            replace_to=replace_to_str, is_lemma=is_lemma)
+        # Lemmas are words surrounded by whitespace, while other
+        # replacements are chars
+        if is_lemma:
+            edge1 = r'(^|\s)('    # Beginning of the string or whitespace
+            edge2 = r')(?=\s|$)'  # Whitespace or end of the string
+        else:
+            edge1 = '()'
+            edge2 = '()'
+
+        for change_me in replace_from_list:
+            the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
+                                   re.UNICODE)
+            # Replaces the second capturing group (change_me) with
+            # replace_to_str and preserves the whitespace in the first group
+            text = the_regex.sub('\g<1>' + replace_to_str, text)
 
     return text
 
@@ -867,7 +872,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     if merged_string == "\n":
         text = handle_special_characters(text)
     else:
-        text = replacement_string_handler(
+        text = replacement_handler(
             text=text, replacer_string=merged_string, is_lemma=False)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------
@@ -926,7 +931,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             file_string=cons_file_string, manual_string=cons_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=0)
-        return replacement_string_handler(
+        return replacement_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=False)
 
     # -- 8. lemmatize --------------------------------------------------------
@@ -942,7 +947,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             file_string=lem_file_string, manual_string=lem_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=1)
-        return replacement_string_handler(
+        return replacement_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=True)
 
     # -- 9. stop words/keep words --------------------------------------------
