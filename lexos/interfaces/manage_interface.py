@@ -60,7 +60,8 @@ def manage():
         file_ids = file_ids.split(",")
         file_manager.disable_all()
         # Toggle the file from active to inactive or vice versa
-        file_manager.togglify(file_ids)
+        file_manager.enable_files(file_ids)
+
     elif 'setLabel' in request.headers:
         new_name = (request.headers['setLabel'])
         file_id = int(request.data)

@@ -6,7 +6,7 @@ Similarity Rankings:,,
  document's vector as opposed to the other documents' vectors.,,
 Selected Comparison Document: ,Chapter67,
 Rank,Document,Cosine Similarity
-1,Chapter64,0.998845
-2,Late40Chapters,0.998104
-3,First80Chapters,0.992059
-4,First80_without_64AND67,0.991609
+1,Late40Chapters,0.0489
+2,First80Chapters,0.0541
+3,First80_without_64AND67,0.0558
+4,Chapter64,0.1347
