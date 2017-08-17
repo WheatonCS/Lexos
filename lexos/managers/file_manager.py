@@ -17,33 +17,18 @@ import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 from lexos.managers.lexos_file import LexosFile
 
-"""
-FileManager:
-
-Description:
-    Class for an object to hold all information about a user's files and
-    choices throughout Lexos.
-    Each user will have their own unique instance of the FileManager.
-
-Major data attributes:
-files:  A dictionary holding the LexosFile objects, each representing an
-        uploaded file to be used in Lexos. The key for the dictionary is the
-        unique ID of the file, with the value being the corresponding LexosFile
-        object.
-"""
-
 
 class FileManager:
     def __init__(self):
-        """ Constructor:
-        Creates an empty file manager.
+        """Class for object to hold info about user's files & choices in Lexos.
 
-        Args:
-            None
-
-        Returns:
-            FileManager object with no files.
+        Each user will have their own unique instance of the
+        FileManager. A major data attribute of this class is a dictionary
+        holding the LexosFile objects, each representing an uploaded file to be
+        used in Lexos. The key for the dictionary is the unique ID of the file,
+        with the value being the corresponding LexosFile object.
         """
+
         self._files = {}
         self.next_id = 0
 
@@ -56,24 +41,22 @@ class FileManager:
     def files(self) -> Dict[int, LexosFile]:
         """A property for private attribute: _files.
 
-        :return: a dict map file id to lexos_files
+        :return: a dict map file id to lexos_files.
         """
+
         return self._files
 
     def add_file(self, original_filename: str, file_name: str,
                  file_string: str) -> int:
-        """
-        Adds a file to the FileManager,
-        identifying the new file with the next ID to be used.
+        """Adds a file to the FileManager.
 
-        Args:
-            original_filename: the original file name of the uploaded file.
-            file_name: The file name we store.
-            file_string: The string contents of the text.
-
-        Returns:
-            The id of the newly added file.
+        The new file identifies with the next ID to be used.
+        :param original_filename: the original file name of the uploaded file.
+        :param file_name: the file name we store.
+        :param file_string: the string contents of the text.
+        :return: the id of the newly added file.
         """
+
         # solve the problem that there is file with the same name
         exist_clone_file = True
         while exist_clone_file:
@@ -99,28 +82,23 @@ class FileManager:
         return new_file.id
 
     def delete_files(self, file_ids: List[int]):
-        """
-        Deletes all the files that have id in IDs
+        """Deletes all the files that have id in IDs.
 
-        Args:
-            file_ids: an array contain all the id of the files need to be
-                deleted
-
-        Returns:
-            None
+        :param file_ids: an array containing all the id of the files that need
+                         to be deleted.
         """
+
         for file_id in file_ids:
             file_id = int(file_id)  # in case that the id is not int
             self.files[file_id].clean_and_delete()
             del self.files[file_id]  # Delete the entry
 
     def get_active_files(self) -> List[LexosFile]:
-        """
-        Creates a list of all the active files in FileManager.
+        """Creates a list of all the active files in FileManager.
 
-        Returns:
-            A list of LexosFile objects.
+        :return: a list of LexosFile objects.
         """
+
         active_files = []
 
         for lFile in list(self.files.values()):
@@ -130,16 +108,13 @@ class FileManager:
         return active_files
 
     def delete_active_files(self) -> List[int]:
-        """
-        Deletes every active file by calling the delete method on the LexosFile
-        object before removing it from the dictionary.
+        """Deletes every active file.
 
-        Args:
-            None.
-
-        Returns:
-            List of deleted file_ids.
+        These active files are deleted by calling the delete method on the
+        LexosFile object before removing it from the dictionary.
+        :return: list of deleted file_ids.
         """
+
         file_ids = []
         for file_id, l_file in list(self.files.items()):
             if l_file.active:
@@ -149,34 +124,27 @@ class FileManager:
         return file_ids
 
     def disable_all(self):
-        """
-        Disables every file in the file manager.
+        """Disables every file in the file manager."""
 
-        Returns:
-            None
-        """
         for l_file in list(self.files.values()):
             l_file.disable()
 
     def enable_all(self):
-        """
-        Enables every file in the file manager.
+        """Enables every file in the file manager."""
 
-        Returns:
-            None
-        """
         for l_file in list(self.files.values()):
             l_file.enable()
 
     def get_previews_of_active(self) -> List[Tuple[int, str, str, str]]:
-        """
-        Creates a formatted list of previews from every active file in the file
-        manager.
+        """Creates a formatted list of previews from every active file.
 
-        Returns:
-            A formatted list with an entry (tuple) for every active file,
-            containing the preview information.
+        Each preview on this formatted list of previews is made from every
+        individual active file located in the file manager.
+        :return: a formatted list with an entry (tuple) for every active file,
+                 containing the preview information (the file id, name, label
+                 and preview).
         """
+
         previews = []
 
         for l_file in self.files.values():
@@ -190,14 +158,15 @@ class FileManager:
         return previews
 
     def get_previews_of_inactive(self) -> List[Tuple[int, str, str, str]]:
-        """
-        Creates a formatted list of previews from every inactive file in the
-        file manager.
+        """Creates a formatted list of previews from every inactive file.
 
-        Returns:
-            A formatted list with an entry (tuple) for every inactive file,
-            containing the preview information.
+        Each preview on this formatted list of previews is made from every
+        individual inactive file located in the file manager.
+        :return: a formatted list with an entry (tuple) for every inactive
+                 file, containing the preview information (the file id, name,
+                 label and preview).
         """
+
         previews = []
 
         for l_file in list(self.files.values()):
@@ -210,14 +179,9 @@ class FileManager:
         return previews
 
     def toggle_file(self, file_id: int):
-        """
-        Toggles the active status of the given file.
+        """Toggles the active status of the given file.
 
-        Args:
-            file_id: The id of the file to be toggled.
-
-        Returns:
-            None
+        :param file_id: the id of the file to be toggled.
         """
 
         l_file = self.files[file_id]
@@ -227,33 +191,10 @@ class FileManager:
         else:
             l_file.enable()
 
-    def togglify(self, file_ids: List[int]):
-        """
-        Sets state to active for fileIDs set in the UI.
-
-        Args:
-            file_ids: List of fileIDs selected in the UI.
-
-        Returns:
-            None
-        """
-
-        for file_id in file_ids:
-            file_id = int(file_id)
-            l_file = self.files[file_id]
-            l_file.enable()
-
-        # TODO: rename this function
-
     def enable_files(self, file_ids: List[int]):
-        """
-        Sets state to active for fileIDs set in the UI.
+        """Enables a list of Lexos files.
 
-        Args:
-            file_ids: List of fileIDs selected in the UI.
-
-        Returns:
-            None
+        :param file_ids: list of fileIDs selected in the UI.
         """
 
         for file_id in file_ids:
@@ -262,14 +203,9 @@ class FileManager:
             l_file.enable()
 
     def disable_files(self, file_ids: List[int]):
-        """
-        Sets state to active for fileIDs set in the UI.
+        """Disables a list of Lexos files.
 
-        Args:
-            file_ids: List of fileIDs selected in the UI.
-
-        Returns:
-            None
+        :param file_ids: list of fileIDs selected in the UI.
         """
 
         for file_id in file_ids:
@@ -278,15 +214,7 @@ class FileManager:
             l_file.disable()
 
     def classify_active_files(self):
-        """
-        Applies a given class label (contained in the request.data) to every
-        active file.
-
-        Args:
-
-        Returns:
-            None
-        """
+        """Applies a class label (from request.data) to every active file."""
 
         # TODO: probably should not get request form here
         class_label = request.data
@@ -296,18 +224,12 @@ class FileManager:
                 l_file.set_class_label(class_label)
 
     def add_upload_file(self, raw_file_string: bytes, file_name: str):
-        """
-        Detect (and apply) the encoding type of the file's contents
-        since chardet runs slow, initially detect (only) MIN_ENCODING_DETECT
-        chars;
-        if that fails, chardet entire file for a fuller test
+        """Detects (and applies) the encoding type of the file's contents.
 
-        Args:
-            raw_file_string: the file you want to detect the encoding
-            file_name: name of the file
-
-        Returns:
-            None
+        Since chardet runs slow, initially detects (only) MIN_ENCODING_DETECT
+        chars; if that fails, chardet entire file for a fuller test
+        :param raw_file_string: the file you want to detect the encoding
+        :param file_name: name of the file
         """
 
         decoded_file_string = general_functions.decode_bytes(
@@ -331,13 +253,8 @@ class FileManager:
         self.add_file(file_name, file_name, decoded_file_string)
 
     def handle_upload_workspace(self):
-        """
-        This function takes care of the session when you upload a workspace
-        (.lexos) file
+        """Handles the session when you upload a workspace (.lexos) file."""
 
-        Returns:
-            None
-        """
         # save .lexos file
         save_path = os.path.join(constants.UPLOAD_FOLDER,
                                  constants.WORKSPACE_DIR)
@@ -376,12 +293,8 @@ class FileManager:
             pass
 
     def update_workspace(self):
-        """
-        Updates the whole work space
+        """Updates the whole work space."""
 
-        Returns:
-            None
-        """
         # update the savepath of each file
         for l_file in list(self.files.values()):
             l_file.savePath = pathjoin(
@@ -393,18 +306,15 @@ class FileManager:
 
     def scrub_files(self, saving_changes: bool) -> \
             List[Tuple[int, str, str, str]]:
-        """
-        Scrubs the active files, and creates a formatted preview list with the
-        results.
+        """Scrubs active files & creates a formatted preview list w/ results.
 
-        Args:
-            saving_changes: A boolean saying whether or not to save the changes
-            made.
-
-        Returns:
-            A formatted list with an entry (tuple) for every active file,
-            containing the preview information.
+        :param saving_changes: a boolean saying whether or not to save the
+                               changes made.
+        :return: a formatted list with an entry (tuple) for every active file,
+                 containing the preview information (the file id, label, class
+                 label, and scrubbed contents preview).
         """
+
         previews = []
 
         for l_file in list(self.files.values()):
@@ -419,18 +329,15 @@ class FileManager:
 
     def cut_files(self, saving_changes: bool) -> \
             List[Tuple[int, str, str, str]]:
-        """
-        Cuts the active files, and creates a formatted preview list with the
-        results.
+        """Cuts active files & creates a formatted preview list w/ the results.
 
-        Args:
-            saving_changes: A boolean saying whether or not to save the changes
-            made.
-
-        Returns:
-            A formatted list with an entry (tuple) for every active file,
-            containing the preview information.
+        :param saving_changes: a boolean saying whether or not to save the
+                               changes made.
+        :return: a formatted list with an entry (tuple) for every active file,
+                 containing the preview information (the file id, label, class
+                 label, and cut contents preview).
         """
+
         active_files = []
         for l_file in list(self.files.values()):
             if l_file.active:
@@ -472,16 +379,13 @@ class FileManager:
         return previews
 
     def zip_active_files(self, zip_file_name: str):
-        """
-        Sends a zip file containing files containing the contents of the active
-        files.
+        """Sends a zip file of files containing contents of the active files.
 
-        Args:
-            zip_file_name: Name to assign to the zipped file.
-
-        Returns:
-            Zipped archive to send to the user, created with Flask's send_file.
+        :param zip_file_name: Name to assign to the zipped file.
+        :return: zipped archive to send to the user, created with Flask's
+                     send_file.
         """
+
         zip_stream = io.BytesIO()
         zip_file = zipfile.ZipFile(file=zip_stream, mode='w')
         for l_file in list(self.files.values()):
@@ -503,15 +407,11 @@ class FileManager:
             as_attachment=True)
 
     def zip_workspace(self) -> str:
-        """
-        Sends a zip file containing a pickel file of the session and the
-        session folder.
+        """Sends a zip file containing a pickle file of session & its folder.
 
-        Args:
-
-        Returns:
-            the path of the zipped workspace
+        :return: the path of the zipped workspace
         """
+
         # initialize the save path
         save_path = os.path.join(
             constants.UPLOAD_FOLDER,
@@ -557,15 +457,13 @@ class FileManager:
         return workspace_file_path
 
     def check_actives_tags(self) -> Tuple[bool, bool, bool]:
-        """
-        Checks the tags of the active files for DOE/XML/HTML/SGML tags.
+        """Checks the tags of the active files for DOE/XML/HTML/SGML tags.
 
-        Args:
-
-        Returns:
-            Two booleans, the first signifying the presence of any type of tags
-            , the secondKeyWord the presence of DOE tags.
+        :return: three booleans, the first signifying the presence of any type
+                 of tags, the secondKeyWord the presence of DOE tags, the third
+                 signifying the presence of gutenberg tags/boilerplate.
         """
+
         found_tags = False
         found_doe = False
         found_gutenberg = False
@@ -589,29 +487,21 @@ class FileManager:
         return found_tags, found_doe, found_gutenberg
 
     def update_label(self, file_id: int, file_label: str):
-        """
-        Sets the file label of the file denoted by the given id to the supplied
-        file label.
+        """Sets the file label of the file denoted to the supplied file label.
 
-        Args:
-            file_id: The id of the file for which to change the label.
-            file_label: The label to set the file to.
-
-        Returns:
-            None
+        Files are denoted by the given id.
+        :param file_id: the id of the file for which to change the label.
+        :param file_label: the label to set the file to.
         """
+
         self.files[file_id] = file_label
 
     def get_active_labels(self) -> Dict[int, str]:
-        """
-        Gets the labels of all active files in a dictionary of
-        { file_id: file_label }.
+        """Gets labels of all active files in dictionary{file_id: file_label}.
 
-        Args:
-
-        Returns:
-            Returns a dictionary of the currently active files' labels.
+        :return: a dictionary of the currently active files' labels.
         """
+
         labels = {}
         for l_file in list(self.files.values()):
             if l_file.active:
@@ -622,12 +512,13 @@ class FileManager:
     @staticmethod
     def grey_word_deprec(result_matrix: List[list], count_matrix: List[list])\
             -> List[list]:
-        """
-        The help function used in GetMatrix method to remove less frequent word
-        , or GreyWord (non-functioning word).
-        This function takes in 2 word count matrices (one of them may be in
-        proportion) and calculate the boundary of the
-        low frequency word with the following function:
+        """Helper function used to remove less frequent words.
+
+        The helper function used in the get_matrix_deprec() method to remove
+        less frequent words, or GreyWord (non-functioning words). This function
+        takes in 2 word count matrices (one of them may be in proportion) and
+        calculates the boundary of the low frequency word with the
+        following function:
             round(sqrt(log(total_word_count * log(max_word_count) /
                         log(total_word_count + 1) ** 2 + exp(1))))
             * log is nature log, sqrt is the square root, round is round to the
@@ -637,39 +528,37 @@ class FileManager:
             * total_word_count is the total_word_count word count of the chunk
         Mathematical property:
             * the data is sensitive to max_word_count when it is small (because
-                max_word_count tend to be smaller than total_word_count)
+                max_word_count tends to be smaller than total_word_count)
             * the function returns 1 when total_word_count and max_word_count
                 approach 0
             * the function returns infinity when total_word_count and
                 max_word_count approach infinity
             * the function is an increasing function with regard to
                 max_word_count or total_word_count
-
-        all the words with lower word count than the boundary of that segment
-        will be a low frequency word
-        if a word is a low frequency word in all the chunks, this will be
-        deemed as non-functioning word(GreyWord) and deleted
-
-        Args:
-            result_matrix: a matrix with header in 0 row and 0 column
-                            it row represent chunk and the column represent
-                            word
-                            it contain the word count (might be proportion
-                            depend on :param useFreq in function gerMatix())
-                                of a particular word in a perticular chunk
-
-            count_matrix: it row represent chunk and the column represent word
-                            it contain the word count (might be proportion
-                            depend on :param useFreq in function gerMatix())
-                                of a particular word in a perticular chunk
-
-        Returns:
-            a matrix with header in 0 row and 0 column
-                it row represent chunk and the column represent word
-                it contain the word count (might be proportion depend on
-                    :param useFreq in function gerMatix())
-                    of a particular word in a perticular chunk
-                this matrix do not contain GreyWord
+        All the words with lower word counts than the boundary of that segment
+        will be a low frequency word. If a word is a low frequency word in all
+        the chunks, this will be deemed as non-functioning word(GreyWord)
+        and deleted.
+        :param result_matrix: a matrix with a header in the 0 row and the 0
+                              column.
+                              its row represents a chunk and the column
+                              represents a word.
+                              it contains the word count (might be proportional
+                              depends on :param use_freq in function
+                              get_matrix_deprec()) of a particular word in a
+                              particular chunk.
+        :param count_matrix: its row represents a chunk and the column
+                             represents a word.
+                             it contains the word count (might be proportional
+                             depends on :param use_freq in function
+                             get_matrix_deprec()) of a particular word in a
+                             particular chunk.
+        :return: a matrix with a header in the 0 row and the 0 column.
+                 its row represents a chunk and the column represents a word.
+                 it contains the word count (might be proportional depends
+                 on :param use_freq in function get_matrix_deprec()) of a
+                 particular word in a particular chunk.
+                 this matrix does not contain grey_word.
         """
 
         # find boundary
@@ -698,22 +587,21 @@ class FileManager:
     @staticmethod
     def culling_deprec(result_matrix: List[list], count_matrix: List[list]) \
             -> List[list]:
-        """
-        This function is a help function of the getMatrix function.
-        This function will delete (make count 0) all the word that appear in
-        strictly less than lower_bound number of document.
-        (if the lower_bound is 2, all the word only contain 1 document will be
-        deleted)
+        """Deletes all words found in less than the lower_bound # of documents.
 
-        Args:
-            result_matrix: The Matrix that getMatrix() function need to return
-                (might contain Porp, Count or weighted depend on user's choice)
-            count_matrix: The Matrix that only contain word count
-
-        Returns:
-            a new ResultMatrix (might contain Porp, Count or weighted depend on
-             user's choice)
+        This function is a helper function of the get_matrix_deprec() function.
+        This function will delete (make count 0) all the words that appear in
+        strictly less than the lower_bound number of documents.
+        (If the lower_bound is 2, all the words only appearing in 1 document
+        will be deleted.)
+        :param result_matrix: the Matrix that the get_matrix_deprec() function
+                              needs to return (might contain Porp, Count or
+                              weighted depending on user's choice).
+        :param count_matrix: the Matrix that only contains word counts.
+        :return: a new result_matrix (might contain Porp, Count or weighted
+                 depending on user's choice).
         """
+
         if request.json:
             lower_bound = int(request.json['cullnumber'])
         else:
@@ -732,23 +620,20 @@ class FileManager:
     @staticmethod
     def most_frequent_word_deprec(result_matrix: List[list],
                                   count_matrix: List[list]) -> List[list]:
-        """
-        This function is a help function of the getMatrix function.
-        This function will rank all the word by word count
-        (across all the segments)
-        Then delete (make count 0) all the words that has ranking lower than
-         lower_rank_bound (tie will be kept)
-        * the return will not be sorted
+        """Ranks all the words by word count and deletes low ranking words.
 
-        Args:
-            result_matrix: The Matrix that getMatrix() function need to return
-            (might contain Porp, Count or weighted depend on user's choice)
-            count_matrix: The Matrix that only contain word count
-
-        Returns:
-            a new ResultMatrix (might contain Porp, Count or weighted depend on
-             user's choice)
+        This function is a helper function of the get_matrix_deprec() function.
+        This function will rank all the words by word count (across all the
+        segments) and then delete (make count 0) all the words that has ranking
+        lower than lower_rank_bound (tie will be kept).
+        :param result_matrix: the Matrix that the get_matrix_deprec() function
+               needs to return (might contain Porp, Count or weighted depending
+               on user's choice).
+        :param count_matrix: the Matrix that only contains word counts.
+        :return: a new result_matrix (might contain Porp, Count
+                 or weighted depending on user's choice) (Unsorted).
         """
+
         if request.json:
             lower_rank_bound = int(request.json['mfwnumber'])
         else:
@@ -776,34 +661,35 @@ class FileManager:
         return result_matrix
 
     @staticmethod
-    def get_matrix_options():
-        """
-        Gets all the options that are used to generate the matrices from GUI
+    def get_matrix_options() -> Tuple[int, bool, bool, bool, str, bool, bool,
+                                      bool, bool, bool]:
+        """Gets all the options that are used to generate the matrices from GUI
 
-        Args:
-
-        Returns:
-            use_word_tokens: A boolean: True if 'word' tokens; False if 'char'
-                        tokens
-            use_tfidf: A boolean: True if the user wants to use "TF/IDF"
-                        (weighted counts) to normalize
-            norm_option: A string representing distance metric options: only
-                        applicable to "TF/IDF", otherwise "N/A"
-            onlyCharGramWithinWords: True if 'char' tokens but only want to
-                        count tokens "inside" words
+        :return:
             n_gram_size: int for size of ngram (either n-words or n-chars,
-                        depending on use_word_tokens)
-            use_freq: A boolean saying whether or not to use the frequency
-                        (count / total), as opposed to the raw counts,
-                        for the count data.
-            grey_word: A boolean (default is False): True if the user wants to
-                        use greyword to normalize
+                         depending on use_word_tokens)
+            use_word_tokens: a boolean that is True if 'word' tokens; False if
+                            'char' tokens
+            use_freq: a boolean saying whether or not to use the frequency
+                      (count / total), as opposed to the raw counts,
+                      for the count data.
+            use_tfidf: a boolean that is True if the user wants to use "TF/IDF"
+                       (weighted counts) to normalize
+            norm_option: a string representing distance metric options: only
+                         applicable to "TF/IDF", otherwise "N/A"
+            grey_word: a boolean (default is False) that is True if the user
+                       wants to use greyword to normalize
+            show_deleted_word: deprecated option
+            only_char_grams_within_words: a boolean that is True if 'char'
+                                          tokens but only want to count tokens
+                                          "inside" words
             most_frequent_word: a boolean to show whether to apply
-                        MostFrequentWord to the Matrix
-                        (see self.mostFrequenWord method for more)
+                                most_frequent_word to the Matrix
+                                (see self.mostFrequenWord method for more)
             culling: a boolean the a boolean to show whether to apply culling
-                        to the Matrix (see self.culling method for more)
+                     to the Matrix (see self.culling method for more)
         """
+
         n_gram_size = int(request.form['tokenSize'])
         use_word_tokens = request.form['tokenType'] == 'word'
         try:
@@ -851,22 +737,22 @@ class FileManager:
         """Get the document term matrix (DTM) of all the active files
 
         Uses scikit-learn's CountVectorizer class to produce the DTM.
-        :param use_word_tokens: A boolean: True if 'word' tokens; False if
-                                'char' tokens
-        :param use_tfidf: A boolean: True if the user wants to use "TF/IDF"
-                                (weighted counts) to normalize
-        :param norm_option: A string representing distance metric options: only
-                                applicable to "TF/IDF", otherwise "N/A"
-        :param only_char_grams_within_words: True if 'char' tokens but only
-                                want to count tokens "inside" words
+        :param use_word_tokens: a boolean that is True if 'word' tokens; False
+                                if 'char' tokens
+        :param use_tfidf: a boolean that is True if the user wants to use
+                          "TF/IDF" (weighted counts) to normalize
+        :param norm_option: a string representing distance metric options: only
+                            applicable to "TF/IDF", otherwise "N/A"
+        :param only_char_grams_within_words: a boolean that is True if 'char'
+                                             tokens but only want to count
+                                             tokens "inside" words
         :param n_gram_size: int for size of ngram (either n-words or n-chars,
-                                depending on useWordTokens)
-        :param use_freq: A boolean saying whether or not to use the frequency
-                                (count / total), as opposed to the raw counts,
-                                for the count data.
+                            depending on useWordTokens)
+        :param use_freq: a boolean saying whether or not to use the frequency
+                         (count / total), as opposed to the raw counts,
+                         for the count data.
         :param mfw: a boolean to show whether to apply MostFrequentWord to the
-                                Matrix (see self.get_most_frequent_words()
-                                method for more)
+                    Matrix (see self.get_most_frequent_words() method for more)
         :param cull: a boolean to show whether to apply culling to the Matrix
                                 (see self.culling() method for more)
         :param round_decimal: A boolean (default is False): True if the float
@@ -1054,9 +940,9 @@ class FileManager:
         The new count matrix will consists of only the most frequent words in
         the whole corpus.
         :param lower_rank_bound: the lowest rank to remain in the matrix
-                                (the rank is determined by the word's number of
-                                appearance in the whole corpus)
-                                (ranked from high to low)
+                                 (the rank is determined by the word's number
+                                 of appearance in the whole corpus)
+                                 (ranked from high to low)
         :param count_matrix: the raw count matrix,
                                 the row are for each segments
                                 the column are for each words
@@ -1094,7 +980,7 @@ class FileManager:
             -> pd.DataFrame:
         """Gets the culled final_matrix and culled words.
 
-        gives a matrix that only contains the words that appears in more than
+        Gives a matrix that only contains the words that appears in more than
         `least_num_seg` segments.
         :param least_num_seg: least number of segment the word needs to appear
                                 in to be kept.
@@ -1129,40 +1015,38 @@ class FileManager:
     def get_matrix_deprec(self, use_word_tokens: bool, use_tfidf: bool,
                           norm_option: str, only_char_grams_within_words: bool,
                           n_gram_size: int, use_freq: bool, grey_word: bool,
-                          mfw: bool, cull: bool, round_decimal: bool=False):
-        """
-        Gets a matrix properly formatted for output to a CSV file, with labels
-        along the top and side for the words and files.
-        Uses scikit-learn's CountVectorizer class
+                          mfw: bool, cull: bool,
+                          round_decimal: bool=False) -> List[list]:
+        """Gets a matrix properly formatted for output to a CSV file.
 
-        Args:
-            use_word_tokens: A boolean: True if 'word' tokens; False if 'char'
+        This CSV file will include labels along the top and side for the words
+        and files. Uses scikit-learn's CountVectorizer class.
+        :param use_word_tokens: True if 'word' tokens; False if 'char'
                                 tokens
-            use_tfidf: A boolean: True if the user wants to use "TF/IDF"
-                                (weighted counts) to normalize
-            norm_option: A string representing distance metric options: only
-                                applicable to "TF/IDF", otherwise "N/A"
-            only_char_grams_within_words: True if 'char' tokens but only want
-                                to count tokens "inside" words
-            n_gram_size: int for size of ngram (either n-words or n-chars,
-                                depending on useWordTokens)
-            use_freq: A boolean saying whether or not to use the frequency
-                                (count / total), as opposed to the raw counts,
-                                for the count data.
-            grey_word: A boolean (default is False): True if the user wants to
-                                use greyword to normalize
-            mfw: a boolean to show whether to apply MostFrequentWord to the
-                                Matrix (see self.mostFrequenWord() method for
-                                more)
-            cull: a boolean to show whether to apply culling to the Matrix (see
-                                self.culling() method for more)
-            round_decimal: A boolean (default is False): True if the float is
-                                fixed to 6 decimal places
-                                (so far only used in tokenizer)
-
-        Returns:
-            Returns the sparse matrix and a list of lists representing the
-            matrix of data.
+        :param use_tfidf: True if the user wants to use "TF/IDF"
+                          (weighted counts) to normalize
+        :param norm_option: a string representing distance metric options: only
+                            applicable to "TF/IDF", otherwise "N/A"
+        :param only_char_grams_within_words: True if 'char' tokens but only
+                                             want to count tokens "inside"
+                                             words
+        :param n_gram_size: int for size of ngram (either n-words or n-chars,
+                            depending on useWordTokens)
+        :param use_freq: a boolean saying whether or not to use the frequency
+                         (count / total), as opposed to the raw counts,
+                         for the count data.
+        :param grey_word: a boolean (default is False): True if the user wants
+                          to use greyword to normalize
+        :param mfw: a boolean to show whether to apply MostFrequentWord to the
+                    Matrix (see self.mostFrequenWord() method for more)
+        :param cull: a boolean to show whether to apply culling to the Matrix
+                     (see self.culling() method for more)
+        :param round_decimal: (default is False) True if the float is
+                              fixed to 6 decimal places
+                              (so far only used in tokenizer)
+        :return:
+            - the index (row) as the segment names (temp_labels)
+            - the column as words
         """
 
         active_files = self.get_active_files()
@@ -1345,69 +1229,39 @@ class FileManager:
 
         return count_matrix
 
-    def get_class_division_map(self):
+    def get_class_division_map(self) -> pd.DataFrame:
+        """:return: a panda frame that contains class division map."""
 
-        # TODO: get rid of this horrible function
+        # active files labels and classes
+        active_files = self.get_active_files()
+        file_labels = [file.label for file in active_files]
+        class_labels = {file.class_label for file in active_files}
+
+        label_length = len(file_labels)
+        class_length = len(class_labels)
+
+        # initialize class division map
+        division_map = pd.DataFrame(
+            data=np.zeros((class_length, label_length), dtype=bool),
+            index=class_labels,
+            columns=file_labels)
+
+        # set correct boolean value for each file
+        for file in active_files:
+            division_map[file.label][file.class_label] = True
+
+        return division_map
+
+    def get_previews_of_all(self) -> List[dict]:
+        """Creates a formatted list of previews from every file.
+
+        Each preview on this formatted list of previews is made from every
+        individual file located in the file manager. For use in the Select
+        screen.
+        :return: a list of dictionaries with preview information for every
+                 file.
         """
-        Args:
 
-        Returns:
-            division_map:
-            name_map:
-            class_label_map:
-        """
-        # create division map
-        division_map = [[0]]  # initialize the division map (at least one file)
-        files = self.get_active_files()
-        try:
-            # try to get temp label
-            name_map = [[request.form["file_" + str(files[0].id)]]]
-        except KeyError:
-            try:
-                name_map = [[files[0].label]]  # user send a get request.
-            except IndexError:
-                return []  # there is no active file
-        class_label_map = [files[0].class_label]
-
-        # because 0 is defined in the initialize
-        for file_id in range(1, len(files)):
-
-            inside_existing_group = False
-
-            for i in range(len(division_map)):  # for group in division map
-                for existing_id in division_map[i]:
-                    if files[existing_id].class_label == \
-                            files[file_id].class_label:
-                        division_map[i].append(file_id)
-                        try:
-                            # try to get temp label
-                            name_map[i].append(
-                                request.form["file_" + str(files[file_id].id)])
-                        except KeyError:
-                            name_map[i].append(files[file_id].label)
-                        inside_existing_group = True
-                        break
-
-            if not inside_existing_group:
-                division_map.append([file_id])
-                try:
-                    # try to get temp label
-                    name_map.append(
-                        [request.form["file_" + str(files[file_id].id)]])
-                except KeyError:
-                    name_map.append([files[file_id].label])
-                class_label_map.append(files[file_id].class_label)
-
-        return division_map, name_map, class_label_map
-
-    def get_previews_of_all(self):
-        """
-        Creates a formatted list of previews from every  file in the file
-        manager. For use in the Select screen.
-
-        Returns:
-            A list of dictionaries with preview information for every file.
-        """
         previews = []
 
         for l_file in list(self.files.values()):
@@ -1424,23 +1278,46 @@ class FileManager:
         return previews
 
     def delete_all_file(self):
-        """
-        Deletes every active file by calling the delete method on the LexosFile
-        object before removing it from the dictionary.
+        """Deletes every active file.
 
-        Args:
-            None.
-
-        Returns:
-            None.
+        This is done by calling the delete method on the LexosFile object
+        before removing it from the dictionary.
         """
+
         for file_id, l_file in list(self.files.items()):
             l_file.clean_and_delete()
             del self.files[file_id]  # Delete the entry
 
     # Experimental for Tokenizer
     @staticmethod
-    def get_matrix_options_from_ajax():
+    def get_matrix_options_from_ajax() -> Tuple[int, bool, bool, bool, str,
+                                                bool, bool, bool, bool, bool]:
+        """Gets all the options that are used to generate the matrices from GUI
+
+        :return:
+            n_gram_size: int for size of ngram (either n-words or n-chars,
+                         depending on use_word_tokens)
+            use_word_tokens: a boolean that is True if 'word' tokens; False if
+                            'char' tokens
+            use_freq: a boolean saying whether or not to use the frequency
+                      (count / total), as opposed to the raw counts,
+                      for the count data.
+            use_tfidf: a boolean that is True if the user wants to use "TF/IDF"
+                       (weighted counts) to normalize
+            norm_option: a string representing distance metric options: only
+                         applicable to "TF/IDF", otherwise "N/A"
+            grey_word: a boolean (default is False) that is True if the user
+                       wants to use greyword to normalize
+            show_deleted_word: deprecated option
+            only_char_grams_within_words: a boolean that is True if 'char'
+                                          tokens but only want to count tokens
+                                          "inside" words
+            most_frequent_word: a boolean to show whether to apply
+                                most_frequent_word to the Matrix
+                                (see self.mostFrequenWord method for more)
+            culling: a boolean the a boolean to show whether to apply culling
+                     to the Matrix (see self.culling method for more)
+        """
 
         if request.json:
             data = request.json

@@ -13,7 +13,8 @@ import re
 # works regex
 from typing import List
 
-from lexos.helpers.error_messages import WINDOW_SIZE_LARGE_MESSAGE
+from lexos.helpers.error_messages import WINDOW_SIZE_LARGE_MESSAGE, \
+    WINDOW_NON_POSITIVE_MESSAGE
 
 
 def a_string_letter(file_string: str, key_letter: str, window_size: int,
@@ -26,6 +27,9 @@ def a_string_letter(file_string: str, key_letter: str, window_size: int,
     :param token_type: a string indicating the search pattern type
     :return: List of averages, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
@@ -67,6 +71,9 @@ def a_string_word_line(split_list: List[str], key_letter: str,
     :param token_type: a string indicating the search pattern type
     :return: List of averages, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
@@ -107,6 +114,7 @@ def a_word_word(split_list: List[str], keyword: str,
     """
     # PRE-conditions:
     assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
 
     window_start = 0
     window_end = window_start + window_size
@@ -150,6 +158,10 @@ def a_word_line(split_list: List[str], keyword: str,
     :param window_size: the number of lines to have in the window
     :return: List of averages, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
@@ -209,6 +221,9 @@ def r_string_letter(file_string: str, first_string: str, second_string: str,
     :param token_type: a string indicating the search pattern type
     :return: List of ratios, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
@@ -255,6 +270,9 @@ def r_string_word_line(split_list: List[str], first_string: str,
     :param token_type: a string indicating the search pattern type
     :return: List of ratios, each index representing the window number
     """
+    # PRE-conditions:
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
+
     window_start = 0
     window_end = window_start + window_size
 
@@ -303,6 +321,7 @@ def r_word_word(split_list: List[str], first_word: str, second_word: str,
     """
     # PRE-conditions:
     assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
 
     window_start = 0
     window_end = window_start + window_size
@@ -372,6 +391,7 @@ def r_word_line(split_list: List[str], first_word: str, second_word: str,
     """
     # PRE-conditions:
     assert window_size <= len(split_list), WINDOW_SIZE_LARGE_MESSAGE
+    assert window_size > 0, WINDOW_NON_POSITIVE_MESSAGE
 
     window_start = 0
     window_end = window_start + window_size
@@ -446,6 +466,8 @@ def rw_analyze(file_string: str, count_type: str, token_type: str,
              the title of the graph, the x-axis label for the graph, the y-axis
              label for the graph
     """
+    # PRE-conditions:
+    assert int(window_size_str) > 0, WINDOW_NON_POSITIVE_MESSAGE
 
     if window_size_str != "":
         window_size = int(window_size_str)
