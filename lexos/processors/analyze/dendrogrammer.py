@@ -305,9 +305,9 @@ def adjust_legend_area(labels: np.ndarray,
     """Adjust the legend area.
 
     :param labels: A list of strings of the name of each text segment.
-    :param max_legend_length_first_page: int, the max legend length on
-           first page
-    :return: max_legend_length_first_page: int, the max legend length on
+    :param max_legend_length_first_page: The max legend length on
+           first page.
+    :return: max_legend_length_first_page: The max legend length on
              first page
     """
     if len(max(labels)) <= const.DENDRO_MAX_LABELS_LENGTH or \
@@ -334,13 +334,15 @@ def generate_legend_list(silhouette_score: str,
                          legend: str) -> (str, List[str]):
     """Generate legend list which contains silhouette score and annotation.
 
-    :param silhouette_score: string, containing the result of silhouette score
-    :param silhouette_annotation: string, annotation of the silhouette score
-    :param legend: A string of all legends
+    :param silhouette_score: A string containing the result of
+    silhouette score.
+    :param silhouette_annotation: A string of annotation of the
+    silhouette score.
+    :param legend: A string of all legends.
     :return:
-            - legend: a string which contains silhouette_score,
-            silhouette_annotation and original legend
-            - legend_list: a list of items in legend split by '\n'
+            - legend: A string which contains silhouette_score,
+              silhouette_annotation and original legend.
+            - legend_list: A list of items in legend split by '\n'.
     """
     str_wrapped_silhouette = textwrap.fill(
         silhouette_score,
@@ -371,20 +373,20 @@ def plot_legend(labels: np.ndarray,
     """Plot dendrogram legend.
 
     :param labels: A list of strings of the name of each text segment.
-    :param legend_page:
-    :param line_total:
-    :param legend: A string of all legends
-    :param page_num:
-    :param max_legend_length_first_page:
+    :param legend_page: Page number of legend.
+    :param line_total: Total number of line.
+    :param legend: A string of all legends.
+    :param page_num: Number of pages.
+    :param max_legend_length_first_page: Maximum legend length of first page.
     :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
            is checked
     :param folder: A string representing the path name to the folder where the
            pdf and png files of the dendrogram will be stored.
-    :param legend_list:
-    :param page_name_list:
+    :param legend_list: A list of items in legend split by '\n'.
+    :param page_name_list: A list of page name.
     :return:
-            - legend_page: int, the page of legend plot
-            - page_name_list: a list of page names
+            - legend_page: The page of legend plot.
+            - page_name_list: A list of page names.
     """
 
     # -- plot dendro legend ---------------------------------------------------
@@ -433,7 +435,6 @@ def plot_legend(labels: np.ndarray,
                 page_num += 1
                 # page_name = "page" + str(page_num)
                 page_name = pyplot.figure(figsize=(10, 15))
-
                 page_name_list.append(page_name)
                 pyplot.axis("off")  # disables figure borders on legends page
                 if line_left <= const.DENDRO_MAX_LINES_PER_PAGE:
@@ -478,17 +479,22 @@ def plot_dendrogram(labels: np.ndarray,
                     orientation: str,
                     folder: str,
                     pruning: int):
-    # -- get options from request ---------------------------------------------
     """Plot dendrogram and save as png file.
 
-    :param labels: labels: A list of strings of the name of each text segment.
-    :param z:
-    :param title:
-    :param augmented_dendrogram:
-    :param orientation:
-    :param folder:
-    :param pruning:
+    :param labels: A list of strings of the name of each text segment.
+    :param z: An ndarray of the hierarchical clustering encoded as
+           a linkage matrix.
+    :param title: A unicode string representing the title of the dendrogram,
+           depending on the user's input.
+    :param augmented_dendrogram: A boolean, True if "Show Branch Height in
+           Dendrogram" is checked.
+    :param orientation: A string of the orientation of the dendrogram.
+    :param folder: A string representing the path name to the folder where the
+           pdf and png files of the dendrogram will be stored.
+    :param pruning: An integer representing the number of leaves to be cut off,
+           starting from the top (defaults to 0).
     """
+    # -- get options from request ---------------------------------------------
     if request.json:
         opts = request.json
     else:
