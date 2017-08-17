@@ -22,7 +22,8 @@
     "d3": "^3.5.17",
     "font-awesome": "^4.7.0",
     "smartmenus": "^1.0.1",
-    "jquery": "^2.2.4"
+    "jquery": "^2.2.4",
+    "lato-font": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -32,8 +33,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "lato-font": "^3.0.0"
+    "eslint-plugin-standard": "^3.0.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
