@@ -670,14 +670,9 @@ def generate_k_means_voronoi(file_manager: FileManager) -> \
         KMeans.getKMeansVoronoi:
     """Generates a table of cluster number and file name from the active files.
 
-    :param file_manager: A FileManager object (see managers/file_manager.py)
-    :return:
-    Returns:
-        kmeans_index: a list of index of the closest center of the file
-        siltt_score: a float of silhouette score based on KMeans algorithm
-        labels_str: a string of file names, separated by '#'
-        k_value: an int of the number of K from input
-
+    :param file_manager: A FileManager object (see managers/file_manager.py).
+    :return: a class object that contains all the analyzed data and information
+             see analyze/Kmeans.py/getKmeansVoronoi class for more.
     """
 
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
