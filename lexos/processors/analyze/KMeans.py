@@ -93,7 +93,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
 
     number_only_matrix = count_matrix.tolist()
 
-    inequality = '≤'
 
     # need to reset matplotlib (if hierarchical was called prior, this clears
     # previous dendrogram from showing in PCA graph)
@@ -149,18 +148,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
     # close the plot so next one doesn't plot over the last one
     plt.close()
 
-    # trap bad silhouette score input
-    if k_value <= 2:
-        silhouette_score = "N/A [Not available for K " + inequality + " 2]"
-
-    elif k_value > (count_matrix.shape[0] - 1):
-        silhouette_score = \
-            'N/A [Not available if (K value) > (number of active files -1)]'
-
-    else:
-        kmeans.fit(number_only_matrix)
-        labels = kmeans.labels_  # for silhouette score
-        silhouette_score = 1
 
     # make a string of rgb tuples to send to the javascript separated by #
     # cause jinja hates lists of strings
