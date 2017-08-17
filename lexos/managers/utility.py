@@ -696,7 +696,6 @@ def generate_k_means_voronoi(file_manager: FileManager):
     # grab data
     count_matrix = dtm_data.values
     labels = dtm_data.index.values
-    labels_str = "#".join(labels)
 
     # gets options for generating the K-mean results
     # sets all values as default
@@ -722,19 +721,16 @@ def generate_k_means_voronoi(file_manager: FileManager):
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    kmeans_index, siltt_score, color_chart, final_points_list, \
-        final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
-            count_matrix=count_matrix,
-            k=k_value,
-            n_init=n_init,
-            max_iter=max_iter,
-            tolerance=tolerance,
-            init_method=init_method,
-            metric_dist=metric_dist,
-            labels=labels)
+    k_means_voronoi_data = KMeans.getKMeansVoronoi(count_matrix=count_matrix,
+                                                   n_init=n_init,
+                                                   k_value=k_value,
+                                                   max_iter=max_iter,
+                                                   tolerance=tolerance,
+                                                   init_method=init_method,
+                                                   metric_dist=metric_dist,
+                                                   labels=labels)
 
-    return kmeans_index, siltt_score, labels_str, k_value, color_chart, \
-        final_points_list, final_centroids_list, text_data, max_x
+    return k_means_voronoi_data
 
 
 def generate_rwa(file_manager: FileManager):
