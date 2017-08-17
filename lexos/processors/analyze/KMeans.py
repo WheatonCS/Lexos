@@ -37,43 +37,40 @@ def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
         return round(silhouette_score, ROUND_DIGIT)
 
 
-def _get_voronoi_plot_data_(data: np.ndarray,
-                            group_index: np.ndarray) -> np.ndarray:
-    """Generate the data needed to be plotted in voronoi analysis method.
+def get_k_means_pca(count_matrix: np.ndarray,
+                    n_init: int,
+                    k_value: int,
+                    max_iter: int,
+                    tolerance: float,
+                    init_method: str,
+                    metric_dist: str,
+                    folder_path: str,
+                    labels: np.ndarray):
+    """Generates an array of centroid index based on the active files.
 
-    :param data: the reduced data analyzed by the k-means method
-    :param group_index: index for the results that are in the same group
-    :return: the centroid analysis data
-    """
-    temp_data = [data[item] for _, item in enumerate(group_index)]
-    result = np.average(temp_data[0].transpose(), axis=1)
-    return result
+    :param folder_path:
+    :return:
+    :param count_matrix: a 2D numpy matrix contains the word counts
+    :param n_init: number of iterations with different centroids
+    :param k_value: k value-for k-means analysis
 
+    :param max_iter: maximum number of iterations
+    :param tolerance: relative tolerance, inertia to declare convergence
+    :param init_method: method of initialization: "K++" or "random"
+    :param metric_dist: method of the distance metrics
+    :param labels: file names of active files
 
-# Gets called from generateKMeansPCA() in utility.py
-
-def get_k_means_pca(
-        matrix,
-        k,
-        max_iter,
-        init_method,
-        n_init,
-        tolerance,
-        metric_dist,
-        file_names,
-        folder_path):
-    """
     Generate an array of centroid index based on the active files.
 
     Args:
-        number_only_matrix: a numpy matrix without file names and word
-        matrix: a python matrix representing the counts of words in files
-        k: int, k-value
+        number_only_matrix: a numpy count_matrix without file names and word
+        count_matrix: a python count_matrix representing the counts of words in files
+        k_value: int, k-value
         max_iter: int, maximum number of iterations
         init_method: str, method of initialization: 'k++' or 'random'
         n_init: int, number of iterations with different centroids
         tolerance: float, relative tolerance, inertia to declare convergence
-        DocTermSparseMatrix: sparse matrix of the word counts
+        DocTermSparseMatrix: sparse count_matrix of the word counts
         metric_dist: str, method of the distance metrics
 
 
@@ -89,16 +86,16 @@ def get_k_means_pca(
     #                   number of centroids to generate
     #
     # max_iter :  int
-    #             Maximum number of iterations of the k-means algorithm
+    #             Maximum number of iterations of the k_value-means algorithm
     #                   for a single run
     #
     # n_init :    int, optional, default: 10
-    #             Number of time the k-means algorithm will be run with
+    #             Number of time the k_value-means algorithm will be run with
     #                   different centroid seeds
     #
-    # init :      'k-means++', 'random' or an ndarray
+    # init :      'k_value-means++', 'random' or an ndarray
     #             method for initialization;
-    #            'k-means++': selects initial cluster centers for k-mean
+    #            'k_value-means++': selects initial cluster centers for k_value-mean
     #                   clustering in a smart way to speed up convergence
     #
     # precompute_distances : boolean
@@ -112,9 +109,9 @@ def get_k_means_pca(
     #                   useful for debugging
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
     #             -2 : all CPUs but one are used.
-    k = int(k)
+    k_value = int(k_value)
 
-    number_only_matrix = matrix.tolist()
+    number_only_matrix = count_matrix.tolist()
 
     inequality = '≤'
 
@@ -123,7 +120,7 @@ def get_k_means_pca(
     plt.figure()
 
     # get color gradient
-    color_list = plt.cm.Dark2(np.linspace(0, 1, k))
+    color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
 
     # make color gradient a list
     color_list = color_list.tolist()
@@ -139,13 +136,13 @@ def get_k_means_pca(
         rgb_tuples.append(tuple(color_list[i]))
 
     # coordinates for each cluster
-    reduced_data = PCA(n_components=2).fit_transform(matrix)
+    reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
     # n_init statically set to 300 for now. Probably should be determined
     # based on number of active files
     kmeans = KMeans(
         init=init_method,
-        n_clusters=k,
+        n_clusters=k_value,
         n_init=n_init,
         tol=tolerance,
         max_iter=max_iter)
@@ -162,7 +159,7 @@ def get_k_means_pca(
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
     # plot and label points
-    for x, y, name, color in zip(xs, ys, file_names, colored_points):
+    for x, y, name, color in zip(xs, ys, labels, colored_points):
         plt.scatter(x, y, c=color, s=40)
         plt.text(x, y, name, color=color)
 
@@ -173,10 +170,10 @@ def get_k_means_pca(
     plt.close()
 
     # trap bad silhouette score input
-    if k <= 2:
+    if k_value <= 2:
         silhouette_score = "N/A [Not available for K " + inequality + " 2]"
 
-    elif k > (matrix.shape[0] - 1):
+    elif k_value > (count_matrix.shape[0] - 1):
         silhouette_score = \
             'N/A [Not available if (K value) > (number of active files -1)]'
 
@@ -205,9 +202,9 @@ def get_k_means_pca(
 
     from plotly.graph_objs import Scatter, Data
 
-    trace = Scatter(x=xs, y=ys, text=file_names,
+    trace = Scatter(x=xs, y=ys, text=labels,
                     textfont=dict(color=plotly_colors),
-                    name=file_names, mode='markers+text',
+                    name=labels, mode='markers+text',
                     marker=dict(color=plotly_colors, line=dict(width=1,)),
                     textposition='right')
 
@@ -221,6 +218,22 @@ def get_k_means_pca(
     big_layout = dict(
         hovermode='closest'
     )
+
+    # calculate the silhouette score
+    silhouette_score = _get_silhouette_score_(k=k_value,
+                                              k_means=k_means,
+                                              matrix=count_matrix,
+                                              metric_dist=metric_dist)
+
+
+
+
+
+
+
+
+
+
     from plotly.offline import plot
     html = """
     <html><head><meta charset="utf-8" /></head><body>
@@ -261,6 +274,19 @@ def get_k_means_pca(
     # integer ndarray with shape (n_samples,) -- label[i] is the code or index
     # of the centroid the i'th observation is closest to
     return best_index, silhouette_score, color_chart
+
+
+def _get_voronoi_plot_data_(data: np.ndarray,
+                            group_index: np.ndarray) -> np.ndarray:
+    """Generate the data needed to be plotted in voronoi analysis method.
+
+    :param data: the reduced data analyzed by the k-means method
+    :param group_index: index for the results that are in the same group
+    :return: the centroid analysis data
+    """
+    temp_data = [data[item] for _, item in enumerate(group_index)]
+    result = np.average(temp_data[0].transpose(), axis=1)
+    return result
 
 
 class getKMeansVoronoi:
