@@ -57,6 +57,7 @@ def get_k_means_pca(count_matrix: np.ndarray,
     :param metric_dist: method of the distance metrics
     :param folder_path: system path to save the temp image
     :param labels: file names of active files
+    :return:
     """
 
     """Parameters for KMeans (SKlearn)"""
@@ -283,8 +284,8 @@ class getKMeansVoronoi:
         This function also finds a list of points for the centroids, and a list of
         points for the segments.
         :param count_matrix: a 2D numpy matrix contains the word counts
-        :param k_value: k value-for k-means analysis
         :param n_init: number of iterations with different centroids
+        :param k_value: k value-for k-means analysis
         :param max_iter: maximum number of iterations
         :param tolerance: relative tolerance, inertia to declare convergence
         :param init_method: method of initialization: "K++" or "random"
