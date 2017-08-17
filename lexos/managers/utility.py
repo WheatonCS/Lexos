@@ -665,12 +665,12 @@ def generate_k_means_pca(file_manager: FileManager):
 
 
 def generate_k_means_voronoi(file_manager: FileManager) -> \
-        KMeans.getKMeansVoronoi:
+        KMeans.GetKMeansVoronoi:
     """Generates a table of cluster number and file name from the active files.
 
     :param file_manager: A FileManager object (see managers/file_manager.py).
     :return: a class object that contains all the analyzed data and information
-             see analyze/Kmeans.py/getKmeansVoronoi class for more.
+             see analyze/Kmeans.py/GetKmeansVoronoi class for more.
     """
 
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
@@ -716,7 +716,7 @@ def generate_k_means_voronoi(file_manager: FileManager) -> \
         makedirs(folder_path)
 
     # generates the data
-    k_means_voronoi_data = KMeans.getKMeansVoronoi(count_matrix=count_matrix,
+    k_means_voronoi_data = KMeans.GetKMeansVoronoi(count_matrix=count_matrix,
                                                    labels=labels,
                                                    n_init=n_init,
                                                    k_value=k_value,

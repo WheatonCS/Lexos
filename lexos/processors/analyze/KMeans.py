@@ -269,7 +269,7 @@ def _get_voronoi_plot_data_(data: np.ndarray,
     return result
 
 
-class getKMeansVoronoi:
+class GetKMeansVoronoi:
     def __init__(self,
                  count_matrix: np.ndarray,
                  n_init: int,
@@ -281,8 +281,8 @@ class getKMeansVoronoi:
                  labels: np.ndarray):
         """Generates an array of centroid index based on the active files.
 
-        This function also finds a list of points for the centroids, and a list of
-        points for the segments.
+        This function also finds a list of points for the centroids, and a list
+        of points for the segments.
         :param count_matrix: a 2D numpy matrix contains the word counts
         :param n_init: number of iterations with different centroids
         :param k_value: k value-for k-means analysis
