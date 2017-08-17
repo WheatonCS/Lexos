@@ -96,7 +96,7 @@ def handle_special_characters(text: str) -> str:
 
     for key in conversion_dict:
         text = make_replacements(
-            text=text, replace_from=list(key), replace_to=conversion_dict[key],
+            text=text, replace_from=[key], replace_to=conversion_dict[key],
             is_word=False)
 
     return text
