@@ -326,12 +326,19 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     text_data = [{"x": item[0], "y": item[1], "title": labels[index]}
                  for index, item in enumerate(final_points_list)]
 
-    best_index1 = np.unique(kmeans_index, return_index=True)
-    # Make a color gradient with k colors
+    # create a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
-    rgb_tuples1 = [tuple([int(rgb_value * 255) for rgb_value in color[:-1]])
-                   for color in color_list]
-    color_chart1 = "rgb" + "#rgb".join(map(str, rgb_tuples1)) + "#"
+
+    # create list of rgb tuples to let the website to plot
+    rgb_tuples = [tuple([int(rgb_value * 255) for rgb_value in color[:-1]])
+                  for color in color_list]
+
+    # puts rgb values in right order to match the table
+    rgb_index = sorted(set(best_index), key=lambda x: best_index.index(x))
+    ordered_color_list1 = [None] * k
+    for index, item in enumerate(rgb_index):
+        ordered_color_list1[item] = rgb_tuples[index]
+    color_chart = "rgb" + "#rgb".join(map(str, rgb_tuples)) + "#"
 
     color_list = color_list.tolist()
 
@@ -354,12 +361,9 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
             seen2.append(best_index[i])
             no_repeats.append(best_index[i])
 
-    no_repeats1 = sorted(set(best_index), key=lambda x: best_index.index(x))
-    ordered_color_list = [None] * k
-    ordered_color_list1 = [None] * k
 
-    for index, item in enumerate(no_repeats1):
-        ordered_color_list1[item] = rgb_tuples1[index]
+    ordered_color_list = [None] * k
+
     for i in range(0, len(no_repeats)):
         ordered_color_list[no_repeats[i]] = color_list[i]
     color_chart1 = "rgb" + "#rgb".join(map(str, ordered_color_list1)) + "#"
