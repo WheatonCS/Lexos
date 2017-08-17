@@ -52,17 +52,16 @@ def _get_voronoi_plot_data_(data: np.ndarray,
 
 # Gets called from generateKMeansPCA() in utility.py
 
-
 def get_k_means_pca(
-    matrix,
-    k,
-    max_iter,
-    init_method,
-    n_init,
-    tolerance,
-    metric_dist,
-    file_names,
-    folder_path):
+        matrix,
+        k,
+        max_iter,
+        init_method,
+        n_init,
+        tolerance,
+        metric_dist,
+        file_names,
+        folder_path):
     """
     Generate an array of centroid index based on the active files.
 
@@ -173,10 +172,18 @@ def get_k_means_pca(
     # close the plot so next one doesn't plot over the last one
     plt.close()
 
-    # calculate silhouette score
-    silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
-                                              metric_dist=metric_dist,
-                                              k_means=k_means)
+    # trap bad silhouette score input
+    if k <= 2:
+        silhouette_score = "N/A [Not available for K " + inequality + " 2]"
+
+    elif k > (matrix.shape[0] - 1):
+        silhouette_score = \
+            'N/A [Not available if (K value) > (number of active files -1)]'
+
+    else:
+        kmeans.fit(number_only_matrix)
+        labels = kmeans.labels_  # for silhouette score
+        silhouette_score = 1
 
     # make a string of rgb tuples to send to the javascript separated by #
     # cause jinja hates lists of strings
@@ -201,7 +208,7 @@ def get_k_means_pca(
     trace = Scatter(x=xs, y=ys, text=file_names,
                     textfont=dict(color=plotly_colors),
                     name=file_names, mode='markers+text',
-                    marker=dict(color=plotly_colors, line=dict(width=1, )),
+                    marker=dict(color=plotly_colors, line=dict(width=1,)),
                     textposition='right')
 
     data = Data([trace])
