@@ -86,12 +86,19 @@ app.register_blueprint(word_cloud_view)
 # implement flask webassets
 assets = Environment(app)
 
-# register library
+# register all the js to webassets
 js_loader = YAMLLoader(
     os.path.join(app.static_folder, 'webasset_bundle_js.yml')
 )
 js_bundles = YAMLLoader.load_bundles(js_loader)
 assets.register('js_all', js_bundles['js-all'])
+
+# register all the css to webassets
+css_loader = YAMLLoader(
+    os.path.join(app.static_folder, 'webasset_bundle_css.yml')
+)
+css_bundles = YAMLLoader.load_bundles(css_loader)
+assets.register('css_all', css_bundles['css-all'])
 
 
 # http://flask.pocoo.org/snippets/28/
