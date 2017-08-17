@@ -317,7 +317,7 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
 
     # create final centroids coordinates list
     final_centroids_list = [[item[0] + translate_x, item[1] + translate_y]
-                            for index, item in enumerate(centroid_coordinates)]
+                            for _, item in enumerate(centroid_coordinates)]
     # starts with a dummy point set off the screen to get rid of yellow mouse
     # tracking action (D3)
     final_centroids_list.insert(0, [-500, -500])
@@ -326,8 +326,13 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     text_data = [{"x": item[0], "y": item[1], "title": labels[index]}
                  for index, item in enumerate(final_points_list)]
 
+    best_index1 = np.unique(kmeans_index, return_index=True)
     # Make a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k))
+    rgb_tuples1 = [tuple([int(rgb_value * 255) for rgb_value in color[:-1]])
+                   for color in color_list]
+    color_chart1 = "rgb" + "#rgb".join(map(str, rgb_tuples1)) + "#"
+
     color_list = color_list.tolist()
 
     # Convert rgba to rgb (all a's are 1 and as such are unnecessary)
@@ -348,6 +353,8 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
         if best_index[i] not in seen2:
             seen2.append(best_index[i])
             no_repeats.append(best_index[i])
+
+    no_repeats1 = list(set(kmeans_index))
 
     ordered_color_list = [None] * k
 
@@ -373,5 +380,5 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
                                               metric_dist=metric_dist,
                                               k_means=k_means)
 
-    return best_index, silhouette_score, color_chart, final_points_list, \
+    return best_index, silhouette_score, color_chart1, final_points_list, \
            final_centroids_list, text_data, max_x
