@@ -94,26 +94,25 @@ def handle_special_characters(text: str) -> str:
     else:
         raise LexosException(INVALID_CHARACTER_MODE_MESSAGE)
 
-    for key in conversion_dict:
-        text = make_replacements(
-            text=text, replace_from=[key], replace_to=conversion_dict[key],
-            is_word=False)
+    text = replacement_dict_handler(text, conversion_dict)
 
     return text
 
 
 def make_replacements(text: str, replace_from: List[str], replace_to: str,
-                      is_word: bool) -> str:
+                      is_lemma: bool) -> str:
     """Replaces occurrences of words or characters in a text.
 
     :param text: The text string to be manipulated.
     :param replace_from: A list of all target words/chars that need replacing.
     :param replace_to: The single word/char they should be replaced with.
-    :param is_word: Whether the target is a full word vs. a single character.
+    :param is_lemma: Whether the target is a full word vs. a single character.
     :return: The text with replacements made.
     """
 
-    if is_word:
+    # Lemmas are words surrounded by whitespace, while other
+    # replacements are chars
+    if is_lemma:
         edge1 = r'(^|\s)('  # Beginning of the string or whitespace
         edge2 = r')(?=\s|$)'  # Whitespace or end of the string
     else:
@@ -126,6 +125,25 @@ def make_replacements(text: str, replace_from: List[str], replace_to: str,
         # Replaces the second capturing group (change_me) with
         # replace_to_str and preserves the whitespace in the first group
         text = the_regex.sub('\g<1>' + replace_to, text)
+
+    return text
+
+
+def replacement_dict_handler(text: str,
+                             conversion_dict: Dict[str, str]) -> str:
+    """Handles special character replacement dicts from the drop-down menu.
+
+    :param text: A text string containing character entities.
+    :param conversion_dict: A dictionary mapping character entities to
+        unicode characters.
+    :return: The text with all entities replaced with the corresponding
+        unicode characters.
+    """
+
+    for key in conversion_dict:
+        text = make_replacements(
+            text=text, replace_from=[key], replace_to=conversion_dict[key],
+            is_lemma=False)
 
     return text
 
@@ -169,7 +187,7 @@ def replacement_string_handler(
 
         text = make_replacements(
             text=text, replace_from=replace_from_list,
-            replace_to=replace_to_str, is_word=is_lemma)
+            replace_to=replace_to_str, is_lemma=is_lemma)
 
     return text
 
