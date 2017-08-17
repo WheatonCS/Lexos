@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import textwrap
-from typing import Union
+from typing import Union, List
 
 import numpy as np
 from PIL import Image, ImageChops
@@ -81,21 +81,110 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
     # different for dendrogram
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
-    distance_list = np.array(
-        [round(float(z[i][2]), 5) for i in range(0, len(z))])
+    distance_list = np.around([float(z[i][2]) for i in range(0, len(z))],
+                              decimals=5)
 
     return distance_list
+
+
+def cluster_dendro(dendro_matrix: np.ndarray,
+                   distance_metric: str,
+                   linkage_method: str,
+                   labels: np.ndarray) -> (np.ndarray, float, float, int,
+                                           float, float, float,
+                                           Union[float, int, str], np.ndarray):
+
+    # Switch to request.json if necessary
+    """generate the score label
+
+    :param dendro_matrix: np.ndarray, occurrence of words in different files
+    :param distance_metric: string, style of distance metric in the dendrogram
+    :param linkage_method: string, style of linkage method in the dendrogram
+    :param labels: list, file names
+    :return:
+            - score_label: np.ndarray, the score of the cluster of dendrogram
+            - inconsistent_max: float, upper bound of threshold to calculate
+               silhouette score if using Inconsistent criterion
+            - maxclust_max: integer, upper bound of threshold to calculate
+               silhouette score if using Maxclust criterion
+            - distance_max: float, upper bound of threshold to calculate
+               silhouette score if using Distance criterion
+            - distance_min: float, lower bound of threshold to calculate
+               silhouette score if using Distance criterion
+            - monocrit_max: float, upper bound of threshold to calculate
+               silhouette score if using Monocrit criterion
+            - monocrit_min: float, lower bound of threshold to calculate
+               silhouette score if using Monocrit criterion
+            - threshold: float/integer/string, threshold (t) value that users
+               entered, equals to 'N/A' if users leave the field blank
+            - y: np.ndarray, pairwise distance between files
+    """
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
+    y = metrics.pairwise.pairwise_distances(
+        dendro_matrix, metric=distance_metric)
+    z = hierarchy.linkage(y, method=linkage_method)
+
+    monocrit = None
+
+    # 'maxclust' range
+    maxclust_max = len(labels) - 1
+
+    # 'inconsistent' range
+    r = hierarchy.inconsistent(z, 2)
+    inconsistent_max = np.round(r[-1][-1], 2)
+
+    # 'distance' range
+    d = hierarchy.cophenet(z)
+    distance_max = np.round(np.amax(d), 2)
+    distance_min = np.round(np.amin(d) + 0.01, 2)
+
+    # 'monocrit' range
+    mr = hierarchy.maxRstat(z, r, 0)
+    monocrit_max = np.round(np.amax(mr), 2)
+    monocrit_min = np.round(np.amin(mr) + 0.01, 2)
+
+    threshold = opts['threshold']
+    if threshold == '':
+        threshold = str(threshold)
+    else:
+        threshold = float(threshold)
+
+    if opts['criterion'] == 'maxclust':
+        if (threshold == '') or (threshold > maxclust_max):
+            threshold = len(labels) - 1
+        else:
+            threshold = round(float(threshold))
+    elif opts['criterion'] == 'distance':
+        if (threshold == '') or (threshold > distance_max) or \
+           (threshold < distance_min):
+            threshold = distance_max
+    elif opts['criterion'] == 'inconsistent':
+        if (threshold == '') or (threshold > inconsistent_max):
+            threshold = inconsistent_max
+    elif opts['criterion'] == 'monocrit':
+        monocrit = mr
+        if (threshold == '') or (threshold > monocrit_max) or (
+                threshold < monocrit_min):
+            threshold = monocrit_max
+    score_label = hierarchy.fcluster(
+        z, t=threshold, criterion=opts['criterion'], monocrit=monocrit)
+
+    return score_label, inconsistent_max, maxclust_max, distance_max,\
+        distance_min, monocrit_max, monocrit_min, threshold, y
 
 
 def get_silhouette_score(dendro_matrix: np.ndarray,
                          distance_metric: str,
                          linkage_method: str,
-                         labels: np.ndarray) -> (str, str, float, int, float,
-                                                 float, float, float,
+                         labels: np.ndarray) -> (str, str, float, float, int,
+                                                 float, float, float, float,
                                                  Union[float, int, str]):
     """Generate silhoutte score based on hierarchical clustering.
 
-    :param dendro_matrix: list, occurrence of words in different files
+    :param dendro_matrix: np.ndarray, occurrence of words in different files
     :param distance_metric: string, style of distance metric in the dendrogram
     :param linkage_method: string, style of linkage method in the dendrogram
     :param labels: list, file names
@@ -119,68 +208,17 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
              - threshold: float/integer/string, threshold (t) value that users
                entered, equals to 'N/A' if users leave the field blank
     """
-    # Switch to request.json if necessary
-    if request.json:
-        opts = request.json
-    else:
-        opts = request.form
 
     active_files_num = len(labels) - 1
 
-    # since number of labels should be more than 2 and less than n_samples - 1
     if active_files_num > 2:
-        y = metrics.pairwise.pairwise_distances(
-            dendro_matrix, metric=distance_metric)
-        z = hierarchy.linkage(y, method=linkage_method)
-
-        monocrit = None
-
-        # 'maxclust' range
-        maxclust_max = len(labels) - 1
-
-        # 'inconsistent' range
-        r = hierarchy.inconsistent(z, 2)
-        inconsistent_max = np.round(r[-1][-1], 2)
-
-        # 'distance' range
-        d = hierarchy.cophenet(z)
-        distance_max = np.round(np.amax(d), 2)
-        distance_min = np.round(np.amin(d) + 0.01, 2)
-
-        # 'monocrit' range
-        mr = hierarchy.maxRstat(z, r, 0)
-        monocrit_max = np.round(np.amax(mr), 2)
-        monocrit_min = np.round(np.amin(mr) + 0.01, 2)
-
-        threshold = opts['threshold']
-        if threshold == '':
-            threshold = str(threshold)
-        else:
-            threshold = float(threshold)
-
-        if opts['criterion'] == 'maxclust':
-            criterion = 'maxclust'
-            if (threshold == '') or (threshold > maxclust_max):
-                threshold = len(labels) - 1
-            else:
-                threshold = round(float(threshold))
-        elif opts['criterion'] == 'distance':
-            criterion = 'distance'
-            if (threshold == '') or (threshold > distance_max) or \
-                    (threshold < distance_min):
-                threshold = distance_max
-        elif opts['criterion'] == 'inconsistent':
-            criterion = 'inconsistent'
-            if (threshold == '') or (threshold > inconsistent_max):
-                threshold = inconsistent_max
-        elif opts['criterion'] == 'monocrit':
-            criterion = 'monocrit'
-            monocrit = mr
-            if (threshold == '') or (threshold > monocrit_max) or (
-                    threshold < monocrit_min):
-                threshold = monocrit_max
-        score_label = hierarchy.fcluster(
-            z, t=threshold, criterion=criterion, monocrit=monocrit)
+        # get score_label
+        score_label, inconsistent_max, maxclust_max, distance_max,\
+            distance_min, monocrit_max, monocrit_min, threshold, y = \
+            cluster_dendro(dendro_matrix=dendro_matrix,
+                           distance_metric=distance_metric,
+                           linkage_method=linkage_method,
+                           labels=labels)
 
         # this means all the files are divided into only 1 or less cluster
         if score_label.size <= 1:
@@ -249,7 +287,7 @@ def trim(im: Image.Image) -> Image.Image:
     """Crop the dendrogram generated in dendrogram function.
 
     :param im: a png image
-    :return: im.crop(bbox): cropped image
+    :return: im.crop(bbox) if bbox == True: cropped image
     """
     bg = Image.new(im.mode, im.size, im.getpixel((0, 0)))
     diff = ImageChops.difference(im, bg)
@@ -257,6 +295,243 @@ def trim(im: Image.Image) -> Image.Image:
     bbox = diff.getbbox()
     if bbox:
         return im.crop(bbox)
+    else:
+        raise ValueError('The box is not created.')
+
+
+def adjust_legend_area(labels: np.ndarray,
+                       max_legend_length_first_page: int) -> int:
+
+    """Adjust the legend area.
+
+    :param labels: A list of strings of the name of each text segment.
+    :param max_legend_length_first_page: int, the max legend length on
+           first page
+    :return: max_legend_length_first_page: int, the max legend length on
+             first page
+    """
+    if len(max(labels)) <= const.DENDRO_MAX_LABELS_LENGTH or \
+            (len(labels) > 20):
+        pyplot.subplot(15, 1, (13, 15))
+
+    # labels are very long: make area for legends smaller
+    elif (len(max(labels)) > const.DENDRO_MAX_LABELS_LENGTH) and \
+        (len(max(labels)) <= (const.DENDRO_MAX_LABELS_LENGTH + 6)) and \
+            (len(labels) <= 20):
+        pyplot.subplot(15, 1, (14, 15))
+        max_legend_length_first_page -= 5
+
+    elif (len(max(labels)) > (const.DENDRO_MAX_LABELS_LENGTH + 6)) and \
+            (len(labels) <= 20):
+        pyplot.subplot(15, 1, (15, 15))
+        max_legend_length_first_page -= 12
+
+    return max_legend_length_first_page
+
+
+def generate_legend_list(silhouette_score: str,
+                         silhouette_annotation: str,
+                         legend: str) -> (str, List[str]):
+    """Generate legend list which contains silhouette score and annotation.
+
+    :param silhouette_score: string, containing the result of silhouette score
+    :param silhouette_annotation: string, annotation of the silhouette score
+    :param legend: A string of all legends
+    :return:
+            - legend: a string which contains silhouette_score,
+            silhouette_annotation and original legend
+            - legend_list: a list of items in legend split by '\n'
+    """
+    str_wrapped_silhouette = textwrap.fill(
+        silhouette_score,
+        const.CHARACTERS_PER_LINE_IN_LEGEND)
+
+    str_wrapped_sil_annotation = textwrap.fill(
+        silhouette_annotation,
+        const.CHARACTERS_PER_LINE_IN_LEGEND)
+
+    legend = str_wrapped_silhouette + "\n" + str_wrapped_sil_annotation + \
+        "\n\n" + legend
+
+    legend_list = legend.split("\n")
+
+    return legend, legend_list
+
+
+def plot_legend(labels: np.ndarray,
+                legend_page: int,
+                line_total: int,
+                legend: str,
+                page_num: int,
+                max_legend_length_first_page: int,
+                show_dendro_legends: bool,
+                folder: str,
+                legend_list: List[str],
+                page_name_list: List[str]) -> (int, list):
+    """Plot dendrogram legend.
+
+    :param labels: A list of strings of the name of each text segment.
+    :param legend_page:
+    :param line_total:
+    :param legend: A string of all legends
+    :param page_num:
+    :param max_legend_length_first_page:
+    :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
+           is checked
+    :param folder: A string representing the path name to the folder where the
+           pdf and png files of the dendrogram will be stored.
+    :param legend_list:
+    :param page_name_list:
+    :return:
+            - legend_page: int, the page of legend plot
+            - page_name_list: a list of page names
+    """
+
+    # -- plot dendro legend ---------------------------------------------------
+    if show_dendro_legends:
+        # area for the legends
+        # make the legend area on the first page smaller if file names are too
+        # long
+        # labels are not exceedingly long, or the font size is automatically
+        # shrinked
+        max_legend_length_first_page = adjust_legend_area(
+            labels=labels,
+            max_legend_length_first_page=max_legend_length_first_page)
+
+        pyplot.axis("off")  # disables figure borders on legends page
+
+        # legend doesn't exceed first page
+        if line_total <= max_legend_length_first_page:
+            pyplot.axis("off")
+            pyplot.text(
+                const.DENDRO_LEGEND_X,
+                const.DENDRO_LEGEND_Y,
+                legend,
+                ha='left',
+                va='top',
+                size=const.DENDRO_LEGEND_FONT_SIZE,
+                alpha=.5)
+
+        else:
+            legend_first_page = "\n".join(
+                legend_list[:max_legend_length_first_page])
+            pyplot.text(
+                const.DENDRO_LEGEND_X,
+                const.DENDRO_LEGEND_Y,
+                legend_first_page,
+                ha='left',
+                va='top',
+                size=const.DENDRO_LEGEND_FONT_SIZE,
+                alpha=.5)
+
+            line_left = line_total - max_legend_length_first_page
+
+            pyplot.savefig(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))
+
+            while line_left > 0:
+                # creates next PDF page for the legends
+                page_num += 1
+                # page_name = "page" + str(page_num)
+                page_name = pyplot.figure(figsize=(10, 15))
+
+                page_name_list.append(page_name)
+                pyplot.axis("off")  # disables figure borders on legends page
+                if line_left <= const.DENDRO_MAX_LINES_PER_PAGE:
+                    legend_left = "\n".join(
+                        legend_list[(line_total - line_left): line_total])
+
+                # still needs another page,
+                # so print out DENDRO_MAX_LINES_PER_PAGE first
+                else:
+                    legend_left = "\n".join(
+                        legend_list[(max_legend_length_first_page +
+                                    const.DENDRO_MAX_LINES_PER_PAGE *
+                                     (page_num - 2)):
+                                    (max_legend_length_first_page +
+                                    const.DENDRO_MAX_LINES_PER_PAGE *
+                                     (page_num - 1))])
+
+                # plots legends
+                pyplot.text(
+                    const.DENDRO_LEGEND_X,
+                    const.DENDRO_LEGEND_Y,
+                    legend_left,
+                    ha='left',
+                    va='top',
+                    size=const.DENDRO_LEGEND_FONT_SIZE,
+                    alpha=.5)
+
+                line_left -= const.DENDRO_MAX_LINES_PER_PAGE
+
+                pyplot.savefig(os.path.join(folder, "legend" +
+                                            str(legend_page) +
+                                            ".png"))
+                legend_page += 1
+
+    return legend_page, page_name_list
+
+
+def plot_dendrogram(labels: np.ndarray,
+                    z: np.ndarray,
+                    title: str,
+                    augmented_dendrogram: bool,
+                    orientation: str,
+                    folder: str,
+                    pruning: int):
+    # -- get options from request ---------------------------------------------
+    """Plot dendrogram and save as png file.
+
+    :param labels: labels: A list of strings of the name of each text segment.
+    :param z:
+    :param title:
+    :param augmented_dendrogram:
+    :param orientation:
+    :param folder:
+    :param pruning:
+    """
+    if request.json:
+        opts = request.json
+    else:
+        opts = request.form
+
+    if opts['orientation'] == "top":
+        leaf_rotation_degree = 90
+    elif opts['orientation'] == "left":
+        leaf_rotation_degree = 0
+    else:  # really should not be Bottom or Top
+        leaf_rotation_degree = 0
+
+    # Allows a margin for long labels
+    pyplot.subplot(15, 1, (1, 10))
+
+    str_wrap_title = textwrap.fill(title,
+                                   const.DENDRO_CHARACTERS_PER_LINE_IN_TITLE)
+
+    # Plot the title for the graph
+    pyplot.title(str_wrap_title, fontsize=const.DENDRO_TITLE_FONT_SIZE)
+
+    # -- get augmented dendrogram if requested --------------------------------
+    if augmented_dendrogram:
+        get_augmented_dendrogram(
+            z,
+            p=pruning,
+            truncate_mode="lastp",
+            labels=labels,
+            leaf_rotation=leaf_rotation_degree,
+            orientation=orientation,
+            show_leaf_counts=True)
+    else:
+        hierarchy.dendrogram(
+            z,
+            p=pruning,
+            truncate_mode="lastp",
+            labels=labels,
+            leaf_rotation=leaf_rotation_degree,
+            orientation=orientation,
+            show_leaf_counts=True)
+
+    # save as png file
+    pyplot.savefig(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))
 
 
 # Gets called from generateDendrogram() in utility.py
@@ -315,43 +590,20 @@ def dendrogram(
               entered, equals to 'N/A' if users leave the field blank
     """
 
-    # Generating silhouette score
+    # -- generate silhouette score --------------------------------------------
     silhouette_score, silhouette_annotation, score, inconsistent_max, \
         maxclust_max, distance_max, distance_min, monocrit_max, monocrit_min, \
         threshold = get_silhouette_score(dendro_matrix, distance_metric,
                                          linkage_method, labels)
 
-    # values are the same from the previous ones, but the formats are slightly
-    # different for dendrogram
-    y = pdist(dendro_matrix, distance_metric)
-    z = hierarchy.linkage(y, method=linkage_method)
-
+    # -- generate legend list -------------------------------------------------
     legend_page = 0
 
-    # Switch to Ajax if necessary
-    if request.json:
-        opts = request.json
-    else:
-        opts = request.form
+    legend, legend_list = generate_legend_list(
+        silhouette_score=silhouette_score,
+        silhouette_annotation=silhouette_annotation,
+        legend=legend)
 
-    if opts['orientation'] == "top":
-        leaf_rotation_degree = 90
-    elif opts['orientation'] == "left":
-        leaf_rotation_degree = 0
-    else:  # really should not be Bottom or Top
-        leaf_rotation_degree = 0
-
-    str_wrapped_silhouette = textwrap.fill(
-        silhouette_score, const.CHARACTERS_PER_LINE_IN_LEGEND)
-
-    str_wrapped_sil_annotation = textwrap.fill(
-        silhouette_annotation,
-        const.CHARACTERS_PER_LINE_IN_LEGEND)
-
-    legend = str_wrapped_silhouette + "\n" + str_wrapped_sil_annotation + \
-        "\n\n" + legend
-
-    legend_list = legend.split("\n")
     line_total = len(legend_list)  # total number of lines of legends
 
     # for file names in unicode
@@ -365,126 +617,32 @@ def dendrogram(
     page_name = pyplot.figure(figsize=(10, 15))  # area for dendrogram
     page_name_list.append(page_name)
 
-    pyplot.subplot(15, 1, (1, 10))  # Allows a margin for long labels
-    str_wrap_title = textwrap.fill(title,
-                                   const.DENDRO_CHARACTERS_PER_LINE_IN_TITLE)
+    # -- plot (augmented) dendrogram ------------------------------------------
+    y = pdist(dendro_matrix, distance_metric)
+    z = hierarchy.linkage(y, method=linkage_method)
 
-    pyplot.title(str_wrap_title, fontsize=const.DENDRO_TITLE_FONT_SIZE)
+    plot_dendrogram(labels=labels,
+                    z=z,
+                    title=title,
+                    augmented_dendrogram=augmented_dendrogram,
+                    orientation=orientation,
+                    folder=folder,
+                    pruning=pruning)
 
-    # get augmented dendrogram if requested
-    if augmented_dendrogram:
-        get_augmented_dendrogram(
-            z,
-            p=pruning,
-            truncate_mode="lastp",
-            labels=labels,
-            leaf_rotation=leaf_rotation_degree,
-            orientation=orientation,
-            show_leaf_counts=True)
-    else:
-        hierarchy.dendrogram(
-            z,
-            p=pruning,
-            truncate_mode="lastp",
-            labels=labels,
-            leaf_rotation=leaf_rotation_degree,
-            orientation=orientation,
-            show_leaf_counts=True)
+    # -- plot legend and get legend page and page name list -------------------
+    legend_page, page_name_list = plot_legend(
+        labels=labels,
+        legend_page=legend_page,
+        line_total=line_total,
+        legend=legend,
+        page_num=page_num,
+        max_legend_length_first_page=max_legend_length_first_page,
+        show_dendro_legends=show_dendro_legends,
+        folder=folder,
+        legend_list=legend_list,
+        page_name_list=page_name_list)
 
-    pyplot.savefig(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))
-    if show_dendro_legends:
-        # area for the legends
-        # make the legend area on the first page smaller if file names are too
-        # long
-        # labels are not exceedingly long, or the font size is automatically
-        # shrinked
-        if len(max(labels)) <= const.DENDRO_MAX_LABELS_LENGTH or \
-                (len(labels) > 20):
-            pyplot.subplot(15, 1, (13, 15))
-
-        # labels are very long: make area for legends smaller
-        elif (len(max(labels)) > const.DENDRO_MAX_LABELS_LENGTH) and \
-                (len(max(labels)) <= (const.DENDRO_MAX_LABELS_LENGTH + 6)) and\
-                (len(labels) <= 20):
-            pyplot.subplot(15, 1, (14, 15))
-            max_legend_length_first_page -= 5
-
-        elif (len(max(labels)) > (const.DENDRO_MAX_LABELS_LENGTH + 6)) and \
-                (len(labels) <= 20):
-            pyplot.subplot(15, 1, (15, 15))
-            max_legend_length_first_page -= 12
-
-        pyplot.axis("off")  # disables figure borders on legends page
-
-        # legend doesn't exceed first page
-        if line_total <= max_legend_length_first_page:
-            pyplot.axis("off")
-            pyplot.text(
-                const.DENDRO_LEGEND_X,
-                const.DENDRO_LEGEND_Y,
-                legend,
-                ha='left',
-                va='top',
-                size=const.DENDRO_LEGEND_FONT_SIZE,
-                alpha=.5)
-
-        else:
-            legend_first_page = "\n".join(
-                legend_list[:max_legend_length_first_page])
-            pyplot.text(
-                const.DENDRO_LEGEND_X,
-                const.DENDRO_LEGEND_Y,
-                legend_first_page,
-                ha='left',
-                va='top',
-                size=const.DENDRO_LEGEND_FONT_SIZE,
-                alpha=.5)
-
-            line_left = line_total - max_legend_length_first_page
-
-            pyplot.savefig(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))
-
-            while line_left > 0:
-                # creates next PDF page for the legends
-                page_num += 1
-                # page_name = "page" + str(page_num)
-                page_name = pyplot.figure(figsize=(10, 15))
-
-                page_name_list.append(page_name)
-                pyplot.axis("off")  # disables figure borders on legends page
-                if line_left <= const.DENDRO_MAX_LINES_PER_PAGE:
-                    legend_left = "\n".join(
-                        legend_list[(line_total - line_left): line_total])
-
-                # still needs another page,
-                # so print out DENDRO_MAX_LINES_PER_PAGE first
-                else:
-                    legend_left = "\n".join(
-                        legend_list[
-                            (max_legend_length_first_page +
-                             const.DENDRO_MAX_LINES_PER_PAGE * (page_num - 2)):
-                            (max_legend_length_first_page +
-                             const.DENDRO_MAX_LINES_PER_PAGE * (page_num - 1))]
-                        )
-
-                # plots legends
-                pyplot.text(
-                    const.DENDRO_LEGEND_X,
-                    const.DENDRO_LEGEND_Y,
-                    legend_left,
-                    ha='left',
-                    va='top',
-                    size=const.DENDRO_LEGEND_FONT_SIZE,
-                    alpha=.5)
-
-                line_left -= const.DENDRO_MAX_LINES_PER_PAGE
-
-                pyplot.savefig(os.path.join(folder, "legend" +
-                                            str(legend_page) +
-                                            ".png"))
-                legend_page += 1
-
-    # saves dendrogram as a .png
+    # -- saves dendrogram as a .png -------------------------------------------
     files = [str(os.path.join(folder, const.DENDROGRAM_PNG_FILENAME))]
     if legend_page > 0:
         for i in range(0, legend_page):
@@ -503,13 +661,13 @@ def dendrogram(
         result = trim(result)
         result.save(str(os.path.join(folder, "dendrogram.png")))
 
-    # saves dendrogram and legends as a pdf file
+    # -- saves dendrogram and legends as a pdf file ---------------------------
     pp = PdfPages(os.path.join(folder, const.DENDROGRAM_PDF_FILENAME))
     for page_name in page_name_list:
         pp.savefig(page_name)
     pp.close()
 
-    # saves dendrogram as a .svg
+    # -- saves dendrogram as a .svg -------------------------------------------
     pyplot.savefig(os.path.join(folder, const.DENDROGRAM_SVG_FILENAME))
     pyplot.close()
     total_pdf_page_number = len(page_name_list)
