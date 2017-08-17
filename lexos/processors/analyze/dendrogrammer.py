@@ -278,8 +278,8 @@ def get_augmented_dendrogram(*args, **kwargs):
             pyplot.annotate("%0.4g" % y, (x, y), xytext=(0, -8),
                             textcoords='offset points',
                             va='top', ha='center', size='small')
-    p = pyplot.legend()
-
+    else:
+        p = pyplot.plot()
     pyplot.legend(p, ['the branch height legend'], numpoints=1,
                   bbox_to_anchor=(1.1, 1.1))
 
@@ -311,19 +311,20 @@ def adjust_legend_area(labels: np.ndarray,
     :return: max_legend_length_first_page: The max legend length on
              first page
     """
-    if len(max(labels)) <= const.DENDRO_MAX_LABELS_LENGTH or \
+    longest_label = max(labels, key=len)
+    if len(longest_label) <= const.DENDRO_MAX_LABELS_LENGTH or \
             (len(labels) > 20):
         pyplot.subplot(15, 1, (13, 15))
 
     # labels are very long: make area for legends smaller
-    elif (len(max(labels)) > const.DENDRO_MAX_LABELS_LENGTH) and \
+    elif (len(longest_label) > const.DENDRO_MAX_LABELS_LENGTH) and \
         (len(max(labels)) <= (const.DENDRO_MAX_LABELS_LENGTH + 6)) and \
             (len(labels) <= 20):
         pyplot.subplot(15, 1, (14, 15))
         max_legend_length_first_page -= 5
 
-    elif (len(max(labels)) > (const.DENDRO_MAX_LABELS_LENGTH + 6)) and \
-            (len(labels) <= 20):
+    elif (len(longest_label) > (const.DENDRO_MAX_LABELS_LENGTH + 6)) \
+            and (len(labels) <= 20):
         pyplot.subplot(15, 1, (15, 15))
         max_legend_length_first_page -= 12
 
