@@ -94,14 +94,10 @@ def handle_special_characters(text: str) -> str:
     else:
         raise LexosException(INVALID_CHARACTER_MODE_MESSAGE)
 
-    r = make_replacer(replacements=conversion_dict)
-    # r is a function created by make_replacer(), _do_replace(), and
-    # replace().
-    # do_replace() returns the new char to use when called with the char to
-    # be replaced. replace() substitutes the characters through repeated
-    # calls to _do_replacer(). This whole functionality is packaged
-    # together in r, which gets applied to the text on the next line.
-    text = r(text)
+    for key in conversion_dict:
+        text = make_replacements(
+            text=text, replace_from=list(key), replace_to=conversion_dict[key],
+            is_word=False)
 
     return text
 

@@ -88,7 +88,7 @@ class TestMakeReplacer:
             "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 
 
-class TestReplacementHandlerAlone:
+class TestReplacementStringHandlerAlone:
     test_string = "Test string is testing"
 
     def test_not_lemma_normal(self):
@@ -97,25 +97,25 @@ class TestReplacementHandlerAlone:
             "Teft ftring if tefting"
         assert replacement_string_handler(
             text=self.test_string, replacer_string="i,e:a", is_lemma=False) \
-               == "Tast strang as tastang"
+            == "Tast strang as tastang"
         assert replacement_string_handler(
             text=self.test_string, replacer_string="q:z", is_lemma=False) == \
-               self.test_string
+            self.test_string
         assert replacement_string_handler(
             text=self.test_string, replacer_string="t:l", is_lemma=False) == \
             "Tesl slring is lesling"
         assert replacement_string_handler(
             text=self.test_string, replacer_string="t:t", is_lemma=False) == \
-               self.test_string
+            self.test_string
         assert replacement_string_handler(
             text=self.test_string, replacer_string=" r : t ", is_lemma=False) \
-               == "Test stting is testing"
+            == "Test stting is testing"
         assert replacement_string_handler(
             text=self.test_string, replacer_string="e:b \n i:o ",
             is_lemma=False) == "Tbst strong os tbstong"
         assert replacement_string_handler(
-            text=self.test_string, replacer_string="n:t\nt:x", is_lemma=False) \
-               == "Tesx sxrixg is xesxixg"
+            text=self.test_string, replacer_string="n:t\nt:x", is_lemma=False)\
+            == "Tesx sxrixg is xesxixg"
         assert replacement_string_handler(
             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:q",
             is_lemma=False) == "qqqq qqqqqq qq qqqqqqq"
@@ -129,13 +129,13 @@ class TestReplacementHandlerAlone:
             is_lemma=False) == "   "
         assert replacement_string_handler(
             text=self.test_string, replacer_string="", is_lemma=False) == \
-               self.test_string
+            self.test_string
         assert replacement_string_handler(
             text=self.test_string, replacer_string=" ", is_lemma=False) == \
-               self.test_string
+            self.test_string
         assert replacement_string_handler(
             text=self.test_string, replacer_string="\n", is_lemma=False) == \
-               self.test_string
+            self.test_string
         # Missing/too many colons
         try:
             replacement_string_handler(
@@ -273,13 +273,13 @@ class TestReplacementHandlerAlone:
             "words things junk stuff wordss text words"
         assert replacement_string_handler(
             text="Hello there.", replacer_string=".,l:!\n", is_lemma=False) \
-               == "He!!o there!"
+            == "He!!o there!"
         assert replacement_string_handler(
             text="Test^ t$ext te?xt", replacer_string="^:>\n$:%\n?:&",
             is_lemma=False) == "Test> t%ext te&xt"
 
 
-class TestReplacementHandlerWithMergeStrings:
+class TestReplacementStringHandlerWithMergeStrings:
     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
     cache_folder = \
         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
