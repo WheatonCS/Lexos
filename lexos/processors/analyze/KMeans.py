@@ -263,94 +263,99 @@ def get_k_means_pca(
     return best_index, silhouette_score, color_chart
 
 
-def get_k_means_voronoi(count_matrix: np.ndarray,
-                        k: int,
-                        n_init: int,
-                        max_iter: int,
-                        tolerance: float,
-                        init_method: str,
-                        metric_dist: str,
-                        labels: np.ndarray):
-    """Generates an array of centroid index based on the active files.
+class getKMeansVoronoi:
+    def __init__(self,
+                 count_matrix: np.ndarray,
+                 k_value: int,
+                 n_init: int,
+                 max_iter: int,
+                 tolerance: float,
+                 init_method: str,
+                 metric_dist: str,
+                 labels: np.ndarray):
+        """Generates an array of centroid index based on the active files.
 
-    This function also finds a list of points for the centroids, and a list of
-    points for the segments.
-    :param count_matrix: a 2D numpy matrix contains the word counts
-    :param k: k value-for k-means analysis
-    :param n_init: number of iterations with different centroids
-    :param max_iter: maximum number of iterations
-    :param tolerance: relative tolerance, inertia to declare convergence
-    :param init_method: method of initialization: "K++" or "random"
-    :param metric_dist: method of the distance metrics
-    :param labels: file names of active files
-    :return:
-        best_index: an array of the cluster index for each sample
-        silhouette_score: float, silhouette score
-        color_chart: string of rgb tuples
-        final_points_list: list of xy coords for each chunk
-        final_centroids_list: list of xy coords for each centroid
-        text_data: dicitonary of labels, xcoord, and ycoord
-        max_x: the maximum x value used to set bounds in javascript
-    """
+        This function also finds a list of points for the centroids, and a list of
+        points for the segments.
+        :param count_matrix: a 2D numpy matrix contains the word counts
+        :param k_value: k value-for k-means analysis
+        :param n_init: number of iterations with different centroids
+        :param max_iter: maximum number of iterations
+        :param tolerance: relative tolerance, inertia to declare convergence
+        :param init_method: method of initialization: "K++" or "random"
+        :param metric_dist: method of the distance metrics
+        :param labels: file names of active files
+        """
+        # finds xy coordinates for each segment
+        reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
-    # finds xy coordinates for each segment
-    reduced_data = PCA(n_components=2).fit_transform(count_matrix)
+        # TODO: n_init probably should be determined based on number of files
+        # performs the kmeans analysis
+        k_means = KMeans(init=init_method,
+                         max_iter=max_iter,
+                         tol=tolerance,
+                         n_init=n_init,
+                         n_clusters=k_value)
+        kmeans_index = k_means.fit_predict(reduced_data)
+        best_index = kmeans_index.tolist()
 
-    # TODO: n_init probably should be determined based on number of files
-    # performs the kmeans analysis
-    k_means = KMeans(init=init_method,
-                     max_iter=max_iter,
-                     tol=tolerance,
-                     n_init=n_init,
-                     n_clusters=k)
-    kmeans_index = k_means.fit_predict(reduced_data)
-    best_index = kmeans_index.tolist()
+        # calculates the centroid points list
+        centroid_coordinates = [_get_voronoi_plot_data_(
+            data=reduced_data, group_index=np.where(kmeans_index == index))
+            for index in np.unique(kmeans_index)]
 
-    # calculates the centroid points list
-    centroid_coordinates = [_get_voronoi_plot_data_(
-        data=reduced_data, group_index=np.where(kmeans_index == index))
-        for index in np.unique(kmeans_index)]
+        # generates values to translate x, y coordinates
+        translate_x = abs(min(reduced_data[:, 0])) + 100
+        translate_y = abs(min(reduced_data[:, 1])) + 100
 
-    # generates values to translate x, y coordinates
-    translate_x = abs(min(reduced_data[:, 0])) + 100
-    translate_y = abs(min(reduced_data[:, 1])) + 100
+        # create final points coordinates list to plot
+        final_points_list = np.copy(reduced_data)
+        final_points_list[:, 0] += translate_x
+        final_points_list[:, 1] += translate_y
+        max_x = max(final_points_list[:, 0])
+        final_points_list = final_points_list.tolist()
 
-    # create final points coordinates list to plot
-    final_points_list = np.copy(reduced_data)
-    final_points_list[:, 0] += translate_x
-    final_points_list[:, 1] += translate_y
-    max_x = max(final_points_list[:, 0])
-    final_points_list = final_points_list.tolist()
+        # create final centroids coordinates list
+        final_centroids_list = [[item[0] + translate_x, item[1] + translate_y]
+                                for _, item in enumerate(centroid_coordinates)]
+        # starts with a dummy point to set off the screen in order to get rid
+        # of yellow mouse tracking action (D3)
+        final_centroids_list.insert(0, [-500, -500])
 
-    # create final centroids coordinates list
-    final_centroids_list = [[item[0] + translate_x, item[1] + translate_y]
-                            for _, item in enumerate(centroid_coordinates)]
-    # starts with a dummy point to set off the screen in order to get rid of
-    # yellow mouse tracking action (D3)
-    final_centroids_list.insert(0, [-500, -500])
+        # create text data
+        text_data = [{"x": item[0], "y": item[1], "title": labels[index]}
+                     for index, item in enumerate(final_points_list)]
 
-    # create text data
-    text_data = [{"x": item[0], "y": item[1], "title": labels[index]}
-                 for index, item in enumerate(final_points_list)]
+        # create a color gradient with k colors
+        color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
 
-    # create a color gradient with k colors
-    color_list = plt.cm.Dark2(np.linspace(0, 1, k))
+        # create list of rgb tuples to let the website to plot
+        rgb_tuples = [tuple([int(rgb_value * 255) for rgb_value in color[:-1]])
+                      for color in color_list]
 
-    # create list of rgb tuples to let the website to plot
-    rgb_tuples = [tuple([int(rgb_value * 255) for rgb_value in color[:-1]])
-                  for color in color_list]
+        # puts rgb values in right order to match the table
+        rgb_index = sorted(set(best_index), key=lambda x: best_index.index(x))
+        ordered_color_list1 = [None] * k_value
+        for index, item in enumerate(rgb_index):
+            ordered_color_list1[item] = rgb_tuples[index]
+        color_chart = "rgb" + "#rgb".join(map(str, rgb_tuples)) + "#"
 
-    # puts rgb values in right order to match the table
-    rgb_index = sorted(set(best_index), key=lambda x: best_index.index(x))
-    ordered_color_list1 = [None] * k
-    for index, item in enumerate(rgb_index):
-        ordered_color_list1[item] = rgb_tuples[index]
-    color_chart = "rgb" + "#rgb".join(map(str, rgb_tuples)) + "#"
+        # create a file label string
+        labels_str = "#".join(labels)
 
-    # calculate silhouette score
-    silhouette_score = _get_silhouette_score_(k=k, matrix=count_matrix,
-                                              metric_dist=metric_dist,
-                                              k_means=k_means)
+        # calculate silhouette score
+        silhouette_score = _get_silhouette_score_(k=k_value,
+                                                  k_means=k_means,
+                                                  matrix=count_matrix,
+                                                  metric_dist=metric_dist)
 
-    return best_index, silhouette_score, color_chart, final_points_list, \
-           final_centroids_list, text_data, max_x
+        # pack all the data
+        self.max_x = max_x
+        self.k_value = k_value
+        self.text_data = text_data
+        self.best_index = best_index
+        self.labels_str = labels_str
+        self.color_chart = color_chart
+        self.silhouette_score = silhouette_score
+        self.final_points_list = final_points_list
+        self.final_centroids_list = final_centroids_list
