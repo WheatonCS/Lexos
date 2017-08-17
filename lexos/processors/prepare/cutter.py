@@ -1,5 +1,4 @@
 import re
-import math
 from typing import List
 
 from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
@@ -58,10 +57,10 @@ def cut_list_with_overlap(input_list: list, norm_seg_size: int, overlap: int,
                               seg_start_distance * index + norm_seg_size]
 
     # return the whole list of segment while evaluating whether is last segment
-    return [
-        get_single_seg(index=index,
-                       is_last_prop=True if index == num_segment-1 else False)
-        for index in range(num_segment)]
+    return [get_single_seg(
+            index=index,
+            is_last_prop=True if index == num_segment - 1 else False
+            ) for index in range(num_segment)]
 
 
 def join_sublist_element(input_list: List[List[str]]) -> List[str]:
