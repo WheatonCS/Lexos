@@ -266,8 +266,8 @@ def get_k_means_pca(
 class getKMeansVoronoi:
     def __init__(self,
                  count_matrix: np.ndarray,
-                 k_value: int,
                  n_init: int,
+                 k_value: int,
                  max_iter: int,
                  tolerance: float,
                  init_method: str,

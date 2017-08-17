@@ -717,13 +717,13 @@ def generate_k_means_voronoi(file_manager: FileManager) -> \
 
     # generates the data
     k_means_voronoi_data = KMeans.getKMeansVoronoi(count_matrix=count_matrix,
+                                                   labels=labels,
                                                    n_init=n_init,
                                                    k_value=k_value,
                                                    max_iter=max_iter,
                                                    tolerance=tolerance,
                                                    init_method=init_method,
-                                                   metric_dist=metric_dist,
-                                                   labels=labels)
+                                                   metric_dist=metric_dist)
 
     return k_means_voronoi_data
 
