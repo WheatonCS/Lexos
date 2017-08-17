@@ -6,7 +6,7 @@ from typing import Union, List
 import numpy as np
 from PIL import Image, ImageChops
 from flask import request
-from matplotlib import pyplot
+from matplotlib import pyplot, figure
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist
@@ -369,7 +369,7 @@ def plot_legend(labels: np.ndarray,
                 show_dendro_legends: bool,
                 folder: str,
                 legend_list: List[str],
-                page_name_list: List[str]) -> (int, list):
+                page_name_list: List[figure.Figure]) -> (int, list):
     """Plot dendrogram legend.
 
     :param labels: A list of strings of the name of each text segment.
@@ -383,7 +383,7 @@ def plot_legend(labels: np.ndarray,
     :param folder: A string representing the path name to the folder where the
            pdf and png files of the dendrogram will be stored.
     :param legend_list: A list of items in legend split by '\n'.
-    :param page_name_list: A list of page name.
+    :param page_name_list: A list of figure of dendrogram area.
     :return:
             - legend_page: The page of legend plot.
             - page_name_list: A list of page names.
@@ -446,11 +446,11 @@ def plot_legend(labels: np.ndarray,
                 else:
                     legend_left = "\n".join(
                         legend_list[(max_legend_length_first_page +
-                                    const.DENDRO_MAX_LINES_PER_PAGE *
-                                     (page_num - 2)):
+                                     const.DENDRO_MAX_LINES_PER_PAGE *
+                                    (page_num - 2)):
                                     (max_legend_length_first_page +
-                                    const.DENDRO_MAX_LINES_PER_PAGE *
-                                     (page_num - 1))])
+                                     const.DENDRO_MAX_LINES_PER_PAGE *
+                                    (page_num - 1))])
 
                 # plots legends
                 pyplot.text(
