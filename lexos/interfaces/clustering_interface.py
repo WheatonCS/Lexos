@@ -93,24 +93,21 @@ def k_means():
                 itm="kmeans",
                 numActiveDocs=num_active_docs)
         elif request.form['viz'] == 'Voronoi':
-            kmeans_index, silhouette_score, file_name_str, k_value, \
-                color_chart_str, final_points_list, final_centroids_list, \
-                text_data, max_x = \
-                utility.generate_k_means_voronoi(file_manager)
+            voronoi_data = utility.generate_k_means_voronoi(file_manager)
             return render_template(
                 'kmeans.html',
                 labels=labels,
-                silhouettescore=silhouette_score,
-                kmeansIndex=kmeans_index,
-                fileNameStr=file_name_str,
+                silhouettescore=voronoi_data.silhouette_score,
+                kmeansIndex=voronoi_data.best_index,
+                fileNameStr=voronoi_data.labels_str,
                 fileNumber=len(labels),
-                KValue=k_value,
+                KValue=voronoi_data.k_value,
                 defaultK=default_k,
-                colorChartStr=color_chart_str,
-                finalPointsList=final_points_list,
-                finalCentroidsList=final_centroids_list,
-                textData=text_data,
-                maxX=max_x,
+                colorChartStr=voronoi_data.color_chart,
+                finalPointsList=voronoi_data.final_points_list,
+                finalCentroidsList=voronoi_data.final_centroids_list,
+                textData=voronoi_data.text_data,
+                maxX=voronoi_data.max_x,
                 kmeansdatagenerated=True,
                 itm="kmeans",
                 numActiveDocs=num_active_docs)
