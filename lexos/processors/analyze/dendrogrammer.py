@@ -95,7 +95,7 @@ def cluster_dendro(dendro_matrix: np.ndarray,
                                            Union[float, int, str], np.ndarray):
 
     # Switch to request.json if necessary
-    """generate the score label
+    """Generate the score label.
 
     :param dendro_matrix: np.ndarray, occurrence of words in different files
     :param distance_metric: string, style of distance metric in the dendrogram
@@ -278,6 +278,7 @@ def get_augmented_dendrogram(*args, **kwargs):
             pyplot.annotate("%0.4g" % y, (x, y), xytext=(0, -8),
                             textcoords='offset points',
                             va='top', ha='center', size='small')
+    p = pyplot.legend()
 
     pyplot.legend(p, ['the branch height legend'], numpoints=1,
                   bbox_to_anchor=(1.1, 1.1))
