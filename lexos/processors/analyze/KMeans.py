@@ -318,8 +318,8 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
     # create final centroids coordinates list
     final_centroids_list = [[item[0] + translate_x, item[1] + translate_y]
                             for _, item in enumerate(centroid_coordinates)]
-    # starts with a dummy point set off the screen to get rid of yellow mouse
-    # tracking action (D3)
+    # starts with a dummy point to set off the screen in order to get rid of
+    # yellow mouse tracking action (D3)
     final_centroids_list.insert(0, [-500, -500])
 
     # create text data
@@ -354,13 +354,15 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
             seen2.append(best_index[i])
             no_repeats.append(best_index[i])
 
-    no_repeats1 = list(set(kmeans_index))
-
+    no_repeats1 = sorted(set(best_index), key=lambda x: best_index.index(x))
     ordered_color_list = [None] * k
+    ordered_color_list1 = [None] * k
 
+    for index, item in enumerate(no_repeats1):
+        ordered_color_list1[item] = rgb_tuples1[index]
     for i in range(0, len(no_repeats)):
         ordered_color_list[no_repeats[i]] = color_list[i]
-
+    color_chart1 = "rgb" + "#rgb".join(map(str, ordered_color_list1)) + "#"
     # make a string of rgb tuples to send to the javascript separated by #
     # cause jinja hates lists of strings
     color_chart = ''
@@ -380,5 +382,5 @@ def get_k_means_voronoi(count_matrix: np.ndarray,
                                               metric_dist=metric_dist,
                                               k_means=k_means)
 
-    return best_index, silhouette_score, color_chart1, final_points_list, \
+    return best_index, silhouette_score, color_chart, final_points_list, \
            final_centroids_list, text_data, max_x
