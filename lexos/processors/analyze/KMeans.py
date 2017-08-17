@@ -48,36 +48,15 @@ def get_k_means_pca(count_matrix: np.ndarray,
                     labels: np.ndarray):
     """Generates an array of centroid index based on the active files.
 
-    :param folder_path:
-    :return:
     :param count_matrix: a 2D numpy matrix contains the word counts
     :param n_init: number of iterations with different centroids
     :param k_value: k value-for k-means analysis
-
     :param max_iter: maximum number of iterations
     :param tolerance: relative tolerance, inertia to declare convergence
     :param init_method: method of initialization: "K++" or "random"
     :param metric_dist: method of the distance metrics
+    :param folder_path: system path to save the temp image
     :param labels: file names of active files
-
-    Generate an array of centroid index based on the active files.
-
-    Args:
-        number_only_matrix: a numpy count_matrix without file names and word
-        count_matrix: a python count_matrix representing the counts of words in files
-        k_value: int, k-value
-        max_iter: int, maximum number of iterations
-        init_method: str, method of initialization: 'k++' or 'random'
-        n_init: int, number of iterations with different centroids
-        tolerance: float, relative tolerance, inertia to declare convergence
-        DocTermSparseMatrix: sparse count_matrix of the word counts
-        metric_dist: str, method of the distance metrics
-
-
-    Returns:
-        best_index: an array of the cluster index for each sample
-        silhouette_score: float, silhouette score
-        color_chart: string, list delimited by # of colors to use
     """
 
     """Parameters for KMeans (SKlearn)"""
