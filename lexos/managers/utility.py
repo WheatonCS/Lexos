@@ -247,13 +247,11 @@ def generate_statistics(file_manager: FileManager) -> \
     :param file_manager: A FileManager object (see managers/file_manager.py)
     :return: file_info_list: a list of tuples that contain the file id and the
                              file information
-                             (see analyze/information.py/
-                             Corpus_Information.returnstatistics()
-                             function for more)
+                             (see analyze/information.py/CorpusInformation
+                             class for more)
              corpus_information: the statistics of the whole corpus
-                                 (see analyze/information.py/
-                                 File_Information.returnstatistics()
-                                 function for more)
+                                 (see analyze/information.py/FileInformation
+                                 class for more)
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
