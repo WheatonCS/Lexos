@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List, Dict, Callable, Match
+from typing import List, Dict
 
 from flask import request, session
 from werkzeug.datastructures import FileStorage
@@ -100,42 +100,6 @@ def handle_special_characters(text: str) -> str:
             is_word=False)
 
     return text
-
-
-def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
-    """Makes a function to alter text according to the replacements dictionary.
-
-    :param replacements: A dictionary where the keys are the strings of encoded
-        ascii characters and the values are the encoded unicode characters.
-    :return: The replace function that actually does the replacing.
-    """
-
-    # create a regular expression object
-    locator = re.compile('|'.join(re.escape(k)
-                                  for k in replacements), re.UNICODE)
-
-    def _do_replace(mo: Match) -> str:
-        """
-        Creates a function to return an object according to the replacements
-        dictionary.
-
-        :param mo: The replacement character as a regex match object, to be
-            used as a key
-        return: The matching value, a string from the replacements dictionary
-        """
-
-        return replacements[mo.group()]
-
-    def replacer(s: str) -> str:
-        """Makes function to return text replaced with replacements dictionary.
-
-        :param s: A string containing the file contents.
-        :return: The text after replacement.
-        """
-
-        return locator.sub(_do_replace, s)
-
-    return replacer
 
 
 def make_replacements(text: str, replace_from: List[str], replace_to: str,
