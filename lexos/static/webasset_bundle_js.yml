@@ -1,0 +1,25 @@
+js-all:
+  contents:
+    - js-lib
+    - js-lexos
+  filter: jsmin
+  output: build/all.js
+
+
+js-lib:
+  contents:
+    - node_modules/jquery/dist/jquery.min.js
+    - node_modules/bootstrap/dist/js/bootstrap.min.js
+    - node_modules/jquery-ui/ui/**/*.js
+    - node_modules/d3/d3.min.js
+    - node_modules/smartmenus/dist/jquery.smartmenus.min.js
+    - node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js
+    - js/jquery.dataTables.areaselect.js
+    - js/natural.js
+    - js/scalarapi.js
+
+js-lexos:
+  contents: js/scripts_*.js
+  config:
+    BABEL_PRESETS: es2015
+  filter: babel

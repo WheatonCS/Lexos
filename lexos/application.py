@@ -5,6 +5,7 @@ import time
 import traceback
 
 from flask import Flask, request, render_template
+from flask_assets import Environment, YAMLLoader
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
@@ -46,6 +47,7 @@ def get_secret_key(file_name: str = 'secret_key') -> bytes:
         return open(file_full_name, 'rb').read()
 
 
+# create flask app and add basic configuration
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
 app.config['MAX_CONTENT_LENGTH'] = lexos.helpers.constants.MAX_FILE_SIZE
@@ -58,6 +60,7 @@ app.jinja_env.filters['tuple'] = tuple
 app.jinja_env.filters['len'] = len
 app.jinja_env.filters['unicode'] = str
 app.jinja_env.filters['time'] = time.time()
+
 
 # register all the blue prints
 # they helps us to manage groups of views
@@ -78,6 +81,24 @@ app.register_blueprint(stats_view)
 app.register_blueprint(tokenizer_view)
 app.register_blueprint(top_words_view)
 app.register_blueprint(word_cloud_view)
+
+
+# implement flask webassets
+assets = Environment(app)
+
+# register all the js to webassets
+js_loader = YAMLLoader(
+    os.path.join(app.static_folder, 'webasset_bundle_js.yml')
+)
+js_bundles = YAMLLoader.load_bundles(js_loader)
+assets.register('js_all', js_bundles['js-all'])
+
+# register all the css to webassets
+css_loader = YAMLLoader(
+    os.path.join(app.static_folder, 'webasset_bundle_css.yml')
+)
+css_bundles = YAMLLoader.load_bundles(css_loader)
+assets.register('css_all', css_bundles['css-all'])
 
 
 # http://flask.pocoo.org/snippets/28/
