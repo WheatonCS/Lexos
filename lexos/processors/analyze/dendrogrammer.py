@@ -61,8 +61,6 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
                          dendro_matrix: np.ndarray) -> np.ndarray:
     """Calculate the distances in the dendrogram.
 
-    Use the word frequencies in the given text segments to calculate distance
-    in a dendrogram
     :param linkage_method: A string representing the grouping style of
     the clades in the dendrogram.
     :param distance_metric: A string representing the style of the distance
@@ -81,8 +79,7 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
     # different for dendrogram
     y = pdist(dendro_matrix, distance_metric)
     z = hierarchy.linkage(y, method=linkage_method)
-    distance_list = np.around([float(z[i][2]) for i in range(0, len(z))],
-                              decimals=5)
+    distance_list = np.around(z[:, 2], decimals=5)
 
     return distance_list
 
