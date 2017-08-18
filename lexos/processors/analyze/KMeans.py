@@ -92,8 +92,8 @@ class GetKMeansPca:
                           enumerate(best_index)]
 
         # make a string of rgb tuples that are separated by # for js
-        color_chart_point = [[int(value * 255) for value in list(rgb)]
-                             for rgb in rgb_tuples]
+        color_chart_point = [tuple([int(value * 255) for value in color])
+                             for color in color_list]
         color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
         color_str_list = color_chart.split("#")
 
