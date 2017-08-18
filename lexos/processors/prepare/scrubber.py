@@ -16,19 +16,19 @@ from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
 from lexos.helpers.exceptions import LexosException
 
 
-def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
+def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
     """Builds special character conversion dictionaries from resource files.
 
-    :param mode: A string which specifies which character set to use.
+    :param char_set: A string which specifies which character set to use.
     :return: A dictionary with all of the character entities in the chosen
         mode mapped to their unicode versions.
     """
 
     conversion_dict = {}
 
-    if mode == "MUFI-3":
+    if char_set == "MUFI-3":
         filename = constants.MUFI_3_FILENAME
-    elif mode == "MUFI-4":
+    elif char_set == "MUFI-4":
         filename = constants.MUFI_4_FILENAME
     else:
         raise ValueError
@@ -42,9 +42,9 @@ def get_special_char_dict_from_file(mode: str) -> Dict[str, str]:
     up_two_levels, _ = os.path.split(up_one_level)
 
     # Create full pathname to find the .tsv in resources directory
-    mode_path = os.path.join(up_two_levels, constants.RESOURCE_DIR, filename)
+    source_path = os.path.join(up_two_levels, constants.RESOURCE_DIR, filename)
 
-    with open(mode_path, encoding='utf-8') as input_file:
+    with open(source_path, encoding='utf-8') as input_file:
         columns = {}
         for line in input_file:
             pieces = line.split('\t')
@@ -88,7 +88,7 @@ def handle_special_characters(text: str) -> str:
                            '&gt;': '>', '&#383;': 'ſ'}
 
     elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
-        conversion_dict = get_special_char_dict_from_file(mode=char_set)
+        conversion_dict = get_special_char_dict_from_file(char_set=char_set)
 
     else:
         raise ValueError("Invalid special character set")

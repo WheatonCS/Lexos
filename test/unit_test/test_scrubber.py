@@ -14,17 +14,17 @@ from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 class TestGetSpecialCharDictFromFile:
 
     def test_get_special_char_dict_from_file(self):
-        assert get_special_char_dict_from_file(mode="MUFI-3") == chars.MUFI3
-        assert get_special_char_dict_from_file(mode="MUFI-4") == chars.MUFI4
+        assert get_special_char_dict_from_file(char_set="MUFI-3") == chars.MUFI3
+        assert get_special_char_dict_from_file(char_set="MUFI-4") == chars.MUFI4
         # This option should be processed by handle_special_characters() only
         try:
-            get_special_char_dict_from_file(mode="doe-sgml")
+            get_special_char_dict_from_file(char_set="doe-sgml")
         except ValueError:
             pass
         else:
             raise AssertionError
         try:
-            get_special_char_dict_from_file(mode="MADEUP-6")
+            get_special_char_dict_from_file(char_set="MADEUP-6")
         except ValueError:
             pass
         else:
