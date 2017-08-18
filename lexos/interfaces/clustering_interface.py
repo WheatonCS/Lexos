@@ -77,18 +77,17 @@ def k_means():
         session_manager.cache_k_mean_option()
         utility.save_file_manager(file_manager)
         if request.form['viz'] == 'PCA':
-            kmeans_index, silhouette_score, file_name_str, k_value, \
-                color_chart_str = utility.generate_k_means_pca(file_manager)
+            pca_data = utility.generate_k_means_pca(file_manager)
             return render_template(
                 'kmeans.html',
                 labels=labels,
-                silhouettescore=silhouette_score,
-                kmeansIndex=kmeans_index,
-                fileNameStr=file_name_str,
+                silhouettescore=pca_data.silhouette_score,
+                kmeansIndex=pca_data.best_index,
+                fileNameStr=pca_data.file_name_str,
                 fileNumber=len(labels),
-                KValue=k_value,
+                KValue=pca_data.k_value,
                 defaultK=default_k,
-                colorChartStr=color_chart_str,
+                colorChartStr=pca_data.color_chart,
                 kmeansdatagenerated=True,
                 itm="kmeans",
                 numActiveDocs=num_active_docs)
