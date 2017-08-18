@@ -24,10 +24,11 @@ os.environ['MPLCONFIGDIR'] = os.path.join(
 def translate_den_options() -> (bool, str, str):
     """Translate dendrogram options for users for legends.
 
-    :return: -need_translate: boolean, true if user chooses Distance Metric OR
-              Normalize Type different than default values
-             -translate_metric: string, user's choice on Distance Metric
-             -translate_dvf: string, user's choice on Normalize Type
+    :return:
+            -need_translate: boolean, true if user chooses Distance Metric OR
+             Normalize Type different than default values
+            -translate_metric: string, user's choice on Distance Metric
+            -translate_dvf: string, user's choice on Normalize Type
     """
     # Switch to Ajax if necessary
     if request.json:
@@ -88,18 +89,18 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
 def cluster_dendro(dendro_matrix: np.ndarray,
                    distance_metric: str,
                    linkage_method: str,
-                   labels: np.ndarray) -> (np.ndarray, float, np.ndarray):
+                   labels: np.ndarray) -> (np.ndarray, int, np.ndarray):
 
     # Switch to request.json if necessary
     """Generate the score label.
 
-    :param dendro_matrix: np.ndarray, occurrence of words in different files
-    :param distance_metric: string, style of distance metric in the dendrogram
-    :param linkage_method: string, style of linkage method in the dendrogram
-    :param labels: list, file names
+    :param dendro_matrix: np.ndarray, occurrence of words in different files.
+    :param distance_metric: string, style of distance metric in the dendrogram.
+    :param linkage_method: string, style of linkage method in the dendrogram.
+    :param labels: A list of file names.
     :return:
             - score_label: np.ndarray, the score of the cluster of dendrogram.
-            - threshold: float, number of clusters that users entered.
+            - threshold: int, number of clusters that users entered.
             - y: np.ndarray, pairwise distance between files.
     """
     if request.json:
@@ -167,7 +168,7 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
                          distance_metric: str,
                          linkage_method: str,
                          labels: np.ndarray) -> (str, str,
-                                                 Union[float, int, str]):
+                                                 Union[int, str]):
     """Generate silhoutte score based on hierarchical clustering.
 
     :param dendro_matrix: np.ndarray, occurrence of words in different files
@@ -175,12 +176,12 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
     :param linkage_method: string, style of linkage method in the dendrogram
     :param labels: list, file names
     :return: - silhouette_score: string, containing the result of silhouette
-               score
+               score.
              - silhouette_annotation: string, annotation of the silhouette
-               score
-             - score: float, silhouette score
-             - threshold: float/integer/string, threshold (t) value that users
-               entered, equals to 'N/A' if active file number is < or = 2
+               score.
+             - score: float, silhouette score.
+             - threshold: integer/string, number of clusters that users
+               entered, equals to 'N/A' if active file number is < or = 2.
     """
 
     active_files_num = len(labels) - 1
@@ -234,7 +235,7 @@ def get_augmented_dendrogram(*args, **kwargs):
     :param args: The linkage matrix encoding the hierarchical clustering to
                  render as a dendrogram.
     :param kwargs: A dictionary which contains options of truncate_mode,
-                   labels, leaf_rotation, orientation, show_leaf_counts
+                   labels, leaf_rotation, orientation, show_leaf_counts.
     """
 
     ddata = hierarchy.dendrogram(*args, **kwargs)
@@ -350,7 +351,7 @@ def plot_legend(labels: np.ndarray,
     :param page_num: Number of pages.
     :param max_legend_length_first_page: Maximum legend length of first page.
     :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
-           is checked
+           is checked.
     :param folder: A string representing the path name to the folder where the
            pdf and png files of the dendrogram will be stored.
     :param legend_list: A list of items in legend split by '\n'.
@@ -523,10 +524,10 @@ def dendrogram(
         legend: str,
         folder: str,
         augmented_dendrogram: bool,
-        show_dendro_legends: bool) -> (int, float, Union[int, float, str]):
+        show_dendro_legends: bool) -> (int, float, Union[int, str]):
     """Create a dendrogram and save it as pdf file and a png image.
 
-    Use the word frequencies in the given text segments to create dendrogram
+    Use the word frequencies in the given text segments to create dendrogram.
 
     :param orientation: A string of the orientation of the dendrogram.
     :param title: A unicode string representing the title of the dendrogram,
@@ -540,18 +541,18 @@ def dendrogram(
     :param labels: A list of strings of the name of each text segment.
     :param dendro_matrix: A list where each item is a list of frequencies for a
            given word (in decimal) for each segment of text.
-    :param legend: A string of all legends
+    :param legend: A string of all legends.
     :param folder: A string representing the path name to the folder where the
            pdf and png files of the dendrogram will be stored.
     :param augmented_dendrogram: A boolean, True if "Show Branch Height in
-           Dendrogram" is checked
+           Dendrogram" is checked.
     :param show_dendro_legends: A boolean, True if "Show Legends in Dendrogram"
-           is checked
+           is checked.
     :return:
             - total_pdf_page_number: integer, total number of pages of the PDF.
-            - score: float, silhouette score
-            - threshold: float/integer/string, threshold (t) value that users
-              entered, equals to 'N/A' if users leave the field blank
+            - score: float, silhouette score.
+            - threshold: integer/string, number of clusters that users entered,
+              equals to 'N/A' if users leave the field blank.
     """
 
     # -- generate silhouette score --------------------------------------------
