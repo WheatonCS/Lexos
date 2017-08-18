@@ -26,8 +26,8 @@ from lexos.processors.analyze.topword import analyze_all_to_para, \
     group_division, analyze_para_to_group, analyze_group_to_group
 
 
-def generate_csv_matrix(file_manager: FileManager, round_decimal: bool = False) \
-    -> List[list]:
+def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
+        -> List[list]:
     """
     Gets a matrix properly formatted for output to a CSV file and also a table
     displaying on the Tokenizer page, with labels along the top and side
@@ -41,8 +41,8 @@ def generate_csv_matrix(file_manager: FileManager, round_decimal: bool = False) 
         Returns the sparse matrix and a list of lists representing the matrix
         of data.
     """
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_deleted, only_char_grams_within_words, mfw, culling = \
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+        show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
     transpose = request.form['csvorientation'] == 'filecolumn'
@@ -118,7 +118,7 @@ def generate_csv_matrix(file_manager: FileManager, round_decimal: bool = False) 
 
 
 def generate_tokenize_results(file_manager: FileManager) -> \
-    Tuple[List[str], str]:
+        Tuple[List[str], str]:
     """
     Generates the results containing HTML tags that will be rendered to the
     template and displayed on Tokenizer page.
@@ -241,17 +241,19 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
 
 
 def generate_statistics(file_manager: FileManager) -> \
-    (List[information.FileInformation], information.CorpusInformation):
+        (List[information.FileInformation], information.CorpusInformation):
     """Calls analyze/information to generate statistics of the corpus.
 
     :param file_manager: A FileManager object (see managers/file_manager.py)
     :return: file_info_list: a list of tuples that contain the file id and the
                              file information
-                             (see analyze/information.py/CorpusInformation
-                             class for more)
+                             (see analyze/information.py/
+                             Corpus_Information.returnstatistics()
+                             function for more)
              corpus_information: the statistics of the whole corpus
-                                 (see analyze/information.py/FileInformation
-                                 class for more)
+                                 (see analyze/information.py/
+                                 File_Information.returnstatistics()
+                                 function for more)
     """
     checked_labels = request.form.getlist('segmentlist')
     file_ids = set(file_manager.files.keys())
@@ -270,8 +272,8 @@ def generate_statistics(file_manager: FileManager) -> \
     except FileExistsError:
         pass
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_deleted, only_char_grams_within_words, mfw, culling = \
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+        show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
     dtm_data = file_manager.get_matrix(
@@ -336,8 +338,7 @@ def get_dendrogram_legend(file_manager: FileManager,
         str_legend += "Distance Metric: " + opts['metric'] + ", "
         str_legend += "Linkage Method: " + opts['linkage'] + ", "
         str_legend += "Data Values Format: " + \
-                      opts['normalizeType'] + " (Norm: " + opts[
-                          'norm'] + ")\n\n"
+            opts['normalizeType'] + " (Norm: " + opts['norm'] + ")\n\n"
 
     str_wrapped_dendro_options = textwrap.fill(
         str_legend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
@@ -501,8 +502,8 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         f.write(newick)
         f.close()
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_grey_word, only_char_grams_within_words, mfw, culling = \
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+        show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
     count_matrix = file_manager.get_matrix_deprec(
@@ -555,7 +556,7 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         makedirs(folder_path)
 
     pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-    distance_min, monocrit_max, monocrit_min, threshold = \
+        distance_min, monocrit_max, monocrit_min, threshold = \
         dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
                                  temp_labels, dendro_matrix, legend,
                                  folder_path, augmented_dendrogram,
@@ -564,9 +565,9 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
     inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
     maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
     distance_op = str(distance_min) + " " + leq + " t " + \
-                  leq + " " + str(distance_max)
+        leq + " " + str(distance_max)
     monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-                  leq + " " + str(monocrit_max)
+        leq + " " + str(monocrit_max)
 
     threshold_ops = {
         "inconsistent": inconsistent_op,
@@ -575,11 +576,133 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         "monocrit": monocrit_op}
 
     return pdf_page_number, score, inconsistent_max, maxclust_max, \
-           distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
-           inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
+        distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
+        inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
+def generate_k_means_pca(file_manager: FileManager) -> KMeans.GetKMeansPca:
+    """Generates a table of cluster number and file name from the active files.
 
+    :param file_manager: A FileManager object (see managers/file_manager.py)
+    :return: a class object that contains all the analyzed data and information
+             see analyze/Kmeans.py/GetKMeansPca class for more.
+    """
+    ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
+        show_grey_word, only_char_grams_within_words, mfw, culling = \
+        file_manager.get_matrix_options()
+
+    dtm_data = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=False,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=ngram_size,
+        use_freq=False,
+        mfw=mfw,
+        cull=culling)
+
+    # grab data
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
+
+    # gets options for generating the K-mean results
+    # sets all values as default
+    n_init = constants.N_INIT
+    max_iter = constants.MAX_ITER
+    tolerance = constants.TOLERANCE
+    k_value = int(np.size(labels) / 2)
+    init_method = request.form['init']
+
+    # gets possible existing values from request.form
+    if request.form['nclusters'] != '':
+        k_value = int(request.form['nclusters'])
+    if request.form['max_iter'] != '':
+        max_iter = int(request.form['max_iter'])
+    if request.form['n_init'] != '':
+        n_init = int(request.form['n_init'])
+    if request.form['tolerance'] != '':
+        tolerance = float(request.form['tolerance'])
+    metric_dist = request.form['KMeans_metric']
+
+    folder_path = path_join(session_manager.session_folder(),
+                            constants.RESULTS_FOLDER)
+    if not os.path.isdir(folder_path):
+        makedirs(folder_path)
+
+    k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
+                                           labels=labels,
+                                           n_init=n_init,
+                                           k_value=k_value,
+                                           max_iter=max_iter,
+                                           tolerance=tolerance,
+                                           init_method=init_method,
+                                           folder_path=folder_path,
+                                           metric_dist=metric_dist)
+
+    return k_means_pca_data
+
+
+def generate_k_means_voronoi(file_manager: FileManager) -> \
+        KMeans.GetKMeansVoronoi:
+    """Generates a table of cluster number and file name from the active files.
+
+    :param file_manager: A FileManager object (see managers/file_manager.py).
+    :return: a class object that contains all the analyzed data and information
+             see analyze/Kmeans.py/GetKmeansVoronoi class for more.
+    """
+    ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
+        show_grey_word, only_char_grams_within_words, mfw, culling = \
+        file_manager.get_matrix_options()
+
+    dtm_data = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=False,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=ngram_size,
+        use_freq=False,
+        mfw=mfw,
+        cull=culling)
+
+    # grab data
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
+
+    # gets options for generating the K-mean results
+    # sets all values as default
+    n_init = constants.N_INIT
+    max_iter = constants.MAX_ITER
+    tolerance = constants.TOLERANCE
+    k_value = int(np.size(labels) / 2)
+    init_method = request.form['init']
+
+    # gets possible existing values from request.form
+    if request.form['nclusters'] != '':
+        k_value = int(request.form['nclusters'])
+    if request.form['max_iter'] != '':
+        max_iter = int(request.form['max_iter'])
+    if request.form['n_init'] != '':
+        n_init = int(request.form['n_init'])
+    if request.form['tolerance'] != '':
+        tolerance = float(request.form['tolerance'])
+    metric_dist = request.form['KMeans_metric']
+
+    folder_path = path_join(session_manager.session_folder(),
+                            constants.RESULTS_FOLDER)
+    if not os.path.isdir(folder_path):
+        makedirs(folder_path)
+
+    # generates the data
+    k_means_voronoi_data = KMeans.GetKMeansVoronoi(count_matrix=count_matrix,
+                                                   labels=labels,
+                                                   n_init=n_init,
+                                                   k_value=k_value,
+                                                   max_iter=max_iter,
+                                                   tolerance=tolerance,
+                                                   init_method=init_method,
+                                                   metric_dist=metric_dist)
+
+    return k_means_voronoi_data
 
 
 def generate_rwa(file_manager: FileManager):
@@ -622,8 +745,7 @@ def generate_rwa(file_manager: FileManager):
         key_word_list2 = key_word_list2.split(", ")
         for i in range(len(key_word_list)):
             key_word_list[i] = key_word_list[i] + \
-                               "/(" + key_word_list[i] + "+" + key_word_list2[
-                                   i] + ")"
+                "/(" + key_word_list[i] + "+" + key_word_list2[i] + ")"
 
     legend_labels_list = []
     legend_labels = ""
@@ -657,6 +779,7 @@ def generate_rwa(file_manager: FileManager):
 
             # if the two slopes are not equal
             if abs(mone - mtwo) > (0.0000000001):
+
                 # plot first possible point to plot
                 data_points[i].append(
                     [first_poss + 1, data_list[i][first_poss]])
@@ -744,8 +867,8 @@ def generate_rwa(file_manager: FileManager):
         # add milestone word to list of plot labels
         legend_labels_list[0] += ms_word
 
-    return data_points, data_list, graph_title, x_axis_label, y_axis_label, \
-           legend_labels_list
+    return data_points, data_list, graph_title, x_axis_label, y_axis_label,\
+        legend_labels_list
 
 
 def generate_rw_matrix_plot(data_points: List[List[List[int]]],
@@ -1097,6 +1220,7 @@ def generate_sims_csv(file_manager: FileManager):
 
     # write the header to the file
     with open(out_file_path, 'w') as out_file:
+
         out_file.write("Similarity Rankings:" + '\n')
 
         out_file.write(
@@ -1137,8 +1261,8 @@ def generate_z_test_top_word(file_manager: FileManager):
     # Initialize
     test_by_class = get_top_word_option()
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_deleted, only_char_grams_within_words, mfw, culling = \
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+        show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
     # Generate word count matrix
@@ -1245,7 +1369,7 @@ def get_top_word_csv(test_results, csv_header):
             table_top_word += data[0] + delimiter
             table_z_score += str(data[1]) + delimiter
         csv_content += table_legend + table_top_word + \
-                       '\n' + delimiter + table_z_score + '\n'
+            '\n' + delimiter + table_z_score + '\n'
 
     with open(save_path, 'w', encoding='utf-8') as f:
         f.write(csv_content)
@@ -1295,9 +1419,10 @@ def load_file_manager() -> FileManager:
 
 def generate_csv_matrix_from_ajax(data: Dict[str, object],
                                   file_manager: FileManager,
-                                  round_decimal: bool = True) -> List[list]:
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_deleted, only_char_grams_within_words, mfw, culling = \
+                                  round_decimal: bool =True) -> List[list]:
+
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+        show_deleted, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_from_ajax()
     transpose = data['csvorientation'] == 'filecolumn'
 
@@ -1560,8 +1685,8 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         f.write(newick)
         f.close()
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_grey_word, only_char_grams_within_words, mfw, culling = \
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+        show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_from_ajax()
 
     count_matrix = file_manager.get_matrix_deprec(
@@ -1614,7 +1739,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         makedirs(folder_path)
 
     pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-    distance_min, monocrit_max, monocrit_min, threshold = \
+        distance_min, monocrit_max, monocrit_min, threshold = \
         dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
                                  temp_labels, dendro_matrix, legend,
                                  folder_path, augmented_dendrogram,
@@ -1623,9 +1748,9 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
     maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
     distance_op = str(distance_min) + " " + leq + " t " + \
-                  leq + " " + str(distance_max)
+        leq + " " + str(distance_max)
     monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-                  leq + " " + str(monocrit_max)
+        leq + " " + str(monocrit_max)
 
     threshold_ops = {
         "inconsistent": inconsistent_op,
@@ -1634,8 +1759,8 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         "monocrit": monocrit_op}
 
     return pdf_page_number, score, inconsistent_max, maxclust_max, \
-           distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
-           inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
+        distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
+        inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
 def simple_vectorizer(content: str, token_type: str, token_size: int):
