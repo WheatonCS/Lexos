@@ -89,17 +89,32 @@ def get_k_means_pca(count_matrix: np.ndarray,
     #                   useful for debugging
     #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
     #             -2 : all CPUs but one are used.
-    k_value = int(k_value)
 
-    number_only_matrix = count_matrix.tolist()
+    # finds xy coordinates for each segment
+    reduced_data = PCA(n_components=2).fit_transform(count_matrix)
+
+    # performs the kmeans analysis
+    k_means = KMeans(init=init_method,
+                     max_iter=max_iter,
+                     tol=tolerance,
+                     n_init=n_init,
+                     n_clusters=k_value)
+    kmeans_index = k_means.fit_predict(reduced_data)
+    best_index = kmeans_index.tolist()
+
+    # calculate the silhouette score
+    silhouette_score = _get_silhouette_score_(k=k_value,
+                                              k_means=k_means,
+                                              matrix=count_matrix,
+                                              metric_dist=metric_dist)
 
 
-    # need to reset matplotlib (if hierarchical was called prior, this clears
-    # previous dendrogram from showing in PCA graph)
+    # reset matplotlib to clear possible previous dendrogram calls
     plt.figure()
 
-    # get color gradient
+    # create a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
+    rgb_tuples1 = [tuple(color[:-1]) for color in color_list]
 
     # make color gradient a list
     color_list = color_list.tolist()
@@ -148,7 +163,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
     # close the plot so next one doesn't plot over the last one
     plt.close()
 
-
     # make a string of rgb tuples to send to the javascript separated by #
     # cause jinja hates lists of strings
     color_chart = ''
@@ -172,7 +186,7 @@ def get_k_means_pca(count_matrix: np.ndarray,
     trace = Scatter(x=xs, y=ys, text=labels,
                     textfont=dict(color=plotly_colors),
                     name=labels, mode='markers+text',
-                    marker=dict(color=plotly_colors, line=dict(width=1,)),
+                    marker=dict(color=plotly_colors, line=dict(width=1, )),
                     textposition='right')
 
     data = Data([trace])
@@ -185,19 +199,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
     big_layout = dict(
         hovermode='closest'
     )
-
-    # calculate the silhouette score
-    silhouette_score = _get_silhouette_score_(k=k_value,
-                                              k_means=k_means,
-                                              matrix=count_matrix,
-                                              metric_dist=metric_dist)
-
-
-
-
-
-
-
 
 
 
