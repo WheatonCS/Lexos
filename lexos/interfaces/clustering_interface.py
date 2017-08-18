@@ -247,10 +247,7 @@ def cluster():
 
         # -- Main functions ---------------------------------------------------
         else:
-            pdf_page_number, score, inconsistent_max, maxclust_max, \
-                distance_max, distance_min, monocrit_max, monocrit_min, \
-                threshold, inconsistent_op, maxclust_op, distance_op, \
-                monocrit_op, threshold_ops = \
+            pdf_page_number, score, threshold = \
                 utility.generate_dendrogram_from_ajax(file_manager)
 
             criterion = request.json['criterion']
@@ -264,14 +261,7 @@ def cluster():
                 "pdfPageNumber": pdf_page_number,
                 "score": score,
                 "criterion": criterion,
-                "inconsistentMax": inconsistent_max,
-                "maxclustMax": maxclust_max,
-                "distanceMax": distance_max,
-                "distance_min": distance_min,
-                "monocritMax": monocrit_max,
-                "monocritMin": monocrit_min,
                 "threshold": threshold,
-                "thresholdOps": threshold_ops,
                 "ver": ver}
             data = json.dumps(data)
             return data

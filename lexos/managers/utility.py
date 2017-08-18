@@ -1416,34 +1416,8 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
     :return:
             - total_pdf_page_number: integer, total number of pages of the PDF.
             - score: float, silhouette score
-            - inconsistent_max: float, upper bound of threshold to calculate
-              silhouette score if using Inconsistent criterion
-            - maxclust_max: integer, upper bound of threshold to calculate
-            - silhouette score  if using Maxclust criterion
-            - distance_max: float, upper bound of threshold to calculate
-              silhouette score if using Distance criterion
-            - distance_min: float, lower bound of threshold to calculate
-              silhouette score if using Distance criterion
-            - monocrit_max: float, upper bound of threshold to calculate
-              silhouette score if using Monocrit criterion
-            - monocrit_min: float, lower bound of threshold to calculate
-              silhouette score if using Monocrit criterion
             - threshold: float/integer/string, threshold (t) value that users
               entered, equals to 'N/A' if users leave the field blank
-            - inconsistent_op: string, the range of t below upper bound of
-                               threshold to calculate silhouette score if using
-                               Inconsistent criterion
-            - maxclust_op: string, the range of t below upper bound of
-                           threshold to calculate silhouette score if using
-                           Maxclust criterion
-            - distance_op: string, the range of t between upper and lower bound
-                           of threshold to calculate silhouette score if using
-                           Distance criterion
-            - monocrit_op: string, the range of t between upper and lower bound
-                           of threshold to calculate silhouette score if using
-                           Monocrit criterion
-            - threshold_ops: a dictionary which contains maxclust_op,
-                             distance_op and monocrit_op
     """
 
     # -- Gets options from request.json ---------------------------------------
@@ -1549,8 +1523,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
         legend = get_dendrogram_legend(file_manager=file_manager,
                                        distance_list=distance_list)
 
-        pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-            distance_min, monocrit_max, monocrit_min, threshold = \
+        pdf_page_number, score, threshold = \
             dendrogrammer.dendrogram(orientation=orientation,
                                      title=title,
                                      pruning=pruning,
@@ -1563,25 +1536,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
                                      augmented_dendrogram=augmented_dendrogram,
                                      show_dendro_legends=show_dendro_legends)
 
-        # generate range of t
-        inconsistent_op = "0 " + '≤' + " t " + '≤' + " " + \
-                          str(inconsistent_max)
-        maxclust_op = "2 " + '≤' + " t " + '≤' + " " + str(maxclust_max)
-        distance_op = str(distance_min) + " " + '≤' + " t " + \
-            '≤' + " " + str(distance_max)
-        monocrit_op = str(monocrit_min) + " " + '≤' + " t " + \
-            '≤' + " " + str(monocrit_max)
-
-        threshold_ops = {
-            "inconsistent": inconsistent_op,
-            "maxclust": maxclust_op,
-            "distance": distance_op,
-            "monocrit": monocrit_op}
-
-        return pdf_page_number, score, inconsistent_max, maxclust_max, \
-            distance_max, distance_min, monocrit_max, monocrit_min, \
-            threshold, inconsistent_op, maxclust_op, distance_op, \
-            monocrit_op, threshold_ops
+        return pdf_page_number, score, threshold
 
 
 def simple_vectorizer(content: str, token_type: str, token_size: int):

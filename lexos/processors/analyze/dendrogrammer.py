@@ -88,9 +88,7 @@ def get_dendro_distances(linkage_method: str, distance_metric: str,
 def cluster_dendro(dendro_matrix: np.ndarray,
                    distance_metric: str,
                    linkage_method: str,
-                   labels: np.ndarray) -> (np.ndarray, float, float, int,
-                                           float, float, float,
-                                           float, np.ndarray):
+                   labels: np.ndarray) -> (np.ndarray, float, np.ndarray):
 
     # Switch to request.json if necessary
     """Generate the score label.
@@ -101,18 +99,6 @@ def cluster_dendro(dendro_matrix: np.ndarray,
     :param labels: list, file names
     :return:
             - score_label: np.ndarray, the score of the cluster of dendrogram.
-            - inconsistent_max: float, upper bound of threshold to calculate
-               silhouette score if using Inconsistent criterion.
-            - maxclust_max: integer, upper bound of threshold to calculate
-               silhouette score if using Maxclust criterion.
-            - distance_max: float, upper bound of threshold to calculate
-               silhouette score if using Distance criterion.
-            - distance_min: float, lower bound of threshold to calculate
-               silhouette score if using Distance criterion.
-            - monocrit_max: float, upper bound of threshold to calculate
-               silhouette score if using Monocrit criterion.
-            - monocrit_min: float, lower bound of threshold to calculate
-               silhouette score if using Monocrit criterion.
             - threshold: float, number of clusters that users entered.
             - y: np.ndarray, pairwise distance between files.
     """
@@ -174,15 +160,13 @@ def cluster_dendro(dendro_matrix: np.ndarray,
     score_label = hierarchy.fcluster(
         z, t=threshold, criterion=opts['criterion'], monocrit=monocrit)
 
-    return score_label, inconsistent_max, maxclust_max, distance_max,\
-        distance_min, monocrit_max, monocrit_min, threshold, y
+    return score_label, threshold, y
 
 
 def get_silhouette_score(dendro_matrix: np.ndarray,
                          distance_metric: str,
                          linkage_method: str,
-                         labels: np.ndarray) -> (str, str, float, float, int,
-                                                 float, float, float, float,
+                         labels: np.ndarray) -> (str, str,
                                                  Union[float, int, str]):
     """Generate silhoutte score based on hierarchical clustering.
 
@@ -195,18 +179,6 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
              - silhouette_annotation: string, annotation of the silhouette
                score
              - score: float, silhouette score
-             - inconsistent_max: float, upper bound of threshold to calculate
-               silhouette score if using Inconsistent criterion
-             - maxclust_max: integer, upper bound of threshold to calculate
-               silhouette score if using Maxclust criterion
-             - distance_max: float, upper bound of threshold to calculate
-               silhouette score if using Distance criterion
-             - distance_min: float, lower bound of threshold to calculate
-               silhouette score if using Distance criterion
-             - monocrit_max: float, upper bound of threshold to calculate
-               silhouette score if using Monocrit criterion
-             - monocrit_min: float, lower bound of threshold to calculate
-               silhouette score if using Monocrit criterion
              - threshold: float/integer/string, threshold (t) value that users
                entered, equals to 'N/A' if active file number is < or = 2
     """
@@ -215,8 +187,7 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
 
     if active_files_num > 2:
         # get score_label
-        score_label, inconsistent_max, maxclust_max, distance_max,\
-            distance_min, monocrit_max, monocrit_min, threshold, y = \
+        score_label, threshold, y = \
             cluster_dendro(dendro_matrix=dendro_matrix,
                            distance_metric=distance_metric,
                            linkage_method=linkage_method,
@@ -229,8 +200,7 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
                                     " a single cluseter because they are too "\
                                     "similar to each other."
             score = 'Invalid for only 1 cluster.'
-            inconsistent_max = maxclust_max = distance_max = distance_min = \
-                monocrit_max = monocrit_min = threshold = 'N/A'
+            threshold = 'N/A'
         else:
             score = metrics.silhouette_score(
                 y, labels=score_label, metric='precomputed')
@@ -253,12 +223,9 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
         silhouette_annotation = ""
         score = 'Invalid for less than or equal to 2 documents.'
 
-        threshold = inconsistent_max = maxclust_max = distance_max = \
-            distance_min = monocrit_max = monocrit_min = 'N/A'
+        threshold = 'N/A'
 
-    return silhouette_score, silhouette_annotation, score, inconsistent_max, \
-        maxclust_max, distance_max, distance_min, monocrit_max, monocrit_min, \
-        threshold
+    return silhouette_score, silhouette_annotation, score, threshold
 
 
 def get_augmented_dendrogram(*args, **kwargs):
@@ -556,8 +523,7 @@ def dendrogram(
         legend: str,
         folder: str,
         augmented_dendrogram: bool,
-        show_dendro_legends: bool) -> (int, float, float, int, float, float,
-                                       float, float, Union[int, float, str]):
+        show_dendro_legends: bool) -> (int, float, Union[int, float, str]):
     """Create a dendrogram and save it as pdf file and a png image.
 
     Use the word frequencies in the given text segments to create dendrogram
@@ -584,27 +550,14 @@ def dendrogram(
     :return:
             - total_pdf_page_number: integer, total number of pages of the PDF.
             - score: float, silhouette score
-            - inconsistent_max: float, upper bound of threshold to calculate
-              silhouette score if using Inconsistent criterion
-            - maxclust_max: integer, upper bound of threshold to calculate
-            - silhouette score  if using Maxclust criterion
-            - distance_max: float, upper bound of threshold to calculate
-              silhouette score if using Distance criterion
-            - distance_min: float, lower bound of threshold to calculate
-              silhouette score if using Distance criterion
-            - monocrit_max: float, upper bound of threshold to calculate
-              silhouette score if using Monocrit criterion
-            - monocrit_min: float, lower bound of threshold to calculate
-              silhouette score if using Monocrit criterion
             - threshold: float/integer/string, threshold (t) value that users
               entered, equals to 'N/A' if users leave the field blank
     """
 
     # -- generate silhouette score --------------------------------------------
-    silhouette_score, silhouette_annotation, score, inconsistent_max, \
-        maxclust_max, distance_max, distance_min, monocrit_max, monocrit_min, \
-        threshold = get_silhouette_score(dendro_matrix, distance_metric,
-                                         linkage_method, labels)
+    silhouette_score, silhouette_annotation, score, threshold = \
+        get_silhouette_score(dendro_matrix, distance_metric,
+                             linkage_method, labels)
 
     # -- generate legend list -------------------------------------------------
     legend_page = 0
@@ -682,5 +635,4 @@ def dendrogram(
     pyplot.close()
     total_pdf_page_number = len(page_name_list)
 
-    return total_pdf_page_number, score, inconsistent_max, maxclust_max, \
-        distance_max, distance_min, monocrit_max, monocrit_min, threshold
+    return total_pdf_page_number, score, threshold
