@@ -15,6 +15,7 @@ from sklearn import metrics
 from lexos.helpers import constants as const
 from lexos.helpers.error_messages import EMPTY_STRING_MESSAGE, \
     EMPTY_LIST_MESSAGE
+from lexos.helpers.exceptions import LexosException
 
 os.environ['MPLCONFIGDIR'] = os.path.join(
     const.UPLOAD_FOLDER, '.matplotlibs')
@@ -89,7 +90,7 @@ def cluster_dendro(dendro_matrix: np.ndarray,
                    linkage_method: str,
                    labels: np.ndarray) -> (np.ndarray, float, float, int,
                                            float, float, float,
-                                           Union[float, int, str], np.ndarray):
+                                           float, np.ndarray):
 
     # Switch to request.json if necessary
     """Generate the score label.
@@ -99,22 +100,21 @@ def cluster_dendro(dendro_matrix: np.ndarray,
     :param linkage_method: string, style of linkage method in the dendrogram
     :param labels: list, file names
     :return:
-            - score_label: np.ndarray, the score of the cluster of dendrogram
+            - score_label: np.ndarray, the score of the cluster of dendrogram.
             - inconsistent_max: float, upper bound of threshold to calculate
-               silhouette score if using Inconsistent criterion
+               silhouette score if using Inconsistent criterion.
             - maxclust_max: integer, upper bound of threshold to calculate
-               silhouette score if using Maxclust criterion
+               silhouette score if using Maxclust criterion.
             - distance_max: float, upper bound of threshold to calculate
-               silhouette score if using Distance criterion
+               silhouette score if using Distance criterion.
             - distance_min: float, lower bound of threshold to calculate
-               silhouette score if using Distance criterion
+               silhouette score if using Distance criterion.
             - monocrit_max: float, upper bound of threshold to calculate
-               silhouette score if using Monocrit criterion
+               silhouette score if using Monocrit criterion.
             - monocrit_min: float, lower bound of threshold to calculate
-               silhouette score if using Monocrit criterion
-            - threshold: float/integer/string, threshold (t) value that users
-               entered, equals to 'N/A' if users leave the field blank
-            - y: np.ndarray, pairwise distance between files
+               silhouette score if using Monocrit criterion.
+            - threshold: float, number of clusters that users entered.
+            - y: np.ndarray, pairwise distance between files.
     """
     if request.json:
         opts = request.json
@@ -148,6 +148,10 @@ def cluster_dendro(dendro_matrix: np.ndarray,
         threshold = str(threshold)
     else:
         threshold = float(threshold)
+        if threshold > len(labels) or threshold < 2:
+            raise LexosException('the number of threshold should not exceed '
+                                 'the number of file names and should larger '
+                                 'than 2')
 
     if opts['criterion'] == 'maxclust':
         if (threshold == '') or (threshold > maxclust_max):
@@ -156,7 +160,7 @@ def cluster_dendro(dendro_matrix: np.ndarray,
             threshold = round(float(threshold))
     elif opts['criterion'] == 'distance':
         if (threshold == '') or (threshold > distance_max) or \
-           (threshold < distance_min):
+                (threshold < distance_min):
             threshold = distance_max
     elif opts['criterion'] == 'inconsistent':
         if (threshold == '') or (threshold > inconsistent_max):
@@ -166,6 +170,7 @@ def cluster_dendro(dendro_matrix: np.ndarray,
         if (threshold == '') or (threshold > monocrit_max) or (
                 threshold < monocrit_min):
             threshold = monocrit_max
+
     score_label = hierarchy.fcluster(
         z, t=threshold, criterion=opts['criterion'], monocrit=monocrit)
 
@@ -203,7 +208,7 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
              - monocrit_min: float, lower bound of threshold to calculate
                silhouette score if using Monocrit criterion
              - threshold: float/integer/string, threshold (t) value that users
-               entered, equals to 'N/A' if users leave the field blank
+               entered, equals to 'N/A' if active file number is < or = 2
     """
 
     active_files_num = len(labels) - 1
@@ -330,14 +335,14 @@ def adjust_legend_area(labels: np.ndarray,
 
 def generate_legend_list(silhouette_score: str,
                          silhouette_annotation: str,
-                         legend: str) -> (str, List[str]):
+                         legend_without_score: str) -> (str, List[str]):
     """Generate legend list which contains silhouette score and annotation.
 
     :param silhouette_score: A string containing the result of
     silhouette score.
     :param silhouette_annotation: A string of annotation of the
     silhouette score.
-    :param legend: A string of all legends.
+    :param legend_without_score: A string of all legends.
     :return:
             - legend: A string which contains silhouette_score,
               silhouette_annotation and original legend.
@@ -352,7 +357,7 @@ def generate_legend_list(silhouette_score: str,
         const.CHARACTERS_PER_LINE_IN_LEGEND)
 
     legend = str_wrapped_silhouette + "\n" + str_wrapped_sil_annotation + \
-        "\n\n" + legend
+        "\n\n" + legend_without_score
 
     legend_list = legend.split("\n")
 
@@ -607,7 +612,7 @@ def dendrogram(
     legend, legend_list = generate_legend_list(
         silhouette_score=silhouette_score,
         silhouette_annotation=silhouette_annotation,
-        legend=legend)
+        legend_without_score=legend)
 
     line_total = len(legend_list)  # total number of lines of legends
 
