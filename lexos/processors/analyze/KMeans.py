@@ -58,37 +58,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
     :param folder_path: system path to save the temp image
     :param labels: file names of active files
     """
-
-    """Parameters for KMeans (SKlearn)"""
-    # n_clusters: int, optional, default: 8
-    #             namely, K;  number of clusters to form OR
-    #                   number of centroids to generate
-    #
-    # max_iter :  int
-    #             Maximum number of iterations of the k_value-means algorithm
-    #                   for a single run
-    #
-    # n_init :    int, optional, default: 10
-    #             Number of time the k_value-means algorithm will be run with
-    #                   different centroid seeds
-    #
-    # init :      'k_value-means++', 'random' or an ndarray
-    #             method for initialization;
-    #            'k_value-means++': selects initial cluster centers for k_value-mean
-    #                   clustering in a smart way to speed up convergence
-    #
-    # precompute_distances : boolean
-    # tol :       float, optional default: 1e-4
-    #             Relative tolerance w.r.t. inertia to declare convergence
-    #
-    # n_jobs :    int
-    #             The number of jobs to use for the computation
-    #             -1 : all CPUs are used
-    #             1 : no parallel computing code is used at all;
-    #                   useful for debugging
-    #             For n_jobs below -1, (n_cpus + 1 + n_jobs) are used.
-    #             -2 : all CPUs but one are used.
-
     # finds xy coordinates for each segment
     reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
@@ -123,19 +92,16 @@ def get_k_means_pca(count_matrix: np.ndarray,
 
     # reset matplotlib to clear possible previous dendrogram calls
     plt.figure()
-
     # plot and label points
     for x, y, name, color in zip(xs, ys, labels, colored_points):
         plt.scatter(x, y, c=color, s=40)
         plt.text(x, y, name, color=color)
-
     # save the plot and close
     plt.savefig(path_join(folder_path, KMEANS_GRAPH_FILENAME))
     plt.close()
 
-    print("BREAK HERE")
     plotly_colors = [color_str_list[item]
-                      for _, item in enumerate(best_index)]
+                     for _, item in enumerate(best_index)]
 
     from plotly.graph_objs import Scatter, Data
     trace = Scatter(x=xs, y=ys, text=labels,
@@ -149,8 +115,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
                         width=500, height=450, hovermode='closest')
     big_layout = dict(hovermode='closest')
 
-
-    print ("BREAK HERE")
     from plotly.offline import plot
     html = """
     <html><head><meta charset="utf-8" /></head><body>
@@ -162,28 +126,24 @@ def get_k_means_pca(count_matrix: np.ndarray,
     lg_div = plot({"data": data, "layout": big_layout}, output_type='div',
                   show_link=False, auto_open=False)
     sm_div = sm_div.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    sm_div = sm_div.replace(
-        "modeBarButtonsToRemove:[]",
-        "modeBarButtonsToRemove:['sendDataToCloud']")
+    sm_div = sm_div.replace("modeBarButtonsToRemove:[]",
+                            "modeBarButtonsToRemove:['sendDataToCloud']")
     sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
     sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
     sm_html = html.replace("___", sm_div)
 
-    html_file = open(path_join(folder_path, PCA_SMALL_GRAPH_FILENAME),
-                     "w",
+    html_file = open(path_join(folder_path, PCA_SMALL_GRAPH_FILENAME), "w",
                      encoding='utf-8')
     html_file.write(sm_html)
     html_file.close()
 
     lg_div = lg_div.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    lg_div = lg_div.replace(
-        "modeBarButtonsToRemove:[]",
-        "modeBarButtonsToRemove:['sendDataToCloud']")
+    lg_div = lg_div.replace("modeBarButtonsToRemove:[]",
+                            "modeBarButtonsToRemove:['sendDataToCloud']")
     lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
     lg_html = html.replace("___", lg_div)
 
-    html_file = open(path_join(folder_path, PCA_BIG_GRAPH_FILENAME),
-                     "w",
+    html_file = open(path_join(folder_path, PCA_BIG_GRAPH_FILENAME), "w",
                      encoding='utf-8')
     html_file.write(lg_html)
     html_file.close()
