@@ -57,7 +57,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
     :param metric_dist: method of the distance metrics
     :param folder_path: system path to save the temp image
     :param labels: file names of active files
-    :return:
     """
 
     """Parameters for KMeans (SKlearn)"""
@@ -108,76 +107,36 @@ def get_k_means_pca(count_matrix: np.ndarray,
                                               matrix=count_matrix,
                                               metric_dist=metric_dist)
 
-    # reset matplotlib to clear possible previous dendrogram calls
-    plt.figure()
-
     # create a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
-    rgb_tuples1 = [tuple(color[:-1]) for color in color_list]
+    rgb_tuples = [tuple(color[:-1]) for color in color_list]
+    colored_points = [rgb_tuples[item] for _, item in enumerate(best_index)]
 
-    # make color gradient a list
-    color_list = color_list.tolist()
+    # make a string of rgb tuples that are separated by # for js
+    color_chart_point = [[int(value * 255) for value in list(rgb)]
+                         for rgb in rgb_tuples]
+    color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
+    color_str_list = color_chart.split("#")[:-1]
 
-    # remove the a value from the rgba lists
-    for rgba in color_list:
-        del rgba[-1]
-
-    rgb_tuples = []
-
-    # convert to tuples and put in a list
-    for i in range(0, len(color_list)):
-        rgb_tuples.append(tuple(color_list[i]))
-
-    # coordinates for each cluster
-    reduced_data = PCA(n_components=2).fit_transform(count_matrix)
-
-    # n_init statically set to 300 for now. Probably should be determined
-    # based on number of active files
-    kmeans = KMeans(
-        init=init_method,
-        n_clusters=k_value,
-        n_init=n_init,
-        tol=tolerance,
-        max_iter=max_iter)
-    kmeans_index = kmeans.fit_predict(reduced_data)
-    best_index = kmeans_index.tolist()
-
-    colored_points = []
-
-    # make list of color for each point
-    for i in range(0, len(best_index)):
-        colored_points.append(rgb_tuples[best_index[i]])
-
-    # split x and y coordinates
+    # split x and y coordinates from analyzed data
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
+
+    # reset matplotlib to clear possible previous dendrogram calls
+    plt.figure()
 
     # plot and label points
     for x, y, name, color in zip(xs, ys, labels, colored_points):
         plt.scatter(x, y, c=color, s=40)
         plt.text(x, y, name, color=color)
 
-    # save the plot
+    # save the plot and close
     plt.savefig(path_join(folder_path, KMEANS_GRAPH_FILENAME))
-
-    # close the plot so next one doesn't plot over the last one
     plt.close()
 
-    # make a string of rgb tuples to send to the javascript separated by #
-    # cause jinja hates lists of strings
-    color_chart = ''
-
-    for i in range(0, len(color_list)):
-        for j in range(0, 3):
-            # Browser needs rgb tuples with int values 0-255 we have rgb tuples
-            # of floats 0-1
-            color_list[i][j] = int(color_list[i][j] * 255)
-        temp = tuple(color_list[i])
-        temp2 = "rgb" + str(temp) + "#"
-        color_chart += temp2
-    colors = color_chart.split("#")
+    print("BREAK HERE")
     plotly_colors = []
     for i in range(0, len(best_index)):
-        new_color = colors[best_index[i]]
+        new_color = color_str_list[best_index[i]]
         plotly_colors.append(new_color)
 
     from plotly.graph_objs import Scatter, Data
@@ -198,6 +157,27 @@ def get_k_means_pca(count_matrix: np.ndarray,
     big_layout = dict(
         hovermode='closest'
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     from plotly.offline import plot
     html = """
