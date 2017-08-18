@@ -85,40 +85,10 @@ def handle_special_characters(text: str) -> str:
     else:
         raise ValueError("Invalid special character set")
 
-    ret_text = replace_with_dict(text, replacement_dict=conversion_dict)
+    ret_text = replace_with_dict(
+        text, replacement_dict=conversion_dict, edge1="()", edge2="()")
 
     return ret_text
-
-
-def replace_with_dict(text: str, replacement_dict: Dict[str, str]) -> str:
-    """Makes a function to alter text according to the replacements dictionary.
-
-    :param text: the input text to replace
-    :param replacement_dict: A dictionary where the keys are the strings of
-        encoded ascii characters and the values are the encoded unicode
-        characters.
-    :return: The replace function that actually does the replacing.
-    """
-
-    # create a regex to find all the "replacement_from" string
-    all_of_replace_from = re.compile(
-        '|'.join(re.escape(replace_from) for replace_from in replacement_dict),
-        re.UNICODE
-    )
-
-    def _replacement_map_func(match_obj: Match) -> str:
-        """This function maps the replace_from match to the replace_to str
-
-        :param match_obj: The replacement character as a regex match object,
-            to be used as a key
-        return: The matching value, a string from the replacements dictionary
-        """
-        return replacement_dict[match_obj.group()]
-
-    # use re.sub with a function
-    # this will send all the match group to the function
-    # and then replace the match group with the result of the function
-    return all_of_replace_from.sub(_replacement_map_func, text)
 
 
 def replacement_handler(
@@ -148,18 +118,20 @@ def replacement_handler(
                 NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
 
         # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
-        replace_from_str, replace_to_str = replacement_line.split(':')
+        replace_from_line, replace_to = replacement_line.split(':')
 
         # Not valid inputs -- ":word" or ":a"
-        if replace_from_str == "":
+        if replace_from_line == "":
             raise LexosException(
                 REPLACEMENT_NO_LEFTHAND_MESSAGE + replacement_line)
         # Not valid inputs -- "a:b,c" or "a,b:c,d"
-        if ',' in replace_to_str:
+        if ',' in replace_to:
             raise LexosException(
                 REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
 
-        replace_from_list = replace_from_str.split(",")
+        replacement_dict = {replace_from: replace_to
+                            for replace_from in replace_from_line.split(",")
+                            if replacement_line != ""}
 
         # Lemmas are words surrounded by whitespace, while other
         # replacements are chars
@@ -170,14 +142,43 @@ def replacement_handler(
             edge1 = '()'
             edge2 = '()'
 
-        for change_me in replace_from_list:
-            the_regex = re.compile(edge1 + re.escape(change_me) + edge2,
-                                   re.UNICODE)
-            # Replaces the second capturing group (change_me) with
-            # replace_to_str and preserves the whitespace in the first group
-            text = the_regex.sub('\g<1>' + replace_to_str, text)
+        text = replace_with_dict(text, replacement_dict, edge1, edge2)
 
     return text
+
+
+def replace_with_dict(text: str, replacement_dict: Dict[str, str],
+                      edge1: str, edge2: str) -> str:
+    """Makes a function to alter text according to the replacements dictionary.
+
+    :param text: the input text to replace
+    :param replacement_dict: A dictionary where the keys are the strings of
+        encoded ascii characters and the values are the encoded unicode
+        characters.
+    :param edge1: A regex pattern describing the leftmost border of the match.
+    :param edge2: A regex pattern describing the rightmost border of the match.
+    :return: The replace function that actually does the replacing.
+    """
+
+    # create a regex to find all the "replacement_from" string
+    all_of_replace_from = re.compile(
+        edge1 +
+        '|'.join(re.escape(replace_from) for replace_from in replacement_dict)
+        + edge2, re.UNICODE)
+
+    def _replacement_map_func(match_obj: Match) -> str:
+        """This function maps the replace_from match to the replace_to str.
+
+        :param match_obj: The replacement character as a regex match object,
+            to be used as a key.
+        return: The matching value, a string from the replacements dictionary.
+        """
+        return replacement_dict[match_obj.group()]
+
+    # Use re.sub() with a function
+    # This will send all the match group to the function
+    # and then replace the match group with the result of the function
+    return all_of_replace_from.sub(_replacement_map_func, text)
 
 
 def process_tag_replace_options(orig_text: str, tag: str, action: str,
