@@ -21,11 +21,10 @@ INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
 EMPTY_MILESTONE_MESSAGE = "the milestone should not be empty"
 EMPTY_NP_ARRAY_MESSAGE = "The input numpy array should not be empty, since" \
     "the input file should not be empty."
-NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Colon error on one or more replacement " \
-                                    "lines"
+NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Invalid number of colons: "
 REPLACEMENT_RIGHT_OPERAND_MESSAGE = "Too many values on right side of " \
-                                    "replacement string"
+                                    "replacement string: "
 REPLACEMENT_NO_LEFTHAND_MESSAGE = "Missing value on the left side of " \
-                                  "replacement string"
+                                  "replacement string: "
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"

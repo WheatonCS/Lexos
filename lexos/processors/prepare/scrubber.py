@@ -156,17 +156,20 @@ def replacement_handler(
 
     for replacement_line in replacement_lines:
         if replacement_line and replacement_line.count(':') != 1:
-            raise LexosException(NOT_ONE_REPLACEMENT_COLON_MESSAGE)
+            raise LexosException(
+                NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
 
         # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
         replace_from_str, replace_to_str = replacement_line.split(':')
 
         # Not valid inputs -- ":word" or ":a"
         if replace_from_str == "":
-            raise LexosException(REPLACEMENT_NO_LEFTHAND_MESSAGE)
+            raise LexosException(
+                REPLACEMENT_NO_LEFTHAND_MESSAGE + replacement_line)
         # Not valid inputs -- "a:b,c" or "a,b:c,d"
         if ',' in replace_to_str:
-            raise LexosException(REPLACEMENT_RIGHT_OPERAND_MESSAGE)
+            raise LexosException(
+                REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
 
         replace_from_list = replace_from_str.split(",")
 
