@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+# This program uses kmeans method to analyze files
+# It uses sklearn.cluster.KMeans for most important analysis
+# please see:
+# http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
+# for more details
+
 from os.path import join as path_join
 from typing import Union
 
