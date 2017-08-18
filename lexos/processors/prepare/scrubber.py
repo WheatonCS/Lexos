@@ -4,7 +4,7 @@ import pickle
 import re
 import sys
 import unicodedata
-from typing import List, Dict, Callable, Match
+from typing import List, Dict, Match
 
 from flask import request, session
 from werkzeug.datastructures import FileStorage
@@ -85,52 +85,40 @@ def handle_special_characters(text: str) -> str:
     else:
         raise ValueError("Invalid special character set")
 
-    r = make_replacer(replacements=conversion_dict)
-    # r is a function created by make_replacer(), _do_replace(), and
-    # replace().
-    # do_replace() returns the new char to use when called with the char to
-    # be replaced. replace() substitutes the characters through repeated
-    # calls to _do_replacer(). This whole functionality is packaged
-    # together in r, which gets applied to the text on the next line.
-    text = r(text)
+        ret_text = replace_with_dict(text, replacement_dict=conversion_dict)
 
-    return text
+    return ret_text
 
 
-def make_replacer(replacements: Dict[str, str]) -> Callable[[str], str]:
+def replace_with_dict(text: str, replacement_dict: Dict[str, str]) -> str:
     """Makes a function to alter text according to the replacements dictionary.
 
-    :param replacements: A dictionary where the keys are the strings of encoded
-        ascii characters and the values are the encoded unicode characters.
+    :param text: the input text to replace
+    :param replacement_dict: A dictionary where the keys are the strings of
+        encoded ascii characters and the values are the encoded unicode
+        characters.
     :return: The replace function that actually does the replacing.
     """
 
-    # create a regular expression object
-    locator = re.compile('|'.join(re.escape(k)
-                                  for k in replacements), re.UNICODE)
+    # create a regex to find all the "replacement_from" string
+    all_of_replace_from = re.compile(
+        '|'.join(re.escape(replace_from) for replace_from in replacement_dict),
+        re.UNICODE
+    )
 
-    def _do_replace(mo: Match) -> str:
-        """
-        Creates a function to return an object according to the replacements
-        dictionary.
+    def _replacement_map_func(match_obj: Match) -> str:
+        """This function maps the replace_from match to the replace_to str
 
-        :param mo: The replacement character as a regex match object, to be
-            used as a key
+        :param match_obj: The replacement character as a regex match object,
+            to be used as a key
         return: The matching value, a string from the replacements dictionary
         """
+        return replacement_dict[match_obj.group()]
 
-        return replacements[mo.group()]
-
-    def replacer(s: str) -> str:
-        """Makes function to return text replaced with replacements dictionary.
-
-        :param s: A string containing the file contents.
-        :return: The text after replacement.
-        """
-
-        return locator.sub(_do_replace, s)
-
-    return replacer
+    # use re.sub with a function
+    # this will send all the match group to the function
+    # and then replace the match group with the result of the function
+    return all_of_replace_from.sub(_replacement_map_func, text)
 
 
 def replacement_handler(
