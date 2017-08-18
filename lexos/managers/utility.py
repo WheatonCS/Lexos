@@ -642,13 +642,10 @@ def generate_k_means_pca(file_manager: FileManager):
                                init_method=init_method,
                                folder_path=folder_path,
                                metric_dist=metric_dist)
-    file_name_str = ""
+    file_name_str = "#".join(labels)
     print("Break")
 
     return kmeans_index, siltt_score, file_name_str, k_value, color_chart
-
-
-# Gets called from kmeans() in lexos_core.py
 
 
 def generate_k_means_voronoi(file_manager: FileManager) -> \

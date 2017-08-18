@@ -134,13 +134,10 @@ def get_k_means_pca(count_matrix: np.ndarray,
     plt.close()
 
     print("BREAK HERE")
-    plotly_colors = []
-    for i in range(0, len(best_index)):
-        new_color = color_str_list[best_index[i]]
-        plotly_colors.append(new_color)
+    plotly_colors = [color_str_list[item]
+                      for _, item in enumerate(best_index)]
 
     from plotly.graph_objs import Scatter, Data
-
     trace = Scatter(x=xs, y=ys, text=labels,
                     textfont=dict(color=plotly_colors),
                     name=labels, mode='markers+text',
@@ -148,37 +145,12 @@ def get_k_means_pca(count_matrix: np.ndarray,
                     textposition='right')
 
     data = Data([trace])
-    small_layout = dict(
-        margin={'l': 50, 'r': 50, 'b': 50, 't': 50, 'pad': 5},
-        width=500,
-        height=450,
-        hovermode='closest'
-    )
-    big_layout = dict(
-        hovermode='closest'
-    )
+    small_layout = dict(margin={'l': 50, 'r': 50, 'b': 50, 't': 50, 'pad': 5},
+                        width=500, height=450, hovermode='closest')
+    big_layout = dict(hovermode='closest')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print ("BREAK HERE")
     from plotly.offline import plot
     html = """
     <html><head><meta charset="utf-8" /></head><body>
@@ -216,8 +188,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
     html_file.write(lg_html)
     html_file.close()
 
-    # integer ndarray with shape (n_samples,) -- label[i] is the code or index
-    # of the centroid the i'th observation is closest to
     return best_index, silhouette_score, color_chart
 
 
