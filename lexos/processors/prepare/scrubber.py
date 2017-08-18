@@ -24,8 +24,6 @@ def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
         mode mapped to their unicode versions.
     """
 
-    conversion_dict = {}
-
     if char_set == "MUFI-3":
         filename = constants.MUFI_3_FILENAME
     elif char_set == "MUFI-4":
@@ -45,15 +43,9 @@ def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
     source_path = os.path.join(up_two_levels, constants.RESOURCE_DIR, filename)
 
     with open(source_path, encoding='utf-8') as input_file:
-        columns = {}
-        for line in input_file:
-            pieces = line.split('\t')
-
-            # put the first two columns of the file into a dictionary
-            columns[pieces[1].rstrip()] = pieces[0]
-            # keep only the pairs with a valid entity name
-            conversion_dict = {key: columns[key] for key in columns
-                               if key[-1:] == ";"}
+        conversion_dict = {key.rstrip(): value
+                           for line in input_file
+                           for value, key, _ in [line.split("\t")]}
 
     return conversion_dict
 
