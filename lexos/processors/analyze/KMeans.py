@@ -106,7 +106,7 @@ def get_k_means_pca(count_matrix: np.ndarray,
                                               k_means=k_means,
                                               matrix=count_matrix,
                                               metric_dist=metric_dist)
-
+    """
     # create a color gradient with k colors
     color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
     rgb_tuples = [tuple(color[:-1]) for color in color_list]
@@ -116,7 +116,7 @@ def get_k_means_pca(count_matrix: np.ndarray,
     color_chart_point = [[int(value * 255) for value in list(rgb)]
                          for rgb in rgb_tuples]
     color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
-    color_str_list = color_chart.split("#")[:-1]
+    color_str_list = color_chart.split("#")
 
     # split x and y coordinates from analyzed data
     xs, ys = reduced_data[:, 0], reduced_data[:, 1]
@@ -136,6 +136,7 @@ def get_k_means_pca(count_matrix: np.ndarray,
     print("BREAK HERE")
     plotly_colors = [color_str_list[item]
                       for _, item in enumerate(best_index)]
+    """
 
     from plotly.graph_objs import Scatter, Data
     trace = Scatter(x=xs, y=ys, text=labels,
