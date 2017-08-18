@@ -29,4 +29,3 @@ REPLACEMENT_NO_LEFTHAND_MESSAGE = "Missing value on the left side of " \
                                   "replacement string"
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
-INVALID_CHARACTER_MODE_MESSAGE = "Invalid rule set selection"

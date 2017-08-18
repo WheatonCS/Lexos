@@ -91,7 +91,7 @@ def handle_special_characters(text: str) -> str:
         conversion_dict = get_special_char_dict_from_file(mode=char_set)
 
     else:
-        raise LexosException()
+        raise ValueError("Invalid special character set")
 
     r = make_replacer(replacements=conversion_dict)
     # r is a function created by make_replacer(), _do_replace(), and
