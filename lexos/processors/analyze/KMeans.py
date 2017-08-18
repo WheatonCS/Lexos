@@ -94,10 +94,10 @@ def get_k_means_pca(count_matrix: np.ndarray,
     reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
     # performs the kmeans analysis
-    k_means = KMeans(init=init_method,
-                     max_iter=max_iter,
-                     tol=tolerance,
+    k_means = KMeans(tol=tolerance,
                      n_init=n_init,
+                     init=init_method,
+                     max_iter=max_iter,
                      n_clusters=k_value)
     kmeans_index = k_means.fit_predict(reduced_data)
     best_index = kmeans_index.tolist()
@@ -107,7 +107,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
                                               k_means=k_means,
                                               matrix=count_matrix,
                                               metric_dist=metric_dist)
-
 
     # reset matplotlib to clear possible previous dendrogram calls
     plt.figure()
@@ -200,8 +199,6 @@ def get_k_means_pca(count_matrix: np.ndarray,
         hovermode='closest'
     )
 
-
-
     from plotly.offline import plot
     html = """
     <html><head><meta charset="utf-8" /></head><body>
@@ -285,10 +282,10 @@ class GetKMeansVoronoi:
 
         # TODO: n_init probably should be determined based on number of files
         # performs the kmeans analysis
-        k_means = KMeans(init=init_method,
-                         max_iter=max_iter,
-                         tol=tolerance,
+        k_means = KMeans(tol=tolerance,
                          n_init=n_init,
+                         init=init_method,
+                         max_iter=max_iter,
                          n_clusters=k_value)
         kmeans_index = k_means.fit_predict(reduced_data)
         best_index = kmeans_index.tolist()
