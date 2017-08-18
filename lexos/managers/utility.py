@@ -579,16 +579,15 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
            inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
-def generate_k_means_pca(file_manager: FileManager):
+def generate_k_means_pca(file_manager: FileManager) -> KMeans.GetKMeansPca:
     """Generates a table of cluster number and file name from the active files.
 
     :param file_manager: A FileManager object (see managers/file_manager.py)
     :return: a class object that contains all the analyzed data and information
              see analyze/Kmeans.py/GetKMeansPca class for more.
     """
-
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_grey_word, only_char_grams_within_words, mfw, culling = \
+        show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
     dtm_data = file_manager.get_matrix(
@@ -643,16 +642,15 @@ def generate_k_means_pca(file_manager: FileManager):
 
 
 def generate_k_means_voronoi(file_manager: FileManager) -> \
-    KMeans.GetKMeansVoronoi:
+        KMeans.GetKMeansVoronoi:
     """Generates a table of cluster number and file name from the active files.
 
     :param file_manager: A FileManager object (see managers/file_manager.py).
     :return: a class object that contains all the analyzed data and information
              see analyze/Kmeans.py/GetKmeansVoronoi class for more.
     """
-
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-    show_grey_word, only_char_grams_within_words, mfw, culling = \
+        show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options()
 
     dtm_data = file_manager.get_matrix(
