@@ -269,6 +269,30 @@ class TestReplacementHandlerAlone:
                 text=self.test_string, replacer_string=":", is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
+        # testing multiple error conditions
+        try:
+            replacement_handler(text=self.test_string,
+                                replacer_string="string:word\n"
+                                                "testing::working\n:yay",
+                                is_lemma=True)
+        except LexosException as excep:
+            assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
+                                 "testing::working"
+        try:
+            replacement_handler(text=self.test_string,
+                                replacer_string=":yay\ntesting,working\n"
+                                                "string:word",
+                                is_lemma=True)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":yay"
+        try:
+            replacement_handler(text=self.test_string,
+                                replacer_string="string:word,thing\n"
+                                                "testing,working\n:yay",
+                                is_lemma=True)
+        except LexosException as excep:
+            assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
+                                 "string:word,thing"
 
     def test_replacement_handler_regex(self):
         assert replacement_handler(
