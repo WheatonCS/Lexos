@@ -162,7 +162,11 @@ class GetKMeansPca:
         html_file.close()
 
         # pack all the needed data
-
+        self.k_value = k_value
+        self.best_index = best_index
+        self.color_chart = color_chart
+        self.file_name_str = "#".join(labels)
+        self.silhouette_score = silhouette_score
 
 
 def _get_voronoi_plot_data_(data: np.ndarray,
