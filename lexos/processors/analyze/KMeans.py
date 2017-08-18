@@ -44,118 +44,125 @@ def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
         return round(silhouette_score, ROUND_DIGIT)
 
 
-def get_k_means_pca(count_matrix: np.ndarray,
-                    n_init: int,
-                    k_value: int,
-                    max_iter: int,
-                    tolerance: float,
-                    init_method: str,
-                    metric_dist: str,
-                    folder_path: str,
-                    labels: np.ndarray):
-    """Generates an array of centroid index based on the active files.
+class GetKMeansPca:
+    def __init__(self,
+                 count_matrix: np.ndarray,
+                 n_init: int,
+                 k_value: int,
+                 max_iter: int,
+                 tolerance: float,
+                 init_method: str,
+                 metric_dist: str,
+                 folder_path: str,
+                 labels: np.ndarray):
+        """Generates an array of centroid index based on the active files.
 
-    :param count_matrix: a 2D numpy matrix contains the word counts
-    :param n_init: number of iterations with different centroids
-    :param k_value: k value-for k-means analysis
-    :param max_iter: maximum number of iterations
-    :param tolerance: relative tolerance, inertia to declare convergence
-    :param init_method: method of initialization: "K++" or "random"
-    :param metric_dist: method of the distance metrics
-    :param folder_path: system path to save the temp image
-    :param labels: file names of active files
-    """
-    # finds xy coordinates for each segment
-    reduced_data = PCA(n_components=2).fit_transform(count_matrix)
+        :param count_matrix: a 2D numpy matrix contains the word counts
+        :param n_init: number of iterations with different centroids
+        :param k_value: k value-for k-means analysis
+        :param max_iter: maximum number of iterations
+        :param tolerance: relative tolerance, inertia to declare convergence
+        :param init_method: method of initialization: "K++" or "random"
+        :param metric_dist: method of the distance metrics
+        :param folder_path: system path to save the temp image
+        :param labels: file names of active files
+        """
+        # finds xy coordinates for each segment
+        reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
-    # performs the kmeans analysis
-    k_means = KMeans(tol=tolerance,
-                     n_init=n_init,
-                     init=init_method,
-                     max_iter=max_iter,
-                     n_clusters=k_value)
-    kmeans_index = k_means.fit_predict(reduced_data)
-    best_index = kmeans_index.tolist()
+        # performs the kmeans analysis
+        k_means = KMeans(tol=tolerance,
+                         n_init=n_init,
+                         init=init_method,
+                         max_iter=max_iter,
+                         n_clusters=k_value)
+        kmeans_index = k_means.fit_predict(reduced_data)
+        best_index = kmeans_index.tolist()
 
-    # calculate the silhouette score
-    silhouette_score = _get_silhouette_score_(k=k_value,
-                                              k_means=k_means,
-                                              matrix=count_matrix,
-                                              metric_dist=metric_dist)
+        # calculate the silhouette score
+        silhouette_score = _get_silhouette_score_(k=k_value,
+                                                  k_means=k_means,
+                                                  matrix=count_matrix,
+                                                  metric_dist=metric_dist)
 
-    # create a color gradient with k colors
-    color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
-    rgb_tuples = [tuple(color[:-1]) for color in color_list]
-    colored_points = [rgb_tuples[item] for _, item in enumerate(best_index)]
+        # create a color gradient with k colors
+        color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
+        rgb_tuples = [tuple(color[:-1]) for color in color_list]
+        colored_points = [rgb_tuples[item] for _, item in
+                          enumerate(best_index)]
 
-    # make a string of rgb tuples that are separated by # for js
-    color_chart_point = [[int(value * 255) for value in list(rgb)]
-                         for rgb in rgb_tuples]
-    color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
-    color_str_list = color_chart.split("#")
+        # make a string of rgb tuples that are separated by # for js
+        color_chart_point = [[int(value * 255) for value in list(rgb)]
+                             for rgb in rgb_tuples]
+        color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
+        color_str_list = color_chart.split("#")
 
-    # split x and y coordinates from analyzed data
-    xs, ys = reduced_data[:, 0], reduced_data[:, 1]
+        # split x and y coordinates from analyzed data
+        xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
-    # reset matplotlib to clear possible previous dendrogram calls
-    plt.figure()
-    # plot and label points
-    for x, y, name, color in zip(xs, ys, labels, colored_points):
-        plt.scatter(x, y, c=color, s=40)
-        plt.text(x, y, name, color=color)
-    # save the plot and close
-    plt.savefig(path_join(folder_path, KMEANS_GRAPH_FILENAME))
-    plt.close()
+        # reset matplotlib to clear possible previous dendrogram calls
+        plt.figure()
+        # plot and label points
+        for x, y, name, color in zip(xs, ys, labels, colored_points):
+            plt.scatter(x, y, c=color, s=40)
+            plt.text(x, y, name, color=color)
+        # save the plot and close
+        plt.savefig(path_join(folder_path, KMEANS_GRAPH_FILENAME))
+        plt.close()
 
-    plotly_colors = [color_str_list[item]
-                     for _, item in enumerate(best_index)]
+        # plot data
+        plotly_colors = [color_str_list[item]
+                         for _, item in enumerate(best_index)]
+        from plotly.graph_objs import Scatter, Data
+        trace = Scatter(x=xs, y=ys, text=labels,
+                        textfont=dict(color=plotly_colors),
+                        name=labels, mode='markers+text',
+                        marker=dict(color=plotly_colors, line=dict(width=1, )),
+                        textposition='right')
 
-    from plotly.graph_objs import Scatter, Data
-    trace = Scatter(x=xs, y=ys, text=labels,
-                    textfont=dict(color=plotly_colors),
-                    name=labels, mode='markers+text',
-                    marker=dict(color=plotly_colors, line=dict(width=1, )),
-                    textposition='right')
+        data = Data([trace])
+        small_layout = dict(
+            margin={'l': 50, 'r': 50, 'b': 50, 't': 50, 'pad': 5},
+            width=500, height=450, hovermode='closest')
+        big_layout = dict(hovermode='closest')
+        from plotly.offline import plot
+        html = """
+        <html><head><meta charset="utf-8" /></head><body>
+        ___
+        </body></html>
+        """
+        sm_div = plot({"data": data, "layout": small_layout},
+                      output_type='div',
+                      show_link=False, auto_open=False)
+        lg_div = plot({"data": data, "layout": big_layout}, output_type='div',
+                      show_link=False, auto_open=False)
+        sm_div = sm_div.replace('displayModeBar:"hover"',
+                                'displayModeBar:true')
+        sm_div = sm_div.replace("modeBarButtonsToRemove:[]",
+                                "modeBarButtonsToRemove:['sendDataToCloud']")
+        sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
+        sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
+        sm_html = html.replace("___", sm_div)
 
-    data = Data([trace])
-    small_layout = dict(margin={'l': 50, 'r': 50, 'b': 50, 't': 50, 'pad': 5},
-                        width=500, height=450, hovermode='closest')
-    big_layout = dict(hovermode='closest')
+        html_file = open(path_join(folder_path, PCA_SMALL_GRAPH_FILENAME), "w",
+                         encoding='utf-8')
+        html_file.write(sm_html)
+        html_file.close()
 
-    from plotly.offline import plot
-    html = """
-    <html><head><meta charset="utf-8" /></head><body>
-    ___
-    </body></html>
-    """
-    sm_div = plot({"data": data, "layout": small_layout}, output_type='div',
-                  show_link=False, auto_open=False)
-    lg_div = plot({"data": data, "layout": big_layout}, output_type='div',
-                  show_link=False, auto_open=False)
-    sm_div = sm_div.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    sm_div = sm_div.replace("modeBarButtonsToRemove:[]",
-                            "modeBarButtonsToRemove:['sendDataToCloud']")
-    sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
-    sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
-    sm_html = html.replace("___", sm_div)
+        lg_div = lg_div.replace('displayModeBar:"hover"',
+                                'displayModeBar:true')
+        lg_div = lg_div.replace("modeBarButtonsToRemove:[]",
+                                "modeBarButtonsToRemove:['sendDataToCloud']")
+        lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
+        lg_html = html.replace("___", lg_div)
 
-    html_file = open(path_join(folder_path, PCA_SMALL_GRAPH_FILENAME), "w",
-                     encoding='utf-8')
-    html_file.write(sm_html)
-    html_file.close()
+        html_file = open(path_join(folder_path, PCA_BIG_GRAPH_FILENAME), "w",
+                         encoding='utf-8')
+        html_file.write(lg_html)
+        html_file.close()
 
-    lg_div = lg_div.replace('displayModeBar:"hover"', 'displayModeBar:true')
-    lg_div = lg_div.replace("modeBarButtonsToRemove:[]",
-                            "modeBarButtonsToRemove:['sendDataToCloud']")
-    lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
-    lg_html = html.replace("___", lg_div)
+        # pack all the needed data
 
-    html_file = open(path_join(folder_path, PCA_BIG_GRAPH_FILENAME), "w",
-                     encoding='utf-8')
-    html_file.write(lg_html)
-    html_file.close()
-
-    return best_index, silhouette_score, color_chart
 
 
 def _get_voronoi_plot_data_(data: np.ndarray,
