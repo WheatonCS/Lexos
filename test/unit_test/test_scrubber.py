@@ -38,70 +38,71 @@ class TestGetSpecialCharDictFromFile:
 
 class TestReplaceWithDict:
     not_special_string = "This string contains no special chars?!\nWow."
-    edge = "()"
+    edge1 = r'()('
+    edge2 = r')()'
 
     def test_replace_with_dict_doe_sgml(self):
 
         assert replace_with_dict(
             self.not_special_string,
-            replacement_dict=chars.DOE_SGML, edge1=self.edge, edge2=self.edge) == self.not_special_string
+            replacement_dict=chars.DOE_SGML, edge1=self.edge1, edge2=self.edge2) == self.not_special_string
 
         assert replace_with_dict(
             chars.DOE_SGML_KEYS,
-            replacement_dict=chars.DOE_SGML, edge1=self.edge, edge2=self.edge) == chars.DOE_SGML_VALS
+            replacement_dict=chars.DOE_SGML, edge1=self.edge1, edge2=self.edge2) == chars.DOE_SGML_VALS
 
         assert replace_with_dict(
             "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
             "characters!&eacute;;",
-            replacement_dict=chars.DOE_SGML, edge1=self.edge, edge2=self.edge) == \
+            replacement_dict=chars.DOE_SGML, edge1=self.edge1, edge2=self.edge2) == \
             "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
 
     def test_replace_with_dict_early_english_html(self):
 
         assert replace_with_dict(
             self.not_special_string,
-            replacement_dict=chars.EE_HTML, edge1=self.edge, edge2=self.edge) == self.not_special_string
+            replacement_dict=chars.EE_HTML, edge1=self.edge1, edge2=self.edge2) == self.not_special_string
 
         assert replace_with_dict(
             chars.EE_HTML_KEYS,
-            replacement_dict=chars.EE_HTML, edge1=self.edge, edge2=self.edge) == chars.EE_HTML_VALS
+            replacement_dict=chars.EE_HTML, edge1=self.edge1, edge2=self.edge2) == chars.EE_HTML_VALS
 
         assert replace_with_dict(
             "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
             "characters!&#383;;",
-            replacement_dict=chars.EE_HTML, edge1=self.edge, edge2=self.edge) == \
+            replacement_dict=chars.EE_HTML, edge1=self.edge1, edge2=self.edge2) == \
             "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
 
     def test_replace_with_dict_mufi_3(self):
 
         assert replace_with_dict(
             self.not_special_string,
-            replacement_dict=chars.MUFI3, edge1=self.edge, edge2=self.edge) == self.not_special_string
+            replacement_dict=chars.MUFI3, edge1=self.edge1, edge2=self.edge2) == self.not_special_string
 
         assert replace_with_dict(
             chars.MUFI3_KEYS,
-            replacement_dict=chars.MUFI3, edge1=self.edge, edge2=self.edge) == chars.MUFI3_VALS
+            replacement_dict=chars.MUFI3, edge1=self.edge1, edge2=self.edge2) == chars.MUFI3_VALS
 
         assert replace_with_dict(
             "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
             "special characters!&afinslig;;",
-            replacement_dict=chars.MUFI3, edge1=self.edge, edge2=self.edge) == \
+            replacement_dict=chars.MUFI3, edge1=self.edge1, edge2=self.edge2) == \
             "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
 
     def test_replace_with_dict_mufi_4(self):
 
         assert replace_with_dict(
             self.not_special_string,
-            replacement_dict=chars.MUFI4, edge1=self.edge, edge2=self.edge) == self.not_special_string
+            replacement_dict=chars.MUFI4, edge1=self.edge1, edge2=self.edge2) == self.not_special_string
 
         assert replace_with_dict(
             chars.MUFI4_KEYS,
-            replacement_dict=chars.MUFI4, edge1=self.edge, edge2=self.edge) == chars.MUFI4_VALS
+            replacement_dict=chars.MUFI4, edge1=self.edge1, edge2=self.edge2) == chars.MUFI4_VALS
 
         assert replace_with_dict(
             "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
             "special characters!&shy;;",
-            replacement_dict=chars.MUFI4, edge1=self.edge, edge2=self.edge) == \
+            replacement_dict=chars.MUFI4, edge1=self.edge1, edge2=self.edge2) == \
             "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad;"
 
     def test_replace_with_dict_other(self):
@@ -109,16 +110,16 @@ class TestReplaceWithDict:
 
         assert replace_with_dict("ythklsv",
                                  replacement_dict=replacement_dict,
-                                 edge1=self.edge, edge2=self.edge) == "ythklsv"
+                                 edge1=self.edge1, edge2=self.edge2) == "ythklsv"
 
         assert replace_with_dict("aeiou",
                                  replacement_dict=replacement_dict,
-                                 edge1=self.edge, edge2=self.edge) == "zqwpx"
+                                 edge1=self.edge1, edge2=self.edge2) == "zqwpx"
 
         assert replace_with_dict(
             "Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;",
-            replacement_dict=replacement_dict, edge1=self.edge,
-            edge2=self.edge) == "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
+            replacement_dict=replacement_dict, edge1=self.edge1,
+            edge2=self.edge2) == "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 
 
 class TestReplacementHandlerAlone:

@@ -139,8 +139,8 @@ def replacement_handler(
             edge1 = r'(^|\s)('    # Beginning of the string or whitespace
             edge2 = r')(?=\s|$)'  # Whitespace or end of the string
         else:
-            edge1 = '()'
-            edge2 = '()'
+            edge1 = r'()('
+            edge2 = r')()'
 
         text = replace_with_dict(text, replacement_dict, edge1, edge2)
 
@@ -173,7 +173,7 @@ def replace_with_dict(text: str, replacement_dict: Dict[str, str],
             to be used as a key.
         return: The matching value, a string from the replacements dictionary.
         """
-        return replacement_dict[match_obj.group()]
+        return replacement_dict[match_obj.group(2)]
 
     # Use re.sub() with a function
     # This will send all the match group to the function
