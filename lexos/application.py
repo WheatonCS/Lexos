@@ -105,7 +105,7 @@ def nl2br(eval_ctx, value):
 @app.errorhandler(404)
 def page_not_found(_):
     """Custom 404 Page"""
-    app.logger.error('Page not found: %s', request.path)
+    app.logger.error('\nPage not found: {url}'.format(url=request.path))
     return render_template('404.html')
 
 
@@ -124,7 +124,7 @@ def unhandled_exception(error):
 
     # if flask raises this error
     else:
-        print(traceback.format_exc())
+        app.logger.error(traceback.format_exc())
         return render_template("500.html")
 
 
