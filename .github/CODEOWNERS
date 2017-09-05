@@ -1,0 +1,10 @@
+# global owners
+# All the pull requests needs to push the following person's review
+*           @chantisnake
+
+# for all the code files, you needs to pass the review of following person
+/lexos/     @Landaluce @EmmaGrace @XinruLiu @Weiqi97
+/test/      @Landaluce @EmmaGrace @XinruLiu @Weiqi97
+
+# for all the front end code, needs to be reviewed by scott
+*.js        @scottkleinman
