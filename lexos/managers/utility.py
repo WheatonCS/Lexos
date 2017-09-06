@@ -1405,18 +1405,16 @@ def xml_handling_options(data: dict = {}):
 
 # Gets called from cluster() in lexos_core.py
 def generate_dendrogram_from_ajax(file_manager: FileManager) \
-    -> (int, int, int, int, int, int, int, int, Union[float, int, str],
-        str, str, str, str, Dict):
+        -> (int, float, Union[float, str]):
     """Generates dendrogram image and PDF from the active files.
 
     :param file_manager: a class for an object to hold all information of
                         user's files and manage the files according to users's
                         choices.
-    :param leq: a string symbol '≤'
     :return:
             - total_pdf_page_number: integer, total number of pages of the PDF.
             - score: float, silhouette score
-            - threshold: float/integer/string, threshold (t) value that users
+            - threshold: float/string, threshold (t) value that users
               entered, equals to 'N/A' if users leave the field blank
     """
 
@@ -1459,7 +1457,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager) \
 
     # get values(raw matrix) and index(file names) from data frame
     dtm = dtm_data_frame.values
-    temp_labels = dtm_data_frame.index
+    temp_labels = np.array(dtm_data_frame.index)
 
     # -- Plots the hierarchical clustering as a dendrogram --------------------
     if 'getdendro' in request.json:
