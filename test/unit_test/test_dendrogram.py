@@ -2,6 +2,7 @@ import numpy as np
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.processors.analyze.dendrogrammer import get_dendro_distances
+from lexos.processors.analyze.dendrogrammer import get_silhouette_score
 
 
 class TestGetDendroDistance:
@@ -43,3 +44,25 @@ class TestGetDendroDistance:
             raise AssertionError("empty list error did not raise.")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
+
+
+class TestGetSilhouetteScore:
+    def test_active_file_less_than_two(self):
+        linkage_method = 'complete'
+        distance_metric = 'hamming'
+        dendro_matrix = np.array([[0.0, 1.0],
+                                  [0.33333333333333331, 0.66666666666666663],
+                                  [0.66666666666666663, 0.33333333333333331]])
+        labels = np.array(['file_1', 'file_2', 'file_3'])
+        active_files_num = 2
+        np.testing.assert_equal(get_silhouette_score(
+            linkage_method=linkage_method,
+            distance_metric=distance_metric,
+            dendro_matrix=dendro_matrix,
+            labels=labels,
+            active_files_num=active_files_num),
+            ('Silhouette Score: invalid for less than or '
+             'equal to 2 documents.',
+             '',
+             'Invalid for less than or equal to 2 documents.',
+             'N/A'))
