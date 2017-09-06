@@ -90,8 +90,6 @@ def cluster_dendro(dendro_matrix: np.ndarray,
                    distance_metric: str,
                    linkage_method: str,
                    labels: np.ndarray) -> (np.ndarray, int, np.ndarray):
-
-    # Switch to request.json if necessary
     """Generate the score label.
 
     :param dendro_matrix: np.ndarray, occurrence of words in different files.
@@ -167,14 +165,15 @@ def cluster_dendro(dendro_matrix: np.ndarray,
 def get_silhouette_score(dendro_matrix: np.ndarray,
                          distance_metric: str,
                          linkage_method: str,
-                         labels: np.ndarray) -> (str, str,
-                                                 Union[int, str]):
+                         labels: np.ndarray,
+                         active_files_num) -> (str, str, Union[int, str], int):
     """Generate silhoutte score based on hierarchical clustering.
 
     :param dendro_matrix: np.ndarray, occurrence of words in different files
     :param distance_metric: string, style of distance metric in the dendrogram
     :param linkage_method: string, style of linkage method in the dendrogram
     :param labels: list, file names
+    :param active_files_num: int, the number of active files
     :return: - silhouette_score: string, containing the result of silhouette
                score.
              - silhouette_annotation: string, annotation of the silhouette
@@ -183,8 +182,6 @@ def get_silhouette_score(dendro_matrix: np.ndarray,
              - threshold: integer/string, number of clusters that users
                entered, equals to 'N/A' if active file number is < or = 2.
     """
-
-    active_files_num = len(labels) - 1
 
     if active_files_num > 2:
         # get score_label
@@ -556,9 +553,10 @@ def dendrogram(
     """
 
     # -- generate silhouette score --------------------------------------------
+    active_files_num = len(labels) - 1
     silhouette_score, silhouette_annotation, score, threshold = \
         get_silhouette_score(dendro_matrix, distance_metric,
-                             linkage_method, labels)
+                             linkage_method, labels, active_files_num)
 
     # -- generate legend list -------------------------------------------------
     legend_page = 0
