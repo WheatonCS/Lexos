@@ -386,6 +386,8 @@ class FileManager:
                      send_file.
         """
 
+        # TODO: make send file happen in interface
+
         zip_stream = io.BytesIO()
         zip_file = zipfile.ZipFile(file=zip_stream, mode='w')
         for l_file in list(self.files.values()):
@@ -411,7 +413,7 @@ class FileManager:
 
         :return: the path of the zipped workspace
         """
-
+        # TODO: move this to matrix model
         # initialize the save path
         save_path = os.path.join(
             constants.UPLOAD_FOLDER,
