@@ -661,8 +661,8 @@ class FileManager:
         return result_matrix
 
     @staticmethod
-    def get_matrix_options() -> Tuple[int, bool, bool, bool, str, bool, bool,
-                                      bool, bool, bool]:
+    def get_matrix_options_deprec() -> Tuple[int, bool, bool, bool, str, bool, bool,
+                                             bool, bool, bool]:
         """Gets all the options that are used to generate the matrices from GUI
 
         :return:
@@ -729,10 +729,12 @@ class FileManager:
             grey_word, show_deleted_word, only_char_grams_within_words, \
             most_frequent_word, culling
 
-    def get_matrix(self, use_word_tokens: bool, use_tfidf: bool,
-                   norm_option: str, only_char_grams_within_words: bool,
-                   n_gram_size: int, use_freq: bool, mfw: bool, cull: bool,
-                   round_decimal: bool=False) -> pd.DataFrame:
+    def get_matrix_deprec2(self, use_word_tokens: bool, use_tfidf: bool,
+                           norm_option: str,
+                           only_char_grams_within_words: bool,
+                           n_gram_size: int, use_freq: bool, mfw: bool,
+                           cull: bool, round_decimal: bool=False) \
+            -> pd.DataFrame:
         # TODO: remove round_decimal
         """Get the document term matrix (DTM) of all the active files
 
@@ -906,7 +908,7 @@ class FileManager:
             else:
                 least_num_seg = int(request.form['cullnumber'])
 
-            dtm_data_frame = self.get_culled_matrix(
+            dtm_data_frame = self.get_culled_matrix_deprec(
                 least_num_seg=least_num_seg,
                 dtm_data_frame=dtm_data_frame
             )
@@ -918,7 +920,7 @@ class FileManager:
             else:
                 lower_rank_bound = int(request.form['mfwnumber'])
 
-            dtm_data_frame = self.get_most_frequent_word(
+            dtm_data_frame = self.get_most_frequent_word_deprec(
                 lower_rank_bound=lower_rank_bound,
                 dtm_data_frame=dtm_data_frame,
                 count_matrix=raw_count_matrix
@@ -931,9 +933,9 @@ class FileManager:
         return dtm_data_frame
 
     @staticmethod
-    def get_most_frequent_word(lower_rank_bound: int,
-                               count_matrix: np.ndarray,
-                               dtm_data_frame: pd.DataFrame) \
+    def get_most_frequent_word_deprec(lower_rank_bound: int,
+                                      count_matrix: np.ndarray,
+                                      dtm_data_frame: pd.DataFrame) \
             -> pd.DataFrame:
         """ Gets the most frequent words in final_matrix and words.
 
@@ -975,9 +977,8 @@ class FileManager:
         return dtm_data_frame
 
     @staticmethod
-    def get_culled_matrix(least_num_seg: int,
-                          dtm_data_frame: pd.DataFrame) \
-            -> pd.DataFrame:
+    def get_culled_matrix_deprec(least_num_seg: int,
+                                 dtm_data_frame: pd.DataFrame) -> pd.DataFrame:
         """Gets the culled final_matrix and culled words.
 
         Gives a matrix that only contains the words that appears in more than
@@ -1290,8 +1291,8 @@ class FileManager:
 
     # Experimental for Tokenizer
     @staticmethod
-    def get_matrix_options_from_ajax() -> Tuple[int, bool, bool, bool, str,
-                                                bool, bool, bool, bool, bool]:
+    def get_matrix_options_from_ajax_deprec() -> \
+            Tuple[int, bool, bool, bool, str, bool, bool, bool, bool, bool]:
         """Gets all the options that are used to generate the matrices from GUI
 
         :return:
