@@ -86,7 +86,7 @@ def handle_special_characters(text: str) -> str:
         raise ValueError("Invalid special character set")
 
     ret_text = replace_with_dict(
-        text, replacement_dict=conversion_dict, edge1="()", edge2="()")
+        text, replacement_dict=conversion_dict, edge1="()(", edge2=")()")
 
     return ret_text
 
@@ -157,7 +157,7 @@ def replace_with_dict(text: str, replacement_dict: Dict[str, str],
         characters.
     :param edge1: A regex pattern describing the leftmost border of the match.
     :param edge2: A regex pattern describing the rightmost border of the match.
-    :return: The replace function that actually does the replacing.
+    :return: The text after replacement.
     """
 
     # create a regex to find all the "replacement_from" string
@@ -173,11 +173,14 @@ def replace_with_dict(text: str, replacement_dict: Dict[str, str],
             to be used as a key.
         return: The matching value, a string from the replacements dictionary.
         """
-        return replacement_dict[match_obj.group(2)]
+
+        # Preserve the spacing in group one, but swap the matched char(s)
+        # with their replacement from the dict
+        return match_obj.group(1) + replacement_dict[match_obj.group(2)]
 
     # Use re.sub() with a function
-    # This will send all the match group to the function
-    # and then replace the match group with the result of the function
+    # This will send all the matches to the function and then replace each
+    # match with the result of the function
     return all_of_replace_from.sub(_replacement_map_func, text)
 
 
