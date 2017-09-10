@@ -33,7 +33,7 @@ The following roadmap incorporates most of the issues in GitHub and the projecte
 10. File structure refactor ([#541](https://github.com/WheatonCS/Lexos/pull/541)). **Done**
 
 ## v3.3. Code Cleanup, and Workflow Improvements
-1.	Implement webassets ([#485](https://github.com/WheatonCS/Lexos/issues/485)).
+1.	Implement webassets, or, more likely, a custom method of minifying and bundling static assets ([#485](https://github.com/WheatonCS/Lexos/issues/485)).
 2.	Introduce error handling Ajax responses and other server errors ([#495](https://github.com/WheatonCS/Lexos/issues/495)).
 3.	Refactor Javascript ([#496](https://github.com/WheatonCS/Lexos/issues/496)).
 
