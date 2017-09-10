@@ -480,12 +480,9 @@ def merge_file_and_manual_strings(file_string: str, manual_string: str,
     return merged_string
 
 
-def split_input_word_string(input_string: str) -> List[str]:
-    """Breaks word string inputs into lists of words.
+def split_stop_keep_word_string(input_string: str) -> List[str]:
+    """Breaks stop and keepword string inputs into lists of words.
 
-    Word strings are a series of words delimited by newlines, commas, and
-        spaces. The raw input of the stop words field from the browser is
-        one example.
     :param input_string: A string of words input by the user.
     :return: A list of the user's string broken up into words.
     """
@@ -540,7 +537,7 @@ def remove_stopwords(text: str, removal_string: str) -> str:
         the stopwords chosen by the user.
     """
 
-    remove_list = split_input_word_string(input_string=removal_string)
+    remove_list = split_stop_keep_word_string(input_string=removal_string)
     scrubbed_text = delete_words(text, remove_list)
 
     return scrubbed_text
@@ -558,7 +555,7 @@ def keep_words(text: str, non_removal_string: str) -> str:
     """
 
     # A list containing the words in non_removal_string.
-    keep_list = split_input_word_string(input_string=non_removal_string)
+    keep_list = split_stop_keep_word_string(input_string=non_removal_string)
 
     split_lines = text.split("\n")
 

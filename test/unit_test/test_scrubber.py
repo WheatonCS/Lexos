@@ -4,7 +4,7 @@ from lexos.helpers.exceptions import LexosException
 from lexos.processors.prepare.scrubber import replacement_handler, \
     get_remove_whitespace_map, replace_with_dict, get_remove_punctuation_map, \
     get_remove_digits_map, get_all_punctuation_map, delete_words, \
-    handle_gutenberg, split_input_word_string, \
+    handle_gutenberg, split_stop_keep_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
     merge_file_and_manual_strings, remove_stopwords, keep_words
@@ -730,30 +730,30 @@ class TestMergeFileAndManualStrings:
 class TestSplitInputWordString:
 
     def test_split_input_word_str_with_words(self):
-        assert split_input_word_string(
+        assert split_stop_keep_word_string(
             input_string="\nThis\nstring\n\nhas\nnewlines\n\n") \
             == ["This", "string", "has", "newlines"]
-        assert split_input_word_string(
+        assert split_stop_keep_word_string(
             input_string=",This,string,,has,commas,,") == \
             ["This", "string", "has", "commas"]
-        assert split_input_word_string(
+        assert split_stop_keep_word_string(
             input_string=".This.string..has.periods..") == \
             [".This.string..has.periods.."]
-        assert split_input_word_string(
+        assert split_stop_keep_word_string(
             input_string=" This string  has spaces  ") == \
             ["This", "string", "has", "spaces"]
-        assert split_input_word_string(
+        assert split_stop_keep_word_string(
             input_string="\n., This,.string\n,, has.\n.some, of,. "
                          "\neverything \n..") == [".", "This", ".string",
                                                   "has.", ".some", "of", ".",
                                                   "everything", ".."]
 
     def test_split_input_word_str_no_words(self):
-        assert split_input_word_string(input_string="") == []
-        assert split_input_word_string(input_string="\n") == []
-        assert split_input_word_string(input_string=",") == []
-        assert split_input_word_string(input_string=" ") == []
-        assert split_input_word_string(
+        assert split_stop_keep_word_string(input_string="") == []
+        assert split_stop_keep_word_string(input_string="\n") == []
+        assert split_stop_keep_word_string(input_string=",") == []
+        assert split_stop_keep_word_string(input_string=" ") == []
+        assert split_stop_keep_word_string(
             input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
             ["..", ".", ".", ".", "..."]
 
