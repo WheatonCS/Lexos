@@ -699,6 +699,34 @@ class TestGetRemoveDigitsMap:
         assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
 
 
+class TestMergeFileAndManualStrings:
+
+    def test_merge_file_and_manual_strings(self):
+        string1 = "and. the\n who,how why"
+        string2 = "what where, but. of,\nnot,for"
+        cache_folder = \
+            '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+        cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+                           'stopwords.p']
+        cache_number = 1
+
+        assert merge_file_and_manual_strings(
+            file_string="", manual_string="", cache_folder=cache_folder,
+            cache_filenames=cache_filenames, cache_number=cache_number) == "\n"
+        assert merge_file_and_manual_strings(
+            file_string=string1, manual_string="",
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=cache_number) == string1 + "\n"
+        assert merge_file_and_manual_strings(
+            file_string="", manual_string=string2,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=cache_number) == "\n" + string2
+        assert merge_file_and_manual_strings(
+            file_string=string1, manual_string=string2,
+            cache_folder=cache_folder, cache_filenames=cache_filenames,
+            cache_number=cache_number) == string1 + "\n" + string2
+
+
 class TestSplitInputWordString:
 
     def test_split_input_word_str_with_words(self):
@@ -728,34 +756,6 @@ class TestSplitInputWordString:
         assert split_input_word_string(
             input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
             ["..", ".", ".", ".", "..."]
-
-
-class TestMergeFileAndManualStrings:
-
-    def test_merge_file_and_manual_strings(self):
-        string1 = "and. the\n who,how why"
-        string2 = "what where, but. of,\nnot,for"
-        cache_folder = \
-            '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-        cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-                           'stopwords.p']
-        cache_number = 1
-
-        assert merge_file_and_manual_strings(
-            file_string="", manual_string="", cache_folder=cache_folder,
-            cache_filenames=cache_filenames, cache_number=cache_number) == "\n"
-        assert merge_file_and_manual_strings(
-            file_string=string1, manual_string="",
-            cache_folder=cache_folder, cache_filenames=cache_filenames,
-            cache_number=cache_number) == string1 + "\n"
-        assert merge_file_and_manual_strings(
-            file_string="", manual_string=string2,
-            cache_folder=cache_folder, cache_filenames=cache_filenames,
-            cache_number=cache_number) == "\n" + string2
-        assert merge_file_and_manual_strings(
-            file_string=string1, manual_string=string2,
-            cache_folder=cache_folder, cache_filenames=cache_filenames,
-            cache_number=cache_number) == string1 + "\n" + string2
 
 
 class TestDeleteWords:
