@@ -456,10 +456,10 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     return remove_digit_map
 
 
-def merge_file_and_manual_strings(file_string: str, manual_string: str,
-                                  cache_folder: str,
-                                  cache_filenames: List[str],
-                                  cache_number: int) -> str:
+def handle_file_and_manual_strings(file_string: str, manual_string: str,
+                                   cache_folder: str,
+                                   cache_filenames: List[str],
+                                   cache_number: int) -> str:
     """Caches uploaded files and merges file strings with manual strings.
 
     :param file_string: The user's uploaded file.
@@ -847,7 +847,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             return orig_text
 
     # -- 2. special characters -----------------------------------------------
-    merged_string = merge_file_and_manual_strings(
+    merged_string = handle_file_and_manual_strings(
         file_string=sc_file_string, manual_string=sc_manual,
         cache_folder=cache_folder, cache_filenames=cache_filenames,
         cache_number=2)
@@ -911,7 +911,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             and cons_manual.
         """
 
-        replacer_string = merge_file_and_manual_strings(
+        replacer_string = handle_file_and_manual_strings(
             file_string=cons_file_string, manual_string=cons_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=0)
@@ -927,7 +927,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             lem_manual.
         """
 
-        replacer_string = merge_file_and_manual_strings(
+        replacer_string = handle_file_and_manual_strings(
             file_string=lem_file_string, manual_string=lem_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=1)
@@ -945,7 +945,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             sw_kw_manual deleted.
         """
 
-        file_and_manual = merge_file_and_manual_strings(
+        file_and_manual = handle_file_and_manual_strings(
             file_string=sw_kw_file_string, manual_string=sw_kw_manual,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=3)

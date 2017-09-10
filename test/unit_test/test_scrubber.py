@@ -7,7 +7,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     handle_gutenberg, split_stop_keep_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
-    merge_file_and_manual_strings, remove_stopwords, keep_words
+    handle_file_and_manual_strings, remove_stopwords, keep_words
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -265,15 +265,15 @@ class TestReplacementHandlerWithMergeStrings:
     # uses requests
 
     def test_replacement_handler_special(self):
-        file_special_string = merge_file_and_manual_strings(
+        file_special_string = handle_file_and_manual_strings(
             file_string="-:_\n!:~\nn:ñ\na:@", manual_string="",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
-        manual_special_string = merge_file_and_manual_strings(
+        manual_special_string = handle_file_and_manual_strings(
             file_string="", manual_string="-:_\n!:~\nn:ñ\na:@",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
-        split_special_string = merge_file_and_manual_strings(
+        split_special_string = handle_file_and_manual_strings(
             file_string="-:_\n!:~", manual_string="n:ñ\na:@",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
@@ -291,15 +291,15 @@ class TestReplacementHandlerWithMergeStrings:
             is_lemma=False) == after_special
 
     def test_replacement_handler_consol(self):
-        file_consol_string = merge_file_and_manual_strings(
+        file_consol_string = handle_file_and_manual_strings(
             file_string="o:u\nt,x:y\nI:i", manual_string="",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
-        manual_consol_string = merge_file_and_manual_strings(
+        manual_consol_string = handle_file_and_manual_strings(
             file_string="", manual_string="o:u\nt,x:y\nI:i",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
-        split_consol_string = merge_file_and_manual_strings(
+        split_consol_string = handle_file_and_manual_strings(
             file_string="o:u\nt,x:y", manual_string="I:i",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
@@ -317,15 +317,15 @@ class TestReplacementHandlerWithMergeStrings:
             is_lemma=False) == after_consol
 
     def test_replacement_handler_lemma(self):
-        file_lemma_string = merge_file_and_manual_strings(
+        file_lemma_string = handle_file_and_manual_strings(
             file_string="I,it:she\n(random):(interesting)", manual_string="",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
-        manual_lemma_string = merge_file_and_manual_strings(
+        manual_lemma_string = handle_file_and_manual_strings(
             file_string="", manual_string="I,it:she\n(random):(interesting)",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
-        split_lemma_string = merge_file_and_manual_strings(
+        split_lemma_string = handle_file_and_manual_strings(
             file_string="I,it:she", manual_string="(random):(interesting)",
             cache_folder=self.cache_folder,
             cache_filenames=self.cache_filenames, cache_number=2)
@@ -699,9 +699,9 @@ class TestGetRemoveDigitsMap:
         assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
 
 
-class TestMergeFileAndManualStrings:
+class TestHandleFileAndManualStrings:
 
-    def test_merge_file_and_manual_strings(self):
+    def test_handle_file_and_manual_strings(self):
         string1 = "and. the\n who,how why"
         string2 = "what where, but. of,\nnot,for"
         cache_folder = \
@@ -710,18 +710,18 @@ class TestMergeFileAndManualStrings:
                            'stopwords.p']
         cache_number = 1
 
-        assert merge_file_and_manual_strings(
+        assert handle_file_and_manual_strings(
             file_string="", manual_string="", cache_folder=cache_folder,
             cache_filenames=cache_filenames, cache_number=cache_number) == "\n"
-        assert merge_file_and_manual_strings(
+        assert handle_file_and_manual_strings(
             file_string=string1, manual_string="",
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=cache_number) == string1 + "\n"
-        assert merge_file_and_manual_strings(
+        assert handle_file_and_manual_strings(
             file_string="", manual_string=string2,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=cache_number) == "\n" + string2
-        assert merge_file_and_manual_strings(
+        assert handle_file_and_manual_strings(
             file_string=string1, manual_string=string2,
             cache_folder=cache_folder, cache_filenames=cache_filenames,
             cache_number=cache_number) == string1 + "\n" + string2
