@@ -85,10 +85,10 @@ def handle_special_characters(text: str) -> str:
     else:
         raise ValueError("Invalid special character set")
 
-    ret_text = replace_with_dict(
+    updated_text = replace_with_dict(
         text, replacement_dict=conversion_dict, edge1="()(", edge2=")()")
 
-    return ret_text
+    return updated_text
 
 
 def replacement_handler(
