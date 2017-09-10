@@ -4,9 +4,10 @@ import pickle
 from lexos.helpers import constants
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
+from lexos.models.base_model import BaseModel
 
 
-class FileManagerModel:
+class FileManagerModel(BaseModel):
     def __init__(self):
         """A model to control file manager.
 
@@ -14,6 +15,7 @@ class FileManagerModel:
         the file_manager is the file_manager for current session.
         We uses pickel library to save and load filemanager on our disk
         """
+        super().__init__()
         self._file_manager_path = os.path.join(session_folder(),
                                                constants.FILEMANAGER_FILENAME)
         self.file_manager = self.load_file_manager()
