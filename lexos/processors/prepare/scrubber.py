@@ -149,25 +149,24 @@ def replacement_handler(
 
 def replace_with_dict(text: str, replacement_dict: Dict[str, str],
                       edge1: str, edge2: str) -> str:
-    """Makes a function to alter text according to the replacements dictionary.
+    """Alters text according to the replacements dictionary.
 
-    :param text: the input text to replace
-    :param replacement_dict: A dictionary where the keys are the strings of
-        encoded ascii characters and the values are the encoded unicode
-        characters.
+    :param text: The input text to replace.
+    :param replacement_dict: A dictionary mapping characters/strings in the
+        text to their replacement values.
     :param edge1: A regex pattern describing the leftmost border of the match.
     :param edge2: A regex pattern describing the rightmost border of the match.
     :return: The text after replacement.
     """
 
-    # create a regex to find all the "replacement_from" string
+    # Create a regex pattern to find all the "replacement_from" strings
     all_of_replace_from = re.compile(
         edge1 +
         '|'.join(re.escape(replace_from) for replace_from in replacement_dict)
         + edge2, re.UNICODE)
 
     def _replacement_map_func(match_obj: Match) -> str:
-        """This function maps the replace_from match to the replace_to str.
+        """Maps the replace_from match to the replace_to string.
 
         :param match_obj: The replacement character as a regex match object,
             to be used as a key.
