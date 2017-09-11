@@ -317,17 +317,13 @@ def consolidate_hyphens(text: str) -> str:
     :return: The text string after all hyphens have been replaced.
     """
 
-    # All UTF-8 values (hex) for different hyphens and dashes, except the
-    # math minus symbol
-    # All unicode dashes have 'Pd'
-    hyphen_values = ['\u058A', '\u05BE', '\u2010', '\u2011', '\u2012',
-                     '\u2013', '\u2014', '\u2015', '\uFE58', '\uFE63',
-                     '\uFF0D', '\u1400', '\u1806', '\u2E17', '\u2E1A',
-                     '\u2E3A', '\u2E3B', '\u2E40', '\u301C', '\u3030',
-                     '\u30A0', '\uFE31', '\uFE32']
-
-    # hex 002D corresponds to the minus symbol (decimal 45)
+    # Hex 002D is the minus symbol (-), which all hyphens will be converted to
     chosen_hyphen_value = '\u002D'
+
+    hyphen_values = dict.fromkeys(
+        [chr(i) for i in range(sys.maxunicode)
+         if unicodedata.category(chr(i)).startswith('Pd')  # All hyphens/dashes
+         and chr(i) != chosen_hyphen_value])
 
     # convert all those types of hyphens into the ascii minus
     for value in hyphen_values:
