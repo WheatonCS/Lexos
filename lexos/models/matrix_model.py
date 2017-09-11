@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -278,13 +276,6 @@ class MatrixModel(FileManagerModel):
             temp_labels=self._get_temp_labels_from_front_end()
         )
 
-    def _get_all_content(self) -> List[str]:
-        """Helper method to get_matrix.
-
-        :return: get all the file content from the file_manager
-        """
-        return [file.load_contents() for file in self._active_files]
-
     def _get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
 
@@ -294,7 +285,7 @@ class MatrixModel(FileManagerModel):
             - the column header are words
         """
 
-        all_contents = self._get_all_content()
+        all_contents = self.file_manager.get_content_of_active()
 
         # heavy hitting tokenization and counting options set here
 
