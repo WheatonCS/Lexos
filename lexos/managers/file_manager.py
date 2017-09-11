@@ -668,8 +668,8 @@ class FileManager:
         return result_matrix
 
     @staticmethod
-    def get_matrix_options_deprec() -> Tuple[int, bool, bool, bool, str, bool, bool,
-                                             bool, bool, bool]:
+    def get_matrix_options_deprec() -> (int, bool, bool, bool, str, bool, bool,
+                                        bool, bool, bool):
         """Gets all the options that are used to generate the matrices from GUI
 
         :return:
