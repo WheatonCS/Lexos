@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
+from lexos.helpers import definitions
 from lexos.models.filemanager_model import FileManagerModel
 
 
@@ -326,7 +327,7 @@ class MatrixModel(FileManagerModel):
         count_vector = CountVectorizer(
             input='content', encoding='utf-8', min_df=1,
             analyzer=self._opt.token_option.token_type,
-            token_pattern=r'(?u)[\S]+', lowercase=False,
+            token_pattern=definitions._WORD_REGEX_STR, lowercase=False,
             ngram_range=(self._opt.token_option.token_type,
                          self._opt.token_option.token_type),
             stop_words=[], dtype=float, max_df=1.0
