@@ -177,7 +177,7 @@ class TestReplacementHandlerAlone:
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
-                                 "Test,testing,working"
+                "Test,testing,working"
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="word", is_lemma=True)
@@ -196,14 +196,14 @@ class TestReplacementHandlerAlone:
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
-                                 "working:Test,testing"
+                "working:Test,testing"
         try:
             replacement_handler(
                 text=self.test_string, replacer_string="is,string:how,what",
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
-                                 "is,string:how,what"
+                "is,string:how,what"
         # No argument on left of colon
         try:
             replacement_handler(
@@ -223,7 +223,7 @@ class TestReplacementHandlerAlone:
                                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
-                                 "testing::working"
+                "testing::working"
         try:
             replacement_handler(text=self.test_string,
                                 replacer_string=":yay\ntesting,working\n"
@@ -238,14 +238,14 @@ class TestReplacementHandlerAlone:
                                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
-                                 "string:word,thing"
+                "string:word,thing"
 
     def test_replacement_handler_regex(self):
         assert replacement_handler(
             text="words ^words words$ word. wordss words+ words",
-            replacer_string="^words:things\nwords$:junk\nword.:stuff\n"
-                            "words+:text", is_lemma=True) == \
-               "words things junk stuff wordss text words"
+            replacer_string="^words:things\nwords$:junk\nword.:stuff"
+            "\nwords+:text", is_lemma=True) == "words things junk stuff " \
+                                               "wordss text words"
         assert replacement_handler(
             text="Hello there.", replacer_string=".,l:!\n", is_lemma=False) \
             == "He!!o there!"
