@@ -200,9 +200,9 @@ class MatrixModel(FileManagerModel):
 
         :return: a token option struct
         """
-        token_type_is_word = self.get_front_end_data('tokenType') == 'word'
-        token_type_is_char = self.get_front_end_data('tokenType') == 'char'
-        char_within_word = self.data_exists_in_requests('inWordsOnly')
+        token_type_is_word = self.front_end_data['tokenType'] == 'word'
+        token_type_is_char = self.front_end_data['tokenType'] == 'char'
+        char_within_word = 'inWordsOnly' in self.front_end_data
 
         # get the token type
         if token_type_is_word:
@@ -215,7 +215,7 @@ class MatrixModel(FileManagerModel):
             raise ValueError('invalid token type from front end')
 
         # get the n_gram_size
-        n_gram_size = int(self.get_front_end_data('tokenSize'))
+        n_gram_size = int(self.front_end_data['tokenSize'])
 
         return TokenOption(token_type=token_type, n_gram_size=n_gram_size)
 
@@ -224,15 +224,15 @@ class MatrixModel(FileManagerModel):
 
         :return: a normalize option struct
         """
-        use_freq = self.get_front_end_data('normalizeType') == 'freq'
+        use_freq = self.front_end_data['normalizeType'] == 'freq'
 
         # if use TF/IDF
-        use_tfidf = self.get_front_end_data('normalizeType') == 'tfidf'
+        use_tfidf = self.front_end_data['normalizeType'] == 'tfidf'
 
         # only applicable when using "TF/IDF", set default value to N/A
-        if self.get_front_end_data('norm') == 'l1':
+        if self.front_end_data['norm'] == 'l1':
             norm_option = 'l1'
-        elif self.get_front_end_data('norm') == 'l2':
+        elif self.front_end_data['norm'] == 'l2':
             norm_option = 'l2'
         else:
             norm_option = None
@@ -245,10 +245,10 @@ class MatrixModel(FileManagerModel):
 
         :return: a culling option struct
         """
-        most_frequent_word = self.data_exists_in_requests('mfwcheckbox')
-        culling = self.data_exists_in_requests('cullcheckbox')
-        least_num_seg = self.get_front_end_data('cullnumber')
-        lower_rank_bound = self.get_front_end_data('mfwnumber')
+        most_frequent_word = self.front_end_data['mfwcheckbox']
+        culling = self.front_end_data['cullcheckbox']
+        least_num_seg = self.front_end_data['cullnumber']
+        lower_rank_bound = self.front_end_data['mfwnumber']
 
         return CullingOption(culling=culling, cull_least_seg=least_num_seg,
                              most_frequent_word=most_frequent_word,
@@ -260,7 +260,7 @@ class MatrixModel(FileManagerModel):
         :return: get all the temp labels from the web
         """
         try:
-            return np.array([self.get_front_end_data("file_" + str(file.id))
+            return np.array([self.front_end_data["file_" + str(file.id)]
                              for file in self._active_files])
         except KeyError:
             return np.array([file.label for file in self._active_files])
