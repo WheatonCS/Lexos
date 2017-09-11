@@ -161,9 +161,9 @@ def replace_with_dict(text: str, replacement_dict: Dict[str, str],
 
     # Create a regex pattern to find all the "replacement_from" strings
     all_of_replace_from = re.compile(
-        edge1 +
-        '|'.join(re.escape(replace_from) for replace_from in replacement_dict)
-        + edge2, re.UNICODE)
+        edge1 + '|'.join(re.escape(replace_from)
+                         for replace_from in replacement_dict) + edge2,
+        re.UNICODE)
 
     def _replacement_map_func(match_obj: Match) -> str:
         """Maps the replace_from match to the replace_to string.
