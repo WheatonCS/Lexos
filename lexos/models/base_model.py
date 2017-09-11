@@ -17,4 +17,3 @@ class BaseModel:
     @property
     def front_end_data(self) -> dict:
         return self._option
-
