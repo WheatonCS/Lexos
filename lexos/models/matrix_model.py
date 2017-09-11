@@ -183,7 +183,7 @@ class MatrixModel(FileManagerModel):
         self._opt = matrix_option if matrix_option else \
             self._get_matrix_option_from_front_end()
 
-        self._dtm = self._get_matrix()
+        self._dtm = self._generate_dtm()
 
     @property
     def doc_term_matrix(self) -> pd.DataFrame:
@@ -277,7 +277,7 @@ class MatrixModel(FileManagerModel):
             temp_labels=self._get_temp_labels_from_front_end()
         )
 
-    def _get_matrix(self)-> pd.DataFrame:
+    def _generate_dtm(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
 
         :return:
