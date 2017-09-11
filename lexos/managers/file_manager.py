@@ -742,7 +742,6 @@ class FileManager:
                            n_gram_size: int, use_freq: bool, mfw: bool,
                            cull: bool, round_decimal: bool=False) \
             -> pd.DataFrame:
-        # TODO: remove round_decimal
         """Get the document term matrix (DTM) of all the active files
 
         Uses scikit-learn's CountVectorizer class to produce the DTM.
