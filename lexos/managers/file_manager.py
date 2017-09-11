@@ -32,10 +32,8 @@ class FileManager:
         self._files = {}
         self.next_id = 0
 
-        makedirs(
-            pathjoin(
-                session_manager.session_folder(),
-                constants.FILE_CONTENTS_FOLDER))
+        makedirs(pathjoin(session_manager.session_folder(),
+                          constants.FILE_CONTENTS_FOLDER))
 
     @property
     def files(self) -> Dict[int, LexosFile]:
@@ -177,6 +175,13 @@ class FileManager:
                 )
 
         return previews
+
+    def get_content_of_active(self) -> List[str]:
+        """Helper method to get_matrix.
+
+        :return: get all the file content from the file_manager
+        """
+        return [file.load_contents() for file in self.get_active_files()]
 
     def toggle_file(self, file_id: int):
         """Toggles the active status of the given file.
