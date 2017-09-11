@@ -200,16 +200,17 @@ class MatrixModel(FileManagerModel):
 
         :return: a token option struct
         """
+        token_type_is_word = self.get_front_end_data('tokenType') == 'word'
+        token_type_is_char = self.get_front_end_data('tokenType') == 'char'
+        char_within_word = self.data_exists_in_requests('inWordsOnly')
+
         # get the token type
-        if self.get_front_end_data('tokenType') == 'word':
+        if token_type_is_word:
             token_type = 'word'
-        elif self.get_front_end_data('tokenType') == 'char':
-            if self.data_exists_in_requests('inWordsOnly'):
-                # onlyCharGramsWithinWords will always be false (since in the
-                # GUI we've hidden the 'inWordsOnly' in request.form )
-                token_type = 'char_wb'
-            else:
-                token_type = 'char'
+        elif token_type_is_char and char_within_word:
+            token_type = 'char_wb'
+        elif token_type_is_char and not char_within_word:
+            token_type = 'char'
         else:
             raise ValueError('invalid token type from front end')
 
