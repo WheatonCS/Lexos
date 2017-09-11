@@ -339,10 +339,18 @@ def consolidate_ampers(text: str) -> str:
     :return: The text string after all ampersands have been replaced.
     """
 
-    amper_values = ["\uFF06", "\u214B", "\U0001F674", "\uFE60", "\u0026",
-                    "\U0001F675", "\u06FD", "\U000E0026"]
-
     chosen_amper_value = "\u0026"
+
+    amper_values = dict.fromkeys(
+        [chr(i) for i in range(sys.maxunicode)
+         # Avoid unnamed control chars throwing ValueErrors
+         if (unicodedata.category(chr(i)).startswith('P') or
+             unicodedata.category(chr(i)).startswith('S') or
+             unicodedata.category(chr(i)).startswith('Cf'))
+         and re.search(
+            r" ampersand|ampersand ", unicodedata.name(chr(i)),
+            re.IGNORECASE) is not None
+         and chr(i) != chosen_amper_value])
 
     # Change all ampersands to one type of ampersand
     for value in amper_values:
