@@ -9,3 +9,4 @@
 # for all the front end code, needs to be reviewed by scott
 *.js        @scottkleinman @chantisnake
 *.html      @scottkleinman @chantisnake
+*.css       @scottkleinman @chantisnake
