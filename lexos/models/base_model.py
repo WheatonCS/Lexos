@@ -33,7 +33,7 @@ class BaseModel:
             raise KeyError(
                 INVALID_DATA_KEY_MESSAGE_FORMAT.format(data_key=data_key))
 
-    def check_data_exists(self, data_key: str) -> bool:
+    def data_exists_in_requests(self, data_key: str) -> bool:
         """check whether the data key exists in the data sent from front end
 
         :param data_key: the key of the data
