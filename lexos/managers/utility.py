@@ -5,11 +5,16 @@ import re
 import textwrap
 from os import makedirs
 from os.path import join as path_join
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from flask import request
+from scipy.cluster import hierarchy
+from scipy.cluster.hierarchy import ward, dendrogram
+from scipy.spatial.distance import pdist
+from sklearn.metrics.pairwise import euclidean_distances
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -306,15 +311,14 @@ def generate_statistics(file_manager: FileManager) -> \
 
 
 def get_dendrogram_legend(file_manager: FileManager,
-                          distance_list: List[float]) -> str:
-    """
-    Generates the legend for dendrogram from the active files.
+                          distance_list: np.ndarray) -> str:
+    """Generates the legend for dendrogram from the active files.
 
-    Args:
-        None
-
-    Returns:
-        A string with all the formatted information of the legend.
+    :param file_manager: a class for an object to hold all information of
+                         user's files and manage the files according to users's
+                         choices.
+    :param distance_list: A list of all the distances in the dendrogram
+    :return: A string with all the formatted information of the legend.
     """
     # Switch to Ajax if necessary
     if request.json:
@@ -375,209 +379,6 @@ def get_newick(node, newick, parent_dist, leaf_names):
                             leaf_names)
         newick = "(%s" % newick
         return newick
-
-
-# Gets called from cluster() in lexos_core.py
-def generate_dendrogram(file_manager: FileManager, leq: str):
-    """
-    Generates dendrogram image and PDF from the active files.
-
-    Args:
-        None
-
-    Returns:
-        Total number of PDF pages, ready to calculate the height of the
-        embedded PDF on screen
-    """
-    from sklearn.metrics.pairwise import euclidean_distances
-    from scipy.cluster.hierarchy import ward, dendrogram
-    from scipy.spatial.distance import pdist
-    from scipy.cluster import hierarchy
-    from os import makedirs
-
-    import matplotlib.pyplot as plt
-
-    if 'getdendro' in request.form:
-        label_dict = file_manager.get_active_labels()
-        labels = []
-        for ind, label in list(label_dict.items()):
-            labels.append(label)
-
-        # Get options from request.form
-        orientation = str(request.form['orientation'])
-        linkage = str(request.form['linkage'])
-        metric = str(request.form['metric'])
-
-        # Get active files
-        all_contents = []  # list of strings-of-text for each segment
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                content_element = l_file.load_contents()
-                all_contents.append(content_element)
-
-                if request.form["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.form["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
-
-        # More options
-        n_gram_size = int(request.form['tokenSize'])
-        use_word_tokens = request.form['tokenType'] == 'word'
-
-        only_char_grams_within_words = False
-        if not use_word_tokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count
-            # front and end markers as ' ' if this is true
-            only_char_grams_within_words = 'inWordsOnly' in request.form
-
-        if use_word_tokens:
-            token_type = 'word'
-        else:
-            token_type = 'char'
-            if only_char_grams_within_words:
-                token_type = 'char_wb'
-
-        from sklearn.feature_extraction.text import CountVectorizer
-        vectorizer = CountVectorizer(
-            input='content',
-            encoding='utf-8',
-            min_df=1,
-            analyzer=token_type,
-            token_pattern=r'(?u)\b[\w\']+\b',
-            ngram_range=(
-                n_gram_size,
-                n_gram_size),
-            stop_words=[],
-            dtype=float,
-            max_df=1.0)
-
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = vectorizer.fit_transform(all_contents)
-        dtm = doc_term_sparse_matrix.toarray()
-
-        if orientation == "left":
-            orientation = "right"
-        if orientation == "top":
-            leaf_rotational_degree = 90
-        else:
-            leaf_rotational_degree = 0
-
-        if linkage == "ward":
-            dist = euclidean_distances(dtm)
-            np.round(dist, 1)
-            linkage_matrix = ward(dist)
-            dendrogram(
-                linkage_matrix,
-                orientation=orientation,
-                leaf_rotation=leaf_rotational_degree,
-                labels=temp_labels)
-            z = linkage_matrix
-        else:
-            y = pdist(dtm, metric)
-            z = hierarchy.linkage(y, method=linkage)
-            dendrogram(
-                z,
-                orientation=orientation,
-                leaf_rotation=leaf_rotational_degree,
-                labels=temp_labels)
-
-        plt.tight_layout()  # fixes margins
-
-        # Change it to a distance matrix
-        t = hierarchy.to_tree(z, False)
-
-        # Conversion to Newick
-        newick = get_newick(t, "", t.dist, temp_labels)
-
-        # create folder to save graph
-        folder = path_join(
-            session_manager.session_folder(),
-            constants.RESULTS_FOLDER)
-        if not os.path.isdir(folder):
-            makedirs(folder)
-
-        f = open(path_join(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
-        f.write(newick)
-        f.close()
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options()
-
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=use_tfidf,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=use_freq,
-        grey_word=grey_word,
-        mfw=mfw,
-        cull=culling)
-
-    # Gets options from request.form and uses options to generate the
-    # dendrogram (with the legends) in a PDF file
-    orientation = str(request.form['orientation'])
-    title = request.form['title']
-    pruning = request.form['pruning']
-    pruning = int(request.form['pruning']) if pruning else 0
-    linkage = str(request.form['linkage'])
-    metric = str(request.form['metric'])
-
-    augmented_dendrogram = False
-    if 'augmented' in request.form:
-        augmented_dendrogram = request.form['augmented'] == 'on'
-
-    show_dendro_legends = False
-    if 'dendroLegends' in request.form:
-        show_dendro_legends = request.form['dendroLegends'] == 'on'
-
-    dendro_matrix = []
-    file_number = len(count_matrix)
-    total_words = len(count_matrix[0])
-
-    for row in range(1, file_number):
-        word_count = []
-        for col in range(1, total_words):
-            word_count.append(count_matrix[row][col])
-        dendro_matrix.append(word_count)
-
-    distance_list = dendrogrammer.get_dendro_distances(
-        linkage, metric, dendro_matrix)
-
-    legend = get_dendrogram_legend(file_manager, distance_list)
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-        distance_min, monocrit_max, monocrit_min, threshold = \
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
-                                 temp_labels, dendro_matrix, legend,
-                                 folder_path, augmented_dendrogram,
-                                 show_dendro_legends)
-
-    inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
-    maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
-    distance_op = str(distance_min) + " " + leq + " t " + \
-        leq + " " + str(distance_max)
-    monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-        leq + " " + str(monocrit_max)
-
-    threshold_ops = {
-        "inconsistent": inconsistent_op,
-        "maxclust": maxclust_op,
-        "distance": distance_op,
-        "monocrit": monocrit_op}
-
-    return pdf_page_number, score, inconsistent_max, maxclust_max, \
-        distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
-        inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
 def generate_k_means_pca(file_manager: FileManager):
@@ -1603,85 +1404,64 @@ def xml_handling_options(data: dict = {}):
 
 
 # Gets called from cluster() in lexos_core.py
-def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
+def generate_dendrogram_from_ajax(file_manager: FileManager) \
+        -> (int, float, Union[float, str]):
+    """Generates dendrogram image and PDF from the active files.
+
+    :param file_manager: a class for an object to hold all information of
+                        user's files and manage the files according to users's
+                        choices.
+    :return:
+            - total_pdf_page_number: integer, total number of pages of the PDF.
+            - score: float, silhouette score
+            - threshold: float/string, threshold (t) value that users
+              entered, equals to 'N/A' if users leave the field blank
     """
-    Generates dendrogram image and PDF from the active files.
 
-    Args:
-        None
+    # -- Gets options from request.json ---------------------------------------
+    linkage = request.json['linkage']
+    metric = request.json['metric']
+    title = request.json['title']
+    orientation = request.json['orientation']
 
-    Returns:
-        Total number of PDF pages, ready to calculate the height of the
-        embedded PDF on screen
-    """
-    from sklearn.metrics.pairwise import euclidean_distances
-    from scipy.cluster.hierarchy import ward, dendrogram
-    from scipy.spatial.distance import pdist
-    from scipy.cluster import hierarchy
-    from os import makedirs
+    # options to generate dendrogram in PDF file
+    pruning = request.json['pruning']
+    pruning = int(request.json['pruning']) if pruning else 0
 
-    import matplotlib.pyplot as plt
+    # options to get augmented dendrogram
+    augmented_dendrogram = False
+    if 'augmented' in request.json:
+        augmented_dendrogram = request.json['augmented'] == 'on'
 
+    # options to get dendrograms lengend
+    show_dendro_legends = False
+    if 'dendroLegends' in request.json:
+        show_dendro_legends = request.json['dendroLegends'] == 'on'
+
+    # options from get_matrix_options
+    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, \
+        grey_word, show_grey_word, only_char_grams_within_words, mfw, \
+        culling = file_manager.get_matrix_options_from_ajax()
+
+    # -- get data frame containing raw matrix of word counts and file names ---
+    dtm_data_frame = file_manager.get_matrix(
+        use_word_tokens=use_word_tokens,
+        use_tfidf=use_tfidf,
+        norm_option=norm_option,
+        only_char_grams_within_words=only_char_grams_within_words,
+        n_gram_size=n_gram_size,
+        use_freq=use_freq,
+        mfw=mfw,
+        cull=culling,
+        round_decimal=False)
+
+    # get values(raw matrix) and index(file names) from data frame
+    dtm = dtm_data_frame.values
+    temp_labels = np.array(dtm_data_frame.index)
+
+    # -- Plots the hierarchical clustering as a dendrogram --------------------
     if 'getdendro' in request.json:
-        label_dict = file_manager.get_active_labels()
-        labels = []
-        for ind, label in list(label_dict.items()):
-            labels.append(label)
-
-        # Get options from request.json
-        orientation = str(request.json['orientation'])
-        linkage = str(request.json['linkage'])
-        metric = str(request.json['metric'])
-
-        # Get active files
-        all_contents = []  # list of strings-of-text for each segment
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                content_element = l_file.load_contents()
-                all_contents.append(content_element)
-
-                if request.json["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.json["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
-
-        # More options
-        n_gram_size = int(request.json['tokenSize'])
-        use_word_tokens = request.json['tokenType'] == 'word'
-        only_char_grams_within_words = False
-        if not use_word_tokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count
-            # front and end markers as ' ' if this is true
-            only_char_grams_within_words = 'inWordsOnly' in request.json
-
-        if use_word_tokens:
-            token_type = 'word'
-        else:
-            token_type = 'char'
-            if only_char_grams_within_words:
-                token_type = 'char_wb'
-
-        from sklearn.feature_extraction.text import CountVectorizer
-
-        vectorizer = CountVectorizer(
-            input='content',
-            encoding='utf-8',
-            min_df=1,
-            analyzer=token_type,
-            token_pattern=r'(?u)\b[\w\']+\b',
-            ngram_range=(
-                n_gram_size,
-                n_gram_size),
-            stop_words=[],
-            dtype=float,
-            max_df=1.0)
-
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = vectorizer.fit_transform(all_contents)
-        dtm = doc_term_sparse_matrix.toarray()
-
+        # orientation options
         if orientation == "left":
             orientation = "right"
         if orientation == "top":
@@ -1689,6 +1469,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         else:
             leaf_rotation_degree = 0
 
+        # linkage options
         if linkage == "ward":
             dist = euclidean_distances(dtm)
             np.round(dist, 1)
@@ -1708,8 +1489,10 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
                 leaf_rotation=leaf_rotation_degree,
                 labels=temp_labels)
 
-        plt.tight_layout()  # fixes margins
+        # fix margins
+        plt.tight_layout()
 
+        # -- generate the dendrogram in a Newick file -------------------------
         # Change it to a distance matrix
         t = hierarchy.to_tree(z, False)
 
@@ -1723,91 +1506,35 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
         if not os.path.isdir(folder):
             makedirs(folder)
 
-        f = open(
-            path_join(
-                folder,
-                constants.DENDROGRAM_NEWICK_FILENAME),
-            'w',
-            encoding='utf-8')
-        f.write(newick)
-        f.close()
+        # write newick in file
+        newick_file_fullname = path_join(folder,
+                                         constants.DENDROGRAM_NEWICK_FILENAME)
+        with open(newick_file_fullname, 'w', encoding='utf-8') as f:
+            f.write(newick)
 
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_from_ajax()
+        # -- generate the dendrogram (with the legends) -----------------------
+        # get dendrogram distances list
+        distance_list = dendrogrammer.get_dendro_distances(
+            linkage, metric, dtm)
 
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=use_tfidf,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=use_freq,
-        grey_word=grey_word,
-        mfw=mfw,
-        cull=culling)
+        # get dendrogram lengend
+        legend = get_dendrogram_legend(file_manager=file_manager,
+                                       distance_list=distance_list)
 
-    # Gets options from request.json and uses options to generate the
-    # dendrogram (with the legends) in a PDF file
-    orientation = str(request.json['orientation'])
-    title = request.json['title']
-    pruning = request.json['pruning']
-    pruning = int(request.json['pruning']) if pruning else 0
-    linkage = str(request.json['linkage'])
-    metric = str(request.json['metric'])
+        pdf_page_number, score, threshold = \
+            dendrogrammer.dendrogram(orientation=orientation,
+                                     title=title,
+                                     pruning=pruning,
+                                     linkage_method=linkage,
+                                     distance_metric=metric,
+                                     labels=temp_labels,
+                                     dendro_matrix=dtm,
+                                     legend=legend,
+                                     folder=folder,
+                                     augmented_dendrogram=augmented_dendrogram,
+                                     show_dendro_legends=show_dendro_legends)
 
-    augmented_dendrogram = False
-    if 'augmented' in request.json:
-        augmented_dendrogram = request.json['augmented'] == 'on'
-
-    show_dendro_legends = False
-    if 'dendroLegends' in request.json:
-        show_dendro_legends = request.json['dendroLegends'] == 'on'
-
-    dendro_matrix = []
-    file_number = len(count_matrix)
-    total_words = len(count_matrix[0])
-
-    for row in range(1, file_number):
-        word_count = []
-        for col in range(1, total_words):
-            word_count.append(count_matrix[row][col])
-        dendro_matrix.append(word_count)
-
-    distance_list = dendrogrammer.get_dendro_distances(
-        linkage, metric, dendro_matrix)
-
-    legend = get_dendrogram_legend(file_manager, distance_list)
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-        distance_min, monocrit_max, monocrit_min, threshold = \
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
-                                 temp_labels, dendro_matrix, legend,
-                                 folder_path, augmented_dendrogram,
-                                 show_dendro_legends)
-
-    inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
-    maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
-    distance_op = str(distance_min) + " " + leq + " t " + \
-        leq + " " + str(distance_max)
-    monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-        leq + " " + str(monocrit_max)
-
-    threshold_ops = {
-        "inconsistent": inconsistent_op,
-        "maxclust": maxclust_op,
-        "distance": distance_op,
-        "monocrit": monocrit_op}
-
-    return pdf_page_number, score, inconsistent_max, maxclust_max, \
-        distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
-        inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
+        return pdf_page_number, score, threshold
 
 
 def simple_vectorizer(content: str, token_type: str, token_size: int):

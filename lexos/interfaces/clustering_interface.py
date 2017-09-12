@@ -1,12 +1,13 @@
 import json
 import os
+import random
 from os.path import join as path_join
 
 from flask import send_file, request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
-from lexos.managers import session_manager as session_manager, utility
 from lexos.interfaces.base_interface import detect_active_docs
+from lexos.managers import session_manager as session_manager, utility
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -171,224 +172,99 @@ def cluster():
 
     :return: a response object (often a render_template call)
     """
-    import random
-    leq = '≤'
-    # Detect the number of active documents.
+    # -- Detect the number of active documents --------------------------------
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
+
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
             session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         if 'hierarchyoption' not in session:
             session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = file_manager.get_active_labels()
-        for key in labels:
-            labels[key] = labels[key]
         threshold_ops = {}
+        labels = file_manager.get_active_labels()
         return render_template(
             'cluster.html',
             labels=labels,
             thresholdOps=threshold_ops,
             numActiveDocs=num_active_docs,
             itm="hierarchical")
-    if 'dendroPDF_download' in request.form:
-        # The 'PDF' button is clicked on cluster.html.
-        # sends pdf file to downloads folder.
-        # utility.generateDendrogram(file_manager)
-        attachment_name = "den_" + request.form['title'] + ".pdf" \
-            if request.form['title'] != '' else 'dendrogram.pdf'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "dendrogram.pdf"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    if 'dendroSVG_download' in request.form:
-        # utility.generateDendrogram(file_manager)
-        attachment_name = "den_" + request.form['title'] + ".svg" \
-            if request.form['title'] != '' else 'dendrogram.svg'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "dendrogram.svg"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    if 'dendroPNG_download' in request.form:
-        # utility.generateDendrogram(file_manager)
-        attachment_name = "den_" + request.form['title'] + ".png" if \
-            request.form[
-                'title'] != '' else 'dendrogram.png'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "dendrogram.png"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    if 'dendroNewick_download' in request.form:
-        attachment_name = "den_" + request.form['title'] + ".txt" \
-            if request.form['title'] != '' else 'newNewickStr.txt'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "newNewickStr.txt"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
+
     if request.method == "POST":
-        # Main functions
-        pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-            distance_min, monocrit_max, monocrit_min, threshold, \
-            inconsistent_op, maxclust_op, distance_op, monocrit_op, \
-            threshold_ops = utility.generate_dendrogram_from_ajax(
-                file_manager, leq)
-        session["score"] = score
-        session["threshold"] = threshold
-        criterion = request.json['criterion']
-        session["criterion"] = criterion
-        labels = file_manager.get_active_labels()
-        for key in labels:
-            labels[key] = labels[key]
-        utility.save_file_manager(file_manager)
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        ver = random.random() * 100
-        data = {
-            "labels": labels,
-            "pdfPageNumber": pdf_page_number,
-            "score": score,
-            "criterion": criterion,
-            "inconsistentMax": inconsistent_max,
-            "maxclustMax": maxclust_max,
-            "distanceMax": distance_max,
-            "distance_min": distance_min,
-            "monocritMax": monocrit_max,
-            "monocritMin": monocrit_min,
-            "threshold": threshold,
-            "thresholdOps": threshold_ops,
-            "ver": ver}
-        data = json.dumps(data)
-        return data
+        # -- Download dendrogram PDF ------------------------------------------
+        if 'dendroPDF_download' in request.form:
+            # The 'PDF' button is clicked on cluster.html.
+            # sends pdf file to downloads folder.
+            # utility.generateDendrogram(file_manager)
+            attachment_name = "den_" + request.form['title'] + ".pdf" \
+                if request.form['title'] != '' else 'dendrogram.pdf'
+            session_manager.cache_analysis_option()
+            session_manager.cache_hierarchy_option()
+            return send_file(path_join(session_manager.session_folder(),
+                                       constants.RESULTS_FOLDER +
+                                       "dendrogram.pdf"),
+                             attachment_filename=attachment_name,
+                             as_attachment=True)
 
+        # -- Download dendrogram SVG ------------------------------------------
+        elif 'dendroSVG_download' in request.form:
+            # utility.generateDendrogram(file_manager)
+            attachment_name = "den_" + request.form['title'] + ".svg" \
+                if request.form['title'] != '' else 'dendrogram.svg'
+            session_manager.cache_analysis_option()
+            session_manager.cache_hierarchy_option()
+            return send_file(path_join(session_manager.session_folder(),
+                                       constants.RESULTS_FOLDER +
+                                       "dendrogram.svg"),
+                             attachment_filename=attachment_name,
+                             as_attachment=True)
 
-# Tells Flask to load this function when someone is at '/cluster-old'
-@cluster_view.route("/cluster-old", methods=["GET", "POST"])
-def cluster_old():
-    """Handles the functionality on the cluster-old page.
+        # -- Download dendrogram PNG ------------------------------------------
+        elif 'dendroPNG_download' in request.form:
+            # utility.generateDendrogram(file_manager)
+            attachment_name = "den_" + request.form['title'] + ".png" if \
+                request.form['title'] != '' else 'dendrogram.png'
+            session_manager.cache_analysis_option()
+            session_manager.cache_hierarchy_option()
+            return send_file(path_join(session_manager.session_folder(),
+                                       constants.RESULTS_FOLDER +
+                                       "dendrogram.png"),
+                             attachment_filename=attachment_name,
+                             as_attachment=True)
 
-    :return: a response object (often a render_template call)
-    """
-    import random
-    leq = '≤'
-    # Detect the number of active documents.
-    num_active_docs = detect_active_docs()
-    file_manager = utility.load_file_manager()
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'hierarchyoption' not in session:
-            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = file_manager.get_active_labels()
-        for key in labels:
-            labels[key] = labels[key]
-        threshold_ops = {}
-        session['dengenerated'] = True
-        return render_template(
-            'cluster.html',
-            labels=labels,
-            thresholdOps=threshold_ops,
-            numActiveDocs=num_active_docs)
-    if 'dendroPDF_download' in request.form:
-        # The 'PDF' button is clicked on cluster.html.
-        # sends pdf file to downloads folder.
-        # utility.generateDendrogram(file_manager)
-        attachment_name = "den_" + request.form['title'] + ".pdf" if \
-            request.form[
-                'title'] != '' else 'dendrogram.pdf'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "dendrogram.pdf"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    if 'dendroSVG_download' in request.form:
-        attachment_name = "den_" + request.form['title'] + ".svg" if \
-            request.form[
-                'title'] != '' else 'dendrogram.svg'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(session_manager.session_folder(),
-                      constants.RESULTS_FOLDER + "dendrogram.svg"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    if 'dendroPNG_download' in request.form:
-        attachment_name = "den_" + request.form['title'] + ".png" \
-            if request.form['title'] != '' else 'dendrogram.png'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER + "dendrogram.png"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    if 'dendroNewick_download' in request.form:
-        attachment_name = "den_" + request.form['title'] + ".txt" if \
-            request.form[
-                'title'] != '' else 'newNewickStr.txt'
-        session_manager.cache_analysis_option()
-        session_manager.cache_hierarchy_option()
-        return send_file(
-            path_join(
-                session_manager.session_folder(),
-                constants.RESULTS_FOLDER +
-                "newNewickStr.txt"),
-            attachment_filename=attachment_name,
-            as_attachment=True)
-    # Main functions
-    # utility.generateDendrogram
-    pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-        distance_min, monocrit_max, monocrit_min, threshold, inconsistent_op, \
-        maxclust_op, distance_op, monocrit_op, threshold_ops = \
-        utility.generate_dendrogram(file_manager, leq)
-    labels = file_manager.get_active_labels()
-    for key in labels:
-        labels[key] = labels[key]
-    utility.save_file_manager(file_manager)
-    session_manager.cache_analysis_option()
-    session_manager.cache_hierarchy_option()
-    ver = random.random() * 100
-    return render_template(
-        'cluster.html',
-        labels=labels,
-        pdfPageNumber=pdf_page_number,
-        score=score,
-        inconsistentMax=inconsistent_max,
-        maxclustMax=maxclust_max,
-        distanceMax=distance_max,
-        distanceMin=distance_min,
-        monocritMax=monocrit_max,
-        monocritMin=monocrit_min,
-        threshold=threshold,
-        thresholdOps=threshold_ops,
-        ver=ver,
-        numActiveDocs=num_active_docs)
+        # --Download dendrogram Newick ----------------------------------------
+        elif 'dendroNewick_download' in request.form:
+            attachment_name = "den_" + request.form['title'] + ".txt" \
+                if request.form['title'] != '' else 'newNewickStr.txt'
+            session_manager.cache_analysis_option()
+            session_manager.cache_hierarchy_option()
+            return send_file(path_join(session_manager.session_folder(),
+                                       constants.RESULTS_FOLDER +
+                                       "newNewickStr.txt"),
+                             attachment_filename=attachment_name,
+                             as_attachment=True)
+
+        # -- Main functions ---------------------------------------------------
+        else:
+            pdf_page_number, score, threshold = \
+                utility.generate_dendrogram_from_ajax(file_manager)
+
+            criterion = request.json['criterion']
+            labels = file_manager.get_active_labels()
+            utility.save_file_manager(file_manager)
+            session_manager.cache_analysis_option()
+            session_manager.cache_hierarchy_option()
+            ver = random.random() * 100
+            data = {
+                "labels": labels,
+                "pdfPageNumber": pdf_page_number,
+                "score": score,
+                "criterion": criterion,
+                "threshold": threshold,
+                "ver": ver}
+            data = json.dumps(data)
+            return data
 
 
 # Tells Flask to load this function when someone is at '/hierarchy'
