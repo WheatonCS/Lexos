@@ -103,6 +103,18 @@ class TestVor:
         assert new_k_means_vor_data.color_chart == \
             'rgb(27, 158, 119)#rgb(102, 166, 30)#rgb(102, 102, 102)#'
 
+    def test_centroids(self):
+        test_list = [[round(x) for x in each_list]
+                     for each_list in k_means_vor_data.final_centroids_list]
+        test_list = sorted(test_list, key=lambda x: x[0])
+        assert test_list == [[-500, -500], [106.0, 171.0], [311.0, 171.0]]
+        new_test_list = \
+            [[round(x) for x in each_list]
+             for each_list in new_k_means_vor_data.final_centroids_list]
+        new_test_list = sorted(new_test_list, key=lambda x: x[0])
+        assert new_test_list == [[-500, -500], [102.0, 336.0], [105.0, 167.0],
+                                 [1521.0, 235.0]]
+
     def test_labels(self):
         assert k_means_vor_data.labels_str == 'F1#F2#F3#F4'
         assert new_k_means_vor_data.labels_str == 'F1#F2#F3#F4#F5#F6'
