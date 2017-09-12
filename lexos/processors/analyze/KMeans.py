@@ -55,7 +55,6 @@ class GetKMeansPca:
                  tolerance: float,
                  init_method: str,
                  metric_dist: str,
-                 folder_path: str,
                  labels: np.ndarray):
         """Generates an array of centroid index based on the active files.
 
@@ -108,12 +107,10 @@ class GetKMeansPca:
         self.color_chart = color_chart
         self.colored_points = colored_points
         self.reduced_data = reduced_data
-        self.folder_path = folder_path
         self.file_name_str = "#".join(labels)
         self.silhouette_score = silhouette_score
 
-    def draw_graph(self):
-
+    def draw_graph(self, folder_path: str):
         color_str_list = self.color_chart.split("#")
 
         # split x and y coordinates from analyzed data
