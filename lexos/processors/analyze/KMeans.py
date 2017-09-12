@@ -100,8 +100,6 @@ class GetKMeansPca:
         # split x and y coordinates from analyzed data
         xs, ys = reduced_data[:, 0], reduced_data[:, 1]
 
-        # reset matplotlib to clear possible previous dendrogram calls
-        # plt.figure()
         # plot and label points
         for x, y, name, color in zip(xs, ys, labels, colored_points):
             plt.scatter(x, y, c=color, s=40)
