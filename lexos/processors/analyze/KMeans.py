@@ -100,26 +100,42 @@ class GetKMeansPca:
         color_chart_point = [tuple([int(value * 255) for value in color])
                              for color in color_list]
         color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
-        color_str_list = color_chart.split("#")
+
+        # pack all the needed data
+        self.labels = labels
+        self.k_value = k_value
+        self.best_index = best_index
+        self.color_chart = color_chart
+        self.colored_points = colored_points
+        self.reduced_data = reduced_data
+        self.folder_path = folder_path
+        self.file_name_str = "#".join(labels)
+        self.silhouette_score = silhouette_score
+
+    def draw_graph(self):
+
+        color_str_list = self.color_chart.split("#")
 
         # split x and y coordinates from analyzed data
-        xs, ys = reduced_data[:, 0], reduced_data[:, 1]
+        xs, ys = self.reduced_data[:, 0], self.reduced_data[:, 1]
 
+        # clear the matplotlib in case previews drawings
+        plt.figure()
         # plot and label points
-        for x, y, name, color in zip(xs, ys, labels, colored_points):
+        for x, y, name, color in zip(xs, ys, self.labels, self.colored_points):
             plt.scatter(x, y, c=color, s=40)
             plt.text(x, y, name, color=color)
         # save the plot and close
-        plt.savefig(path_join(folder_path, KMEANS_GRAPH_FILENAME))
+        plt.savefig(path_join(self.folder_path, KMEANS_GRAPH_FILENAME))
         plt.close()
 
         # plot data
         plotly_colors = [color_str_list[item]
-                         for _, item in enumerate(best_index)]
+                         for _, item in enumerate(self.best_index)]
         from plotly.graph_objs import Scatter, Data
-        trace = Scatter(x=xs, y=ys, text=labels,
+        trace = Scatter(x=xs, y=ys, text=self.labels,
                         textfont=dict(color=plotly_colors),
-                        name=labels, mode='markers+text',
+                        name=self.labels, mode='markers+text',
                         marker=dict(color=plotly_colors, line=dict(width=1, )),
                         textposition='right')
 
@@ -147,8 +163,8 @@ class GetKMeansPca:
         sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
         sm_html = html.replace("___", sm_div)
 
-        html_file = open(path_join(folder_path, PCA_SMALL_GRAPH_FILENAME), "w",
-                         encoding='utf-8')
+        html_file = open(path_join(self.folder_path, PCA_SMALL_GRAPH_FILENAME),
+                         "w", encoding='utf-8')
         html_file.write(sm_html)
         html_file.close()
 
@@ -159,17 +175,10 @@ class GetKMeansPca:
         lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
         lg_html = html.replace("___", lg_div)
 
-        html_file = open(path_join(folder_path, PCA_BIG_GRAPH_FILENAME), "w",
-                         encoding='utf-8')
+        html_file = open(path_join(self.folder_path, PCA_BIG_GRAPH_FILENAME),
+                         "w", encoding='utf-8')
         html_file.write(lg_html)
         html_file.close()
-
-        # pack all the needed data
-        self.k_value = k_value
-        self.best_index = best_index
-        self.color_chart = color_chart
-        self.file_name_str = "#".join(labels)
-        self.silhouette_score = silhouette_score
 
 
 def _get_voronoi_plot_data_(data: np.ndarray,
