@@ -27,26 +27,26 @@ new_k_value = 3
 
 # Set up the pca testing values
 k_means_pca_data = KMeans.GetKMeansPca(
+    k_value=2,
     labels=labels,
     n_init=n_init,
     folder_path="",
     max_iter=max_iter,
     tolerance=tolerance,
-    init_method=init_method,
     metric_dist="euclidean",
-    count_matrix=count_matrix,
-    k_value=k_value)
+    init_method=init_method,
+    count_matrix=count_matrix)
 
 new_k_means_pca_data = KMeans.GetKMeansPca(
+    k_value=3,
     labels=new_labels,
     n_init=n_init,
     folder_path="",
     max_iter=max_iter,
     tolerance=tolerance,
-    init_method=init_method,
     metric_dist="euclidean",
-    count_matrix=new_count_matrix,
-    k_value=new_k_value)
+    init_method=init_method,
+    count_matrix=new_count_matrix)
 
 
 class TestPCA:
@@ -90,8 +90,6 @@ new_k_means_vor_data = KMeans.GetKMeansVoronoi(
     tolerance=tolerance,
     init_method=init_method,
     metric_dist="euclidean")
-
-print("DONE")
 
 
 class TestVor:
