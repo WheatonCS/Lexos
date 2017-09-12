@@ -4,11 +4,6 @@ from lexos.helpers import constants
 from lexos.processors.analyze import KMeans
 
 # Set up the global testing values
-init_method = "k-means++"
-n_init = constants.N_INIT
-max_iter = constants.MAX_ITER
-tolerance = constants.TOLERANCE
-
 labels = np.array(["F1", "F2", "F3", "F4"])
 count_matrix = np.array([(1, 0, 0, 0, 0, 200, 0, 0),
                          (0, 1, 0, 0, 100, 0, 0, 0),
@@ -23,6 +18,13 @@ new_count_matrix = np.array([(1, 10, 100, 0, 0, 0, 0, 0),
                              (0, 0, 0, 0, 1000, 1000, 0, 0),
                              (0, 0, 0, 0, 0, 0, 1, 1)])
 
+init_method = "k-means++"
+n_init = constants.N_INIT
+max_iter = constants.MAX_ITER
+tolerance = constants.TOLERANCE
+k_value = 2
+new_k_value = 3
+
 # Set up the pca testing values
 k_means_pca_data = KMeans.GetKMeansPca(
     labels=labels,
@@ -33,7 +35,7 @@ k_means_pca_data = KMeans.GetKMeansPca(
     init_method=init_method,
     metric_dist="euclidean",
     count_matrix=count_matrix,
-    k_value=int(np.size(labels) / 2))
+    k_value=k_value)
 
 new_k_means_pca_data = KMeans.GetKMeansPca(
     labels=new_labels,
@@ -44,7 +46,7 @@ new_k_means_pca_data = KMeans.GetKMeansPca(
     init_method=init_method,
     metric_dist="euclidean",
     count_matrix=new_count_matrix,
-    k_value=int(np.size(new_labels) / 2))
+    k_value=new_k_value)
 
 
 class TestPCA:
