@@ -1,11 +1,9 @@
 version: 3.2
 groups:
-  code-review:
+  backend-reviewer:
     required: -1
-    approve_by_comment:
-      approve_regex: "approved|Approved|:\+1:"
-      enabled: false
-      reject_regex: ^Rejected
+    github_reviews:
+      enabled: true
     reset_on_push:
       enabled: true
     users:
