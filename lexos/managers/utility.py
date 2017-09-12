@@ -638,6 +638,7 @@ def generate_k_means_pca(file_manager: FileManager) -> KMeans.GetKMeansPca:
                                            init_method=init_method,
                                            folder_path=folder_path,
                                            metric_dist=metric_dist)
+    k_means_pca_data.draw_graph()
 
     return k_means_pca_data
 

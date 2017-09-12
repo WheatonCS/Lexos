@@ -17,8 +17,7 @@ from sklearn.decomposition import PCA
 
 from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
-from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
-    EMPTY_FOLDER_PATH
+from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
 
 
 def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
@@ -55,6 +54,7 @@ class GetKMeansPca:
                  tolerance: float,
                  init_method: str,
                  metric_dist: str,
+                 folder_path: str,
                  labels: np.ndarray):
         """Generates an array of centroid index based on the active files.
 
@@ -107,10 +107,11 @@ class GetKMeansPca:
         self.color_chart = color_chart
         self.colored_points = colored_points
         self.reduced_data = reduced_data
+        self.folder_path = folder_path
         self.file_name_str = "#".join(labels)
         self.silhouette_score = silhouette_score
 
-    def draw_graph(self, folder_path: str):
+    def draw_graph(self):
         color_str_list = self.color_chart.split("#")
 
         # split x and y coordinates from analyzed data
