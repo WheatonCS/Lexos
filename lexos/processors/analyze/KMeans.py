@@ -71,7 +71,6 @@ class GetKMeansPca:
         """
         assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
         assert np.size(labels) > 0, EMPTY_NP_ARRAY_MESSAGE
-        assert len(folder_path) > 0, EMPTY_FOLDER_PATH
 
         # finds xy coordinates for each segment
         reduced_data = PCA(n_components=2).fit_transform(count_matrix)
