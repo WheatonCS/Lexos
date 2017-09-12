@@ -1,10 +1,10 @@
-version: 3.2
+version: 2           # specify pull approve version
 groups:
-  backend-reviewer:
-    required: -1
-    github_reviews:
+  backend-reviewer:  # reviewer for backend code
+    required: -1     # require all reviewer to pass
+    github_reviews:  # use github pull request review as indicator for approve
       enabled: true
-    reset_on_push:
+    reset_on_push:   # every time there is a new push the approves will be reseted
       enabled: true
     users:
       - chantisnake
