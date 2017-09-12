@@ -106,14 +106,28 @@ class TestVor:
     def test_centroids(self):
         test_list = [[round(x) for x in each_list]
                      for each_list in k_means_vor_data.final_centroids_list]
-        test_list = sorted(test_list, key=lambda x: x[0])
+        test_list = sorted(test_list, key=lambda x: [x[0], x[1]])
         assert test_list == [[-500, -500], [106.0, 171.0], [311.0, 171.0]]
+
         new_test_list = \
             [[round(x) for x in each_list]
              for each_list in new_k_means_vor_data.final_centroids_list]
-        new_test_list = sorted(new_test_list, key=lambda x: x[0])
+        new_test_list = sorted(new_test_list, key=lambda x: [x[0], x[1]])
         assert new_test_list == [[-500, -500], [102.0, 336.0], [105.0, 167.0],
                                  [1521.0, 235.0]]
+
+    def test_points(self):
+        test_list = [[round(x) for x in each_list]
+                     for each_list in k_means_vor_data.final_points_list]
+        test_list = sorted(test_list, key=lambda x: [x[0], x[1]])
+        assert test_list == [[100, 100], [100, 241], [118, 171], [311, 171]]
+
+        new_test_list = \
+            [[round(x) for x in each_list]
+             for each_list in new_k_means_vor_data.final_points_list]
+        new_test_list = sorted(new_test_list, key=lambda x: [x[0], x[1]])
+        assert new_test_list == [[100, 100], [100, 370], [105, 167],
+                                 [105, 302], [109, 235], [1521, 235]]
 
     def test_labels(self):
         assert k_means_vor_data.labels_str == 'F1#F2#F3#F4'
