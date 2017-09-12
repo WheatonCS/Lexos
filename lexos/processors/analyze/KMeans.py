@@ -17,6 +17,8 @@ from sklearn.decomposition import PCA
 
 from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
+from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
+    EMPTY_FOLDER_PATH
 
 
 def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
@@ -67,6 +69,10 @@ class GetKMeansPca:
         :param folder_path: system path to save the temp image
         :param labels: file names of active files
         """
+        assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
+        assert np.size(labels) > 0, EMPTY_NP_ARRAY_MESSAGE
+        assert len(folder_path) > 0, EMPTY_FOLDER_PATH
+
         # finds xy coordinates for each segment
         reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
@@ -203,6 +209,9 @@ class GetKMeansVoronoi:
         :param metric_dist: method of the distance metrics.
         :param labels: file names of active files.
         """
+        assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
+        assert np.size(labels) > 0, EMPTY_NP_ARRAY_MESSAGE
+
         # finds xy coordinates for each segment
         reduced_data = PCA(n_components=2).fit_transform(count_matrix)
 
