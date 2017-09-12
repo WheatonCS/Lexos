@@ -1,0 +1,11 @@
+version: 3.2
+groups:
+  code-review:
+    required: -1
+    reset_on_push:
+      enabled: true
+    users:
+    - chantisnake
+    - EmmaGrace
+    - Landaluce
+    - Weiqi97
