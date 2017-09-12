@@ -1,0 +1,14 @@
+version: 3.2
+groups:
+  code-review:
+    required: -1
+    approve_by_comment:
+      approve_regex: approved|Approved|:\+1:
+      enabled: false
+    reset_on_push:
+      enabled: true
+    users:
+    - chantisnake
+    - EmmaGrace
+    - Landaluce
+    - Weiqi97
