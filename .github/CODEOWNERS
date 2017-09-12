@@ -3,8 +3,8 @@
 *           @chantisnake
 
 # for all the code files, you needs to pass the review of following person
-/lexos/     @Landaluce @EmmaGrace @XinruLiu @Weiqi97 @chantisnake
-/test/      @Landaluce @EmmaGrace @XinruLiu @Weiqi97 @chantisnake
+/lexos/     @Landaluce @EmmaGrace @Weiqi97 @chantisnake
+/test/      @Landaluce @EmmaGrace @Weiqi97 @chantisnake
 
 # for all the front end code, needs to be reviewed by scott
 *.js        @scottkleinman @chantisnake
