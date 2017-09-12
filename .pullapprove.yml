@@ -1,15 +1,24 @@
-version: 3.2
+# this is a yaml config for Pull Approve
+# see there documentation at http://docs.pullapprove.com/
+
+version: 2   # specify pull approve version
+author_approval:
+  auto: true   # author of pull request don't need to approve their pull request
+github_reviews:  # use github pull request review as indicator for approve
+  enabled: true
+reset_on_push:   # every time there is a new push the approves will be reseted
+  enabled: true
+
+# all the reviewer groups
 groups:
-  code-review:
-    required: -1
-    approve_by_comment:
-      approve_regex: approved|Approved|:\+1:
-      enabled: false
-      reject_regex: ^Rejected
-    reset_on_push:
-      enabled: true
+  backend-reviewer:  # reviewer for backend code
+    required: -1     # require all reviewer to pass
+    conditions:
+      files:
+        - "lexos/*"  # review if edited anything in main code base
+        - "test/*"  # review if edited anything in tests
     users:
-    - chantisnake
-    - EmmaGrace
-    - Landaluce
-    - Weiqi97
+      - chantisnake
+      - EmmaGrace
+      - Landaluce
+      - Weiqi97
