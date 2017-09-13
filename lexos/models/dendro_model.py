@@ -51,8 +51,8 @@ class DendroOption:
 
 
 class DendrogramModel(MatrixModel):
-    def __init__(self, matrix_option: MatrixOption,
-                 dendro_option: DendroOption):
+    def __init__(self, matrix_option: MatrixOption = None,
+                 dendro_option: DendroOption = None):
         """This is the class to generate dendrogram
 
         :param matrix_option: the option for generating dtm
