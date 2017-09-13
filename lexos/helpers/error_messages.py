@@ -23,4 +23,3 @@ EMPTY_NP_ARRAY_MESSAGE = "The input numpy array should not be empty, since" \
     "the input file should not be empty."
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
-EMPTY_FOLDER_PATH = "The given folder path should not be empty"
