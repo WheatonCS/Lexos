@@ -11,8 +11,6 @@ groups:
       auto: true   # author of pull request don't need to approve their pull request
     github_reviews:  # use github pull request review as indicator for approve
       enabled: true
-    reset_on_push:   # every time there is a new push the approves will be reseted
-      enabled: true
     conditions:
       files:
         - "lexos/*"  # review if edited anything in main code base
