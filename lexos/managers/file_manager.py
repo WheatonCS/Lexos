@@ -1,16 +1,15 @@
 import io
+import numpy as np
 import os
+import pandas as pd
 import shutil
 import zipfile
 from cmath import sqrt, log, exp
+from flask import request, send_file
 from os import makedirs
 from os.path import join as pathjoin
-from typing import List, Tuple, Dict
-
-import numpy as np
-import pandas as pd
-from flask import request, send_file
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from typing import List, Tuple, Dict
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -1298,7 +1297,7 @@ class FileManager:
     # Experimental for Tokenizer
     @staticmethod
     def get_matrix_options_from_ajax_deprec() -> \
-            Tuple[int, bool, bool, bool, str, bool, bool, bool, bool, bool]:
+            (int, bool, bool, bool, str, bool, bool, bool, bool, bool):
         """Gets all the options that are used to generate the matrices from GUI
 
         :return:
