@@ -8,17 +8,21 @@ from lexos.models.base_model import BaseModel
 
 
 class FileManagerModel(BaseModel):
-    def __init__(self):
+    def __init__(self, test_file_manager: FileManager = None):
         """A model to control file manager.
 
         the _file_manager_path is where the file manager is stored
         the file_manager is the file_manager for current session.
         We uses pickel library to save and load filemanager on our disk
+        :param test_file_manager: (fake result)
+                    the file_manager that used for testing
         """
         super().__init__()
         self._file_manager_path = os.path.join(session_folder(),
                                                constants.FILEMANAGER_FILENAME)
-        self.file_manager = self.load_file_manager()
+
+        self.file_manager = self.load_file_manager() \
+            if not test_file_manager else test_file_manager
 
     def load_file_manager(self) -> FileManager:
         """Loads the file manager for the current session from the hard drive.
