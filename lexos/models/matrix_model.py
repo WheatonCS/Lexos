@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
+from lexos.managers.file_manager import FileManager
 from lexos.models.filemanager_model import FileManagerModel
 
 
@@ -175,16 +176,26 @@ class MatrixOption:
 
 class MatrixModel(FileManagerModel):
 
-    def __init__(self, matrix_option: MatrixOption = None):
-        """Class to generate and manipulate dtm."""
-        super().__init__()
+    def __init__(self, test_matrix_option: MatrixOption = None,
+                 test_file_manager: FileManager = None,
+                 test_dtm: pd.DataFrame = None):
+        """Class to generate and manipulate dtm.
+
+        :param test_file_manager: (fake parameter)
+                                the file manger used for testing
+        :param test_matrix_option: (fake parameter)
+                                the matrix options used for testing
+        :param test_dtm: (fake result)
+                        the result matrix used for testing
+        """
+        super().__init__(test_file_manager=test_file_manager)
         self._active_files = self.file_manager.get_active_files()
 
         # get the matrix option
-        self._opt = matrix_option if matrix_option else \
+        self._opt = test_matrix_option if test_matrix_option else \
             self._get_matrix_option_from_front_end()
 
-        self._dtm = self._generate_dtm()
+        self._dtm = self._generate_dtm() if not test_dtm else test_dtm
 
     @property
     def doc_term_matrix(self) -> pd.DataFrame:
