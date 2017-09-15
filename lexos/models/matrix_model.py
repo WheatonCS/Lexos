@@ -21,16 +21,26 @@ class MatrixModel(BaseModel):
                                 the matrix options used for testing
         """
         super().__init__()
-        file_manager_model = FileManagerModel()
-        matrix_receiver = MatrixReceiver()
+        self._test_file_manager = test_file_manager
+        self._test_matrix_option = test_matrix_option
 
-        # the result form higher level class
-        self._file_manager = test_file_manager if test_file_manager \
-            else file_manager_model.load_file_manager()
+    @property
+    def _file_manager(self) -> FileManager:
+        """Result form higher level class: the file manager of current session.
 
-        # the front end option from receiver
-        self._opts = test_matrix_option if test_matrix_option \
-            else matrix_receiver.options_from_front_end()
+        :return: a file manager object
+        """
+        return self._test_file_manager if self._test_file_manager \
+            else FileManagerModel().load_file_manager()
+
+    @property
+    def _opts(self) -> MatrixOption:
+        """Get all the options to use
+
+        :return: either a frontend option or a fake option used for testing
+        """
+        return self._test_matrix_option if self._test_matrix_option \
+            else MatrixReceiver().options_from_front_end()
 
     def get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files

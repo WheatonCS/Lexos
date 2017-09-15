@@ -11,7 +11,14 @@ class BaseReceiver:
 
         used to handle requests and other common stuff
         """
-        self._front_end_data_unsafe = self._get_all_options_from_front_end()
+        pass
+
+    @property
+    def _front_end_data_nullable(self) -> Optional[dict]:
+        try:
+            return self._get_all_options_from_front_end()
+        except RuntimeError:  # working out of request context
+            return None
 
     @property
     def _front_end_data(self) -> RequestData:
@@ -19,8 +26,8 @@ class BaseReceiver:
 
         :return: all the front end data pack in a dict
         """
-        assert self._front_end_data_unsafe is not None
-        return self._front_end_data_unsafe
+        assert self._front_end_data_nullable is not None
+        return self._front_end_data_nullable
 
     @staticmethod
     def _get_all_options_from_front_end() -> Optional[RequestData]:
