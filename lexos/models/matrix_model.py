@@ -32,7 +32,7 @@ class MatrixModel(BaseModel):
         self._opts = test_matrix_option if test_matrix_option \
             else matrix_receiver.options_from_front_end()
 
-    def generate(self)-> pd.DataFrame:
+    def get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
 
         :return:
