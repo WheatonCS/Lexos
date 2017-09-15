@@ -45,6 +45,10 @@ class BaseReceiver:
             return None
 
     def options_from_front_end(self):
-        """A virtual method to get the options"""
+        """A virtual method to pack the specific option needed.
+
+        find all the option needed and pack them into a struct.
+        Needs to be implemented in other receivers
+        """
         raise NotImplementedError
 
