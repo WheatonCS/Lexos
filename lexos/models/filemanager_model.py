@@ -8,6 +8,7 @@ from lexos.models.base_model import BaseModel
 
 
 class FileManagerModel(BaseModel):
+
     def __init__(self, test_file_manager: FileManager = None):
         """A model to control file manager.
 
