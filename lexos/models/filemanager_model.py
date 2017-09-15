@@ -21,18 +21,16 @@ class FileManagerModel(BaseModel):
         self._file_manager_path = os.path.join(session_folder(),
                                                constants.FILEMANAGER_FILENAME)
 
-        self.file_manager = self.load_file_manager() \
-            if not test_file_manager else test_file_manager
+        self._test_file_manager = test_file_manager
 
     def load_file_manager(self) -> FileManager:
         """Loads the file manager for the current session from the hard drive.
 
         :return: file manager object for the session.
         """
-
         return pickle.load(open(self._file_manager_path))
 
-    def save_file_manager(self):
+    def save_file_manager(self, file_manager: FileManager):
         """saves file manager to file manger path."""
 
-        pickle.dump(self.file_manager, open(self._file_manager_path, 'wb'))
+        pickle.dump(file_manager, open(self._file_manager_path, 'wb'))
