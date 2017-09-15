@@ -1,19 +1,19 @@
 from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
-from lexos.interfaces.base_interface import detect_active_docs
 from lexos.managers import utility, session_manager as session_manager
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-stats_view = Blueprint('statistics', __name__)
+stats_blueprint = Blueprint('statistics', __name__)
 
 
 # Tells Flask to load this function when someone is at '/statsgenerator'
-@stats_view.route("/statistics", methods=["GET", "POST"])
+@stats_blueprint.route("/statistics", methods=["GET", "POST"])
 def statistics():
     """Handles the functionality on the Statistics page.
 

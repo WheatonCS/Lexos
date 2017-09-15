@@ -1,21 +1,22 @@
+from collections import OrderedDict
+
 from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
-from collections import OrderedDict
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-rwa_view = Blueprint("rowlling_windows", __name__)
+rwa_blueprint = Blueprint("rowlling_windows", __name__)
 
 
 # Tells Flask to load this function when someone is at '/rollingwindow'
-@rwa_view.route("/rollingwindow", methods=["GET", "POST"])
+@rwa_blueprint.route("/rollingwindow", methods=["GET", "POST"])
 def rolling_window():
     """Handles the functionality on the rollingwindow page.
 
