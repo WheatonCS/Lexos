@@ -57,7 +57,3 @@ class DendrogramModel(BaseModel):
                    show_link=False, output_type="div", include_plotlyjs=False)
 
         return div
-
-
-
-
