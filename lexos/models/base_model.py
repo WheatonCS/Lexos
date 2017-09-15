@@ -6,7 +6,7 @@ class BaseModel:
             - the options get from receivers (possibly fake inputted options).
             - the result of higher level class (possibly fake inputted result).
         Each model has 1 public method with name "generate"
-            - This is the computation result for lower class or view to use.
+            - This is the computation result for lower class or views to use.
         """
         pass
 

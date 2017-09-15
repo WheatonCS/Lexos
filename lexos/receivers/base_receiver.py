@@ -37,7 +37,7 @@ class BaseReceiver:
         else:
             return None
 
-    def options(self):
+    def options_from_front_end(self):
         """A virtual method to get the options"""
         raise NotImplementedError
 
