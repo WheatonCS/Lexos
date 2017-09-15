@@ -8,17 +8,17 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants
 from lexos.managers import session_manager, utility
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-upload_view = Blueprint('upload', __name__)
+upload_blueprint = Blueprint('upload', __name__)
 
 
-@upload_view.route("/upload", methods=["GET", "POST"])
+@upload_blueprint.route("/upload", methods=["GET", "POST"])
 def upload():
     """Handles the functionality of the upload page.
 
@@ -68,7 +68,7 @@ def upload():
         return 'success'
 
 
-@upload_view.route("/scrape", methods=["GET", "POST"])
+@upload_blueprint.route("/scrape", methods=["GET", "POST"])
 def scrape():
     """scraps the urls an generates text file from each url.
 

@@ -2,19 +2,19 @@ from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
-from lexos.interfaces.base_interface import detect_active_docs
 from lexos.managers import utility, session_manager as session_manager
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-top_words_view = Blueprint('top_words', __name__)
+top_words_blueprint = Blueprint('top_words', __name__)
 
 
 # Tells Flask to load this function when someone is at '/topword'
-@top_words_view.route("/topword", methods=["GET", "POST"])
+@top_words_blueprint.route("/topword", methods=["GET", "POST"])
 def top_words():
     """Handles the topword page functionality.
 

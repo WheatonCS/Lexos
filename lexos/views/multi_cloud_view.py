@@ -1,24 +1,24 @@
 import json
-import pandas as pd
 from collections import OrderedDict
 
+import pandas as pd
 from flask import request, session, render_template, Blueprint
 from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-multi_cloud_view = Blueprint('multi_clouds', __name__)
+multi_cloud_blueprint = Blueprint('multi_clouds', __name__)
 
 
 # Tells Flask to load this function when someone is at '/multicloud'
-@multi_cloud_view.route("/multicloud", methods=["GET", "POST"])
+@multi_cloud_blueprint.route("/multicloud", methods=["GET", "POST"])
 def multi_cloud():
     """Handles the functionality on the multicloud pages.
 
@@ -75,7 +75,7 @@ def multi_cloud():
 
 
 # Tells Flask to load this function when '/doMulticloud' is called
-@multi_cloud_view.route("/doMulticloud", methods=["GET", "POST"])
+@multi_cloud_blueprint.route("/doMulticloud", methods=["GET", "POST"])
 def do_multicloud():
     """:return: a json object with all the word counts
     """
