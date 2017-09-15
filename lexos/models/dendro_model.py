@@ -25,7 +25,7 @@ class DendrogramModel(BaseModel):
         dendro_receiver = DendroReceiver()
 
         self._doc_term_matrix = test_dtm if test_dtm \
-            else matrix_model.generate()
+            else matrix_model.get_matrix()
 
         self._dendro_option = test_dendro_option if test_dendro_option else \
             dendro_receiver.options_from_front_end()
@@ -47,7 +47,7 @@ class DendrogramModel(BaseModel):
                 dist, method=self._dendro_option.dist_metric)
         )
 
-    def generate(self) -> str:
+    def get_dendrogram_div(self) -> str:
         """Generate the dendrogram div to send to the front end
 
         :return: a div
