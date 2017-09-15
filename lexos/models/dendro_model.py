@@ -7,7 +7,7 @@ from scipy.spatial.distance import pdist
 
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.reciever.dendro_receiver import DendroOption, DendroReceiver
+from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
 
 
 class DendrogramModel(BaseModel):
@@ -24,11 +24,11 @@ class DendrogramModel(BaseModel):
         matrix_model = MatrixModel()
         dendro_receiver = DendroReceiver()
 
-        self.doc_term_matrix = test_dtm if test_dtm \
+        self._doc_term_matrix = test_dtm if test_dtm \
             else matrix_model.generate()
 
         self._dendro_option = test_dendro_option if test_dendro_option else \
-            dendro_receiver.options()
+            dendro_receiver.options_from_front_end()
 
     def _get_dendrogram_fig(self) -> Figure:
         """Generate a dendrogram figure object in plotly.
@@ -37,7 +37,7 @@ class DendrogramModel(BaseModel):
         """
 
         return ff.create_dendrogram(
-            self.doc_term_matrix,
+            self._doc_term_matrix,
             orientation=self._dendro_option.orientation,
 
             distfun=lambda matrix: pdist(

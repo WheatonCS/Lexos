@@ -1,4 +1,4 @@
-from lexos.reciever.base_receiver import BaseReceiver
+from lexos.receivers.base_receiver import BaseReceiver
 
 
 class FileManagerReceiver(BaseReceiver):
@@ -6,6 +6,6 @@ class FileManagerReceiver(BaseReceiver):
         """So far there is no frontend option for file manager"""
         super().__init__()
 
-    def options(self):
+    def options_from_front_end(self):
         """So far there is no frontend option for file manager"""
         pass

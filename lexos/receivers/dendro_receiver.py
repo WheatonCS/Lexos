@@ -1,4 +1,4 @@
-from lexos.reciever.base_receiver import BaseReceiver
+from lexos.receivers.base_receiver import BaseReceiver
 
 
 class DendroOption:
@@ -45,7 +45,7 @@ class DendroOption:
 
 class DendroReceiver(BaseReceiver):
 
-    def options(self) -> DendroOption:
+    def options_from_front_end(self) -> DendroOption:
         """Get the dendrogram option from front end
 
         :return: a DendroOption object to hold all the options

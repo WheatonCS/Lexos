@@ -1,6 +1,6 @@
 import numpy as np
 
-from lexos.reciever.base_receiver import BaseReceiver
+from lexos.receivers.base_receiver import BaseReceiver
 
 
 class TokenOption:
@@ -248,7 +248,7 @@ class MatrixReceiver(BaseReceiver):
 
         return np.array([self._front_end_data[key] for key in label_keys])
 
-    def options(self) -> MatrixOption:
+    def options_from_front_end(self) -> MatrixOption:
         """Get all the matrix option from front end.
 
         :return: all the option packed together into a matrix option class
