@@ -266,3 +266,18 @@ def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
     except FileExistsError:
         pass
     pickle.dump(contents, open(dest_folder + filename, 'wb'))
+
+
+def load_file_from_disk(loc_folder: str, filename: str) -> str:
+    """Loads a file that was previously saved to the disk.
+
+    :param loc_folder: The location of the containing folder.
+    :param filename: The name of the file to be loaded.
+    :return: The contents of the loaded file.
+    """
+
+    try:
+        file_string = pickle.load(open(loc_folder + filename, 'rb'))
+        return file_string
+    except FileNotFoundError:
+        return ""
