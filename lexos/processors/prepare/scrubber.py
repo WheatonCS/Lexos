@@ -289,8 +289,8 @@ def scrub_select_apos(text: str) -> str:
     :return: The text string, now with only internal apostrophes.
     """
 
-    # If apos preceded by a whitespace character: (?<=[\s])'
-    # OR apos followed by a whitespace character: |'(?=[\s])
+    # If one or more apos. preceded by a whitespace character: (?<=[\s])'+
+    # OR one or more apos. followed by a whitespace character: |'+(?=[\s])
 
     # Using " " to represent whitespace, "w" to represent a word
     #     character, and "***" to represent any sequence of any characters,
@@ -298,10 +298,13 @@ def scrub_select_apos(text: str) -> str:
     # 1) ***w' *** because the apostrophe is followed by whitespace
     # 2) *** 'w*** because the apostrophe follows whitespace
     # 3) *** ' *** because the apos. follows AND is followed by whitespace
-    # This will NOT remove apos. next to other punctuation and multiple
-    #     apos. next to each other, because they are not whitespace
 
-    pattern = re.compile(r"(?<=[\s])'|'(?=[\s])", re.UNICODE)
+    # This will NOT remove apos. next to other punctuation, because they are
+    # not whitespace
+    # Consecutive apostrophes are treated as one, to avoid odd behavior
+    # (Ex. "test'' ''' ''test" => "test' ' 'test" is undesirable)
+
+    pattern = re.compile(r"(?<=[\s])'+|'+(?=[\s])", re.UNICODE)
 
     # apply the pattern to replace all external or floating apos with
     # empty strings
