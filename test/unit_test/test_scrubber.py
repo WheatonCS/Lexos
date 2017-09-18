@@ -918,9 +918,9 @@ class TestGetRemoveWhitespaceMap:
             {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}
 
 
-# cache_filestring
+# save_scrub_optional_upload
 
-# load_cached_filestring
+# load_scrub_optional_upload
 
 
 class TestHandleGutenberg:

@@ -477,9 +477,9 @@ def handle_file_and_manual_strings(file_string: str, manual_string: str,
     """
 
     if file_string:
-        cache_filestring(file_string=file_string,
-                         cache_folder=cache_folder,
-                         filename=cache_filenames[cache_number])
+        save_scrub_optional_upload(file_string=file_string,
+                                   cache_folder=cache_folder,
+                                   filename=cache_filenames[cache_number])
     merged_string = file_string + "\n" + manual_string
 
     return merged_string
@@ -600,27 +600,28 @@ def get_remove_whitespace_map(
     return remove_whitespace_map
 
 
-def cache_filestring(file_string: str, cache_folder: str, filename: str):
-    """Caches the contents of a file into the cache folder.
+def save_scrub_optional_upload(file_string: str, cache_folder: str,
+                               filename: str):
+    """Saves the contents of a file into the cache folder.
 
-    :param file_string: A string representing a whole file to be cached.
+    :param file_string: A string representing a whole file to be saved.
     :param cache_folder: A string representing the path of the cache folder.
     :param filename: A string representing the name of the file that is being
-        loaded.
+        saved.
     """
 
     general_functions.write_file_to_disk(
         contents=file_string, dest_folder=cache_folder, filename=filename)
 
 
-def load_cached_file_string(cache_folder: str, filename: str) -> str:
-    """Loads a file string that was previously cached in the cache folder.
+def load_scrub_optional_upload(cache_folder: str, filename: str) -> str:
+    """Loads a file string that was previously saved in the cache folder.
 
     :param cache_folder: A string representing the path of the cache folder.
     :param filename: A string representing the name of the file that is being
         loaded.
-    :return: The file string cached in the cache folder (empty if there is no
-        string to load).
+    :return: The file string that was saved in the cache folder (empty if
+        there is no string to load).
     """
 
     return general_functions.load_file_from_disk(loc_folder=cache_folder,
@@ -696,7 +697,7 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
             file_strings[index] = general_functions.decode_bytes(file_content)
             opt_uploads[key].seek(0)
         elif key.strip('[]') in cache_options:
-            file_strings[index] = load_cached_file_string(
+            file_strings[index] = load_scrub_optional_upload(
                 cache_folder, cache_filenames[index])
         else:
             session['scrubbingoptions']['optuploadnames'][key] = ''
