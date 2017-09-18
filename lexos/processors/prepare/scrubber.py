@@ -609,11 +609,8 @@ def cache_filestring(file_string: str, cache_folder: str, filename: str):
         loaded.
     """
 
-    try:
-        os.makedirs(cache_folder)
-    except FileExistsError:
-        pass
-    pickle.dump(file_string, open(cache_folder + filename, 'wb'))
+    general_functions.write_file_to_disk(
+        contents=file_string, dest_folder=cache_folder, filename=filename)
 
 
 def load_cached_file_string(cache_folder: str, filename: str) -> str:
@@ -626,11 +623,8 @@ def load_cached_file_string(cache_folder: str, filename: str) -> str:
         string to load).
     """
 
-    try:
-        file_string = pickle.load(open(cache_folder + filename, 'rb'))
-        return file_string
-    except FileNotFoundError:
-        return ""
+    return general_functions.load_file_from_disk(loc_folder=cache_folder,
+                                                 filename=filename)
 
 
 def handle_gutenberg(text: str) -> str:
