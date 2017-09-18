@@ -15,6 +15,13 @@ class BaseReceiver:
 
     @property
     def _front_end_data_nullable(self) -> Optional[dict]:
+        """An nullable front-end data
+
+        the front end data, possibly None:
+        - if not in an request context, you will get None
+        - if no request data is sent in current request, you will get None
+        :return: the front end data, possibly None.
+        """
         try:
             return self._get_all_options_from_front_end()
         except RuntimeError:  # working out of request context
