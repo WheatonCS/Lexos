@@ -59,10 +59,10 @@ class TestPCA:
 
     def test_color(self):
         assert k_means_pca_data.color_chart == \
-               'rgb(27, 158, 119, 255)#rgb(102, 102, 102, 255)#'
+            'rgb(27, 158, 119, 255)#rgb(102, 102, 102, 255)#'
         assert new_k_means_pca_data.color_chart == \
-               'rgb(27, 158, 119, 255)#rgb(102, 166, 30, 255)' \
-               '#rgb(102, 102, 102, 255)#'
+            'rgb(27, 158, 119, 255)#rgb(102, 166, 30, 255)' \
+            '#rgb(102, 102, 102, 255)#'
 
     def test_name(self):
         assert k_means_pca_data.file_name_str == 'F1#F2#F3#F4'
@@ -70,7 +70,7 @@ class TestPCA:
 
     def test_score(self):
         assert k_means_pca_data.silhouette_score == \
-               'N/A [Not available for K ≤ 2]'
+            'N/A [Not available for K ≤ 2]'
         assert new_k_means_pca_data.silhouette_score == 0.283
 
     def test_special_case(self):
@@ -171,7 +171,7 @@ class TestVor:
 
     def test_score(self):
         assert k_means_vor_data.silhouette_score == \
-               'N/A [Not available for K ≤ 2]'
+            'N/A [Not available for K ≤ 2]'
         assert new_k_means_vor_data.silhouette_score == 0.283
 
     def test_special_case(self):
