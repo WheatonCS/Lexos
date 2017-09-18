@@ -345,8 +345,7 @@ def consolidate_ampers(text: str) -> str:
         [chr(i) for i in range(sys.maxunicode)
          # Avoid unnamed control chars throwing ValueErrors
          if (unicodedata.category(chr(i)).startswith('P') or
-             unicodedata.category(chr(i)).startswith('S') or
-             unicodedata.category(chr(i)).startswith('Cf'))
+             unicodedata.category(chr(i)).startswith('S'))
          and re.search(
             r" ampersand|ampersand ", unicodedata.name(chr(i)),
             re.IGNORECASE) is not None

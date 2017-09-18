@@ -607,8 +607,8 @@ class TestConsolidateAmpers:
     def test_consolidate_ampers(self):
         assert consolidate_ampers(
             text="Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
-            "test\U000E0026\u0026 \uFF06") == "Tes&t test& & &test tes&&t " \
-                                              "test&& &"
+            "test\u0026 \uFF06") == "Tes&t test& & &test tes&&t " \
+                                              "test& &"
         assert consolidate_ampers(text="Test test") == "Test test"
         assert consolidate_ampers(text="") == ""
 
@@ -625,7 +625,7 @@ class TestGetRemovePunctuationMap:
                         " \u2015hyphens \uFE58\uFE63\uFF0D " \
                         "\u1400in\u1806\u2E17 here!\u2E1A!"
         amper_string = "We\uFF06 \u214B\u06FD have tons\uFE60 &\u0026 tons " \
-                       "\U0001F675 of \U000E0026ampers here!\U0001F674!"
+                       "\U0001F675 of ampers here!\U0001F674!"
         mixed_string = "There's a lot o' punct. & \"chars\" \U0001F674 " \
                        "mixed-up things in here! How''s it go\u30A0\ning to " \
                        "go?"
@@ -665,7 +665,7 @@ class TestGetRemovePunctuationMap:
                                   "-hyphens --- -in-- here!-!", map_no_hyphen)
         assert get_remove_punctuation_map(
             amper_string, apos=False, hyphen=False, amper=True,
-            previewing=False) == ("We& && have tons& && tons & of &ampers "
+            previewing=False) == ("We& && have tons& && tons & of ampers "
                                   "here!&!", map_no_amper)
         assert get_remove_punctuation_map(
             mixed_string, apos=True, hyphen=True, amper=False,
