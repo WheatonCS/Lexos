@@ -1,6 +1,7 @@
 import numpy as np
 
 from lexos.helpers import constants
+from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
 from lexos.processors.analyze import KMeans
 
 # Set up the global testing values
@@ -17,6 +18,8 @@ new_count_matrix = np.array([(1, 10, 100, 0, 0, 0, 0, 0),
                              (0, 0, 20, 200, 0, 0, 0, 0),
                              (0, 0, 0, 0, 1000, 1000, 0, 0),
                              (0, 0, 0, 0, 0, 0, 1, 1)])
+
+empty = np.array([])
 
 init_method = "k-means++"
 n_init = constants.N_INIT
@@ -56,10 +59,10 @@ class TestPCA:
 
     def test_color(self):
         assert k_means_pca_data.color_chart == \
-            'rgb(27, 158, 119, 255)#rgb(102, 102, 102, 255)#'
+               'rgb(27, 158, 119, 255)#rgb(102, 102, 102, 255)#'
         assert new_k_means_pca_data.color_chart == \
-            'rgb(27, 158, 119, 255)#rgb(102, 166, 30, 255)' \
-            '#rgb(102, 102, 102, 255)#'
+               'rgb(27, 158, 119, 255)#rgb(102, 166, 30, 255)' \
+               '#rgb(102, 102, 102, 255)#'
 
     def test_name(self):
         assert k_means_pca_data.file_name_str == 'F1#F2#F3#F4'
@@ -67,8 +70,37 @@ class TestPCA:
 
     def test_score(self):
         assert k_means_pca_data.silhouette_score == \
-            'N/A [Not available for K ≤ 2]'
+               'N/A [Not available for K ≤ 2]'
         assert new_k_means_pca_data.silhouette_score == 0.283
+
+    def test_special_case(self):
+        try:
+            _ = KMeans.GetKMeansPca(k_value=2,
+                                    labels=empty,
+                                    n_init=n_init,
+                                    folder_path="",
+                                    max_iter=max_iter,
+                                    tolerance=tolerance,
+                                    metric_dist="euclidean",
+                                    init_method=init_method,
+                                    count_matrix=count_matrix)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_NP_ARRAY_MESSAGE
+
+        try:
+            _ = KMeans.GetKMeansPca(k_value=2,
+                                    labels=labels,
+                                    n_init=n_init,
+                                    folder_path="",
+                                    max_iter=max_iter,
+                                    tolerance=tolerance,
+                                    metric_dist="euclidean",
+                                    init_method=init_method,
+                                    count_matrix=empty)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_NP_ARRAY_MESSAGE
 
 
 k_means_vor_data = KMeans.GetKMeansVoronoi(
@@ -139,5 +171,32 @@ class TestVor:
 
     def test_score(self):
         assert k_means_vor_data.silhouette_score == \
-            'N/A [Not available for K ≤ 2]'
+               'N/A [Not available for K ≤ 2]'
         assert new_k_means_vor_data.silhouette_score == 0.283
+
+    def test_special_case(self):
+        try:
+            _ = KMeans.GetKMeansVoronoi(k_value=2,
+                                        labels=empty,
+                                        n_init=n_init,
+                                        max_iter=max_iter,
+                                        tolerance=tolerance,
+                                        metric_dist="euclidean",
+                                        init_method=init_method,
+                                        count_matrix=count_matrix)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_NP_ARRAY_MESSAGE
+
+        try:
+            _ = KMeans.GetKMeansVoronoi(k_value=2,
+                                        labels=labels,
+                                        n_init=n_init,
+                                        max_iter=max_iter,
+                                        tolerance=tolerance,
+                                        metric_dist="euclidean",
+                                        init_method=init_method,
+                                        count_matrix=empty)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == EMPTY_NP_ARRAY_MESSAGE
