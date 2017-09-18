@@ -268,7 +268,7 @@ def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
     pickle.dump(contents, open(dest_folder + filename, 'wb'))
 
 
-def load_file_from_disk(loc_folder: str, filename: str) -> str:
+def load_file_from_disk(loc_folder: str, filename: str) -> Any:
     """Loads a file that was previously saved to the disk.
 
     :param loc_folder: The location of the containing folder.
