@@ -1,8 +1,9 @@
 import errno
 import os
+import pickle
 import re
 import shutil
-from typing import Union
+from typing import Union, Any
 from zipfile import ZipFile
 
 import chardet
@@ -250,3 +251,18 @@ def decode_bytes(raw_bytes: Union[bytes, str]) -> str:
         decoded_str = raw_bytes
 
     return decoded_str
+
+
+def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
+    """Stores data in a file on the disk.
+
+    :param contents: Whatever the file should contain.
+    :param dest_folder: The directory path where the file should be saved.
+    :param filename: The name of the file to be created.
+    """
+
+    try:
+        os.makedirs(dest_folder)
+    except FileExistsError:
+        pass
+    pickle.dump(contents, open(dest_folder + filename, 'wb'))
