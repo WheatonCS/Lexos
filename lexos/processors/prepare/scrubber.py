@@ -289,19 +289,19 @@ def scrub_select_apos(text: str) -> str:
     :return: The text string, now with only internal apostrophes.
     """
 
-    # If apos preceded by a non-word character: (?<=[^\w])'
-    # OR apos followed by a non-word character: |'(?=[^\w])
+    # If apos preceded by a whitespace character: (?<=[\s])'
+    # OR apos followed by a whitespace character: |'(?=[\s])
 
-    # Using " " to represent non-word whitespace, "w" to represent a word
+    # Using " " to represent whitespace, "w" to represent a word
     #     character, and "***" to represent any sequence of any characters,
     #     this pattern will match:
-    # 1) ***w' *** because the apostrophe is followed by a non-word
-    # 2) *** 'w*** because the apostrophe follows a non-word
-    # 3) *** ' *** because the apos. follows AND is followed by non-words
-    # This will also work for apos. next to other punctuation and multiple
-    #     apos. next to each other, because they count as non-word
+    # 1) ***w' *** because the apostrophe is followed by whitespace
+    # 2) *** 'w*** because the apostrophe follows whitespace
+    # 3) *** ' *** because the apos. follows AND is followed by whitespace
+    # This will NOT remove apos. next to other punctuation and multiple
+    #     apos. next to each other, because they are not whitespace
 
-    pattern = re.compile(r"(?<=[^\w])'|'(?=[^\w])", re.UNICODE)
+    pattern = re.compile(r"(?<=[\s])'|'(?=[\s])", re.UNICODE)
 
     # apply the pattern to replace all external or floating apos with
     # empty strings

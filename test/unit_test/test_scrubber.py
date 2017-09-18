@@ -582,7 +582,7 @@ class TestScrubSelectApos:
     def test_scrub_select_apos(self):
         assert scrub_select_apos(
             text="Tes't test' ' 'test tes''t test'' '' ''test") == \
-            "Tes't test  test test test  test"
+            "Tes't test  test tes''t test'  'test"
         assert scrub_select_apos(text="Test test") == "Test test"
         assert scrub_select_apos(text="' ") == " "
         assert scrub_select_apos(text="'") == "'"
@@ -656,8 +656,8 @@ class TestGetRemovePunctuationMap:
                                   chars.ORD_PUNCT_SYMBOL_TO_NONE)
         assert get_remove_punctuation_map(
             apos_string, apos=True, hyphen=False, amper=False,
-            previewing=False) == ("There's \"a lot\" of words in this text"
-                                  " here ye isnt ere a lot\"ve em?!",
+            previewing=False) == ("There's \"a lot\" of words in this text "
+                                  "here ye isn''t ere a lot\"ve em?'!",
                                   map_no_apos)
         assert get_remove_punctuation_map(
             hyphen_string, apos=False, hyphen=True, amper=False,
@@ -670,12 +670,12 @@ class TestGetRemovePunctuationMap:
         assert get_remove_punctuation_map(
             mixed_string, apos=True, hyphen=True, amper=False,
             previewing=False) == ("There's a lot o punct. & \"chars\" "
-                                  "\U0001F674 mixed-up things in here! Hows it"
-                                  " go-\ning to go?", map_no_apos_hyphen)
+                                  "\U0001F674 mixed-up things in here! How''s "
+                                  "it go-\ning to go?", map_no_apos_hyphen)
         assert get_remove_punctuation_map(
             mixed_string, apos=True, hyphen=False, amper=True,
             previewing=False) == ("There's a lot o punct. & \"chars\" & "
-                                  "mixed-up things in here! Hows it "
+                                  "mixed-up things in here! How''s it "
                                   "go\u30A0\ning to go?", map_no_apos_amper)
         assert get_remove_punctuation_map(
             mixed_string, apos=False, hyphen=True, amper=True,
@@ -685,7 +685,7 @@ class TestGetRemovePunctuationMap:
         assert get_remove_punctuation_map(
             mixed_string, apos=True, hyphen=True, amper=True,
             previewing=False) == ("There's a lot o punct. & \"chars\" & "
-                                  "mixed-up things in here! Hows it "
+                                  "mixed-up things in here! How''s it "
                                   "go-\ning to go?",
                                   map_no_all)
         assert get_remove_punctuation_map(
