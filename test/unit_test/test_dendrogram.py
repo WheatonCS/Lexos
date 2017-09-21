@@ -16,6 +16,6 @@ options = DendroOption(orientation='left',
 
 def test_regular():
     model = DendrogramModel(test_dtm=dtm_data_frame,
-                            test_dendro_option=options)
+                            test_option=options)
     a = model.get_dendrogram_div()
     pass
