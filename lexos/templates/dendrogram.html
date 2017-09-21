@@ -3,7 +3,7 @@
 
 {% block head %}
     <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
+            src="{{ url_for('statc', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
     <script>
       $(document).ready(function () {
         // Handle the return to top links
@@ -117,29 +117,30 @@
 
 
 {% block results %}
-        <div class="row">
+    <div class="row submit-button-row">
         <div class="col-md-6">
             <input class="bttn bttn-action" id="getdendro" name="getdendro"
                    type="button" value="Get Dendrogram" style=""/>
         </div>
         <div class="col-md-6" style="text-align:right;">
+
             <label id="downloadButtons"
-                   class="generated {{ 'hidden' if session['degenerated'] != True }}">
+                   class="generated">
                 Download: </label>
-            <div class="btn-group generated {{ 'hidden' if session['degenerated'] != True }}"
+            <div class="btn-group generated"
                  role="group" aria-label="...">
                 <input role="button" id="dendrodownload"
                        class="btn btn-primary"
                        type="submit" name="dendroPDF_download" value="PDF">
+
                 <input role="button" id="dendroPNGdownload"
                        class="btn btn-success"
                        type="submit" name="dendroPNG_download" value="PNG">
+
                 <input role="button" id="dendroSVGdownload"
                        class="btn btn-primary"
                        type="submit" name="dendroSVG_download" value="SVG">
-                <input role="button" id="dendroNewickdownload"
-                       class="btn btn-success" type="submit"
-                       name="dendroNewick_download" value="Newick">
+
             </div>
             <span class="generated {{ 'hidden' if session['degenerated'] != True }}"><br>Click the image to open it in a new tab.</span>
         </div>
