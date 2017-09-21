@@ -2,7 +2,7 @@
 {% set active_page = 'cluster' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_dendrogram_old.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
 	var pdfPageNumber = {{ pdfPageNumber|default(0) }}
 

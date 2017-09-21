@@ -1833,13 +1833,15 @@ select#orientation {
   width: 140px;
 }
 
-.silhouette-options,
+.submit-button-row {
+  margin-top: 10px;
+}
+
 .dendrogram-options,
 .kmeans-options {
   float: left;
 }
 
-.silhouette-options,
 .dendrogram-options label,
 .kmeans-options label{
   clear: both;
@@ -1848,7 +1850,7 @@ select#orientation {
 }
 
 .icon-help#annotationTip {
-  top: 0px;
+  top: 0;
   right: -5px;
 }
 
@@ -1856,7 +1858,6 @@ select#orientation {
   border: 1px solid #BDC3C7;
   border-radius: 6px;
   display: none;
-  color: black;
   position: absolute;
   font-size: 13px;
   line-height: 2px;
@@ -1867,9 +1868,6 @@ select#orientation {
   top:460px;
 }
 
-#silhouetteResults {
-  display:none;
-}
 
 /* ================== K MEANS STYLING ==================== */
 #kmeansresults {
