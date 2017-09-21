@@ -21,22 +21,16 @@ def dendrogram():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'hierarchyoption' not in session:
-            session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-        labels = file_manager.get_active_labels()
-        for key in labels:
-            labels[key] = labels[key]
-        threshold_ops = {}
-        return render_template(
-            'dendrogram.html',
-            labels=labels,
-            thresholdOps=threshold_ops,
-            numActiveDocs=num_active_docs,
-            itm="hierarchical")
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'hierarchyoption' not in session:
+        session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
+    labels = file_manager.get_active_labels()
+    return render_template(
+        'dendrogram.html',
+        labels=labels,
+        numActiveDocs=num_active_docs,
+        itm="hierarchical")
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
