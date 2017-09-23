@@ -24,6 +24,7 @@ from lexos.interfaces.tokenizer_interface import tokenizer_view
 from lexos.interfaces.top_words_interface import top_words_view
 from lexos.interfaces.upload_interface import upload_view
 from lexos.interfaces.word_cloud_interface import word_cloud_view
+from lexos.interfaces.content_analysis_interface import content_analysis_view
 
 
 def get_secret_key(file_name: str = 'secret_key') -> bytes:
@@ -78,6 +79,7 @@ app.register_blueprint(stats_view)
 app.register_blueprint(tokenizer_view)
 app.register_blueprint(top_words_view)
 app.register_blueprint(word_cloud_view)
+app.register_blueprint(content_analysis_view)
 
 
 # http://flask.pocoo.org/snippets/28/
