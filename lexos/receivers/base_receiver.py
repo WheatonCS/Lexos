@@ -58,4 +58,3 @@ class BaseReceiver:
         Needs to be implemented in other receivers
         """
         raise NotImplementedError
-
