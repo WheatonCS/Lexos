@@ -3,7 +3,8 @@
 
 {% block head %}
     <script type="text/javascript"
-            src="{{ url_for('statc', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
+            src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
       $(document).ready(function () {
         // Handle the return to top links
@@ -146,6 +147,9 @@
         </div>
     </div>
 
+    <div id="denderogram-result">
+
+    </div>
 
 {% endblock %}
 
