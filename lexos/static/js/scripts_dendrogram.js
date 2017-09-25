@@ -22,7 +22,7 @@ $(document).ready(function () {
                 'data': JSON.stringify(form),
                 'complete': function (response) {
                     console.log(response.responseText)
-                    $('#denderogram-result').html(response.responseText)
+                    $('#dendrogram-result').html(response.responseText)
                 }
             }
         )
