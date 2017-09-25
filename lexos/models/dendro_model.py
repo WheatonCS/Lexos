@@ -52,7 +52,9 @@ class DendrogramModel(BaseModel):
                 matrix, metric=self._dendro_option.dist_metric),
 
             linkagefun=lambda dist: linkage(
-                dist, method=self._dendro_option.linkage_method)
+                dist, method=self._dendro_option.linkage_method),
+
+            labels=self._doc_term_matrix.index.values
         )
 
     def get_dendrogram_div(self) -> str:
