@@ -229,10 +229,19 @@ class MatrixReceiver(BaseReceiver):
 
         :return: a culling option struct
         """
-        most_frequent_word = self._front_end_data['mfwcheckbox']
-        culling = self._front_end_data['cullcheckbox']
-        least_num_seg = self._front_end_data['cullnumber']
-        lower_rank_bound = self._front_end_data['mfwnumber']
+        if 'mfwcheckbox' in self._front_end_data:
+            most_frequent_word = True
+            lower_rank_bound = self._front_end_data['mfwnumber']
+        else:
+            most_frequent_word = False
+            lower_rank_bound = None
+
+        if 'cullcheckbox' in self._front_end_data:
+            culling = True
+            least_num_seg = self._front_end_data['cullnumber']
+        else:
+            culling = False
+            least_num_seg = None
 
         return CullingOption(culling=culling, cull_least_seg=least_num_seg,
                              most_frequent_word=most_frequent_word,
