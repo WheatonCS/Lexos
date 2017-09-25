@@ -6,6 +6,7 @@ from flask import send_file, request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager, utility
+from lexos.models.dendro_model import DendrogramModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -31,6 +32,14 @@ def dendrogram():
         labels=labels,
         numActiveDocs=num_active_docs,
         itm="hierarchical")
+
+
+@cluster_blueprint.route("/dendrogramDiv", methods=['POST'])
+def dendrogram_div():
+    session_manager.cache_analysis_option()
+    session_manager.cache_hierarchy_option()
+    test = DendrogramModel().get_dendrogram_div()
+    return test
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
