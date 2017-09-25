@@ -23,3 +23,9 @@ EMPTY_NP_ARRAY_MESSAGE = "The input numpy array should not be empty, since" \
     "the input file should not be empty."
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
+
+
+# ============= Base Model Errors ===========================
+NO_DATA_SENT_ERROR_MESSAGE = 'Front end did not send data to backend'
+INVALID_DATA_KEY_MESSAGE_FORMAT = \
+    'no data with name {data_key} sended to backend'
