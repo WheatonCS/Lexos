@@ -31,7 +31,7 @@ class FileManagerModel(BaseModel):
 
         :return: file manager object for the session.
         """
-        return pickle.load(open(self._file_manager_path))
+        return pickle.load(open(self._file_manager_path, 'rb'))
 
     def save_file_manager(self, file_manager: FileManager):
         """saves file manager to file manger path."""
