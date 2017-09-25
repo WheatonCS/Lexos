@@ -1,5 +1,5 @@
-import os
 import getpass
+import os
 
 """ Constants """
 
@@ -255,7 +255,7 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
     'title': '',
-    'orientation': 'top',
+    'orientation': 'bottom',
     'pruning': '',
     'augmented': True,
     'criterion': 'maxclust',
