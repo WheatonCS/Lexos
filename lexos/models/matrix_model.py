@@ -92,8 +92,8 @@ class MatrixModel(BaseModel):
             input='content', encoding='utf-8', min_df=1,
             analyzer=self._opts.token_option.token_type,
             token_pattern=definitions.WORD_REGEX, lowercase=False,
-            ngram_range=(self._opts.token_option.token_type,
-                         self._opts.token_option.token_type),
+            ngram_range=(self._opts.token_option.n_gram_size,
+                         self._opts.token_option.n_gram_size),
             stop_words=[], dtype=float, max_df=1.0
         )
 
