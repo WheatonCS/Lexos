@@ -20,6 +20,16 @@ from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
 from lexos.models.base_model import BaseModel
 
+k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
+                                       labels=labels,
+                                       n_init=n_init,
+                                       k_value=k_value,
+                                       max_iter=max_iter,
+                                       tolerance=tolerance,
+                                       init_method=init_method,
+                                       folder_path=folder_path,
+                                       metric_dist=metric_dist)
+
 
 class KmeansModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
