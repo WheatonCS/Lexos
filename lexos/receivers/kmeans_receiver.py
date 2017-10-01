@@ -1,6 +1,7 @@
+from lexos.helpers import constants
 from lexos.receivers.base_receiver import BaseReceiver
 from lexos.receivers.session_receiver import SessionReceiver
-import os
+from os.path import join as join
 
 
 class KmeansOption:
@@ -28,10 +29,6 @@ class KmeansReceiver(BaseReceiver, SessionReceiver):
         k_value = int(self._front_end_data['nclusters'])
         max_iter = int(self._front_end_data['max_iter'])
         tolerance = float(self._front_end_data['tolerance'])
-        folder_path = os.pat
+        folder_path = join(self.get_session_folder(), constants.RESULTS_FOLDER)
 
-    folder_path = path_join(session_manager.session_folder(),
-                            constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
 

@@ -30,6 +30,9 @@ k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
                                        folder_path=folder_path,
                                        metric_dist=metric_dist)
 
+if not os.path.isdir(folder_path):
+    makedirs(folder_path)
+
 
 class KmeansModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
