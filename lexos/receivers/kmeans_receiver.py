@@ -8,6 +8,15 @@ class KmeansOption:
     def __init__(self, n_init: int, k_value: int, max_iter: int,
                  metric_dist: str, tolerance: float, folder_path: str):
         """This is a structure to hold all the Kmeans options.
+
+        :param n_init: number of iterations with different centroids
+        :param k_value: k value-for k-means analysis
+        :param max_iter: maximum number of iterations
+        :param tolerance: relative tolerance, inertia to declare convergence
+        :param init_method: method of initialization: "K++" or "random"
+        :param metric_dist: method of the distance metrics
+        :param folder_path: system path to save the temp image
+        :param labels: file names of active files
         """
         self._n_init = n_init
         self._k_value = k_value
