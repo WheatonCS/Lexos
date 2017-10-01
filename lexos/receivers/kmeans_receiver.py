@@ -1,12 +1,15 @@
+import os
 from lexos.helpers import constants
 from lexos.receivers.base_receiver import BaseReceiver
 from lexos.receivers.session_receiver import SessionReceiver
 from os.path import join as join
+from os import makedirs as mkdir
 
 
 class KmeansOption:
     def __init__(self, n_init: int, k_value: int, max_iter: int,
-                 metric_dist: str, tolerance: float, folder_path: str):
+                 tolerance: float, init_method: str,  metric_dist: str,
+                 folder_path: str):
         """This is a structure to hold all the Kmeans options.
 
         :param n_init: number of iterations with different centroids
@@ -16,12 +19,12 @@ class KmeansOption:
         :param init_method: method of initialization: "K++" or "random"
         :param metric_dist: method of the distance metrics
         :param folder_path: system path to save the temp image
-        :param labels: file names of active files
         """
         self._n_init = n_init
         self._k_value = k_value
         self._max_iter = max_iter
         self._tolerance = tolerance
+        self._init_method = init_method
         self._metric_dist = metric_dist
         self._folder_path = folder_path
 
@@ -42,6 +45,10 @@ class KmeansOption:
         return self._tolerance
 
     @property
+    def init_method(self) -> str:
+        return self._init_method
+
+    @property
     def metric_dist(self) -> str:
         return self._metric_dist
 
@@ -60,12 +67,16 @@ class KmeansReceiver(BaseReceiver, SessionReceiver):
         k_value = int(self._front_end_data['nclusters'])
         max_iter = int(self._front_end_data['max_iter'])
         tolerance = float(self._front_end_data['tolerance'])
+        init_method = self._front_end_data['init']
         metric_dist = self._front_end_data['KMeans_metric']
         folder_path = join(self.get_session_folder(), constants.RESULTS_FOLDER)
+        if not os.path.isdir(folder_path):
+            mkdir(folder_path)
 
         return KmeansOption(n_init=n_init,
                             k_value=k_value,
                             max_iter=max_iter,
                             tolerance=tolerance,
+                            init_method=init_method,
                             metric_dist=metric_dist,
                             folder_path=folder_path)
