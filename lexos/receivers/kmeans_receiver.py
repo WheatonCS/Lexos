@@ -5,17 +5,40 @@ from os.path import join as join
 
 
 class KmeansOption:
-    def __init__(self, metric: str, n_init: int, k_value: int, max_iter: int,
-                 tolerance: float):
-        self._metric = metric
+    def __init__(self, n_init: int, k_value: int, max_iter: int,
+                 metric_dist: str, tolerance: float, folder_path: str):
+        """This is a structure to hold all the Kmeans options.
+        """
         self._n_init = n_init
         self._k_value = k_value
         self._max_iter = max_iter
         self._tolerance = tolerance
+        self._metric_dist = metric_dist
+        self._folder_path = folder_path
 
     @property
-    def metric(self) -> str:
-        return self._metric
+    def n_init(self) -> int:
+        return self._n_init
+
+    @property
+    def k_value(self) -> int:
+        return self._k_value
+
+    @property
+    def max_iter(self) -> int:
+        return self._max_iter
+
+    @property
+    def tolerance(self) -> float:
+        return self._tolerance
+
+    @property
+    def metric_dist(self) -> str:
+        return self._metric_dist
+
+    @property
+    def folder_path(self) -> str:
+        return self._folder_path
 
 
 class KmeansReceiver(BaseReceiver, SessionReceiver):
@@ -24,11 +47,16 @@ class KmeansReceiver(BaseReceiver, SessionReceiver):
 
         :return: a KmeansOption object to hold all the options.
         """
-        metric = self._front_end_data['KMeans_metric']
         n_init = int(self._front_end_data['n_init'])
         k_value = int(self._front_end_data['nclusters'])
         max_iter = int(self._front_end_data['max_iter'])
         tolerance = float(self._front_end_data['tolerance'])
+        metric_dist = self._front_end_data['KMeans_metric']
         folder_path = join(self.get_session_folder(), constants.RESULTS_FOLDER)
 
-
+        return KmeansOption(n_init=n_init,
+                            k_value=k_value,
+                            max_iter=max_iter,
+                            tolerance=tolerance,
+                            metric_dist=metric_dist,
+                            folder_path=folder_path)
