@@ -32,25 +32,16 @@ class ContentAnalysisModel(object):
         file_content = file.load_contents()
         self.corpora.append(file_content)
         self.total_word_counts.append(len(str(file_content).split(" ")))
+        self.active_corpora.append(1)
 
-    def add_dictionary(self, file_path):
-        file_name = ntpath.basename(file_path)
+    def add_dictionary(self, file_name, content):
         self.dictionaries_names.append(file_name)
-        self.dictionaries_labels.append(ntpath.basename(strip_file_extension(file_name)))
-        file_extension = get_file_extension(file_path)
-        if file_extension == ".csv":
-            new_list = read_csv(file_path)
-            new_list = ' '.join(new_list.split())
-        elif file_extension == ".txt" or "":
-            new_list = read_txt(file_path)
-        elif file_extension == ".docx":
-            new_list = read_docx(file_path)
-        new_list = new_list.split(", ")
+        self.dictionaries_labels.append(file_name)
+        new_list = str(content).split(", ")
         new_list = list(map(lambda x: x.lower(), new_list))
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
         self.dictionaries.append(new_list)
         self.active_dictionaries.append(1)
-        self.dictionaries_extensions.append(file_extension)
 
     def delete_corpus(self, index: int):
         del self.corpora[index]
