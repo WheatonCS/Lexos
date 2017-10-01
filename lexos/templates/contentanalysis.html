@@ -15,24 +15,50 @@
     <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
   {% endif %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_content_analysis.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
+
 {% endblock %}
 {% block content %}
-<fieldset class="advanced-option">
-		    {% set lem_showing = (session['scrubbingoptions']['optuploadnames']['lemfileselect[]']) or (session['scrubbingoptions']['manuallemmas']) %}
-		    <legend id="Lemmas" class="has-chevron">
-                Dictionaries
-                <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
-                <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
-                <span id="lemfileselectbttnlabel" class="bttnfilelabels" style="font-size:12px;float:right;">{{ session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] + '\n(using stored)' if session['scrubbingoptions']['optuploadnames']['lemfileselect[]'] != '' }}</span>
-            </legend>
-			<div class="collapse" id="lemmasPanel">
-                <div class="optuploadbuttondiv">
-					<div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
-                    <input type="file" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]"/>
+<div class="row">
+    <div class="col-md-3">
+        <legend id="Dictionaries" class="has-chevron">
+            Dictionaries
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
+            <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
+        </legend>
+        <div class="collapse" id="lemmasPanel">
+            <div class="optuploadbuttondiv">
+                <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
+                <input type="file" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <legend id="Dictionaries" class="has-chevron">
+            Formula
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
+            <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
+        </legend>
+        <div class="collapse" id="lemmasPanel">
+            <div class="optuploadbuttondiv">
 
-                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <a class="btn btn-success" onclick="analyzeContent('apply')" role="button">Analyze</a>
+    </div>
+    <div class="col-md-9" style="text-align:right;">
+        <a class="btn btn-primary" onclick="" role="button">Download CSV</a>
+    </div>
+</div>
+<div class="row">
+        <div id="preview-body" style="width: 100%"></div>
+</div>
 
-			</div>
-	    </fieldset>
 {% endblock %}
