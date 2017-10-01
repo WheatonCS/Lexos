@@ -1,3 +1,4 @@
+import json
 from natsort import natsorted
 
 from flask import send_file, request, session, render_template, Blueprint
@@ -24,15 +25,25 @@ def content_analysis():
     file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels()
     files = file_manager.get_active_files()
-    print(labels)
-    analysis.add_corpus(files[0])
-    #analysis.display()
 
-    from collections import OrderedDict
-    labels = OrderedDict(natsorted(labels.items(), key=lambda x: x[1]))
+    for file in files:
+        analysis.add_corpus(file)
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
 
-        return render_template('contentanalysis.html', labels=labels,
-                               numActiveDocs=num_active_docs)
+        return render_template('contentanalysis.html')
+    else:
+        for upload_file in request.files.getlist('lemfileselect[]'):
+            analysis.add_dictionary(upload_file.filename, upload_file.read())
+        analysis.count_words()
+        analysis.generate_scores(analysis.dictionaries_labels,
+                                 ['x', 'x', 'x', 'x'], ['1', '1', '1', '1'],
+                                 ['+', '+', '+', '+'])
+        analysis.display()
+        results = [analysis.to_html()]
+        data = {"data": results}
+        data = json.dumps(data)
+        return data
+
+
