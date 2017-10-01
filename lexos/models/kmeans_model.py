@@ -15,10 +15,19 @@ from sklearn import metrics
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 
+from lexos.helpers import constants
 from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
 from lexos.models.base_model import BaseModel
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.kmeans_receiver import KmeansOption, KmeansReceiver
+
+n_init = constants.N_INIT
+max_iter = constants.MAX_ITER
+tolerance = constants.TOLERANCE
+k_value = int(np.size(labels) / 2)
+init_method = request.form['init']
 
 k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
                                        labels=labels,
@@ -30,11 +39,8 @@ k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
                                        folder_path=folder_path,
                                        metric_dist=metric_dist)
 
-if not os.path.isdir(folder_path):
-    makedirs(folder_path)
 
-
-class KmeansModel(BaseModel):
+class KmeansPCAModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
                  test_option: Optional[KmeansOption] = None):
         """This is the class to generate kmeans.
@@ -47,6 +53,18 @@ class KmeansModel(BaseModel):
         super().__init__()
         self._test_dtm = test_dtm
         self._test_option = test_option
+
+    @property
+    def _doc_term_matrix(self) -> pd.DataFrame:
+        return self._test_dtm if self._test_dtm is not None \
+            else MatrixModel().get_matrix()
+
+    @property
+    def _kmeans_option(self) -> KmeansOption:
+        return self._test_option if self._test_dtm is not None \
+            else KmeansReceiver().options_from_front_end()
+
+    def get_pca(self):
 
 
 def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
