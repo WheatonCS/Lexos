@@ -10,112 +10,74 @@ from lexos.managers.lexos_file import LexosFile
 class ContentAnalysisModel(object):
     def __init__(self):
         self.dictionaries = []
-        self.dictionaries_names = []
-        self.dictionaries_labels = []
-        self.active_dictionaries = []
-        self.dictionaries_extensions = []
-
-        self.corpora = []
-        self.corpora_names = []
-        self.corpora_labels = []
-        self.active_corpora = []
-
+        self.corpus = []
         self.counters = []
-        self.total_word_counts = []
-        self.sums = []
+        self.formulas = []
         self.scores = []
         self.average = []
 
     def add_corpus(self, file: LexosFile):
-        self.corpora_names.append(file.name)
-        self.corpora_labels.append(file.label)
         file_content = file.load_contents()
-        self.corpora.append(file_content)
-        self.total_word_counts.append(len(str(file_content).split(" ")))
-        self.active_corpora.append(1)
+        total_word_counts = len(str(file_content).split(" "))
+        self.corpus.append(File(file_content, file.name, file.label,
+                                total_word_counts))
 
-    def add_dictionary(self, file_name, content):
-        self.dictionaries_names.append(file_name)
-        self.dictionaries_labels.append(file_name)
+    def add_dictionary(self, file_name: str, content: str):
         new_list = str(content).split(", ")
         new_list = list(map(lambda x: x.lower(), new_list))
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
-        self.dictionaries.append(new_list)
-        self.active_dictionaries.append(1)
+        self.dictionaries.append(Dictionary(new_list, file_name, file_name))
 
     def delete_corpus(self, index: int):
-        del self.corpora[index]
-        del self.corpora_names[index]
-        del self.active_corpora[index]
+        del self.corpus[index]
 
     def delete_dictionary(self, index: int):
         del self.dictionaries[index]
-        del self.dictionaries_names[index]
-        del self.dictionaries_labels[index]
-        del self.active_dictionaries[index]
-        del self.dictionaries_extensions[index]
 
     def deactivate_corpus(self, index: int):
-        self.active_corpora[index] = False
+        self.corpus[index].active = False
 
     def activate_corpus(self, index: int):
-        self.active_corpora[index] = True
+        self.corpus[index].active = True
 
     def deactivate_dictionary(self, index: int):
-        self.active_dictionaries[index] = False
+        self.dictionaries[index].active = False
 
     def activate_dictionary(self, index: int):
-        self.active_dictionaries[index] = True
-
-    """def utf8_to_ascii(self, text):
-        text = text.replace(u'\u2014', '-')
-        text = text.replace(u'\u2013', '-')
-        exclude = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', ',', '.', '/', ':', ';', '<', '=', '>', '?', '@',
-                   '[', '\\', ']', '^', '_', '`', '{', '|', '}',
-                   '~']  # , u'\u2018', u'\u2019', u'\u201c', u'\u201d', u'\u2022', u'\u2026']
-        exclude.append(u'\u2018')  # '
-        exclude.append(u'\u2019')  # '
-        exclude.append(u'\u201c')  # "
-        exclude.append(u'\u201d')  # "
-        exclude.append(u'\u2022')  # bullet point
-        exclude.append(u'\u2026')  # ...
-
-        for c in exclude:  # ---------------------------------------
-            text = text.replace(c, ' ')
-        return ' '.join(text.split())"""
+        self.dictionaries[index].active = True
 
     def count_words(self):
         # delete previous results
         self.counters = []
-        corpora = self.corpora
-        for corpus in corpora:
+        for file in self.corpus:
             counts = []
             for i in range(len(self.dictionaries)):
-                if self.active_dictionaries[i]:
+                if self.dictionaries[i].active:
                     count = 0
-                    for word in self.dictionaries[i]:
-                        if corpus.startswith(word + " "):
+                    for word in self.dictionaries[i].content:
+                        if file.content.startswith(word + " "):
                             count += 1
-                        if corpus.endswith(" " + word + "\n") \
-                                or corpus.endswith(" " + word) or corpus.endswith(word):
+                        if file.content.endswith(" " + word + "\n") or \
+                            file.content.endswith(" " + word) or \
+                            file.content.endswith(word):
                             count += 1
-                        count += len(corpus.split(" " + word + " ")) - 1
+                        count += len(file.content.split(" " + word + " ")) - 1
                         if ' ' in word:
-                            corpus = corpus.replace(word, " ")
+                            file.content = file.content.replace(word, " ")
                     counts.append(count)
             self.counters.append(counts)
 
     def generate_scores(self, formula: str):
-        print(formula)
-        for i in range(len(self.corpora_names)):
+        for i in range(len(self.corpus)):
             new_formula = formula
-            for j in range(len(self.dictionaries_labels)):
-                new_formula = new_formula.replace("["+self.dictionaries_labels[j]+"]", str(self.counters[i][j]))
-            print(new_formula)
+            for j in range(len(self.dictionaries)):
+                new_formula = new_formula.replace(
+                    "[" + self.dictionaries[j].label + "]",
+                    str(self.counters[i][j]))
             result = eval(new_formula)
             self.scores.append(round(
-                float(result) / self.total_word_counts[i], 3))
-            self.sums.append(result)
+                float(result) / self.corpus[i].total_word_counts, 3))
+            self.formulas.append(result)
 
     def generate_averages(self):
         self.average = []
@@ -124,19 +86,21 @@ class ContentAnalysisModel(object):
         sums_sum = 0
         for i in range(len(self.scores)):
             scores_sum += self.scores[i]
-            total_word_counts_sum += self.total_word_counts[i]
-            sums_sum += self.sums[i]
+            total_word_counts_sum += \
+                self.corpus[i].total_word_counts
+            sums_sum += self.formulas[i]
         if len(self.scores) != 0:
-            scores_avg = round((float(scores_sum) / len(self.scores)), 3)
+            scores_avg = round(
+                (float(scores_sum) / len(self.scores)), 3)
         else:
             scores_avg = 0
-        if len(self.total_word_counts) != 0:
+        if len(self.corpus) != 0:
             total_word_counts_avg = round((float(total_word_counts_sum) /
-                                           (len(self.total_word_counts))), 1)
+                                           (len(self.corpus))), 1)
         else:
             total_word_counts_avg = 0
-        if len(self.sums) != 0:
-            sums_avg = round((float(sums_sum) / len(self.sums)), 1)
+        if len(self.formulas) != 0:
+            sums_avg = round((float(sums_sum) / len(self.formulas)), 1)
         else:
             sums_avg = 0
         cat_count = 0
@@ -154,38 +118,50 @@ class ContentAnalysisModel(object):
         self.average.append(total_word_counts_avg)
         self.average.append(scores_avg)
 
-    def to_html(self)-> str:
+    def to_html(self) -> str:
         result = "<div class='dataTables_scroll'"
         result += "<div class='dataTables_scrollHead'>"
         result += "<div class='dataTables_scrollHeadInner'>"
-        result += "<table id='analyze_table' class='table table-bordered table-striped table-condensed'>"
+        result += "<table id='analyze_table' class='table table-bordered" \
+                  " table-striped table-condensed'>"
         result += "<thead>"
-        result += "<th align='center' class='sorting_asc' aria-sort='ascending' aria-controls='statstable'>Document Names</th>"
-        for i in range(len(self.dictionaries_names)):
-            if self.active_dictionaries[i] == 1:
-                result += "<th align='center' class='sorting' aria-controls='statstable'>" +\
-                          self.dictionaries_labels[i] + "</th>"
-        result += "<th align='center' class='sorting' aria-controls='statstable'>Formula</th>"
-        result += "<th align='center' class='sorting' aria-controls='statstable'>Total Word Counts</th>"
-        result += "<th align='center' class='sorting' aria-controls='statstable'>Scores</th>"
+        result += "<th align='center' class='sorting_asc' " \
+                  "aria-sort='ascending' " \
+                  "aria-controls='statstable'>Document Names</th>"
+        for i in range(len(self.dictionaries)):
+            if self.dictionaries[i].active:
+                result += "<th align='center' class='sorting' " \
+                          "aria-controls='statstable'>" + \
+                          self.dictionaries[i].label + "</th>"
+        result += "<th align='center' class='sorting' " \
+                  "aria-controls='statstable'>Formula</th>"
+        result += "<th align='center' class='sorting' " \
+                  "aria-controls='statstable'>Total Word Counts</th>"
+        result += "<th align='center' class='sorting' " \
+                  "aria-controls='statstable'>Scores</th>"
         result += "</tr></thead>"
-        #result += "</table>"
+        # result += "</table>"
         result += "</div></div>"
 
-        result += "<div class='dataTables_scrollBody' style='position: relative; overflow: auto; max-height: 370px; width: 100%;'>"
-        #result += "<table id ='statstable' class='table table-bordered table-striped table-condensed dataTable no-footer' role='grid' aria-describedby='statstable_info' style='width: 100%;'>"
+        result += "<div class='dataTables_scrollBody' style='position: " \
+                  "relative; overflow: auto; max-height: 370px; " \
+                  "width: 100%;'>"
+        # result += "<table id ='statstable' class='table table-bordered " \
+        #           "table-striped table-condensed dataTable no-footer' " \
+        #           "role='grid' aria-describedby='statstable_info' " \
+        #           "style='width: 100%;'>"
         result += "<tr>"
-        for i in range(len(self.corpora_names)):
-            if self.active_corpora[i] == 1:
+        for i in range(len(self.corpus)):
+            if self.corpus[i].active:
                 result += "</tr>"
                 if i % 2 == 0:
                     result += "<tr id='even'>"
                 else:
                     result += "<tr id='odd'>"
-                result += "<td align='center'>" +\
-                          self.corpora_labels[i] + "</td>"
-                for counts in self.counters[i] + [self.sums[i]] +\
-                        [self.total_word_counts[i]] + [self.scores[i]]:
+                result += "<td align='center'>" + \
+                          self.corpus[i].label + "</td>"
+                for counts in self.counters[i] + [self.formulas[i]] + \
+                    [self.corpus[i].total_word_counts] + [self.scores[i]]:
                     result += "<td align='center'>" + str(counts) + "</td>"
         result += "</tr><tr>"
         for x in range(len(self.average)):
@@ -198,18 +174,23 @@ class ContentAnalysisModel(object):
         df = self.generate_data_frame()
         print(df)
 
-    def generate_data_frame(self)-> pd.DataFrame:
-        columns = ['file'] + self.dictionaries_labels +\
-                  ['formula', 'total_word_count', 'score']
-        indices = self.corpora_labels + ['averages']
+    def generate_data_frame(self) -> pd.DataFrame:
+        columns = ['file']
+        for dictionary in self.dictionaries:
+            columns.append(dictionary.label)
+        columns += ['formula', 'total_word_count', 'score']
+        indices = []
+        for file in self.corpus:
+            indices.append(file.label)
+        indices += ['averages']
         df = pd.DataFrame(columns=range(len(columns)),
                           index=range(len(indices)))
-        for i in range(len(self.corpora_labels)):
-            df.xs(i)[0] = self.corpora_labels[i]
+        for i in range(len(self.corpus)):
+            df.xs(i)[0] = self.corpus[i].label
             for j in range(len(self.counters[i])):
                 df.xs(i)[j + 1] = self.counters[i][j]
-            df.xs(i)[j + 2] = self.sums[i]
-            df.xs(i)[j + 3] = self.total_word_counts[i]
+            df.xs(i)[j + 2] = self.formulas[i]
+            df.xs(i)[j + 3] = self.corpus[i].total_word_counts
             df.xs(i)[j + 4] = self.scores[i]
         for j in range(len(self.average)):
             df.xs(i + 1)[j] = self.average[j]
@@ -229,31 +210,31 @@ class ContentAnalysisModel(object):
         csv_file.close()
 
 
-def read_txt(file_path: str):
-    try:
-        with open(file_path, 'r') as txt_file:
-            text = txt_file.read().decode("latin")
-            return unicodedata.normalize(
-                'NFKD', text).encode('ascii', 'ignore')
-    except IOError:
-        print("could not read", file_path)
+"""class Document(object):
+
+    @property
+    def active(self):
+        return self._active
+
+    @active.setter
+    def active(self, active):
+        self._active = active"""
 
 
-def read_csv(file_path: str):
-    result = ""
-    try:
-        with open(file_path, 'rb') as csv_file:
-            spam_reader = csv.reader(csv_file, delimiter=',')
-            for row in spam_reader:
-                result += ', '.join(row)
-        return result
-    except IOError:
-        print("could not read", file_path)
+class Dictionary(object):
+    def __init__(self, content: list, filename: str, label: str,
+                 active: bool = True):
+        self.content = content
+        self.names = filename
+        self.label = label
+        self.active = active
 
 
-def read_docx(file_path):
-    document = Document(file_path)
-    text = ""
-    for para in document.paragraphs:
-        text += para.text
-    return text.encode("utf-8")
+class File(object):
+    def __init__(self, content: str, filename: str, label: str,
+                 total_word_counts: str, active: bool = True):
+        self.content = content
+        self.names = filename
+        self.label = label
+        self.active = active
+        self.total_word_counts = total_word_counts
