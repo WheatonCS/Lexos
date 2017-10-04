@@ -105,49 +105,17 @@ class ContentAnalysisModel(object):
                     counts.append(count)
             self.counters.append(counts)
 
-    def generate_scores(self, labels: list, op1_list: list, quantities: list,
-                        op2_list: list):
-        #may not need labels
-        index = 0
-        self.sums = []
-        self.scores = []
-        for i in range(len(op1_list)):
-            if op1_list[i] == 'x':
-                op1_list[i] = '*'
-            if op2_list[i] == 'x':
-                op2_list[i] = '*'
-        # find better fix
-        temp = op2_list[0]
-        for j in range(1, len(op2_list)):
-            op2_list[j - 1] = op2_list[j]
-        op2_list[-1] = temp
-        if len(labels) > 0:
-            for i in range(len(self.counters)):
-                sum = 0
-                for x in range(len(self.counters[i])):
-                    next = op2_list[x]
-                    if self.counters[i][x] != 0:
-                        op = eval(str(float(self.counters[i][x])) +
-                                  op1_list[x] + (quantities[x]))
-                    else:
-                        op = 0
-                    self.counters[i][x] = op
-                    sum = eval(str(float(sum)) + next + str(op))
-                self.scores.append(round(
-                    float(sum) / self.total_word_counts[index], 3))
-                self.sums.append(sum)
-                index += 1
-        else:
-            for counts in self.counters:
-                sum = 0
-                index = 0
-                for count in counts:
-                    sum += count
-                self.scores.append(round(
-                    float(sum) / self.total_word_counts[index], 1))
-                self.sums.append(float(sum))
-                index += 1
-        self.generate_averages()
+    def generate_scores(self, formula: str):
+        print(formula)
+        for i in range(len(self.corpora_names)):
+            new_formula = formula
+            for j in range(len(self.dictionaries_labels)):
+                new_formula = new_formula.replace("["+self.dictionaries_labels[j]+"]", str(self.counters[i][j]))
+            print(new_formula)
+            result = eval(new_formula)
+            self.scores.append(round(
+                float(result) / self.total_word_counts[i], 3))
+            self.sums.append(result)
 
     def generate_averages(self):
         self.average = []
@@ -187,16 +155,26 @@ class ContentAnalysisModel(object):
         self.average.append(scores_avg)
 
     def to_html(self)-> str:
-        result = "<table id='analyze_table'><tr id='header'>"
-        result += "<td align='center'>Files</td>"
+        result = "<div class='dataTables_scroll'"
+        result += "<div class='dataTables_scrollHead'>"
+        result += "<div class='dataTables_scrollHeadInner'>"
+        result += "<table id='analyze_table' class='table table-bordered table-striped table-condensed'>"
+        result += "<thead>"
+        result += "<th align='center' class='sorting_asc' aria-sort='ascending' aria-controls='statstable'>Document Names</th>"
         for i in range(len(self.dictionaries_names)):
             if self.active_dictionaries[i] == 1:
-                result += "<td align='center'>" +\
-                          self.dictionaries_labels[i] + "</td>"
-        result += "<td align='center'>Formula</td>"
-        result += "<td align='center'>Total Word Counts</td>"
-        result += "<td align='center'>Scores</td>"
-        result += "</tr><tr>"
+                result += "<th align='center' class='sorting' aria-controls='statstable'>" +\
+                          self.dictionaries_labels[i] + "</th>"
+        result += "<th align='center' class='sorting' aria-controls='statstable'>Formula</th>"
+        result += "<th align='center' class='sorting' aria-controls='statstable'>Total Word Counts</th>"
+        result += "<th align='center' class='sorting' aria-controls='statstable'>Scores</th>"
+        result += "</tr></thead>"
+        #result += "</table>"
+        result += "</div></div>"
+
+        result += "<div class='dataTables_scrollBody' style='position: relative; overflow: auto; max-height: 370px; width: 100%;'>"
+        #result += "<table id ='statstable' class='table table-bordered table-striped table-condensed dataTable no-footer' role='grid' aria-describedby='statstable_info' style='width: 100%;'>"
+        result += "<tr>"
         for i in range(len(self.corpora_names)):
             if self.active_corpora[i] == 1:
                 result += "</tr>"
@@ -213,6 +191,7 @@ class ContentAnalysisModel(object):
         for x in range(len(self.average)):
             result += "<td align='center'>" + str(self.average[x]) + "</td>"
         result += "</tr></table>"
+        result += "</div></div>"
         return result
 
     def display(self):

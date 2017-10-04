@@ -31,19 +31,40 @@ def content_analysis():
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-
         return render_template('contentanalysis.html')
     else:
-        for upload_file in request.files.getlist('lemfileselect[]'):
-            analysis.add_dictionary(upload_file.filename, upload_file.read())
+        for i in range(len(session['dictionary_names'])):
+            analysis.add_dictionary(session['dictionary_names'][i], session['dictionary_contents'][i])
+
         analysis.count_words()
-        analysis.generate_scores(analysis.dictionaries_labels,
-                                 ['x', 'x', 'x', 'x'], ['1', '1', '1', '1'],
-                                 ['+', '+', '+', '+'])
-        analysis.display()
-        results = [analysis.to_html()]
-        data = {"data": results}
+        analysis.generate_scores(session['formula'])
+        analysis.generate_averages()
+        data = {"data": [analysis.to_html()]}
+        data["dictionary_labels"] = analysis.dictionaries_labels
         data = json.dumps(data)
         return data
 
+# Tells Flask to load this function when someone is at '/getdictlabels'
+@content_analysis_view.route("/uploaddictionaries", methods=["GET", "POST"])
+def upload_dictionaries():
+    session['dictionary_contents'] = []
+    session['dictionary_names'] = []
+    for upload_file in request.files.getlist('lemfileselect[]'):
+        filename = upload_file.filename
+        content = upload_file.read()
+        session['dictionary_contents'].append(content)
+        session['dictionary_names'].append(filename)
+    data = {"dictionary_labels": session['dictionary_names']}
+    data = json.dumps(data)
+    return data
 
+# Tells Flask to load this function when someone is at '/saveformula'
+@content_analysis_view.route("/saveformula", methods=["GET", "POST"])
+def save_formula():
+    formula = request.json['calc_input']
+    formula = formula.replace("√", "sqrt").replace("^", "**")
+    session['formula'] = formula
+    if formula.count("(") != formula.count(")") or \
+        formula.count("[") != formula.count("]"):
+        return "error"
+    return "success"
