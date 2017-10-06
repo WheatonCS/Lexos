@@ -289,8 +289,10 @@ def scrub_select_apos(text: str) -> str:
     :return: The text string, now with only internal apostrophes.
     """
 
-    # If one or more apos. preceded by a whitespace character: (?<=[\s])'+
-    # OR one or more apos. followed by a whitespace character: |'+(?=[\s])
+    # If one or more apos. preceded by beginning of string or whitespace:
+    #     (?:^|(?<=\s))'+
+    # OR one or more apos. followed by whitespace or end of string:
+    #     |'+(?=\s|$)
 
     # Using " " to represent whitespace, "w" to represent a word
     #     character, and "***" to represent any sequence of any characters,
