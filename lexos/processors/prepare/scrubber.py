@@ -304,7 +304,7 @@ def scrub_select_apos(text: str) -> str:
     # Consecutive apostrophes are treated as one, to avoid odd behavior
     # (Ex. "test'' ''' ''test" => "test' ' 'test" is undesirable)
 
-    pattern = re.compile(r"(?<=[\s])'+|'+(?=[\s])", re.UNICODE)
+    pattern = re.compile(r"(?:^|(?<=\s))'+|'+(?=\s|$)", re.UNICODE)
 
     # apply the pattern to replace all external or floating apos with
     # empty strings

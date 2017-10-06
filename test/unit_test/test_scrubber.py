@@ -581,11 +581,11 @@ class TestScrubSelectApos:
 
     def test_scrub_select_apos(self):
         assert scrub_select_apos(
-            text="Tes't test' ' 'test tes''t test'' '' ''test") == \
+            text="'Tes't test' ' 'test tes''t test'' '' ''test''") == \
             "Tes't test  test tes''t test  test"
         assert scrub_select_apos(text="Test test") == "Test test"
         assert scrub_select_apos(text="' ") == " "
-        assert scrub_select_apos(text="'") == "'"
+        assert scrub_select_apos(text="'") == ""
         assert scrub_select_apos(text="") == ""
 
 
