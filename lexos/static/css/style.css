@@ -1843,6 +1843,11 @@ select#orientation {
   line-height: 34px;
 }
 
+#dendrogram-result {
+  width: max-content;
+  margin-right: auto;
+  margin-left: auto;
+}
 
 
 /* ================== K MEANS STYLING ==================== */
