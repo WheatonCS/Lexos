@@ -566,6 +566,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# mypy cache
+.mypy_cache
+
 ### Node template
 # Logs
 logs
