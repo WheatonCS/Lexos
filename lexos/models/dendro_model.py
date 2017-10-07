@@ -62,8 +62,9 @@ class DendrogramModel(BaseModel):
 
         :return: a div
         """
+        figure = self._get_dendrogram_fig()
 
-        div = plot(self._get_dendrogram_fig(),
+        div = plot(figure,
                    show_link=False, output_type="div", include_plotlyjs=False)
 
         return div
