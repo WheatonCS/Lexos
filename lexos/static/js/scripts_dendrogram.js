@@ -21,7 +21,6 @@ $(document).ready(function () {
                 'dataType': 'json',
                 'data': JSON.stringify(form),
                 'complete': function (response) {
-                    console.log(response.responseText)
                     $('#dendrogram-result').html(response.responseText)
                 }
             }
