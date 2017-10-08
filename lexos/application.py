@@ -2,7 +2,6 @@ import json
 import os
 import re
 import time
-import traceback
 
 from flask import Flask, request, render_template
 from jinja2 import evalcontextfilter
