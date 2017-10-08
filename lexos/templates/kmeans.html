@@ -184,14 +184,14 @@ font-size:13px;}
 			<div class="col-md-7">
 <!-- 			<div class="kmeansresultsRight">
  -->			{% if request.form['viz']=='PCA' %}
-			<!--<img id="kmeansimage" src="{{url_for('k_means_image')}}?{{ range(10000)|random }}"/>
+			<!--<img id="kmeansimage" src="{{url_for('cluster.k_means_image')}}?{{ range(10000)|random }}"/>
 
                 <div class="imageLinkBtn">
 				<a href="#" class="imageLink" target="_blank"></a>
 			</div>-->
 			<div class="PCAImage" name="{{ degenerated }}">{{ degenerated }}
-                {% set small_plotly = url_for('small_pca')~"?"~range(10000)|random -%}
-                {% set big_plotly = url_for('big_pca')~"?"~range(10000)|random -%}
+                {% set small_plotly = url_for('cluster.small_pca')~"?"~range(10000)|random -%}
+                {% set big_plotly = url_for('cluster.big_pca')~"?"~range(10000)|random -%}
 
                     <input id="plotlyID" type="hidden" value="{{ small_plotly }}">
                     <iframe class="imageLink" id="plotlyFrame" src="{{ small_plotly }}" style="min-height:470px;min-width:520px;border:1px solid #000;border-radius:3px;margin:0 auto;"></iframe>

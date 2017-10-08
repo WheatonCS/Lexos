@@ -580,176 +580,130 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
         inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
-def generate_k_means_pca(file_manager: FileManager):
+def generate_k_means_pca(file_manager: FileManager) -> KMeans.GetKMeansPca:
+    """Generates a table of cluster number and file name from the active files.
+
+    :param file_manager: A FileManager object (see managers/file_manager.py)
+    :return: a class object that contains all the analyzed data and information
+             see analyze/Kmeans.py/GetKMeansPca class for more.
     """
-    Generates a table of cluster_number and file name from the active files.
-
-    Args:
-        None
-
-    Returns:
-        kmeans_index: a list of index of the closest center of the file
-        siltt_score: a float of silhouette score based on KMeans algorithm
-        file_name_str: a string of file names, separated by '#'
-        k_value: an int of the number of K from input
-    """
-
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_deprec()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
-        grey_word=grey_word,
-        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
-    del count_matrix[0]
-    for row in count_matrix:
-        del row[0]
+    # grab data
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
 
-    matrix = np.array(count_matrix)
-
-    # Gets options from request.form and uses options to generate the K-mean
-    # results
-    k_value = len(file_manager.get_active_files()) / 2  # default K value
-    max_iter = 300  # default number of iterations
+    # gets options for generating the K-mean results
+    # sets all values as default
+    n_init = constants.N_INIT
+    max_iter = constants.MAX_ITER
+    tolerance = constants.TOLERANCE
+    k_value = int(np.size(labels) / 2)
     init_method = request.form['init']
-    n_init = 300
-    tolerance = 1e-4
 
-    if (request.form['nclusters'] != '') and (
-            int(request.form['nclusters']) != k_value):
+    # gets possible existing values from request.form
+    if request.form['nclusters'] != '':
         k_value = int(request.form['nclusters'])
-    if (request.form['max_iter'] != '') and (
-            int(request.form['max_iter']) != max_iter):
+    if request.form['max_iter'] != '':
         max_iter = int(request.form['max_iter'])
     if request.form['n_init'] != '':
         n_init = int(request.form['n_init'])
     if request.form['tolerance'] != '':
         tolerance = float(request.form['tolerance'])
-
     metric_dist = request.form['KMeans_metric']
 
-    file_name_list = []
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                file_name_list.append(l_file.label)
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                file_name_list.append(new_label)
-
-    file_name_str = file_name_list[0]
-
-    for i in range(1, len(file_name_list)):
-        file_name_str += "#" + file_name_list[i]
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
+    folder_path = path_join(session_manager.session_folder(),
+                            constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    kmeans_index, siltt_score, color_chart = KMeans.get_k_means_pca(
-        matrix, k_value, max_iter, init_method, n_init, tolerance, metric_dist,
-        file_name_list, folder_path)
+    k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
+                                           labels=labels,
+                                           n_init=n_init,
+                                           k_value=k_value,
+                                           max_iter=max_iter,
+                                           tolerance=tolerance,
+                                           init_method=init_method,
+                                           folder_path=folder_path,
+                                           metric_dist=metric_dist)
+    k_means_pca_data.draw_graph()
 
-    return kmeans_index, siltt_score, file_name_str, k_value, color_chart
+    return k_means_pca_data
 
 
-# Gets called from kmeans() in lexos_core.py
+def generate_k_means_voronoi(file_manager: FileManager) -> \
+        KMeans.GetKMeansVoronoi:
+    """Generates a table of cluster number and file name from the active files.
 
-
-def generate_k_means_voronoi(file_manager: FileManager):
+    :param file_manager: A FileManager object (see managers/file_manager.py).
+    :return: a class object that contains all the analyzed data and information
+             see analyze/Kmeans.py/GetKmeansVoronoi class for more.
     """
-    Generates a table of cluster_number and file name from the active files.
-
-    Args:
-        None
-
-    Returns:
-        kmeans_index: a list of index of the closest center of the file
-        siltt_score: a float of silhouette score based on KMeans algorithm
-        file_name_str: a string of file names, separated by '#'
-        k_value: an int of the number of K from input
-    """
-
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_deprec()
 
-    count_matrix = file_manager.get_matrix_deprec(
+    dtm_data = file_manager.get_matrix(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
-        grey_word=grey_word,
-        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
-    del count_matrix[0]
-    for row in count_matrix:
-        del row[0]
+    # grab data
+    count_matrix = dtm_data.values
+    labels = dtm_data.index.values
 
-    matrix = np.array(count_matrix)
-
-    # Gets options from request.form and uses options to generate the K-mean
-    # results
-    k_value = len(file_manager.get_active_files()) / 2  # default K value
-    max_iter = 300  # default number of iterations
+    # gets options for generating the K-mean results
+    # sets all values as default
+    n_init = constants.N_INIT
+    max_iter = constants.MAX_ITER
+    tolerance = constants.TOLERANCE
+    k_value = int(np.size(labels) / 2)
     init_method = request.form['init']
-    n_init = 300
-    tolerance = 1e-4
 
-    if (request.form['nclusters'] != '') and (
-            int(request.form['nclusters']) != k_value):
+    # gets possible existing values from request.form
+    if request.form['nclusters'] != '':
         k_value = int(request.form['nclusters'])
-    if (request.form['max_iter'] != '') and (
-            int(request.form['max_iter']) != max_iter):
+    if request.form['max_iter'] != '':
         max_iter = int(request.form['max_iter'])
     if request.form['n_init'] != '':
         n_init = int(request.form['n_init'])
     if request.form['tolerance'] != '':
         tolerance = float(request.form['tolerance'])
-
     metric_dist = request.form['KMeans_metric']
 
-    file_name_list = []
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                file_name_list.append(l_file.label)
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                file_name_list.append(new_label)
-    file_name_str = file_name_list[0]
-
-    for i in range(1, len(file_name_list)):
-        file_name_str += "#" + file_name_list[i]
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
+    folder_path = path_join(session_manager.session_folder(),
+                            constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    kmeans_index, siltt_score, color_chart, final_points_list, \
-        final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
-            matrix, k_value, max_iter, init_method, n_init, tolerance,
-            metric_dist, file_name_list)
+    # generates the data
+    k_means_voronoi_data = KMeans.GetKMeansVoronoi(count_matrix=count_matrix,
+                                                   labels=labels,
+                                                   n_init=n_init,
+                                                   k_value=k_value,
+                                                   max_iter=max_iter,
+                                                   tolerance=tolerance,
+                                                   init_method=init_method,
+                                                   metric_dist=metric_dist)
 
-    return kmeans_index, siltt_score, file_name_str, k_value, color_chart, \
-        final_points_list, final_centroids_list, text_data, max_x
+    return k_means_voronoi_data
 
 
 def generate_rwa(file_manager: FileManager):
