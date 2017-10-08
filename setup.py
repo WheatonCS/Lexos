@@ -1,6 +1,7 @@
 """This file is used for pip install"""
 
 from setuptools import setup, find_packages
+
 from proj_info import SHORT_NAME, VERSION, ABOUT_URL, AUTHOR, LICENSE_TYPE, \
     SHORT_DESCRIPTION, LONG_DESCRIPTION
 
@@ -14,12 +15,6 @@ setup(
     long_description=LONG_DESCRIPTION,
     packages=find_packages('.'),
     include_package_data=True,
-    packages=find_packages(),
-    entry_points={
-        'console_scripts': [
-            'lexos = lexos.application:run'
-        ]
-    },
     zip_safe=False,
     platforms='any',
     install_requires=[
