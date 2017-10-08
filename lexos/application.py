@@ -123,8 +123,7 @@ def unhandled_exception(error):
 
     # if flask raises this error
     else:
-        app.logger.error(traceback.format_exc())
-        return render_template("500.html")
+        raise error
 
 
 if __name__ == '__main__':
