@@ -6,11 +6,12 @@ import time
 import traceback
 
 from flask import Flask, request, render_template
+
+from flask import Flask
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
 import lexos.helpers.constants
-from lexos.helpers.exceptions import LexosException
 from lexos.interfaces.base_interface import base_view
 from lexos.interfaces.bubble_viz_interface import viz_view
 from lexos.interfaces.clustering_interface import cluster_view
