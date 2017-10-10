@@ -59,7 +59,10 @@ def handle_special_characters(text: str) -> str:
 
     char_set = request.form['entityrules']
 
-    if char_set == 'doe-sgml':
+    if char_set == 'default':
+        return text
+
+    elif char_set == 'doe-sgml':
         conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
                            '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
                            '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
