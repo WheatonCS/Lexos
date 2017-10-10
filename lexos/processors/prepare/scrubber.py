@@ -385,23 +385,26 @@ def get_remove_punctuation_map(
         removed mapped to None.
     """
 
-    punctuation_filename = os.path.join(
-        constants.UPLOAD_FOLDER, "cache/punctuationmap.p")  # Localhost path
+    punctuation_folder = os.path.join(constants.UPLOAD_FOLDER, "cache/")
+    punctuation_filename = "punctuationmap.p"
 
     # Map of punctuation to be removed
-    if os.path.exists(punctuation_filename):
-        remove_punctuation_map = pickle.load(open(punctuation_filename, 'rb'))
-    else:
+    remove_punctuation_map = load_character_deletion_map(
+        punctuation_folder, punctuation_filename)
+
+    if remove_punctuation_map == "":
         # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = get_all_punctuation_map()
 
         try:
-            store_path = os.path.dirname(punctuation_filename)
+            store_path = os.path.dirname(
+                punctuation_folder + punctuation_filename)
             os.makedirs(store_path)
         except FileExistsError:
             pass
         pickle.dump(    # Save punctuation file
-            remove_punctuation_map, open(punctuation_filename, 'wb'))
+            remove_punctuation_map, open(
+                punctuation_folder + punctuation_filename, 'wb'))
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
@@ -436,17 +439,16 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
         mapped to None.
     """
 
-    digit_filename = os.path.join(
-        constants.UPLOAD_FOLDER, "cache/digitmap.p")  # Relative localhost path
+    digit_folder = os.path.join(constants.UPLOAD_FOLDER, "cache/")
+    digit_filename = "digitmap.p"
 
-    # if digit map has already been generated
-    if os.path.exists(digit_filename):
-        # open the digit map for further use
-        remove_digit_map = pickle.load(open(digit_filename, 'rb'))
-    else:
+    # Map of digits to be removed
+    remove_digit_map = load_character_deletion_map(
+        digit_folder, digit_filename)
 
-        # Generate the digit map with all unicode characters that start with
-        # the category 'N'
+    if remove_digit_map == "":
+        # If the digit map does not already exist, generate it with all
+        # unicode characters that start with the category 'N'
         # See http://www.fileformat.info/info/unicode/category/index.htm for
         # the list of categories
         remove_digit_map = dict.fromkeys(
@@ -455,13 +457,13 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
 
     try:
         # Try making a directory for saving the file if it doesn't exist
-        store_path = os.path.dirname(digit_filename)
+        store_path = os.path.dirname(digit_folder + digit_filename)
         os.makedirs(store_path)  # Make a directory with store_path as input
     except FileExistsError:
         pass
 
     # Store the digit map
-    pickle.dump(remove_digit_map, open(digit_filename, 'wb'))
+    pickle.dump(remove_digit_map, open(digit_folder + digit_filename, 'wb'))
 
     return remove_digit_map
 
@@ -606,8 +608,8 @@ def get_remove_whitespace_map(
     return remove_whitespace_map
 
 
-def save_scrub_optional_upload(file_string: str, storage_folder: str,
-                               filename: str):
+def save_character_deletion_map(file_string: str, storage_folder: str,
+                                filename: str):
     """Saves the contents of a file into the storage folder.
 
     :param file_string: A string representing a whole file to be saved.
@@ -621,8 +623,39 @@ def save_scrub_optional_upload(file_string: str, storage_folder: str,
         contents=file_string, dest_folder=storage_folder, filename=filename)
 
 
-def load_scrub_optional_upload(storage_folder: str, filename: str) -> str:
+def load_character_deletion_map(storage_folder: str,
+                                filename: str) -> Dict[int, type(None)]:
     """Loads a file string that was previously saved in the storage folder.
+
+    :param storage_folder: A string representing the path of the storage
+        folder.
+    :param filename: A string representing the name of the file that is being
+        loaded.
+    :return: The file string that was saved in the folder (empty if there is
+        no string to load).
+    """
+
+    return general_functions.load_file_from_disk(loc_folder=storage_folder,
+                                                 filename=filename)
+
+
+def save_scrub_optional_upload(file_string: str, storage_folder: str,
+                               filename: str):
+    """Saves the contents of a user option file into the storage folder.
+
+    :param file_string: A string representing a whole file to be saved.
+    :param storage_folder: A string representing the path of the storage
+        folder.
+    :param filename: A string representing the name of the file that is being
+        saved.
+    """
+
+    general_functions.write_file_to_disk(
+        contents=file_string, dest_folder=storage_folder, filename=filename)
+
+
+def load_scrub_optional_upload(storage_folder: str, filename: str) -> str:
+    """Loads a option file that was previously saved in the storage folder.
 
     :param storage_folder: A string representing the path of the storage
         folder.
