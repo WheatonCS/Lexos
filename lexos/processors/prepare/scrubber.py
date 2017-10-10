@@ -62,12 +62,11 @@ def handle_special_characters(text: str) -> str:
         return text
 
     elif char_set == 'doe-sgml':
-        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                           '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
-                           '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
-                           '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
-                           '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
-                           '&amacron;': 'ā', '&cmacron;': 'c̄',
+        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
+                           '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę',
+                           '&oe;': 'œ', '&amp;': '⁊', '&egrave;': 'è',
+                           '&eacute;': 'é', '&auml;': 'ä', '&ouml;': 'ö',
+                           '&uuml;': 'ü', '&amacron;': 'ā', '&cmacron;': 'c̄',
                            '&emacron;': 'ē', '&imacron;': 'ī',
                            '&nmacron;': 'n̄', '&omacron;': 'ō',
                            '&pmacron;': 'p̄', '&qmacron;': 'q̄',
