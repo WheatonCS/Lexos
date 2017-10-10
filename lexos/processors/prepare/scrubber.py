@@ -817,8 +817,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 0. Gutenberg --------------------------------------------------------
 
-    # gutenberg is True if LexosFile finds the (case-sensitive) string
-    # "Project Gutenberg" in the text
+    # gutenberg is True if LexosFile finds the (case-sensitive) string:
+    #     "\*\*\* START OF THIS PROJECT GUTENBERG" + <Some title> + "\*\*\*"
     if gutenberg:
         text = handle_gutenberg(text)
 
