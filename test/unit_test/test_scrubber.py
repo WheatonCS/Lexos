@@ -607,8 +607,7 @@ class TestConsolidateAmpers:
     def test_consolidate_ampers(self):
         assert consolidate_ampers(
             text="Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
-            "test\u0026 \uFF06") == "Tes&t test& & &test tes&&t " \
-                                              "test& &"
+            "test\u0026 \uFF06") == "Tes&t test& & &test tes&&t test& &"
         assert consolidate_ampers(text="Test test") == "Test test"
         assert consolidate_ampers(text="") == ""
 

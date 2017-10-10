@@ -330,8 +330,8 @@ def consolidate_hyphens(text: str) -> str:
 
     hyphen_values = dict.fromkeys(
         [chr(i) for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('Pd')  # All hyphens/dashes
-         and chr(i) != chosen_hyphen_value])
+         if unicodedata.category(chr(i)).startswith('Pd') and  # All hyphens/
+         chr(i) != chosen_hyphen_value])                       # dashes
 
     # convert all those types of hyphens into the ascii minus
     for value in hyphen_values:
@@ -353,11 +353,11 @@ def consolidate_ampers(text: str) -> str:
         [chr(i) for i in range(sys.maxunicode)
          # Avoid unnamed control chars throwing ValueErrors
          if (unicodedata.category(chr(i)).startswith('P') or
-             unicodedata.category(chr(i)).startswith('S'))
-         and re.search(
+             unicodedata.category(chr(i)).startswith('S')) and
+         re.search(
             r" ampersand|ampersand ", unicodedata.name(chr(i)),
-            re.IGNORECASE) is not None
-         and chr(i) != chosen_amper_value])
+            re.IGNORECASE) is not None and
+         chr(i) != chosen_amper_value])
 
     # Change all ampersands to one type of ampersand
     for value in amper_values:
