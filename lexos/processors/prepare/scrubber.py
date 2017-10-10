@@ -393,12 +393,12 @@ def get_remove_punctuation_map(
         remove_punctuation_map = get_all_punctuation_map()
 
         try:
-            cache_path = os.path.dirname(punctuation_filename)
-            os.makedirs(cache_path)
+            store_path = os.path.dirname(punctuation_filename)
+            os.makedirs(store_path)
         except FileExistsError:
             pass
-        pickle.dump(
-            remove_punctuation_map, open(punctuation_filename, 'wb'))  # Cache
+        pickle.dump(    # Save punctuation file
+            remove_punctuation_map, open(punctuation_filename, 'wb'))
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
@@ -451,37 +451,38 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
              if unicodedata.category(chr(i)).startswith('N')])
 
     try:
-        # try making a directory for caching if it doesn't exist
-        cache_path = os.path.dirname(digit_filename)
-        os.makedirs(cache_path)  # make a directory with cache_path as input
+        # Try making a directory for saving the file if it doesn't exist
+        store_path = os.path.dirname(digit_filename)
+        os.makedirs(store_path)  # Make a directory with store_path as input
     except FileExistsError:
         pass
 
-    # cache the digit map
+    # Store the digit map
     pickle.dump(remove_digit_map, open(digit_filename, 'wb'))
 
     return remove_digit_map
 
 
 def handle_file_and_manual_strings(file_string: str, manual_string: str,
-                                   cache_folder: str,
-                                   cache_filenames: List[str],
-                                   cache_number: int) -> str:
-    """Caches uploaded files and merges file strings with manual strings.
+                                   storage_folder: str,
+                                   storage_filenames: List[str],
+                                   storage_number: int) -> str:
+    """Saves uploaded files and merges file strings with manual strings.
 
     :param file_string: The user's uploaded file.
     :param manual_string: The input from a text field.
-    :param cache_folder: A string representing the path of the cache folder.
-    :param cache_filenames: A list of filename strings that will be used to
+    :param storage_folder: A string representing the path of the storage
+        folder.
+    :param storage_filenames: A list of filename strings that will be used to
         load and save the user's sw/kw input.
-    :param cache_number: The index of the relevant file in cache_filenames.
+    :param storage_number: The index of the relevant file in storage_filenames.
     :return: The combination of the text field and file strings.
     """
 
     if file_string:
         save_scrub_optional_upload(file_string=file_string,
-                                   cache_folder=cache_folder,
-                                   filename=cache_filenames[cache_number])
+                                   storage_folder=storage_folder,
+                                   filename=storage_filenames[storage_number])
     merged_string = file_string + "\n" + manual_string
 
     return merged_string
@@ -602,31 +603,33 @@ def get_remove_whitespace_map(
     return remove_whitespace_map
 
 
-def save_scrub_optional_upload(file_string: str, cache_folder: str,
+def save_scrub_optional_upload(file_string: str, storage_folder: str,
                                filename: str):
-    """Saves the contents of a file into the cache folder.
+    """Saves the contents of a file into the storage folder.
 
     :param file_string: A string representing a whole file to be saved.
-    :param cache_folder: A string representing the path of the cache folder.
+    :param storage_folder: A string representing the path of the storage
+        folder.
     :param filename: A string representing the name of the file that is being
         saved.
     """
 
     general_functions.write_file_to_disk(
-        contents=file_string, dest_folder=cache_folder, filename=filename)
+        contents=file_string, dest_folder=storage_folder, filename=filename)
 
 
-def load_scrub_optional_upload(cache_folder: str, filename: str) -> str:
-    """Loads a file string that was previously saved in the cache folder.
+def load_scrub_optional_upload(storage_folder: str, filename: str) -> str:
+    """Loads a file string that was previously saved in the storage folder.
 
-    :param cache_folder: A string representing the path of the cache folder.
+    :param storage_folder: A string representing the path of the storage
+        folder.
     :param filename: A string representing the name of the file that is being
         loaded.
-    :return: The file string that was saved in the cache folder (empty if
-        there is no string to load).
+    :return: The file string that was saved in the folder (empty if there is
+        no string to load).
     """
 
-    return general_functions.load_file_from_disk(loc_folder=cache_folder,
+    return general_functions.load_file_from_disk(loc_folder=storage_folder,
                                                  filename=filename)
 
 
@@ -674,19 +677,20 @@ def handle_gutenberg(text: str) -> str:
 
 
 def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
-                               cache_options: List[str], cache_folder: str,
-                               cache_filenames: List[str]) -> (str, str, str,
-                                                               str, str, str,
-                                                               str, str):
+                               storage_options: List[str], storage_folder: str,
+                               storage_filenames: List[str]) -> (str, str, str,
+                                                                 str, str, str,
+                                                                 str, str):
     """Gathers all the strings used by the "Additional Options" scrub section.
 
     :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
         containing the additional scrubbing option files that have been
         uploaded.
-    :param cache_options: A list of strings representing additional options
+    :param storage_options: A list of strings representing additional options
         that have been chosen by the user.
-    :param cache_folder: A string representing the path of the cache folder.
-    :param cache_filenames: A list of filename strings that will be used to
+    :param storage_folder: A string representing the path of the storage
+        folder.
+    :param storage_filenames: A list of filename strings that will be used to
         load and save the user's selections.
     :return: An array containing strings of all the additional scrubbing
         option text fields and files.
@@ -698,9 +702,9 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
             file_content = opt_uploads[key].read()
             file_strings[index] = general_functions.decode_bytes(file_content)
             opt_uploads[key].seek(0)
-        elif key.strip('[]') in cache_options:
+        elif key.strip('[]') in storage_options:
             file_strings[index] = load_scrub_optional_upload(
-                cache_folder, cache_filenames[index])
+                storage_folder, storage_filenames[index])
         else:
             session['scrubbingoptions']['optuploadnames'][key] = ''
             file_strings[index] = ""
@@ -720,8 +724,8 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
           white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
-          opt_uploads: Dict[str, FileStorage], cache_options: List[str],
-          cache_folder: str, previewing: bool = False) -> str:
+          opt_uploads: Dict[str, FileStorage], storage_options: List[str],
+          storage_folder: str, previewing: bool = False) -> str:
     """Scrubs the text according to the specifications chosen by the user.
 
     This function calls call_rlhandler, handle_tags(), remove_punctuation(),
@@ -747,17 +751,18 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
         containing the additional scrubbing option files that have been
         uploaded.
-    :param cache_options: A list of strings representing additional options
+    :param storage_options: A list of strings representing additional options
         that have been chosen by the user.
-    :param cache_folder: A string representing the path of the cache folder.
+    :param storage_folder: A string representing the path of the storage
+        folder.
     :param previewing: A boolean indicating whether the user is previewing.
     :return: A string representing the text after all the scrubbing.
     """
 
-    cache_filenames = sorted(
+    storage_filenames = sorted(
         ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
     option_strings = prepare_additional_options(
-        opt_uploads, cache_options, cache_folder, cache_filenames)
+        opt_uploads, storage_options, storage_folder, storage_filenames)
 
     # handle uploaded FILES: consolidations, lemmas, special characters,
     # stop-keep words
@@ -851,8 +856,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- 2. special characters -----------------------------------------------
     merged_string = handle_file_and_manual_strings(
         file_string=sc_file_string, manual_string=sc_manual,
-        cache_folder=cache_folder, cache_filenames=cache_filenames,
-        cache_number=2)
+        storage_folder=storage_folder, storage_filenames=storage_filenames,
+        storage_number=2)
 
     # "\n" comes from "" + "\n" + ""
     if merged_string == "\n":
@@ -915,8 +920,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         replacer_string = handle_file_and_manual_strings(
             file_string=cons_file_string, manual_string=cons_manual,
-            cache_folder=cache_folder, cache_filenames=cache_filenames,
-            cache_number=0)
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            storage_number=0)
         return replacement_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=False)
 
@@ -931,8 +936,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         replacer_string = handle_file_and_manual_strings(
             file_string=lem_file_string, manual_string=lem_manual,
-            cache_folder=cache_folder, cache_filenames=cache_filenames,
-            cache_number=1)
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            storage_number=1)
         return replacement_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=True)
 
@@ -949,8 +954,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         file_and_manual = handle_file_and_manual_strings(
             file_string=sw_kw_file_string, manual_string=sw_kw_manual,
-            cache_folder=cache_folder, cache_filenames=cache_filenames,
-            cache_number=3)
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            storage_number=3)
 
         # if file_and_manual does not contain words there is no issue calling
         # remove_stopwords()
