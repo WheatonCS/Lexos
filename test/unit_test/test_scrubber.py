@@ -256,10 +256,10 @@ class TestReplacementHandlerAlone:
 
 class TestReplacementHandlerWithMergeStrings:
     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
-    cache_folder = \
+    storage_folder = \
         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-    cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-                       'stopwords.p']
+    storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+                         'stopwords.p']
 
     # No tests with neither replacer because handle_special_characters()
     # uses requests
@@ -267,16 +267,16 @@ class TestReplacementHandlerWithMergeStrings:
     def test_replacement_handler_special(self):
         file_special_string = handle_file_and_manual_strings(
             file_string="-:_\n!:~\nn:ñ\na:@", manual_string="",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         manual_special_string = handle_file_and_manual_strings(
             file_string="", manual_string="-:_\n!:~\nn:ñ\na:@",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         split_special_string = handle_file_and_manual_strings(
             file_string="-:_\n!:~", manual_string="n:ñ\na:@",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         after_special = "This is... Some (r@ñdom) te_xt I 'wrote'~ Isñ't " \
                         "it ñice?"
 
@@ -293,16 +293,16 @@ class TestReplacementHandlerWithMergeStrings:
     def test_replacement_handler_consol(self):
         file_consol_string = handle_file_and_manual_strings(
             file_string="o:u\nt,x:y\nI:i", manual_string="",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         manual_consol_string = handle_file_and_manual_strings(
             file_string="", manual_string="o:u\nt,x:y\nI:i",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         split_consol_string = handle_file_and_manual_strings(
             file_string="o:u\nt,x:y", manual_string="I:i",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         after_consol = "This is... Sume (randum) ye-yy i 'wruye'! isn'y iy" \
                        " nice?"
 
@@ -319,16 +319,16 @@ class TestReplacementHandlerWithMergeStrings:
     def test_replacement_handler_lemma(self):
         file_lemma_string = handle_file_and_manual_strings(
             file_string="I,it:she\n(random):(interesting)", manual_string="",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         manual_lemma_string = handle_file_and_manual_strings(
             file_string="", manual_string="I,it:she\n(random):(interesting)",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         split_lemma_string = handle_file_and_manual_strings(
             file_string="I,it:she", manual_string="(random):(interesting)",
-            storage_folder=self.cache_folder,
-            storage_filenames=self.cache_filenames, storage_number=2)
+            storage_folder=self.storage_folder,
+            storage_filenames=self.storage_filenames, storage_number=2)
         after_lemma = "This is... Some (interesting) te-xt she 'wrote'! " \
                       "Isn't she nice?"
 
@@ -615,7 +615,7 @@ class TestConsolidateAmpers:
 
 class TestGetRemovePunctuationMap:
 
-    def test_get_remove_punct_map_no_cache(self):
+    def test_get_remove_punct_map_no_store(self):
         no_punct_string = "Some text with no punctuation"
         apos_string = "There's \"a lot\" of words in this text here ye' " \
                       "isn''t 'ere a lot\"ve 'em?'!"
@@ -695,7 +695,7 @@ class TestGetRemovePunctuationMap:
 
 class TestGetRemoveDigitsMap:
 
-    def test_get_remove_digits_no_cache(self):
+    def test_get_remove_digits_no_store(self):
         assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
 
 
@@ -704,28 +704,28 @@ class TestHandleFileAndManualStrings:
     def test_handle_file_and_manual_strings(self):
         string1 = "and. the\n who,how why"
         string2 = "what where, but. of,\nnot,for"
-        cache_folder = \
+        storage_folder = \
             '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-        cache_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-                           'stopwords.p']
-        cache_number = 1
+        storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+                             'stopwords.p']
+        storage_number = 1
 
         assert handle_file_and_manual_strings(
-            file_string="", manual_string="", storage_folder=cache_folder,
-            storage_filenames=cache_filenames, storage_number=cache_number) \
-            == "\n"
+            file_string="", manual_string="", storage_folder=storage_folder,
+            storage_filenames=storage_filenames,
+            storage_number=storage_number) == "\n"
         assert handle_file_and_manual_strings(
             file_string=string1, manual_string="",
-            storage_folder=cache_folder, storage_filenames=cache_filenames,
-            storage_number=cache_number) == string1 + "\n"
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            storage_number=storage_number) == string1 + "\n"
         assert handle_file_and_manual_strings(
             file_string="", manual_string=string2,
-            storage_folder=cache_folder, storage_filenames=cache_filenames,
-            storage_number=cache_number) == "\n" + string2
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            storage_number=storage_number) == "\n" + string2
         assert handle_file_and_manual_strings(
             file_string=string1, manual_string=string2,
-            storage_folder=cache_folder, storage_filenames=cache_filenames,
-            storage_number=cache_number) == string1 + "\n" + string2
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            storage_number=storage_number) == string1 + "\n" + string2
 
 
 class TestSplitInputWordString:
