@@ -2,7 +2,6 @@ import json
 import os
 import re
 import time
-import traceback
 
 from flask import Flask, request, render_template
 from jinja2 import evalcontextfilter
@@ -123,8 +122,7 @@ def unhandled_exception(error):
 
     # if flask raises this error
     else:
-        app.logger.error(traceback.format_exc())
-        return render_template("500.html")
+        raise error
 
 
 if __name__ == '__main__':
