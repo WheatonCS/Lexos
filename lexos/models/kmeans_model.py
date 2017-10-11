@@ -23,21 +23,66 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.kmeans_receiver import KmeansOption, KmeansReceiver
 
-n_init = constants.N_INIT
-max_iter = constants.MAX_ITER
-tolerance = constants.TOLERANCE
-k_value = int(np.size(labels) / 2)
-init_method = request.form['init']
 
-k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
-                                       labels=labels,
-                                       n_init=n_init,
-                                       k_value=k_value,
-                                       max_iter=max_iter,
-                                       tolerance=tolerance,
-                                       init_method=init_method,
-                                       folder_path=folder_path,
-                                       metric_dist=metric_dist)
+# TODO: Process data from front end for KMEANS option
+
+
+class KmeansPCAResult:
+    def __init__(self,
+                 labels: np.ndarray,
+                 k_value: int,
+                 best_index: list,
+                 color_chart: str,
+                 folder_path: str,
+                 reduced_data: list,
+                 colored_points: list,
+                 silhouette_score: Union[str, float]):
+
+        self._labels = labels
+        self._k_value = k_value
+        self._best_index = best_index
+        self._color_chart = color_chart
+        self._folder_path = folder_path
+        self._reduced_data = reduced_data
+        self._colored_points = colored_points
+        self._silhouette_score = silhouette_score
+        self._file_name_str = "#".join(self._labels)
+
+    @property
+    def labels(self) -> np.ndarray:
+        return self._labels
+
+    @property
+    def k_value(self) -> int:
+        return self._k_value
+
+    @property
+    def best_index(self) -> list:
+        return self._best_index
+
+    @property
+    def color_chart(self) -> str:
+        return self._color_chart
+
+    @property
+    def folder_path(self) -> str:
+        return self._folder_path
+
+    @property
+    def reduced_data(self) -> list:
+        return self._reduced_data
+
+    @property
+    def colored_points(self) -> list:
+        return self._colored_points
+
+    @property
+    def silhouette_score(self) -> Union[str, float]:
+        return self._silhouette_score
+
+    @property
+    def file_name_str(self) -> str:
+        return self._file_name_str
 
 
 class KmeansPCAModel(BaseModel):
@@ -53,6 +98,12 @@ class KmeansPCAModel(BaseModel):
         super().__init__()
         self._test_dtm = test_dtm
         self._test_option = test_option
+        self.k_means = None
+        self.best_index = None
+        self.color_chart = None
+        self.reduced_data = None
+        self.colored_points = None
+        self.silhouette_score = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
@@ -64,101 +115,60 @@ class KmeansPCAModel(BaseModel):
         return self._test_option if self._test_dtm is not None \
             else KmeansReceiver().options_from_front_end()
 
-    def get_pca(self):
+    def _get_silhouette_score(self) -> Union[str, float]:
+        """Generates silhouette score based on the KMeans algorithm.
 
-
-def _get_silhouette_score_(k: int, matrix: np.ndarray, k_means: KMeans,
-                           metric_dist: str) -> Union[str, float]:
-    """Generates silhouette score based on the KMeans algorithm.
-
-    This function returns a proper message if it is under the condition where
-    it cannot perform the calculation on finding silhouette score.
-    :param k: k-value for k-means analysis.
-    :param matrix: a 2D numpy matrix that contains word counts.
-    :param k_means: a KMeans class object.
-    :param metric_dist: method of the distance metric.
-    :return: the calculated silhouette score or a proper message if the
-             conditions for calculation were not met.
-    """
-    if k <= 2:
-        return "N/A [Not available for K ≤ 2]"
-    elif k > (matrix.shape[0] - 1):
-        return "N/A [Not available if (K value) > (number of active files -1)]"
-    else:
-        labels = k_means.fit(matrix).labels_
-        silhouette_score = metrics.silhouette_score(X=matrix,
-                                                    labels=labels,
-                                                    metric=metric_dist)
-        return round(silhouette_score, ROUND_DIGIT)
-
-
-class GetKMeansPca:
-    def __init__(self,
-                 count_matrix: np.ndarray,
-                 n_init: int,
-                 k_value: int,
-                 max_iter: int,
-                 tolerance: float,
-                 init_method: str,
-                 metric_dist: str,
-                 folder_path: str,
-                 labels: np.ndarray):
-        """Generates an array of centroid index based on the active files.
-
-        :param count_matrix: a 2D numpy matrix contains the word counts
-        :param n_init: number of iterations with different centroids
-        :param k_value: k value-for k-means analysis
-        :param max_iter: maximum number of iterations
-        :param tolerance: relative tolerance, inertia to declare convergence
-        :param init_method: method of initialization: "K++" or "random"
-        :param metric_dist: method of the distance metrics
-        :param folder_path: system path to save the temp image
-        :param labels: file names of active files
+        This function returns a proper message if it is under the condition where
+        it cannot perform the calculation on finding silhouette score.
+        :return: the calculated silhouette score or a proper message if the
+                 conditions for calculation were not met.
         """
-        assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
-        assert np.size(labels) > 0, EMPTY_NP_ARRAY_MESSAGE
+        if self._kmeans_option.k_value <= 2:
+            return "N/A [Not available for K ≤ 2]"
+        elif self._kmeans_option.k_value > (
+                self._doc_term_matrix.values.shape[0] - 1):
+            return "N/A [Not available if (K value) > " \
+                   "(number of active files -1)]"
+        else:
+            labels = self.k_means.fit(self._doc_term_matrix.values).labels_
+            silhouette_score = metrics.silhouette_score(
+                X=self._doc_term_matrix.values,
+                labels=labels,
+                metric=self._kmeans_option.metric_dist)
+            return round(silhouette_score, ROUND_DIGIT)
 
-        # finds xy coordinates for each segment
-        reduced_data = PCA(n_components=2).fit_transform(count_matrix)
+    def _get_pca_data(self):
+        # Test if get empty input
+        assert np.size(self._doc_term_matrix.values) > 0, \
+            EMPTY_NP_ARRAY_MESSAGE
 
-        # performs the kmeans analysis
-        k_means = KMeans(tol=tolerance,
-                         n_init=n_init,
-                         init=init_method,
-                         max_iter=max_iter,
-                         n_clusters=k_value)
-        kmeans_index = k_means.fit_predict(reduced_data)
-        best_index = kmeans_index.tolist()
+        # Get Kmeans
+        self.reduced_data = \
+            PCA(n_components=2).fit_transform(self._doc_term_matrix.values)
+        self.k_means = KMeans(tol=self._kmeans_option.tolerance,
+                              n_init=self._kmeans_option.n_init,
+                              init=self._kmeans_option.init_method,
+                              max_iter=self._kmeans_option.max_iter,
+                              n_clusters=self._kmeans_option.k_value)
+        kmeans_index = self.k_means.fit_predict(self.reduced_data)
+        self.best_index = kmeans_index.tolist()
 
         # calculate the silhouette score
-        silhouette_score = _get_silhouette_score_(k=k_value,
-                                                  k_means=k_means,
-                                                  matrix=count_matrix,
-                                                  metric_dist=metric_dist)
+        self.silhouette_score = self._get_silhouette_score()
 
         # create a color gradient with k colors
-        color_list = plt.cm.Dark2(np.linspace(0, 1, k_value))
+        color_list = \
+            plt.cm.Dark2(np.linspace(0, 1, self._kmeans_option.k_value))
         rgb_tuples = [tuple(color[:-1]) for color in color_list]
-        colored_points = [rgb_tuples[item] for _, item in
-                          enumerate(best_index)]
+        self.colored_points = [rgb_tuples[item] for _, item in
+                               enumerate(self.best_index)]
 
         # make a string of rgb tuples that are separated by # for js
-        color_chart_point = [tuple([int(value * 255) for value in color])
-                             for color in color_list]
-        color_chart = "rgb" + "#rgb".join(map(str, color_chart_point)) + "#"
+        color_chart_p = [tuple([int(value * 255) for value in color])
+                         for color in color_list]
+        self.color_chart = "rgb" + "#rgb".join(map(str, color_chart_p)) + "#"
 
-        # pack all the needed data
-        self.labels = labels
-        self.k_value = k_value
-        self.best_index = best_index
-        self.color_chart = color_chart
-        self.colored_points = colored_points
-        self.reduced_data = reduced_data
-        self.folder_path = folder_path
-        self.file_name_str = "#".join(labels)
-        self.silhouette_score = silhouette_score
-
-    def draw_graph(self):
+    def _draw_graph(self):
         color_str_list = self.color_chart.split("#")
 
         # split x and y coordinates from analyzed data
@@ -167,22 +177,26 @@ class GetKMeansPca:
         # clear the matplotlib in case previews drawings
         plt.figure()
         # plot and label points
-        for x, y, name, color in zip(xs, ys, self.labels, self.colored_points):
+        for x, y, color, name in zip(xs, ys, self.colored_points,
+                                     self._doc_term_matrix.index.values):
             plt.scatter(x, y, c=color, s=40)
             plt.text(x, y, name, color=color)
         # save the plot and close
-        plt.savefig(path_join(self.folder_path, KMEANS_GRAPH_FILENAME))
+        plt.savefig(path_join(self._kmeans_option.folder_path,
+                              KMEANS_GRAPH_FILENAME))
         plt.close()
 
         # plot data
         plotly_colors = [color_str_list[item]
                          for _, item in enumerate(self.best_index)]
         from plotly.graph_objs import Scatter, Data
-        trace = Scatter(x=xs, y=ys, text=self.labels,
+        trace = Scatter(x=xs, y=ys,
+                        mode='markers+text',
+                        textposition='right',
                         textfont=dict(color=plotly_colors),
-                        name=self.labels, mode='markers+text',
-                        marker=dict(color=plotly_colors, line=dict(width=1, )),
-                        textposition='right')
+                        text=self._doc_term_matrix.index.values,
+                        name=self._doc_term_matrix.index.values,
+                        marker=dict(color=plotly_colors, line=dict(width=1, )))
 
         data = Data([trace])
         small_layout = dict(
@@ -208,7 +222,8 @@ class GetKMeansPca:
         sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
         sm_html = html.replace("___", sm_div)
 
-        html_file = open(path_join(self.folder_path, PCA_SMALL_GRAPH_FILENAME),
+        html_file = open(path_join(self._kmeans_option.folder_path,
+                                   PCA_SMALL_GRAPH_FILENAME),
                          "w", encoding='utf-8')
         html_file.write(sm_html)
         html_file.close()
@@ -220,10 +235,26 @@ class GetKMeansPca:
         lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
         lg_html = html.replace("___", lg_div)
 
-        html_file = open(path_join(self.folder_path, PCA_BIG_GRAPH_FILENAME),
+        html_file = open(path_join(self._kmeans_option.folder_path,
+                                   PCA_BIG_GRAPH_FILENAME),
                          "w", encoding='utf-8')
         html_file.write(lg_html)
         html_file.close()
+
+    def get_result(self) -> KmeansPCAResult:
+        self._get_pca_data()
+        self._draw_graph()
+        return KmeansPCAResult(labels=self._doc_term_matrix.index.values,
+                               k_value=self._kmeans_option.k_value,
+                               best_index=self.best_index,
+                               color_chart=self.color_chart,
+                               folder_path=self._kmeans_option.folder_path,
+                               reduced_data=self.reduced_data,
+                               colored_points=self.colored_points,
+                               silhouette_score=self.silhouette_score)
+
+
+
 
 
 def _get_voronoi_plot_data_(data: np.ndarray,
