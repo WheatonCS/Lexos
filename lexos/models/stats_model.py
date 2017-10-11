@@ -14,7 +14,10 @@ class CorpusInfo:
                  average: float, num_file: int, file_sizes: int,
                  file_names: np.ndarray, std_deviation: float,
                  anomaly_iqr: dict, anomaly_std_err: dict):
-
+        self._q1 = q1
+        self._q3 = q3
+        self._iqr = iqr
+        self._median = median
         self._average = average
         self._num_file = num_file
         self._file_sizes = file_sizes
@@ -22,6 +25,50 @@ class CorpusInfo:
         self._std_deviation = std_deviation
         self._anomaly_iqr = anomaly_iqr
         self._anomaly_std_err = anomaly_std_err
+
+    @property
+    def q1(self):
+        return self._q1
+
+    @property
+    def q3(self):
+        return self._q3
+
+    @property
+    def iqr(self):
+        return self.iqr
+
+    @property
+    def median(self):
+        return self._median
+
+    @property
+    def average(self):
+        return self._average
+
+    @property
+    def num_file(self):
+        return self._num_file
+
+    @property
+    def file_sizes(self):
+        return self._file_sizes
+
+    @property
+    def file_names(self):
+        return self._file_names
+
+    @property
+    def std_deviation(self):
+        return self._std_deviation
+
+    @property
+    def anomaly_iqr(self):
+        return self._anomaly_iqr
+
+    @property
+    def anomaly_std_err(self):
+        return self._anomaly_std_err
 
 
 class FileInfo:
@@ -40,6 +87,50 @@ class FileInfo:
         self._word_count = word_count
         self._std_deviation = std_deviation
         self._total_word_count = total_word_count
+
+    @property
+    def q1(self):
+        return self._q1
+
+    @property
+    def q3(self):
+        return self._q3
+
+    @property
+    def iqr(self):
+        return self.iqr
+
+    @property
+    def hapax(self):
+        return self._hapax
+
+    @property
+    def median(self):
+        return self._median
+
+    @property
+    def average(self):
+        return self._average
+
+    @property
+    def num_word(self):
+        return self._num_word
+
+    @property
+    def file_name(self):
+        return self._file_name
+
+    @property
+    def word_count(self):
+        return self._word_count
+
+    @property
+    def std_deviation(self):
+        return self._std_deviation
+
+    @property
+    def total_word_count(self):
+        return self._total_word_count
 
 
 class StatsModel(BaseModel):
@@ -145,5 +236,5 @@ class StatsModel(BaseModel):
              for index, label in enumerate(self._doc_term_matrix.index.values)]
         return file_info_list
 
-    def get_result(self):
+    def get_result(self) -> (List[FileInfo], CorpusInfo):
         return self._get_all_file_result(), self._get_corpus_info()
