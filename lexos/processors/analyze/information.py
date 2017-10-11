@@ -66,20 +66,6 @@ class CorpusInformation:
         # different from others(too large or too small) analyzed by using iqr
         self.anomaly_iqr = file_anomaly_iqr
 
-    def plot(self, path):
-        """Plot a bar chart to represent the statistics.
-
-        x is the file name and y is the file size, represented by word count.
-        """
-        plt.bar(list(range(self.num_file)), list(self.file_sizes),
-                align='center')
-        plt.xticks(list(range(self.num_file)), list(self.file_names))
-        plt.xticks(rotation=50)
-        plt.xlabel('File Name')
-        plt.ylabel('File Size(in term of word count)')
-        plt.savefig(path)
-        plt.close()
-
 
 class FileInformation:
     def __init__(self, count_list: np.ndarray, file_name: str):
@@ -119,9 +105,25 @@ class FileInformation:
         self.iqr = q3 - q1
         self.hapax = ((count_list == 1).sum())
 
-
     """
-    # THIS PLOT FUNCTION IS NOT USED CURRENTLY
+    # THESE TWO PLOT FUNCTION IS NOT USED CURRENTLY
+    def plot(self, path):
+    
+        ###COMMENTS###
+        Plot a bar chart to represent the statistics.
+
+        x is the file name and y is the file size, represented by word count.
+        ###COMMENTS###
+        
+        plt.bar(list(range(self.num_file)), list(self.file_sizes),
+                align='center')
+        plt.xticks(list(range(self.num_file)), list(self.file_names))
+        plt.xticks(rotation=50)
+        plt.xlabel('File Name')
+        plt.ylabel('File Size(in term of word count)')
+        plt.savefig(path)
+        plt.close()
+        
     def plot(self, path, num_bins=0):
     
         ###COMMENTS###
