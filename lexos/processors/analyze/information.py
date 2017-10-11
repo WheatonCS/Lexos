@@ -119,15 +119,20 @@ class FileInformation:
         self.iqr = q3 - q1
         self.hapax = ((count_list == 1).sum())
 
+
+    """
+    # THIS PLOT FUNCTION IS NOT USED CURRENTLY
     def plot(self, path, num_bins=0):
-        """draw a histogram to represent the data
+    
+        ###COMMENTS###
+        draw a histogram to represent the data
 
         :param path: User defined path to store the desired image
         :param num_bins: number of bars, default is
                          (Number different word in the file ) / 2, if it is too
                          large take 50 as default (see '#default of num_bins')
-        """
-
+        ###COMMENTS###
+        
         # plot data
         mu = self.average  # mean of distribution
         sigma = self.std_deviation  # standard deviation of distribution
@@ -150,3 +155,4 @@ class FileInformation:
         plt.subplots_adjust(left=0.15)
         plt.savefig(path)
         plt.close()
+    """
