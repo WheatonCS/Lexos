@@ -383,19 +383,17 @@ def get_remove_punctuation_map(
         removed mapped to None.
     """
 
-    punctuation_folder = os.path.join(constants.CACHE_FOLDER)
-
     try:
         # Map of punctuation to be removed
         remove_punctuation_map = load_character_deletion_map(
-            punctuation_folder, constants.PUNCTUATION_MAP_FILENAME)
+            constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
 
     except FileNotFoundError:
         # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = get_all_punctuation_map()
 
         save_character_deletion_map(
-            remove_punctuation_map, punctuation_folder,
+            remove_punctuation_map, constants.CACHE_FOLDER,
             constants.PUNCTUATION_MAP_FILENAME)
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
@@ -431,12 +429,10 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
         mapped to None.
     """
 
-    digit_folder = os.path.join(constants.CACHE_FOLDER)
-
     # Map of digits to be removed
     try:
         remove_digit_map = load_character_deletion_map(
-            digit_folder, constants.DIGIT_MAP_FILENAME)
+            constants.CACHE_FOLDER, constants.DIGIT_MAP_FILENAME)
 
     except FileNotFoundError:
         # If the digit map does not already exist, generate it with all
@@ -448,7 +444,8 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
              if unicodedata.category(chr(i)).startswith('N')])
 
         save_character_deletion_map(
-            remove_digit_map, digit_folder, constants.DIGIT_MAP_FILENAME)
+            remove_digit_map, constants.CACHE_FOLDER,
+            constants.DIGIT_MAP_FILENAME)
 
     return remove_digit_map
 

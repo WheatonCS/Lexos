@@ -15,7 +15,7 @@ WORKSPACE_DIR = 'workspace/'
 TMP_FOLDER = os.path.expanduser(
     '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
-CACHE_FOLDER = UPLOAD_FOLDER + 'cache/'
+CACHE_FOLDER = os.path.join(UPLOAD_FOLDER, 'cache/')
 RESOURCE_DIR = "resources/"
 
 '''file name'''
