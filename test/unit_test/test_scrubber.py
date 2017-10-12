@@ -917,6 +917,7 @@ class TestGetRemoveWhitespaceMap:
             spaces=True, tabs=True, new_lines=True) == \
             {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}
 
+
 # save_character_deletion_map
 
 # load_character_deletion_map
