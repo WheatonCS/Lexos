@@ -276,8 +276,5 @@ def load_file_from_disk(loc_folder: str, filename: str) -> Any:
     :return: The contents of the loaded file.
     """
 
-    try:
-        file_string = pickle.load(open(loc_folder + filename, 'rb'))
-        return file_string
-    except FileNotFoundError:
-        return ""
+    file_string = pickle.load(open(loc_folder + filename, 'rb'))
+    return file_string

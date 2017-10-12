@@ -386,11 +386,12 @@ def get_remove_punctuation_map(
     punctuation_folder = os.path.join(constants.UPLOAD_FOLDER, "cache/")
     punctuation_filename = "punctuationmap.p"
 
-    # Map of punctuation to be removed
-    remove_punctuation_map = load_character_deletion_map(
-        punctuation_folder, punctuation_filename)
+    try:
+        # Map of punctuation to be removed
+        remove_punctuation_map = load_character_deletion_map(
+            punctuation_folder, punctuation_filename)
 
-    if remove_punctuation_map == "":
+    except FileNotFoundError:
         # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = get_all_punctuation_map()
 
@@ -434,10 +435,11 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     digit_filename = "digitmap.p"
 
     # Map of digits to be removed
-    remove_digit_map = load_character_deletion_map(
-        digit_folder, digit_filename)
+    try:
+        remove_digit_map = load_character_deletion_map(
+            digit_folder, digit_filename)
 
-    if remove_digit_map == "":
+    except FileNotFoundError:
         # If the digit map does not already exist, generate it with all
         # unicode characters that start with the category 'N'
         # See http://www.fileformat.info/info/unicode/category/index.htm for
@@ -649,8 +651,11 @@ def load_scrub_optional_upload(storage_folder: str, filename: str) -> str:
         no string to load).
     """
 
-    return general_functions.load_file_from_disk(
-        loc_folder=storage_folder, filename=filename)
+    try:
+        return general_functions.load_file_from_disk(
+            loc_folder=storage_folder, filename=filename)
+    except FileNotFoundError:
+        return ""
 
 
 def handle_gutenberg(text: str) -> str:
