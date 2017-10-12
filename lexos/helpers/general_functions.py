@@ -262,7 +262,7 @@ def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
     """
 
     try:
-        os.makedirs(dest_folder + filename)
+        os.makedirs(dest_folder)
     except FileExistsError:
         pass
     pickle.dump(contents, open(dest_folder + filename, 'wb'))
