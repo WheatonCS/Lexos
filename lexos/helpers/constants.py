@@ -1,5 +1,5 @@
-import os
 import getpass
+import os
 
 """ Constants """
 
@@ -15,6 +15,7 @@ WORKSPACE_DIR = 'workspace/'
 TMP_FOLDER = os.path.expanduser(
     '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
+CACHE_FOLDER = UPLOAD_FOLDER + 'cache/'
 RESOURCE_DIR = "resources/"
 
 '''file name'''
@@ -36,6 +37,12 @@ TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 DEBUG_LOG_FILE_NAME = 'debug.log'
 MUFI_3_FILENAME = 'MUFI_3_DICT.tsv'
 MUFI_4_FILENAME = 'MUFI_4_DICT.tsv'
+STOPWORD_FILENAME = 'stopwords.p'
+LEMMA_FILENAME = 'lemmas.p'
+CONSOLIDATION_FILENAME = 'consolidations.p'
+SPECIAL_CHAR_FILENAME = 'specialchars.p'
+DIGIT_MAP_FILENAME = 'digitmap.p'
+PUNCTUATION_MAP_FILENAME = 'punctuationmap.p'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB

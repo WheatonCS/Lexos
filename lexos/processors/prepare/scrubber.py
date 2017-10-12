@@ -383,20 +383,20 @@ def get_remove_punctuation_map(
         removed mapped to None.
     """
 
-    punctuation_folder = os.path.join(constants.UPLOAD_FOLDER, "cache/")
-    punctuation_filename = "punctuationmap.p"
+    punctuation_folder = os.path.join(constants.CACHE_FOLDER)
 
     try:
         # Map of punctuation to be removed
         remove_punctuation_map = load_character_deletion_map(
-            punctuation_folder, punctuation_filename)
+            punctuation_folder, constants.PUNCTUATION_MAP_FILENAME)
 
     except FileNotFoundError:
         # Creates map of punctuation to be removed if it doesn't already exist
         remove_punctuation_map = get_all_punctuation_map()
 
         save_character_deletion_map(
-            remove_punctuation_map, punctuation_folder, punctuation_filename)
+            remove_punctuation_map, punctuation_folder,
+            constants.PUNCTUATION_MAP_FILENAME)
 
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
@@ -431,13 +431,12 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
         mapped to None.
     """
 
-    digit_folder = os.path.join(constants.UPLOAD_FOLDER, "cache/")
-    digit_filename = "digitmap.p"
+    digit_folder = os.path.join(constants.CACHE_FOLDER)
 
     # Map of digits to be removed
     try:
         remove_digit_map = load_character_deletion_map(
-            digit_folder, digit_filename)
+            digit_folder, constants.DIGIT_MAP_FILENAME)
 
     except FileNotFoundError:
         # If the digit map does not already exist, generate it with all
@@ -449,7 +448,7 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
              if unicodedata.category(chr(i)).startswith('N')])
 
         save_character_deletion_map(
-            remove_digit_map, digit_folder, digit_filename)
+            remove_digit_map, digit_folder, constants.DIGIT_MAP_FILENAME)
 
     return remove_digit_map
 
@@ -785,7 +784,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     """
 
     storage_filenames = sorted(
-        ['stopwords.p', 'lemmas.p', 'consolidations.p', 'specialchars.p'])
+        [constants.STOPWORD_FILENAME, constants.LEMMA_FILENAME,
+         constants.CONSOLIDATION_FILENAME, constants.SPECIAL_CHAR_FILENAME])
     option_strings = prepare_additional_options(
         opt_uploads, storage_options, storage_folder, storage_filenames)
 
