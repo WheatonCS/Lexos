@@ -95,6 +95,20 @@ $(function() {
       });
  });
 function backspace(calc){
-    var length = calc.display.value.length;
-    calc.display.value=calc.display.value.substring(0,length-1);
+    var content = calc.display.value;
+    var length = content.length;
+    if(content[length -1] == "]"){
+        content = content.substring(0,content.lastIndexOf("["));
+    }
+    else if(content.endsWith("sin(") || content.endsWith("cos(") ||
+            content.endsWith("tan(") || content.endsWith("log(")){
+        content = content.substring(0,length - 4);
+    }
+    else if(content.endsWith("^(") || content.endsWith("√(") ){
+        content = content.substring(0,length - 2);
+    }
+    else{
+        content = content.substring(0,length - 1);
+    }
+    calc.display.value = content;
 }
