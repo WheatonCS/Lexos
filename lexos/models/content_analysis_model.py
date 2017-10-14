@@ -210,7 +210,10 @@ class ContentAnalysisModel(object):
         csv_file.close()
 
 
-"""class Document(object):
+class Document(object):
+    def __init__(self):
+        self._active = True
+        self._label = ""
 
     @property
     def active(self):
@@ -218,23 +221,55 @@ class ContentAnalysisModel(object):
 
     @active.setter
     def active(self, active):
-        self._active = active"""
+        self._active = active
+
+    @property
+    def label(self):
+        return self._label
+
+    @label.setter
+    def label(self, label):
+        self._label = label
 
 
-class Dictionary(object):
+class Dictionary(Document):
     def __init__(self, content: list, filename: str, label: str,
                  active: bool = True):
-        self.content = content
-        self.names = filename
-        self.label = label
-        self.active = active
+        self._content = content
+        self._names = filename
+        self._label = label
+        self._active = active
+
+    @property
+    def content(self) -> list:
+        return self._content
+
+    @content.setter
+    def content(self, content: list):
+        self._content = content
 
 
-class File(object):
+class File(Document):
     def __init__(self, content: str, filename: str, label: str,
-                 total_word_counts: str, active: bool = True):
-        self.content = content
-        self.names = filename
-        self.label = label
-        self.active = active
-        self.total_word_counts = total_word_counts
+                 total_word_counts: int, active: bool = True):
+        self._content = content
+        self._names = filename
+        self._label = label
+        self._active = active
+        self._total_word_counts = total_word_counts
+
+    @property
+    def content(self) -> str:
+        return self._content
+
+    @content.setter
+    def content(self, content: str):
+        self._content = content
+
+    @property
+    def total_word_counts(self) -> int:
+        return self._total_word_counts
+
+    @total_word_counts.setter
+    def total_word_counts(self, total_word_counts: int):
+        self._total_word_counts = total_word_counts
