@@ -6,12 +6,8 @@ function analyzeContent(action) {
     $('#error-modal').modal();
     return
   }
-
   $('#status-prepare').css({ 'visibility': 'visible' });
-
   $('#formAction').val(action);
-  var formData = new FormData($('form')[0]);
-
   $.ajax({
     url: '/contentanalysis',
     type: 'POST',
