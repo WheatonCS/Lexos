@@ -73,9 +73,12 @@ def save_formula():
     :return:
     """
     formula = request.json['calc_input']
-    formula = formula.replace("√", "sqrt").replace("^", "**")
-    session['formula'] = formula
-    if formula.count("(") != formula.count(")") or \
-            formula.count("[") != formula.count("]"):
-        return "error"
+    if len(formula) == 0:
+        session['formula'] = "0"
+    else:
+        formula = formula.replace("√", "sqrt").replace("^", "**")
+        session['formula'] = formula
+        if formula.count("(") != formula.count(")") or \
+                formula.count("[") != formula.count("]"):
+            return "error"
     return "success"
