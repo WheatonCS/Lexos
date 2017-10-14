@@ -67,12 +67,12 @@ function upload_dictionaries(action) {
     $('#preview-body').empty();
     $.each(response['dictionary_labels'], function (i, item) {
       dict_labels = response['dictionary_labels'];
-      $('#dictionaries').empty();
+      $('#dictionaryButtons').empty();
       for (i = 0; i < dict_labels.length; i++) {
           html = "<input type='button' value='" +
               dict_labels[i] + "'" +
               "onClick='" + "this.form.display.value+=\"[" + dict_labels[i] + "]\"'>";
-          $('#dictionaries').append(html);
+          $('#dictionaryButtons').append(html);
       }
       $('#status-prepare').css({ 'visibility': 'hidden' })
     })

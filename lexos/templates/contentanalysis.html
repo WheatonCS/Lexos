@@ -77,9 +77,13 @@ font-weight:bold;}
                 <div id="big_wrapper">
                     <div id="form_wrapper">
                        <form id="calcform" name="calc">
-                           <input id="display" type="text" name="display" value="" disabled contenteditable="false" >
+                           <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
                            <br>
-                           <div id="dictionaries"></div>
+                           <div id="dictionaryButtons">
+                               {% for item in session['dictionary_names'] %}
+                                   <input value="{{ item }}" onclick="this.form.display.value+='{{ item }}'" type="button">
+                               {% endfor %}
+                           </div>
                            <input class="button number" type="button" value="1" onClick="display.value+=1">
                            <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
                            <input class="button number" type="button" value="3" onClick="this.form.display.value+=3">
