@@ -7,6 +7,16 @@ from lexos.managers.lexos_file import LexosFile
 
 class ContentAnalysisModel(object):
     def __init__(self):
+        """A model to manage the content analysis tool.
+
+        dictionaries: List of Dictionary objects
+        corpus: List of File objects
+        counters: a 2D array with count of every dictionary for evey file in
+        the corpus
+        formulas: List of string that represent a formula for each file
+        scores: List of formula/total word count of each file
+        averages: Lis of averages count of each dictionary
+        """
         self.dictionaries = []
         self.corpus = []
         self.counters = []
@@ -15,26 +25,47 @@ class ContentAnalysisModel(object):
         self.average = []
 
     def add_corpus(self, file: LexosFile):
+        """Adds a file to the corpus
+
+        :param file: a LexosFile object
+        """
         file_content = file.load_contents()
         total_word_counts = len(str(file_content).split(" "))
         self.corpus.append(File(file_content, file.name, file.label,
                                 total_word_counts))
 
     def add_dictionary(self, file_name: str, content: str):
+        """Adds a dictionary
+
+        :param file_name: name of the file
+        :param content: content of the file
+        """
         new_list = str(content).split(", ")
         new_list = list(map(lambda x: x.lower(), new_list))
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
         self.dictionaries.append(Dictionary(new_list, file_name, file_name))
 
     def delete_dictionary(self, filename: str):
+        """deletes a dictionary
+
+        :param filename: filename of dictionary to delete
+        """
         pass
 
     def toggle_dictionary(self, filename: str):
+        """Activates and Deactivates a dictionary
+
+        :param filename: filename of dictionary to toggle
+        """
         for dictionary in self.dictionaries:
             if dictionary.name == filename:
                 dictionary.active = not dictionary.active
 
     def get_active_dicts(self) -> list:
+        """
+
+        :return: a list containing all active dictionaries
+        """
         active_dicts = []
         for dictionary in self.dictionaries:
             if dictionary.active:
@@ -42,6 +73,9 @@ class ContentAnalysisModel(object):
         return active_dicts
 
     def count_words(self):
+        """counts all dictionaries for all active files in the corpus
+
+        """
         # delete previous results
         self.counters = []
         for file in self.corpus:
@@ -63,6 +97,12 @@ class ContentAnalysisModel(object):
             self.counters.append(counts)
 
     def generate_scores(self, formula: str):
+        """calculate the formula and scores=formula/total_word_count for each
+        file in the corpus
+
+        :param formula: a string containing a mathematical equation with
+        dictionary names between brackets
+        """
         self.scores = []
         self.formulas = []
         active_dicts = self.get_active_dicts()
@@ -78,6 +118,10 @@ class ContentAnalysisModel(object):
             self.formulas.append(result)
 
     def generate_averages(self):
+        """Calculates the averages of eachm dictionary count, formula,
+        total_word_count, and score
+
+        """
         self.average = []
         scores_sum = 0
         total_word_counts_sum = 0
@@ -118,6 +162,11 @@ class ContentAnalysisModel(object):
         self.average.append(scores_avg)
 
     def to_html(self) -> str:
+        """
+
+        :return: a html table containing all values stored in this class
+        members
+        """
         result = "<div class='dataTables_scroll'"
         result += "<div class='dataTables_scrollHead'>"
         result += "<div class='dataTables_scrollHeadInner'>"
@@ -170,10 +219,19 @@ class ContentAnalysisModel(object):
         return result
 
     def display(self):
+        """For testing purposes, prints a data frame with all values store in
+        the class members
+
+        """
         df = self.generate_data_frame()
         print(df)
 
     def generate_data_frame(self) -> pd.DataFrame:
+        """
+
+        :return: a data frame containing all values stored in this class
+        members
+        """
         columns = ['file']
         for dictionary in self.dictionaries:
             columns.append(dictionary.label)
@@ -197,6 +255,9 @@ class ContentAnalysisModel(object):
         return df
 
     def save_to_csv(self):
+        """saves the data frame into a .csv file
+
+        """
         df = self.generate_data_frame()
         with open('results.csv', 'wb') as csv_file:
             spam_writer = csv.writer(csv_file,
@@ -211,6 +272,13 @@ class ContentAnalysisModel(object):
 
 class Document(object):
     def __init__(self):
+        """An object of this class represents a document
+
+        _active: Boolean that indicates if the document is active
+        _label: file label
+        _name: original filename
+
+        """
         self._active = True
         self._label = ""
         self._name = ""
@@ -239,6 +307,13 @@ class Document(object):
 class Dictionary(Document):
     def __init__(self, content: list, filename: str, label: str,
                  active: bool = True):
+        """
+
+        :param content: list of word/phrses separated by commas
+        :param filename: original filename
+        :param label: file label
+        :param active: Boolean that indicates if the document is active
+        """
         self._content = content
         self._name = filename
         self._label = label
@@ -256,6 +331,14 @@ class Dictionary(Document):
 class File(Document):
     def __init__(self, content: str, filename: str, label: str,
                  total_word_counts: int, active: bool = True):
+        """
+
+        :param content: file content
+        :param filename: original filename
+        :param label: file label
+        :param total_word_counts: count of word in the file
+        :param active: Boolean that indicates if the document is active
+        """
         self._content = content
         self._name = filename
         self._label = label
