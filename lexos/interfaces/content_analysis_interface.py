@@ -12,8 +12,7 @@ from lexos.models.content_analysis_model import ContentAnalysisModel
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
 content_analysis_view = Blueprint('content_analysis', __name__)
-
-
+analysis = None
 # Tells Flask to load this function when someone is at '/contentanalysis'
 @content_analysis_view.route("/contentanalysis", methods=["GET", "POST"])
 def content_analysis():
@@ -21,20 +20,19 @@ def content_analysis():
 
     :return:
     """
-    analysis = ContentAnalysisModel()
-    # Detect the number of active documents.
-    num_active_docs = detect_active_docs()
-    file_manager = utility.load_file_manager()
-    files = file_manager.get_active_files()
-    for file in files:
-        analysis.add_corpus(file)
+    global analysis
+    if analysis is None:
+        analysis = ContentAnalysisModel()
+    elif len(analysis.corpus) == 0:
+        file_manager = utility.load_file_manager()
+        files = file_manager.get_active_files()
+        for file in files:
+            analysis.add_corpus(file)
+
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         return render_template('contentanalysis.html')
     else:
-        for i in range(len(session['dictionary_names'])):
-            analysis.add_dictionary(session['dictionary_names'][i],
-                                    session['dictionary_contents'][i])
         analysis.count_words()
         analysis.generate_scores(session['formula'])
         analysis.generate_averages()
@@ -53,14 +51,21 @@ def upload_dictionaries():
 
     :return:
     """
+    global analysis
+    analysis = ContentAnalysisModel()
+
     session['dictionary_contents'] = []
     session['dictionary_names'] = []
+    session['active_dictionaries'] = []
     for upload_file in request.files.getlist('lemfileselect[]'):
         filename = upload_file.filename
         content = upload_file.read()
+        analysis.add_dictionary(filename, content)
         session['dictionary_contents'].append(content)
         session['dictionary_names'].append(filename)
+        session['active_dictionaries'].append(True)
     data = {"dictionary_labels": session['dictionary_names']}
+    data['active_dictionaries'] = session['active_dictionaries']
     data = json.dumps(data)
     return data
 
@@ -82,3 +87,20 @@ def save_formula():
                 formula.count("[") != formula.count("]"):
             return "error"
     return "success"
+
+
+# Tells Flask to load this function when someone is at '/toggledictionary'
+@content_analysis_view.route("/toggledictionary", methods=["GET", "POST"])
+def toggle_dictionary():
+    dictionary = request.json['dict_name']
+    global analysis
+    analysis.toggle_dictionary(dictionary)
+    session['dictionary_names'] = []
+    session['active_dictionaries'] = []
+    for dictionary in analysis.dictionaries:
+        session['dictionary_names'].append(dictionary.name)
+        session['active_dictionaries'].append(dictionary.active)
+    data = {"dictionary_labels": session['dictionary_names']}
+    data['active_dictionaries'] = session['active_dictionaries']
+    data = json.dumps(data)
+    return data

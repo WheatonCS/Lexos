@@ -62,6 +62,19 @@ font-weight:bold;}
                 <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
                 <input type="file" onchange="upload_dictionaries('apply')" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
             </div>
+
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div>
+            <div id="checkboxes">
+            <!--{% for item in session['dictionary_names'] %}
+                <form method='POST'>
+                    <input type='hidden' name='dictionary' value='{{item}}'>
+                    <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} >{{item}}
+                </form>
+            {% endfor %}-->
+            </div>
         </div>
     </div>
 </div>
@@ -80,9 +93,9 @@ font-weight:bold;}
                            <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
                            <br>
                            <div id="dictionaryButtons">
-                               {% for item in session['dictionary_names'] %}
+                              <!-- {% for item in session['dictionary_names'] %}
                                    <input value="{{ item }}" onclick="this.form.display.value+='{{ item }}'" type="button">
-                               {% endfor %}
+                               {% endfor %}-->
                            </div>
                            <input class="button number" type="button" value="1" onClick="display.value+=1">
                            <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">

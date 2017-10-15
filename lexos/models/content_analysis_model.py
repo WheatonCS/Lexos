@@ -1,8 +1,6 @@
-from docx import Document
-import unicodedata
-import ntpath
 import csv
 import pandas as pd
+from math import sqrt, sin, cos, tan, log  # do not delete!
 
 from lexos.managers.lexos_file import LexosFile
 
@@ -28,23 +26,20 @@ class ContentAnalysisModel(object):
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
         self.dictionaries.append(Dictionary(new_list, file_name, file_name))
 
-    def delete_corpus(self, index: int):
-        del self.corpus[index]
+    def delete_dictionary(self, filename: str):
+        pass
 
-    def delete_dictionary(self, index: int):
-        del self.dictionaries[index]
+    def toggle_dictionary(self, filename: str):
+        for dictionary in self.dictionaries:
+            if dictionary.name == filename:
+                dictionary.active = not dictionary.active
 
-    def deactivate_corpus(self, index: int):
-        self.corpus[index].active = False
-
-    def activate_corpus(self, index: int):
-        self.corpus[index].active = True
-
-    def deactivate_dictionary(self, index: int):
-        self.dictionaries[index].active = False
-
-    def activate_dictionary(self, index: int):
-        self.dictionaries[index].active = True
+    def get_active_dicts(self) -> list:
+        active_dicts = []
+        for dictionary in self.dictionaries:
+            if dictionary.active:
+                active_dicts.append(dictionary)
+        return active_dicts
 
     def count_words(self):
         # delete previous results
@@ -68,11 +63,14 @@ class ContentAnalysisModel(object):
             self.counters.append(counts)
 
     def generate_scores(self, formula: str):
+        self.scores = []
+        self.formulas = []
+        active_dicts = self.get_active_dicts()
         for i in range(len(self.corpus)):
             new_formula = formula
-            for j in range(len(self.dictionaries)):
+            for j in range(len(active_dicts)):
                 new_formula = new_formula.replace(
-                    "[" + self.dictionaries[j].label + "]",
+                    "[" + active_dicts[j].label + "]",
                     str(self.counters[i][j]))
             result = eval(new_formula)
             self.scores.append(round(
@@ -84,6 +82,7 @@ class ContentAnalysisModel(object):
         scores_sum = 0
         total_word_counts_sum = 0
         sums_sum = 0
+        active_dicts = self.get_active_dicts()
         for i in range(len(self.scores)):
             scores_sum += self.scores[i]
             total_word_counts_sum += \
@@ -105,7 +104,7 @@ class ContentAnalysisModel(object):
             sums_avg = 0
         cat_count = 0
         self.average.append("Averages")
-        for x in range(len(self.dictionaries)):
+        for x in range(len(active_dicts)):
             for i in range(len(self.counters)):
                 cat_count += self.counters[i][x]
             if len(self.counters) != 0:
@@ -214,6 +213,7 @@ class Document(object):
     def __init__(self):
         self._active = True
         self._label = ""
+        self._name = ""
 
     @property
     def active(self):
@@ -231,12 +231,16 @@ class Document(object):
     def label(self, label):
         self._label = label
 
+    @property
+    def name(self):
+        return self._name
+
 
 class Dictionary(Document):
     def __init__(self, content: list, filename: str, label: str,
                  active: bool = True):
         self._content = content
-        self._names = filename
+        self._name = filename
         self._label = label
         self._active = active
 
@@ -253,7 +257,7 @@ class File(Document):
     def __init__(self, content: str, filename: str, label: str,
                  total_word_counts: int, active: bool = True):
         self._content = content
-        self._names = filename
+        self._name = filename
         self._label = label
         self._active = active
         self._total_word_counts = total_word_counts
