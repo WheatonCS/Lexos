@@ -16,9 +16,10 @@ analysis = None
 # Tells Flask to load this function when someone is at '/contentanalysis'
 @content_analysis_view.route("/contentanalysis", methods=["GET", "POST"])
 def content_analysis():
-    """
+    """Handles the functionality on the contentanalysis page.
 
-    :return:
+    :return: a response object (often a render_template call) to flask and
+    eventually to the browser.
     """
     global analysis
     if analysis is None:
@@ -28,7 +29,6 @@ def content_analysis():
         files = file_manager.get_active_files()
         for file in files:
             analysis.add_corpus(file)
-
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         return render_template('contentanalysis.html')
@@ -47,13 +47,12 @@ def content_analysis():
 # Tells Flask to load this function when someone is at '/getdictlabels'
 @content_analysis_view.route("/uploaddictionaries", methods=["GET", "POST"])
 def upload_dictionaries():
-    """
+    """Uploads dictionaries to the content analysis object.
 
-    :return:
+    :return: a json object.
     """
     global analysis
     analysis = ContentAnalysisModel()
-
     session['dictionary_contents'] = []
     session['dictionary_names'] = []
     session['active_dictionaries'] = []
@@ -73,9 +72,9 @@ def upload_dictionaries():
 # Tells Flask to load this function when someone is at '/saveformula'
 @content_analysis_view.route("/saveformula", methods=["GET", "POST"])
 def save_formula():
-    """
+    """Saves the formula.
 
-    :return:
+    :return: a string indicating if it succeeded
     """
     formula = request.json['calc_input']
     if len(formula) == 0:
@@ -92,6 +91,10 @@ def save_formula():
 # Tells Flask to load this function when someone is at '/toggledictionary'
 @content_analysis_view.route("/toggledictionary", methods=["GET", "POST"])
 def toggle_dictionary():
+    """Handles the functionality of the checkboxes.
+
+    :return: a json object.
+    """
     dictionary = request.json['dict_name']
     global analysis
     analysis.toggle_dictionary(dictionary)
