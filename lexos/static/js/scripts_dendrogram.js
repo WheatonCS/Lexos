@@ -19,6 +19,11 @@ function runModal (htmlMsg) {
     $('#error-modal').modal()
 }
 
+/**
+ * the function to do ajax in dendrogram
+ * @param url {string} - the url to do post
+ * @param extension {string | null} - used to download dendrogram, to specify the file type to download. if unused, this will be null
+ */
 function doAjax (url, extension) {
     var form = jsonifyForm()
     $.extend(form, {file_extension: extension})
@@ -63,7 +68,7 @@ $(document).ready(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            doAjax('/dendrogramDiv')
+            doAjax('/dendrogramDiv', null)
         }
         else {
             runModal(error)
