@@ -125,13 +125,13 @@ class ContentAnalysisModel(object):
         self.average = []
         scores_sum = 0
         total_word_counts_sum = 0
-        sums_sum = 0
+        formulas_sum = 0
         active_dicts = self.get_active_dicts()
         for i in range(len(self.scores)):
             scores_sum += self.scores[i]
             total_word_counts_sum += \
                 self.corpus[i].total_word_counts
-            sums_sum += self.formulas[i]
+            formulas_sum += self.formulas[i]
         if len(self.scores) != 0:
             scores_avg = round(
                 (float(scores_sum) / len(self.scores)), 3)
@@ -143,7 +143,7 @@ class ContentAnalysisModel(object):
         else:
             total_word_counts_avg = 0
         if len(self.formulas) != 0:
-            sums_avg = round((float(sums_sum) / len(self.formulas)), 1)
+            sums_avg = round((float(formulas_sum) / len(self.formulas)), 1)
         else:
             sums_avg = 0
         cat_count = 0
