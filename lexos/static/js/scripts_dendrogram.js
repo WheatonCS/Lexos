@@ -26,7 +26,7 @@ function runModal (htmlMsg) {
  */
 function doAjax (url, extension) {
     var form = jsonifyForm()
-    $.extend(form, {file_extension: extension})
+    $.extend(form, {downloadFileExtension: extension})
     $.ajax({
             type: 'POST',
             url: url,
@@ -79,7 +79,7 @@ $(document).ready(function () {
     /**
      * The events after any download button is clicked
      */
-    $('#dendroPDFdownload, #dendroSVGdownload, #dendroPNGdownload').on('click', function () {
+    $('.dendroDownload').on('click', function () {
 
         const error = submissionError()  // the error happens during submission
         const fileExtension = $(this).attr('data-file-extension')  // the file extension
