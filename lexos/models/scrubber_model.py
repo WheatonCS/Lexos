@@ -293,5 +293,37 @@ class ScrubbingOptions:
 
 
 class ScrubberModel:
-    def __init__(self):
+    def __init__(self, scrubbing_options: ScrubbingOptions = None):
+        """A class to manage scrubbing parameters.
+
+        :param scrubbing_options: A struct of all the scrubbing options.
+        """
+
+        self._options = scrubbing_options \
+            or self._get_scrubbing_options_from_front_end()
+
+    def _get_basic_options_from_front_end(self) -> BasicOptions:
+        """Gets all the basic options from the front end.
+
+        :return: A BasicOptions struct.
+        """
+
         pass
+
+    def _get_additional_options_from_front_end(self) -> AdditionalOptions:
+        """Gets all the additional options from the front end.
+
+        :return: An AdditionalOptions struct.
+        """
+
+        pass
+
+    def _get_scrubbing_options_from_front_end(self) -> ScrubbingOptions:
+        """Gets all the scrubbing options from the front end.
+
+        :return: A ScrubbingOptions struct.
+        """
+
+        return ScrubbingOptions(
+            basic_options=self._get_basic_options_from_front_end(),
+            additional_options=self._get_additional_options_from_front_end())
