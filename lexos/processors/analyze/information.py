@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import mlab
-
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 
 
@@ -105,8 +102,13 @@ class FileInformation:
         self.iqr = q3 - q1
         self.hapax = ((count_list == 1).sum())
 
-    """
+
+"""
     # THESE TWO PLOT FUNCTION IS NOT USED CURRENTLY
+    
+    import matplotlib.pyplot as plt
+    from matplotlib import mlab
+    
     def plot(self, path):
     
         ###COMMENTS###
@@ -157,4 +159,4 @@ class FileInformation:
         plt.subplots_adjust(left=0.15)
         plt.savefig(path)
         plt.close()
-    """
+"""
