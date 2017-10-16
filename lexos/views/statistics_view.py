@@ -2,6 +2,7 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.stats_model import StatsModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -42,6 +43,7 @@ def statistics():
         token = request.form['tokenType']
         file_info_list, corpus_info = utility.generate_statistics(
             file_manager)
+        A, B = StatsModel().get_result()
         session_manager.cache_analysis_option()
         session_manager.cache_statistic_option()
         # DO NOT save fileManager!
