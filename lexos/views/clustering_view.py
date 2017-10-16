@@ -38,7 +38,8 @@ def dendrogram():
 def dendrogram_div():
     session_manager.cache_analysis_option()
     session_manager.cache_hierarchy_option()
-    return DendrogramModel().get_dendrogram_div()
+    return json.dumps(
+        {'dendroDiv': DendrogramModel().get_dendrogram_div()})
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
