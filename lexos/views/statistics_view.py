@@ -2,9 +2,7 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.models.base_model import BaseModel
 from lexos.models.stats_model import StatsModel
-from lexos.receivers.base_receiver import BaseReceiver
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
