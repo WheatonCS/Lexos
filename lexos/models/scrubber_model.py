@@ -1,3 +1,5 @@
+from lexos.models.filemanager_model import FileManagerModel
+
 
 class BasicOptions:
     def __init__(self, gutenberg: bool, lower: bool, punct: bool, apos: bool,
@@ -292,13 +294,16 @@ class ScrubbingOptions:
         return self._additional_options
 
 
-class ScrubberModel:
+class ScrubberModel(FileManagerModel):
     def __init__(self, scrubbing_options: ScrubbingOptions = None):
         """A class to manage scrubbing parameters.
 
         :param scrubbing_options: A struct of all the scrubbing options.
         """
 
+        super().__init__()
+
+        # Get all the scrubbing options
         self._options = scrubbing_options \
             or self._get_scrubbing_options_from_front_end()
 
