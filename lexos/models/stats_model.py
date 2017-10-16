@@ -11,7 +11,7 @@ from lexos.models.matrix_model import MatrixModel
 class CorpusInfo:
     """This is a structure that holds corpus information"""
     def __init__(self, q1: float, q3: float, iqr: float, median: float,
-                 average: float, num_file: int, file_sizes: int,
+                 average: float, num_file: int, file_sizes: list,
                  file_names: np.ndarray, std_deviation: float,
                  anomaly_iqr: dict, anomaly_std_err: dict):
         self._q1 = q1
@@ -185,7 +185,7 @@ class StatsModel(BaseModel):
                           median=mid,
                           average=average_file_size,
                           num_file=num_file,
-                          file_sizes=file_sizes.item(),
+                          file_sizes=list(file_sizes),
                           file_names=self._doc_term_matrix.index.values,
                           std_deviation=std_dev_file_size,
                           anomaly_iqr=file_anomaly_iqr,
