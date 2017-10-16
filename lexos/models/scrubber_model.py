@@ -163,8 +163,91 @@ class BasicOptions:
 
 
 class AdditionalOptions:
-    def __init__(self):
-        pass
+    def __init__(self, file_consol: str, file_lemma: str,
+                 file_special_char: str, file_sw_kw: str, manual_consol: str,
+                 manual_lemma: str, manual_special_char: str,
+                 manual_sw_kw: str):
+
+        self._file_consol = file_consol
+        self._file_lemma = file_lemma
+        self._file_special_char = file_special_char
+        self._file_sw_kw = file_sw_kw
+        self._manual_consol = manual_consol
+        self._manual_lemma = manual_lemma
+        self._manual_special_char = manual_special_char
+        self._manual_sw_kw = manual_sw_kw
+
+    @property
+    def file_consol(self) -> str:
+        """The user's uploaded consolidations file.
+
+        :return: The above file contents as a string.
+        """
+
+        return self._file_consol
+
+    @property
+    def file_lemma(self) -> str:
+        """The user's uploaded lemma file.
+
+        :return: The above file contents as a string.
+        """
+
+        return self._file_lemma
+
+    @property
+    def file_special_char(self) -> str:
+        """The user's uploaded special character file.
+
+        :return: The above file contents as a string.
+        """
+
+        return self._file_special_char
+
+    @property
+    def file_sw_kw(self) -> str:
+        """The user's uploaded stop word/keep word file.
+
+        :return: The above file contents as a string.
+        """
+
+        return self._file_sw_kw
+
+    @property
+    def manual_consol(self) -> str:
+        """The user's input from the consolidations text box.
+
+        :return: The above field contents as a string.
+        """
+
+        return self._manual_consol
+
+    @property
+    def manual_lemma(self) -> str:
+        """The user's input from the lemma text box.
+
+        :return: The above field contents as a string.
+        """
+
+        return self._manual_lemma
+
+    @property
+    def manual_special_char(self) -> str:
+        """The user's input from the special character text box.
+
+        :return: The above field contents as a string.
+        """
+
+        return self._manual_special_char
+
+    @property
+    def manual_sw_kw(self) -> str:
+        """The user's input from the stop word/keep word text box.
+
+        :return: The above field contents as a string.
+        """
+
+        return self._manual_sw_kw
 
 
 class ScrubbingOptions:
