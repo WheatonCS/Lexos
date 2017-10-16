@@ -262,8 +262,34 @@ class AdditionalOptions:
 
 
 class ScrubbingOptions:
-    def __init__(self):
-        pass
+    def __init__(self, basic_options: BasicOptions,
+                 additional_options: AdditionalOptions):
+        """A struct containing all the scrubbing options.
+
+        :param basic_options: A struct containing basic options.
+        :param additional_options: A struct containing additional options.
+        """
+
+        self._basic_options = basic_options
+        self._additional_options = additional_options
+
+    @property
+    def basic_options(self) -> BasicOptions:
+        """All the basic scrubbing options.
+
+        :return: A BasicOptions struct.
+        """
+
+        return self._basic_options
+
+    @property
+    def additional_options(self) -> AdditionalOptions:
+        """All the additional scrubbing options.
+
+        :return: An AdditionalOptions struct.
+        """
+
+        return self._additional_options
 
 
 class ScrubberModel:
