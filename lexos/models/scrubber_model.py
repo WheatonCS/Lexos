@@ -167,6 +167,17 @@ class AdditionalOptions:
                  file_special_char: str, file_sw_kw: str, manual_consol: str,
                  manual_lemma: str, manual_special_char: str,
                  manual_sw_kw: str):
+        """A struct to represent additional scrubbing options.
+
+        :param file_consol: The uploaded consolidations file string.
+        :param file_lemma: The uploaded lemma file string.
+        :param file_special_char: The uploaded special character file string.
+        :param file_sw_kw: The uploaded stop word/keep word file string.
+        :param manual_consol: The consolidations field string.
+        :param manual_lemma: The lemma field string.
+        :param manual_special_char: The special character field string.
+        :param manual_sw_kw: The stop word/keep word field string.
+        """
 
         self._file_consol = file_consol
         self._file_lemma = file_lemma
