@@ -75,7 +75,7 @@ class FileInfo:
     """This is a structure that holds each file information"""
     def __init__(self, q1: float, q3: float, iqr: float, hapax: int,
                  median: float, average: float, num_word: int, file_name: str,
-                 word_count: int, std_deviation: float, total_word_count:int):
+                 word_count: int, std_deviation: float, total_word_count: int):
         self._q1 = q1
         self._q3 = q3
         self._iqr = iqr
@@ -89,47 +89,47 @@ class FileInfo:
         self._total_word_count = total_word_count
 
     @property
-    def q1(self):
+    def q1(self) -> float:
         return self._q1
 
     @property
-    def q3(self):
+    def q3(self) -> float:
         return self._q3
 
     @property
-    def iqr(self):
+    def iqr(self) -> float:
         return self.iqr
 
     @property
-    def hapax(self):
+    def hapax(self) -> int:
         return self._hapax
 
     @property
-    def median(self):
+    def median(self) -> float:
         return self._median
 
     @property
-    def average(self):
+    def average(self) -> float:
         return self._average
 
     @property
-    def num_word(self):
+    def num_word(self) -> int:
         return self._num_word
 
     @property
-    def file_name(self):
+    def file_name(self) -> str:
         return self._file_name
 
     @property
-    def word_count(self):
+    def word_count(self) -> int:
         return self._word_count
 
     @property
-    def std_deviation(self):
+    def std_deviation(self) -> float:
         return self._std_deviation
 
     @property
-    def total_word_count(self):
+    def total_word_count(self) -> int:
         return self._total_word_count
 
 
