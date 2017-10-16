@@ -27,47 +27,47 @@ class CorpusInfo:
         self._anomaly_std_err = anomaly_std_err
 
     @property
-    def q1(self):
+    def q1(self) -> float:
         return self._q1
 
     @property
-    def q3(self):
+    def q3(self) -> float:
         return self._q3
 
     @property
-    def iqr(self):
+    def iqr(self) -> float:
         return self.iqr
 
     @property
-    def median(self):
+    def median(self) -> float:
         return self._median
 
     @property
-    def average(self):
+    def average(self) -> float:
         return self._average
 
     @property
-    def num_file(self):
+    def num_file(self) -> int:
         return self._num_file
 
     @property
-    def file_sizes(self):
+    def file_sizes(self) -> list:
         return self._file_sizes
 
     @property
-    def file_names(self):
+    def file_names(self) -> np.ndarray:
         return self._file_names
 
     @property
-    def std_deviation(self):
+    def std_deviation(self) -> float:
         return self._std_deviation
 
     @property
-    def anomaly_iqr(self):
+    def anomaly_iqr(self) -> dict:
         return self._anomaly_iqr
 
     @property
-    def anomaly_std_err(self):
+    def anomaly_std_err(self) -> dict:
         return self._anomaly_std_err
 
 
