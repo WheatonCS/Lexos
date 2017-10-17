@@ -22,14 +22,12 @@ function runModal (htmlMsg) {
 /**
  * the function to do ajax in dendrogram
  * @param url {string} - the url to do post
- * @param extension {string | null} - used to download dendrogram, to specify the file type to download. if unused, this will be null
  */
-function doAjax (url, extension) {
+function doAjax (url) {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
     var form = jsonifyForm()
-    $.extend(form, {downloadFileExtension: extension})
     $.ajax({
             type: 'POST',
             url: url,
@@ -43,7 +41,7 @@ function doAjax (url, extension) {
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('backend fail to plot the dendrogram.')
+                runModal('error encountered while plotting the dendrogram.')
             }
         }
     )
@@ -80,22 +78,6 @@ $(document).ready(function () {
             runModal(error)
         }
 
-    })
-
-    /**
-     * The events after any download button is clicked
-     */
-    $('.dendroDownload').on('click', function () {
-
-        const error = submissionError()  // the error happens during submission
-        const fileExtension = $(this).attr('data-file-extension')  // the file extension
-
-        if (error === null) { // if there is no error
-            doAjax('/dendrogramDownload', fileExtension)
-        }
-        else {
-            runModal(error)
-        }
     })
 
 })
