@@ -25,6 +25,9 @@ function runModal (htmlMsg) {
  * @param extension {string | null} - used to download dendrogram, to specify the file type to download. if unused, this will be null
  */
 function doAjax (url, extension) {
+    // show loading icon
+    $('#status-analyze').css({'visibility': 'visible'})
+
     var form = jsonifyForm()
     $.extend(form, {downloadFileExtension: extension})
     $.ajax({
@@ -34,6 +37,7 @@ function doAjax (url, extension) {
             dataType: 'json',
             data: JSON.stringify(form),
             complete: function (response) {
+                $('#status-analyze').css({'visibility': 'hidden'})
                 $('#dendrogram-result').html(response['responseJSON']['dendroDiv'])
             },
             error: function (jqXHR, textStatus, errorThrown) {
