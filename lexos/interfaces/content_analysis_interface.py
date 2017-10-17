@@ -63,8 +63,8 @@ def upload_dictionaries():
         session['dictionary_contents'].append(content)
         session['dictionary_names'].append(filename)
         session['active_dictionaries'].append(True)
-    data = {"dictionary_labels": session['dictionary_names']}
-    data['active_dictionaries'] = session['active_dictionaries']
+    data = {"dictionary_labels": session['dictionary_names'],
+            'active_dictionaries': session['active_dictionaries']}
     data = json.dumps(data)
     return data
 
@@ -103,7 +103,7 @@ def toggle_dictionary():
     for dictionary in analysis.dictionaries:
         session['dictionary_names'].append(dictionary.name)
         session['active_dictionaries'].append(dictionary.active)
-    data = {"dictionary_labels": session['dictionary_names']}
-    data['active_dictionaries'] = session['active_dictionaries']
+    data = {"dictionary_labels": session['dictionary_names'],
+            'active_dictionaries': session['active_dictionaries']}
     data = json.dumps(data)
     return data
