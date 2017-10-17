@@ -34,14 +34,15 @@ def content_analysis():
         return render_template('contentanalysis.html')
     else:
         analysis.count_words()
-        analysis.generate_scores(session['formula'])
-        analysis.generate_averages()
-        data = {"data": [analysis.to_html()]}
-        data["dictionary_labels"] = []
-        for dictionary in analysis.dictionaries:
-            data["dictionary_labels"].append(dictionary.label)
-        data = json.dumps(data)
-        return data
+        if analysis.is_secure(session['formula']):
+            analysis.generate_scores(session['formula'])
+            analysis.generate_averages()
+            data = {"data": [analysis.to_html()], "dictionary_labels": []}
+            for dictionary in analysis.dictionaries:
+                data["dictionary_labels"].append(dictionary.label)
+            data = json.dumps(data)
+            return data
+        return "error"
 
 
 # Tells Flask to load this function when someone is at '/getdictlabels'

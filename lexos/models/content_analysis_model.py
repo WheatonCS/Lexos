@@ -270,6 +270,16 @@ class ContentAnalysisModel(object):
         csv_file.close()
 
 
+def is_secure(formula: str):
+    allowed_input = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                     "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
+    for item in allowed_input:
+        formula = formula.replace(item, "")
+    if len(formula) == 0:
+        return True
+    return False
+
+
 class Document(object):
     def __init__(self):
         """An object of this class represents a document
