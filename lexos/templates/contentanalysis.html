@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% set active_page = 'contentanalysis' %}
 
-{% block title %}analyzer{% endblock %}
+{% block title %}Content Analysis{% endblock %}
 {% block head %}
  <!-- Latest compiled and minified DataTables CSS and JS -->
   {% if config['LOCAL_MODE'] == True %}
@@ -68,12 +68,12 @@ font-weight:bold;}
     <div class="col-md-3">
         <div>
             <div id="checkboxes">
-            <!--{% for item in session['dictionary_names'] %}
+            {% for index in range(session['dictionary_names']|length) %}
                 <form method='POST'>
-                    <input type='hidden' name='dictionary' value='{{item}}'>
-                    <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} >{{item}}
+                    <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
+                    <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}
                 </form>
-            {% endfor %}-->
+            {% endfor %}
             </div>
         </div>
     </div>
@@ -93,9 +93,11 @@ font-weight:bold;}
                            <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
                            <br>
                            <div id="dictionaryButtons">
-                              <!-- {% for item in session['dictionary_names'] %}
-                                   <input value="{{ item }}" onclick="this.form.display.value+='{{ item }}'" type="button">
-                               {% endfor %}-->
+                               {% for index in range(session['dictionary_names']|length) %}
+                                   {% if session['active_dictionaries'][index] %}
+                                        <input value='{{ session['dictionary_names'][index] }}' onclick="this.form.display.value+='[{{ session['dictionary_names'][index] }}]'" type="button">
+                                   {% endif %}
+                               {% endfor %}
                            </div>
                            <input class="button number" type="button" value="1" onClick="display.value+=1">
                            <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
