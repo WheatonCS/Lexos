@@ -63,7 +63,10 @@ class DendrogramModel(BaseModel):
         :return: a div
         """
         figure = self._get_dendrogram_fig()
-        figure['layout'].update({'width': 800, 'height': 1000})
+
+        # update the style of the image
+        figure['layout'].update({'width': 800, 'height': 1000,
+                                 'hovermode': 'x'})
 
         div = plot(figure, show_link=False, output_type="div",
                    include_plotlyjs=False)
