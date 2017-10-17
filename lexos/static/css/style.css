@@ -1,6 +1,6 @@
 /*@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
 */
-/*!
+/*/
   Lato font.
 */
 /* Lato (normal, regular) */
@@ -314,7 +314,7 @@ input[type="file"] {
 }
 
 
-/* ================== d3 STYLING ================================= */
+/*!* ================== d3 STYLING ================================= *!*/
 
 .line {
   fill: none;
@@ -1847,6 +1847,10 @@ select#orientation {
   width: max-content;
   margin-right: auto;
   margin-left: auto;
+}
+
+#dendrogram-result .plot {
+  opacity: 1;
 }
 
 
