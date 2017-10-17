@@ -37,6 +37,8 @@ function doAjax (url, extension) {
                 $('#dendrogram-result').html(response['responseJSON']['dendroDiv'])
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                console.log('textStatus: ' + textStatus)
+                console.log('errorThrown: ' + errorThrown)
                 runModal('backend fail to plot the dendrogram.')
             }
         }
