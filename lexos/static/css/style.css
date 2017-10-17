@@ -1845,6 +1845,7 @@ select#orientation {
 
 #dendrogram-result {
   width: max-content;
+  width: -moz-max-content;
   margin-right: auto;
   margin-left: auto;
 }
