@@ -82,62 +82,55 @@ font-weight:bold;}
             <div class="optuploadbuttondiv">
                 <div id="big_wrapper">
                     <div id="form_wrapper">
-                       <form id="calcform" name="calc">
-                           <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
-                           <br>
-                           <div id="dictionaryButtons">
-                               {% for index in range(session['dictionary_names']|length) %}
-                                   {% if session['active_dictionaries'][index] %}
-                                        <input value='{{ session['dictionary_names'][index] }}' onclick="this.form.display.value+='[{{ session['dictionary_names'][index] }}]'" type="button">
-                                   {% endif %}
-                               {% endfor %}
-                           </div>
-                           <input class="button number" type="button" value="1" onClick="display.value+=1">
-                           <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
-                           <input class="button number" type="button" value="3" onClick="this.form.display.value+=3">
-                           <input class="button three" type="button" value="C" onClick="this.form.display.value=''">
-                           <input class="button three" type="button" value="DEL" onClick="backspace(this.form)">
-                           <br>
-                           <input class="button number" type="button" value="4" onClick="this.form.display.value+=4">
-                           <input class="button number" type="button" value="5" onClick="this.form.display.value+=5">
-                           <input class="button number" type="button" value="6" onClick="this.form.display.value+=6">
-                           <input class="button opps" type="button" value="+" onClick="this.form.display.value+='+'">
-                           <input class="button" type="button" value="sin" onClick="this.form.display.value+='sin('">
-                           <br>
-                           <input class="button number" type="button" value="7" onClick="this.form.display.value+=7">
-                           <input class="button number" type="button" value="8" onClick="this.form.display.value+=8">
-                           <input class="button number" type="button" value="9" onClick="this.form.display.value+=9">
-                           <input class="button opps" type="button" value="-" onClick="this.form.display.value+='-'">
-                           <input class="button" type="button" value="cos" onClick="this.form.display.value+='cos('">
-                           <br>
-                           <input class="button opps" type="button" value="." onClick="this.form.display.value+='.'">
-                           <input class="button number" type="button" value="0" onClick="this.form.display.value+=0">
-                           <input class="button opps" type="button" value="/" onClick="this.form.display.value+='/'">
-                           <input class="button opps" type="button" value="x" onClick="this.form.display.value+='*'">
-                           <input class="button" type="button" value="tan" onClick="this.form.display.value+='tan('">
-                           <br>
-                           <input class="button opps" type="button" value="√" onClick="this.form.display.value+='√('">
-                           <input class="button opps" type="button" value="log" onClick="this.form.display.value+='log('">
-                           <input class="button" type="button" value="x^y" onClick="this.form.display.value+='^('">
-                           <input class="button" type="button" value="(" onClick="this.form.display.value+='('">
-                           <input class="button" type="button" value=")" onClick="this.form.display.value+=')'">
-                           <br>
-                           <a class="btn btn-success" id='save_formula' role="button">Save</a>
-                       </form>
-                   </div>
+                        <form id="calcform" name="calc">
+                       <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
+                       <br>
+                       <div id="dictionaryButtons">
+                           {% for index in range(session['dictionary_names']|length) %}
+                               {% if session['active_dictionaries'][index] %}
+                                    <input value='{{ session['dictionary_names'][index] }}' onclick="this.form.display.value+='[{{ session['dictionary_names'][index] }}]'" type="button">
+                               {% endif %}
+                           {% endfor %}
+                       </div>
+                       <input class="button number" type="button" value="1" onClick="display.value+=1">
+                       <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
+                       <input class="button number" type="button" value="3" onClick="this.form.display.value+=3">
+                       <input class="button three" type="button" value="C" onClick="this.form.display.value=''">
+                       <input class="button three" type="button" value="DEL" onClick="backspace(this.form)">
+                       <br>
+                       <input class="button number" type="button" value="4" onClick="this.form.display.value+=4">
+                       <input class="button number" type="button" value="5" onClick="this.form.display.value+=5">
+                       <input class="button number" type="button" value="6" onClick="this.form.display.value+=6">
+                       <input class="button opps" type="button" value="+" onClick="this.form.display.value+='+'">
+                       <input class="button" type="button" value="sin" onClick="this.form.display.value+='sin('">
+                       <br>
+                       <input class="button number" type="button" value="7" onClick="this.form.display.value+=7">
+                       <input class="button number" type="button" value="8" onClick="this.form.display.value+=8">
+                       <input class="button number" type="button" value="9" onClick="this.form.display.value+=9">
+                       <input class="button opps" type="button" value="-" onClick="this.form.display.value+='-'">
+                       <input class="button" type="button" value="cos" onClick="this.form.display.value+='cos('">
+                       <br>
+                       <input class="button opps" type="button" value="." onClick="this.form.display.value+='.'">
+                       <input class="button number" type="button" value="0" onClick="this.form.display.value+=0">
+                       <input class="button opps" type="button" value="/" onClick="this.form.display.value+='/'">
+                       <input class="button opps" type="button" value="x" onClick="this.form.display.value+='*'">
+                       <input class="button" type="button" value="tan" onClick="this.form.display.value+='tan('">
+                       <br>
+                       <input class="button opps" type="button" value="√" onClick="this.form.display.value+='√('">
+                       <input class="button opps" type="button" value="log" onClick="this.form.display.value+='log('">
+                       <input class="button" type="button" value="x^y" onClick="this.form.display.value+='^('">
+                       <input class="button" type="button" value="(" onClick="this.form.display.value+='('">
+                       <input class="button" type="button" value=")" onClick="this.form.display.value+=')'">
+                   </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-3">
-
-    </div>
-</div>
 <div class="row" style="margin-top: 20px;">
     <div class="col-md-3">
-        <a class="btn btn-success" onclick="analyzeContent('apply')" role="button">Analyze</a>
+        <a class="btn btn-success" id="analyze_button" role="button">Analyze</a>
     </div>
     <div class="col-md-9" style="text-align:right;">
         <a class="btn btn-primary" onclick="" role="button">Download CSV</a>

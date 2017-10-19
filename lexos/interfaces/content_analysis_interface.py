@@ -33,6 +33,15 @@ def content_analysis():
         # 'GET' request occurs when the page is first loaded
         return render_template('contentanalysis.html')
     else:
+        formula = request.json['calc_input']
+        if len(formula) == 0:
+            session['formula'] = "0"
+        else:
+            formula = formula.replace("√", "sqrt").replace("^", "**")
+            session['formula'] = formula
+            if formula.count("(") != formula.count(")") or \
+                    formula.count("[") != formula.count("]"):
+                return "error"
         analysis.count_words()
         if analysis.is_secure(session['formula']):
             analysis.generate_scores(session['formula'])
@@ -78,6 +87,7 @@ def save_formula():
     :return: a string indicating if it succeeded
     """
     formula = request.json['calc_input']
+    print(formula)
     if len(formula) == 0:
         session['formula'] = "0"
     else:
