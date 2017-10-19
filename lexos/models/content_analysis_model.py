@@ -269,15 +269,18 @@ class ContentAnalysisModel(object):
                 spam_writer.writerow(list(row))
         csv_file.close()
 
-
-def is_secure(formula: str):
-    allowed_input = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                     "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
-    for item in allowed_input:
-        formula = formula.replace(item, "")
-    if len(formula) == 0:
-        return True
-    return False
+    def is_secure(self, formula: str):
+        active_dicts = self.get_active_dicts()
+        allowed_input = []
+        for dictionary in active_dicts:
+            allowed_input.append("[" + dictionary.name + "]")
+        allowed_input += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ",
+                         "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
+        for item in allowed_input:
+            formula = formula.replace(item, "")
+        if len(formula) == 0:
+            return True
+        return False
 
 
 class Document(object):
