@@ -58,27 +58,20 @@ font-weight:bold;}
             <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
         </legend>
         <div class="collapse" id="lemmasPanel">
+            <div id="checkboxes">
+                {% for index in range(session['dictionary_names']|length) %}
+                    <form method='POST'>
+                        <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
+                        <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}
+                    </form>
+                {% endfor %}
+            </div>
             <div class="optuploadbuttondiv">
                 <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
                 <input type="file" onchange="upload_dictionaries('apply')" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
             </div>
-
         </div>
     </div>
-    <div class="col-md-3">
-        <div>
-            <div id="checkboxes">
-            {% for index in range(session['dictionary_names']|length) %}
-                <form method='POST'>
-                    <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
-                    <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}
-                </form>
-            {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
     <div class="col-md-3">
         <legend id="Dictionaries" class="has-chevron">
             Formula
@@ -102,7 +95,7 @@ font-weight:bold;}
                            <input class="button number" type="button" value="1" onClick="display.value+=1">
                            <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
                            <input class="button number" type="button" value="3" onClick="this.form.display.value+=3">
-                           <input class="button three" type="button" value="C" onClick="this.form.display.value=' '">
+                           <input class="button three" type="button" value="C" onClick="this.form.display.value=''">
                            <input class="button three" type="button" value="DEL" onClick="backspace(this.form)">
                            <br>
                            <input class="button number" type="button" value="4" onClick="this.form.display.value+=4">
@@ -135,6 +128,11 @@ font-weight:bold;}
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+
     </div>
 </div>
 <div class="row" style="margin-top: 20px;">
