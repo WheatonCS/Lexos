@@ -58,19 +58,24 @@ font-weight:bold;}
             <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
         </legend>
         <div class="collapse" id="lemmasPanel">
-            <div id="checkboxes">
-                {% for index in range(session['dictionary_names']|length) %}
-                        <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
-                        <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}
-                {% endfor %}
+            <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
+                <div id="checkboxes">
+                    {% for index in range(session['dictionary_names']|length) %}
+                        <div class="forAllCheckBox" align="left">
+                            <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
+                            <label id="statSelect"><input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}</label>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="optuploadbuttondiv">
                 <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
                 <input type="file" onchange="upload_dictionaries('apply')" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
             </div>
         </div>
+
     </div>
-    <div class="col-md-3">
+    <div class="col-md-5">
         <legend id="Dictionaries" class="has-chevron">
             Formula
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
