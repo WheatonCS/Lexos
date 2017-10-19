@@ -105,18 +105,13 @@ class FileInformation:
 
 """
     # THESE TWO PLOT FUNCTION IS NOT USED CURRENTLY
-    
     import matplotlib.pyplot as plt
     from matplotlib import mlab
-    
     def plot(self, path):
-    
         ###COMMENTS###
-        Plot a bar chart to represent the statistics.
-
+        Plot a bar chart to represent the statistics
         x is the file name and y is the file size, represented by word count.
         ###COMMENTS###
-        
         plt.bar(list(range(self.num_file)), list(self.file_sizes),
                 align='center')
         plt.xticks(list(range(self.num_file)), list(self.file_names))
@@ -125,18 +120,14 @@ class FileInformation:
         plt.ylabel('File Size(in term of word count)')
         plt.savefig(path)
         plt.close()
-        
     def plot(self, path, num_bins=0):
-    
         ###COMMENTS###
         draw a histogram to represent the data
-
         :param path: User defined path to store the desired image
         :param num_bins: number of bars, default is
                          (Number different word in the file ) / 2, if it is too
                          large take 50 as default (see '#default of num_bins')
         ###COMMENTS###
-        
         # plot data
         mu = self.average  # mean of distribution
         sigma = self.std_deviation  # standard deviation of distribution
@@ -146,7 +137,6 @@ class FileInformation:
         # the histogram of the data
         n, bins, patches = plt.hist(list(self.word_count), num_bins,
                                     normed=1, facecolor='green', alpha=0.5)
-
         # add a 'best fit' line
         y = mlab.normpdf(bins, mu, sigma)
         plt.plot(bins, y, 'r--')
@@ -154,7 +144,6 @@ class FileInformation:
         plt.ylabel('Probability(how many words have this word count)')
         plt.title(r'Histogram of word count: $\mu=' + str(self.average) +
                   '$, $\sigma=' + str(self.std_deviation) + '$')
-
         # Tweak spacing to prevent clipping of y axis label
         plt.subplots_adjust(left=0.15)
         plt.savefig(path)

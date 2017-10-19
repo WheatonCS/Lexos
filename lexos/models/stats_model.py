@@ -74,8 +74,9 @@ class CorpusInfo:
 class FileInfo:
     """This is a structure that holds each file information"""
     def __init__(self, q1: float, q3: float, iqr: float, hapax: int,
-                 median: float, average: float, num_word: int, file_name: str,
-                 word_count: int, std_deviation: float, total_word_count: int):
+                 median: float, average: float, num_word: int,
+                 file_name: str, word_count: int, std_deviation: float,
+                 total_word_count: int):
         self._q1 = q1
         self._q3 = q3
         self._iqr = iqr
