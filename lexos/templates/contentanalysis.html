@@ -60,10 +60,8 @@ font-weight:bold;}
         <div class="collapse" id="lemmasPanel">
             <div id="checkboxes">
                 {% for index in range(session['dictionary_names']|length) %}
-                    <form method='POST'>
                         <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
                         <input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}
-                    </form>
                 {% endfor %}
             </div>
             <div class="optuploadbuttondiv">
@@ -82,7 +80,6 @@ font-weight:bold;}
             <div class="optuploadbuttondiv">
                 <div id="big_wrapper">
                     <div id="form_wrapper">
-                        <form id="calcform" name="calc">
                        <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
                        <br>
                        <div id="dictionaryButtons">
@@ -121,7 +118,6 @@ font-weight:bold;}
                        <input class="button" type="button" value="x^y" onClick="this.form.display.value+='^('">
                        <input class="button" type="button" value="(" onClick="this.form.display.value+='('">
                        <input class="button" type="button" value=")" onClick="this.form.display.value+=')'">
-                   </form>
                     </div>
                 </div>
             </div>
