@@ -66,6 +66,7 @@ def upload_dictionaries():
     session['dictionary_contents'] = []
     session['dictionary_names'] = []
     session['active_dictionaries'] = []
+    session['toggle_all'] = True
     for upload_file in request.files.getlist('lemfileselect[]'):
         filename = upload_file.filename
         content = upload_file.read()
@@ -73,8 +74,9 @@ def upload_dictionaries():
         session['dictionary_contents'].append(content)
         session['dictionary_names'].append(filename)
         session['active_dictionaries'].append(True)
-    data = {"dictionary_labels": session['dictionary_names'],
-            'active_dictionaries': session['active_dictionaries']}
+    data = {'dictionary_labels': session['dictionary_names'],
+            'active_dictionaries': session['active_dictionaries'],
+            'toggle_all': session['toggle_all']}
     data = json.dumps(data)
     return data
 
@@ -106,15 +108,26 @@ def toggle_dictionary():
 
     :return: a json object.
     """
-    dictionary = request.json['dict_name']
     global analysis
-    analysis.toggle_dictionary(dictionary)
     session['dictionary_names'] = []
     session['active_dictionaries'] = []
-    for dictionary in analysis.dictionaries:
-        session['dictionary_names'].append(dictionary.name)
-        session['active_dictionaries'].append(dictionary.active)
-    data = {"dictionary_labels": session['dictionary_names'],
-            'active_dictionaries': session['active_dictionaries']}
+    if request.json['toggle_all']:
+        session['toggle_all'] = not session['toggle_all']
+        for dictionary in analysis.dictionaries:
+            session['dictionary_names'].append(dictionary.name)
+            dictionary.active = session['toggle_all']
+            session['active_dictionaries'].append(session['toggle_all'])
+    else:
+        dictionary = request.json['dict_name']
+        analysis.toggle_dictionary(dictionary)
+        session['toggle_all'] = False
+        for dictionary in analysis.dictionaries:
+            session['dictionary_names'].append(dictionary.name)
+            session['active_dictionaries'].append(dictionary.active)
+            if not dictionary.active:
+                session['toggle_all'] = False
+    data = {'dictionary_labels': session['dictionary_names'],
+            'active_dictionaries': session['active_dictionaries'],
+            'toggle_all': session['toggle_all']}
     data = json.dumps(data)
     return data
