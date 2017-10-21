@@ -46,9 +46,16 @@ def content_analysis():
         if analysis.is_secure(session['formula']):
             analysis.generate_scores(session['formula'])
             analysis.generate_averages()
-            data = {"data": [analysis.to_html()], "dictionary_labels": []}
+
+            session['result_table'] = analysis.to_html()
+            session['dictionary_labels'] = []
+            session['active_dictionaries'] = []
             for dictionary in analysis.dictionaries:
-                data["dictionary_labels"].append(dictionary.label)
+                session["dictionary_labels"].append(dictionary.label)
+                session["active_dictionaries"].append(dictionary.active)
+            data = {"result_table": session['result_table'],
+                    "dictionary_labels": session['dictionary_labels'],
+                    "active_dictionaries": session['active_dictionaries']}
             data = json.dumps(data)
             return data
         return "error"
@@ -153,3 +160,4 @@ def delete_dictionary():
             'active_dictionaries': session['active_dictionaries']}
     data = json.dumps(data)
     return data
+

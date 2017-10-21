@@ -72,7 +72,7 @@ font-weight:bold;}
             </div>
             <div class="optuploadbuttondiv">
                 <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
-                <input type="file" onchange="upload_dictionaries('apply')" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
+                <input type="file" onchange="upload_dictionaries()" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
             </div>
         </div>
 
@@ -135,7 +135,7 @@ font-weight:bold;}
 </div>
 <div class="row" style="margin-top: 20px;">
     <div class="col-md-3">
-        <a class="btn btn-success" id="analyze_button" role="button">Analyze</a>
+        <a class="btn btn-success" id="analyze_button" role="button" onclick="analyze()">Analyze</a>
     </div>
     <div class="col-md-9" style="text-align:right;">
         <a class="btn btn-primary" onclick="" role="button">Download CSV</a>
