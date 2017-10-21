@@ -58,7 +58,7 @@ font-weight:bold;}
             <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
         </legend>
         <div class="collapse" id="lemmasPanel">
-            <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
+            <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 320px; min-height: 2em;">
                 <div class="forAllCheckBox" id="forAllCheckBox" align="left"></div>
                 <div id="checkboxes" style="padding-left: 15px">
                     {% for index in range(session['dictionary_names']|length) %}
@@ -89,6 +89,7 @@ font-weight:bold;}
                     <div id="form_wrapper">
                        <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
                        <br>
+                        <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 100px; min-height: 0px">
                        <div id="dictionaryButtons">
                            {% for index in range(session['dictionary_names']|length) %}
                                {% if session['active_dictionaries'][index] %}
@@ -96,6 +97,7 @@ font-weight:bold;}
                                {% endif %}
                            {% endfor %}
                        </div>
+                        </div>
                        <input class="button number" type="button" value="1" onClick="display.value+=1">
                        <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
                        <input class="button number" type="button" value="3" onClick="this.form.display.value+=3">
