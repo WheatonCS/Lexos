@@ -131,3 +131,26 @@ def toggle_dictionary():
             'toggle_all': session['toggle_all']}
     data = json.dumps(data)
     return data
+
+
+# Tells Flask to load this function when someone is at '/deletedictionary'
+@content_analysis_view.route("/deletedictionary", methods=["GET", "POST"])
+def delete_dictionary():
+    """Handles the functionality of the delete buttons.
+
+    :return: a json object.
+    """
+    global analysis
+    session['dictionary_names'] = []
+    session['active_dictionaries'] = []
+
+    dictionary = request.json['dict_name']
+    analysis.delete_dictionary(dictionary)
+    for dictionary in analysis.dictionaries:
+        session['dictionary_names'].append(dictionary.name)
+        session['active_dictionaries'].append(dictionary.active)
+    data = {'dictionary_labels': session['dictionary_names'],
+            'active_dictionaries': session['active_dictionaries'],
+            'toggle_all': session['toggle_all']}
+    data = json.dumps(data)
+    return data

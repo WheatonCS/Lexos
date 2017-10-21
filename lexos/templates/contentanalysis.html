@@ -67,6 +67,7 @@ font-weight:bold;}
                         <div class="forAllCheckBox" align="left">
                             <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
                             <label id="statSelect"><input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}</label>
+                            <a class="btn" id="analyze_button" role="button" onclick='delete_dictionary("{{ index }}")'>X</a>
                         </div>
                     {% endfor %}
                 </div>

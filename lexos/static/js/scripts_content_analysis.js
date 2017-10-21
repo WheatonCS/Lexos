@@ -67,7 +67,8 @@ function upload_dictionaries(action) {
               if(active_dicts[i]){
                   checkboxes += " checked";
               }
-              checkboxes += "'><input type='checkbox' id='dict_checkbox' onclick='toggle_checkbox("+i+")'>"+dict_labels[i]+ "</label></div>";
+              checkboxes += "'><input type='checkbox' id='dict_checkbox' onclick='toggle_checkbox("+i+")'>"+dict_labels[i]+ "</label>";
+              checkboxes += "<a class='btn' id='analyze_button' role='button' onclick='delete_dictionary(" + i +")'>X</a></div>";
               $('#checkboxes').append(checkboxes);
           }
           $('#status-prepare').css({ 'visibility': 'hidden' });
@@ -117,7 +118,52 @@ function toggle_checkbox(i) {
           if(active_dicts[i]){
               checkboxes += " checked";
           }
-          checkboxes += "'><input type='checkbox' id='dict_checkbox' onclick='toggle_checkbox("+i+")'>"+dict_labels[i]+ "</label></div>";
+          checkboxes += "'><input type='checkbox' id='dict_checkbox' onclick='toggle_checkbox("+i+")'>"+dict_labels[i]+ "</label>";
+          checkboxes += "<a class='btn' id='analyze_button' role='button' onclick='delete_dictionary(" + i +")'>X</a></div>";
+          $('#checkboxes').append(checkboxes);
+      }
+    })
+}
+function delete_dictionary(i) {
+    var dict_names = [];
+    $("input[name=dictionary]").each(function(){ dict_names.push(this.value); });
+    var dict_name = dict_names[i];
+    var data = JSON.stringify({"dict_name": dict_name});
+
+   $.ajax({
+      url: "/deletedictionary",
+      type: "POST",
+      data: data,
+      contentType: 'application/json;charset=UTF-8'
+   }).done(function (response) {
+       response = JSON.parse(response);
+       var dict_labels = response['dictionary_labels'];
+       var active_dicts = response['active_dictionaries'];
+       var toggle_all = response['toggle_all'];
+       $('#dictionaryButtons').empty();
+       $('#checkboxes').empty();
+       $('#forAllCheckBox').empty();
+       $('#display').val("");
+       var check_all = "<label class='icon-checkbox";
+       if(toggle_all) {
+           check_all += " checked";
+       }
+       check_all += "'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>";
+       $('#forAllCheckBox').append(check_all);
+      for (var i = 0; i < dict_labels.length; i++) {
+          if(active_dicts[i]) {
+              var buttons = "<input type='button' value='" + dict_labels[i] + "'" +
+                  " onClick='" + "this.form.display.value+=\"[" + dict_labels[i] + "]\"'>";
+              $('#dictionaryButtons').append(buttons);
+          }
+          var checkboxes = "<div class='forAllCheckBox' align='left'>" +
+              "<input type='hidden' name='dictionary' value='"+dict_labels[i]+"'>" +
+              "<label class='icon-checkbox";
+          if(active_dicts[i]){
+              checkboxes += " checked";
+          }
+          checkboxes += "'><input type='checkbox' id='dict_checkbox' onclick='toggle_checkbox("+i+")'>"+dict_labels[i]+ "</label>";
+          checkboxes += "<a class='btn' id='analyze_button' role='button' onclick='delete_dictionary(" + i +")'>X</a></div>";
           $('#checkboxes').append(checkboxes);
       }
     })

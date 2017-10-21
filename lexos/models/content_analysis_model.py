@@ -50,7 +50,10 @@ class ContentAnalysisModel(object):
 
         :param filename: filename of dictionary to delete
         """
-        pass
+        for i in range(len(self.dictionaries)):
+            if self.dictionaries[i].name == filename:
+                del self.dictionaries[i]
+                break
 
     def toggle_dictionary(self, filename: str):
         """Activates and Deactivates a dictionary
