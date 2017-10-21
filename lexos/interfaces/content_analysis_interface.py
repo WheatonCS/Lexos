@@ -151,6 +151,5 @@ def delete_dictionary():
         session['active_dictionaries'].append(dictionary.active)
     data = {'dictionary_labels': session['dictionary_names'],
             'active_dictionaries': session['active_dictionaries']}
-            #'toggle_all': session['toggle_all']}
     data = json.dumps(data)
     return data

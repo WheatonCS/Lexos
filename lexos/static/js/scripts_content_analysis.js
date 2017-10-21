@@ -103,7 +103,6 @@ function toggle_checkbox(i) {
        var dict_labels = response['dictionary_labels'];
        var active_dicts = response['active_dictionaries'];
        var toggle_all = response['toggle_all'];
-
        $('#dictionaryButtons').empty();
        $('#checkboxes').empty();
        $('#forAllCheckBox').empty();
@@ -137,7 +136,6 @@ function delete_dictionary(i) {
     $("input[name=dictionary]").each(function(){ dict_names.push(this.value); });
     var dict_name = dict_names[i];
     var data = JSON.stringify({"dict_name": dict_name});
-
    $.ajax({
       url: "/deletedictionary",
       type: "POST",
@@ -147,14 +145,12 @@ function delete_dictionary(i) {
        response = JSON.parse(response);
        var dict_labels = response['dictionary_labels'];
        var active_dicts = response['active_dictionaries'];
-       //var toggle_all = response['toggle_all'];
        $('#dictionaryButtons').empty();
        $('#checkboxes').empty();
        $('#display').val("");
        if(dict_labels.length == 0){
            $('#forAllCheckBox').empty();
        }
-
       for (var i = 0; i < dict_labels.length; i++) {
           if(active_dicts[i]) {
               var buttons = "<input type='button' value='" + dict_labels[i] + "'" +
@@ -178,15 +174,12 @@ function backspace(calc){
     var length = content.length;
     if(content[length -1] == "]"){
         content = content.substring(0,content.lastIndexOf("["));
-    }
-    else if(content.endsWith("sin(") || content.endsWith("cos(") ||
+    }else if(content.endsWith("sin(") || content.endsWith("cos(") ||
             content.endsWith("tan(") || content.endsWith("log(")){
         content = content.substring(0,length - 4);
-    }
-    else if(content.endsWith("^(") || content.endsWith("√(") ){
+    }else if(content.endsWith("^(") || content.endsWith("√(") ){
         content = content.substring(0,length - 2);
-    }
-    else{
+    }else{
         content = content.substring(0,length - 1);
     }
     calc.display.value = content;
