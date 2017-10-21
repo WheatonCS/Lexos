@@ -55,8 +55,16 @@ function upload_dictionaries(action) {
         $.each(response['dictionary_labels'], function (i, item) {
           var dict_labels = response['dictionary_labels'];
           var active_dicts = response['active_dictionaries'];
+          var toggle_all = response['toggle_all'];
           $('#dictionaryButtons').empty();
           $('#checkboxes').empty();
+          $('#forAllCheckBox').empty();
+          var check_all = "<label class='icon-checkbox";
+          if(toggle_all) {
+              check_all += " checked";
+          }
+          check_all += "'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>";
+          $('#forAllCheckBox').append(check_all);
           for (i = 0; i < dict_labels.length; i++) {
               var buttons = "<input type='button' value='" + dict_labels[i] + "'" +
                   "onClick='" + "this.form.display.value+=\"[" + dict_labels[i] + "]\"'>";
@@ -139,17 +147,14 @@ function delete_dictionary(i) {
        response = JSON.parse(response);
        var dict_labels = response['dictionary_labels'];
        var active_dicts = response['active_dictionaries'];
-       var toggle_all = response['toggle_all'];
+       //var toggle_all = response['toggle_all'];
        $('#dictionaryButtons').empty();
        $('#checkboxes').empty();
-       $('#forAllCheckBox').empty();
        $('#display').val("");
-       var check_all = "<label class='icon-checkbox";
-       if(toggle_all) {
-           check_all += " checked";
+       if(dict_labels.length == 0){
+           $('#forAllCheckBox').empty();
        }
-       check_all += "'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>";
-       $('#forAllCheckBox').append(check_all);
+
       for (var i = 0; i < dict_labels.length; i++) {
           if(active_dicts[i]) {
               var buttons = "<input type='button' value='" + dict_labels[i] + "'" +

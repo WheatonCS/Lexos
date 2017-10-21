@@ -59,9 +59,7 @@ font-weight:bold;}
         </legend>
         <div class="collapse" id="lemmasPanel">
             <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
-                <div class="forAllCheckBox" id="forAllCheckBox" align="left">
-                    <label><input type="checkbox" id="allCheckBoxSelector" checked onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>
-                </div>
+                <div class="forAllCheckBox" id="forAllCheckBox" align="left"></div>
                 <div id="checkboxes" style="padding-left: 15px">
                     {% for index in range(session['dictionary_names']|length) %}
                         <div class="forAllCheckBox" align="left">
