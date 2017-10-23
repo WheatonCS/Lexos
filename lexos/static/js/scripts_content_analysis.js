@@ -124,7 +124,7 @@ function update_dictionary_checkboxes(dict_labels, active_dicts) {
             checkbox += " checked";
         }
         checkbox += "'><input type='checkbox' id='dict_checkbox' onclick='toggle_checkbox("+i+")'>"+dict_labels[i]+ "</label>";
-        checkbox += "<a class='btn' id='analyze_button' role='button' onclick='delete_dictionary(" + i +")'>X</a></div>";
+        checkbox += "<a role='button'><span class='glyphicon glyphicon-remove delete' onclick='delete_dictionary(" + i + ")'></span></a>";
         $('#checkboxes').append(checkbox);
     }
 }

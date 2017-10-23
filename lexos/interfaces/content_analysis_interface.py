@@ -29,9 +29,26 @@ def content_analysis():
         files = file_manager.get_active_files()
         for file in files:
             analysis.add_corpus(file)
+
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
-        return render_template('contentanalysis.html')
+        result_table = ""
+        dictionary_labels = []
+        active_dictionaries = []
+        session['toggle_all'] = False
+        if len(analysis.dictionaries):
+            session['toggle_all'] = True
+            for dictionary in analysis.dictionaries:
+                dictionary_labels.append(dictionary.label)
+                active_dictionaries.append(dictionary.active)
+                result_table = analysis.to_html()
+                if not dictionary.active:
+                    session['toggle_all'] = False
+        return render_template('contentanalysis.html',
+                               result_table=result_table,
+                               dictionary_labels=dictionary_labels,
+                               active_dictionaries=active_dictionaries,
+                               toggle_all=session['toggle_all'])
     else:
         formula = request.json['calc_input']
         if len(formula) == 0:
@@ -46,16 +63,12 @@ def content_analysis():
         if analysis.is_secure(session['formula']):
             analysis.generate_scores(session['formula'])
             analysis.generate_averages()
-
-            session['result_table'] = analysis.to_html()
-            session['dictionary_labels'] = []
-            session['active_dictionaries'] = []
+            data = {"result_table": analysis.to_html(),
+                    "dictionary_labels": [],
+                    "active_dictionaries": []}
             for dictionary in analysis.dictionaries:
-                session["dictionary_labels"].append(dictionary.label)
-                session["active_dictionaries"].append(dictionary.active)
-            data = {"result_table": session['result_table'],
-                    "dictionary_labels": session['dictionary_labels'],
-                    "active_dictionaries": session['active_dictionaries']}
+                data['dictionary_labels'].append(dictionary.label)
+                data['active_dictionaries'].append(dictionary.active)
             data = json.dumps(data)
             return data
         return "error"
@@ -70,20 +83,16 @@ def upload_dictionaries():
     """
     global analysis
     analysis = ContentAnalysisModel()
-    session['dictionary_contents'] = []
-    session['dictionary_names'] = []
-    session['active_dictionaries'] = []
     session['toggle_all'] = True
+    data = {'dictionary_labels': [],
+            'active_dictionaries': [],
+            'toggle_all': True}
     for upload_file in request.files.getlist('lemfileselect[]'):
         filename = upload_file.filename
         content = upload_file.read()
         analysis.add_dictionary(filename, content)
-        session['dictionary_contents'].append(content)
-        session['dictionary_names'].append(filename)
-        session['active_dictionaries'].append(True)
-    data = {'dictionary_labels': session['dictionary_names'],
-            'active_dictionaries': session['active_dictionaries'],
-            'toggle_all': session['toggle_all']}
+        data['dictionary_labels'].append(filename)
+        data['active_dictionaries'].append(True)
     data = json.dumps(data)
     return data
 
@@ -116,26 +125,25 @@ def toggle_dictionary():
     :return: a json object.
     """
     global analysis
-    session['dictionary_names'] = []
-    session['active_dictionaries'] = []
+    data = {'dictionary_labels': [],
+            'active_dictionaries': [],
+            'toggle_all': session['toggle_all']}
     if request.json['toggle_all']:
         session['toggle_all'] = not session['toggle_all']
         for dictionary in analysis.dictionaries:
-            session['dictionary_names'].append(dictionary.name)
             dictionary.active = session['toggle_all']
-            session['active_dictionaries'].append(session['toggle_all'])
+            data['dictionary_labels'].append(dictionary.name)
+            data['active_dictionaries'].append(session['toggle_all'])
     else:
         dictionary = request.json['dict_name']
         analysis.toggle_dictionary(dictionary)
-        session['toggle_all'] = False
+        session['toggle_all'] = True
         for dictionary in analysis.dictionaries:
-            session['dictionary_names'].append(dictionary.name)
-            session['active_dictionaries'].append(dictionary.active)
+            data['dictionary_labels'].append(dictionary.name)
+            data['active_dictionaries'].append(dictionary.active)
             if not dictionary.active:
                 session['toggle_all'] = False
-    data = {'dictionary_labels': session['dictionary_names'],
-            'active_dictionaries': session['active_dictionaries'],
-            'toggle_all': session['toggle_all']}
+    data['toggle_all'] = session['toggle_all']
     data = json.dumps(data)
     return data
 
@@ -148,16 +156,13 @@ def delete_dictionary():
     :return: a json object.
     """
     global analysis
-    session['dictionary_names'] = []
-    session['active_dictionaries'] = []
-
+    data = {'dictionary_labels': [],
+            'active_dictionaries': []}
     dictionary = request.json['dict_name']
     analysis.delete_dictionary(dictionary)
     for dictionary in analysis.dictionaries:
-        session['dictionary_names'].append(dictionary.name)
-        session['active_dictionaries'].append(dictionary.active)
-    data = {'dictionary_labels': session['dictionary_names'],
-            'active_dictionaries': session['active_dictionaries']}
+        data['dictionary_labels'].append(dictionary.name)
+        data['active_dictionaries'].append(dictionary.active)
     data = json.dumps(data)
     return data
 

@@ -26,8 +26,6 @@ body {text-align:center;}
 #form_wrapper {width:400px;
 text-align:center;}
 
-#calcform{/*padding:10px;*/}
-
 #display {width:380px;
 height:40px;
 font-size:18px;
@@ -46,7 +44,8 @@ font-weight:bold;}
 .opps {font-size:18px;}
 
 .three {font-weight:bold;}
-/*.three:hover{background-color:#1A77B7;}*/
+.delete {color: #16A085;}
+.delete:hover{color: red;}
 </style>
 {% endblock %}
 {% block content %}
@@ -59,19 +58,27 @@ font-weight:bold;}
         </legend>
         <div class="collapse" id="lemmasPanel">
             <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 320px; min-height: 2em;">
-                <div class="forAllCheckBox" id="forAllCheckBox" align="left"></div>
+                <div class="forAllCheckBox" id="forAllCheckBox" align="left">
+                    {% if dictionary_labels|length > 0 %}
+                        {% if toggle_all %}
+                            <label class='icon-checkbox checked'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>
+                        {% else %}
+                            <label class='icon-checkbox'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>
+                        {% endif %}
+                    {% endif %}
+                </div>
                 <div id="checkboxes" style="padding-left: 15px">
-                    {% for index in range(session['dictionary_names']|length) %}
-                        <div class="forAllCheckBox" align="left">
-                            <input type='hidden' name='dictionary' value='{{session['dictionary_names'][index]}}'>
-                            <label id="statSelect"><input type='checkbox' id='dict_checkbox' {{'checked' if session['active_dictionaries'][index] }} onclick='toggle_checkbox("{{ index }}")'>{{session['dictionary_names'][index]}}</label>
-                            <a class="btn" id="analyze_button" role="button" onclick='delete_dictionary("{{ index }}")'>X</a>
+                    {% for index in range(dictionary_labels|length) %}
+                        <div class="forAllCheckBox" align="left" style='width:100%;'>
+                            <input type='hidden' name='dictionary' value='{{dictionary_labels[index]}}'>
+                            <label id="statSelect"><input type='checkbox' id='dict_checkbox' {{'checked' if active_dictionaries[index] }} onclick='toggle_checkbox("{{ index }}")'>{{dictionary_labels[index]}}</label>
+                            <a role="button" ><span class="glyphicon glyphicon-remove delete" onclick='delete_dictionary("{{ index }}")'></span></a>
                         </div>
                     {% endfor %}
                 </div>
             </div>
             <div class="optuploadbuttondiv">
-                <div class="bttn upload-bttn" style="margin-top: 5px;">Upload File</div>
+                <div class="bttn upload-bttn" style="margin-top: 5px;">Upload Corpus</div>
                 <input type="file" onchange="upload_dictionaries()" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
             </div>
         </div>
@@ -91,11 +98,11 @@ font-weight:bold;}
                        <br>
                         <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 100px; min-height: 0px">
                        <div id="dictionaryButtons">
-                           {% for index in range(session['dictionary_names']|length) %}
-                               {% if session['active_dictionaries'][index] %}
-                                    <input value='{{ session['dictionary_names'][index] }}' onclick="this.form.display.value+='[{{ session['dictionary_names'][index] }}]'" type="button">
+                            {% for index in range(dictionary_labels|length) %}
+                               {% if active_dictionaries[index] %}
+                                    <input value='{{ dictionary_labels[index] }}' onclick="this.form.display.value+='[{{ dictionary_labels[index] }}]'" type="button">
                                {% endif %}
-                           {% endfor %}
+                            {% endfor %}
                        </div>
                         </div>
                        <input class="button number" type="button" value="1" onClick="display.value+=1">
@@ -142,7 +149,7 @@ font-weight:bold;}
     </div>
 </div>
 <div class="row">
-        <div id="table" style="width: 100%"></div>
+        <div id="table" style="width: 100%">{{ result_table|safe }}</div>
 </div>
 
 {% endblock %}
