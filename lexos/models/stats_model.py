@@ -9,7 +9,7 @@ from lexos.models.matrix_model import MatrixModel
 
 
 class CorpusInfo:
-    """This is a structure that holds corpus information"""
+    """This is a structure that holds all the corpus information"""
     def __init__(self, q1: float, q3: float, iqr: float, median: float,
                  average: float, num_file: int, file_sizes: list,
                  file_names: np.ndarray, std_deviation: float,
@@ -28,46 +28,67 @@ class CorpusInfo:
 
     @property
     def q1(self) -> float:
+        """The first quartile of all file sizes."""
+
         return self._q1
 
     @property
     def q3(self) -> float:
+        """The second quartile of all file sizes."""
+
         return self._q3
 
     @property
     def iqr(self) -> float:
+        """The interquartile range of all file sizes."""
+
         return self.iqr
 
     @property
     def median(self) -> float:
+        """The median of all file sizes."""
+
         return self._median
 
     @property
     def average(self) -> float:
+        """The average of all file sized."""
+
         return self._average
 
     @property
     def num_file(self) -> int:
+        """The number of files."""
+
         return self._num_file
 
     @property
     def file_sizes(self) -> list:
+        """The list of all file sizes."""
+
         return self._file_sizes
 
     @property
     def file_names(self) -> np.ndarray:
+        """The list of all file names."""
         return self._file_names
 
     @property
     def std_deviation(self) -> float:
+        """The standard deviation of all file sizes."""
+
         return self._std_deviation
 
     @property
     def anomaly_iqr(self) -> dict:
+        """The anomaly interquartile range of all file sizes."""
+
         return self._anomaly_iqr
 
     @property
     def anomaly_std_err(self) -> dict:
+        """The anomaly standard error of all file sizes."""
+
         return self._anomaly_std_err
 
 
@@ -91,46 +112,68 @@ class FileInfo:
 
     @property
     def q1(self) -> float:
+        """The first quartile of all word counts of a file."""
+
         return self._q1
 
     @property
     def q3(self) -> float:
+        """The third quartile of all word counts of a file."""
+
         return self._q3
 
     @property
     def iqr(self) -> float:
+        """The first quartile of all word counts of a file."""
+
         return self.iqr
 
     @property
     def hapax(self) -> int:
+        """The first quartile of all word counts of a file."""
+
         return self._hapax
 
     @property
     def median(self) -> float:
+        """The first quartile of all word counts of a file."""
+
         return self._median
 
     @property
     def average(self) -> float:
+        """The first quartile of all word counts of a file."""
+
         return self._average
 
     @property
     def num_word(self) -> int:
+        """The first quartile of all word counts of a file."""
+
         return self._num_word
 
     @property
     def file_name(self) -> str:
+        """The first quartile of all word counts of a file."""
+
         return self._file_name
 
     @property
     def word_count(self) -> int:
+        """The first quartile of all word counts of a file."""
+
         return self._word_count
 
     @property
     def std_deviation(self) -> float:
+        """The first quartile of all word counts of a file."""
+
         return self._std_deviation
 
     @property
     def total_word_count(self) -> int:
+        """The first quartile of all word counts of a file."""
+
         return self._total_word_count
 
 
@@ -138,8 +181,7 @@ class StatsModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None):
         """This is the class to generate statistics of the input file.
 
-        :param test_dtm: (fake parameter)
-                    the doc term matrix used of testing
+        :param test_dtm: (fake parameter) the doc term matrix used of testing
         """
         super().__init__()
         self._test_dtm = test_dtm
@@ -157,6 +199,7 @@ class StatsModel(BaseModel):
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
         file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
+
         # 1 standard error analysis
         average_file_size = round(np.average(file_sizes), 3)
         # Calculate the standard deviation
@@ -173,6 +216,7 @@ class StatsModel(BaseModel):
         q1 = np.percentile(file_sizes, 25, interpolation="midpoint")
         q3 = np.percentile(file_sizes, 75, interpolation="midpoint")
         iqr = q3 - q1
+
         # calculate the anomaly
         for count, label in enumerate(self._doc_term_matrix.index.values):
             if file_sizes[count] > mid + 1.5 * iqr:
@@ -188,8 +232,8 @@ class StatsModel(BaseModel):
                           num_file=num_file,
                           file_sizes=list(file_sizes),
                           file_names=self._doc_term_matrix.index.values,
-                          std_deviation=std_dev_file_size,
                           anomaly_iqr=file_anomaly_iqr,
+                          std_deviation=std_dev_file_size,
                           anomaly_std_err=file_anomaly_std_err)
 
     @staticmethod
@@ -230,6 +274,8 @@ class StatsModel(BaseModel):
                         total_word_count=total_word_count)
 
     def _get_all_file_result(self) -> List[FileInfo]:
+        """Find statistics of all files and put each result into a list"""
+
         file_info_list = \
             [self._get_file_info(
                 count_list=self._doc_term_matrix.values[index, :],
@@ -238,4 +284,6 @@ class StatsModel(BaseModel):
         return file_info_list
 
     def get_result(self) -> (List[FileInfo], CorpusInfo):
+        """Return stats for the whole corpus and each file in the corpus"""
+
         return self._get_all_file_result(), self._get_corpus_info()
