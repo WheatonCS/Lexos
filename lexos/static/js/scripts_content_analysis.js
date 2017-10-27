@@ -1,6 +1,11 @@
 /**
  * Created by alvaro on 9/23/17.
  */
+$(document).ready(function() {
+    $('.dataframe').DataTable( {
+        "scrollX": true
+    } );
+} );
 function analyze() {
     var calc_input = $("input[name=display]").val();
     var data = JSON.stringify({"calc_input": calc_input});
@@ -16,6 +21,30 @@ function analyze() {
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);
         $('#table').html(response['result_table']);
+        $('.dataframe').width('100%');
+        $('.dataframe').DataTable( {
+            "scrollX": true,
+            'language': {
+                'lengthMenu': 'Display _MENU_ documents',
+                'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
+            },
+            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, 'All']],
+            'dom': "<'row'<'col-sm-2'l><'col-sm-3 pull-right'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            'buttons': [
+              'copyHtml5',
+              'excelHtml5',
+              'csvHtml5',
+              {
+                extend: 'csvHtml5',
+                text: 'TSV',
+                fieldSeparator: '\t',
+                extension: '.tsv'
+              },
+              'pdfHtml5'
+            ]
+        });
     });
  }
 function upload_dictionaries() {

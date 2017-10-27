@@ -164,63 +164,6 @@ class ContentAnalysisModel(object):
         self.average.append(total_word_counts_avg)
         self.average.append(scores_avg)
 
-    def to_html(self) -> str:
-        """
-
-        :return: a html table containing all values stored in this class
-        members
-        """
-        result = "<div class='dataTables_scroll'"
-        result += "<div class='dataTables_scrollHead'>"
-        result += "<div class='dataTables_scrollHeadInner'>"
-        result += "<table id='analyze_table' class='table table-bordered" \
-                  " table-striped table-condensed'>"
-        result += "<thead>"
-        result += "<th align='center' class='sorting_asc' " \
-                  "aria-sort='ascending' " \
-                  "aria-controls='statstable'>Document Names</th>"
-        for i in range(len(self.dictionaries)):
-            if self.dictionaries[i].active:
-                result += "<th align='center' class='sorting' " \
-                          "aria-controls='statstable'>" + \
-                          self.dictionaries[i].label + "</th>"
-        result += "<th align='center' class='sorting' " \
-                  "aria-controls='statstable'>Formula</th>"
-        result += "<th align='center' class='sorting' " \
-                  "aria-controls='statstable'>Total Word Counts</th>"
-        result += "<th align='center' class='sorting' " \
-                  "aria-controls='statstable'>Scores</th>"
-        result += "</tr></thead>"
-        # result += "</table>"
-        result += "</div></div>"
-
-        result += "<div class='dataTables_scrollBody' style='position: " \
-                  "relative; overflow: auto; max-height: 370px; " \
-                  "width: 100%;'>"
-        # result += "<table id ='statstable' class='table table-bordered " \
-        #           "table-striped table-condensed dataTable no-footer' " \
-        #           "role='grid' aria-describedby='statstable_info' " \
-        #           "style='width: 100%;'>"
-        result += "<tr>"
-        for i in range(len(self.corpus)):
-            if self.corpus[i].active:
-                result += "</tr>"
-                if i % 2 == 0:
-                    result += "<tr id='even'>"
-                else:
-                    result += "<tr id='odd'>"
-                result += "<td align='center'>" + \
-                          self.corpus[i].label + "</td>"
-                for counts in self.counters[i] + [self.formulas[i]] + \
-                    [self.corpus[i].total_word_counts] + [self.scores[i]]:
-                    result += "<td align='center'>" + str(counts) + "</td>"
-        result += "</tr><tr>"
-        for x in range(len(self.average)):
-            result += "<td align='center'>" + str(self.average[x]) + "</td>"
-        result += "</tr></table>"
-        result += "</div></div>"
-        return result
-
     def display(self):
         """For testing purposes, prints a data frame with all values store in
         the class members
@@ -229,16 +172,21 @@ class ContentAnalysisModel(object):
         df = self.generate_data_frame()
         print(df)
 
+    def to_html(self) -> str:
+        df = self.generate_data_frame()
+        html = df.to_html(classes="table table-striped table-bordered", index=False)
+        return html
+
     def generate_data_frame(self) -> pd.DataFrame:
         """
 
         :return: a data frame containing all values stored in this class
         members
         """
-        columns = ['file']
+        columns = ['Document Name']
         for dictionary in self.dictionaries:
             columns.append(dictionary.label)
-        columns += ['formula', 'total_word_count', 'score']
+        columns += ['formula', 'total word count', 'score']
         indices = []
         for file in self.corpus:
             indices.append(file.label)

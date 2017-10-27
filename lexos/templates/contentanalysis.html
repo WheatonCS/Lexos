@@ -141,15 +141,12 @@ font-weight:bold;}
     </div>
 </div>
 <div class="row" style="margin-top: 20px;">
-    <div class="col-md-3">
+    <div class="col-md-1">
         <a class="btn btn-success" id="analyze_button" role="button" onclick="analyze()">Analyze</a>
     </div>
-    <div class="col-md-9" style="text-align:right;">
-        <a class="btn btn-primary" onclick="" role="button">Download CSV</a>
-    </div>
 </div>
-<div class="row">
-        <div id="table" style="width: 100%">{{ result_table|safe }}</div>
+<div class="row" style="margin-top: 20px;">
+    <div id="table"></div>
 </div>
 
 {% endblock %}
