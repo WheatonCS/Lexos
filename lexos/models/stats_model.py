@@ -124,55 +124,55 @@ class FileInfo:
 
     @property
     def iqr(self) -> float:
-        """The first quartile of all word counts of a file."""
+        """The interquartile range of all word counts of a file."""
 
         return self.iqr
 
     @property
     def hapax(self) -> int:
-        """The first quartile of all word counts of a file."""
+        """The hapax of all word counts of a file."""
 
         return self._hapax
 
     @property
     def median(self) -> float:
-        """The first quartile of all word counts of a file."""
+        """The median of all word counts of a file."""
 
         return self._median
 
     @property
     def average(self) -> float:
-        """The first quartile of all word counts of a file."""
+        """The average of all word counts of a file."""
 
         return self._average
 
     @property
     def num_word(self) -> int:
-        """The first quartile of all word counts of a file."""
+        """The number of words of a file."""
 
         return self._num_word
 
     @property
     def file_name(self) -> str:
-        """The first quartile of all word counts of a file."""
+        """The name of a file."""
 
         return self._file_name
 
     @property
     def word_count(self) -> int:
-        """The first quartile of all word counts of a file."""
+        """The number of word of a file."""
 
         return self._word_count
 
     @property
     def std_deviation(self) -> float:
-        """The first quartile of all word counts of a file."""
+        """The standard deviation of all word counts of a file."""
 
         return self._std_deviation
 
     @property
     def total_word_count(self) -> int:
-        """The first quartile of all word counts of a file."""
+        """The total of all word counts of a file."""
 
         return self._total_word_count
 
