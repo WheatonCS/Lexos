@@ -1,19 +1,11 @@
-from flask import request
-
-
 class BaseModel:
     def __init__(self):
-        """This is the base model for all the models
+        """Model is a set of classes to do computation.
 
-        used to handle requests and other common stuff
+        Each model has 2 properties:
+            - the options get from receivers (possibly fake inputted options).
+            - the result of higher level class (possibly fake inputted result).
+        Each model has at least 1 public method:
+            - This is the computation result for lower class or views to use.
         """
-        if request.json:  # check request.json (ajax request) first
-            self._option = request.json
-        elif request.form:  # fall back to request.form (form request)
-            self._option = request.form
-        else:  # no data send to the back end
-            self._option = None
-
-    @property
-    def front_end_data(self) -> dict:
-        return self._option
+        pass

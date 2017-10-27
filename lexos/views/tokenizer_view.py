@@ -8,18 +8,18 @@ from natsort import natsorted
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-tokenizer_view = Blueprint('tokenizer', __name__)
+tokenizer_blueprint = Blueprint('tokenizer', __name__)
 
 
 # Tells Flask to load this function when someone is at '/tokenizer'
-@tokenizer_view.route("/tokenizer", methods=["GET", "POST"])
+@tokenizer_blueprint.route("/tokenizer", methods=["GET", "POST"])
 def tokenizer():
     """Handles the functionality on the tokenizer page.
 
@@ -406,7 +406,7 @@ def tokenizer():
         return json.dumps(response)
 
 
-@tokenizer_view.route("/getTokenizerCSV", methods=["GET", "POST"])
+@tokenizer_blueprint.route("/getTokenizerCSV", methods=["GET", "POST"])
 def get_tokenizer_csv():
     """Called when the CSV button in Tokenizer is clicked.
 
@@ -426,7 +426,7 @@ def get_tokenizer_csv():
         as_attachment=True)
 
 
-@tokenizer_view.route("/getTenRows", methods=["GET", "POST"])
+@tokenizer_blueprint.route("/getTenRows", methods=["GET", "POST"])
 def get_ten_rows():
     """:return: a json object with the first ten rows of a DTM.
 

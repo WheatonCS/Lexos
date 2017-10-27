@@ -1,5 +1,5 @@
-import os
 import getpass
+import os
 
 """ Constants """
 
@@ -20,9 +20,6 @@ RESOURCE_DIR = "resources/"
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
-DENDROGRAM_PNG_FILENAME = 'dendrogram.png'
-DENDROGRAM_PDF_FILENAME = 'dendrogram.pdf'
-DENDROGRAM_SVG_FILENAME = 'dendrogram.svg'
 DENDROGRAM_NEWICK_FILENAME = 'newNewickStr.txt'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
@@ -255,7 +252,7 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
     'title': '',
-    'orientation': 'top',
+    'orientation': 'bottom',
     'pruning': '',
     'augmented': True,
     'criterion': 'maxclust',
