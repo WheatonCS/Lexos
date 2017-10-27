@@ -41,9 +41,11 @@ class ContentAnalysisModel(object):
         :param content: content of the file
         """
         new_list = str(content).split(", ")
-        new_list = list(map(lambda x: x.lower(), new_list))
+        #new_list = list(map(lambda x: x.lower(), new_list))
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
-        self.dictionaries.append(Dictionary(new_list, file_name, file_name))
+        import os
+        label = os.path.splitext(file_name)[0]
+        self.dictionaries.append(Dictionary(new_list, file_name, label))
 
     def delete_dictionary(self, filename: str):
         """deletes a dictionary
@@ -61,7 +63,7 @@ class ContentAnalysisModel(object):
         :param filename: filename of dictionary to toggle
         """
         for dictionary in self.dictionaries:
-            if dictionary.name == filename:
+            if dictionary.label == filename:
                 dictionary.active = not dictionary.active
 
     def get_active_dicts(self) -> list:
@@ -224,7 +226,7 @@ class ContentAnalysisModel(object):
         active_dicts = self.get_active_dicts()
         allowed_input = []
         for dictionary in active_dicts:
-            allowed_input.append("[" + dictionary.name + "]")
+            allowed_input.append("[" + dictionary.label + "]")
         allowed_input += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ",
                          "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
         for item in allowed_input:

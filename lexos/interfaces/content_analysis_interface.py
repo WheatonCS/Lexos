@@ -132,14 +132,14 @@ def toggle_dictionary():
         session['toggle_all'] = not session['toggle_all']
         for dictionary in analysis.dictionaries:
             dictionary.active = session['toggle_all']
-            data['dictionary_labels'].append(dictionary.name)
+            data['dictionary_labels'].append(dictionary.label)
             data['active_dictionaries'].append(session['toggle_all'])
     else:
         dictionary = request.json['dict_name']
         analysis.toggle_dictionary(dictionary)
         session['toggle_all'] = True
         for dictionary in analysis.dictionaries:
-            data['dictionary_labels'].append(dictionary.name)
+            data['dictionary_labels'].append(dictionary.label)
             data['active_dictionaries'].append(dictionary.active)
             if not dictionary.active:
                 session['toggle_all'] = False
@@ -161,7 +161,7 @@ def delete_dictionary():
     dictionary = request.json['dict_name']
     analysis.delete_dictionary(dictionary)
     for dictionary in analysis.dictionaries:
-        data['dictionary_labels'].append(dictionary.name)
+        data['dictionary_labels'].append(dictionary.label)
         data['active_dictionaries'].append(dictionary.active)
     data = json.dumps(data)
     return data
