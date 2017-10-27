@@ -119,35 +119,13 @@
 
 {% block results %}
     <div class="row submit-button-row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <input class="bttn bttn-action" id="getdendro" name="getdendro"
                    type="button" value="Get Dendrogram" style=""/>
         </div>
-        <div class="col-md-6" style="text-align:right;">
-
-            <label id="downloadButtons"
-                   class="generated">
-                Download: </label>
-            <div class="btn-group generated"
-                 role="group" aria-label="...">
-                <input role="button" id="dendrodownload"
-                       class="btn btn-primary"
-                       type="submit" name="dendroPDF_download" value="PDF">
-
-                <input role="button" id="dendroPNGdownload"
-                       class="btn btn-success"
-                       type="submit" name="dendroPNG_download" value="PNG">
-
-                <input role="button" id="dendroSVGdownload"
-                       class="btn btn-primary"
-                       type="submit" name="dendroSVG_download" value="SVG">
-
-            </div>
-            <span class="generated {{ 'hidden' if session['degenerated'] != True }}"><br>Click the image to open it in a new tab.</span>
-        </div>
     </div>
 
-    <div id="dendrogram-result">
+    <div id="dendrogram-result" class="row">
 
     </div>
 

@@ -171,13 +171,10 @@ class MatrixOption:
 
 
 class MatrixReceiver(BaseReceiver):
-    def __init__(self, test_matrix_option: MatrixOption = None):
-        """This is the class to pack the matrix options
 
-        :param test_matrix_option: the matrix option used for testing
-        """
+    def __init__(self):
+        """The receiver to the all the matrix option"""
         super().__init__()
-        self._test_matrix_option = test_matrix_option
 
     def _get_token_option_from_front_end(self) -> TokenOption:
         """get the token option from front end
