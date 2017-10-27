@@ -36,21 +36,19 @@ def statistics():
         return render_template(
             'statistics.html',
             labels=labels,
-            labels2=labels,
             itm="statistics",
             numActiveDocs=num_active_docs)
+
     if request.method == "POST":
         token = request.form['tokenType']
 
         file_info_list, corpus_info = StatsModel().get_result()
         session_manager.cache_analysis_option()
         session_manager.cache_statistic_option()
-        # DO NOT save fileManager!
         return render_template(
             'statistics.html',
-            labels=labels,
-            FileInfoList=file_info_list,
-            corpusInfo=corpus_info,
             token=token,
-            itm="statistics",
+            labels=labels,
+            corpusInfo=corpus_info,
+            FileInfoList=file_info_list,
             numActiveDocs=num_active_docs)
