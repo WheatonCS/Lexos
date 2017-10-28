@@ -15,6 +15,9 @@ function analyze() {
         var active_dicts = response['active_dictionaries'];
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);
+        if(response['error']){
+            alert('You have no active documents. Please activate at least one document using the Manage tool or upload a new document.');
+        }
         $('#table').html(response['result_table']);
         $('.dataframe').width('100%');
         $('.dataframe').DataTable( {
@@ -60,6 +63,9 @@ function upload_dictionaries() {
         var dict_labels = response['dictionary_labels'];
         var active_dicts = response['active_dictionaries'];
         var toggle_all = response['toggle_all'];
+        if(response['error']){
+            alert('You have no active documents. Please activate at least one document using the Manage tool or upload a new document.');
+        }
         $('#display').val("");
         update_check_all_checkbox(toggle_all);
         update_dictionary_buttons(dict_labels,active_dicts);

@@ -4,6 +4,7 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.managers.utility import load_file_manager
 from lexos.models.content_analysis_model import ContentAnalysisModel
+from lexos.interfaces.base_interface import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -59,13 +60,19 @@ def content_analysis():
             if formula.count("(") != formula.count(")") or \
                     formula.count("[") != formula.count("]"):
                 return "error"
-        analysis.count_words()
+        num_active_docs = detect_active_docs()
+        if num_active_docs > 0:
+            analysis.count_words()
         if analysis.is_secure(session['formula']):
-            analysis.generate_scores(session['formula'])
-            analysis.generate_averages()
-            data = {"result_table": analysis.to_html(),
+            data = {"result_table": "",
                     "dictionary_labels": [],
-                    "active_dictionaries": []}
+                    "active_dictionaries": [],
+                    "error": True}
+            if num_active_docs > 0:
+                analysis.generate_scores(session['formula'])
+                analysis.generate_averages()
+                data['result_table'] = analysis.to_html()
+                data['error'] = False
             for dictionary in analysis.dictionaries:
                 data['dictionary_labels'].append(dictionary.label)
                 data['active_dictionaries'].append(dictionary.active)
@@ -88,7 +95,10 @@ def upload_dictionaries():
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
             'formula': "",
-            'toggle_all': True}
+            'toggle_all': True,
+            'error': False}
+    if detect_active_docs() == 0:
+        data['error'] = True
     for upload_file in request.files.getlist('lemfileselect[]'):
         file_name = upload_file.filename
         content = upload_file.read()
