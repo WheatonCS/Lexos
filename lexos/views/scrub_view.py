@@ -5,18 +5,18 @@ from flask import request, session, render_template, Blueprint
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-scrubber_view = Blueprint('scrubber', __name__)
+scrubber_blueprint = Blueprint('scrubber', __name__)
 
 
 # Tells Flask to load this function when someone is at '/scrub'
-@scrubber_view.route("/scrub", methods=["GET", "POST"])
+@scrubber_blueprint.route("/scrub", methods=["GET", "POST"])
 def scrub():
     # Are you looking for scrubber.py?
     """Handles the functionality of the scrub page.
@@ -51,7 +51,7 @@ def scrub():
 
 
 # Tells Flask to load this function when someone is at '/doScrubbing'
-@scrubber_view.route("/doScrubbing", methods=["GET", "POST"])
+@scrubber_blueprint.route("/doScrubbing", methods=["GET", "POST"])
 def do_scrubbing():
     """:return: a json object with a scrubbed preview
     """
@@ -77,7 +77,7 @@ def do_scrubbing():
 
 
 # Tells Flask to load this function when someone is at '/downloadScrubbing'
-@scrubber_view.route("/downloadScrubbing", methods=["GET", "POST"])
+@scrubber_blueprint.route("/downloadScrubbing", methods=["GET", "POST"])
 def download_scrubbing():
     """downloads scrubbed files.
 
@@ -89,7 +89,7 @@ def download_scrubbing():
     return file_manager.zip_active_files('scrubbed.zip')
 
 
-@scrubber_view.route("/getTagsTable", methods=["GET", "POST"])
+@scrubber_blueprint.route("/getTagsTable", methods=["GET", "POST"])
 def get_tags_table():
     """ :return: an html table of the xml handling options
     """
@@ -162,7 +162,7 @@ def get_tags_table():
     return json.dumps(response)
 
 
-@scrubber_view.route("/setAllTagsTable", methods=["GET", "POST"])
+@scrubber_blueprint.route("/setAllTagsTable", methods=["GET", "POST"])
 def set_all_tags_table():
     """sets all the tags options.
 
@@ -223,7 +223,7 @@ def set_all_tags_table():
     return json.dumps(s)
 
 
-@scrubber_view.route("/xml", methods=["GET", "POST"])
+@scrubber_blueprint.route("/xml", methods=["GET", "POST"])
 def xml():
     """Handle XML tags.
 
@@ -234,7 +234,7 @@ def xml():
     return "success"
 
 
-@scrubber_view.route("/removeUploadLabels", methods=["GET", "POST"])
+@scrubber_blueprint.route("/removeUploadLabels", methods=["GET", "POST"])
 def remove_upload_labels():
     """Removes Scrub upload files from the session when the labels are clicked.
 

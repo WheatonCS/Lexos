@@ -4,18 +4,18 @@ import re
 from flask import request, render_template, Blueprint
 
 from lexos.managers import utility
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-manage_view = Blueprint('manage', __name__)
+manage_blueprint = Blueprint('manage', __name__)
 
 
 # Tells Flask to load this function when someone is at '/select'
-@manage_view.route("/manage", methods=["GET", "POST"])
+@manage_blueprint.route("/manage", methods=["GET", "POST"])
 def manage():
     """Handles the functionality of the select page.
 
@@ -86,7 +86,7 @@ def manage():
     return ''  # Return an empty string because you have to return something
 
 
-@manage_view.route("/selectAll", methods=["GET", "POST"])
+@manage_blueprint.route("/selectAll", methods=["GET", "POST"])
 def select_all():
     """selects all files.
 
@@ -98,7 +98,7 @@ def select_all():
     return 'success'
 
 
-@manage_view.route("/deselectAll", methods=["GET", "POST"])
+@manage_blueprint.route("/deselectAll", methods=["GET", "POST"])
 def deselect_all():
     """deletes all files.
 
@@ -110,7 +110,7 @@ def deselect_all():
     return 'success'
 
 
-@manage_view.route("/downloadDocuments", methods=["GET", "POST"])
+@manage_blueprint.route("/downloadDocuments", methods=["GET", "POST"])
 def download_documents():
     """downloads all selected files.
 
@@ -122,7 +122,7 @@ def download_documents():
     return file_manager.zip_active_files('selected_documents.zip')
 
 
-@manage_view.route("/enableRows", methods=["GET", "POST"])
+@manage_blueprint.route("/enableRows", methods=["GET", "POST"])
 def enable_rows():
     """:return: string indicating that it has succeeded
     """
@@ -133,7 +133,7 @@ def enable_rows():
     return 'success'
 
 
-@manage_view.route("/disableRows", methods=["GET", "POST"])
+@manage_blueprint.route("/disableRows", methods=["GET", "POST"])
 def disable_rows():
     """:return: string indicating that it has succeeded
     """
@@ -144,7 +144,7 @@ def disable_rows():
     return 'success'
 
 
-@manage_view.route("/getPreview", methods=["GET", "POST"])
+@manage_blueprint.route("/getPreview", methods=["GET", "POST"])
 def get_previews():
     """:return: a json object with the id, label, and preview text for all
     text files
@@ -160,7 +160,7 @@ def get_previews():
     return json.dumps(preview_vals)
 
 
-@manage_view.route("/setLabel", methods=["GET", "POST"])
+@manage_blueprint.route("/setLabel", methods=["GET", "POST"])
 def set_label():
     """sets the label of a file.
 
@@ -175,7 +175,7 @@ def set_label():
     return 'success'
 
 
-@manage_view.route("/setClass", methods=["GET", "POST"])
+@manage_blueprint.route("/setClass", methods=["GET", "POST"])
 def set_class():
     """sets a class.
 
@@ -189,7 +189,7 @@ def set_class():
     return 'success'
 
 
-@manage_view.route("/deleteOne", methods=["GET", "POST"])
+@manage_blueprint.route("/deleteOne", methods=["GET", "POST"])
 def delete_one():
     """:return: string indicating that it has succeeded
     """
@@ -199,7 +199,7 @@ def delete_one():
     return "success"
 
 
-@manage_view.route("/deleteSelected", methods=["GET", "POST"])
+@manage_blueprint.route("/deleteSelected", methods=["GET", "POST"])
 def delete_selected():
     """:returns json object with the ids of the files to delete
     """
@@ -209,7 +209,7 @@ def delete_selected():
     return json.dumps(file_ids)
 
 
-@manage_view.route("/setClassSelected", methods=["GET", "POST"])
+@manage_blueprint.route("/setClassSelected", methods=["GET", "POST"])
 def set_class_selected():
     file_manager = utility.load_file_manager()
     rows = request.json[0]
@@ -220,7 +220,7 @@ def set_class_selected():
     return json.dumps(rows)
 
 
-@manage_view.route("/mergeDocuments", methods=["GET", "POST"])
+@manage_blueprint.route("/mergeDocuments", methods=["GET", "POST"])
 def merge_documents():
     """:return: json object with the new file's id and preview
     """
