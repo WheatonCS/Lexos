@@ -159,4 +159,3 @@ def test_is_secure():
     assert test.is_secure("[dict1][dict2]")
     assert test.is_secure("0123456789 +-*/ () sin cos tan log sqrt")
     assert test.is_secure("os.system()") is False
-test_is_secure()
