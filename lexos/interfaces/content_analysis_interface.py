@@ -2,8 +2,7 @@ import json
 
 from flask import request, session, render_template, Blueprint
 
-from lexos.managers import utility
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.managers.utility import load_file_manager
 from lexos.models.content_analysis_model import ContentAnalysisModel
 
 # this is a flask blue print
@@ -13,6 +12,8 @@ from lexos.models.content_analysis_model import ContentAnalysisModel
 # http://flask.pocoo.org/docs/0.12/blueprints/
 content_analysis_view = Blueprint('content_analysis', __name__)
 analysis = None
+
+
 # Tells Flask to load this function when someone is at '/contentanalysis'
 @content_analysis_view.route("/contentanalysis", methods=["GET", "POST"])
 def content_analysis():
@@ -25,7 +26,7 @@ def content_analysis():
     if analysis is None:
         analysis = ContentAnalysisModel()
     elif len(analysis.corpus) == 0:
-        file_manager = utility.load_file_manager()
+        file_manager = load_file_manager()
         files = file_manager.get_active_files()
         for file in files:
             analysis.add_corpus(file_name=file.name,
@@ -33,8 +34,6 @@ def content_analysis():
                                 content=file.load_contents())
 
     if request.method == 'GET':
-        # 'GET' request occurs when the page is first loaded
-        result_table = ""
         dictionary_labels = []
         active_dictionaries = []
         session['toggle_all'] = False
@@ -43,11 +42,9 @@ def content_analysis():
             for dictionary in analysis.dictionaries:
                 dictionary_labels.append(dictionary.label)
                 active_dictionaries.append(dictionary.active)
-                result_table = analysis.to_html()
                 if not dictionary.active:
                     session['toggle_all'] = False
         return render_template('contentanalysis.html',
-                               result_table=result_table,
                                dictionary_labels=dictionary_labels,
                                active_dictionaries=active_dictionaries,
                                toggle_all=session['toggle_all'])
@@ -85,16 +82,17 @@ def upload_dictionaries():
     """
     global analysis
     analysis = ContentAnalysisModel()
+    session['formula'] = ""
     session['toggle_all'] = True
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
+            'formula': "",
             'toggle_all': True}
     for upload_file in request.files.getlist('lemfileselect[]'):
-        filename = upload_file.filename
+        file_name = upload_file.filename
         content = upload_file.read()
-        analysis.add_dictionary(filename, content)
-        import os
-        data['dictionary_labels'].append(os.path.splitext(filename)[0])
+        analysis.add_dictionary(file_name=file_name, content=content)
+        data['dictionary_labels'].append(analysis.dictionaries[-1].label)
         data['active_dictionaries'].append(True)
     data = json.dumps(data)
     return data
@@ -168,4 +166,3 @@ def delete_dictionary():
         data['active_dictionaries'].append(dictionary.active)
     data = json.dumps(data)
     return data
-

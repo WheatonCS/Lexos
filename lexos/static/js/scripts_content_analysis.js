@@ -65,6 +65,7 @@ function upload_dictionaries() {
         var dict_labels = response['dictionary_labels'];
         var active_dicts = response['active_dictionaries'];
         var toggle_all = response['toggle_all'];
+        $('#display').val("");
         update_check_all_checkbox(toggle_all);
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);

@@ -1,4 +1,6 @@
 import pandas as pd
+
+
 # do not delete! used in generate_scores() by eval()
 # from math import sqrt, sin, cos, tan, log
 
@@ -30,7 +32,10 @@ class ContentAnalysisModel(object):
         :param label: file label
         """
         total_word_counts = len(str(content).split(" "))
-        self.corpus.append(File(content, file_name, label, total_word_counts))
+        self.corpus.append(File(content=content,
+                                file_name=file_name,
+                                label=label,
+                                total_word_counts=total_word_counts))
 
     def add_dictionary(self, file_name: str, content: str):
         """Adds a dictionary
@@ -42,25 +47,27 @@ class ContentAnalysisModel(object):
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
         import os
         label = os.path.splitext(file_name)[0]
-        self.dictionaries.append(Dictionary(new_list, file_name, label))
+        self.dictionaries.append(Dictionary(content=new_list,
+                                            file_name=file_name,
+                                            label=label))
 
-    def delete_dictionary(self, filename: str):
+    def delete_dictionary(self, file_name: str):
         """deletes a dictionary
 
-        :param filename: filename of dictionary to delete
+        :param file_name: filename of dictionary to delete
         """
         for i in range(len(self.dictionaries)):
-            if self.dictionaries[i].name == filename:
+            if self.dictionaries[i].name == file_name:
                 del self.dictionaries[i]
                 break
 
-    def toggle_dictionary(self, filename: str):
+    def toggle_dictionary(self, file_name: str):
         """Activates and Deactivates a dictionary
 
-        :param filename: filename of dictionary to toggle
+        :param file_name: filename of dictionary to toggle
         """
         for dictionary in self.dictionaries:
-            if dictionary.label == filename:
+            if dictionary.label == file_name:
                 dictionary.active = not dictionary.active
 
     def get_active_dicts(self) -> list:
@@ -245,17 +252,17 @@ class Document(object):
 
 
 class Dictionary(Document):
-    def __init__(self, content: list, filename: str, label: str,
+    def __init__(self, content: list, file_name: str, label: str,
                  active: bool = True):
         """
 
         :param content: list of word/phrses separated by commas
-        :param filename: original filename
+        :param file_name: original filename
         :param label: file label
         :param active: Boolean that indicates if the document is active
         """
         self._content = content
-        self._name = filename
+        self._name = file_name
         self._label = label
         self._active = active
 
@@ -269,18 +276,18 @@ class Dictionary(Document):
 
 
 class File(Document):
-    def __init__(self, content: str, filename: str, label: str,
+    def __init__(self, content: str, file_name: str, label: str,
                  total_word_counts: int, active: bool = True):
         """
 
         :param content: file content
-        :param filename: original filename
+        :param file_name: original filename
         :param label: file label
         :param total_word_counts: count of word in the file
         :param active: Boolean that indicates if the document is active
         """
         self._content = content
-        self._name = filename
+        self._name = file_name
         self._label = label
         self._active = active
         self._total_word_counts = total_word_counts
