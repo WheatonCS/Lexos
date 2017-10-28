@@ -28,7 +28,9 @@ def content_analysis():
         file_manager = utility.load_file_manager()
         files = file_manager.get_active_files()
         for file in files:
-            analysis.add_corpus(file)
+            analysis.add_corpus(file_name=file.name,
+                                label=file.label,
+                                content=file.load_contents())
 
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded

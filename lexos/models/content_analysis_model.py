@@ -1,8 +1,6 @@
-import csv
 import pandas as pd
-from math import sqrt, sin, cos, tan, log  # do not delete!
-
-from lexos.managers.lexos_file import LexosFile
+from math import sqrt, sin, cos, tan, log  # do not delete! used by eval in
+                                           # generate_scores()
 
 
 class ContentAnalysisModel(object):
@@ -22,17 +20,17 @@ class ContentAnalysisModel(object):
         self.counters = []
         self.formulas = []
         self.scores = []
-        self.average = []
+        self.averages = []
 
-    def add_corpus(self, file: LexosFile):
+    def add_corpus(self, file_name: str, label: str, content: str):
         """Adds a file to the corpus
 
-        :param file: a LexosFile object
+        :param content: file content
+        :param file_name: file name
+        :param label: file label
         """
-        file_content = file.load_contents()
-        total_word_counts = len(str(file_content).split(" "))
-        self.corpus.append(File(file_content, file.name, file.label,
-                                total_word_counts))
+        total_word_counts = len(str(content).split(" "))
+        self.corpus.append(File(content, file_name, label, total_word_counts))
 
     def add_dictionary(self, file_name: str, content: str):
         """Adds a dictionary
@@ -41,7 +39,6 @@ class ContentAnalysisModel(object):
         :param content: content of the file
         """
         new_list = str(content).split(", ")
-        #new_list = list(map(lambda x: x.lower(), new_list))
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
         import os
         label = os.path.splitext(file_name)[0]
@@ -127,7 +124,7 @@ class ContentAnalysisModel(object):
         total_word_count, and score
 
         """
-        self.average = []
+        self.averages = []
         scores_sum = 0
         total_word_counts_sum = 0
         formulas_sum = 0
@@ -152,34 +149,26 @@ class ContentAnalysisModel(object):
         else:
             sums_avg = 0
         cat_count = 0
-        self.average.append("Averages")
+        self.averages.append("Averages")
         for x in range(len(active_dicts)):
             for i in range(len(self.counters)):
                 cat_count += self.counters[i][x]
             if len(self.counters) != 0:
-                self.average.append(round(
+                self.averages.append(round(
                     float(cat_count) / len(self.counters), 1))
             else:
-                self.average.append(0)
+                self.averages.append(0)
             cat_count = 0
-        self.average.append(sums_avg)
-        self.average.append(total_word_counts_avg)
-        self.average.append(scores_avg)
-
-    def display(self):
-        """For testing purposes, prints a data frame with all values store in
-        the class members
-
-        """
-        df = self.generate_data_frame()
-        print(df)
+        self.averages.append(sums_avg)
+        self.averages.append(total_word_counts_avg)
+        self.averages.append(scores_avg)
 
     def to_html(self) -> str:
-        df = self.generate_data_frame()
+        df = self.to_data_frame()
         html = df.to_html(classes="table table-striped table-bordered", index=False)
         return html
 
-    def generate_data_frame(self) -> pd.DataFrame:
+    def to_data_frame(self) -> pd.DataFrame:
         """
 
         :return: a data frame containing all values stored in this class
@@ -202,25 +191,10 @@ class ContentAnalysisModel(object):
             df.xs(i)[j + 2] = self.formulas[i]
             df.xs(i)[j + 3] = self.corpus[i].total_word_counts
             df.xs(i)[j + 4] = self.scores[i]
-        for j in range(len(self.average)):
-            df.xs(i + 1)[j] = self.average[j]
+        for j in range(len(self.averages)):
+            df.xs(i + 1)[j] = self.averages[j]
         df.columns = columns
         return df
-
-    def save_to_csv(self):
-        """saves the data frame into a .csv file
-
-        """
-        df = self.generate_data_frame()
-        with open('results.csv', 'wb') as csv_file:
-            spam_writer = csv.writer(csv_file,
-                                     delimiter=',',
-                                     quotechar='|',
-                                     quoting=csv.QUOTE_MINIMAL)
-            spam_writer.writerow(list(df.columns))
-            for index, row in df.iterrows():
-                spam_writer.writerow(list(row))
-        csv_file.close()
 
     def is_secure(self, formula: str):
         active_dicts = self.get_active_dicts()
@@ -228,7 +202,7 @@ class ContentAnalysisModel(object):
         for dictionary in active_dicts:
             allowed_input.append("[" + dictionary.label + "]")
         allowed_input += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ",
-                         "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
+                          "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
         for item in allowed_input:
             formula = formula.replace(item, "")
         if len(formula) == 0:
