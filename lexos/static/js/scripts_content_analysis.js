@@ -1,11 +1,6 @@
 /**
  * Created by alvaro on 9/23/17.
  */
-$(document).ready(function() {
-    $('.dataframe').DataTable( {
-        "scrollX": true
-    } );
-} );
 function analyze() {
     var calc_input = $("input[name=display]").val();
     var data = JSON.stringify({"calc_input": calc_input});
