@@ -1,6 +1,6 @@
 import pandas as pd
-from math import sqrt, sin, cos, tan, log  # do not delete! used by eval in
-                                           # generate_scores()
+# do not delete! used in generate_scores() by eval()
+# from math import sqrt, sin, cos, tan, log
 
 
 class ContentAnalysisModel(object):
