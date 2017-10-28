@@ -23,8 +23,9 @@ def content_analysis():
     eventually to the browser.
     """
     global analysis
-    if analysis is None:
+    if analysis is None or 'content_analysis' not in session:
         analysis = ContentAnalysisModel()
+        session['content_analysis'] = True
     elif len(analysis.corpus) == 0:
         file_manager = load_file_manager()
         files = file_manager.get_active_files()
