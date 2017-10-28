@@ -91,7 +91,8 @@ def upload_dictionaries():
         filename = upload_file.filename
         content = upload_file.read()
         analysis.add_dictionary(filename, content)
-        data['dictionary_labels'].append(filename)
+        import os
+        data['dictionary_labels'].append(os.path.splitext(filename)[0])
         data['active_dictionaries'].append(True)
     data = json.dumps(data)
     return data
