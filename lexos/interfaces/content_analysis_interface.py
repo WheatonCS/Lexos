@@ -58,17 +58,24 @@ def content_analysis():
             formula = formula.replace("√", "sqrt").replace("^", "**")
             session['formula'] = formula
             error_msg = "Formula errors:<br>"
+            is_error = False
             if formula.count("(") != formula.count(")"):
                 error_msg += "Mismatched parenthesis<br>"
+                is_error = True
             if "sin()" in formula:
                 error_msg += "sin takes exactly one argument (0 given)<br>"
+                is_error = True
             if "cos()" in formula:
                 error_msg += "cos takes exactly one argument (0 given)<br>"
+                is_error = True
             if "tan()" in formula:
                 error_msg += "tan takes exactly one argument (0 given)<br>"
+                is_error = True
             if "log()" in formula:
                 error_msg += "log takes exactly one argument (0 given)<br>"
-            return error(error_msg)
+                is_error = True
+            if is_error:
+                return error(error_msg)
 
         num_active_docs = detect_active_docs()
         num_active_dicts = analysis.detect_active_dicts()
@@ -137,7 +144,6 @@ def save_formula():
     :return: a string indicating if it succeeded
     """
     formula = request.json['calc_input']
-    print(formula)
     if len(formula) == 0:
         session['formula'] = "0"
     else:
