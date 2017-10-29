@@ -56,12 +56,7 @@ function upload_dictionaries() {
         type: 'POST',
         processData: false, // important
         contentType: false, // important
-        data: formData,
-        error: function (jqXHR, textStatus, errorThrown) {
-          $('#error-modal-message').html('Lexos could not apply the analysis content actions.');
-          $('#error-modal').modal();
-          console.log('bad: ' + textStatus + ': ' + errorThrown)
-        }
+        data: formData
     }).done(function (response) {
         response = JSON.parse(response);
         var dict_labels = response['dictionary_labels'];
