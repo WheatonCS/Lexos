@@ -204,6 +204,7 @@ def delete_dictionary():
     data = json.dumps(data)
     return data
 
+
 def error(msg: str):
     data = {"error": msg}
     data = json.dumps(data)
