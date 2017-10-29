@@ -57,28 +57,48 @@ def content_analysis():
         else:
             formula = formula.replace("√", "sqrt").replace("^", "**")
             session['formula'] = formula
-            if formula.count("(") != formula.count(")") or \
-                    formula.count("[") != formula.count("]"):
-                return "error"
+            error_msg = "Formula errors:<br>"
+            if formula.count("(") != formula.count(")"):
+                error_msg += "Mismatched parenthesis<br>"
+            if "sin()" in formula:
+                error_msg += "sin takes exactly one argument (0 given)<br>"
+            if "cos()" in formula:
+                error_msg += "cos takes exactly one argument (0 given)<br>"
+            if "tan()" in formula:
+                error_msg += "tan takes exactly one argument (0 given)<br>"
+            if "log()" in formula:
+                error_msg += "log takes exactly one argument (0 given)<br>"
+            return error(error_msg)
+
         num_active_docs = detect_active_docs()
-        if num_active_docs > 0:
-            analysis.count_words()
+        num_active_dicts = analysis.detect_active_dicts()
+        if num_active_docs == 0 and num_active_dicts == 0:
+            data = {"error": "At least 1 active document and 1 active "
+                             "dictionary are required to perform a "
+                             "content analysis."}
+            data = json.dumps(data)
+            return data
+        elif num_active_docs == 0:
+            return error("At least 1 active document is required to perform "
+                         "a content analysis.")
+        elif num_active_dicts == 0:
+            return error("At least 1 active dictionary is required to perform "
+                         "a content analysis.")
+        analysis.count_words()
         if analysis.is_secure(session['formula']):
             data = {"result_table": "",
                     "dictionary_labels": [],
                     "active_dictionaries": [],
-                    "error": True}
-            if num_active_docs > 0:
-                analysis.generate_scores(session['formula'])
-                analysis.generate_averages()
-                data['result_table'] = analysis.to_html()
-                data['error'] = False
+                    "error": False}
+            analysis.generate_scores(session['formula'])
+            analysis.generate_averages()
+            data['result_table'] = analysis.to_html()
             for dictionary in analysis.dictionaries:
                 data['dictionary_labels'].append(dictionary.label)
                 data['active_dictionaries'].append(dictionary.active)
             data = json.dumps(data)
             return data
-        return "error"
+        return error("Formula error: Invalid input")
 
 
 # Tells Flask to load this function when someone is at '/getdictlabels'
@@ -175,5 +195,10 @@ def delete_dictionary():
     for dictionary in analysis.dictionaries:
         data['dictionary_labels'].append(dictionary.label)
         data['active_dictionaries'].append(dictionary.active)
+    data = json.dumps(data)
+    return data
+
+def error(msg: str):
+    data = {"error": msg}
     data = json.dumps(data)
     return data

@@ -2,7 +2,7 @@ import pandas as pd
 
 
 # do not delete! used in generate_scores() by eval()
-# from math import sqrt, sin, cos, tan, log
+from math import sqrt, sin, cos, tan, log
 
 
 class ContentAnalysisModel(object):
@@ -81,6 +81,13 @@ class ContentAnalysisModel(object):
                 active_dicts.append(dictionary)
         return active_dicts
 
+    def detect_active_dicts(self) -> int:
+        num_active_dicts = 0
+        for dictionary in self.dictionaries:
+            if dictionary.active:
+                num_active_dicts += 1
+        return num_active_dicts
+
     def count_words(self):
         """counts all dictionaries for all active files in the corpus
 
@@ -115,13 +122,18 @@ class ContentAnalysisModel(object):
         self.scores = []
         self.formulas = []
         active_dicts = self.get_active_dicts()
+        result = 0
         for i in range(len(self.corpus)):
             new_formula = formula
             for j in range(len(active_dicts)):
                 new_formula = new_formula.replace(
                     "[" + active_dicts[j].label + "]",
                     str(self.counters[i][j]))
-            result = eval(new_formula)
+            new_formula = new_formula.replace("()", "")
+            try:
+                result = eval(new_formula)
+            except (ValueError, SyntaxError):
+                pass
             self.scores.append(round(
                 float(result) / self.corpus[i].total_word_counts, 3))
             self.formulas.append(result)
