@@ -100,10 +100,10 @@ function toggle_checkbox(i) {
     })
 }
 function delete_dictionary(i) {
-    var dict_names = [];
-    $("input[name=dictionary]").each(function(){ dict_names.push(this.value); });
-    var dict_name = dict_names[i];
-    var data = JSON.stringify({"dict_name": dict_name});
+    var dict_labels = [];
+    $("input[name=dictionary]").each(function(){ dict_labels.push(this.value); });
+    var dict_label = dict_labels[i];
+    var data = JSON.stringify({"dict_label": dict_label});
     $.ajax({
         url: "/deletedictionary",
         type: "POST",

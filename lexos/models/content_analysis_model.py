@@ -51,13 +51,13 @@ class ContentAnalysisModel(object):
                                             file_name=file_name,
                                             label=label))
 
-    def delete_dictionary(self, file_name: str):
+    def delete_dictionary(self, label: str):
         """deletes a dictionary
 
         :param file_name: filename of dictionary to delete
         """
         for i in range(len(self.dictionaries)):
-            if self.dictionaries[i].name == file_name:
+            if self.dictionaries[i].label == label:
                 del self.dictionaries[i]
                 break
 

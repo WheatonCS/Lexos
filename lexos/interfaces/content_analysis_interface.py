@@ -190,8 +190,8 @@ def delete_dictionary():
     global analysis
     data = {'dictionary_labels': [],
             'active_dictionaries': []}
-    dictionary = request.json['dict_name']
-    analysis.delete_dictionary(dictionary)
+    dict_label = request.json['dict_label']
+    analysis.delete_dictionary(dict_label)
     for dictionary in analysis.dictionaries:
         data['dictionary_labels'].append(dictionary.label)
         data['active_dictionaries'].append(dictionary.active)
