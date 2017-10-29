@@ -1,6 +1,6 @@
 /*@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
 */
-/*!
+/*/
   Lato font.
 */
 /* Lato (normal, regular) */
@@ -314,7 +314,7 @@ input[type="file"] {
 }
 
 
-/* ================== d3 STYLING ================================= */
+/*!* ================== d3 STYLING ================================= *!*/
 
 .line {
   fill: none;
@@ -1833,46 +1833,40 @@ select#orientation {
   width: 140px;
 }
 
-.silhouette-options,
-.dendrogram-options,
-.kmeans-options {
+.dendrogram-options{
   float: left;
 }
 
-.silhouette-options,
-.dendrogram-options label,
-.kmeans-options label{
+.dendrogram-options label {
   clear: both;
   float: left;
   line-height: 34px;
 }
 
-.icon-help#annotationTip {
-  top: 0px;
-  right: -5px;
+#dendrogram-result {
+  width: max-content;
+  width: -moz-max-content;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-.thresholdHelp {
-  border: 1px solid #BDC3C7;
-  border-radius: 6px;
-  display: none;
-  color: black;
-  position: absolute;
-  font-size: 13px;
-  line-height: 2px;
-  color: #303030;
-  padding: 1px 10px;
-  margin-top:1px;
-  left:230px;
-  top:460px;
+#dendrogram-result .plot {
+  opacity: 1;
 }
 
-#silhouetteResults {
-  display:none;
-}
 
 /* ================== K MEANS STYLING ==================== */
-#kmeansresults {
+
+.silhouette-options,
+.kmeans-options {
+  float: left;
+}
+
+.silhouette-options,
+.kmeans-options label{
+  clear: both;
+  float: left;
+  line-height: 34px;
 }
 
 #kmeanscreateoptions {

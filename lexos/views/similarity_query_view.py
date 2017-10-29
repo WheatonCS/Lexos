@@ -2,19 +2,19 @@ import numpy as np
 from flask import request, session, render_template, send_file, Blueprint
 
 from lexos.helpers import constants as constants
-from lexos.interfaces.base_interface import detect_active_docs
 from lexos.managers import utility, session_manager as session_manager
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-sim_view = Blueprint('sim_query', __name__)
+sim_blueprint = Blueprint('sim_query', __name__)
 
 
 # Tells Flask to load this function when someone is at '/extension'
-@sim_view.route("/similarity", methods=["GET", "POST"])
+@sim_blueprint.route("/similarity", methods=["GET", "POST"])
 def similarity():
     """Handles the similarity query page functionality.
 

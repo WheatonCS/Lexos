@@ -1,151 +1,83 @@
-$(document).ready(function () {
-  //  Dynamically change the height of the embedded image
-  pdfPageNumber = 1
-  $('.dendroImage').height(pdfPageNumber * 120 + 'vh')
-
-  // Function to convert the form data into a JSON object
-  function jsonifyForm () {
+/**
+ * the function to convert the from into json
+ * @returns {{string: string}} - the from converted to json
+ */
+function jsonifyForm () {
     var form = {}
     $.each($('form').serializeArray(), function (i, field) {
-      form[field.name] = field.value || ''
+        form[field.name] = field.value || ''
     })
     return form
-  }
+}
 
-  function doAjax (action) {
+/**
+ * the function to run the error modal
+ * @param htmlMsg {string} - the message to display, you can put html in it
+ */
+function runModal (htmlMsg) {
+    $('#error-modal-message').html(htmlMsg)
+    $('#error-modal').modal()
+}
+
+/**
+ * the function to do ajax in dendrogram
+ * @param url {string} - the url to do post
+ */
+function doAjax (url) {
+    // show loading icon
+    $('#status-analyze').css({'visibility': 'visible'})
+
     var form = jsonifyForm()
-    var extension = {}
-    extension[action] = true
-    $.extend(form, extension)
     $.ajax({
-      'type': 'POST',
-      'url': '/cluster',
-      'contentType': 'application/json; charset=utf-8',
-      'dataType': 'json',
-      'data': JSON.stringify(form),
-      // "beforeSend": function(form) {
-      //    console.log("Before Send: "+JSON.stringify(form));
-      // },
-      'complete': function (response) {
-        $('#pdf').attr('src', '/dendrogramimage?' + response['responseJSON']['ver'])
-        $('#scoreSpan').html(response['responseJSON']['score'])
-        $('#criterionSpan').html(response['responseJSON']['criterion'])
-        $('#thresholdSpan').html(response['responseJSON']['threshold'])
-        $('.generated').removeClass('hidden')
-        console.log('Response: ' + JSON.stringify(response))
-        document.getElementById('graph-anchor').scrollIntoView({ block: 'start', behavior: 'smooth' })
-        $('#status-analyze').css({ 'visibility': 'hidden' })
-      }
-    }// end ajax
+            type: 'POST',
+            url: url,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify(form),
+            complete: function (response) {
+                $('#status-analyze').css({'visibility': 'hidden'})
+                $('#dendrogram-result').html(response['responseJSON']['dendroDiv'])
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('textStatus: ' + textStatus)
+                console.log('errorThrown: ' + errorThrown)
+                runModal('error encountered while plotting the dendrogram.')
+            }
+        }
     )
-  };
+}
 
-  // Events after 'Get Dendrogram' is clicked, handle exceptions
-  $('#getdendro, #dendroPDFdownload, #dendroSVGdownload, #dendroPNGdownload, #dendroNewickdownload, #download').on('click', function () {
-    var err1 = 'A dendrogram requires at least 2 active documents to be created.'
-    var err2 = 'Invalid Threshold.'
-    var err3 = 'Invalid number of leaves.'
-    var activeFiles = $('#num_active_files').val()
-    var action = $(this).attr('id')
+/**
+ * the error message for the submission
+ * @returns {string | null} - if it is null, it means no error, else then the string is the error message
+ */
+function submissionError () {
+    const err = 'A dendrogram requires at least 2 active documents to be created.'
+    const activeFiles = $('#num_active_files').val()
+    if (activeFiles < 2)
+        return err
+    else
+        return null
+}
 
-    if (activeFiles < 2) {
-      $('#status-analyze').css({ 'visibility': 'hidden' })
-      $('#error-modal-message').html(err1)
-      $('#error-modal').modal()
-    } else {
-      var pruning = $('#pruning').val()
-      if ((Math.abs(Math.round(pruning)) != pruning) || pruning == 1) {
-        $('#status-analyze').css({ 'visibility': 'hidden' })
-        $('#error-modal-message').html(err3)
-        $('#error-modal').modal()
-      }
+/**
+ * When the HTML documents finish loading
+ */
+$(document).ready(function () {
 
-      var thresholdValue = $('#threshold').val()
-      var cOption = $('#criterion').val()
-      if (cOption == 'inconsistent') {
-        if ((thresholdValue >= 0 && thresholdValue <= inconsistentMax) || (thresholdValue == '')) {
-          if (action == 'getdendro') {
-            $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
-            doAjax(action)
-          }
-        } else {
-          $('#status-analyze').css({ 'visibility': 'hidden' })
-          $('#error-modal-message').html(err2)
-          $('#error-modal').modal()
-        }
-      } else if (cOption == 'maxclust') {
-        if ((thresholdValue >= 2 && thresholdValue <= maxclustMax) || (thresholdValue == '')) {
-          if (action == 'getdendro') {
-            $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
-            doAjax(action)
-          }
-        } else {
-          $('#status-analyze').css({ 'visibility': 'hidden' })
-          msg = 'The maximum number of clusters should be at least 2 and no more than ' + maxclustMax + ' (the number of active documents).'
-          $('#error-modal-message').html(err2 + ' ' + msg)
-          $('#error-modal').modal()
-          if (action == 'getdendro') { doAjax(action) }
-        }
-      } else if (cOption == 'distance') {
-        if ((thresholdValue >= distanceMin && thresholdValue <= distanceMax) || (thresholdValue == '')) {
-          if (action == 'getdendro') {
-            $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
-            doAjax(action)
-          }
-        } else {
-          $('#status-analyze').css({ 'visibility': 'hidden' })
-          $('#error-modal-message').html(err2)
-          $('#error-modal').modal()
-        }
-      } else if (cOption == 'monocrit') {
-        if ((thresholdValue >= monocritMin && thresholdValue <= monocritMax) || (thresholdValue == '')) {
-          if (action == 'getdendro') {
-            $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
-            doAjax(action)
-          }
-        } else {
-          $('#status-analyze').css({ 'visibility': 'hidden' })
-          $('#error-modal-message').html(err2)
-          $('#error-modal').modal()
-        }
-      }
-    }
-  })
+    /**
+     * the events after dendrogram is clicked
+     */
+    $('#getdendro').on('click', function () {
+        const error = submissionError()  // the error happens during submission
 
-  // Update threshold values
-  $('#threshold').each(function () {
-    var default_value = this.value
-    $(this).focus(function () {
-      if (this.value == default_value) {
-        this.value = ''
-      }
+        if (error === null) {  // if there is no error
+            doAjax('/dendrogramDiv', null)
+        }
+        else {
+            runModal(error)
+        }
+
     })
-  })
-  // Calculate the threshold values based on criterions
-  var inconsistentrange = '0 ≤ t ≤ '
-  var maxclustRange = '2 ≤ t ≤ '
-  var range = ' ≤ t ≤ '
 
-  var inconsistentMaxStr = inconsistentMax.toString()
-  var maxclustMaxStr = maxclustMax.toString()
-  var distanceMaxStr = distanceMax.toString()
-  var monocritMaxStr = monocritMax.toString()
-
-  var distanceMinStr = distanceMin.toString()
-  var monocritMinStr = monocritMin.toString()
-
-  var inconsistentOp = inconsistentrange.concat(inconsistentMaxStr)
-  var maxclustOp = maxclustRange.concat(maxclustMaxStr)
-  var distanceOp = distanceMinStr.concat(range, distanceMaxStr)
-  var monocritOp = monocritMinStr.concat(range, monocritMaxStr)
-
-  var placeholderText = { 'Inconsistent': inconsistentOp, 'Maxclust': maxclustOp, 'Distance': distanceOp, 'Monocrit': monocritOp }
-
-  $('#criterion').on('change', function () {
-    var selectedVal = $('#criterion').find(':selected').text()
-    $('#threshold').attr('placeholder', placeholderText[selectedVal])
-  }).on('click', function () {
-    var selectedVal = $('#criterion').find(':selected').text()
-    $('#threshold').attr('placeholder', placeholderText[selectedVal])
-  })
 })
