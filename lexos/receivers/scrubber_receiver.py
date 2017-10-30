@@ -1,16 +1,14 @@
-# from lexos.receivers.base_receiver import BaseReceiver
+from lexos.receivers.base_receiver import BaseReceiver
 
 
 class BasicOptions:
 
-    def __init__(self, gutenberg: bool, lower: bool, punct: bool, apos: bool,
+    def __init__(self, lower: bool, punct: bool, apos: bool,
                  hyphen: bool, amper: bool, digits: bool, tags: bool,
                  whitespace: bool, spaces: bool, tabs: bool, newlines: bool,
                  previewing: bool = False):
         """A struct to represent basic scrubbing options.
 
-        :param gutenberg: A boolean indicating whether the text is a Project
-            Gutenberg file.
         :param lower: A boolean indicating whether or not the text is
             converted to lowercase.
         :param punct: A boolean indicating whether to remove punctuation from
@@ -33,7 +31,6 @@ class BasicOptions:
         :param previewing: A boolean indicating whether the user is previewing.
         """
 
-        self._gutenberg = gutenberg
         self._lower = lower
         self._punct = punct
         self._apos = apos
@@ -46,15 +43,6 @@ class BasicOptions:
         self._tabs = tabs
         self._newlines = newlines
         self._previewing = previewing
-
-    @property
-    def gutenberg(self) -> bool:
-        """Whether the text contains Project Gutenberg boilerplate.
-
-        :return: A bool to indicate the above information.
-        """
-
-        return self._gutenberg
 
     @property
     def lower(self) -> bool:
@@ -297,7 +285,7 @@ class ScrubbingOptions:
         return self._additional_options
 
 
-class ScrubbingReceiver:  # (BaseReceiver)
+class ScrubbingReceiver(BaseReceiver):
 
     def __init__(self, test_scrubbing_options: ScrubbingOptions = None):
         """A class to put together all the scrubbing options.
@@ -314,7 +302,21 @@ class ScrubbingReceiver:  # (BaseReceiver)
         :return: A BasicOptions struct.
         """
 
-        pass
+        lower = self._front_end_data['lowercasebox']
+        punct = self._front_end_data['punctuationbox']
+        apos = self._front_end_data['aposbox']
+        hyphen = self._front_end_data['hyphensbox']
+        amper = self._front_end_data['ampersandbox']
+        digits = self._front_end_data['digitsbox']
+        tags = self._front_end_data['tagbox']
+        whitespace = self._front_end_data['whitespacebox']
+        spaces = self._front_end_data['spacesbox']
+        tabs = self._front_end_data['tabsbox']
+        newlines = self._front_end_data['newlinesbox']
+        previewing = self._front_end_data["formAction"] == "apply"
+
+        return BasicOptions(lower, punct, apos, hyphen, amper, digits, tags, whitespace, spaces, tabs,
+                            newlines,  previewing)
 
     def _get_additional_options_from_front_end(self) -> AdditionalOptions:
         """Gets all the additional options from the front end.
