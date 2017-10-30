@@ -1,4 +1,11 @@
+from typing import Dict, List
+
+from flask import request, session
 from lexos.receivers.base_receiver import BaseReceiver
+from werkzeug.datastructures import FileStorage
+
+from lexos.helpers import constants, general_functions
+from lexos.managers import session_manager
 
 
 class BasicOptions:
@@ -318,13 +325,90 @@ class ScrubbingReceiver(BaseReceiver):
         return BasicOptions(lower, punct, apos, hyphen, amper, digits, tags, whitespace, spaces, tabs,
                             newlines,  previewing)
 
+    def _load_scrub_optional_upload(self, storage_folder: str, filename: str) -> str:
+        """Loads a option file that was previously saved in the storage folder.
+
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file that is being
+            loaded.
+        :return: The file string that was saved in the folder (empty if there is
+            no string to load).
+        """
+
+        try:
+            return general_functions.load_file_from_disk(loc_folder=storage_folder, filename=filename)
+        except FileNotFoundError:
+            return ""
+
+    def _prepare_uploaded_files(self, opt_uploads: Dict[str, FileStorage], storage_options: List[str],
+                                storage_folder: str, storage_filenames: List[str]) -> (str, str, str, str, str, str,
+                                                                                       str, str):
+        """Gathers all the files used by the "Additional Options" scrub section.
+
+        :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
+            containing the additional scrubbing option files that have been
+            uploaded.
+        :param storage_options: A list of strings representing additional options
+            that have been chosen by the user.
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param storage_filenames: A list of filename strings that will be used to
+            load and save the user's selections.
+        :return: An array containing strings of all the additional scrubbing
+            option text fields and files.
+        """
+
+        file_strings = {}
+        for index, key in enumerate(sorted(opt_uploads)):
+            if opt_uploads[key].filename:
+                file_content = opt_uploads[key].read()
+                file_strings[index] = general_functions.decode_bytes(file_content)
+                opt_uploads[key].seek(0)
+            elif key.strip('[]') in storage_options:
+                file_strings[index] = self._load_scrub_optional_upload(storage_folder, storage_filenames[index])
+            else:
+                session['scrubbingoptions']['optuploadnames'][key] = ''
+                file_strings[index] = ""
+
+        # Create an array of option strings:
+        # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string
+        all_files = (file_strings[0], file_strings[1], file_strings[2], file_strings[3])
+
+        return all_files
+
     def _get_additional_options_from_front_end(self) -> AdditionalOptions:
         """Gets all the additional options from the front end.
 
         :return: An AdditionalOptions struct.
         """
 
-        pass
+        opt_uploads = request.files
+        storage_options = []
+        for key in list(request.form.keys()):
+            if 'usecache' in key:
+                storage_options.append(key[len('usecache'):])
+
+        storage_folder = session_manager.session_folder() + '/scrub/'
+        storage_filenames = [constants.CONSOLIDATION_FILENAME, constants.LEMMA_FILENAME,
+                             constants.SPECIAL_CHAR_FILENAME, constants.STOPWORD_FILENAME]
+
+        file_strings = self._prepare_uploaded_files(opt_uploads, storage_options, storage_folder, storage_filenames)
+
+        # Handle uploaded FILES: consolidations, lemmas, special characters, stop-keep words
+        file_consol = file_strings[0]
+        file_lemma = file_strings[1]
+        file_special_char = file_strings[2]
+        file_sw_kw = file_strings[3]
+
+        # Handle manual entries: consolidations, lemmas, special characters, stop-keep words
+        manual_consol = self._front_end_data['manualconsolidations']
+        manual_lemma = self._front_end_data['manuallemmas']
+        manual_special_char = self._front_end_data['manuallemmas']
+        manual_sw_kw = self._front_end_data['manuallemmas']
+
+        return AdditionalOptions(file_consol, file_lemma, file_special_char, file_sw_kw, manual_consol, manual_lemma,
+                                 manual_special_char, manual_sw_kw)
 
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.
