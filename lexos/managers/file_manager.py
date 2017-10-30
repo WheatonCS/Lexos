@@ -1,15 +1,16 @@
 import io
-import numpy as np
 import os
-import pandas as pd
 import shutil
 import zipfile
 from cmath import sqrt, log, exp
-from flask import request, send_file
 from os import makedirs
 from os.path import join as pathjoin
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from typing import List, Tuple, Dict
+
+import numpy as np
+import pandas as pd
+from flask import request, send_file
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -181,6 +182,14 @@ class FileManager:
         :return: get all the file content from the file_manager
         """
         return [file.load_contents() for file in self.get_active_files()]
+
+    def get_content_of_active_with_id(self) -> Dict[str, int]:
+        """Gets the contents and IDs of all active files.
+
+        :return: All the file contents and IDs from the file_manager.
+        """
+        return {file.load_contents(): file.id
+                for file in self.get_active_files()}
 
     def toggle_file(self, file_id: int):
         """Toggles the active status of the given file.
@@ -501,6 +510,15 @@ class FileManager:
         """
 
         self.files[file_id] = file_label
+
+    def update_content(self, file_id: int, updated_content: str):
+        """Updates the contents of a file.
+
+        :param file_id: The ID of the file to be updated.
+        :param updated_content: The content that should be in the file.
+        """
+
+        self.files[file_id].save_contents(file_contents=updated_content)
 
     def get_active_labels(self) -> Dict[int, str]:
         """Gets labels of all active files in dictionary{file_id: file_label}.
