@@ -98,7 +98,6 @@ class ContentAnalysisModel(object):
             counts = []
             for i in range(len(self.dictionaries)):
                 if self.dictionaries[i].active:
-                    print(self.dictionaries[i].label)
                     count = 0
                     for word in self.dictionaries[i].content:
                         if file.content.startswith(word + " "):
