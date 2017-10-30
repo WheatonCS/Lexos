@@ -6,18 +6,18 @@ from flask import send_file, request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager, utility
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-cluster_view = Blueprint('cluster', __name__)
+cluster_blueprint = Blueprint('cluster', __name__)
 
 
 # Tells Flask to load this function when someone is at '/dendrogramimage'
-@cluster_view.route("/dendrogramimage", methods=["GET", "POST"])
+@cluster_blueprint.route("/dendrogramimage", methods=["GET", "POST"])
 def dendrogram_image():
     """Reads the png image of the dendrogram and displays it on the browser.
 
@@ -36,7 +36,7 @@ def dendrogram_image():
 
 
 # Tells Flask to load this function when someone is at '/kmeans'
-@cluster_view.route("/kmeans", methods=["GET", "POST"])
+@cluster_blueprint.route("/kmeans", methods=["GET", "POST"])
 def k_means():
     """Handles the functionality on the kmeans page.
 
@@ -117,7 +117,7 @@ def k_means():
 
 
 # Tells Flask to load this function when someone is at '/kmeansimage'
-@cluster_view.route("/kmeansimage", methods=["GET", "POST"])
+@cluster_blueprint.route("/kmeansimage", methods=["GET", "POST"])
 def k_means_image():
     """Reads the png image of the kmeans and displays it on the web browser.
 
@@ -134,7 +134,7 @@ def k_means_image():
     return send_file(image_path)
 
 
-@cluster_view.route("/small_PCA", methods=["GET", "POST"])
+@cluster_blueprint.route("/small_PCA", methods=["GET", "POST"])
 def small_pca():
     """Reads the small image of the PCA and displays it on the web browser.
 
@@ -149,7 +149,7 @@ def small_pca():
         return send_file(plotly_url)
 
 
-@cluster_view.route("/big_PCA", methods=["GET", "POST"])
+@cluster_blueprint.route("/big_PCA", methods=["GET", "POST"])
 def big_pca():
     """Reads the big image of the PCA and displays it on the web browser.
 
@@ -165,7 +165,7 @@ def big_pca():
 
 
 # Tells Flask to load this function when someone is at '/cluster'
-@cluster_view.route("/cluster", methods=["GET", "POST"])
+@cluster_blueprint.route("/cluster", methods=["GET", "POST"])
 def cluster():
     """Handles the functionality on the cluster page.
 
@@ -283,7 +283,7 @@ def cluster():
 
 
 # Tells Flask to load this function when someone is at '/cluster-old'
-@cluster_view.route("/cluster-old", methods=["GET", "POST"])
+@cluster_blueprint.route("/cluster-old", methods=["GET", "POST"])
 def cluster_old():
     """Handles the functionality on the cluster-old page.
 
@@ -392,7 +392,7 @@ def cluster_old():
 
 
 # Tells Flask to load this function when someone is at '/hierarchy'
-@cluster_view.route("/cluster/output", methods=["GET", "POST"])
+@cluster_blueprint.route("/cluster/output", methods=["GET", "POST"])
 def cluster_output():
     image_path = path_join(
         session_manager.session_folder(),

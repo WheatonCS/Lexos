@@ -4,19 +4,19 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.managers.utility import load_file_manager
 from lexos.models.content_analysis_model import ContentAnalysisModel
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-content_analysis_view = Blueprint('content_analysis', __name__)
+content_analysis_blueprint = Blueprint('content_analysis', __name__)
 analysis = None
 
 
 # Tells Flask to load this function when someone is at '/contentanalysis'
-@content_analysis_view.route("/contentanalysis", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/contentanalysis", methods=["GET", "POST"])
 def content_analysis():
     """Handles the functionality on the contentanalysis page.
 
@@ -109,7 +109,7 @@ def content_analysis():
 
 
 # Tells Flask to load this function when someone is at '/getdictlabels'
-@content_analysis_view.route("/uploaddictionaries", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/uploaddictionaries", methods=["GET", "POST"])
 def upload_dictionaries():
     """Uploads dictionaries to the content analysis object.
 
@@ -137,7 +137,7 @@ def upload_dictionaries():
 
 
 # Tells Flask to load this function when someone is at '/saveformula'
-@content_analysis_view.route("/saveformula", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/saveformula", methods=["GET", "POST"])
 def save_formula():
     """Saves the formula.
 
@@ -156,7 +156,7 @@ def save_formula():
 
 
 # Tells Flask to load this function when someone is at '/toggledictionary'
-@content_analysis_view.route("/toggledictionary", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/toggledictionary", methods=["GET", "POST"])
 def toggle_dictionary():
     """Handles the functionality of the checkboxes.
 
@@ -187,7 +187,7 @@ def toggle_dictionary():
 
 
 # Tells Flask to load this function when someone is at '/deletedictionary'
-@content_analysis_view.route("/deletedictionary", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/deletedictionary", methods=["GET", "POST"])
 def delete_dictionary():
     """Handles the functionality of the delete buttons.
 
