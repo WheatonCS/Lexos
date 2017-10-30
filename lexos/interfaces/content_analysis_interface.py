@@ -173,7 +173,7 @@ def toggle_dictionary():
             data['dictionary_labels'].append(dictionary.label)
             data['active_dictionaries'].append(session['toggle_all'])
     else:
-        dictionary = request.json['dict_name']
+        dictionary = request.json['dict_label']
         analysis.toggle_dictionary(dictionary)
         session['toggle_all'] = True
         for dictionary in analysis.dictionaries:

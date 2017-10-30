@@ -15,15 +15,16 @@
     <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
   {% endif %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_content_analysis.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_content_analysis.js') }}?ver={{version}}"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>-->
     <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
 <style>
 *{padding:0;
 margin:0;
 }
-body {text-align:center;}
-#heading {margin-top:30px;}
-#form_wrapper {width:400px;
+/*body {text-align:center;}
+#heading {margin-top:30px;}*/
+#calculator_wrapper {width:400px;
 text-align:center;}
 
 #display {width:380px;
@@ -34,7 +35,7 @@ margin:4px;
 border:2px solid #999;
 background-color:#FFFFFF;}
 
-.button {width:40px;
+.calc_button {width:40px;
 height:40px;
 margin:1px;  }
 
@@ -43,7 +44,7 @@ font-weight:bold;}
 
 .opps {font-size:18px;}
 
-.three {font-weight:bold;}
+.bold {font-weight:bold;}
 .delete {color: #16A085;}
 .delete:hover{color: red;}
 </style>
@@ -56,7 +57,7 @@ font-weight:bold;}
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
             <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
         </legend>
-        <div class="collapse" id="lemmasPanel">
+        <div class="collapse" ><!--id="lemmasPanel"-->
             <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 320px; min-height: 2em;">
                 <div class="forAllCheckBox" id="forAllCheckBox" align="left">
                     {% if dictionary_labels|length > 0 %}
@@ -93,7 +94,7 @@ font-weight:bold;}
         <div class="collapse" id="lemmasPanel">
             <div class="optuploadbuttondiv">
                 <div id="big_wrapper">
-                    <div id="form_wrapper">
+                    <div id="calculator_wrapper">
                        <input id="display" type="text" name="display" value="{{ session['formula'] }}" disabled contenteditable="false" >
                        <br>
                         <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 100px; min-height: 0px">
@@ -105,35 +106,35 @@ font-weight:bold;}
                             {% endfor %}
                        </div>
                         </div>
-                       <input class="button number" type="button" value="1" onClick="display.value+=1">
-                       <input class="button number" type="button" value="2" onClick="this.form.display.value+=2">
-                       <input class="button number" type="button" value="3" onClick="this.form.display.value+=3">
-                       <input class="button three" type="button" value="C" onClick="this.form.display.value=''">
-                       <input class="button three" type="button" value="DEL" onClick="backspace(this.form)">
+                       <input class="calc_button number" type="button" value="1" onClick="display.value+=1">
+                       <input class="calc_button number" type="button" value="2" onClick="this.form.display.value+=2">
+                       <input class="calc_button number" type="button" value="3" onClick="this.form.display.value+=3">
+                       <input class="calc_button bold" type="button" value="C" onClick="this.form.display.value=''">
+                       <input class="calc_button" type="button" value="DEL" onClick="backspace(this.form)">
                        <br>
-                       <input class="button number" type="button" value="4" onClick="this.form.display.value+=4">
-                       <input class="button number" type="button" value="5" onClick="this.form.display.value+=5">
-                       <input class="button number" type="button" value="6" onClick="this.form.display.value+=6">
-                       <input class="button opps" type="button" value="+" onClick="this.form.display.value+='+'">
-                       <input class="button" type="button" value="sin" onClick="this.form.display.value+='sin('">
+                       <input class="calc_button number" type="button" value="4" onClick="this.form.display.value+=4">
+                       <input class="calc_button number" type="button" value="5" onClick="this.form.display.value+=5">
+                       <input class="calc_button number" type="button" value="6" onClick="this.form.display.value+=6">
+                       <input class="calc_button opps" type="button" value="+" onClick="this.form.display.value+='+'">
+                       <input class="calc_button" type="button" value="sin" onClick="this.form.display.value+='sin('">
                        <br>
-                       <input class="button number" type="button" value="7" onClick="this.form.display.value+=7">
-                       <input class="button number" type="button" value="8" onClick="this.form.display.value+=8">
-                       <input class="button number" type="button" value="9" onClick="this.form.display.value+=9">
-                       <input class="button opps" type="button" value="-" onClick="this.form.display.value+='-'">
-                       <input class="button" type="button" value="cos" onClick="this.form.display.value+='cos('">
+                       <input class="calc_button number" type="button" value="7" onClick="this.form.display.value+=7">
+                       <input class="calc_button number" type="button" value="8" onClick="this.form.display.value+=8">
+                       <input class="calc_button number" type="button" value="9" onClick="this.form.display.value+=9">
+                       <input class="calc_button opps" type="button" value="-" onClick="this.form.display.value+='-'">
+                       <input class="calc_button" type="button" value="cos" onClick="this.form.display.value+='cos('">
                        <br>
-                       <input class="button opps" type="button" value="." onClick="this.form.display.value+='.'">
-                       <input class="button number" type="button" value="0" onClick="this.form.display.value+=0">
-                       <input class="button opps" type="button" value="/" onClick="this.form.display.value+='/'">
-                       <input class="button opps" type="button" value="x" onClick="this.form.display.value+='*'">
-                       <input class="button" type="button" value="tan" onClick="this.form.display.value+='tan('">
+                       <input class="calc_button opps" type="button" value="." onClick="this.form.display.value+='.'">
+                       <input class="calc_button number" type="button" value="0" onClick="this.form.display.value+=0">
+                       <input class="calc_button opps" type="button" value="/" onClick="this.form.display.value+='/'">
+                       <input class="calc_button opps" type="button" value="x" onClick="this.form.display.value+='*'">
+                       <input class="calc_button" type="button" value="tan" onClick="this.form.display.value+='tan('">
                        <br>
-                       <input class="button opps" type="button" value="√" onClick="this.form.display.value+='√('">
-                       <input class="button opps" type="button" value="log" onClick="this.form.display.value+='log('">
-                       <input class="button" type="button" value="x^y" onClick="this.form.display.value+='^('">
-                       <input class="button" type="button" value="(" onClick="this.form.display.value+='('">
-                       <input class="button" type="button" value=")" onClick="this.form.display.value+=')'">
+                       <input class="calc_button opps" type="button" value="√" onClick="this.form.display.value+='√('">
+                       <input class="calc_button opps" type="button" value="log" onClick="this.form.display.value+='log('">
+                       <input class="calc_button" type="button" value="x^y" onClick="this.form.display.value+='^('">
+                       <input class="calc_button" type="button" value="(" onClick="this.form.display.value+='('">
+                       <input class="calc_button" type="button" value=")" onClick="this.form.display.value+=')'">
                     </div>
                 </div>
             </div>

@@ -54,20 +54,20 @@ class ContentAnalysisModel(object):
     def delete_dictionary(self, label: str):
         """deletes a dictionary
 
-        :param file_name: filename of dictionary to delete
+        :param label: label of dictionary to delete
         """
         for i in range(len(self.dictionaries)):
             if self.dictionaries[i].label == label:
                 del self.dictionaries[i]
                 break
 
-    def toggle_dictionary(self, file_name: str):
+    def toggle_dictionary(self, label: str):
         """Activates and Deactivates a dictionary
 
-        :param file_name: filename of dictionary to toggle
+        :param label: filename of dictionary to toggle
         """
         for dictionary in self.dictionaries:
-            if dictionary.label == file_name:
+            if dictionary.label == label:
                 dictionary.active = not dictionary.active
 
     def get_active_dicts(self) -> list:
@@ -98,6 +98,7 @@ class ContentAnalysisModel(object):
             counts = []
             for i in range(len(self.dictionaries)):
                 if self.dictionaries[i].active:
+                    print(self.dictionaries[i].label)
                     count = 0
                     for word in self.dictionaries[i].content:
                         if file.content.startswith(word + " "):
@@ -194,7 +195,8 @@ class ContentAnalysisModel(object):
         members
         """
         columns = ['Document Name']
-        for dictionary in self.dictionaries:
+        active_dicts = self.get_active_dicts()
+        for dictionary in active_dicts:
             columns.append(dictionary.label)
         columns += ['formula', 'total word count', 'score']
         indices = []

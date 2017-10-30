@@ -73,10 +73,10 @@ function toggle_checkbox(i) {
     if(i == -1){
         data = JSON.stringify({"toggle_all": true});
     } else {
-        var dict_names = [];
-        $("input[name=dictionary]").each(function(){ dict_names.push(this.value); });
-        var dict_name = dict_names[i];
-        data = JSON.stringify({"dict_name": dict_name, "toggle_all": false});
+        var dict_labels = [];
+        $("input[name=dictionary]").each(function(){ dict_labels.push(this.value); });
+        var dict_label = dict_labels[i];
+        data = JSON.stringify({"dict_label": dict_label, "toggle_all": false});
     }
     $.ajax({
         url: "/toggledictionary",
