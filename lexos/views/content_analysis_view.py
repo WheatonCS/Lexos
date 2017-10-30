@@ -109,7 +109,7 @@ def content_analysis():
 
 
 # Tells Flask to load this function when someone is at '/getdictlabels'
-@content_analysis_blueprint.route("/uploaddictionaries", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/uploaddictionaries", methods=["POST"])
 def upload_dictionaries():
     """Uploads dictionaries to the content analysis object.
 
@@ -137,7 +137,7 @@ def upload_dictionaries():
 
 
 # Tells Flask to load this function when someone is at '/saveformula'
-@content_analysis_blueprint.route("/saveformula", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/saveformula", methods=["POST"])
 def save_formula():
     """Saves the formula.
 
@@ -156,7 +156,7 @@ def save_formula():
 
 
 # Tells Flask to load this function when someone is at '/toggledictionary'
-@content_analysis_blueprint.route("/toggledictionary", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/toggledictionary", methods=["POST"])
 def toggle_dictionary():
     """Handles the functionality of the checkboxes.
 
@@ -187,7 +187,7 @@ def toggle_dictionary():
 
 
 # Tells Flask to load this function when someone is at '/deletedictionary'
-@content_analysis_blueprint.route("/deletedictionary", methods=["GET", "POST"])
+@content_analysis_blueprint.route("/deletedictionary", methods=["POST"])
 def delete_dictionary():
     """Handles the functionality of the delete buttons.
 

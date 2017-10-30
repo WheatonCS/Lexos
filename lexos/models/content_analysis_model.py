@@ -184,7 +184,8 @@ class ContentAnalysisModel(object):
 
     def to_html(self) -> str:
         df = self.to_data_frame()
-        html = df.to_html(classes="table table-striped table-bordered", index=False)
+        html = df.to_html(classes="table table-striped table-bordered",
+                          index=False)
         return html
 
     def to_data_frame(self) -> pd.DataFrame:
@@ -221,8 +222,9 @@ class ContentAnalysisModel(object):
         allowed_input = []
         for dictionary in active_dicts:
             allowed_input.append("[" + dictionary.label + "]")
-        allowed_input += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", " ",
-                          "+", "-", "*", "/", "sin", "cos", "tan", "log", "sqrt", "(", ")"]
+        allowed_input += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                          " ", "+", "-", "*", "/", "sin", "cos", "tan", "log",
+                          "sqrt", "(", ")"]
         for item in allowed_input:
             formula = formula.replace(item, "")
         if len(formula) == 0:
