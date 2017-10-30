@@ -23,7 +23,6 @@ function analyze() {
         update_dictionary_checkboxes(dict_labels, active_dicts);
 
         $('#table').html(response['result_table']);
-        $('.dataframe').width('100%');
         $('.dataframe').DataTable( {
             "scrollX": true,
             'language': {

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% set active_page = 'contentanalysis' %}
-
 {% block title %}Content Analysis{% endblock %}
 {% block head %}
  <!-- Latest compiled and minified DataTables CSS and JS -->
@@ -16,38 +15,8 @@
     <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
   {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_content_analysis.js') }}?ver={{version}}"></script>
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}?ver={{version}}"/>-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/content_analysis.css') }}?ver={{version}}"/>
     <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
-<style>
-*{padding:0;
-margin:0;
-}
-/*body {text-align:center;}
-#heading {margin-top:30px;}*/
-#calculator_wrapper {width:400px;
-text-align:center;}
-
-#display {width:380px;
-height:40px;
-font-size:18px;
-color:black;
-margin:4px;
-border:2px solid #999;
-background-color:#FFFFFF;}
-
-.calc_button {width:40px;
-height:40px;
-margin:1px;  }
-
-.number {font-size:16px;
-font-weight:bold;}
-
-.opps {font-size:18px;}
-
-.bold {font-weight:bold;}
-.delete {color: #16A085;}
-.delete:hover{color: red;}
-</style>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -79,11 +48,10 @@ font-weight:bold;}
                 </div>
             </div>
             <div class="optuploadbuttondiv">
-                <div class="bttn upload-bttn" style="margin-top: 5px;">Upload Files</div>
+                <div class="bttn upload-bttn" id='upload_files'>Upload Files</div>
                 <input type="file" onchange="upload_dictionaries()" class="scrub-upload inputWrapper" id="lemfileselect" name="lemfileselect[]" multiple=""/>
             </div>
         </div>
-
     </div>
     <div class="col-md-5">
         <legend id="Dictionaries" class="has-chevron">
@@ -143,11 +111,10 @@ font-weight:bold;}
 </div>
 <div class="row" style="margin-top: 20px;">
     <div class="col-md-1">
-        <a class="btn btn-success" id="analyze_button" role="button" onclick="analyze()">Analyze</a>
+        <input class="bttn bttn-action" id="analyze_button" value="Analyze" type="button" onclick="analyze()">
     </div>
 </div>
 <div class="row" style="margin-top: 20px;">
     <div id="table"></div>
 </div>
-
 {% endblock %}
