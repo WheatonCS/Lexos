@@ -33,4 +33,4 @@ class ScrubberModel(BaseModel):
         :return: either a frontend option or a fake option used for testing
         """
         return self._test_scrubbing_options or \
-            ScrubbingReceiver().get_scrubbing_options_from_front_end()
+            ScrubbingReceiver().options_from_front_end()

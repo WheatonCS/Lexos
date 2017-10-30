@@ -324,7 +324,7 @@ class ScrubbingReceiver:  # (BaseReceiver)
 
         pass
 
-    def get_scrubbing_options_from_front_end(self) -> ScrubbingOptions:
+    def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.
 
         :return: All the scrubbing options packed in a ScrubbingOptions struct.
