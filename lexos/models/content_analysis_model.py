@@ -104,7 +104,8 @@ class ContentAnalysisModel(object):
                             count += 1
                         if file.content.endswith(" " + word + "\n") or \
                             file.content.endswith(" " + word) or \
-                            file.content.endswith(word):
+                            file.content.endswith(
+                                word):
                             count += 1
                         count += len(file.content.split(" " + word + " ")) - 1
                         if ' ' in word:
