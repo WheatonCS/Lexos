@@ -148,7 +148,7 @@ def test_to_html():
 
 def test_to_data_frame():
     test = ContentAnalysisModel()
-    assert type(test.to_data_frame()) == type(pd.DataFrame())
+    assert isinstance(test.to_data_frame(), type(pd.DataFrame()))
 
 
 def test_is_secure():
