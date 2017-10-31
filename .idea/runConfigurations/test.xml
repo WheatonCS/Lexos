@@ -10,18 +10,10 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <module name="Lexos" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="" />
-    <option name="CLASS_NAME" value="" />
-    <option name="METHOD_NAME" value="" />
-    <option name="FOLDER_NAME" value="" />
-    <option name="TEST_TYPE" value="TEST_SCRIPT" />
-    <option name="PATTERN" value="" />
-    <option name="USE_PATTERN" value="false" />
-    <option name="testToRun" value="" />
-    <option name="keywords" value="" />
-    <option name="params" value="" />
-    <option name="USE_PARAM" value="false" />
-    <option name="USE_KEYWORD" value="false" />
+    <option name="_new_keywords" value="&quot;&quot;" />
+    <option name="_new_additionalArguments" value="&quot;&quot;" />
+    <option name="_new_target" value="&quot;.&quot;" />
+    <option name="_new_targetType" value="&quot;PATH&quot;" />
     <method />
   </configuration>
 </component>

@@ -1,9 +1,10 @@
 import json
+
 from flask import session, redirect, url_for, render_template, send_file, \
     request, Blueprint
+
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-
 
 # this is a flask blue print
 # it helps us to manage groups of views

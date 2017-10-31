@@ -3,282 +3,46 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
+from lexos.managers.file_manager import FileManager
+from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
+from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver
 
 
-class TokenOption:
-    def __init__(self, n_gram_size: int, token_type: str):
-        """A struct to represent token option.
+class MatrixModel(BaseModel):
 
-        :param n_gram_size: the size of each token
-        :param token_type: the token type to send into CountVectorizer
+    def __init__(self, test_matrix_option: MatrixOption = None,
+                 test_file_manager: FileManager = None):
+        """Class to generate and manipulate dtm.
+
+        :param test_file_manager: (fake parameter)
+                                the file manger used for testing
+        :param test_matrix_option: (fake parameter)
+                                the matrix options used for testing
         """
-        self._n_gram_size = n_gram_size
-        self._token_type = token_type
-
-    @property
-    def n_gram_size(self) -> int:
-        """The size of each token.
-
-        the number of words or char in each token
-        :return: an int to indicate above information
-        """
-        return self._n_gram_size
-
-    @property
-    def token_type(self) -> str:
-        """The type of the token.
-
-        The token type to be send into CountVectorizer.
-        Available options are 'word', 'char', 'char_wb'.
-        :return: a string to indicate above information.
-        """
-        return self._token_type
-
-
-class NormOption:
-    def __init__(self, use_freq: bool, use_tf_idf: bool,
-                 tf_idf_norm_option: str):
-        """A struct to keep the normalize option.
-
-        :param use_freq: True if we are using proportional count
-                         False if we are using raw count
-        :param use_tf_idf: whether to apply TF-IDF transformation
-        :param tf_idf_norm_option: the normalize option in TF-IDF
-        """
-        self._use_freq = use_freq
-        self._use_tf_idf = use_tf_idf
-        self._tf_idf_norm_option = tf_idf_norm_option
-
-    @property
-    def use_freq(self) -> bool:
-        """Whether to use proportional count in our doc term matrix.
-
-        :return: True if we are using proportional count
-                 False if we are using raw count
-        """
-        return self._use_freq
-
-    @property
-    def use_tf_idf(self) -> bool:
-        """Whether to apply TF-IDF transformation to the matrix
-
-        :return: a boolean to indicate above information
-        """
-        return self._use_tf_idf
-
-    @property
-    def tf_idf_norm_option(self) -> str:
-        """The normalize option for TF-IDF transformation
-
-        :return: a string to indicate above information
-        """
-        return self._tf_idf_norm_option
-
-
-class CullingOption:
-    def __init__(self, most_frequent_word: bool, mfw_lowest_rank: int,
-                 culling: bool, cull_least_seg: int):
-        """A struct to represent all the culling option
-
-        :param most_frequent_word: Whether to apply most frequent word
-        :param mfw_lowest_rank: the lowest word rank to keep in passage
-        :param culling: whether to apply culling option
-        :param cull_least_seg: the least number of passage that the word
-            needs to be in.
-        """
-        self._mfw = most_frequent_word
-        self._mfw_lower = mfw_lowest_rank
-        self._culling = culling
-        self._cull_lower = cull_least_seg
-
-    @property
-    def most_frequent_word(self) -> bool:
-        """Whether to apply most frequent word
-
-        :return: A boolean to indicate the above information
-        """
-        return self._mfw
-
-    @property
-    def mfw_lowest_rank(self) -> int:
-        """The lowest word rank to keep in passage
-
-        :return: a int to indicate the above information
-        """
-        return self._mfw_lower
-
-    @property
-    def culling(self) -> bool:
-        """Whether to apply the culling option
-
-        :return: a boolean to indicate the above information
-        """
-        return self._culling
-
-    @property
-    def cull_least_passage(self) -> int:
-        """The least a number of passage the words needs to be in
-
-        :return: a int to indicate the above information
-        """
-        return self._cull_lower
-
-
-class MatrixOption:
-    def __init__(self, token_option: TokenOption, norm_option: NormOption,
-                 culling_option: CullingOption, temp_labels: np.ndarray):
-        """A struct to represent all the matrix option.
-
-        :param token_option: the token options
-        :param norm_option: the normalize options
-        :param culling_option: the culling options
-        :param temp_labels: all the temp labels in an np array
-        """
-        self._token_option = token_option
-        self._norm_option = norm_option
-        self._culling_option = culling_option
-        self._temp_label = temp_labels
-
-    @property
-    def token_option(self) -> TokenOption:
-        """All the token option
-
-        :return: a TokenOption type
-        """
-        return self._token_option
-
-    @property
-    def norm_option(self) -> NormOption:
-        """All the normalize options
-
-        :return: a NormOption Type
-        """
-        return self._norm_option
-
-    @property
-    def culling_option(self) -> CullingOption:
-        """All the culling options.
-
-        :return: a CullingOption type
-        """
-        return self._culling_option
-
-    @property
-    def temp_labels(self) -> np.ndarray:
-        """All the temp labels
-
-        :return: an np array with all the labels
-        """
-        return self._temp_label
-
-
-class MatrixModel(FileManagerModel):
-
-    def __init__(self, matrix_option: MatrixOption = None):
-        """Class to generate and manipulate dtm."""
         super().__init__()
-        self._active_files = self.file_manager.get_active_files()
-
-        # get the matrix option
-        self._opt = matrix_option if matrix_option else \
-            self._get_matrix_option_from_front_end()
-
-        self._dtm = self._generate_dtm()
+        self._test_file_manager = test_file_manager
+        self._test_matrix_option = test_matrix_option
 
     @property
-    def doc_term_matrix(self) -> pd.DataFrame:
-        """the document term matrix
+    def _file_manager(self) -> FileManager:
+        """Result form higher level class: the file manager of current session.
 
-        :return: a panda data frame:
-            - columns headers are words
-            - index (row) headers are segment names
+        :return: a file manager object
         """
-        return self._dtm
+        return self._test_file_manager if self._test_file_manager \
+            else FileManagerModel().load_file_manager()
 
-    def _get_token_option_from_front_end(self) -> TokenOption:
-        """get the token option from front end
+    @property
+    def _opts(self) -> MatrixOption:
+        """Get all the options to use
 
-        :return: a token option struct
+        :return: either a frontend option or a fake option used for testing
         """
-        token_type_is_word = self.front_end_data['tokenType'] == 'word'
-        token_type_is_char = self.front_end_data['tokenType'] == 'char'
-        char_within_word = 'inWordsOnly' in self.front_end_data
+        return self._test_matrix_option if self._test_matrix_option \
+            else MatrixReceiver().options_from_front_end()
 
-        # get the token type
-        if token_type_is_word:
-            token_type = 'word'
-        elif token_type_is_char and char_within_word:
-            token_type = 'char_wb'
-        elif token_type_is_char and not char_within_word:
-            token_type = 'char'
-        else:
-            raise ValueError('invalid token type from front end')
-
-        # get the n_gram_size
-        n_gram_size = int(self.front_end_data['tokenSize'])
-
-        return TokenOption(token_type=token_type, n_gram_size=n_gram_size)
-
-    def _get_normalize_option_from_front_end(self) -> NormOption:
-        """Get the normalize option from front end.
-
-        :return: a normalize option struct
-        """
-        use_freq = self.front_end_data['normalizeType'] == 'freq'
-
-        # if use TF/IDF
-        use_tfidf = self.front_end_data['normalizeType'] == 'tfidf'
-
-        # only applicable when using "TF/IDF", set default value to N/A
-        if self.front_end_data['norm'] == 'l1':
-            norm_option = 'l1'
-        elif self.front_end_data['norm'] == 'l2':
-            norm_option = 'l2'
-        else:
-            norm_option = None
-
-        return NormOption(use_freq=use_freq, use_tf_idf=use_tfidf,
-                          tf_idf_norm_option=norm_option)
-
-    def _get_culling_option_from_front_end(self) -> CullingOption:
-        """Get the culling option from the front end
-
-        :return: a culling option struct
-        """
-        most_frequent_word = self.front_end_data['mfwcheckbox']
-        culling = self.front_end_data['cullcheckbox']
-        least_num_seg = self.front_end_data['cullnumber']
-        lower_rank_bound = self.front_end_data['mfwnumber']
-
-        return CullingOption(culling=culling, cull_least_seg=least_num_seg,
-                             most_frequent_word=most_frequent_word,
-                             mfw_lowest_rank=lower_rank_bound)
-
-    def _get_temp_labels_from_front_end(self) -> np.array:
-        """Get all the temp labels from front end
-
-        :return: get all the temp labels from the web
-        """
-        try:
-            return np.array([self.front_end_data["file_" + str(file.id)]
-                             for file in self._active_files])
-        except KeyError:
-            return np.array([file.label for file in self._active_files])
-
-    def _get_matrix_option_from_front_end(self) -> MatrixOption:
-        """Get all the matrix option from front end.
-
-        :return: all the option packed together into a matrix option class
-        """
-        return MatrixOption(
-            token_option=self._get_token_option_from_front_end(),
-            norm_option=self._get_normalize_option_from_front_end(),
-            culling_option=self._get_culling_option_from_front_end(),
-            temp_labels=self._get_temp_labels_from_front_end()
-        )
-
-    def _generate_dtm(self)-> pd.DataFrame:
+    def get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
 
         :return:
@@ -287,7 +51,7 @@ class MatrixModel(FileManagerModel):
             - the column header are words
         """
 
-        all_contents = self.file_manager.get_content_of_active()
+        all_contents = self._file_manager.get_content_of_active()
 
         # heavy hitting tokenization and counting options set here
 
@@ -326,10 +90,10 @@ class MatrixModel(FileManagerModel):
 
         count_vector = CountVectorizer(
             input='content', encoding='utf-8', min_df=1,
-            analyzer=self._opt.token_option.token_type,
-            token_pattern=definitions._WORD_REGEX_STR, lowercase=False,
-            ngram_range=(self._opt.token_option.token_type,
-                         self._opt.token_option.token_type),
+            analyzer=self._opts.token_option.token_type,
+            token_pattern=definitions.WORD_REGEX, lowercase=False,
+            ngram_range=(self._opts.token_option.n_gram_size,
+                         self._opts.token_option.n_gram_size),
             stop_words=[], dtype=float, max_df=1.0
         )
 
@@ -380,9 +144,9 @@ class MatrixModel(FileManagerModel):
         #       if False, tf = term-frequency
         #       *** we choose False as the normal term-frequency ***
 
-        if self._opt.norm_option.use_tf_idf:  # if use TF/IDF
+        if self._opts.norm_option.use_tf_idf:  # if use TF/IDF
             transformer = TfidfTransformer(
-                norm=self._opt.norm_option.tf_idf_norm_option,
+                norm=self._opts.norm_option.tf_idf_norm_option,
                 use_idf=True,
                 smooth_idf=False,
                 sublinear_tf=False)
@@ -395,28 +159,28 @@ class MatrixModel(FileManagerModel):
         words = count_vector.get_feature_names()
         # pack the data into a data frame
         dtm_data_frame = pd.DataFrame(data=raw_count_matrix,
-                                      index=self._opt.temp_labels,
+                                      index=self._opts.temp_labels,
                                       columns=words)
 
         # change the dtm to proportion
-        if self._opt.norm_option.use_freq:
+        if self._opts.norm_option.use_freq:
             # apply the proportion function to each row
             dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
                                                   axis=1)
 
         # apply culling to dtm
-        if self._opt.culling_option.culling:
+        if self._opts.culling_option.culling:
 
             dtm_data_frame = self._get_culled_matrix(
-                least_num_seg=self._opt.culling_option.cull_least_passage,
+                least_num_seg=self._opts.culling_option.cull_least_passage,
                 dtm_data_frame=dtm_data_frame
             )
 
         # only leaves the most frequent words in dtm
-        if self._opt.culling_option.most_frequent_word:
+        if self._opts.culling_option.most_frequent_word:
 
             dtm_data_frame = self._get_most_frequent_word(
-                lower_rank_bound=self._opt.culling_option.mfw_lowest_rank,
+                lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
                 dtm_data_frame=dtm_data_frame,
                 count_matrix=raw_count_matrix
             )
