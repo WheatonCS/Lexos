@@ -1,11 +1,7 @@
 import pandas as pd
 
-
-# do not delete! used in generate_scores() by eval()
-
 # noinspection PyUnresolvedReferences
-# noqa F401
-from math import sqrt, sin, cos, tan, log  # NOQA
+from math import sqrt, sin, cos, tan, log  # noqa F401
 
 
 class ContentAnalysisModel(object):
