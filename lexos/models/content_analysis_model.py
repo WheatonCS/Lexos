@@ -55,7 +55,8 @@ class ContentAnalysisModel(object):
 
         :param label: label of dictionary to delete
         """
-        self.dictionaries = [dictionary for dictionary in self.dictionaries if dictionary.label != label]
+        self.dictionaries = [dictionary for dictionary in self.dictionaries
+                             if dictionary.label != label]
 
     def toggle_dictionary(self, label: str):
         """Activates and Deactivates a dictionary
@@ -71,7 +72,8 @@ class ContentAnalysisModel(object):
 
         :return: a list containing all active dictionaries
         """
-        return [dictionary for dictionary in self.dictionaries if dictionary.active]
+        return [dictionary for dictionary in self.dictionaries
+                if dictionary.active]
 
     def detect_active_dicts(self) -> int:
         return len(self.get_active_dicts())

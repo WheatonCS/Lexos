@@ -89,8 +89,8 @@ def content_analysis():
             return error("At least 1 active document is required to perform "
                          "a content analysis.")
         elif num_active_dicts == 0:
-            return error("At least 1 active dictionary is required to perform "
-                         "a content analysis.")
+            return error("At least 1 active dictionary is required to perform"
+                         " a content analysis.")
         analysis.count_words()
         if analysis.is_secure(session['formula']):
             data = {"result_table": "",
