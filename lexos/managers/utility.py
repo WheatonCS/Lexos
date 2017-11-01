@@ -1520,7 +1520,7 @@ def xml_handling_options(data: dict = {}):
             for e in root.iter():
                 # Add to tags list, stripping all namespaces
                 tags.append(e.tag.split('}', 1)[1])
-        except:
+        except etree.XMLSyntaxError:
             import bs4
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(file.load_contents(), 'html.parser')
