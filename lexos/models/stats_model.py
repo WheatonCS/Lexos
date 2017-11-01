@@ -92,6 +92,22 @@ class CorpusInfo:
         return self._anomaly_std_err
 
 
+class CorpusInfo1:
+    """This is a structure that holds all the corpus information"""
+    q1: float
+    q3: float
+    iqr: float
+    median: float
+    average: float
+    num_file: int
+    file_sizes: list
+    file_names: np.ndarray
+    std_deviation: float
+    anomaly_iqr: dict
+    anomaly_std_err: dict
+
+
+
 class FileInfo:
     """This is a structure that holds each file information"""
     def __init__(self, q1: float, q3: float, iqr: float, hapax: int,
@@ -192,7 +208,7 @@ class StatsModel(BaseModel):
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
-    def _get_corpus_info(self) -> CorpusInfo:
+    def _get_corpus_info(self) -> CorpusInfo1:
         """Converts word lists completely to statistic."""
         # initialize
         num_file = np.size(self._doc_term_matrix.index.values)
@@ -224,17 +240,18 @@ class StatsModel(BaseModel):
             elif file_sizes[count] < mid - 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'small'})
 
-        return CorpusInfo(q1=q1,
-                          q3=q3,
-                          iqr=iqr,
-                          median=mid,
-                          average=average_file_size,
-                          num_file=num_file,
-                          file_sizes=list(file_sizes),
-                          file_names=self._doc_term_matrix.index.values,
-                          anomaly_iqr=file_anomaly_iqr,
-                          std_deviation=std_dev_file_size,
-                          anomaly_std_err=file_anomaly_std_err)
+        CorpusInfo1.q1 = q1
+        CorpusInfo1.q3 = q3
+        CorpusInfo1.iqr = iqr
+        CorpusInfo1.median = mid
+        CorpusInfo1.average = average_file_size
+        CorpusInfo1.num_file = num_file
+        CorpusInfo1.file_sizes = list(file_sizes)
+        CorpusInfo1.file_names = self._doc_term_matrix.index.values
+        CorpusInfo1.anomaly_iqr = file_anomaly_iqr
+        CorpusInfo1.std_deviation = std_dev_file_size
+        CorpusInfo1.anomaly_std_err = file_anomaly_std_err
+        return CorpusInfo1
 
     @staticmethod
     def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
@@ -283,7 +300,7 @@ class StatsModel(BaseModel):
              for index, label in enumerate(self._doc_term_matrix.index.values)]
         return file_info_list
 
-    def get_result(self) -> (List[FileInfo], CorpusInfo):
+    def get_result(self) -> (List[FileInfo], CorpusInfo1):
         """Return stats for the whole corpus and each file in the corpus"""
 
         return self._get_all_file_result(), self._get_corpus_info()
