@@ -2,7 +2,8 @@ import pandas as pd
 
 
 # do not delete! used in generate_scores() by eval()
-# noqa <unused import statement>
+# noqa F401
+# noinspection PyUnresolvedReferences
 from math import sqrt, sin, cos, tan, log
 
 
