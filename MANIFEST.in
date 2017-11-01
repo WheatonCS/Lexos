@@ -1,0 +1,2 @@
+recursive-exclude test *
+recursive-include lexos *

@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import sys
 import time
 
 from flask import Flask, request, render_template
@@ -127,5 +128,9 @@ def unhandled_exception(error):
         raise error
 
 
-if __name__ == '__main__':
-    app.run()
+def run():
+    """Run lexos."""
+    try:
+        sys.exit(app.run())
+    except KeyboardInterrupt:
+        print('Exiting lexos. Bye!')
