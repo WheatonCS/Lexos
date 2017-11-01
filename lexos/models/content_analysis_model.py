@@ -2,6 +2,7 @@ import pandas as pd
 
 
 # do not delete! used in generate_scores() by eval()
+# noqa <unused import statement>
 from math import sqrt, sin, cos, tan, log
 
 
