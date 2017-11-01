@@ -128,7 +128,7 @@ def test_generate_averages():
 
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='test')
-    test.add_corpus(file_name="file1", label='file2', content='other file')
+    test.add_corpus(file_name="file2", label='file2', content='other file')
     test.add_dictionary(file_name="dict1", content="test")
     test.count_words()
     test.generate_scores(formula="0")
@@ -149,9 +149,12 @@ def test_to_html():
 def test_to_data_frame():
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='test')
-    test.add_corpus(file_name="file1", label='file2', content='other file')
+    test.add_corpus(file_name="file2", label='file2', content='other file')
     test.add_dictionary(file_name="dict1", content="test")
     test.add_dictionary(file_name="dict2", content="test")
+    test.count_words()
+    test.generate_scores(formula="0")
+    test.generate_averages()
     assert isinstance(test.to_data_frame(), type(pd.DataFrame()))
 
 
