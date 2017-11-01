@@ -3,6 +3,7 @@ from flask import request, session, render_template, send_file, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.similarity_model import SimilarityModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -48,7 +49,7 @@ def similarity():
     if 'gen-sims' in request.form:
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        score_name_data_frame = utility.generate_similarities(file_manager)
+        score_name_data_frame = SimilarityModel().get_similarity_score()
 
         docs_score = np.concatenate(score_name_data_frame.values)
         docs_name = np.array(score_name_data_frame.index)
