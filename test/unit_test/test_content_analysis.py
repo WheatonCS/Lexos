@@ -148,6 +148,10 @@ def test_to_html():
 
 def test_to_data_frame():
     test = ContentAnalysisModel()
+    test.add_corpus(file_name="file1", label='file1', content='test')
+    test.add_corpus(file_name="file1", label='file2', content='other file')
+    test.add_dictionary(file_name="dict1", content="test")
+    test.add_dictionary(file_name="dict2", content="test")
     assert isinstance(test.to_data_frame(), type(pd.DataFrame()))
 
 
@@ -159,3 +163,10 @@ def test_is_secure():
     assert test.is_secure("[dict1][dict2]")
     assert test.is_secure("0123456789 +-*/ () sin cos tan log sqrt")
     assert test.is_secure("os.system()") is False
+
+
+def test_detect_active_dicts():
+    test = ContentAnalysisModel()
+    test.add_dictionary(file_name="dict1", content="test")
+    test.add_dictionary(file_name="dict2", content="test")
+    assert test.detect_active_dicts() == 2
