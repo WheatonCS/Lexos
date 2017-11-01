@@ -55,10 +55,7 @@ class ContentAnalysisModel(object):
 
         :param label: label of dictionary to delete
         """
-        for i in range(len(self._dictionaries)):
-            if self._dictionaries[i].label == label:
-                del self._dictionaries[i]
-                break
+        self.dictionaries = [dictionary for dictionary in self.dictionaries if dictionary.label != label]
 
     def toggle_dictionary(self, label: str):
         """Activates and Deactivates a dictionary
@@ -74,24 +71,13 @@ class ContentAnalysisModel(object):
 
         :return: a list containing all active dictionaries
         """
-        active_dicts = []
-        for dictionary in self._dictionaries:
-            if dictionary.active:
-                active_dicts.append(dictionary)
-        return active_dicts
+        return [dictionary for dictionary in self.dictionaries if dictionary.active]
 
     def detect_active_dicts(self) -> int:
-        num_active_dicts = 0
-        for dictionary in self._dictionaries:
-            if dictionary.active:
-                num_active_dicts += 1
-        return num_active_dicts
+        return len(self.get_active_dicts())
 
     def count_words(self):
-        """counts all dictionaries for all active files in the corpus
-
-        """
-        # delete previous results
+        """counts all dictionaries for all active files in the corpus"""
         self._counters = []
         for file in self._corpus:
             counts = []
