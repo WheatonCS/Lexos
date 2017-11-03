@@ -32,7 +32,7 @@ $(function () {
 
   // Display selected document name on screen
   function makeFilenameStr(fileID) {
-    var selectedFilename = 'Selected Document: WULALA' + documentLabels[fileID]
+    var selectedFilename = 'Selected Document: ' + documentLabels[fileID]
     $('#selectedDocument').text(selectedFilename)
   }
 
