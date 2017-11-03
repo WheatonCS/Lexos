@@ -1,11 +1,11 @@
 $(function () {
-  // Hide unnecessary divs for DTM
-  var newLabelsLocation = $('#normalize-options').parent()
-  var newNormalizeLocation = $('#temp-label-div').parent()
-  var tempNormalize = $('#normalize-options').html()
-  var tempLabels = $('#temp-label-div').html()
-  $('#normalize-options').remove()
-  $('#temp-label-div').remove()
+    // Hide unnecessary divs for DTM
+    var newLabelsLocation = $('#normalize-options').parent()
+    var newNormalizeLocation = $('#temp-label-div').parent()
+    var tempNormalize = $('#normalize-options').html()
+    var tempLabels = $('#temp-label-div').html()
+    $('#normalize-options').remove()
+    $('#temp-label-div').remove()
   newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels)
   newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize)
   newLabelsLocation.append(newLabels)
@@ -32,7 +32,7 @@ $(function () {
 
   // Display selected document name on screen
   function makeFilenameStr(fileID) {
-    var selectedFilename = 'Selected Document: ' + documentLabels[fileID]
+    var selectedFilename = 'Selected Document: WULALA' + documentLabels[fileID]
     $('#selectedDocument').text(selectedFilename)
   }
 

@@ -54,7 +54,7 @@ class SimilarityModel(BaseModel):
         # get cosine_similarity
         dist = 1 - cosine_similarity(final_matrix)
 
-        # get an array of file index in filemanager.files
+        # get an array of file index in file manager files
         num_row = len(self._doc_term_matrix.index)
         other_file_indexes = np.asarray([file_index for file_index in range(
             num_row) if file_index != self._similarity_option.comp_file_id])
