@@ -9,7 +9,7 @@ from lexos.models.matrix_model import MatrixModel
 
 
 class CorpusInfo(NamedTuple):
-    """A typed tuple to represent token option."""
+    """A typed tuple to represent statistics of the whole corpus."""
     q1: float  # The first quartile of all file sizes.
     q3: float  # The second quartile of all file sizes.
     iqr: float  # The inter-quartile range of all file sizes.
@@ -23,23 +23,19 @@ class CorpusInfo(NamedTuple):
     anomaly_std_err: dict  # The anomaly standard error of all file sizes.
 
 
-class FileInfo:
-    """This is a structure that holds each file information"""
-    def __init__(self, q1: float, q3: float, iqr: float, hapax: int,
-                 median: float, average: float, num_word: int,
-                 file_name: str, word_count: int, std_deviation: float,
-                 total_word_count: int):
-        self._q1 = q1
-        self._q3 = q3
-        self._iqr = iqr
-        self._hapax = hapax
-        self._median = median
-        self._average = average
-        self._num_word = num_word
-        self._file_name = file_name
-        self._word_count = word_count
-        self._std_deviation = std_deviation
-        self._total_word_count = total_word_count
+class FileInfo(NamedTuple):
+    """A typed tuple to represent statistics of each file in corpus."""
+    q1: float  # The first quartile of all word counts of a file.
+    q3: float  # The second quartile of all word counts of a file.
+    iqr: float  # The inter-quartile range of all word counts of a file.
+    hapax: int  # The hapax of all word counts of a file.
+    median: float  # The median of all word counts of a file.
+    average: float  # The average of all word counts of a file.
+    num_word: int  # The number of words of a file.
+    file_name: str  # The name of a file.
+    word_count: int  # The count of all words within a file.
+    std_deviation: float  # The standard deviation of word counts.
+    total_word_count: int # The total of all word counts of a file.
 
     @property
     def q1(self) -> float:
@@ -166,7 +162,6 @@ class StatsModel(BaseModel):
                           anomaly_iqr=file_anomaly_iqr,
                           std_deviation=std_dev_file_size,
                           anomaly_std_err=file_anomaly_std_err)
-
 
     @staticmethod
     def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
