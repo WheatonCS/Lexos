@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, NamedTuple
 
 import numpy as np
 import pandas as pd
@@ -8,104 +8,19 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 
 
-class CorpusInfo:
-    """This is a structure that holds all the corpus information"""
-    def __init__(self, q1: float, q3: float, iqr: float, median: float,
-                 average: float, num_file: int, file_sizes: list,
-                 file_names: np.ndarray, std_deviation: float,
-                 anomaly_iqr: dict, anomaly_std_err: dict):
-        self._q1 = q1
-        self._q3 = q3
-        self._iqr = iqr
-        self._median = median
-        self._average = average
-        self._num_file = num_file
-        self._file_sizes = file_sizes
-        self._file_names = file_names
-        self._std_deviation = std_deviation
-        self._anomaly_iqr = anomaly_iqr
-        self._anomaly_std_err = anomaly_std_err
-
-    @property
-    def q1(self) -> float:
-        """The first quartile of all file sizes."""
-
-        return self._q1
-
-    @property
-    def q3(self) -> float:
-        """The second quartile of all file sizes."""
-
-        return self._q3
-
-    @property
-    def iqr(self) -> float:
-        """The interquartile range of all file sizes."""
-
-        return self.iqr
-
-    @property
-    def median(self) -> float:
-        """The median of all file sizes."""
-
-        return self._median
-
-    @property
-    def average(self) -> float:
-        """The average of all file sized."""
-
-        return self._average
-
-    @property
-    def num_file(self) -> int:
-        """The number of files."""
-
-        return self._num_file
-
-    @property
-    def file_sizes(self) -> list:
-        """The list of all file sizes."""
-
-        return self._file_sizes
-
-    @property
-    def file_names(self) -> np.ndarray:
-        """The list of all file names."""
-        return self._file_names
-
-    @property
-    def std_deviation(self) -> float:
-        """The standard deviation of all file sizes."""
-
-        return self._std_deviation
-
-    @property
-    def anomaly_iqr(self) -> dict:
-        """The anomaly interquartile range of all file sizes."""
-
-        return self._anomaly_iqr
-
-    @property
-    def anomaly_std_err(self) -> dict:
-        """The anomaly standard error of all file sizes."""
-
-        return self._anomaly_std_err
-
-
-class CorpusInfo1:
-    """This is a structure that holds all the corpus information"""
-    q1: float
-    q3: float
-    iqr: float
-    median: float
-    average: float
-    num_file: int
-    file_sizes: list
-    file_names: np.ndarray
-    std_deviation: float
-    anomaly_iqr: dict
-    anomaly_std_err: dict
-
+class CorpusInfo(NamedTuple):
+    """A typed tuple to represent token option."""
+    q1: float  # The first quartile of all file sizes.
+    q3: float  # The second quartile of all file sizes.
+    iqr: float  # The inter-quartile range of all file sizes.
+    median: float  # The median of all file sizes.
+    average: float  # The average of all file sized.
+    num_file: int  # The number of files.
+    file_sizes: list  # The list of all file sizes.
+    file_names: np.ndarray  # The list of all file names.
+    std_deviation: float  # The standard deviation of all file sizes.
+    anomaly_iqr: dict  # The anomaly inter-quartile range of all file sizes.
+    anomaly_std_err: dict  # The anomaly standard error of all file sizes.
 
 
 class FileInfo:
@@ -208,7 +123,7 @@ class StatsModel(BaseModel):
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
-    def _get_corpus_info(self) -> CorpusInfo1:
+    def _get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
         # initialize
         num_file = np.size(self._doc_term_matrix.index.values)
@@ -240,18 +155,18 @@ class StatsModel(BaseModel):
             elif file_sizes[count] < mid - 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'small'})
 
-        CorpusInfo1.q1 = q1
-        CorpusInfo1.q3 = q3
-        CorpusInfo1.iqr = iqr
-        CorpusInfo1.median = mid
-        CorpusInfo1.average = average_file_size
-        CorpusInfo1.num_file = num_file
-        CorpusInfo1.file_sizes = list(file_sizes)
-        CorpusInfo1.file_names = self._doc_term_matrix.index.values
-        CorpusInfo1.anomaly_iqr = file_anomaly_iqr
-        CorpusInfo1.std_deviation = std_dev_file_size
-        CorpusInfo1.anomaly_std_err = file_anomaly_std_err
-        return CorpusInfo1
+        return CorpusInfo(q1=q1,
+                          q3=q3,
+                          iqr=iqr,
+                          median=mid,
+                          average=average_file_size,
+                          num_file=num_file,
+                          file_sizes=list(file_sizes),
+                          file_names=self._doc_term_matrix.index.values,
+                          anomaly_iqr=file_anomaly_iqr,
+                          std_deviation=std_dev_file_size,
+                          anomaly_std_err=file_anomaly_std_err)
+
 
     @staticmethod
     def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
@@ -300,7 +215,7 @@ class StatsModel(BaseModel):
              for index, label in enumerate(self._doc_term_matrix.index.values)]
         return file_info_list
 
-    def get_result(self) -> (List[FileInfo], CorpusInfo1):
+    def get_result(self) -> (List[FileInfo], CorpusInfo):
         """Return stats for the whole corpus and each file in the corpus"""
 
         return self._get_all_file_result(), self._get_corpus_info()
