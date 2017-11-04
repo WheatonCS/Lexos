@@ -4,7 +4,7 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class DendroOption(NamedTuple):
-    """The struct to implement dendro options"""
+    """The typed tuple to implement dendro options"""
     # the orientation of the dendrogram to send to plotly
     # available options are: 'top', 'right', 'bottom', or 'left'
     # see:

@@ -6,7 +6,7 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class TokenOption(NamedTuple):
-    """A struct to represent token option."""
+    """A typed tuple to represent token option."""
     # the size of each token
     n_gram_size: int
 
@@ -16,7 +16,7 @@ class TokenOption(NamedTuple):
 
 
 class NormOption(NamedTuple):
-    """A struct to keep the normalize option."""
+    """A typed tuple to keep the normalize option."""
     # True if we are using proportional count, False if we are using raw count
     use_freq: bool
 
@@ -29,7 +29,7 @@ class NormOption(NamedTuple):
 
 
 class CullingOption(NamedTuple):
-    """A struct to represent all the culling option."""
+    """A typed tuple to represent all the culling option."""
     # Whether to apply most frequent word
     most_frequent_word: bool
 
@@ -44,7 +44,7 @@ class CullingOption(NamedTuple):
 
 
 class MatrixOption(NamedTuple):
-    """A struct to represent all the matrix option."""
+    """A typed tuple to represent all the matrix option."""
     # the token options
     token_option: TokenOption
 
