@@ -21,30 +21,36 @@ function runModal (htmlMsg) {
 
 /**
  * the function to do ajax in dendrogram
- * @param url {string} - the url to do post
  */
-function doAjax (url) {
+function doAjax () {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
+    // convert form into an object map string to string
     var form = jsonifyForm()
+
+    // make the ajax request
     $.ajax({
-            type: 'POST',
-            url: url,
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(form),
-            complete: function (response) {
-                $('#status-analyze').css({'visibility': 'hidden'})
-                $('#dendrogram-result').html(response['responseJSON']['dendroDiv'])
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
+        type: 'POST',
+        url: '/dendrogramDiv',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        data: JSON.stringify(form)
+    })
+        .done(
+            function (response) {
+                $('#dendrogram-result').html(response['dendroDiv'])
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
                 runModal('error encountered while plotting the dendrogram.')
-            }
-        }
-    )
+            })
+        .always(
+            function () {
+                $('#status-analyze').css({'visibility': 'hidden'})
+            })
 }
 
 /**
@@ -52,10 +58,10 @@ function doAjax (url) {
  * @returns {string | null} - if it is null, it means no error, else then the string is the error message
  */
 function submissionError () {
-    const err = 'A dendrogram requires at least 2 active documents to be created.'
+    const active_file_num_too_few_err = 'A dendrogram requires at least 2 active documents to be created.'
     const activeFiles = $('#num_active_files').val()
     if (activeFiles < 2)
-        return err
+        return active_file_num_too_few_err
     else
         return null
 }
@@ -63,7 +69,7 @@ function submissionError () {
 /**
  * When the HTML documents finish loading
  */
-$(document).ready(function () {
+$(function () {
 
     /**
      * the events after dendrogram is clicked
@@ -72,12 +78,11 @@ $(document).ready(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            doAjax('/dendrogramDiv', null)
+            doAjax()
         }
         else {
             runModal(error)
         }
-
     })
 
 })
