@@ -1,4 +1,4 @@
-from typing import Type, NamedTuple
+from typing import NamedTuple
 
 from lexos.receivers.base_receiver import BaseReceiver
 
