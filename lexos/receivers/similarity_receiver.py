@@ -19,6 +19,6 @@ class SimilarityReceiver(BaseReceiver):
 
         :return: a similarity option object that holds all the options
         """
-        comp_file_id = int(self._front_end_data['uploadname']) - 1
+        comp_file_id = int(self._front_end_data['uploadname'])
 
         return SimilarityOption(comp_file_id=comp_file_id)
