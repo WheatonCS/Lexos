@@ -20,23 +20,34 @@ function runModal (htmlMsg) {
 }
 
 /**
- * the function to do ajax in dendrogram
+ * The function to create the ajax object
+ * @param form {object.<string, string>} the form converted into a json
+ * @returns {jquery.Ajax} - the jquery ajax object (a deferred object)
  */
-function doAjax () {
-    // show loading icon
-    $('#status-analyze').css({'visibility': 'visible'})
+function sendAjaxRequest (form) {
 
-    // convert form into an object map string to string
-    var form = jsonifyForm()
-
-    // make the ajax request
-    $.ajax({
+    return $.ajax({
         type: 'POST',
         url: '/dendrogramDiv',
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         data: JSON.stringify(form)
     })
+
+}
+
+/**
+ * the function to submit form via ajax in dendrogram
+ */
+function submitForm () {
+    // show loading icon
+    $('#status-analyze').css({'visibility': 'visible'})
+
+    // convert form into an object map string to string
+    var form = jsonifyForm()
+
+    // send the ajax request
+    sendAjaxRequest(form)
         .done(
             function (response) {
                 $('#dendrogram-result').html(response['dendroDiv'])
@@ -78,7 +89,7 @@ $(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            doAjax()
+            submitForm()
         }
         else {
             runModal(error)
