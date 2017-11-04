@@ -1,5 +1,4 @@
 from typing import NamedTuple
-
 from lexos.receivers.base_receiver import BaseReceiver
 
 
@@ -21,6 +20,5 @@ class SimilarityReceiver(BaseReceiver):
         :return: a similarity option object that holds all the options
         """
         comp_file_id = int(self._front_end_data['uploadname'])
-        similarity_option = SimilarityOption(comp_file_id=comp_file_id)
 
-        return similarity_option
+        return SimilarityOption(comp_file_id=comp_file_id)
