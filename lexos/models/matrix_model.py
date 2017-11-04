@@ -172,7 +172,7 @@ class MatrixModel(BaseModel):
         if self._opts.culling_option.culling:
 
             dtm_data_frame = self._get_culled_matrix(
-                least_num_seg=self._opts.culling_option.cull_least_passage,
+                least_num_seg=self._opts.culling_option.cull_least_seg,
                 dtm_data_frame=dtm_data_frame
             )
 
