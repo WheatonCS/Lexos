@@ -81,23 +81,23 @@ class ContentAnalysisModel(object):
     def count_words(self):
         """counts all dictionaries for all active files in the corpus"""
         self._counters = []
+        active_dicts = self.get_active_dicts()
         for file in self._corpus:
             counts = []
-            for i in range(len(self._dictionaries)):
-                if self._dictionaries[i].active:
-                    count = 0
-                    for word in self._dictionaries[i].content:
-                        if file.content.startswith(word + " "):
-                            count += 1
-                        if file.content.endswith(" " + word + "\n") or \
-                            file.content.endswith(" " + word) or \
-                            file.content.endswith(
-                                word):
-                            count += 1
-                        count += len(file.content.split(" " + word + " ")) - 1
-                        if ' ' in word:
-                            file.content = file.content.replace(word, " ")
-                    counts.append(count)
+            for dictionary in active_dicts:
+                count = 0
+                for word in dictionary.content:
+                    if file.content.startswith(word + " "):
+                        count += 1
+                    if file.content.endswith(" " + word + "\n") or \
+                        file.content.endswith(" " + word) or \
+                        file.content.endswith(
+                            word):
+                        count += 1
+                    count += len(file.content.split(" " + word + " ")) - 1
+                    if ' ' in word:
+                        file.content = file.content.replace(word, " ")
+                counts.append(count)
             self._counters.append(counts)
 
     def generate_scores(self, formula: str):
@@ -155,17 +155,16 @@ class ContentAnalysisModel(object):
             sums_avg = round((float(formulas_sum) / len(self._formulas)), 1)
         else:
             sums_avg = 0
-        cat_count = 0
         self._averages.append("Averages")
         for x in range(len(active_dicts)):
-            for i in range(len(self._counters)):
-                cat_count += self._counters[i][x]
+            cat_count = 0
+            for counter in self._counters:
+                cat_count += counter[x]
             if len(self._counters) != 0:
                 self._averages.append(round(
                     float(cat_count) / len(self._counters), 1))
             else:
                 self._averages.append(0)
-            cat_count = 0
         self._averages.append(sums_avg)
         self._averages.append(total_word_counts_avg)
         self._averages.append(scores_avg)
