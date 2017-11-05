@@ -11,7 +11,7 @@ class ScrubberModel(BaseModel):
 
     def __init__(self, test_scrubbing_options: ScrubbingOptions = None,
                  test_file_manager: FileManager = None):
-        """A class to scrub documents.
+        """A class to scrub text documents.
 
         :param test_scrubbing_options: A struct of scrubbing options used for
             testing.
@@ -23,8 +23,9 @@ class ScrubberModel(BaseModel):
 
     @property
     def _file_manager(self) -> FileManager:
-        """Result form higher level class: the file manager of current session.
-        :return: a file manager object
+        """The file manager for the current session.
+
+        :return: A FileManager object.
         """
 
         return self._test_file_manager \
@@ -32,8 +33,10 @@ class ScrubberModel(BaseModel):
 
     @property
     def _options(self) -> ScrubbingOptions:
-        """Get all the scrubbing options.
-        :return: either a frontend option or a fake option used for testing
+        """Gets all the scrubbing options.
+
+        :return: A struct of scrubbing options from the front end or test
+            options.
         """
 
         return self._test_scrubbing_options or \
@@ -41,7 +44,6 @@ class ScrubberModel(BaseModel):
 
     @property
     def _active_docs(self) -> Dict[int, str]:
-
         """Gets the IDs and content of all active files.
 
         :return: A dictionary mapping ID number to file string.
