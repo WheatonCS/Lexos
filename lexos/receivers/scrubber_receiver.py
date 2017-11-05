@@ -364,8 +364,9 @@ class ScrubbingReceiver(BaseReceiver):
         previewing = self._front_end_data["formAction"] == "apply"
 
         return BasicOptions(
-            lower, punct, apos, hyphen, amper, digits, tags, whitespace,
-            spaces, tabs, newlines, previewing)
+            lower=lower, punct=punct, apos=apos, hyphen=hyphen, amper=amper,
+            digits=digits, tags=tags, whitespace=whitespace, spaces=spaces,
+            tabs=tabs, newlines=newlines, previewing=previewing)
 
     def _load_scrub_optional_upload(self, storage_folder: str,
                                     filename: str) -> str:
@@ -418,9 +419,9 @@ class ScrubbingReceiver(BaseReceiver):
                 file_strings[index] = ""
 
         return FileOptions(
-            storage_folder, storage_filenames, file_consol=file_strings[0],
-            file_lemma=file_strings[1], file_special_char=file_strings[2],
-            file_sw_kw=file_strings[3])
+            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            file_consol=file_strings[0], file_lemma=file_strings[1],
+            file_special_char=file_strings[2], file_sw_kw=file_strings[3])
 
     def _get_additional_options_from_front_end(self) -> AdditionalOptions:
         """Gets all the additional options from the front end.
@@ -436,7 +437,8 @@ class ScrubbingReceiver(BaseReceiver):
         manual_sw_kw = self._front_end_data['manuallemmas']
 
         return AdditionalOptions(
-            manual_consol, manual_lemma, manual_special_char, manual_sw_kw)
+            manual_consol=manual_consol, manual_lemma=manual_lemma,
+            manual_special_char=manual_special_char, manual_sw_kw=manual_sw_kw)
 
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.
