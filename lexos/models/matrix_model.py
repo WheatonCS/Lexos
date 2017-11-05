@@ -9,6 +9,8 @@ from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver
 
+IdTempLabelMap = Dict[int, str]
+
 
 class MatrixModel(BaseModel):
 
@@ -47,7 +49,7 @@ class MatrixModel(BaseModel):
         """An unordered list (counter) of all the temp labels"""
         return Counter(self._opts.id_temp_label_map.values())
 
-    def get_temp_label_id_map(self) -> Dict[int, str]:
+    def get_temp_label_id_map(self) -> IdTempLabelMap:
         """Get the dict where id maps to temp labels."""
         return self._opts.id_temp_label_map
 
