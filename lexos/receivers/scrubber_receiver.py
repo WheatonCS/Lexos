@@ -1,10 +1,10 @@
 from typing import List
 
 from flask import request, session
-from lexos.receivers.base_receiver import BaseReceiver
 
 from lexos.helpers import constants, general_functions
 from lexos.managers import session_manager
+from lexos.receivers.base_receiver import BaseReceiver
 
 
 class BasicOptions:
@@ -365,7 +365,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return BasicOptions(
             lower, punct, apos, hyphen, amper, digits, tags, whitespace,
-            spaces, tabs, newlines,  previewing)
+            spaces, tabs, newlines, previewing)
 
     def _load_scrub_optional_upload(self, storage_folder: str,
                                     filename: str) -> str:
