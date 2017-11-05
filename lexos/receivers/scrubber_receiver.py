@@ -1,6 +1,10 @@
 from typing import List
 
+from flask import request, session
 from lexos.receivers.base_receiver import BaseReceiver
+
+from lexos.helpers import constants, general_functions
+from lexos.managers import session_manager
 
 
 class BasicOptions:
@@ -288,15 +292,17 @@ class AdditionalOptions:
 
 class ScrubbingOptions:
 
-    def __init__(self, basic_options: BasicOptions,
+    def __init__(self, basic_options: BasicOptions, file_options: FileOptions,
                  additional_options: AdditionalOptions):
         """A struct containing all the scrubbing options.
 
         :param basic_options: A struct containing basic options.
+        :param file_options: A struct containing file options.
         :param additional_options: A struct containing additional options.
         """
 
         self._basic_options = basic_options
+        self._file_options = file_options
         self._additional_options = additional_options
 
     @property
@@ -307,6 +313,15 @@ class ScrubbingOptions:
         """
 
         return self._basic_options
+
+    @property
+    def file_options(self) -> FileOptions:
+        """All the scrubbing file options.
+
+        :return: A FileOptions struct.
+        """
+
+        return self._file_options
 
     @property
     def additional_options(self) -> AdditionalOptions:
@@ -352,6 +367,61 @@ class ScrubbingReceiver(BaseReceiver):
             lower, punct, apos, hyphen, amper, digits, tags, whitespace,
             spaces, tabs, newlines,  previewing)
 
+    def _load_scrub_optional_upload(self, storage_folder: str,
+                                    filename: str) -> str:
+        """Loads a option file that was previously saved in the storage folder.
+
+        :param storage_folder: The location of the storage folder as a string.
+        :param filename: A string representing the name of the file that is
+            being loaded.
+        :return: The file string that was saved in the folder (empty if there
+            is no string to load).
+        """
+
+        try:
+            return general_functions.load_file_from_disk(
+                loc_folder=storage_folder, filename=filename)
+        except FileNotFoundError:
+            return ""
+
+    def _get_file_options_from_front_end(self) -> FileOptions:
+        """Gets all the file options from the front end.
+
+        :return: A FileOptions struct.
+        """
+
+        storage_folder = session_manager.session_folder() + '/scrub/'
+        storage_filenames = [constants.CONSOLIDATION_FILENAME,
+                             constants.LEMMA_FILENAME,
+                             constants.SPECIAL_CHAR_FILENAME,
+                             constants.STOPWORD_FILENAME]
+
+        opt_uploads = request.files
+        storage_options = []
+        for key in list(request.form.keys()):
+            if 'usecache' in key:
+                storage_options.append(key[len('usecache'):])
+
+        # Get file consolidations, lemmas, special chars, and stop/keep words
+        file_strings = {}
+        for index, key in enumerate(sorted(opt_uploads)):
+            if opt_uploads[key].filename:
+                file_content = opt_uploads[key].read()
+                file_strings[index] = general_functions.decode_bytes(
+                    file_content)
+                opt_uploads[key].seek(0)
+            elif key.strip('[]') in storage_options:
+                file_strings[index] = self._load_scrub_optional_upload(
+                    storage_folder, storage_filenames[index])
+            else:
+                session['scrubbingoptions']['optuploadnames'][key] = ''
+                file_strings[index] = ""
+
+        return FileOptions(
+            storage_folder, storage_filenames, file_consol=file_strings[0],
+            file_lemma=file_strings[1], file_special_char=file_strings[2],
+            file_sw_kw=file_strings[3])
+
     def _get_additional_options_from_front_end(self) -> AdditionalOptions:
         """Gets all the additional options from the front end.
 
@@ -376,4 +446,5 @@ class ScrubbingReceiver(BaseReceiver):
 
         return ScrubbingOptions(
             basic_options=self._get_basic_options_from_front_end(),
+            file_options=self._get_file_options_from_front_end(),
             additional_options=self._get_additional_options_from_front_end())
