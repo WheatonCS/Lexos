@@ -183,12 +183,12 @@ class FileManager:
         """
         return [file.load_contents() for file in self.get_active_files()]
 
-    def get_content_of_active_with_id(self) -> Dict[str, int]:
+    def get_content_of_active_with_id(self) -> Dict[int, str]:
         """Gets the contents and IDs of all active files.
 
         :return: All the file contents and IDs from the file_manager.
         """
-        return {file.load_contents(): file.id
+        return {file.id: file.load_contents()
                 for file in self.get_active_files()}
 
     def toggle_file(self, file_id: int):
