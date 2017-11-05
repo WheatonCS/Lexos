@@ -157,9 +157,7 @@ class ContentAnalysisModel(object):
             sums_avg = 0
         self._averages.append("Averages")
         for x in range(len(active_dicts)):
-            cat_count = 0
-            for counter in self._counters:
-                cat_count += counter[x]
+            cat_count = sum([counter[x] for counter in self._counters])
             if len(self._counters) != 0:
                 self._averages.append(round(
                     float(cat_count) / len(self._counters), 1))
@@ -181,15 +179,10 @@ class ContentAnalysisModel(object):
         :return: a data frame containing all values stored in this class
         members
         """
-        columns = ['Document Name']
-        active_dicts = self.get_active_dicts()
-        for dictionary in active_dicts:
-            columns.append(dictionary.label)
-        columns += ['formula', 'total word count', 'score']
-        indices = []
-        for file in self._corpus:
-            indices.append(file.label)
-        indices += ['averages']
+        columns = ['Document Name'] + [dictionary.label for dictionary in
+                                       self.get_active_dicts()] + \
+                  ['formula', 'total word count', 'score']
+        indices = [file.label for file in self._corpus] + ['averages']
         df = pd.DataFrame(columns=range(len(columns)),
                           index=range(len(indices)))
         for i in range(len(self._corpus)):
@@ -205,13 +198,11 @@ class ContentAnalysisModel(object):
         return df
 
     def is_secure(self, formula: str):
-        active_dicts = self.get_active_dicts()
-        allowed_input = []
-        for dictionary in active_dicts:
-            allowed_input.append("[" + dictionary.label + "]")
-        allowed_input += ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-                          " ", "+", "-", "*", "/", "sin", "cos", "tan", "log",
-                          "sqrt", "(", ")"]
+        allowed_input = ["[" + dictionary.label + "]" for
+                         dictionary in self.get_active_dicts()] + \
+                        ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                         " ", "+", "-", "*", "/", "sin", "cos", "tan", "log",
+                         "sqrt", "(", ")"]
         for item in allowed_input:
             formula = formula.replace(item, "")
         if len(formula) == 0:
