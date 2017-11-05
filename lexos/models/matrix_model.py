@@ -1,4 +1,5 @@
-import numpy as np
+from typing import Counter, Dict
+
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
@@ -42,16 +43,28 @@ class MatrixModel(BaseModel):
         return self._test_matrix_option if self._test_matrix_option \
             else MatrixReceiver().options_from_front_end()
 
-    def get_matrix(self)-> pd.DataFrame:
-        """Get the document term matrix (DTM) of all the active files
+    def get_temp_label(self) -> Counter[str]:
+        """An unordered list (counter) of all the temp labels"""
+        return Counter(self._opts.id_temp_label_map.values())
 
-        :return:
-            a panda data frame with:
-            - the index (row) header are the segment names (temp_labels)
-            - the column header are words
+    def get_temp_label_id_map(self) -> Dict[int, str]:
+        """Get the dict where id maps to temp labels."""
+        return self._opts.id_temp_label_map
+
+    def _get_raw_count_matrix(self) -> pd.DataFrame:
+        """Get the raw count matrix for the whole corpus
+
+        :return: a panda data frame
+            where
+                - the index header is the file id
+                - the row header is the words in the file
         """
+        all_contents_with_id = \
+            self._file_manager.get_content_of_active_with_id()
 
-        all_contents = self._file_manager.get_content_of_active()
+        # a pair of parallel array
+        file_ids = all_contents_with_id.keys()
+        file_contents = all_contents_with_id.values()
 
         # heavy hitting tokenization and counting options set here
 
@@ -98,7 +111,44 @@ class MatrixModel(BaseModel):
         )
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = count_vector.fit_transform(all_contents)
+        doc_term_sparse_matrix = count_vector.fit_transform(file_contents)
+
+        # need to get at the entire matrix and not sparse matrix
+        raw_count_matrix = doc_term_sparse_matrix.toarray()
+        # snag all features (e.g., word-grams or char-grams) that were counted
+        words = count_vector.get_feature_names()
+        # pack the data into a data frame
+        return pd.DataFrame(data=raw_count_matrix,
+                            index=file_ids,
+                            columns=words)
+
+    def _apply_transformations_to_matrix(self, dtm_data_frame) -> pd.DataFrame:
+        """Apply all the transitions to the matrix
+
+        Currently there are following transitions with following order:
+        - culling
+        - most frequent word
+        - tf-idf transformation
+        - convert to proportion
+        :param dtm_data_frame: the initial raw count data frame.
+        :return: the final data frame after all the transformation
+        """
+
+        # apply culling to dtm
+        if self._opts.culling_option.culling:
+
+            dtm_data_frame = self._get_culled_matrix(
+                least_num_seg=self._opts.culling_option.cull_least_passage,
+                dtm_data_frame=dtm_data_frame
+            )
+
+        # only leaves the most frequent words in dtm
+        if self._opts.culling_option.most_frequent_word:
+
+            dtm_data_frame = self._get_most_frequent_word(
+                lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
+                dtm_data_frame=dtm_data_frame,
+            )
 
         # ==== Parameters TfidfTransformer (TF/IDF) ===
 
@@ -150,17 +200,7 @@ class MatrixModel(BaseModel):
                 use_idf=True,
                 smooth_idf=False,
                 sublinear_tf=False)
-            doc_term_sparse_matrix = transformer.fit_transform(
-                doc_term_sparse_matrix)
-
-        # need to get at the entire matrix and not sparse matrix
-        raw_count_matrix = doc_term_sparse_matrix.toarray()
-        # snag all features (e.g., word-grams or char-grams) that were counted
-        words = count_vector.get_feature_names()
-        # pack the data into a data frame
-        dtm_data_frame = pd.DataFrame(data=raw_count_matrix,
-                                      index=self._opts.temp_labels,
-                                      columns=words)
+            dtm_data_frame = transformer.fit_transform(dtm_data_frame)
 
         # change the dtm to proportion
         if self._opts.norm_option.use_freq:
@@ -168,28 +208,23 @@ class MatrixModel(BaseModel):
             dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
                                                   axis=1)
 
-        # apply culling to dtm
-        if self._opts.culling_option.culling:
-
-            dtm_data_frame = self._get_culled_matrix(
-                least_num_seg=self._opts.culling_option.cull_least_passage,
-                dtm_data_frame=dtm_data_frame
-            )
-
-        # only leaves the most frequent words in dtm
-        if self._opts.culling_option.most_frequent_word:
-
-            dtm_data_frame = self._get_most_frequent_word(
-                lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
-                dtm_data_frame=dtm_data_frame,
-                count_matrix=raw_count_matrix
-            )
-
         return dtm_data_frame
+
+    def get_matrix(self)-> pd.DataFrame:
+        """Get the document term matrix (DTM) of all the active files
+
+        :return:
+            a panda data frame with:
+            - the index (row) header are file ids
+            - the column header are words
+        """
+
+        raw_count_matrix = self._get_raw_count_matrix()
+
+        return self._apply_transformations_to_matrix(raw_count_matrix)
 
     @staticmethod
     def _get_most_frequent_word(lower_rank_bound: int,
-                                count_matrix: np.ndarray,
                                 dtm_data_frame: pd.DataFrame) -> pd.DataFrame:
         """ Gets the most frequent words in final_matrix and words.
 
@@ -199,9 +234,6 @@ class MatrixModel(BaseModel):
                                  (the rank is determined by the word's number
                                  of appearance in the whole corpus)
                                  (ranked from high to low)
-        :param count_matrix: the raw count matrix,
-                                the row are for each segments
-                                the column are for each words
         :param dtm_data_frame: the dtm in the form of panda data frame.
                                 the indices(rows) are segment names
                                 the columns are words.
@@ -209,14 +241,14 @@ class MatrixModel(BaseModel):
             dtm data frame with only the most frequent words
         """
 
-        # get the word counts for corpus (1D array)
-        corpus_word_count_list = count_matrix.sum(axis=0)
+        # get the word counts for each word in the entire corpus (1D array)
+        word_count_in_corpus = dtm_data_frame.sum(axis='index')
 
         # get the index to sort those words
-        sort_index_array = corpus_word_count_list.argsort()
+        sort_index_array = word_count_in_corpus.argsort()
 
         # get the total number of unique words
-        total_num_words = corpus_word_count_list.size
+        total_num_words = word_count_in_corpus.size
 
         # strip the index to leave the most frequent ones
         # those are the index of the most frequent words
