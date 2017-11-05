@@ -5,18 +5,18 @@ from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-word_cloud_view = Blueprint('word_cloud', __name__)
+word_cloud_blueprint = Blueprint('word_cloud', __name__)
 
 
 # Tells Flask to load this function when someone is at '/wordcloud'
-@word_cloud_view.route("/wordcloud", methods=["GET", "POST"])
+@word_cloud_blueprint.route("/wordcloud", methods=["GET", "POST"])
 def word_cloud():
     """Handles the functionality on the visualisation page.
 

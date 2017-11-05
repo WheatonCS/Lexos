@@ -1,16 +1,17 @@
 import json
+
 from flask import session, redirect, url_for, render_template, send_file, \
     request, Blueprint
+
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-base_view = Blueprint('base', __name__)
+base_blueprint = Blueprint('base', __name__)
 
 
 def detect_active_docs() -> int:
@@ -32,7 +33,7 @@ def detect_active_docs() -> int:
         return 0
 
 
-@base_view.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
+@base_blueprint.route("/detectActiveDocsbyAjax", methods=["GET", "POST"])
 def detect_active_docs_by_ajax() -> str:
     """Calls detectActiveDocs() from an ajax request.
 
@@ -42,7 +43,7 @@ def detect_active_docs_by_ajax() -> str:
     return str(num_active_docs)
 
 
-@base_view.route("/nosession", methods=["GET", "POST"])
+@base_blueprint.route("/nosession", methods=["GET", "POST"])
 def no_session():
     """loads a redirection message that redirects to upload.
 
@@ -54,7 +55,7 @@ def no_session():
     return render_template('nosession.html', numActiveDocs=0)
 
 
-@base_view.route("/", methods=["GET"])
+@base_blueprint.route("/", methods=["GET"])
 def base():
     """handles redirection to other pages.
 
@@ -64,7 +65,7 @@ def base():
     return redirect(url_for('upload.upload'))
 
 
-@base_view.route("/downloadworkspace", methods=["GET"])
+@base_blueprint.route("/downloadworkspace", methods=["GET"])
 def download_workspace():
     """send the workspace file (.lexos) to the user.
 
@@ -79,7 +80,7 @@ def download_workspace():
         as_attachment=True)
 
 
-@base_view.route("/reset", methods=["GET"])
+@base_blueprint.route("/reset", methods=["GET"])
 def reset():
     """ Resets the session and initializes a new one.
 
@@ -92,7 +93,7 @@ def reset():
     return redirect(url_for('upload.upload'))
 
 
-@base_view.route("/updatesettings", methods=["GET", "POST"])
+@base_blueprint.route("/updatesettings", methods=["GET", "POST"])
 def update_settings():
     if request.method == "POST":
         session_manager.cache_general_settings()
