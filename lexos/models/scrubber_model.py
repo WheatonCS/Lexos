@@ -50,3 +50,22 @@ class ScrubberModel(BaseModel):
         """
 
         return self._file_manager.get_content_of_active_with_id()
+
+    def _scrub(self, doc_id: int) -> str:
+        """Scrubs a single document with the provided ID.
+
+        :param doc_id: The document's ID number.
+        :return: The document's scrubbed text.
+        """
+
+        pass
+
+    def _scrub_active_docs(self):
+        """Updates all active documents with their scrubbed text.
+
+        """
+
+        for text_id in self._active_docs:
+            scrubbed_text = self._scrub(text_id)
+            self._file_manager.update_content(
+                file_id=text_id, updated_content=scrubbed_text)
