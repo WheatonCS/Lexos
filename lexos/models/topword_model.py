@@ -15,7 +15,6 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.topword_receiver import TopwordOption, TopwordReceiver
 
-
 ReadableResult = List[Tuple[str, list]]
 
 
