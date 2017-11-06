@@ -200,3 +200,35 @@ class TopwordModel(BaseModel):
         # find number of groups
         num_group = len(group_lists)
 
+        # comparison map, in here is a list of tuple.
+        # There are two elements in the tuple, each one is a index of groups
+        # (for example the first group will have index 0)
+        # Two groups index cannot be equal.
+        comp_map = itertools.product(list(range(num_group)),
+                                     list(range(num_group)))
+        comp_map = [(i_index, j_index)
+                    for (i_index, j_index) in comp_map if i_index != j_index]
+
+        # compare each paragraph in group_comp to group_base
+        for comp_index, base_index in comp_map:
+            comp_para = group_values[comp_index]
+
+            # generate analysis data
+            temp_analysis_result = [TopwordModel.z_test_word_list(
+                count_list_i=paras,
+                count_list_j=group_lists[base_index],
+                words=self._doc_term_matrix.volumns.values)
+                for para_index, paras in enumerate(comp_para)]
+
+            # generate header
+            temp_header = ['Document "' + name_map[comp_index][para_index] +
+                           '" compared to Class: ' + class_labels[base_index]
+                           for para_index, _ in enumerate(comp_para)]
+
+            analysis_result += temp_analysis_result
+            header_list += temp_header
+
+        # put result together in a readable list
+        readable_result = list(zip(header_list, analysis_result))
+
+        return readable_result
