@@ -1,18 +1,11 @@
+from typing import NamedTuple
+
 from lexos.receivers.base_receiver import BaseReceiver
 
 
-class TopwordOption:
-    def __init__(self, topword_option: str):
-        """This is a struct to hold all the topword option.
-
-        :param topword_option: the comparing option of topword analysis.
-        """
-        self._topword_option = topword_option
-
-    @property
-    def topword_option(self) -> str:
-        """The comparing option of topword analysis."""
-        return self._topword_option
+class TopwordOption(NamedTuple):
+    """The typed tuple to implement topword options"""
+    topword_option: str
 
 
 class TopwordReceiver(BaseReceiver):
