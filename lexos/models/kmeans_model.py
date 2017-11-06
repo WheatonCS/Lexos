@@ -5,15 +5,12 @@
 
 from os.path import join as path_join
 from typing import Union, Optional, NamedTuple, Iterable
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
-
-from lexos.helpers import constants
 from lexos.helpers.constants import KMEANS_GRAPH_FILENAME, \
     PCA_SMALL_GRAPH_FILENAME, PCA_BIG_GRAPH_FILENAME, ROUND_DIGIT
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
