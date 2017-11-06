@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 
 from flask import request
 
@@ -290,20 +290,73 @@ class ManualOptions:
         return self._manual_sw_kw
 
 
+class AdditionalOptions:
+    def __init__(self, consol: Dict[str, str], lemma: Dict[str, str],
+                 special_char: Dict[str, str], sw_kw: List[str], keep: bool):
+        """
+
+        :param consol:
+        :param lemma:
+        :param special_char:
+        :param sw_kw:
+        :param keep:
+        """
+
+        self._consol = consol
+        self._lemma = lemma
+        self._special_char = special_char
+        self._sw_kw = sw_kw
+        self._keep = keep
+
+    def _handle_file_and_manual_strings(self, file_string: str,
+                                        manual_string: str,
+                                        storage_folder: str, storage_filename):
+        """Saves uploaded files and merges file strings with manual strings.
+
+        :param file_string: The user's uploaded file.
+        :param manual_string: The input from a text field.
+        :param storage_folder: The path to the storage folder.
+        :param storage_filename: The name of the file to save to.
+        :return: The combination of the text field and file strings.
+        """
+
+        if file_string:
+            self._save_scrub_optional_upload(file_string=file_string,
+                                             storage_folder=storage_folder,
+                                             filename=storage_filename)
+        merged_string = file_string + "\n" + manual_string
+
+        return merged_string
+
+    @staticmethod
+    def _save_scrub_optional_upload(file_string: str, storage_folder: str,
+                                    filename: str):
+        """Saves the contents of a user option file into the storage folder.
+
+        :param file_string: A string representing a whole file to be saved.
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file that is
+            being saved.
+        """
+
+        general_functions.write_file_to_disk(
+            contents=file_string, dest_folder=storage_folder,
+            filename=filename)
+
+
 class ScrubbingOptions:
 
-    def __init__(self, basic_options: BasicOptions, file_options: FileOptions,
-                 manual_options: ManualOptions):
+    def __init__(self, basic_options: BasicOptions,
+                 additional_options: AdditionalOptions):
         """A struct containing all the scrubbing options.
 
         :param basic_options: A struct containing basic options.
-        :param file_options: A struct containing file options.
-        :param manual_options: A struct containing manual options.
+        :param additional_options: A struct containing additional options.
         """
 
         self._basic_options = basic_options
-        self._file_options = file_options
-        self._manual_options = manual_options
+        self._additional_options = additional_options
 
     @property
     def basic_options(self) -> BasicOptions:
@@ -315,22 +368,13 @@ class ScrubbingOptions:
         return self._basic_options
 
     @property
-    def file_options(self) -> FileOptions:
-        """All the scrubbing file options.
+    def additional_options(self) -> AdditionalOptions:
+        """All the scrubbing additional options.
 
-        :return: A FileOptions struct.
+        :return: An AdditionalOptions struct.
         """
 
-        return self._file_options
-
-    @property
-    def manual_options(self) -> ManualOptions:
-        """All the manual scrubbing options.
-
-        :return: A ManualOptions struct.
-        """
-
-        return self._manual_options
+        return self._additional_options
 
 
 class ScrubbingReceiver(BaseReceiver):
@@ -367,24 +411,6 @@ class ScrubbingReceiver(BaseReceiver):
             lower=lower, punct=punct, apos=apos, hyphen=hyphen, amper=amper,
             digits=digits, tags=tags, whitespace=whitespace, spaces=spaces,
             tabs=tabs, newlines=newlines, previewing=previewing)
-
-    @staticmethod
-    def _load_scrub_optional_upload(storage_folder: str,
-                                    filename: str) -> str:
-        """Loads a option file that was previously saved in the storage folder.
-
-        :param storage_folder: The location of the storage folder as a string.
-        :param filename: A string representing the name of the file that is
-            being loaded.
-        :return: The file string that was saved in the folder (empty if there
-            is no string to load).
-        """
-
-        try:
-            return general_functions.load_file_from_disk(
-                loc_folder=storage_folder, filename=filename)
-        except FileNotFoundError:
-            return ""
 
     def _get_file_options_from_front_end(self) -> FileOptions:
         """Gets all the file options from the front end.
@@ -425,6 +451,24 @@ class ScrubbingReceiver(BaseReceiver):
             file_consol=file_strings[0], file_lemma=file_strings[1],
             file_special_char=file_strings[2], file_sw_kw=file_strings[3])
 
+    @staticmethod
+    def _load_scrub_optional_upload(storage_folder: str,
+                                    filename: str) -> str:
+        """Loads a option file that was previously saved in the storage folder.
+
+        :param storage_folder: The location of the storage folder as a string.
+        :param filename: A string representing the name of the file that is
+            being loaded.
+        :return: The file string that was saved in the folder (empty if there
+            is no string to load).
+        """
+
+        try:
+            return general_functions.load_file_from_disk(
+                loc_folder=storage_folder, filename=filename)
+        except FileNotFoundError:
+            return ""
+
     def _get_manual_options_from_front_end(self) -> ManualOptions:
         """Gets all the manual options from the front end.
 
@@ -442,6 +486,15 @@ class ScrubbingReceiver(BaseReceiver):
             manual_consol=manual_consol, manual_lemma=manual_lemma,
             manual_special_char=manual_special_char, manual_sw_kw=manual_sw_kw)
 
+    def _get_additional_options_from_front_end(self) -> AdditionalOptions:
+        """
+
+        """
+
+        file_options = self._get_file_options_from_front_end(),
+        manual_options = self._get_manual_options_from_front_end()
+        pass
+
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.
 
@@ -450,5 +503,4 @@ class ScrubbingReceiver(BaseReceiver):
 
         return ScrubbingOptions(
             basic_options=self._get_basic_options_from_front_end(),
-            file_options=self._get_file_options_from_front_end(),
-            manual_options=self._get_manual_options_from_front_end())
+            additional_options=self._get_additional_options_from_front_end())

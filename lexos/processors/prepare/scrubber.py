@@ -450,31 +450,6 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     return remove_digit_map
 
 
-def handle_file_and_manual_strings(file_string: str, manual_string: str,
-                                   storage_folder: str,
-                                   storage_filenames: List[str],
-                                   storage_number: int) -> str:
-    """Saves uploaded files and merges file strings with manual strings.
-
-    :param file_string: The user's uploaded file.
-    :param manual_string: The input from a text field.
-    :param storage_folder: A string representing the path of the storage
-        folder.
-    :param storage_filenames: A list of filename strings that will be used to
-        load and save the user's sw/kw input.
-    :param storage_number: The index of the relevant file in storage_filenames.
-    :return: The combination of the text field and file strings.
-    """
-
-    if file_string:
-        save_scrub_optional_upload(file_string=file_string,
-                                   storage_folder=storage_folder,
-                                   filename=storage_filenames[storage_number])
-    merged_string = file_string + "\n" + manual_string
-
-    return merged_string
-
-
 def split_stop_keep_word_string(input_string: str) -> List[str]:
     """Breaks stop and keepword string inputs into lists of words.
 
@@ -619,21 +594,6 @@ def load_character_deletion_map(storage_folder: str,
 
     return general_functions.load_file_from_disk(
         loc_folder=storage_folder, filename=filename)
-
-
-def save_scrub_optional_upload(file_string: str, storage_folder: str,
-                               filename: str):
-    """Saves the contents of a user option file into the storage folder.
-
-    :param file_string: A string representing a whole file to be saved.
-    :param storage_folder: A string representing the path of the storage
-        folder.
-    :param filename: A string representing the name of the file that is being
-        saved.
-    """
-
-    general_functions.write_file_to_disk(
-        contents=file_string, dest_folder=storage_folder, filename=filename)
 
 
 def handle_gutenberg(text: str) -> str:
