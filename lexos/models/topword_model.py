@@ -176,3 +176,14 @@ class TopwordModel(BaseModel):
         readable_result = list(zip(header_list, analysis_result))
 
         return readable_result
+
+    def _analyze_para_to_group(self) -> List[Tuple[str, list]]:
+        """Analyzes each single word compare to all the other group.
+
+
+        :return: a list of tuples, each tuple contains a human readable header
+                 and corresponding analysis result.
+        """
+
+
+
