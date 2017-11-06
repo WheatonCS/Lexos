@@ -45,6 +45,10 @@ class DendroOption:
 
 class DendroReceiver(BaseReceiver):
 
+    def __init__(self):
+        """The Receiver to get all the dendrogram options"""
+        super().__init__()
+
     def options_from_front_end(self) -> DendroOption:
         """Get the dendrogram option from front end
 
