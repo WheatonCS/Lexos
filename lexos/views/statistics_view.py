@@ -40,11 +40,12 @@ def statistics():
             numActiveDocs=num_active_docs)
 
     if request.method == "POST":
-        token = request.form['tokenType']
-
-        file_info_list, corpus_info = StatsModel().get_result()
+        token = StatsModel.get_token_type()
+        file_info_list = StatsModel().get_file_result()
+        corpus_info = StatsModel().get_corpus_result()
         session_manager.cache_analysis_option()
         session_manager.cache_statistic_option()
+
         return render_template(
             'statistics.html',
             token=token,
