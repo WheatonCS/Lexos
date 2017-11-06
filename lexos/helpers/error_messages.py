@@ -29,3 +29,7 @@ WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
 NO_DATA_SENT_ERROR_MESSAGE = 'Front end did not send data to backend'
 INVALID_DATA_KEY_MESSAGE_FORMAT = \
     'no data with name {data_key} sended to backend'
+
+# ============= Topword Model Error =========================
+NOT_ENOUGH_CLASSES_MESSAGE = "Only one class given, cannot do Z-test by " \
+                             "class, at least 2 classes needed"
