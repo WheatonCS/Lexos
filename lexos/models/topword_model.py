@@ -16,6 +16,9 @@ from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.topword_receiver import TopwordOption, TopwordReceiver
 
 
+ReadableResult = List[Tuple[str, list]]
+
+
 class TopwordModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
                  test_option: Optional[TopwordOption] = None):
@@ -151,7 +154,7 @@ class TopwordModel(BaseModel):
             raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
         return division_map, class_labels
 
-    def _analyze_all_to_para(self) -> List[Tuple[str, list]]:
+    def _analyze_all_to_para(self) -> ReadableResult:
         """Analyzes each single word compare to the total documents.
 
         :return: a list of tuples, each tuple contains a human readable header
@@ -177,7 +180,7 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_para_to_group(self) -> List[Tuple[str, list]]:
+    def _analyze_para_to_group(self) -> ReadableResult:
         """Analyzes each single word compare to all the other group.
 
 
@@ -233,7 +236,7 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_group_to_group(self) -> List[Tuple[str, list]]:
+    def _analyze_group_to_group(self) -> ReadableResult:
         """Analyzes the group compare with each other groups.
 
         :return: a list of tuples, each tuple contains a human readable header
