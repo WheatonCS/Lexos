@@ -3,6 +3,7 @@ from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.topword_model import TopwordModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -61,7 +62,8 @@ def top_words():
                 'the value of request.form["testInput"] '
                 'cannot be understood by the backend')
         # get the topword test result
-        result = utility.generate_z_test_top_word(file_manager)
+        # result = utility.generate_z_test_top_word(file_manager)
+        result = TopwordModel().get_result()
 
         if 'get-topword' in request.form:  # download topword
             path = utility.get_top_word_csv(result, csv_header=header)
