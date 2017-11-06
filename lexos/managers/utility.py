@@ -1345,7 +1345,7 @@ def generate_z_test_top_word(file_manager: FileManager):
 
         # check if more than one class exists
         if division_map.shape[0] == 1:
-            raise ValueError("Only one class given, cannot do Z-test by "
+            raise ValueError(" only one class given, cannot do Z-test by "
                              "class, at least 2 classes needed")
 
         # divides into group
