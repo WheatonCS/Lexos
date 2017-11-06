@@ -240,5 +240,14 @@ class TopwordModel(BaseModel):
                  and corresponding analysis result
         """
         division_map, class_labels = TopwordModel.get_class_map()
+        group_values, name_map = \
+            TopwordModel.group_division(dtm=self._doc_term_matrix,
+                                        division_map=division_map.values)
 
+        # find the total word count of each group
+        group_lists = [np.sum(value, axis=0)
+                       for _, value in enumerate(group_values)]
+
+        # find number of groups
+        num_group = len(group_lists)
 
