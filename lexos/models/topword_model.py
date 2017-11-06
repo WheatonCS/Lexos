@@ -112,7 +112,7 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
-        (List[np.ndarray], List[np.ndarray]):
+            (List[np.ndarray], List[np.ndarray]):
         """Divides the word counts into groups via the group map.
 
         :param dtm: pandas data frame that contains the word count matrix.
@@ -279,3 +279,12 @@ class TopwordModel(BaseModel):
         readable_result = list(zip(header_list, analysis_result))
 
         return readable_result
+
+    def get_result(self) -> ReadableResult:
+        if self._topword_option.topword_option == 'allToPara':
+            return self._analyze_all_to_para()
+
+        elif self._topword_option.topword_option == 'classToPara':
+            return self._analyze_para_to_group()
+
+
