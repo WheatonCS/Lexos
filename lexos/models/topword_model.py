@@ -70,3 +70,39 @@ class TopwordModel(BaseModel):
             return 0
         else:
             return round((p1 - pt) / standard_error, 4)
+
+    @staticmethod
+    def z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
+                         words: np.ndarray) -> List[Tuple[str, int]]:
+        """Processes z-test on all the words of two input word lists.
+
+        :param count_list_i: first word list, a numpy array contains word
+                             counts.
+        :param count_list_j: second word list, a numpy array contains word
+                             counts.
+        :param words: words that show up at least one time in the whole corpus.
+        :return: a list that is sorted by z-scores contains tuples, where each
+                 type maps a word to its z-score.
+        """
+        # initialize
+        word_z_score_list = []
+        row_sum = np.sum(count_list_i).item()
+        total_sum = np.sum(count_list_j).item()
+
+        # analyze
+        for index, word in enumerate(words):
+            p_i = count_list_i[index] / row_sum
+            p_j = count_list_j[index] / total_sum
+            z_score = TopwordModel._z_test_(p1=p_i, pt=p_j, n1=row_sum,
+                                            nt=total_sum)
+            # get rid of the insignificant results
+            # insignificant means those with absolute values smaller than 1.96
+            if abs(z_score) >= 1.96:
+                word_z_score_list.append((word, z_score))
+
+        # sort the dictionary by the z-scores from larger to smaller
+        sorted_word_z_score_list = sorted(word_z_score_list,
+                                          key=lambda tup: abs(tup[1]),
+                                          reverse=True)
+
+        return sorted_word_z_score_list
