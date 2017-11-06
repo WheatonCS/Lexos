@@ -184,6 +184,6 @@ class TopwordModel(BaseModel):
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-
+        division_map, class_labels = TopwordModel.get_class_map()
 
 
