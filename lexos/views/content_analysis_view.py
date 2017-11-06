@@ -29,8 +29,8 @@ def content_analysis():
         session['content_analysis'] = True
     elif len(analysis.corpus) == 0:
         file_manager = load_file_manager()
-        files = file_manager.get_active_files()
-        for file in files:
+        active_files = file_manager.get_active_files()
+        for file in active_files:
             analysis.add_corpus(file_name=file.name,
                                 label=file.label,
                                 content=file.load_contents())
