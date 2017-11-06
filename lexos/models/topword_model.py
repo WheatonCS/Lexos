@@ -251,3 +251,28 @@ class TopwordModel(BaseModel):
         # find number of groups
         num_group = len(group_lists)
 
+        # comparison map, in here is a list of tuple.
+        # There are two elements in the tuple, each one is a index of groups
+        # (for example the first group will have index 0)
+        # i_index has to be smaller than j_index to avoid repetition
+        comp_map = itertools.product(list(range(num_group)),
+                                     list(range(num_group)))
+        comp_map = [(i_index, j_index)
+                    for (i_index, j_index) in comp_map if i_index < j_index]
+
+        # generate analysis result
+        analysis_result = [TopwordModel.z_test_word_list(
+            count_list_i=group_lists[comp_index],
+            count_list_j=group_lists[base_index],
+            words=self._doc_term_matrix.columns.values)
+            for comp_index, base_index in comp_map]
+
+        # generate header list
+        header_list = ['Class "' + class_labels[comp_index] +
+                       '" compared to Class: ' + class_labels[base_index]
+                       for comp_index, base_index in comp_map]
+
+        # put two lists together as a human readable result
+        readable_result = list(zip(header_list, analysis_result))
+
+        return readable_result
