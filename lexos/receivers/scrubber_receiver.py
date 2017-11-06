@@ -1,6 +1,6 @@
 from typing import List
 
-from flask import request, session
+from flask import request
 
 from lexos.helpers import constants, general_functions
 from lexos.managers import session_manager
@@ -368,7 +368,8 @@ class ScrubbingReceiver(BaseReceiver):
             digits=digits, tags=tags, whitespace=whitespace, spaces=spaces,
             tabs=tabs, newlines=newlines, previewing=previewing)
 
-    def _load_scrub_optional_upload(self, storage_folder: str,
+    @staticmethod
+    def _load_scrub_optional_upload(storage_folder: str,
                                     filename: str) -> str:
         """Loads a option file that was previously saved in the storage folder.
 
@@ -415,7 +416,8 @@ class ScrubbingReceiver(BaseReceiver):
                 file_strings[index] = self._load_scrub_optional_upload(
                     storage_folder, storage_filenames[index])
             else:
-                session['scrubbingoptions']['optuploadnames'][key] = ''
+                self._front_end_data[
+                    'scrubbingoptions']['optuploadnames'][key] = ''
                 file_strings[index] = ""
 
         return FileOptions(
