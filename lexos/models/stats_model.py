@@ -36,7 +36,7 @@ class FileInfo(NamedTuple):
     file_name: str  # The name of a file.
     word_count: int  # The count of all words within a file.
     std_deviation: float  # The standard deviation of word counts.
-    total_word_count: int # The total of all word counts of a file.
+    total_word_count: int  # The total of all word counts of a file.
 
 
 class StatsModel(BaseModel):
