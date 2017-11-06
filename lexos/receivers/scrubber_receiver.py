@@ -236,11 +236,11 @@ class FileOptions:
         return self._file_sw_kw
 
 
-class AdditionalOptions:
+class ManualOptions:
 
     def __init__(self, manual_consol: str, manual_lemma: str,
                  manual_special_char: str, manual_sw_kw: str):
-        """A struct to represent additional scrubbing options.
+        """A struct to represent manual scrubbing options.
 
         :param manual_consol: The consolidations field string.
         :param manual_lemma: The lemma field string.
@@ -293,17 +293,17 @@ class AdditionalOptions:
 class ScrubbingOptions:
 
     def __init__(self, basic_options: BasicOptions, file_options: FileOptions,
-                 additional_options: AdditionalOptions):
+                 manual_options: ManualOptions):
         """A struct containing all the scrubbing options.
 
         :param basic_options: A struct containing basic options.
         :param file_options: A struct containing file options.
-        :param additional_options: A struct containing additional options.
+        :param manual_options: A struct containing manual options.
         """
 
         self._basic_options = basic_options
         self._file_options = file_options
-        self._additional_options = additional_options
+        self._manual_options = manual_options
 
     @property
     def basic_options(self) -> BasicOptions:
@@ -324,13 +324,13 @@ class ScrubbingOptions:
         return self._file_options
 
     @property
-    def additional_options(self) -> AdditionalOptions:
-        """All the additional scrubbing options.
+    def manual_options(self) -> ManualOptions:
+        """All the manual scrubbing options.
 
-        :return: An AdditionalOptions struct.
+        :return: A ManualOptions struct.
         """
 
-        return self._additional_options
+        return self._manual_options
 
 
 class ScrubbingReceiver(BaseReceiver):
@@ -425,10 +425,10 @@ class ScrubbingReceiver(BaseReceiver):
             file_consol=file_strings[0], file_lemma=file_strings[1],
             file_special_char=file_strings[2], file_sw_kw=file_strings[3])
 
-    def _get_additional_options_from_front_end(self) -> AdditionalOptions:
-        """Gets all the additional options from the front end.
+    def _get_manual_options_from_front_end(self) -> ManualOptions:
+        """Gets all the manual options from the front end.
 
-        :return: An AdditionalOptions struct.
+        :return: A ManualOptions struct.
         """
 
         # Handle manual entries: consolidations, lemmas, special characters,
@@ -438,7 +438,7 @@ class ScrubbingReceiver(BaseReceiver):
         manual_special_char = self._front_end_data['manuallemmas']
         manual_sw_kw = self._front_end_data['manuallemmas']
 
-        return AdditionalOptions(
+        return ManualOptions(
             manual_consol=manual_consol, manual_lemma=manual_lemma,
             manual_special_char=manual_special_char, manual_sw_kw=manual_sw_kw)
 
@@ -451,4 +451,4 @@ class ScrubbingReceiver(BaseReceiver):
         return ScrubbingOptions(
             basic_options=self._get_basic_options_from_front_end(),
             file_options=self._get_file_options_from_front_end(),
-            additional_options=self._get_additional_options_from_front_end())
+            manual_options=self._get_manual_options_from_front_end())
