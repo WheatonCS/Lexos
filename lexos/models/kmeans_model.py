@@ -81,8 +81,8 @@ class KmeansModel(BaseModel):
     def _get_silhouette_score(self) -> Union[str, float]:
         """Generates silhouette score based on the KMeans algorithm.
 
-        This function returns a proper message if it is under the condition where
-        it cannot perform the calculation on finding silhouette score.
+        This function returns a proper message if it is under the condition
+        where it cannot perform the calculation on finding silhouette score.
         :return: the calculated silhouette score or a proper message if the
                  conditions for calculation were not met.
         """
