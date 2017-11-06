@@ -150,3 +150,12 @@ class TopwordModel(BaseModel):
         if division_map.shape[0] == 1:
             raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
         return division_map, class_labels
+
+    def _analyze_all_to_para(self) -> List[Tuple[str, list]]:
+        """Analyzes each single word compare to the total documents.
+
+        :return: a list of tuples, each tuple contains a human readable header
+                 and corresponding analysis result.
+        """
+        # initialize
+        count_matrix_sum = np.sum(self._doc_term_matrix.values, axis=0)

@@ -1345,7 +1345,7 @@ def generate_z_test_top_word(file_manager: FileManager):
 
         # check if more than one class exists
         if division_map.shape[0] == 1:
-            raise ValueError(" only one class given, cannot do Z-test by "
+            raise ValueError("Only one class given, cannot do Z-test by "
                              "class, at least 2 classes needed")
 
         # divides into group
@@ -1832,3 +1832,119 @@ def simple_vectorizer(content: str, token_type: str, token_size: int):
     dtm = dtm.toarray()  # convert to a regular array
     vocab = np.array(vocab)
     return dtm, vocab
+
+    # initialize
+    count_matrix = dtm.values
+    name_list = dtm.index.values
+
+    # create group map
+    # noinspection PyTypeChecker
+    group_list = [count_matrix[row] for row in division_map]
+    # noinspection PyTypeChecker
+    label_list = [name_list[row] for row in division_map]
+
+    return group_list, label_list
+
+
+
+
+
+    def _analyze_para_to_group(self) -> List[Tuple[str, list]]:
+        """Analyzes each single word compare to all the other group.
+
+
+        :return: a list of tuples, each tuple contains a human readable header
+                 and corresponding analysis result.
+        """
+        division_map, class_labels = TopwordModel.get_class_map()
+        group_values, name_map = \
+            TopwordModel.group_division(dtm=self._doc_term_matrix,
+                                        division_map=division_map.values)
+
+        # initialize the value to return
+        analysis_result = []
+        header_list = []
+
+        # find the total word count of each group
+        group_lists = [np.sum(value, axis=0)
+                       for _, value in enumerate(group_values)]
+
+        # find number of groups
+        num_group = len(group_lists)
+
+        # comparison map, in here is a list of tuple.
+        # There are two elements in the tuple, each one is a index of groups
+        # (for example the first group will have index 0)
+        # Two groups index cannot be equal.
+        comp_map = itertools.product(list(range(num_group)),
+                                     list(range(num_group)))
+        comp_map = [(i_index, j_index)
+                    for (i_index, j_index) in comp_map if i_index != j_index]
+
+        # compare each paragraph in group_comp to group_base
+        for comp_index, base_index in comp_map:
+            comp_para = group_values[comp_index]
+
+            # generate analysis data
+            temp_analysis_result = [TopwordModel.z_test_word_list(
+                count_list_i=paras,
+                count_list_j=group_lists[base_index],
+                words=self._doc_term_matrix.volumns.values)
+                for para_index, paras in enumerate(comp_para)]
+
+            # generate header
+            temp_header = ['Document "' + name_map[comp_index][para_index] +
+                           '" compared to Class: ' + class_labels[base_index]
+                           for para_index, _ in enumerate(comp_para)]
+
+            analysis_result += temp_analysis_result
+            header_list += temp_header
+
+        # put result together in a readable list
+        readable_result = list(zip(header_list, analysis_result))
+
+        return readable_result
+
+    def _analyze_group_to_group(self) -> List[Tuple[str, list]]:
+        """Analyzes the group compare with each other groups.
+
+        :return: a list of tuples, each tuple contains a human readable header
+                 and corresponding analysis result
+        """
+        division_map, class_labels = TopwordModel.get_class_map()
+        group_values, name_map = \
+            TopwordModel.group_division(dtm=self._doc_term_matrix,
+                                        division_map=division_map.values)
+
+        # find the total word count of each group
+        group_lists = [np.sum(value, axis=0)
+                       for _, value in enumerate(group_values)]
+
+        # find number of groups
+        num_group = len(group_lists)
+
+        # comparison map, in here is a list of tuple.
+        # There are two elements in the tuple, each one is a index of groups
+        # (for example the first group will have index 0)
+        # i_index has to be smaller than j_index to avoid repetition
+        comp_map = itertools.product(list(range(num_group)),
+                                     list(range(num_group)))
+        comp_map = [(i_index, j_index)
+                    for (i_index, j_index) in comp_map if i_index < j_index]
+
+        # generate analysis result
+        analysis_result = [TopwordModel.z_test_word_list(
+            count_list_i=group_lists[comp_index],
+            count_list_j=group_lists[base_index],
+            words=self._doc_term_matrix.columns.values)
+            for comp_index, base_index in comp_map]
+
+        # generate header list
+        header_list = ['Class "' + class_labels[comp_index] +
+                       '" compared to Class: ' + class_labels[base_index]
+                       for comp_index, base_index in comp_map]
+
+        # put two lists together as a human readable result
+        readable_result = list(zip(header_list, analysis_result))
+
+        return readable_result
