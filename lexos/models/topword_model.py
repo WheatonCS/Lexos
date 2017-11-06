@@ -126,3 +126,15 @@ class TopwordModel(BaseModel):
         # Trap possible empty inputs
         assert np.size(dtm.values) > 0, EMPTY_NP_ARRAY_MESSAGE
         assert np.size(division_map) > 0, EMPTY_NP_ARRAY_MESSAGE
+
+        # initialize
+        count_matrix = dtm.values
+        name_list = dtm.index.values
+
+        # create group map
+        # noinspection PyTypeChecker
+        group_list = [count_matrix[row] for row in division_map]
+        # noinspection PyTypeChecker
+        label_list = [name_list[row] for row in division_map]
+
+        return group_list, label_list
