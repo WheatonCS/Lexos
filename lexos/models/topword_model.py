@@ -141,4 +141,12 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def get_class_map():
+        division_map = FileManager().get_class_division_map()
+        class_labels = division_map.index.values
+        if "" in class_labels:
+            class_labels[np.where(class_labels == "")] = "untitled"
 
+        # check if more than one class exists
+        if division_map.shape[0] == 1:
+            raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
+        return division_map, class_labels
