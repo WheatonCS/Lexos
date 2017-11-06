@@ -159,3 +159,20 @@ class TopwordModel(BaseModel):
         """
         # initialize
         count_matrix_sum = np.sum(self._doc_term_matrix.values, axis=0)
+
+        # generate analysis result
+        analysis_result = [TopwordModel.z_test_word_list(
+            count_list_i=row,
+            count_list_j=count_matrix_sum,
+            words=self._doc_term_matrix.columns.values)
+            for _, row in enumerate(self._doc_term_matrix.values)]
+
+        # generate header list
+        header_list = \
+            ['Document "' + label + '" compared to the whole corpus'
+             for _, label in enumerate(self._doc_term_matrix.index.values)]
+
+        # put two lists together as a human readable result
+        readable_result = list(zip(header_list, analysis_result))
+
+        return readable_result
