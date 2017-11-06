@@ -6,6 +6,7 @@ import pandas as pd
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import MatrixReceiver
 
 
 class CorpusInfo(NamedTuple):
@@ -56,9 +57,9 @@ class StatsModel(BaseModel):
     def _get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
         # initialize
-        num_file = np.size(self._doc_term_matrix.index.values)
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
+        num_file = np.size(self._doc_term_matrix.index.values)
         file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
 
         # 1 standard error analysis
@@ -144,7 +145,19 @@ class StatsModel(BaseModel):
              for index, label in enumerate(self._doc_term_matrix.index.values)]
         return file_info_list
 
-    def get_result(self) -> (List[FileInfo], CorpusInfo):
-        """Return stats for the whole corpus and each file in the corpus"""
+    def get_corpus_result(self) -> CorpusInfo:
+        """Return stats for the whole corpus."""
 
-        return self._get_all_file_result(), self._get_corpus_info()
+        return self._get_corpus_info()
+
+    def get_file_result(self) -> List[FileInfo]:
+        """Return stats for each file in the corpus in a list"""
+
+        return self._get_all_file_result()
+
+    @staticmethod
+    def get_token_type() -> str:
+        """Return token type."""
+
+        return \
+            MatrixReceiver().options_from_front_end().token_option.token_type
