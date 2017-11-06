@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-
 # This model uses kmeans method to analyze files.
 # It uses sklearn.cluster.KMeans for most important analysis, please see:
 # http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 # for more details
 
 from os.path import join as path_join
-from typing import Union, Optional
+from typing import Union, Optional, NamedTuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,62 +25,15 @@ from lexos.receivers.kmeans_receiver import KmeansOption, KmeansReceiver
 # TODO: Process data from front end for KMEANS option
 
 
-class KmeansPCAResult:
-    def __init__(self,
-                 labels: np.ndarray,
-                 k_value: int,
-                 best_index: list,
-                 color_chart: str,
-                 folder_path: str,
-                 reduced_data: list,
-                 colored_points: list,
-                 silhouette_score: Union[str, float]):
-
-        self._labels = labels
-        self._k_value = k_value
-        self._best_index = best_index
-        self._color_chart = color_chart
-        self._folder_path = folder_path
-        self._reduced_data = reduced_data
-        self._colored_points = colored_points
-        self._silhouette_score = silhouette_score
-        self._file_name_str = "#".join(self._labels)
-
-    @property
-    def labels(self) -> np.ndarray:
-        return self._labels
-
-    @property
-    def k_value(self) -> int:
-        return self._k_value
-
-    @property
-    def best_index(self) -> list:
-        return self._best_index
-
-    @property
-    def color_chart(self) -> str:
-        return self._color_chart
-
-    @property
-    def folder_path(self) -> str:
-        return self._folder_path
-
-    @property
-    def reduced_data(self) -> list:
-        return self._reduced_data
-
-    @property
-    def colored_points(self) -> list:
-        return self._colored_points
-
-    @property
-    def silhouette_score(self) -> Union[str, float]:
-        return self._silhouette_score
-
-    @property
-    def file_name_str(self) -> str:
-        return self._file_name_str
+class KmeansPCAResult(NamedTuple):
+    labels: np.ndarray
+    k_value: int
+    best_index: list
+    color_chart: str
+    folder_path: str
+    reduced_data: list
+    colored_points: list
+    silhouette_score: Union[str, float]):
 
 
 class KmeansPCAModel(BaseModel):
