@@ -138,3 +138,7 @@ class TopwordModel(BaseModel):
         label_list = [name_list[row] for row in division_map]
 
         return group_list, label_list
+
+    @staticmethod
+    def get_class_map():
+
