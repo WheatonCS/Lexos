@@ -34,7 +34,6 @@ def content_analysis():
             analysis.add_corpus(file_name=file.name,
                                 label=file.label,
                                 content=file.load_contents())
-
     if request.method == 'GET':
         dictionary_labels = []
         active_dictionaries = []
@@ -76,7 +75,6 @@ def content_analysis():
                 is_error = True
             if is_error:
                 return error(error_msg)
-
         num_active_docs = detect_active_docs()
         num_active_dicts = analysis.detect_active_dicts()
         if num_active_docs == 0 and num_active_dicts == 0:

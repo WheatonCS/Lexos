@@ -1,4 +1,3 @@
-
 function analyze() {
     var calc_input = $("input[name=display]").val();
     var data = JSON.stringify({"calc_input": calc_input});
@@ -19,7 +18,6 @@ function analyze() {
         var active_dicts = response['active_dictionaries'];
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);
-
         $('#table').html(response['result_table']);
         $('.dataframe').DataTable( {
             "scrollX": true,
