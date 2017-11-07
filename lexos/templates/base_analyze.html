@@ -26,7 +26,7 @@ $(document).ready(function() {
 	</div>
 	<!-- End Left Column - Analyze-Options -->
 
-	<!-- Right Column - Analyze-Advanced -->	
+	<!-- Right Column - Analyze-Advanced -->
 	<div id="analyze-advanced" class="col-md-7">
 
 		<!-- Analyze-Advanced Row 1 -->
@@ -38,7 +38,7 @@ $(document).ready(function() {
 				<!-- Fieldset - Tokenize-Options -->
 				<fieldset class="analyze-advanced-options" id="tokenize-options">
 					<legend id="tokenize-title" style="width:210px;">Tokenize
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This feature the text into n-grams of the user's desired length, by tokens or characters." style=""></i>
+                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This feature divides the text into n-grams of the user's desired length, by tokens or characters." style=""></i>
 					</legend>
                         <div class="row" id="tokenize-input">
 						<div class="col-sm-5" id="tokenize-size-input">
@@ -70,7 +70,7 @@ $(document).ready(function() {
 			{# </label> #}
 			{# </div> #}
 						</div>
-					</div>				
+					</div>
 				</fieldset>
 			</div>
 
@@ -92,7 +92,7 @@ $(document).ready(function() {
 							<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
 						</label>
         						<br/>
-                        
+
 						<label>Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.' style=""></i>
 							<br/>
 							<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/><input type="hidden" name="norm" value="None"/>
@@ -105,7 +105,7 @@ $(document).ready(function() {
 							</ul>
 							</span>
                         </label>
-						
+
 					</div>
 				</fieldset>
 			</div>
@@ -126,7 +126,7 @@ $(document).ready(function() {
 					</legend>
 					<div class="collapse" id="cullingoptsdiv">
 						<div style="" aria-expanded="true" class="collapse in" id="cullingOptsPanel" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}">
-							<label>Most Frequent Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use only the most frequently occuring terms in the DTM." style="padding-left:4px;"></i>
+							<label>Most Frequent Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use only the most frequently occurring terms in the DTM." style="padding-left:4px;"></i>
 								<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 							</label>
 
@@ -137,13 +137,13 @@ $(document).ready(function() {
 							<label>Culling<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Set the minimum number of documents in which terms must occur to be included in the DTM." style="padding-left:4px;"></i>
 								<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
 							</label>
-	
+
 							<span id="cullnumber-input">
 							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ numActiveDocs }}" step="1" value="{{ numActiveDocs }}" /> documents</label>
 							</span>
 							<label>Grey Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Exclude the terms with the lowest frequencies from the DTM." style="padding-left:4px;"></i>
 							<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
-							</label>	
+							</label>
 						</div>
 					</div>
 				</fieldset>
@@ -155,7 +155,7 @@ $(document).ready(function() {
 				<!-- Fieldset - Temp-Label-Div -->
 				<fieldset class="analyze-advanced-options" id="temp-label-div">
 					<legend class="has-chevron">Assign Temporary Labels
-					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Assign temporary names of documents for use in tables and graphs produced by Lexos tools that use the Tokenize, Normalize, and Culling options." style=""></i>
+					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Assign temporary names to documents for use in tables and graphs produced by the Lexos tools that use the Tokenize, Normalize, and Culling options." style=""></i>
 					<span class="fa fa-chevron-right rotate " data-target="#tempLabelPanel" aria-expanded="false" aria-controls="tempLabelPanel"></span>
 					</legend>
 					<div class="collapse" id="modifylabels" style="overflow:auto;width:100%;">
@@ -180,7 +180,7 @@ $(document).ready(function() {
 		</div>
 		<!-- End Analyze-Advanced Row 2 -->
 	</div>
-	<!-- End Right Column - Analyze-Advanced -->	
+	<!-- End Right Column - Analyze-Advanced -->
 </div>
 <!-- End Top Row -->
 

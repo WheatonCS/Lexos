@@ -1,5 +1,5 @@
-import os
 import getpass
+import os
 
 """ Constants """
 
@@ -15,14 +15,12 @@ WORKSPACE_DIR = 'workspace/'
 TMP_FOLDER = os.path.expanduser(
     '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
+CACHE_FOLDER = os.path.join(UPLOAD_FOLDER, 'cache/')
 RESOURCE_DIR = "resources/"
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
-DENDROGRAM_PNG_FILENAME = 'dendrogram.png'
-DENDROGRAM_PDF_FILENAME = 'dendrogram.pdf'
-DENDROGRAM_SVG_FILENAME = 'dendrogram.svg'
 DENDROGRAM_NEWICK_FILENAME = 'newNewickStr.txt'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
@@ -36,6 +34,12 @@ TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
 DEBUG_LOG_FILE_NAME = 'debug.log'
 MUFI_3_FILENAME = 'MUFI_3_DICT.tsv'
 MUFI_4_FILENAME = 'MUFI_4_DICT.tsv'
+STOPWORD_FILENAME = 'stopwords.p'
+LEMMA_FILENAME = 'lemmas.p'
+CONSOLIDATION_FILENAME = 'consolidations.p'
+SPECIAL_CHAR_FILENAME = 'specialchars.p'
+DIGIT_MAP_FILENAME = 'digitmap.p'
+PUNCTUATION_MAP_FILENAME = 'punctuationmap.p'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
@@ -255,7 +259,7 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
     'title': '',
-    'orientation': 'top',
+    'orientation': 'bottom',
     'pruning': '',
     'augmented': True,
     'criterion': 'maxclust',

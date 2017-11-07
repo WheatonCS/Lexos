@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import sys
 import time
 
 from flask import Flask, request, render_template
@@ -9,20 +10,20 @@ from markupsafe import Markup, escape
 
 import lexos.helpers.constants
 from lexos.helpers.exceptions import LexosException
-from lexos.interfaces.base_interface import base_view
-from lexos.interfaces.bubble_viz_interface import viz_view
-from lexos.interfaces.clustering_interface import cluster_view
-from lexos.interfaces.cut_interface import cutter_view
-from lexos.interfaces.manage_interface import manage_view
-from lexos.interfaces.multi_cloud_interface import multi_cloud_view
-from lexos.interfaces.rolling_window_interface import rwa_view
-from lexos.interfaces.scrub_interface import scrubber_view
-from lexos.interfaces.similarity_query_interface import sim_view
-from lexos.interfaces.statistics_interface import stats_view
-from lexos.interfaces.tokenizer_interface import tokenizer_view
-from lexos.interfaces.top_words_interface import top_words_view
-from lexos.interfaces.upload_interface import upload_view
-from lexos.interfaces.word_cloud_interface import word_cloud_view
+from lexos.views.base_view import base_blueprint
+from lexos.views.bubble_view import viz_blueprint
+from lexos.views.clustering_view import cluster_blueprint
+from lexos.views.cut_view import cutter_blueprint
+from lexos.views.manage_view import manage_blueprint
+from lexos.views.multi_cloud_view import multi_cloud_blueprint
+from lexos.views.rolling_window_view import rwa_blueprint
+from lexos.views.scrub_view import scrubber_blueprint
+from lexos.views.similarity_query_view import sim_blueprint
+from lexos.views.statistics_view import stats_blueprint
+from lexos.views.tokenizer_view import tokenizer_blueprint
+from lexos.views.top_words_view import top_words_blueprint
+from lexos.views.upload_view import upload_blueprint
+from lexos.views.word_cloud_view import word_cloud_blueprint
 
 
 def get_secret_key(file_name: str = 'secret_key') -> bytes:
@@ -63,20 +64,20 @@ app.jinja_env.filters['time'] = time.time()
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-app.register_blueprint(base_view)
-app.register_blueprint(upload_view)
-app.register_blueprint(manage_view)
-app.register_blueprint(viz_view)
-app.register_blueprint(cluster_view)
-app.register_blueprint(cutter_view)
-app.register_blueprint(multi_cloud_view)
-app.register_blueprint(rwa_view)
-app.register_blueprint(scrubber_view)
-app.register_blueprint(sim_view)
-app.register_blueprint(stats_view)
-app.register_blueprint(tokenizer_view)
-app.register_blueprint(top_words_view)
-app.register_blueprint(word_cloud_view)
+app.register_blueprint(base_blueprint)
+app.register_blueprint(upload_blueprint)
+app.register_blueprint(manage_blueprint)
+app.register_blueprint(viz_blueprint)
+app.register_blueprint(cluster_blueprint)
+app.register_blueprint(cutter_blueprint)
+app.register_blueprint(multi_cloud_blueprint)
+app.register_blueprint(rwa_blueprint)
+app.register_blueprint(scrubber_blueprint)
+app.register_blueprint(sim_blueprint)
+app.register_blueprint(stats_blueprint)
+app.register_blueprint(tokenizer_blueprint)
+app.register_blueprint(top_words_blueprint)
+app.register_blueprint(word_cloud_blueprint)
 
 
 # http://flask.pocoo.org/snippets/28/
@@ -103,11 +104,11 @@ def nl2br(eval_ctx, value):
 @app.errorhandler(404)
 def page_not_found(_):
     """Custom 404 Page"""
-    app.logger.error('Page not found: %s', request.path)
-    return render_template('404.html'), 404
+    app.logger.error('\nPage not found: {url}'.format(url=request.path))
+    return render_template('404.html')
 
 
-@app.error_handlers(Exception)
+@app.errorhandler(Exception)
 def unhandled_exception(error):
     """handles internal server errors
 
@@ -122,8 +123,12 @@ def unhandled_exception(error):
 
     # if flask raises this error
     else:
-        render_template("500.html")
+        raise error
 
 
-if __name__ == '__main__':
-    app.run()
+def run():
+    """Run lexos."""
+    try:
+        sys.exit(app.run())
+    except KeyboardInterrupt:
+        print('Exiting lexos. Bye!')
