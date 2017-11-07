@@ -82,23 +82,31 @@ class ContentAnalysisModel(object):
         """counts all dictionaries for all active files in the corpus"""
         self._counters = []
         active_dicts = self.get_active_dicts()
-        for file in self._corpus:
-            counts = []
+        dictionaries = self.join_active_dicts()
+        from copy import deepcopy
+        for file in deepcopy(self._corpus):
+            for phrase in dictionaries:
+                count = 0
+                if file.content.startswith(phrase.content + " "):
+                    count += 1
+                if file.content.endswith(" " + phrase.content + "\n") or \
+                    file.content.endswith(" " + phrase.content) or \
+                    file.content.endswith(
+                        phrase.content):
+                    count += 1
+                count += len(file.content.split(" " + phrase.content + " ")) - 1
+                if ' ' in phrase.content:
+                    file.content = file.content.replace(phrase.content, " ")
+                phrase.count = count
+            counter = []
             for dictionary in active_dicts:
                 count = 0
-                for word in dictionary.content:
-                    if file.content.startswith(word + " "):
-                        count += 1
-                    if file.content.endswith(" " + word + "\n") or \
-                        file.content.endswith(" " + word) or \
-                        file.content.endswith(
-                            word):
-                        count += 1
-                    count += len(file.content.split(" " + word + " ")) - 1
-                    if ' ' in word:
-                        file.content = file.content.replace(word, " ")
-                counts.append(count)
-            self._counters.append(counts)
+                for phrase in dictionaries:
+                    if phrase.label == dictionary.label:
+                        count += phrase.count
+                counter.append(count)
+                if len(counter) == len(active_dicts):
+                    self._counters.append(counter)
 
     def generate_scores(self, formula: str):
         """calculate the formula and scores=formula/total_word_count for each
@@ -166,6 +174,14 @@ class ContentAnalysisModel(object):
         self._averages.append(sums_avg)
         self._averages.append(total_word_counts_avg)
         self._averages.append(scores_avg)
+
+    def join_active_dicts(self) -> list:
+        active_dicts = self.get_active_dicts()
+        dictionaries = [Phrase(content=phrase, label=dictionary.label)
+                        for dictionary in active_dicts
+                        for phrase in dictionary.content]
+        dictionaries.sort(key=lambda x: len(x.content.split()), reverse=True)
+        return dictionaries
 
     def to_html(self) -> str:
         df = self.to_data_frame()
@@ -324,3 +340,10 @@ class File(Document):
     @total_word_counts.setter
     def total_word_counts(self, total_word_counts: int):
         self._total_word_counts = total_word_counts
+
+
+class Phrase(object):
+    def __init__(self, content: str, label: str, count: int=0):
+        self.content = content
+        self.label = label
+        self.count = count
