@@ -23,10 +23,11 @@ def topic_json_maker(mallet_path: str) -> List[dict]:
     with open(mallet_path, encoding='utf-8') as data:
         for line in data:
             try:
-                l = line.rstrip().split(' ')  # Split the line on spaces
-                l[0:2] = []  # Delete the ID and word from the list
+                # split the line into data
+                line_data = line.rstrip().split(' ')
+                line_data[0:2] = []  # Delete the ID and word from the list
                 # New list topic-count pairs
-                topic_count_pairs = [pair.split(':') for pair in l]
+                topic_count_pairs = [pair.split(':') for pair in line_data]
                 for topic, count in topic_count_pairs:
                     n_topics.append(int(topic))  # New list with topics
             except ValueError:
@@ -46,10 +47,10 @@ def topic_json_maker(mallet_path: str) -> List[dict]:
     # Re-shape the file data
     with open(mallet_path, encoding='utf-8') as f:
         for line in f:
-            l = line.rstrip().split(' ')
-            word = l[1]
-            l[0:2] = []
-            topic_count_pairs = [pair.split(':') for pair in l]
+            line_data = line.rstrip().split(' ')
+            word = line_data[1]
+            line_data[0:2] = []
+            topic_count_pairs = [pair.split(':') for pair in line_data]
             mallet_vocab.append(word)
             counts = np.zeros(num_topics)
             for topic, count in topic_count_pairs:

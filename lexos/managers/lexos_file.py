@@ -5,10 +5,10 @@ from os.path import join as pathjoin
 from typing import Dict, Tuple, List
 
 from flask import request
+
 from lexos.helpers import general_functions, constants
 from lexos.managers import session_manager
 from lexos.processors.prepare import cutter
-
 from lexos.processors.prepare import scrubber
 
 
@@ -128,7 +128,8 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        if re.search('Project Gutenberg', file_contents):
+        if re.search("\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+                     file_contents):
             return True
         else:
             return False
@@ -222,10 +223,10 @@ class LexosFile:
         :return: a preview string of the possibly changed file.
         """
 
-        cache_options = []
+        storage_options = []
         for key in list(request.form.keys()):
             if 'usecache' in key:
-                cache_options.append(key[len('usecache'):])
+                storage_options.append(key[len('usecache'):])
 
         if 'scrub' not in self.options:
             self.options['scrub'] = {}
@@ -248,8 +249,8 @@ class LexosFile:
             tabs=scrub_options['tabsbox'],
             new_lines=scrub_options['newlinesbox'],
             opt_uploads=request.files,
-            cache_options=cache_options,
-            cache_folder=session_manager.session_folder() + '/scrub/',
+            storage_options=storage_options,
+            storage_folder=session_manager.session_folder() + '/scrub/',
             previewing=not saving_changes)
 
         if saving_changes:

@@ -21,5 +21,16 @@ INVALID_CUTTING_TYPE_MESSAGE = "the cutting type should be letters, lines, " \
 EMPTY_MILESTONE_MESSAGE = "the milestone should not be empty"
 EMPTY_NP_ARRAY_MESSAGE = "The input numpy array should not be empty, since" \
     "the input file should not be empty."
+NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Invalid number of colons: "
+REPLACEMENT_RIGHT_OPERAND_MESSAGE = "Too many values on right side of " \
+                                    "replacement string: "
+REPLACEMENT_NO_LEFTHAND_MESSAGE = "Missing value on the left side of " \
+                                  "replacement string: "
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
+
+
+# ============= Base Model Errors ===========================
+NO_DATA_SENT_ERROR_MESSAGE = 'Front end did not send data to backend'
+INVALID_DATA_KEY_MESSAGE_FORMAT = \
+    'no data with name {data_key} sended to backend'

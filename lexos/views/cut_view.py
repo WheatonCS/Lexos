@@ -4,17 +4,17 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.interfaces.base_interface import detect_active_docs
+from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-cutter_view = Blueprint('cutter', __name__)
+cutter_blueprint = Blueprint('cutter', __name__)
 
 
-@cutter_view.route("/cut", methods=["GET", "POST"])
+@cutter_blueprint.route("/cut", methods=["GET", "POST"])
 def cut():
     """ Handles the functionality of the cut page.
 
@@ -63,7 +63,7 @@ def cut():
             numActiveDocs=num_active_docs)
 
 
-@cutter_view.route("/downloadCutting", methods=["GET", "POST"])
+@cutter_blueprint.route("/downloadCutting", methods=["GET", "POST"])
 def download_cutting():
     """downloads cut files.
 
@@ -75,7 +75,7 @@ def download_cutting():
     return file_manager.zip_active_files('cut_files.zip')
 
 
-@cutter_view.route("/doCutting", methods=["GET", "POST"])
+@cutter_blueprint.route("/doCutting", methods=["GET", "POST"])
 def do_cutting():
     """cuts the files.
 
