@@ -126,7 +126,7 @@ def upload_dictionaries():
         data['error'] = True
     for upload_file in request.files.getlist('lemfileselect[]'):
         file_name = upload_file.filename
-        content = upload_file.read()
+        content = upload_file.read().decode("utf-8").replace('\n', '')
         analysis.add_dictionary(file_name=file_name, content=content)
         data['dictionary_labels'].append(analysis.dictionaries[-1].label)
         data['active_dictionaries'].append(True)
