@@ -94,7 +94,8 @@ class ContentAnalysisModel(object):
                     file.content.endswith(
                         phrase.content):
                     count += 1
-                count += len(file.content.split(" " + phrase.content + " ")) - 1
+                count += len(
+                    file.content.split(" " + phrase.content + " ")) - 1
                 if ' ' in phrase.content:
                     file.content = file.content.replace(phrase.content, " ")
                 phrase.count = count
