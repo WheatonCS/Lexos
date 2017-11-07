@@ -142,3 +142,8 @@ class TestDecodeBytes:
         input_str = 'сегодняшнее домашнее задание.' \
                     ' Настенные часы висят на стене. '
         assert decode_bytes(input_str.encode('windows-1251')) == input_str
+
+    def test_python_string_decoding(self):
+        python_string = "Hello, world!"
+
+        assert decode_bytes(python_string) == python_string
