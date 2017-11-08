@@ -4,12 +4,12 @@ import numpy as np
 
 
 def topic_json_maker(mallet_path: str) -> List[dict]:
-    """Generate a list of json dict for the mallet topic file.
+    """Make a list of d3 json dict for the mallet file in mallet path.
 
-    We read and parse the mallet topic file,
-    then generate a d3 json dict for each topic.
-    :param mallet_path: the path of the mallet topic file
-    :return: a list of d3 json dict (one for each topic)
+    This function read and parse the mallet file,
+    then for each topic in file, we make a d3 json dict to draw word cloud
+    :param mallet_path: the path of the mallet file
+    :return: a list of d3 json dict
     """
     # Configuration
     # Top N number of words in each topic that will appear in output
