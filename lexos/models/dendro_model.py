@@ -8,13 +8,14 @@ from scipy.cluster.hierarchy import linkage
 from scipy.spatial.distance import pdist
 
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel
+from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
 
 
 class DendrogramModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[DendroOption] = None):
+                 test_option: Optional[DendroOption] = None,
+                 test_id_temp_label_map: Optional[IdTempLabelMap] = None):
         """This is the class to generate dendrogram.
 
         :param test_dtm: (fake parameter)
@@ -25,12 +26,20 @@ class DendrogramModel(BaseModel):
         super().__init__()
         self._test_dtm = test_dtm
         self._test_option = test_option
+        self._test_id_temp_label_map = test_id_temp_label_map
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-
+        """:return: the document term matrix"""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels"""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_temp_label_id_map()
 
     @property
     def _dendro_option(self) -> DendroOption:
@@ -44,6 +53,9 @@ class DendrogramModel(BaseModel):
         :return: A plotly figure object
         """
 
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
         return ff.create_dendrogram(
             self._doc_term_matrix,
             orientation=self._dendro_option.orientation,
@@ -54,7 +66,7 @@ class DendrogramModel(BaseModel):
             linkagefun=lambda dist: linkage(
                 dist, method=self._dendro_option.linkage_method),
 
-            labels=self._doc_term_matrix.index.values
+            labels=labels
         )
 
     def get_dendrogram_div(self) -> str:
