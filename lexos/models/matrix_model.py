@@ -1,4 +1,4 @@
-from typing import Counter, Dict
+from typing import Counter
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -8,7 +8,7 @@ from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver, \
-  IdTempLabelMap
+    IdTempLabelMap
 
 
 class MatrixModel(BaseModel):
@@ -210,7 +210,7 @@ class MatrixModel(BaseModel):
                                                   axis=1)
 
         return dtm_data_frame
-      
+
     def get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
 
