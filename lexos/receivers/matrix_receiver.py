@@ -1,9 +1,7 @@
-from typing import NamedTuple, Optional, Dict
-import numpy as np
 import re
+from typing import NamedTuple, Optional, Dict
 
 from lexos.receivers.base_receiver import BaseReceiver
-
 
 IdTempLabelMap = Dict[int, str]
 
@@ -58,7 +56,7 @@ class MatrixOption(NamedTuple):
     culling_option: CullingOption
 
     # all the temp labels of segments
-    id_temp_label_map(self) -> IdTempLabelMap
+    id_temp_label_map: IdTempLabelMap
 
 
 class MatrixReceiver(BaseReceiver):
