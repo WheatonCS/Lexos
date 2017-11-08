@@ -43,7 +43,7 @@ class StatsModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None):
         """This is the class to generate statistics of the input file.
 
-        :param test_dtm: (fake parameter) the doc term matrix used of testing
+        :param test_dtm: (fake parameter) the doc term matrix used of testing.
         """
         super().__init__()
         self._test_dtm = test_dtm
@@ -100,10 +100,10 @@ class StatsModel(BaseModel):
 
     @staticmethod
     def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
-        """Gives statistics of a particular file in a given file list
+        """Gives statistics of a particular file in a given file list.
 
-        :param count_list: a list contains words count of a particular file
-        :param file_name: the file name of that file
+        :param count_list: a list contains words count of a particular file.
+        :param file_name: the file name of that file.
         """
         assert count_list.size > 0, EMPTY_LIST_MESSAGE
 
@@ -136,7 +136,7 @@ class StatsModel(BaseModel):
                         total_word_count=total_word_count)
 
     def _get_all_file_result(self) -> List[FileInfo]:
-        """Find statistics of all files and put each result into a list"""
+        """Find statistics of all files and put each result into a list."""
 
         file_info_list = \
             [self._get_file_info(
@@ -151,13 +151,13 @@ class StatsModel(BaseModel):
         return self._get_corpus_info()
 
     def get_file_result(self) -> List[FileInfo]:
-        """Return stats for each file in the corpus in a list"""
+        """Return stats for each file in the corpus in a list."""
 
         return self._get_all_file_result()
 
     @staticmethod
     def get_token_type() -> str:
-        """Return token type."""
+        """Return token type that was used for analyzing."""
 
         return \
             MatrixReceiver().options_from_front_end().token_option.token_type
