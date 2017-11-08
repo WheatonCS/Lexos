@@ -163,10 +163,10 @@ class MatrixModel(BaseModel):
                                       columns=words)
 
         # change the dtm to proportion
-        if self._opts.norm_option.use_freq:
-            # apply the proportion function to each row
-            dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
-                                                  axis=1)
+        # if self._opts.norm_option.use_freq:
+        # apply the proportion function to each row
+        dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
+                                              axis=1)
 
         # apply culling to dtm
         if self._opts.culling_option.culling:
