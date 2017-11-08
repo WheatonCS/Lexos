@@ -1,4 +1,4 @@
-from typing import Counter, Dict
+from typing import Counter
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -7,9 +7,8 @@ from lexos.helpers import definitions
 from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
-from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver
-
-IdTempLabelMap = Dict[int, str]
+from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver, \
+    IdTempLabelMap
 
 
 class MatrixModel(BaseModel):

@@ -1,175 +1,62 @@
 import re
-from typing import Dict
+from typing import NamedTuple, Optional, Dict
 
 from lexos.receivers.base_receiver import BaseReceiver
 
-
-class TokenOption:
-    def __init__(self, n_gram_size: int, token_type: str):
-        """A struct to represent token option.
-
-        :param n_gram_size: the size of each token
-        :param token_type: the token type to send into CountVectorizer
-        """
-        self._n_gram_size = n_gram_size
-        self._token_type = token_type
-
-    @property
-    def n_gram_size(self) -> int:
-        """The size of each token.
-
-        the number of words or char in each token
-        :return: an int to indicate above information
-        """
-        return self._n_gram_size
-
-    @property
-    def token_type(self) -> str:
-        """The type of the token.
-
-        The token type to be send into CountVectorizer.
-        Available options are 'word', 'char', 'char_wb'.
-        :return: a string to indicate above information.
-        """
-        return self._token_type
+IdTempLabelMap = Dict[int, str]
 
 
-class NormOption:
-    def __init__(self, use_freq: bool, use_tf_idf: bool,
-                 tf_idf_norm_option: str):
-        """A struct to keep the normalize option.
+class TokenOption(NamedTuple):
+    """A typed tuple to represent token option."""
+    # the size of each token
+    n_gram_size: int
 
-        :param use_freq: True if we are using proportional count
-                         False if we are using raw count
-        :param use_tf_idf: whether to apply TF-IDF transformation
-        :param tf_idf_norm_option: the normalize option in TF-IDF
-        """
-        self._use_freq = use_freq
-        self._use_tf_idf = use_tf_idf
-        self._tf_idf_norm_option = tf_idf_norm_option
-
-    @property
-    def use_freq(self) -> bool:
-        """Whether to use proportional count in our doc term matrix.
-
-        :return: True if we are using proportional count
-                 False if we are using raw count
-        """
-        return self._use_freq
-
-    @property
-    def use_tf_idf(self) -> bool:
-        """Whether to apply TF-IDF transformation to the matrix
-
-        :return: a boolean to indicate above information
-        """
-        return self._use_tf_idf
-
-    @property
-    def tf_idf_norm_option(self) -> str:
-        """The normalize option for TF-IDF transformation
-
-        :return: a string to indicate above information
-        """
-        return self._tf_idf_norm_option
+    # the token type to send to CountVerctorizer
+    # available options are 'word', 'char_wb', and 'char'
+    token_type: str
 
 
-class CullingOption:
-    def __init__(self, most_frequent_word: bool, mfw_lowest_rank: int,
-                 culling: bool, cull_least_seg: int):
-        """A struct to represent all the culling option
+class NormOption(NamedTuple):
+    """A typed tuple to keep the normalize option."""
+    # True if we are using proportional count, False if we are using raw count
+    use_freq: bool
 
-        :param most_frequent_word: Whether to apply most frequent word
-        :param mfw_lowest_rank: the lowest word rank to keep in passage
-        :param culling: whether to apply culling option
-        :param cull_least_seg: the least number of passage that the word
-            needs to be in.
-        """
-        self._mfw = most_frequent_word
-        self._mfw_lower = mfw_lowest_rank
-        self._culling = culling
-        self._cull_lower = cull_least_seg
+    # True if we are using proportional count, False if we are using raw count
+    use_tf_idf: bool
 
-    @property
-    def most_frequent_word(self) -> bool:
-        """Whether to apply most frequent word
-
-        :return: A boolean to indicate the above information
-        """
-        return self._mfw
-
-    @property
-    def mfw_lowest_rank(self) -> int:
-        """The lowest word rank to keep in passage
-
-        :return: a int to indicate the above information
-        """
-        return self._mfw_lower
-
-    @property
-    def culling(self) -> bool:
-        """Whether to apply the culling option
-
-        :return: a boolean to indicate the above information
-        """
-        return self._culling
-
-    @property
-    def cull_least_passage(self) -> int:
-        """The least a number of passage the words needs to be in
-
-        :return: a int to indicate the above information
-        """
-        return self._cull_lower
+    # the normalize option in TF-IDF
+    # available options are 'l1' and 'l2'. nice naming, SciPy!
+    tf_idf_norm_option: str
 
 
-class MatrixOption:
-    def __init__(self, token_option: TokenOption, norm_option: NormOption,
-                 culling_option: CullingOption,
-                 id_temp_label_map: Dict[int, str]):
-        """A struct to represent all the matrix option.
+class CullingOption(NamedTuple):
+    """A typed tuple to represent all the culling option."""
+    # Whether to apply most frequent word
+    most_frequent_word: bool
 
-        :param token_option: the token options
-        :param norm_option: the normalize options
-        :param culling_option: the culling options
-        :param id_temp_label_map: all the temp labels in an np array
-        """
-        self._token_option = token_option
-        self._norm_option = norm_option
-        self._culling_option = culling_option
-        self._temp_label = id_temp_label_map
+    # the lowest word rank to keep in DTM
+    mfw_lowest_rank: Optional[int]
 
-    @property
-    def token_option(self) -> TokenOption:
-        """All the token option
+    # Whether to apply culling option
+    culling: bool
 
-        :return: a TokenOption type
-        """
-        return self._token_option
+    # the least number of passage that the word needs to be in
+    cull_least_seg: Optional[int]
 
-    @property
-    def norm_option(self) -> NormOption:
-        """All the normalize options
 
-        :return: a NormOption Type
-        """
-        return self._norm_option
+class MatrixOption(NamedTuple):
+    """A typed tuple to represent all the matrix option."""
+    # the token options
+    token_option: TokenOption
 
-    @property
-    def culling_option(self) -> CullingOption:
-        """All the culling options.
+    # the normalize options
+    norm_option: NormOption
 
-        :return: a CullingOption type
-        """
-        return self._culling_option
+    # the culling options
+    culling_option: CullingOption
 
-    @property
-    def id_temp_label_map(self) -> Dict[int, str]:
-        """All the temp labels
-
-        :return: an np array with all the labels
-        """
-        return self._temp_label
+    # all the temp labels of segments
+    id_temp_label_map: IdTempLabelMap
 
 
 class MatrixReceiver(BaseReceiver):
@@ -230,14 +117,14 @@ class MatrixReceiver(BaseReceiver):
         """
         if 'mfwcheckbox' in self._front_end_data:
             most_frequent_word = True
-            lower_rank_bound = self._front_end_data['mfwnumber']
+            lower_rank_bound = int(self._front_end_data['mfwnumber'])
         else:
             most_frequent_word = False
             lower_rank_bound = None
 
         if 'cullcheckbox' in self._front_end_data:
             culling = True
-            least_num_seg = self._front_end_data['cullnumber']
+            least_num_seg = int(self._front_end_data['cullnumber'])
         else:
             culling = False
             least_num_seg = None
