@@ -1,8 +1,11 @@
-from typing import NamedTuple, Optional
-
+from typing import NamedTuple, Optional, Dict
 import numpy as np
+import re
 
 from lexos.receivers.base_receiver import BaseReceiver
+
+
+IdTempLabelMap = Dict[int, str]
 
 
 class TokenOption(NamedTuple):
@@ -55,7 +58,7 @@ class MatrixOption(NamedTuple):
     culling_option: CullingOption
 
     # all the temp labels of segments
-    temp_labels: np.ndarray
+    id_temp_label_map(self) -> IdTempLabelMap
 
 
 class MatrixReceiver(BaseReceiver):
@@ -132,15 +135,39 @@ class MatrixReceiver(BaseReceiver):
                              most_frequent_word=most_frequent_word,
                              mfw_lowest_rank=lower_rank_bound)
 
-    def _get_temp_labels_from_front_end(self) -> np.array:
-        """Get all the temp labels from front end
+    def _get_id_temp_label_map_from_front_end(self) -> Dict[int, str]:
+        """Get all the file id maps to temp labels from front end
 
-        :return: get all the temp labels from the web
+        :return: a dict maps id to temp labels
         """
-        label_keys = [key for key in self._front_end_data.keys()
-                      if key.startswith('file_')]
+        label_key_regex = re.compile(r"file_(\d+)")
 
-        return np.array([self._front_end_data[key] for key in label_keys])
+        def parse_temp_label_data(label_key: str) -> (int, str):
+            """parse the key of the temp label into a tuple
+
+            get the id from the label key and find the label correspond to
+            the label key.
+            then return a tuple of id and the label
+            :param label_key: key of the label in _front_end_data
+            :return: a tuple where the first element is the file id
+                     and the second element is the temp label
+            """
+            # extract the file id
+            match_obj = label_key_regex.match(label_key)
+            file_id = int(match_obj.group(1))
+
+            # find the label
+            label = self._front_end_data[label_key]
+
+            return file_id, label
+
+        # a list of tuple where
+        # the first element is the key, the second element is the value
+        id_temp_label_list = [parse_temp_label_data(key)
+                              for key in self._front_end_data.keys()
+                              if label_key_regex.match(key)]
+
+        return dict(id_temp_label_list)
 
     def options_from_front_end(self) -> MatrixOption:
         """Get all the matrix option from front end.
@@ -151,5 +178,5 @@ class MatrixReceiver(BaseReceiver):
             token_option=self._get_token_option_from_front_end(),
             norm_option=self._get_normalize_option_from_front_end(),
             culling_option=self._get_culling_option_from_front_end(),
-            temp_labels=self._get_temp_labels_from_front_end()
+            id_temp_label_map=self._get_id_temp_label_map_from_front_end()
         )
