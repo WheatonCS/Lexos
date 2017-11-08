@@ -74,22 +74,22 @@ class StatsModel(BaseModel):
                 file_anomaly_std_err.update({label: 'small'})
 
         # 2 iqr analysis
-        mid = np.median(file_sizes).item()
+        median = np.median(file_sizes).item()
         q1 = np.percentile(file_sizes, 25, interpolation="midpoint")
         q3 = np.percentile(file_sizes, 75, interpolation="midpoint")
         iqr = q3 - q1
 
         # calculate the anomaly
         for count, label in enumerate(self._doc_term_matrix.index.values):
-            if file_sizes[count] > mid + 1.5 * iqr:
+            if file_sizes[count] > median + 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'large'})
-            elif file_sizes[count] < mid - 1.5 * iqr:
+            elif file_sizes[count] < median - 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'small'})
 
         return CorpusInfo(q1=q1,
                           q3=q3,
                           iqr=iqr,
-                          median=mid,
+                          median=median,
                           average=average_file_size,
                           num_file=num_file,
                           file_sizes=list(file_sizes),
@@ -117,7 +117,7 @@ class StatsModel(BaseModel):
         std_word_count = np.std(nonzero_count_list).item()
 
         # 2 iqr analysis
-        mid = np.median(nonzero_count_list).item()
+        median = np.median(nonzero_count_list).item()
         q1 = np.percentile(nonzero_count_list, 25, interpolation="midpoint")
         q3 = np.percentile(nonzero_count_list, 75, interpolation="midpoint")
         iqr = q3 - q1
@@ -127,7 +127,7 @@ class StatsModel(BaseModel):
                         q3=q3,
                         iqr=iqr,
                         hapax=hapax,
-                        median=mid,
+                        median=median,
                         average=average_word_count,
                         num_word=num_word,
                         file_name=file_name,
