@@ -1,8 +1,8 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict
 
 from flask import request
 
-RequestData = Dict[str, Any]
+RequestData = Dict[str, str]
 
 
 class BaseReceiver:
@@ -14,7 +14,7 @@ class BaseReceiver:
         pass
 
     @property
-    def _front_end_data_nullable(self) -> Optional[dict]:
+    def _front_end_data_nullable(self) -> Optional[RequestData]:
         """An nullable front-end data
 
         the front end data, possibly None:
