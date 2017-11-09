@@ -151,14 +151,17 @@ class StatsModel(BaseModel):
                         std_deviation=std_word_count,
                         total_word_count=total_word_count)
 
-    def _get_all_file_result(self) -> List[FileInfo]:
+    def _get_each_file_result(self) -> List[FileInfo]:
         """Find statistics of all files and put each result into a list."""
+
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
         file_info_list = \
             [self._get_file_info(
                 count_list=self._doc_term_matrix.values[index, :],
                 file_name=label)
-             for index, label in enumerate(self._doc_term_matrix.index.values)]
+             for index, label in enumerate(labels)]
         return file_info_list
 
     def get_corpus_result(self) -> CorpusInfo:
@@ -169,7 +172,7 @@ class StatsModel(BaseModel):
     def get_file_result(self) -> List[FileInfo]:
         """Return stats for each file in the corpus in a list."""
 
-        return self._get_all_file_result()
+        return self._get_each_file_result()
 
     @staticmethod
     def get_token_type() -> str:
