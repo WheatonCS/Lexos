@@ -57,9 +57,16 @@ class StatsModel(BaseModel):
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-
+        """:return: the document term matrix"""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels"""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_temp_label_id_map()
 
     def _get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
