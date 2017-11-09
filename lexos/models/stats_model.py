@@ -18,7 +18,7 @@ class CorpusInfo(NamedTuple):
     average: float  # The average of all file sized.
     num_file: int  # The number of files.
     file_sizes: list  # The list of all file sizes.
-    file_names: np.ndarray  # The list of all file names.
+    file_names: list  # The list of all file names.
     std_deviation: float  # The standard deviation of all file sizes.
     anomaly_iqr: dict  # The anomaly inter-quartile range of all file sizes.
     anomaly_std_err: dict  # The anomaly standard error of all file sizes.
@@ -75,13 +75,15 @@ class StatsModel(BaseModel):
         file_anomaly_std_err = {}
         num_file = np.size(self._doc_term_matrix.index.values)
         file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
         # 1 standard error analysis
         average_file_size = round(np.average(file_sizes), 3)
         # Calculate the standard deviation
         std_dev_file_size = np.std(file_sizes).item()
         # Calculate the anomaly
-        for count, label in enumerate(self._doc_term_matrix.index.values):
+        for count, label in enumerate(labels):
             if file_sizes[count] > average_file_size + 2 * std_dev_file_size:
                 file_anomaly_std_err.update({label: 'large'})
             elif file_sizes[count] < average_file_size - 2 * std_dev_file_size:
@@ -107,7 +109,7 @@ class StatsModel(BaseModel):
                           average=average_file_size,
                           num_file=num_file,
                           file_sizes=list(file_sizes),
-                          file_names=self._doc_term_matrix.index.values,
+                          file_names=labels,
                           anomaly_iqr=file_anomaly_iqr,
                           std_deviation=std_dev_file_size,
                           anomaly_std_err=file_anomaly_std_err)
