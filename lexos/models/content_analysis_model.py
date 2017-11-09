@@ -1,11 +1,16 @@
 import pandas as pd
+from typing import Optional
+from copy import deepcopy
 
 # noinspection PyUnresolvedReferences
 from math import sqrt, sin, cos, tan, log  # noqa F401
 
+from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver,\
+    ContentAnalysisOption
+
 
 class ContentAnalysisModel(object):
-    def __init__(self):
+    def __init__(self, test_option: Optional[ContentAnalysisOption]):
         """A model to manage the content analysis tool.
 
         dictionaries: List of Dictionary objects
@@ -16,12 +21,15 @@ class ContentAnalysisModel(object):
         scores: List of formula/total word count of each file
         averages: Lis of averages count of each dictionary
         """
+        self._test_option = test_option
         self._dictionaries = []
         self._corpus = []
         self._counters = []
         self._formulas = []
         self._scores = []
         self._averages = []
+        self._formula = ""
+        self._toggle_all = True
 
     def add_corpus(self, file_name: str, label: str, content: str):
         """Adds a file to the corpus
@@ -50,22 +58,61 @@ class ContentAnalysisModel(object):
                                              file_name=file_name,
                                              label=label))
 
-    def delete_dictionary(self, label: str):
+    def delete_dictionary(self):
         """deletes a dictionary
 
         :param label: label of dictionary to delete
         """
+        label = self.front_end_dict_label
         self.dictionaries = [dictionary for dictionary in self.dictionaries
                              if dictionary.label != label]
+        data = {'dictionary_labels': [],
+                'active_dictionaries': []}
 
-    def toggle_dictionary(self, label: str):
+        for dictionary in self.dictionaries:
+            data['dictionary_labels'].append(dictionary.label)
+            data['active_dictionaries'].append(dictionary.active)
+        return data
+
+    def toggle_dictionary(self):
         """Activates and Deactivates a dictionary
 
-        :param label: filename of dictionary to toggle
         """
+        label = self.front_end_dict_label
+        self._toggle_all = True
+        dictionary_labels = []
+        active_dictionaries = []
         for dictionary in self._dictionaries:
             if dictionary.label == label:
                 dictionary.active = not dictionary.active
+            if not dictionary.active:
+                self._toggle_all = False
+            dictionary_labels.append(dictionary.label)
+            active_dictionaries.append(dictionary.active)
+        return dictionary_labels, active_dictionaries, self._toggle_all
+
+    def toggle_all_dicts(self):
+        self._toggle_all = not self._toggle_all
+        dictionary_labels = []
+        active_dictionaries = []
+        for dictionary in self.dictionaries:
+            dictionary.active = self._toggle_all
+            dictionary_labels.append(dictionary.label)
+            active_dictionaries.append(self._toggle_all)
+        return dictionary_labels, active_dictionaries, self._toggle_all
+
+    def test(self):
+        dictionary_labels = []
+        active_dictionaries = []
+        self._toggle_all = False
+        if len(self.dictionaries):
+            self._toggle_all = True
+            for dictionary in self.dictionaries:
+                dictionary_labels.append(dictionary.label)
+                active_dictionaries.append(dictionary.active)
+                if not dictionary.active:
+                    self._toggle_all = False
+        return dictionary_labels, active_dictionaries, self._toggle_all
 
     def get_active_dicts(self) -> list:
         """
@@ -83,7 +130,6 @@ class ContentAnalysisModel(object):
         self._counters = []
         active_dicts = self.get_active_dicts()
         dictionaries = self.join_active_dicts()
-        from copy import deepcopy
         for file in deepcopy(self._corpus):
             for phrase in dictionaries:
                 count = 0
@@ -109,19 +155,17 @@ class ContentAnalysisModel(object):
                 if len(counter) == len(active_dicts):
                     self._counters.append(counter)
 
-    def generate_scores(self, formula: str):
+    def generate_scores(self):
         """calculate the formula and scores=formula/total_word_count for each
         file in the corpus
 
-        :param formula: a string containing a mathematical equation with
-        dictionary names between brackets
         """
         self._scores = []
         self._formulas = []
         active_dicts = self.get_active_dicts()
         result = 0
         for i in range(len(self._corpus)):
-            new_formula = formula
+            new_formula = self._formula
             for j in range(len(active_dicts)):
                 new_formula = new_formula.replace(
                     "[" + active_dicts[j].label + "]",
@@ -214,7 +258,8 @@ class ContentAnalysisModel(object):
         df.columns = columns
         return df
 
-    def is_secure(self, formula: str):
+    def is_secure(self):
+        formula = self._formula
         allowed_input = ["[" + dictionary.label + "]" for
                          dictionary in self.get_active_dicts()] + \
                         ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -225,6 +270,52 @@ class ContentAnalysisModel(object):
         if len(formula) == 0:
             return True
         return False
+
+    def save_formula(self):
+        formula = self.front_end_formula
+        if len(formula) == 0:
+            self._formula = "0"
+        else:
+            formula = formula.replace("√", "sqrt").replace("^", "**")
+            self._formula = formula
+
+    def check_formula(self):
+        error_msg = "Formula errors:<br>"
+        is_error = False
+        if self._formula.count("(") != self._formula.count(")"):
+            error_msg += "Mismatched parenthesis<br>"
+            is_error = True
+        if "sin()" in self._formula:
+            error_msg += "sin takes exactly one argument (0 given)<br>"
+            is_error = True
+        if "cos()" in self._formula:
+            error_msg += "cos takes exactly one argument (0 given)<br>"
+            is_error = True
+        if "tan()" in self._formula:
+            error_msg += "tan takes exactly one argument (0 given)<br>"
+            is_error = True
+        if "log()" in self._formula:
+            error_msg += "log takes exactly one argument (0 given)<br>"
+            is_error = True
+        if is_error:
+            return error_msg
+        return 0
+
+    def analyze(self):
+        self.count_words()
+        if self.is_secure():
+            data = {"result_table": "",
+                    "dictionary_labels": [],
+                    "active_dictionaries": [],
+                    "error": False}
+            self.generate_scores()
+            self.generate_averages()
+            data['result_table'] = self.to_html()
+            for dictionary in self.dictionaries:
+                data['dictionary_labels'].append(dictionary.label)
+                data['active_dictionaries'].append(dictionary.active)
+            return data
+        return 0
 
     @property
     def dictionaries(self) -> list:
@@ -249,6 +340,28 @@ class ContentAnalysisModel(object):
     @property
     def averages(self) -> list:
         return self._averages
+
+    @property
+    def _content_analysis_option(self) -> ContentAnalysisOption:
+
+        return self._test_option if self._test_option is not None \
+            else ContentAnalysisReceiver().options_from_front_end()
+
+    @property
+    def front_end_formula(self):
+        return self._content_analysis_option.formula
+
+    @property
+    def front_end_toggle_all(self):
+        return self._content_analysis_option.toggle_all
+
+    @property
+    def front_end_dict_label(self):
+        return self._content_analysis_option.dict_label
+
+    @property
+    def toggle_all(self):
+        return self._toggle_all
 
 
 class Document(object):

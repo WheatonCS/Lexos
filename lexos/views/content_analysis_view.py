@@ -25,7 +25,7 @@ def content_analysis():
     """
     global analysis
     if analysis is None or 'content_analysis' not in session:
-        analysis = ContentAnalysisModel()
+        analysis = ContentAnalysisModel(test_option=None)
         session['content_analysis'] = True
     elif len(analysis.corpus) == 0:
         file_manager = load_file_manager()
@@ -35,75 +35,32 @@ def content_analysis():
                                 label=file.label,
                                 content=file.load_contents())
     if request.method == 'GET':
-        dictionary_labels = []
-        active_dictionaries = []
-        session['toggle_all'] = False
-        if len(analysis.dictionaries):
-            session['toggle_all'] = True
-            for dictionary in analysis.dictionaries:
-                dictionary_labels.append(dictionary.label)
-                active_dictionaries.append(dictionary.active)
-                if not dictionary.active:
-                    session['toggle_all'] = False
+        dictionary_labels, active_dictionaries, toggle_all = analysis.test()
         return render_template('contentanalysis.html',
                                dictionary_labels=dictionary_labels,
                                active_dictionaries=active_dictionaries,
-                               toggle_all=session['toggle_all'])
+                               toggle_all=toggle_all)
     else:
-        formula = request.json['calc_input']
-        if len(formula) == 0:
-            session['formula'] = "0"
-        else:
-            formula = formula.replace("√", "sqrt").replace("^", "**")
-            session['formula'] = formula
-            error_msg = "Formula errors:<br>"
-            is_error = False
-            if formula.count("(") != formula.count(")"):
-                error_msg += "Mismatched parenthesis<br>"
-                is_error = True
-            if "sin()" in formula:
-                error_msg += "sin takes exactly one argument (0 given)<br>"
-                is_error = True
-            if "cos()" in formula:
-                error_msg += "cos takes exactly one argument (0 given)<br>"
-                is_error = True
-            if "tan()" in formula:
-                error_msg += "tan takes exactly one argument (0 given)<br>"
-                is_error = True
-            if "log()" in formula:
-                error_msg += "log takes exactly one argument (0 given)<br>"
-                is_error = True
-            if is_error:
-                return error(error_msg)
         num_active_docs = detect_active_docs()
         num_active_dicts = analysis.detect_active_dicts()
         if num_active_docs == 0 and num_active_dicts == 0:
-            data = {"error": "At least 1 active document and 1 active "
-                             "dictionary are required to perform a "
-                             "content analysis."}
-            data = json.dumps(data)
-            return data
+            return error("At least 1 active document and 1 active "
+                         "dictionary are required to perform a "
+                         "content analysis.")
         elif num_active_docs == 0:
             return error("At least 1 active document is required to perform "
                          "a content analysis.")
         elif num_active_dicts == 0:
             return error("At least 1 active dictionary is required to perform"
                          " a content analysis.")
-        analysis.count_words()
-        if analysis.is_secure(session['formula']):
-            data = {"result_table": "",
-                    "dictionary_labels": [],
-                    "active_dictionaries": [],
-                    "error": False}
-            analysis.generate_scores(session['formula'])
-            analysis.generate_averages()
-            data['result_table'] = analysis.to_html()
-            for dictionary in analysis.dictionaries:
-                data['dictionary_labels'].append(dictionary.label)
-                data['active_dictionaries'].append(dictionary.active)
-            data = json.dumps(data)
-            return data
-        return error("Formula error: Invalid input")
+        analysis.save_formula()
+        formula_errors = analysis.check_formula()
+        if formula_errors != 0:
+            return error(formula_errors)
+        result = analysis.analyze()
+        if result == 0:
+            return error("Formula error: Invalid input")
+        return json.dumps(result)
 
 
 # Tells Flask to load this function when someone is at '/getdictlabels'
@@ -114,9 +71,7 @@ def upload_dictionaries():
     :return: a json object.
     """
     global analysis
-    analysis = ContentAnalysisModel()
-    session['formula'] = ""
-    session['toggle_all'] = True
+    analysis = ContentAnalysisModel(test_option=None)
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
             'formula': "",
@@ -141,16 +96,8 @@ def save_formula():
 
     :return: a string indicating if it succeeded
     """
-    formula = request.json['calc_input']
-    if len(formula) == 0:
-        session['formula'] = "0"
-    else:
-        formula = formula.replace("√", "sqrt").replace("^", "**")
-        session['formula'] = formula
-        if formula.count("(") != formula.count(")") or \
-                formula.count("[") != formula.count("]"):
-            return "error"
-    return "success"
+    analysis.save_formula()
+    return 'success'
 
 
 # Tells Flask to load this function when someone is at '/toggledictionary'
@@ -163,25 +110,16 @@ def toggle_dictionary():
     global analysis
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
-            'toggle_all': session['toggle_all']}
-    if request.json['toggle_all']:
-        session['toggle_all'] = not session['toggle_all']
-        for dictionary in analysis.dictionaries:
-            dictionary.active = session['toggle_all']
-            data['dictionary_labels'].append(dictionary.label)
-            data['active_dictionaries'].append(session['toggle_all'])
+            'toggle_all': analysis.toggle_all}
+    if analysis.front_end_toggle_all:
+        data['dictionary_labels'],\
+            data['active_dictionaries'],\
+            data['toggle_all'] = analysis.toggle_all_dicts()
     else:
-        dictionary = request.json['dict_label']
-        analysis.toggle_dictionary(dictionary)
-        session['toggle_all'] = True
-        for dictionary in analysis.dictionaries:
-            data['dictionary_labels'].append(dictionary.label)
-            data['active_dictionaries'].append(dictionary.active)
-            if not dictionary.active:
-                session['toggle_all'] = False
-    data['toggle_all'] = session['toggle_all']
-    data = json.dumps(data)
-    return data
+        data['dictionary_labels'],\
+            data['active_dictionaries'],\
+            data['toggle_all'] = analysis.toggle_dictionary()
+    return json.dumps(data)
 
 
 # Tells Flask to load this function when someone is at '/deletedictionary'
@@ -192,15 +130,7 @@ def delete_dictionary():
     :return: a json object.
     """
     global analysis
-    data = {'dictionary_labels': [],
-            'active_dictionaries': []}
-    dict_label = request.json['dict_label']
-    analysis.delete_dictionary(dict_label)
-    for dictionary in analysis.dictionaries:
-        data['dictionary_labels'].append(dictionary.label)
-        data['active_dictionaries'].append(dictionary.active)
-    data = json.dumps(data)
-    return data
+    return json.dumps(analysis.delete_dictionary())
 
 
 def error(msg: str):
