@@ -96,7 +96,7 @@ class StatsModel(BaseModel):
         iqr = q3 - q1
 
         # calculate the anomaly
-        for count, label in enumerate(self._doc_term_matrix.index.values):
+        for count, label in enumerate(labels):
             if file_sizes[count] > median + 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'large'})
             elif file_sizes[count] < median - 1.5 * iqr:
