@@ -6,7 +6,7 @@ import pandas as pd
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
 
 
 class CorpusInfo(NamedTuple):
@@ -40,13 +40,20 @@ class FileInfo(NamedTuple):
 
 
 class StatsModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None):
+    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
+                 test_option=None,
+                 test_id_temp_label_map: Optional[IdTempLabelMap] = None):
         """This is the class to generate statistics of the input file.
 
-        :param test_dtm: (fake parameter) the doc term matrix used of testing.
+        :param test_dtm: (fake parameter)
+                         the doc term matrix used for testing
+        :param test_option: (fake parameter)
+                            option used for testing
         """
         super().__init__()
         self._test_dtm = test_dtm
+        self._test_option = test_option
+        self._test_id_temp_label_map = test_id_temp_label_map
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
