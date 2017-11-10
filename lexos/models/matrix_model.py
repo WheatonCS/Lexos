@@ -1,4 +1,4 @@
-from typing import Counter, Dict, NamedTuple
+from typing import Counter, Dict, NamedTuple, Optional
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -19,7 +19,7 @@ class MatrixTestOptions(NamedTuple):
 
 class MatrixModel(BaseModel):
 
-    def __init__(self, test_options: MatrixTestOptions):
+    def __init__(self, test_options: Optional[MatrixTestOptions] = None):
         """Class to generate and manipulate dtm.
 
         :param test_options:
