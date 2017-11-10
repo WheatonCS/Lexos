@@ -153,8 +153,7 @@ class StatsModel(BaseModel):
 
     def _get_each_file_result(self) -> List[FileInfo]:
         """Find statistics of all files and put each result into a list."""
-        ID = self._id_temp_label_map
-        DTM = self._doc_term_matrix
+
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
