@@ -1,12 +1,20 @@
 import pandas as pd
 import numpy as np
 
+from lexos.models.stats_model import StatsModel
+
+# ------------------------ First test suite ------------------------
 test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
-                            index=np.array([1, 2]),
+                            index=np.array([0, 1]),
                             columns=np.array(["A", "B", "C", "D"]))
+test_id_temp_table_one = {0: 'F1.txt', 1: 'F2.txt'}
+test_stats_model_one = \
+    StatsModel(test_dtm=test_dtm_one,
+               test_id_temp_label_map=test_id_temp_table_one)
+test_corpus_result = test_stats_model_one.get_corpus_result()
 
-{0: 'catCaterpillar', 1: 'DreamCH1', 2: 'Heart_of_Darkness', 3: 'OnetoTen', 4: 'War_and_Peace'}
+
 
 labels = np.array(["file_one.txt", "file_two.txt"])
 
