@@ -31,6 +31,21 @@ test_stats_model_two = \
 test_corpus_result_two = test_stats_model_two.get_corpus_result()
 test_file_result_two = test_stats_model_two.get_file_result()
 # ------------------------------------------------------------------
+# ------------------- test suite for anomaly test ------------------
+test_dtm_anomaly = pd.DataFrame(
+    data=np.array([(1, 1), (50, 50), (50, 50), (50, 50), (50, 50),
+                   (50, 50), (50, 50), (50, 50), (50, 50), (100, 100)]),
+    index=np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+    columns=np.array(["A", "B"]))
+test_id_temp_table_anomaly = \
+    {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt", 4: "F5.txt",
+     5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
+test_stats_model_anomaly = \
+    StatsModel(test_dtm=test_dtm_anomaly,
+               test_id_temp_label_map=test_id_temp_table_anomaly)
+test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_result()
+test_file_result_anomaly = test_stats_model_anomaly.get_file_result()
+# ------------------------------------------------------------------
 print("DONE")
 """
 labels = np.array(["file_one.txt", "file_two.txt"])
@@ -112,44 +127,47 @@ class TestFileResult:
         assert test_file_result_two[2].hapax == 0
 
 
-"""
+
 class TestCorpusInfo:
     def test_file_name(self):
         assert test_corpus_result_one.file_names[0] == "F1.txt"
-        assert new_corpus_info.file_names[1] == new_labels[1]
+        assert test_corpus_result_two.file_names[2] == "F3.txt"
 
     def test_average(self):
         assert test_corpus_result_one.average == 47.5
-        assert new_corpus_info.average == 47
+        assert test_corpus_result_two.average == 47
 
     def test_std(self):
         assert round(test_corpus_result_one.std_deviation, 4) == 32.5
-        assert round(new_corpus_info.std_deviation, 4) == 26.5456
+        assert round(test_corpus_result_two.std_deviation, 4) == 26.5456
 
     def test_median(self):
         assert test_corpus_result_one.median == 47.5
-        assert new_corpus_info.median == 46
+        assert test_corpus_result_two.median == 46
 
     def test_quartiles(self):
-        assert test_corpus_result_one.q1 == corpus_info.q3 == 47.5
+        assert test_corpus_result_one.q1 == test_corpus_result_one.q3 == 47.5
         assert test_corpus_result_one.iqr == 0
-        assert new_corpus_info.q1 == 30.5
-        assert new_corpus_info.q3 == 63
-        assert new_corpus_info.iqr == 32.5
+        assert test_corpus_result_two.q1 == 30.5
+        assert test_corpus_result_two.q3 == 63
+        assert test_corpus_result_two.iqr == 32.5
 
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr["F1.txt"] == "large"
-        assert new_corpus_info.anomaly_iqr == {}
+        assert test_corpus_result_one.anomaly_iqr["F2.txt"] == "small"
+
+        assert test_corpus_result_two.anomaly_iqr == {}
         assert anomaly_corpus_info.anomaly_iqr["F1.txt"] == "small"
         assert anomaly_corpus_info.anomaly_iqr["F10.txt"] == "large"
 
     def test_file_anomaly_std(self):
         assert test_corpus_result_one.anomaly_std_err == {}
-        assert new_corpus_info.anomaly_std_err == {}
+        assert test_corpus_result_two.anomaly_std_err == {}
         assert anomaly_corpus_info.anomaly_std_err["F1.txt"] == "small"
         assert anomaly_corpus_info.anomaly_std_err["F10.txt"] == "large"
 
 
+"""
 class TestSpecialCase:
     def test_empty_list(self):
         try:
