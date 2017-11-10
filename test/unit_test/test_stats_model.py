@@ -24,13 +24,14 @@ test_dtm_two = pd.DataFrame(
     index=np.array([0, 1, 2]),
     columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H",
                       "I", "J", "K", "L"]))
-test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 3: "F3.txt"}
+test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_stats_model_two = \
     StatsModel(test_dtm=test_dtm_two,
                test_id_temp_label_map=test_id_temp_table_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_result()
 test_file_result_two = test_stats_model_two.get_file_result()
 # ------------------------------------------------------------------
+print("DONE")
 """
 labels = np.array(["file_one.txt", "file_two.txt"])
 
@@ -69,14 +70,16 @@ anomaly_corpus_info = CorpusInformation(count_matrix=anomaly_matrix,
 """
 
 
-class TestFileInfo:
+class TestFileResult:
     def test_basic_info(self):
         assert test_file_result_one[0].file_name == "F1.txt"
         assert test_file_result_one[1].file_name == "F2.txt"
+        assert test_file_result_two[2].file_name == "F3.txt"
 
     def test_unique_words(self):
         assert test_file_result_one[0].num_word == 4
         assert test_file_result_one[1].num_word == 5
+        assert test_file_result_two[1].num_word == 5
 
     def test_total_words(self):
         assert test_file_result_one[0].total_word_count == 80
@@ -101,10 +104,12 @@ class TestFileInfo:
     def test_std(self):
         assert round(test_file_result_one[0].std_deviation, 4) == 12.7475
         assert round(test_file_result_one[1].std_deviation, 4) == 1.4142
+        assert round(test_file_result_two[2].std_deviation, 4) == 1.118
 
     def test_hapax(self):
         assert test_file_result_one[0].hapax == 0
         assert test_file_result_one[1].hapax == 1
+        assert test_file_result_two[2].hapax == 0
 
 
 """
