@@ -1,4 +1,4 @@
-from typing import Counter, Dict
+from typing import Counter, Dict, NamedTuple
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -12,20 +12,22 @@ from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver, \
 FileIDContentMap = Dict[int, str]
 
 
+class MatrixTestOptions(NamedTuple):
+    front_end_option: MatrixOption
+    file_id_content_map: FileIDContentMap
+
+
 class MatrixModel(BaseModel):
 
-    def __init__(self, test_matrix_option: MatrixOption = None,
-                 test_file_id_content_map: FileIDContentMap = None):
+    def __init__(self, test_options: MatrixTestOptions):
         """Class to generate and manipulate dtm.
 
-        :param test_file_id_content_map: (fake parameter)
-                                a map from file id to file contents
-        :param test_matrix_option: (fake parameter)
-                                the matrix options used for testing
+        :param test_options:
+            the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_file_id_content_map = test_file_id_content_map
-        self._test_matrix_option = test_matrix_option
+        self._test_file_id_content_map = test_options.front_end_option
+        self._test_matrix_option = test_options.file_id_content_map
 
     @property
     def _file_id_content_map(self) -> FileIDContentMap:
