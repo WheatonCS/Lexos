@@ -10,9 +10,10 @@ from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver,\
 
 
 class ContentAnalysisModel(object):
-    def __init__(self, test_option: Optional[ContentAnalysisOption]=None):
+    def __init__(self, test_options: Optional[ContentAnalysisOption]=None):
         """A model to manage the content analysis tool.
 
+        test_option:
         dictionaries: List of Dictionary objects
         corpus: List of File objects
         counters: a 2D array with count of every dictionary for evey file in
@@ -21,7 +22,7 @@ class ContentAnalysisModel(object):
         scores: List of formula/total word count of each file
         averages: Lis of averages count of each dictionary
         """
-        self._test_option = test_option
+        self._test_options = test_options
         self._dictionaries = []
         self._corpus = []
         self._counters = []
@@ -61,9 +62,11 @@ class ContentAnalysisModel(object):
     def delete_dictionary(self):
         """deletes a dictionary
 
-        :param label: label of dictionary to delete
         """
-        label = self.front_end_dict_label
+        if self._test_options is not None:
+            label = self._test_options.label
+        else:
+            label = self.front_end_dict_label
         self.dictionaries = [dictionary for dictionary in self.dictionaries
                              if dictionary.label != label]
         data = {'dictionary_labels': [],
@@ -92,6 +95,9 @@ class ContentAnalysisModel(object):
         return dictionary_labels, active_dictionaries, self._toggle_all
 
     def toggle_all_dicts(self):
+        """Activates and Deactivates all dictionaries
+
+        """
         self._toggle_all = not self._toggle_all
         dictionary_labels = []
         active_dictionaries = []
@@ -101,7 +107,7 @@ class ContentAnalysisModel(object):
             active_dictionaries.append(self._toggle_all)
         return dictionary_labels, active_dictionaries, self._toggle_all
 
-    def test(self):
+    def get_contents(self):
         dictionary_labels = []
         active_dictionaries = []
         self._toggle_all = False
@@ -272,7 +278,10 @@ class ContentAnalysisModel(object):
         return False
 
     def save_formula(self):
-        formula = self.front_end_formula
+        if self._test_options is not None:
+            formula = self._test_options.formula
+        else:
+            formula = self.front_end_formula
         if len(formula) == 0:
             self._formula = "0"
         else:
@@ -343,9 +352,11 @@ class ContentAnalysisModel(object):
 
     @property
     def _content_analysis_option(self) -> ContentAnalysisOption:
-
-        return self._test_option if self._test_option is not None \
-            else ContentAnalysisReceiver().options_from_front_end()
+        if self._test_options is not None:
+            if self._test_options.formula is not None:
+                self.save_formula()
+            return self._test_options
+        return ContentAnalysisReceiver().options_from_front_end()
 
     @property
     def front_end_formula(self):
@@ -362,6 +373,14 @@ class ContentAnalysisModel(object):
     @property
     def toggle_all(self):
         return self._toggle_all
+
+    @property
+    def test_option(self):
+        return self._test_options
+
+    @test_option.setter
+    def test_option(self, options):
+        self._test_options = options
 
 
 class Document(object):

@@ -35,7 +35,7 @@ def content_analysis():
                                 label=file.label,
                                 content=file.load_contents())
     if request.method == 'GET':
-        dictionary_labels, active_dictionaries, toggle_all = analysis.test()
+        dictionary_labels, active_dictionaries, toggle_all = analysis.get_contents()
         return render_template('contentanalysis.html',
                                dictionary_labels=dictionary_labels,
                                active_dictionaries=active_dictionaries,
