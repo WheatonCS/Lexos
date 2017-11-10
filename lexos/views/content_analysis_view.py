@@ -25,7 +25,7 @@ def content_analysis():
     """
     global analysis
     if analysis is None or 'content_analysis' not in session:
-        analysis = ContentAnalysisModel(test_option=None)
+        analysis = ContentAnalysisModel()
         session['content_analysis'] = True
     elif len(analysis.corpus) == 0:
         file_manager = load_file_manager()
@@ -71,7 +71,7 @@ def upload_dictionaries():
     :return: a json object.
     """
     global analysis
-    analysis = ContentAnalysisModel(test_option=None)
+    analysis = ContentAnalysisModel()
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
             'formula': "",

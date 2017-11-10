@@ -10,7 +10,7 @@ from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver,\
 
 
 class ContentAnalysisModel(object):
-    def __init__(self, test_option: Optional[ContentAnalysisOption]):
+    def __init__(self, test_option: Optional[ContentAnalysisOption]=None):
         """A model to manage the content analysis tool.
 
         dictionaries: List of Dictionary objects
