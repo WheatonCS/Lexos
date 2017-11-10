@@ -127,7 +127,6 @@ class TestFileResult:
         assert test_file_result_two[2].hapax == 0
 
 
-
 class TestCorpusInfo:
     def test_file_name(self):
         assert test_corpus_result_one.file_names[0] == "F1.txt"
@@ -155,16 +154,15 @@ class TestCorpusInfo:
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr["F1.txt"] == "large"
         assert test_corpus_result_one.anomaly_iqr["F2.txt"] == "small"
-
         assert test_corpus_result_two.anomaly_iqr == {}
-        assert anomaly_corpus_info.anomaly_iqr["F1.txt"] == "small"
-        assert anomaly_corpus_info.anomaly_iqr["F10.txt"] == "large"
+        assert test_corpus_result_anomaly.anomaly_iqr["F1.txt"] == "small"
+        assert test_corpus_result_anomaly.anomaly_iqr["F10.txt"] == "large"
 
     def test_file_anomaly_std(self):
         assert test_corpus_result_one.anomaly_std_err == {}
         assert test_corpus_result_two.anomaly_std_err == {}
-        assert anomaly_corpus_info.anomaly_std_err["F1.txt"] == "small"
-        assert anomaly_corpus_info.anomaly_std_err["F10.txt"] == "large"
+        assert test_corpus_result_anomaly.anomaly_std_err["F1.txt"] == "small"
+        assert test_corpus_result_anomaly.anomaly_std_err["F10.txt"] == "large"
 
 
 """
