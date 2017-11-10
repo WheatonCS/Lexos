@@ -34,7 +34,7 @@ class MatrixModel(BaseModel):
         :return: a file manager object
         """
         return self._test_file_id_content_map \
-            if self._test_file_id_content_map \
+            if self._test_file_id_content_map is not None \
             else FileManagerModel().load_file_manager() \
             .get_content_of_active_with_id()
 
@@ -44,7 +44,8 @@ class MatrixModel(BaseModel):
 
         :return: either a frontend option or a fake option used for testing
         """
-        return self._test_matrix_option if self._test_matrix_option \
+        return self._test_matrix_option \
+            if self._test_matrix_option is not None \
             else MatrixReceiver().options_from_front_end()
 
     def get_temp_label(self) -> Counter[str]:
