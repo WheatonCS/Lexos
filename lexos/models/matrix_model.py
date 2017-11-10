@@ -1,39 +1,42 @@
-from typing import Counter
+from typing import Counter, Dict
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
-from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver, \
     IdTempLabelMap
 
+FileIDContentMap = Dict[int, str]
+
 
 class MatrixModel(BaseModel):
 
     def __init__(self, test_matrix_option: MatrixOption = None,
-                 test_file_manager: FileManager = None):
+                 test_file_id_content_map: FileIDContentMap = None):
         """Class to generate and manipulate dtm.
 
-        :param test_file_manager: (fake parameter)
-                                the file manger used for testing
+        :param test_file_id_content_map: (fake parameter)
+                                a map from file id to file contents
         :param test_matrix_option: (fake parameter)
                                 the matrix options used for testing
         """
         super().__init__()
-        self._test_file_manager = test_file_manager
+        self._test_file_id_content_map = test_file_id_content_map
         self._test_matrix_option = test_matrix_option
 
     @property
-    def _file_manager(self) -> FileManager:
+    def _file_id_content_map(self) -> FileIDContentMap:
         """Result form higher level class: the file manager of current session.
 
         :return: a file manager object
         """
-        return self._test_file_manager if self._test_file_manager \
-            else FileManagerModel().load_file_manager()
+        return self._test_file_id_content_map \
+            if self._test_file_id_content_map \
+            else FileManagerModel().load_file_manager() \
+            .get_content_of_active_with_id()
 
     @property
     def _opts(self) -> MatrixOption:
@@ -60,8 +63,7 @@ class MatrixModel(BaseModel):
                 - the index header is the file id
                 - the row header is the words in the file
         """
-        all_contents_with_id = \
-            self._file_manager.get_content_of_active_with_id()
+        all_contents_with_id = self._file_id_content_map
 
         # a pair of parallel array
         file_ids = all_contents_with_id.keys()
