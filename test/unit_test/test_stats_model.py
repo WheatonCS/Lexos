@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
 from lexos.models.stats_model import StatsModel
 
 # ------------------------ First test suite ------------------------
@@ -45,6 +46,15 @@ test_stats_model_anomaly = \
                test_id_temp_label_map=test_id_temp_table_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_result()
 test_file_result_anomaly = test_stats_model_anomaly.get_file_result()
+# ------------------------------------------------------------------
+# -------------------- Special case test suite ---------------------
+test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
+                                index=np.array([0, 1, 2]),
+                                columns=np.array(["A", "B"]))
+test_id_temp_table_special = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
+test_stats_model_special = StatsModel(
+    test_dtm=test_dtm_special,
+    test_id_temp_label_map=test_id_temp_table_special)
 # ------------------------------------------------------------------
 print("DONE")
 """
@@ -165,45 +175,16 @@ class TestCorpusInfo:
         assert test_corpus_result_anomaly.anomaly_std_err["F10.txt"] == "large"
 
 
-"""
 class TestSpecialCase:
     def test_empty_list(self):
         try:
-            _ = CorpusInformation(count_matrix=count_matrix,
-                                  labels=empty_labels)
+            _ = test_stats_model_special.get_file_result()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
-            _ = CorpusInformation(count_matrix=empty_matrix,
-                                  labels=labels)
+            _ = test_stats_model_special.get_corpus_result()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
-
-        try:
-            _ = FileInformation(count_list=empty_file_matrix[1, :],
-                                file_name=labels[1])
-            raise AssertionError("Empty input error message did not raise")
-        except AssertionError as error:
-            assert str(error) == EMPTY_LIST_MESSAGE
-
-        try:
-            _ = FileInformation(count_list=count_matrix[0, :],
-                                file_name=empty_file_label[0])
-            raise AssertionError("Empty input error message did not raise")
-        except AssertionError as error:
-            assert str(error) == EMPTY_LIST_MESSAGE
-
-    def test_empty_file(self):
-        assert empty_corpus_info.average == 20
-        assert round(empty_corpus_info.std_deviation, 4) == 20
-        assert empty_corpus_info.q1 == empty_corpus_info.q3 == \
-            empty_corpus_info.median == 20
-
-    def test_empty_file_anomaly(self):
-        assert empty_corpus_info.anomaly_iqr["file_one.txt"] == "large"
-        assert empty_corpus_info.anomaly_iqr["file_two.txt"] == "small"
-        assert empty_corpus_info.anomaly_std_err == {}
-"""
