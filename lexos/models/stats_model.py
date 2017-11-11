@@ -70,6 +70,8 @@ class StatsModel(BaseModel):
 
     def _get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
+        assert self._doc_term_matrix, EMPTY_LIST_MESSAGE
+
         # initialize
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
