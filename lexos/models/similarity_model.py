@@ -68,17 +68,19 @@ class SimilarityModel(BaseModel):
         dist = 1 - cosine_similarity(self._doc_term_matrix.values)
 
         # get an array of file index in file manager files
-        num_row = len(self._doc_term_matrix.index)
-        other_file_indexes = np.asarray([file_index for file_index in range(
-            num_row) if file_index != self._similarity_option.comp_file_id])
+        other_file_indexes = np.where(self._doc_term_matrix.index !=
+                                      self._similarity_option.comp_file_id)[0]
+        select_file_indexes = np.where(self._doc_term_matrix.index ==
+                                       self._similarity_option.comp_file_id)[0]
 
         # construct an array of scores
         docs_score_array = np.asarray(
-            [dist[file_index, self._similarity_option.comp_file_id]
+            [dist[file_index, select_file_indexes]
              for file_index in other_file_indexes])
+
         # construct an array of names
-        docs_name_array = np.asarray([temp_labels[i]
-                                     for i in other_file_indexes])
+        docs_name_array = np.asarray([labels[i]
+                                     for i in list(other_file_indexes)])
 
         # sort the score array
         sorted_score_array = np.sort(docs_score_array)
