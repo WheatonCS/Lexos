@@ -70,8 +70,8 @@ class StatsModel(BaseModel):
 
     def _get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
-        assert self._doc_term_matrix, EMPTY_LIST_MESSAGE
-
+        assert np.sum(self._doc_term_matrix.values.size) > 0, \
+            EMPTY_LIST_MESSAGE
         # initialize
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
@@ -123,8 +123,7 @@ class StatsModel(BaseModel):
         :param count_list: a list contains words count of a particular file.
         :param file_name: the file name of that file.
         """
-        assert count_list.size > 0, EMPTY_LIST_MESSAGE
-
+        assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
         # initialize remove all zeros from count_list
         nonzero_count_list = count_list[count_list != 0]
         num_word = np.size(nonzero_count_list)
