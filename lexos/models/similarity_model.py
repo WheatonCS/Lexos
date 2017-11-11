@@ -6,33 +6,45 @@ from sklearn.metrics.pairwise import cosine_similarity
 from lexos.models.base_model import BaseModel
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.receivers.similarity_receiver import SimilarityOption, \
     SimilarityReceiver
 
 
 class SimilarityModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[SimilarityOption] = None):
+                 test_option: Optional[SimilarityOption] = None,
+                 test_id_temp_label_map: Optional[IdTempLabelMap] = None):
         """This is the class to generate similarity.
 
         :param test_dtm: (fake parameter)
-                    the doc term matrix used of testing
+                         the doc term matrix used for testing.
         :param test_option: (fake parameter)
-                    the similarity used for testing
+                            the similarity option used for testing.
+        :param test_id_temp_label_map: (fake parameter)
+                                       the id temp label map used for testing.
         """
         super().__init__()
         self._test_dtm = test_dtm
         self._test_option = test_option
+        self._test_id_temp_label_map = test_id_temp_label_map
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-
+        """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
-    def _similarity_option(self) -> SimilarityOption:
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_temp_label_id_map()
 
+    @property
+    def _similarity_option(self) -> SimilarityOption:
+        """:return: the similarity option."""
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()
 
