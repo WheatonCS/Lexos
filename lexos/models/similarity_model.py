@@ -60,11 +60,12 @@ class SimilarityModel(BaseModel):
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
 
-        temp_labels = np.array(self._doc_term_matrix.index)
-        final_matrix = self._doc_term_matrix.values
+        # get labels
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
         # get cosine_similarity
-        dist = 1 - cosine_similarity(final_matrix)
+        dist = 1 - cosine_similarity(self._doc_term_matrix.values)
 
         # get an array of file index in file manager files
         num_row = len(self._doc_term_matrix.index)
