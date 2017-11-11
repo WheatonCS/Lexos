@@ -17,6 +17,7 @@ test_stats_model_one = \
 test_corpus_result_one = test_stats_model_one.get_corpus_result()
 test_file_result_one = test_stats_model_one.get_file_result()
 # ------------------------------------------------------------------
+
 # ------------------------ Second test suite -----------------------
 test_dtm_two = pd.DataFrame(
     data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -32,6 +33,7 @@ test_stats_model_two = \
 test_corpus_result_two = test_stats_model_two.get_corpus_result()
 test_file_result_two = test_stats_model_two.get_file_result()
 # ------------------------------------------------------------------
+
 # ------------------- test suite for anomaly test ------------------
 test_dtm_anomaly = pd.DataFrame(
     data=np.array([(1, 1), (50, 50), (50, 50), (50, 50), (50, 50),
@@ -47,6 +49,7 @@ test_stats_model_anomaly = \
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_result()
 test_file_result_anomaly = test_stats_model_anomaly.get_file_result()
 # ------------------------------------------------------------------
+
 # -------------------- Special case test suite ---------------------
 test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
                                 index=np.array([0, 1, 2]),
@@ -56,43 +59,6 @@ test_stats_model_special = StatsModel(
     test_dtm=test_dtm_special,
     test_id_temp_label_map=test_id_temp_table_special)
 # ------------------------------------------------------------------
-print("DONE")
-"""
-labels = np.array(["file_one.txt", "file_two.txt"])
-
-# Create file info list to test
-file_info_list = []
-for count, label in enumerate(labels):
-    file_info_list.append(FileInformation(count_list=count_matrix[count, :],
-                                          file_name=label))
-
-# Create a corpus info dict to test
-corpus_info = CorpusInformation(count_matrix=count_matrix, labels=labels)
-
-# Create another corpus info dict to test
-new_count_matrix = np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0, 0, 0, 0),
-                             (0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0),
-                             (0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 13)])
-new_labels = np.array(["F1.txt", "F2.txt", "F3.txt"])
-new_corpus_info = CorpusInformation(count_matrix=new_count_matrix,
-                                    labels=new_labels)
-
-# Create corpus that contains empty file
-empty_labels = np.array([])
-empty_matrix = np.array([])
-empty_file_matrix = np.array([(40, 0), (0, 0)])
-empty_file_label = np.array(["", "F1.txt"])
-empty_corpus_info = CorpusInformation(count_matrix=empty_file_matrix,
-                                      labels=labels)
-
-# Create special corpus for anomaly test
-anomaly_matrix = np.array([(1, 1), (50, 50), (50, 50), (50, 50), (50, 50),
-                           (50, 50), (50, 50), (50, 50), (50, 50), (100, 100)])
-anomaly_labels = np.array(["F1.txt", "F2.txt", "F3.txt", "F4.txt", "F5.txt",
-                           "F6.txt", "F7.txt", "F8.txt", "F9.txt", "F10.txt"])
-anomaly_corpus_info = CorpusInformation(count_matrix=anomaly_matrix,
-                                        labels=anomaly_labels)
-"""
 
 
 class TestFileResult:
