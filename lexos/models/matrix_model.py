@@ -26,8 +26,8 @@ class MatrixModel(BaseModel):
             the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_file_id_content_map = test_options.front_end_option
-        self._test_matrix_option = test_options.file_id_content_map
+        self._test_file_id_content_map = test_options.file_id_content_map
+        self._test_front_end_option = test_options.front_end_option
 
     @property
     def _file_id_content_map(self) -> FileIDContentMap:
@@ -46,8 +46,8 @@ class MatrixModel(BaseModel):
 
         :return: either a frontend option or a fake option used for testing
         """
-        return self._test_matrix_option \
-            if self._test_matrix_option is not None \
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else MatrixReceiver().options_from_front_end()
 
     def get_temp_label(self) -> Counter[str]:
