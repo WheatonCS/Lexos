@@ -60,44 +60,32 @@ class SimilarityModel(BaseModel):
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
 
-        # get labels
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
         # get cosine_similarity
         dist = 1 - cosine_similarity(self._doc_term_matrix.values)
 
-        # get an array of file index in file manager files
-        other_file_indexes = np.where(self._doc_term_matrix.index !=
-                                      self._similarity_option.comp_file_id)[0]
-        select_file_indexes = np.where(self._doc_term_matrix.index ==
-                                       self._similarity_option.comp_file_id)[0]
+        # get index of selected file in the DTM
+        selected_index = np.where(self._doc_term_matrix.index ==
+                                  self._similarity_option.comp_file_id)[0][0]
+
+        # get an array of compared file indexes
+        other_indexes = np.where(self._doc_term_matrix.index !=
+                                 self._similarity_option.comp_file_id)[0]
 
         # construct an array of scores
-        Test = [dist[file_index, select_file_indexes]
-             for file_index in other_file_indexes]
-        docs_score_array = np.asarray(
-            [dist[file_index, select_file_indexes]
-             for file_index in other_file_indexes])
+        docs_score_array = np.asarray([dist[file_index, selected_index]
+                                       for file_index in other_indexes])
 
         # construct an array of names
-        compared_file_label = np.asarray(
+        compared_file_labels = np.asarray(
             [self._id_temp_label_map[file_id]
              for file_id in self._doc_term_matrix.index.values
              if file_id != self._similarity_option.comp_file_id])
-        docs_name_array = np.asarray([labels[i]
-                                     for i in list(other_file_indexes)])
 
-        # sort the score array
-        sorted_score_array = np.sort(docs_score_array)
+        # sort and round the score array
+        final_score_array = np.round(np.sort(docs_score_array), decimals=4)
 
-        # round the score array to 4 decimals
-        final_score_array = np.round(sorted_score_array, decimals=4)
-
-        # sort the name array in terms of the score array
-        sorted_score_array_index = docs_score_array.argsort()
-        final_name_array = docs_name_array[sorted_score_array_index]
-        sorted_compared_file_label = compared_file_label[sorted_score_array_index]
+        # sort the name array to correctly map the score array
+        final_name_array = compared_file_labels[docs_score_array.argsort()]
 
         # pack the scores and names in data_frame
         score_name_data_frame = pd.DataFrame(final_score_array,
@@ -106,5 +94,4 @@ class SimilarityModel(BaseModel):
         return score_name_data_frame
 
     def get_similarity_score(self) -> pd.DataFrame:
-
         return self._similarity_maker()
