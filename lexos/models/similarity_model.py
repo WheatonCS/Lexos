@@ -74,11 +74,17 @@ class SimilarityModel(BaseModel):
                                        self._similarity_option.comp_file_id)[0]
 
         # construct an array of scores
+        Test = [dist[file_index, select_file_indexes]
+             for file_index in other_file_indexes]
         docs_score_array = np.asarray(
             [dist[file_index, select_file_indexes]
              for file_index in other_file_indexes])
 
         # construct an array of names
+        compared_file_label = np.asarray(
+            [self._id_temp_label_map[file_id]
+             for file_id in self._doc_term_matrix.index.values
+             if file_id != self._similarity_option.comp_file_id])
         docs_name_array = np.asarray([labels[i]
                                      for i in list(other_file_indexes)])
 
@@ -91,6 +97,7 @@ class SimilarityModel(BaseModel):
         # sort the name array in terms of the score array
         sorted_score_array_index = docs_score_array.argsort()
         final_name_array = docs_name_array[sorted_score_array_index]
+        sorted_compared_file_label = compared_file_label[sorted_score_array_index]
 
         # pack the scores and names in data_frame
         score_name_data_frame = pd.DataFrame(final_score_array,
