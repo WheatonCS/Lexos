@@ -176,12 +176,13 @@ class FileManager:
 
         return previews
 
-    def get_content_of_active(self) -> List[str]:
+    def get_content_of_active_with_id(self) -> Dict[int, str]:
         """Helper method to get_matrix.
 
         :return: get all the file content from the file_manager
         """
-        return [file.load_contents() for file in self.get_active_files()]
+        return {file.id: file.load_contents()
+                for file in self.get_active_files()}
 
     def get_content_of_active_with_id(self) -> Dict[int, str]:
         """Gets the contents and IDs of all active files.
