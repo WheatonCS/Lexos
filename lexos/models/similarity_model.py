@@ -134,4 +134,8 @@ class SimilarityModel(BaseModel):
             out_file.write("Selected Comparison Document: " + delimiter +
                            selected_file_name + '\n')
 
+        # append the pandas data frame to the file
+        with open(out_file_path, 'a') as f:
+            self._similarity_maker().to_csv(f)
 
+        return out_file_path
