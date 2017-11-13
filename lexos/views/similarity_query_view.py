@@ -49,23 +49,16 @@ def similarity():
     if 'gen-sims' in request.form:
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        score_name_data_frame = SimilarityModel().get_similarity_score()
-
-        docs_score = np.concatenate(score_name_data_frame.values)
-        docs_name = np.array(score_name_data_frame.index)
-
-        docs_list_score = '***'.join(str(score) for score in docs_score) \
-                          + '***'
-        docs_list_name = '***'.join(name for name in docs_name) + '***'
-
+        docs_score = SimilarityModel().get_similarity_score()
+        docs_label = SimilarityModel().get_similarity_label()
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
         return render_template(
             'similarity.html',
             labels=labels,
             encodedLabels=encoded_labels,
-            docsListScore=docs_list_score,
-            docsListName=docs_list_name,
+            docsListScore=docs_score,
+            docsListName=docs_label,
             similaritiesgenerated=True,
             itm="similarity-query",
             numActiveDocs=num_active_docs)
