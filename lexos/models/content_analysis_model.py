@@ -358,7 +358,7 @@ class ContentAnalysisModel(object):
                  data, dictionary containing the result html table, dictionary
                  labels, active dictionaries, errors
         """
-        self.count_words()#---------------------------------------------------------
+        self.count_words()
         if self.is_secure():
             data = {"result_table": "",
                     "dictionary_labels": [],
