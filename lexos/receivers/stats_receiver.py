@@ -8,4 +8,4 @@ class StatsReceiver(BaseReceiver):
 
     def options_from_front_end(self):
         """So far there is no frontend option for statistics analysis"""
-        pass
+        raise NotImplementedError
