@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 import pandas as pd
 import plotly.figure_factory as ff
@@ -19,7 +19,7 @@ class DendroTestOptions(NamedTuple):
 
 
 class DendrogramModel(BaseModel):
-    def __init__(self, test_options: DendroTestOptions):
+    def __init__(self, test_options: Optional[DendroTestOptions] = None):
         """This is the class to generate dendrogram.
 
         :param test_options:
