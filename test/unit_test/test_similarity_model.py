@@ -6,6 +6,7 @@ from lexos.receivers.similarity_receiver import SimilarityOption
 
 
 # --------------------- test with similarity equals one --------------------
+# noinspection PyProtectedMember
 def test_with_similarity_equal_one():
     test_dtm = pd.DataFrame([[0.0, 0.0, 9.0, 9.0, 0.0, 0.0, 5.0, 4.0, 0.0, 9.0,
                               0.0, 0.0, 0.0, 0.0, 0.0, 9.0, 0.0, 0.0, 0.0],
@@ -24,14 +25,15 @@ def test_with_similarity_equal_one():
             id_temp_label_map=test_id_table
         )
     )
-    scores = similarity_model.get_similarity_score()
-    labels = similarity_model.get_similarity_label()
-    assert scores == "1.0***1.0***"
-    assert labels == "F1.txt***F2.txt***"
+    pd.testing.assert_series_equal(
+        similarity_model._similarity_maker(),
+        pd.Series([1., 1.], index=["F1.txt", "F2.txt"])
+    )
 # --------------------------------------------------------------------------
 
 
 # --------------------- test with all same content -------------------------
+# noinspection PyProtectedMember
 def test_with_all_same_content_file():
     test_dtm = pd.DataFrame([[9.0, 9.0, 5.0, 4.0, 0.0, 9.0, 9.0],
                              [9.0, 9.0, 5.0, 4.0, 0.0, 9.0, 9.0],
@@ -46,14 +48,15 @@ def test_with_all_same_content_file():
             id_temp_label_map=test_id_table
         )
     )
-    scores = similarity_model.get_similarity_score()
-    labels = similarity_model.get_similarity_label()
-    assert scores == "0.0***0.0***"
-    assert labels == "F1.txt***F3.txt***"
+    pd.testing.assert_series_equal(
+        similarity_model._similarity_maker(),
+        pd.Series([0., 0.], index=["F1.txt", "F3.txt"])
+    )
 # --------------------------------------------------------------------------
 
 
 # --------------------- test with with two dimension -----------------------
+# noinspection PyProtectedMember
 def test_with_two_dimension():
     test_dtm = pd.DataFrame([[0.0, 1.0], [1.0, 2.0], [2.0, 1.0]],
                             index=[0, 1, 2])
@@ -66,14 +69,16 @@ def test_with_two_dimension():
             id_temp_label_map=test_id_table
         )
     )
-    scores = similarity_model.get_similarity_score()
-    labels = similarity_model.get_similarity_label()
-    assert scores == "0.1056***0.5528***"
-    assert labels == "F2.txt***F3.txt***"
+    # assertion
+    pd.testing.assert_series_equal(
+        similarity_model._similarity_maker(),
+        pd.Series([.105572809, .5527864045], index=["F2.txt", "F3.txt"])
+    )
 # --------------------------------------------------------------------------
 
 
 # --------------------- test with with three dimension ---------------------
+# noinspection PyProtectedMember
 def test_with_three_dimension():
     test_dtm = pd.DataFrame([[1.0, 1.0, 1.0], [1.0, 0.0, 0.0],
                              [0.0, 2.0, 1.0]],
@@ -87,10 +92,11 @@ def test_with_three_dimension():
             id_temp_label_map=test_id_table
         )
     )
-    scores = similarity_model.get_similarity_score()
-    labels = similarity_model.get_similarity_label()
-    assert scores == "0.4226***1.0***"
-    assert labels == "F1.txt***F3.txt***"
+    # assertion
+    pd.testing.assert_series_equal(
+        similarity_model._similarity_maker(),
+        pd.Series([.42264973081, 1.], index=["F1.txt", "F3.txt"])
+    )
 # --------------------------------------------------------------------------
 
 
