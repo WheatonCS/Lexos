@@ -66,15 +66,12 @@ class SimilarityModel(BaseModel):
         # get index of selected file in the DTM
         selected_index = np.where(self._doc_term_matrix.index ==
                                   self._similarity_option.comp_file_id)[0][0]
-
         # get an array of compared file indexes
         other_indexes = np.where(self._doc_term_matrix.index !=
                                  self._similarity_option.comp_file_id)[0]
-
         # construct an array of scores
         docs_score_array = np.asarray([dist[file_index, selected_index]
                                        for file_index in other_indexes])
-
         # construct an array of names
         compared_file_labels = np.asarray(
             [self._id_temp_label_map[file_id]
@@ -83,7 +80,6 @@ class SimilarityModel(BaseModel):
 
         # sort and round the score array
         final_score_array = np.round(np.sort(docs_score_array), decimals=4)
-
         # sort the name array to correctly map the score array
         final_name_array = compared_file_labels[docs_score_array.argsort()]
 
@@ -93,5 +89,16 @@ class SimilarityModel(BaseModel):
                                              columns=["Cosine similarity"])
         return score_name_data_frame
 
-    def get_similarity_score(self) -> pd.DataFrame:
-        return self._similarity_maker()
+    def get_similarity_score(self) -> str:
+        """This function returns similarity scores as a string"""
+        scores = np.concatenate(self._similarity_maker().values)
+        scores_list = '***'.join(str(score) for score in scores) + '***'
+
+        return scores_list
+
+    def get_similarity_label(self) -> str:
+        """This function returns similarity compared labels as a string"""
+        labels = np.array(self._similarity_maker().index)
+        labels_list = '***'.join(name for name in labels) + '***'
+
+        return labels_list
