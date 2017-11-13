@@ -5,22 +5,21 @@ from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.processors.analyze.similarity import similarity_maker
 
 
+# --------------------- test with similarity equals one --------------------
+from lexos.receivers.similarity_receiver import SimilarityOption
 
+test_dtm = pd.DataFrame([[0.0, 0.0, 9.0, 9.0, 0.0, 0.0, 5.0, 4.0,0.0, 9.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 9.0, 0.0, 0.0, 0.0],
+                         [0.0, 0.0, 9.0, 9.0, 0.0, 0.0, 0.0, 4.0,5.0, 9.0, 0.0,
+                          0.0, 0.0, 0.0, 0.0, 9.0, 0.0, 0.0, 0.0],
+                         [5.0, 10.0, 0.0, 0.0, 10.0, 5.0, 0.0, 0.0, 0.0, 0.0,
+                          10.0, 5.0, 5.0, 5.0, 5.0, 0.0, 5.0, 5.0, 5.0]],
+                        index=["F1", "F2", "F3"])
+SimilarityOption.comp_file_id = 3
 
-
-class TestSimilarity:
+# --------------------------------------------------------------------------
     def test_with_similarity_equals_one(self):
-        dtm_data_frame = pd.DataFrame([[0.0, 0.0, 9.0, 9.0, 0.0, 0.0, 5.0, 4.0,
-                                        0.0, 9.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9.0,
-                                        0.0, 0.0, 0.0],
-                                       [0.0, 0.0, 9.0, 9.0, 0.0, 0.0, 0.0, 4.0,
-                                        5.0, 9.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9.0,
-                                        0.0, 0.0, 0.0],
-                                       [5.0, 10.0, 0.0, 0.0, 10.0, 5.0, 0.0,
-                                        0.0, 0.0, 0.0, 10.0, 5.0, 5.0, 5.0,
-                                        5.0, 0.0, 5.0, 5.0, 5.0]],
-                                      index=['catBobcat', 'catCaterpillar',
-                                             'wake'])
+
         comp_file_index = 2
         assert_frame_equal(similarity_maker(dtm_data_frame, comp_file_index),
                            pd.DataFrame([[1.0], [1.0]],
