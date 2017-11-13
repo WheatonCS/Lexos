@@ -37,7 +37,7 @@ class TestsBasic:
         basic_fig = self.model._get_dendrogram_fig()
         np.testing.assert_equal(
             basic_fig['layout']['yaxis']['ticktext'],
-            np.array(['I look so good!', 'this is a test', 'Cheng is handsome'])
+            ['I look so good!', 'this is a test', 'Cheng is handsome']
         )
         np.testing.assert_allclose(
             basic_fig['data'][0]['x'], [0., 5., 5., 0.]
