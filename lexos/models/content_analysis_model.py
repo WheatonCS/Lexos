@@ -107,7 +107,16 @@ class ContentAnalysisModel(object):
             active_dictionaries.append(self._toggle_all)
         return dictionary_labels, active_dictionaries, self._toggle_all
 
-    def get_contents(self):
+    def get_contents(self) -> [list, list, bool]:#--------------------------------------
+        """
+
+        :return:
+        dictionary_labels: list congaing a dictionary labels
+        active_dictionaries: list of booleans indicating which
+        dictionaries are active
+        _toggle_all: boolean that represents the status of the
+        check all dictionaries checkbox
+        """
         dictionary_labels = []
         active_dictionaries = []
         self._toggle_all = False
@@ -129,6 +138,10 @@ class ContentAnalysisModel(object):
                 if dictionary.active]
 
     def detect_active_dicts(self) -> int:
+        """
+
+        :return: number of active dictionaries
+        """
         return len(self.get_active_dicts())
 
     def count_words(self):
@@ -227,14 +240,22 @@ class ContentAnalysisModel(object):
         self._averages.append(scores_avg)
 
     def join_active_dicts(self) -> list:
+        """
+
+        :return: list of phrases contained in the active dictionaries
+        """
         active_dicts = self.get_active_dicts()
-        dictionaries = [Phrase(content=phrase, label=dictionary.label)
+        dictionaries = [Phrase(content=phrase, dict_label=dictionary.label)
                         for dictionary in active_dicts
                         for phrase in dictionary.content]
         dictionaries.sort(key=lambda x: len(x.content.split()), reverse=True)
         return dictionaries
 
     def to_html(self) -> str:
+        """
+
+        :return: dataframe table in html
+        """
         df = self.to_data_frame()
         html = df.to_html(classes="table table-striped table-bordered",
                           index=False)
@@ -265,6 +286,10 @@ class ContentAnalysisModel(object):
         return df
 
     def is_secure(self):
+        """Checks if the formula is secure
+
+        :return: True if secure, false if not secure
+        """
         formula = self._formula
         allowed_input = ["[" + dictionary.label + "]" for
                          dictionary in self.get_active_dicts()] + \
@@ -278,10 +303,13 @@ class ContentAnalysisModel(object):
         return False
 
     def save_formula(self):
+        """saves the formula from the front-end in the class member
+        _formula
+        """
         if self._test_options is not None:
             formula = self._test_options.formula
         else:
-            formula = self.front_end_formula
+            formula = self._content_analysis_option.formula  # self.front_end_formula
         if len(formula) == 0:
             self._formula = "0"
         else:
@@ -289,6 +317,10 @@ class ContentAnalysisModel(object):
             self._formula = formula
 
     def check_formula(self):
+        """Checks if there are any errors in the formula
+
+        :return: error message if there is an error, 0 if there is no errors
+        """
         error_msg = "Formula errors:<br>"
         is_error = False
         if self._formula.count("(") != self._formula.count(")"):
@@ -311,7 +343,15 @@ class ContentAnalysisModel(object):
         return 0
 
     def analyze(self):
-        self.count_words()
+        """Calls all the functions needed to generate the final html table
+        containing all word/phrase counts and formula results for each file in
+        the corpus
+
+        :return: 0 if the formula is not secure.
+                 data, dictionary containing the result html table, dictionary
+                 labels, active dictionaries, errors
+        """
+        self.count_words()#---------------------------------------------------------
         if self.is_secure():
             data = {"result_table": "",
                     "dictionary_labels": [],
@@ -352,6 +392,9 @@ class ContentAnalysisModel(object):
 
     @property
     def _content_analysis_option(self) -> ContentAnalysisOption:
+        """
+        :return: front-end or test options
+        """
         if self._test_options is not None:
             if self._test_options.formula is not None:
                 self.save_formula()
@@ -476,7 +519,13 @@ class File(Document):
 
 
 class Phrase(object):
-    def __init__(self, content: str, label: str, count: int=0):
+    def __init__(self, content: str, dict_label: str, count: int=0):
+        """
+
+        :param content: the phrase or word
+        :param dict_label: label of dictionary it belongs to
+        :param count: how many times it apears in a file
+        """
         self.content = content
-        self.label = label
+        self.dict_label = dict_label
         self.count = count
