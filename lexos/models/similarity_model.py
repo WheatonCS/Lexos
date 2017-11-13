@@ -110,8 +110,7 @@ class SimilarityModel(BaseModel):
 
     def _generate_sims_csv(self):
         delimiter = ','
-        selected_file_name = self._id_temp_label_map[
-            self._similarity_option.comp_file_id]
+        selected_file_name = self._id_temp_label_map[self._similarity_option.comp_file_id]
 
         # get the path of the folder to save result
         folder_path = path_join(SessionReceiver().get_session_folder(),
@@ -125,4 +124,14 @@ class SimilarityModel(BaseModel):
         # write the header to the file
         with open(out_file_path, 'w') as out_file:
             out_file.write("Similarity Rankings:" + '\n')
+
+            out_file.write(
+                "The rankings are determined by 'distance between documents' "
+                "where small distances (near zero) represent documents that "
+                "are 'similar' and unlike documents have distances closer to "
+                "one.\n")
+
+            out_file.write("Selected Comparison Document: " + delimiter +
+                           selected_file_name + '\n')
+
 
