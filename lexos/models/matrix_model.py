@@ -255,7 +255,7 @@ class MatrixModel(BaseModel):
             dtm data frame with only the most frequent words
         """
 
-        # get the top index of the sum of each row
+        # get the word count of each word in the corpus (a panda series)
         corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
         # sort the word list
