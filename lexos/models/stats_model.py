@@ -41,7 +41,6 @@ class FileInfo(NamedTuple):
 
 class StatsModel(BaseModel):
     def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option=None,
                  test_id_temp_label_map: Optional[IdTempLabelMap] = None):
         """This is the class to generate statistics of the input file.
 
@@ -52,7 +51,6 @@ class StatsModel(BaseModel):
         """
         super().__init__()
         self._test_dtm = test_dtm
-        self._test_option = test_option
         self._test_id_temp_label_map = test_id_temp_label_map
 
     @property
@@ -154,14 +152,11 @@ class StatsModel(BaseModel):
     def _get_each_file_result(self) -> List[FileInfo]:
         """Find statistics of all files and put each result into a list."""
 
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
         file_info_list = \
             [self._get_file_info(
-                count_list=self._doc_term_matrix.values[index, :],
-                file_name=label)
-             for index, label in enumerate(labels)]
+                count_list=self._doc_term_matrix[file_id].values,
+                file_name=temp_label)
+             for file_id, temp_label in self._id_temp_label_map.items()]
         return file_info_list
 
     def get_corpus_result(self) -> CorpusInfo:
