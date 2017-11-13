@@ -1,5 +1,4 @@
 import pandas as pd
-
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.similarity_model import SimilarityModel
 from lexos.receivers.similarity_receiver import SimilarityOption
