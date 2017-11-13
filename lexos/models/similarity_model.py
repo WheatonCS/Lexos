@@ -1,13 +1,15 @@
 import os
+from os import makedirs
+from os.path import join as path_join
+from typing import NamedTuple
+
 import numpy as np
 import pandas as pd
-from os import makedirs
-from typing import Optional
-from os.path import join as path_join
 from sklearn.metrics.pairwise import cosine_similarity
+
 from lexos.helpers import constants
-from lexos.models.base_model import BaseModel
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
+from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.receivers.session_receiver import SessionReceiver
@@ -15,23 +17,28 @@ from lexos.receivers.similarity_receiver import SimilarityOption, \
     SimilarityReceiver
 
 
+class TestSimilarityOption(NamedTuple):
+    doc_term_matrix: pd.DataFrame
+    front_end_option: SimilarityOption
+    id_temp_label_map: IdTempLabelMap
+
+
 class SimilarityModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[SimilarityOption] = None,
-                 test_id_temp_label_map: Optional[IdTempLabelMap] = None):
+    def __init__(self, test_options: TestSimilarityOption = None):
         """This is the class to generate similarity.
 
-        :param test_dtm: (fake parameter)
-                         the doc term matrix used for testing.
-        :param test_option: (fake parameter)
-                            the similarity option used for testing.
-        :param test_id_temp_label_map: (fake parameter)
-                                       the id temp label map used for testing.
+        :param test_options:
+            The option to send in for testing
         """
         super().__init__()
-        self._test_dtm = test_dtm
-        self._test_option = test_option
-        self._test_id_temp_label_map = test_id_temp_label_map
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_option = test_options.front_end_option
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_option = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
