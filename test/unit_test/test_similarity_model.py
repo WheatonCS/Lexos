@@ -79,7 +79,7 @@ def test_with_three_dimension():
 
 
 # --------------------- test with with special case ------------------------
-def test_with_special_case():
+def test_with_special_case_one():
     try:
         test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
         test_option = SimilarityOption(comp_file_id=-1)
@@ -89,6 +89,21 @@ def test_with_special_case():
             test_option=test_option,
             test_id_temp_label_map=test_id_table)
         _ = similarity_model.get_similarity_score()
+        raise AssertionError("negative index error did not raise.")
+    except AssertionError as error:
+        assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
+
+
+def test_with_special_case_two():
+    try:
+        test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
+        test_option = SimilarityOption(comp_file_id=-2)
+        test_id_table = {0: "F1.txt", 1: "F2.txt"}
+        similarity_model = SimilarityModel(
+            test_dtm=test_dtm,
+            test_option=test_option,
+            test_id_temp_label_map=test_id_table)
+        _ = similarity_model.get_similarity_label()
         raise AssertionError("negative index error did not raise.")
     except AssertionError as error:
         assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
