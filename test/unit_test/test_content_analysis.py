@@ -233,7 +233,7 @@ def test_join_active_dicts():
     joined_dicts = test.join_active_dicts()
     assert joined_dicts[0].label == 'dict1'
     assert joined_dicts[0].content == 'test1'
-    assert joined_dicts[1].label == 'dict2'
+    assert joined_dicts[1].dict_label == 'dict2'
     assert joined_dicts[1].content == 'test2'
 
 
