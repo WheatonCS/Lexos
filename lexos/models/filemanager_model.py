@@ -21,7 +21,7 @@ class FileManagerModel(BaseModel):
     @property
     def _file_manager_path(self) -> str:
 
-        # receive option from fontend
+        # receive option from frontend
         session_folder = SessionReceiver().get_session_folder_nullable()
 
         return os.path.join(session_folder, constants.FILEMANAGER_FILENAME)

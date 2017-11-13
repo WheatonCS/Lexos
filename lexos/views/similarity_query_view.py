@@ -1,12 +1,10 @@
-import numpy as np
 from flask import request, session, render_template, send_file, Blueprint
-
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.similarity_model import SimilarityModel
 from lexos.views.base_view import detect_active_docs
 
-# this is a flask blue print
-# it helps us to manage groups of views
+# this is a flask blue print, it helps us to manage groups of views
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
@@ -30,6 +28,7 @@ def similarity():
     labels = file_manager.get_active_labels()
     for i in labels:
         encoded_labels[str(i)] = labels[i]
+
     if request.method == 'GET':
         # 'GET' request occurs when the page is first loaded
         if 'analyoption' not in session:
@@ -45,36 +44,30 @@ def similarity():
             similaritiesgenerated=False,
             itm="similarity-query",
             numActiveDocs=num_active_docs)
+
     if 'gen-sims' in request.form:
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        score_name_data_frame = utility.generate_similarities(file_manager)
-
-        docs_score = np.concatenate(score_name_data_frame.values)
-        docs_name = np.array(score_name_data_frame.index)
-
-        docs_list_score = '***'.join(str(score) for score in docs_score) \
-                          + '***'
-        docs_list_name = '***'.join(name for name in docs_name) + '***'
-
+        docs_score = SimilarityModel().get_similarity_score()
+        docs_label = SimilarityModel().get_similarity_label()
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
         return render_template(
             'similarity.html',
             labels=labels,
             encodedLabels=encoded_labels,
-            docsListScore=docs_list_score,
-            docsListName=docs_list_name,
+            docsListScore=docs_score,
+            docsListName=docs_label,
             similaritiesgenerated=True,
             itm="similarity-query",
             numActiveDocs=num_active_docs)
+
     if 'get-sims' in request.form:
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
-        save_path, file_extension = utility.generate_sims_csv(file_manager)
-        utility.save_file_manager(file_manager)
+        save_path = SimilarityModel().generate_sims_csv()
         return send_file(
             save_path,
-            attachment_filename="similarity-query" + file_extension,
-            as_attachment=True)
+            as_attachment=True,
+            attachment_filename="similarity-query.csv")
