@@ -143,19 +143,21 @@ class MatrixModel(BaseModel):
 
         # apply culling to dtm
         if self._opts.culling_option.culling:
-
-            dtm_data_frame = self._get_culled_matrix(
+            dtm_after_cull = self._get_culled_matrix(
                 least_num_seg=self._opts.culling_option.cull_least_seg,
                 dtm_data_frame=dtm_data_frame
             )
+        else:
+            dtm_after_cull = dtm_data_frame
 
         # only leaves the most frequent words in dtm
         if self._opts.culling_option.most_frequent_word:
-
-            dtm_data_frame = self._get_most_frequent_word(
+            dtm_after_mfw = self._get_most_frequent_word(
                 lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
-                dtm_data_frame=dtm_data_frame,
+                dtm_data_frame=dtm_after_cull,
             )
+        else:
+            dtm_after_mfw = dtm_after_cull
 
         # ==== Parameters TfidfTransformer (TF/IDF) ===
 
@@ -207,15 +209,20 @@ class MatrixModel(BaseModel):
                 use_idf=True,
                 smooth_idf=False,
                 sublinear_tf=False)
-            dtm_data_frame = transformer.fit_transform(dtm_data_frame)
+            dtm_after_tf_idf = transformer.fit_transform(dtm_after_mfw)
+        else:
+            dtm_after_tf_idf = dtm_after_mfw
 
         # change the dtm to proportion
         if self._opts.norm_option.use_freq:
             # apply the proportion function to each row
-            dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
-                                                  axis=1)
+            dtm_after_freq = dtm_after_tf_idf.apply(
+                lambda row: row / row.sum(), axis=1
+            )
+        else:
+            dtm_after_freq = dtm_after_tf_idf
 
-        return dtm_data_frame
+        return dtm_after_freq
 
     def get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
