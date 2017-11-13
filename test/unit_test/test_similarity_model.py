@@ -79,19 +79,6 @@ def test_with_three_dimension():
 """
 
 
-
-
-    def test_with_three_dimension(self):
-        dtm_data_frame = pd.DataFrame([[1.0, 1.0, 1.0],
-                                       [1.0, 0.0, 0.0],
-                                       [0.0, 2.0, 1.0]],
-                                      index=['file_1', 'file_2', 'file_3'])
-        comp_file_index = 1
-        assert_frame_equal(similarity_maker(dtm_data_frame, comp_file_index),
-                           pd.DataFrame([[0.4226], [1.0]],
-                                        index=['file_1', 'file_3'],
-                                        columns=["Cosine similarity"]))
-
     def test_similarity_maker_non_neg_index_precondition(self):
         try:
             dtm_data_frame = pd.DataFrame([[1.0], [1.0]],
