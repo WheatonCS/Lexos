@@ -5,7 +5,7 @@ from typing import NamedTuple
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
+from scipy.spatial.distance import cosine
 
 from lexos.helpers import constants
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
@@ -59,7 +59,7 @@ class SimilarityModel(BaseModel):
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()
 
-    def _similarity_maker(self) -> pd.DataFrame:
+    def _similarity_maker(self) -> pd.Series:
         """this function generate the result of cos-similarity between files
 
         :return: docs_score: a parallel list with `docs_name`, is an
@@ -71,38 +71,36 @@ class SimilarityModel(BaseModel):
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
 
-        # get cosine_similarity
-        dist = 1 - cosine_similarity(self._doc_term_matrix.values)
+        # select the row with comp_file_id
+        comp_file_word_count = self._doc_term_matrix.loc[
+                               self._similarity_option.comp_file_id,
+                               :  # select all columns
+                               ]
 
-        # get index of selected file in the DTM
-        selected_index = np.where(self._doc_term_matrix.index ==
-                                  self._similarity_option.comp_file_id)[0][0]
-        # get an array of compared file indexes
-        other_indexes = np.where(self._doc_term_matrix.index !=
-                                 self._similarity_option.comp_file_id)[0]
-        # construct an array of scores
-        docs_score_array = np.asarray([dist[file_index, selected_index]
-                                       for file_index in other_indexes])
-        # construct an array of names
-        compared_file_labels = np.asarray(
-            [self._id_temp_label_map[file_id]
-             for file_id in self._doc_term_matrix.index.values
-             if file_id != self._similarity_option.comp_file_id])
+        # select the all the other rows (index is not comp_file_id)
+        # or drop the comp_file_id row
+        other_file_word_counts: pd.DataFrame = self._doc_term_matrix.drop(
+            self._similarity_option.comp_file_id,
+            axis="index"
+        )
 
-        # sort and round the score array
-        final_score_array = np.round(np.sort(docs_score_array), decimals=4)
-        # sort the name array to correctly map the score array
-        final_name_array = compared_file_labels[docs_score_array.argsort()]
+        # calculate the cosine score, a parallel array to labels
+        # the "file_word_count" refers to a row in "other_file_word_counts"
+        cos_scores = [
+            abs(round(cosine(comp_file_word_count, file_word_count), 4))
+            for index, file_word_count in other_file_word_counts.iterrows()
+        ]
 
-        # pack the scores and names in data_frame
-        score_name_data_frame = pd.DataFrame(np.absolute(final_score_array),
-                                             index=final_name_array,
-                                             columns=["Cosine similarity"])
-        return score_name_data_frame
+        # get the labels for cos_scores
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in other_file_word_counts.index]
+
+        # pack score and labels into a series
+        return pd.Series(cos_scores, index=labels)
 
     def get_similarity_score(self) -> str:
         """This function returns similarity scores as a string"""
-        scores = np.concatenate(self._similarity_maker().values)
+        scores = self._similarity_maker().values
         scores_list = '***'.join(str(score) for score in scores) + '***'
 
         return scores_list
