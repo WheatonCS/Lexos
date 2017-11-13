@@ -101,14 +101,3 @@ def test_with_special_case():
     except AssertionError as error:
         assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
 # --------------------------------------------------------------------------
-"""
-
-    def test_similarity_maker_non_neg_index_precondition(self):
-        try:
-            dtm_data_frame = pd.DataFrame([[1.0], [1.0]],
-                                          index=['test_1', 'test_2'])
-            _ = similarity_maker(dtm_data_frame, comp_file_index=-1)
-            raise AssertionError("negative index error did not raise.")
-        except AssertionError as error:
-            assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
-"""
