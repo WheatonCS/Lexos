@@ -24,8 +24,6 @@ def test_with_similarity_equal_one():
     labels = similarity_model.get_similarity_label()
     assert scores == "1.0***1.0***"
     assert labels == "F1.txt***F2.txt***"
-
-
 # --------------------------------------------------------------------------
 
 
@@ -44,8 +42,6 @@ def test_with_all_same_content_file():
     labels = similarity_model.get_similarity_label()
     assert scores == "0.0***0.0***"
     assert labels == "F1.txt***F3.txt***"
-
-
 # --------------------------------------------------------------------------
 
 
@@ -62,8 +58,6 @@ def test_with_two_dimension():
     labels = similarity_model.get_similarity_label()
     assert scores == "0.1056***0.5528***"
     assert labels == "F2.txt***F3.txt***"
-
-
 # --------------------------------------------------------------------------
 
 
@@ -81,8 +75,6 @@ def test_with_three_dimension():
     labels = similarity_model.get_similarity_label()
     assert scores == "0.4226***1.0***"
     assert labels == "F1.txt***F3.txt***"
-
-
 # --------------------------------------------------------------------------
 
 
