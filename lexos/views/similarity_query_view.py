@@ -66,9 +66,9 @@ def similarity():
         # The 'Download Matrix' button is clicked on similarity.html.
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
-        save_path, file_extension = utility.generate_sims_csv(file_manager)
+        # save_path, file_extension = utility.generate_sims_csv(file_manager)
         utility.save_file_manager(file_manager)
         return send_file(
             save_path,
-            attachment_filename="similarity-query" + file_extension,
+            attachment_filename="similarity-query.csv",
             as_attachment=True)
