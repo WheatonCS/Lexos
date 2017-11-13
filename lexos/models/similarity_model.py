@@ -113,5 +113,16 @@ class SimilarityModel(BaseModel):
         selected_file_name = self._id_temp_label_map[
             self._similarity_option.comp_file_id]
 
+        # get the path of the folder to save result
+        folder_path = path_join(SessionReceiver().get_session_folder(),
+                                constants.RESULTS_FOLDER)
+        if not os.path.isdir(folder_path):
+            makedirs(folder_path)
 
+        # get the saved file path
+        out_file_path = path_join(folder_path, 'results.csv')
+
+        # write the header to the file
+        with open(out_file_path, 'w') as out_file:
+            out_file.write("Similarity Rankings:" + '\n')
 
