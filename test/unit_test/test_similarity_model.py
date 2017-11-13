@@ -1,4 +1,6 @@
 import pandas as pd
+
+from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.similarity_model import SimilarityModel
 from lexos.receivers.similarity_receiver import SimilarityOption
 
@@ -22,6 +24,8 @@ def test_with_similarity_equal_one():
     labels = similarity_model.get_similarity_label()
     assert scores == "1.0***1.0***"
     assert labels == "F1.txt***F2.txt***"
+
+
 # --------------------------------------------------------------------------
 
 
@@ -40,6 +44,8 @@ def test_with_all_same_content_file():
     labels = similarity_model.get_similarity_label()
     assert scores == "0.0***0.0***"
     assert labels == "F1.txt***F3.txt***"
+
+
 # --------------------------------------------------------------------------
 
 
@@ -56,6 +62,8 @@ def test_with_two_dimension():
     labels = similarity_model.get_similarity_label()
     assert scores == "0.1056***0.5528***"
     assert labels == "F2.txt***F3.txt***"
+
+
 # --------------------------------------------------------------------------
 
 
@@ -74,10 +82,26 @@ def test_with_three_dimension():
     assert scores == "0.4226***1.0***"
     assert labels == "F1.txt***F3.txt***"
 
+
 # --------------------------------------------------------------------------
 
-"""
 
+# --------------------- test with with special case ------------------------
+def test_with_special_case():
+    try:
+        test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
+        test_option = SimilarityOption(comp_file_id=-1)
+        test_id_table = {0: "F1.txt", 1: "F2.txt"}
+        similarity_model = SimilarityModel(
+            test_dtm=test_dtm,
+            test_option=test_option,
+            test_id_temp_label_map=test_id_table)
+        _ = similarity_model.get_similarity_score()
+        raise AssertionError("negative index error did not raise.")
+    except AssertionError as error:
+        assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
+# --------------------------------------------------------------------------
+"""
 
     def test_similarity_maker_non_neg_index_precondition(self):
         try:
