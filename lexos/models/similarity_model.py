@@ -88,7 +88,7 @@ class SimilarityModel(BaseModel):
         final_name_array = compared_file_labels[docs_score_array.argsort()]
 
         # pack the scores and names in data_frame
-        score_name_data_frame = pd.DataFrame(final_score_array,
+        score_name_data_frame = pd.DataFrame(np.absolute(final_score_array),
                                              index=final_name_array,
                                              columns=["Cosine similarity"])
         return score_name_data_frame
