@@ -54,7 +54,7 @@ class MatrixModel(BaseModel):
         """An unordered list (counter) of all the temp labels"""
         return Counter(self._opts.id_temp_label_map.values())
 
-    def get_temp_label_id_map(self) -> IdTempLabelMap:
+    def get_id_temp_label_map(self) -> IdTempLabelMap:
         """Get the dict where id maps to temp labels."""
         return self._opts.id_temp_label_map
 
@@ -128,7 +128,8 @@ class MatrixModel(BaseModel):
                             index=file_ids,
                             columns=words)
 
-    def _apply_transformations_to_matrix(self, dtm_data_frame) -> pd.DataFrame:
+    def _apply_transformations_to_matrix(self, dtm_data_frame: pd.DataFrame) \
+            -> pd.DataFrame:
         """Apply all the transitions to the matrix
 
         Currently there are following transitions with following order:
@@ -144,7 +145,7 @@ class MatrixModel(BaseModel):
         if self._opts.culling_option.culling:
 
             dtm_data_frame = self._get_culled_matrix(
-                least_num_seg=self._opts.culling_option.cull_least_passage,
+                least_num_seg=self._opts.culling_option.cull_least_seg,
                 dtm_data_frame=dtm_data_frame
             )
 
@@ -247,26 +248,21 @@ class MatrixModel(BaseModel):
             dtm data frame with only the most frequent words
         """
 
-        # get the word counts for each word in the entire corpus (1D array)
-        word_count_in_corpus = dtm_data_frame.sum(axis='index')
+        # get the top index of the sum of each row
+        corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
-        # get the index to sort those words
-        sort_index_array = word_count_in_corpus.argsort()
+        # sort the word list
+        sorted_word_count: pd.Series \
+            = corpus_word_count.sort_values(ascending=False)
 
-        # get the total number of unique words
-        total_num_words = word_count_in_corpus.size
+        # get the first "lower_rank_bound" number of item
+        most_frequent_counts: pd.Series \
+            = sorted_word_count.head(lower_rank_bound)
 
-        # strip the index to leave the most frequent ones
-        # those are the index of the most frequent words
-        most_frequent_index = sort_index_array[
-            total_num_words - lower_rank_bound, lower_rank_bound]
+        # get the most frequent words (the index of the count)
+        most_frequent_words = most_frequent_counts.index
 
-        # use the most frequent index to get out most frequent words
-        # this feature is called index array:
-        # https://docs.scipy.org/doc/numpy/user/basics.indexing.html
-        dtm_data_frame = dtm_data_frame.iloc[most_frequent_index]
-
-        return dtm_data_frame
+        return dtm_data_frame[most_frequent_words]
 
     @staticmethod
     def _get_culled_matrix(least_num_seg: int,
@@ -300,7 +296,8 @@ class MatrixModel(BaseModel):
         # get the index of all the words needs to remain
         # this is an array of int
         dtm_data_frame = dtm_data_frame.loc[
-            words_in_num_seg_series >= least_num_seg
+            :,  # select all rows (row indexer)
+            words_in_num_seg_series >= least_num_seg  # col indexer
             ]
 
         return dtm_data_frame
