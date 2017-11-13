@@ -42,6 +42,25 @@ def test_with_all_same_content_file():
     assert labels == "F1.txt***F3.txt***"
 # --------------------------------------------------------------------------
 
+
+# --------------------- test with with two dimension -----------------------
+def test_with_two_dimension():
+    test_dtm = pd.DataFrame([[0.0, 1.0], [1.0, 2.0], [2.0, 1.0]],
+                            index=[0, 1, 2])
+    test_option = SimilarityOption(comp_file_id=0)
+    test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
+    similarity_model = SimilarityModel(test_dtm=test_dtm,
+                                       test_option=test_option,
+                                       test_id_temp_label_map=test_id_table)
+    scores = similarity_model.get_similarity_score()
+    labels = similarity_model.get_similarity_label()
+    assert scores == '0.1056***0.5528***'
+    assert labels == "F2.txt***F3.txt***"
+# --------------------------------------------------------------------------
+
+
+# --------------------- test with with two dimension -----------------------
+
 """
 
 
