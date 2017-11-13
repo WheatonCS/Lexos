@@ -28,7 +28,6 @@ class TestsBasic:
             4: "Cheng is handsome",
             10: "I look so good!"
         }
-
     )
 
     model = DendrogramModel(test_options=test_options)
