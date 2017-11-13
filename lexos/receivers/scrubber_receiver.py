@@ -136,17 +136,17 @@ class ScrubbingReceiver(BaseReceiver):
         :return: A BasicOptions struct.
         """
 
-        lower = self._front_end_data['lowercasebox']
-        punct = self._front_end_data['punctuationbox']
-        apos = self._front_end_data['aposbox']
-        hyphen = self._front_end_data['hyphensbox']
-        amper = self._front_end_data['ampersandbox']
-        digits = self._front_end_data['digitsbox']
-        tags = self._front_end_data['tagbox']
-        whitespace = self._front_end_data['whitespacebox']
-        spaces = self._front_end_data['spacesbox']
-        tabs = self._front_end_data['tabsbox']
-        newlines = self._front_end_data['newlinesbox']
+        lower = self._front_end_data['lowercasebox'] == "true"
+        punct = self._front_end_data['punctuationbox'] == "true"
+        apos = self._front_end_data['aposbox'] == "true"
+        hyphen = self._front_end_data['hyphensbox'] == "true"
+        amper = self._front_end_data['ampersandbox'] == "true"
+        digits = self._front_end_data['digitsbox'] == "true"
+        tags = self._front_end_data['tagbox'] == "true"
+        whitespace = self._front_end_data['whitespacebox'] == "true"
+        spaces = self._front_end_data['spacesbox'] == "true"
+        tabs = self._front_end_data['tabsbox'] == "true"
+        newlines = self._front_end_data['newlinesbox'] == "true"
         previewing = self._front_end_data["formAction"] == "apply"
 
         return BasicOptions(
