@@ -2,7 +2,6 @@ import os
 import numpy as np
 import pandas as pd
 from os import makedirs
-from flask import request
 from typing import Optional
 from os.path import join as path_join
 from sklearn.metrics.pairwise import cosine_similarity
@@ -128,13 +127,11 @@ class SimilarityModel(BaseModel):
         # write the header to the file
         with open(out_file_path, 'w') as out_file:
             out_file.write("Similarity Rankings:" + '\n')
-
             out_file.write(
                 "The rankings are determined by 'distance between documents' "
                 "where small distances (near zero) represent documents that "
                 "are 'similar' and unlike documents have distances closer to "
                 "one.\n")
-
             out_file.write("Selected Comparison Document: " + ',' +
                            selected_file_name + '\n')
 
