@@ -35,7 +35,8 @@ def content_analysis():
                                 label=file.label,
                                 content=file.load_contents())
     if request.method == 'GET':
-        dictionary_labels, active_dictionaries, toggle_all = analysis.get_contents()
+        dictionary_labels, active_dictionaries, toggle_all =\
+            analysis.get_contents()
         return render_template('contentanalysis.html',
                                dictionary_labels=dictionary_labels,
                                active_dictionaries=active_dictionaries,
@@ -111,7 +112,7 @@ def toggle_dictionary():
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
             'toggle_all': analysis.toggle_all}
-    if analysis.front_end_toggle_all:
+    if analysis.content_analysis_option.toggle_all:
         data['dictionary_labels'],\
             data['active_dictionaries'],\
             data['toggle_all'] = analysis.toggle_all_dicts()

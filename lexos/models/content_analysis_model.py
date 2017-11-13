@@ -66,7 +66,7 @@ class ContentAnalysisModel(object):
         if self._test_options is not None:
             label = self._test_options.label
         else:
-            label = self.front_end_dict_label
+            label = self.content_analysis_option.dict_label
         self.dictionaries = [dictionary for dictionary in self.dictionaries
                              if dictionary.label != label]
         data = {'dictionary_labels': [],
@@ -81,7 +81,7 @@ class ContentAnalysisModel(object):
         """Activates and Deactivates a dictionary
 
         """
-        label = self.front_end_dict_label
+        label = self.content_analysis_option.dict_label
         self._toggle_all = True
         dictionary_labels = []
         active_dictionaries = []
@@ -107,7 +107,7 @@ class ContentAnalysisModel(object):
             active_dictionaries.append(self._toggle_all)
         return dictionary_labels, active_dictionaries, self._toggle_all
 
-    def get_contents(self) -> [list, list, bool]:#--------------------------------------
+    def get_contents(self) -> [list, list, bool]:
         """
 
         :return:
@@ -168,7 +168,7 @@ class ContentAnalysisModel(object):
             for dictionary in active_dicts:
                 count = 0
                 for phrase in dictionaries:
-                    if phrase.label == dictionary.label:
+                    if phrase.dict_label == dictionary.label:
                         count += phrase.count
                 counter.append(count)
                 if len(counter) == len(active_dicts):
@@ -208,11 +208,13 @@ class ContentAnalysisModel(object):
         total_word_counts_sum = 0
         formulas_sum = 0
         active_dicts = self.get_active_dicts()
-        for i in range(len(self.scores)):
-            scores_sum += self.scores[i]
+        for index, (score, formula, file) in enumerate(zip(self.scores,
+                                                           self._formulas,
+                                                           self._corpus)):
+            scores_sum += score
             total_word_counts_sum += \
-                self._corpus[i].total_word_counts
-            formulas_sum += self._formulas[i]
+                file.total_word_counts
+            formulas_sum += formula
         if len(self.scores) != 0:
             scores_avg = round(
                 (float(scores_sum) / len(self.scores)), 3)
@@ -273,15 +275,20 @@ class ContentAnalysisModel(object):
         indices = [file.label for file in self._corpus] + ['averages']
         df = pd.DataFrame(columns=range(len(columns)),
                           index=range(len(indices)))
-        for i in range(len(self._corpus)):
-            df.xs(i)[0] = self._corpus[i].label
-            for j in range(len(self._counters[i])):
-                df.xs(i)[j + 1] = self._counters[i][j]
-            df.xs(i)[j + 2] = self._formulas[i]
-            df.xs(i)[j + 3] = self._corpus[i].total_word_counts
-            df.xs(i)[j + 4] = self._scores[i]
-        for j in range(len(self._averages)):
-            df.xs(i + 1)[j] = self._averages[j]
+        # adds row to df with: file label, count for each dict,
+        # formula result, total word count, score
+        for i, (file, formula, score, counter) in enumerate(
+            zip(self._corpus, self._formulas,
+                self._scores, self._counters)):
+            df.xs(i)[0] = file.label
+            for j, (count) in enumerate(counter):
+                df.xs(i)[j + 1] = count
+            df.xs(i)[j + 2] = formula
+            df.xs(i)[j + 3] = file.total_word_counts
+            df.xs(i)[j + 4] = score
+        # add a roe to df with the average of each column
+        for j, (average) in enumerate(self._averages):
+            df.xs(i + 1)[j] = average
         df.columns = columns
         return df
 
@@ -309,7 +316,7 @@ class ContentAnalysisModel(object):
         if self._test_options is not None:
             formula = self._test_options.formula
         else:
-            formula = self._content_analysis_option.formula  # self.front_end_formula
+            formula = self.content_analysis_option.formula
         if len(formula) == 0:
             self._formula = "0"
         else:
@@ -391,7 +398,7 @@ class ContentAnalysisModel(object):
         return self._averages
 
     @property
-    def _content_analysis_option(self) -> ContentAnalysisOption:
+    def content_analysis_option(self) -> ContentAnalysisOption:
         """
         :return: front-end or test options
         """
@@ -400,18 +407,6 @@ class ContentAnalysisModel(object):
                 self.save_formula()
             return self._test_options
         return ContentAnalysisReceiver().options_from_front_end()
-
-    @property
-    def front_end_formula(self):
-        return self._content_analysis_option.formula
-
-    @property
-    def front_end_toggle_all(self):
-        return self._content_analysis_option.toggle_all
-
-    @property
-    def front_end_dict_label(self):
-        return self._content_analysis_option.dict_label
 
     @property
     def toggle_all(self):
