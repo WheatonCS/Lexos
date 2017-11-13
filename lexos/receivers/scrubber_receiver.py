@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, NamedTuple
 
 from flask import request
 
@@ -7,287 +7,85 @@ from lexos.managers import session_manager
 from lexos.receivers.base_receiver import BaseReceiver
 
 
-class BasicOptions:
-
-    def __init__(self, lower: bool, punct: bool, apos: bool,
-                 hyphen: bool, amper: bool, digits: bool, tags: bool,
-                 whitespace: bool, spaces: bool, tabs: bool, newlines: bool,
-                 previewing: bool = False):
-        """A struct to represent basic scrubbing options.
-
-        :param lower: A boolean indicating whether or not the text is
-            converted to lowercase.
-        :param punct: A boolean indicating whether to remove punctuation from
-            the text.
-        :param apos: A boolean indicating whether to keep apostrophes in the
-            text.
-        :param hyphen: A boolean indicating whether to keep hyphens in the
-            text.
-        :param amper: A boolean indicating whether to keep ampersands in the
-            text.
-        :param digits: A boolean indicating whether to remove digits from the
-            text.
-        :param tags: A boolean indicating whether Scrub Tags has been checked.
-        :param whitespace: A boolean indicating whether white spaces should be
-            removed.
-        :param spaces: A boolean indicating whether spaces should be removed.
-        :param tabs: A boolean indicating whether tabs should be removed.
-        :param newlines: A boolean indicating whether newlines should be
-            removed.
-        :param previewing: A boolean indicating whether the user is previewing.
-        """
-
-        self._lower = lower
-        self._punct = punct
-        self._apos = apos
-        self._hyphen = hyphen
-        self._amper = amper
-        self._digits = digits
-        self._tags = tags
-        self._whitespace = whitespace
-        self._spaces = spaces
-        self._tabs = tabs
-        self._newlines = newlines
-        self._previewing = previewing
+class BasicOptions(NamedTuple):
 
-    @property
-    def lower(self) -> bool:
-        """Whether the text should be made lowercase.
+    """A typed tuple that contains basic scrubbing options."""
 
-        :return: A bool to indicate the above information.
-        """
+    # Indicates whether to convert the text to lowercase.
+    lower: bool
 
-        return self._lower
+    # Indicates whether to scrub punctuation the text.
+    punct: bool
 
-    @property
-    def punct(self) -> bool:
-        """Whether the text should have punctuation removed.
+    # Indicates whether to keep apostrophes in the text.
+    apos: bool
 
-        :return: A bool to indicate the above information.
-        """
+    # Indicates whether to keep hyphens in the text.
+    hyphen: bool
 
-        return self._punct
+    # Indicates whether to keep ampersands in the text.
+    amper: bool
 
-    @property
-    def apos(self) -> bool:
-        """Whether word-internal apostrophes should be preserved in the text.
+    # Indicates whether to remove digits from the text.
+    digits: bool
 
-        :return: A bool to indicate the above information.
-        """
+    # Indicates whether Scrub Tags has been checked.
+    tags: bool
 
-        return self._apos
+    # Indicates whether whitespace should be removed.
+    whitespace: bool
 
-    @property
-    def hyphen(self) -> bool:
-        """Whether hyphens should be preserved in the text.
+    # Indicates whether spaces should be removed.
+    spaces: bool
 
-        :return: A bool to indicate the above information.
-        """
+    # Indicates whether tabs should be removed.
+    tabs: bool
 
-        return self._hyphen
+    # Indicates whether newlines should be removed.
+    newlines: bool
 
-    @property
-    def amper(self) -> bool:
-        """Whether ampersands should be preserved in the text.
+    # Indicates whether the user is previewing.
+    previewing: bool = False
 
-        :return: A bool to indicate the above information.
-        """
 
-        return self._amper
+class FileOptions(NamedTuple):
 
-    @property
-    def digits(self) -> bool:
-        """Whether the text should have digits removed.
+    """A typed tuple that contains additional scrubbing from files."""
 
-        :return: A bool to indicate the above information.
-        """
+    # The storage folder location/path as a string.
+    storage_folder: str
 
-        return self._digits
+    # A list of file names in the storage folder.
+    storage_filenames: List[str]
 
-    @property
-    def tags(self) -> bool:
-        """Whether the text should have tags scrubbed.
+    # The uploaded consolidations file string.
+    file_consol: str
 
-        :return: A bool to indicate the above information.
-        """
+    # The uploaded lemma file string.
+    file_lemma: str
 
-        return self._tags
+    # The uploaded special character file string.
+    file_special_char: str
 
-    @property
-    def whitespace(self) -> bool:
-        """Whether the text should have whitespace removed.
+    # The uploaded stop word/keep word file string.
+    file_sw_kw: str
 
-        :return: A bool to indicate the above information.
-        """
 
-        return self._whitespace
+class ManualOptions(NamedTuple):
 
-    @property
-    def spaces(self) -> bool:
-        """Whether the text should have spaces removed.
+    """A typed tuple that contains additional scrubbing options from fields."""
 
-        :return: A bool to indicate the above information.
-        """
+    # The consolidations field string.
+    manual_consol: str
 
-        return self._spaces
+    # The lemma field string.
+    manual_lemma: str
 
-    @property
-    def tabs(self) -> bool:
-        """Whether the text should have tabs removed.
+    # The special character field string.
+    manual_special_char: str
 
-        :return: A bool to indicate the above information.
-        """
-
-        return self._tabs
-
-    @property
-    def newlines(self) -> bool:
-        """Whether the text should have newlines removed.
-
-        :return: A bool to indicate the above information.
-        """
-
-        return self._newlines
-
-    @property
-    def previewing(self) -> bool:
-        """Whether the user is previewing.
-
-        :return: A bool to indicate the above information.
-        """
-
-        return self._previewing
-
-
-class FileOptions:
-
-    def __init__(self, storage_folder, storage_filenames: List[str],
-                 file_consol: str, file_lemma: str, file_special_char: str,
-                 file_sw_kw: str):
-
-        """
-        :param storage_folder: The storage folder path as a string.
-        :param storage_filenames: A list of the storage file names.
-        :param file_consol: The uploaded consolidations file string.
-        :param file_lemma: The uploaded lemma file string.
-        :param file_special_char: The uploaded special character file string.
-        :param file_sw_kw: The uploaded stop word/keep word file string.
-        """
-
-        self._storage_folder = storage_folder
-        self._storage_filenames = storage_filenames
-        self._file_consol = file_consol
-        self._file_lemma = file_lemma
-        self._file_special_char = file_special_char
-        self._file_sw_kw = file_sw_kw
-
-    @property
-    def storage_folder(self) -> str:
-        """The location of the storage folder.
-
-        :return: A string to indicate the above information.
-        """
-
-        return self._storage_folder
-
-    @property
-    def storage_filenames(self) -> List[str]:
-        """All the files found in the storage folder.
-
-        :return: A list of strings to indicate the above information.
-        """
-
-        return self._storage_filenames
-
-    @property
-    def file_consol(self) -> str:
-        """The user's uploaded consolidations file.
-
-        :return: The above file contents as a string.
-        """
-
-        return self._file_consol
-
-    @property
-    def file_lemma(self) -> str:
-        """The user's uploaded lemma file.
-
-        :return: The above file contents as a string.
-        """
-
-        return self._file_lemma
-
-    @property
-    def file_special_char(self) -> str:
-        """The user's uploaded special character file.
-
-        :return: The above file contents as a string.
-        """
-
-        return self._file_special_char
-
-    @property
-    def file_sw_kw(self) -> str:
-        """The user's uploaded stop word/keep word file.
-
-        :return: The above file contents as a string.
-        """
-
-        return self._file_sw_kw
-
-
-class ManualOptions:
-
-    def __init__(self, manual_consol: str, manual_lemma: str,
-                 manual_special_char: str, manual_sw_kw: str):
-        """A struct to represent manual scrubbing options.
-
-        :param manual_consol: The consolidations field string.
-        :param manual_lemma: The lemma field string.
-        :param manual_special_char: The special character field string.
-        :param manual_sw_kw: The stop word/keep word field string.
-        """
-
-        self._manual_consol = manual_consol
-        self._manual_lemma = manual_lemma
-        self._manual_special_char = manual_special_char
-        self._manual_sw_kw = manual_sw_kw
-
-    @property
-    def manual_consol(self) -> str:
-        """The user's input from the consolidations text box.
-
-        :return: The above field contents as a string.
-        """
-
-        return self._manual_consol
-
-    @property
-    def manual_lemma(self) -> str:
-        """The user's input from the lemma text box.
-
-        :return: The above field contents as a string.
-        """
-
-        return self._manual_lemma
-
-    @property
-    def manual_special_char(self) -> str:
-        """The user's input from the special character text box.
-
-        :return: The above field contents as a string.
-        """
-
-        return self._manual_special_char
-
-    @property
-    def manual_sw_kw(self) -> str:
-        """The user's input from the stop word/keep word text box.
-
-        :return: The above field contents as a string.
-        """
-
-        return self._manual_sw_kw
+    # The stop word/keep word field string.
+    manual_sw_kw: str
 
 
 class AdditionalOptions:
