@@ -108,9 +108,13 @@ class SimilarityModel(BaseModel):
 
         return labels_list
 
-    def _generate_sims_csv(self):
-        delimiter = ','
-        selected_file_name = self._id_temp_label_map[self._similarity_option.comp_file_id]
+    def generate_sims_csv(self) -> str:
+        """This function generates csv file for similarity scores.
+
+        :return output file path.
+        """
+        selected_file_name = self._id_temp_label_map[
+            self._similarity_option.comp_file_id]
 
         # get the path of the folder to save result
         folder_path = path_join(SessionReceiver().get_session_folder(),
@@ -131,7 +135,7 @@ class SimilarityModel(BaseModel):
                 "are 'similar' and unlike documents have distances closer to "
                 "one.\n")
 
-            out_file.write("Selected Comparison Document: " + delimiter +
+            out_file.write("Selected Comparison Document: " + ',' +
                            selected_file_name + '\n')
 
         # append the pandas data frame to the file
