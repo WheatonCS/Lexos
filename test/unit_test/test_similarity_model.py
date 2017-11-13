@@ -1,7 +1,7 @@
 import pandas as pd
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
-from lexos.models.similarity_model import SimilarityModel, TestSimilarityOption
+from lexos.models.similarity_model import SimilarityModel, SimilarityTestOption
 from lexos.receivers.similarity_receiver import SimilarityOption
 
 
@@ -18,7 +18,7 @@ def test_with_similarity_equal_one():
     test_front_end_option = SimilarityOption(comp_file_id=2)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
-        test_options=TestSimilarityOption(
+        test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
             id_temp_label_map=test_id_table
@@ -40,7 +40,7 @@ def test_with_all_same_content_file():
     test_front_end_option = SimilarityOption(comp_file_id=1)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
-        test_options=TestSimilarityOption(
+        test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
             id_temp_label_map=test_id_table
@@ -60,7 +60,7 @@ def test_with_two_dimension():
     test_front_end_option = SimilarityOption(comp_file_id=0)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
-        test_options=TestSimilarityOption(
+        test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
             id_temp_label_map=test_id_table
@@ -81,7 +81,7 @@ def test_with_three_dimension():
     test_front_end_option = SimilarityOption(comp_file_id=1)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
-        test_options=TestSimilarityOption(
+        test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
             id_temp_label_map=test_id_table
@@ -101,7 +101,7 @@ def test_with_special_case_one():
         test_front_end_option = SimilarityOption(comp_file_id=-1)
         test_id_table = {0: "F1.txt", 1: "F2.txt"}
         similarity_model = SimilarityModel(
-            test_options=TestSimilarityOption(
+            test_options=SimilarityTestOption(
                 doc_term_matrix=test_dtm,
                 front_end_option=test_front_end_option,
                 id_temp_label_map=test_id_table
@@ -119,7 +119,7 @@ def test_with_special_case_two():
         test_front_end_option = SimilarityOption(comp_file_id=-2)
         test_id_table = {0: "F1.txt", 1: "F2.txt"}
         similarity_model = SimilarityModel(
-            test_options=TestSimilarityOption(
+            test_options=SimilarityTestOption(
                 doc_term_matrix=test_dtm,
                 front_end_option=test_front_end_option,
                 id_temp_label_map=test_id_table

@@ -17,14 +17,14 @@ from lexos.receivers.similarity_receiver import SimilarityOption, \
     SimilarityReceiver
 
 
-class TestSimilarityOption(NamedTuple):
+class SimilarityTestOption(NamedTuple):
     doc_term_matrix: pd.DataFrame
     front_end_option: SimilarityOption
     id_temp_label_map: IdTempLabelMap
 
 
 class SimilarityModel(BaseModel):
-    def __init__(self, test_options: TestSimilarityOption = None):
+    def __init__(self, test_options: SimilarityTestOption = None):
         """This is the class to generate similarity.
 
         :param test_options:
