@@ -286,7 +286,7 @@ class ContentAnalysisModel(object):
             df.xs(i)[j + 2] = formula
             df.xs(i)[j + 3] = file.total_word_counts
             df.xs(i)[j + 4] = score
-        # add a roe to df with the average of each column
+        # add a row to df with the average of each column
         for j, (average) in enumerate(self._averages):
             df.xs(i + 1)[j] = average
         df.columns = columns
