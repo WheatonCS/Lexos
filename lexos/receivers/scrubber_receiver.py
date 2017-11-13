@@ -88,91 +88,35 @@ class ManualOptions(NamedTuple):
     manual_sw_kw: str
 
 
-class AdditionalOptions:
-    def __init__(self, consol: Dict[str, str], lemma: Dict[str, str],
-                 special_char: Dict[str, str], sw_kw: List[str], keep: bool):
-        """
+class AdditionalOptions(NamedTuple):
 
-        :param consol:
-        :param lemma:
-        :param special_char:
-        :param sw_kw:
-        :param keep:
-        """
+    """A typed tuple that contains all additional scrubbing options."""
 
-        self._consol = consol
-        self._lemma = lemma
-        self._special_char = special_char
-        self._sw_kw = sw_kw
-        self._keep = keep
+    # The merged consolidations string.
+    consol: Dict[str, str]
 
-    def _handle_file_and_manual_strings(self, file_string: str,
-                                        manual_string: str,
-                                        storage_folder: str, storage_filename):
-        """Saves uploaded files and merges file strings with manual strings.
+    # The merged lemma string.
+    lemma: Dict[str, str]
 
-        :param file_string: The user's uploaded file.
-        :param manual_string: The input from a text field.
-        :param storage_folder: The path to the storage folder.
-        :param storage_filename: The name of the file to save to.
-        :return: The combination of the text field and file strings.
-        """
+    # The merged special character string.
+    special_char: Dict[str, str]
 
-        if file_string:
-            self._save_scrub_optional_upload(file_string=file_string,
-                                             storage_folder=storage_folder,
-                                             filename=storage_filename)
-        merged_string = file_string + "\n" + manual_string
+    # The merged stop word/keep word string.
+    sw_kw: List[str]
 
-        return merged_string
-
-    @staticmethod
-    def _save_scrub_optional_upload(file_string: str, storage_folder: str,
-                                    filename: str):
-        """Saves the contents of a user option file into the storage folder.
-
-        :param file_string: A string representing a whole file to be saved.
-        :param storage_folder: A string representing the path of the storage
-            folder.
-        :param filename: A string representing the name of the file that is
-            being saved.
-        """
-
-        general_functions.write_file_to_disk(
-            contents=file_string, dest_folder=storage_folder,
-            filename=filename)
+    # Indicates whether sw_kw contains keep words (True) or stop words (False).
+    keep: bool
 
 
-class ScrubbingOptions:
+class ScrubbingOptions(NamedTuple):
 
-    def __init__(self, basic_options: BasicOptions,
-                 additional_options: AdditionalOptions):
-        """A struct containing all the scrubbing options.
+    """A typed tuple that contains all scrubbing options."""
 
-        :param basic_options: A struct containing basic options.
-        :param additional_options: A struct containing additional options.
-        """
+    # A NamedTuple of basic options.
+    basic_options: BasicOptions
 
-        self._basic_options = basic_options
-        self._additional_options = additional_options
-
-    @property
-    def basic_options(self) -> BasicOptions:
-        """All the basic scrubbing options.
-
-        :return: A BasicOptions struct.
-        """
-
-        return self._basic_options
-
-    @property
-    def additional_options(self) -> AdditionalOptions:
-        """All the scrubbing additional options.
-
-        :return: An AdditionalOptions struct.
-        """
-
-        return self._additional_options
+    # A NamedTuple of additional options.
+    additional_options: AdditionalOptions
 
 
 class ScrubbingReceiver(BaseReceiver):
