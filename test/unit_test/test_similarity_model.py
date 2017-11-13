@@ -26,7 +26,7 @@ def test_with_similarity_equal_one():
         )
     )
     pd.testing.assert_series_equal(
-        similarity_model._similarity_maker(),
+        similarity_model._gen_exact_similarity(),
         pd.Series([1., 1.], index=["F1.txt", "F2.txt"])
     )
 # --------------------------------------------------------------------------
@@ -49,7 +49,7 @@ def test_with_all_same_content_file():
         )
     )
     pd.testing.assert_series_equal(
-        similarity_model._similarity_maker(),
+        similarity_model._gen_exact_similarity(),
         pd.Series([0., 0.], index=["F1.txt", "F3.txt"])
     )
 # --------------------------------------------------------------------------
@@ -71,7 +71,7 @@ def test_with_two_dimension():
     )
     # assertion
     pd.testing.assert_series_equal(
-        similarity_model._similarity_maker(),
+        similarity_model._gen_exact_similarity(),
         pd.Series([.105572809, .5527864045], index=["F2.txt", "F3.txt"])
     )
 # --------------------------------------------------------------------------
@@ -94,7 +94,7 @@ def test_with_three_dimension():
     )
     # assertion
     pd.testing.assert_series_equal(
-        similarity_model._similarity_maker(),
+        similarity_model._gen_exact_similarity(),
         pd.Series([.42264973081, 1.], index=["F1.txt", "F3.txt"])
     )
 # --------------------------------------------------------------------------

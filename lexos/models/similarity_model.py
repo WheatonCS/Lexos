@@ -59,13 +59,12 @@ class SimilarityModel(BaseModel):
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()
 
-    def _similarity_maker(self) -> pd.Series:
-        """this function generate the result of cos-similarity between files
+    def _gen_exact_similarity(self) -> pd.Series:
+        """Get the exact (not rounded) cos-similarity between files
 
-        :return: docs_score: a parallel list with `docs_name`, is an
-                             array of the cos-similarity distance
-        :return: docs_name: a parallel list with `docs_score`, is an
-                             array of the name (temp labels)
+        :return a panda series where
+            - the index is the temp labels
+            - the value is the cos distance between this file and "comp_file"
         """
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
@@ -100,14 +99,14 @@ class SimilarityModel(BaseModel):
 
     def get_similarity_score(self) -> str:
         """This function returns similarity scores as a string"""
-        scores = self._similarity_maker().values
+        scores = self._gen_exact_similarity().values
         scores_list = '***'.join(str(score) for score in scores) + '***'
 
         return scores_list
 
     def get_similarity_label(self) -> str:
         """This function returns similarity compared labels as a string"""
-        labels = np.array(self._similarity_maker().index)
+        labels = np.array(self._gen_exact_similarity().index)
         labels_list = '***'.join(name for name in labels) + '***'
 
         return labels_list
@@ -142,6 +141,6 @@ class SimilarityModel(BaseModel):
 
         # append the pandas data frame to the file
         with open(out_file_path, 'a') as f:
-            self._similarity_maker().to_csv(f)
+            self._gen_exact_similarity().to_csv(f)
 
         return out_file_path
