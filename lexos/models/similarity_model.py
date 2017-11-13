@@ -1,12 +1,17 @@
-from typing import Optional
-
+import os
 import numpy as np
 import pandas as pd
+from os import makedirs
+from flask import request
+from typing import Optional
+from os.path import join as path_join
 from sklearn.metrics.pairwise import cosine_similarity
+from lexos.helpers import constants
 from lexos.models.base_model import BaseModel
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.receivers.session_receiver import SessionReceiver
 from lexos.receivers.similarity_receiver import SimilarityOption, \
     SimilarityReceiver
 
@@ -102,3 +107,6 @@ class SimilarityModel(BaseModel):
         labels_list = '***'.join(name for name in labels) + '***'
 
         return labels_list
+
+    def _generate_sims_csv(self):
+        delimiter = ','
