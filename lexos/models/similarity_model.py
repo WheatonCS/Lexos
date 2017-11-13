@@ -110,3 +110,7 @@ class SimilarityModel(BaseModel):
 
     def _generate_sims_csv(self):
         delimiter = ','
+        selected_file_name = self._id_temp_label_map[self._similarity_option.comp_file_id]
+
+
+
