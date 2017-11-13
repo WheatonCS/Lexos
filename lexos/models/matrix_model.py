@@ -26,8 +26,12 @@ class MatrixModel(BaseModel):
             the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_file_id_content_map = test_options.file_id_content_map
-        self._test_front_end_option = test_options.front_end_option
+        if test_options is not None:
+            self._test_file_id_content_map = test_options.file_id_content_map
+            self._test_front_end_option = test_options.front_end_option
+        else:
+            self._test_file_id_content_map = None
+            self._test_front_end_option = None
 
     @property
     def _file_id_content_map(self) -> FileIDContentMap:

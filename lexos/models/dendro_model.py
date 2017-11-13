@@ -26,9 +26,14 @@ class DendrogramModel(BaseModel):
             the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_dtm = test_options.doc_term_matrix
-        self._test_front_end_option = test_options.front_end_option
-        self._test_id_temp_label_map = test_options.id_temp_label_map
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_front_end_option = test_options.front_end_option
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_front_end_option = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
