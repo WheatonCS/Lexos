@@ -86,8 +86,7 @@ def upload_dictionaries():
         analysis.add_dictionary(file_name=file_name, content=content)
         data['dictionary_labels'].append(analysis.dictionaries[-1].label)
         data['active_dictionaries'].append(True)
-    data = json.dumps(data)
-    return data
+    return json.dumps(data)
 
 
 # Tells Flask to load this function when someone is at '/saveformula'
@@ -109,18 +108,9 @@ def toggle_dictionary():
     :return: a json object.
     """
     global analysis
-    data = {'dictionary_labels': [],
-            'active_dictionaries': [],
-            'toggle_all': analysis.toggle_all}
     if analysis.content_analysis_option.toggle_all:
-        data['dictionary_labels'],\
-            data['active_dictionaries'],\
-            data['toggle_all'] = analysis.toggle_all_dicts()
-    else:
-        data['dictionary_labels'],\
-            data['active_dictionaries'],\
-            data['toggle_all'] = analysis.toggle_dictionary()
-    return json.dumps(data)
+        return json.dumps(analysis.toggle_all_dicts())
+    return json.dumps(analysis.toggle_dictionary())
 
 
 # Tells Flask to load this function when someone is at '/deletedictionary'
@@ -135,6 +125,4 @@ def delete_dictionary():
 
 
 def error(msg: str):
-    data = {"error": msg}
-    data = json.dumps(data)
-    return data
+    return json.dumps({"error": msg})

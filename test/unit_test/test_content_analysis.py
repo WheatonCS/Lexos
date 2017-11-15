@@ -58,37 +58,37 @@ def test_count_words():
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     assert test.counters[0][0] == 1
 
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='test test test')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     assert test.counters[0][0] == 3
 
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='a test')
     test.add_dictionary(file_name="dict1", content="test, a")
-    test.count_words()
+    test.count()
     assert test.counters[0][0] == 2
 
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='a test')
     test.add_dictionary(file_name="dict1", content="test, a, a test")
-    test.count_words()
+    test.count()
     assert test.counters[0][0] == 1
 
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='a test test')
     test.add_dictionary(file_name="dict1", content="test, a, a test")
-    test.count_words()
+    test.count()
     assert test.counters[0][0] == 2
 
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='a test test a')
     test.add_dictionary(file_name="dict1", content="test, a, a test")
-    test.count_words()
+    test.count()
     assert test.counters[0][0] == 3
 
 
@@ -96,7 +96,7 @@ def test_generate_scores():
     test = ContentAnalysisModel(TestOptions(formula=""))
     test.add_corpus(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     test.generate_scores()
     assert test.scores[0] == 0.0
     test.test_option = TestOptions(formula="[dict1]")
@@ -107,7 +107,7 @@ def test_generate_scores():
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='test a')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="[dict1]")
     test.save_formula()
     test.generate_scores()
@@ -116,7 +116,7 @@ def test_generate_scores():
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='a test')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="[dict1]*2")
     test.save_formula()
     test.generate_scores()
@@ -125,7 +125,7 @@ def test_generate_scores():
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='a test a')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="[dict1]")
     test.save_formula()
     test.generate_scores()
@@ -136,7 +136,7 @@ def test_generate_averages():
     test = ContentAnalysisModel()
     test.add_corpus(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="0")
     test.save_formula()
     test.generate_scores()
@@ -147,14 +147,14 @@ def test_generate_averages():
     test.add_corpus(file_name="file1", label='file1', content='test')
     test.add_corpus(file_name="file2", label='file2', content='other file')
     test.add_dictionary(file_name="dict1", content="test")
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="0")
     test.save_formula()
     test.generate_scores()
     test.generate_averages()
     assert test.averages == ['Averages', 0.5, 0.0, 1.5, 0.0]
 
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="4*[dict1]**2")
     test.save_formula()
     test.generate_scores()
@@ -173,7 +173,7 @@ def test_to_data_frame():
     test.add_corpus(file_name="file2", label='file2', content='other file')
     test.add_dictionary(file_name="dict1", content="test")
     test.add_dictionary(file_name="dict2", content="test")
-    test.count_words()
+    test.count()
     test.test_option = TestOptions(formula="")
     test.save_formula()
     test.generate_scores()

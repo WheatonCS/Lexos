@@ -83,29 +83,31 @@ class ContentAnalysisModel(object):
         """
         label = self.content_analysis_option.dict_label
         self._toggle_all = True
-        dictionary_labels = []
-        active_dictionaries = []
+        data = {'dictionary_labels': [],
+                'active_dictionaries': [],
+                'toggle_all': self.toggle_all}
         for dictionary in self._dictionaries:
             if dictionary.label == label:
                 dictionary.active = not dictionary.active
             if not dictionary.active:
                 self._toggle_all = False
-            dictionary_labels.append(dictionary.label)
-            active_dictionaries.append(dictionary.active)
-        return dictionary_labels, active_dictionaries, self._toggle_all
+            data['dictionary_labels'].append(dictionary.label)
+            data['active_dictionaries'].append(dictionary.active)
+        return data
 
     def toggle_all_dicts(self):
         """Activates and Deactivates all dictionaries
 
         """
         self._toggle_all = not self._toggle_all
-        dictionary_labels = []
-        active_dictionaries = []
+        data = {'dictionary_labels': [],
+                'active_dictionaries': [],
+                'toggle_all': self._toggle_all}
         for dictionary in self.dictionaries:
             dictionary.active = self._toggle_all
-            dictionary_labels.append(dictionary.label)
-            active_dictionaries.append(self._toggle_all)
-        return dictionary_labels, active_dictionaries, self._toggle_all
+            data['dictionary_labels'].append(dictionary.label)
+            data['active_dictionaries'].append(self._toggle_all)
+        return data
 
     def get_contents(self) -> [list, list, bool]:
         """
@@ -144,35 +146,29 @@ class ContentAnalysisModel(object):
         """
         return len(self.get_active_dicts())
 
-    def count_words(self):
+    def count(self):
         """counts all dictionaries for all active files in the corpus"""
         self._counters = []
-        active_dicts = self.get_active_dicts()
         dictionaries = self.join_active_dicts()
         for file in deepcopy(self._corpus):
+            dictionaries = count_phrases(dictionaries, file)
+            self.get_dictionary_counts(dictionaries)
+
+    def get_dictionary_counts(self, dictionaries):
+        """gets the counts for each dictionary
+
+        :param dictionaries: list of Phrase object
+        """
+        counter = []
+        active_dicts = self.get_active_dicts()
+        for dictionary in active_dicts:
+            count = 0
             for phrase in dictionaries:
-                count = 0
-                if file.content.startswith(phrase.content + " "):
-                    count += 1
-                if file.content.endswith(" " + phrase.content + "\n") or \
-                    file.content.endswith(" " + phrase.content) or \
-                    file.content.endswith(
-                        phrase.content):
-                    count += 1
-                count += len(
-                    file.content.split(" " + phrase.content + " ")) - 1
-                if ' ' in phrase.content:
-                    file.content = file.content.replace(phrase.content, " ")
-                phrase.count = count
-            counter = []
-            for dictionary in active_dicts:
-                count = 0
-                for phrase in dictionaries:
-                    if phrase.dict_label == dictionary.label:
-                        count += phrase.count
-                counter.append(count)
-                if len(counter) == len(active_dicts):
-                    self._counters.append(counter)
+                if phrase.dict_label == dictionary.label:
+                    count += phrase.count
+            counter.append(count)
+            if len(counter) == len(active_dicts):
+                self._counters.append(counter)
 
     def generate_scores(self):
         """calculate the formula and scores=formula/total_word_count for each
@@ -358,7 +354,7 @@ class ContentAnalysisModel(object):
                  data, dictionary containing the result html table, dictionary
                  labels, active dictionaries, errors
         """
-        self.count_words()
+        self.count()
         if self.is_secure():
             data = {"result_table": "",
                     "dictionary_labels": [],
@@ -419,6 +415,30 @@ class ContentAnalysisModel(object):
     @test_option.setter
     def test_option(self, options):
         self._test_options = options
+
+
+def count_phrases(dictionary, file):
+    """counts each phrase in the dictionaty in the given file
+
+    :param dictionary: list of Phrase objects
+    :param file: a File object
+    :return: list of Phrase objects with their counts
+    """
+    for phrase in dictionary:
+        count = 0
+        if file.content.startswith(phrase.content + " "):
+            count += 1
+        if file.content.endswith(" " + phrase.content + "\n") or \
+            file.content.endswith(" " + phrase.content) or \
+            file.content.endswith(
+                phrase.content):
+            count += 1
+        count += len(
+            file.content.split(" " + phrase.content + " ")) - 1
+        if ' ' in phrase.content:
+            file.content = file.content.replace(phrase.content, " ")
+        phrase.count = count
+    return dictionary
 
 
 class Document(object):
