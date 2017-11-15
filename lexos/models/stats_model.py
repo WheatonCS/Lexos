@@ -131,7 +131,7 @@ class StatsModel(BaseModel):
         # initialize remove all zeros from count_list
         nonzero_count_list = count_list[count_list != 0]
         num_word = np.size(nonzero_count_list)
-        total_word_count = sum(nonzero_count_list).item()
+        total_word_count = int(sum(nonzero_count_list).item())
         # 1 standard error analysis
         average_word_count = round(total_word_count / num_word, 3)
         # calculate the standard deviation
