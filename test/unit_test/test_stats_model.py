@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
-from lexos.models.stats_model import StatsModel
+from lexos.models.stats_model import StatsModel, StatsTestOptions
 
 # ------------------------ First test suite ------------------------
 test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
@@ -11,9 +11,9 @@ test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                             columns=np.array(["A", "B", "C", "D", "E", "F",
                                               "G", "H", "I"]))
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
-test_stats_model_one = \
-    StatsModel(test_dtm=test_dtm_one,
-               test_id_temp_label_map=test_id_temp_table_one)
+test_option_one = StatsTestOptions(doc_term_matrix=test_dtm_one,
+                                   id_temp_label_map=test_id_temp_table_one)
+test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_result()
 test_file_result_one = test_stats_model_one.get_file_result()
 # ------------------------------------------------------------------
@@ -27,9 +27,9 @@ test_dtm_two = pd.DataFrame(
     columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H",
                       "I", "J", "K", "L"]))
 test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
-test_stats_model_two = \
-    StatsModel(test_dtm=test_dtm_two,
-               test_id_temp_label_map=test_id_temp_table_two)
+test_option_two = StatsTestOptions(doc_term_matrix=test_dtm_two,
+                                   id_temp_label_map=test_id_temp_table_two)
+test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_result()
 test_file_result_two = test_stats_model_two.get_file_result()
 # ------------------------------------------------------------------
@@ -43,9 +43,10 @@ test_dtm_anomaly = pd.DataFrame(
 test_id_temp_table_anomaly = \
     {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt", 4: "F5.txt",
      5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
-test_stats_model_anomaly = \
-    StatsModel(test_dtm=test_dtm_anomaly,
-               test_id_temp_label_map=test_id_temp_table_anomaly)
+test_option_anomaly = \
+    StatsTestOptions(doc_term_matrix=test_dtm_anomaly,
+                     id_temp_label_map=test_id_temp_table_anomaly)
+test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_result()
 test_file_result_anomaly = test_stats_model_anomaly.get_file_result()
 # ------------------------------------------------------------------
@@ -55,9 +56,10 @@ test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
                                 index=np.array([0, 1, 2]),
                                 columns=np.array(["A", "B"]))
 test_id_temp_table_special = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
-test_stats_model_special = StatsModel(
-    test_dtm=test_dtm_special,
-    test_id_temp_label_map=test_id_temp_table_special)
+test_option_special = \
+    StatsTestOptions(doc_term_matrix=test_dtm_special,
+                     id_temp_label_map=test_id_temp_table_special)
+test_stats_model_special = StatsModel(test_options=test_option_special)
 # ------------------------------------------------------------------
 
 
