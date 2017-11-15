@@ -418,7 +418,7 @@ class ContentAnalysisModel(object):
 
 
 def count_phrases(dictionary, file):
-    """counts each phrase in the dictionaty in the given file
+    """counts each phrase in the dictionary in the given file
 
     :param dictionary: list of Phrase objects
     :param file: a File object
