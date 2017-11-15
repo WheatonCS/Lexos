@@ -9,6 +9,12 @@ from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
 
 
+class StatsTestOptions(NamedTuple):
+    """A typed tuple to hold test options."""
+    doc_term_matrix: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+
+
 class CorpusInfo(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
     q1: float  # The first quartile of all file sizes.
@@ -40,18 +46,19 @@ class FileInfo(NamedTuple):
 
 
 class StatsModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_id_temp_label_map: Optional[IdTempLabelMap] = None):
+    def __init__(self, test_options: Optional[StatsTestOptions] = None):
         """This is the class to generate statistics of the input file.
 
-        :param test_dtm: (fake parameter)
-                         the doc term matrix for testing
-        :param test_id_temp_label_map: (fake parameter)
-                                       the fake id temp label map for testing
+        :param test_options: the input used in testing to override the
+                             dynamically loaded option
         """
         super().__init__()
-        self._test_dtm = test_dtm
-        self._test_id_temp_label_map = test_id_temp_label_map
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
