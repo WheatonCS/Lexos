@@ -45,9 +45,9 @@ class StatsModel(BaseModel):
         """This is the class to generate statistics of the input file.
 
         :param test_dtm: (fake parameter)
-                         the doc term matrix used for testing
-        :param test_option: (fake parameter)
-                            option used for testing
+                         the doc term matrix for testing
+        :param test_id_temp_label_map: (fake parameter)
+                                       the fake id temp label map for testing
         """
         super().__init__()
         self._test_dtm = test_dtm
