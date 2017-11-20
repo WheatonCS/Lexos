@@ -64,7 +64,9 @@ function displaySimResult () {
             function (response) {
                 const outerTableDivSelector = $('#simTable')
                 outerTableDivSelector.html(response)  // put the response into the web page
-                outerTableDivSelector.children().DataTable()  // init the response table to data table
+                outerTableDivSelector.children().DataTable({  // init the response table to data table
+                    paging: false,  // no page
+                })
                 $('#similaritiesResults').css({"display": "block"})  // display everything
             })
         .fail(
