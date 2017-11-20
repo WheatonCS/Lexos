@@ -25,7 +25,7 @@ def viz():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     from collections import OrderedDict
     from natsort import natsorted
     labels = OrderedDict(natsorted(labels.items(), key=lambda x: x[1]))

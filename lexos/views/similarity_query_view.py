@@ -1,4 +1,5 @@
 from flask import request, session, render_template, send_file, Blueprint
+
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.models.similarity_model import SimilarityModel
@@ -12,7 +13,7 @@ sim_blueprint = Blueprint('sim_query', __name__)
 
 
 # Tells Flask to load this function when someone is at '/extension'
-@sim_blueprint.route("/similarity", methods=["GET", "POST"])
+@sim_blueprint.route("/similarity", methods=["GET"])
 def similarity():
     """Handles the similarity query page functionality.
 
@@ -25,7 +26,7 @@ def similarity():
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
     encoded_labels = {}
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     for i in labels:
         encoded_labels[str(i)] = labels[i]
 
@@ -48,8 +49,6 @@ def similarity():
     if 'gen-sims' in request.form:
         # 'POST' request occur when html form is submitted
         # (i.e. 'Get Graphs', 'Download...')
-        docs_score = SimilarityModel().get_similarity_score()
-        docs_label = SimilarityModel().get_similarity_label()
         session_manager.cache_analysis_option()
         session_manager.cache_sim_options()
         return render_template(

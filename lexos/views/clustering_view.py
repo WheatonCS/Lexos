@@ -26,7 +26,7 @@ def dendrogram():
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     if 'hierarchyoption' not in session:
         session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     return render_template(
         'dendrogram.html',
         labels=labels,
@@ -58,7 +58,7 @@ def k_means():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     for key in labels:
         labels[key] = labels[key]
     default_k = int(len(labels) / 2)

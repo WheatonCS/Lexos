@@ -398,7 +398,7 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
     import matplotlib.pyplot as plt
 
     if 'getdendro' in request.form:
-        label_dict = file_manager.get_active_labels()
+        label_dict = file_manager.get_active_labels_with_id()
         labels = []
         for ind, label in list(label_dict.items()):
             labels.append(label)
@@ -1276,7 +1276,7 @@ def generate_sims_csv(file_manager: FileManager):
             "'similar' and unlike documents have distances closer to one.\n")
 
         out_file.write("Selected Comparison Document: " + delimiter + str(
-            file_manager.get_active_labels()[int(comp_file_id)]) + '\n')
+            file_manager.get_active_labels_with_id()[int(comp_file_id)]) + '\n')
 
     # append the dataframe to the file
     with open(out_file_path, 'a') as f:
@@ -1623,7 +1623,7 @@ def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
     import matplotlib.pyplot as plt
 
     if 'getdendro' in request.json:
-        label_dict = file_manager.get_active_labels()
+        label_dict = file_manager.get_active_labels_with_id()
         labels = []
         for ind, label in list(label_dict.items()):
             labels.append(label)
