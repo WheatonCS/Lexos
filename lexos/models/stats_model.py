@@ -23,8 +23,6 @@ class CorpusInfo(NamedTuple):
     median: float  # The median of all file sizes.
     average: float  # The average of all file sized.
     num_file: int  # The number of files.
-    file_sizes: list  # The list of all file sizes.
-    file_names: list  # The list of all file names.
     std_deviation: float  # The standard deviation of all file sizes.
     anomaly_iqr: dict  # The anomaly inter-quartile range of all file sizes.
     anomaly_std_err: dict  # The anomaly standard error of all file sizes.
@@ -114,8 +112,6 @@ class StatsModel(BaseModel):
                           median=median,
                           average=average_file_size,
                           num_file=num_file,
-                          file_sizes=list(file_sizes),
-                          file_names=labels,
                           anomaly_iqr=file_anomaly_iqr,
                           std_deviation=std_dev_file_size,
                           anomaly_std_err=file_anomaly_std_err)
