@@ -1,4 +1,5 @@
-from typing import Dict, NamedTuple, Optional
+import re
+from typing import Dict, NamedTuple, Optional, Match
 
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
@@ -51,6 +52,43 @@ class ScrubberModel(BaseModel):
         return self._test_front_end_options or \
             ScrubbingReceiver().options_from_front_end()
 
+    @staticmethod
+    def _replace_with_dict(text: str, replacement_dict: Dict[str, str],
+                           edge1: str, edge2: str) -> str:
+        """Alters text according to the replacements dictionary.
+
+        :param text: The input text to replace.
+        :param replacement_dict: A dictionary mapping characters/strings in the
+            text to their replacement values.
+        :param edge1: A regex pattern describing the left border of the match.
+        :param edge2: A regex pattern describing the right border of the match.
+        :return: The text after replacement.
+        """
+
+        # Create a regex pattern to find all the "replacement_from" strings
+        all_of_replace_from = re.compile(
+            edge1 + '|'.join(re.escape(replace_from)
+                             for replace_from in replacement_dict) + edge2,
+            re.UNICODE)
+
+        def _replacement_map_func(match_obj: Match) -> str:
+            """Maps the replace_from match to the replace_to string.
+
+            :param match_obj: The replacement character as a regex match
+                object, to be used as a key.
+            return: The matching value, a string from the replacements
+                dictionary.
+            """
+
+            # Preserve the spacing in group one, but swap the matched char(s)
+            # with their replacement from the dict
+            return match_obj.group(1) + replacement_dict[match_obj.group(2)]
+
+        # Use re.sub() with a function
+        # This will send all the matches to the function and then replace each
+        # match with the result of the function
+        return all_of_replace_from.sub(_replacement_map_func, text)
+
     def _scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
 
@@ -97,7 +135,7 @@ class ScrubberModel(BaseModel):
         # -- 0. Gutenberg -----------------------------------------------------
         # need to figure out gutenberg
 
-        # -- 1. lower ---------------------------------------------------------
+        # -- 1. Lower ---------------------------------------------------------
         if self._options.basic_options.lower:    # User wants to ignore case
             def to_lower_function(original_text: str) -> str:
                 """Removes capital letters from a text.
@@ -118,7 +156,11 @@ class ScrubberModel(BaseModel):
 
                 return original_text
 
-        # -- 2. special characters --------------------------------------------
+        # -- 2. Special characters --------------------------------------------
+        text = self._replace_with_dict(
+            text=text,
+            replacement_dict=self._options.additional_options.special_char,
+            edge1="()(", edge2=")()")
 
         return text
 

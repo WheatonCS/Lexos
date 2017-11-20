@@ -2,49 +2,13 @@
 import re
 import sys
 import unicodedata
-from typing import List, Dict, Match
+from typing import List, Dict
 
-from flask import request, session
+from flask import request
 from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
-
-
-def replace_with_dict(text: str, replacement_dict: Dict[str, str],
-                      edge1: str, edge2: str) -> str:
-    """Alters text according to the replacements dictionary.
-
-    :param text: The input text to replace.
-    :param replacement_dict: A dictionary mapping characters/strings in the
-        text to their replacement values.
-    :param edge1: A regex pattern describing the leftmost border of the match.
-    :param edge2: A regex pattern describing the rightmost border of the match.
-    :return: The text after replacement.
-    """
-
-    # Create a regex pattern to find all the "replacement_from" strings
-    all_of_replace_from = re.compile(
-        edge1 + '|'.join(re.escape(replace_from)
-                         for replace_from in replacement_dict) + edge2,
-        re.UNICODE)
-
-    def _replacement_map_func(match_obj: Match) -> str:
-        """Maps the replace_from match to the replace_to string.
-
-        :param match_obj: The replacement character as a regex match object,
-            to be used as a key.
-        return: The matching value, a string from the replacements dictionary.
-        """
-
-        # Preserve the spacing in group one, but swap the matched char(s)
-        # with their replacement from the dict
-        return match_obj.group(1) + replacement_dict[match_obj.group(2)]
-
-    # Use re.sub() with a function
-    # This will send all the matches to the function and then replace each
-    # match with the result of the function
-    return all_of_replace_from.sub(_replacement_map_func, text)
 
 
 def process_tag_replace_options(orig_text: str, tag: str, action: str,
@@ -95,41 +59,6 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         processed_text = orig_text    # Leave Tag Alone
 
     return processed_text
-
-
-def handle_tags(text: str) -> str:
-    """Handles tags that are found in the text.
-
-    Useless tags (header tags) are deleted and depending on the specifications
-        chosen by the user, words between meaningful tags (corr, foreign) are
-        either kept or deleted.
-    :param text: A unicode string representing the whole text that is being
-        manipulated.
-    :return: A unicode string representing the text after deletion of the tags.
-    """
-
-    text = re.sub('[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-    text = re.sub(r"(<\?.*?>)", "", text)    # Remove xml declarations
-    text = re.sub(r"(<!--.*?-->)", "", text)    # Remove comments
-
-    # This matches the DOCTYPE and all internal entity declarations
-    doctype = re.compile(r"<!DOCTYPE.*?>", re.DOTALL)
-    text = re.sub(doctype, "", text)    # Remove DOCTYPE declarations
-
-    if 'xmlhandlingoptions' in session:  # Should always be true
-
-        # If user saved changes in Scrub Tags button (XML modal), then visit
-        # each tag:
-        for tag in session['xmlhandlingoptions']:
-            action = session['xmlhandlingoptions'][tag]["action"]
-            attribute = session['xmlhandlingoptions'][tag]["attribute"]
-            text = process_tag_replace_options(text, tag, action, attribute)
-
-        # One last catch-all- removes extra whitespace from all the removed
-        # tags
-        text = re.sub('[\t ]+', " ", text, re.UNICODE)
-
-    return text
 
 
 def get_all_punctuation_map() -> Dict[int, type(None)]:
