@@ -121,19 +121,15 @@ class ScrubbingOptions(NamedTuple):
 
 class ScrubbingReceiver(BaseReceiver):
 
-    def __init__(self, test_scrubbing_options: ScrubbingOptions = None):
-        """A class to put together all the scrubbing options.
-
-        :param test_scrubbing_options: A set of options to use for testing.
-        """
+    def __init__(self):
+        """A receiver for all the scrubbing options."""
 
         super().__init__()
-        self._test_scrubbing_options = test_scrubbing_options
 
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
 
-        :return: A BasicOptions struct.
+        :return: A BasicOptions NamedTuple.
         """
 
         lower = self._front_end_data['lowercasebox'] == "true"
@@ -157,7 +153,7 @@ class ScrubbingReceiver(BaseReceiver):
     def _get_file_options_from_front_end(self) -> FileOptions:
         """Gets all the file options from the front end.
 
-        :return: A FileOptions struct.
+        :return: A FileOptions NamedTuple.
         """
 
         storage_folder = session_manager.session_folder() + '/scrub/'
