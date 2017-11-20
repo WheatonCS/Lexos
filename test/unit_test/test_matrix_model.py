@@ -21,8 +21,7 @@ class BasicTest:
             token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
-            culling_option=CullingOption(culling=False, cull_least_seg=None,
-                                         most_frequent_word=False,
+            culling_option=CullingOption(cull_least_seg=None,
                                          mfw_lowest_rank=None),
             id_temp_label_map={
                 0: "test_label_1",
@@ -69,8 +68,7 @@ class CullingTest:
             token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
-            culling_option=CullingOption(culling=True, cull_least_seg=3,
-                                         most_frequent_word=True,
+            culling_option=CullingOption(cull_least_seg=3,
                                          mfw_lowest_rank=1),
             id_temp_label_map={
                 1: "label_1",

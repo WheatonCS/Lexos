@@ -147,7 +147,7 @@ class MatrixModel(BaseModel):
         """
 
         # apply culling to dtm
-        if self._opts.culling_option.culling:
+        if self._opts.culling_option.cull_least_seg is not None:
             dtm_after_cull = self._get_culled_matrix(
                 least_num_seg=self._opts.culling_option.cull_least_seg,
                 dtm_data_frame=dtm_data_frame
@@ -156,7 +156,7 @@ class MatrixModel(BaseModel):
             dtm_after_cull = dtm_data_frame
 
         # only leaves the most frequent words in dtm
-        if self._opts.culling_option.most_frequent_word:
+        if self._opts.culling_option.mfw_lowest_rank is not None:
             dtm_after_mfw = self._get_most_frequent_word(
                 lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
                 dtm_data_frame=dtm_after_cull,
