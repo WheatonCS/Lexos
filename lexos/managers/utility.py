@@ -15,7 +15,6 @@ import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 import lexos.processors.analyze.KMeans as KMeans
-import lexos.processors.analyze.information as information
 import lexos.processors.analyze.similarity as similarity
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
@@ -235,75 +234,6 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     out_file.close()
 
     return out_file_path, extension
-
-
-# Gets called from statistics() in lexos_core.py
-
-
-def generate_statistics(file_manager: FileManager) -> \
-        (List[information.FileInformation], information.CorpusInformation):
-    """Calls analyze/information to generate statistics of the corpus.
-
-    :param file_manager: A FileManager object (see managers/file_manager.py)
-    :return: file_info_list: a list of tuples that contain the file id and the
-                             file information
-                             (see analyze/information.py/
-                             Corpus_Information.returnstatistics()
-                             function for more)
-             corpus_information: the statistics of the whole corpus
-                                 (see analyze/information.py/
-                                 File_Information.returnstatistics()
-                                 function for more)
-    """
-    checked_labels = request.form.getlist('segmentlist')
-    file_ids = set(file_manager.files.keys())
-    # convert the checked_labels into int
-    checked_labels = set(map(int, checked_labels))
-    # if the file_id is not in checked list
-    for file_id in file_ids - checked_labels:
-        # make that file inactive in order to getMatrix
-        file_manager.files[file_id].disable()
-
-    # folder path for storing graphs and plots
-    folder_path = os.path.join(session_manager.session_folder(),
-                               constants.RESULTS_FOLDER)
-    try:
-        os.mkdir(folder_path)  # attempt to make folder to store graphs/plots
-    except FileExistsError:
-        pass
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_deleted, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    dtm_data = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=culling)
-    # grab data from data frame
-    count_matrix = dtm_data.values
-    labels = dtm_data.index.values
-
-    # helper function gets information for each file
-    def get_file_info(row_index, label):
-        return information.FileInformation(
-            count_list=count_matrix[row_index, :],
-            file_name=label)
-
-    # put information of each file into a list
-    file_info_list = [get_file_info(row_index=ind, label=label)
-                      for ind, label in enumerate(labels)]
-
-    # get information of the whole corpus
-    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
-                                                labels=labels)
-    return file_info_list, corpus_info
-
 
 def get_dendrogram_legend(file_manager: FileManager,
                           distance_list: List[float]) -> str:
