@@ -12,7 +12,6 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class BasicOptions(NamedTuple):
-
     """A typed tuple that contains basic scrubbing options."""
 
     # Indicates whether to convert the text to lowercase.
@@ -53,7 +52,6 @@ class BasicOptions(NamedTuple):
 
 
 class FileOptions(NamedTuple):
-
     """A typed tuple that contains additional scrubbing from files."""
 
     # The storage folder location/path as a string.
@@ -76,7 +74,6 @@ class FileOptions(NamedTuple):
 
 
 class ManualOptions(NamedTuple):
-
     """A typed tuple that contains additional scrubbing options from fields."""
 
     # The consolidations field string.
@@ -93,7 +90,6 @@ class ManualOptions(NamedTuple):
 
 
 class AdditionalOptions(NamedTuple):
-
     """A typed tuple that contains all additional scrubbing options."""
 
     # The merged consolidations string.
@@ -113,7 +109,6 @@ class AdditionalOptions(NamedTuple):
 
 
 class ScrubbingOptions(NamedTuple):
-
     """A typed tuple that contains all scrubbing options."""
 
     # A NamedTuple of basic options.
@@ -371,7 +366,7 @@ class ScrubbingReceiver(BaseReceiver):
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.
 
-        :return: All the scrubbing options packed in a ScrubbingOptions struct.
+        :return: All the options packed in a ScrubbingOptions NamedTuple.
         """
 
         return ScrubbingOptions(
