@@ -1,3 +1,4 @@
+import re
 from typing import List, Dict, NamedTuple
 
 from flask import request
@@ -126,6 +127,79 @@ class ScrubbingReceiver(BaseReceiver):
 
         super().__init__()
 
+    @staticmethod
+    def _load_scrub_optional_upload(storage_folder: str,
+                                    filename: str) -> str:
+        """Loads a option file that was previously saved in the storage folder.
+
+        :param storage_folder: The location of the storage folder as a string.
+        :param filename: A string representing the name of the file that is
+            being loaded.
+        :return: The file string that was saved in the folder (empty if there
+            is no string to load).
+        """
+
+        try:
+            return general_functions.load_file_from_disk(
+                loc_folder=storage_folder, filename=filename)
+        except FileNotFoundError:
+            return ""
+
+    @staticmethod
+    def _save_scrub_optional_upload(file_string: str, storage_folder: str,
+                                    filename: str):
+        """Saves the contents of a user option file into the storage folder.
+
+        :param file_string: A string representing a whole file to be saved.
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file that is
+            being saved.
+        """
+
+        general_functions.write_file_to_disk(
+            contents=file_string, dest_folder=storage_folder,
+            filename=filename)
+
+    def _handle_file_and_manual_strings(self, file_string: str,
+                                        manual_string: str,
+                                        storage_folder: str,
+                                        storage_filename: str):
+        """Saves uploaded files and merges file strings with manual strings.
+
+        :param file_string: The user's uploaded file.
+        :param manual_string: The input from a text field.
+        :param storage_folder: The path to the storage folder.
+        :param storage_filename: The name of the file to save to.
+        :return: The combination of the text field and file strings.
+        """
+
+        if file_string:
+            self._save_scrub_optional_upload(file_string=file_string,
+                                             storage_folder=storage_folder,
+                                             filename=storage_filename)
+        merged_string = file_string + "\n" + manual_string
+
+        return merged_string
+
+    @staticmethod
+    def split_stop_keep_word_string(input_string: str) -> List[str]:
+        """Breaks stop and keepword string inputs into lists of words.
+
+        :param input_string: A string of words input by the user.
+        :return: A list of the user's string broken up into words.
+        """
+
+        input_lines = input_string.split("\n")
+
+        # A list of all words delimited by commas, spaces, and newlines
+        input_words = [word
+                       for line in input_lines
+                       for word in re.split('[, ]', line.strip())
+                       if word != '']
+
+        return input_words
+
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
 
@@ -189,28 +263,10 @@ class ScrubbingReceiver(BaseReceiver):
             file_consol=file_strings[0], file_lemma=file_strings[1],
             file_special_char=file_strings[2], file_sw_kw=file_strings[3])
 
-    @staticmethod
-    def _load_scrub_optional_upload(storage_folder: str,
-                                    filename: str) -> str:
-        """Loads a option file that was previously saved in the storage folder.
-
-        :param storage_folder: The location of the storage folder as a string.
-        :param filename: A string representing the name of the file that is
-            being loaded.
-        :return: The file string that was saved in the folder (empty if there
-            is no string to load).
-        """
-
-        try:
-            return general_functions.load_file_from_disk(
-                loc_folder=storage_folder, filename=filename)
-        except FileNotFoundError:
-            return ""
-
     def _get_manual_options_from_front_end(self) -> ManualOptions:
         """Gets all the manual options from the front end.
 
-        :return: A ManualOptions struct.
+        :return: A ManualOptions NamedTuple.
         """
 
         # Handle manual entries: consolidations, lemmas, special characters,
@@ -225,13 +281,42 @@ class ScrubbingReceiver(BaseReceiver):
             manual_special_char=manual_special_char, manual_sw_kw=manual_sw_kw)
 
     def _get_additional_options_from_front_end(self) -> AdditionalOptions:
-        """
+        """Gets all the additional options from the front end.
 
-        """
+        :return: An AdditionalOptions NamedTuple"""
 
         file_options = self._get_file_options_from_front_end(),
         manual_options = self._get_manual_options_from_front_end()
-        pass
+
+        # Combine both types of additional option inputs
+        storage_folder = getattr(file_options, "storage_folder")
+        both_consol = self._handle_file_and_manual_strings(
+            file_string=getattr(file_options, "file_consol"),
+            manual_string=getattr(manual_options, "manual_consol"),
+            storage_folder=storage_folder,
+            storage_filename=constants.CONSOLIDATION_FILENAME)
+        both_lemma = self._handle_file_and_manual_strings(
+            file_string=getattr(file_options, "file_lemma"),
+            manual_string=getattr(manual_options, "manual_lemma"),
+            storage_folder=storage_folder,
+            storage_filename=constants.LEMMA_FILENAME)
+        both_special_char = self._handle_file_and_manual_strings(
+            file_string=getattr(file_options, "file_special_char"),
+            manual_string=getattr(manual_options, "manual_special_char"),
+            storage_folder=storage_folder,
+            storage_filename=constants.SPECIAL_CHAR_FILENAME)
+        both_sw_kw = self._handle_file_and_manual_strings(
+            file_string=getattr(file_options, "file_sw_kw"),
+            manual_string=getattr(manual_options, "manual_sw_kw"),
+            storage_folder=storage_folder,
+            storage_filename=constants.STOPWORD_FILENAME)
+
+        sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
+
+        # return AdditionalOptions(consol=consol, lemma=lemma,
+        #                          special_char=special_char, sw_kw=sw_kw,
+        #                          keep=???)
+
 
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.

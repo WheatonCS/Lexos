@@ -450,24 +450,6 @@ def get_remove_digits_map() -> Dict[int, type(None)]:
     return remove_digit_map
 
 
-def split_stop_keep_word_string(input_string: str) -> List[str]:
-    """Breaks stop and keepword string inputs into lists of words.
-
-    :param input_string: A string of words input by the user.
-    :return: A list of the user's string broken up into words.
-    """
-
-    input_lines = input_string.split("\n")
-
-    # A list of all words delimited by commas, spaces, and newlines
-    input_words = [word
-                   for line in input_lines
-                   for word in re.split('[, ]', line.strip())
-                   if word != '']
-
-    return input_words
-
-
 def delete_words(text: str, remove_list: List[str]) -> str:
     """Deletes the words in remove_list from the text.
 
