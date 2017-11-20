@@ -84,7 +84,7 @@ function displaySimResult () {
 /**
  * download the sim csv
  */
-function downloadSimCsv () {
+function downloadSimCSV () {
         // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
@@ -126,7 +126,7 @@ $(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            downloadSimCsv()
+            downloadSimCSV()
         }
         else {
             runModal(error)
