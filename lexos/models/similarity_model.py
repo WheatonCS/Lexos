@@ -1,17 +1,12 @@
-import os
-from os import makedirs
-from os.path import join as path_join
 from typing import NamedTuple
 
 import pandas as pd
 from scipy.spatial.distance import cosine
 
-from lexos.helpers import constants
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.receivers.session_receiver import SessionReceiver
 from lexos.receivers.similarity_receiver import SimilarityOption, \
     SimilarityReceiver
 
@@ -111,31 +106,4 @@ class SimilarityModel(BaseModel):
 
         :return output file path.
         """
-        selected_file_name = self._id_temp_label_map[
-            self._similarity_option.comp_file_id]
-
-        # get the path of the folder to save result
-        folder_path = path_join(SessionReceiver().get_session_folder(),
-                                constants.RESULTS_FOLDER)
-        if not os.path.isdir(folder_path):
-            makedirs(folder_path)
-
-        # get the saved file path
-        out_file_path = path_join(folder_path, 'results.csv')
-
-        # write the header to the file
-        with open(out_file_path, 'w') as out_file:
-            out_file.write("Similarity Rankings:" + '\n')
-            out_file.write(
-                "The rankings are determined by 'distance between documents' "
-                "where small distances (near zero) represent documents that "
-                "are 'similar' and unlike documents have distances closer to "
-                "one.\n")
-            out_file.write("Selected Comparison Document: " + ',' +
-                           selected_file_name + '\n')
-
-        # append the pandas data frame to the file
-        with open(out_file_path, 'a') as f:
-            self._gen_exact_similarity().to_csv(f)
-
-        return out_file_path
+        return self._gen_exact_similarity().to_frame().to_csv()
