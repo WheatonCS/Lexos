@@ -70,7 +70,7 @@ class StatsModel(BaseModel):
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_temp_label_id_map()
 
-    def get_corpus_result(self) -> CorpusInfo:
+    def get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
         assert np.sum(self._doc_term_matrix.values) > 0, EMPTY_LIST_MESSAGE
         # initialize
@@ -149,7 +149,7 @@ class StatsModel(BaseModel):
                         std_deviation=std_word_count,
                         total_word_count=total_word_count)
 
-    def get_file_result(self) -> List[FileInfo]:
+    def get_all_file_info(self) -> List[FileInfo]:
         """Find statistics of all files and put each result into a list."""
 
         file_info_list = \

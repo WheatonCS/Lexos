@@ -41,8 +41,8 @@ def statistics():
 
     if request.method == "POST":
         token = StatsModel.get_token_type()
-        file_info_list = StatsModel().get_file_result()
-        corpus_info = StatsModel().get_corpus_result()
+        file_info_list = StatsModel().get_all_file_info()
+        corpus_info = StatsModel().get_corpus_info()
         session_manager.cache_analysis_option()
         session_manager.cache_statistic_option()
 
