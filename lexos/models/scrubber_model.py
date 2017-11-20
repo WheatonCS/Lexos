@@ -31,9 +31,9 @@ class ScrubberModel(BaseModel):
 
     @property
     def _file_id_content_map(self) -> FileIDContentMap:
-        """The file manager for the current session.
+        """A dictionary of active file IDs and content for the current session.
 
-        :return: A FileManager object.
+        :return: A FileIDContentMap.
         """
 
         return self._test_file_id_content_map \
@@ -42,9 +42,9 @@ class ScrubberModel(BaseModel):
 
     @property
     def _options(self) -> ScrubbingOptions:
-        """Gets all the scrubbing options.
+        """All the scrubbing options.
 
-        :return: A struct of scrubbing options from the front end or test
+        :return: A NamedTuple of scrubbing options from the front end or test
             options.
         """
 
