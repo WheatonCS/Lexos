@@ -40,14 +40,14 @@ def similarity():
         numActiveDocs=num_active_docs)
 
 
-@sim_blueprint.route("/similarityTable", method=['POST'])
+@sim_blueprint.route("/similarityHTML", methods=['POST'])
 def sim_html():
     session_manager.cache_analysis_option()
     session_manager.cache_sim_options()
     return SimilarityModel().generate_sims_html()
 
 
-@sim_blueprint.route("/similarityCSV", method=['POST'])
+@sim_blueprint.route("/similarityCSV", methods=['POST'])
 def sim_csv():
     session_manager.cache_analysis_option()
     session_manager.cache_sim_options()
