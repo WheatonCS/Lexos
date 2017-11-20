@@ -1,7 +1,9 @@
 import errno
 import os
+import pickle
 import re
 import shutil
+from typing import Union, Any
 from zipfile import ZipFile
 
 import chardet
@@ -230,17 +232,49 @@ def _try_decode_bytes_(raw_bytes: bytes) -> str:
     return decoded_string
 
 
-def decode_bytes(raw_bytes: bytes) -> str:
-    """Decode the raw byte into a string
+def decode_bytes(raw_bytes: Union[bytes, str]) -> str:
+    """Decodes raw bytes from a user's file into a string.
 
-    :param raw_bytes: the bytes you get and want to decode to string
-    :return: A decoded string
+    :param raw_bytes: The bytes to be decoded to a python string.
+    :return: The decoded string.
     """
-    try:
-        decoded_str = _try_decode_bytes_(raw_bytes)
 
-    except (UnicodeDecodeError, TypeError):
-        raise LexosException('chardet fail to detect encoding of your file, '
-                             'please make sure your file is in utf-8 encoding')
+    if isinstance(raw_bytes, bytes):
+        try:
+            decoded_str = _try_decode_bytes_(raw_bytes)
+
+        except (UnicodeDecodeError, TypeError):
+            raise LexosException('chardet fail to detect encoding of your '
+                                 'file, please make sure your file is in '
+                                 'utf-8 encoding')
+    else:
+        decoded_str = raw_bytes
 
     return decoded_str
+
+
+def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
+    """Stores data in a file on the disk.
+
+    :param contents: Whatever the file should contain.
+    :param dest_folder: The directory path where the file should be saved.
+    :param filename: The name of the file to be created.
+    """
+
+    try:
+        os.makedirs(dest_folder)
+    except FileExistsError:
+        pass
+    pickle.dump(contents, open(dest_folder + filename, 'wb'))
+
+
+def load_file_from_disk(loc_folder: str, filename: str) -> Any:
+    """Loads a file that was previously saved to the disk.
+
+    :param loc_folder: The location of the containing folder.
+    :param filename: The name of the file to be loaded.
+    :return: The contents of the loaded file.
+    """
+
+    file_string = pickle.load(open(loc_folder + filename, 'rb'))
+    return file_string

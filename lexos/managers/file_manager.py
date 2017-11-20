@@ -1,15 +1,16 @@
 import io
-import numpy as np
 import os
-import pandas as pd
 import shutil
 import zipfile
 from cmath import sqrt, log, exp
-from flask import request, send_file
 from os import makedirs
 from os.path import join as pathjoin
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from typing import List, Tuple, Dict
+
+import numpy as np
+import pandas as pd
+from flask import request, send_file
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -175,12 +176,13 @@ class FileManager:
 
         return previews
 
-    def get_content_of_active(self) -> List[str]:
+    def get_content_of_active_with_id(self) -> Dict[int, str]:
         """Helper method to get_matrix.
 
         :return: get all the file content from the file_manager
         """
-        return [file.load_contents() for file in self.get_active_files()]
+        return {file.id: file.load_contents()
+                for file in self.get_active_files()}
 
     def toggle_file(self, file_id: int):
         """Toggles the active status of the given file.

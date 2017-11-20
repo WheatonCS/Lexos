@@ -1,5 +1,3 @@
-a	?	0061
-A	?	0041
 	&aenl;	EEE0
 ᴀ	&ascap;	1D00
 ª	&ordf;	00AA
@@ -155,8 +153,6 @@ A	?	0041
 	&anecklessvlig;	EFA2
 	&aclose;	F203
 	&Asqu;	F13A
-b	?	0062
-B	?	0042
 	&benl;	EEE1
 ʙ	&bscap;	0299
 	&bscapdot;	EBD0
@@ -171,8 +167,6 @@ B	?	0042
 	&bovlmed;	E44D
 	&bblig;	EEC2
 	&bglig;	EEC3
-c	?	0063
-C	?	0043
 	&cenl;	EEE2
 ᴄ	&cscap;	1D04
 ç	&ccedil;	00E7
@@ -193,8 +187,6 @@ C	?	0043
 	&ccurl;	F198
 Ↄ	&CONbase;	2183
 ↄ	&conbase;	2184
-d	?	0064
-D	?	0044
 	&denl;	EEE3
 ᴅ	&dscap;	1D05
 đ	&dstrok;	0111
@@ -225,8 +217,6 @@ D	?	0044
 	&drotenl;	EEE4
 ẟ	&dscript;	1E9F
 	&dcurl;	F193
-e	?	0065
-E	?	0045
 	&eenl;	EEE6
 ᴇ	&escap;	1D07
 ę	&eogon;	0119
@@ -291,8 +281,6 @@ E	?	0045
 	&eunc;	F218
 	&eext;	F219
 	&etall;	F21A
-f	?	0066
-F	?	0046
 	&fenl;	EEE7
 ꜰ	&fscap;	A730
 	&fdotbl;	E4EE
@@ -335,8 +323,6 @@ F	?	0046
 	&finsacute;	EBB4
 	&Finsacute;	EBB3
 	&fcurl;	F194
-g	?	0067
-G	?	0047
 	&genl;	EEE8
 ɢ	&gscap;	0262
 ǥ	&gstrok;	01E5
@@ -366,8 +352,6 @@ G	?	0047
 	&gsmlowloop;	F21F
 ɡ	&gopen;	0261
 	&gcurl;	F196
-h	?	0068
-H	?	0048
 	&henl;	EEE9
 ʜ	&hscap;	029C
 ɦ	&hhook;	0266
@@ -390,8 +374,6 @@ H	?	0048
 Ⱶ	&Hhalf;	2C75
 	&Hunc;	F110
 	&hrdes;	F23A
-i	?	0069
-I	?	0049
 	&ienl;	EEEA
 ɪ	&iscap;	026A
 ı	&inodot;	0131
@@ -440,8 +422,6 @@ I	?	0049
 	&ivsup;	E54B
 	&ilong;	F220
 ꟾ	&Ilong;	A7FE
-j	?	006A
-J	?	004A
 	&jenl;	EEEB
 ᴊ	&jscap;	1D0A
 ȷ	&jnodot;	0237
@@ -466,8 +446,6 @@ J	?	004A
 	&Jmacrhigh;	E154
 	&Jovlhigh;	E152
 	&jesup;	E8E7
-k	?	006B
-K	?	004B
 	&kenl;	EEEC
 ᴋ	&kscap;	1D0B
 ƙ	&khook;	0199
@@ -492,8 +470,6 @@ K	?	004B
 	&ksemiclose;	F221
 	&kclose;	F209
 	&kcurl;	F195
-l	?	006C
-L	?	004C
 	&lenl;	EEED
 ʟ	&lscap;	029F
 ƚ	&lbar;	019A
@@ -523,8 +499,6 @@ L	?	004C
 	&ldes;	F222
 ꞁ	&lturn;	A781
 Ꞁ	&Lturn;	A780
-m	?	006D
-M	?	004D
 	&menl;	EEEE
 ᴍ	&mscap;	1D0D
 ꝳ	&mtailstrok;	A773
@@ -556,8 +530,6 @@ M	?	004D
 	&mmeduncacute;	EBB6
 	&Muncacute;	EBB5
 ꟿ	&M5leg;	A7FF
-n	?	006E
-N	?	004E
 	&nenl;	EEEF
 ɴ	&nscap;	0274
 	&nscapldes;	F22B
@@ -586,8 +558,6 @@ N	?	004E
 	&Nrdes;	F229
 	&nscaprdes;	F22A
 	&nflour;	F19A
-o	?	006F
-O	?	004F
 	&oenl;	EEF0
 ᴏ	&oscap;	1D0F
 º	&ordm;	00BA
@@ -713,8 +683,6 @@ O	?	004F
 	&ovsup;	E647
 ɔ	&oopen;	0254
 	&oopenmacr;	E7CC
-p	?	0070
-P	?	0050
 	&penl;	EEF1
 ᴘ	&pscap;	1D18
 ꝑ	&pbardes;	A751
@@ -739,8 +707,6 @@ P	?	0050
 	&ppliguml;	EBE7
 	&PPliguml;	EBE6
 ꟼ	&Prev;	A7FC
-q	?	0071
-Q	?	0051
 	&qenl;	EEF2
 	&qscap;	EF0C
 ꝙ	&qslstrok;	A759
@@ -758,8 +724,6 @@ Q	?	0051
 	&qmacr;	E681
 	&qvinslig;	EAD1
 	&Qstem;	F22C
-r	?	0072
-R	?	0052
 	&renl;	EEF3
 ʀ	&rscap;	0280
 Ʀ	&YR;	01A6
@@ -786,8 +750,6 @@ R	?	0052
 ꞃ	&rins;	A783
 Ꞃ	&Rins;	A782
 	&rflour;	F19B
-s	?	0073
-S	?	0053
 	&senl;	EEF4
 ꜱ	&sscap;	A731
 ṡ	&sdot;	1E61
@@ -837,8 +799,6 @@ S	?	0053
 	&sclose;	F128
 ꞅ	&sins;	A785
 Ꞅ	&Sins;	A784
-t	?	0074
-T	?	0054
 	&tenl;	EEF5
 ᴛ	&tscap;	1D1B
 ꝷ	&ttailstrok;	A777
@@ -860,8 +820,6 @@ T	?	0054
 ꞇ	&trot;	A787
 Ꞇ	&Trot;	A786
 	&tcurl;	F199
-u	?	0075
-U	?	0055
 	&uenl;	EEF7
 ᴜ	&uscap;	1D1C
 ʉ	&ubar;	0289
@@ -921,8 +879,6 @@ U	?	0055
 	&Uosup;	E32D
 	&uvsup;	E8EC
 	&uwsup;	E8ED
-v	?	0076
-V	?	0056
 	&venl;	EEF8
 ᴠ	&vscap;	1D20
 	&vbar;	E74E
@@ -962,8 +918,6 @@ V	?	0056
 	&Vinsacute;	EBBA
 ỽ	&vwelsh;	1EFD
 Ỽ	&Vwelsh;	1EFC
-w	?	0077
-W	?	0057
 	&wenl;	EEF9
 ᴡ	&wscap;	1D21
 ẉ	&wdotbl;	1E89
@@ -990,8 +944,6 @@ W	?	0057
 	&wosup;	E754
 	&wusup;	E8F2
 	&wvsup;	E8F3
-x	?	0078
-X	?	0058
 	&xenl;	EEFA
 	&xscap;	EF11
 ˣ	&xmod;	02E3
@@ -1000,8 +952,6 @@ X	?	0058
 	&xslashlra;	E8BE
 	&xslashlradbl;	E8CE
 	&Xovlhigh;	F7B3
-y	?	0079
-Y	?	0059
 	&yenl;	EEFB
 ʏ	&yscap;	028F
 	&ybar;	E77B
@@ -1044,8 +994,6 @@ Y	?	0059
 	&yrgmainstrok;	F233
 ỿ	&yloop;	1EFF
 Ỿ	&Yloop;	1EFE
-z	?	007A
-Z	?	005A
 	&zenl;	EEFC
 ᴢ	&zscap;	1D22
 ƶ	&zstrok;	01B6
@@ -1077,16 +1025,6 @@ Z	?	005A
 	&thornslonglig;	E734
 	&thornslongligbar;	E735
 	&thornrarmlig;	E8C1
-0	?	0030
-1	?	0031
-2	?	0032
-3	?	0033
-4	?	0034
-5	?	0035
-6	?	0036
-7	?	0037
-8	?	0038
-9	?	0039
 ¼	&frac14;	00BC
 ½	&frac12;	00BD
 ¾	&frac34;	00BE
