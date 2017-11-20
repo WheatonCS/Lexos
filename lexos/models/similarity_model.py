@@ -89,7 +89,7 @@ class SimilarityModel(BaseModel):
                   for file_id in other_file_word_counts.index]
 
         # pack score and labels into a series
-        return pd.Series(cos_scores, index=labels)
+        return pd.Series(cos_scores, index=labels, name="cos_similarity")
 
     def generate_sims_html(self) -> str:
         """Generate the html for sim query
