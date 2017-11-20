@@ -62,8 +62,10 @@ function displaySimResult () {
     sendAjaxRequest("/similarityHTML", form)
         .done(
             function (response) {
-                $('#simTable').html(response)
-                $('#similaritiesResults').css({"display": "block"})
+                const outerTableDivSelector = $('#simTable')
+                outerTableDivSelector.html(response)  // put the response into the web page
+                outerTableDivSelector.children().DataTable()  // init the response table to data table
+                $('#similaritiesResults').css({"display": "block"})  // display everything
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
