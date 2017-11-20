@@ -3,7 +3,6 @@ from os import makedirs
 from os.path import join as path_join
 from typing import NamedTuple
 
-import numpy as np
 import pandas as pd
 from scipy.spatial.distance import cosine
 
@@ -97,19 +96,15 @@ class SimilarityModel(BaseModel):
         # pack score and labels into a series
         return pd.Series(cos_scores, index=labels)
 
-    def get_similarity_score(self) -> str:
-        """This function returns similarity scores as a string"""
-        scores = self._gen_exact_similarity().values
-        scores_list = '***'.join(str(score) for score in scores) + '***'
+    def generate_sims_html(self) -> str:
+        """Generate the html for sim query
 
-        return scores_list
-
-    def get_similarity_label(self) -> str:
-        """This function returns similarity compared labels as a string"""
-        labels = np.array(self._gen_exact_similarity().index)
-        labels_list = '***'.join(name for name in labels) + '***'
-
-        return labels_list
+        We also round all the data to 4 digits for better display
+        :return: the html table to put into the web page
+        """
+        return self._gen_exact_similarity().round(4).to_html(
+            classes="table table-striped table-bordered"
+        )
 
     def generate_sims_csv(self) -> str:
         """This function generates csv file for similarity scores.
