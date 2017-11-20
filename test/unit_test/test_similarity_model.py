@@ -72,7 +72,9 @@ def test_with_two_dimension():
     # assertion
     pd.testing.assert_series_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([.105572809, .5527864045], index=["F2.txt", "F3.txt"])
+        pd.Series([.105572809, .5527864045],
+                  index=["F2.txt", "F3.txt"],
+                  name="cos_similarity")
     )
 # --------------------------------------------------------------------------
 
@@ -95,12 +97,15 @@ def test_with_three_dimension():
     # assertion
     pd.testing.assert_series_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([.42264973081, 1.], index=["F1.txt", "F3.txt"])
+        pd.Series([.42264973081, 1.],
+                  index=["F1.txt", "F3.txt"],
+                  name="cos_similarity")
     )
 # --------------------------------------------------------------------------
 
 
 # --------------------- test with with special case ------------------------
+# noinspection PyProtectedMember
 def test_with_special_case_one():
     try:
         test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
@@ -113,12 +118,13 @@ def test_with_special_case_one():
                 id_temp_label_map=test_id_table
             )
         )
-        _ = similarity_model.get_similarity_score()
+        _ = similarity_model._gen_exact_similarity()
         raise AssertionError("negative index error did not raise.")
     except AssertionError as error:
         assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
 
 
+# noinspection PyProtectedMember
 def test_with_special_case_two():
     try:
         test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
@@ -131,7 +137,7 @@ def test_with_special_case_two():
                 id_temp_label_map=test_id_table
             )
         )
-        _ = similarity_model.get_similarity_label()
+        _ = similarity_model._gen_exact_similarity()
         raise AssertionError("negative index error did not raise.")
     except AssertionError as error:
         assert str(error) == NON_NEGATIVE_INDEX_MESSAGE
