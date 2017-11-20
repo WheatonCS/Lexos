@@ -8,7 +8,6 @@ from os.path import join as path_join
 from typing import List, Tuple, Dict
 
 import numpy as np
-import pandas as pd
 from flask import request
 
 import lexos.helpers.constants as constants
@@ -16,7 +15,6 @@ import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 import lexos.processors.analyze.KMeans as KMeans
 import lexos.processors.analyze.information as information
-import lexos.processors.analyze.similarity as similarity
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
@@ -1190,99 +1188,6 @@ def generate_mc_json_obj(file_manager: FileManager):
         json_obj = multicloud_topic.topic_json_maker(output_path)
 
     return json_obj
-
-
-def generate_similarities(file_manager: FileManager) -> pd.DataFrame:
-    """Generates cosine similarity rankings between comparison files
-
-    :param file_manager: a class for an object to hold all information of
-                         user's files and manage the files according to users's
-                         choices.
-    :return:
-        - doc_str_score: a string which stores the similarity scores
-        - doc_str_name: a string which stores the name of the comparison files
-                        ranked in order from best to worst
-    """
-
-    # generate tokenized lists of all documents and comparison document
-    comp_file_id = request.form['uploadname']
-    use_word_tokens = request.form['tokenType'] == 'word'
-    ngram_size = int(request.form['tokenSize'])
-    only_char_grams_within_words = 'inWordsOnly' in request.form
-    cull = 'cullcheckbox' in request.form
-    mfw = 'mfwcheckbox' in request.form
-
-    if int(comp_file_id) in file_manager.files.keys():
-        comp_file_index = int(comp_file_id)
-    else:
-        raise ValueError('input comparison file id cannot be found '
-                         'in filemanager')
-
-    dtm_data_frame = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option="N/A",
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=ngram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=cull,
-        round_decimal=False)
-
-    # call similarity.py to generate the similarity list
-    score_name_data_frame = similarity.similarity_maker(
-        dtm_data_frame, comp_file_index)
-
-    return score_name_data_frame
-
-
-def generate_sims_csv(file_manager: FileManager):
-    """
-    Generates a CSV file from the calculating similarity.
-
-    Args:
-        None
-
-    Returns:
-        The filepath where the CSV was saved, and the chosen extension .csv for
-        the file.
-    """
-    extension = '.csv'
-
-    score_name_data_frame = generate_similarities(file_manager)
-
-    delimiter = ','
-
-    # get the path of the folder to save result
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    # get the saved file path
-    out_file_path = path_join(folder_path, 'results' + extension)
-
-    comp_file_id = request.form['uploadname']
-
-    # write the header to the file
-    with open(out_file_path, 'w') as out_file:
-
-        out_file.write("Similarity Rankings:" + '\n')
-
-        out_file.write(
-            "The rankings are determined by 'distance between documents' "
-            "where small distances (near zero) represent documents that are "
-            "'similar' and unlike documents have distances closer to one.\n")
-
-        out_file.write("Selected Comparison Document: " + delimiter + str(
-            file_manager.get_active_labels_with_id()[int(comp_file_id)]) + '\n')
-
-    # append the dataframe to the file
-    with open(out_file_path, 'a') as f:
-        score_name_data_frame.to_csv(f)
-
-    return out_file_path, extension
 
 
 def get_top_word_option() -> str:
