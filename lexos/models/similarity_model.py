@@ -100,10 +100,3 @@ class SimilarityModel(BaseModel):
         return self._gen_exact_similarity().round(4).to_frame().to_html(
             classes="table table-striped table-bordered"
         )
-
-    def generate_sims_csv(self) -> str:
-        """This function generates csv file for similarity scores.
-
-        :return output file path.
-        """
-        return self._gen_exact_similarity().to_frame().to_csv()

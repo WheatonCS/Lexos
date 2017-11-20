@@ -1,4 +1,4 @@
-from flask import session, render_template, send_file, Blueprint
+from flask import session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
@@ -45,14 +45,3 @@ def sim_html():
     session_manager.cache_analysis_option()
     session_manager.cache_sim_options()
     return SimilarityModel().generate_sims_html()
-
-
-@sim_blueprint.route("/similarityCSV", methods=['POST'])
-def sim_csv():
-    session_manager.cache_analysis_option()
-    session_manager.cache_sim_options()
-    save_path = SimilarityModel().generate_sims_csv()
-    return send_file(
-        save_path,
-        as_attachment=True,
-        attachment_filename="similarity-query.csv")
