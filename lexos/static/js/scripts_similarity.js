@@ -7,14 +7,13 @@ function runModal (htmlMsg) {
     $('#error-modal').modal()
 }
 
-
 /**
  * check all the easy error with js, in this case, you need more than 2 documents
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
-function submissionError() {
+function submissionError () {
     if ($('#num_active_files').val() < 2)
-        return "You must have at least 2 active documents to proceed!"
+        return 'You must have at least 2 active documents to proceed!'
     else
         return null
 }
@@ -30,7 +29,6 @@ function jsonifyForm () {
     })
     return form
 }
-
 
 /**
  * send the ajax request
@@ -52,22 +50,30 @@ function sendAjaxRequest (url, form) {
  * display the result of the similarity query on web page
  */
 function displaySimResult () {
-        // show loading icon
+    // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
     // convert form into an object map string to string
     const form = jsonifyForm()
 
     // send the ajax request
-    sendAjaxRequest("/similarityHTML", form)
+    sendAjaxRequest('/similarityHTML', form)
         .done(
             function (response) {
                 const outerTableDivSelector = $('#simTable')
                 outerTableDivSelector.html(response)  // put the response into the web page
                 outerTableDivSelector.children().DataTable({  // init the response table to data table
                     paging: false,  // no page
+                    dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
+                    '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5'
+                    ]
                 })
-                $('#similaritiesResults').css({"display": "block"})  // display everything
+                $('#similaritiesResults').css({'display': 'block'})  // display everything
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
@@ -85,14 +91,14 @@ function displaySimResult () {
  * download the sim csv
  */
 function downloadSimCSV () {
-        // show loading icon
+    // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
     // convert form into an object map string to string
     const form = jsonifyForm()
 
     // send the ajax request
-    sendAjaxRequest("/similarityCSV", form)
+    sendAjaxRequest('/similarityCSV', form)
         .fail(
             function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
@@ -105,11 +111,10 @@ function downloadSimCSV () {
             })
 }
 
-
 $(function () {
 
     // hide the similarity
-    $("#similaritiesResults").css({"display": "none"})
+    $('#similaritiesResults').css({'display': 'none'})
 
     $('#get-sims').click(function () {
         const error = submissionError()  // the error happens during submission
@@ -122,7 +127,7 @@ $(function () {
         }
     })
 
-    $("#sims-download").click(function () {
+    $('#sims-download').click(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
