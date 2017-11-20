@@ -10,9 +10,6 @@ from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
-from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
-from lexos.helpers.exceptions import LexosException
 
 
 def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
@@ -90,62 +87,6 @@ def handle_special_characters(text: str) -> str:
         text, replacement_dict=conversion_dict, edge1="()(", edge2=")()")
 
     return updated_text
-
-
-def replacement_handler(
-        text: str, replacer_string: str, is_lemma: bool) -> str:
-    """Handles replacement lines found in the scrub-alteration-upload files.
-
-    :param text: A unicode string with the whole text to be altered.
-    :param replacer_string: A formatted string input with newline-separated
-        "replacement lines", where each line is formatted to replace the
-        majority of the words with one word.
-    :param is_lemma: A boolean indicating whether or not the replacement line
-        is for a lemma.
-    :returns: The input string with replacements made.
-    """
-
-    # Remove spaces in replacement string for consistent format, then split the
-    # individual replacements to be made
-    no_space_replacer = replacer_string.translate({ord(" "): None})
-
-    # Handle excess blank lines in file, etc.
-    replacement_lines = [token for token in no_space_replacer.split('\n')
-                         if token != ""]
-
-    for replacement_line in replacement_lines:
-        if replacement_line and replacement_line.count(':') != 1:
-            raise LexosException(
-                NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
-
-        # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
-        replace_from_line, replace_to = replacement_line.split(':')
-
-        # Not valid inputs -- ":word" or ":a"
-        if replace_from_line == "":
-            raise LexosException(
-                REPLACEMENT_NO_LEFTHAND_MESSAGE + replacement_line)
-        # Not valid inputs -- "a:b,c" or "a,b:c,d"
-        if ',' in replace_to:
-            raise LexosException(
-                REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
-
-        replacement_dict = {replace_from: replace_to
-                            for replace_from in replace_from_line.split(",")
-                            if replacement_line != ""}
-
-        # Lemmas are words surrounded by whitespace, while other
-        # replacements are chars
-        if is_lemma:
-            edge1 = r'(^|\s)('    # Beginning of the string or whitespace
-            edge2 = r')(?=\s|$)'  # Whitespace or end of the string
-        else:
-            edge1 = r'()('
-            edge2 = r')()'
-
-        text = replace_with_dict(text, replacement_dict, edge1, edge2)
-
-    return text
 
 
 def replace_with_dict(text: str, replacement_dict: Dict[str, str],

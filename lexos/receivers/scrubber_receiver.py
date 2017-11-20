@@ -4,6 +4,9 @@ from typing import List, Dict, NamedTuple
 from flask import request
 
 from lexos.helpers import constants, general_functions
+from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
+from lexos.helpers.exceptions import LexosException
 from lexos.managers import session_manager
 from lexos.receivers.base_receiver import BaseReceiver
 
@@ -183,7 +186,7 @@ class ScrubbingReceiver(BaseReceiver):
         return merged_string
 
     @staticmethod
-    def split_stop_keep_word_string(input_string: str) -> List[str]:
+    def _split_stop_keep_word_string(input_string: str) -> List[str]:
         """Breaks stop and keepword string inputs into lists of words.
 
         :param input_string: A string of words input by the user.
@@ -199,6 +202,49 @@ class ScrubbingReceiver(BaseReceiver):
                        if word != '']
 
         return input_words
+
+    @staticmethod
+    def _create_replacements_dict(replacer_string: str) -> Dict[str, str]:
+        """Creates a dictionary of words and their desired replacements.
+
+        :param replacer_string: The replacement instruction string.
+        :return: The dictionary assembled from the instructions.
+        """
+
+        # Remove spaces in replacer string for consistent format, then
+        # split the individual replacements to be made
+        no_space_replacer = replacer_string.translate({ord(" "): None})
+
+        # Handle excess blank lines in file, etc.
+        replacement_lines = [token for token in no_space_replacer.split('\n')
+                             if token != ""]
+
+        replacement_dict = {}
+        for replacement_line in replacement_lines:
+            if replacement_line and replacement_line.count(':') != 1:
+                raise LexosException(
+                    NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
+
+            # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
+            replace_from_line, replace_to = replacement_line.split(':')
+
+            # Not valid inputs -- ":word" or ":a"
+            if replace_from_line == "":
+                raise LexosException(
+                    REPLACEMENT_NO_LEFTHAND_MESSAGE + replacement_line)
+            # Not valid inputs -- "a:b,c" or "a,b:c,d"
+            if ',' in replace_to:
+                raise LexosException(
+                    REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
+
+            partial_replacement_dict = {replace_from: replace_to
+                                        for replace_from in
+                                        replace_from_line.split(",")
+                                        if replacement_line != ""}
+            for key in partial_replacement_dict:
+                replacement_dict[key] = partial_replacement_dict[key]
+
+        return replacement_dict
 
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
@@ -311,12 +357,16 @@ class ScrubbingReceiver(BaseReceiver):
             storage_folder=storage_folder,
             storage_filename=constants.STOPWORD_FILENAME)
 
-        sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
+        consol = self._create_replacements_dict(replacer_string=both_consol)
+        lemma = self._create_replacements_dict(replacer_string=both_lemma)
+        special_char = self._create_replacements_dict(
+            replacer_string=both_special_char)
+        sw_kw = self._split_stop_keep_word_string(input_string=both_sw_kw)
+        keep = self._front_end_data['sw_option'] == "keep"
 
-        # return AdditionalOptions(consol=consol, lemma=lemma,
-        #                          special_char=special_char, sw_kw=sw_kw,
-        #                          keep=???)
-
+        return AdditionalOptions(consol=consol, lemma=lemma,
+                                 special_char=special_char, sw_kw=sw_kw,
+                                 keep=keep)
 
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.
