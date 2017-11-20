@@ -3,8 +3,8 @@ from typing import Counter
 import pandas as pd
 
 from lexos.models.matrix_model import MatrixModel, MatrixTestOptions
-from lexos.receivers.matrix_receiver import MatrixFrontEndOption, TokenOption, \
-    CullingOption, NormOption
+from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
+    TokenOption, CullingOption, NormOption
 
 
 class BasicTest:
