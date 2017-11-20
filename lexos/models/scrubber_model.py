@@ -58,11 +58,68 @@ class ScrubberModel(BaseModel):
         :return: The document's scrubbed text.
         """
 
-        original_text = self._file_id_content_map[doc_id]
+        # Scrubbing order:
+        #
+        # Note:  lemmas and consolidations do NOT work on tags; in short,
+        #        these manipulations do not change inside any tags
+        #
+        # 0. Gutenberg
+        # 1. lower
+        #    (not applied in tags ever;
+        #    lemmas/consolidations/specialChars/stopKeepWords changed;
+        #    text not changed at this point)
+        # 2. special characters
+        # 3. tags - scrub tags
+        # 4. punctuation
+        #    (hyphens, apostrophes, ampersands);
+        #    text not changed at this point, not applied in tags ever
+        # 5. digits (text not changed at this point, not applied in tags ever)
+        # 6. white space (text not changed at this point, not applied in tags
+        #    ever, otherwise tag attributes will be messed up)
+        # 7. consolidations
+        #    (text not changed at this point, not applied in tags ever)
+        # 8. lemmatize (text not changed at this point, not applied in tags
+        #    ever)
+        # 9. stop words/keep words
+        #    (text not changed at this point, not applied in tags ever)
+        #
+        # apply:
+        # 0. remove Gutenberg boiler plate (if any)
+        # 1. lowercase
+        # 2. consolidation
+        # 3. lemmatize
+        # 4. stop words
+        # 5. remove punctuation, digits, and whitespace without changing all
+        #    the content in the tag
 
-        # need to figure out how to do gutenberg
+        text = self._file_id_content_map[doc_id]
 
-        return ""
+        # -- 0. Gutenberg -----------------------------------------------------
+        # need to figure out gutenberg
+
+        # -- 1. lower ---------------------------------------------------------
+        if self._options.basic_options.lower:    # User wants to ignore case
+            def to_lower_function(original_text: str) -> str:
+                """Removes capital letters from a text.
+
+                :param original_text: A mixed-case string.
+                :return: The text with all caps converted to lowercase.
+                """
+
+                return original_text.lower()
+        else:
+            def to_lower_function(original_text: str) -> str:
+                """Returns the string it is passed.
+
+                :param original_text: A text string.
+                :return: original_text, unchanged.
+                """
+
+                return original_text
+
+        # -- 2. special characters --------------------------------------------
+
+        return text
 
     def _scrub_all_docs(self):
         """Updates all active documents with their scrubbed text."""
