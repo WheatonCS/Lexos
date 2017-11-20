@@ -44,7 +44,7 @@ class CullingOption(NamedTuple):
     cull_least_seg: Optional[int]
 
 
-class MatrixOption(NamedTuple):
+class MatrixFrontEndOption(NamedTuple):
     """A typed tuple to represent all the matrix option."""
     # the token options
     token_option: TokenOption
@@ -167,12 +167,12 @@ class MatrixReceiver(BaseReceiver):
 
         return dict(id_temp_label_list)
 
-    def options_from_front_end(self) -> MatrixOption:
+    def options_from_front_end(self) -> MatrixFrontEndOption:
         """Get all the matrix option from front end.
 
         :return: all the option packed together into a matrix option class
         """
-        return MatrixOption(
+        return MatrixFrontEndOption(
             token_option=self._get_token_option_from_front_end(),
             norm_option=self._get_normalize_option_from_front_end(),
             culling_option=self._get_culling_option_from_front_end(),

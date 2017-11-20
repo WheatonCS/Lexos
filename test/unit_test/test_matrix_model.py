@@ -3,7 +3,7 @@ from typing import Counter
 import pandas as pd
 
 from lexos.models.matrix_model import MatrixModel, MatrixTestOptions
-from lexos.receivers.matrix_receiver import MatrixOption, TokenOption, \
+from lexos.receivers.matrix_receiver import MatrixFrontEndOption, TokenOption, \
     CullingOption, NormOption
 
 
@@ -17,7 +17,7 @@ class BasicTest:
             3: "ta da ha"
         },
 
-        front_end_option=MatrixOption(
+        front_end_option=MatrixFrontEndOption(
             token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
@@ -65,7 +65,7 @@ class CullingTest:
             3: "la da ha"
         },
 
-        front_end_option=MatrixOption(
+        front_end_option=MatrixFrontEndOption(
             token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),

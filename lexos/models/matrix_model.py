@@ -6,14 +6,15 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from lexos.helpers import definitions
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
-from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver, \
+from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
+    MatrixReceiver, \
     IdTempLabelMap
 
 FileIDContentMap = Dict[int, str]
 
 
 class MatrixTestOptions(NamedTuple):
-    front_end_option: MatrixOption
+    front_end_option: MatrixFrontEndOption
     file_id_content_map: FileIDContentMap
 
 
@@ -45,7 +46,7 @@ class MatrixModel(BaseModel):
             .get_content_of_active_with_id()
 
     @property
-    def _opts(self) -> MatrixOption:
+    def _opts(self) -> MatrixFrontEndOption:
         """Get all the options to use
 
         :return: either a frontend option or a fake option used for testing
