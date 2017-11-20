@@ -70,7 +70,7 @@ class StatsModel(BaseModel):
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_temp_label_id_map()
 
-    def _get_corpus_info(self) -> CorpusInfo:
+    def get_corpus_result(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
         assert np.sum(self._doc_term_matrix.values) > 0, EMPTY_LIST_MESSAGE
         # initialize
@@ -158,11 +158,6 @@ class StatsModel(BaseModel):
                 file_name=temp_label)
              for file_id, temp_label in self._id_temp_label_map.items()]
         return file_info_list
-
-    def get_corpus_result(self) -> CorpusInfo:
-        """Return stats for the whole corpus."""
-
-        return self._get_corpus_info()
 
     @staticmethod
     def get_token_type() -> str:
