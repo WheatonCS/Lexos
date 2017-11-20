@@ -1,35 +1,44 @@
-from typing import Dict
+from typing import Dict, NamedTuple, Optional
 
-from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.scrubber_receiver import ScrubbingOptions, \
     ScrubbingReceiver
 
+FileIDContentMap = Dict[int, str]
+
+
+class ScrubberTestOptions(NamedTuple):
+    front_end_options: ScrubbingOptions
+    file_id_content_map: FileIDContentMap
+
 
 class ScrubberModel(BaseModel):
 
-    def __init__(self, test_scrubbing_options: ScrubbingOptions = None,
-                 test_file_manager: FileManager = None):
+    def __init__(self, test_options: Optional[ScrubberTestOptions]):
         """A class to scrub text documents.
 
-        :param test_scrubbing_options: A struct of scrubbing options used for
-            testing.
+        :param test_options: A set of scrubbing options used for unit testing.
         """
 
         super().__init__()
-        self._test_scrubbing_options = test_scrubbing_options
-        self._test_file_manager = test_file_manager
+        if test_options:
+            self._test_front_end_options = test_options.front_end_options
+            self._test_file_id_content_map = test_options.file_id_content_map
+        else:
+            self._test_front_end_options = None
+            self._test_file_id_content_map = None
 
     @property
-    def _file_manager(self) -> FileManager:
+    def _file_id_content_map(self) -> FileIDContentMap:
         """The file manager for the current session.
 
         :return: A FileManager object.
         """
 
-        return self._test_file_manager \
-            or FileManagerModel().load_file_manager()
+        return self._test_file_id_content_map \
+            or FileManagerModel().load_file_manager()\
+                   .get_content_of_active_with_id()
 
     @property
     def _options(self) -> ScrubbingOptions:
@@ -39,17 +48,8 @@ class ScrubberModel(BaseModel):
             options.
         """
 
-        return self._test_scrubbing_options or \
+        return self._test_front_end_options or \
             ScrubbingReceiver().options_from_front_end()
-
-    @property
-    def _active_docs(self) -> Dict[int, str]:
-        """Gets the IDs and content of all active files.
-
-        :return: A dictionary mapping ID number to file string.
-        """
-
-        return self._file_manager.get_content_of_active_with_id()
 
     def _scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
@@ -60,12 +60,11 @@ class ScrubberModel(BaseModel):
 
         pass
 
-    def _scrub_active_docs(self):
-        """Updates all active documents with their scrubbed text.
+    def _scrub_all_docs(self):
+        """Updates all active documents with their scrubbed text."""
 
-        """
-
-        for text_id in self._active_docs:
+        for text_id in self._file_id_content_map:
             scrubbed_text = self._scrub(text_id)
-            self._file_manager.update_content(
-                file_id=text_id, updated_content=scrubbed_text)
+            self._file_id_content_map[text_id] = scrubbed_text
+
+        # need to put this back into file manager
