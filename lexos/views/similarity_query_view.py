@@ -36,8 +36,7 @@ def similarity():
     return render_template(
         'similarity.html',
         labels=id_label_map,
-        numActiveDocs=num_active_docs,
-        itm="similarity"
+        numActiveDocs=num_active_docs
     )
 
 
