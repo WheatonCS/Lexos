@@ -92,16 +92,16 @@ class ManualOptions(NamedTuple):
 class AdditionalOptions(NamedTuple):
     """A typed tuple that contains all additional scrubbing options."""
 
-    # The merged consolidations string.
+    # The merged consolidations replacement dictionary.
     consol: Dict[str, str]
 
-    # The merged lemma string.
+    # The merged lemma replacement dictionary.
     lemma: Dict[str, str]
 
-    # The merged special character string.
+    # The merged special character replacement dictionary.
     special_char: Dict[str, str]
 
-    # The merged stop word/keep word string.
+    # The merged stop word/keep words list.
     sw_kw: List[str]
 
     # Indicates whether sw_kw contains keep words (True) or stop words (False).
@@ -182,7 +182,7 @@ class ScrubbingReceiver(BaseReceiver):
 
     @staticmethod
     def _split_stop_keep_word_string(input_string: str) -> List[str]:
-        """Breaks stop and keepword string inputs into lists of words.
+        """Breaks stop and keep word string inputs into lists of words.
 
         :param input_string: A string of words input by the user.
         :return: A list of the user's string broken up into words.
@@ -299,6 +299,10 @@ class ScrubbingReceiver(BaseReceiver):
                     'scrubbingoptions']['optuploadnames'][key] = ''
                 file_strings[index] = ""
 
+        if self._front_end_data['lowercasebox'] == "true":
+            for index in range(4):
+                file_strings[index] = file_strings[index].lower()
+
         return FileOptions(
             storage_folder=storage_folder, storage_filenames=storage_filenames,
             file_consol=file_strings[0], file_lemma=file_strings[1],
@@ -316,6 +320,12 @@ class ScrubbingReceiver(BaseReceiver):
         manual_lemma = self._front_end_data['manuallemmas']
         manual_special_char = self._front_end_data['manuallemmas']
         manual_sw_kw = self._front_end_data['manuallemmas']
+
+        if self._front_end_data['lowercasebox'] == "true":
+            manual_consol = manual_consol.lower()
+            manual_lemma = manual_lemma.lower()
+            manual_special_char = manual_special_char.lower()
+            manual_sw_kw = manual_sw_kw.lower()
 
         return ManualOptions(
             manual_consol=manual_consol, manual_lemma=manual_lemma,

@@ -58,7 +58,11 @@ class ScrubberModel(BaseModel):
         :return: The document's scrubbed text.
         """
 
-        pass
+        original_text = self._file_id_content_map[doc_id]
+
+        # need to figure out how to do gutenberg
+
+        return ""
 
     def _scrub_all_docs(self):
         """Updates all active documents with their scrubbed text."""
