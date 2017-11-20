@@ -1,3 +1,4 @@
+import os
 import re
 from typing import List, Dict, NamedTuple
 
@@ -120,11 +121,13 @@ class ScrubbingOptions(NamedTuple):
 
 class ScrubbingReceiver(BaseReceiver):
 
+    # Constructor---
     def __init__(self):
         """A receiver for all the scrubbing options."""
 
         super().__init__()
 
+    # Various helper functions---
     @staticmethod
     def _load_scrub_optional_upload(storage_folder: str,
                                     filename: str) -> str:
@@ -241,6 +244,82 @@ class ScrubbingReceiver(BaseReceiver):
 
         return replacement_dict
 
+    @staticmethod
+    def _get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
+        """Makes special character conversion dictionaries from resource files.
+
+        :param char_set: A string which specifies which character set to use.
+        :return: A dictionary with all of the character entities in the chosen
+            mode mapped to their unicode versions.
+        """
+
+        if char_set == "MUFI-3":
+            filename = constants.MUFI_3_FILENAME
+        elif char_set == "MUFI-4":
+            filename = constants.MUFI_4_FILENAME
+        else:
+            raise ValueError
+
+        # assign current working path to variable
+        cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Go up two levels by splitting the path into two parts and discarding
+        # everything after the rightmost slash
+        up_one_level, _ = os.path.split(cur_file_dir)
+        up_two_levels, _ = os.path.split(up_one_level)
+
+        # Create full pathname to find the .tsv in resources directory
+        source_path = os.path.join(up_two_levels, constants.RESOURCE_DIR,
+                                   filename)
+
+        with open(source_path, encoding='utf-8') as input_file:
+            conversion_dict = {key.rstrip(): value
+                               for line in input_file
+                               for value, key, _ in [line.split("\t")]}
+
+        return conversion_dict
+
+    def _get_special_char_from_menu(self) -> Dict[str, str]:
+        """Creates special character dictionaries based on drop down choice.
+
+        :return: The appropriate special character replacement dictionary.
+        """
+
+        char_set = self._front_end_data['entityrules']
+
+        if char_set == 'default':
+            conversion_dict = {}
+
+        elif char_set == 'doe-sgml':
+            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                               '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
+                               '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
+                               '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
+                               '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
+                               '&amacron;': 'ā', '&cmacron;': 'c̄',
+                               '&emacron;': 'ē', '&imacron;': 'ī',
+                               '&nmacron;': 'n̄', '&omacron;': 'ō',
+                               '&pmacron;': 'p̄', '&qmacron;': 'q̄',
+                               '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
+                               '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
+
+        elif char_set == 'early-english-html':
+            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                               '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
+                               '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
+                               '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
+                               '&gt;': '>', '&#383;': 'ſ'}
+
+        elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
+            conversion_dict = self._get_special_char_dict_from_file(
+                char_set=char_set)
+
+        else:
+            raise ValueError("Invalid special character set")
+
+        return conversion_dict
+
+    # Option getters---
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
 
@@ -362,10 +441,14 @@ class ScrubbingReceiver(BaseReceiver):
             storage_folder=storage_folder,
             storage_filename=constants.STOPWORD_FILENAME)
 
+        if both_special_char != "\n":    # Comes from "" + "\n" + ""
+            special_char = self._create_replacements_dict(
+                replacer_string=both_special_char)
+        else:
+            special_char = self._get_special_char_from_menu()
+
         consol = self._create_replacements_dict(replacer_string=both_consol)
         lemma = self._create_replacements_dict(replacer_string=both_lemma)
-        special_char = self._create_replacements_dict(
-            replacer_string=both_special_char)
         sw_kw = self._split_stop_keep_word_string(input_string=both_sw_kw)
         keep = self._front_end_data['sw_option'] == "keep"
 

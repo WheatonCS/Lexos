@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import re
 import sys
 import unicodedata
@@ -10,83 +9,6 @@ from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
-
-
-def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
-    """Builds special character conversion dictionaries from resource files.
-
-    :param char_set: A string which specifies which character set to use.
-    :return: A dictionary with all of the character entities in the chosen
-        mode mapped to their unicode versions.
-    """
-
-    if char_set == "MUFI-3":
-        filename = constants.MUFI_3_FILENAME
-    elif char_set == "MUFI-4":
-        filename = constants.MUFI_4_FILENAME
-    else:
-        raise ValueError
-
-    # assign current working path to variable
-    cur_file_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # Go up two levels by splitting the path into two parts and discarding
-    # everything after the rightmost slash
-    up_one_level, _ = os.path.split(cur_file_dir)
-    up_two_levels, _ = os.path.split(up_one_level)
-
-    # Create full pathname to find the .tsv in resources directory
-    source_path = os.path.join(up_two_levels, constants.RESOURCE_DIR, filename)
-
-    with open(source_path, encoding='utf-8') as input_file:
-        conversion_dict = {key.rstrip(): value
-                           for line in input_file
-                           for value, key, _ in [line.split("\t")]}
-
-    return conversion_dict
-
-
-def handle_special_characters(text: str) -> str:
-    """Replaces encoded characters with their corresponding unicode characters.
-
-    :param text: The text to be altered, containing common/encoded characters.
-    :return: The text string, now containing unicode character equivalents.
-    """
-
-    char_set = request.form['entityrules']
-
-    if char_set == 'default':
-        return text
-
-    elif char_set == 'doe-sgml':
-        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
-                           '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę',
-                           '&oe;': 'œ', '&amp;': '⁊', '&egrave;': 'è',
-                           '&eacute;': 'é', '&auml;': 'ä', '&ouml;': 'ö',
-                           '&uuml;': 'ü', '&amacron;': 'ā', '&cmacron;': 'c̄',
-                           '&emacron;': 'ē', '&imacron;': 'ī',
-                           '&nmacron;': 'n̄', '&omacron;': 'ō',
-                           '&pmacron;': 'p̄', '&qmacron;': 'q̄',
-                           '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
-                           '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
-
-    elif char_set == 'early-english-html':
-        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                           '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
-                           '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
-                           '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
-                           '&gt;': '>', '&#383;': 'ſ'}
-
-    elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
-        conversion_dict = get_special_char_dict_from_file(char_set=char_set)
-
-    else:
-        raise ValueError("Invalid special character set")
-
-    updated_text = replace_with_dict(
-        text, replacement_dict=conversion_dict, edge1="()(", edge2=")()")
-
-    return updated_text
 
 
 def replace_with_dict(text: str, replacement_dict: Dict[str, str],

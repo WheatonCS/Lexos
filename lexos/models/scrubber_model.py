@@ -107,6 +107,7 @@ class ScrubberModel(BaseModel):
                 """
 
                 return original_text.lower()
+
         else:
             def to_lower_function(original_text: str) -> str:
                 """Returns the string it is passed.
