@@ -76,7 +76,6 @@ class StatsModel(BaseModel):
         # initialize
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
-        num_file = np.size(self._doc_term_matrix.index.values)
         file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
@@ -111,7 +110,7 @@ class StatsModel(BaseModel):
                           median=median,
                           average=average_file_size,
                           anomaly_iqr=file_anomaly_iqr,
-                          std_deviation=std_dev_file_size,
+                          std_deviation=round(std_dev_file_size, 4),
                           anomaly_std_err=file_anomaly_std_err)
 
     @staticmethod
