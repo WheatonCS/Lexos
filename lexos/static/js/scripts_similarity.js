@@ -49,56 +49,38 @@ function sendAjaxRequest (url, form) {
 /**
  * display the result of the similarity query on web page
  */
-function displaySimResult () {
+function generateSimResult () {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
     // convert form into an object map string to string
     const form = jsonifyForm()
+
+    // the configuration for creating data table
+    const dataTableConfig = {
+        // do not display pages
+        paging: false,
+
+        // specify where the button is
+        dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
+        '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+
+        // specify all the button that is put on to the page
+        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+    }
 
     // send the ajax request
     sendAjaxRequest('/similarityHTML', form)
         .done(
             function (response) {
                 const outerTableDivSelector = $('#simTable')
-                outerTableDivSelector.html(response)  // put the response into the web page
-                outerTableDivSelector.children().DataTable({  // init the response table to data table
-                    paging: false,  // no page
-                    dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
-                    '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
-                    buttons: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5'
-                    ]
-                })
+                // put the response onto the web page
+                outerTableDivSelector.html(response)
+                // initialize the data table
+                outerTableDivSelector.children().DataTable(dataTableConfig)
+                // display the similarity result
                 $('#similaritiesResults').css({'display': 'block'})  // display everything
             })
-        .fail(
-            function (jqXHR, textStatus, errorThrown) {
-                console.log('textStatus: ' + textStatus)
-                console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while generating the similarity query result.')
-            })
-        .always(
-            function () {
-                $('#status-analyze').css({'visibility': 'hidden'})
-            })
-}
-
-/**
- * download the sim csv
- */
-function downloadSimCSV () {
-    // show loading icon
-    $('#status-analyze').css({'visibility': 'visible'})
-
-    // convert form into an object map string to string
-    const form = jsonifyForm()
-
-    // send the ajax request
-    sendAjaxRequest('/similarityCSV', form)
         .fail(
             function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
@@ -116,27 +98,19 @@ $(function () {
     // hide the similarity
     $('#similaritiesResults').css({'display': 'none'})
 
+    /**
+     * The event handler for generate similarity clicked
+     */
     $('#get-sims').click(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            displaySimResult()
+            generateSimResult()
         }
         else {
             runModal(error)
         }
     })
 
-    $('#sims-download').click(function () {
-        const error = submissionError()  // the error happens during submission
-
-        if (error === null) {  // if there is no error
-            downloadSimCSV()
-        }
-        else {
-            runModal(error)
-        }
-
-    })
 })
 
