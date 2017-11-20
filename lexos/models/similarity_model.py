@@ -102,7 +102,7 @@ class SimilarityModel(BaseModel):
         We also round all the data to 4 digits for better display
         :return: the html table to put into the web page
         """
-        return self._gen_exact_similarity().round(4).to_html(
+        return self._gen_exact_similarity().round(4).to_frame().to_html(
             classes="table table-striped table-bordered"
         )
 
