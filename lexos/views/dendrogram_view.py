@@ -26,8 +26,7 @@ def dendrogram():
     return render_template(
         'dendrogram.html',
         labels=labels,
-        numActiveDocs=num_active_docs,
-        itm="hierarchical")
+        numActiveDocs=num_active_docs)
 
 
 @dendrogram_blueprint.route("/dendrogramDiv", methods=['POST'])
