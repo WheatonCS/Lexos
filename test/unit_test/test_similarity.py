@@ -27,7 +27,7 @@ def test_with_similarity_equal_one():
     )
     pd.testing.assert_series_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([1., 1.], index=["F1.txt", "F2.txt"])
+        pd.Series([1., 1.], index=["F1.txt", "F2.txt"], name="cos_similarity")
     )
 # --------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ def test_with_all_same_content_file():
     )
     pd.testing.assert_series_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([0., 0.], index=["F1.txt", "F3.txt"])
+        pd.Series([0., 0.], index=["F1.txt", "F3.txt"], name="cos_similarity")
     )
 # --------------------------------------------------------------------------
 
