@@ -108,26 +108,6 @@ class RollingWindowsModel(BaseModel):
             input_list=lines, window_size=window_size
         )
 
-    def _get_window(self) -> np.ndarray:
-        window_unit = self._options.window_options.window_unit
-        window_size = self._options.window_options.window_size
-        passage = self._passage
-
-        if window_unit is WindowUnitType.line:
-            return self._get_line_windows(passage=passage,
-                                          window_size=window_size)
-
-        elif window_unit is WindowUnitType.word:
-            return self._get_word_windows(passage=passage,
-                                          window_size=window_size)
-
-        elif window_unit is WindowUnitType.letter:
-            return self._get_letters_windows(passage=passage,
-                                             windows_size=window_size)
-
-        else:
-            raise ValueError("unhandled window type: " + window_unit)
-
     @staticmethod
     def _find_regex_in_window(window: str, regex: str) -> int:
         return len(re.findall(pattern=regex, string=window,
@@ -151,40 +131,68 @@ class RollingWindowsModel(BaseModel):
 
         return len(re.findall(pattern=string_regex, string=window))
 
+    def _get_window(self) -> np.ndarray:
+        window_unit = self._options.window_options.window_unit
+        window_size = self._options.window_options.window_size
+        passage = self._passage
+
+        if window_unit is WindowUnitType.line:
+            return self._get_line_windows(passage=passage,
+                                          window_size=window_size)
+
+        elif window_unit is WindowUnitType.word:
+            return self._get_word_windows(passage=passage,
+                                          window_size=window_size)
+
+        elif window_unit is WindowUnitType.letter:
+            return self._get_letters_windows(passage=passage,
+                                             windows_size=window_size)
+
+        else:
+            raise ValueError("unhandled window type: " + window_unit)
+
     def find_token_average_in_window(self, window: str) -> float:
         token_type = self._options.token_options.token_type
         token = self._options.token_options.token
         window_size = self._options.window_options.window_size
 
         if token_type is RWATokenType.string:
-            count = self._find_string_in_window(window=window, string=token)
+            token_count = self._find_string_in_window(window=window,
+                                                      string=token)
+
         elif token_type is RWATokenType.word:
-            count = self._find_word_in_window(window=window, word=token)
+            token_count = self._find_word_in_window(window=window,
+                                                    word=token)
+
         elif token_type is RWATokenType.regex:
-            count = self._find_regex_in_window(window=window, regex=token)
+            token_count = self._find_regex_in_window(window=window,
+                                                     regex=token)
+
         else:
             raise ValueError("unhandled token type: " + token_type)
 
-        return count / window_size
+        return token_count / window_size
 
     def find_token_ratio_in_window(self, window: str) -> float:
         token_type = self._options.token_options.token_type
-        token = self._options.token_options.token
+        primary_token = self._options.token_options.token
         secondary_token = self._options.token_options.secondary_token
 
         if token_type is RWATokenType.string:
             numerator = self._find_string_in_window(window=window,
-                                                    string=token)
+                                                    string=primary_token)
             denominator = self._find_string_in_window(window=window,
                                                       string=secondary_token)
 
         elif token_type is RWATokenType.word:
-            numerator = self._find_word_in_window(window=window, word=token)
+            numerator = self._find_word_in_window(window=window,
+                                                  word=primary_token)
             denominator = self._find_word_in_window(window=window,
                                                     word=secondary_token)
 
         elif token_type is RWATokenType.regex:
-            numerator = self._find_regex_in_window(window=window, regex=token)
+            numerator = self._find_regex_in_window(window=window,
+                                                   regex=primary_token)
             denominator = self._find_regex_in_window(window=window,
                                                      regex=secondary_token)
 
