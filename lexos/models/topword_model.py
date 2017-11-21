@@ -300,12 +300,12 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def get_result(self) -> ReadableResult:
-        if self._topword_option.topword_option == "allToPara":
+        if self._opts.analysis_option == "allToPara":
 
             return self._analyze_all_to_para()
-        elif self._topword_option.topword_option == "classToPara":
+        elif self._opts.analysis_option == "classToPara":
 
             return self._analyze_para_to_group()
-        elif self._topword_option.topword_option == "classToClass":
+        elif self._opts.analysis_option == "classToClass":
 
             return self._analyze_group_to_group()
