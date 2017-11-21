@@ -101,13 +101,12 @@ class StatsModel(BaseModel):
         median = np.median(file_sizes).item()
         q1 = np.percentile(file_sizes, 25, interpolation="midpoint")
         q3 = np.percentile(file_sizes, 75, interpolation="midpoint")
-        iqr = q3 - q1
-
-        # calculate the anomaly
+        iqr = q3 - q1  # Find interquartile range.
+        # Find file anomaly.
         for count, label in enumerate(labels):
-            if file_sizes[count] > median + 1.5 * iqr:
+            if file_sizes[count] > q3 + 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'large'})
-            elif file_sizes[count] < median - 1.5 * iqr:
+            elif file_sizes[count] < q1 - 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'small'})
 
         return CorpusInfo(q1=q1,
