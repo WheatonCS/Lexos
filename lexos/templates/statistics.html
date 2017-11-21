@@ -146,7 +146,7 @@ $(document).ready( function () {
 		{% for file in FileInfoList %}
 			<tr>
 				<td>{{ file.file_name }}</td>
-				<td>{{ file.num_word }}</td>
+				<td>{{ file.distinct_word_count }}</td>
 				<td>{{ file.hapax }} </td>
 				<td>{{ file.total_word_count }}</td>
 				<td>{{ file.average }}</td>
