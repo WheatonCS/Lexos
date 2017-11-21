@@ -17,23 +17,23 @@ class StatsTestOptions(NamedTuple):
 
 class CorpusInfo(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
-    q1: float  # The first quartile of all file sizes.
-    q3: float  # The second quartile of all file sizes.
-    iqr: float  # The inter-quartile range of all file sizes.
-    median: float  # The median of all file sizes.
-    average: float  # The average of all file sized.
-    std_deviation: float  # The standard deviation of all file sizes.
-    anomaly_iqr: dict  # The anomaly inter-quartile range of all file sizes.
-    anomaly_std_err: dict  # The anomaly standard error of all file sizes.
+    q1: float  # First quartile of all file sizes.
+    q3: float  # Third quartile of all file sizes.
+    iqr: float  # Interquartile range.
+    median: float  # Median (second quartile) of all file sizes.
+    average: float  # Average size of all files.
+    std_deviation: float  # Standard deviation of all file sizes.
+    anomaly_iqr: dict  # File anomaly found using interquartile range analysis
+    anomaly_std_err: dict  # File anomaly found using standard error analysis
 
 
 class FileInfo(NamedTuple):
     """A typed tuple to represent statistics of each file in corpus."""
-    hapax: int  # The hapax of all word counts of a file.
-    file_name: str  # The name of a file.
-    total_word_count: int  # The number of total word counts of a file.
-    average_word_count: float  # The average of all word counts of a file.
-    distinct_word_count: int  # The number of words of a file.
+    hapax: int  # Number of words that appear only once in a file.
+    file_name: str  # Name of the file.
+    total_word_count: int  # Total count of words in a file.
+    average_word_count: float  # Average count of words in a file.
+    distinct_word_count: int  # Number of distinct words in a file.
 
 
 class StatsModel(BaseModel):
