@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, List
 
 from lexos.receivers.base_receiver import BaseReceiver
 
@@ -26,15 +26,20 @@ class RWAWindowOptions(NamedTuple):
     window_unit: WindowUnitType
 
 
-class RWATokenOptions(NamedTuple):
+class RWARatioTokenOptions(NamedTuple):
     token_type: RWATokenType
-    token: str
-    secondary_token: str
+    numerator_token: str
+    denominator_token: str
+
+
+class RWAAverageTokenOptions(NamedTuple):
+    token_type: RWATokenType
+    tokens: List[str]
 
 
 class RWAFrontEndOptions(NamedTuple):
-    count_type: RWACountType
-    token_options: RWATokenOptions
+    ratio_token_options: Optional[RWARatioTokenOptions]
+    average_token_options: Optional[RWAAverageTokenOptions]
     window_options: RWAWindowOptions
     milestone: Optional[str]
 
@@ -49,21 +54,60 @@ class RollingWindowsReceiver(BaseReceiver):
         else:
             raise ValueError("invalid count type from front end")
 
-    def _get_token_options(self) -> RWATokenOptions:
+    def _get_ratio_token_options(self) -> RWARatioTokenOptions:
+        """
+
+        :return:
+        """
+
         if self._front_end_data['inputtype'] == 'string':
             token_type = RWATokenType.string
+            numerator_token = self._front_end_data['rollingsearchword']
+            denominator_token = self._front_end_data['rollingsearchwordopt']
+
         elif self._front_end_data['inputtype'] == 'regex':
             token_type = RWATokenType.regex
+            numerator_token = self._front_end_data['rollingsearchword']
+            denominator_token = self._front_end_data['rollingsearchwordopt']
+
         elif self._front_end_data['inputtype'] == 'word':
             token_type = RWATokenType.word
+            numerator_token = self._front_end_data['rollingsearchword'].strip()
+            denominator_token = \
+                self._front_end_data['rollingsearchwordopt'].strip()
+
         else:
             raise ValueError("invalid token type from front end")
 
-        token = self._front_end_data['rollingsearchword']
-        secondary_token = self._front_end_data['rollingsearchwordopt']
+        return RWARatioTokenOptions(token_type=token_type,
+                                    numerator_token=numerator_token,
+                                    denominator_token=denominator_token)
 
-        return RWATokenOptions(token_type=token_type, token=token,
-                               secondary_token=secondary_token)
+    def _get_average_token_options(self) -> RWAAverageTokenOptions:
+        """
+
+        :return:
+        """
+
+        # the unprocessed token
+        raw_token = self._front_end_data['rollingsearchword']
+
+        if self._front_end_data['inputtype'] == 'string':
+            token_type = RWATokenType.string
+            tokens = raw_token.split(',')
+
+        elif self._front_end_data['inputtype'] == 'regex':
+            token_type = RWATokenType.regex
+            tokens = raw_token.split(',')
+
+        elif self._front_end_data['inputtype'] == 'word':
+            token_type = RWATokenType.word
+            tokens = [token.strip() for token in raw_token.split(',')]
+
+        else:
+            raise ValueError("invalid token type from front end")
+
+        return RWAAverageTokenOptions(token_type=token_type, tokens=tokens)
 
     def _get_window_option(self) -> RWAWindowOptions:
         if self._front_end_data['windowtype'] == 'letter':
@@ -87,12 +131,22 @@ class RollingWindowsReceiver(BaseReceiver):
             return self._front_end_data['rollingmilestonetype']
 
     def options_from_front_end(self) -> RWAFrontEndOptions:
-        return RWAFrontEndOptions(
-            count_type=self._get_count_type(),
-            token_options=self._get_token_options(),
-            window_options=self._get_window_option(),
-            milestone=self._get_milestone()
-        )
+        if self._front_end_data['counttype'] == 'ratio':
+            return RWAFrontEndOptions(
+                average_token_options=None,
+                ratio_token_options=self._get_ratio_token_options(),
+                window_options=self._get_window_option(),
+                milestone=self._get_milestone()
+            )
+        elif self._front_end_data['counttype'] == 'average':
+            return RWAFrontEndOptions(
+                average_token_options=self._get_average_token_options(),
+                ratio_token_options=None,
+                window_options=self._get_window_option(),
+                milestone=self._get_milestone()
+            )
+        else:
+            raise ValueError("invalid count type from front end")
 
     def get_file_id_from_front_end(self) -> int:
         return int(self._front_end_data['filetorollinganalyze'])
