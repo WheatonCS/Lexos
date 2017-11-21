@@ -75,7 +75,7 @@ class RollingWindowsReceiver(BaseReceiver):
         else:
             raise ValueError("invalid window unit from front end")
 
-        window_size = self._front_end_data['rollingwindowsize']
+        window_size = int(self._front_end_data['rollingwindowsize'])
 
         return RWAWindowOptions(window_size=window_size,
                                 window_unit=window_unit)
@@ -93,3 +93,6 @@ class RollingWindowsReceiver(BaseReceiver):
             window_options=self._get_window_option(),
             milestone=self._get_milestone()
         )
+
+    def get_file_id_from_front_end(self) -> int:
+        return int(self._front_end_data['filetorollinganalyze'])
