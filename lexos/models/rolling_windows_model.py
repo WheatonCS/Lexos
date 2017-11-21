@@ -1,9 +1,9 @@
 import re
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, List
 
 import numpy as np
 
-from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX_STR, \
+from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX, \
     WORD_BOUNDARY_REGEX_STR
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
@@ -46,6 +46,27 @@ class RollingWindowsModel(BaseModel):
             else RollingWindowsReceiver().options_from_front_end()
 
     @staticmethod
+    def _get_rolling_window_from_list(input_list: List[str],
+                                      window_size: int) -> np.ndarray:
+        """
+
+        :param input_list:
+        :param window_size:
+        """
+
+        # number of items in the input list
+        num_item = len(input_list)
+
+        # get the total number of windows
+        num_window = num_item - window_size
+
+        # get the rolling list, should be a array of str
+        return np.array(
+            "".join(input_list[start: start + window_size])
+            for start in range(num_window)
+        )
+
+    @staticmethod
     def _get_letters_windows(passage: str, windows_size: int) -> np.ndarray:
         """
 
@@ -53,18 +74,8 @@ class RollingWindowsModel(BaseModel):
         :param windows_size:
         :return:
         """
-
-        # total number of letter in the passage
-        num_letter = len(passage)
-
-        # the total number of windows
-        # because every time we move one unit (one letter)
-        # to create the next window
-        num_windows = num_letter - windows_size
-
-        return np.array(
-            passage[start: start + windows_size]
-            for start in range(num_windows)
+        return RollingWindowsModel._get_rolling_window_from_list(
+            input_list=list(passage), window_size=windows_size
         )
 
     @staticmethod
@@ -76,17 +87,10 @@ class RollingWindowsModel(BaseModel):
         :return:
         """
 
-        # the regex for `window_size` number of words with right boundary
-        # also matches less than `window_size` number of word
-        # with right boundary (for the last remainder)
-        words_regex = re.compile(
-            "(?:" + WORD_AND_RIGHT_BOUNDARY_REGEX_STR + ")" +
-            "{1," + str(window_size) + "}",  # repeat at least 1 time
-            flags=rwa_regex_flags
-        )
+        words = re.findall(WORD_AND_RIGHT_BOUNDARY_REGEX, passage)
 
-        return np.array(
-            re.finditer(words_regex, passage)
+        return RollingWindowsModel._get_rolling_window_from_list(
+            input_list=words, window_size=window_size
         )
 
     @staticmethod
@@ -99,16 +103,9 @@ class RollingWindowsModel(BaseModel):
 
         # get all the lines
         lines = passage.splitlines(keepends=True)
-        num_lines = len(lines)
 
-        # the total number of windows
-        # because every time we move one unit (one line)
-        # to create the next window
-        num_windows = num_lines - window_size
-
-        return np.array(
-            lines[start: start + window_size]
-            for start in range(num_windows)
+        return RollingWindowsModel._get_rolling_window_from_list(
+            input_list=lines, window_size=window_size
         )
 
     def _get_window(self) -> np.ndarray:
