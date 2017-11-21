@@ -65,7 +65,10 @@ class StatsModel(BaseModel):
             else MatrixModel().get_temp_label_id_map()
 
     def get_corpus_info(self) -> CorpusInfo:
-        """Converts word lists completely to statistic."""
+        """Converts word lists completely to statistic.
+
+        :return: a typed tuple that holds all statistic of the entire corpus.
+        """
 
         # Check if empty corpus is given.
         assert np.sum(self._doc_term_matrix.values) > 0, EMPTY_LIST_MESSAGE
@@ -81,10 +84,10 @@ class StatsModel(BaseModel):
         # Find average size of all files.
         average_file_size = round(np.average(file_sizes), 3)
 
-        # Standard error analysis: consider file sizes are normally
-        # distributed; we detect anomaly by finding files with sizes that are
-        # more than two standard deviation away from the mean, in another word,
-        # we find files with sizes that are not in the major 95% range.
+        # Standard error analysis: assume file sizes are normally distributed;
+        # we detect anomaly by finding files with sizes that are more than two
+        # standard deviation away from the mean. In another word, we find files
+        # with sizes that are not in the major 95% range.
         # Find the standard deviation.
         std_dev_file_size = np.std(file_sizes).item()
         # Find file anomaly.
@@ -163,7 +166,7 @@ class StatsModel(BaseModel):
 
     @staticmethod
     def get_token_type() -> str:
-        """Return token type that was used for analyzing."""
+        """:return: token type that was used for analyzing."""
 
         return \
             MatrixReceiver().options_from_front_end().token_option.token_type
