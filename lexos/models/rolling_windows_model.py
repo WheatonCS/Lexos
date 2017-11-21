@@ -12,6 +12,7 @@ from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
 
 rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
 
+
 class RWATestOptions(NamedTuple):
     passage_string: str
     rolling_windows_options: RWAFrontEndOptions
