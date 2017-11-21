@@ -3,44 +3,64 @@
 # follows normal distribution
 
 import itertools
-from typing import List, Tuple, Optional
-
 import numpy as np
 import pandas as pd
-
+from typing import List, Tuple, Optional, NamedTuple
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
     SEG_NON_POSITIVE_MESSAGE, NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.topword_receiver import TopwordOption, TopwordReceiver
+from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.receivers.topword_receiver import TopwordFrontEndOption, \
+    TopwordReceiver
+
+
+class TopwordTestOptions(NamedTuple):
+    """A typed tuple to hold test options."""
+    doc_term_matrix: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+    front_end_option: TopwordFrontEndOption
+
 
 ReadableResult = List[Tuple[str, list]]
 
 
 class TopwordModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[TopwordOption] = None):
+    def __init__(self, test_options: Optional[TopwordTestOptions] = None):
         """This is the class to generate top word analysis.
-        :param test_dtm: (fake parameter)
-                    the doc term matrix used of testing
-        :param test_option: (fake parameter)
-                    the topword option used for testing
+
+        :param test_options: the input used in testing to override the
+                             dynamically loaded option
         """
         super().__init__()
-        self._test_dtm = test_dtm
-        self._test_option = test_option
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_front_end_option = test_options.front_end_option
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_front_end_option = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-
+        """:return: the document term matrix"""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
-    def _topword_option(self) -> TopwordOption:
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels"""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_temp_label_id_map()
 
-        return self._test_option if self._test_option is not None \
+    @property
+    def _opts(self) -> TopwordFrontEndOption:
+
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else TopwordReceiver().options_from_front_end()
 
     @staticmethod
