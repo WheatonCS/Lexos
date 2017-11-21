@@ -31,7 +31,7 @@ class TopwordModel(BaseModel):
         """This is the class to generate top word analysis.
 
         :param test_options: the input used in testing to override the
-                             dynamically loaded option
+                             dynamically loaded option.
         """
         super().__init__()
         if test_options is not None:
@@ -45,20 +45,20 @@ class TopwordModel(BaseModel):
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-        """:return: the document term matrix"""
+        """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
     def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels"""
+        """:return: a map takes an id to temp labels."""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_temp_label_id_map()
 
     @property
-    def _opts(self) -> TopwordFrontEndOption:
-
+    def _topword_front_end_option(self) -> TopwordFrontEndOption:
+        """:return: a typed tuple that holds the topword front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else TopwordReceiver().options_from_front_end()
@@ -300,12 +300,12 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def get_result(self) -> ReadableResult:
-        if self._opts.analysis_option == "allToPara":
+        if self._topword_front_end_option.analysis_option == "allToPara":
 
             return self._analyze_all_to_para()
-        elif self._opts.analysis_option == "classToPara":
+        elif self._topword_front_end_option.analysis_option == "classToPara":
 
             return self._analyze_para_to_group()
-        elif self._opts.analysis_option == "classToClass":
+        elif self._topword_front_end_option.analysis_option == "classToClass":
 
             return self._analyze_group_to_group()
