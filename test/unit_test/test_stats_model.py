@@ -69,35 +69,18 @@ class TestFileResult:
         assert test_file_result_one[1].file_name == "F2.txt"
         assert test_file_result_two[2].file_name == "F3.txt"
 
-    def test_unique_words(self):
-        assert test_file_result_one[0].num_word == 4
-        assert test_file_result_one[1].num_word == 5
-        assert test_file_result_two[1].num_word == 5
+    def test_distinct_words(self):
+        assert test_file_result_one[0].distinct_word_count == 4
+        assert test_file_result_one[1].distinct_word_count == 5
+        assert test_file_result_two[1].distinct_word_count == 5
 
     def test_total_words(self):
         assert test_file_result_one[0].total_word_count == 80
         assert test_file_result_one[1].total_word_count == 15
 
-    def test_median(self):
-        assert test_file_result_one[0].median == (15 + 20) / 2
-        assert test_file_result_one[1].median == 3
-
-    def test_quartiles(self):
-        assert test_file_result_one[0].q1 == 10
-        assert test_file_result_one[0].q3 == 30
-        assert test_file_result_one[1].q1 == 2
-        assert test_file_result_one[1].q3 == 4
-        assert test_file_result_one[0].iqr == \
-            test_file_result_one[0].q3 - test_file_result_one[0].q1
-
     def test_average(self):
-        assert test_file_result_one[0].average == 20
-        assert test_file_result_one[1].average == 3
-
-    def test_std(self):
-        assert round(test_file_result_one[0].std_deviation, 4) == 12.7475
-        assert round(test_file_result_one[1].std_deviation, 4) == 1.4142
-        assert round(test_file_result_two[2].std_deviation, 4) == 1.118
+        assert test_file_result_one[0].average_word_count == 20
+        assert test_file_result_one[1].average_word_count == 3
 
     def test_hapax(self):
         assert test_file_result_one[0].hapax == 0
@@ -106,10 +89,6 @@ class TestFileResult:
 
 
 class TestCorpusInfo:
-    def test_file_name(self):
-        assert test_corpus_result_one.file_names[0] == "F1.txt"
-        assert test_corpus_result_two.file_names[2] == "F3.txt"
-
     def test_average(self):
         assert test_corpus_result_one.average == 47.5
         assert test_corpus_result_two.average == 47
