@@ -66,19 +66,28 @@ class StatsModel(BaseModel):
 
     def get_corpus_info(self) -> CorpusInfo:
         """Converts word lists completely to statistic."""
+
+        # Check if empty corpus is given.
         assert np.sum(self._doc_term_matrix.values) > 0, EMPTY_LIST_MESSAGE
-        # initialize
+
+        # Initialize two dictionaries to hold anomaly analysis result.
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
-        file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
+        # Get file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
-
-        # 1 standard error analysis
+        # Find size of each file.
+        file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
+        # Find average size of all files.
         average_file_size = round(np.average(file_sizes), 3)
-        # Calculate the standard deviation
+
+        # Standard error analysis: consider file sizes are normally
+        # distributed; we detect anomaly by finding files with sizes that are
+        # more than two standard deviation away from the mean, in another word,
+        # we find files with sizes that are not in the major 95% range.
+        # Find the standard deviation.
         std_dev_file_size = np.std(file_sizes).item()
-        # Calculate the anomaly
+        # Find file anomaly.
         for count, label in enumerate(labels):
             if file_sizes[count] > average_file_size + 2 * std_dev_file_size:
                 file_anomaly_std_err.update({label: 'large'})
@@ -118,7 +127,7 @@ class StatsModel(BaseModel):
         # Check if input is empty.
         assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
 
-        # initialize: remove all zeros from count_list.
+        # Initialize: remove all zeros from count_list.
         nonzero_count_list = count_list[count_list != 0]
 
         # Count number of distinct words.
