@@ -3,12 +3,14 @@ from typing import NamedTuple, Optional
 
 import numpy as np
 
-from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX_STR
+from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX_STR, \
+    _WORD_BOUNDARY_REGEX_STR
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
-    RollingWindowsReceiver, WindowUnitType
+    RollingWindowsReceiver, WindowUnitType, RWATokenType
 
+rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
 
 class RWATestOptions(NamedTuple):
     passage_string: str
@@ -79,7 +81,7 @@ class RollingWindowsModel(BaseModel):
         words_regex = re.compile(
             "(?:" + WORD_AND_RIGHT_BOUNDARY_REGEX_STR + ")" +
             "{1," + str(window_size) + "}",  # repeat at least 1 time
-            re.UNICODE | re.MULTILINE | re.DOTALL
+            flags=rwa_regex_flags
         )
 
         return np.array(
@@ -127,3 +129,42 @@ class RollingWindowsModel(BaseModel):
 
         else:
             raise ValueError("unhandled window type: " + window_unit)
+
+    @staticmethod
+    def _find_regex_in_window(window: str, regex: str) -> int:
+        return len(re.findall(pattern=regex, string=window,
+                              flags=rwa_regex_flags))
+
+    @staticmethod
+    def _find_word_in_window(window: str, word: str) -> int:
+        word_regex = re.compile(
+            # enclose the word in word boundaries
+            _WORD_BOUNDARY_REGEX_STR + re.escape(word)
+            + _WORD_BOUNDARY_REGEX_STR,
+
+            flags=rwa_regex_flags
+        )
+
+        return len(re.findall(pattern=word_regex, string=window))
+
+    @staticmethod
+    def _find_string_in_window(window: str, string: str) -> int:
+        string_regex = re.compile(re.escape(string), flags=rwa_regex_flags)
+
+        return len(re.findall(pattern=string_regex, string=window))
+
+    def find_token_average_in_window(self, window: str) -> int:
+        token_type = self._options.token_options.token_type
+        token = self._options.token_options.token
+        window_size = self._options.window_options.window_size
+
+        if token_type is RWATokenType.string:
+            count = self._find_string_in_window(window=window, string=token)
+        elif token_type is RWATokenType.word:
+            count = self._find_word_in_window(window=window, word=token)
+        elif token_type is RWATokenType.regex:
+            count = self._find_regex_in_window(window=window, regex=token)
+        else:
+            raise ValueError("unhandled token type: " + token_type)
+
+        return count / window_size
