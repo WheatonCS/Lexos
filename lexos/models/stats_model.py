@@ -29,17 +29,13 @@ class CorpusInfo(NamedTuple):
 
 class FileInfo(NamedTuple):
     """A typed tuple to represent statistics of each file in corpus."""
-    q1: float  # The first quartile of all word counts of a file.
-    q3: float  # The second quartile of all word counts of a file.
-    iqr: float  # The inter-quartile range of all word counts of a file.
     hapax: int  # The hapax of all word counts of a file.
     median: float  # The median of all word counts of a file.
-    average: float  # The average of all word counts of a file.
-    distinct_word_count: int  # The number of words of a file.
     file_name: str  # The name of a file.
     word_count: int  # The count of all words within a file.
-    std_deviation: float  # The standard deviation of word counts.
     total_word_count: int  # The total of all word counts of a file.
+    average_word_count: float  # The average of all word counts of a file.
+    distinct_word_count: int  # The number of words of a file.
 
 
 class StatsModel(BaseModel):
@@ -144,17 +140,12 @@ class StatsModel(BaseModel):
         # Count number of words that only appear once in the given input.
         hapax = ((count_list == 1).sum()).item()
 
-        return FileInfo(q1=q1,
-                        q3=q3,
-                        iqr=iqr,
-                        hapax=hapax,
+        return FileInfo(hapax=hapax,
                         median=median,
-                        average=average_word_count,
-                        distinct_word_count=distinct_word_count,
                         file_name=file_name,
-                        word_count=nonzero_count_list,
-                        std_deviation=std_word_count,
-                        total_word_count=total_word_count)
+                        total_word_count=total_word_count,
+                        average_word_count=average_word_count,
+                        distinct_word_count=distinct_word_count,)
 
     def get_all_file_info(self) -> List[FileInfo]:
         """Find statistics of all files and put each result into a list."""
