@@ -151,7 +151,7 @@ class RollingWindowsModel(BaseModel):
 
         return len(re.findall(pattern=string_regex, string=window))
 
-    def find_token_average_in_window(self, window: str) -> int:
+    def find_token_average_in_window(self, window: str) -> float:
         token_type = self._options.token_options.token_type
         token = self._options.token_options.token
         window_size = self._options.window_options.window_size
@@ -166,3 +166,30 @@ class RollingWindowsModel(BaseModel):
             raise ValueError("unhandled token type: " + token_type)
 
         return count / window_size
+
+    def find_token_ratio_in_window(self, window: str) -> float:
+        token_type = self._options.token_options.token_type
+        token = self._options.token_options.token
+        secondary_token = self._options.token_options.secondary_token
+
+        if token_type is RWATokenType.string:
+            numerator = self._find_string_in_window(window=window,
+                                                    string=token)
+            denominator = self._find_string_in_window(window=window,
+                                                      string=secondary_token)
+
+        elif token_type is RWATokenType.word:
+            numerator = self._find_word_in_window(window=window, word=token)
+            denominator = self._find_word_in_window(window=window,
+                                                    word=secondary_token)
+
+        elif token_type is RWATokenType.regex:
+            numerator = self._find_regex_in_window(window=window, regex=token)
+            denominator = self._find_regex_in_window(window=window,
+                                                     regex=secondary_token)
+
+        else:
+            raise ValueError("unhandled token type: " + token_type)
+
+        return numerator / denominator
+
