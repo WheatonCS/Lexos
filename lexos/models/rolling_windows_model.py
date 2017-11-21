@@ -4,7 +4,7 @@ from typing import NamedTuple, Optional
 import numpy as np
 
 from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX_STR, \
-    _WORD_BOUNDARY_REGEX_STR
+    WORD_BOUNDARY_REGEX_STR
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
@@ -140,8 +140,8 @@ class RollingWindowsModel(BaseModel):
     def _find_word_in_window(window: str, word: str) -> int:
         word_regex = re.compile(
             # enclose the word in word boundaries
-            _WORD_BOUNDARY_REGEX_STR + re.escape(word)
-            + _WORD_BOUNDARY_REGEX_STR,
+            WORD_BOUNDARY_REGEX_STR + re.escape(word)
+            + WORD_BOUNDARY_REGEX_STR,
 
             flags=rwa_regex_flags
         )
