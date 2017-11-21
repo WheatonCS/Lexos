@@ -10,8 +10,8 @@ import pandas as pd
 
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
     SEG_NON_POSITIVE_MESSAGE, NOT_ENOUGH_CLASSES_MESSAGE
-from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
+from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.topword_receiver import TopwordOption, TopwordReceiver
 
@@ -143,7 +143,8 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def get_class_map():
-        division_map = FileManager().get_class_division_map()
+        division_map = \
+            FileManagerModel().load_file_manager().get_class_division_map()
         class_labels = division_map.index.values
         if "" in class_labels:
             class_labels[np.where(class_labels == "")] = "untitled"
