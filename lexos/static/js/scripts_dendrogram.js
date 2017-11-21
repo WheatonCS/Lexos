@@ -3,7 +3,7 @@
  * @returns {{string: string}} - the from converted to json
  */
 function jsonifyForm () {
-    var form = {}
+    const form = {}
     $.each($('form').serializeArray(), function (i, field) {
         form[field.name] = field.value || ''
     })
@@ -20,31 +20,47 @@ function runModal (htmlMsg) {
 }
 
 /**
- * the function to do ajax in dendrogram
- * @param url {string} - the url to do post
+ * The function to create the ajax object
+ * @param form {object.<string, string>} the form converted into a json
+ * @returns {jquery.Ajax} - the jquery ajax object (a deferred object)
  */
-function doAjax (url) {
+function sendAjaxRequest (form) {
+
+    return $.ajax({
+        type: 'POST',
+        url: '/dendrogramDiv',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(form)
+    })
+
+}
+
+/**
+ * the function to submit form via ajax in dendrogram
+ */
+function submitForm () {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
-    var form = jsonifyForm()
-    $.ajax({
-            type: 'POST',
-            url: url,
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(form),
-            complete: function (response) {
-                $('#status-analyze').css({'visibility': 'hidden'})
-                $('#dendrogram-result').html(response['responseJSON']['dendroDiv'])
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
+    // convert form into an object map string to string
+    const form = jsonifyForm()
+
+    // send the ajax request
+    sendAjaxRequest(form)
+        .done(
+            function (response) {
+                $('#dendrogram-result').html(response)
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
                 runModal('error encountered while plotting the dendrogram.')
-            }
-        }
-    )
+            })
+        .always(
+            function () {
+                $('#status-analyze').css({'visibility': 'hidden'})
+            })
 }
 
 /**
@@ -52,10 +68,10 @@ function doAjax (url) {
  * @returns {string | null} - if it is null, it means no error, else then the string is the error message
  */
 function submissionError () {
-    const err = 'A dendrogram requires at least 2 active documents to be created.'
+    const active_file_num_too_few_err = 'A dendrogram requires at least 2 active documents to be created.'
     const activeFiles = $('#num_active_files').val()
     if (activeFiles < 2)
-        return err
+        return active_file_num_too_few_err
     else
         return null
 }
@@ -63,7 +79,7 @@ function submissionError () {
 /**
  * When the HTML documents finish loading
  */
-$(document).ready(function () {
+$(function () {
 
     /**
      * the events after dendrogram is clicked
@@ -72,12 +88,11 @@ $(document).ready(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            doAjax('/dendrogramDiv', null)
+            submitForm()
         }
         else {
             runModal(error)
         }
-
     })
 
 })

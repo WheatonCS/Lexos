@@ -1,57 +1,81 @@
-import numpy as np
+from typing import Counter, Dict, NamedTuple, Optional
+
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
-from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
-from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver
+from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
+    MatrixReceiver, \
+    IdTempLabelMap
+
+FileIDContentMap = Dict[int, str]
+
+
+class MatrixTestOptions(NamedTuple):
+    front_end_option: MatrixFrontEndOption
+    file_id_content_map: FileIDContentMap
 
 
 class MatrixModel(BaseModel):
 
-    def __init__(self, test_matrix_option: MatrixOption = None,
-                 test_file_manager: FileManager = None):
+    def __init__(self, test_options: Optional[MatrixTestOptions] = None):
         """Class to generate and manipulate dtm.
 
-        :param test_file_manager: (fake parameter)
-                                the file manger used for testing
-        :param test_matrix_option: (fake parameter)
-                                the matrix options used for testing
+        :param test_options:
+            the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_file_manager = test_file_manager
-        self._test_matrix_option = test_matrix_option
+        if test_options is not None:
+            self._test_file_id_content_map = test_options.file_id_content_map
+            self._test_front_end_option = test_options.front_end_option
+        else:
+            self._test_file_id_content_map = None
+            self._test_front_end_option = None
 
     @property
-    def _file_manager(self) -> FileManager:
+    def _file_id_content_map(self) -> FileIDContentMap:
         """Result form higher level class: the file manager of current session.
 
         :return: a file manager object
         """
-        return self._test_file_manager if self._test_file_manager \
-            else FileManagerModel().load_file_manager()
+        return self._test_file_id_content_map \
+            if self._test_file_id_content_map is not None \
+            else FileManagerModel().load_file_manager() \
+            .get_content_of_active_with_id()
 
     @property
-    def _opts(self) -> MatrixOption:
+    def _opts(self) -> MatrixFrontEndOption:
         """Get all the options to use
 
         :return: either a frontend option or a fake option used for testing
         """
-        return self._test_matrix_option if self._test_matrix_option \
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else MatrixReceiver().options_from_front_end()
 
-    def get_matrix(self)-> pd.DataFrame:
-        """Get the document term matrix (DTM) of all the active files
+    def get_temp_label(self) -> Counter[str]:
+        """An unordered list (counter) of all the temp labels"""
+        return Counter(self._opts.id_temp_label_map.values())
 
-        :return:
-            a panda data frame with:
-            - the index (row) header are the segment names (temp_labels)
-            - the column header are words
+    def get_id_temp_label_map(self) -> IdTempLabelMap:
+        """Get the dict where id maps to temp labels."""
+        return self._opts.id_temp_label_map
+
+    def _get_raw_count_matrix(self) -> pd.DataFrame:
+        """Get the raw count matrix for the whole corpus
+
+        :return: a panda data frame
+            where
+                - the index header is the file id
+                - the row header is the words in the file
         """
+        all_contents_with_id = self._file_id_content_map
 
-        all_contents = self._file_manager.get_content_of_active()
+        # a pair of parallel array
+        file_ids = all_contents_with_id.keys()
+        file_contents = all_contents_with_id.values()
 
         # heavy hitting tokenization and counting options set here
 
@@ -98,7 +122,47 @@ class MatrixModel(BaseModel):
         )
 
         # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = count_vector.fit_transform(all_contents)
+        doc_term_sparse_matrix = count_vector.fit_transform(file_contents)
+
+        # need to get at the entire matrix and not sparse matrix
+        raw_count_matrix = doc_term_sparse_matrix.toarray()
+        # snag all features (e.g., word-grams or char-grams) that were counted
+        words = count_vector.get_feature_names()
+        # pack the data into a data frame
+        return pd.DataFrame(data=raw_count_matrix,
+                            index=file_ids,
+                            columns=words)
+
+    def _apply_transformations_to_matrix(self, dtm_data_frame: pd.DataFrame) \
+            -> pd.DataFrame:
+        """Apply all the transitions to the matrix
+
+        Currently there are following transitions with following order:
+        - culling
+        - most frequent word
+        - tf-idf transformation
+        - convert to proportion
+        :param dtm_data_frame: the initial raw count data frame.
+        :return: the final data frame after all the transformation
+        """
+
+        # apply culling to dtm
+        if self._opts.culling_option.cull_least_seg is not None:
+            dtm_after_cull = self._get_culled_matrix(
+                least_num_seg=self._opts.culling_option.cull_least_seg,
+                dtm_data_frame=dtm_data_frame
+            )
+        else:
+            dtm_after_cull = dtm_data_frame
+
+        # only leaves the most frequent words in dtm
+        if self._opts.culling_option.mfw_lowest_rank is not None:
+            dtm_after_mfw = self._get_most_frequent_word(
+                lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
+                dtm_data_frame=dtm_after_cull,
+            )
+        else:
+            dtm_after_mfw = dtm_after_cull
 
         # ==== Parameters TfidfTransformer (TF/IDF) ===
 
@@ -150,46 +214,36 @@ class MatrixModel(BaseModel):
                 use_idf=True,
                 smooth_idf=False,
                 sublinear_tf=False)
-            doc_term_sparse_matrix = transformer.fit_transform(
-                doc_term_sparse_matrix)
-
-        # need to get at the entire matrix and not sparse matrix
-        raw_count_matrix = doc_term_sparse_matrix.toarray()
-        # snag all features (e.g., word-grams or char-grams) that were counted
-        words = count_vector.get_feature_names()
-        # pack the data into a data frame
-        dtm_data_frame = pd.DataFrame(data=raw_count_matrix,
-                                      index=self._opts.temp_labels,
-                                      columns=words)
+            dtm_after_tf_idf = transformer.fit_transform(dtm_after_mfw)
+        else:
+            dtm_after_tf_idf = dtm_after_mfw
 
         # change the dtm to proportion
         if self._opts.norm_option.use_freq:
             # apply the proportion function to each row
-            dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
-                                                  axis=1)
-
-        # apply culling to dtm
-        if self._opts.culling_option.culling:
-
-            dtm_data_frame = self._get_culled_matrix(
-                least_num_seg=self._opts.culling_option.cull_least_passage,
-                dtm_data_frame=dtm_data_frame
+            dtm_after_freq = dtm_after_tf_idf.apply(
+                lambda row: row / row.sum(), axis=1
             )
+        else:
+            dtm_after_freq = dtm_after_tf_idf
 
-        # only leaves the most frequent words in dtm
-        if self._opts.culling_option.most_frequent_word:
+        return dtm_after_freq
 
-            dtm_data_frame = self._get_most_frequent_word(
-                lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
-                dtm_data_frame=dtm_data_frame,
-                count_matrix=raw_count_matrix
-            )
+    def get_matrix(self)-> pd.DataFrame:
+        """Get the document term matrix (DTM) of all the active files
 
-        return dtm_data_frame
+        :return:
+            a panda data frame with:
+            - the index (row) header are file ids
+            - the column header are words
+        """
+
+        raw_count_matrix = self._get_raw_count_matrix()
+
+        return self._apply_transformations_to_matrix(raw_count_matrix)
 
     @staticmethod
     def _get_most_frequent_word(lower_rank_bound: int,
-                                count_matrix: np.ndarray,
                                 dtm_data_frame: pd.DataFrame) -> pd.DataFrame:
         """ Gets the most frequent words in final_matrix and words.
 
@@ -199,9 +253,6 @@ class MatrixModel(BaseModel):
                                  (the rank is determined by the word's number
                                  of appearance in the whole corpus)
                                  (ranked from high to low)
-        :param count_matrix: the raw count matrix,
-                                the row are for each segments
-                                the column are for each words
         :param dtm_data_frame: the dtm in the form of panda data frame.
                                 the indices(rows) are segment names
                                 the columns are words.
@@ -209,26 +260,21 @@ class MatrixModel(BaseModel):
             dtm data frame with only the most frequent words
         """
 
-        # get the word counts for corpus (1D array)
-        corpus_word_count_list = count_matrix.sum(axis=0)
+        # get the word count of each word in the corpus (a panda series)
+        corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
-        # get the index to sort those words
-        sort_index_array = corpus_word_count_list.argsort()
+        # sort the word list
+        sorted_word_count: pd.Series \
+            = corpus_word_count.sort_values(ascending=False)
 
-        # get the total number of unique words
-        total_num_words = corpus_word_count_list.size
+        # get the first "lower_rank_bound" number of item
+        most_frequent_counts: pd.Series \
+            = sorted_word_count.head(lower_rank_bound)
 
-        # strip the index to leave the most frequent ones
-        # those are the index of the most frequent words
-        most_frequent_index = sort_index_array[
-            total_num_words - lower_rank_bound, lower_rank_bound]
+        # get the most frequent words (the index of the count)
+        most_frequent_words = most_frequent_counts.index
 
-        # use the most frequent index to get out most frequent words
-        # this feature is called index array:
-        # https://docs.scipy.org/doc/numpy/user/basics.indexing.html
-        dtm_data_frame = dtm_data_frame.iloc[most_frequent_index]
-
-        return dtm_data_frame
+        return dtm_data_frame[most_frequent_words]
 
     @staticmethod
     def _get_culled_matrix(least_num_seg: int,
@@ -262,7 +308,8 @@ class MatrixModel(BaseModel):
         # get the index of all the words needs to remain
         # this is an array of int
         dtm_data_frame = dtm_data_frame.loc[
-            words_in_num_seg_series >= least_num_seg
+            :,  # select all rows (row indexer)
+            words_in_num_seg_series >= least_num_seg  # col indexer
             ]
 
         return dtm_data_frame

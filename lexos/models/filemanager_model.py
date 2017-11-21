@@ -3,8 +3,8 @@ import pickle
 
 from lexos.helpers import constants
 from lexos.managers.file_manager import FileManager
+from lexos.managers.session_manager import session_folder
 from lexos.models.base_model import BaseModel
-from lexos.receivers.session_receiver import SessionReceiver
 
 
 class FileManagerModel(BaseModel):
@@ -20,11 +20,8 @@ class FileManagerModel(BaseModel):
 
     @property
     def _file_manager_path(self) -> str:
-
-        # receive option from fontend
-        session_folder = SessionReceiver().get_session_folder_nullable()
-
-        return os.path.join(session_folder, constants.FILEMANAGER_FILENAME)
+        """The path of the file manager pickle file"""
+        return os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
 
     def load_file_manager(self) -> FileManager:
         """Loads the file manager for the current session from the hard drive.
