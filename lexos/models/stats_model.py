@@ -31,7 +31,7 @@ class FileInfo(NamedTuple):
     """A typed tuple to represent statistics of each file in corpus."""
     hapax: int  # The hapax of all word counts of a file.
     file_name: str  # The name of a file.
-    total_word_count: int  # The total of all word counts of a file.
+    total_word_count: int  # The number of total word counts of a file.
     average_word_count: float  # The average of all word counts of a file.
     distinct_word_count: int  # The number of words of a file.
 
@@ -113,6 +113,7 @@ class StatsModel(BaseModel):
 
         :param count_list: a list contains words count of a particular file.
         :param file_name: the file name of that file.
+        :return a typed tuple contains file name and statistics of that file.
         """
         # Check if input is empty.
         assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
@@ -136,7 +137,11 @@ class StatsModel(BaseModel):
                         distinct_word_count=distinct_word_count)
 
     def get_all_file_info(self) -> List[FileInfo]:
-        """Find statistics of all files and put each result into a list."""
+        """Find statistics of all files and put each result into a list.
+
+        :return: a list of typed tuple, where each typed tuple contains file
+                 name and statistics of that file.
+        """
 
         file_info_list = \
             [self._get_file_info(
