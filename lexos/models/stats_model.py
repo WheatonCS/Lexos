@@ -30,9 +30,7 @@ class CorpusInfo(NamedTuple):
 class FileInfo(NamedTuple):
     """A typed tuple to represent statistics of each file in corpus."""
     hapax: int  # The hapax of all word counts of a file.
-    median: float  # The median of all word counts of a file.
     file_name: str  # The name of a file.
-    word_count: int  # The count of all words within a file.
     total_word_count: int  # The total of all word counts of a file.
     average_word_count: float  # The average of all word counts of a file.
     distinct_word_count: int  # The number of words of a file.
@@ -128,24 +126,14 @@ class StatsModel(BaseModel):
         total_word_count = int(sum(nonzero_count_list).item())
         # Find average word count
         average_word_count = round(total_word_count / distinct_word_count, 3)
-        # Find standard deviation
-        std_word_count = np.std(nonzero_count_list).item()
-
-        #
-        median = np.median(nonzero_count_list).item()
-        q1 = np.percentile(nonzero_count_list, 25, interpolation="midpoint")
-        q3 = np.percentile(nonzero_count_list, 75, interpolation="midpoint")
-        iqr = q3 - q1
-
         # Count number of words that only appear once in the given input.
         hapax = ((count_list == 1).sum()).item()
 
         return FileInfo(hapax=hapax,
-                        median=median,
                         file_name=file_name,
                         total_word_count=total_word_count,
                         average_word_count=average_word_count,
-                        distinct_word_count=distinct_word_count,)
+                        distinct_word_count=distinct_word_count)
 
     def get_all_file_info(self) -> List[FileInfo]:
         """Find statistics of all files and put each result into a list."""
