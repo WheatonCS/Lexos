@@ -235,6 +235,7 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
 
     return out_file_path, extension
 
+
 def get_dendrogram_legend(file_manager: FileManager,
                           distance_list: List[float]) -> str:
     """
