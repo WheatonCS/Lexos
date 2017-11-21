@@ -35,7 +35,7 @@ class FileInfo(NamedTuple):
     hapax: int  # The hapax of all word counts of a file.
     median: float  # The median of all word counts of a file.
     average: float  # The average of all word counts of a file.
-    num_word: int  # The number of words of a file.
+    distinct_word_count: int  # The number of words of a file.
     file_name: str  # The name of a file.
     word_count: int  # The count of all words within a file.
     std_deviation: float  # The standard deviation of word counts.
@@ -120,24 +120,28 @@ class StatsModel(BaseModel):
         :param count_list: a list contains words count of a particular file.
         :param file_name: the file name of that file.
         """
-        # Check if input is empty
+        # Check if input is empty.
         assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
 
-        # initialize: remove all zeros from count_list
+        # initialize: remove all zeros from count_list.
         nonzero_count_list = count_list[count_list != 0]
-        # Count number of distinct words in a file
-        num_word = np.size(nonzero_count_list)
-        total_word_count = int(sum(nonzero_count_list).item())
 
-        average_word_count = round(total_word_count / num_word, 3)
-        # calculate the standard deviation
+        # Count number of distinct words.
+        distinct_word_count = np.size(nonzero_count_list)
+        # Count number of total words.
+        total_word_count = int(sum(nonzero_count_list).item())
+        # Find average word count
+        average_word_count = round(total_word_count / distinct_word_count, 3)
+        # Find standard deviation
         std_word_count = np.std(nonzero_count_list).item()
 
-        # iqr analysis
+        #
         median = np.median(nonzero_count_list).item()
         q1 = np.percentile(nonzero_count_list, 25, interpolation="midpoint")
         q3 = np.percentile(nonzero_count_list, 75, interpolation="midpoint")
         iqr = q3 - q1
+
+        # Count number of words that only appear once in the given input.
         hapax = ((count_list == 1).sum()).item()
 
         return FileInfo(q1=q1,
@@ -146,7 +150,7 @@ class StatsModel(BaseModel):
                         hapax=hapax,
                         median=median,
                         average=average_word_count,
-                        num_word=num_word,
+                        distinct_word_count=distinct_word_count,
                         file_name=file_name,
                         word_count=nonzero_count_list,
                         std_deviation=std_word_count,
