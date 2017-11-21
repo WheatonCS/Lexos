@@ -94,7 +94,10 @@ class StatsModel(BaseModel):
             elif file_sizes[count] < average_file_size - 2 * std_dev_file_size:
                 file_anomaly_std_err.update({label: 'small'})
 
-        # 2 iqr analysis
+        # Interquartile range analysis: We detect anomaly by finding files with
+        # sizes that are either 1.5 interquartile ranges above third quartile
+        # or 1.5 interquartile ranges below first quartile.
+        # Find quartiles.
         median = np.median(file_sizes).item()
         q1 = np.percentile(file_sizes, 25, interpolation="midpoint")
         q3 = np.percentile(file_sizes, 75, interpolation="midpoint")
