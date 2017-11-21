@@ -67,17 +67,16 @@ class TopwordModel(BaseModel):
     def _z_test_(p1, pt, n1, nt):
         """Examines if a particular word is an anomaly.
 
-        while examining, this function compares the probability of a word's
+        While examining, this function compares the probability of a word's
         occurrence in one particular segment to the probability of the same
         word's occurrence in the rest of the segments. Usually we report a
         word as an anomaly if the return value is smaller than -1.96 or
         bigger than 1.96.
         :param p1: the probability of a word's occurrence in a particular
-                   segment: Number of word occurrence in the
-                   segment/total word count in the segment
+                   segment: Number of word occurrence in the segment /
+                   total word count in the segment
         :param pt: the probability of a word's occurrence in all the segments
-                   (or the whole passage)
-                   Number of word occurrence in all the segment/
+                   Number of word occurrence in all the segment /
                    total word count in all the segment
         :param n1: the number of total words in the segment we care about.
         :param nt: the number of total words in all the segment selected.
@@ -88,6 +87,7 @@ class TopwordModel(BaseModel):
         assert nt > 0, SEG_NON_POSITIVE_MESSAGE
         p = (p1 * n1 + pt * nt) / (n1 + nt)
         standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt))) ** 0.5
+        # Trap possible division by 0 error.
         if np.isclose([standard_error], [0]):
             return 0
         else:
