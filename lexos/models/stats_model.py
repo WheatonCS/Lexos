@@ -120,17 +120,20 @@ class StatsModel(BaseModel):
         :param count_list: a list contains words count of a particular file.
         :param file_name: the file name of that file.
         """
+        # Check if input is empty
         assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
-        # initialize remove all zeros from count_list
+
+        # initialize: remove all zeros from count_list
         nonzero_count_list = count_list[count_list != 0]
+        # Count number of distinct words in a file
         num_word = np.size(nonzero_count_list)
         total_word_count = int(sum(nonzero_count_list).item())
-        # 1 standard error analysis
+
         average_word_count = round(total_word_count / num_word, 3)
         # calculate the standard deviation
         std_word_count = np.std(nonzero_count_list).item()
 
-        # 2 iqr analysis
+        # iqr analysis
         median = np.median(nonzero_count_list).item()
         q1 = np.percentile(nonzero_count_list, 25, interpolation="midpoint")
         q3 = np.percentile(nonzero_count_list, 75, interpolation="midpoint")
