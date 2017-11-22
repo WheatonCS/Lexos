@@ -1,7 +1,3 @@
-# This program detects word anomaly using z-test for proportion, while
-# analyzing, we assume the possibility of a particular word appear in a text
-# follows normal distribution
-
 import itertools
 import numpy as np
 import pandas as pd
@@ -67,11 +63,12 @@ class TopwordModel(BaseModel):
     def _z_test_(p1, pt, n1, nt):
         """Examines if a particular word is an anomaly.
 
-        While examining, this function compares the probability of a word's
-        occurrence in one particular segment to the probability of the same
-        word's occurrence in the rest of the segments. Usually we report a
-        word as an anomaly if the return value is smaller than -1.96 or
-        bigger than 1.96.
+        This z-test method is the major method we use in this program to detect
+        if a word is an anomaly, while doing so, we assume the possibility of
+        a particular word appear in a text follows normal distribution. And
+        while examining, this function compares the probability of a word's
+        occurrence in the rest of the segments. Usually we report a word as an
+        anomaly if the return value is smaller than -1.96 or bigger than 1.96.
         :param p1: the probability of a word's occurrence in a particular
                    segment: Number of word occurrence in the segment /
                    total word count in the segment
@@ -80,16 +77,22 @@ class TopwordModel(BaseModel):
                    total word count in all the segment
         :param n1: the number of total words in the segment we care about.
         :param nt: the number of total words in all the segment selected.
-        :return: the probability that the particular word in a particular
-                 segment is NOT an anomaly.
+        :return: the z-score shown that the particular word in a particular
+                 segment is an anomaly or not.
         """
+        # Trap possible empty inputs.
         assert n1 > 0, SEG_NON_POSITIVE_MESSAGE
         assert nt > 0, SEG_NON_POSITIVE_MESSAGE
+
+        # Calculate the pooled proportion.
         p = (p1 * n1 + pt * nt) / (n1 + nt)
+        # Calculate the standard error.
         standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt))) ** 0.5
+
         # Trap possible division by 0 error.
         if np.isclose([standard_error], [0]):
             return 0
+        # If not division by 0, return the calculated z-score.
         else:
             return round((p1 - pt) / standard_error, 4)
 
