@@ -183,7 +183,10 @@ class TopwordModel(BaseModel):
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-        # initialize
+        # Initialize, get all the file labels.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
         count_matrix_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # generate analysis result
@@ -196,7 +199,7 @@ class TopwordModel(BaseModel):
         # generate header list
         header_list = \
             ['Document "' + label + '" compared to the whole corpus'
-             for _, label in enumerate(self._doc_term_matrix.index.values)]
+             for _, label in enumerate(labels)]
 
         # put two lists together as a human readable result
         readable_result = list(zip(header_list, analysis_result))
