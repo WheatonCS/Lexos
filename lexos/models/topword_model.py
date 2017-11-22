@@ -60,7 +60,7 @@ class TopwordModel(BaseModel):
             else TopwordReceiver().options_from_front_end()
 
     @staticmethod
-    def _z_test_(p1, pt, n1, nt):
+    def _z_test(p1, pt, n1, nt):
         """Examines if a particular word is an anomaly.
 
         This z-test method is the major method we use in this program to detect
@@ -97,14 +97,14 @@ class TopwordModel(BaseModel):
             return round((p1 - pt) / standard_error, 4)
 
     @staticmethod
-    def z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
-                         words: np.ndarray) -> List[Tuple[str, int]]:
+    def _z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
+                          words: np.ndarray) -> List[Tuple[str, int]]:
         """Processes z-test on all the words of two input word lists.
 
-        :param count_list_i: first word list, a numpy array contains word
-                             counts.
-        :param count_list_j: second word list, a numpy array contains word
-                             counts.
+        :param count_list_i: a numpy array contains word sums or simply word
+                             counts
+        :param count_list_j: a numpy array contains word sums or simply word
+                             counts
         :param words: words that show up at least one time in the whole corpus.
         :return: a list that is sorted by z-scores contains tuples, where each
                  type maps a word to its z-score.
@@ -116,10 +116,10 @@ class TopwordModel(BaseModel):
 
         # analyze
         for index, word in enumerate(words):
-            p_i = count_list_i[index] / row_sum
-            p_j = count_list_j[index] / total_sum
-            z_score = TopwordModel._z_test_(p1=p_i, pt=p_j, n1=row_sum,
-                                            nt=total_sum)
+            p_1 = count_list_i[index] / row_sum
+            p_t = count_list_j[index] / total_sum
+            z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=row_sum,
+                                           nt=total_sum)
             # get rid of the insignificant results
             # insignificant means those with absolute values smaller than 1.96
             if abs(z_score) >= 1.96:
@@ -187,12 +187,12 @@ class TopwordModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        count_matrix_sum = np.sum(self._doc_term_matrix.values, axis=0)
+        word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # generate analysis result
-        analysis_result = [TopwordModel.z_test_word_list(
+        analysis_result = [TopwordModel._z_test_word_list(
             count_list_i=row,
-            count_list_j=count_matrix_sum,
+            count_list_j=word_count_sum,
             words=self._doc_term_matrix.columns.values)
             for _, row in enumerate(self._doc_term_matrix.values)]
 
@@ -243,7 +243,7 @@ class TopwordModel(BaseModel):
             comp_para = group_values[comp_index]
 
             # generate analysis data
-            temp_analysis_result = [TopwordModel.z_test_word_list(
+            temp_analysis_result = [TopwordModel._z_test_word_list(
                 count_list_i=paras,
                 count_list_j=group_lists[base_index],
                 words=self._doc_term_matrix.volumns.values)
@@ -290,7 +290,7 @@ class TopwordModel(BaseModel):
                     for (i_index, j_index) in comp_map if i_index < j_index]
 
         # generate analysis result
-        analysis_result = [TopwordModel.z_test_word_list(
+        analysis_result = [TopwordModel._z_test_word_list(
             count_list_i=group_lists[comp_index],
             count_list_j=group_lists[base_index],
             words=self._doc_term_matrix.columns.values)
