@@ -109,7 +109,7 @@ class TopwordModel(BaseModel):
         :return: a list that is sorted by z-scores contains tuples, where each
                  type maps a word to its z-score.
         """
-        # initialize
+        # Initialize
         word_z_score_list = []
         row_sum = np.sum(count_list_i).item()
         total_sum = np.sum(count_list_j).item()
