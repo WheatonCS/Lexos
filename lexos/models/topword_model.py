@@ -3,61 +3,80 @@
 # follows normal distribution
 
 import itertools
-from typing import List, Tuple, Optional
-
 import numpy as np
 import pandas as pd
-
+from typing import List, Tuple, Optional, NamedTuple
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
     SEG_NON_POSITIVE_MESSAGE, NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.topword_receiver import TopwordOption, TopwordReceiver
+from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.receivers.topword_receiver import TopwordFrontEndOption, \
+    TopwordReceiver
+
+
+class TopwordTestOptions(NamedTuple):
+    """A typed tuple to hold test options."""
+    doc_term_matrix: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+    front_end_option: TopwordFrontEndOption
+
 
 ReadableResult = List[Tuple[str, list]]
 
 
 class TopwordModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[TopwordOption] = None):
+    def __init__(self, test_options: Optional[TopwordTestOptions] = None):
         """This is the class to generate top word analysis.
-        :param test_dtm: (fake parameter)
-                    the doc term matrix used of testing
-        :param test_option: (fake parameter)
-                    the topword option used for testing
+
+        :param test_options: the input used in testing to override the
+                             dynamically loaded option.
         """
         super().__init__()
-        self._test_dtm = test_dtm
-        self._test_option = test_option
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_front_end_option = test_options.front_end_option
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_front_end_option = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-
+        """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
-    def _topword_option(self) -> TopwordOption:
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_temp_label_id_map()
 
-        return self._test_option if self._test_option is not None \
+    @property
+    def _topword_front_end_option(self) -> TopwordFrontEndOption:
+        """:return: a typed tuple that holds the topword front end option."""
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else TopwordReceiver().options_from_front_end()
 
     @staticmethod
     def _z_test_(p1, pt, n1, nt):
         """Examines if a particular word is an anomaly.
 
-        while examining, this function compares the probability of a word's
+        While examining, this function compares the probability of a word's
         occurrence in one particular segment to the probability of the same
         word's occurrence in the rest of the segments. Usually we report a
         word as an anomaly if the return value is smaller than -1.96 or
         bigger than 1.96.
         :param p1: the probability of a word's occurrence in a particular
-                   segment: Number of word occurrence in the
-                   segment/total word count in the segment
+                   segment: Number of word occurrence in the segment /
+                   total word count in the segment
         :param pt: the probability of a word's occurrence in all the segments
-                   (or the whole passage)
-                   Number of word occurrence in all the segment/
+                   Number of word occurrence in all the segment /
                    total word count in all the segment
         :param n1: the number of total words in the segment we care about.
         :param nt: the number of total words in all the segment selected.
@@ -68,6 +87,7 @@ class TopwordModel(BaseModel):
         assert nt > 0, SEG_NON_POSITIVE_MESSAGE
         p = (p1 * n1 + pt * nt) / (n1 + nt)
         standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt))) ** 0.5
+        # Trap possible division by 0 error.
         if np.isclose([standard_error], [0]):
             return 0
         else:
@@ -281,12 +301,12 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def get_result(self) -> ReadableResult:
-        if self._topword_option.topword_option == "allToPara":
+        if self._topword_front_end_option.analysis_option == "allToPara":
 
             return self._analyze_all_to_para()
-        elif self._topword_option.topword_option == "classToPara":
+        elif self._topword_front_end_option.analysis_option == "classToPara":
 
             return self._analyze_para_to_group()
-        elif self._topword_option.topword_option == "classToClass":
+        elif self._topword_front_end_option.analysis_option == "classToClass":
 
             return self._analyze_group_to_group()
