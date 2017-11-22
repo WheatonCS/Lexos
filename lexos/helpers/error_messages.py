@@ -37,4 +37,4 @@ INVALID_DATA_KEY_MESSAGE_FORMAT = \
 
 # ============= Topword Model Error =========================
 NOT_ENOUGH_CLASSES_MESSAGE = "Only one class given, cannot do Z-test by " \
-                             "class, at least 2 classes needed"
+                             "class, at least 2 classes needed."
