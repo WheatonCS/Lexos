@@ -7,13 +7,13 @@ from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.receivers.similarity_receiver import SimilarityOption, \
+from lexos.receivers.similarity_receiver import SimilarityFrontEndOption, \
     SimilarityReceiver
 
 
 class SimilarityTestOption(NamedTuple):
     doc_term_matrix: pd.DataFrame
-    front_end_option: SimilarityOption
+    front_end_option: SimilarityFrontEndOption
     id_temp_label_map: IdTempLabelMap
 
 
@@ -48,7 +48,7 @@ class SimilarityModel(BaseModel):
             else MatrixModel().get_temp_label_id_map()
 
     @property
-    def _similarity_option(self) -> SimilarityOption:
+    def _similarity_option(self) -> SimilarityFrontEndOption:
         """:return: the similarity option."""
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()

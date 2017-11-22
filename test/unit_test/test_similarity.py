@@ -2,7 +2,7 @@ import pandas as pd
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.similarity_model import SimilarityModel, SimilarityTestOption
-from lexos.receivers.similarity_receiver import SimilarityOption
+from lexos.receivers.similarity_receiver import SimilarityFrontEndOption
 
 
 # --------------------- test with similarity equals one --------------------
@@ -16,7 +16,7 @@ def test_with_similarity_equal_one():
                               0.0,
                               10.0, 5.0, 5.0, 5.0, 5.0, 0.0, 5.0, 5.0, 5.0]],
                             index=[0, 1, 2])
-    test_front_end_option = SimilarityOption(comp_file_id=2)
+    test_front_end_option = SimilarityFrontEndOption(comp_file_id=2)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
         test_options=SimilarityTestOption(
@@ -39,7 +39,7 @@ def test_with_all_same_content_file():
                              [9.0, 9.0, 5.0, 4.0, 0.0, 9.0, 9.0],
                              [9.0, 9.0, 5.0, 4.0, 0.0, 9.0, 9.0]],
                             index=[0, 1, 2])
-    test_front_end_option = SimilarityOption(comp_file_id=1)
+    test_front_end_option = SimilarityFrontEndOption(comp_file_id=1)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
         test_options=SimilarityTestOption(
@@ -60,7 +60,7 @@ def test_with_all_same_content_file():
 def test_with_two_dimension():
     test_dtm = pd.DataFrame([[0.0, 1.0], [1.0, 2.0], [2.0, 1.0]],
                             index=[0, 1, 2])
-    test_front_end_option = SimilarityOption(comp_file_id=0)
+    test_front_end_option = SimilarityFrontEndOption(comp_file_id=0)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
         test_options=SimilarityTestOption(
@@ -85,7 +85,7 @@ def test_with_three_dimension():
     test_dtm = pd.DataFrame([[1.0, 1.0, 1.0], [1.0, 0.0, 0.0],
                              [0.0, 2.0, 1.0]],
                             index=[0, 1, 2])
-    test_front_end_option = SimilarityOption(comp_file_id=1)
+    test_front_end_option = SimilarityFrontEndOption(comp_file_id=1)
     test_id_table = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
     similarity_model = SimilarityModel(
         test_options=SimilarityTestOption(
@@ -109,7 +109,7 @@ def test_with_three_dimension():
 def test_with_special_case_one():
     try:
         test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
-        test_front_end_option = SimilarityOption(comp_file_id=-1)
+        test_front_end_option = SimilarityFrontEndOption(comp_file_id=-1)
         test_id_table = {0: "F1.txt", 1: "F2.txt"}
         similarity_model = SimilarityModel(
             test_options=SimilarityTestOption(
@@ -128,7 +128,7 @@ def test_with_special_case_one():
 def test_with_special_case_two():
     try:
         test_dtm = pd.DataFrame([[1.0], [1.0]], index=[0, 1])
-        test_front_end_option = SimilarityOption(comp_file_id=-2)
+        test_front_end_option = SimilarityFrontEndOption(comp_file_id=-2)
         test_id_table = {0: "F1.txt", 1: "F2.txt"}
         similarity_model = SimilarityModel(
             test_options=SimilarityTestOption(
