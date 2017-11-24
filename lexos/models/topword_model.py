@@ -110,7 +110,8 @@ class TopwordModel(BaseModel):
                  and corresponding data is the z_score. And the panda series is
                  sorted by z_score in descending order.
         """
-
+        # Initialize, create empty dictionary to hold analysis result.
+        word_score_dict = {}
 
 
         # Perform the z-test to detect word anomalies.
