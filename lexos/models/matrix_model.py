@@ -1,54 +1,65 @@
-from typing import Counter
+from typing import Counter, Dict, NamedTuple, Optional
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
-from lexos.managers.file_manager import FileManager
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
-from lexos.receivers.matrix_receiver import MatrixOption, MatrixReceiver, \
+from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
+    MatrixReceiver, \
     IdTempLabelMap
+
+FileIDContentMap = Dict[int, str]
+
+
+class MatrixTestOptions(NamedTuple):
+    front_end_option: MatrixFrontEndOption
+    file_id_content_map: FileIDContentMap
 
 
 class MatrixModel(BaseModel):
 
-    def __init__(self, test_matrix_option: MatrixOption = None,
-                 test_file_manager: FileManager = None):
+    def __init__(self, test_options: Optional[MatrixTestOptions] = None):
         """Class to generate and manipulate dtm.
 
-        :param test_file_manager: (fake parameter)
-                                the file manger used for testing
-        :param test_matrix_option: (fake parameter)
-                                the matrix options used for testing
+        :param test_options:
+            the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_file_manager = test_file_manager
-        self._test_matrix_option = test_matrix_option
+        if test_options is not None:
+            self._test_file_id_content_map = test_options.file_id_content_map
+            self._test_front_end_option = test_options.front_end_option
+        else:
+            self._test_file_id_content_map = None
+            self._test_front_end_option = None
 
     @property
-    def _file_manager(self) -> FileManager:
+    def _file_id_content_map(self) -> FileIDContentMap:
         """Result form higher level class: the file manager of current session.
 
         :return: a file manager object
         """
-        return self._test_file_manager if self._test_file_manager \
-            else FileManagerModel().load_file_manager()
+        return self._test_file_id_content_map \
+            if self._test_file_id_content_map is not None \
+            else FileManagerModel().load_file_manager() \
+            .get_content_of_active_with_id()
 
     @property
-    def _opts(self) -> MatrixOption:
+    def _opts(self) -> MatrixFrontEndOption:
         """Get all the options to use
 
         :return: either a frontend option or a fake option used for testing
         """
-        return self._test_matrix_option if self._test_matrix_option \
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else MatrixReceiver().options_from_front_end()
 
     def get_temp_label(self) -> Counter[str]:
         """An unordered list (counter) of all the temp labels"""
         return Counter(self._opts.id_temp_label_map.values())
 
-    def get_temp_label_id_map(self) -> IdTempLabelMap:
+    def get_id_temp_label_map(self) -> IdTempLabelMap:
         """Get the dict where id maps to temp labels."""
         return self._opts.id_temp_label_map
 
@@ -60,8 +71,7 @@ class MatrixModel(BaseModel):
                 - the index header is the file id
                 - the row header is the words in the file
         """
-        all_contents_with_id = \
-            self._file_manager.get_content_of_active_with_id()
+        all_contents_with_id = self._file_id_content_map
 
         # a pair of parallel array
         file_ids = all_contents_with_id.keys()
@@ -123,7 +133,8 @@ class MatrixModel(BaseModel):
                             index=file_ids,
                             columns=words)
 
-    def _apply_transformations_to_matrix(self, dtm_data_frame) -> pd.DataFrame:
+    def _apply_transformations_to_matrix(self, dtm_data_frame: pd.DataFrame) \
+            -> pd.DataFrame:
         """Apply all the transitions to the matrix
 
         Currently there are following transitions with following order:
@@ -136,20 +147,22 @@ class MatrixModel(BaseModel):
         """
 
         # apply culling to dtm
-        if self._opts.culling_option.culling:
-
-            dtm_data_frame = self._get_culled_matrix(
-                least_num_seg=self._opts.culling_option.cull_least_passage,
+        if self._opts.culling_option.cull_least_seg is not None:
+            dtm_after_cull = self._get_culled_matrix(
+                least_num_seg=self._opts.culling_option.cull_least_seg,
                 dtm_data_frame=dtm_data_frame
             )
+        else:
+            dtm_after_cull = dtm_data_frame
 
         # only leaves the most frequent words in dtm
-        if self._opts.culling_option.most_frequent_word:
-
-            dtm_data_frame = self._get_most_frequent_word(
+        if self._opts.culling_option.mfw_lowest_rank is not None:
+            dtm_after_mfw = self._get_most_frequent_word(
                 lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
-                dtm_data_frame=dtm_data_frame,
+                dtm_data_frame=dtm_after_cull,
             )
+        else:
+            dtm_after_mfw = dtm_after_cull
 
         # ==== Parameters TfidfTransformer (TF/IDF) ===
 
@@ -201,15 +214,20 @@ class MatrixModel(BaseModel):
                 use_idf=True,
                 smooth_idf=False,
                 sublinear_tf=False)
-            dtm_data_frame = transformer.fit_transform(dtm_data_frame)
+            dtm_after_tf_idf = transformer.fit_transform(dtm_after_mfw)
+        else:
+            dtm_after_tf_idf = dtm_after_mfw
 
         # change the dtm to proportion
         if self._opts.norm_option.use_freq:
             # apply the proportion function to each row
-            dtm_data_frame = dtm_data_frame.apply(lambda row: row / row.sum(),
-                                                  axis=1)
+            dtm_after_freq = dtm_after_tf_idf.apply(
+                lambda row: row / row.sum(), axis=1
+            )
+        else:
+            dtm_after_freq = dtm_after_tf_idf
 
-        return dtm_data_frame
+        return dtm_after_freq
 
     def get_matrix(self)-> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
@@ -242,26 +260,21 @@ class MatrixModel(BaseModel):
             dtm data frame with only the most frequent words
         """
 
-        # get the word counts for each word in the entire corpus (1D array)
-        word_count_in_corpus = dtm_data_frame.sum(axis='index')
+        # get the word count of each word in the corpus (a panda series)
+        corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
-        # get the index to sort those words
-        sort_index_array = word_count_in_corpus.argsort()
+        # sort the word list
+        sorted_word_count: pd.Series \
+            = corpus_word_count.sort_values(ascending=False)
 
-        # get the total number of unique words
-        total_num_words = word_count_in_corpus.size
+        # get the first "lower_rank_bound" number of item
+        most_frequent_counts: pd.Series \
+            = sorted_word_count.head(lower_rank_bound)
 
-        # strip the index to leave the most frequent ones
-        # those are the index of the most frequent words
-        most_frequent_index = sort_index_array[
-            total_num_words - lower_rank_bound, lower_rank_bound]
+        # get the most frequent words (the index of the count)
+        most_frequent_words = most_frequent_counts.index
 
-        # use the most frequent index to get out most frequent words
-        # this feature is called index array:
-        # https://docs.scipy.org/doc/numpy/user/basics.indexing.html
-        dtm_data_frame = dtm_data_frame.iloc[most_frequent_index]
-
-        return dtm_data_frame
+        return dtm_data_frame[most_frequent_words]
 
     @staticmethod
     def _get_culled_matrix(least_num_seg: int,
@@ -295,7 +308,8 @@ class MatrixModel(BaseModel):
         # get the index of all the words needs to remain
         # this is an array of int
         dtm_data_frame = dtm_data_frame.loc[
-            words_in_num_seg_series >= least_num_seg
+            :,  # select all rows (row indexer)
+            words_in_num_seg_series >= least_num_seg  # col indexer
             ]
 
         return dtm_data_frame

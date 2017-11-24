@@ -12,8 +12,9 @@ import lexos.helpers.constants
 from lexos.helpers.exceptions import LexosException
 from lexos.views.base_view import base_blueprint
 from lexos.views.bubble_view import viz_blueprint
-from lexos.views.clustering_view import cluster_blueprint
 from lexos.views.cut_view import cutter_blueprint
+from lexos.views.dendrogram_view import dendrogram_blueprint
+from lexos.views.k_means_view import k_means_blueprint
 from lexos.views.manage_view import manage_blueprint
 from lexos.views.multi_cloud_view import multi_cloud_blueprint
 from lexos.views.rolling_window_view import rwa_blueprint
@@ -68,7 +69,8 @@ app.register_blueprint(base_blueprint)
 app.register_blueprint(upload_blueprint)
 app.register_blueprint(manage_blueprint)
 app.register_blueprint(viz_blueprint)
-app.register_blueprint(cluster_blueprint)
+app.register_blueprint(k_means_blueprint)
+app.register_blueprint(dendrogram_blueprint)
 app.register_blueprint(cutter_blueprint)
 app.register_blueprint(multi_cloud_blueprint)
 app.register_blueprint(rwa_blueprint)
