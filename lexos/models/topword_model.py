@@ -129,7 +129,8 @@ class TopwordModel(BaseModel):
         sorted_dict = OrderedDict(sorted(word_score_dict.items(),
                                          key=lambda item: abs(item[1]),
                                          reverse=True))
-
+        # Convert the sorted result to a panda series.
+        result_series = pd.Series(sorted_dict)
         return result_series
 
     @staticmethod
