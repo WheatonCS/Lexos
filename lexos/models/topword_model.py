@@ -187,7 +187,7 @@ class TopwordModel(BaseModel):
         # Initialize, get all the file labels.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
-
+        # Get word count sum of each word for future calculation.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # generate analysis result
