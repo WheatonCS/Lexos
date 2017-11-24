@@ -39,8 +39,8 @@ def content_analysis():
             ).active_dicts
             dict_labels = ContentAnalysisReceiver().options_from_front_end(
             ).dict_labels
-            toggle_all_value = ContentAnalysisReceiver().options_from_front_end(
-            ).toggle_all_value
+            toggle_all_value = ContentAnalysisReceiver(
+            ).options_from_front_end().toggle_all_value
         except AssertionError:
             dict_labels = [os.path.splitext(dict_name)[0]
                            for dict_name in dictionary_names]
@@ -87,7 +87,7 @@ def content_analysis():
                                         label=dict_label,
                                         content=content)
         result_table, formula_errors = analysis.analyze()
-        if formula_errors != 0 or result_table is None:
+        if formula_errors is not None or result_table is None:
             return error(formula_errors)
         data = {"result_table": result_table,
                 "dictionary_labels": dict_labels,

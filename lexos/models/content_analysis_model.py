@@ -208,7 +208,7 @@ class ContentAnalysisModel(object):
         df.columns = columns
         return df
 
-    def is_secure(self):
+    def is_secure(self) -> bool:
         """Checks if the formula is secure
 
         :return: True if secure, false if not secure
@@ -240,7 +240,7 @@ class ContentAnalysisModel(object):
             self._formula = formula
         return self.check_formula()
 
-    def check_formula(self):
+    def check_formula(self) -> str:
         """Checks if there are any errors in the formula
 
         :return: error message if there is an error, 0 if there is no errors
@@ -264,16 +264,17 @@ class ContentAnalysisModel(object):
             is_error = True
         if is_error:
             return error_msg
-        return 0
+        return None
 
-    def analyze(self):
+    def analyze(self) -> [str, str]:
         """Calls all the functions needed to generate the final html table
         containing all word/phrase counts and formula results for each file in
         the corpus
 
-        :return: 0 if the formula is not secure.
-                 data, dictionary containing the result html table, dictionary
-                 labels, active dictionaries, errors
+        :return: formula_errors: str with error message or None if there is no
+                 errors.
+                 result_table: str containing result html table or None if
+                 there are any errors in the formula
         """
         self.count()
         if self.is_secure():
