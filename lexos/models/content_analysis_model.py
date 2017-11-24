@@ -243,7 +243,8 @@ class ContentAnalysisModel(object):
     def check_formula(self) -> str:
         """Checks if there are any errors in the formula
 
-        :return: error message if there is an error, 0 if there is no errors
+        :return: error message if there is an empty str or None if there is
+                 no errors
         """
         error_msg = "Formula errors:<br>"
         is_error = False
@@ -264,7 +265,7 @@ class ContentAnalysisModel(object):
             is_error = True
         if is_error:
             return error_msg
-        return None
+        return ""
 
     def analyze(self) -> [str, str]:
         """Calls all the functions needed to generate the final html table
@@ -284,7 +285,7 @@ class ContentAnalysisModel(object):
             result_table = self.to_html()
         else:
             formula_errors = "Formula error: Invalid input"
-            result_table = None
+            result_table = ""
         return result_table, formula_errors
 
     @property

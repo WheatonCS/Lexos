@@ -87,7 +87,7 @@ def content_analysis():
                                         label=dict_label,
                                         content=content)
         result_table, formula_errors = analysis.analyze()
-        if formula_errors is not None or result_table is None:
+        if len(formula_errors) != 0 or result_table is None:
             return error(formula_errors)
         data = {"result_table": result_table,
                 "dictionary_labels": dict_labels,
