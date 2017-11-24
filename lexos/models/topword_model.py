@@ -122,9 +122,13 @@ class TopwordModel(BaseModel):
             p_t = count_list_j[index] / j_sum
             z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
             # Record the significant result. (See details: _z_test())
+            if abs(z_score) >= 1.96:
+                word_score_dict.update({word: z_score})
 
-
-
+        # Sort word score dict by z-score in descending order.
+        sorted_dict = OrderedDict(sorted(word_score_dict.items(),
+                                         key=lambda item: abs(item[1]),
+                                         reverse=True))
 
         return result_series
 
