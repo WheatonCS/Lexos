@@ -1,4 +1,6 @@
 import itertools
+from collections import OrderedDict
+
 import numpy as np
 import pandas as pd
 from typing import List, Tuple, Optional, NamedTuple
@@ -11,15 +13,15 @@ from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.receivers.topword_receiver import TopwordFrontEndOption, \
     TopwordReceiver
 
+# Type hinting for the analysis result each function returns.
+ReadableResult = List[pd.Series]
+
 
 class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold test options."""
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordFrontEndOption
-
-
-ReadableResult = List[Tuple[str, list]]
 
 
 class TopwordModel(BaseModel):
@@ -98,39 +100,30 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def _z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
-                          words: np.ndarray) -> List[Tuple[str, int]]:
+                          words: np.ndarray) -> pd.Series:
         """Processes z-test on all the words of two input word lists.
 
-        :param count_list_i: a numpy array contains word sums or simply word
-                             counts
-        :param count_list_j: a numpy array contains word sums or simply word
-                             counts
+        :param count_list_i: 2D matrix contains word counts.
+        :param count_list_j: 2D matrix contains word counts.
         :param words: words that show up at least one time in the whole corpus.
-        :return: a list that is sorted by z-scores contains tuples, where each
-                 type maps a word to its z-score.
+        :return: a panda series contains analysis result, where index are words
+                 and corresponding data is the z_score. And the panda series is
+                 sorted by z_score in descending order.
         """
-        # Initialize
-        word_z_score_list = []
-        row_sum = np.sum(count_list_i).item()
-        total_sum = np.sum(count_list_j).item()
 
-        # analyze
+
+
+        # Perform the z-test to detect word anomalies.
         for index, word in enumerate(words):
-            p_1 = count_list_i[index] / row_sum
-            p_t = count_list_j[index] / total_sum
-            z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=row_sum,
-                                           nt=total_sum)
-            # get rid of the insignificant results
-            # insignificant means those with absolute values smaller than 1.96
-            if abs(z_score) >= 1.96:
-                word_z_score_list.append((word, z_score))
+            p_1 = count_list_i[index] / i_sum
+            p_t = count_list_j[index] / j_sum
+            z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
+            # Record the significant result. (See details: _z_test())
 
-        # sort the dictionary by the z-scores from larger to smaller
-        sorted_word_z_score_list = sorted(word_z_score_list,
-                                          key=lambda tup: abs(tup[1]),
-                                          reverse=True)
 
-        return sorted_word_z_score_list
+
+
+        return result_series
 
     @staticmethod
     def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
@@ -183,32 +176,22 @@ class TopwordModel(BaseModel):
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-        # Initialize, get all the file labels.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
 
-        word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
+
 
         # generate analysis result
-        analysis_result = [TopwordModel._z_test_word_list(
+        result_series_list = [TopwordModel._z_test_word_list(
             count_list_i=row,
             count_list_j=word_count_sum,
             words=self._doc_term_matrix.columns.values)
-            for _, row in enumerate(self._doc_term_matrix.values)]
 
-        # generate header list
-        header_list = \
-            ['Document "' + label + '" compared to the whole corpus'
-             for _, label in enumerate(labels)]
 
-        # put two lists together as a human readable result
-        readable_result = list(zip(header_list, analysis_result))
+
 
         return readable_result
 
     def _analyze_para_to_group(self) -> ReadableResult:
         """Analyzes each single word compare to all the other group.
-
 
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
