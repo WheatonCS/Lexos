@@ -112,7 +112,9 @@ class TopwordModel(BaseModel):
         """
         # Initialize, create empty dictionary to hold analysis result.
         word_score_dict = {}
-
+        # Find sums of two input matrix for future calculation.
+        i_sum = np.sum(count_list_i).item()
+        j_sum = np.sum(count_list_j).item()
 
         # Perform the z-test to detect word anomalies.
         for index, word in enumerate(words):
