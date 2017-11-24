@@ -195,9 +195,13 @@ class TopwordModel(BaseModel):
             count_list_i=row,
             count_list_j=word_count_sum,
             words=self._doc_term_matrix.columns.values)
+            for row in self._doc_term_matrix.values]
 
-
-
+        # Assign name to each result series.
+        readable_result = [
+            result_series_list[index].rename['Document "' + label +
+                                             '" compared to the whole corpus']
+            for index, label in enumerate(labels)]
 
         return readable_result
 
