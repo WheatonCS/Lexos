@@ -184,7 +184,9 @@ class TopwordModel(BaseModel):
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-
+        # Initialize, get all the file labels.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
 
         # generate analysis result
