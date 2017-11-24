@@ -29,7 +29,7 @@
             <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 320px; min-height: 2em;">
                 <div class="forAllCheckBox" id="forAllCheckBox" align="left">
                     {% if dictionary_labels|length > 0 %}
-                        {% if toggle_all %}
+                        {% if toggle_all_value %}
                             <label class='icon-checkbox checked'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>
                         {% else %}
                             <label class='icon-checkbox'><input type='checkbox' id='allCheckBoxSelector' onclick='toggle_checkbox(-1)'>Check/Uncheck All</label>

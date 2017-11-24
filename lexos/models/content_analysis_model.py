@@ -32,7 +32,7 @@ class ContentAnalysisModel(object):
         self._formula = ""
         self._toggle_all = True
 
-    def add_corpus(self, file_name: str, label: str, content: str):
+    def add_file(self, file_name: str, label: str, content: str):
         """Adds a file to the corpus
 
         :param content: file content
@@ -45,91 +45,18 @@ class ContentAnalysisModel(object):
                                  label=label,
                                  total_word_counts=total_word_counts))
 
-    def add_dictionary(self, file_name: str, content: str):
+    def add_dictionary(self, file_name: str, label: str, content: str):
         """Adds a dictionary
 
         :param file_name: name of the file
+        :param label: label of the file
         :param content: content of the file
         """
         new_list = str(content).split(", ")
         new_list.sort(key=lambda x: len(x.split()), reverse=True)
-        import os
-        label = os.path.splitext(file_name)[0]
         self._dictionaries.append(Dictionary(content=new_list,
                                              file_name=file_name,
                                              label=label))
-
-    def delete_dictionary(self):
-        """deletes a dictionary
-
-        """
-        if self._test_options is not None:
-            label = self._test_options.label
-        else:
-            label = self.content_analysis_option.dict_label
-        self.dictionaries = [dictionary for dictionary in self.dictionaries
-                             if dictionary.label != label]
-        data = {'dictionary_labels': [],
-                'active_dictionaries': []}
-
-        for dictionary in self.dictionaries:
-            data['dictionary_labels'].append(dictionary.label)
-            data['active_dictionaries'].append(dictionary.active)
-        return data
-
-    def toggle_dictionary(self):
-        """Activates and Deactivates a dictionary
-
-        """
-        label = self.content_analysis_option.dict_label
-        self._toggle_all = True
-        data = {'dictionary_labels': [],
-                'active_dictionaries': [],
-                'toggle_all': self.toggle_all}
-        for dictionary in self._dictionaries:
-            if dictionary.label == label:
-                dictionary.active = not dictionary.active
-            if not dictionary.active:
-                self._toggle_all = False
-            data['dictionary_labels'].append(dictionary.label)
-            data['active_dictionaries'].append(dictionary.active)
-        return data
-
-    def toggle_all_dicts(self):
-        """Activates and Deactivates all dictionaries
-
-        """
-        self._toggle_all = not self._toggle_all
-        data = {'dictionary_labels': [],
-                'active_dictionaries': [],
-                'toggle_all': self._toggle_all}
-        for dictionary in self.dictionaries:
-            dictionary.active = self._toggle_all
-            data['dictionary_labels'].append(dictionary.label)
-            data['active_dictionaries'].append(self._toggle_all)
-        return data
-
-    def get_contents(self) -> [list, list, bool]:
-        """
-
-        :return:
-        dictionary_labels: list congaing a dictionary labels
-        active_dictionaries: list of booleans indicating which
-        dictionaries are active
-        _toggle_all: boolean that represents the status of the
-        check all dictionaries checkbox
-        """
-        dictionary_labels = []
-        active_dictionaries = []
-        self._toggle_all = False
-        if len(self.dictionaries):
-            self._toggle_all = True
-            for dictionary in self.dictionaries:
-                dictionary_labels.append(dictionary.label)
-                active_dictionaries.append(dictionary.active)
-                if not dictionary.active:
-                    self._toggle_all = False
-        return dictionary_labels, active_dictionaries, self._toggle_all
 
     def get_active_dicts(self) -> list:
         """
@@ -138,13 +65,6 @@ class ContentAnalysisModel(object):
         """
         return [dictionary for dictionary in self.dictionaries
                 if dictionary.active]
-
-    def detect_active_dicts(self) -> int:
-        """
-
-        :return: number of active dictionaries
-        """
-        return len(self.get_active_dicts())
 
     def count(self):
         """counts all dictionaries for all active files in the corpus"""
@@ -318,6 +238,7 @@ class ContentAnalysisModel(object):
         else:
             formula = formula.replace("√", "sqrt").replace("^", "**")
             self._formula = formula
+        return self.check_formula()
 
     def check_formula(self):
         """Checks if there are any errors in the formula
@@ -356,18 +277,14 @@ class ContentAnalysisModel(object):
         """
         self.count()
         if self.is_secure():
-            data = {"result_table": "",
-                    "dictionary_labels": [],
-                    "active_dictionaries": [],
-                    "error": False}
+            formula_errors = self.save_formula()
             self.generate_scores()
             self.generate_averages()
-            data['result_table'] = self.to_html()
-            for dictionary in self.dictionaries:
-                data['dictionary_labels'].append(dictionary.label)
-                data['active_dictionaries'].append(dictionary.active)
-            return data
-        return 0
+            result_table = self.to_html()
+        else:
+            formula_errors = "Formula error: Invalid input"
+            result_table = None
+        return result_table, formula_errors
 
     @property
     def dictionaries(self) -> list:

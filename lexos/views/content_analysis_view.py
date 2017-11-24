@@ -1,10 +1,13 @@
 import json
+import os
 
 from flask import request, session, render_template, Blueprint
 
 from lexos.managers.utility import load_file_manager
 from lexos.models.content_analysis_model import ContentAnalysisModel
+from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver
 from lexos.views.base_view import detect_active_docs
+from lexos.helpers import constants
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -12,7 +15,6 @@ from lexos.views.base_view import detect_active_docs
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
 content_analysis_blueprint = Blueprint('content_analysis', __name__)
-analysis = None
 
 
 # Tells Flask to load this function when someone is at '/contentanalysis'
@@ -23,27 +25,42 @@ def content_analysis():
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
-    global analysis
-    if analysis is None or 'content_analysis' not in session:
-        analysis = ContentAnalysisModel()
-        session['content_analysis'] = True
-    elif len(analysis.corpus) == 0:
-        file_manager = load_file_manager()
-        active_files = file_manager.get_active_files()
-        for file in active_files:
-            analysis.add_corpus(file_name=file.name,
-                                label=file.label,
-                                content=file.load_contents())
+    analysis = ContentAnalysisModel()
+    path = os.path.join(constants.TMP_FOLDER,
+                        constants.UPLOAD_FOLDER,
+                        session['id'], 'content_analysis/')
+    if os.path.isdir(path):
+        dictionary_names = [name for name in os.listdir(path)]
+    else:
+        dictionary_names = []
     if request.method == 'GET':
-        dictionary_labels, active_dictionaries, toggle_all =\
-            analysis.get_contents()
+        try:
+            active_dicts = ContentAnalysisReceiver().options_from_front_end(
+            ).active_dicts
+            dict_labels = ContentAnalysisReceiver().options_from_front_end(
+            ).dict_labels
+            toggle_all_value = ContentAnalysisReceiver().options_from_front_end(
+            ).toggle_all_value
+        except AssertionError:
+            dict_labels = [os.path.splitext(dict_name)[0]
+                           for dict_name in dictionary_names]
+            active_dicts = [True] * len(dict_labels)
+            toggle_all_value = True
         return render_template('contentanalysis.html',
-                               dictionary_labels=dictionary_labels,
-                               active_dictionaries=active_dictionaries,
-                               toggle_all=toggle_all)
+                               dictionary_labels=dict_labels,
+                               active_dictionaries=active_dicts,
+                               toggle_all_value=toggle_all_value)
     else:
         num_active_docs = detect_active_docs()
-        num_active_dicts = analysis.detect_active_dicts()
+        active_dicts = ContentAnalysisReceiver().options_from_front_end(
+        ).active_dicts
+        dict_labels = ContentAnalysisReceiver().options_from_front_end(
+        ).dict_labels
+        if len(dict_labels) == 0:
+            dict_labels = [os.path.splitext(dict_name)[0]
+                           for dict_name in dictionary_names]
+            active_dicts = [True] * len(dict_labels)
+        num_active_dicts = active_dicts.count(True)
         if num_active_docs == 0 and num_active_dicts == 0:
             return error("At least 1 active document and 1 active "
                          "dictionary are required to perform a "
@@ -54,14 +71,29 @@ def content_analysis():
         elif num_active_dicts == 0:
             return error("At least 1 active dictionary is required to perform"
                          " a content analysis.")
-        analysis.save_formula()
-        formula_errors = analysis.check_formula()
-        if formula_errors != 0:
+        file_manager = load_file_manager()
+        active_files = file_manager.get_active_files()
+        for file in active_files:
+            analysis.add_file(file_name=file.name,
+                              label=file.label,
+                              content=file.load_contents())
+        for dict_name, dict_label, active in zip(dictionary_names,
+                                                 dict_labels,
+                                                 active_dicts):
+            if active:
+                f = open(os.path.join(path, dict_name), "r")
+                content = f.read()
+                analysis.add_dictionary(file_name=dict_name,
+                                        label=dict_label,
+                                        content=content)
+        result_table, formula_errors = analysis.analyze()
+        if formula_errors != 0 or result_table is None:
             return error(formula_errors)
-        result = analysis.analyze()
-        if result == 0:
-            return error("Formula error: Invalid input")
-        return json.dumps(result)
+        data = {"result_table": result_table,
+                "dictionary_labels": dict_labels,
+                "active_dictionaries": active_dicts,
+                "error": False}
+        return json.dumps(data)
 
 
 # Tells Flask to load this function when someone is at '/getdictlabels'
@@ -71,8 +103,11 @@ def upload_dictionaries():
 
     :return: a json object.
     """
-    global analysis
-    analysis = ContentAnalysisModel()
+    path = os.path.join(constants.TMP_FOLDER,
+                        constants.UPLOAD_FOLDER,
+                        session['id'], 'content_analysis/')
+    if not os.path.isdir(path):
+        os.makedirs(path)
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
             'formula': "",
@@ -83,21 +118,14 @@ def upload_dictionaries():
     for upload_file in request.files.getlist('lemfileselect[]'):
         file_name = upload_file.filename
         content = upload_file.read().decode("utf-8").replace('\n', '')
-        analysis.add_dictionary(file_name=file_name, content=content)
-        data['dictionary_labels'].append(analysis.dictionaries[-1].label)
-        data['active_dictionaries'].append(True)
+        file = open(path + file_name, 'w')
+        file.write(content)
+        file.close()
+    dictionary_names = [name for name in os.listdir(path)]
+    data['dictionary_labels'] = [os.path.splitext(dict_name)[0]
+                                 for dict_name in dictionary_names]
+    data['active_dictionaries'] = [True] * len(dictionary_names)
     return json.dumps(data)
-
-
-# Tells Flask to load this function when someone is at '/saveformula'
-@content_analysis_blueprint.route("/saveformula", methods=["POST"])
-def save_formula():
-    """Saves the formula.
-
-    :return: a string indicating if it succeeded
-    """
-    analysis.save_formula()
-    return 'success'
 
 
 # Tells Flask to load this function when someone is at '/toggledictionary'
@@ -107,10 +135,30 @@ def toggle_dictionary():
 
     :return: a json object.
     """
-    global analysis
-    if analysis.content_analysis_option.toggle_all:
-        return json.dumps(analysis.toggle_all_dicts())
-    return json.dumps(analysis.toggle_dictionary())
+    toggle_all = ContentAnalysisReceiver().options_from_front_end().toggle_all
+    dict_labels = ContentAnalysisReceiver().options_from_front_end(
+    ).dict_labels
+    active_dicts = ContentAnalysisReceiver().options_from_front_end(
+    ).active_dicts
+    if toggle_all:
+        toggle_all_value = ContentAnalysisReceiver().options_from_front_end(
+        ).toggle_all_value
+        data = {'toggle_all_value': toggle_all_value,
+                'dictionary_labels': dict_labels,
+                'active_dictionaries':
+                    [toggle_all_value] * len(dict_labels)}
+        return json.dumps(data)
+
+    dict_label = ContentAnalysisReceiver().options_from_front_end().dict_label
+    data = {'toggle_all_value': True}
+    for label, active_dict in zip(dict_labels, active_dicts):
+        if label == dict_label:
+            active_dict = not active_dict
+        if not active_dict:
+            data['toggle_all_value'] = False
+    data['dictionary_labels'] = dict_labels
+    data['active_dictionaries'] = active_dicts
+    return json.dumps(data)
 
 
 # Tells Flask to load this function when someone is at '/deletedictionary'
@@ -120,8 +168,22 @@ def delete_dictionary():
 
     :return: a json object.
     """
-    global analysis
-    return json.dumps(analysis.delete_dictionary())
+    path = os.path.join(constants.TMP_FOLDER,
+                        constants.UPLOAD_FOLDER,
+                        session['id'], 'content_analysis/')
+    dict_label = ContentAnalysisReceiver().options_from_front_end().dict_label
+    os.remove(os.path.join(path, dict_label + '.txt'))
+    dict_labels = ContentAnalysisReceiver().options_from_front_end(
+    ).dict_labels
+    active_dicts = ContentAnalysisReceiver().options_from_front_end(
+    ).active_dicts
+    data = {'dictionary_labels': [],
+            'active_dictionaries': []}
+    for label, active_dict in zip(dict_labels, active_dicts):
+        if label != dict_label:
+            data['dictionary_labels'].append(label)
+            data['active_dictionaries'].append(active_dict)
+    return json.dumps(data)
 
 
 def error(msg: str):
