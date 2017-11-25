@@ -204,16 +204,16 @@
             </div>
         </div>
         <div class="row">
-            {% for file in result %}
+            {% for file_result in result %}
                 <div class="col-md-6 topwordTableDivv topwordTableDivPZAlll">
-                    <p class="topwordResultTableTitle"><strong> {{ file.name }} </strong></p>
+                    <p class="topwordResultTableTitle"><strong> {{ file_result.name }} </strong></p>
                     <table style="border:1px solid #ddd;" class="table table-striped table-condensed table-hover header-fixed">
                         <thead>
                             <th>Top Word</th>
                             <th>Z Score</th>
                         </thead>
                         <tbody>
-                        {% for word, score in file.iteritems() %}
+                        {% for word, score in file_result.iteritems() %}
                             <tr>
                                 <td>{{ word }}</td>
                                 <td>{{ score }}</td>
