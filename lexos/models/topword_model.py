@@ -277,6 +277,7 @@ class TopwordModel(BaseModel):
                 self._analyze_para_to_group(division_map))
 
         elif self._topword_front_end_option.analysis_option == "classToClass":
+
             division_map = \
                 FileManagerModel().load_file_manager().get_class_division_map()
             return TopwordModel._get_readable_size(
