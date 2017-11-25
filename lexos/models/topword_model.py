@@ -255,7 +255,11 @@ class TopwordModel(BaseModel):
         # Find the total word count of each group.
         group_sums = [np.sum(row, axis=0) for row in group_matrices]
 
-
+        # Find the comparison map, which is a list of tuples.
+        # There are two elements in each tuple, each one is a index of groups.
+        # Ex: first group has index 0. And two group indexes cannot be equal.
+        comp_map = itertools.product(list(range(len(group_sums))),
+                                     list(range(len(group_sums))))
         comp_map = [(i_index, j_index)
                     for (i_index, j_index) in comp_map if i_index < j_index]
 
