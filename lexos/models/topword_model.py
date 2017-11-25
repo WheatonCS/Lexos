@@ -205,7 +205,7 @@ class TopwordModel(BaseModel):
             # Attach readable header to analysis result.
             temp_readable_result = [temp_result_list[index].rename(
                 'Document "' + group_file_labels[comp_index][index] +
-                '" compared to Class: ' + class_labels[base_index])
+                '" compared to Class "' + class_labels[base_index] + '"')
                 for index in range(len(comp_para))]
 
             # Put all temp result together.
