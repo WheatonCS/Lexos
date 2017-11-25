@@ -152,7 +152,7 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled window type: " + window_unit)
 
-    def find_token_average_in_window(self, window: str) -> pd.Series:
+    def _find_token_average_in_window(self, window: str) -> pd.Series:
 
         assert self._options.average_token_options is not None
 
@@ -186,7 +186,7 @@ class RollingWindowsModel(BaseModel):
             index=tokens
         )
 
-    def find_token_ratio_in_window(self, window: str) -> float:
+    def _find_token_ratio_in_window(self, window: str) -> float:
 
         assert self._options.average_token_options is not None
 
