@@ -4,6 +4,7 @@ import os
 from flask import request, session, render_template, Blueprint
 
 from lexos.managers.utility import load_file_manager
+from lexos.managers.session_manager import session
 from lexos.models.content_analysis_model import ContentAnalysisModel
 from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver
 from lexos.views.base_view import detect_active_docs
@@ -34,28 +35,35 @@ def content_analysis():
     else:
         dictionary_names = []
     if request.method == 'GET':
-        try:
-            active_dicts = ContentAnalysisReceiver().options_from_front_end(
-            ).active_dicts
-            dict_labels = ContentAnalysisReceiver().options_from_front_end(
-            ).dict_labels
-            toggle_all_value = ContentAnalysisReceiver(
-            ).options_from_front_end().toggle_all_value
-        except AssertionError:
-            dict_labels = [os.path.splitext(dict_name)[0]
-                           for dict_name in dictionary_names]
+        if 'dictionary_labels' in session:
+            dict_labels = session['dictionary_labels']
+        else:
+            dict_labels = []
+        if 'active_dictionaries' in session:
+            active_dicts = session['active_dictionaries']
+        else:
             active_dicts = [True] * len(dict_labels)
+        if 'toggle_all_value' in session:
+            toggle_all_value = session['toggle_all_value']
+        else:
             toggle_all_value = True
+        if 'formula' in session:
+            formula = session['formula']
+        else:
+            formula = ""
         return render_template('contentanalysis.html',
                                dictionary_labels=dict_labels,
                                active_dictionaries=active_dicts,
-                               toggle_all_value=toggle_all_value)
+                               toggle_all_value=toggle_all_value,
+                               formula=formula)
     else:
         num_active_docs = detect_active_docs()
         active_dicts = ContentAnalysisReceiver().options_from_front_end(
         ).active_dicts
         dict_labels = ContentAnalysisReceiver().options_from_front_end(
         ).dict_labels
+        session['formula'] = ContentAnalysisReceiver().options_from_front_end(
+        ).formula
         if len(dict_labels) == 0:
             dict_labels = [os.path.splitext(dict_name)[0]
                            for dict_name in dictionary_names]
@@ -111,7 +119,7 @@ def upload_dictionaries():
     data = {'dictionary_labels': [],
             'active_dictionaries': [],
             'formula': "",
-            'toggle_all': True,
+            'toggle_all_value': True,
             'error': False}
     if detect_active_docs() == 0:
         data['error'] = True
@@ -125,6 +133,9 @@ def upload_dictionaries():
     data['dictionary_labels'] = [os.path.splitext(dict_name)[0]
                                  for dict_name in dictionary_names]
     data['active_dictionaries'] = [True] * len(dictionary_names)
+    session['dictionary_labels'] = data['dictionary_labels']
+    session['active_dictionaries'] = data['active_dictionaries']
+    session['toggle_all_value'] = data['toggle_all_value']
     return json.dumps(data)
 
 
@@ -147,6 +158,8 @@ def toggle_dictionary():
                 'dictionary_labels': dict_labels,
                 'active_dictionaries':
                     [toggle_all_value] * len(dict_labels)}
+        session['active_dictionaries'] = data['active_dictionaries']
+        session['toggle_all_value'] = data['toggle_all_value']
         return json.dumps(data)
 
     dict_label = ContentAnalysisReceiver().options_from_front_end().dict_label
@@ -158,6 +171,8 @@ def toggle_dictionary():
             data['toggle_all_value'] = False
     data['dictionary_labels'] = dict_labels
     data['active_dictionaries'] = active_dicts
+    session['dictionary_labels'] = dict_labels
+    session['active_dictionaries'] = active_dicts
     return json.dumps(data)
 
 
@@ -183,6 +198,8 @@ def delete_dictionary():
         if label != dict_label:
             data['dictionary_labels'].append(label)
             data['active_dictionaries'].append(active_dict)
+    session['dictionary_labels'] = data['dictionary_labels']
+    session['active_dictionaries'] = data['active_dictionaries']
     return json.dumps(data)
 
 
