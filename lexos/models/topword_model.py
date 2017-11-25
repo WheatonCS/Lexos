@@ -165,19 +165,6 @@ class TopwordModel(BaseModel):
 
         return group_list, label_list
 
-    @staticmethod
-    def get_class_map():
-        division_map = \
-            FileManagerModel().load_file_manager().get_class_division_map()
-        class_labels = division_map.index.values
-        if "" in class_labels:
-            class_labels[np.where(class_labels == "")] = "untitled"
-
-        # check if more than one class exists
-        if division_map.shape[0] == 1:
-            raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
-        return division_map, class_labels
-
     def _analyze_all_to_para(self) -> ReadableResult:
         """Detect if a given word is an anomaly.
 
@@ -208,13 +195,14 @@ class TopwordModel(BaseModel):
 
         return readable_result_list
 
-    def _analyze_para_to_group(self) -> ReadableResult:
+    def _analyze_para_to_group(self, division_map: pd.DataFrame) -> \
+            ReadableResult:
         """Analyzes each single word compare to all the other group.
 
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-        division_map, class_labels = TopwordModel.get_class_map()
+        class_labels = division_map.index.values
         group_values, name_map = \
             TopwordModel.group_division(dtm=self._doc_term_matrix,
                                         division_map=division_map.values)
@@ -320,7 +308,9 @@ class TopwordModel(BaseModel):
             return TopwordModel._get_readable_size(self._analyze_all_to_para())
         elif self._topword_front_end_option.analysis_option == "classToPara":
 
-            return self._analyze_para_to_group()
+            division_map = \
+                FileManagerModel().load_file_manager().get_class_division_map()
+            return self._analyze_para_to_group(division_map)
         elif self._topword_front_end_option.analysis_option == "classToClass":
 
             return self._analyze_group_to_group()
