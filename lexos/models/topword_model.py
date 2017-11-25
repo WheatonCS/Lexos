@@ -52,7 +52,7 @@ class TopwordModel(BaseModel):
         """:return: a map takes an id to temp labels."""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_temp_label_id_map()
+            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _topword_front_end_option(self) -> TopwordFrontEndOption:
@@ -134,8 +134,9 @@ class TopwordModel(BaseModel):
         return result_series
 
     @staticmethod
-    def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
-        (List[np.ndarray], List[np.ndarray]):
+    def _group_division(count_matrix: np.ndarray,
+                        division_map: np.ndarray) -> \
+            (List[np.ndarray], List[np.ndarray]):
         """Divides the word counts into groups via the group map.
 
         :param dtm: pandas data frame that contains the word count matrix.
@@ -150,20 +151,14 @@ class TopwordModel(BaseModel):
                  files within a group
         """
         # Trap possible empty inputs
-        assert np.size(dtm.values) > 0, EMPTY_NP_ARRAY_MESSAGE
+        assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
         assert np.size(division_map) > 0, EMPTY_NP_ARRAY_MESSAGE
-
-        # initialize
-        count_matrix = dtm.values
-        name_list = dtm.index.values
 
         # create group map
         # noinspection PyTypeChecker
         group_list = [count_matrix[row] for row in division_map]
-        # noinspection PyTypeChecker
-        label_list = [name_list[row] for row in division_map]
 
-        return group_list, label_list
+        return group_list
 
     def _analyze_all_to_para(self) -> ReadableResult:
         """Detect if a given word is an anomaly.
@@ -202,20 +197,14 @@ class TopwordModel(BaseModel):
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-        class_labels = division_map.index.values
-        group_values, name_map = \
-            TopwordModel.group_division(dtm=self._doc_term_matrix,
-                                        division_map=division_map.values)
 
-        # initialize the value to return
-        readable_result = []
 
-        # find the total word count of each group
-        group_lists = [np.sum(value, axis=0)
-                       for _, value in enumerate(group_values)]
+
+
+
 
         # find number of groups
-        num_group = len(group_lists)
+        num_group = len(group_sums)
 
         # comparison map, in here is a list of tuple.
         # There are two elements in the tuple, each one is a index of groups
@@ -233,7 +222,7 @@ class TopwordModel(BaseModel):
             # generate analysis data
             temp_result_list = [TopwordModel._z_test_word_list(
                 count_list_i=paras,
-                count_list_j=group_lists[base_index],
+                count_list_j=group_sums[base_index],
                 words=self._doc_term_matrix.columns.values)
                 for para_index, paras in enumerate(comp_para)]
 
@@ -259,11 +248,11 @@ class TopwordModel(BaseModel):
                                         division_map=division_map.values)
 
         # find the total word count of each group
-        group_lists = [np.sum(value, axis=0)
+        group_sums = [np.sum(value, axis=0)
                        for _, value in enumerate(group_values)]
 
         # find number of groups
-        num_group = len(group_lists)
+        num_group = len(group_sums)
 
         # comparison map, in here is a list of tuple.
         # There are two elements in the tuple, each one is a index of groups
@@ -276,8 +265,8 @@ class TopwordModel(BaseModel):
 
         # generate analysis result
         analysis_result = [TopwordModel._z_test_word_list(
-            count_list_i=group_lists[comp_index],
-            count_list_j=group_lists[base_index],
+            count_list_i=group_sums[comp_index],
+            count_list_j=group_sums[base_index],
             words=self._doc_term_matrix.columns.values)
             for comp_index, base_index in comp_map]
 
