@@ -4,8 +4,8 @@ from typing import Optional
 
 import pandas as pd
 
-from lexos.processors.analyze.contentanalysis_receiver import ContentAnalysisReceiver,\
-    ContentAnalysisOption
+from lexos.processors.analyze.contentanalysis_receiver import \
+    ContentAnalysisReceiver, ContentAnalysisOption
 
 
 class ContentAnalysisModel(object):
