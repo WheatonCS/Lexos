@@ -3,9 +3,8 @@ from collections import OrderedDict
 
 import numpy as np
 import pandas as pd
-from typing import List, Tuple, Optional, NamedTuple
-from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE, \
-    SEG_NON_POSITIVE_MESSAGE, NOT_ENOUGH_CLASSES_MESSAGE
+from typing import List, Optional, NamedTuple
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import MatrixModel
@@ -245,8 +244,8 @@ class TopwordModel(BaseModel):
 
         # generate header list
         readable_result_list = [result_list[comp_index].rename(
-            'Class "' + class_labels[comp_index] + '" compared to Class "'
-            + class_labels[base_index] + '"')
+            'Class "' + class_labels[comp_index] + '" compared to Class "' +
+            class_labels[base_index] + '"')
             for comp_index, base_index in comp_map]
 
         return readable_result_list
