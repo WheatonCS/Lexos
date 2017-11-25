@@ -258,12 +258,18 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def _get_readable_size(result_list: ReadableResult) -> ReadableResult:
-        """For each file, only show first 20 results on web as a preview."""
+        """For each file, only show first 20 results on web as a preview.
+
+        :return: a list of series with maximum length of 20."""
 
         return [result if result.size <= 20 else result[:20]
                 for result in result_list]
 
     def get_result(self) -> ReadableResult:
+        """Call the right method corresponding to user's selection.
+
+        :return: a list of series with maximum length of 20."""
+
         if self._topword_front_end_option.analysis_option == "allToPara":
 
             return TopwordModel._get_readable_size(
