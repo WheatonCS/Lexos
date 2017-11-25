@@ -309,6 +309,7 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def _get_readable_size(result_list: ReadableResult) -> ReadableResult:
+        """For each file, only show first 20 results on web as a preview."""
 
         return [result if result.size <= 20 else result[:20]
                 for result in result_list]
