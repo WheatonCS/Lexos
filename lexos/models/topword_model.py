@@ -276,7 +276,7 @@ class TopwordModel(BaseModel):
             + class_labels[base_index] + '"')
             for comp_index, base_index in comp_map]
 
-
+        return readable_result_list
 
     @staticmethod
     def _get_readable_size(result_list: ReadableResult) -> ReadableResult:
