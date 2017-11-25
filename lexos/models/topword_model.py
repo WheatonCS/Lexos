@@ -270,7 +270,8 @@ class TopwordModel(BaseModel):
             words=self._doc_term_matrix.columns.values)
             for comp_index, base_index in comp_map]
 
-
+        # generate header list
+        readable_result_list = [result_list[comp_index].rename(
 
 
 
