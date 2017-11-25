@@ -252,7 +252,8 @@ class TopwordModel(BaseModel):
         # Match labels and word counts into groups.
         group_matrices = [self._doc_term_matrix.values[row]
                           for row in division_map.values]
-
+        # Find the total word count of each group.
+        group_sums = [np.sum(row, axis=0) for row in group_matrices]
 
 
         comp_map = [(i_index, j_index)
