@@ -133,33 +133,6 @@ class TopwordModel(BaseModel):
         result_series = pd.Series(sorted_dict)
         return result_series
 
-    @staticmethod
-    def _group_division(count_matrix: np.ndarray,
-                        division_map: np.ndarray) -> \
-            (List[np.ndarray], List[np.ndarray]):
-        """Divides the word counts into groups via the group map.
-
-        :param dtm: pandas data frame that contains the word count matrix.
-        :param division_map: a numpy matrix represents the group map, where the
-                             index represents the class names and the column
-                             contains file name of each file. The matrix
-                             contains boolean values to determine which
-                             class each file belongs to.
-        :return: a list that contains 2D numpy matrix that each matrix
-                 represents the word count of a group, and another list that
-                 contains numpy arrays that each array contains names of
-                 files within a group
-        """
-        # Trap possible empty inputs
-        assert np.size(count_matrix) > 0, EMPTY_NP_ARRAY_MESSAGE
-        assert np.size(division_map) > 0, EMPTY_NP_ARRAY_MESSAGE
-
-        # create group map
-        # noinspection PyTypeChecker
-        group_list = [count_matrix[row] for row in division_map]
-
-        return group_list
-
     def _analyze_all_to_para(self) -> ReadableResult:
         """Detect if a given word is an anomaly.
 
