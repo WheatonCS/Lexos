@@ -135,7 +135,7 @@ class TopwordModel(BaseModel):
 
     @staticmethod
     def group_division(dtm: pd.DataFrame, division_map: np.ndarray) -> \
-            (List[np.ndarray], List[np.ndarray]):
+        (List[np.ndarray], List[np.ndarray]):
         """Divides the word counts into groups via the group map.
 
         :param dtm: pandas data frame that contains the word count matrix.
@@ -208,8 +208,7 @@ class TopwordModel(BaseModel):
                                         division_map=division_map.values)
 
         # initialize the value to return
-        analysis_result = []
-        header_list = []
+        readable_result = []
 
         # find the total word count of each group
         group_lists = [np.sum(value, axis=0)
@@ -232,22 +231,19 @@ class TopwordModel(BaseModel):
             comp_para = group_values[comp_index]
 
             # generate analysis data
-            temp_analysis_result = [TopwordModel._z_test_word_list(
+            temp_result_list = [TopwordModel._z_test_word_list(
                 count_list_i=paras,
                 count_list_j=group_lists[base_index],
-                words=self._doc_term_matrix.volumns.values)
+                words=self._doc_term_matrix.columns.values)
                 for para_index, paras in enumerate(comp_para)]
 
             # generate header
-            temp_header = ['Document "' + name_map[comp_index][para_index] +
-                           '" compared to Class: ' + class_labels[base_index]
-                           for para_index, _ in enumerate(comp_para)]
+            temp_readable_result = [temp_result_list[index].rename(
+                'Document "' + name_map[comp_index][index] +
+                '" compared to Class: ' + class_labels[base_index])
+                for index in range(len(comp_para))]
 
-            analysis_result += temp_analysis_result
-            header_list += temp_header
-
-        # put result together in a readable list
-        readable_result = list(zip(header_list, analysis_result))
+            readable_result += temp_readable_result
 
         return readable_result
 
