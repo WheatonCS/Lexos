@@ -1244,7 +1244,7 @@ class FileManager:
         # active files labels and classes.
         active_files = self.get_active_files()
         file_labels = [file.label for file in active_files]
-        class_labels = {file.class_label for file in active_files}
+        class_labels = list({file.class_label for file in active_files})
 
         # initialize values and get class division map.
         label_length = len(file_labels)
@@ -1260,9 +1260,9 @@ class FileManager:
             division_map[file.label][file.class_label] = True
 
         # set files with no class assigned to untitled.
-        if "" in division_map.index.values:
-            division_map.index.values[np.where(class_labels == "")] = \
-                "untitled"
+        if '' in division_map.index.values:
+            division_map.index.values[
+                np.where(division_map.index.values == '')] = "untitled"
 
         # check if more than one class exists.
         if division_map.shape[0] == 1:
