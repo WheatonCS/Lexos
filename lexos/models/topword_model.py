@@ -250,7 +250,8 @@ class TopwordModel(BaseModel):
         # Initialize all the class labels.
         class_labels = division_map.index.values
         # Match labels and word counts into groups.
-
+        group_matrices = [self._doc_term_matrix.values[row]
+                          for row in division_map.values]
 
 
 
