@@ -197,7 +197,8 @@ class TopwordModel(BaseModel):
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result.
         """
-
+        # Initialize all the labels and result to return.
+        readable_result = []
 
 
 
