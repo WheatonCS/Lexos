@@ -1245,10 +1245,10 @@ class FileManager:
         file_labels = [file.label for file in active_files]
         class_labels = {file.class_label for file in active_files}
 
+        # initialize values and get class division map
         label_length = len(file_labels)
         class_length = len(class_labels)
 
-        # initialize class division map
         division_map = pd.DataFrame(
             data=np.zeros((class_length, label_length), dtype=bool),
             index=class_labels,
@@ -1257,6 +1257,13 @@ class FileManager:
         # set correct boolean value for each file
         for file in active_files:
             division_map[file.label][file.class_label] = True
+
+        if "" in class_labels:
+            class_labels[np.where(class_labels == "")] = "untitled"
+
+        # check if more than one class exists
+        if division_map.shape[0] == 1:
+            raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
         return division_map
 
