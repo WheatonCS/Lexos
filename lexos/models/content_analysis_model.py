@@ -158,7 +158,7 @@ class ContentAnalysisModel(object):
         self._averages.append(scores_avg)
 
     def join_active_dicts(self) -> list:
-        """
+        """Joins all active dicts into on list of Phrase objects
 
         :return: list of phrases contained in the active dictionaries
         """
@@ -170,7 +170,7 @@ class ContentAnalysisModel(object):
         return dictionaries
 
     def to_html(self) -> str:
-        """
+        """Generates an html table from dataframe
 
         :return: dataframe table in html
         """
@@ -180,7 +180,7 @@ class ContentAnalysisModel(object):
         return html
 
     def to_data_frame(self) -> pd.DataFrame:
-        """
+        """Generates a dataframe containing all values stored in this class
 
         :return: a data frame containing all values stored in this class
         members
@@ -226,9 +226,7 @@ class ContentAnalysisModel(object):
         return False
 
     def save_formula(self):
-        """saves the formula from the front-end in the class member
-        _formula
-        """
+        """saves formula from front-end in the class member _formula"""
         if self._test_options is not None:
             formula = self._test_options.formula
         else:
@@ -268,9 +266,7 @@ class ContentAnalysisModel(object):
         return ""
 
     def analyze(self) -> [str, str]:
-        """Calls all the functions needed to generate the final html table
-        containing all word/phrase counts and formula results for each file in
-        the corpus
+        """Generates html table containing counts, averages, & formula results
 
         :return: formula_errors: str with error message or None if there is no
                  errors.
@@ -314,7 +310,8 @@ class ContentAnalysisModel(object):
 
     @property
     def content_analysis_option(self) -> ContentAnalysisOption:
-        """
+        """Gets front-end options from ContentAnalysisReceiver
+
         :return: front-end or test options
         """
         if self._test_options is not None:
@@ -397,7 +394,7 @@ class Document(object):
 class Dictionary(Document):
     def __init__(self, content: list, file_name: str, label: str,
                  active: bool = True):
-        """
+        """An object of this class represents a dictionary
 
         :param content: list of word/phrses separated by commas
         :param file_name: original filename
@@ -421,7 +418,7 @@ class Dictionary(Document):
 class File(Document):
     def __init__(self, content: str, file_name: str, label: str,
                  total_word_counts: int, active: bool = True):
-        """
+        """An object of this class represents a file
 
         :param content: file content
         :param file_name: original filename
@@ -454,7 +451,7 @@ class File(Document):
 
 class Phrase(object):
     def __init__(self, content: str, dict_label: str, count: int=0):
-        """
+        """An object of this class represents a Phrase
 
         :param content: the phrase or word
         :param dict_label: label of dictionary it belongs to
