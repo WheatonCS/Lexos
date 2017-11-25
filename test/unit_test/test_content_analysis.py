@@ -238,11 +238,10 @@ def test_analyze():
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
     result_table, formula_errors = test.analyze()
-    print(result_table, formula_errors)
-    assert result_table is None
+    assert result_table == ""
     assert isinstance(formula_errors, str)
     test.test_option = TestOptions(formula="[dict1]")
     test.save_formula()
     result_table, formula_errors = test.analyze()
     assert result_table == test.to_html()
-    assert formula_errors == 0
+    assert formula_errors == ""
