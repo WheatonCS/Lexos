@@ -203,7 +203,7 @@ def test_save_formula():
 
 def test_check_formula():
     test = ContentAnalysisModel(TestOptions(formula="()sin(1)"))
-    assert test.check_formula() == 0
+    assert test.check_formula() == ""
     test.test_option = TestOptions(formula="(")
     test.save_formula()
     assert test.check_formula() == "Formula errors:<br>"\
