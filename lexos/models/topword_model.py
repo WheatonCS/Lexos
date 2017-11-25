@@ -207,16 +207,14 @@ class TopwordModel(BaseModel):
                           for row in division_map.values]
         group_file_labels = [file_labels[row] for row in division_map.values]
 
-        # find the total word count of each group
+        # Find the total word count of each group
         group_sums = [np.sum(row, axis=0) for row in group_matrices]
-
-        # find number of groups
+        # Find number of groups
         num_group = len(group_sums)
 
-        # comparison map, in here is a list of tuple.
-        # There are two elements in the tuple, each one is a index of groups
-        # (for example the first group will have index 0)
-        # Two groups index cannot be equal.
+        # Find the comparison map, which is a list of tuples.
+        # There are two elements in each tuple, each one is a index of groups
+        # Ex: first group has index 0. And two group indexes cannot be equal.
         comp_map = itertools.product(list(range(num_group)),
                                      list(range(num_group)))
         comp_map = [(i_index, j_index)
@@ -224,7 +222,7 @@ class TopwordModel(BaseModel):
 
         # compare each paragraph in group_comp to group_base
         for comp_index, base_index in comp_map:
-            comp_para = group_values[comp_index]
+            comp_para = group_matrices[comp_index]
 
             # generate analysis data
             temp_result_list = [TopwordModel._z_test_word_list(
@@ -235,7 +233,7 @@ class TopwordModel(BaseModel):
 
             # generate header
             temp_readable_result = [temp_result_list[index].rename(
-                'Document "' + name_map[comp_index][index] +
+                'Document "' + group_file_labels[comp_index][index] +
                 '" compared to Class: ' + class_labels[base_index])
                 for index in range(len(comp_para))]
 
