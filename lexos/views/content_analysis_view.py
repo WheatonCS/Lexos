@@ -161,7 +161,6 @@ def toggle_dictionary():
         session['active_dictionaries'] = data['active_dictionaries']
         session['toggle_all_value'] = data['toggle_all_value']
         return json.dumps(data)
-
     dict_label = ContentAnalysisReceiver().options_from_front_end().dict_label
     data = {'toggle_all_value': True}
     for label, active_dict in zip(dict_labels, active_dicts):
@@ -204,4 +203,9 @@ def delete_dictionary():
 
 
 def error(msg: str):
+    """
+
+    :param msg: error message to send to the front-end
+    :return: error message in a json string
+    """
     return json.dumps({"error": msg})
