@@ -199,7 +199,9 @@ class TopwordModel(BaseModel):
         """
         # Initialize all the labels and result to return.
         readable_result = []
-
+        file_labels = [self._id_temp_label_map[file_id]
+                       for file_id in self._doc_term_matrix.index.values]
+        class_labels = division_map.index.values
 
 
 
