@@ -199,8 +199,8 @@ class TopwordModel(BaseModel):
 
         # Assign name to each result series.
         readable_result = [
-            result_series_list[index].rename['Document "' + label +
-                                             '" compared to the whole corpus']
+            result_series_list[index].rename('Document "' + label +
+                                             '" compared to the whole corpus')
             for index, label in enumerate(labels)]
 
         return readable_result
