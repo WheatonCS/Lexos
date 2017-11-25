@@ -307,6 +307,12 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
+    @staticmethod
+    def _get_readable_size(result_list: ReadableResult) -> ReadableResult:
+
+        return [result if result.size <= 20 else result[:20]
+                for result in result_list]
+
     def get_result(self) -> ReadableResult:
         if self._topword_front_end_option.analysis_option == "allToPara":
 
