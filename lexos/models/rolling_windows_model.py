@@ -2,6 +2,7 @@ import re
 from typing import NamedTuple, Optional, List
 
 import numpy as np
+import pandas as pd
 
 from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX, \
     WORD_BOUNDARY_REGEX_STR
@@ -151,53 +152,67 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled window type: " + window_unit)
 
-    def find_token_average_in_window(self, window: str) -> float:
-        token_type = self._options.token_options.token_type
-        token = self._options.token_options.token
+    def find_token_average_in_window(self, window: str) -> pd.Series:
+
+        assert self._options.average_token_options is not None
+
+        token_type = self._options.average_token_options.token_type
+        tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
 
         if token_type is RWATokenType.string:
-            token_count = self._find_string_in_window(window=window,
-                                                      string=token)
+            token_counts = [
+                self._find_string_in_window(window=window, string=token)
+                for token in tokens
+            ]
 
         elif token_type is RWATokenType.word:
-            token_count = self._find_word_in_window(window=window,
-                                                    word=token)
+            token_counts = [
+                self._find_word_in_window(window=window, word=token)
+                for token in tokens
+            ]
 
         elif token_type is RWATokenType.regex:
-            token_count = self._find_regex_in_window(window=window,
-                                                     regex=token)
+            token_counts = [
+                self._find_regex_in_window(window=window, regex=token)
+                for token in tokens
+            ]
 
         else:
             raise ValueError("unhandled token type: " + token_type)
 
-        return token_count / window_size
+        return pd.Series(
+            [token_count / window_size for token_count in token_counts],
+            index=tokens
+        )
 
     def find_token_ratio_in_window(self, window: str) -> float:
-        token_type = self._options.token_options.token_type
-        primary_token = self._options.token_options.token
-        secondary_token = self._options.token_options.secondary_token
+
+        assert self._options.average_token_options is not None
+
+        token_type = self._options.ratio_token_options.token_type
+        numerator_token = self._options.ratio_token_options.numerator_token
+        denominator_token = self._options.ratio_token_options.denominator_token
 
         if token_type is RWATokenType.string:
             numerator = self._find_string_in_window(window=window,
-                                                    string=primary_token)
+                                                    string=numerator_token)
             denominator = self._find_string_in_window(window=window,
-                                                      string=secondary_token)
+                                                      string=denominator_token)
 
         elif token_type is RWATokenType.word:
             numerator = self._find_word_in_window(window=window,
-                                                  word=primary_token)
+                                                  word=numerator_token)
             denominator = self._find_word_in_window(window=window,
-                                                    word=secondary_token)
+                                                    word=denominator_token)
 
         elif token_type is RWATokenType.regex:
             numerator = self._find_regex_in_window(window=window,
-                                                   regex=primary_token)
+                                                   regex=numerator_token)
             denominator = self._find_regex_in_window(window=window,
-                                                     regex=secondary_token)
+                                                     regex=denominator_token)
 
         else:
             raise ValueError("unhandled token type: " + token_type)
 
         return numerator / denominator
-
