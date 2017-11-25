@@ -1,7 +1,7 @@
 import json
 import os
 
-from flask import request, session, render_template, Blueprint
+from flask import request, render_template, Blueprint
 
 from lexos.managers.utility import load_file_manager
 from lexos.managers.session_manager import session
