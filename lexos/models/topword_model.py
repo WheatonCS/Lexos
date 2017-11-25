@@ -240,49 +240,32 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_group_to_group(self) -> ReadableResult:
+    def _analyze_group_to_group(self, division_map: pd.DataFrame) -> \
+
         """Analyzes the group compare with each other groups.
 
         :return: a list of tuples, each tuple contains a human readable header
                  and corresponding analysis result
         """
-        division_map, class_labels = TopwordModel.get_class_map()
-        group_values, name_map = \
-            TopwordModel.group_division(dtm=self._doc_term_matrix,
-                                        division_map=division_map.values)
+        # Initialize all the class labels.
 
-        # find the total word count of each group
-        group_sums = [np.sum(value, axis=0)
-                       for _, value in enumerate(group_values)]
 
-        # find number of groups
-        num_group = len(group_sums)
 
-        # comparison map, in here is a list of tuple.
-        # There are two elements in the tuple, each one is a index of groups
-        # (for example the first group will have index 0)
-        # i_index has to be smaller than j_index to avoid repetition
-        comp_map = itertools.product(list(range(num_group)),
-                                     list(range(num_group)))
+
         comp_map = [(i_index, j_index)
                     for (i_index, j_index) in comp_map if i_index < j_index]
 
         # generate analysis result
-        analysis_result = [TopwordModel._z_test_word_list(
+        result_list = [TopwordModel._z_test_word_list(
             count_list_i=group_sums[comp_index],
             count_list_j=group_sums[base_index],
             words=self._doc_term_matrix.columns.values)
             for comp_index, base_index in comp_map]
 
-        # generate header list
-        header_list = ['Class "' + class_labels[comp_index] +
-                       '" compared to Class: ' + class_labels[base_index]
-                       for comp_index, base_index in comp_map]
 
-        # put two lists together as a human readable result
-        readable_result = list(zip(header_list, analysis_result))
 
-        return readable_result
+
+
 
     @staticmethod
     def _get_readable_size(result_list: ReadableResult) -> ReadableResult:
@@ -294,12 +277,17 @@ class TopwordModel(BaseModel):
     def get_result(self) -> ReadableResult:
         if self._topword_front_end_option.analysis_option == "allToPara":
 
-            return TopwordModel._get_readable_size(self._analyze_all_to_para())
+            return TopwordModel._get_readable_size(
+                self._analyze_all_to_para())
+
         elif self._topword_front_end_option.analysis_option == "classToPara":
 
             division_map = \
                 FileManagerModel().load_file_manager().get_class_division_map()
-            return self._analyze_para_to_group(division_map)
-        elif self._topword_front_end_option.analysis_option == "classToClass":
+            return TopwordModel._get_readable_size(
+                self._analyze_para_to_group(division_map))
 
-            return self._analyze_group_to_group()
+        elif self._topword_front_end_option.analysis_option == "classToClass":
+            division_map = \
+                FileManagerModel().load_file_manager().get_class_division_map()
+            return self._analyze_group_to_group(division_map)
