@@ -1,6 +1,7 @@
 import pandas as pd
 
-from lexos.processors.analyze.content_analysis_model import ContentAnalysisModel
+from lexos.processors.analyze.content_analysis_model import \
+    ContentAnalysisModel
 
 
 class TestOptions(object):
