@@ -202,41 +202,40 @@ class TopwordModel(BaseModel):
         file_labels = np.array([self._id_temp_label_map[file_id] for file_id
                                 in self._doc_term_matrix.index.values])
         class_labels = division_map.index.values
-        # Match labels and word counts into groups
+        # Match labels and word counts into groups.
         group_matrices = [self._doc_term_matrix.values[row]
                           for row in division_map.values]
         group_file_labels = [file_labels[row] for row in division_map.values]
 
-        # Find the total word count of each group
+        # Find the total word count of each group.
         group_sums = [np.sum(row, axis=0) for row in group_matrices]
-        # Find number of groups
-        num_group = len(group_sums)
 
         # Find the comparison map, which is a list of tuples.
-        # There are two elements in each tuple, each one is a index of groups
+        # There are two elements in each tuple, each one is a index of groups.
         # Ex: first group has index 0. And two group indexes cannot be equal.
-        comp_map = itertools.product(list(range(num_group)),
-                                     list(range(num_group)))
+        comp_map = itertools.product(list(range(len(group_sums))),
+                                     list(range(len(group_sums))))
         comp_map = [(i_index, j_index)
                     for (i_index, j_index) in comp_map if i_index != j_index]
 
-        # compare each paragraph in group_comp to group_base
+        # Compare each paragraph in group_comp to group_base.
         for comp_index, base_index in comp_map:
             comp_para = group_matrices[comp_index]
 
-            # generate analysis data
+            # Get analysis result.
             temp_result_list = [TopwordModel._z_test_word_list(
                 count_list_i=paras,
                 count_list_j=group_sums[base_index],
                 words=self._doc_term_matrix.columns.values)
                 for para_index, paras in enumerate(comp_para)]
 
-            # generate header
+            # Attach readable header to analysis result.
             temp_readable_result = [temp_result_list[index].rename(
                 'Document "' + group_file_labels[comp_index][index] +
                 '" compared to Class: ' + class_labels[base_index])
                 for index in range(len(comp_para))]
 
+            # Put all temp result together.
             readable_result += temp_readable_result
 
         return readable_result
