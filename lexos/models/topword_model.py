@@ -207,7 +207,8 @@ class TopwordModel(BaseModel):
                           for row in division_map.values]
         group_file_labels = [file_labels[row] for row in division_map.values]
 
-
+        # find the total word count of each group
+        group_sums = [np.sum(row, axis=0) for row in group_matrices]
 
         # find number of groups
         num_group = len(group_sums)
