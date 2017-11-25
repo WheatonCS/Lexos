@@ -274,7 +274,7 @@ class TopwordModel(BaseModel):
         readable_result_list = [result_list[comp_index].rename(
             'Class "' + class_labels[comp_index] + '" compared to Class "'
             + class_labels[base_index] + '"')
-
+            for comp_index, base_index in comp_map]
 
 
 
