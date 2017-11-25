@@ -301,4 +301,5 @@ class TopwordModel(BaseModel):
         elif self._topword_front_end_option.analysis_option == "classToClass":
             division_map = \
                 FileManagerModel().load_file_manager().get_class_division_map()
-            return self._analyze_group_to_group(division_map)
+            return TopwordModel._get_readable_size(
+                self._analyze_group_to_group(division_map))
