@@ -78,9 +78,9 @@ def top_words():
             num_class = file_manager.get_class_division_map().shape[0]
 
             # only give the user a preview of the topWord
-            for i in range(len(result)):
-                if len(result[i][1]) > 20:
-                    result[i] = result[i][1][:20]
+            # for i in range(len(result)):
+            #     if len(result[i][1]) > 20:
+            #         result[i] = result[i][1][:20]
             session_manager.cache_analysis_option()
             session_manager.cache_top_word_options()
             return render_template(
