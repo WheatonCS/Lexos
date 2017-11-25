@@ -241,7 +241,7 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def _analyze_group_to_group(self, division_map: pd.DataFrame) -> \
-
+            ReadableResult:
         """Analyzes the group compare with each other groups.
 
         :return: a list of tuples, each tuple contains a human readable header
