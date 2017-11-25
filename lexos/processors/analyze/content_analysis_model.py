@@ -1,11 +1,10 @@
-import pandas as pd
-from typing import Optional
 from copy import deepcopy
-
-# noinspection PyUnresolvedReferences
 from math import sqrt, sin, cos, tan, log  # noqa F401
+from typing import Optional
 
-from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver,\
+import pandas as pd
+
+from lexos.processors.analyze.contentanalysis_receiver import ContentAnalysisReceiver,\
     ContentAnalysisOption
 
 
