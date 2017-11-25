@@ -272,6 +272,8 @@ class TopwordModel(BaseModel):
 
         # generate header list
         readable_result_list = [result_list[comp_index].rename(
+            'Class "' + class_labels[comp_index] + '" compared to Class "'
+            + class_labels[base_index] + '"')
 
 
 
