@@ -164,10 +164,13 @@ class TopwordModel(BaseModel):
 
     def _analyze_para_to_group(self, division_map: pd.DataFrame) -> \
             ReadableResult:
-        """Analyzes each single word compare to all the other group.
+        """Detect if a given word is an anomaly.
 
-        :return: a list of tuples, each tuple contains a human readable header
-                 and corresponding analysis result.
+        While doing so, this method compares the occurrence of a given word
+        in a particular segment to the occurrence of the same word in other
+        class of segments.
+        :return: a list of series, each series has a readable name and the
+                 result, which contains words with corresponding z-scores.
         """
         # Initialize all the labels and result to return.
         readable_result = []
@@ -214,10 +217,13 @@ class TopwordModel(BaseModel):
 
     def _analyze_group_to_group(self, division_map: pd.DataFrame) -> \
             ReadableResult:
-        """Analyzes the group compare with each other groups.
+        """Detect if a given word is an anomaly.
 
-        :return: a list of tuples, each tuple contains a human readable header
-                 and corresponding analysis result
+        While doing so, this method compares the occurrence of a given word
+        in a class of segments to the occurrence of the same word in other
+        class of segments.
+        :return: a list of series, each series has a readable name and the
+                 result, which contains words with corresponding z-scores.
         """
         # Initialize all the class labels.
         class_labels = division_map.index.values
