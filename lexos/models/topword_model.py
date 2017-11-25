@@ -67,7 +67,7 @@ class TopwordModel(BaseModel):
 
         This z-test method is the major method we use in this program to detect
         if a word is an anomaly, while doing so, we assume the possibility of
-        a particular word appear in a text follows normal distribution. And
+        a particular word appearing in a text follows normal distribution. And
         while examining, this function compares the probability of a word's
         occurrence in the rest of the segments. Usually we report a word as an
         anomaly if the return value is smaller than -1.96 or bigger than 1.96.
@@ -179,31 +179,34 @@ class TopwordModel(BaseModel):
         return division_map, class_labels
 
     def _analyze_all_to_para(self) -> ReadableResult:
-        """Analyzes each single word compare to the total documents.
+        """Detect if a given word is an anomaly.
 
-        :return: a list of tuples, each tuple contains a human readable header
-                 and corresponding analysis result.
+        While doing so, this method compares the occurrence of a given word
+        in a particular segment to the occurrence of the same word in the whole
+        corpus.
+        :return: a list of series, each series has a readable name and the
+                 result, which contains words with corresponding z-scores.
         """
         # Initialize, get all the file labels.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
-        # Get word count sum of each word for future calculation.
+        # Get word count in the whole corpus of each word.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # generate analysis result
-        result_series_list = [TopwordModel._z_test_word_list(
+        result_list = [TopwordModel._z_test_word_list(
             count_list_i=row,
             count_list_j=word_count_sum,
             words=self._doc_term_matrix.columns.values)
             for row in self._doc_term_matrix.values]
 
         # Assign name to each result series.
-        readable_result = [
-            result_series_list[index].rename('Document "' + label +
-                                             '" compared to the whole corpus')
+        readable_result_list = [
+            result_list[index].rename('Document "' + label +
+                                      '" compared to the whole corpus')
             for index, label in enumerate(labels)]
 
-        return readable_result
+        return readable_result_list
 
     def _analyze_para_to_group(self) -> ReadableResult:
         """Analyzes each single word compare to all the other group.
