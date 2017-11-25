@@ -45,7 +45,7 @@ class SimilarityModel(BaseModel):
         """:return: a map takes an id to temp labels."""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_temp_label_id_map()
+            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _similarity_option(self) -> SimilarityFrontEndOption:
