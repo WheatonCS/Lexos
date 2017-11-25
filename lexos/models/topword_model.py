@@ -248,6 +248,8 @@ class TopwordModel(BaseModel):
                  and corresponding analysis result
         """
         # Initialize all the class labels.
+        class_labels = division_map.index.values
+        # Match labels and word counts into groups.
 
 
 
