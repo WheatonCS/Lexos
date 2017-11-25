@@ -316,7 +316,7 @@ class TopwordModel(BaseModel):
     def get_result(self) -> ReadableResult:
         if self._topword_front_end_option.analysis_option == "allToPara":
 
-            return self._analyze_all_to_para()
+            return TopwordModel._get_readable_size(self._analyze_all_to_para())
         elif self._topword_front_end_option.analysis_option == "classToPara":
 
             return self._analyze_para_to_group()
