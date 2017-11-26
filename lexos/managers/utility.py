@@ -13,8 +13,6 @@ import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 import lexos.processors.analyze.KMeans as KMeans
-import lexos.processors.analyze.information as information
-import lexos.processors.analyze.similarity as similarity
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
@@ -232,74 +230,6 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     out_file.close()
 
     return out_file_path, extension
-
-
-# Gets called from statistics() in lexos_core.py
-
-
-def generate_statistics(file_manager: FileManager) -> \
-        (List[information.FileInformation], information.CorpusInformation):
-    """Calls analyze/information to generate statistics of the corpus.
-
-    :param file_manager: A FileManager object (see managers/file_manager.py)
-    :return: file_info_list: a list of tuples that contain the file id and the
-                             file information
-                             (see analyze/information.py/
-                             Corpus_Information.returnstatistics()
-                             function for more)
-             corpus_information: the statistics of the whole corpus
-                                 (see analyze/information.py/
-                                 File_Information.returnstatistics()
-                                 function for more)
-    """
-    checked_labels = request.form.getlist('segmentlist')
-    file_ids = set(file_manager.files.keys())
-    # convert the checked_labels into int
-    checked_labels = set(map(int, checked_labels))
-    # if the file_id is not in checked list
-    for file_id in file_ids - checked_labels:
-        # make that file inactive in order to getMatrix
-        file_manager.files[file_id].disable()
-
-    # folder path for storing graphs and plots
-    folder_path = os.path.join(session_manager.session_folder(),
-                               constants.RESULTS_FOLDER)
-    try:
-        os.mkdir(folder_path)  # attempt to make folder to store graphs/plots
-    except FileExistsError:
-        pass
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_deleted, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    dtm_data = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=culling)
-    # grab data from data frame
-    count_matrix = dtm_data.values
-    labels = dtm_data.index.values
-
-    # helper function gets information for each file
-    def get_file_info(row_index, label):
-        return information.FileInformation(
-            count_list=count_matrix[row_index, :],
-            file_name=label)
-
-    # put information of each file into a list
-    file_info_list = [get_file_info(row_index=ind, label=label)
-                      for ind, label in enumerate(labels)]
-
-    # get information of the whole corpus
-    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
-                                                labels=labels)
-    return file_info_list, corpus_info
 
 
 def generate_k_means_pca(file_manager: FileManager):
@@ -912,99 +842,6 @@ def generate_mc_json_obj(file_manager: FileManager):
         json_obj = multicloud_topic.topic_json_maker(output_path)
 
     return json_obj
-
-
-def generate_similarities(file_manager: FileManager) -> pd.DataFrame:
-    """Generates cosine similarity rankings between comparison files
-
-    :param file_manager: a class for an object to hold all information of
-                         user's files and manage the files according to users's
-                         choices.
-    :return:
-        - doc_str_score: a string which stores the similarity scores
-        - doc_str_name: a string which stores the name of the comparison files
-                        ranked in order from best to worst
-    """
-
-    # generate tokenized lists of all documents and comparison document
-    comp_file_id = request.form['uploadname']
-    use_word_tokens = request.form['tokenType'] == 'word'
-    ngram_size = int(request.form['tokenSize'])
-    only_char_grams_within_words = 'inWordsOnly' in request.form
-    cull = 'cullcheckbox' in request.form
-    mfw = 'mfwcheckbox' in request.form
-
-    if int(comp_file_id) in file_manager.files.keys():
-        comp_file_index = int(comp_file_id)
-    else:
-        raise ValueError('input comparison file id cannot be found '
-                         'in filemanager')
-
-    dtm_data_frame = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option="N/A",
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=ngram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=cull,
-        round_decimal=False)
-
-    # call similarity.py to generate the similarity list
-    score_name_data_frame = similarity.similarity_maker(
-        dtm_data_frame, comp_file_index)
-
-    return score_name_data_frame
-
-
-def generate_sims_csv(file_manager: FileManager):
-    """
-    Generates a CSV file from the calculating similarity.
-
-    Args:
-        None
-
-    Returns:
-        The filepath where the CSV was saved, and the chosen extension .csv for
-        the file.
-    """
-    extension = '.csv'
-
-    score_name_data_frame = generate_similarities(file_manager)
-
-    delimiter = ','
-
-    # get the path of the folder to save result
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    # get the saved file path
-    out_file_path = path_join(folder_path, 'results' + extension)
-
-    comp_file_id = request.form['uploadname']
-
-    # write the header to the file
-    with open(out_file_path, 'w') as out_file:
-
-        out_file.write("Similarity Rankings:" + '\n')
-
-        out_file.write(
-            "The rankings are determined by 'distance between documents' "
-            "where small distances (near zero) represent documents that are "
-            "'similar' and unlike documents have distances closer to one.\n")
-
-        out_file.write("Selected Comparison Document: " + delimiter + str(
-            file_manager.get_active_labels()[int(comp_file_id)]) + '\n')
-
-    # append the dataframe to the file
-    with open(out_file_path, 'a') as f:
-        score_name_data_frame.to_csv(f)
-
-    return out_file_path, extension
 
 
 def get_top_word_option() -> str:
