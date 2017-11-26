@@ -83,8 +83,7 @@ class TopwordModel(BaseModel):
                  segment is an anomaly or not.
         """
         # Trap possible empty inputs.
-        assert n1 > 0, SEG_NON_POSITIVE_MESSAGE
-        assert nt > 0, SEG_NON_POSITIVE_MESSAGE
+        assert n1 > 0 and nt > 0, SEG_NON_POSITIVE_MESSAGE
 
         # Calculate the pooled proportion.
         p = (p1 * n1 + pt * nt) / (n1 + nt)
@@ -142,6 +141,9 @@ class TopwordModel(BaseModel):
         :return: a list of series, each series has a readable name and the
                  result, which contains words with corresponding z-scores.
         """
+        # Trap possible empty input error.
+        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+
         # Initialize, get all the file labels.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
@@ -209,7 +211,7 @@ class TopwordModel(BaseModel):
             temp_readable_result = [temp_result_list[index].rename(
                 'Document "' + group_file_labels[comp_index][index] +
                 '" compared to Class "' + class_labels[base_index] + '"')
-                for index in range(len(comp_para))]
+                for index, _ in enumerate(comp_para)]
 
             # Put all temp result together.
             readable_result += temp_readable_result
