@@ -1,11 +1,14 @@
 import itertools
 from collections import OrderedDict
-
+import os
 import numpy as np
 import pandas as pd
 from typing import List, Optional, NamedTuple
+
+from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NOT_ENOUGH_CLASSES_MESSAGE
+from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
@@ -26,7 +29,7 @@ class TopwordTestOptions(NamedTuple):
 class TopwordResult(NamedTuple):
     """A typed tuple to hold topword results."""
     header: str
-    result: ReadableResult
+    results: ReadableResult
 
 
 class TopwordModel(BaseModel):
@@ -271,26 +274,56 @@ class TopwordModel(BaseModel):
         return readable_result_list
 
     @staticmethod
-    def _get_readable_size(result_list: ReadableResult) -> ReadableResult:
+    def _get_readable_size(topword_result: TopwordResult) -> ReadableResult:
         """For each file, only show first 20 results on web as a preview.
 
         :return: a list of series with maximum length of 20."""
 
         return [result if result.size <= 20 else result[:20]
-                for result in result_list]
+                for result in topword_result.results]
 
-    def get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
+    @staticmethod
+    def _get_top_word_csv(topword_result: TopwordResult) -> str:
+        """Writes the generated top word results to an output CSV file.
+
+        :param topword_result:
+        :returns: path of the generated CSV file.
+        """
+        # make the path
+        result_folder_path = os.path.join(
+            session_manager.session_folder(), RESULTS_FOLDER)
+
+        try:
+            # attempt to make the save path directory
+            os.makedirs(result_folder_path)
+        except OSError:
+            pass
+
+        save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
+
+        # Add header to the file
+        csv_content = topword_result.header + '\n'
+
+        for result in topword_result.result:
+            csv_content += result.transpose().to_csv()
+
+        with open(save_path, 'w', encoding='utf-8') as f:
+            f.write(csv_content)
+
+        return save_path
+
+    def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
-        :return: a list of series with maximum length of 20."""
+        :return: a namedtuple that holds the topword result, which includes a
+                 header and a list of panda sereis. """
 
         if self._topword_front_end_option.analysis_option == "allToPara":
             # Get header and result.
             header = "Compare Each Document to All the Documents As a Whole"
-            result = TopwordModel._get_readable_size(
-                self._analyze_fill_to_all())
+            results = self._analyze_fill_to_all()
 
-            return TopwordResult(header=header, result=result)
+            return TopwordResult(header=header, results=results)
 
         elif self._topword_front_end_option.analysis_option == "classToPara":
             # check if more than one class exists.
@@ -298,10 +331,9 @@ class TopwordModel(BaseModel):
 
             # Get header and result.
             header = "Compare Each Document to Other Class(es)"
-            result = TopwordModel._get_readable_size(
-                self._analyze_class_to_all(class_division_map))
+            results = self._analyze_class_to_all(class_division_map)
 
-            return TopwordResult(header=header, result=result)
+            return TopwordResult(header=header, results=results)
 
         elif self._topword_front_end_option.analysis_option == "classToClass":
             # check if more than one class exists.
@@ -309,7 +341,10 @@ class TopwordModel(BaseModel):
 
             # Get header and result.
             header = "Compare a Class to Each Other Class"
-            result = TopwordModel._get_readable_size(
-                self._analyze_class_to_class(class_division_map))
+            results = self._analyze_class_to_class(class_division_map)
 
-            return TopwordResult(header=header, result=result)
+            return TopwordResult(header=header, results=results)
+
+    def get_readable_result(self):
+
+        return TopwordModel._get_readable_size(self._get_result())
