@@ -50,6 +50,7 @@ test_option_empty = TopwordTestOptions(
     id_temp_label_map={},
     front_end_option=test_front_end_option)
 test_topword_model_empty = TopwordModel(test_options=test_option_empty)
+
 # Fake input for class division map.
 fake_class_division_map = pd.DataFrame(data=[], index=[], columns=[])
 
@@ -68,12 +69,14 @@ class TestParaToGroup:
                       name='Document "F2" compared to the whole corpus'))
 
     def test_normal_case_header(self):
-        assert test_topword_model.get_result(fake_class_division_map).header \
+        assert test_topword_model.get_result(
+            class_division_map=fake_class_division_map).header \
             == "Compare Each Document to All the Documents As a Whole"
 
     def test_special_case(self):
         try:
-            _ = test_topword_model_empty.get_result(fake_class_division_map)
+            _ = test_topword_model_empty.get_result(
+                class_division_map=fake_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
@@ -95,11 +98,13 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
 test_topword_model_one = TopwordModel(test_options=test_option)
+
 # Fake class division map.
 test_class_division_map = pd.DataFrame(
     data=np.array([(True, True, False, False), (False, False, True, True)]),
     index=np.array(["C1", "C2"]),
     columns=np.array(["F1", "F2", "F3", "F4"]))
+
 
 # Testing starts here
 class TestClassToAll:
@@ -113,7 +118,12 @@ class TestClassToAll:
             test_topword_model_one.get_result(
                 class_division_map=test_class_division_map)[3],
             pd.Series([], index=[],
-                      name='Document "F3" compared to the whole corpus'))
+                      name='Document "F3" compared to Class "C1"'))
+
+    def test_normal_case_header(self):
+        assert test_topword_model_one.get_result(
+            class_division_map=test_class_division_map).header == \
+            "Compare Each Document to Other Class(es)"
 
     def test_special_case(self):
         try:
