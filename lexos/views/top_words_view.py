@@ -26,7 +26,7 @@ def top_words():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
     # 'GET' request occurs when the page is first loaded
@@ -54,7 +54,7 @@ def topword_html():
     # 'POST' request occurs when html form is submitted
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
     # get the class division map and number of existing classes
