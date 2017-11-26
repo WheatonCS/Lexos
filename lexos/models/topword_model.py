@@ -294,8 +294,7 @@ class TopwordModel(BaseModel):
 
         elif self._topword_front_end_option.analysis_option == "classToPara":
             # check if more than one class exists.
-            if class_division_map.shape[0] == 1:
-                raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
+            assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
 
             # Get header and result.
             header = "Compare Each Document to Other Class(es)"
@@ -306,8 +305,7 @@ class TopwordModel(BaseModel):
 
         elif self._topword_front_end_option.analysis_option == "classToClass":
             # check if more than one class exists.
-            if class_division_map.shape[0] == 1:
-                raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
+            assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
 
             # Get header and result.
             header = "Compare a Class to Each Other Class"
