@@ -97,6 +97,7 @@ class ContentAnalysisModel(object):
         self._scores = []
         self._formulas = []
         active_dicts = self.get_active_dicts()
+        result = 0
         for i, file in enumerate(self._corpus):
             new_formula = self._formula
             for j, active_dict in enumerate(active_dicts):
@@ -104,7 +105,10 @@ class ContentAnalysisModel(object):
                     "[" + active_dict.label + "]",
                     str(self._counters[i][j]))
             new_formula = new_formula.replace("()", "")
-            result = eval(new_formula)
+            try:
+                result = eval(new_formula)
+            except (ValueError, SyntaxError):
+                pass
             self._scores.append(round(
                 float(result) / file.total_word_counts, 3))
             self._formulas.append(result)
