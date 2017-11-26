@@ -286,7 +286,7 @@ class TopwordModel(BaseModel):
 
         if self._topword_front_end_option.analysis_option == "allToPara":
             # Get header and result.
-            header = "Compare Each Document to Other Class(es)"
+            header = "Compare Each Document to All the Documents As a Whole"
             result = TopwordModel._get_readable_size(
                 self._analyze_fill_to_all())
 
@@ -298,7 +298,7 @@ class TopwordModel(BaseModel):
                 raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
             # Get header and result.
-            header = "Compare Each Document to All the Documents As a Whole"
+            header = "Compare Each Document to Other Class(es)"
             result = TopwordModel._get_readable_size(
                 self._analyze_class_to_all(class_division_map))
 

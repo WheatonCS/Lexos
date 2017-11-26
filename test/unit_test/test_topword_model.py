@@ -67,7 +67,7 @@ class TestParaToGroup:
 
     def test_normal_case_header(self):
         assert test_topword_model.get_result(fake_class_division_map).header \
-            == "Compare Each Document to Other Class(es)"
+            == "Compare Each Document to All the Documents As a Whole"
 
     def test_special_case(self):
         try:
@@ -77,14 +77,14 @@ class TestParaToGroup:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
 
-
+"""
 # -------------------- Test method analyze class to all ---------------------
 # Create test suits for normal cases.
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
                                        (0, 0, 1, 1, 0, 0, 0, 0),
                                        (0, 0, 0, 0, 1, 1, 0, 0),
                                        (0, 0, 0, 0, 0, 0, 1, 10)]),
-                        index=np.array([0, 1]),
+                        index=np.array([0, 1, 2, 3]),
                         columns=np.array(["A", "B", "C", "D",
                                           "E", "F", "G", "H"]))
 test_id_temp_label_map = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
@@ -99,21 +99,20 @@ test_class_division_map = pd.DataFrame(data=np.array([(1, 1, 0, 0),
                                        index=np.array(["C1", "C2"]),
                                        columns=np.array(["F1", "F2",
                                                          "F3", "F4"]))
-
-# Get test result here.
-test_result = test_topword_model_one._analyze_class_to_all(
-    test_class_division_map)
+F = test_topword_model_one.get_result(test_class_division_map).header
+T = test_topword_model_one.get_result(test_class_division_map).result
+print("STOP HERE!")
 
 
 # Testing starts here
 class TestClassToAll:
     def test_normal_case(self):
         pd.testing.assert_series_equal(
-            test_topword_model_one.get_result()[0],
+            test_topword_model_one.get_result(test_class_division_map)[0],
             pd.Series([-2.1483], index=["D"],
                       name='Document "F1" compared to the whole corpus'))
         pd.testing.assert_series_equal(
-            test_topword_model_one.get_result()[1],
+            test_topword_model_one.get_result(test_class_division_map)[1],
             pd.Series([], index=[],
                       name='Document "F2" compared to the whole corpus'))
 
@@ -125,3 +124,4 @@ class TestClassToAll:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
 # ---------------------------------------------------------------------------
+"""
