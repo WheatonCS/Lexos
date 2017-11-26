@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
+    NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.models.topword_model import TopwordModel, TopwordTestOptions
 from lexos.receivers.topword_receiver import TopwordFrontEndOption
 
@@ -27,8 +28,6 @@ class TestZTest:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
-
-
 # ---------------------------------------------------------------------------
 
 
@@ -139,6 +138,13 @@ class TestClassToAll:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
+
+        try:
+            _ = test_topword_model_empty_one.get_result(
+                class_division_map=fake_class_division_map)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
 
 
@@ -179,3 +185,11 @@ class TestClassToClass:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
+
+        try:
+            _ = test_topword_model_empty_two.get_result(
+                class_division_map=fake_class_division_map)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
+# ---------------------------------------------------------------------------
