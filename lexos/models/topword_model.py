@@ -175,6 +175,9 @@ class TopwordModel(BaseModel):
         :return: a list of series, each series has a readable name and the
                  result, which contains words with corresponding z-scores.
         """
+        # Trap possible empty input error.
+        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+
         # Initialize all the labels and result to return.
         readable_result = []
         file_labels = np.array([self._id_temp_label_map[file_id] for file_id
@@ -228,6 +231,9 @@ class TopwordModel(BaseModel):
         :return: a list of series, each series has a readable name and the
                  result, which contains words with corresponding z-scores.
         """
+        # Trap possible empty input error.
+        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+
         # Initialize all the class labels.
         class_labels = division_map.index.values
         # Match labels and word counts into groups.
