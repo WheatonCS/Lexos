@@ -49,7 +49,7 @@ def top_words():
         numActiveDocs=num_active_docs)
 
 
-@top_words_blueprint.route("/topword", methods=["GET"])
+@top_words_blueprint.route("/topword", methods=["POST"])
 def topword_html():
     # 'POST' request occurs when html form is submitted
     num_active_docs = detect_active_docs()
