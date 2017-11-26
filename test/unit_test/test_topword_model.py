@@ -31,3 +31,8 @@ class TestZTest:
 
 
 # -------------------- Test method analyze all to para ----------------------
+# Create test suits for normal cases
+test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
+                            index=np.array([0, 1]),
+                            columns=np.array(["A", "B", "C", "D"]))
+test_id_temp_label_map = {0: "F1", 1: "F2"}
