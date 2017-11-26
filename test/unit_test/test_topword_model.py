@@ -10,9 +10,9 @@ from lexos.receivers.topword_receiver import TopwordFrontEndOption
 class TestZTest:
     def test_normal_case(self):
         assert round(TopwordModel._z_test(p1=0.1, pt=0.3, n1=10, nt=1000), 2) \
-               == -1.38
+            == -1.38
         assert round(TopwordModel._z_test(p1=0.3, pt=0.1, n1=100, nt=100), 2) \
-               == 3.54
+            == 3.54
         assert TopwordModel._z_test(p1=1, pt=1, n1=100, nt=100) == 0
 
     def test_special_case(self):
@@ -124,7 +124,7 @@ class TestClassToAll:
                       name='Document "F1" compared to Class "C2"'))
         pd.testing.assert_series_equal(
             test_topword_model_one.get_result(
-                class_division_map=test_class_division_map)[3],
+                class_division_map=test_class_division_map).result[2],
             pd.Series([], index=[],
                       name='Document "F3" compared to Class "C1"'))
 
@@ -141,4 +141,3 @@ class TestClassToAll:
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
-
