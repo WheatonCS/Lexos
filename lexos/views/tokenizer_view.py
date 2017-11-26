@@ -37,7 +37,7 @@ def tokenizer():
     file_manager = utility.load_file_manager()
     if request.method == "GET":
         # Get the active labels and sort them
-        labels = file_manager.get_active_labels()
+        labels = file_manager.get_active_labels_with_id()
         header_labels = []
         for fileID in labels:
             header_labels.append(file_manager.files[int(fileID)].label)
@@ -206,7 +206,7 @@ def tokenizer():
                 as_attachment=True)
         else:
             # Get the active labels and sort them
-            labels = file_manager.get_active_labels()
+            labels = file_manager.get_active_labels_with_id()
             header_labels = []
             for fileID in labels:
                 header_labels.append(file_manager.files[int(fileID)].label)
@@ -436,7 +436,7 @@ def get_ten_rows():
     from operator import itemgetter
     file_manager = utility.load_file_manager()
     # Get the active labels and sort them
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     header_labels = []
     for fileID in labels:
         header_labels.append(file_manager.files[int(fileID)].label)
