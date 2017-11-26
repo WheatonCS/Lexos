@@ -31,15 +31,11 @@ class TestZTest:
 
 # ------------------- Test method analyze para to group ---------------------
 # Create test suits for normal cases
-test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
-                                       (0, 0, 1, 1, 0, 0, 0, 0),
-                                       (0, 0, 0, 0, 1, 1, 0, 0),
-                                       (0, 0, 0, 0, 0, 0, 1, 10)]),
+test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
                         index=np.array([0, 1]),
-                        columns=np.array(["A", "B", "C", "D",
-                                          "E", "F", "G", "H"]))
-test_id_temp_label_map = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
-test_front_end_option = TopwordFrontEndOption(analysis_option="classToPara")
+                        columns=np.array(["A", "B", "C", "D"]))
+test_id_temp_label_map = {0: "F1", 1: "F2"}
+test_front_end_option = TopwordFrontEndOption(analysis_option="allToPara")
 test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
@@ -72,28 +68,30 @@ class TestParaToGroup:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
 
-# -------------------- Test method analyze all to para ----------------------
+
+# -------------------- Test method analyze class to all ---------------------
 # Create test suits for normal cases
-test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
+
+test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
+                                       (0, 0, 1, 1, 0, 0, 0, 0),
+                                       (0, 0, 0, 0, 1, 1, 0, 0),
+                                       (0, 0, 0, 0, 0, 0, 1, 10)]),
                         index=np.array([0, 1]),
-                        columns=np.array(["A", "B", "C", "D"]))
-test_id_temp_label_map = {0: "F1", 1: "F2"}
-test_front_end_option = TopwordFrontEndOption(analysis_option="allToPara")
+                        columns=np.array(["A", "B", "C", "D",
+                                          "E", "F", "G", "H"]))
+test_id_temp_label_map = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
+test_front_end_option = TopwordFrontEndOption(analysis_option="classToPara")
 test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
 test_topword_model_one = TopwordModel(test_options=test_option)
-# Create test suit for special case test
-test_option_empty = TopwordTestOptions(
-    doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
-    id_temp_label_map={},
-    front_end_option=test_front_end_option)
-test_topword_model_empty = TopwordModel(test_options=test_option_empty)
+
+test_class_divison_map
 
 
 # Testing starts here
-class TestAllToPara:
-    def test_normal_case(self):
+class estClassToAll:
+    def est_normal_case(self):
         pd.testing.assert_series_equal(
             test_topword_model_one.get_result()[0],
             pd.Series([-2.1483], index=["D"],
@@ -110,3 +108,4 @@ class TestAllToPara:
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
+
