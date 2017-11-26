@@ -4,7 +4,8 @@ from collections import OrderedDict
 import numpy as np
 import pandas as pd
 from typing import List, Optional, NamedTuple
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
+    NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import MatrixModel
@@ -279,6 +280,11 @@ class TopwordModel(BaseModel):
 
             division_map = \
                 FileManagerModel().load_file_manager().get_class_division_map()
+
+            # check if more than one class exists.
+            if division_map.shape[0] == 1:
+                raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
+
             return TopwordModel._get_readable_size(
                 self._analyze_para_to_group(division_map))
 
@@ -286,5 +292,10 @@ class TopwordModel(BaseModel):
 
             division_map = \
                 FileManagerModel().load_file_manager().get_class_division_map()
+
+            # check if more than one class exists.
+            if division_map.shape[0] == 1:
+                raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
+
             return TopwordModel._get_readable_size(
                 self._analyze_group_to_group(division_map))
