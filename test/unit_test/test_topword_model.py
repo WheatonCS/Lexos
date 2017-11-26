@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
-    EMPTY_NP_ARRAY_MESSAGE, EMPTY_LIST_MESSAGE
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE
 from lexos.models.topword_model import TopwordModel, TopwordTestOptions
 from lexos.receivers.topword_receiver import TopwordFrontEndOption
 
