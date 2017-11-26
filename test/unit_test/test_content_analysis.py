@@ -116,7 +116,7 @@ def test_generate_scores():
     test.save_formula()
     test.generate_scores()
     assert test.scores[0] == round(1 / 3, 3)
-test_generate_scores()
+
 
 def test_generate_averages():
     test = ContentAnalysisModel()
