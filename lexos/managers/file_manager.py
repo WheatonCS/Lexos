@@ -15,7 +15,6 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
-from lexos.helpers.error_messages import NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.managers.lexos_file import LexosFile
 
 
@@ -1263,10 +1262,6 @@ class FileManager:
         if '' in division_map.index.values:
             division_map.index.values[
                 np.where(division_map.index.values == '')] = "untitled"
-
-        # check if more than one class exists.
-        if division_map.shape[0] == 1:
-            raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
         return division_map
 
