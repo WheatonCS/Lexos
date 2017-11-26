@@ -51,3 +51,8 @@ test_topword_model_empty = TopwordModel(test_options=test_option_empty)
 
 # Testing starts here
 class TestAllToPara:
+    def test_normal_case(self):
+        pd.testing.assert_series_equal(
+            test_topword_model_one.get_result()[0],
+            pd.Series([-2.1483], index=["D"],
+                      name='Document "F1" compared to the whole corpus'))
