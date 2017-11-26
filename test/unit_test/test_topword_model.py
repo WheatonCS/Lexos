@@ -150,6 +150,13 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  front_end_option=test_front_end_option)
 test_topword_model_two = TopwordModel(test_options=test_option)
 
+# Create test suit for special case.
+test_option_empty = TopwordTestOptions(
+    doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
+    id_temp_label_map={},
+    front_end_option=test_front_end_option)
+test_topword_model_empty_two = TopwordModel(test_options=test_option_empty)
+
 
 class TestClassToClass:
     def test_normal_case_result(self):
@@ -164,3 +171,11 @@ class TestClassToClass:
         assert test_topword_model_two.get_result(
             class_division_map=test_class_division_map).header == \
             'Compare a Class to Each Other Class'
+
+    def test_special_case(self):
+        try:
+            _ = test_topword_model_empty_two.get_result(
+                class_division_map=test_class_division_map)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
