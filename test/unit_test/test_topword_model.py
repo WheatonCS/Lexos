@@ -51,7 +51,9 @@ test_option_empty = TopwordTestOptions(
 test_topword_model_empty = TopwordModel(test_options=test_option_empty)
 
 # Fake input for class division map.
-fake_class_division_map = pd.DataFrame(data=[], index=[], columns=[])
+fake_class_division_map = pd.DataFrame(data=np.array([(True, True, True)]),
+                                       index=["C1"],
+                                       columns=["F1", "F2", "F3"])
 
 
 class TestParaToGroup:
