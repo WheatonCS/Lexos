@@ -1,8 +1,6 @@
 from collections import OrderedDict
-
 from flask import request, session, render_template, send_file, Blueprint
 from natsort import natsorted
-
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.models.filemanager_model import FileManagerModel

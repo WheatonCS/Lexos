@@ -24,6 +24,12 @@ class TopwordTestOptions(NamedTuple):
     front_end_option: TopwordFrontEndOption
 
 
+class TopwordResult(NamedTuple):
+    """A typed tuple to hold topword results."""
+    header: str
+    result: ReadableResult
+
+
 class TopwordModel(BaseModel):
     def __init__(self, test_options: Optional[TopwordTestOptions] = None):
         """This is the class to generate top word analysis.
@@ -62,7 +68,7 @@ class TopwordModel(BaseModel):
             else TopwordReceiver().options_from_front_end()
 
     @staticmethod
-    def z_test(p1, pt, n1, nt):
+    def _z_test(p1, pt, n1, nt):
         """Examines if a particular word is an anomaly.
 
         This z-test method is the major method we use in this program to detect
@@ -119,7 +125,7 @@ class TopwordModel(BaseModel):
         for index, word in enumerate(words):
             p_1 = count_list_i[index] / i_sum
             p_t = count_list_j[index] / j_sum
-            z_score = TopwordModel.z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
+            z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
             # Record the significant result. (See details: _z_test())
             if abs(z_score) >= 1.96:
                 word_score_dict.update({word: z_score})
@@ -274,36 +280,36 @@ class TopwordModel(BaseModel):
         return [result if result.size <= 20 else result[:20]
                 for result in result_list]
 
-    def get_result(self) -> ReadableResult:
+    def get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
         :return: a list of series with maximum length of 20."""
 
         if self._topword_front_end_option.analysis_option == "allToPara":
-
-            return TopwordModel._get_readable_size(
+            # Get header and result.
+            header = "Compare Each Document to Other Class(es)"
+            result = TopwordModel._get_readable_size(
                 self._analyze_fill_to_all())
+
+            return TopwordResult(header=header, result=result)
 
         elif self._topword_front_end_option.analysis_option == "classToPara":
 
-            division_map = \
-                FileManagerModel().load_file_manager().get_class_division_map()
-
             # check if more than one class exists.
-            if division_map.shape[0] == 1:
+            if class_division_map.shape[0] == 1:
                 raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
+            # Get header and result.
+            header = "Compare Each Document to All the Documents As a Whole"
+
             return TopwordModel._get_readable_size(
-                self._analyze_class_to_all(division_map))
+                self._analyze_class_to_all(class_division_map))
 
         elif self._topword_front_end_option.analysis_option == "classToClass":
 
-            division_map = \
-                FileManagerModel().load_file_manager().get_class_division_map()
-
             # check if more than one class exists.
-            if division_map.shape[0] == 1:
+            if class_division_map.shape[0] == 1:
                 raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
             return TopwordModel._get_readable_size(
-                self._analyze_class_to_class(division_map))
+                self._analyze_class_to_class(class_division_map))
