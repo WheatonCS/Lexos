@@ -36,3 +36,9 @@ test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
                             index=np.array([0, 1]),
                             columns=np.array(["A", "B", "C", "D"]))
 test_id_temp_label_map = {0: "F1", 1: "F2"}
+test_front_end_option = TopwordFrontEndOption(analysis_option="allToPara")
+test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
+                                 id_temp_label_map=test_id_temp_label_map,
+                                 front_end_option=test_front_end_option)
+test_topword_model_one = TopwordModel(test_options=test_option)
+# Create test suit for special case test
