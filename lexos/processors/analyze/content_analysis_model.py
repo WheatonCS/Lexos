@@ -32,7 +32,7 @@ class ContentAnalysisModel(object):
         self._toggle_all = True
 
     def add_file(self, file_name: str, label: str, content: str):
-        """Adds a file to the corpus
+        """Adds a file to the corpus.
 
         :param content: file content
         :param file_name: file name
@@ -45,7 +45,7 @@ class ContentAnalysisModel(object):
                                  total_word_counts=total_word_counts))
 
     def add_dictionary(self, file_name: str, label: str, content: str):
-        """Adds a dictionary
+        """Adds a dictionary.
 
         :param file_name: name of the file
         :param label: label of the file
@@ -58,7 +58,7 @@ class ContentAnalysisModel(object):
                                              label=label))
 
     def get_active_dicts(self) -> list:
-        """
+        """Gets a list containing all active dictionaries.
 
         :return: a list containing all active dictionaries
         """
@@ -66,7 +66,7 @@ class ContentAnalysisModel(object):
                 if dictionary.active]
 
     def count(self):
-        """counts all dictionaries for all active files in the corpus"""
+        """Counts all dictionaries for all active files in the corpus."""
         self._counters = []
         dictionaries = self.join_active_dicts()
         for file in deepcopy(self._corpus):
@@ -74,7 +74,7 @@ class ContentAnalysisModel(object):
             self.get_dictionary_counts(dictionaries)
 
     def get_dictionary_counts(self, dictionaries):
-        """gets the counts for each dictionary
+        """Gets the counts for each dictionary.
 
         :param dictionaries: list of Phrase object
         """
@@ -90,19 +90,19 @@ class ContentAnalysisModel(object):
                 self._counters.append(counter)
 
     def generate_scores(self):
-        """calculate the formula and scores=formula/total_word_count for each
-        file in the corpus
+        """Calculate the formula and scores for each file in the corpus.
 
+        scores=formula/total_word_count
         """
         self._scores = []
         self._formulas = []
         active_dicts = self.get_active_dicts()
         result = 0
-        for i in range(len(self._corpus)):
+        for i, file in enumerate(self._corpus):
             new_formula = self._formula
-            for j in range(len(active_dicts)):
+            for j, active_dict in enumerate(active_dicts):
                 new_formula = new_formula.replace(
-                    "[" + active_dicts[j].label + "]",
+                    "[" + active_dict.label + "]",
                     str(self._counters[i][j]))
             new_formula = new_formula.replace("()", "")
             try:
@@ -110,14 +110,11 @@ class ContentAnalysisModel(object):
             except (ValueError, SyntaxError):
                 pass
             self._scores.append(round(
-                float(result) / self._corpus[i].total_word_counts, 3))
+                float(result) / file.total_word_counts, 3))
             self._formulas.append(result)
 
     def generate_averages(self):
-        """Calculates the averages of eachm dictionary count, formula,
-        total_word_count, and score
-
-        """
+        """Calculates the averages of every row in the table."""
         self._averages = []
         scores_sum = 0
         total_word_counts_sum = 0
@@ -157,7 +154,7 @@ class ContentAnalysisModel(object):
         self._averages.append(scores_avg)
 
     def join_active_dicts(self) -> list:
-        """Joins all active dicts into on list of Phrase objects
+        """Joins all active dicts into on list of Phrase objects.
 
         :return: list of phrases contained in the active dictionaries
         """
@@ -169,7 +166,7 @@ class ContentAnalysisModel(object):
         return dictionaries
 
     def to_html(self) -> str:
-        """Generates an html table from dataframe
+        """Generates an html table from dataframe.
 
         :return: dataframe table in html
         """
@@ -179,7 +176,7 @@ class ContentAnalysisModel(object):
         return html
 
     def to_data_frame(self) -> pd.DataFrame:
-        """Generates a dataframe containing all values stored in this class
+        """Generates a dataframe containing all values stored in this class.
 
         :return: a data frame containing all values stored in this class
         members
@@ -208,7 +205,10 @@ class ContentAnalysisModel(object):
         return df
 
     def is_secure(self) -> bool:
-        """Checks if the formula is secure
+        """Checks if the formula is secure.
+
+        The formula is secure if only contains names of uploaded dictionaries
+        and approved math symbols.
 
         :return: True if secure, false if not secure
         """
@@ -225,7 +225,7 @@ class ContentAnalysisModel(object):
         return False
 
     def save_formula(self):
-        """saves formula from front-end in the class member _formula"""
+        """Saves formula from front-end in the class member _formula."""
         if self._test_options is not None:
             formula = self._test_options.formula
         else:
@@ -238,7 +238,7 @@ class ContentAnalysisModel(object):
         return self.check_formula()
 
     def check_formula(self) -> str:
-        """Checks if there are any errors in the formula
+        """Checks if there are any errors in the formula.
 
         :return: error message if there is an empty str or None if there is
                  no errors
@@ -265,7 +265,7 @@ class ContentAnalysisModel(object):
         return ""
 
     def analyze(self) -> [str, str]:
-        """Generates html table containing counts, averages, & formula results
+        """Generates html table containing counts, averages, & formula.
 
         :return: formula_errors: str with error message or None if there is no
                  errors.
@@ -309,7 +309,7 @@ class ContentAnalysisModel(object):
 
     @property
     def content_analysis_option(self) -> ContentAnalysisOption:
-        """Gets front-end options from ContentAnalysisReceiver
+        """Gets front-end options from ContentAnalysisReceiver.
 
         :return: front-end or test options
         """
@@ -333,9 +333,18 @@ class ContentAnalysisModel(object):
 
 
 def count_phrases(dictionary, file):
-    """counts each phrase in the dictionary in the given file
+    """Counts each phrase in the dictionary in the given file.
 
-    :param dictionary: list of Phrase objects
+    If a has with more than 1 word is found in a file, it is deleted
+    from the file to prevent double count.
+    For example:
+    dictionary = ["not very good", "very good"]
+    file = "not very good"
+    count: "not very good" = 1
+           "very good" = 0
+
+    :param dictionary: list of Phrase objects sorted by number of word in
+    descending order
     :param file: a File object
     :return: list of Phrase objects with their counts
     """
@@ -358,7 +367,7 @@ def count_phrases(dictionary, file):
 
 class Document(object):
     def __init__(self):
-        """An object of this class represents a document
+        """An object of this class represents a document.
 
         _active: Boolean that indicates if the document is active
         _label: file label
@@ -393,7 +402,7 @@ class Document(object):
 class Dictionary(Document):
     def __init__(self, content: list, file_name: str, label: str,
                  active: bool = True):
-        """An object of this class represents a dictionary
+        """An object of this class represents a dictionary.
 
         :param content: list of word/phrses separated by commas
         :param file_name: original filename
@@ -417,7 +426,7 @@ class Dictionary(Document):
 class File(Document):
     def __init__(self, content: str, file_name: str, label: str,
                  total_word_counts: int, active: bool = True):
-        """An object of this class represents a file
+        """An object of this class represents a file.
 
         :param content: file content
         :param file_name: original filename
@@ -450,7 +459,7 @@ class File(Document):
 
 class Phrase(object):
     def __init__(self, content: str, dict_label: str, count: int=0):
-        """An object of this class represents a Phrase
+        """An object of this class represents a Phrase.
 
         :param content: the phrase or word
         :param dict_label: label of dictionary it belongs to
