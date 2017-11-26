@@ -56,3 +56,15 @@ class TestAllToPara:
             test_topword_model_one.get_result()[0],
             pd.Series([-2.1483], index=["D"],
                       name='Document "F1" compared to the whole corpus'))
+        pd.testing.assert_series_equal(
+            test_topword_model_one.get_result()[1],
+            pd.Series([], index=[],
+                      name='Document "F2" compared to the whole corpus'))
+
+    def test_special_case(self):
+        try:
+            _ = test_topword_model_empty.get_result()
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
+# ---------------------------------------------------------------------------
