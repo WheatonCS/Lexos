@@ -300,9 +300,10 @@ class TopwordModel(BaseModel):
 
             # Get header and result.
             header = "Compare Each Document to All the Documents As a Whole"
-
-            return TopwordModel._get_readable_size(
+            result = TopwordModel._get_readable_size(
                 self._analyze_class_to_all(class_division_map))
+
+            return TopwordResult(header=header, result=result)
 
         elif self._topword_front_end_option.analysis_option == "classToClass":
 
