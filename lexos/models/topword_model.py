@@ -132,7 +132,7 @@ class TopwordModel(BaseModel):
         result_series = pd.Series(sorted_dict)
         return result_series
 
-    def _analyze_all_to_para(self) -> ReadableResult:
+    def _analyze_fill_to_all(self) -> ReadableResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
@@ -165,7 +165,7 @@ class TopwordModel(BaseModel):
 
         return readable_result_list
 
-    def _analyze_para_to_group(self, division_map: pd.DataFrame) -> \
+    def _analyze_class_to_all(self, division_map: pd.DataFrame) -> \
             ReadableResult:
         """Detect if a given word is an anomaly.
 
@@ -221,7 +221,7 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_group_to_group(self, division_map: pd.DataFrame) -> \
+    def _analyze_class_to_class(self, division_map: pd.DataFrame) -> \
             ReadableResult:
         """Detect if a given word is an anomaly.
 
@@ -282,7 +282,7 @@ class TopwordModel(BaseModel):
         if self._topword_front_end_option.analysis_option == "allToPara":
 
             return TopwordModel._get_readable_size(
-                self._analyze_all_to_para())
+                self._analyze_fill_to_all())
 
         elif self._topword_front_end_option.analysis_option == "classToPara":
 
@@ -294,7 +294,7 @@ class TopwordModel(BaseModel):
                 raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
             return TopwordModel._get_readable_size(
-                self._analyze_para_to_group(division_map))
+                self._analyze_class_to_all(division_map))
 
         elif self._topword_front_end_option.analysis_option == "classToClass":
 
@@ -306,4 +306,4 @@ class TopwordModel(BaseModel):
                 raise ValueError(NOT_ENOUGH_CLASSES_MESSAGE)
 
             return TopwordModel._get_readable_size(
-                self._analyze_group_to_group(division_map))
+                self._analyze_class_to_class(division_map))

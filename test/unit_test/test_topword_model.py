@@ -29,6 +29,49 @@ class TestZTest:
 # ---------------------------------------------------------------------------
 
 
+# ------------------- Test method analyze para to group ---------------------
+# Create test suits for normal cases
+test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
+                                       (0, 0, 1, 1, 0, 0, 0, 0),
+                                       (0, 0, 0, 0, 1, 1, 0, 0),
+                                       (0, 0, 0, 0, 0, 0, 1, 10)]),
+                        index=np.array([0, 1]),
+                        columns=np.array(["A", "B", "C", "D",
+                                          "E", "F", "G", "H"]))
+test_id_temp_label_map = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
+test_front_end_option = TopwordFrontEndOption(analysis_option="classToPara")
+test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
+                                 id_temp_label_map=test_id_temp_label_map,
+                                 front_end_option=test_front_end_option)
+test_topword_model = TopwordModel(test_options=test_option)
+# Create test suit for special case test
+test_option_empty = TopwordTestOptions(
+    doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
+    id_temp_label_map={},
+    front_end_option=test_front_end_option)
+test_topword_model_empty = TopwordModel(test_options=test_option_empty)
+
+
+# Testing starts here
+class TestParaToGroup:
+    def test_normal_case(self):
+        pd.testing.assert_series_equal(
+            test_topword_model.get_result()[0],
+            pd.Series([-2.1483], index=["D"],
+                      name='Document "F1" compared to the whole corpus'))
+        pd.testing.assert_series_equal(
+            test_topword_model.get_result()[1],
+            pd.Series([], index=[],
+                      name='Document "F2" compared to the whole corpus'))
+
+    def test_special_case(self):
+        try:
+            _ = test_topword_model_empty.get_result()
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
+# ---------------------------------------------------------------------------
+
 # -------------------- Test method analyze all to para ----------------------
 # Create test suits for normal cases
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
