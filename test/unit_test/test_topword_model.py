@@ -16,3 +16,8 @@ class TestZTest:
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
+        try:
+            _ = TopwordModel._z_test(p1=0.1, pt=0.3, n1=0, nt=100)
+            raise AssertionError("Error message did not raise")
+        except AssertionError as error:
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
