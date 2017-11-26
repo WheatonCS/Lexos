@@ -33,7 +33,7 @@ class TestZTest:
 
 
 # ------------------- Test method analyze para to group ---------------------
-# Create test suits for normal cases.
+# Create test suit for normal case.
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
                         index=np.array([0, 1]),
                         columns=np.array(["A", "B", "C", "D"]))
@@ -44,7 +44,7 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  front_end_option=test_front_end_option)
 test_topword_model = TopwordModel(test_options=test_option)
 
-# Create test suit for special case test.
+# Create test suit for special case.
 test_option_empty = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
     id_temp_label_map={},
@@ -84,7 +84,7 @@ class TestParaToGroup:
 
 
 # -------------------- Test method analyze class to all ---------------------
-# Create test suits for normal cases.
+# Create test suit for normal case.
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
                                        (0, 0, 1, 1, 0, 0, 0, 0),
                                        (0, 0, 0, 0, 1, 1, 0, 0),
@@ -98,6 +98,14 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
 test_topword_model_one = TopwordModel(test_options=test_option)
+
+# Create test suit for special case.
+# Create test suit for special case test.
+test_option_empty = TopwordTestOptions(
+    doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
+    id_temp_label_map={},
+    front_end_option=test_front_end_option)
+test_topword_model_empty_one = TopwordModel(test_options=test_option_empty)
 
 # Fake class division map.
 test_class_division_map = pd.DataFrame(
@@ -127,10 +135,10 @@ class TestClassToAll:
 
     def test_special_case(self):
         try:
-            _ = test_topword_model_empty.get_result()
+            _ = test_topword_model_empty_one.get_result(
+                class_division_map=test_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
-
 # ---------------------------------------------------------------------------
 
