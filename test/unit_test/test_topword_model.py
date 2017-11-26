@@ -42,3 +42,12 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  front_end_option=test_front_end_option)
 test_topword_model_one = TopwordModel(test_options=test_option)
 # Create test suit for special case test
+test_option_empty = TopwordTestOptions(
+    doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
+    id_temp_label_map={},
+    front_end_option=test_front_end_option)
+test_topword_model_empty = TopwordModel(test_options=test_option_empty)
+
+
+# Testing starts here
+class TestAllToPara:
