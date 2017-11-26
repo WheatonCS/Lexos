@@ -1132,6 +1132,8 @@ def get_top_word_csv(test_results, csv_header):
     csv_content = csv_header + '\n'  # add a header
 
     for result in test_results:
+        csv_content += result.to_csv(header=True)
+        """
         table_legend = result[0] + delimiter
         table_top_word = 'TopWord, '
         table_z_score = 'Z-score, '
@@ -1140,7 +1142,7 @@ def get_top_word_csv(test_results, csv_header):
             table_z_score += str(data[1]) + delimiter
         csv_content += table_legend + table_top_word + \
             '\n' + delimiter + table_z_score + '\n'
-
+        """
     with open(save_path, 'w', encoding='utf-8') as f:
         f.write(csv_content)
 
