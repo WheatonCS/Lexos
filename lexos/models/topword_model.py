@@ -101,7 +101,7 @@ class TopwordModel(BaseModel):
     @staticmethod
     def _z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
                           words: np.ndarray) -> pd.Series:
-        """Processes z-test on all the words of two input word lists.
+        """Run z-test on all the words of two input word lists.
 
         :param count_list_i: 2D matrix contains word counts.
         :param count_list_j: 2D matrix contains word counts.
@@ -148,14 +148,14 @@ class TopwordModel(BaseModel):
         # Get word count in the whole corpus of each word.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
-        # generate analysis result
+        # Generate analysis result.
         result_list = [TopwordModel._z_test_word_list(
             count_list_i=row,
             count_list_j=word_count_sum,
             words=self._doc_term_matrix.columns.values)
             for row in self._doc_term_matrix.values]
 
-        # Assign name to each result series.
+        # Attach readable name to each result series.
         readable_result_list = [
             result_list[index].rename('Document "' + label +
                                       '" compared to the whole corpus')
@@ -198,14 +198,14 @@ class TopwordModel(BaseModel):
         for comp_index, base_index in comp_map:
             comp_para = group_matrices[comp_index]
 
-            # Get analysis result.
+            # Generate analysis result.
             temp_result_list = [TopwordModel._z_test_word_list(
                 count_list_i=paras,
                 count_list_j=group_sums[base_index],
                 words=self._doc_term_matrix.columns.values)
                 for para_index, paras in enumerate(comp_para)]
 
-            # Attach readable header to analysis result.
+            # Attach readable name to each result series.
             temp_readable_result = [temp_result_list[index].rename(
                 'Document "' + group_file_labels[comp_index][index] +
                 '" compared to Class "' + class_labels[base_index] + '"')
@@ -242,14 +242,14 @@ class TopwordModel(BaseModel):
         comp_map = [(i_index, j_index)
                     for (i_index, j_index) in comp_map if i_index < j_index]
 
-        # generate analysis result
+        # Generate analysis result.
         result_list = [TopwordModel._z_test_word_list(
             count_list_i=group_sums[comp_index],
             count_list_j=group_sums[base_index],
             words=self._doc_term_matrix.columns.values)
             for comp_index, base_index in comp_map]
 
-        # generate header list
+        # Attach readable name to each result series.
         readable_result_list = [result_list[comp_index].rename(
             'Class "' + class_labels[comp_index] + '" compared to Class "' +
             class_labels[base_index] + '"')
