@@ -97,7 +97,6 @@ class ContentAnalysisModel(object):
         self._scores = []
         self._formulas = []
         active_dicts = self.get_active_dicts()
-        result = 0
         for i, file in enumerate(self._corpus):
             new_formula = self._formula
             for j, active_dict in enumerate(active_dicts):
