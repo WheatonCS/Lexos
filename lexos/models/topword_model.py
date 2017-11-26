@@ -62,7 +62,7 @@ class TopwordModel(BaseModel):
             else TopwordReceiver().options_from_front_end()
 
     @staticmethod
-    def _z_test(p1, pt, n1, nt):
+    def z_test(p1, pt, n1, nt):
         """Examines if a particular word is an anomaly.
 
         This z-test method is the major method we use in this program to detect
@@ -119,7 +119,7 @@ class TopwordModel(BaseModel):
         for index, word in enumerate(words):
             p_1 = count_list_i[index] / i_sum
             p_t = count_list_j[index] / j_sum
-            z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
+            z_score = TopwordModel.z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
             # Record the significant result. (See details: _z_test())
             if abs(z_score) >= 1.96:
                 word_score_dict.update({word: z_score})
