@@ -315,8 +315,8 @@ class TopwordModel(BaseModel):
     def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
-        :return: a namedtuple that holds the topword result, which includes a
-                 header and a list of panda sereis. """
+        :return: a namedtuple that holds the topword result, which contains a
+                 header and a list of pandas series."""
 
         if self._topword_front_end_option.analysis_option == "allToPara":
             # Get header and result.
@@ -345,6 +345,13 @@ class TopwordModel(BaseModel):
 
             return TopwordResult(header=header, results=results)
 
-    def get_readable_result(self):
+    def get_readable_result(self, class_division_map: pd.DataFrame):
+        """Gets the readable result to display on the web page.
 
-        return TopwordModel._get_readable_size(self._get_result())
+        :return: a namedtuple that holds the topword result, which contains a
+                 header and a list of pandas series, however it will check the
+                 length of each pandas series and only return the first 20 rows
+                 if the pandas series has length that is longer than 20."""
+
+        return TopwordModel._get_readable_size(
+            self._get_result(class_division_map))
