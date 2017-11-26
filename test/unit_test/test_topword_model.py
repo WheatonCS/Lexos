@@ -6,26 +6,29 @@ from lexos.receivers.topword_receiver import TopwordFrontEndOption
 
 
 # ---------------------------- Test for z-test ------------------------------
+# noinspection PyProtectedMember
 class TestZTest:
     def test_normal_case(self):
-        assert round(TopwordModel.z_test(p1=0.1, pt=0.3, n1=10, nt=1000), 2) \
-            == -1.38
-        assert round(TopwordModel.z_test(p1=0.3, pt=0.1, n1=100, nt=100), 2) \
-            == 3.54
-        assert TopwordModel.z_test(p1=1, pt=1, n1=100, nt=100) == 0
+        assert round(TopwordModel._z_test(p1=0.1, pt=0.3, n1=10, nt=1000), 2) \
+               == -1.38
+        assert round(TopwordModel._z_test(p1=0.3, pt=0.1, n1=100, nt=100), 2) \
+               == 3.54
+        assert TopwordModel._z_test(p1=1, pt=1, n1=100, nt=100) == 0
 
     def test_special_case(self):
         try:
-            _ = TopwordModel.z_test(p1=0.1, pt=0.3, n1=100, nt=0)
+            _ = TopwordModel._z_test(p1=0.1, pt=0.3, n1=100, nt=0)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
         try:
-            _ = TopwordModel.z_test(p1=0.1, pt=0.3, n1=0, nt=100)
+            _ = TopwordModel._z_test(p1=0.1, pt=0.3, n1=0, nt=100)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -40,6 +43,7 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
 test_topword_model = TopwordModel(test_options=test_option)
+
 # Create test suit for special case test.
 test_option_empty = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
@@ -48,7 +52,6 @@ test_option_empty = TopwordTestOptions(
 test_topword_model_empty = TopwordModel(test_options=test_option_empty)
 
 
-# Testing starts here.
 class TestParaToGroup:
     def test_normal_case(self):
         pd.testing.assert_series_equal(
@@ -85,12 +88,20 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  front_end_option=test_front_end_option)
 test_topword_model_one = TopwordModel(test_options=test_option)
 # Fake class division map.
-test_class_divison_map
+test_class_division_map = pd.DataFrame(data=np.array([(1, 1, 0, 0),
+                                                      (0, 0, 1, 1)]),
+                                       index=np.array(["C1", "C2"]),
+                                       columns=np.array(["F1", "F2",
+                                                         "F3", "F4"]))
+
+# Get test result here.
+test_result = test_topword_model_one._analyze_class_to_all(
+    test_class_division_map)
 
 
 # Testing starts here
-class estClassToAll:
-    def est_normal_case(self):
+class TestClassToAll:
+    def test_normal_case(self):
         pd.testing.assert_series_equal(
             test_topword_model_one.get_result()[0],
             pd.Series([-2.1483], index=["D"],
@@ -106,5 +117,5 @@ class estClassToAll:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
-# ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
