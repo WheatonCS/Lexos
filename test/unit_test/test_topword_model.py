@@ -100,7 +100,6 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
 test_topword_model_one = TopwordModel(test_options=test_option)
 
 # Create test suit for special case.
-# Create test suit for special case test.
 test_option_empty = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
     id_temp_label_map={},
@@ -141,3 +140,27 @@ class TestClassToAll:
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
+
+
+# ------------------- Test method analyze class to class --------------------
+# Create test suite for normal case.
+test_front_end_option = TopwordFrontEndOption(analysis_option="classToClass")
+test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
+                                 id_temp_label_map=test_id_temp_label_map,
+                                 front_end_option=test_front_end_option)
+test_topword_model_two = TopwordModel(test_options=test_option)
+
+
+class TestClassToClass:
+    def test_normal_case_result(self):
+        pd.testing.assert_series_equal(
+            test_topword_model_two.get_result(
+                class_division_map=test_class_division_map).result[0],
+            pd.Series([-7.70470, 5.09830, 5.09830, 5.09830, 5.09830],
+                      index=["H", "A", "B", "C", "D"],
+                      name='Class "C1" compared to Class "C2"'))
+
+    def test_normal_case_header(self):
+        assert test_topword_model_two.get_result(
+            class_division_map=test_class_division_map).header == \
+            'Compare a Class to Each Other Class'
