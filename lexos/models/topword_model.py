@@ -312,6 +312,6 @@ class TopwordModel(BaseModel):
             # Get header and result.
             header = "Compare a Class to Each Other Class"
             result = TopwordModel._get_readable_size(
-                self._analyze_class_to_all(class_division_map))
+                self._analyze_class_to_class(class_division_map))
 
             return TopwordResult(header=header, result=result)
