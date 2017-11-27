@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import NamedTuple, Optional
 
 import pandas as pd
 import plotly.figure_factory as ff
@@ -12,21 +12,28 @@ from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
 
 
+class DendroTestOptions(NamedTuple):
+    doc_term_matrix: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+    front_end_option: DendroOption
+
+
 class DendrogramModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[DendroOption] = None,
-                 test_id_temp_label_map: Optional[IdTempLabelMap] = None):
+    def __init__(self, test_options: Optional[DendroTestOptions] = None):
         """This is the class to generate dendrogram.
 
-        :param test_dtm: (fake parameter)
-                    the doc term matrix used of testing
-        :param test_option: (fake parameter)
-                    the dendrogram used for testing
+        :param test_options:
+            the input used in testing to override the dynamically loaded option
         """
         super().__init__()
-        self._test_dtm = test_dtm
-        self._test_option = test_option
-        self._test_id_temp_label_map = test_id_temp_label_map
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_front_end_option = test_options.front_end_option
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_front_end_option = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
@@ -39,12 +46,13 @@ class DendrogramModel(BaseModel):
         """:return: a map takes an id to temp labels"""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_temp_label_id_map()
+            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _dendro_option(self) -> DendroOption:
 
-        return self._test_option if self._test_option is not None \
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else DendroReceiver().options_from_front_end()
 
     def _get_dendrogram_fig(self) -> Figure:

@@ -1,0 +1,172 @@
+from typing import Optional, List, NamedTuple
+
+import numpy as np
+import pandas as pd
+
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
+from lexos.models.base_model import BaseModel
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
+
+
+class StatsTestOptions(NamedTuple):
+    """A typed tuple to hold test options."""
+    doc_term_matrix: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+
+
+class CorpusInfo(NamedTuple):
+    """A typed tuple to represent statistics of the whole corpus."""
+    q1: float  # First quartile of all file sizes.
+    q3: float  # Third quartile of all file sizes.
+    iqr: float  # Interquartile range.
+    median: float  # Median (second quartile) of all file sizes.
+    average: float  # Average size of all files.
+    std_deviation: float  # Standard deviation of all file sizes.
+    anomaly_iqr: dict  # File anomaly found using interquartile range analysis
+    anomaly_std_err: dict  # File anomaly found using standard error analysis
+
+
+class FileInfo(NamedTuple):
+    """A typed tuple to represent statistics of each file in corpus."""
+    hapax: int  # Number of words that appear only once in a file.
+    file_name: str  # Name of the file.
+    total_word_count: int  # Total count of words in a file.
+    average_word_count: float  # Average count of words in a file.
+    distinct_word_count: int  # Number of distinct words in a file.
+
+
+class StatsModel(BaseModel):
+    def __init__(self, test_options: Optional[StatsTestOptions] = None):
+        """This is the class to generate statistics of the input file.
+
+        :param test_options: the input used in testing to override the
+                             dynamically loaded option
+        """
+        super().__init__()
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_id_temp_label_map = None
+
+    @property
+    def _doc_term_matrix(self) -> pd.DataFrame:
+        """:return: the document term matrix"""
+        return self._test_dtm if self._test_dtm is not None \
+            else MatrixModel().get_matrix()
+
+    @property
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels"""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_id_temp_label_map()
+
+    def get_corpus_info(self) -> CorpusInfo:
+        """Converts word lists completely to statistic.
+
+        :return: a typed tuple that holds all statistic of the entire corpus.
+        """
+
+        # Check if empty corpus is given.
+        assert np.sum(self._doc_term_matrix.values) > 0, EMPTY_LIST_MESSAGE
+
+        # Initialize two dictionaries to hold anomaly analysis result.
+        file_anomaly_iqr = {}
+        file_anomaly_std_err = {}
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+        # Find size of each file.
+        file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
+        # Find average size of all files.
+        average_file_size = round(np.average(file_sizes), 3)
+
+        # Standard error analysis: assume file sizes are normally distributed;
+        # we detect anomaly by finding files with sizes that are more than two
+        # standard deviation away from the mean. In another word, we find files
+        # with sizes that are not in the major 95% range.
+        # Find the standard deviation.
+        std_dev_file_size = np.std(file_sizes).item()
+        # Find file anomaly.
+        for count, label in enumerate(labels):
+            if file_sizes[count] > average_file_size + 2 * std_dev_file_size:
+                file_anomaly_std_err.update({label: 'large'})
+            elif file_sizes[count] < average_file_size - 2 * std_dev_file_size:
+                file_anomaly_std_err.update({label: 'small'})
+
+        # Interquartile range analysis: We detect anomaly by finding files with
+        # sizes that are either 1.5 interquartile ranges above third quartile
+        # or 1.5 interquartile ranges below first quartile.
+        # Find quartiles.
+        median = np.median(file_sizes).item()
+        q1 = np.percentile(file_sizes, 25, interpolation="midpoint")
+        q3 = np.percentile(file_sizes, 75, interpolation="midpoint")
+        iqr = q3 - q1  # Find interquartile range.
+        # Find file anomaly.
+        for count, label in enumerate(labels):
+            if file_sizes[count] > q3 + 1.5 * iqr:
+                file_anomaly_iqr.update({label: 'large'})
+            elif file_sizes[count] < q1 - 1.5 * iqr:
+                file_anomaly_iqr.update({label: 'small'})
+
+        return CorpusInfo(q1=q1,
+                          q3=q3,
+                          iqr=iqr,
+                          median=median,
+                          average=average_file_size,
+                          anomaly_iqr=file_anomaly_iqr,
+                          std_deviation=round(std_dev_file_size, 4),
+                          anomaly_std_err=file_anomaly_std_err)
+
+    @staticmethod
+    def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
+        """Gives statistics of a particular file in a given file list.
+
+        :param count_list: a list contains words count of a particular file.
+        :param file_name: the file name of that file.
+        :return a typed tuple contains file name and statistics of that file.
+        """
+        # Check if input is empty.
+        assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
+
+        # Initialize: remove all zeros from count_list.
+        nonzero_count_list = count_list[count_list != 0]
+
+        # Count number of distinct words.
+        distinct_word_count = np.size(nonzero_count_list)
+        # Count number of total words.
+        total_word_count = int(sum(nonzero_count_list).item())
+        # Find average word count
+        average_word_count = round(total_word_count / distinct_word_count, 3)
+        # Count number of words that only appear once in the given input.
+        hapax = ((count_list == 1).sum()).item()
+
+        return FileInfo(hapax=hapax,
+                        file_name=file_name,
+                        total_word_count=total_word_count,
+                        average_word_count=average_word_count,
+                        distinct_word_count=distinct_word_count)
+
+    def get_all_file_info(self) -> List[FileInfo]:
+        """Find statistics of all files and put each result into a list.
+
+        :return: a list of typed tuple, where each typed tuple contains file
+                 name and statistics of that file.
+        """
+
+        file_info_list = \
+            [self._get_file_info(
+                count_list=self._doc_term_matrix.loc[file_id].values,
+                file_name=temp_label)
+             for file_id, temp_label in self._id_temp_label_map.items()]
+        return file_info_list
+
+    @staticmethod
+    def get_token_type() -> str:
+        """:return: token type that was used for analyzing."""
+
+        return \
+            MatrixReceiver().options_from_front_end().token_option.token_type

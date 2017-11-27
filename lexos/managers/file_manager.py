@@ -521,18 +521,14 @@ class FileManager:
 
         self.files[file_id].save_contents(file_contents=updated_content)
 
-    def get_active_labels(self) -> Dict[int, str]:
+    def get_active_labels_with_id(self) -> Dict[int, str]:
         """Gets labels of all active files in dictionary{file_id: file_label}.
 
         :return: a dictionary of the currently active files' labels.
         """
 
-        labels = {}
-        for l_file in list(self.files.values()):
-            if l_file.active:
-                labels[l_file.id] = l_file.label
-
-        return labels
+        return {l_file.id: l_file.label
+                for l_file in self.files.values() if l_file.active}
 
     @staticmethod
     def grey_word_deprec(result_matrix: List[list], count_matrix: List[list])\

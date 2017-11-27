@@ -12,6 +12,10 @@ install:
   - pip install -r ./requirements.txt
   - pip install -r ./dev_requirements.txt
 
+branches:
+  only:
+    - master
+
 test_script:
   # test for python static analysis
   # including code style, doc style, and basic code analysis
