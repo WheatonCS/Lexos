@@ -62,7 +62,8 @@ def topword_html():
         get_class_division_map()
     num_class = class_division_map.shape[0]
     if 'get-topword' in request.form:  # download topword
-        path = TopwordModel().get_top_word_csv(class_division_map)
+        path = TopwordModel().get_topword_csv_path(
+            class_division_map=class_division_map)
         session_manager.cache_analysis_option()
         session_manager.cache_top_word_options()
         return send_file(
@@ -72,7 +73,8 @@ def topword_html():
     else:
         session_manager.cache_analysis_option()
         session_manager.cache_top_word_options()
-        topword_result = TopwordModel().get_readable_result(class_division_map)
+        topword_result = TopwordModel().get_readable_result(
+            class_division_map=class_division_map)
         return render_template(
             'topword.html',
             result=topword_result.results,
