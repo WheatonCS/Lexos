@@ -5,7 +5,7 @@ import zipfile
 from cmath import sqrt, log, exp
 from os import makedirs
 from os.path import join as pathjoin
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Set
 
 import numpy as np
 import pandas as pd
@@ -183,6 +183,14 @@ class FileManager:
         """
         return {file.id: file.load_contents()
                 for file in self.get_active_files()}
+
+    def get_gutenberg_file_ids(self) -> Set[int]:
+        """Gets the ids of all gutenberg files.
+
+        :return: A set of id numbers belonging to active gutenberg files.
+        """
+        return set(
+            [file.id for file in self.get_active_files() if file.is_gutenberg])
 
     def toggle_file(self, file_id: int):
         """Toggles the active status of the given file.
