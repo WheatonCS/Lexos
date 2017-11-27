@@ -146,6 +146,40 @@ class ScrubberModel(BaseModel):
         # match with the result of the function
         return all_of_replace_from.sub(_replacement_map_func, text)
 
+
+
+    def _handle_tags(self, text: str) -> str:
+        """Handles tags that are found in the text.
+
+        Useless tags (header tags) are deleted and depending on the
+            specifications chosen by the user, words between meaningful tags
+            (corr, foreign) are either kept or deleted.
+        :param text: A unicode string representing the whole text that is being
+            manipulated.
+        :return: The text after deletion of the tags, as a unicode string.
+        """
+
+        # Remove extra whitespace
+        text = re.sub('[\t ]+', " ", text, re.UNICODE)
+        text = re.sub(r"(<\?.*?>)", "", text)  # Remove xml declarations
+        text = re.sub(r"(<!--.*?-->)", "", text)  # Remove comments
+
+        # This matches the DOCTYPE and all internal entity declarations
+        doctype = re.compile(r"<!DOCTYPE.*?>", re.DOTALL)
+        text = re.sub(doctype, "", text)  # Remove DOCTYPE declarations
+
+        for tag in self._options.basic_options.tag_options:
+            action = self._options.basic_options.tag_options[tag].action
+            attribute = self._options.basic_options.tag_options[tag].attribute
+
+        # DO STUFF WITH TAGS HERE
+
+        # One last catch-all- removes extra whitespace from all the removed
+        # tags
+        text = re.sub('[\t ]+', " ", text, re.UNICODE)
+
+        return text
+
     def _scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
 
@@ -221,7 +255,9 @@ class ScrubberModel(BaseModel):
             edge1="()(", edge2=")()")
 
         # -- 3. Tags ----------------------------------------------------------
-        # need to figure out tags
+        if self._options.basic_options.tags:  # If Remove Tags was checked:
+            text = self._handle_tags(text)
+
 
         return text
 
