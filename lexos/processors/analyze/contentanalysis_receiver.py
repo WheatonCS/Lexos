@@ -2,8 +2,9 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class ContentAnalysisOption:
-    def __init__(self, formula, dict_label, toggle_all, dict_labels,
-                 active_dicts, toggle_all_value):
+    def __init__(self, formula: str, dict_label: str, toggle_all: bool,
+                 dict_labels: [str], active_dicts: [bool],
+                 toggle_all_value: bool):
         self.formula = formula
         self.dict_label = dict_label
         self.toggle_all = toggle_all
