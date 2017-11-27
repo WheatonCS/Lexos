@@ -274,36 +274,6 @@ class TopwordModel(BaseModel):
 
         return readable_result_list
 
-    @staticmethod
-    def _get_top_word_csv(topword_result: TopwordResult) -> str:
-        """Writes the generated top word results to an output CSV file.
-
-        :param topword_result:
-        :returns: path of the generated CSV file.
-        """
-        # make the path
-        result_folder_path = os.path.join(
-            session_manager.session_folder(), RESULTS_FOLDER)
-
-        try:
-            # attempt to make the save path directory
-            os.makedirs(result_folder_path)
-        except OSError:
-            pass
-
-        save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
-
-        # Add header to the file
-        csv_content = topword_result.header + '\n'
-
-        for result in topword_result.result:
-            csv_content += result.transpose().to_csv()
-
-        with open(save_path, 'w', encoding='utf-8') as f:
-            f.write(csv_content)
-
-        return save_path
-
     def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
@@ -337,7 +307,8 @@ class TopwordModel(BaseModel):
 
             return TopwordResult(header=header, results=results)
 
-    def get_readable_result(self, class_division_map: pd.DataFrame):
+    def get_readable_result(self, class_division_map: pd.DataFrame) -> \
+            TopwordResult:
         """Gets the readable result to display on the web page.
 
         :return: a namedtuple that holds the topword result, which contains a
@@ -351,3 +322,32 @@ class TopwordModel(BaseModel):
 
         return TopwordResult(header=topword_result.header,
                              results=readable_result)
+
+    def get_top_word_csv(self) -> str:
+        """Writes the generated top word results to an output CSV file.
+
+        :param topword_result:
+        :returns: path of the generated CSV file.
+        """
+        # make the path
+        result_folder_path = os.path.join(
+            session_manager.session_folder(), RESULTS_FOLDER)
+
+        try:
+            # attempt to make the save path directory
+            os.makedirs(result_folder_path)
+        except OSError:
+            pass
+
+        save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
+
+        # Add header to the file
+        csv_content = self._get_result().header + '\n'
+
+        for result in topword_result.result:
+            csv_content += result.transpose().to_csv()
+
+        with open(save_path, 'w', encoding='utf-8') as f:
+            f.write(csv_content)
+
+        return save_path
