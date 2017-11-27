@@ -110,7 +110,7 @@ class ContentAnalysisModel(object):
             except (ValueError, SyntaxError):
                 pass
             self._scores.append(round(
-                float(result) / file.total_word_count, 3))
+                float(result) / file.total_word_count, ndigits=3))
             self._formulas.append(result)
 
     def generate_averages(self):
@@ -129,16 +129,16 @@ class ContentAnalysisModel(object):
             formulas_sum += formula
         if len(self.scores) != 0:
             scores_avg = round(
-                (float(scores_sum) / len(self.scores)), 3)
+                (float(scores_sum) / len(self.scores)), ndigits=3)
         else:
             scores_avg = 0
         if len(self._corpus) != 0:
             total_word_counts_avg = round((float(total_word_counts_sum) /
-                                           (len(self._corpus))), 1)
+                                           (len(self._corpus))), ndigits=1)
         else:
             total_word_counts_avg = 0
         if len(self._formulas) != 0:
-            sums_avg = round((float(formulas_sum) / len(self._formulas)), 1)
+            sums_avg = round((float(formulas_sum) / len(self._formulas)), ndigits=1)
         else:
             sums_avg = 0
         self._averages.append("Averages")
@@ -146,7 +146,7 @@ class ContentAnalysisModel(object):
             cat_count = sum([counter[x] for counter in self._counters])
             if len(self._counters) != 0:
                 self._averages.append(round(
-                    float(cat_count) / len(self._counters), 1))
+                    float(cat_count) / len(self._counters), ndigits=1))
             else:
                 self._averages.append(0)
         self._averages.append(sums_avg)
