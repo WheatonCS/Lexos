@@ -324,7 +324,7 @@ class TopwordModel(BaseModel):
         return TopwordResult(header=topword_result.header,
                              results=readable_result)
 
-    def get_top_word_csv(self, class_division_map: pd.DataFrame) -> str:
+    def get_topword_csv(self, class_division_map: pd.DataFrame) -> str:
         """Writes the generated top word results to an output CSV file.
 
         :returns: path of the generated CSV file.
@@ -346,8 +346,9 @@ class TopwordModel(BaseModel):
         with open(save_path, 'w', encoding='utf-8') as f:
             # Write header to the file
             f.write(topword_result.header + '\n')
-            # Write results
+            # Write results to the file
+            # Since we want indexes and data in rows, we get the transpose.
             for result in topword_result.results:
-                f.write(result.to_csv())
+                f.write(pd.DataFrame(result).transpose().to_csv(header=True))
 
         return save_path
