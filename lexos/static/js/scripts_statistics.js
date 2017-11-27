@@ -1,26 +1,12 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(document).ready(function () {
-  // Hide unnecessary divs for DTM
-  var newLabelsLocation = $('#normalize-options').parent()
-  var newNormalizeLocation = $('#temp-label-div').parent()
-  var tempNormalize = $('#normalize-options').html()
-  var tempLabels = $('#temp-label-div').html()
-  $('#normalize-options').remove()
-  $('#temp-label-div').remove()
-  newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels)
-  newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize)
-  newLabelsLocation.append(newLabels)
-  newNormalizeLocation.append(newNormalize)
-  $('#normalize-options').hide()
 
-  // $("#normalize-options").css({"visibility":"hidden"});
+  // hide the normalize options
+  $("#normalize-options").css({"visibility":"hidden"});
 
-  // Reset the maximum number of documents when a checkbox is clicked
-  /*	$("#cullnumber").change(function() {
-      if ($("#cullnumber").val() > $(".minifilepreview:checked").length) {
-        alert('blah');
-      }
-    }); */
+  // set the normalize option to raw count
+  $("#normalizeTypeRaw").attr("checked", true)
+
 
   // Reset the maximum number of documents when a checkbox is clicked
   $('.minifilepreview').click(function () {
