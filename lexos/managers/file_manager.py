@@ -185,6 +185,10 @@ class FileManager:
                 for file in self.get_active_files()}
 
     def get_gutenberg_file_ids(self) -> Set[int]:
+        """Gets the ids of all gutenberg files.
+
+        :return: A set of id numbers belonging to active gutenberg files.
+        """
         return set(
             [file.id for file in self.get_active_files() if file.is_gutenberg])
 
