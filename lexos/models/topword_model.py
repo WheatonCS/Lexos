@@ -279,8 +279,7 @@ class TopwordModel(BaseModel):
 
         :return: a list of series with maximum length of 20."""
 
-        return [result if result.size <= 20 else result[:20]
-                for result in topword_result.results]
+        return []
 
     @staticmethod
     def _get_top_word_csv(topword_result: TopwordResult) -> str:
@@ -353,5 +352,9 @@ class TopwordModel(BaseModel):
                  length of each pandas series and only return the first 20 rows
                  if the pandas series has length that is longer than 20."""
 
-        return TopwordModel._get_readable_size(
-            self._get_result(class_division_map))
+        topword_result = self._get_result(class_division_map)
+        readable_result = [result if result.size <= 20 else result[:20]
+                           for result in topword_result.results]
+
+        return TopwordResult(header=topword_result.header,
+                             results=readable_result)
