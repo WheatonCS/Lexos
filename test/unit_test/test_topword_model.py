@@ -59,24 +59,24 @@ fake_class_division_map = pd.DataFrame(data=np.array([(True, True, True)]),
 class TestParaToGroup:
     def test_normal_case_result(self):
         pd.testing.assert_series_equal(
-            test_topword_model.get_result(
-                class_division_map=fake_class_division_map).result[0],
+            test_topword_model.get_readable_result(
+                class_division_map=fake_class_division_map).results[0],
             pd.Series([-2.1483], index=["D"],
                       name='Document "F1" compared to the whole corpus'))
         pd.testing.assert_series_equal(
-            test_topword_model.get_result(
-                class_division_map=fake_class_division_map).result[1],
+            test_topword_model.get_readable_result(
+                class_division_map=fake_class_division_map).results[1],
             pd.Series([], index=[],
                       name='Document "F2" compared to the whole corpus'))
 
     def test_normal_case_header(self):
-        assert test_topword_model.get_result(
+        assert test_topword_model.get_readable_result(
             class_division_map=fake_class_division_map).header \
             == "Compare Each Document to All the Documents As a Whole"
 
     def test_special_case(self):
         try:
-            _ = test_topword_model_empty.get_result(
+            _ = test_topword_model_empty.get_readable_result(
                 class_division_map=fake_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
@@ -118,31 +118,31 @@ test_class_division_map = pd.DataFrame(
 class TestClassToAll:
     def test_normal_case_result(self):
         pd.testing.assert_series_equal(
-            test_topword_model_one.get_result(
-                class_division_map=test_class_division_map).result[0],
+            test_topword_model_one.get_readable_result(
+                class_division_map=test_class_division_map).results[0],
             pd.Series([7.2108, 7.2108, -6.3857], index=["A", "B", "H"],
                       name='Document "F1" compared to Class "C2"'))
         pd.testing.assert_series_equal(
-            test_topword_model_one.get_result(
-                class_division_map=test_class_division_map).result[2],
+            test_topword_model_one.get_readable_result(
+                class_division_map=test_class_division_map).results[2],
             pd.Series([], index=[],
                       name='Document "F3" compared to Class "C1"'))
 
     def test_normal_case_header(self):
-        assert test_topword_model_one.get_result(
+        assert test_topword_model_one.get_readable_result(
             class_division_map=test_class_division_map).header == \
             "Compare Each Document to Other Class(es)"
 
     def test_special_case(self):
         try:
-            _ = test_topword_model_empty_one.get_result(
+            _ = test_topword_model_empty_one.get_readable_result(
                 class_division_map=test_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
         try:
-            _ = test_topword_model_empty_one.get_result(
+            _ = test_topword_model_empty_one.get_readable_result(
                 class_division_map=fake_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
@@ -169,27 +169,27 @@ test_topword_model_empty_two = TopwordModel(test_options=test_option_empty)
 class TestClassToClass:
     def test_normal_case_result(self):
         pd.testing.assert_series_equal(
-            test_topword_model_two.get_result(
-                class_division_map=test_class_division_map).result[0],
+            test_topword_model_two.get_readable_result(
+                class_division_map=test_class_division_map).results[0],
             pd.Series([-7.70470, 5.09830, 5.09830, 5.09830, 5.09830],
                       index=["H", "A", "B", "C", "D"],
                       name='Class "C1" compared to Class "C2"'))
 
     def test_normal_case_header(self):
-        assert test_topword_model_two.get_result(
+        assert test_topword_model_two.get_readable_result(
             class_division_map=test_class_division_map).header == \
             'Compare a Class to Each Other Class'
 
     def test_special_case(self):
         try:
-            _ = test_topword_model_empty_two.get_result(
+            _ = test_topword_model_empty_two.get_readable_result(
                 class_division_map=test_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
         try:
-            _ = test_topword_model_empty_two.get_result(
+            _ = test_topword_model_empty_two.get_readable_result(
                 class_division_map=fake_class_division_map)
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
