@@ -17,8 +17,6 @@ import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
-from lexos.processors.analyze.topword import analyze_all_to_para, \
-    group_division, analyze_para_to_group, analyze_group_to_group
 
 
 def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
