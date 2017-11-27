@@ -22,7 +22,7 @@ class ScrubberModel(BaseModel):
         """
 
         super().__init__()
-        if test_options:
+        if test_options is not None:
             self._test_front_end_options = test_options.front_end_options
             self._test_file_id_content_map = test_options.file_id_content_map
         else:
@@ -37,8 +37,9 @@ class ScrubberModel(BaseModel):
         """
 
         return self._test_file_id_content_map \
-            or FileManagerModel().load_file_manager()\
-                   .get_content_of_active_with_id()
+            if self._test_file_id_content_map is not None \
+            else FileManagerModel().load_file_manager() \
+            .get_content_of_active_with_id()
 
     @property
     def _options(self) -> ScrubbingOptions:
@@ -48,8 +49,9 @@ class ScrubberModel(BaseModel):
             options.
         """
 
-        return self._test_front_end_options or \
-            ScrubbingReceiver().options_from_front_end()
+        return self._test_front_end_options \
+            if self._test_front_end_options is not None \
+            else ScrubbingReceiver().options_from_front_end()
 
     def _scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
