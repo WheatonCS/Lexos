@@ -1,5 +1,5 @@
 import re
-from typing import Dict, NamedTuple, Optional, Match
+from typing import Dict, NamedTuple, Optional, Match, Set
 
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
@@ -219,6 +219,9 @@ class ScrubberModel(BaseModel):
             text=text,
             replacement_dict=self._options.additional_options.special_char,
             edge1="()(", edge2=")()")
+
+        # -- 3. Tags ----------------------------------------------------------
+        # need to figure out tags
 
         return text
 
