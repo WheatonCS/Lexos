@@ -142,8 +142,9 @@ class ContentAnalysisModel(object):
         else:
             sums_avg = 0
         self._averages.append("Averages")
-        for x in range(len(active_dicts)):
-            cat_count = sum([counter[x] for counter in self._counters])
+        for dict_index, _ in enumerate(active_dicts):
+            cat_count = sum([counter[dict_index]
+                             for counter in self._counters])
             if len(self._counters) != 0:
                 self._averages.append(round(
                     float(cat_count) / len(self._counters), ndigits=1))
@@ -189,18 +190,18 @@ class ContentAnalysisModel(object):
                           index=range(len(indices)))
         # adds row to df with: file label, count for each dict,
         # formula result, total word count, score
-        for i, (file, formula, score, counter) in enumerate(
+        for row_index, (file, formula, score, counter) in enumerate(
             zip(self._corpus, self._formulas,
                 self._scores, self._counters)):
-            df.xs(i)[0] = file.label
-            for j, (count) in enumerate(counter):
-                df.xs(i)[j + 1] = count
-            df.xs(i)[j + 2] = formula
-            df.xs(i)[j + 3] = file.total_word_count
-            df.xs(i)[j + 4] = score
+            df.xs(row_index)[0] = file.label
+            for col_index, (count) in enumerate(counter):
+                df.xs(row_index)[col_index + 1] = count
+            df.xs(row_index)[col_index + 2] = formula
+            df.xs(row_index)[col_index + 3] = file.total_word_count
+            df.xs(row_index)[col_index + 4] = score
         # add a row to df with the average of each column
-        for j, (average) in enumerate(self._averages):
-            df.xs(i + 1)[j] = average
+        for average_index, (average) in enumerate(self._averages):
+            df.xs(row_index + 1)[average_index] = average
         df.columns = columns
         return df
 
