@@ -110,7 +110,7 @@ class ContentAnalysisModel(object):
             except (ValueError, SyntaxError):
                 pass
             self._scores.append(round(
-                float(result) / file.total_word_counts, 3))
+                float(result) / file.total_word_count, 3))
             self._formulas.append(result)
 
     def generate_averages(self):
@@ -125,7 +125,7 @@ class ContentAnalysisModel(object):
                                                            self._corpus)):
             scores_sum += score
             total_word_counts_sum += \
-                file.total_word_counts
+                file.total_word_count
             formulas_sum += formula
         if len(self.scores) != 0:
             scores_avg = round(
@@ -196,7 +196,7 @@ class ContentAnalysisModel(object):
             for j, (count) in enumerate(counter):
                 df.xs(i)[j + 1] = count
             df.xs(i)[j + 2] = formula
-            df.xs(i)[j + 3] = file.total_word_counts
+            df.xs(i)[j + 3] = file.total_word_count
             df.xs(i)[j + 4] = score
         # add a row to df with the average of each column
         for j, (average) in enumerate(self._averages):
@@ -285,26 +285,32 @@ class ContentAnalysisModel(object):
 
     @property
     def dictionaries(self) -> list:
+        """:return: dictionaries"""
         return self._dictionaries
 
     @dictionaries.setter
     def dictionaries(self, dictionaries: list):
+        """Set dictionaries."""
         self._dictionaries = dictionaries
 
     @property
     def corpus(self) -> list:
+        """:return: corpus"""
         return self._corpus
 
     @property
     def counters(self) -> list:
+        """:return: counters"""
         return self._counters
 
     @property
     def scores(self) -> list:
+        """Sets scores."""
         return self._scores
 
     @property
     def averages(self) -> list:
+        """:return: averages"""
         return self._averages
 
     @property
@@ -320,15 +326,13 @@ class ContentAnalysisModel(object):
         return ContentAnalysisReceiver().options_from_front_end()
 
     @property
-    def toggle_all(self):
-        return self._toggle_all
-
-    @property
     def test_option(self):
+        """:return: test options"""
         return self._test_options
 
     @test_option.setter
     def test_option(self, options):
+        """Sets test options."""
         self._test_options = options
 
 
@@ -379,23 +383,28 @@ class Document(object):
         self._name = ""
 
     @property
-    def active(self):
+    def active(self) -> bool:
+        """:return: document active"""
         return self._active
 
     @active.setter
-    def active(self, active):
+    def active(self, active: bool):
+        """Sets document active"""
         self._active = active
 
     @property
-    def label(self):
+    def label(self) -> str:
+        """:return: document label"""
         return self._label
 
     @label.setter
-    def label(self, label):
+    def label(self, label: str):
+        """Sets document name."""
         self._label = label
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """:return: document name"""
         return self._name
 
 
@@ -416,10 +425,12 @@ class Dictionary(Document):
 
     @property
     def content(self) -> list:
+        """:return: dictionary content"""
         return self._content
 
     @content.setter
     def content(self, content: list):
+        """Sets the dictionary content."""
         self._content = content
 
 
@@ -442,18 +453,22 @@ class File(Document):
 
     @property
     def content(self) -> str:
+        """:return: file content"""
         return self._content
 
     @content.setter
     def content(self, content: str):
+        """Sets file content."""
         self._content = content
 
     @property
-    def total_word_counts(self) -> int:
+    def total_word_count(self) -> int:
+        """:return: total_word_count"""
         return self._total_word_counts
 
-    @total_word_counts.setter
-    def total_word_counts(self, total_word_counts: int):
+    @total_word_count.setter
+    def total_word_count(self, total_word_counts: int):
+        """Sets the file's word count."""
         self._total_word_counts = total_word_counts
 
 

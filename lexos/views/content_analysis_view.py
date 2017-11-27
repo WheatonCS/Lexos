@@ -205,7 +205,7 @@ def delete_dictionary():
 
 
 def error(msg: str):
-    """
+    """Generates a jason string with the given error message.
 
     :param msg: error message to send to the front-end
     :return: error message in a json string
