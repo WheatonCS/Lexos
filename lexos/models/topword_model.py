@@ -309,6 +309,9 @@ class TopwordModel(BaseModel):
 
             return TopwordResult(header=header, results=results)
 
+        else:
+            raise ValueError("Invalid topword analysis option.")
+
     def get_readable_result(self, class_division_map: pd.DataFrame) -> \
             TopwordResult:
         """Gets the readable result to display on the web page.
