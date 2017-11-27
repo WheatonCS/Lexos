@@ -275,14 +275,6 @@ class TopwordModel(BaseModel):
         return readable_result_list
 
     @staticmethod
-    def _get_readable_size(topword_result: TopwordResult) -> ReadableResult:
-        """For each file, only show first 20 results on web as a preview.
-
-        :return: a list of series with maximum length of 20."""
-
-        return []
-
-    @staticmethod
     def _get_top_word_csv(topword_result: TopwordResult) -> str:
         """Writes the generated top word results to an output CSV file.
 
