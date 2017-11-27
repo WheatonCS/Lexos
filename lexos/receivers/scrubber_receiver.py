@@ -2,7 +2,7 @@ import os
 import re
 from typing import List, Dict, NamedTuple
 
-from flask import request
+from flask import request, session
 
 from lexos.helpers import constants, general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
@@ -10,6 +10,14 @@ from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
 from lexos.helpers.exceptions import LexosException
 from lexos.managers import session_manager
 from lexos.receivers.base_receiver import BaseReceiver
+
+
+class SingleTagOptions(NamedTuple):
+    # How to handle this particular tag
+    action: str
+
+    # The attribute to replace the tag with if the action is "replace-element"
+    attribute: str
 
 
 class BasicOptions(NamedTuple):
@@ -35,6 +43,9 @@ class BasicOptions(NamedTuple):
 
     # Indicates whether Scrub Tags has been checked.
     tags: bool
+
+    # A dictionary mapping every tag from the text to their handling options
+    tag_options: Dict[str, SingleTagOptions]
 
     # Indicates whether whitespace should be removed.
     whitespace: bool
@@ -320,6 +331,25 @@ class ScrubbingReceiver(BaseReceiver):
         return conversion_dict
 
     # Option getters---
+    @staticmethod
+    def _get_tag_options_from_front_end() -> Dict[str, SingleTagOptions]:
+        """Gets all the tag options from the front end.
+
+        :return: A dictionary of tags and corresponding SingleTagOptions
+        """
+
+        if 'xmlhandlingoptions' in session:  # Should always be true
+            # If user saved changes in Scrub Tags button (XML modal), then
+            # visit each tag
+            tag_options = {tag: SingleTagOptions(
+                session['xmlhandlingoptions'][tag]["action"],
+                session['xmlhandlingoptions'][tag]["attribute"])
+                for tag in session['xmlhandlingoptions']}
+        else:
+            tag_options = {}
+
+        return tag_options
+
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
 
@@ -333,6 +363,7 @@ class ScrubbingReceiver(BaseReceiver):
         amper = self._front_end_data['ampersandbox'] == "true"
         digits = self._front_end_data['digitsbox'] == "true"
         tags = self._front_end_data['tagbox'] == "true"
+        tag_options = self._get_tag_options_from_front_end()
         whitespace = self._front_end_data['whitespacebox'] == "true"
         spaces = self._front_end_data['spacesbox'] == "true"
         tabs = self._front_end_data['tabsbox'] == "true"
@@ -341,8 +372,9 @@ class ScrubbingReceiver(BaseReceiver):
 
         return BasicOptions(
             lower=lower, punct=punct, apos=apos, hyphen=hyphen, amper=amper,
-            digits=digits, tags=tags, whitespace=whitespace, spaces=spaces,
-            tabs=tabs, newlines=newlines, previewing=previewing)
+            digits=digits, tags=tags, tag_options=tag_options,
+            whitespace=whitespace, spaces=spaces, tabs=tabs, newlines=newlines,
+            previewing=previewing)
 
     def _get_file_options_from_front_end(self) -> FileOptions:
         """Gets all the file options from the front end.
