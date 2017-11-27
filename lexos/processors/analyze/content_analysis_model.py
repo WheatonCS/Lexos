@@ -138,7 +138,8 @@ class ContentAnalysisModel(object):
         else:
             total_word_counts_avg = 0
         if len(self._formulas) != 0:
-            sums_avg = round((float(formulas_sum) / len(self._formulas)), ndigits=1)
+            sums_avg = round((float(formulas_sum) / len(self._formulas)),
+                             ndigits=1)
         else:
             sums_avg = 0
         self._averages.append("Averages")
