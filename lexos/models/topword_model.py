@@ -316,38 +316,38 @@ class TopwordModel(BaseModel):
                  length of each pandas series and only return the first 20 rows
                  if the pandas series has length that is longer than 20."""
 
-        topword_result = self._get_result(class_division_map)
+        topword_result = \
+            self._get_result(class_division_map=class_division_map)
         readable_result = [result if result.size <= 20 else result[:20]
                            for result in topword_result.results]
 
         return TopwordResult(header=topword_result.header,
                              results=readable_result)
 
-    def get_top_word_csv(self) -> str:
+    def get_top_word_csv(self, class_division_map: pd.DataFrame) -> str:
         """Writes the generated top word results to an output CSV file.
 
-        :param topword_result:
         :returns: path of the generated CSV file.
         """
         # make the path
         result_folder_path = os.path.join(
             session_manager.session_folder(), RESULTS_FOLDER)
 
+        # attempt to make the save path directory
         try:
-            # attempt to make the save path directory
             os.makedirs(result_folder_path)
         except OSError:
             pass
-
         save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
 
-        # Add header to the file
-        csv_content = self._get_result().header + '\n'
-
-        for result in topword_result.result:
-            csv_content += result.transpose().to_csv()
+        topword_result = \
+            self._get_result(class_division_map=class_division_map)
 
         with open(save_path, 'w', encoding='utf-8') as f:
-            f.write(csv_content)
+            # Write header to the file
+            f.write(topword_result.header + '\n')
+            # Write results
+            for result in topword_result.results:
+                f.write(result.to_csv())
 
         return save_path
