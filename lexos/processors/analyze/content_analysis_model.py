@@ -347,7 +347,6 @@ def count_phrases(dictionary, file):
     file = "not very good"
     count: "not very good" = 1
            "very good" = 0
-
     :param dictionary: list of Phrase objects sorted by number of word in
     descending order
     :param file: a File object
