@@ -1,6 +1,7 @@
 import itertools
 from collections import OrderedDict
 import os
+import math
 import numpy as np
 import pandas as pd
 from typing import List, Optional, NamedTuple
@@ -99,7 +100,7 @@ class TopwordModel(BaseModel):
         standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt))) ** 0.5
 
         # Trap possible division by 0 error.
-        if np.isclose([standard_error], [0]):
+        if math.isclose(standard_error, 0):
             return 0
         # If not division by 0, return the calculated z-score.
         else:
