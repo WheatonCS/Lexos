@@ -80,7 +80,6 @@ def test_count_words():
     assert test.counters[0][0] == 3
 
 
-
 def test_generate_scores():
     test = ContentAnalysisModel(TestOptions(formula=""))
     test.add_file(file_name="file1", label='file1', content='test')
