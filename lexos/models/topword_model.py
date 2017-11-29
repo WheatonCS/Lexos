@@ -118,27 +118,39 @@ class TopwordModel(BaseModel):
                  and corresponding data is the z_score. And the panda series is
                  sorted by z_score in descending order.
         """
-        # Initialize, create empty dictionary to hold analysis result.
-        word_score_dict = {}
+
         # Find sums of two input matrix for future calculation.
         i_sum = np.sum(count_list_i).item()
         j_sum = np.sum(count_list_j).item()
 
+        def _z_test_for_one_word(word_index: int) -> float:
+            """
+
+            :param word_index:
+            :return:
+            """
+            p_1 = count_list_i[word_index] / i_sum
+            p_t = count_list_j[word_index] / j_sum
+            return TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
+
         # Perform the z-test to detect word anomalies.
-        for index, word in enumerate(words):
-            p_1 = count_list_i[index] / i_sum
-            p_t = count_list_j[index] / j_sum
-            z_score = TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
-            # Record the significant result. (See details: _z_test())
-            if abs(z_score) >= 1.96:
-                word_score_dict.update({word: z_score})
+        full_word_score_dict = {word: _z_test_for_one_word(word_index=index)
+                                for index, word in enumerate(words)}
+
+        # filter out the insignificant result
+        sig_word_score_dict = {
+            word: z_score for word, z_score in full_word_score_dict.items()
+            if abs(z_score) >= 1.96
+        }
 
         # Sort word score dict by z-score in descending order.
-        sorted_dict = OrderedDict(sorted(word_score_dict.items(),
+        sorted_dict = OrderedDict(sorted(sig_word_score_dict.items(),
                                          key=lambda item: abs(item[1]),
                                          reverse=True))
+
         # Convert the sorted result to a panda series.
         result_series = pd.Series(sorted_dict)
+
         return result_series
 
     def _analyze_fill_to_all(self) -> ReadableResult:
