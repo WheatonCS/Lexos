@@ -108,21 +108,21 @@ class TopwordModel(BaseModel):
             return round((p1 - p2) / standard_error, 4)
 
     @staticmethod
-    def _z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
-                          words: np.ndarray) -> pd.Series:
+    def _z_test_word_list(data_set_one: pd.DataFrame,
+                          data_set_two: pd.DataFrame) -> pd.Series:
         """Run z-test on all the words of two input word lists.
 
-        :param count_list_i: 2D matrix contains word counts.
-        :param count_list_j: 2D matrix contains word counts.
+        :param data_set_one: 2D matrix contains word counts.
+        :param data_set_two: 2D matrix contains word counts.
         :param words: words that show up at least one time in the whole corpus.
         :return: a panda series contains analysis result, where index are words
                  and corresponding data is the z_score. And the panda series is
                  sorted by z_score in descending order.
         """
 
-        # Find sums of two input matrix for future calculation.
-        i_sum = np.sum(count_list_i).item()
-        j_sum = np.sum(count_list_j).item()
+        # Find sample population of the two input data set
+        n1 = data_set_one.values.sum()
+        n2 = data_set_two.values.sum()
 
         def _z_test_for_one_word(word_index: int) -> float:
             """
@@ -130,13 +130,14 @@ class TopwordModel(BaseModel):
             :param word_index:
             :return:
             """
-            p_1 = count_list_i[word_index] / i_sum
-            p_t = count_list_j[word_index] / j_sum
-            return TopwordModel._z_test(p1=p_1, p2=p_t, n1=i_sum, n2=j_sum)
+            p1 = data_set_one[word_index] / n1
+            p2 = data_set_two[word_index] / n2
+            return TopwordModel._z_test(p1=p1, p2=p2, n1=n1, n2=n2)
 
         # Perform the z-test to detect word anomalies.
-        full_word_score_dict = {word: _z_test_for_one_word(word_index=index)
-                                for index, word in enumerate(words)}
+        full_word_score_dict = \
+            {word: _z_test_for_one_word(word_index=index)
+             for index, word in enumerate(data_set_one.columns.values)}
 
         # filter out the insignificant result
         sig_word_score_dict = {
@@ -169,14 +170,18 @@ class TopwordModel(BaseModel):
         # Initialize, get all the file labels.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
+
         # Get word count in the whole corpus of each word.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # Generate analysis result.
         result_list = [TopwordModel._z_test_word_list(
-            count_list_i=row,
-            count_list_j=word_count_sum,
-            words=self._doc_term_matrix.columns.values)
+            data_set_one=pd.DataFrame(
+                data=row,
+                columns=self._doc_term_matrix.columns.values),
+            data_set_two=pd.DataFrame(
+                data=word_count_sum,
+                columns=self._doc_term_matrix.columns.values))
             for row in self._doc_term_matrix.values]
 
         # Attach readable name to each result series.
@@ -226,10 +231,11 @@ class TopwordModel(BaseModel):
             comp_para = group_matrices[comp_index]
 
             # Generate analysis result.
-            temp_result_list = [TopwordModel._z_test_word_list(
-                count_list_i=paras,
-                count_list_j=group_sums[base_index],
-                words=self._doc_term_matrix.columns.values)
+            temp_result_list = [
+                TopwordModel._z_test_word_list(data_set_one=paras,
+                                               data_set_two=group_sums[
+                                                   base_index],
+                                               words=self._doc_term_matrix.columns.values)
                 for para_index, paras in enumerate(comp_para)]
 
             # Attach readable name to each result series.
@@ -273,10 +279,10 @@ class TopwordModel(BaseModel):
                     for (i_index, j_index) in comp_map if i_index < j_index]
 
         # Generate analysis result.
-        result_list = [TopwordModel._z_test_word_list(
-            count_list_i=group_sums[comp_index],
-            count_list_j=group_sums[base_index],
-            words=self._doc_term_matrix.columns.values)
+        result_list = [
+            TopwordModel._z_test_word_list(data_set_one=group_sums[comp_index],
+                                           data_set_two=group_sums[base_index],
+                                           words=self._doc_term_matrix.columns.values)
             for comp_index, base_index in comp_map]
 
         # Attach readable name to each result series.

@@ -83,7 +83,7 @@ class TestParaToGroup:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
 
-
+"""
 # -------------------- Test method analyze class to all ---------------------
 # Create test suit for normal case.
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
@@ -195,3 +195,4 @@ class TestClassToClass:
         except AssertionError as error:
             assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
+"""
