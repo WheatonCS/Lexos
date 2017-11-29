@@ -61,6 +61,8 @@ def test_count_words():
     test.add_dictionary(file_name="dict1.txt", label="dict1",
                         content="test, a, a test")
     test.count()
+
+    print(test.counters[0][0])
     assert test.counters[0][0] == 1
 
     test = ContentAnalysisModel()
@@ -76,6 +78,7 @@ def test_count_words():
                         content="test, a, a test")
     test.count()
     assert test.counters[0][0] == 3
+test_count_words()
 
 
 def test_generate_scores():

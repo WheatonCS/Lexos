@@ -356,8 +356,16 @@ def count_phrases(dictionary, file):
     :return: list of Phrase objects with their counts
     """
     for phrase in dictionary:
-        count = len(re.findall(_WORD_BOUNDARY_REGEX_STR + phrase.content +
-                               _WORD_BOUNDARY_REGEX_STR, file.content))
+        count = 0
+        if file.content.startswith(phrase.content + " "):
+            count += 1
+        if file.content.endswith(" " + phrase.content + "\n") or \
+            file.content.endswith(" " + phrase.content) or \
+            file.content.endswith(
+                phrase.content):
+            count += 1
+        count += len(re.findall(_WORD_BOUNDARY_REGEX_STR + phrase.content +
+                                _WORD_BOUNDARY_REGEX_STR, file.content))
         if ' ' in phrase.content:
             file.content = file.content.replace(phrase.content, " ")
         phrase.count = count
