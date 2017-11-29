@@ -118,9 +118,8 @@ class RollingWindowsModel(BaseModel):
     def _find_word_in_window(window: str, word: str) -> int:
         word_regex = re.compile(
             # enclose the word in word boundaries
-            WORD_BOUNDARY_REGEX_STR + re.escape(word)
-            + WORD_BOUNDARY_REGEX_STR,
-
+            WORD_BOUNDARY_REGEX_STR + re.escape(word) +
+            WORD_BOUNDARY_REGEX_STR,
             flags=rwa_regex_flags
         )
 
