@@ -3,6 +3,8 @@ from typing import NamedTuple, Optional, List
 
 import numpy as np
 import pandas as pd
+import plotly.graph_objs as go
+from plotly.offline import plot
 
 from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX, \
     WORD_BOUNDARY_REGEX_STR
@@ -250,3 +252,56 @@ class RollingWindowsModel(BaseModel):
         )
 
         return get_token_ratio_array(windows)
+
+    def _get_token_ratio_graph(self) -> str:
+        token_ratio_array = self._find_token_ratio()
+
+        # get the tokens for display
+        numerator_token = self._options.ratio_token_options.numerator_token
+        denominator_token = self._options.ratio_token_options.denominator_token
+
+        # construct the graph object
+        graph_obj = go.Scattergl(
+            # the x coordinates are the index of the window, starting from 0
+            x=np.arange(len(token_ratio_array)),
+            # the y coordinates is the token ratios
+            y=token_ratio_array,
+            mode="lines",
+            name=f"{numerator_token} / {denominator_token}"
+        )
+
+        return plot(
+            graph_obj, include_plotlyjs=False, output_type='div'
+        )
+
+    def _get_token_average_graph(self) -> str:
+
+        token_count_data_frame = self._find_token_average()
+
+        graph_objs = [
+            go.Scattergl(
+                x=np.arange(len(row)),
+                y=row,
+                mode="lines",
+                name=token
+            ) for token, row in token_count_data_frame.iterrows()
+        ]
+
+        return plot(
+            graph_objs, include_plotlyjs=False, output_type='div'
+        )
+
+    def get_rwa_graph(self) -> str:
+
+        count_average = self._options.average_token_options is not None
+        count_ratio = self._options.ratio_token_options is not None
+
+        # precondition
+        # ^ is the exclusive or operator,
+        # means we can either use average count or ratio count
+        assert count_average ^ count_ratio
+
+        if count_average:
+            return self._get_token_average_graph()
+        if count_ratio:
+            return self._get_token_ratio_graph()
