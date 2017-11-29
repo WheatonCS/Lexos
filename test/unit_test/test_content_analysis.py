@@ -78,7 +78,7 @@ def test_count_words():
                         content="test, a, a test")
     test.count()
     assert test.counters[0][0] == 3
-test_count_words()
+
 
 
 def test_generate_scores():
