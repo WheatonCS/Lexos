@@ -152,7 +152,7 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled window type: " + window_unit)
 
-    def _find_token_average_in_window(self, window: str) -> pd.Series:
+    def _find_tokens_average_in_window(self, window: str) -> pd.Series:
 
         assert self._options.average_token_options is not None
 
@@ -216,3 +216,38 @@ class RollingWindowsModel(BaseModel):
             raise ValueError("unhandled token type: " + token_type)
 
         return numerator / denominator
+
+    def _find_token_average(self) -> pd.DataFrame:
+        windows = self._get_window()
+
+        # the create the ufunc to get token average from an array of windows
+        # documentation about ufunc:
+        # https://docs.scipy.org/doc/numpy/reference/ufuncs.html
+        get_tokens_average_array = np.frompyfunc(
+            lambda window: self._find_tokens_average_in_window(window),
+            nin=1, nout=1  # number of input and output of the python function
+        )
+
+        # this is a numpy array of series.
+        # each series map the token to its count in the window
+        array_of_token_count_series: np.ndarray = \
+            get_tokens_average_array(windows)
+
+        # stack all the series into a large data frame
+        final_df: pd.DataFrame = pd.concat(array_of_token_count_series,
+                                           ignore_index=True, axis="columns")
+
+        return final_df
+
+    def _find_token_ratio(self) -> np.ndarray:
+        windows = self._get_window()
+
+        # the create the ufunc to get token ratio from an array of windows
+        # documentation about ufunc:
+        # https://docs.scipy.org/doc/numpy/reference/ufuncs.html
+        get_token_ratio_array = np.frompyfunc(
+            lambda window: self._find_token_ratio_in_window(window),
+            nin=1, nout=1  # number of input and output of the python function
+        )
+
+        return get_token_ratio_array(windows)
