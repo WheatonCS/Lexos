@@ -1,9 +1,11 @@
 from copy import deepcopy
+import re
 from math import sqrt, sin, cos, tan, log  # noqa F401
 from typing import Optional
 
 import pandas as pd
 
+from lexos.helpers.definitions import _WORD_BOUNDARY_REGEX_STR
 from lexos.processors.analyze.contentanalysis_receiver import \
     ContentAnalysisReceiver, ContentAnalysisOption
 
@@ -163,7 +165,7 @@ class ContentAnalysisModel(object):
         active_dicts = self.get_active_dicts()
         dictionaries = [Phrase(content=phrase, dict_label=dictionary.label)
                         for dictionary in active_dicts
-                        for phrase in dictionary.content]
+                        for phrase in dictionary.content if phrase != '']
         dictionaries.sort(key=lambda x: len(x.content.split()), reverse=True)
         return dictionaries
 
@@ -354,16 +356,8 @@ def count_phrases(dictionary, file):
     :return: list of Phrase objects with their counts
     """
     for phrase in dictionary:
-        count = 0
-        if file.content.startswith(phrase.content + " "):
-            count += 1
-        if file.content.endswith(" " + phrase.content + "\n") or \
-            file.content.endswith(" " + phrase.content) or \
-            file.content.endswith(
-                phrase.content):
-            count += 1
-        count += len(
-            file.content.split(" " + phrase.content + " ")) - 1
+        count = len(re.findall(_WORD_BOUNDARY_REGEX_STR + phrase.content +
+                               _WORD_BOUNDARY_REGEX_STR, file.content))
         if ' ' in phrase.content:
             file.content = file.content.replace(phrase.content, " ")
         phrase.count = count
