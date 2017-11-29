@@ -4,7 +4,7 @@ import os
 import math
 import numpy as np
 import pandas as pd
-from typing import List, Optional, NamedTuple
+from typing import List, Optional, NamedTuple, Union
 
 from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
@@ -35,7 +35,7 @@ class TopwordResult(NamedTuple):
 
 class TopwordModel(BaseModel):
     def __init__(self, test_options: Optional[TopwordTestOptions] = None):
-        """This is the class to generate top word analysis.
+        """This is the class to run topword analysis.
 
         :param test_options: the input used in testing to override the
                              dynamically loaded option.
@@ -71,8 +71,8 @@ class TopwordModel(BaseModel):
             else TopwordReceiver().options_from_front_end()
 
     @staticmethod
-    def _z_test(p1, pt, n1, nt):
-        """Examines if a particular word is an anomaly.
+    def _z_test(p1: float, p2: float, n1: int, n2: int) -> float:
+        """Examine if a particular word is an anomaly.
 
         This z-test method is the major method we use in this program to detect
         if a word is an anomaly, while doing so, we assume the possibility of
@@ -83,28 +83,29 @@ class TopwordModel(BaseModel):
         :param p1: the probability of a word's occurrence in a particular
                    segment: Number of word occurrence in the segment /
                    total word count in the segment
-        :param pt: the probability of a word's occurrence in all the segments
+        :param p2: the probability of a word's occurrence in all the segments
                    Number of word occurrence in all the segment /
                    total word count in all the segment
         :param n1: the number of total words in the segment we care about.
-        :param nt: the number of total words in all the segment selected.
+        :param n2: the number of total words in all the segment selected.
         :return: the z-score shown that the particular word in a particular
                  segment is an anomaly or not.
         """
         # Trap possible empty inputs.
-        assert n1 > 0 and nt > 0, SEG_NON_POSITIVE_MESSAGE
+        assert n1 > 0 and n2 > 0, SEG_NON_POSITIVE_MESSAGE
 
-        # Calculate the pooled proportion.
-        p = (p1 * n1 + pt * nt) / (n1 + nt)
-        # Calculate the standard error.
-        standard_error = (p * (1 - p) * ((1 / n1) + (1 / nt))) ** 0.5
+        # Find the estimator of overall sample proportion.
+        p_hat = (p1 * n1 + p2 * n2) / (n1 + n2)
+        # Find the standard error.
+        standard_error = np.sqrt(p_hat * (1 - p_hat) * ((1 / n1) + (1 / n2)))
 
         # Trap possible division by 0 error.
+        # TODO: Do we may need more complicate check here?
         if math.isclose(standard_error, 0):
-            return 0
+            return 0.0
         # If not division by 0, return the calculated z-score.
         else:
-            return round((p1 - pt) / standard_error, 4)
+            return round((p1 - p2) / standard_error, 4)
 
     @staticmethod
     def _z_test_word_list(count_list_i: np.ndarray, count_list_j: np.ndarray,
@@ -131,7 +132,7 @@ class TopwordModel(BaseModel):
             """
             p_1 = count_list_i[word_index] / i_sum
             p_t = count_list_j[word_index] / j_sum
-            return TopwordModel._z_test(p1=p_1, pt=p_t, n1=i_sum, nt=j_sum)
+            return TopwordModel._z_test(p1=p_1, p2=p_t, n1=i_sum, n2=j_sum)
 
         # Perform the z-test to detect word anomalies.
         full_word_score_dict = {word: _z_test_for_one_word(word_index=index)
@@ -153,8 +154,8 @@ class TopwordModel(BaseModel):
 
         return result_series
 
-    def _analyze_fill_to_all(self) -> ReadableResult:
-        """Detect if a given word is an anomaly.
+    def _analyze_file_to_all(self) -> ReadableResult:
+        """Detect word anomalies in one file comparing to the whole corpus.
 
         While doing so, this method compares the occurrence of a given word
         in a particular segment to the occurrence of the same word in the whole
@@ -295,7 +296,7 @@ class TopwordModel(BaseModel):
         if self._topword_front_end_option.analysis_option == "allToPara":
             # Get header and result.
             header = "Compare Each Document to All the Documents As a Whole"
-            results = self._analyze_fill_to_all()
+            results = self._analyze_file_to_all()
 
             return TopwordResult(header=header, results=results)
 
