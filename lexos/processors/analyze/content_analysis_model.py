@@ -88,6 +88,9 @@ class ContentAnalysisModel(object):
                 if phrase.dict_label == dictionary.label:
                     count += phrase.count
             counter.append(count)
+            # creates a list, where each member represents the cunts of all
+            # dictionaries for one file, so each index in the list represents
+            # a row of the table
             if len(counter) == len(active_dicts):
                 self._counters.append(counter)
 
