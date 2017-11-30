@@ -12,6 +12,6 @@ SINGLE_RIGHT_WORD_BOUNDARY_REGEX_STR = r'\s|$'
 # ============== compiled version ==================
 WORD_REGEX = re.compile(WORD_REGEX_STR, re.UNICODE)
 
-WORD_AND_RIGHT_BOUNDARY_REGEX = re.compile(
-    WORD_REGEX_STR + WORD_BOUNDARY_REGEX_STR + "+", re.UNICODE
+WORD_AND_ALL_RIGHT_BOUNDARY_REGEX = re.compile(
+    f"{WORD_REGEX_STR}(?:{WORD_BOUNDARY_REGEX_STR})+", re.UNICODE
 )

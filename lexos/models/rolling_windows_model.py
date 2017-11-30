@@ -6,8 +6,8 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-from lexos.helpers.definitions import WORD_AND_RIGHT_BOUNDARY_REGEX, \
-    WORD_BOUNDARY_REGEX_STR
+from lexos.helpers.definitions import WORD_AND_ALL_RIGHT_BOUNDARY_REGEX, \
+    SINGLE_LEFT_WORD_BOUNDARY_REGEX_STR, SINGLE_RIGHT_WORD_BOUNDARY_REGEX_STR
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
@@ -90,7 +90,7 @@ class RollingWindowsModel(BaseModel):
         :return:
         """
 
-        words = re.findall(WORD_AND_RIGHT_BOUNDARY_REGEX, passage)
+        words = re.findall(WORD_AND_ALL_RIGHT_BOUNDARY_REGEX, passage)
 
         return RollingWindowsModel._get_rolling_window_from_list(
             input_list=words, window_size=window_size
@@ -120,8 +120,8 @@ class RollingWindowsModel(BaseModel):
     def _find_word_in_window(window: str, word: str) -> int:
         word_regex = re.compile(
             # enclose the word in word boundaries
-            WORD_BOUNDARY_REGEX_STR + re.escape(word) +
-            WORD_BOUNDARY_REGEX_STR,
+            SINGLE_LEFT_WORD_BOUNDARY_REGEX_STR + re.escape(word) +
+            SINGLE_RIGHT_WORD_BOUNDARY_REGEX_STR,
             flags=rwa_regex_flags
         )
 
