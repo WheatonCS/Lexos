@@ -50,11 +50,14 @@ test_option_empty = TopwordTestOptions(
     front_end_option=test_front_end_option)
 test_topword_model_empty = TopwordModel(test_options=test_option_empty)
 
-# Fake input for class division map.
-fake_class_division_map = pd.DataFrame(data=np.array([(True, True, True)]),
-                                       index=["C1"],
-                                       columns=["F1", "F2", "F3"])
 
+
+# Fake input for class division map.
+fake_class_division_map = pd.DataFrame(data=np.array([(True, True)]),
+                                       index=["C1"],
+                                       columns=["F1", "F2"])
+F = test_topword_model.get_readable_result(fake_class_division_map)
+print("DONE")
 
 class TestParaToGroup:
     def test_normal_case_result(self):

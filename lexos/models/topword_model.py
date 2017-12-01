@@ -108,38 +108,39 @@ class TopwordModel(BaseModel):
             return round((p1 - p2) / standard_error, 4)
 
     @staticmethod
-    def _z_test_word_list(data_set_one: pd.DataFrame,
-                          data_set_two: pd.DataFrame) -> pd.Series:
+    def _z_test_word_list(data_series_one: pd.Series,
+                          data_series_two: pd.Series) -> pd.Series:
         """Run z-test on all the words of two input word lists.
 
-        :param data_set_one: 2D matrix contains word counts.
-        :param data_set_two: 2D matrix contains word counts.
-        :param words: words that show up at least one time in the whole corpus.
+        :param data_series_one: a pandas series where data represents word
+                                counts and corresponding index are the words.
+        :param data_series_two: a pandas series where data represents word
+                                counts and corresponding index are the words.
         :return: a panda series contains analysis result, where index are words
                  and corresponding data is the z_score. And the panda series is
                  sorted by z_score in descending order.
         """
 
         # Find sample population of the two input data set
-        n1 = data_set_one.values.sum()
-        n2 = data_set_two.values.sum()
+        n1 = data_series_one.values.sum()
+        n2 = data_series_two.values.sum()
 
         def _z_test_for_one_word(word_index: int) -> float:
-            """
+            """Helper function that run z-test on one word.
 
-            :param word_index:
-            :return:
+            :param word_index: index of the word.
+            :return: z-test score.
             """
-            p1 = data_set_one[word_index] / n1
-            p2 = data_set_two[word_index] / n2
+            p1 = data_series_one[word_index] / n1
+            p2 = data_series_two[word_index] / n2
             return TopwordModel._z_test(p1=p1, p2=p2, n1=n1, n2=n2)
 
         # Perform the z-test to detect word anomalies.
         full_word_score_dict = \
             {word: _z_test_for_one_word(word_index=index)
-             for index, word in enumerate(data_set_one.columns.values)}
+             for index, word in enumerate(data_series_one.index.values)}
 
-        # filter out the insignificant result
+        # Filter out the insignificant result
         sig_word_score_dict = {
             word: z_score for word, z_score in full_word_score_dict.items()
             if abs(z_score) >= 1.96
@@ -152,6 +153,9 @@ class TopwordModel(BaseModel):
 
         # Convert the sorted result to a panda series.
         result_series = pd.Series(sorted_dict)
+        # Set the result series name.
+        result_series.name = \
+            "%s compared to %s" % (data_series_one.name, data_series_two.name)
 
         return result_series
 
@@ -167,30 +171,23 @@ class TopwordModel(BaseModel):
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
-        # Initialize, get all the file labels.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
         # Get word count in the whole corpus of each word.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # Generate analysis result.
-        result_list = [TopwordModel._z_test_word_list(
-            data_set_one=pd.DataFrame(
-                data=row,
-                columns=self._doc_term_matrix.columns.values),
-            data_set_two=pd.DataFrame(
-                data=word_count_sum,
-                columns=self._doc_term_matrix.columns.values))
-            for row in self._doc_term_matrix.values]
+        result_list = [
+            TopwordModel._z_test_word_list(
+                data_series_one=pd.Series(
+                    data=self._doc_term_matrix.loc[file_id],
+                    index=self._doc_term_matrix.columns.values,
+                    name='Document "%s"' % (self._id_temp_label_map[file_id])),
+                data_series_two=pd.Series(
+                    data=word_count_sum,
+                    index=self._doc_term_matrix.columns.values,
+                    name="the whole corpus"))
+            for file_id in self._doc_term_matrix.index.values]
 
-        # Attach readable name to each result series.
-        readable_result_list = [
-            result_list[index].rename('Document "' + label +
-                                      '" compared to the whole corpus')
-            for index, label in enumerate(labels)]
-
-        return readable_result_list
+        return result_list
 
     def _analyze_class_to_all(self, division_map: pd.DataFrame) -> \
             ReadableResult:
@@ -232,10 +229,9 @@ class TopwordModel(BaseModel):
 
             # Generate analysis result.
             temp_result_list = [
-                TopwordModel._z_test_word_list(data_set_one=paras,
-                                               data_set_two=group_sums[
-                                                   base_index],
-                                               words=self._doc_term_matrix.columns.values)
+                TopwordModel._z_test_word_list(data_series_one=paras,
+                                               data_series_two=group_sums[
+                                                   base_index])
                 for para_index, paras in enumerate(comp_para)]
 
             # Attach readable name to each result series.
@@ -280,9 +276,9 @@ class TopwordModel(BaseModel):
 
         # Generate analysis result.
         result_list = [
-            TopwordModel._z_test_word_list(data_set_one=group_sums[comp_index],
-                                           data_set_two=group_sums[base_index],
-                                           words=self._doc_term_matrix.columns.values)
+            TopwordModel._z_test_word_list(
+                data_series_one=group_sums[comp_index],
+                data_series_two=group_sums[base_index])
             for comp_index, base_index in comp_map]
 
         # Attach readable name to each result series.
