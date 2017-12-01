@@ -260,11 +260,19 @@ class TopwordModel(BaseModel):
 
         # Initialize all the class labels.
         class_labels = division_map.index.values
+
+        label_comb = list(itertools.combinations(class_labels, 2))
+        print("DONE")
+
         # Match labels and word counts into groups.
         group_matrices = [self._doc_term_matrix.values[row]
                           for row in division_map.values]
         # Find the total word count of each group.
         group_sums = [np.sum(row, axis=0) for row in group_matrices]
+
+        group_data = pd.DataFrame(data=group_sums,
+                                  columns=self._doc_term_matrix.columns.values,
+                                  index=class_labels)
 
         # Find the comparison map, which is a list of tuples.
         # There are two elements in each tuple, each one is a index of groups.

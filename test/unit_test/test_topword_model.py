@@ -148,7 +148,7 @@ class TestClassToAll:
         except AssertionError as error:
             assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
-
+"""
 
 # ------------------- Test method analyze class to class --------------------
 # Create test suite for normal case.
@@ -164,6 +164,12 @@ test_option_empty = TopwordTestOptions(
     id_temp_label_map={},
     front_end_option=test_front_end_option)
 test_topword_model_empty_two = TopwordModel(test_options=test_option_empty)
+
+
+test_class_division_map = pd.DataFrame(
+    data=np.array([(True, True, False, False), (False, False, True, True)]),
+    index=np.array(["C1", "C2"]),
+    columns=np.array(["F1", "F2", "F3", "F4"]))
 
 
 class TestClassToClass:
@@ -195,4 +201,4 @@ class TestClassToClass:
         except AssertionError as error:
             assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
-"""
+
