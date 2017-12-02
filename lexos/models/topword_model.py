@@ -141,10 +141,9 @@ class TopwordModel(BaseModel):
              for index, word in enumerate(data_series_one.index.values)}
 
         # Filter out the insignificant result
-        sig_word_score_dict = {
-            word: z_score for word, z_score in full_word_score_dict.items()
-            if abs(z_score) >= 1.96
-        }
+        sig_word_score_dict = \
+            {word: z_score for word, z_score in full_word_score_dict.items()
+             if abs(z_score) >= 1.96}
 
         # Sort word score dict by z-score in descending order.
         sorted_dict = OrderedDict(sorted(sig_word_score_dict.items(),
@@ -205,46 +204,38 @@ class TopwordModel(BaseModel):
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
-        # Initialize all the labels and result to return.
-        readable_result = []
-        file_labels = np.array([self._id_temp_label_map[file_id] for file_id
-                                in self._doc_term_matrix.index.values])
+        # Initialize, get all words that appear at least once in whole corpus.
+        words = self._doc_term_matrix.columns.values
+
+        # Get all class labels.
         class_labels = division_map.index.values
-        # Match labels and word counts into groups.
-        group_matrices = [self._doc_term_matrix.values[row]
-                          for row in division_map.values]
-        group_file_labels = [file_labels[row] for row in division_map.values]
 
-        # Find the total word count of each group.
-        group_sums = [np.sum(row, axis=0) for row in group_matrices]
+        file_class_combinations = \
+            [(file_id, class_label)
+             for file_id in self._doc_term_matrix.index.values
+             for class_label in class_labels
+             if not division_map[file_id][class_label]]
 
-        # Find the comparison map, which is a list of tuples.
-        # There are two elements in each tuple, each one is a index of groups.
-        # Ex: first group has index 0. And two group indexes cannot be equal.
-        comp_map = itertools.product(list(range(len(group_sums))),
-                                     list(range(len(group_sums))))
-        comp_map = [(i_index, j_index)
-                    for (i_index, j_index) in comp_map if i_index != j_index]
+        # Split DTM into groups and find word count sums of each group.
+        group_sums = [np.sum(self._doc_term_matrix.values[row], axis=0)
+                      for row in division_map.values]
 
-        # Compare each paragraph in group_comp to group_base.
-        for comp_index, base_index in comp_map:
-            comp_para = group_matrices[comp_index]
+        # Put groups word count sums into a data frame.
+        group_data = \
+            pd.DataFrame(data=group_sums, index=class_labels, columns=words)
 
-            # Generate analysis result.
-            temp_result_list = [
-                TopwordModel._z_test_word_list(data_series_one=paras,
-                                               data_series_two=group_sums[
-                                                   base_index])
-                for para_index, paras in enumerate(comp_para)]
-
-            # Attach readable name to each result series.
-            temp_readable_result = [temp_result_list[index].rename(
-                'Document "' + group_file_labels[comp_index][index] +
-                '" compared to Class "' + class_labels[base_index] + '"')
-                for index, _ in enumerate(comp_para)]
-
-            # Put all temp result together.
-            readable_result += temp_readable_result
+        # Initialize all the labels and result to return.
+        readable_result = [
+            TopwordModel._z_test_word_list(
+                data_series_one=pd.Series(
+                    data=self._doc_term_matrix.loc[file_id],
+                    index=words,
+                    name='Document "%s"' % (self._id_temp_label_map[file_id])),
+                data_series_two=pd.Series(
+                    data=group_data.loc[class_label],
+                    index=words,
+                    name='Class "%s"' % class_label))
+            for file_id, class_label in file_class_combinations]
 
         return readable_result
 
@@ -278,14 +269,6 @@ class TopwordModel(BaseModel):
         # Put groups word count sums into a data frame.
         group_data = \
             pd.DataFrame(data=group_sums, index=class_labels, columns=words)
-
-        # Find the comparison map, which is a list of tuples.
-        # There are two elements in each tuple, each one is a index of groups.
-        # Ex: first group has index 0. And two group indexes cannot be equal.
-        comp_map = itertools.product(list(range(len(group_sums))),
-                                     list(range(len(group_sums))))
-        comp_map = [(i_index, j_index)
-                    for (i_index, j_index) in comp_map if i_index < j_index]
 
         # Generate analysis result.
         result_list = [
