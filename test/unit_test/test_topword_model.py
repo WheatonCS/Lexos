@@ -53,7 +53,7 @@ test_topword_model_empty = TopwordModel(test_options=test_option_empty)
 # Fake input for class division map.
 fake_class_division_map = pd.DataFrame(data=np.array([(True, True)]),
                                        index=["C1"],
-                                       columns=["F1", "F2"])
+                                       columns=[0, 1])
 
 
 class TestParaToGroup:
@@ -83,7 +83,7 @@ class TestParaToGroup:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 # ---------------------------------------------------------------------------
 
-"""
+
 # -------------------- Test method analyze class to all ---------------------
 # Create test suit for normal case.
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
@@ -111,7 +111,7 @@ test_topword_model_empty_one = TopwordModel(test_options=test_option_empty)
 test_class_division_map = pd.DataFrame(
     data=np.array([(True, True, False, False), (False, False, True, True)]),
     index=np.array(["C1", "C2"]),
-    columns=np.array(["F1", "F2", "F3", "F4"]))
+    columns=np.array([0, 1, 2, 3]))
 
 
 # Testing starts here
@@ -148,35 +148,7 @@ class TestClassToAll:
         except AssertionError as error:
             assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
-"""
 
-# Create test suit for normal case.
-test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
-                                       (0, 0, 1, 1, 0, 0, 0, 0),
-                                       (0, 0, 0, 0, 1, 1, 0, 0),
-                                       (0, 0, 0, 0, 0, 0, 1, 100)]),
-                        index=np.array([0, 1, 2, 3]),
-                        columns=np.array(["A", "B", "C", "D",
-                                          "E", "F", "G", "H"]))
-test_id_temp_label_map = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
-test_front_end_option = TopwordFrontEndOption(analysis_option="classToPara")
-test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
-                                 id_temp_label_map=test_id_temp_label_map,
-                                 front_end_option=test_front_end_option)
-test_topword_model_one = TopwordModel(test_options=test_option)
-
-# Create test suit for special case.
-test_option_empty = TopwordTestOptions(
-    doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
-    id_temp_label_map={},
-    front_end_option=test_front_end_option)
-test_topword_model_empty_one = TopwordModel(test_options=test_option_empty)
-
-# Fake class division map.
-test_class_division_map = pd.DataFrame(
-    data=np.array([(True, True, False, False), (False, False, True, True)]),
-    index=np.array(["C1", "C2"]),
-    columns=np.array(["F1", "F2", "F3", "F4"]))
 
 # ------------------- Test method analyze class to class --------------------
 # Create test suite for normal case.
@@ -223,4 +195,3 @@ class TestClassToClass:
         except AssertionError as error:
             assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
-
