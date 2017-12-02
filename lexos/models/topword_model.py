@@ -78,17 +78,19 @@ class TopwordModel(BaseModel):
         if a word is an anomaly, while doing so, we assume the possibility of
         a particular word appearing in a text follows normal distribution. And
         while examining, this function compares the probability of a word's
-        occurrence in the rest of the segments. Usually we report a word as an
-        anomaly if the return value is smaller than -1.96 or bigger than 1.96.
+        occurrence in one segment against another segment. (Here a segment can
+        be a single, a group of files or the whole corpus.)
+        Usually we report a word as an anomaly if the return value is smaller
+        than -1.96 or bigger than 1.96.
         :param p1: the probability of a word's occurrence in a particular
                    segment: Number of word occurrence in the segment /
                    total word count in the segment
         :param p2: the probability of a word's occurrence in all the segments
                    Number of word occurrence in all the segment /
                    total word count in all the segment
-        :param n1: the number of total words in the segment we care about.
-        :param n2: the number of total words in all the segment selected.
-        :return: the z-score shown that the particular word in a particular
+        :param n1: the number of total words in this segment.
+        :param n2: the number of total words in this segment.
+        :return: the z-score indicates that the particular word in a particular
                  segment is an anomaly or not.
         """
         # Trap possible empty inputs.
@@ -177,7 +179,7 @@ class TopwordModel(BaseModel):
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
         # Generate analysis result.
-        result_list = [
+        readable_result = [
             TopwordModel._z_test_word_list(
                 data_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
@@ -189,7 +191,7 @@ class TopwordModel(BaseModel):
                     name="the whole corpus"))
             for file_id in self._doc_term_matrix.index.values]
 
-        return result_list
+        return readable_result
 
     def _analyze_class_to_all(self, division_map: pd.DataFrame) -> \
             ReadableResult:
@@ -210,6 +212,8 @@ class TopwordModel(BaseModel):
         # Get all class labels.
         class_labels = division_map.index.values
 
+        # Get all combinations of file ids and class labels if the file is not
+        # in the class.
         file_class_combinations = \
             [(file_id, class_label)
              for file_id in self._doc_term_matrix.index.values
@@ -271,7 +275,7 @@ class TopwordModel(BaseModel):
             pd.DataFrame(data=group_sums, index=class_labels, columns=words)
 
         # Generate analysis result.
-        result_list = [
+        readable_result = [
             TopwordModel._z_test_word_list(
                 data_series_one=pd.Series(
                     data=group_data.loc[group_one_label],
@@ -283,7 +287,7 @@ class TopwordModel(BaseModel):
                     name='Class "%s"' % group_two_label))
             for group_one_label, group_two_label in label_combinations]
 
-        return result_list
+        return readable_result
 
     def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
