@@ -171,6 +171,9 @@ class TopwordModel(BaseModel):
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
+        # Initialize, get all words that appear at least once in whole corpus.
+        words = self._doc_term_matrix.columns.values
+
         # Get word count in the whole corpus of each word.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
@@ -179,11 +182,11 @@ class TopwordModel(BaseModel):
             TopwordModel._z_test_word_list(
                 data_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
-                    index=self._doc_term_matrix.columns.values,
+                    index=words,
                     name='Document "%s"' % (self._id_temp_label_map[file_id])),
                 data_series_two=pd.Series(
                     data=word_count_sum,
-                    index=self._doc_term_matrix.columns.values,
+                    index=words,
                     name="the whole corpus"))
             for file_id in self._doc_term_matrix.index.values]
 
@@ -258,21 +261,23 @@ class TopwordModel(BaseModel):
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
-        # Initialize all the class labels.
+        # Initialize, get all words that appear at least once in whole corpus.
+        words = self._doc_term_matrix.columns.values
+
+        # Get all class labels.
         class_labels = division_map.index.values
 
-        label_comb = list(itertools.combinations(class_labels, 2))
-        print("DONE")
+        # Get all unique combinations of every two labels, so we can compare
+        # one class against other class(es).
+        label_combinations = list(itertools.combinations(class_labels, 2))
 
-        # Match labels and word counts into groups.
-        group_matrices = [self._doc_term_matrix.values[row]
-                          for row in division_map.values]
-        # Find the total word count of each group.
-        group_sums = [np.sum(row, axis=0) for row in group_matrices]
+        # Split DTM into groups and find word count sums of each group.
+        group_sums = [np.sum(self._doc_term_matrix.values[row], axis=0)
+                      for row in division_map.values]
 
-        group_data = pd.DataFrame(data=group_sums,
-                                  columns=self._doc_term_matrix.columns.values,
-                                  index=class_labels)
+        # Put groups word count sums into a data frame.
+        group_data = \
+            pd.DataFrame(data=group_sums, index=class_labels, columns=words)
 
         # Find the comparison map, which is a list of tuples.
         # There are two elements in each tuple, each one is a index of groups.
@@ -285,17 +290,17 @@ class TopwordModel(BaseModel):
         # Generate analysis result.
         result_list = [
             TopwordModel._z_test_word_list(
-                data_series_one=group_sums[comp_index],
-                data_series_two=group_sums[base_index])
-            for comp_index, base_index in comp_map]
+                data_series_one=pd.Series(
+                    data=group_data.loc[group_one_label],
+                    index=words,
+                    name='Class "%s"' % group_one_label),
+                data_series_two=pd.Series(
+                    data=group_data.loc[group_two_label],
+                    index=words,
+                    name='Class "%s"' % group_two_label))
+            for group_one_label, group_two_label in label_combinations]
 
-        # Attach readable name to each result series.
-        readable_result_list = [result_list[comp_index].rename(
-            'Class "' + class_labels[comp_index] + '" compared to Class "' +
-            class_labels[base_index] + '"')
-            for comp_index, base_index in comp_map]
-
-        return readable_result_list
+        return result_list
 
     def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
