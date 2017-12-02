@@ -4,7 +4,7 @@ import os
 import math
 import numpy as np
 import pandas as pd
-from typing import List, Optional, NamedTuple, Union
+from typing import List, Optional, NamedTuple
 
 from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
