@@ -482,6 +482,18 @@ class ScrubberModel(BaseModel):
                 replacement_dict=self._options.additional_options.lemma,
                 is_lemma=True)
 
+        # -- 9. Stop words/keep words -----------------------------------------
+        def stop_keep_words_function(orig_text: str) -> str:
+            """Deletes certain words according to user input strings.
+
+            :param orig_text: A text string.
+            :return: If "stop" was chosen, returns the text with all words in
+                the sw_kw list deleted. If "keep" was chosen, returns the text
+                with all words not in sw_kw deleted.
+            """
+
+            # if self._options.additional_options.keep and
+
         return text
 
     def scrub_all_docs(self) -> FileIDContentMap:
