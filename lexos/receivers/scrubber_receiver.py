@@ -14,15 +14,6 @@ from lexos.managers import session_manager
 from lexos.receivers.base_receiver import BaseReceiver
 
 
-class SingleTagOptions(NamedTuple):
-    """A typed tuple that contains a single tag's handling options."""
-    # How to handle this particular tag
-    action: str
-
-    # The attribute to replace the tag with if the action is "replace-element"
-    attribute: str
-
-
 class PunctuationOptions(NamedTuple):
     """A typed tuple that contains specific punctuation options."""
 
@@ -40,6 +31,29 @@ class PunctuationOptions(NamedTuple):
 
     # A dictionary mapping punctuation marks for deletion to None
     remove_punctuation_map: Dict[int, type(None)]
+
+
+class SingleTagOptions(NamedTuple):
+    """A typed tuple that contains a single tag's handling options."""
+
+    # How to handle this particular tag
+    action: str
+
+    # The attribute to replace the tag with if the action is "replace-element"
+    attribute: str
+
+
+class WhitespaceOptions(NamedTuple):
+    """A typed tuple that contains specific whitespace options."""
+
+    # Indicates whether spaces should be removed.
+    spaces: bool
+
+    # Indicates whether tabs should be removed.
+    tabs: bool
+
+    # Indicates whether newlines should be removed.
+    newlines: bool
 
 
 class BasicOptions(NamedTuple):
@@ -69,14 +83,8 @@ class BasicOptions(NamedTuple):
     # Indicates whether whitespace should be removed.
     whitespace: bool
 
-    # Indicates whether spaces should be removed.
-    spaces: bool
-
-    # Indicates whether tabs should be removed.
-    tabs: bool
-
-    # Indicates whether newlines should be removed.
-    newlines: bool
+    # Contains options for specific whitespace characters
+    whitespace_options: WhitespaceOptions
 
 
 class FileOptions(NamedTuple):
@@ -514,6 +522,25 @@ class ScrubbingReceiver(BaseReceiver):
             apos=apos, hyphen=hyphen, amper=amper, previewing=previewing,
             remove_punctuation_map=remove_punctuation_map)
 
+    def _get_whitespace_options_from_front_end(self, whitespace: bool
+                                               ) -> WhitespaceOptions:
+        """Gets all the whitespace options from the front end.
+
+        :param whitespace: Whether the user wants to remove whitespace.
+        :return: A WhitespaceOptions NamedTuple.
+        """
+
+        if whitespace:
+            spaces = self._front_end_data['spacesbox'] == "true"
+            tabs = self._front_end_data['tabsbox'] == "true"
+            newlines = self._front_end_data['newlinesbox'] == "true"
+        else:
+            spaces = False
+            tabs = False
+            newlines = False
+
+        return WhitespaceOptions(spaces=spaces, tabs=tabs, newlines=newlines)
+
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
 
@@ -521,9 +548,12 @@ class ScrubbingReceiver(BaseReceiver):
         """
 
         lower = self._front_end_data['lowercasebox'] == "true"
-        punct = self._front_end_data['punctuationbox'] == "true"
-        digits = self._front_end_data['digitsbox'] == "true"
 
+        punct = self._front_end_data['punctuationbox'] == "true"
+        punctuation_options = self._get_punctuation_options_from_front_end(
+            punct=punct)
+
+        digits = self._front_end_data['digitsbox'] == "true"
         if digits:
             remove_digits_map = self._get_remove_digits_map()
         else:
@@ -531,18 +561,16 @@ class ScrubbingReceiver(BaseReceiver):
 
         tags = self._front_end_data['tagbox'] == "true"
         tag_options = self._get_tag_options_from_front_end()
-        punctuation_options = self._get_punctuation_options_from_front_end(
-            punct=punct)
+
         whitespace = self._front_end_data['whitespacebox'] == "true"
-        spaces = self._front_end_data['spacesbox'] == "true"
-        tabs = self._front_end_data['tabsbox'] == "true"
-        newlines = self._front_end_data['newlinesbox'] == "true"
+        whitespace_options = self._get_whitespace_options_from_front_end(
+            whitespace=whitespace)
 
         return BasicOptions(
             lower=lower, punct=punct, punctuation_options=punctuation_options,
             digits=digits, remove_digits_map=remove_digits_map, tags=tags,
-            tag_options=tag_options, whitespace=whitespace, spaces=spaces,
-            tabs=tabs, newlines=newlines)
+            tag_options=tag_options, whitespace=whitespace,
+            whitespace_options=whitespace_options)
 
     def _get_file_options_from_front_end(self) -> FileOptions:
         """Gets all the file options from the front end.

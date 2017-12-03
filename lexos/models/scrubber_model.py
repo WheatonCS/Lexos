@@ -423,8 +423,9 @@ class ScrubberModel(BaseModel):
             text = self._handle_preserved_punctuation(text=text)
 
         # -- 5. digits --------------------------------------------------------
-        if self._options.basic_options.digits:
-            pass
+        # Now handled entirely in ScrubberReceiver
+
+        # -- 6. whitespace ----------------------------------------------------
 
         return text
 
