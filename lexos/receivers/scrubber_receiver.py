@@ -458,18 +458,27 @@ class ScrubbingReceiver(BaseReceiver):
 
         return remove_punctuation_map
 
-    def _get_punctuation_options_from_front_end(self) -> PunctuationOptions:
+    def _get_punctuation_options_from_front_end(self, punct: bool
+                                                ) -> PunctuationOptions:
         """Gets all the punctuation options from the front end.
 
+        :param punct: Whether the user wants to remove punctuation.
         :return: A PunctuationOptions NamedTuple.
         """
 
-        apos = self._front_end_data['aposbox'] == "true"
-        hyphen = self._front_end_data['hyphensbox'] == "true"
-        amper = self._front_end_data['ampersandbox'] == "true"
         previewing = self._front_end_data["formAction"] == "apply"
-        remove_punctuation_map = self._get_remove_punctuation_map(
-            apos=apos, hyphen=hyphen, amper=amper, previewing=previewing)
+
+        if punct:
+            apos = self._front_end_data['aposbox'] == "true"
+            hyphen = self._front_end_data['hyphensbox'] == "true"
+            amper = self._front_end_data['ampersandbox'] == "true"
+            remove_punctuation_map = self._get_remove_punctuation_map(
+                apos=apos, hyphen=hyphen, amper=amper, previewing=previewing)
+        else:
+            apos = False
+            hyphen = False
+            amper = False
+            remove_punctuation_map = {}
 
         return PunctuationOptions(
             apos=apos, hyphen=hyphen, amper=amper, previewing=previewing,
@@ -486,7 +495,8 @@ class ScrubbingReceiver(BaseReceiver):
         digits = self._front_end_data['digitsbox'] == "true"
         tags = self._front_end_data['tagbox'] == "true"
         tag_options = self._get_tag_options_from_front_end()
-        punctuation_options = self._get_punctuation_options_from_front_end()
+        punctuation_options = self._get_punctuation_options_from_front_end(
+            punct=punct)
         whitespace = self._front_end_data['whitespacebox'] == "true"
         spaces = self._front_end_data['spacesbox'] == "true"
         tabs = self._front_end_data['tabsbox'] == "true"
