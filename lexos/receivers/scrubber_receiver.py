@@ -1,5 +1,7 @@
 import os
 import re
+import sys
+import unicodedata
 from typing import List, Dict, NamedTuple
 
 from flask import request, session
@@ -362,7 +364,53 @@ class ScrubbingReceiver(BaseReceiver):
         return tag_options
 
     @staticmethod
-    def _get_remove_punctuation_map(apos: bool, hyphen: bool,  amper: bool,
+    def _get_all_punctuation_map() -> Dict[int, type(None)]:
+        """Creates a dictionary containing all unicode punctuation and symbols.
+
+        :return: The dictionary, with the ord() of each char mapped to None.
+        """
+
+        punctuation_map = dict.fromkeys(
+            [i for i in range(sys.maxunicode)
+             if unicodedata.category(chr(i)).startswith('P') or
+             unicodedata.category(chr(i)).startswith('S')])
+
+        return punctuation_map
+
+    @staticmethod
+    def _save_character_deletion_map(deletion_map: Dict[int, type(None)],
+                                     storage_folder: str, filename: str):
+        """Saves a character deletion map in the storage folder.
+
+        :param deletion_map: A character deletion map to be saved.
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file the map
+            should be saved in.
+        """
+
+        general_functions.write_file_to_disk(
+            contents=deletion_map, dest_folder=storage_folder,
+            filename=filename)
+
+    @staticmethod
+    def _load_character_deletion_map(storage_folder: str,
+                                     filename: str) -> Dict[int, type(None)]:
+        """Loads a character map that was previously saved in the storage folder.
+
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file that is being
+            loaded.
+        :return: The character deletion map that was saved in the folder (empty
+            if there is no map to load).
+        """
+
+        return general_functions.load_file_from_disk(
+            loc_folder=storage_folder, filename=filename)
+
+    def _get_remove_punctuation_map(self, apos: bool, hyphen: bool,
+                                    amper: bool,
                                     previewing: bool) -> Dict[int, type(None)]:
         """Gets the punctuation removal map.
 
@@ -379,14 +427,14 @@ class ScrubbingReceiver(BaseReceiver):
 
         try:
             # Map of punctuation to be removed
-            remove_punctuation_map = load_character_deletion_map(
+            remove_punctuation_map = self._load_character_deletion_map(
                 constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
 
         except FileNotFoundError:
             # Creates map of punctuation to be removed if it doesn't exist
-            remove_punctuation_map = get_all_punctuation_map()
+            remove_punctuation_map = self._get_all_punctuation_map()
 
-            save_character_deletion_map(
+            self._save_character_deletion_map(
                 remove_punctuation_map, constants.CACHE_FOLDER,
                 constants.PUNCTUATION_MAP_FILENAME)
 
