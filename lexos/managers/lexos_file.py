@@ -9,7 +9,6 @@ from flask import request
 from lexos.helpers import general_functions, constants
 from lexos.managers import session_manager
 from lexos.processors.prepare import cutter
-from lexos.processors.prepare import scrubber
 
 
 class LexosFile:
@@ -187,102 +186,6 @@ class LexosFile:
         """
 
         self.name = filename
-
-    def get_scrub_options(self) -> Dict[str, object]:
-        """Gets the options for scrubbing from the request.form.
-
-        :return: a formatted dictionary of the chosen options for scrubbing a
-                 file.
-        """
-
-        scrub_options = {}
-
-        for upload_file in constants.OPTUPLOADNAMES:
-            if upload_file in self.options['scrub']:
-                scrub_options[upload_file] = self.options['scrub'][upload_file]
-
-        for checkbox in constants.SCRUBBOXES:
-            scrub_options[checkbox] = (checkbox in request.form)
-        for text_area in constants.SCRUBINPUTS:
-            scrub_options[text_area] = request.form[text_area]
-        for upload_file in request.files:
-            file_name = request.files[upload_file].filename
-            if (file_name != ''):
-                scrub_options[upload_file] = file_name
-        if 'tags' in request.form:
-            scrub_options['keepDOEtags'] = request.form['tags'] == 'keep'
-
-        return scrub_options
-
-    def scrub_contents(self, saving_changes: bool) -> str:
-        """ Scrubs the contents of the file according to the user's options
-
-        May save the changes or not.
-        :param saving_changes: boolean saying whether or not to save the
-                               changes made.
-        :return: a preview string of the possibly changed file.
-        """
-
-        storage_options = []
-        for key in list(request.form.keys()):
-            if 'usecache' in key:
-                storage_options.append(key[len('usecache'):])
-
-        if 'scrub' not in self.options:
-            self.options['scrub'] = {}
-        scrub_options = self.get_scrub_options()
-
-        text_string = self.load_contents()
-
-        text_string = scrubber.scrub(
-            text_string,
-            gutenberg=self.is_gutenberg,
-            lower=scrub_options['lowercasebox'],
-            punct=scrub_options['punctuationbox'],
-            apos=scrub_options['aposbox'],
-            hyphen=scrub_options['hyphensbox'],
-            amper=scrub_options['ampersandbox'],
-            digits=scrub_options['digitsbox'],
-            tags=scrub_options['tagbox'],
-            white_space=scrub_options['whitespacebox'],
-            spaces=scrub_options['spacesbox'],
-            tabs=scrub_options['tabsbox'],
-            new_lines=scrub_options['newlinesbox'],
-            opt_uploads=request.files,
-            storage_options=storage_options,
-            storage_folder=session_manager.session_folder() + '/scrub/',
-            previewing=not saving_changes)
-
-        if saving_changes:
-            self.save_contents(text_string)
-            self.save_scrub_options()
-
-        # renew the preview
-        self.contents_preview = self.generate_preview(text_string)
-        text_string = self.contents_preview
-
-        return text_string
-
-    def save_scrub_options(self):
-        """Saves the scrubbing options into the LexosFile object's metadata."""
-
-        self.options['scrub'] = self.get_scrub_options()
-
-    def set_scrub_options_from(self, parent: 'LexosFile'):
-        """Sets the scrubbing options from another file.
-
-        Most often the scrubbing options come from the parent file that a
-        child file was cut from.
-        :param parent: a LexosFile object that contains the scrubbing
-                       options (and more information) for the parent file.
-        """
-
-        if "scrub" not in self.options:
-            self.options['scrub'] = {}
-            if "scrub" in parent.options:
-                self.options['scrub'] = parent.options['scrub']
-            else:
-                parent.options['scrub'] = {}
 
     def cut_contents(self) -> List[str]:
         """

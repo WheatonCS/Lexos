@@ -18,7 +18,6 @@ scrubber_blueprint = Blueprint('scrubber', __name__)
 # Tells Flask to load this function when someone is at '/scrub'
 @scrubber_blueprint.route("/scrub", methods=["GET", "POST"])
 def scrub():
-    # Are you looking for scrubber.py?
     """Handles the functionality of the scrub page.
 
     It scrubs the files depending on the specifications chosen by the user,
