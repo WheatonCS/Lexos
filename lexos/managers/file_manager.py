@@ -16,6 +16,7 @@ import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 from lexos.managers.lexos_file import LexosFile
+from lexos.models.scrubber_model import ScrubberModel
 
 
 class FileManager:
@@ -329,15 +330,15 @@ class FileManager:
                  label, and scrubbed contents preview).
         """
 
-        previews = []
+        updated_id_content_map = ScrubberModel().scrub_all_docs()
+        previews = [(file_id,
+                     self.get_active_labels_with_id()[file_id],
+                     self.get_class_labels_with_id()[file_id],
+                     updated_id_content_map[file_id])
+                    for file_id in updated_id_content_map]
 
-        for l_file in list(self.files.values()):
-            if l_file.active:
-                previews.append(
-                    (l_file.id,
-                     l_file.label,
-                     l_file.class_label,
-                     l_file.scrub_contents(saving_changes)))
+        if saving_changes:
+            self.mass_update_content(id_content_map=updated_id_content_map)
 
         return previews
 
@@ -521,6 +522,16 @@ class FileManager:
 
         self.files[file_id].save_contents(file_contents=updated_content)
 
+    def mass_update_content(self, id_content_map: Dict[int, str]):
+        """Updates the contents of multiple files.
+
+        :param id_content_map: A dictionary mapping file id to updated content.
+        """
+
+        for file_id in id_content_map:
+            self.update_content(
+                file_id=file_id, updated_content=id_content_map[file_id])
+
     def get_active_labels_with_id(self) -> Dict[int, str]:
         """Gets labels of all active files in dictionary{file_id: file_label}.
 
@@ -528,6 +539,15 @@ class FileManager:
         """
 
         return {l_file.id: l_file.label
+                for l_file in self.files.values() if l_file.active}
+
+    def get_class_labels_with_id(self) -> Dict[int, str]:
+        """Gets class labels of all active files in dict{file_id: class_label}.
+
+        :return: a dictionary of the currently active files' class labels.
+        """
+
+        return {l_file.id: l_file.class_label
                 for l_file in self.files.values() if l_file.active}
 
     @staticmethod

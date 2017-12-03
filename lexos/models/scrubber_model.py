@@ -146,8 +146,6 @@ class ScrubberModel(BaseModel):
         # match with the result of the function
         return all_of_replace_from.sub(_replacement_map_func, text)
 
-
-
     def _handle_tags(self, text: str) -> str:
         """Handles tags that are found in the text.
 
@@ -258,11 +256,10 @@ class ScrubberModel(BaseModel):
         if self._options.basic_options.tags:  # If Remove Tags was checked:
             text = self._handle_tags(text)
 
-
         return text
 
-    def _scrub_all_docs(self):
-        """Updates all active documents with their scrubbed text."""
+    def scrub_all_docs(self) -> FileIDContentMap:
+        """Returns all active documents with their scrubbed text."""
 
         for text_id in self._file_id_content_map:
             scrubbed_text = self._scrub(text_id)
