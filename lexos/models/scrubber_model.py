@@ -1,4 +1,6 @@
 import re
+import sys
+import unicodedata
 from typing import Dict, NamedTuple, Optional, Match, Set
 
 from lexos.models.base_model import BaseModel
@@ -233,6 +235,111 @@ class ScrubberModel(BaseModel):
 
         return text
 
+    @staticmethod
+    def _scrub_select_apos(text: str) -> str:
+        """Scrubs all non-word-internal apostrophes from a text.
+
+        :param text: The string to be scrubbed of external apostrophes.
+        :return: The text string, now with only internal apostrophes.
+        """
+
+        # If one or more apos. preceded by beginning of string or whitespace:
+        #     (?:^|(?<=\s))'+
+        # OR one or more apos. followed by whitespace or end of string:
+        #     |'+(?=\s|$)
+
+        # Using " " to represent whitespace, "w" to represent a word
+        #     character, and "***" to represent any sequence of any characters,
+        #     this pattern will match:
+        # 1) ***w' *** because the apostrophe is followed by whitespace
+        # 2) *** 'w*** because the apostrophe follows whitespace
+        # 3) *** ' *** because the apos. follows AND is followed by whitespace
+
+        # This will NOT remove apos. next to other punctuation, because they
+        # are not whitespace
+        # Consecutive apostrophes are treated as one, to avoid odd behavior
+        # (Ex. "test'' ''' ''test" => "test' ' 'test" is undesirable)
+
+        pattern = re.compile(r"(?:^|(?<=\s))'+|'+(?=\s|$)", re.UNICODE)
+
+        # apply the pattern to replace all external or floating apos with
+        # empty strings
+        scrubbed_text = str(re.sub(pattern, r"", text))
+
+        return scrubbed_text
+
+
+    @staticmethod
+    def _consolidate_hyphens(text: str) -> str:
+        """Converts all hyphens in a text to the minus sign (-).
+
+        :param text: A string which should have hyphens converted.
+        :return: The text string after all hyphens have been replaced.
+        """
+
+        # 002D is the minus symbol (-), which all hyphens will be converted to
+        chosen_hyphen_value = '\u002D'
+
+        hyphen_values = dict.fromkeys(
+            [chr(i) for i in range(sys.maxunicode)
+             if
+             unicodedata.category(chr(i)).startswith('Pd') and  # All hyphens
+             chr(i) != chosen_hyphen_value])  # dashes
+
+        # convert all those types of hyphens into the ascii minus
+        for value in hyphen_values:
+            text = text.replace(value, chosen_hyphen_value)
+
+        return text
+
+    @staticmethod
+    def _consolidate_ampers(text: str) -> str:
+        """Converts all ampersands in a text to a single one (&).
+
+        :param text: A string which should have ampersands converted.
+        :return: The text string after all ampersands have been replaced.
+        """
+
+        chosen_amper_value = "\u0026"
+
+        amper_values = dict.fromkeys(
+            [chr(i) for i in range(sys.maxunicode)
+             # Avoid unnamed control chars throwing ValueErrors
+             if (unicodedata.category(chr(i)).startswith('P') or
+                 unicodedata.category(chr(i)).startswith('S')) and
+             re.search(
+                 r" ampersand|ampersand ", unicodedata.name(chr(i)),
+                 re.IGNORECASE) is not None and
+             chr(i) != chosen_amper_value])
+
+        # Change all ampersands to one type of ampersand
+        for value in amper_values:
+            text = text.replace(value, chosen_amper_value)
+
+        return text
+
+    def _handle_preserved_punctuation(self, text: str) -> str:
+        """Alters the text so internal apos, hyphens, and ampers are preserved.
+
+        :param text: The unaltered text.
+        :returns: The text with only desired apos, hyphens, and ampers
+            remaining.
+        """
+
+        # If Keep Word-Internal Apostropes
+        if self._options.basic_options.punctuation_options.apos:
+            text = self._scrub_select_apos(text=text)
+
+        # If Keep Hyphens
+        if self._options.basic_options.punctuation_options.hyphen:
+            text = self._consolidate_hyphens(text=text)
+
+        # If Keep Ampersands
+        if self._options.basic_options.punctuation_options.amper:
+            text = self._consolidate_ampers(text=text)
+
+        return text
+
     def _scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
 
@@ -309,10 +416,11 @@ class ScrubberModel(BaseModel):
 
         # -- 3. Tags ----------------------------------------------------------
         if self._options.basic_options.tags:  # If Remove Tags was checked:
-            text = self._handle_tags(text)
+            text = self._handle_tags(text=text)
 
         # -- 4. punctuation (hyphens, apostrophes, ampersands) ----------------
-
+        if self._options.basic_options.punct:
+            text = self._handle_preserved_punctuation(text=text)
 
         return text
 
