@@ -57,6 +57,9 @@ class BasicOptions(NamedTuple):
     # Indicates whether to remove digits from the text.
     digits: bool
 
+    # A dictionary mapping digits for deletion to None
+    remove_digits_map: Dict[int: type(None)]
+
     # Indicates whether Scrub Tags has been checked.
     tags: bool
 
@@ -344,6 +347,33 @@ class ScrubbingReceiver(BaseReceiver):
         return conversion_dict
 
     # Option getters---
+    def _get_remove_digits_map(self) -> Dict[int, type(None)]:
+        """Get the digit removal map.
+
+        :return: A dictionary that contains all the digits that should be
+            removed mapped to None.
+        """
+
+        # Map of digits to be removed
+        try:
+            remove_digit_map = self._load_character_deletion_map(
+                constants.CACHE_FOLDER, constants.DIGIT_MAP_FILENAME)
+
+        except FileNotFoundError:
+            # If the digit map does not already exist, generate it with all
+            # unicode characters that start with the category 'N'
+            # See http://www.fileformat.info/info/unicode/category/index.htm
+            # for the list of categories
+            remove_digit_map = dict.fromkeys(
+                [i for i in range(sys.maxunicode)
+                 if unicodedata.category(chr(i)).startswith('N')])
+
+            self._save_character_deletion_map(
+                remove_digit_map, constants.CACHE_FOLDER,
+                constants.DIGIT_MAP_FILENAME)
+
+        return remove_digit_map
+
     @staticmethod
     def _get_tag_options_from_front_end() -> Dict[str, SingleTagOptions]:
         """Gets all the tag options from the front end.
@@ -493,6 +523,12 @@ class ScrubbingReceiver(BaseReceiver):
         lower = self._front_end_data['lowercasebox'] == "true"
         punct = self._front_end_data['punctuationbox'] == "true"
         digits = self._front_end_data['digitsbox'] == "true"
+
+        if digits:
+            remove_digits_map = self._get_remove_digits_map()
+        else:
+            remove_digits_map = {}
+
         tags = self._front_end_data['tagbox'] == "true"
         tag_options = self._get_tag_options_from_front_end()
         punctuation_options = self._get_punctuation_options_from_front_end(
@@ -504,8 +540,9 @@ class ScrubbingReceiver(BaseReceiver):
 
         return BasicOptions(
             lower=lower, punct=punct, punctuation_options=punctuation_options,
-            digits=digits, tags=tags, tag_options=tag_options,
-            whitespace=whitespace, spaces=spaces, tabs=tabs, newlines=newlines)
+            digits=digits, remove_digits_map=remove_digits_map, tags=tags,
+            tag_options=tag_options, whitespace=whitespace, spaces=spaces,
+            tabs=tabs, newlines=newlines)
 
     def _get_file_options_from_front_end(self) -> FileOptions:
         """Gets all the file options from the front end.

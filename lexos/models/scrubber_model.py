@@ -422,6 +422,10 @@ class ScrubberModel(BaseModel):
         if self._options.basic_options.punct:
             text = self._handle_preserved_punctuation(text=text)
 
+        # -- 5. digits --------------------------------------------------------
+        if self._options.basic_options.digits:
+            pass
+
         return text
 
     def scrub_all_docs(self) -> FileIDContentMap:

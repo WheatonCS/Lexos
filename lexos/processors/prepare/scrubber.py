@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-import sys
-import unicodedata
 from typing import List, Dict
 
 from flask import request
@@ -9,34 +7,6 @@ from werkzeug.datastructures import FileStorage
 
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
-
-
-def get_remove_digits_map() -> Dict[int, type(None)]:
-    """Get the digit removal map.
-
-    :return: A dictionary that contains all the digits that should be removed
-        mapped to None.
-    """
-
-    # Map of digits to be removed
-    try:
-        remove_digit_map = load_character_deletion_map(
-            constants.CACHE_FOLDER, constants.DIGIT_MAP_FILENAME)
-
-    except FileNotFoundError:
-        # If the digit map does not already exist, generate it with all
-        # unicode characters that start with the category 'N'
-        # See http://www.fileformat.info/info/unicode/category/index.htm for
-        # the list of categories
-        remove_digit_map = dict.fromkeys(
-            [i for i in range(sys.maxunicode)
-             if unicodedata.category(chr(i)).startswith('N')])
-
-        save_character_deletion_map(
-            remove_digit_map, constants.CACHE_FOLDER,
-            constants.DIGIT_MAP_FILENAME)
-
-    return remove_digit_map
 
 
 def delete_words(text: str, remove_list: List[str]) -> str:
