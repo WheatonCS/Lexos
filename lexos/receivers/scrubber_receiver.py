@@ -13,11 +13,25 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class SingleTagOptions(NamedTuple):
+    """A typed tuple that contains a single tag's handling options."""
     # How to handle this particular tag
     action: str
 
     # The attribute to replace the tag with if the action is "replace-element"
     attribute: str
+
+
+class PunctuationOptions(NamedTuple):
+    """A typed tuple that contains specific punctuation options."""
+
+    # Indicates whether to keep apostrophes in the text.
+    apos: bool
+
+    # Indicates whether to keep hyphens in the text.
+    hyphen: bool
+
+    # Indicates whether to keep ampersands in the text.
+    amper: bool
 
 
 class BasicOptions(NamedTuple):
@@ -29,14 +43,8 @@ class BasicOptions(NamedTuple):
     # Indicates whether to scrub punctuation the text.
     punct: bool
 
-    # Indicates whether to keep apostrophes in the text.
-    apos: bool
-
-    # Indicates whether to keep hyphens in the text.
-    hyphen: bool
-
-    # Indicates whether to keep ampersands in the text.
-    amper: bool
+    # Contains options for specific punctuation marks
+    punctuation_options: PunctuationOptions
 
     # Indicates whether to remove digits from the text.
     digits: bool
@@ -347,6 +355,18 @@ class ScrubbingReceiver(BaseReceiver):
 
         return tag_options
 
+    def _get_punctuation_options_from_front_end(self) -> PunctuationOptions:
+        """Gets all the punctuation options from the front end.
+
+        :return: A PunctuationOptions NamedTuple.
+        """
+
+        apos = self._front_end_data['aposbox'] == "true"
+        hyphen = self._front_end_data['hyphensbox'] == "true"
+        amper = self._front_end_data['ampersandbox'] == "true"
+
+        return PunctuationOptions(apos=apos, hyphen=hyphen, amper=amper)
+
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
 
@@ -355,20 +375,17 @@ class ScrubbingReceiver(BaseReceiver):
 
         lower = self._front_end_data['lowercasebox'] == "true"
         punct = self._front_end_data['punctuationbox'] == "true"
-        apos = self._front_end_data['aposbox'] == "true"
-        hyphen = self._front_end_data['hyphensbox'] == "true"
-        amper = self._front_end_data['ampersandbox'] == "true"
         digits = self._front_end_data['digitsbox'] == "true"
         tags = self._front_end_data['tagbox'] == "true"
         tag_options = self._get_tag_options_from_front_end()
+        punctuation_options = self._get_punctuation_options_from_front_end()
         whitespace = self._front_end_data['whitespacebox'] == "true"
         spaces = self._front_end_data['spacesbox'] == "true"
         tabs = self._front_end_data['tabsbox'] == "true"
         newlines = self._front_end_data['newlinesbox'] == "true"
-        previewing = self._front_end_data["formAction"] == "apply"
 
         return BasicOptions(
-            lower=lower, punct=punct, apos=apos, hyphen=hyphen, amper=amper,
+            lower=lower, punct=punct, punctuation_options=punctuation_options,
             digits=digits, tags=tags, tag_options=tag_options,
             whitespace=whitespace, spaces=spaces, tabs=tabs, newlines=newlines)
 
