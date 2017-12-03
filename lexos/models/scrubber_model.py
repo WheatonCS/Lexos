@@ -418,14 +418,35 @@ class ScrubberModel(BaseModel):
         if self._options.basic_options.tags:  # If Remove Tags was checked:
             text = self._handle_tags(text=text)
 
-        # -- 4. punctuation (hyphens, apostrophes, ampersands) ----------------
+        # -- 4. Punctuation (hyphens, apostrophes, ampersands) ----------------
         if self._options.basic_options.punct:
             text = self._handle_preserved_punctuation(text=text)
 
-        # -- 5. digits --------------------------------------------------------
+        # -- 5. Digits --------------------------------------------------------
         # Now handled entirely in ScrubberReceiver
 
-        # -- 6. whitespace ----------------------------------------------------
+        # -- 6. Whitespace ----------------------------------------------------
+        # Also handled entirely in ScrubberReceiver
+
+        # -- Create total removal function -----------------------------
+        # Merge all the removal maps
+        total_removal_map = self._options.basic_options.punctuation_options.\
+            remove_punctuation_map.copy()
+        total_removal_map.update(self._options.basic_options.remove_digits_map)
+        total_removal_map.update(
+            self._options.basic_options.whitespace_options.
+            remove_whitespace_map)
+
+        # Create a remove function
+        def total_removal_function(orig_text: str) -> str:
+            """Removes the characters specified by total_removal_map.
+            :param orig_text: A text string.
+            :return: The text string, with removal characters deleted.
+            """
+
+            return orig_text.translate(total_removal_map)
+
+        # -- 7. consolidations ------------------------------------------------
 
         return text
 
