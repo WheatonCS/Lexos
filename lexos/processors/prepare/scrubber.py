@@ -11,56 +11,6 @@ from lexos.helpers import constants as constants, \
     general_functions as general_functions
 
 
-def process_tag_replace_options(orig_text: str, tag: str, action: str,
-                                attribute: str) -> str:
-    """Replaces html-style tags in text files according to user options.
-
-    :param orig_text: The user's text containing the original tag.
-    :param tag: The particular tag to be processed.
-    :param action: A string specifying the action to be performed on the tag.
-        Action options are remove the tag, remove the element and contents,
-        replace the element and contents with a value, or leave the tag as-is.
-    :param attribute: A value that will replace the tag when the "replace
-        with attribute" option is chosen.
-    :return: The user's text, after the specified tag is processed.
-    """
-
-    # in GUI:  Remove Tag Only
-    if action == "remove-tag":
-        # searching for variants this specific tag:  <tag> ...
-        pattern = re.compile(
-            '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
-            '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
-            '\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
-
-        # substitute all matching patterns with one space
-        processed_text = re.sub(pattern, " ", orig_text)
-
-    # in GUI:  Remove Element and All Its Contents
-    elif action == "remove-element":
-        # <[whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
-        # as applied across newlines, (re.MULTILINE), on re.UNICODE,
-        # and .* includes newlines (re.DOTALL)
-        pattern = re.compile(
-            "<\s*" + re.escape(tag) + "( .+?>|>).+?</\s*" + re.escape(tag) +
-            ">", re.MULTILINE | re.DOTALL | re.UNICODE)
-
-        processed_text = re.sub(pattern, " ", orig_text)
-
-    # in GUI:  Replace Element and Its Contents with Attribute Value
-    elif action == "replace-element":
-        pattern = re.compile(
-            "<\s*" + re.escape(tag) + ".*?>.+?</\s*" + re.escape(tag) + ".*?>",
-            re.MULTILINE | re.DOTALL | re.UNICODE)
-
-        processed_text = re.sub(pattern, attribute, orig_text)
-
-    else:
-        processed_text = orig_text    # Leave Tag Alone
-
-    return processed_text
-
-
 def get_all_punctuation_map() -> Dict[int, type(None)]:
     """Creates a dictionary containing all unicode punctuation and symbols.
 
