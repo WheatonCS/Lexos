@@ -55,6 +55,9 @@ class WhitespaceOptions(NamedTuple):
     # Indicates whether newlines should be removed.
     newlines: bool
 
+    # A dictionary mapping whitespace characters for deletion to None
+    remove_whitespace_map: Dict[int, type(None)]
+
 
 class BasicOptions(NamedTuple):
     """A typed tuple that contains basic scrubbing options."""
@@ -522,6 +525,27 @@ class ScrubbingReceiver(BaseReceiver):
             apos=apos, hyphen=hyphen, amper=amper, previewing=previewing,
             remove_punctuation_map=remove_punctuation_map)
 
+    @staticmethod
+    def _get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
+                                   ) -> Dict[int, type(None)]:
+        """Get the white space removal map.
+        :param spaces: A boolean indicating whether spaces should be removed.
+        :param tabs: A bool indicating whether or tabs should be removed.
+        :param newlines: A bool indicating whether newlines should be removed.
+        :return: A dictionary that contains all the whitespaces that should be
+            removed (tabs, spaces or newlines) mapped to None.
+        """
+
+        remove_whitespace_map = {}
+        if spaces:
+            remove_whitespace_map.update({ord(' '): None})
+        if tabs:
+            remove_whitespace_map.update({ord('\t'): None})
+        if newlines:
+            remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
+
+        return remove_whitespace_map
+
     def _get_whitespace_options_from_front_end(self, whitespace: bool
                                                ) -> WhitespaceOptions:
         """Gets all the whitespace options from the front end.
@@ -534,12 +558,17 @@ class ScrubbingReceiver(BaseReceiver):
             spaces = self._front_end_data['spacesbox'] == "true"
             tabs = self._front_end_data['tabsbox'] == "true"
             newlines = self._front_end_data['newlinesbox'] == "true"
+            remove_whitespace_map = self._get_remove_whitespace_map(
+                spaces=spaces, tabs=tabs, newlines=newlines)
         else:
             spaces = False
             tabs = False
             newlines = False
+            remove_whitespace_map = {}
 
-        return WhitespaceOptions(spaces=spaces, tabs=tabs, newlines=newlines)
+        return WhitespaceOptions(
+            spaces=spaces, tabs=tabs, newlines=newlines,
+            remove_whitespace_map=remove_whitespace_map)
 
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
