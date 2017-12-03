@@ -106,64 +106,6 @@ def consolidate_ampers(text: str) -> str:
     return text
 
 
-def get_remove_punctuation_map(
-        text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
-        ) -> (str, Dict[int, type(None)]):
-    """Gets the punctuation removal map.
-
-    :param text: A unicode string representing the whole text that is being
-        manipulated.
-    :param apos: A boolean indicating whether apostrophes should be kept in
-        the text.
-    :param hyphen: A boolean indicating whether hyphens should be kept in the
-        text.
-    :param amper: A boolean indicating whether ampersands should be kept in
-        the text.
-    :param previewing: A boolean indicating whether the user is previewing.
-    :returns: A tuple where the first element is the original text and the
-        second is a dictionary that contains all the punctuation that should be
-        removed mapped to None.
-    """
-
-    try:
-        # Map of punctuation to be removed
-        remove_punctuation_map = load_character_deletion_map(
-            constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
-
-    except FileNotFoundError:
-        # Creates map of punctuation to be removed if it doesn't already exist
-        remove_punctuation_map = get_all_punctuation_map()
-
-        save_character_deletion_map(
-            remove_punctuation_map, constants.CACHE_FOLDER,
-            constants.PUNCTUATION_MAP_FILENAME)
-
-    # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
-    if apos:
-        text = scrub_select_apos(text)
-        del remove_punctuation_map[39]    # No further apos will be scrubbed
-
-    # If Remove All Punctuation and Keep Hyphens are ticked
-    if hyphen:
-        text = consolidate_hyphens(text)
-
-        # Now that all those hyphens are the ascii minus, delete it from the
-        # map so no hyphens will be scrubbed from the text
-        del remove_punctuation_map[45]
-
-    # If Remove All Punctuation and Keep Ampersands are ticked
-    if amper:
-        text = consolidate_ampers(text)
-        del remove_punctuation_map[38]    # Delete chosen amper from map
-
-    if previewing:
-        del remove_punctuation_map[8230]    # ord(…)
-
-    # This function has the side-effect of altering the text, thus the
-    # updated text must be returned
-    return text, remove_punctuation_map
-
-
 def get_remove_digits_map() -> Dict[int, type(None)]:
     """Get the digit removal map.
 

@@ -312,13 +312,7 @@ class ScrubberModel(BaseModel):
             text = self._handle_tags(text)
 
         # -- 4. punctuation (hyphens, apostrophes, ampersands) ----------------
-        if self._options.basic_options.punct:
-            # remove_punctuation_map alters the text for apos and hyphens,
-            # thus the updated must be returned
-            text, remove_punctuation_map = get_remove_punctuation_map(
-                text, apos, hyphen, amper, previewing)
-        else:
-            remove_punctuation_map = {}
+
 
         return text
 

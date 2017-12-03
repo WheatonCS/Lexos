@@ -33,6 +33,12 @@ class PunctuationOptions(NamedTuple):
     # Indicates whether to keep ampersands in the text.
     amper: bool
 
+    # Indicates whether the user is previewing.
+    previewing: bool
+
+    # A dictionary mapping punctuation marks for deletion to None
+    remove_punctuation_map: Dict[int, type(None)]
+
 
 class BasicOptions(NamedTuple):
     """A typed tuple that contains basic scrubbing options."""
@@ -355,6 +361,55 @@ class ScrubbingReceiver(BaseReceiver):
 
         return tag_options
 
+    @staticmethod
+    def _get_remove_punctuation_map(apos: bool, hyphen: bool,  amper: bool,
+                                    previewing: bool) -> Dict[int, type(None)]:
+        """Gets the punctuation removal map.
+
+        :param apos: A boolean indicating whether apostrophes should be kept in
+            the text.
+        :param hyphen: A boolean indicating whether hyphens should be kept in
+            the text.
+        :param amper: A boolean indicating whether ampersands should be kept in
+            the text.
+        :param previewing: A boolean indicating whether the user is previewing.
+        :returns: A dictionary that contains all the punctuation that should be
+            removed mapped to None.
+        """
+
+        try:
+            # Map of punctuation to be removed
+            remove_punctuation_map = load_character_deletion_map(
+                constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
+
+        except FileNotFoundError:
+            # Creates map of punctuation to be removed if it doesn't exist
+            remove_punctuation_map = get_all_punctuation_map()
+
+            save_character_deletion_map(
+                remove_punctuation_map, constants.CACHE_FOLDER,
+                constants.PUNCTUATION_MAP_FILENAME)
+
+        # If Remove All Punctuation & Keep Word-Internal Apostrophes are ticked
+        if apos:
+            del remove_punctuation_map[39]  # No further apos will be scrubbed
+
+        # If Remove All Punctuation and Keep Hyphens are ticked
+        if hyphen:
+
+            # Now that all those hyphens are the ascii minus, delete it from
+            # the map so no hyphens will be scrubbed from the text
+            del remove_punctuation_map[45]
+
+        # If Remove All Punctuation and Keep Ampersands are ticked
+        if amper:
+            del remove_punctuation_map[38]  # Delete chosen amper from map
+
+        if previewing:
+            del remove_punctuation_map[8230]  # ord(…)
+
+        return remove_punctuation_map
+
     def _get_punctuation_options_from_front_end(self) -> PunctuationOptions:
         """Gets all the punctuation options from the front end.
 
@@ -364,8 +419,13 @@ class ScrubbingReceiver(BaseReceiver):
         apos = self._front_end_data['aposbox'] == "true"
         hyphen = self._front_end_data['hyphensbox'] == "true"
         amper = self._front_end_data['ampersandbox'] == "true"
+        previewing = self._front_end_data["formAction"] == "apply"
+        remove_punctuation_map = self._get_remove_punctuation_map(
+            apos=apos, hyphen=hyphen, amper=amper, previewing=previewing)
 
-        return PunctuationOptions(apos=apos, hyphen=hyphen, amper=amper)
+        return PunctuationOptions(
+            apos=apos, hyphen=hyphen, amper=amper, previewing=previewing,
+            remove_punctuation_map=remove_punctuation_map)
 
     def _get_basic_options_from_front_end(self) -> BasicOptions:
         """Gets all the basic options from the front end.
