@@ -116,16 +116,25 @@ class ScrubberModel(BaseModel):
 
     @staticmethod
     def _replace_with_dict(text: str, replacement_dict: Dict[str, str],
-                           edge1: str, edge2: str) -> str:
+                           is_lemma: bool) -> str:
         """Alters text according to the replacements dictionary.
 
         :param text: The input text to replace.
         :param replacement_dict: A dictionary mapping characters/strings in the
             text to their replacement values.
-        :param edge1: A regex pattern describing the left border of the match.
-        :param edge2: A regex pattern describing the right border of the match.
+        :param is_lemma: A boolean indicating whether or not the replacement
+            to be made is for a lemma.
         :return: The text after replacement.
         """
+
+        # Lemmas are words surrounded by whitespace, while other replacements
+        # are chars
+        if is_lemma:
+            edge1 = r'(^|\s)('  # Beginning of the string or whitespace
+            edge2 = r')(?=\s|$)'  # Whitespace or end of the string
+        else:
+            edge1 = r'()('
+            edge2 = r')()'
 
         # Create a regex pattern to find all the "replacement_from" strings
         all_of_replace_from = re.compile(
@@ -153,7 +162,7 @@ class ScrubberModel(BaseModel):
 
     @staticmethod
     def _process_tag_replace_options(orig_text: str, tag: str, action: str,
-                                    attribute: str) -> str:
+                                     attribute: str) -> str:
         """Replaces html-style tags in text files according to user options.
 
         :param orig_text: The user's text containing the original tag.
@@ -388,14 +397,14 @@ class ScrubberModel(BaseModel):
 
         # -- 1. lower ---------------------------------------------------------
         if self._options.basic_options.lower:    # User wants to ignore case
-            def to_lower_function(original_text: str) -> str:
+            def to_lower_function(orig_text: str) -> str:
                 """Removes capital letters from a text.
 
-                :param original_text: A mixed-case string.
+                :param orig_text: A mixed-case string.
                 :return: The text with all caps converted to lowercase.
                 """
 
-                return original_text.lower()
+                return orig_text.lower()
 
         else:
             def to_lower_function(original_text: str) -> str:
@@ -411,7 +420,7 @@ class ScrubberModel(BaseModel):
         text = self._replace_with_dict(
             text=text,
             replacement_dict=self._options.additional_options.special_char,
-            edge1="()(", edge2=")()")
+            is_lemma=False)
 
         # -- 3. Tags ----------------------------------------------------------
         if self._options.basic_options.tags:  # If Remove Tags was checked:
@@ -439,13 +448,28 @@ class ScrubberModel(BaseModel):
         # Create a remove function
         def total_removal_function(orig_text: str) -> str:
             """Removes the characters specified by total_removal_map.
+
             :param orig_text: A text string.
             :return: The text string, with removal characters deleted.
             """
 
             return orig_text.translate(total_removal_map)
 
-        # -- 7. consolidations ------------------------------------------------
+        # -- 7. Consolidations ------------------------------------------------
+        def consolidation_function(orig_text: str) -> str:
+            """Replaces characters according to user input strings.
+
+            :param orig_text: A text string.
+            :return: The text with characters swapped according to consol
+                dictionary.
+            """
+
+            return self._replace_with_dict(
+                text=orig_text,
+                replacement_dict=self._options.additional_options.consol,
+                is_lemma=False)
+
+        # -- 8. Lemmas --------------------------------------------------------
 
         return text
 
