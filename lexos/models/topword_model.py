@@ -193,7 +193,7 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_class_to_all(self, division_map: pd.DataFrame) -> \
+    def _analyze_class_to_all(self, class_division_map: pd.DataFrame) -> \
             ReadableResult:
         """Detect if a given word is an anomaly.
 
@@ -210,7 +210,7 @@ class TopwordModel(BaseModel):
         words = self._doc_term_matrix.columns.values
 
         # Get all class labels.
-        class_labels = division_map.index.values
+        class_labels = class_division_map.index.values
 
         # Get all combinations of file ids and class labels if the file is not
         # in the class.
@@ -218,11 +218,11 @@ class TopwordModel(BaseModel):
             [(file_id, class_label)
              for file_id in self._doc_term_matrix.index.values
              for class_label in class_labels
-             if not division_map[file_id][class_label]]
+             if not class_division_map[file_id][class_label]]
 
         # Split DTM into groups and find word count sums of each group.
         group_sums = [np.sum(self._doc_term_matrix.values[row], axis=0)
-                      for row in division_map.values]
+                      for row in class_division_map.values]
 
         # Put groups word count sums into a data frame.
         group_data = \
@@ -243,7 +243,7 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_class_to_class(self, division_map: pd.DataFrame) -> \
+    def _analyze_class_to_class(self, class_division_map: pd.DataFrame) -> \
             ReadableResult:
         """Detect if a given word is an anomaly.
 
@@ -260,7 +260,7 @@ class TopwordModel(BaseModel):
         words = self._doc_term_matrix.columns.values
 
         # Get all class labels.
-        class_labels = division_map.index.values
+        class_labels = class_division_map.index.values
 
         # Get all unique combinations of every two labels, so we can compare
         # one class against other class(es).
@@ -268,7 +268,7 @@ class TopwordModel(BaseModel):
 
         # Split DTM into groups and find word count sums of each group.
         group_sums = [np.sum(self._doc_term_matrix.values[row], axis=0)
-                      for row in division_map.values]
+                      for row in class_division_map.values]
 
         # Put groups word count sums into a data frame.
         group_data = \
@@ -309,7 +309,7 @@ class TopwordModel(BaseModel):
             # Get header and result.
             header = "Compare Each Document to Other Class(es)"
             results = self._analyze_class_to_all(
-                division_map=class_division_map)
+                class_division_map=class_division_map)
 
             return TopwordResult(header=header, results=results)
 
@@ -320,7 +320,7 @@ class TopwordModel(BaseModel):
             # Get header and result.
             header = "Compare a Class to Each Other Class"
             results = self._analyze_class_to_class(
-                division_map=class_division_map)
+                class_division_map=class_division_map)
 
             return TopwordResult(header=header, results=results)
 
