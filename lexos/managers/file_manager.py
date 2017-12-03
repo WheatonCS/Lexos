@@ -330,7 +330,8 @@ class FileManager:
                  label, and scrubbed contents preview).
         """
 
-        updated_id_content_map = ScrubberModel().scrub_all_docs()
+        updated_id_content_map = \
+            ScrubberModel(previewing=not saving_changes).scrub_all_docs()
         previews = [(file_id,
                      self.get_active_labels_with_id()[file_id],
                      self.get_class_labels_with_id()[file_id],

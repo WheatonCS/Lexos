@@ -18,7 +18,8 @@ class ScrubberTestOptions(NamedTuple):
 
 class ScrubberModel(BaseModel):
 
-    def __init__(self, test_options: Optional[ScrubberTestOptions]):
+    def __init__(self, test_options: Optional[ScrubberTestOptions],
+                 previewing: bool):
         """A class to scrub text documents.
 
         :param test_options: A set of scrubbing options used for unit testing.
@@ -34,6 +35,8 @@ class ScrubberModel(BaseModel):
             self._test_file_id_content_map = None
             self._test_gutenberg_file_set = None
             self._test_front_end_options = None
+
+        self._previewing = previewing
 
     @property
     def _file_id_content_map(self) -> FileIDContentMap:

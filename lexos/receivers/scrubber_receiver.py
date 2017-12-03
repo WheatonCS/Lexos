@@ -59,9 +59,6 @@ class BasicOptions(NamedTuple):
     # Indicates whether newlines should be removed.
     newlines: bool
 
-    # Indicates whether the user is previewing.
-    previewing: bool = False
-
 
 class FileOptions(NamedTuple):
     """A typed tuple that contains additional scrubbing from files."""
@@ -373,8 +370,7 @@ class ScrubbingReceiver(BaseReceiver):
         return BasicOptions(
             lower=lower, punct=punct, apos=apos, hyphen=hyphen, amper=amper,
             digits=digits, tags=tags, tag_options=tag_options,
-            whitespace=whitespace, spaces=spaces, tabs=tabs, newlines=newlines,
-            previewing=previewing)
+            whitespace=whitespace, spaces=spaces, tabs=tabs, newlines=newlines)
 
     def _get_file_options_from_front_end(self) -> FileOptions:
         """Gets all the file options from the front end.
