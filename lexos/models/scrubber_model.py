@@ -3,6 +3,7 @@ import sys
 import unicodedata
 from typing import Dict, NamedTuple, Optional, Match, Set, List
 
+from lexos.helpers import general_functions
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.scrubber_receiver import ScrubbingOptions, \
@@ -562,7 +563,17 @@ class ScrubberModel(BaseModel):
             else:
                 return orig_text
 
-        return text
+        # apply all the functions and exclude tag
+        text = general_functions.apply_function_exclude_tags(
+            input_string=text, functions=[to_lower_function,
+                                          consolidation_function,
+                                          lemmatize_function,
+                                          stop_keep_words_function,
+                                          total_removal_function])
+
+        finished_text = re.sub("[\s]+", " ", text, re.UNICODE | re.MULTILINE)
+
+        return finished_text
 
     def scrub_all_docs(self) -> FileIDContentMap:
         """Returns all active documents with their scrubbed text."""
