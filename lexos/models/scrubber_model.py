@@ -311,6 +311,8 @@ class ScrubberModel(BaseModel):
         if self._options.basic_options.tags:  # If Remove Tags was checked:
             text = self._handle_tags(text)
 
+        # -- 4. punctuation (hyphens, apostrophes, ampersands) ----------------
+
         return text
 
     def scrub_all_docs(self) -> FileIDContentMap:
