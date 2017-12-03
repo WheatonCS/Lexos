@@ -373,7 +373,7 @@ class FileManager:
                     file_id = self.add_file(
                         original_filename, doc_label + '.txt', fileString)
 
-                    self.files[file_id].set_scrub_options_from(parent=l_file)
+                    self.files[file_id].set_scrub_options_from_deprec(parent=l_file)
                     self.files[file_id].save_cut_options(parent_id=l_file.id)
                     self.files[file_id].set_name(doc_label)
                     self.files[file_id].set_class_label(

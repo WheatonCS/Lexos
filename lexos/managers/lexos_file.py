@@ -187,6 +187,53 @@ class LexosFile:
 
         self.name = filename
 
+    def get_scrub_options_deprec(self) -> Dict[str, object]:
+        """Gets the options for scrubbing from the request.form.
+
+        :return: a formatted dictionary of the chosen options for scrubbing a
+                 file.
+        """
+
+        scrub_options = {}
+
+        for upload_file in constants.OPTUPLOADNAMES:
+            if upload_file in self.options['scrub']:
+                scrub_options[upload_file] = self.options['scrub'][upload_file]
+
+        for checkbox in constants.SCRUBBOXES:
+            scrub_options[checkbox] = (checkbox in request.form)
+        for text_area in constants.SCRUBINPUTS:
+            scrub_options[text_area] = request.form[text_area]
+        for upload_file in request.files:
+            file_name = request.files[upload_file].filename
+            if (file_name != ''):
+                scrub_options[upload_file] = file_name
+        if 'tags' in request.form:
+            scrub_options['keepDOEtags'] = request.form['tags'] == 'keep'
+
+        return scrub_options
+
+    def save_scrub_options_deprec(self):
+        """Saves the scrubbing options into the LexosFile object's metadata."""
+
+        self.options['scrub'] = self.get_scrub_options_deprec()
+
+    def set_scrub_options_from_deprec(self, parent: 'LexosFile'):
+        """Sets the scrubbing options from another file.
+
+        Most often the scrubbing options come from the parent file that a
+        child file was cut from.
+        :param parent: a LexosFile object that contains the scrubbing
+                       options (and more information) for the parent file.
+        """
+
+        if "scrub" not in self.options:
+            self.options['scrub'] = {}
+            if "scrub" in parent.options:
+                self.options['scrub'] = parent.options['scrub']
+            else:
+                parent.options['scrub'] = {}
+
     def cut_contents(self) -> List[str]:
         """
         Cuts the contents of the file according to options chosen by the user.
