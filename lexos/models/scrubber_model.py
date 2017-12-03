@@ -460,7 +460,7 @@ class ScrubberModel(BaseModel):
             """Replaces characters according to user input strings.
 
             :param orig_text: A text string.
-            :return: The text with characters swapped according to consol
+            :return: The text with characters swapped according to the consol
                 dictionary.
             """
 
@@ -470,6 +470,17 @@ class ScrubberModel(BaseModel):
                 is_lemma=False)
 
         # -- 8. Lemmas --------------------------------------------------------
+        def lemmatize_function(orig_text: str) -> str:
+            """Replaces words according to user input strings.
+
+            :param orig_text: A text string.
+            :return: The text with words swapped according to lemma dictionary.
+            """
+
+            return self._replace_with_dict(
+                text=orig_text,
+                replacement_dict=self._options.additional_options.lemma,
+                is_lemma=True)
 
         return text
 
