@@ -349,36 +349,35 @@ class ScrubberModel(BaseModel):
 
         # Scrubbing order:
         #
-        # Note:  lemmas and consolidations do NOT work on tags; in short,
+        # Note:  Lemmas and consolidations do NOT work on tags; in short,
         #        these manipulations do not change inside any tags
         #
         # 0. Gutenberg
-        # 1. lower
+        # 1. Lower
         #    (not applied in tags ever;
         #    lemmas/consolidations/specialChars/stopKeepWords changed;
         #    text not changed at this point)
-        # 2. special characters
-        # 3. tags - scrub tags
-        # 4. punctuation
+        # 2. Special characters
+        # 3. Tags - scrub tags
+        # 4. Punctuation
         #    (hyphens, apostrophes, ampersands);
         #    text not changed at this point, not applied in tags ever
-        # 5. digits (text not changed at this point, not applied in tags ever)
-        # 6. white space (text not changed at this point, not applied in tags
+        # 5. Digits (text not changed at this point, not applied in tags ever)
+        # 6. Whitespace (text not changed at this point, not applied in tags
         #    ever, otherwise tag attributes will be messed up)
-        # 7. consolidations
+        # 7. Consolidations
         #    (text not changed at this point, not applied in tags ever)
-        # 8. lemmatize (text not changed at this point, not applied in tags
-        #    ever)
-        # 9. stop words/keep words
+        # 8. Lemmas (text not changed at this point, not applied in tags ever)
+        # 9. Stop words/keep words
         #    (text not changed at this point, not applied in tags ever)
         #
-        # apply:
-        # 0. remove Gutenberg boiler plate (if any)
-        # 1. lowercase
-        # 2. consolidation
-        # 3. lemmatize
-        # 4. stop words
-        # 5. remove punctuation, digits, and whitespace without changing all
+        # Apply:
+        # 0. Remove Gutenberg boilerplate (if any)
+        # 1. Lowercase
+        # 2. Consolidation
+        # 3. Lemmatize
+        # 4. Stop words
+        # 5. Remove punctuation, digits, and whitespace without changing all
         #    the content in the tag
 
         text = self._file_id_content_map[doc_id]
