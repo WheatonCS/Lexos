@@ -582,4 +582,4 @@ class ScrubberModel(BaseModel):
             scrubbed_text = self._scrub(text_id)
             self._file_id_content_map[text_id] = scrubbed_text
 
-        # need to put this back into file manager
+        return self._file_id_content_map
