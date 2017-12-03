@@ -143,7 +143,10 @@ class AdditionalOptions(NamedTuple):
     # The merged stop word/keep words list.
     sw_kw: List[str]
 
-    # Indicates whether sw_kw contains keep words (True) or stop words (False).
+    # Indicates whether sw_kw contains stop words.
+    stop: bool
+
+    # Indicates whether sw_kw contains keep words.
     keep: bool
 
 
@@ -707,11 +710,12 @@ class ScrubbingReceiver(BaseReceiver):
         consol = self._create_replacements_dict(replacer_string=both_consol)
         lemma = self._create_replacements_dict(replacer_string=both_lemma)
         sw_kw = self._split_stop_keep_word_string(input_string=both_sw_kw)
+        stop = self._front_end_data['sw_option'] == "stop"
         keep = self._front_end_data['sw_option'] == "keep"
 
         return AdditionalOptions(consol=consol, lemma=lemma,
                                  special_char=special_char, sw_kw=sw_kw,
-                                 keep=keep)
+                                 stop=stop, keep=keep)
 
     def options_from_front_end(self) -> ScrubbingOptions:
         """Gets all the scrubbing options from the front end.

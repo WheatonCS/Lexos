@@ -1,7 +1,7 @@
 import re
 import sys
 import unicodedata
-from typing import Dict, NamedTuple, Optional, Match, Set
+from typing import Dict, NamedTuple, Optional, Match, Set, List
 
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
@@ -349,6 +349,61 @@ class ScrubberModel(BaseModel):
 
         return text
 
+    @staticmethod
+    def _delete_words(text: str, remove_list: List[str]) -> str:
+        """Deletes the words in remove_list from the text.
+
+        :param text: The original text string.
+        :param remove_list: A list of words to be removed from the text.
+        :return: The updated text, containing only words that were not in
+            remove_list.
+        """
+
+        # Create center of the pattern, with non-alphanumerics escaped
+        # ["User", "words", here"] => "User|words|here"
+        remove_string = "|".join([re.escape(word) for word in remove_list])
+
+        if remove_string:
+            # Produces the pattern (^|\s)(User|words|here)(?=\s|$)
+
+            # (^|\s) -- If the word begins the string OR is preceded by a space
+            # (User|words|here) -- AND it appears in the list exactly
+            # (?=\s|$) -- AND it is followed by a space OR ends the string...
+            pattern = re.compile(r'(^|\s)(' + remove_string + r')(?=\s|$)',
+                                 re.UNICODE)
+
+            # ...Then swap the word and the preceding (but not following)
+            # space for an empty string
+            text = pattern.sub("", text)
+
+        return text
+
+    def _keep_words(self, text: str, keep_list: List[str]) -> str:
+        """Removes words that are not in non_removal_string from the text.
+
+        :param text: A unicode string representing the whole text that is being
+            manipulated.
+        :param keep_list: A list of unicode strings to keep in the text.
+        :return: A unicode string representing the text that has been stripped
+            of everything but the words chosen by the user.
+        """
+
+        split_lines = text.split("\n")
+
+        # A list of words in the user's text. Words are case-sensitive and
+        # will include punctuation if those scrubbing options were not
+        # selected beforehand.
+        word_list = [word
+                     for line in split_lines
+                     for word in re.split('\s', line, re.UNICODE)
+                     if word != '']
+
+        # remove_list is a copy of word_list without the keepwords
+        remove_list = [word for word in word_list if word not in keep_list]
+        scrubbed_text = self._delete_words(text, remove_list)
+
+        return scrubbed_text
+
     def _scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
 
@@ -492,7 +547,20 @@ class ScrubberModel(BaseModel):
                 with all words not in sw_kw deleted.
             """
 
-            # if self._options.additional_options.keep and
+            # User chose "stop"
+            if self._options.additional_options.stop:
+                return self._delete_words(
+                    text=text,
+                    remove_list=self._options.additional_options.sw_kw)
+            # User chose "keep" and supplied a list (to avoid deleting the
+            # whole text)
+            elif self._options.additional_options.keep \
+                    and self._options.additional_options.sw_kw != []:
+                return self._keep_words(
+                    text=text,
+                    keep_list=self._options.additional_options.sw_kw)
+            else:
+                return orig_text
 
         return text
 
