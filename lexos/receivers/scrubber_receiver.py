@@ -513,9 +513,9 @@ class ScrubbingReceiver(BaseReceiver):
         previewing = self._front_end_data["formAction"] == "apply"
 
         if punct:
-            apos = self._front_end_data['aposbox'] == "true"
-            hyphen = self._front_end_data['hyphensbox'] == "true"
-            amper = self._front_end_data['ampersandbox'] == "true"
+            apos = "aposbox" in self._front_end_data
+            hyphen = "hyphensbox" in self._front_end_data
+            amper = "ampersandbox" in self._front_end_data
             remove_punctuation_map = self._get_remove_punctuation_map(
                 apos=apos, hyphen=hyphen, amper=amper, previewing=previewing)
         else:
@@ -558,9 +558,9 @@ class ScrubbingReceiver(BaseReceiver):
         """
 
         if whitespace:
-            spaces = self._front_end_data['spacesbox'] == "true"
-            tabs = self._front_end_data['tabsbox'] == "true"
-            newlines = self._front_end_data['newlinesbox'] == "true"
+            spaces = "spacebox" in self._front_end_data
+            tabs = "tabsbox" in self._front_end_data
+            newlines = "newlinesbox" in self._front_end_data['newlinesbox']
             remove_whitespace_map = self._get_remove_whitespace_map(
                 spaces=spaces, tabs=tabs, newlines=newlines)
         else:
@@ -579,22 +579,22 @@ class ScrubbingReceiver(BaseReceiver):
         :return: A BasicOptions NamedTuple.
         """
 
-        lower = self._front_end_data['lowercasebox'] == "true"
+        lower = 'lowercasebox' in self._front_end_data
 
-        punct = self._front_end_data['punctuationbox'] == "true"
+        punct = 'punctuationbox' in self._front_end_data
         punctuation_options = self._get_punctuation_options_from_front_end(
             punct=punct)
 
-        digits = self._front_end_data['digitsbox'] == "true"
+        digits = "digitbox" in self._front_end_data
         if digits:
             remove_digits_map = self._get_remove_digits_map()
         else:
             remove_digits_map = {}
 
-        tags = self._front_end_data['tagbox'] == "true"
+        tags = "tagbox" in self._front_end_data
         tag_options = self._get_tag_options_from_front_end()
 
-        whitespace = self._front_end_data['whitespacebox'] == "true"
+        whitespace = "whitespacebox" in self._front_end_data
         whitespace_options = self._get_whitespace_options_from_front_end(
             whitespace=whitespace)
 
@@ -634,11 +634,10 @@ class ScrubbingReceiver(BaseReceiver):
                 file_strings[index] = self._load_scrub_optional_upload(
                     storage_folder, storage_filenames[index])
             else:
-                self._front_end_data[
-                    'scrubbingoptions']['optuploadnames'][key] = ''
+                session['scrubbingoptions']['optuploadnames'][key] = ''
                 file_strings[index] = ""
 
-        if self._front_end_data['lowercasebox'] == "true":
+        if "lowercasebox" in self._front_end_data['lowercasebox']:
             for index in range(4):
                 file_strings[index] = file_strings[index].lower()
 
@@ -660,7 +659,7 @@ class ScrubbingReceiver(BaseReceiver):
         manual_special_char = self._front_end_data['manuallemmas']
         manual_sw_kw = self._front_end_data['manuallemmas']
 
-        if self._front_end_data['lowercasebox'] == "true":
+        if 'lowercasebox' in self._front_end_data:
             manual_consol = manual_consol.lower()
             manual_lemma = manual_lemma.lower()
             manual_special_char = manual_special_char.lower()
@@ -675,29 +674,29 @@ class ScrubbingReceiver(BaseReceiver):
 
         :return: An AdditionalOptions NamedTuple"""
 
-        file_options = self._get_file_options_from_front_end(),
+        file_options = self._get_file_options_from_front_end()
         manual_options = self._get_manual_options_from_front_end()
 
         # Combine both types of additional option inputs
-        storage_folder = getattr(file_options, "storage_folder")
+        storage_folder = file_options.storage_folder
         both_consol = self._handle_file_and_manual_strings(
-            file_string=getattr(file_options, "file_consol"),
-            manual_string=getattr(manual_options, "manual_consol"),
+            file_string=file_options.file_consol,
+            manual_string=manual_options.manual_consol,
             storage_folder=storage_folder,
             storage_filename=constants.CONSOLIDATION_FILENAME)
         both_lemma = self._handle_file_and_manual_strings(
-            file_string=getattr(file_options, "file_lemma"),
-            manual_string=getattr(manual_options, "manual_lemma"),
+            file_string=file_options.file_lemma,
+            manual_string=manual_options.manual_lemma,
             storage_folder=storage_folder,
             storage_filename=constants.LEMMA_FILENAME)
         both_special_char = self._handle_file_and_manual_strings(
-            file_string=getattr(file_options, "file_special_char"),
-            manual_string=getattr(manual_options, "manual_special_char"),
+            file_string=file_options.file_special_char,
+            manual_string=manual_options.manual_special_char,
             storage_folder=storage_folder,
             storage_filename=constants.SPECIAL_CHAR_FILENAME)
         both_sw_kw = self._handle_file_and_manual_strings(
-            file_string=getattr(file_options, "file_sw_kw"),
-            manual_string=getattr(manual_options, "manual_sw_kw"),
+            file_string=file_options.file_sw_kw,
+            manual_string=manual_options.manual_sw_kw,
             storage_folder=storage_folder,
             storage_filename=constants.STOPWORD_FILENAME)
 
