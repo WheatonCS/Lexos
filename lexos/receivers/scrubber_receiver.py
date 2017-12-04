@@ -75,7 +75,7 @@ class BasicOptions(NamedTuple):
     digits: bool
 
     # A dictionary mapping digits for deletion to None
-    remove_digits_map: Dict[int: type(None)]
+    remove_digits_map: Dict[int, None]
 
     # Indicates whether Scrub Tags has been checked.
     tags: bool
