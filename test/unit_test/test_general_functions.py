@@ -46,10 +46,10 @@ class TestHtmlEscape:
         assert html_escape_deprec('&') == "&amp;"
 
     def test_quot(self):
-        assert html_escape_deprec('"') == "&quot;"
+        assert html_escape_deprec('"') == "&#34;"
 
     def test_apos(self):
-        assert html_escape_deprec("'") == "&apos;"
+        assert html_escape_deprec("'") == "&#39;"
 
     def test_gt(self):
         assert html_escape_deprec('>') == "&gt;"
@@ -58,13 +58,13 @@ class TestHtmlEscape:
         assert html_escape_deprec('<') == "&lt;"
 
     def test_all(self):
-        assert html_escape_deprec('&"\'><') == '&amp;&quot;&apos;&gt;&lt;'
-        assert html_escape_deprec("<html lang='en'></html>") == '&lt;html lang=&apo' \
-                                                         's;en&apos;&gt;&lt;' \
-                                                         '/html&gt;'
-        assert html_escape_deprec('<html lang="en"></html>') == '&lt;html lang=&quo' \
-                                                         't;en&quot;&gt;&lt;' \
-                                                         '/html&gt;'
+        assert html_escape_deprec('&"\'><') == "&amp;&#34;&#39;&gt;&lt;"
+
+        assert html_escape_deprec("<html lang='en'></html>") == \
+            "&lt;html lang=&#39;en&#39;&gt;&lt;/html&gt;"
+
+        assert html_escape_deprec('<html lang="en"></html>') == \
+            '&lt;html lang=&#34;en&#34;&gt;&lt;/html&gt;'
 
 
 class TestApplyFunctionExcludeTags:
