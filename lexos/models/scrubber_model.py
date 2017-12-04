@@ -579,3 +579,11 @@ class ScrubberModel(BaseModel):
 
         return {file_id: self._scrub(file_id)
                 for file_id, content in self._file_id_content_map.items()}
+
+    def save_scrub_changes(self):
+        """Perform side effect to save scrubbed the file on the disk"""
+
+        file_manager = FileManagerModel().load_file_manager()
+        scrubbed_file_manager = file_manager.mass_update_content(
+            self._get_all_scrub_text())
+        FileManagerModel().save_file_manager(scrubbed_file_manager)
