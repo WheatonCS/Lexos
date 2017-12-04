@@ -16,7 +16,6 @@ import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 from lexos.managers.lexos_file import LexosFile
-from lexos.models.scrubber_model import ScrubberModel
 
 
 class FileManager:
@@ -318,30 +317,6 @@ class FileManager:
                 str(l_file.id) + '.txt')
         # update the session
         session_manager.load()
-
-    def scrub_files(self, saving_changes: bool) -> \
-            List[Tuple[int, str, str, str]]:
-        """Scrubs active files & creates a formatted preview list w/ results.
-
-        :param saving_changes: a boolean saying whether or not to save the
-                               changes made.
-        :return: a formatted list with an entry (tuple) for every active file,
-                 containing the preview information (the file id, label, class
-                 label, and scrubbed contents preview).
-        """
-
-        updated_id_content_map = \
-            ScrubberModel(previewing=not saving_changes).scrub_all_docs()
-        previews = [(file_id,
-                     self.get_active_labels_with_id()[file_id],
-                     self.get_class_labels_with_id()[file_id],
-                     updated_id_content_map[file_id])
-                    for file_id in updated_id_content_map]
-
-        if saving_changes:
-            self.mass_update_content(id_content_map=updated_id_content_map)
-
-        return previews
 
     def cut_files(self, saving_changes: bool) -> \
             List[Tuple[int, str, str, str]]:
