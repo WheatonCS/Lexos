@@ -1,6 +1,6 @@
 from lexos.helpers.general_functions import get_encoding, make_preview_from, \
-    generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
-    dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
+    generate_d3_object, html_escape_deprec, \
+    apply_function_exclude_tags, decode_bytes
 
 
 class TestGeneralFunctions:
@@ -40,48 +40,29 @@ class TestGeneralFunctions:
                                            {'word': 'c', 'count': 3},
                                            {'word': 'd', 'count': 4}]}
 
-    def test_merge_list(self):
-        assert merge_list([{"a": 1, "b": 2}, {"c": 3, "d": 4}]) == {
-            'a': 1, 'b': 2, 'c': 3, 'd': 4}
-
-    def test_load_stastic(self):
-        assert load_stastic(
-            "this is a string string") == {
-            "this": 1, "is": 1, "a": 1, "string": 2}
-
-    def test_matrix_to_dict(self):
-        assert matrix_to_dict([['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]]) == \
-            [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]
-
-    def test_dict_to_matrix(self):
-        assert dict_to_matrix(
-            [{'a': 1, 'b': 2, 'c': 3, 'd': 4}]) == (
-                [['', 'a', 'b', 'c', 'd'], [0, 1, 2, 3, 4]],
-                ['a', 'b', 'c', 'd'])
-
 
 class TestHtmlEscape:
     def test_amp(self):
-        assert html_escape('&') == "&amp;"
+        assert html_escape_deprec('&') == "&amp;"
 
     def test_quot(self):
-        assert html_escape('"') == "&quot;"
+        assert html_escape_deprec('"') == "&quot;"
 
     def test_apos(self):
-        assert html_escape("'") == "&apos;"
+        assert html_escape_deprec("'") == "&apos;"
 
     def test_gt(self):
-        assert html_escape('>') == "&gt;"
+        assert html_escape_deprec('>') == "&gt;"
 
     def test_lt(self):
-        assert html_escape('<') == "&lt;"
+        assert html_escape_deprec('<') == "&lt;"
 
     def test_all(self):
-        assert html_escape('&"\'><') == '&amp;&quot;&apos;&gt;&lt;'
-        assert html_escape("<html lang='en'></html>") == '&lt;html lang=&apo' \
+        assert html_escape_deprec('&"\'><') == '&amp;&quot;&apos;&gt;&lt;'
+        assert html_escape_deprec("<html lang='en'></html>") == '&lt;html lang=&apo' \
                                                          's;en&apos;&gt;&lt;' \
                                                          '/html&gt;'
-        assert html_escape('<html lang="en"></html>') == '&lt;html lang=&quo' \
+        assert html_escape_deprec('<html lang="en"></html>') == '&lt;html lang=&quo' \
                                                          't;en&quot;&gt;&lt;' \
                                                          '/html&gt;'
 
