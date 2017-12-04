@@ -637,7 +637,7 @@ class ScrubbingReceiver(BaseReceiver):
                 session['scrubbingoptions']['optuploadnames'][key] = ''
                 file_strings[index] = ""
 
-        if "lowercasebox" in self._front_end_data['lowercasebox']:
+        if "lowercasebox" in self._front_end_data:
             for index in range(4):
                 file_strings[index] = file_strings[index].lower()
 
