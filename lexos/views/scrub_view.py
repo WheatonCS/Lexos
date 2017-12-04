@@ -5,6 +5,8 @@ from flask import request, session, render_template, Blueprint
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.scrubber_model import ScrubberModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -52,27 +54,35 @@ def scrub():
 # Tells Flask to load this function when someone is at '/doScrubbing'
 @scrubber_blueprint.route("/doScrubbing", methods=["GET", "POST"])
 def do_scrubbing():
-    """:return: a json object with a scrubbed preview
-    """
-    file_manager = utility.load_file_manager()
+    """:return: a json object with a scrubbed preview"""
+
+    # load the id label map
+    id_active_label_map = FileManagerModel().load_file_manager()\
+        .get_active_labels_with_id()
+
     # The 'Preview Scrubbing' or 'Apply Scrubbing' button is clicked on
     # scrub.html.
     session_manager.cache_alteration_files()
     session_manager.cache_scrub_options()
+
     # saves changes only if 'Apply Scrubbing' button is clicked
     saving_changes = True if request.form["formAction"] == "apply" else False
+
     # preview_info is a tuple of (id, file_name(label), class_label, preview)
-    previews = file_manager.scrub_files(saving_changes=saving_changes)
-    # escape the html elements, only transforms preview[3], because that is
-    # the text:
-    previews = [
-        [preview[0], preview[1], preview[2],
-         general_functions.html_escape(preview[3])] for preview in previews]
-    if saving_changes:
-        utility.save_file_manager(file_manager)
-    data = {"data": previews}
-    data = json.dumps(data)
-    return data
+    previews = ScrubberModel().scrub_active_file_and_return_preview(
+        save_changes=saving_changes)
+
+    # generate the data to send to frontend
+    data = [
+        {
+            "label": id_active_label_map[file_id],
+            "preview": general_functions.html_escape_deprec(previews)
+        }
+        for file_id, previews in previews.items()
+    ]
+
+    data_json_str = json.dumps(data)
+    return data_json_str
 
 
 # Tells Flask to load this function when someone is at '/downloadScrubbing'
