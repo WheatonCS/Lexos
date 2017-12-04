@@ -574,11 +574,8 @@ class ScrubberModel(BaseModel):
 
         return finished_text
 
-    def scrub_all_docs(self) -> FileIDContentMap:
+    def _get_all_scrub_text(self) -> FileIDContentMap:
         """Returns all active documents with their scrubbed text."""
 
-        for text_id in self._file_id_content_map:
-            scrubbed_text = self._scrub(text_id)
-            self._file_id_content_map[text_id] = scrubbed_text
-
-        return self._file_id_content_map
+        return {file_id: self._scrub(file_id)
+                for file_id, content in self._file_id_content_map.items()}
