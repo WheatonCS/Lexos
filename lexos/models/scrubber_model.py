@@ -625,7 +625,7 @@ class ScrubberModel(BaseModel):
             ScrubberModel._save_scrub_changes(
                 id_scrubbed_content_map=id_scrubbed_content_map)
 
-        # return
+        # return all the previews
         return ScrubberModel._get_preview_of_scrubbed(
             id_scrubbed_content_map=id_scrubbed_content_map)
 
