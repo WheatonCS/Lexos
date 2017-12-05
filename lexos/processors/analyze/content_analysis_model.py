@@ -5,13 +5,13 @@ from typing import Optional
 
 import pandas as pd
 
-from lexos.helpers.definitions import _WORD_BOUNDARY_REGEX_STR
+from lexos.helpers.definitions import count_phrase_in_text
 from lexos.processors.analyze.contentanalysis_receiver import \
     ContentAnalysisReceiver, ContentAnalysisOption
 
 
 class ContentAnalysisModel(object):
-    def __init__(self, test_options: Optional[ContentAnalysisOption]=None):
+    def __init__(self, test_options: Optional[ContentAnalysisOption] = None):
         """A model to manage the content analysis tool.
 
         test_option:
@@ -343,14 +343,15 @@ class ContentAnalysisModel(object):
         self._test_options = options
 
 
-def count_phrases(dictionary, file):
+def count_phrases(dictionary: list, file: object):
     """Counts each phrase in the dictionary in the given file.
 
     If a has with more than 1 word is found in a file, it is deleted
     from the file to prevent double count.
     For example:
-    dictionary = ["not very good", "very good"]
-    file = "not very good"
+    dictionary[1].content = "not very good"
+    dictionary[2].content = "very good"
+    file.content = "not very good"
     count: "not very good" = 1
            "very good" = 0
     :param dictionary: list of Phrase objects sorted by number of word in
@@ -359,19 +360,10 @@ def count_phrases(dictionary, file):
     :return: list of Phrase objects with their counts
     """
     for phrase in dictionary:
-        count = 0
-        if file.content.startswith(phrase.content + " "):
-            count += 1
-        if file.content.endswith(" " + phrase.content + "\n") or \
-            file.content.endswith(" " + phrase.content) or \
-            file.content.endswith(
-                phrase.content):
-            count += 1
-        count += len(re.findall(_WORD_BOUNDARY_REGEX_STR + phrase.content +
-                                _WORD_BOUNDARY_REGEX_STR, file.content))
+        phrase.count = count_phrase_in_text(phrase=phrase.content,
+                                            text=file.content)
         if ' ' in phrase.content:
-            file.content = file.content.replace(phrase.content, " ")
-        phrase.count = count
+            file.content = file.content.replace(phrase.content, ' ')
     return dictionary
 
 
@@ -479,7 +471,7 @@ class File(Document):
 
 
 class Phrase(object):
-    def __init__(self, content: str, dict_label: str, count: int=0):
+    def __init__(self, content: str, dict_label: str, count: int = 0):
         """An object of this class represents a Phrase.
 
         :param content: the phrase or word
