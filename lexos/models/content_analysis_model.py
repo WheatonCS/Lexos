@@ -269,7 +269,7 @@ class ContentAnalysisModel(object):
             return error_msg
         return ""
 
-    def analyze(self) -> [str, str]:
+    def analyze(self) -> (Optional[str], Optional[str]):
         """Generates html table containing counts, averages, & formula.
 
         :return: formula_errors: str with error message or None if there is no
