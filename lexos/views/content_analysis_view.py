@@ -6,9 +6,9 @@ from flask import request, render_template, Blueprint
 from lexos.helpers import constants
 from lexos.managers.session_manager import session
 from lexos.managers.utility import load_file_manager
-from lexos.processors.analyze.content_analysis_model import \
+from lexos.models.content_analysis_model import \
     ContentAnalysisModel
-from lexos.processors.analyze.contentanalysis_receiver import \
+from lexos.receivers.contentanalysis_receiver import \
     ContentAnalysisReceiver
 from lexos.views.base_view import detect_active_docs
 

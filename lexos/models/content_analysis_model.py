@@ -1,12 +1,10 @@
 from copy import deepcopy
-import re
-from math import sqrt, sin, cos, tan, log  # noqa F401
 from typing import Optional
 
 import pandas as pd
 
 from lexos.helpers.definitions import count_phrase_in_text
-from lexos.processors.analyze.contentanalysis_receiver import \
+from lexos.receivers.contentanalysis_receiver import \
     ContentAnalysisReceiver, ContentAnalysisOption
 
 
