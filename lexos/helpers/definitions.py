@@ -10,7 +10,7 @@ WORD_REGEX = re.compile(_WORD_REGEX_STR, re.UNICODE)
 def count_phrase_in_text(phrase: str, text: str):
     """Count how many times the phrase appears in the text
 
-    :param phrase: string containing a phase or word
+    :param phrase: string that may contain white spaces
     :param text: string where the phrase will get count
     :return: count: number of times the phrase appears in the text
     """
