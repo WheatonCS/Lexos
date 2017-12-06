@@ -101,12 +101,12 @@ class ContentAnalysisModel(object):
         self._formulas = []
         active_dicts = self.get_active_dicts()
         result = 0
-        for i, file in enumerate(self._corpus):
+        for corpus_index, file in enumerate(self._corpus):
             new_formula = self._formula
-            for j, active_dict in enumerate(active_dicts):
+            for active_dict_index, active_dict in enumerate(active_dicts):
                 new_formula = new_formula.replace(
                     "[" + active_dict.label + "]",
-                    str(self._counters[i][j]))
+                    str(self._counters[corpus_index][active_dict_index]))
             new_formula = new_formula.replace("()", "")
             try:
                 result = eval(new_formula)
