@@ -17,6 +17,8 @@ def count_phrase_in_text(phrase: str, text: str):
     count = 0
     # Remove leading and trailing white spaces
     phrase = phrase.strip()
+    # Substitute multiple whitespace with single whitespace
+    phrase = ' '.join(phrase.split())
     if text.startswith(phrase + " "):
         count += 1
     if text.endswith(" " + phrase + "\n") or text.endswith(" " + phrase) or \
