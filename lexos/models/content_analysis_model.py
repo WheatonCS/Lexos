@@ -198,6 +198,7 @@ class ContentAnalysisModel(object):
             zip(self._corpus, self._formulas,
                 self._scores, self._counters)):
             df.xs(row_index)[0] = file.label
+            # save into the dataframe all the counts for a file
             for col_index, (count) in enumerate(counter):
                 df.xs(row_index)[col_index + 1] = count
             df.xs(row_index)[col_index + 2] = formula
