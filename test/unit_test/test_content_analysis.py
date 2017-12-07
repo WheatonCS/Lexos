@@ -5,9 +5,7 @@ from lexos.models.content_analysis_model import \
 
 
 class TestOptions(object):
-    def __init__(self, dict_label=None, formula=None):
-        self.label = dict_label
-        self.dict_label = dict_label
+    def __init__(self, formula):
         self.formula = formula
 
 
@@ -29,7 +27,7 @@ def test_add_dictionary():
 
 
 def test_get_active_dicts():
-    test = ContentAnalysisModel(TestOptions(dict_label="dict1"))
+    test = ContentAnalysisModel()
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test")
     active = test.get_active_dicts()

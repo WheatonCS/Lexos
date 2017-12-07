@@ -12,7 +12,9 @@ class ContentAnalysisModel(object):
     def __init__(self, test_options: Optional[ContentAnalysisOption] = None):
         """A model to manage the content analysis tool.
 
-        test_option:
+        :param test_options:
+            the input used in testing to override the dynamically loaded option
+
         dictionaries: List of Dictionary objects
         corpus: List of File objects
         counters: a 2D array with count of every dictionary for evey file in
