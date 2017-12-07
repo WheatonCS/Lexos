@@ -20,7 +20,7 @@ def count_phrase_in_text(phrase: str, text: str):
     if text.startswith(phrase + " "):
         count += 1
     if text.endswith(" " + phrase + "\n") or text.endswith(" " + phrase) or \
-            text.endswith(phrase):
+            text.endswith(" " + phrase + "\r\n") or text.endswith(phrase):
         count += 1
     count += len(text.split(" " + phrase + " ")) - 1
     return count
