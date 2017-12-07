@@ -15,6 +15,8 @@ def count_phrase_in_text(phrase: str, text: str):
     :return: count: number of times the phrase appears in the text
     """
     count = 0
+    # Remove leading and trailing white spaces
+    phrase = phrase.strip()
     if text.startswith(phrase + " "):
         count += 1
     if text.endswith(" " + phrase + "\n") or text.endswith(" " + phrase) or \
