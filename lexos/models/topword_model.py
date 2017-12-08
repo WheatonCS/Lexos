@@ -231,7 +231,7 @@ class TopwordModel(BaseModel):
         # Get all class labels.
         class_labels = class_division_map.index.values
 
-        # Get all combinations of file ids and class labels if the file is not
+        # Get all combinations of file ids and class labels, if the file is not
         # in the class.
         file_class_combinations = \
             [(file_id, class_label)
@@ -240,14 +240,17 @@ class TopwordModel(BaseModel):
              if not class_division_map[file_id][class_label]]
 
         # Split DTM into groups and find word count sums of each group.
-        group_sums = [self._doc_term_matrix[group_index].sum()
-                      for group_index in class_division_map.values]
+        group_word_sums = [self._doc_term_matrix[group_index].sum()
+                           for group_index in class_division_map.values]
 
-        # Put groups word count sums into a data frame.
-        group_data = \
-            pd.DataFrame(data=group_sums, index=class_labels, columns=words)
-
-        # Initialize all the labels and result to return.
+        # Put groups word count sums into a data frame, where data is the word
+        # sums of each class of segments, index is the class labels and columns
+        # are the words.
+        group_data = pd.DataFrame(data=group_word_sums,
+                                  index=class_labels,
+                                  columns=words)
+        # Loop through all the combinations of file ids and class labels to
+        # perform topword analysis on each file with the class its not in.
         readable_result = [
             TopwordModel._z_test_word_list(
                 word_count_series_one=pd.Series(
@@ -288,14 +291,17 @@ class TopwordModel(BaseModel):
         label_combinations = list(itertools.combinations(class_labels, 2))
 
         # Split DTM into groups and find word count sums of each group.
-        group_sums = [self._doc_term_matrix[group_index].sum()
-                      for group_index in class_division_map.values]
+        group_word_sums = [self._doc_term_matrix[group_index].sum()
+                           for group_index in class_division_map.values]
 
-        # Put groups word count sums into a data frame.
-        group_data = \
-            pd.DataFrame(data=group_sums, index=class_labels, columns=words)
-
-        # Generate analysis result.
+        # Put groups word count sums into a data frame, where data is the word
+        # sums of each class of segments, index is the class labels and columns
+        # are the words.
+        group_data = pd.DataFrame(data=group_word_sums,
+                                  index=class_labels,
+                                  columns=words)
+        # Loop through all the combinations of class labels to perform topword
+        # analysis between different classes.
         readable_result = [
             TopwordModel._z_test_word_list(
                 word_count_series_one=pd.Series(
@@ -314,8 +320,8 @@ class TopwordModel(BaseModel):
         """Call the right method corresponding to user's selection.
 
         :return: a namedtuple that holds the topword result, which contains a
-                 header and a list of pandas series."""
-
+                 header and a list of pandas series.
+        """
         if self._topword_front_end_option.analysis_option == "allToPara":
             # Get header and result.
             header = "Compare Each Document to All the Documents As a Whole"
