@@ -21,7 +21,7 @@ ReadableResult = List[pd.Series]
 
 
 class TopwordTestOptions(NamedTuple):
-    """A typed tuple to hold test options."""
+    """A typed tuple to hold topword test options."""
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordFrontEndOption
@@ -74,20 +74,20 @@ class TopwordModel(BaseModel):
     def _z_test(p1: float, p2: float, n1: int, n2: int) -> float:
         """Examine if a particular word is an anomaly.
 
-        This z-test method is the major method we use in this program to detect
-        if a word is an anomaly, while doing so, we assume the possibility of
-        a particular word appearing in a text follows normal distribution. And
-        while examining, this function compares the probability of a word's
+        This z-test method is the major analysis method we use to detect if a
+        word is an anomaly. While doing so, we assume the possibility of a
+        particular word appearing in a text follows the normal distribution.
+        And while examining, this function compares the probability of a word's
         occurrence in one segment against another segment. (Here a segment can
-        be a single, a group of files or the whole corpus.)
+        be a single file, a group of files or the whole corpus.)
         Usually we report a word as an anomaly if the return value is smaller
         than -1.96 or bigger than 1.96.
         :param p1: the probability of a word's occurrence in a particular
                    segment: Number of word occurrence in the segment /
                    total word count in the segment
         :param p2: the probability of a word's occurrence in all the segments
-                   Number of word occurrence in all the segment /
-                   total word count in all the segment
+                   segment: Number of word occurrence in the segment /
+                   total word count in the segment
         :param n1: the number of total words in this segment.
         :param n2: the number of total words in this segment.
         :return: the z-score indicates that the particular word in a particular
@@ -110,37 +110,41 @@ class TopwordModel(BaseModel):
             return round((p1 - p2) / standard_error, 4)
 
     @staticmethod
-    def _z_test_word_list(data_series_one: pd.Series,
-                          data_series_two: pd.Series) -> pd.Series:
+    def _z_test_word_list(word_count_series_one: pd.Series,
+                          word_count_series_two: pd.Series) -> pd.Series:
         """Run z-test on all the words of two input word lists.
 
-        :param data_series_one: a pandas series where data represents word
-                                counts and corresponding index are the words.
-        :param data_series_two: a pandas series where data represents word
-                                counts and corresponding index are the words.
-        :return: a panda series contains analysis result, where index are words
-                 and corresponding data is the z_score. And the panda series is
-                 sorted by z_score in descending order.
+        :param word_count_series_one: a pandas series where:
+            - the data is the word counts.
+            - the index is the corresponding words.
+            - the name depends on the what the input is. If a file is given,
+              the name will be string "File" add the actual file name, or if a
+              class is given, the name will be string "class" add the actual
+              class name.
+        :param word_count_series_two: a pandas series where:
+            - the data is the word counts.
+            - the index is the corresponding words.
+            - the name depends on the what the input is. If a file is given,
+              the name will be string "File" add the actual file name, or if a
+              class is given, the name will be string "class" add the actual
+              class name.
+        :return: a panda series where:
+            - the data is the z-scores.
+            - the index is the corresponding words.
+            - the name is a readable header for analysis result.
         """
 
         # Find sample population of the two input data set
-        n1 = data_series_one.values.sum()
-        n2 = data_series_two.values.sum()
+        n1 = word_count_series_one.values.sum()
+        n2 = word_count_series_two.values.sum()
 
-        def _z_test_for_one_word(word_index: int) -> float:
-            """Helper function that run z-test on one word.
-
-            :param word_index: index of the word.
-            :return: z-test score.
-            """
-            p1 = data_series_one[word_index] / n1
-            p2 = data_series_two[word_index] / n2
-            return TopwordModel._z_test(p1=p1, p2=p2, n1=n1, n2=n2)
+        joined_data_frame = word_count_series_one.to_frame().join(
+            word_count_series_two.to_frame())
 
         # Perform the z-test to detect word anomalies.
         full_word_score_dict = \
-            {word: _z_test_for_one_word(word_index=index)
-             for index, word in enumerate(data_series_one.index.values)}
+            {word: TopwordModel._z_test(p1=c1/n1, p2=c2/n2, n1=n1, n2=n2)
+             for word, [c1, c2] in joined_data_frame.iterrows()}
 
         # Filter out the insignificant result
         sig_word_score_dict = \
@@ -156,7 +160,7 @@ class TopwordModel(BaseModel):
         result_series = pd.Series(sorted_dict)
         # Set the result series name.
         result_series.name = \
-            "%s compared to %s" % (data_series_one.name, data_series_two.name)
+            "%s compared to %s" % (word_count_series_one.name, word_count_series_two.name)
 
         return result_series
 
@@ -181,11 +185,11 @@ class TopwordModel(BaseModel):
         # Generate analysis result.
         readable_result = [
             TopwordModel._z_test_word_list(
-                data_series_one=pd.Series(
+                word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
                     name='Document "%s"' % (self._id_temp_label_map[file_id])),
-                data_series_two=pd.Series(
+                word_count_series_two=pd.Series(
                     data=word_count_sum,
                     index=words,
                     name="the whole corpus"))
@@ -231,11 +235,11 @@ class TopwordModel(BaseModel):
         # Initialize all the labels and result to return.
         readable_result = [
             TopwordModel._z_test_word_list(
-                data_series_one=pd.Series(
+                word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
                     name='Document "%s"' % (self._id_temp_label_map[file_id])),
-                data_series_two=pd.Series(
+                word_count_series_two=pd.Series(
                     data=group_data.loc[class_label],
                     index=words,
                     name='Class "%s"' % class_label))
@@ -277,11 +281,11 @@ class TopwordModel(BaseModel):
         # Generate analysis result.
         readable_result = [
             TopwordModel._z_test_word_list(
-                data_series_one=pd.Series(
+                word_count_series_one=pd.Series(
                     data=group_data.loc[group_one_label],
                     index=words,
                     name='Class "%s"' % group_one_label),
-                data_series_two=pd.Series(
+                word_count_series_two=pd.Series(
                     data=group_data.loc[group_two_label],
                     index=words,
                     name='Class "%s"' % group_two_label))
