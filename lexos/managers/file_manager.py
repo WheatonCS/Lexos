@@ -1261,11 +1261,6 @@ class FileManager:
         for file in active_files:
             class_division_map[file.id][file.class_label] = True
 
-        # set files with no class assigned to untitled.
-        if '' in class_division_map.index.values:
-            class_division_map.index.values[
-                np.where(class_division_map.index.values == '')] = "untitled"
-
         return class_division_map
 
     def get_previews_of_all(self) -> List[dict]:
