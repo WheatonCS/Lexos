@@ -150,8 +150,8 @@ class TopwordModel(BaseModel):
         # can implement the 'sort_by' function for series in our general
         # functions if we need it for better performance.
         full_word_score_dict = \
-            {word: TopwordModel._z_test(p1=count1/total_word_count_one,
-                                        p2=count2/total_word_count_two,
+            {word: TopwordModel._z_test(p1=count1 / total_word_count_one,
+                                        p2=count2 / total_word_count_two,
                                         n1=total_word_count_one,
                                         n2=total_word_count_two)
              for word, [count1, count2] in joined_data_frame.iterrows()}
@@ -208,7 +208,7 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_class_to_all(self, class_division_map: pd.DataFrame) -> \
+    def _analyze_file_to_class(self, class_division_map: pd.DataFrame) -> \
             ReadableResult:
         """Detect if a given word is an anomaly.
 
@@ -236,8 +236,8 @@ class TopwordModel(BaseModel):
              if not class_division_map[file_id][class_label]]
 
         # Split DTM into groups and find word count sums of each group.
-        group_sums = [self._doc_term_matrix[row].sum(axis=0)
-                      for row in class_division_map.values]
+        group_sums = [self._doc_term_matrix[group_index].sum()
+                      for group_index in class_division_map.values]
 
         # Put groups word count sums into a data frame.
         group_data = \
@@ -282,8 +282,8 @@ class TopwordModel(BaseModel):
         label_combinations = list(itertools.combinations(class_labels, 2))
 
         # Split DTM into groups and find word count sums of each group.
-        group_sums = [self._doc_term_matrix[row].sum(axis=0)
-                      for row in class_division_map.values]
+        group_sums = [self._doc_term_matrix[group_index].sum()
+                      for group_index in class_division_map.values]
 
         # Put groups word count sums into a data frame.
         group_data = \
@@ -323,7 +323,7 @@ class TopwordModel(BaseModel):
 
             # Get header and result.
             header = "Compare Each Document to Other Class(es)"
-            results = self._analyze_class_to_all(
+            results = self._analyze_file_to_class(
                 class_division_map=class_division_map)
 
             return TopwordResult(header=header, results=results)
