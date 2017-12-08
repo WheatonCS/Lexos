@@ -13,8 +13,8 @@ from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.receivers.topword_receiver import TopwordFrontEndOption, \
-    TopwordReceiver
+from lexos.receivers.topword_receiver import TopwordReceiver, \
+    TopwordAnalysisType
 
 # Type hinting for the analysis result each function returns.
 ReadableResult = List[pd.Series]
@@ -24,7 +24,7 @@ class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
-    front_end_option: TopwordFrontEndOption
+    front_end_option: TopwordAnalysisType
 
 
 class TopwordResult(NamedTuple):
@@ -64,7 +64,7 @@ class TopwordModel(BaseModel):
             else MatrixModel().get_id_temp_label_map()
 
     @property
-    def _topword_front_end_option(self) -> TopwordFrontEndOption:
+    def _topword_front_end_option(self) -> TopwordAnalysisType:
         """:return: a typed tuple that holds the topword front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
@@ -322,30 +322,33 @@ class TopwordModel(BaseModel):
         :return: a namedtuple that holds the topword result, which contains a
                  header and a list of pandas series.
         """
-        if self._topword_front_end_option.analysis_option == "allToPara":
+        topword_analysis_option = \
+            self._topword_front_end_option.analysis_option
+
+        if topword_analysis_option == TopwordAnalysisType.ALL_TO_PARA:
             # Get header and result.
-            header = "Compare Each Document to All the Documents As a Whole"
+            header = "Compare Each Document to All the Documents As a Whole."
             results = self._analyze_file_to_all()
 
             return TopwordResult(header=header, results=results)
 
-        elif self._topword_front_end_option.analysis_option == "classToPara":
+        elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_PARA:
             # Check if more than one class exists.
             assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
 
             # Get header and result.
-            header = "Compare Each Document to Other Class(es)"
+            header = "Compare Each Document to Other Class(es)."
             results = self._analyze_file_to_class(
                 class_division_map=class_division_map)
 
             return TopwordResult(header=header, results=results)
 
-        elif self._topword_front_end_option.analysis_option == "classToClass":
+        elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_CLASS:
             # Check if more than one class exists.
             assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
 
             # Get header and result.
-            header = "Compare a Class to Each Other Class"
+            header = "Compare a Class to Each Other Class(es)."
             results = self._analyze_class_to_class(
                 class_division_map=class_division_map)
 
@@ -361,7 +364,8 @@ class TopwordModel(BaseModel):
         :return: a namedtuple that holds the topword result, which contains a
                  header and a list of pandas series, however it will check the
                  length of each pandas series and only return the first 20 rows
-                 if the pandas series has length that is longer than 20."""
+                 if the pandas series has length that is longer than 20.
+        """
 
         topword_result = \
             self._get_result(class_division_map=class_division_map)
