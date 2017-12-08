@@ -323,7 +323,7 @@ class TopwordModel(BaseModel):
                  header and a list of pandas series.
         """
         topword_analysis_option = \
-            self._topword_front_end_option.analysis_option
+            self._topword_front_end_option
 
         if topword_analysis_option == TopwordAnalysisType.ALL_TO_PARA:
             # Get header and result.

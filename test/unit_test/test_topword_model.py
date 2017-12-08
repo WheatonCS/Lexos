@@ -3,7 +3,7 @@ import pandas as pd
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.models.topword_model import TopwordModel, TopwordTestOptions
-from lexos.receivers.topword_receiver import TopwordFrontEndOption
+from lexos.receivers.topword_receiver import TopwordAnalysisType
 
 
 # ---------------------------- Test for z-test ------------------------------
@@ -37,7 +37,7 @@ test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
                         index=np.array([0, 1]),
                         columns=np.array(["A", "B", "C", "D"]))
 test_id_temp_label_map = {0: "F1", 1: "F2"}
-test_front_end_option = TopwordFrontEndOption(analysis_option="allToPara")
+test_front_end_option = TopwordAnalysisType.ALL_TO_PARA
 test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
@@ -72,7 +72,7 @@ class TestParaToGroup:
     def test_normal_case_header(self):
         assert test_topword_model.get_readable_result(
             class_division_map=fake_class_division_map).header \
-            == "Compare Each Document to All the Documents As a Whole"
+            == "Compare Each Document to All the Documents As a Whole."
 
     def test_special_case(self):
         try:
@@ -94,7 +94,7 @@ test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
                         columns=np.array(["A", "B", "C", "D",
                                           "E", "F", "G", "H"]))
 test_id_temp_label_map = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
-test_front_end_option = TopwordFrontEndOption(analysis_option="classToPara")
+test_front_end_option = TopwordAnalysisType.CLASS_TO_PARA
 test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
@@ -131,7 +131,7 @@ class TestClassToAll:
     def test_normal_case_header(self):
         assert test_topword_model_one.get_readable_result(
             class_division_map=test_class_division_map).header == \
-            "Compare Each Document to Other Class(es)"
+            "Compare Each Document to Other Class(es)."
 
     def test_special_case(self):
         try:
@@ -152,7 +152,7 @@ class TestClassToAll:
 
 # ------------------- Test method analyze class to class --------------------
 # Create test suite for normal case.
-test_front_end_option = TopwordFrontEndOption(analysis_option="classToClass")
+test_front_end_option = TopwordAnalysisType.CLASS_TO_CLASS
 test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  id_temp_label_map=test_id_temp_label_map,
                                  front_end_option=test_front_end_option)
@@ -178,7 +178,7 @@ class TestClassToClass:
     def test_normal_case_header(self):
         assert test_topword_model_two.get_readable_result(
             class_division_map=test_class_division_map).header == \
-            'Compare a Class to Each Other Class'
+            'Compare a Class to Each Other Class(es).'
 
     def test_special_case(self):
         try:
