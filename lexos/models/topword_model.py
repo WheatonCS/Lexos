@@ -199,7 +199,7 @@ class TopwordModel(BaseModel):
                 word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
-                    name=f"Document {self._id_temp_label_map[file_id]}"),
+                    name=f"Document \"{self._id_temp_label_map[file_id]}\""),
                 word_count_series_two=pd.Series(
                     data=word_count_sum,
                     index=words,
@@ -249,11 +249,11 @@ class TopwordModel(BaseModel):
                 word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
-                    name='Document "%s"' % (self._id_temp_label_map[file_id])),
+                    name=f"Document \"{self._id_temp_label_map[file_id]}\""),
                 word_count_series_two=pd.Series(
                     data=group_data.loc[class_label],
                     index=words,
-                    name='Class "%s"' % class_label))
+                    name=f"Class \"{class_label}\""))
             for file_id, class_label in file_class_combinations]
 
         return readable_result
@@ -295,11 +295,11 @@ class TopwordModel(BaseModel):
                 word_count_series_one=pd.Series(
                     data=group_data.loc[group_one_label],
                     index=words,
-                    name='Class "%s"' % group_one_label),
+                    name=f"Class \"{group_one_label}\""),
                 word_count_series_two=pd.Series(
                     data=group_data.loc[group_two_label],
                     index=words,
-                    name='Class "%s"' % group_two_label))
+                    name=f"Class \"{group_two_label}\""))
             for group_one_label, group_two_label in label_combinations]
 
         return readable_result
@@ -353,8 +353,7 @@ class TopwordModel(BaseModel):
 
         topword_result = \
             self._get_result(class_division_map=class_division_map)
-        readable_result = [result if result.size <= 20 else result[:20]
-                           for result in topword_result.results]
+        readable_result = [result[:20] for result in topword_result.results]
 
         return TopwordResult(header=topword_result.header,
                              results=readable_result)
