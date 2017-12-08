@@ -236,7 +236,7 @@ class TopwordModel(BaseModel):
              if not class_division_map[file_id][class_label]]
 
         # Split DTM into groups and find word count sums of each group.
-        group_sums = [np.sum(self._doc_term_matrix.values[row], axis=0)
+        group_sums = [self._doc_term_matrix[row].sum(axis=0)
                       for row in class_division_map.values]
 
         # Put groups word count sums into a data frame.
@@ -282,7 +282,7 @@ class TopwordModel(BaseModel):
         label_combinations = list(itertools.combinations(class_labels, 2))
 
         # Split DTM into groups and find word count sums of each group.
-        group_sums = [np.sum(self._doc_term_matrix.values[row], axis=0)
+        group_sums = [self._doc_term_matrix[row].sum(axis=0)
                       for row in class_division_map.values]
 
         # Put groups word count sums into a data frame.
