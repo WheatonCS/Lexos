@@ -187,9 +187,9 @@
                     <p class="topwordResultTableTitle"><strong>Class: "{{ classmap.index.values[i] }}"</strong></p>
                 {% endif %}
                     <div class="topwordFileTable">
-                        {% for filename in classmap.columns.values %}
-                            {%  if classmap[filename][classmap.index.values[i]] %}
-                                <p class="topwordFile">{{ filename }}</p>
+                        {% for file_id in classmap.columns.values %}
+                            {%  if classmap[file_id][classmap.index.values[i]] %}
+                                <p class="topwordFile">{{ labels[file_id] }}</p>
                             {% endif %}
                         {% endfor %}
                     </div>
