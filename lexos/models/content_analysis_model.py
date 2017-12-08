@@ -192,7 +192,7 @@ class ContentAnalysisModel(object):
                                        self.get_active_dicts()] + \
                   ['formula', 'total word count', 'score']
         indices = [file.label for file in self._corpus] + ['averages']
-        df = pd.DataFrame(columns=range(len(columns)),
+        df = pd.DataFrame(columns=columns,
                           index=range(len(indices)))
         # adds row to df with: file label, count for each dict,
         # formula result, total word count, score
@@ -215,7 +215,7 @@ class ContentAnalysisModel(object):
     def is_secure(self) -> bool:
         """Checks if the formula is secure.
 
-        The formula is secure if only contains names of uploaded dictionaries
+        The formula is siecure if only contains names of uploaded dictionaries
         and approved math symbols.
 
         :return: True if secure, false if not secure
