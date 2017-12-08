@@ -217,6 +217,11 @@ class TopwordModel(BaseModel):
         While doing so, this method compares the occurrence of a given word
         in a particular segment to the occurrence of the same word in other
         class of segments.
+        :param class_division_map: a pandas data frame where:
+            - the data is the division map with boolean values that indicate
+              which class each file belongs to.
+            - the index is the class labels.
+            - the column is the file id.
         :return: a list of pandas series, where each series formed by:
             - the data, which is the sorted z-scores.
             - the index, which the corresponding words.
@@ -272,6 +277,11 @@ class TopwordModel(BaseModel):
         While doing so, this method compares the occurrence of a given word
         in a class of segments to the occurrence of the same word in other
         class of segments.
+        :param class_division_map: a pandas data frame where:
+            - the data is the division map with boolean values that indicate
+              which class each file belongs to.
+            - the index is the class labels.
+            - the column is the file id.
         :return: a list of pandas series, where each series formed by:
             - the data, which is the sorted z-scores.
             - the index, which the corresponding words.
@@ -319,6 +329,11 @@ class TopwordModel(BaseModel):
     def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
+        :param class_division_map: a pandas data frame where:
+            - the data is the division map with boolean values that indicate
+              which class each file belongs to.
+            - the index is the class labels.
+            - the column is the file id.
         :return: a namedtuple that holds the topword result, which contains a
                  header and a list of pandas series.
         """
@@ -360,8 +375,13 @@ class TopwordModel(BaseModel):
             TopwordResult:
         """Gets the readable result to display on the web page.
 
+        :param class_division_map: a pandas data frame where:
+            - the data is the division map with boolean values that indicate
+              which class each file belongs to.
+            - the index is the class labels.
+            - the column is the file id.
         :return: a namedtuple that holds the topword result, which contains a
-                 header and a list of pandas series, however it will check the
+                 header and a list of pandas series. However it will check the
                  length of each pandas series and only return the first 20 rows
                  if the pandas series has length that is longer than 20.
         """
@@ -376,7 +396,12 @@ class TopwordModel(BaseModel):
     def get_topword_csv_path(self, class_division_map: pd.DataFrame) -> str:
         """Writes the generated top word results to an output CSV file.
 
-        :returns: path of the generated CSV file.
+        :param class_division_map: a pandas data frame where:
+            - the data is the division map with boolean values that indicate
+              which class each file belongs to.
+            - the index is the class labels.
+            - the column is the file id.
+        :return: path of the generated CSV file.
         """
         # Make the path.
         result_folder_path = os.path.join(
