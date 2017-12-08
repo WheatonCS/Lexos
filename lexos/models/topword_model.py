@@ -176,13 +176,15 @@ class TopwordModel(BaseModel):
         return result_series
 
     def _analyze_file_to_all(self) -> ReadableResult:
-        """Detect word anomalies in one file comparing to the whole corpus.
+        """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
         in a particular segment to the occurrence of the same word in the whole
         corpus.
-        :return: a list of series, each series has a readable name and the
-                 result, which contains words with corresponding z-scores.
+        :return: a list of pandas series, where each series formed by:
+            - the data, which is the sorted z-scores.
+            - the index, which the corresponding words.
+            - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
@@ -215,8 +217,10 @@ class TopwordModel(BaseModel):
         While doing so, this method compares the occurrence of a given word
         in a particular segment to the occurrence of the same word in other
         class of segments.
-        :return: a list of series, each series has a readable name and the
-                 result, which contains words with corresponding z-scores.
+        :return: a list of pandas series, where each series formed by:
+            - the data, which is the sorted z-scores.
+            - the index, which the corresponding words.
+            - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
@@ -265,8 +269,10 @@ class TopwordModel(BaseModel):
         While doing so, this method compares the occurrence of a given word
         in a class of segments to the occurrence of the same word in other
         class of segments.
-        :return: a list of series, each series has a readable name and the
-                 result, which contains words with corresponding z-scores.
+        :return: a list of pandas series, where each series formed by:
+            - the data, which is the sorted z-scores.
+            - the index, which the corresponding words.
+            - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
