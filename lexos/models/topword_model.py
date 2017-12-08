@@ -133,25 +133,36 @@ class TopwordModel(BaseModel):
             - the index is the corresponding words.
             - the name is a readable header for analysis result.
         """
+        # Find sample population of the two input data set.
+        total_word_count_one = word_count_series_one.values.sum()
+        total_word_count_two = word_count_series_two.values.sum()
 
-        # Find sample population of the two input data set
-        n1 = word_count_series_one.values.sum()
-        n2 = word_count_series_two.values.sum()
-
+        # Join two input pandas series together to avoid making the assumption
+        # that they are parallel array in future analysis.
         joined_data_frame = word_count_series_one.to_frame().join(
             word_count_series_two.to_frame())
 
         # Perform the z-test to detect word anomalies.
+        # We are using dict instead of pandas series here, because this method
+        # requires 'full_word_score_dict' to be sorted via the absolute value
+        # of the z-scores (the 'value' of the dictionary).
+        # For code clarity we use this as a temp solution, but in future we
+        # can implement the 'sort_by' function for series in our general
+        # functions if we need it for better performance.
         full_word_score_dict = \
-            {word: TopwordModel._z_test(p1=c1/n1, p2=c2/n2, n1=n1, n2=n2)
-             for word, [c1, c2] in joined_data_frame.iterrows()}
+            {word: TopwordModel._z_test(p1=count1/total_word_count_one,
+                                        p2=count2/total_word_count_two,
+                                        n1=total_word_count_one,
+                                        n2=total_word_count_two)
+             for word, [count1, count2] in joined_data_frame.iterrows()}
 
-        # Filter out the insignificant result
+        # Filter out the insignificant result.
         sig_word_score_dict = \
             {word: z_score for word, z_score in full_word_score_dict.items()
              if abs(z_score) >= 1.96}
 
-        # Sort word score dict by z-score in descending order.
+        # Sort 'sig_word_score_dict' by absolute value of z-scores in
+        # descending order.
         sorted_dict = OrderedDict(sorted(sig_word_score_dict.items(),
                                          key=lambda item: abs(item[1]),
                                          reverse=True))
@@ -159,8 +170,8 @@ class TopwordModel(BaseModel):
         # Convert the sorted result to a panda series.
         result_series = pd.Series(sorted_dict)
         # Set the result series name.
-        result_series.name = \
-            "%s compared to %s" % (word_count_series_one.name, word_count_series_two.name)
+        result_series.name = f"{word_count_series_one.name} compared to " \
+                             f"{word_count_series_two.name}"
 
         return result_series
 
@@ -179,16 +190,16 @@ class TopwordModel(BaseModel):
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns.values
 
-        # Get word count in the whole corpus of each word.
+        # Get word count of each word in whole corpus.
         word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
 
-        # Generate analysis result.
+        # Generate analysis result by comparing each file to the whole corpus.
         readable_result = [
             TopwordModel._z_test_word_list(
                 word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
-                    name='Document "%s"' % (self._id_temp_label_map[file_id])),
+                    name=f"Document {self._id_temp_label_map[file_id]}"),
                 word_count_series_two=pd.Series(
                     data=word_count_sum,
                     index=words,
