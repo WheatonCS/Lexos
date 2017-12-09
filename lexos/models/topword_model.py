@@ -191,10 +191,10 @@ class TopwordModel(BaseModel):
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
-        words = self._doc_term_matrix.columns.values
+        words = self._doc_term_matrix.columns
 
         # Get word count of each word in whole corpus.
-        word_count_sum = np.sum(self._doc_term_matrix.values, axis=0)
+        word_count_sum = self._doc_term_matrix.sum()
 
         # Generate analysis result by comparing each file to the whole corpus.
         readable_result = [
@@ -232,10 +232,10 @@ class TopwordModel(BaseModel):
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
-        words = self._doc_term_matrix.columns.values
+        words = self._doc_term_matrix.columns
 
         # Get all class labels.
-        class_labels = class_division_map.index.values
+        class_labels = class_division_map.index
 
         # Get all combinations of file ids and class labels, if the file is not
         # in the class.
