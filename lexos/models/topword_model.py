@@ -291,10 +291,10 @@ class TopwordModel(BaseModel):
         assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
-        words = self._doc_term_matrix.columns.values
+        words = self._doc_term_matrix.columns
 
         # Get all class labels.
-        class_labels = class_division_map.index.values
+        class_labels = class_division_map.index
 
         # Get all unique combinations of every two labels, so we can compare
         # one class against other class(es).
