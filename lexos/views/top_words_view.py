@@ -1,6 +1,4 @@
-from collections import OrderedDict
 from flask import request, session, render_template, send_file, Blueprint
-from natsort import natsorted
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.models.filemanager_model import FileManagerModel
@@ -27,7 +25,6 @@ def top_words():
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels_with_id()
-    labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
     # 'GET' request occurs when the page is first loaded
     if 'topwordoption' not in session:
@@ -55,7 +52,6 @@ def topword_html():
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels_with_id()
-    labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
 
     # get the class division map and number of existing classes
     class_division_map = FileManagerModel().load_file_manager().\

@@ -1,23 +1,28 @@
-from typing import NamedTuple
-
+from enum import Enum
 from lexos.receivers.base_receiver import BaseReceiver
 
 
-class TopwordFrontEndOption(NamedTuple):
-    """The typed tuple to implement topword options."""
-    analysis_option: str
+class TopwordAnalysisType(Enum):
+    ALL_TO_PARA = "allToPara"
+    CLASS_TO_PARA = "classToPara"
+    CLASS_TO_CLASS = "classToClass"
 
 
 class TopwordReceiver(BaseReceiver):
     def __init__(self):
-        """The Receiver to get all the topword options from front end."""
+        """The Receiver to get the topword analysis type from front end."""
         super().__init__()
 
-    def options_from_front_end(self) -> TopwordFrontEndOption:
+    def options_from_front_end(self) -> TopwordAnalysisType:
         """Get the topword option from front end.
 
-        :return: a TopwordFrontEndOption object to hold the analysis option.
+        :return: a TopwordAnalysisType object that holds the analysis option.
         """
-        analysis_option = self._front_end_data['testInput']
-
-        return TopwordFrontEndOption(analysis_option=analysis_option)
+        if self._front_end_data["testInput"] == "allToPara":
+            return TopwordAnalysisType.ALL_TO_PARA
+        elif self._front_end_data["testInput"] == "classToPara":
+            return TopwordAnalysisType.CLASS_TO_PARA
+        elif self._front_end_data["testInput"] == "classToClass":
+            return TopwordAnalysisType.CLASS_TO_CLASS
+        else:
+            raise ValueError("Invalid topword analysis option from front end.")
