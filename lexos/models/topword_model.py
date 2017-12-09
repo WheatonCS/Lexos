@@ -1,10 +1,11 @@
 import itertools
-from collections import OrderedDict
-import os
 import math
+import os
+from collections import OrderedDict
+from typing import List, Optional, NamedTuple
+
 import numpy as np
 import pandas as pd
-from typing import List, Optional, NamedTuple
 
 from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
@@ -17,7 +18,7 @@ from lexos.receivers.topword_receiver import TopwordFrontEndOption, \
     TopwordReceiver
 
 # Type hinting for the analysis result each function returns.
-ReadableResult = List[pd.Series]
+AnalysisResult = List[pd.Series]
 
 
 class TopwordTestOptions(NamedTuple):
@@ -30,7 +31,7 @@ class TopwordTestOptions(NamedTuple):
 class TopwordResult(NamedTuple):
     """A typed tuple to hold topword results."""
     header: str
-    results: ReadableResult
+    results: AnalysisResult
 
 
 class TopwordModel(BaseModel):
@@ -160,7 +161,7 @@ class TopwordModel(BaseModel):
 
         return result_series
 
-    def _analyze_file_to_all(self) -> ReadableResult:
+    def _analyze_file_to_all(self) -> AnalysisResult:
         """Detect word anomalies in one file comparing to the whole corpus.
 
         While doing so, this method compares the occurrence of a given word
@@ -194,7 +195,7 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def _analyze_class_to_all(self, class_division_map: pd.DataFrame) -> \
-            ReadableResult:
+            AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
@@ -244,7 +245,7 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def _analyze_class_to_class(self, class_division_map: pd.DataFrame) -> \
-            ReadableResult:
+            AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
