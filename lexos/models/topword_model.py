@@ -135,8 +135,8 @@ class TopwordModel(BaseModel):
             - the name is a readable header for analysis result.
         """
         # Find sample population of the two input data set.
-        total_word_count_one = word_count_series_one.values.sum()
-        total_word_count_two = word_count_series_two.values.sum()
+        total_word_count_one = word_count_series_one.sum()
+        total_word_count_two = word_count_series_two.sum()
 
         # Join two input pandas series together to avoid making the assumption
         # that they are parallel array in future analysis.
