@@ -4,7 +4,6 @@ import os
 from collections import OrderedDict
 from typing import List, Optional, NamedTuple
 
-import numpy as np
 import pandas as pd
 
 from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
@@ -100,7 +99,7 @@ class TopwordModel(BaseModel):
         # Find the estimator of overall sample proportion.
         p_hat = (p1 * n1 + p2 * n2) / (n1 + n2)
         # Find the standard error.
-        standard_error = np.sqrt(p_hat * (1 - p_hat) * ((1 / n1) + (1 / n2)))
+        standard_error = math.sqrt(p_hat * (1 - p_hat) * ((1 / n1) + (1 / n2)))
 
         # Trap possible division by 0 error.
         # TODO: Do we may need more complicate check here?
