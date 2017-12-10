@@ -27,7 +27,7 @@ WORD_REGEX = re.compile(_WORD_REGEX_STR, re.UNICODE)
 
 
 def get_all_words_in_text(text: str) -> List[str]:
-    """Get all the words in a given text in the order that they appear
+    """Get all the words in a given text in the order that they appear.
 
     :param text: the text to get all the word from
     :return: a list of words in the order that they appear in text
@@ -35,3 +35,13 @@ def get_all_words_in_text(text: str) -> List[str]:
     # the `split` and `strip` method handles all kinds of white spaces
     # including the
     return text.strip().split()
+
+
+def get_single_word_count_in_text(text: str, word: str) -> int:
+    """Get the number of single word appear in text.
+
+    :param text: the whole text to find the word
+    :param word: the word to find in the whole text
+    :return: the number of times the `word` appear in `text`
+    """
+    return get_all_words_in_text(text).count(word)
