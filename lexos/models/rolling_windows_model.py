@@ -156,7 +156,7 @@ class RollingWindowsModel(BaseModel):
         tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
 
-        def _average_matrix_helkper(
+        def _average_matrix_helper(
                 get_token_count_func: Callable[[str, str], int]) \
                 -> pd.DataFrame:
             """The helper to get the average matrix
@@ -182,13 +182,13 @@ class RollingWindowsModel(BaseModel):
             return pd.DataFrame(list_matrix, index=tokens)
 
         if token_type is RWATokenType.string:
-            return _average_matrix_helkper(self._find_string_in_window)
+            return _average_matrix_helper(self._find_string_in_window)
 
         elif token_type is RWATokenType.word:
-            return _average_matrix_helkper(self._find_word_in_window)
+            return _average_matrix_helper(self._find_word_in_window)
 
         elif token_type is RWATokenType.regex:
-            return _average_matrix_helkper(self._find_regex_in_window)
+            return _average_matrix_helper(self._find_regex_in_window)
 
         else:
             raise ValueError(f"unhandled token type: {token_type}")
