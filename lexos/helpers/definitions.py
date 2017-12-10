@@ -64,7 +64,7 @@ def get_words_with_right_boundary(text: str) -> List[str]:
     return [
         # joins the word with its right boundary
         # (all the space on the right side until another word)
-        "".join(reg_split_list[start: start + 1])
+        "".join(reg_split_list[start: start + 2])
         # we cannot use keyword parameter on range,
         # because stupid python (3.6.1) does not allow us to...
         # the range means: range(start=1, end=len(reg_split_list), step=2)
