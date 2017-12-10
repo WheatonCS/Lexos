@@ -157,11 +157,11 @@ class RollingWindowsModel(BaseModel):
         window_size = self._options.window_options.window_size
 
         def _average_matrix_helper(
-                get_token_count_func: Callable[[str, str], int]) \
+                window_term_count_func: Callable[[str, str], int]) \
                 -> pd.DataFrame:
             """The helper to get the average matrix
 
-            :param get_token_count_func:
+            :param window_term_count_func:
                 the function to get count of term in the window
                 the window is the first argument
                 the term is the second argument,
@@ -172,11 +172,12 @@ class RollingWindowsModel(BaseModel):
                     but there is no column header, because it is impossible to
                     set the header as windows
             """
-            # we cannot use keyword parameter in get_token_count_func because:
+            # we cannot use keyword parameter in window_term_count_func
+            # because:
             #  - the type hinting does not support keyword parameter
             #       (on Python 3.6.1)
             #  - the function that sent in has different keywords
-            list_matrix = [[get_token_count_func(window, token) / window_size
+            list_matrix = [[window_term_count_func(window, token) / window_size
                             for token in tokens] for window in windows]
 
             return pd.DataFrame(list_matrix, columns=tokens).transpose()
@@ -193,77 +194,85 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError(f"unhandled token type: {token_type}")
 
-    def _find_token_ratio_in_window(self, window: str) -> float:
+    def _find_token_ratio_in_windows(self, windows: Iterator[str]) \
+            -> pd.Series:
 
-        assert self._options.average_token_options is not None
+        assert self._options.ratio_token_options is not None
 
         token_type = self._options.ratio_token_options.token_type
         numerator_token = self._options.ratio_token_options.numerator_token
         denominator_token = self._options.ratio_token_options.denominator_token
 
+        def _get_ratio_helper(
+                window: str,
+                window_term_count_func: Callable[[str, str], int]) -> float:
+
+            # we cannot use keyword parameter on window_term_count_func
+            # because:
+            #  - the type hinting does not support keyword parameter
+            #       (on Python 3.6.1)
+            #  - the function that sent in has different keywords
+            numerator = window_term_count_func(window, numerator_token)
+            denominator = window_term_count_func(window, denominator_token)
+
+            # handle division by 0
+            if denominator == 0:
+                return np.nan
+            else:
+                return numerator / denominator
+
         if token_type is RWATokenType.string:
-            numerator = self._find_string_in_window(window=window,
-                                                    string=numerator_token)
-            denominator = self._find_string_in_window(window=window,
-                                                      string=denominator_token)
+            return pd.Series([
+                _get_ratio_helper(
+                    window=window,
+                    window_term_count_func=self._find_string_in_window)
+                for window in windows
+            ], name=f"{numerator_token} / {denominator_token}")
 
         elif token_type is RWATokenType.word:
-            numerator = self._find_word_in_window(window=window,
-                                                  word=numerator_token)
-            denominator = self._find_word_in_window(window=window,
-                                                    word=denominator_token)
+            return pd.Series([
+                _get_ratio_helper(
+                    window=window,
+                    window_term_count_func=self._find_word_in_window)
+                for window in windows
+            ], name=f"{numerator_token} / {denominator_token}")
 
         elif token_type is RWATokenType.regex:
-            numerator = self._find_regex_in_window(window=window,
-                                                   regex=numerator_token)
-            denominator = self._find_regex_in_window(window=window,
-                                                     regex=denominator_token)
+            return pd.Series([
+                _get_ratio_helper(
+                    window=window,
+                    window_term_count_func=self._find_regex_in_window)
+                for window in windows
+            ], name=f"{numerator_token} / {denominator_token}")
 
         else:
             raise ValueError(f"unhandled token type: {token_type}")
-
-        return numerator / denominator
 
     def _find_token_average(self) -> pd.DataFrame:
         windows = self._get_window()
 
         return self._find_tokens_average_in_windows(windows=windows)
 
-    def _find_token_ratio(self) -> np.ndarray:
+    def _find_token_ratio(self) -> pd.Series:
         windows = self._get_window()
 
-        # the create the ufunc to get token ratio from an array of windows
-        # documentation about ufunc:
-        # https://docs.scipy.org/doc/numpy/reference/ufuncs.html
-        get_token_ratio_array = np.frompyfunc(
-            lambda window: self._find_token_ratio_in_window(window),
-            # number of input and output of the python function,
-            # keyword paramter is not allowed here:
-            # this means nin=1, nout=1
-            1, 1
-        )
-
-        return get_token_ratio_array(windows)
+        return self._find_token_ratio_in_windows(windows)
 
     def _get_token_ratio_graph(self) -> str:
-        token_ratio_array = self._find_token_ratio()
-
-        # get the tokens for display
-        numerator_token = self._options.ratio_token_options.numerator_token
-        denominator_token = self._options.ratio_token_options.denominator_token
+        token_ratio_series = self._find_token_ratio()
 
         # construct the graph object
         graph_obj = go.Scattergl(
             # the x coordinates are the index of the window, starting from 0
-            x=np.arange(len(token_ratio_array)),
+            x=np.arange(len(token_ratio_series)),
             # the y coordinates is the token ratios
-            y=token_ratio_array,
+            y=token_ratio_series,
             mode="lines",
-            name=f"{numerator_token} / {denominator_token}"
+            name=token_ratio_series.name
         )
 
         return plot(
-            graph_obj, include_plotlyjs=False, output_type='div'
+            [graph_obj], include_plotlyjs=False, output_type='div'
         )
 
     def _get_token_average_graph(self) -> str:
