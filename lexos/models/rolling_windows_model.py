@@ -1,5 +1,5 @@
 import re
-from typing import NamedTuple, Optional, List
+from typing import NamedTuple, Optional, List, Iterator, Callable
 
 import numpy as np
 import pandas as pd
@@ -147,7 +147,8 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError(f"unhandled window type: {window_unit}")
 
-    def _find_tokens_average_in_window(self, window: str) -> pd.Series:
+    def _find_tokens_average_in_windows(self, windows: Iterator[str]) \
+            -> pd.DataFrame:
 
         assert self._options.average_token_options is not None
 
@@ -155,31 +156,42 @@ class RollingWindowsModel(BaseModel):
         tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
 
+        def _average_matrix_helkper(
+                get_token_count_func: Callable[[str, str], int]) \
+                -> pd.DataFrame:
+            """The helper to get the average matrix
+
+            :param get_token_count_func:
+                the function to get count of term in the window
+                the window is the first argument
+                the term is the second argument,
+                returns an int, that is the count of the term in the window
+            :return: a panda data frame where
+                - the index header is the tokens
+                - the column header corresponds to the windows but
+                    but there is no column header, because it is impossible to
+                    set the header as windows
+            """
+            # we cannot use keyword parameter in get_token_count_func because:
+            #  - the type hinting does not support keyword parameter
+            #       (on Python 3.6.1)
+            #  - the function that sent in has different keywords
+            list_matrix = [[get_token_count_func(window, token) / window_size
+                            for window in windows] for token in tokens]
+
+            return pd.DataFrame(list_matrix, index=tokens)
+
         if token_type is RWATokenType.string:
-            token_counts = [
-                self._find_string_in_window(window=window, string=token)
-                for token in tokens
-            ]
+            return _average_matrix_helkper(self._find_string_in_window)
 
         elif token_type is RWATokenType.word:
-            token_counts = [
-                self._find_word_in_window(window=window, word=token)
-                for token in tokens
-            ]
+            return _average_matrix_helkper(self._find_word_in_window)
 
         elif token_type is RWATokenType.regex:
-            token_counts = [
-                self._find_regex_in_window(window=window, regex=token)
-                for token in tokens
-            ]
+            return _average_matrix_helkper(self._find_regex_in_window)
 
         else:
             raise ValueError(f"unhandled token type: {token_type}")
-
-        return pd.Series(
-            [token_count / window_size for token_count in token_counts],
-            index=tokens
-        )
 
     def _find_token_ratio_in_window(self, window: str) -> float:
 
@@ -215,27 +227,7 @@ class RollingWindowsModel(BaseModel):
     def _find_token_average(self) -> pd.DataFrame:
         windows = self._get_window()
 
-        # the create the ufunc to get token average from an array of windows
-        # documentation about ufunc:
-        # https://docs.scipy.org/doc/numpy/reference/ufuncs.html
-        get_tokens_average_array = np.frompyfunc(
-            lambda window: self._find_tokens_average_in_window(window),
-            # number of input and output of the python function,
-            # keyword paramter is not allowed here:
-            # this means nin=1, nout=1
-            1, 1
-        )
-
-        # this is a numpy array of series.
-        # each series map the token to its count in the window
-        array_of_token_count_series: np.ndarray = \
-            get_tokens_average_array(windows)
-
-        # stack all the series into a large data frame
-        final_df: pd.DataFrame = pd.concat(array_of_token_count_series,
-                                           ignore_index=True, axis="columns")
-
-        return final_df
+        return self._find_tokens_average_in_windows(windows=windows)
 
     def _find_token_ratio(self) -> np.ndarray:
         windows = self._get_window()
