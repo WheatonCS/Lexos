@@ -64,10 +64,10 @@ class RollingWindowsModel(BaseModel):
         num_window = num_item - window_size
 
         # get the rolling list, should be a array of str
-        return np.array(
+        return np.array([
             "".join(input_list[start: start + window_size])
             for start in range(num_window)
-        )
+        ])
 
     @staticmethod
     def _get_letters_windows(passage: str, windows_size: int) -> np.ndarray:
@@ -220,7 +220,10 @@ class RollingWindowsModel(BaseModel):
         # https://docs.scipy.org/doc/numpy/reference/ufuncs.html
         get_tokens_average_array = np.frompyfunc(
             lambda window: self._find_tokens_average_in_window(window),
-            nin=1, nout=1  # number of input and output of the python function
+            # number of input and output of the python function,
+            # keyword paramter is not allowed here:
+            # this means nin=1, nout=1
+            1, 1
         )
 
         # this is a numpy array of series.
