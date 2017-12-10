@@ -245,7 +245,10 @@ class RollingWindowsModel(BaseModel):
         # https://docs.scipy.org/doc/numpy/reference/ufuncs.html
         get_token_ratio_array = np.frompyfunc(
             lambda window: self._find_token_ratio_in_window(window),
-            nin=1, nout=1  # number of input and output of the python function
+            # number of input and output of the python function,
+            # keyword paramter is not allowed here:
+            # this means nin=1, nout=1
+            1, 1
         )
 
         return get_token_ratio_array(windows)
