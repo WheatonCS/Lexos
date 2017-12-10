@@ -33,8 +33,8 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _passage(self) -> str:
-        if self._passage is not None:
-            return self._passage
+        if self._test_passage is not None:
+            return self._test_passage
         else:
             file_id = RollingWindowsReceiver().get_file_id_from_front_end()
             file_id_content_map = FileManagerModel().load_file_manager() \
