@@ -215,7 +215,7 @@ class ContentAnalysisModel(object):
     def is_secure(self) -> bool:
         """Checks if the formula is secure.
 
-        The formula is siecure if only contains names of uploaded dictionaries
+        The formula is secure if only contains names of uploaded dictionaries
         and approved math symbols.
 
         :return: True if secure, false if not secure
