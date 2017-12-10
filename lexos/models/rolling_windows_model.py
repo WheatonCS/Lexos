@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-from lexos.helpers.definitions import get_all_words_in_text, \
+from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
@@ -90,7 +90,7 @@ class RollingWindowsModel(BaseModel):
         :return:
         """
 
-        words = get_all_words_in_text(passage)
+        words = get_words_with_right_boundary(passage)
 
         return RollingWindowsModel._get_rolling_window_from_list(
             input_list=words, window_size=window_size
