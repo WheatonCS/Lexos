@@ -30,7 +30,7 @@ def get_all_words_in_text(text: str) -> List[str]:
     """Get all the words in a given text in the order that they appear
 
     :param text: the text to get all the word from
-    :return: a list of words
+    :return: a list of words in the order that they appear in text
     """
     # the `split` and `strip` method handles all kinds of white spaces
     # including the
