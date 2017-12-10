@@ -151,7 +151,7 @@ class RollingWindowsModel(BaseModel):
                                              windows_size=window_size)
 
         else:
-            raise ValueError("unhandled window type: " + window_unit)
+            raise ValueError(f"unhandled window type: {window_unit}")
 
     def _find_tokens_average_in_window(self, window: str) -> pd.Series:
 
@@ -180,7 +180,7 @@ class RollingWindowsModel(BaseModel):
             ]
 
         else:
-            raise ValueError("unhandled token type: " + token_type)
+            raise ValueError(f"unhandled token type: {token_type}")
 
         return pd.Series(
             [token_count / window_size for token_count in token_counts],
@@ -214,7 +214,7 @@ class RollingWindowsModel(BaseModel):
                                                      regex=denominator_token)
 
         else:
-            raise ValueError("unhandled token type: " + token_type)
+            raise ValueError(f"unhandled token type: {token_type}")
 
         return numerator / denominator
 
