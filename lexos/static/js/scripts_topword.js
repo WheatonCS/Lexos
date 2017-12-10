@@ -1,7 +1,11 @@
 $(function () {
   // Hide unnecessary div for DTM
   $('#normalize-options').css({ 'visibility': 'hidden' })
+  // set the normalize option to raw count
+  $("#normalizeTypeRaw").attr("checked", true)
+
   $('#temp-label-div').css('position', 'relative').css('left', '-6px').css('top', '0px')
+
 
   // display/hide expandable divs (Define Groups div) here
   function updateGroupOptionDiv() {
