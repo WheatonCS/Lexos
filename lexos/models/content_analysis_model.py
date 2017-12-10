@@ -147,7 +147,6 @@ class ContentAnalysisModel(object):
                              ndigits=1)
         else:
             sums_avg = 0
-        self._averages.append("Averages")
         for dict_index, _ in enumerate(active_dicts):
             cat_count = sum([counter[dict_index]
                              for counter in self._counters])
@@ -191,25 +190,16 @@ class ContentAnalysisModel(object):
         columns = ['Document Name'] + [dictionary.label for dictionary in
                                        self.get_active_dicts()] + \
                   ['formula', 'total word count', 'score']
-        indices = [file.label for file in self._corpus] + ['averages']
-        df = pd.DataFrame(columns=columns,
-                          index=range(len(indices)))
-        # adds row to df with: file label, count for each dict,
-        # formula result, total word count, score
-        for row_index, (file, formula, score, counter) in enumerate(
+        df = pd.DataFrame(columns=columns)
+        avg_column = pd.Series(["Averages"] + self._averages, index=columns)
+        df = df.append(avg_column, ignore_index=True)
+        for index, (file, formula, score, counters) in enumerate(
             zip(self._corpus, self._formulas,
                 self._scores, self._counters)):
-            df.xs(row_index)[0] = file.label
-            # save into the dataframe all the counts for a file
-            for col_index, (count) in enumerate(counter):
-                df.xs(row_index)[col_index + 1] = count
-            df.xs(row_index)[col_index + 2] = formula
-            df.xs(row_index)[col_index + 3] = file.total_word_count
-            df.xs(row_index)[col_index + 4] = score
-        # add a row to df with the average of each column
-        for average_index, (average) in enumerate(self._averages):
-            df.xs(row_index + 1)[average_index] = average
-        df.columns = columns
+            column = pd.Series([file.label] + counters + [formula] +
+                               [file.total_word_count] + [score],
+                               index=columns)
+            df = df.append(column, ignore_index=True)
         return df
 
     def is_secure(self) -> bool:
