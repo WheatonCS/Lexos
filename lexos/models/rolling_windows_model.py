@@ -177,9 +177,9 @@ class RollingWindowsModel(BaseModel):
             #       (on Python 3.6.1)
             #  - the function that sent in has different keywords
             list_matrix = [[get_token_count_func(window, token) / window_size
-                            for window in windows] for token in tokens]
+                            for token in tokens] for window in windows]
 
-            return pd.DataFrame(list_matrix, index=tokens)
+            return pd.DataFrame(list_matrix, columns=tokens).transpose()
 
         if token_type is RWATokenType.string:
             return _average_matrix_helper(self._find_string_in_window)
