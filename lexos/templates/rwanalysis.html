@@ -4,57 +4,6 @@
 {% block head %}
 <!-- Javascript that formats options and graph -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{version}}"></script>
-<script type="text/javascript">
-// Initialize variables
-var dataLines = {{ data|default(0) }};
-var xAxisLabel = "{{xAxisLabel}}";
-var yAxisLabel = "{{yAxisLabel}}";
-var legendLabels = "{{legendLabels[0]}}";
-legendLabels = legendLabels.split("#");
-noDots = {{ 'true' if session['rwoption']['hideDots'] else 'false' }};
-BandW = {{ 'true' if session['rwoption']['BWoutput'] else 'false' }};
-
-{% if rwadatagenerated %}
-// If there is data scroll down to the graph on page load
-$(document).ready( function () {
-	//window.location="#graph-anchor";
-	document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
-
-	// Save to PNG
-	$(".save-png").on("click", function(){
-		var $container = $('#rwagraphdiv'),
-		// Canvg requires trimmed content
-		content = $container.html().trim(),
-		canvas = document.getElementById('svg-canvas');
-
-		// Draw svg on canvas
-		canvg(canvas, content);
-
-		// Change img from SVG representation
-		var theImage = canvas.toDataURL("image/png");
-		$('#rwagraphsvg').attr('src', theImage);
-
-
-		//Open a new window with the image
-		var w = window.open();
-		var img = $("#rwagraphsvg").clone().css("display", "block");
-		var html = $("<div/>");
-		html.append("<h2 style='margin-left: 30px'>Instructions for Saving Image</h2>");
-		html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3><ol>");
-		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose \"Save Image As...\".</li>");
-		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Right click and view image, then select your browser's print operation and choose print to PDF.</li></ol>");
-		html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Chrome:</strong></h3>");
-		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>Right click on the image and choose to \"Open image in new tab\".</li>");
-		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose to \"Save image as...\".</li>");
-		html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Select your browser's print operation and choose print to PDF.</li></ol>");
-		html.append(img);
-
-		$(w.document.body).html(html);
-	// End Save
-	});
-});
-{% endif %}
-</script>
 {% endblock %}
 
 {% block title %}visualizer{% endblock %}
@@ -149,7 +98,7 @@ $(document).ready( function () {
 </div>
 
 <!-- Row 2 -->
-<div clas="row">
+<div class="row">
 	<!-- Window Unit Selection -->
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
@@ -192,63 +141,14 @@ $(document).ready( function () {
 	<div class="col-sm-4">
 		<fieldset class="rwanalysisradiosdiv">
 			<legend>6. Get Graph</legend>
-			<input type="submit" id="getgraph"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
-			<!-- If data has been generated, add the download buttons -->
-			{% if rwadatagenerated %}
-				<br>
-				<label>Download:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different browsers and operating systems behave differently. If the download buttons do not work for you, we recommend using your computer's screen shot functionality." style="padding-left:5px;"></i></label>
-				<br>
-                <input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
-                <!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix" style="width:158px;margin-bottom:6px;"/>
-			    <input type="button" class="bttn bttn-action save-png" id="save-png1" value="PNG" style="width:158px;margin-bottom:6px;"/> -->
-			    <!--<input  type="submit" class="bttn bttn-action" id="save" name="get-RW-pdf" value="PDF/PNG" style="width:158px;margin-bottom:6px;display:none;"/> -->
-
-				<div class="btn bttn bttn-action download-svg-chrome" href="#" style="width:158px;margin-bottom:6px;">SVG (Chrome)</div>
-
-				<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="width:158px;margin-bottom:6px;">SVG (Other Browsers)</a>
-			{% endif %}
+			<input type="button" id="getgraph"  class="bttn bttn-action" name="rollinganalyze" value="Get Graph" style="width:158px;margin-bottom:20px;"/>
         </fieldset>
 	</div>
 </div>
 {% endblock %}
 
 {% block results %}
-<!-- Draw the graph div if there is data -->
-{% if rwadatagenerated %}
-<a name="graph-anchor" id="graph-anchor"></a><a class="to-top" style="padding-left:60px;padding-top:70px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
-<div id="rwagraphlabel">{{graphTitle}}</div>
-<div id="rwagraphdiv" name=" {{ rwadatagenerated }} " class="hidden">{{ rwadatagenerated }}</div>
-<div style="margin-left:60px;margin-top:-20px;">
-	<label><a class="to-top" style="margin-right: 40px;"><i class="fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="bottom" title="Back to Top"></i></a>Download:<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different browsers and operating systems behave differently. If the download buttons do not work for you, we recommend using your computer's screen shot functionality." style="padding-left:5px;padding-right:5px"></i></label>
-	<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-plot" value="CSV Matrix"/>
-	<!--<input type="submit" class="bttn bttn-action" id="generateRWmatrix" name="get-RW-data" value="CSV Matrix"/> -->
-    <!--<input type="button" class="bttn bttn-action save-png" id="save-png2" value="PNG"/> -->
-    <!--<input type= "submit" class="bttn bttn-action"  name="get-RW-pdf" id="save" value="PDF/PNG" style="display:none;"/> -->
-	<div class="btn bttn bttn-action download-svg-chrome" href="#" style="margin-top:-2px;">SVG (Chrome)</div>
-	<a class="btn bttn bttn-action download-svg-other" href="#" target="_blank" style="margin-top:-2px;">SVG (Other Browsers)</a>
-</div>
-
-<div id="rwagraphdive" class="infobox">
-	<p></p>
-</div>
-
-<!-- Create the SVG canvas if segments are selected -->
-{% if words == "" %}
-	<h4 id="nosegments">Please select the segments for the graph.</h4>
-{% else %}
-	<!-- Canvg Used for Save to PNG -->
-	<script type="text/javascript" src="{{ url_for('static', filename='js/canvg/rgbcolor.js') }}?ver={{version}}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/canvg/StackBlur.js') }}?ver={{version}}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/canvg/canvg.min.js') }}?ver={{version}}"></script>
-	<canvas id="svg-canvas" style="display:none;"></canvas>
-	<img id="svg-img" style="display:none;"/>
-{% endif %}
-
-{% endif %}
- <script>
-	var dataset = {{ JSONObj|safe or {} }};
-    var numActiveDocs = {{ numActiveDocs }};
-</script>
+    <div id="rwa-result-graph"></div>
 {% endblock %}
 
 
