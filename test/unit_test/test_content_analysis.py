@@ -125,7 +125,7 @@ def test_generate_averages():
     test.save_formula()
     test.generate_scores()
     test.generate_averages()
-    assert test.averages == ['Averages', 1.0, 0.0, 1.0, 0.0]
+    assert test.averages == [1.0, 0.0, 1.0, 0.0]
 
     test = ContentAnalysisModel()
     test.add_file(file_name="file1", label='file1', content='test')
@@ -136,14 +136,14 @@ def test_generate_averages():
     test.save_formula()
     test.generate_scores()
     test.generate_averages()
-    assert test.averages == ['Averages', 0.5, 0.0, 1.5, 0.0]
+    assert test.averages == [0.5, 0.0, 1.5, 0.0]
 
     test.count()
     test.test_option = TestOptions(formula="4*[dict1]**2")
     test.save_formula()
     test.generate_scores()
     test.generate_averages()
-    assert test.averages == ['Averages', 0.5, 2.0, 1.5, 2.0]
+    assert test.averages == [0.5, 2.0, 1.5, 2.0]
 
 
 def test_to_html():
