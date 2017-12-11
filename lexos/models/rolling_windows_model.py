@@ -10,6 +10,7 @@ from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
 from lexos.models.base_model import BaseModel
 from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.matrix_model import FileIDContentMap
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
 
@@ -17,7 +18,7 @@ rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
 
 
 class RWATestOptions(NamedTuple):
-    passage_string: str
+    file_id_content_map: FileIDContentMap
     rolling_windows_options: RWAFrontEndOptions
 
 
@@ -29,10 +30,10 @@ class RollingWindowsModel(BaseModel):
         """
         super().__init__()
         if test_option is not None:
-            self._test_passage = test_option.passage_string
+            self._test_file_id_content_map = test_option.file_id_content_map
             self._test_front_end_options = test_option.rolling_windows_options
         else:
-            self._test_passage = None
+            self._test_file_id_content_map = None
             self._test_front_end_options = None
 
     @property
@@ -41,14 +42,20 @@ class RollingWindowsModel(BaseModel):
 
         :return: the content of the passage as a string
         """
-        if self._test_passage is not None:
-            return self._test_passage
+        # if test option is specified
+        if self._test_file_id_content_map is not None and \
+                self._test_front_end_options is not None:
+            file_id = self._test_front_end_options.passage_file_id
+            file_id_content_map = self._test_file_id_content_map
+
+        # if test option is not specified, get option from front end
         else:
-            file_id = RollingWindowsReceiver().get_file_id_from_front_end()
+            file_id = RollingWindowsReceiver().options_from_front_end()\
+                .passage_file_id
             file_id_content_map = FileManagerModel().load_file_manager() \
                 .get_content_of_active_with_id()
 
-            return file_id_content_map[file_id]
+        return file_id_content_map[file_id]
 
     @property
     def _options(self) -> RWAFrontEndOptions:
