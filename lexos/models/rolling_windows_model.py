@@ -23,6 +23,10 @@ class RWATestOptions(NamedTuple):
 
 class RollingWindowsModel(BaseModel):
     def __init__(self, test_option: Optional[RWATestOptions] = None):
+        """The class for rolling window calculation.
+
+        :param test_option: the options to send in for testing
+        """
         super().__init__()
         if test_option is not None:
             self._test_passage = test_option.passage_string
@@ -33,6 +37,10 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _passage(self) -> str:
+        """The passage to run rolling windows on
+
+        :return: the content of the passage as a string
+        """
         if self._test_passage is not None:
             return self._test_passage
         else:
@@ -44,6 +52,10 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _options(self) -> RWAFrontEndOptions:
+        """the front end option packed into one named tuple
+
+        :return: a RWAFrontEndOption packs all the frontend option
+        """
         return self._test_front_end_options \
             if self._test_front_end_options is not None \
             else RollingWindowsReceiver().options_from_front_end()
@@ -51,10 +63,12 @@ class RollingWindowsModel(BaseModel):
     @staticmethod
     def _get_rolling_window_from_list(input_list: List[str],
                                       window_size: int) -> np.ndarray:
-        """
+        """A helper function to get the rolling window from the list of terms
 
-        :param input_list:
-        :param window_size:
+        :param input_list: a list of terms (word, char or line),
+            depends on the window type (word and line are with endings)
+        :param window_size: the size of the window (number of terms in window)
+        :return: an array of strings, each element is a window
         """
 
         # number of items in the input list
@@ -71,11 +85,12 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _get_letters_windows(passage: str, windows_size: int) -> np.ndarray:
-        """
+        """Get the windows of letters with specific window size
 
-        :param passage:
-        :param windows_size:
-        :return:
+        :param passage: the whole text to generate the windows
+            (the text to run rolling window analysis on)
+        :param windows_size: number of terms (letters) in a single window
+        :return: an array of windows
         """
         return RollingWindowsModel._get_rolling_window_from_list(
             input_list=list(passage), window_size=windows_size
@@ -83,11 +98,12 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _get_word_windows(passage: str, window_size: int) -> np.ndarray:
-        """
+        """Get the window of words with specific window size
 
-        :param passage:
-        :param window_size:
-        :return:
+        :param passage: the whole text to generate the windows
+            (the text to run rolling window analysis on)
+        :param window_size: number of terms (words) in a single window
+        :return: an array of windows
         """
 
         words = get_words_with_right_boundary(passage)
@@ -98,10 +114,12 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _get_line_windows(passage: str, window_size: int) -> np.ndarray:
-        """
+        """Get the window of lines with specific size
 
-        :param passage:
-        :param window_size:
+        :param passage: the whole text ot generate the windows
+            (the text to run rolling window analysis on)
+        :param window_size: the number of terms (lines) in a window
+        :return: an array of windows
         """
 
         # get all the lines
@@ -113,21 +131,43 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _find_regex_in_window(window: str, regex: str) -> int:
+        """find the number of times the regex appear in window
+
+        current method only finds non-overlapping regex.
+        :param window: find regex in this window
+        :param regex: the regex to find
+        :return: the number of times the regex appear in the window
+        """
         return len(re.findall(pattern=regex, string=window,
                               flags=rwa_regex_flags))
 
     @staticmethod
     def _find_word_in_window(window: str, word: str) -> int:
+        """find the number of times a particular word appear in the window
 
+        :param window: find the word in this window
+        :param word: the word to find
+        :return: the number of times the word appear int the window
+        """
         return get_single_word_count_in_text(text=window, word=word)
 
     @staticmethod
     def _find_string_in_window(window: str, string: str) -> int:
+        """find the number of times the string appear in the window
+
+        :param window: find the string in this window
+        :param string: the string to find
+        :return: the number of times the string appear int the window
+        """
         string_regex = re.compile(re.escape(string), flags=rwa_regex_flags)
 
         return len(re.findall(pattern=string_regex, string=window))
 
     def _get_window(self) -> np.ndarray:
+        """get the array of window with the option in classes
+
+        :return: an array of windows to run analysis on
+        """
         window_unit = self._options.window_options.window_unit
         window_size = self._options.window_options.window_size
         passage = self._passage
@@ -149,7 +189,17 @@ class RollingWindowsModel(BaseModel):
 
     def _find_tokens_average_in_windows(self, windows: Iterator[str]) \
             -> pd.DataFrame:
+        """find the token average in the given windows
 
+        a token average is calculated by the number of times the token
+        (or term) appear in the window divided by the window size
+        :param windows: an array of windows to calculate
+        :return: a panda data frame where:
+            - the index header is the tokens
+            - the column header corresponds to the windows but but there is
+                no column header, because it is impossible to set the header
+                as windows
+        """
         assert self._options.average_token_options is not None
 
         token_type = self._options.average_token_options.token_type
@@ -196,7 +246,14 @@ class RollingWindowsModel(BaseModel):
 
     def _find_token_ratio_in_windows(self, windows: Iterator[str]) \
             -> pd.Series:
+        """Find the token ratios in all the windows
 
+        get the ratio of the count of the numerator token and denominator token
+        if the count of denominator token for that window is 0,
+        that window's data will be np.nan
+        :param windows: all the windows to get the ratio
+        :return: a series of ratio, the index correspond to the windows
+        """
         assert self._options.ratio_token_options is not None
 
         token_type = self._options.ratio_token_options.token_type
@@ -206,7 +263,17 @@ class RollingWindowsModel(BaseModel):
         def _get_ratio_helper(
                 window: str,
                 window_term_count_func: Callable[[str, str], int]) -> float:
+            """the helper method to find a ratio for a single window
 
+            :param window: the window to find ratio in
+            :param window_term_count_func:
+                the function to get count of term in the window
+                the window is the first argument
+                the term is the second argument,
+                returns an int, that is the count of the term in the window
+            :return: a float represent the ratio of the count of
+                the nominator token and denominator token.
+            """
             # we cannot use keyword parameter on window_term_count_func
             # because:
             #  - the type hinting does not support keyword parameter
@@ -222,43 +289,75 @@ class RollingWindowsModel(BaseModel):
                 return numerator / denominator
 
         if token_type is RWATokenType.string:
-            return pd.Series([
-                _get_ratio_helper(
-                    window=window,
-                    window_term_count_func=self._find_string_in_window)
-                for window in windows
-            ], name=f"{numerator_token} / {denominator_token}")
+            return pd.Series(
+                # the list to pack into the series
+                [
+                    _get_ratio_helper(
+                        window=window,
+                        window_term_count_func=self._find_string_in_window)
+                    for window in windows
+                ],
+                # the name of the series
+                name=f"{numerator_token} / {denominator_token}"
+            )
 
         elif token_type is RWATokenType.word:
-            return pd.Series([
-                _get_ratio_helper(
-                    window=window,
-                    window_term_count_func=self._find_word_in_window)
-                for window in windows
-            ], name=f"{numerator_token} / {denominator_token}")
+            return pd.Series(
+                # the list to pack into the series
+                [
+                    _get_ratio_helper(
+                        window=window,
+                        window_term_count_func=self._find_word_in_window)
+                    for window in windows
+                ],
+                # the name of the series
+                name=f"{numerator_token} / {denominator_token}"
+            )
 
         elif token_type is RWATokenType.regex:
-            return pd.Series([
-                _get_ratio_helper(
-                    window=window,
-                    window_term_count_func=self._find_regex_in_window)
-                for window in windows
-            ], name=f"{numerator_token} / {denominator_token}")
+            return pd.Series(
+                # the list to pack into the series
+                [
+                    _get_ratio_helper(
+                        window=window,
+                        window_term_count_func=self._find_regex_in_window)
+                    for window in windows
+                ],
+                # the name of the series
+                name=f"{numerator_token} / {denominator_token}"
+            )
 
         else:
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_token_average(self) -> pd.DataFrame:
+        """Find the token average in all the windows generated
+
+        :return:
+            - the index header is the tokens
+            - the column header corresponds to the windows but
+                but there is no column header, because it is impossible to
+                set the header as windows
+
+        """
         windows = self._get_window()
 
         return self._find_tokens_average_in_windows(windows=windows)
 
     def _find_token_ratio(self) -> pd.Series:
+        """Find the token ratio all the window generated
+
+        :return: a series of ratio, the index correspond to the windows
+        """
         windows = self._get_window()
 
         return self._find_token_ratio_in_windows(windows)
 
     def _get_token_ratio_graph(self) -> str:
+        """Get the plotly graph for the token ratio.
+
+        :return: a html string
+        """
         token_ratio_series = self._find_token_ratio()
 
         # construct the graph object
@@ -276,7 +375,10 @@ class RollingWindowsModel(BaseModel):
         )
 
     def _get_token_average_graph(self) -> str:
+        """Get the plotly graph for token average
 
+        :return: a html string
+        """
         token_count_data_frame = self._find_token_average()
 
         graph_objs = [
@@ -293,7 +395,10 @@ class RollingWindowsModel(BaseModel):
         )
 
     def get_rwa_graph(self) -> str:
+        """Get the rolling window graph
 
+        :return: a html string
+        """
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
 
