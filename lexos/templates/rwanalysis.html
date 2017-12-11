@@ -243,7 +243,10 @@
 {% endblock %}
 
 {% block results %}
-    <div id="rwa-result-graph"></div>
+    <div id="rwa-result-graph">
+        <!-- Loading Icon -->
+        <div id="status-analyze"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+    </div>
 {% endblock %}
 
 

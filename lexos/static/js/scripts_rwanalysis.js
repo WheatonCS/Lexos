@@ -50,7 +50,7 @@ function sendAjaxRequest (form) {
  */
 function submitForm () {
     // show loading icon
-    $('#status-analyze').css({'visibility': 'visible'})
+    $('#status-visualize').css({'visibility': 'visible'})
 
     // convert form into an object map string to string
     const form = jsonifyForm()
@@ -69,7 +69,7 @@ function submitForm () {
             })
         .always(
             function () {
-                $('#status-analyze').css({'visibility': 'hidden'})
+                $('#status-visualize').css({'visibility': 'hidden'})
             })
 }
 
