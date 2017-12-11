@@ -66,7 +66,7 @@ function submitForm () {
             function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while plotting the dendrogram.')
+                runModal('error encountered while plotting the rolling window analysis.')
             })
         .always(
             function () {
