@@ -1,5 +1,4 @@
 // Show the milestone input when the milestone checkbox is checked
-
 function updateMSopt () {
   if ($('#rollinghasmilestone').is(':checked')) {
     $('#rollingmilestoneopt').show()
