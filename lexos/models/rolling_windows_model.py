@@ -367,6 +367,8 @@ class RollingWindowsModel(BaseModel):
         """
         token_ratio_series = self._find_token_ratio()
 
+        # TODO: support black and white color scheme
+        # TODO: support show dots, (just change the mode)
         # construct the graph object
         graph_obj = go.Scattergl(
             # the x coordinates are the index of the window, starting from 0
@@ -388,6 +390,8 @@ class RollingWindowsModel(BaseModel):
         """
         token_count_data_frame = self._find_token_average()
 
+        # TODO: support black and white color scheme
+        # TODO: support show dots, (just change the mode)
         graph_objs = [
             go.Scattergl(
                 x=np.arange(len(row)),
