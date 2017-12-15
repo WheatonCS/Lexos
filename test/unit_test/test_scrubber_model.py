@@ -1,39 +1,8 @@
 # from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
 #     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 # from lexos.helpers.exceptions import LexosException
-
 from lexos.models.scrubber_model import ScrubberModel
-
-# from lexos.processors.prepare.scrubber import replacement_handler, \
-#     get_remove_whitespace_map, replace_with_dict, get_remove_punctuation_map, \
-#     get_remove_digits_map, get_all_punctuation_map, delete_words, \
-#     handle_gutenberg, split_stop_keep_word_string, \
-#     get_special_char_dict_from_file, process_tag_replace_options, \
-#     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
-#     handle_file_and_manual_strings, remove_stopwords, keep_words
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
-#
-#
-# class TestGetSpecialCharDictFromFile:
-#
-#     def test_get_special_char_dict_from_file(self):
-#         assert get_special_char_dict_from_file(char_set="MUFI-3") == \
-#             chars.MUFI3
-#         assert get_special_char_dict_from_file(char_set="MUFI-4") == \
-#             chars.MUFI4
-#         # This option should be processed by handle_special_characters() only
-#         try:
-#             get_special_char_dict_from_file(char_set="doe-sgml")
-#         except ValueError:
-#             pass
-#         else:
-#             raise AssertionError
-#         try:
-#             get_special_char_dict_from_file(char_set="MADEUP-6")
-#         except ValueError:
-#             pass
-#         else:
-#             raise AssertionError
 #
 #
 # # handle_special_characters
