@@ -115,8 +115,8 @@ class ScrubberModel(BaseModel):
         return text
 
     @staticmethod
-    def _replace_with_dict(text: str, replacement_dict: Dict[str, str],
-                           is_lemma: bool) -> str:
+    def replace_with_dict(text: str, replacement_dict: Dict[str, str],
+                          is_lemma: bool) -> str:
         """Alters text according to the replacements dictionary.
 
         :param text: The input text to replace.
@@ -472,7 +472,7 @@ class ScrubberModel(BaseModel):
                 return original_text
 
         # -- 2. Special characters --------------------------------------------
-        text = self._replace_with_dict(
+        text = self.replace_with_dict(
             text=text,
             replacement_dict=self._options.additional_options.special_char,
             is_lemma=False)
@@ -519,7 +519,7 @@ class ScrubberModel(BaseModel):
                 dictionary.
             """
 
-            return self._replace_with_dict(
+            return self.replace_with_dict(
                 text=orig_text,
                 replacement_dict=self._options.additional_options.consol,
                 is_lemma=False)
@@ -532,7 +532,7 @@ class ScrubberModel(BaseModel):
             :return: The text with words swapped according to lemma dictionary.
             """
 
-            return self._replace_with_dict(
+            return self.replace_with_dict(
                 text=orig_text,
                 replacement_dict=self._options.additional_options.lemma,
                 is_lemma=True)

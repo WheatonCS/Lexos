@@ -1,8 +1,8 @@
-assert True
-
 # from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
 #     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 # from lexos.helpers.exceptions import LexosException
+from lexos.models.scrubber_model import ScrubberModel
+
 # from lexos.processors.prepare.scrubber import replacement_handler, \
 #     get_remove_whitespace_map, replace_with_dict, get_remove_punctuation_map, \
 #     get_remove_digits_map, get_all_punctuation_map, delete_words, \
@@ -10,7 +10,8 @@ assert True
 #     get_special_char_dict_from_file, process_tag_replace_options, \
 #     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
 #     handle_file_and_manual_strings, remove_stopwords, keep_words
-# from test.helpers import special_chars_and_punct as chars, gutenberg as guten
+from test.helpers import special_chars_and_punct as chars
+# , gutenberg as guten
 #
 #
 # class TestGetSpecialCharDictFromFile:
@@ -343,93 +344,90 @@ assert True
 #         assert replacement_handler(
 #             text=self.text_string, replacer_string=split_lemma_string,
 #             is_lemma=True) == after_lemma
-#
-#
-# class TestReplaceWithDict:
-#     not_special_string = "This string contains no special chars?!\nWow."
-#     edge1 = r'()('
-#     edge2 = r')()'
-#
-#     def test_replace_with_dict_doe_sgml(self):
-#
-#         assert replace_with_dict(
-#             self.not_special_string, replacement_dict=chars.DOE_SGML,
-#             edge1=self.edge1, edge2=self.edge2) == self.not_special_string
-#
-#         assert replace_with_dict(
-#             chars.DOE_SGML_KEYS, replacement_dict=chars.DOE_SGML,
-#             edge1=self.edge1, edge2=self.edge2) == chars.DOE_SGML_VALS
-#
-#         assert replace_with_dict(
-#             "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
-#             "characters!&eacute;;", replacement_dict=chars.DOE_SGML,
-#             edge1=self.edge1, edge2=self.edge2) == \
-#             "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
-#
-#     def test_replace_with_dict_early_english_html(self):
-#
-#         assert replace_with_dict(
-#             self.not_special_string, replacement_dict=chars.EE_HTML,
-#             edge1=self.edge1, edge2=self.edge2) == self.not_special_string
-#
-#         assert replace_with_dict(
-#             chars.EE_HTML_KEYS, replacement_dict=chars.EE_HTML,
-#             edge1=self.edge1, edge2=self.edge2) == chars.EE_HTML_VALS
-#
-#         assert replace_with_dict(
-#             "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
-#             "characters!&#383;;", replacement_dict=chars.EE_HTML,
-#             edge1=self.edge1, edge2=self.edge2) == \
-#             "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
-#
-#     def test_replace_with_dict_mufi_3(self):
-#
-#         assert replace_with_dict(
-#             self.not_special_string, replacement_dict=chars.MUFI3,
-#             edge1=self.edge1, edge2=self.edge2) == self.not_special_string
-#
-#         assert replace_with_dict(
-#             chars.MUFI3_KEYS, replacement_dict=chars.MUFI3, edge1=self.edge1,
-#             edge2=self.edge2) == chars.MUFI3_VALS
-#
-#         assert replace_with_dict(
-#             "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
-#             "special characters!&afinslig;;", replacement_dict=chars.MUFI3,
-#             edge1=self.edge1, edge2=self.edge2) == \
-#             "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
-#
-#     def test_replace_with_dict_mufi_4(self):
-#
-#         assert replace_with_dict(
-#             self.not_special_string, replacement_dict=chars.MUFI4,
-#             edge1=self.edge1, edge2=self.edge2) == self.not_special_string
-#
-#         assert replace_with_dict(
-#             chars.MUFI4_KEYS, replacement_dict=chars.MUFI4, edge1=self.edge1,
-#             edge2=self.edge2) == chars.MUFI4_VALS
-#
-#         assert replace_with_dict(
-#             "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
-#             "special characters!&shy;;", replacement_dict=chars.MUFI4,
-#             edge1=self.edge1, edge2=self.edge2) == \
-#             "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad;"
-#
-#     def test_replace_with_dict_other(self):
-#         replacement_dict = {'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'}
-#
-#         assert replace_with_dict(
-#             "ythklsv", replacement_dict=replacement_dict, edge1=self.edge1,
-#             edge2=self.edge2) == "ythklsv"
-#
-#         assert replace_with_dict(
-#             "aeiou", replacement_dict=replacement_dict, edge1=self.edge1,
-#             edge2=self.edge2) == "zqwpx"
-#
-#         assert replace_with_dict(
-#             "Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;",
-#             replacement_dict=replacement_dict, edge1=self.edge1,
-#             edge2=self.edge2) == "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn " \
-#                                  "srydvlnmfk!w;"
+
+
+class TestMenuSpecialChars:
+    not_special_string = "This string contains no special chars?!\nWow."
+
+    def test_replace_with_dict_doe_sgml(self):
+
+        assert ScrubberModel().replace_with_dict(
+            self.not_special_string, replacement_dict=chars.DOE_SGML,
+            is_lemma=False) == self.not_special_string
+
+        assert ScrubberModel().replace_with_dict(
+            chars.DOE_SGML_KEYS, replacement_dict=chars.DOE_SGML,
+            is_lemma=False) == chars.DOE_SGML_VALS
+
+        assert ScrubberModel().replace_with_dict(
+            "Text. &omacron;Alternating&t;? &lbar;\nWith &bbar; special "
+            "characters!&eacute;;", replacement_dict=chars.DOE_SGML,
+            is_lemma=False) == \
+            "Text. ōAlternatingþ? ł\nWith ƀ special characters!é;"
+
+    def test_replace_with_dict_early_english_html(self):
+
+        assert ScrubberModel().replace_with_dict(
+            self.not_special_string, replacement_dict=chars.EE_HTML,
+            is_lemma=False) == self.not_special_string
+
+        assert ScrubberModel().replace_with_dict(
+            chars.EE_HTML_KEYS, replacement_dict=chars.EE_HTML,
+            is_lemma=False) == chars.EE_HTML_VALS
+
+        assert ScrubberModel().replace_with_dict(
+            "Text. &ae;Alternating&E;? &gt;\nWith &#540; special "
+            "characters!&#383;;", replacement_dict=chars.EE_HTML,
+            is_lemma=False) == \
+            "Text. æAlternatingĘ? >\nWith Ȝ special characters!ſ;"
+
+    def test_replace_with_dict_mufi_3(self):
+
+        assert ScrubberModel().replace_with_dict(
+            self.not_special_string, replacement_dict=chars.MUFI3,
+            is_lemma=False) == self.not_special_string
+
+        assert ScrubberModel().replace_with_dict(
+            chars.MUFI3_KEYS, replacement_dict=chars.MUFI3,
+            is_lemma=False) == chars.MUFI3_VALS
+
+        assert ScrubberModel().replace_with_dict(
+            "Text. &tridotdw;Alternating&AOlig;? &ffilig;\nWith &nlrleg; "
+            "special characters!&afinslig;;", replacement_dict=chars.MUFI3,
+            is_lemma=False) == \
+            "Text. ∵AlternatingꜴ? ﬃ\nWith ƞ special characters!\uefa4;"
+
+    def test_replace_with_dict_mufi_4(self):
+
+        assert ScrubberModel().replace_with_dict(
+            self.not_special_string, replacement_dict=chars.MUFI4,
+            is_lemma=False) == self.not_special_string
+
+        assert ScrubberModel().replace_with_dict(
+            chars.MUFI4_KEYS, replacement_dict=chars.MUFI4,
+            is_lemma=False) == chars.MUFI4_VALS
+
+        assert ScrubberModel().replace_with_dict(
+            "Text. &llhsqb;Alternating&OBIIT;? &aeligdotbl;\nWith &circledot; "
+            "special characters!&shy;;", replacement_dict=chars.MUFI4,
+            is_lemma=False) == \
+            "Text. ⸤AlternatingꝊ? \ue436\nWith ◌ special characters!\xad;"
+
+    def test_replace_with_dict_other(self):
+        replacement_dict = {'a': 'z', 'e': 'q', 'i': 'w', 'o': 'p', 'u': 'x'}
+
+        assert ScrubberModel().replace_with_dict(
+            "ythklsv", replacement_dict=replacement_dict,
+            is_lemma=False) == "ythklsv"
+
+        assert ScrubberModel().replace_with_dict(
+            "aeiou", replacement_dict=replacement_dict, is_lemma=False) == \
+            "zqwpx"
+
+        assert ScrubberModel().replace_with_dict(
+            "Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;",
+            replacement_dict=replacement_dict, is_lemma=False) == \
+            "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 #
 #
 # class TestProcessTagReplaceOptions:
