@@ -72,7 +72,7 @@ class ScrubberModel(BaseModel):
             else ScrubbingReceiver().options_from_front_end()
 
     @staticmethod
-    def _handle_gutenberg(text: str) -> str:
+    def handle_gutenberg(text: str) -> str:
         """Removes Project Gutenberg boilerplate from text.
 
         :param text: A Project Gutenberg document.
@@ -448,7 +448,7 @@ class ScrubberModel(BaseModel):
 
         # -- 0. Gutenberg -----------------------------------------------------
         if doc_id in self._gutenberg_file_set:
-            text = self._handle_gutenberg(text=text)
+            text = self.handle_gutenberg(text=text)
 
         # -- 1. lower ---------------------------------------------------------
         if self._options.basic_options.lower:    # User wants to ignore case
