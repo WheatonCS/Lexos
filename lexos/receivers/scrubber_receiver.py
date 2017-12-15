@@ -360,7 +360,6 @@ class ScrubbingReceiver(BaseReceiver):
 
         return conversion_dict
 
-    # Option getters---
     def _get_remove_digits_map(self) -> Dict[int, type(None)]:
         """Get the digit removal map.
 
@@ -502,6 +501,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return remove_punctuation_map
 
+    # Option getters---
     def _get_punctuation_options_from_front_end(self, punct: bool
                                                 ) -> PunctuationOptions:
         """Gets all the punctuation options from the front end.
