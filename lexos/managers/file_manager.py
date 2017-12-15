@@ -1247,27 +1247,34 @@ class FileManager:
         return count_matrix
 
     def get_class_division_map(self) -> pd.DataFrame:
-        """:return: a panda frame that contains class division map."""
+        """Gets the class division map to help with topword analysis.
 
-        # active files labels and classes
+        :return: a pandas data frame where:
+            - the data is the division map with boolean values that indicate
+              which class each file belongs to.
+            - the index is the class labels.
+            - the column is the file id.
+
+        """
+        # active files labels and classes.
         active_files = self.get_active_files()
-        file_labels = [file.label for file in active_files]
+        file_ids = [file.id for file in active_files]
         class_labels = {file.class_label for file in active_files}
 
-        label_length = len(file_labels)
+        # initialize values and get class division map.
+        label_length = len(file_ids)
         class_length = len(class_labels)
 
-        # initialize class division map
-        division_map = pd.DataFrame(
+        class_division_map = pd.DataFrame(
             data=np.zeros((class_length, label_length), dtype=bool),
             index=class_labels,
-            columns=file_labels)
+            columns=file_ids)
 
-        # set correct boolean value for each file
+        # set correct boolean value for each file.
         for file in active_files:
-            division_map[file.label][file.class_label] = True
+            class_division_map[file.id][file.class_label] = True
 
-        return division_map
+        return class_division_map
 
     def get_previews_of_all(self) -> List[dict]:
         """Creates a formatted list of previews from every file.
