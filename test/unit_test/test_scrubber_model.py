@@ -1,7 +1,9 @@
 # from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
 #     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 # from lexos.helpers.exceptions import LexosException
-from lexos.models.scrubber_model import ScrubberModel
+from lexos.models.scrubber_model import ScrubberModel, ScrubberTestOptions
+from lexos.receivers.scrubber_receiver import ScrubbingOptions, BasicOptions, \
+    PunctuationOptions, WhitespaceOptions, AdditionalOptions
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 #
 #
@@ -397,149 +399,160 @@ class TestMenuSpecialChars:
             "Jklt. aghscbmtlsro? e\nLvdy u jgdtbhn srydvlnmfk!i;",
             replacement_dict=replacement_dict, is_lemma=False) == \
             "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
-#
-#
-# class TestProcessTagReplaceOptions:
-#     tag_text = "Text before tags.\n<first> Some text in the first tag " \
-#                "</first>\nText between the tags.\n<second tag_num= \"2-nd " \
-#                "tag's num\">Other text in the second tag</second>\nText" \
-#                " after the tags."
-#     no_end = "The ending <first> tags here <first> are a bit <second> messed" \
-#              " up."
-#
-#     def test_process_tag_rep_options_remove_tag(self):
-#         action = "remove-tag"
-#         attribute = ""
-#
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="first", action=action,
-#             attribute=attribute) == "Text before tags.\n  Some text in the " \
-#                                     "first tag  \nText between the tags." \
-#                                     "\n<second tag_num= \"2-nd tag's num\">" \
-#                                     "Other text in the second tag</second>\n" \
-#                                     "Text after the tags."
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="second", action=action,
-#             attribute=attribute) == "Text before tags.\n<first> Some text in" \
-#                                     " the first tag </first>\nText between" \
-#                                     " the tags.\n Other text in the second " \
-#                                     "tag \nText after the tags."
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="first", action=action,
-#             attribute=attribute) == "The ending   tags here   are a bit " \
-#                                     "<second> messed up."
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="second", action=action,
-#             attribute=attribute) == "The ending <first> tags here <first> " \
-#                                     "are a bit   messed up."
-#
-#     def test_process_tag_rep_options_remove_element(self):
-#         action = "remove-element"
-#         attribute = ""
-#
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="first", action=action,
-#             attribute=attribute) == "Text before tags.\n \nText between the" \
-#                                     " tags.\n<second tag_num= \"2-nd tag's " \
-#                                     "num\">Other text in the second tag" \
-#                                     "</second>\nText after the tags."
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="second", action=action,
-#             attribute=attribute) == "Text before tags.\n<first> Some text in" \
-#                                     " the first tag </first>\nText between " \
-#                                     "the tags.\n \nText after the tags."
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="first", action=action,
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="second", action=action,
-#             attribute=attribute) == self.no_end
-#
-#     def test_process_tag_rep_options_replace_element(self):
-#         action = "replace-element"
-#         attribute = "a very nice attribute"
-#
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="first", action=action,
-#             attribute=attribute) == "Text before tags.\na very nice " \
-#                                     "attribute\nText between the tags." \
-#                                     "\n<second tag_num= \"2-nd tag's num\">" \
-#                                     "Other text in the second tag</second>\n" \
-#                                     "Text after the tags."
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="second", action=action,
-#             attribute=attribute) == "Text before tags.\n<first> Some text in" \
-#                                     " the first tag </first>\nText "\
-#                                     "between the tags.\na very nice " \
-#                                     "attribute\nText after the tags."
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="first", action=action,
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="second", action=action,
-#             attribute=attribute) == self.no_end
-#
-#     def test_process_tag_rep_options_leave_tag(self):
-#         action = "leave-alone"
-#         attribute = ""
-#
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="first", action=action,
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="second", action=action,
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="first", action=action,
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="second", action=action,
-#             attribute=attribute) == self.no_end
-#
-#     def test_process_tag_rep_options_other(self):
-#         action = "remove-tag"
-#         attribute = ""
-#
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="first", action="fake-option",
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="second", action="fake-option",
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="first", action="fake-option",
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="second", action="fake-option",
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="Text", action=action,
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag=" ", action=action,
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag="", action=action,
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.tag_text, tag=".", action=action,
-#             attribute=attribute) == self.tag_text
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="Text", action=action,
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             self.no_end, " ", action, attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag="", action=action,
-#             attribute=attribute) == self.no_end
-#         assert process_tag_replace_options(
-#             orig_text=self.no_end, tag=".", action=action,
-#             attribute=attribute) == self.no_end
-#
-#
-# # handle_tags
-#
-#
+
+
+class TestProcessTagReplaceOptions:
+    tag_text = "Text before tags.\n<first> Some text in the first tag " \
+               "</first>\nText between the tags.\n<second tag_num= \"2-nd " \
+               "tag's num\">Other text in the second tag</second>\nText" \
+               " after the tags."
+    no_end = "The ending <first> tags here <first> are a bit <second> messed" \
+             " up."
+
+    @staticmethod
+    def _make_options(tag, action, attribute):
+        test_options = ScrubberTestOptions(
+            front_end_options=ScrubbingOptions(
+                basic_options=BasicOptions(
+                    lower=False, punct=False,
+                    punctuation_options=PunctuationOptions(
+                        apos=False, hyphen=False, amper=False,
+                        previewing=False,
+                        remove_punctuation_map={}), digits=False,
+                    remove_digits_map={}, tags=True,
+                    tag_options={tag: (action, attribute)},
+                    whitespace=False, whitespace_options=WhitespaceOptions(
+                        spaces=False, tabs=False, newlines=False,
+                        remove_whitespace_map={})),
+                additional_options=AdditionalOptions(
+                    consol={}, lemma={}, special_char={}, sw_kw=[], stop=False,
+                    keep=False)), file_id_content_map={},
+            gutenberg_file_set={})
+
+        return test_options
+
+    def test_process_tag_rep_options_remove_tag(self):
+        action = "remove-tag"
+        attribute = ""
+        first_test_options = self._make_options("first", action, attribute)
+        second_test_options = self._make_options("second", action, attribute)
+
+        assert ScrubberModel(first_test_options).handle_tags(self.tag_text) \
+            == "Text before tags.\n  Some text in the first tag  \nText " \
+               "between the tags.\n<second tag_num= \"2-nd tag's num\">" \
+               "Other text in the second tag</second>\nText after the tags."
+        assert ScrubberModel(first_test_options).handle_tags(self.no_end) \
+            == "The ending   tags here   are a bit <second> messed up."
+        assert ScrubberModel(second_test_options).handle_tags(self.tag_text) \
+            == "Text before tags.\n<first> Some text in the first tag " \
+               "</first>\nText between the tags.\n Other text in the second " \
+               "tag \nText after the tags."
+        assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
+            == "The ending <first> tags here <first> are a bit   messed up."
+
+    def test_process_tag_rep_options_remove_element(self):
+        action = "remove-element"
+        attribute = ""
+        first_test_options = self._make_options("first", action, attribute)
+        second_test_options = self._make_options("second", action, attribute)
+
+        assert ScrubberModel(first_test_options).handle_tags(self.tag_text) \
+            == "Text before tags.\n \nText between the tags.\n<second tag_" \
+               "num= \"2-nd tag's num\">Other text in the second tag" \
+               "</second>\nText after the tags."
+        assert ScrubberModel(first_test_options).handle_tags(self.no_end) \
+            == self.no_end
+        assert ScrubberModel(second_test_options).handle_tags(self.tag_text) \
+            == "Text before tags.\n<first> Some text in the first tag " \
+               "</first>\nText between the tags.\n \nText after the tags."
+        assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+    def test_process_tag_rep_options_replace_element(self):
+        action = "replace-element"
+        attribute = "a very nice attribute"
+        first_test_options = self._make_options("first", action, attribute)
+        second_test_options = self._make_options("second", action, attribute)
+        assert ScrubberModel(first_test_options).handle_tags(self.tag_text) \
+            == "Text before tags.\na very nice attribute\nText between the " \
+               "tags.\n<second tag_num= \"2-nd tag's num\">Other text in the" \
+               " second tag</second>\nText after the tags."
+        assert ScrubberModel(first_test_options).handle_tags(self.no_end) \
+            == self.no_end
+        assert ScrubberModel(second_test_options).handle_tags(self.tag_text) \
+            == "Text before tags.\n<first> Some text in the first tag " \
+               "</first>\nText between the tags.\na very nice attribute\n" \
+               "Text after the tags."
+        assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+    def test_process_tag_rep_options_leave_tag(self):
+        action = "leave-alone"
+        attribute = ""
+        first_test_options = self._make_options("first", action, attribute)
+        second_test_options = self._make_options("second", action, attribute)
+
+        assert ScrubberModel(first_test_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(first_test_options).handle_tags(self.no_end) \
+            == self.no_end
+        assert ScrubberModel(second_test_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+    def test_process_tag_rep_options_other(self):
+        action = "fake-option"
+        attribute = ""
+        first_fake_options = self._make_options("first", action, attribute)
+        second_fake_options = self._make_options("second", action, attribute)
+
+        assert ScrubberModel(first_fake_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(first_fake_options).handle_tags(self.no_end) \
+            == self.no_end
+        assert ScrubberModel(second_fake_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(second_fake_options).handle_tags(self.no_end) \
+            == self.no_end
+
+        action = "remove-tag"
+        tag = "Text"
+        text_test_options = self._make_options(tag, action, attribute)
+
+        assert ScrubberModel(text_test_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(text_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+        tag = " "
+        space_test_options = self._make_options(tag, action, attribute)
+
+        assert ScrubberModel(space_test_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(space_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+        tag = ""
+        no_space_test_options = self._make_options(tag, action, attribute)
+
+        assert ScrubberModel(no_space_test_options).handle_tags(
+            self.tag_text) == self.tag_text
+        assert ScrubberModel(no_space_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+        tag = "."
+        period_test_options = self._make_options(tag, action, attribute)
+
+        assert ScrubberModel(period_test_options).handle_tags(self.tag_text) \
+            == self.tag_text
+        assert ScrubberModel(period_test_options).handle_tags(self.no_end) \
+            == self.no_end
+
+
+# handle_tags
+
+
 # class TestGetAllPunctuationMap:
 #
 #     def test_get_all_punctuation_map(self):

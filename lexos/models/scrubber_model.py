@@ -211,7 +211,7 @@ class ScrubberModel(BaseModel):
 
         return processed_text
 
-    def _handle_tags(self, text: str) -> str:
+    def handle_tags(self, text: str) -> str:
         """Handles tags that are found in the text.
 
         Useless tags (header tags) are deleted and depending on the
@@ -479,7 +479,7 @@ class ScrubberModel(BaseModel):
 
         # -- 3. Tags ----------------------------------------------------------
         if self._options.basic_options.tags:  # If Remove Tags was checked:
-            text = self._handle_tags(text=text)
+            text = self.handle_tags(text=text)
 
         # -- 4. Punctuation (hyphens, apostrophes, ampersands) ----------------
         if self._options.basic_options.punct:
