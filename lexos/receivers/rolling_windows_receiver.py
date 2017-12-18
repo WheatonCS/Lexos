@@ -141,7 +141,7 @@ class RollingWindowsReceiver(BaseReceiver):
 
     def _get_milestone(self) -> Optional[str]:
         """Get the milestone from front end"""
-        if 'rollinghasmilestone' in self._front_end_data:
+        if 'rollinghasmilestone' not in self._front_end_data:
             return None
         else:
             return self._front_end_data['rollingmilestonetype']
