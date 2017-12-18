@@ -170,7 +170,7 @@ class RollingWindowsModel(BaseModel):
 
         return len(re.findall(pattern=string_regex, string=window))
 
-    def _get_window(self) -> np.ndarray:
+    def _get_windows(self) -> np.ndarray:
         """get the array of window with the option in classes
 
         :return: an array of windows to run analysis on
@@ -337,35 +337,38 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError(f"unhandled token type: {token_type}")
 
-    def _find_token_average(self) -> pd.DataFrame:
-        """Find the token average in all the windows generated
+    def _find_mile_stone_windows_indexes_in_all_windows(
+            self, windows: Iterator[str]) -> List[int]:
+        """Get a indexes of the mile stone windows
 
-        :return:
-            - the index header is the tokens
-            - the column header corresponds to the windows but
-                but there is no column header, because it is impossible to
-                set the header as windows
-
+        A "mile stone window" is a window where the window that starts with
+        the milestone string.
+        :param windows: a iterator of windows
+        :return: a list of indexes of the mile stone windows
         """
-        windows = self._get_window()
 
-        return self._find_tokens_average_in_windows(windows=windows)
+        # get an empty graph if the milestone is empty
+        if self._options.milestone is None:
+            return []
 
-    def _find_token_ratio(self) -> pd.Series:
-        """Find the token ratio all the window generated
+        # if the milestone string exists
+        else:
+            # get the mile stone str
+            milestone_str = self._options.milestone
 
-        :return: a series of ratio, the index correspond to the windows
-        """
-        windows = self._get_window()
-
-        return self._find_token_ratio_in_windows(windows)
+            # get the index fo the mile stone window
+            return [index for index, window in enumerate(windows)
+                    if window.startswith(milestone_str)]
 
     def _get_token_ratio_graph(self) -> go.Scattergl:
         """Get the plotly graph for the token ratio without milestone.
 
         :return: plotly graph object
         """
-        token_ratio_series = self._find_token_ratio()
+
+        windows = self._get_windows()
+
+        token_ratio_series = self._find_token_ratio_in_windows(windows)
 
         # TODO: support black and white color scheme
         # TODO: support show dots, (just change the mode)
@@ -384,7 +387,10 @@ class RollingWindowsModel(BaseModel):
 
         :return: a list of plotly graph object
         """
-        token_count_data_frame = self._find_token_average()
+        windows = self._get_windows()
+
+        token_average_data_frame = self._find_tokens_average_in_windows(
+            windows=windows)
 
         # TODO: support black and white color scheme
         # TODO: support show dots, (just change the mode)
@@ -394,7 +400,7 @@ class RollingWindowsModel(BaseModel):
                 y=row,
                 mode="lines",
                 name=token
-            ) for token, row in token_count_data_frame.iterrows()
+            ) for token, row in token_average_data_frame.iterrows()
         ]
 
     def get_rwa_graph(self) -> str:
