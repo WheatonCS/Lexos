@@ -360,17 +360,17 @@ class RollingWindowsModel(BaseModel):
 
         return self._find_token_ratio_in_windows(windows)
 
-    def _get_token_ratio_graph(self) -> str:
-        """Get the plotly graph for the token ratio.
+    def _get_token_ratio_graph(self) -> go.Scattergl:
+        """Get the plotly graph for the token ratio without milestone.
 
-        :return: a html string
+        :return: plotly graph object
         """
         token_ratio_series = self._find_token_ratio()
 
         # TODO: support black and white color scheme
         # TODO: support show dots, (just change the mode)
         # construct the graph object
-        graph_obj = go.Scattergl(
+        return go.Scattergl(
             # the x coordinates are the index of the window, starting from 0
             x=np.arange(len(token_ratio_series)),
             # the y coordinates is the token ratios
@@ -379,20 +379,16 @@ class RollingWindowsModel(BaseModel):
             name=token_ratio_series.name
         )
 
-        return plot(
-            [graph_obj], include_plotlyjs=False, output_type='div'
-        )
+    def _get_token_average_graph(self) -> List[go.Scattergl]:
+        """Get the plotly graph for token average without milestone.
 
-    def _get_token_average_graph(self) -> str:
-        """Get the plotly graph for token average
-
-        :return: a html string
+        :return: a list of plotly graph object
         """
         token_count_data_frame = self._find_token_average()
 
         # TODO: support black and white color scheme
         # TODO: support show dots, (just change the mode)
-        graph_objs = [
+        return [
             go.Scattergl(
                 x=np.arange(len(row)),
                 y=row,
@@ -400,10 +396,6 @@ class RollingWindowsModel(BaseModel):
                 name=token
             ) for token, row in token_count_data_frame.iterrows()
         ]
-
-        return plot(
-            graph_objs, include_plotlyjs=False, output_type='div'
-        )
 
     def get_rwa_graph(self) -> str:
         """Get the rolling window graph
@@ -419,6 +411,12 @@ class RollingWindowsModel(BaseModel):
         assert count_average ^ count_ratio
 
         if count_average:
-            return self._get_token_average_graph()
-        if count_ratio:
-            return self._get_token_ratio_graph()
+            graph_to_plot = self._get_token_average_graph()
+        elif count_ratio:
+            graph_to_plot = self._get_token_ratio_graph()
+        else:
+            raise ValueError("unhandled count type")
+
+        return plot(
+            graph_to_plot, include_plotlyjs=False, output_type='div'
+        )
