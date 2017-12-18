@@ -6,6 +6,7 @@ from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 from lexos.views.base_view import detect_active_docs
 
+
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
