@@ -187,9 +187,9 @@
                     <p class="topwordResultTableTitle"><strong>Class: "{{ classmap.index.values[i] }}"</strong></p>
                 {% endif %}
                     <div class="topwordFileTable">
-                        {% for filename in classmap.columns.values %}
-                            {%  if classmap[filename][classmap.index.values[i]] %}
-                                <p class="topwordFile">{{ filename }}</p>
+                        {% for file_id in classmap.columns.values %}
+                            {%  if classmap[file_id][classmap.index.values[i]] %}
+                                <p class="topwordFile">{{ labels[file_id] }}</p>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -204,19 +204,19 @@
             </div>
         </div>
         <div class="row">
-            {% for file in result %}
+            {% for file_result in result %}
                 <div class="col-md-6 topwordTableDivv topwordTableDivPZAlll">
-                    <p class="topwordResultTableTitle"><strong> {{ file[0] }} </strong></p>
+                    <p class="topwordResultTableTitle"><strong> {{ file_result.name }} </strong></p>
                     <table style="border:1px solid #ddd;" class="table table-striped table-condensed table-hover header-fixed">
                         <thead>
                             <th>Top Word</th>
                             <th>Z Score</th>
                         </thead>
                         <tbody>
-                        {% for data in file[1] %}
+                        {% for word, score in file_result.iteritems() %}
                             <tr>
-                                <td>{{ data[0] }}</td>
-                                <td>{{ data[1] }}</td>
+                                <td>{{ word }}</td>
+                                <td>{{ score }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

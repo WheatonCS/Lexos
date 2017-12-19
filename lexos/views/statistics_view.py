@@ -2,6 +2,7 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.stats_model import StatsModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -23,7 +24,7 @@ def statistics():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels()
+    labels = file_manager.get_active_labels_with_id()
     if request.method == "GET":
         # "GET" request occurs when the page is first loaded.
         if 'analyoption' not in session:
@@ -35,21 +36,20 @@ def statistics():
         return render_template(
             'statistics.html',
             labels=labels,
-            labels2=labels,
             itm="statistics",
             numActiveDocs=num_active_docs)
+
     if request.method == "POST":
-        token = request.form['tokenType']
-        file_info_list, corpus_info = utility.generate_statistics(
-            file_manager)
+        token = StatsModel.get_token_type()
+        file_info_list = StatsModel().get_all_file_info()
+        corpus_info = StatsModel().get_corpus_info()
         session_manager.cache_analysis_option()
         session_manager.cache_statistic_option()
-        # DO NOT save fileManager!
+
         return render_template(
             'statistics.html',
-            labels=labels,
-            FileInfoList=file_info_list,
-            corpusInfo=corpus_info,
             token=token,
-            itm="statistics",
+            labels=labels,
+            corpusInfo=corpus_info,
+            FileInfoList=file_info_list,
             numActiveDocs=num_active_docs)

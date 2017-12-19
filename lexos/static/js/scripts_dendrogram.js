@@ -3,7 +3,7 @@
  * @returns {{string: string}} - the from converted to json
  */
 function jsonifyForm () {
-    var form = {}
+    const form = {}
     $.each($('form').serializeArray(), function (i, field) {
         form[field.name] = field.value || ''
     })
@@ -30,7 +30,6 @@ function sendAjaxRequest (form) {
         type: 'POST',
         url: '/dendrogramDiv',
         contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
         data: JSON.stringify(form)
     })
 
@@ -44,13 +43,13 @@ function submitForm () {
     $('#status-analyze').css({'visibility': 'visible'})
 
     // convert form into an object map string to string
-    var form = jsonifyForm()
+    const form = jsonifyForm()
 
     // send the ajax request
     sendAjaxRequest(form)
         .done(
             function (response) {
-                $('#dendrogram-result').html(response['dendroDiv'])
+                $('#dendrogram-result').html(response)
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {

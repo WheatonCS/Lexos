@@ -31,20 +31,16 @@ class NormOption(NamedTuple):
 
 class CullingOption(NamedTuple):
     """A typed tuple to represent all the culling option."""
-    # Whether to apply most frequent word
-    most_frequent_word: bool
-
     # the lowest word rank to keep in DTM
+    # if none, then don't apply most frequent word
     mfw_lowest_rank: Optional[int]
 
-    # Whether to apply culling option
-    culling: bool
-
     # the least number of passage that the word needs to be in
+    # if none, then don't apply culling
     cull_least_seg: Optional[int]
 
 
-class MatrixOption(NamedTuple):
+class MatrixFrontEndOption(NamedTuple):
     """A typed tuple to represent all the matrix option."""
     # the token options
     token_option: TokenOption
@@ -116,21 +112,16 @@ class MatrixReceiver(BaseReceiver):
         :return: a culling option struct
         """
         if 'mfwcheckbox' in self._front_end_data:
-            most_frequent_word = True
             lower_rank_bound = int(self._front_end_data['mfwnumber'])
         else:
-            most_frequent_word = False
             lower_rank_bound = None
 
         if 'cullcheckbox' in self._front_end_data:
-            culling = True
             least_num_seg = int(self._front_end_data['cullnumber'])
         else:
-            culling = False
             least_num_seg = None
 
-        return CullingOption(culling=culling, cull_least_seg=least_num_seg,
-                             most_frequent_word=most_frequent_word,
+        return CullingOption(cull_least_seg=least_num_seg,
                              mfw_lowest_rank=lower_rank_bound)
 
     def _get_id_temp_label_map_from_front_end(self) -> Dict[int, str]:
@@ -167,12 +158,12 @@ class MatrixReceiver(BaseReceiver):
 
         return dict(id_temp_label_list)
 
-    def options_from_front_end(self) -> MatrixOption:
+    def options_from_front_end(self) -> MatrixFrontEndOption:
         """Get all the matrix option from front end.
 
         :return: all the option packed together into a matrix option class
         """
-        return MatrixOption(
+        return MatrixFrontEndOption(
             token_option=self._get_token_option_from_front_end(),
             norm_option=self._get_normalize_option_from_front_end(),
             culling_option=self._get_culling_option_from_front_end(),

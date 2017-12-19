@@ -47,7 +47,7 @@ class BaseReceiver:
         if request.json:
             return dict(request.json)
         elif request.form:
-            return dict(request.form)
+            return request.form
         else:
             return None
 

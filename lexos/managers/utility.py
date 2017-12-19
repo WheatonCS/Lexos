@@ -2,28 +2,21 @@
 import os
 import pickle
 import re
-import textwrap
 from os import makedirs
 from os.path import join as path_join
 from typing import List, Tuple, Dict
 
 import numpy as np
-import pandas as pd
 from flask import request
 
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 import lexos.processors.analyze.KMeans as KMeans
-import lexos.processors.analyze.information as information
-import lexos.processors.analyze.similarity as similarity
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
-from lexos.processors.analyze import dendrogrammer
-from lexos.processors.analyze.topword import analyze_all_to_para, \
-    group_division, analyze_para_to_group, analyze_group_to_group
 
 
 def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
@@ -237,317 +230,76 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     return out_file_path, extension
 
 
-# Gets called from statistics() in lexos_core.py
-
-
-def generate_statistics(file_manager: FileManager) -> \
-        (List[information.FileInformation], information.CorpusInformation):
-    """Calls analyze/information to generate statistics of the corpus.
-
-    :param file_manager: A FileManager object (see managers/file_manager.py)
-    :return: file_info_list: a list of tuples that contain the file id and the
-                             file information
-                             (see analyze/information.py/
-                             Corpus_Information.returnstatistics()
-                             function for more)
-             corpus_information: the statistics of the whole corpus
-                                 (see analyze/information.py/
-                                 File_Information.returnstatistics()
-                                 function for more)
+def generate_k_means_pca(file_manager: FileManager):
     """
-    checked_labels = request.form.getlist('segmentlist')
-    file_ids = set(file_manager.files.keys())
-    # convert the checked_labels into int
-    checked_labels = set(map(int, checked_labels))
-    # if the file_id is not in checked list
-    for file_id in file_ids - checked_labels:
-        # make that file inactive in order to getMatrix
-        file_manager.files[file_id].disable()
-
-    # folder path for storing graphs and plots
-    folder_path = os.path.join(session_manager.session_folder(),
-                               constants.RESULTS_FOLDER)
-    try:
-        os.mkdir(folder_path)  # attempt to make folder to store graphs/plots
-    except FileExistsError:
-        pass
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_deleted, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    dtm_data = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=culling)
-    # grab data from data frame
-    count_matrix = dtm_data.values
-    labels = dtm_data.index.values
-
-    # helper function gets information for each file
-    def get_file_info(row_index, label):
-        return information.FileInformation(
-            count_list=count_matrix[row_index, :],
-            file_name=label)
-
-    # put information of each file into a list
-    file_info_list = [get_file_info(row_index=ind, label=label)
-                      for ind, label in enumerate(labels)]
-
-    # get information of the whole corpus
-    corpus_info = information.CorpusInformation(count_matrix=count_matrix,
-                                                labels=labels)
-    return file_info_list, corpus_info
-
-
-def get_dendrogram_legend(file_manager: FileManager,
-                          distance_list: List[float]) -> str:
-    """
-    Generates the legend for dendrogram from the active files.
+    Generates a table of cluster_number and file name from the active files.
 
     Args:
         None
 
     Returns:
-        A string with all the formatted information of the legend.
+        kmeans_index: a list of index of the closest center of the file
+        siltt_score: a float of silhouette score based on KMeans algorithm
+        file_name_str: a string of file names, separated by '#'
+        k_value: an int of the number of K from input
     """
-    # Switch to Ajax if necessary
-    if request.json:
-        opts = request.json
-    else:
-        opts = request.form
 
-    str_final_legend = ""
-
-    # ----- DENDROGRAM OPTIONS -----
-    str_legend = "Dendrogram Options - "
-
-    need_translate, translate_metric, translate_dvf = \
-        dendrogrammer.translate_den_options()
-
-    if need_translate:
-        str_legend += "Distance Metric: " + translate_metric + ", "
-        str_legend += "Linkage Method: " + opts['linkage'] + ", "
-        str_legend += "Data Values Format: " + translate_dvf + "\n\n"
-    else:
-        str_legend += "Distance Metric: " + opts['metric'] + ", "
-        str_legend += "Linkage Method: " + opts['linkage'] + ", "
-        str_legend += "Data Values Format: " + \
-            opts['normalizeType'] + " (Norm: " + opts['norm'] + ")\n\n"
-
-    str_wrapped_dendro_options = textwrap.fill(
-        str_legend, constants.CHARACTERS_PER_LINE_IN_LEGEND)
-    # -------- end DENDROGRAM OPTIONS ----------
-
-    str_final_legend += str_wrapped_dendro_options + "\n\n"
-
-    distances = ', '.join(str(x) for x in distance_list)
-    distances_legend = "Dendrogram Distances - " + distances
-    str_wrapped_distances_legend = textwrap.fill(
-        distances_legend, (constants.CHARACTERS_PER_LINE_IN_LEGEND - 6))
-
-    str_final_legend += str_wrapped_distances_legend + "\n\n"
-
-    for lexos_file in list(file_manager.files.values()):
-        if lexos_file.active:
-            str_final_legend += lexos_file.get_legend() + "\n\n"
-
-    return str_final_legend
-
-
-# Gets called from generateDendrogram() in utility.py
-def get_newick(node, newick, parent_dist, leaf_names):
-    if node.is_leaf():
-        return "%s:%.2f%s" % (
-            leaf_names[node.id], parent_dist - node.dist, newick)
-    else:
-        if len(newick) > 0:
-            newick = "):%.2f%s" % (parent_dist - node.dist, newick)
-        else:
-            newick = ");"
-        newick = get_newick(node.get_left(), newick, node.dist, leaf_names)
-        newick = get_newick(node.get_right(), ",%s" % newick, node.dist,
-                            leaf_names)
-        newick = "(%s" % newick
-        return newick
-
-
-# Gets called from cluster() in lexos_core.py
-def generate_dendrogram(file_manager: FileManager, leq: str):
-    """
-    Generates dendrogram image and PDF from the active files.
-
-    Args:
-        None
-
-    Returns:
-        Total number of PDF pages, ready to calculate the height of the
-        embedded PDF on screen
-    """
-    from sklearn.metrics.pairwise import euclidean_distances
-    from scipy.cluster.hierarchy import ward, dendrogram
-    from scipy.spatial.distance import pdist
-    from scipy.cluster import hierarchy
-    from os import makedirs
-
-    import matplotlib.pyplot as plt
-
-    if 'getdendro' in request.form:
-        label_dict = file_manager.get_active_labels()
-        labels = []
-        for ind, label in list(label_dict.items()):
-            labels.append(label)
-
-        # Get options from request.form
-        orientation = str(request.form['orientation'])
-        linkage = str(request.form['linkage'])
-        metric = str(request.form['metric'])
-
-        # Get active files
-        all_contents = []  # list of strings-of-text for each segment
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                content_element = l_file.load_contents()
-                all_contents.append(content_element)
-
-                if request.form["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.form["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
-
-        # More options
-        n_gram_size = int(request.form['tokenSize'])
-        use_word_tokens = request.form['tokenType'] == 'word'
-
-        only_char_grams_within_words = False
-        if not use_word_tokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count
-            # front and end markers as ' ' if this is true
-            only_char_grams_within_words = 'inWordsOnly' in request.form
-
-        if use_word_tokens:
-            token_type = 'word'
-        else:
-            token_type = 'char'
-            if only_char_grams_within_words:
-                token_type = 'char_wb'
-
-        from sklearn.feature_extraction.text import CountVectorizer
-        vectorizer = CountVectorizer(
-            input='content',
-            encoding='utf-8',
-            min_df=1,
-            analyzer=token_type,
-            token_pattern=r'(?u)\b[\w\']+\b',
-            ngram_range=(
-                n_gram_size,
-                n_gram_size),
-            stop_words=[],
-            dtype=float,
-            max_df=1.0)
-
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = vectorizer.fit_transform(all_contents)
-        dtm = doc_term_sparse_matrix.toarray()
-
-        if orientation == "left":
-            orientation = "right"
-        if orientation == "top":
-            leaf_rotational_degree = 90
-        else:
-            leaf_rotational_degree = 0
-
-        if linkage == "ward":
-            dist = euclidean_distances(dtm)
-            np.round(dist, 1)
-            linkage_matrix = ward(dist)
-            dendrogram(
-                linkage_matrix,
-                orientation=orientation,
-                leaf_rotation=leaf_rotational_degree,
-                labels=temp_labels)
-            z = linkage_matrix
-        else:
-            y = pdist(dtm, metric)
-            z = hierarchy.linkage(y, method=linkage)
-            dendrogram(
-                z,
-                orientation=orientation,
-                leaf_rotation=leaf_rotational_degree,
-                labels=temp_labels)
-
-        plt.tight_layout()  # fixes margins
-
-        # Change it to a distance matrix
-        t = hierarchy.to_tree(z, False)
-
-        # Conversion to Newick
-        newick = get_newick(t, "", t.dist, temp_labels)
-
-        # create folder to save graph
-        folder = path_join(
-            session_manager.session_folder(),
-            constants.RESULTS_FOLDER)
-        if not os.path.isdir(folder):
-            makedirs(folder)
-
-        f = open(path_join(folder, constants.DENDROGRAM_NEWICK_FILENAME), 'w')
-        f.write(newick)
-        f.close()
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
+    ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_deprec()
 
     count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
-        use_tfidf=use_tfidf,
+        use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=use_freq,
+        n_gram_size=ngram_size,
+        use_freq=False,
         grey_word=grey_word,
+        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
-    # Gets options from request.form and uses options to generate the
-    # dendrogram (with the legends) in a PDF file
-    orientation = str(request.form['orientation'])
-    title = request.form['title']
-    pruning = request.form['pruning']
-    pruning = int(request.form['pruning']) if pruning else 0
-    linkage = str(request.form['linkage'])
-    metric = str(request.form['metric'])
+    del count_matrix[0]
+    for row in count_matrix:
+        del row[0]
 
-    augmented_dendrogram = False
-    if 'augmented' in request.form:
-        augmented_dendrogram = request.form['augmented'] == 'on'
+    matrix = np.array(count_matrix)
 
-    show_dendro_legends = False
-    if 'dendroLegends' in request.form:
-        show_dendro_legends = request.form['dendroLegends'] == 'on'
+    # Gets options from request.form and uses options to generate the K-mean
+    # results
+    k_value = len(file_manager.get_active_files()) / 2  # default K value
+    max_iter = 300  # default number of iterations
+    init_method = request.form['init']
+    n_init = 300
+    tolerance = 1e-4
 
-    dendro_matrix = []
-    file_number = len(count_matrix)
-    total_words = len(count_matrix[0])
+    if (request.form['nclusters'] != '') and (
+            int(request.form['nclusters']) != k_value):
+        k_value = int(request.form['nclusters'])
+    if (request.form['max_iter'] != '') and (
+            int(request.form['max_iter']) != max_iter):
+        max_iter = int(request.form['max_iter'])
+    if request.form['n_init'] != '':
+        n_init = int(request.form['n_init'])
+    if request.form['tolerance'] != '':
+        tolerance = float(request.form['tolerance'])
 
-    for row in range(1, file_number):
-        word_count = []
-        for col in range(1, total_words):
-            word_count.append(count_matrix[row][col])
-        dendro_matrix.append(word_count)
+    metric_dist = request.form['KMeans_metric']
 
-    distance_list = dendrogrammer.get_dendro_distances(
-        linkage, metric, dendro_matrix)
+    file_name_list = []
+    for l_file in list(file_manager.files.values()):
+        if l_file.active:
+            if request.form["file_" + str(l_file.id)] == l_file.label:
+                file_name_list.append(l_file.label)
+            else:
+                new_label = request.form["file_" + str(l_file.id)]
+                file_name_list.append(new_label)
 
-    legend = get_dendrogram_legend(file_manager, distance_list)
+    file_name_str = file_name_list[0]
+
+    for i in range(1, len(file_name_list)):
+        file_name_str += "#" + file_name_list[i]
 
     folder_path = path_join(
         session_manager.session_folder(),
@@ -555,155 +307,99 @@ def generate_dendrogram(file_manager: FileManager, leq: str):
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-        distance_min, monocrit_max, monocrit_min, threshold = \
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
-                                 temp_labels, dendro_matrix, legend,
-                                 folder_path, augmented_dendrogram,
-                                 show_dendro_legends)
+    kmeans_index, siltt_score, color_chart = KMeans.get_k_means_pca(
+        matrix, k_value, max_iter, init_method, n_init, tolerance, metric_dist,
+        file_name_list, folder_path)
 
-    inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
-    maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
-    distance_op = str(distance_min) + " " + leq + " t " + \
-        leq + " " + str(distance_max)
-    monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-        leq + " " + str(monocrit_max)
-
-    threshold_ops = {
-        "inconsistent": inconsistent_op,
-        "maxclust": maxclust_op,
-        "distance": distance_op,
-        "monocrit": monocrit_op}
-
-    return pdf_page_number, score, inconsistent_max, maxclust_max, \
-        distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
-        inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
+    return kmeans_index, siltt_score, file_name_str, k_value, color_chart
 
 
-def generate_k_means_pca(file_manager: FileManager) -> KMeans.GetKMeansPca:
-    """Generates a table of cluster number and file name from the active files.
+# Gets called from kmeans() in lexos_core.py
 
-    :param file_manager: A FileManager object (see managers/file_manager.py)
-    :return: a class object that contains all the analyzed data and information
-             see analyze/Kmeans.py/GetKMeansPca class for more.
+
+def generate_k_means_voronoi(file_manager: FileManager):
     """
+    Generates a table of cluster_number and file name from the active files.
+
+    Args:
+        None
+
+    Returns:
+        kmeans_index: a list of index of the closest center of the file
+        siltt_score: a float of silhouette score based on KMeans algorithm
+        file_name_str: a string of file names, separated by '#'
+        k_value: an int of the number of K from input
+    """
+
     ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
         show_grey_word, only_char_grams_within_words, mfw, culling = \
         file_manager.get_matrix_options_deprec()
 
-    dtm_data = file_manager.get_matrix(
+    count_matrix = file_manager.get_matrix_deprec(
         use_word_tokens=use_word_tokens,
         use_tfidf=False,
         norm_option=norm_option,
         only_char_grams_within_words=only_char_grams_within_words,
         n_gram_size=ngram_size,
         use_freq=False,
+        grey_word=grey_word,
+        show_grey_word=show_grey_word,
         mfw=mfw,
         cull=culling)
 
-    # grab data
-    count_matrix = dtm_data.values
-    labels = dtm_data.index.values
+    del count_matrix[0]
+    for row in count_matrix:
+        del row[0]
 
-    # gets options for generating the K-mean results
-    # sets all values as default
-    n_init = constants.N_INIT
-    max_iter = constants.MAX_ITER
-    tolerance = constants.TOLERANCE
-    k_value = int(np.size(labels) / 2)
+    matrix = np.array(count_matrix)
+
+    # Gets options from request.form and uses options to generate the K-mean
+    # results
+    k_value = len(file_manager.get_active_files()) / 2  # default K value
+    max_iter = 300  # default number of iterations
     init_method = request.form['init']
+    n_init = 300
+    tolerance = 1e-4
 
-    # gets possible existing values from request.form
-    if request.form['nclusters'] != '':
+    if (request.form['nclusters'] != '') and (
+            int(request.form['nclusters']) != k_value):
         k_value = int(request.form['nclusters'])
-    if request.form['max_iter'] != '':
+    if (request.form['max_iter'] != '') and (
+            int(request.form['max_iter']) != max_iter):
         max_iter = int(request.form['max_iter'])
     if request.form['n_init'] != '':
         n_init = int(request.form['n_init'])
     if request.form['tolerance'] != '':
         tolerance = float(request.form['tolerance'])
+
     metric_dist = request.form['KMeans_metric']
 
-    folder_path = path_join(session_manager.session_folder(),
-                            constants.RESULTS_FOLDER)
+    file_name_list = []
+    for l_file in list(file_manager.files.values()):
+        if l_file.active:
+            if request.form["file_" + str(l_file.id)] == l_file.label:
+                file_name_list.append(l_file.label)
+            else:
+                new_label = request.form["file_" + str(l_file.id)]
+                file_name_list.append(new_label)
+    file_name_str = file_name_list[0]
+
+    for i in range(1, len(file_name_list)):
+        file_name_str += "#" + file_name_list[i]
+
+    folder_path = path_join(
+        session_manager.session_folder(),
+        constants.RESULTS_FOLDER)
     if not os.path.isdir(folder_path):
         makedirs(folder_path)
 
-    k_means_pca_data = KMeans.GetKMeansPca(count_matrix=count_matrix,
-                                           labels=labels,
-                                           n_init=n_init,
-                                           k_value=k_value,
-                                           max_iter=max_iter,
-                                           tolerance=tolerance,
-                                           init_method=init_method,
-                                           folder_path=folder_path,
-                                           metric_dist=metric_dist)
-    k_means_pca_data.draw_graph()
+    kmeans_index, siltt_score, color_chart, final_points_list, \
+        final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
+            matrix, k_value, max_iter, init_method, n_init, tolerance,
+            metric_dist, file_name_list)
 
-    return k_means_pca_data
-
-
-def generate_k_means_voronoi(file_manager: FileManager) -> \
-        KMeans.GetKMeansVoronoi:
-    """Generates a table of cluster number and file name from the active files.
-
-    :param file_manager: A FileManager object (see managers/file_manager.py).
-    :return: a class object that contains all the analyzed data and information
-             see analyze/Kmeans.py/GetKmeansVoronoi class for more.
-    """
-    ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    dtm_data = file_manager.get_matrix(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=ngram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=culling)
-
-    # grab data
-    count_matrix = dtm_data.values
-    labels = dtm_data.index.values
-
-    # gets options for generating the K-mean results
-    # sets all values as default
-    n_init = constants.N_INIT
-    max_iter = constants.MAX_ITER
-    tolerance = constants.TOLERANCE
-    k_value = int(np.size(labels) / 2)
-    init_method = request.form['init']
-
-    # gets possible existing values from request.form
-    if request.form['nclusters'] != '':
-        k_value = int(request.form['nclusters'])
-    if request.form['max_iter'] != '':
-        max_iter = int(request.form['max_iter'])
-    if request.form['n_init'] != '':
-        n_init = int(request.form['n_init'])
-    if request.form['tolerance'] != '':
-        tolerance = float(request.form['tolerance'])
-    metric_dist = request.form['KMeans_metric']
-
-    folder_path = path_join(session_manager.session_folder(),
-                            constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    # generates the data
-    k_means_voronoi_data = KMeans.GetKMeansVoronoi(count_matrix=count_matrix,
-                                                   labels=labels,
-                                                   n_init=n_init,
-                                                   k_value=k_value,
-                                                   max_iter=max_iter,
-                                                   tolerance=tolerance,
-                                                   init_method=init_method,
-                                                   metric_dist=metric_dist)
-
-    return k_means_voronoi_data
+    return kmeans_index, siltt_score, file_name_str, k_value, color_chart, \
+        final_points_list, final_centroids_list, text_data, max_x
 
 
 def generate_rwa(file_manager: FileManager):
@@ -1146,238 +842,6 @@ def generate_mc_json_obj(file_manager: FileManager):
     return json_obj
 
 
-def generate_similarities(file_manager: FileManager) -> pd.DataFrame:
-    """Generates cosine similarity rankings between comparison files
-
-    :param file_manager: a class for an object to hold all information of
-                         user's files and manage the files according to users's
-                         choices.
-    :return:
-        - doc_str_score: a string which stores the similarity scores
-        - doc_str_name: a string which stores the name of the comparison files
-                        ranked in order from best to worst
-    """
-
-    # generate tokenized lists of all documents and comparison document
-    comp_file_id = request.form['uploadname']
-    use_word_tokens = request.form['tokenType'] == 'word'
-    ngram_size = int(request.form['tokenSize'])
-    only_char_grams_within_words = 'inWordsOnly' in request.form
-    cull = 'cullcheckbox' in request.form
-    mfw = 'mfwcheckbox' in request.form
-
-    if int(comp_file_id) in file_manager.files.keys():
-        comp_file_index = int(comp_file_id)
-    else:
-        raise ValueError('input comparison file id cannot be found '
-                         'in filemanager')
-
-    dtm_data_frame = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option="N/A",
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=ngram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=cull,
-        round_decimal=False)
-
-    # call similarity.py to generate the similarity list
-    score_name_data_frame = similarity.similarity_maker(
-        dtm_data_frame, comp_file_index)
-
-    return score_name_data_frame
-
-
-def generate_sims_csv(file_manager: FileManager):
-    """
-    Generates a CSV file from the calculating similarity.
-
-    Args:
-        None
-
-    Returns:
-        The filepath where the CSV was saved, and the chosen extension .csv for
-        the file.
-    """
-    extension = '.csv'
-
-    score_name_data_frame = generate_similarities(file_manager)
-
-    delimiter = ','
-
-    # get the path of the folder to save result
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    # get the saved file path
-    out_file_path = path_join(folder_path, 'results' + extension)
-
-    comp_file_id = request.form['uploadname']
-
-    # write the header to the file
-    with open(out_file_path, 'w') as out_file:
-
-        out_file.write("Similarity Rankings:" + '\n')
-
-        out_file.write(
-            "The rankings are determined by 'distance between documents' "
-            "where small distances (near zero) represent documents that are "
-            "'similar' and unlike documents have distances closer to one.\n")
-
-        out_file.write("Selected Comparison Document: " + delimiter + str(
-            file_manager.get_active_labels()[int(comp_file_id)]) + '\n')
-
-    # append the dataframe to the file
-    with open(out_file_path, 'a') as f:
-        score_name_data_frame.to_csv(f)
-
-    return out_file_path, extension
-
-
-def get_top_word_option() -> str:
-    """Gets the top word options from the front-end.
-
-    :return: test_by_class: option for proportional z test to see whether to
-             use test by files or by classes
-    """
-    if 'testInput' in request.form:  # when do KW this is not in request.form
-        test_by_class = request.form['testInput']
-    else:
-        test_by_class = None
-
-    return test_by_class
-
-
-def generate_z_test_top_word(file_manager: FileManager):
-    """Generates the z-test top word results based on user options.
-
-    :param file_manager: A FileManager object (see managers/file_manager.py).
-    :return: A dictionary containing the Z-test results.
-    """
-    # Initialize
-    test_by_class = get_top_word_option()
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_deleted, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    # Generate word count matrix
-    dtm_data = file_manager.get_matrix_deprec2(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=False,
-        mfw=mfw,
-        cull=culling)
-
-    # Grab data from data frame
-    count_matrix = dtm_data.values
-    labels = dtm_data.index.values
-    words = dtm_data.columns.values
-
-    # test for all
-    if test_by_class == 'allToPara':
-        analysis_result = analyze_all_to_para(count_matrix=count_matrix,
-                                              words=words,
-                                              labels=labels)
-
-    # test by class
-    elif test_by_class == 'classToPara':
-        # create division map
-        division_map = file_manager.get_class_division_map()
-        class_labels = division_map.index.values
-        # initialize class labels
-        if "" in class_labels:
-            class_labels[np.where(class_labels == "")] = "untitled"
-
-        # check if more than one class exists
-        if division_map.shape[0] == 1:
-            raise ValueError(" only one class given, cannot do Z-test by "
-                             "class, at least 2 classes needed")
-
-        # divides into group
-        group_values, name_map = group_division(dtm_data, division_map.values)
-
-        # test
-        analysis_result = analyze_para_to_group(group_values=group_values,
-                                                words=words,
-                                                name_map=name_map,
-                                                class_labels=class_labels)
-
-    elif test_by_class == 'classToClass':
-        # create division map
-        division_map = file_manager.get_class_division_map()
-        class_labels = division_map.index.values
-        # initialize class labels
-        if "" in class_labels:
-            class_labels[np.where(class_labels == "")] = "untitled"
-
-        # check if more than one class exists
-        if division_map.shape[0] == 1:
-            raise ValueError(" only one class given, cannot do Z-test by "
-                             "class, at least 2 classes needed")
-        # divides into group
-        group_values, name_map = group_division(dtm_data, division_map.values)
-        # test
-        analysis_result = analyze_group_to_group(group_values=group_values,
-                                                 words=words,
-                                                 class_labels=class_labels)
-
-    else:
-        raise ValueError(
-            'the post parameter of testbyclass cannot be understood by the '
-            'backend see utility.GenerateZTestTopWord for more')
-
-    return analysis_result
-
-
-def get_top_word_csv(test_results, csv_header):
-    """Writes the generated top word results to an output CSV file.
-
-    :param test_results: analysis result generated by function
-                         generate_z_test_top_word().
-    :param csv_header: header of the csv file.
-    :returns: path of the generated CSV file.
-    """
-    # make the path
-    result_folder_path = os.path.join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-
-    try:
-        # attempt to make the save path directory
-        os.makedirs(result_folder_path)
-    except OSError:
-        pass
-    save_path = os.path.join(result_folder_path,
-                             constants.TOPWORD_CSV_FILE_NAME)
-
-    delimiter = ','
-    csv_content = csv_header + '\n'  # add a header
-
-    for result in test_results:
-        table_legend = result[0] + delimiter
-        table_top_word = 'TopWord, '
-        table_z_score = 'Z-score, '
-        for data in result[1]:
-            table_top_word += data[0] + delimiter
-            table_z_score += str(data[1]) + delimiter
-        csv_content += table_legend + table_top_word + \
-            '\n' + delimiter + table_z_score + '\n'
-
-    with open(save_path, 'w', encoding='utf-8') as f:
-        f.write(csv_content)
-
-    return save_path
-
-
 def save_file_manager(file_manager: FileManager):
     """
     Saves the file manager to the hard drive.
@@ -1554,214 +1018,6 @@ def xml_handling_options(data: dict = {}):
         if key not in tags:
             del session_manager.session['xmlhandlingoptions'][key]
             session_manager.session.modified = True
-
-
-# Gets called from cluster() in lexos_core.py
-def generate_dendrogram_from_ajax(file_manager: FileManager, leq: str):
-    """
-    Generates dendrogram image and PDF from the active files.
-
-    Args:
-        None
-
-    Returns:
-        Total number of PDF pages, ready to calculate the height of the
-        embedded PDF on screen
-    """
-    from sklearn.metrics.pairwise import euclidean_distances
-    from scipy.cluster.hierarchy import ward, dendrogram
-    from scipy.spatial.distance import pdist
-    from scipy.cluster import hierarchy
-    from os import makedirs
-
-    import matplotlib.pyplot as plt
-
-    if 'getdendro' in request.json:
-        label_dict = file_manager.get_active_labels()
-        labels = []
-        for ind, label in list(label_dict.items()):
-            labels.append(label)
-
-        # Get options from request.json
-        orientation = str(request.json['orientation'])
-        linkage = str(request.json['linkage'])
-        metric = str(request.json['metric'])
-
-        # Get active files
-        all_contents = []  # list of strings-of-text for each segment
-        temp_labels = []  # list of labels for each segment
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                content_element = l_file.load_contents()
-                all_contents.append(content_element)
-
-                if request.json["file_" + str(l_file.id)] == l_file.label:
-                    temp_labels.append(l_file.label)
-                else:
-                    new_label = request.json["file_" + str(l_file.id)]
-                    temp_labels.append(new_label)
-
-        # More options
-        n_gram_size = int(request.json['tokenSize'])
-        use_word_tokens = request.json['tokenType'] == 'word'
-        only_char_grams_within_words = False
-        if not use_word_tokens:  # if using character-grams
-            # this option is disabled on the GUI, because countVectorizer count
-            # front and end markers as ' ' if this is true
-            only_char_grams_within_words = 'inWordsOnly' in request.json
-
-        if use_word_tokens:
-            token_type = 'word'
-        else:
-            token_type = 'char'
-            if only_char_grams_within_words:
-                token_type = 'char_wb'
-
-        from sklearn.feature_extraction.text import CountVectorizer
-
-        vectorizer = CountVectorizer(
-            input='content',
-            encoding='utf-8',
-            min_df=1,
-            analyzer=token_type,
-            token_pattern=r'(?u)\b[\w\']+\b',
-            ngram_range=(
-                n_gram_size,
-                n_gram_size),
-            stop_words=[],
-            dtype=float,
-            max_df=1.0)
-
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = vectorizer.fit_transform(all_contents)
-        dtm = doc_term_sparse_matrix.toarray()
-
-        if orientation == "left":
-            orientation = "right"
-        if orientation == "top":
-            leaf_rotation_degree = 90
-        else:
-            leaf_rotation_degree = 0
-
-        if linkage == "ward":
-            dist = euclidean_distances(dtm)
-            np.round(dist, 1)
-            linkage_matrix = ward(dist)
-            dendrogram(
-                linkage_matrix,
-                orientation=orientation,
-                leaf_rotation=leaf_rotation_degree,
-                labels=temp_labels)
-            z = linkage_matrix
-        else:
-            y = pdist(dtm, metric)
-            z = hierarchy.linkage(y, method=linkage)
-            dendrogram(
-                z,
-                orientation=orientation,
-                leaf_rotation=leaf_rotation_degree,
-                labels=temp_labels)
-
-        plt.tight_layout()  # fixes margins
-
-        # Change it to a distance matrix
-        t = hierarchy.to_tree(z, False)
-
-        # Conversion to Newick
-        newick = get_newick(t, "", t.dist, temp_labels)
-
-        # create folder to save graph
-        folder = path_join(
-            session_manager.session_folder(),
-            constants.RESULTS_FOLDER)
-        if not os.path.isdir(folder):
-            makedirs(folder)
-
-        f = open(
-            path_join(
-                folder,
-                constants.DENDROGRAM_NEWICK_FILENAME),
-            'w',
-            encoding='utf-8')
-        f.write(newick)
-        f.close()
-
-    n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_from_ajax_deprec()
-
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=use_tfidf,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=n_gram_size,
-        use_freq=use_freq,
-        grey_word=grey_word,
-        mfw=mfw,
-        cull=culling)
-
-    # Gets options from request.json and uses options to generate the
-    # dendrogram (with the legends) in a PDF file
-    orientation = str(request.json['orientation'])
-    title = request.json['title']
-    pruning = request.json['pruning']
-    pruning = int(request.json['pruning']) if pruning else 0
-    linkage = str(request.json['linkage'])
-    metric = str(request.json['metric'])
-
-    augmented_dendrogram = False
-    if 'augmented' in request.json:
-        augmented_dendrogram = request.json['augmented'] == 'on'
-
-    show_dendro_legends = False
-    if 'dendroLegends' in request.json:
-        show_dendro_legends = request.json['dendroLegends'] == 'on'
-
-    dendro_matrix = []
-    file_number = len(count_matrix)
-    total_words = len(count_matrix[0])
-
-    for row in range(1, file_number):
-        word_count = []
-        for col in range(1, total_words):
-            word_count.append(count_matrix[row][col])
-        dendro_matrix.append(word_count)
-
-    distance_list = dendrogrammer.get_dendro_distances(
-        linkage, metric, dendro_matrix)
-
-    legend = get_dendrogram_legend(file_manager, distance_list)
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    pdf_page_number, score, inconsistent_max, maxclust_max, distance_max, \
-        distance_min, monocrit_max, monocrit_min, threshold = \
-        dendrogrammer.dendrogram(orientation, title, pruning, linkage, metric,
-                                 temp_labels, dendro_matrix, legend,
-                                 folder_path, augmented_dendrogram,
-                                 show_dendro_legends)
-
-    inconsistent_op = "0 " + leq + " t " + leq + " " + str(inconsistent_max)
-    maxclust_op = "2 " + leq + " t " + leq + " " + str(maxclust_max)
-    distance_op = str(distance_min) + " " + leq + " t " + \
-        leq + " " + str(distance_max)
-    monocrit_op = str(monocrit_min) + " " + leq + " t " + \
-        leq + " " + str(monocrit_max)
-
-    threshold_ops = {
-        "inconsistent": inconsistent_op,
-        "maxclust": maxclust_op,
-        "distance": distance_op,
-        "monocrit": monocrit_op}
-
-    return pdf_page_number, score, inconsistent_max, maxclust_max, \
-        distance_max, distance_min, monocrit_max, monocrit_min, threshold, \
-        inconsistent_op, maxclust_op, distance_op, monocrit_op, threshold_ops
 
 
 def simple_vectorizer(content: str, token_type: str, token_size: int):
