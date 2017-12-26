@@ -20,6 +20,7 @@ from lexos.receivers.kmeans_receiver import KmeansOption, KmeansReceiver
 
 
 # TODO: Process data from front end for KMEANS option
+from lexos.receivers.matrix_receiver import IdTempLabelMap
 
 
 class KmeansPCAResult(NamedTuple):
@@ -45,34 +46,48 @@ class KmeansVORResult(NamedTuple):
     final_centroids_list: list
 
 
-class KmeansModel(BaseModel):
-    def __init__(self, test_dtm: Optional[pd.DataFrame] = None,
-                 test_option: Optional[KmeansOption] = None):
-        """This is the class to generate kmeans.
+class KmeansTestOptions(NamedTuple):
+    """A typed tuple to hold topword test options."""
+    doc_term_matrix: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+    front_end_option: KmeansOption
 
-        :param test_dtm: (fake parameter)
-                    the doc term matrix used of testing
-        :param test_option: (fake parameter)
-                    the kmeans used for testing
+
+class KmeansModel(BaseModel):
+    def __init__(self, test_options: Optional[KmeansTestOptions] = None):
+        """This is the class to run kmeans analysis.
+
+        :param test_options: the input used in testing to override the
+                             dynamically loaded option.
         """
         super().__init__()
-        self._test_dtm = test_dtm
-        self._test_option = test_option
-        self.k_means = None
-        self.best_index = None
-        self.color_chart = None
-        self.reduced_data = None
-        self.colored_points = None
-        self.silhouette_score = None
+        if test_options is not None:
+            self._test_dtm = test_options.doc_term_matrix
+            self._test_front_end_option = test_options.front_end_option
+            self._test_id_temp_label_map = test_options.id_temp_label_map
+        else:
+            self._test_dtm = None
+            self._test_front_end_option = None
+            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
+        """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
-    def _kmeans_option(self) -> KmeansOption:
-        return self._test_option if self._test_dtm is not None \
+    def _id_temp_label_map(self) -> IdTempLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_id_temp_label_map \
+            if self._test_id_temp_label_map is not None \
+            else MatrixModel().get_id_temp_label_map()
+
+    @property
+    def _kmeans_front_end_option(self) -> KmeansOption:
+        """:return: a typed tuple that holds the topword front end option."""
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
             else KmeansReceiver().options_from_front_end()
 
     def _get_silhouette_score(self) -> Union[str, float]:
@@ -83,9 +98,9 @@ class KmeansModel(BaseModel):
         :return: the calculated silhouette score or a proper message if the
                  conditions for calculation were not met.
         """
-        if self._kmeans_option.k_value <= 2:
+        if self._kmeans_front_end_option.k_value <= 2:
             return "N/A [Not available for K ≤ 2]"
-        elif self._kmeans_option.k_value > (
+        elif self._kmeans_front_end_option.k_value > (
                 self._doc_term_matrix.values.shape[0] - 1):
             return "N/A [Not available if (K value) > " \
                    "(number of active files -1)]"
@@ -94,7 +109,7 @@ class KmeansModel(BaseModel):
             silhouette_score = metrics.silhouette_score(
                 X=self._doc_term_matrix.values,
                 labels=labels,
-                metric=self._kmeans_option.metric_dist)
+                metric=self._kmeans_front_end_option.metric_dist)
             return round(silhouette_score, ROUND_DIGIT)
 
     def _get_pca_data(self):
@@ -182,25 +197,6 @@ class KmeansModel(BaseModel):
         sm_div = sm_div.replace("displaylogo:!0", "displaylogo:0")
         sm_html = html.replace("___", sm_div)
 
-        html_file = open(path_join(self._kmeans_option.folder_path,
-                                   PCA_SMALL_GRAPH_FILENAME),
-                         "w", encoding='utf-8')
-        html_file.write(sm_html)
-        html_file.close()
-
-        lg_div = lg_div.replace('displayModeBar:"hover"',
-                                'displayModeBar:true')
-        lg_div = lg_div.replace("modeBarButtonsToRemove:[]",
-                                "modeBarButtonsToRemove:['sendDataToCloud']")
-        lg_div = lg_div.replace("displaylogo:!0", "displaylogo:0")
-        lg_html = html.replace("___", lg_div)
-
-        html_file = open(path_join(self._kmeans_option.folder_path,
-                                   PCA_BIG_GRAPH_FILENAME),
-                         "w", encoding='utf-8')
-        html_file.write(lg_html)
-        html_file.close()
-
     def get_pca_result(self) -> KmeansPCAResult:
         self._get_pca_data()
         self._draw_graph()
@@ -208,7 +204,6 @@ class KmeansModel(BaseModel):
                                k_value=self._kmeans_option.k_value,
                                best_index=self.best_index,
                                color_chart=self.color_chart,
-                               folder_path=self._kmeans_option.folder_path,
                                reduced_data=self.reduced_data,
                                colored_points=self.colored_points,
                                silhouette_score=self.silhouette_score)
