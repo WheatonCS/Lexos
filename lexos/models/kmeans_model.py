@@ -98,6 +98,7 @@ class KmeansModel(BaseModel):
         :return: the calculated silhouette score or a proper message if the
                  conditions for calculation were not met.
         """
+        """
         if self._kmeans_front_end_option.k_value <= 2:
             return "N/A [Not available for K ≤ 2]"
         elif self._kmeans_front_end_option.k_value > (
@@ -111,15 +112,43 @@ class KmeansModel(BaseModel):
                 labels=labels,
                 metric=self._kmeans_front_end_option.metric_dist)
             return round(silhouette_score, ROUND_DIGIT)
-
-    def _get_pca_data(self):
+        """
+    def get_pca_result(self):
         # Test if get empty input
         assert np.size(self._doc_term_matrix.values) > 0, \
             EMPTY_NP_ARRAY_MESSAGE
 
         # Get Kmeans
-        self.reduced_data = \
-            PCA(n_components=2).fit_transform(self._doc_term_matrix.values)
+        reduced_data = \
+            PCA(n_components=2).fit_transform(self._doc_term_matrix)
+
+
+        print ("STOP")
+
+        traces = []
+
+        for name in :
+            trace = Scatter(
+                x=Y_sklearn[y == name, 0],
+                y=Y_sklearn[y == name, 1],
+                mode='markers',
+                name=name,
+                marker=Marker(
+                    size=12,
+                    line=Line(
+                        color='rgba(217, 217, 217, 0.14)',
+                        width=0.5),
+                    opacity=0.8))
+            traces.append(trace)
+
+        data = Data(traces)
+        layout = Layout(xaxis=XAxis(title='PC1', showline=False),
+                        yaxis=YAxis(title='PC2', showline=False))
+        fig = Figure(data=data, layout=layout)
+        py.iplot(fig)
+
+
+        """
         self.k_means = KMeans(tol=self._kmeans_option.tolerance,
                               n_init=self._kmeans_option.n_init,
                               init=self._kmeans_option.init_method,
@@ -179,11 +208,7 @@ class KmeansModel(BaseModel):
             width=500, height=450, hovermode='closest')
         big_layout = dict(hovermode='closest')
         from plotly.offline import plot
-        html = """
-        <html><head><meta charset="utf-8" /></head><body>
-        ___
-        </body></html>
-        """
+
         sm_div = plot({"data": data, "layout": small_layout},
                       output_type='div',
                       show_link=False, auto_open=False)
@@ -211,18 +236,12 @@ class KmeansModel(BaseModel):
     @staticmethod
     def _get_voronoi_plot_data_(data: np.ndarray,
                                 group_index: np.ndarray) -> np.ndarray:
-        """Generates the data needed to be plotted in voronoi analysis method.
 
-        :param data: the reduced data analyzed by the k-means method.
-        :param group_index: index for the results that are in the same group.
-        :return: the centroid analysis data.
-        """
         temp_data = [data[item] for _, item in enumerate(group_index)]
         result = np.average(temp_data[0].transpose(), axis=1)
         return result
 
     def _get_voronoi_data(self) -> KmeansVORResult:
-        """Generates an array of centroid index based on the active files."""
 
         # Test if get empty input
         assert np.size(self._doc_term_matrix.values) > 0, \
@@ -303,3 +322,4 @@ class KmeansModel(BaseModel):
     def get_vor_result(self) -> KmeansVORResult:
 
         return self._get_voronoi_data()
+"""
