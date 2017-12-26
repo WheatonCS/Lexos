@@ -5,6 +5,7 @@ from flask import send_file, request, session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager, utility
+from lexos.models.kmeans_model import KmeansModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -57,18 +58,17 @@ def k_means():
         session_manager.cache_k_mean_option()
         utility.save_file_manager(file_manager)
         if request.form['viz'] == 'PCA':
-            kmeans_index, silhouette_score, file_name_str, k_value, \
-                color_chart_str = utility.generate_k_means_pca(file_manager)
+            PCA_result = KmeansModel().get_pca_result()
             return render_template(
                 'kmeans.html',
-                labels=labels,
-                silhouettescore=silhouette_score,
-                kmeansIndex=kmeans_index,
-                fileNameStr=file_name_str,
+                labels=PCA_result.labels,
+                silhouettescore=PCA_result.silhouette_score,
+                kmeansIndex=PCA_result.best_index,
+                fileNameStr="",
                 fileNumber=len(labels),
-                KValue=k_value,
+                KValue=PCA_result.k_value,
                 defaultK=default_k,
-                colorChartStr=color_chart_str,
+                colorChartStr=PCA_result.color_chart,
                 kmeansdatagenerated=True,
                 itm="kmeans",
                 numActiveDocs=num_active_docs)
