@@ -281,12 +281,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
 
 DEFAULT_KMEAN_OPTIONS = {
     'nclusters': '',
-    'max_iter': '',
+    'max_iter': 300,
     'init': 'k-means++',
-    'n_init': '',
-    'tolerance': '',
+    'n_init': 300,
+    'tolerance': 1e-4,
     'KMeans_metric': '',
-    'viz': 'Voronoi'}
+    'viz': 'PCA'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
