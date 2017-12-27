@@ -283,7 +283,7 @@ DEFAULT_KMEAN_OPTIONS = {
     'nclusters': '',
     'max_iter': 300,
     'init': 'k-means++',
-    'n_init': 300,
+    'n_init': 10,
     'tolerance': 1e-4,
     'KMeans_metric': '',
     'viz': 'PCA'}
