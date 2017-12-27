@@ -285,7 +285,7 @@ DEFAULT_KMEAN_OPTIONS = {
     'init': 'k-means++',
     'n_init': 10,
     'tolerance': 1e-4,
-    'KMeans_metric': '',
+    'KMeans_metric': 'euclidean',
     'viz': 'PCA'}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
