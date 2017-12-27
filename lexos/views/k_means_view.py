@@ -1,10 +1,8 @@
-import os
-from os.path import join as path_join
-
-from flask import send_file, request, session, render_template, Blueprint
+from flask import session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
-from lexos.managers import session_manager as session_manager, utility
+from lexos.managers import session_manager as session_manager
+from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.kmeans_model import KmeansModel
 from lexos.views.base_view import detect_active_docs
 
@@ -28,6 +26,7 @@ def k_means():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     default_k = int(num_active_docs / 2)
+    labels = FileManagerModel().load_file_manager().get_active_labels_with_id()
     # 'GET' request occurs when the page is first loaded
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
@@ -36,6 +35,7 @@ def k_means():
     return render_template(
         'kmeans.html',
         itm="kmeans",
+        labels=labels,
         defaultK=default_k,
         numActiveDocs=num_active_docs)
 
