@@ -58,7 +58,7 @@ class KmeansModel(BaseModel):
 
     @property
     def _kmeans_front_end_option(self) -> KmeansOption:
-        """:return: a typed tuple that holds the topword front end option."""
+        """:return: a typed tuple that holds the k-means front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else KmeansReceiver().options_from_front_end()
