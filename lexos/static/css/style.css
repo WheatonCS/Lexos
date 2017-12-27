@@ -1901,11 +1901,6 @@ select#orientation {
   overflow: hidden;
 }
 
-.imageLinkBtn {
-  width: 27%;
-  margin: -20px auto 10px auto;
-}
-
 #basicTable {
   border: none;
   width: 100%;
