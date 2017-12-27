@@ -3,13 +3,11 @@
 # http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 # for more details
 
-from typing import Union, Optional, NamedTuple
+from typing import Optional, NamedTuple
 import numpy as np
 import pandas as pd
-import plotly
+import plotly.graph_objs as go
 from plotly.offline import plot
-from plotly.graph_objs import Scatter, Marker, Line, Data, Layout, XAxis, \
-    YAxis, Figure
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
@@ -20,7 +18,7 @@ from lexos.receivers.matrix_receiver import IdTempLabelMap
 
 
 class KmeansTestOptions(NamedTuple):
-    """A typed tuple to hold topword test options."""
+    """A typed tuple to hold k-means test options."""
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: KmeansOption
@@ -83,26 +81,28 @@ class KmeansModel(BaseModel):
         traces = []
 
         for group_num in set(kmeans_index):
-            x_data = reduced_data[np.where(kmeans_index == group_num), 0].tolist()
-            y_data = reduced_data[np.where(kmeans_index == group_num), 1].tolist()
-            trace = Scatter(
+            x_data = reduced_data[
+                np.where(kmeans_index == group_num), 0].tolist()
+            y_data = reduced_data[
+                np.where(kmeans_index == group_num), 1].tolist()
+            trace = go.Scatter(
                 x=x_data[0],
                 y=y_data[0],
                 mode='markers',
                 name="group %f" % group_num,
-                marker=Marker(
+                marker=go.Marker(
                     size=12,
-                    line=Line(
+                    line=go.Line(
                         color='rgba(217, 217, 217, 0.14)',
                         width=0.5),
                     opacity=0.8))
             traces.append(trace)
 
-        data = Data(traces)
+        data = go.Data(traces)
 
-        layout = Layout(xaxis=XAxis(title='PC1', showline=False),
-                        yaxis=YAxis(title='PC2', showline=False))
-        figure = Figure(data=data, layout=layout)
+        layout = go.Layout(xaxis=go.XAxis(title='PC1', showline=False),
+                           yaxis=go.YAxis(title='PC2', showline=False))
+        figure = go.Figure(data=data, layout=layout)
 
         # update the style of the image
         figure['layout'].update({'width': 600, 'height': 600,
