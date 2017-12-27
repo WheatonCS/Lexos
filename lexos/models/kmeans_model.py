@@ -95,7 +95,7 @@ class KmeansModel(BaseModel):
                     line=Line(
                         color='rgba(217, 217, 217, 0.14)',
                         width=0.5),
-                    opacity=1))
+                    opacity=0.8))
             traces.append(trace)
 
         data = Data(traces)
@@ -104,13 +104,9 @@ class KmeansModel(BaseModel):
                         yaxis=YAxis(title='PC2', showline=False))
         figure = Figure(data=data, layout=layout)
 
-        plotly.offline.plot(figure)
-
         # update the style of the image
-        figure['layout'].update({'width': 800, 'height': 1000,
+        figure['layout'].update({'width': 600, 'height': 600,
                                  'hovermode': 'x'})
-
-        plotly.offline.plot(figure)
 
         div = plot(figure, show_link=False, output_type="div",
                    include_plotlyjs=False)
