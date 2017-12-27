@@ -1856,7 +1856,16 @@ select#orientation {
 
 
 /* ================== K MEANS STYLING ==================== */
+#kmeansPCA-result {
+  width: max-content;
+  width: -moz-max-content;
+  margin-right: auto;
+  margin-left: auto;
+}
 
+#kmeansPCA-result .plot {
+  opacity: 1;
+}
 .silhouette-options,
 .kmeans-options {
   float: left;
