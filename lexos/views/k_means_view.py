@@ -35,16 +35,8 @@ def k_means():
         session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
     return render_template(
         'kmeans.html',
-        labels=labels,
-        silhouettescore='',
-        kmeansIndex=[],
-        fileNameStr='',
-        fileNumber=len(labels),
-        KValue=0,
-        defaultK=default_k,
-        colorChartStr='',
-        kmeansdatagenerated=False,
         itm="kmeans",
+        defaultK=default_k,
         numActiveDocs=num_active_docs)
 
 
