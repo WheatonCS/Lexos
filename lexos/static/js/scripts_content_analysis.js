@@ -31,6 +31,13 @@ function analyze() {
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);
         update_check_all_checkbox(response['toggle_all_value']);
+        $('#individual_counts').html(response['individual_counts_table']);
+        $('#DataTables_Table_1').DataTable({
+            "scrollX": true,
+            'language': {
+                'lengthMenu': 'Display _MENU_ phrases',
+                'info': 'Showing _START_ to _END_ of _TOTAL_ phrases'
+            }});
         $('#table').html(response['result_table']);
         $('.dataframe').DataTable( {
             "scrollX": true,

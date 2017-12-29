@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import Optional
+import random
 
 import pandas as pd
 
@@ -67,13 +68,45 @@ class ContentAnalysisModel(object):
         return [dictionary for dictionary in self.dictionaries
                 if dictionary.active]
 
-    def count(self):
-        """Counts all dictionaries for all active files in the corpus."""
+    def count(self) -> list:
+        """Counts all dictionaries for all active files in the corpus.
+
+        :return: a list of phrase objects"""
         self._counters = []
         dictionaries = self.join_active_dicts()
         for file in deepcopy(self._corpus):
             dictionaries = count_phrases(dictionaries, file)
             self.get_dictionary_counts(dictionaries)
+        return dictionaries
+
+    def generate_individual_counts_table(self, dictionaries: list) -> str:
+        """Generates a html table.
+
+         Each row has a phrase, its count in the entire corpus, and the
+         dictionary it belongs to.
+
+        :param dictionaries: list of Phrase objects
+        :return: str containing the html table
+        """
+        # Generate a random color for each dictionary
+        colors = {}
+        for dictionary in self._dictionaries:
+            colors[dictionary.label] = ''.join(
+                [random.choice('0123456789ABCDEF') for x in range(6)])
+        # Set table headers
+        individual_counts = "<table class='dataframe table table-striped " \
+                            "table-bordered'><thead><tr><th>Dictionary</th>" \
+                            "<th>Phrase</th><th>Count</th></tr></thead><tbody>"
+        # Add a row for each phrase found in the corpus
+        for phrase in dictionaries:
+            if phrase.count > 0:
+                individual_counts += "<tr style='color:#" + \
+                                    colors[phrase.dict_label] + ";'>" + \
+                                    "<td>" + phrase.dict_label + "</td>" + \
+                                    "<td>" + phrase.content + "</td>" \
+                                    "<td >" + str(phrase.count) + "</td></tr>"
+        individual_counts += "</tbody></table>"
+        return individual_counts
 
     def get_dictionary_counts(self, dictionaries):
         """Gets the counts for each dictionary.
@@ -270,16 +303,19 @@ class ContentAnalysisModel(object):
                  result_table: str containing result html table or None if
                  there are any errors in the formula
         """
-        self.count()
+        dictionaries = self.count()
         if self.is_secure():
             formula_errors = self.save_formula()
             self.generate_scores()
             self.generate_averages()
             result_table = self.to_html()
+            individual_counts_table = self.generate_individual_counts_table(
+                dictionaries)
         else:
             formula_errors = "Formula error: Invalid input"
             result_table = ""
-        return result_table, formula_errors
+            individual_counts_table = ""
+        return result_table, individual_counts_table, formula_errors
 
     @property
     def dictionaries(self) -> list:
