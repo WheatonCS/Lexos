@@ -50,7 +50,8 @@ a:hover {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-#table table, #table .dataTables_scrollHeadInner, #individual_counts table,
-#individual_counts .dataTables_scrollHeadInner {
+#table table, #table .dataTables_scrollHeadInner, #corpus_counts table,
+#corpus_counts .dataTables_scrollHeadInner, files_raw_counts_tables table,
+#files_raw_counts_tables .dataTables_scrollHeadInner, .file{
     margin: auto;
 }

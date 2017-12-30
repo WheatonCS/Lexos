@@ -79,34 +79,62 @@ class ContentAnalysisModel(object):
             self.get_dictionary_counts(dictionaries)
         return dictionaries
 
-    def generate_individual_counts_table(self, dictionaries: list) -> str:
+    def generate_corpus_counts_table(self, dictionaries: list, colors) -> str:
         """Generates a html table.
 
          Each row has a phrase, its count in the entire corpus, and the
          dictionary it belongs to.
 
+        :param colors: dict with a hex color for each dictionary
         :param dictionaries: list of Phrase objects
         :return: str containing the html table
         """
-        # Generate a random color for each dictionary
-        colors = {}
-        for dictionary in self._dictionaries:
-            colors[dictionary.label] = ''.join(
-                [random.choice('0123456789ABCDEF') for x in range(6)])
         # Set table headers
-        individual_counts = "<table class='dataframe table table-striped " \
-                            "table-bordered'><thead><tr><th>Dictionary</th>" \
-                            "<th>Phrase</th><th>Count</th></tr></thead><tbody>"
+        corpus_counts_html = "<table class='corpus dataframe " \
+                             "table table-striped table-bordered'><thead>" \
+                             "<tr><th>Dictionary</th>" \
+                             "<th>Phrase</th><th>Count</th></tr></thead>" \
+                             "<tbody>"
         # Add a row for each phrase found in the corpus
         for phrase in dictionaries:
-            if phrase.count > 0:
-                individual_counts += "<tr style='color:#" + \
-                                    colors[phrase.dict_label] + ";'>" + \
-                                    "<td>" + phrase.dict_label + "</td>" + \
-                                    "<td>" + phrase.content + "</td>" \
-                                    "<td >" + str(phrase.count) + "</td></tr>"
-        individual_counts += "</tbody></table>"
-        return individual_counts
+            count = 0
+            for i in phrase.file_counts:
+                count += phrase.file_counts[i]
+            corpus_counts_html += "<tr style='color:#" + \
+                                  colors[phrase.dict_label] + ";'>" + \
+                                  "<td>" + phrase.dict_label + "</td>" + \
+                                  "<td>" + phrase.content + "</td>" \
+                                  "<td >" + str(count) + "</td></tr>"
+        corpus_counts_html += "</tbody></table>"
+        return corpus_counts_html
+
+    def generate_files_raw_counts_tables(self, dictionaries, colors):
+        """Generates a html table for each file in the corpus.
+
+        Each row has a phrase, its count, and the dictionary it belongs to.
+
+        :param colors: dict with a hex color for each dictionary
+        :param dictionaries: list of Phrase objects
+        :return: list of str containing the html tables
+        """
+        tables = []
+        for file in self._corpus:
+            # Set table headers
+            html_table = "<table class='file dataframe table " \
+                         "table-striped table-bordered'><caption>" +\
+                         file.label + \
+                         "</caption><thead><tr><th>Dictionary</th>" \
+                         "<th>Phrase</th><th>Count</th></tr></thead><tbody>"
+            for phrase in dictionaries:
+                html_table += "<tr style='color:#" + \
+                              colors[phrase.dict_label] + ";'>" + \
+                              "<td>" + phrase.dict_label + "</td>" + \
+                              "<td>" + phrase.content + "</td>" \
+                              "<td >" + str(phrase.file_counts[file.label]) +\
+                              "</td></tr>"
+            html_table += "</tbody></table>"
+            tables.append(html_table)
+        return tables
 
     def get_dictionary_counts(self, dictionaries):
         """Gets the counts for each dictionary.
@@ -210,7 +238,7 @@ class ContentAnalysisModel(object):
         :return: dataframe table in html
         """
         df = self.to_data_frame()
-        html = df.to_html(classes="table table-striped table-bordered",
+        html = df.to_html(classes="result table table-striped table-bordered",
                           index=False)
         return html
 
@@ -309,13 +337,18 @@ class ContentAnalysisModel(object):
             self.generate_scores()
             self.generate_averages()
             result_table = self.to_html()
-            individual_counts_table = self.generate_individual_counts_table(
-                dictionaries)
+            colors = self.dictionary_colors
+            individual_counts_table = self.generate_corpus_counts_table(
+                dictionaries, colors)
+            files_raw_counts_tables = self.generate_files_raw_counts_tables(
+                dictionaries, colors)
         else:
             formula_errors = "Formula error: Invalid input"
             result_table = ""
             individual_counts_table = ""
-        return result_table, individual_counts_table, formula_errors
+            files_raw_counts_tables = ""
+        return result_table, individual_counts_table, \
+            files_raw_counts_tables, formula_errors
 
     @property
     def dictionaries(self) -> list:
@@ -346,6 +379,18 @@ class ContentAnalysisModel(object):
     def averages(self) -> list:
         """:return: averages"""
         return self._averages
+
+    @property
+    def dictionary_colors(self) -> dict:
+        """Generate a random color for each dictionary.
+
+        :return: dict with a color for each dictionary
+        """
+        colors = {}
+        for dictionary in self._dictionaries:
+            colors[dictionary.label] = ''.join(
+                [random.choice('0123456789ABCD') for x in range(6)])
+        return colors
 
     @property
     def content_analysis_option(self) -> ContentAnalysisOption:
@@ -389,6 +434,8 @@ def count_phrases(dictionary: list, file: object):
     for phrase in dictionary:
         phrase.count = count_phrase_in_text(phrase=phrase.content,
                                             text=file.content)
+        phrase.file_counts[file.label] = count_phrase_in_text(
+            phrase=phrase.content, text=file.content)
         if ' ' in phrase.content:
             file.content = file.content.replace(phrase.content, ' ')
     return dictionary
@@ -508,3 +555,4 @@ class Phrase(object):
         self.content = content
         self.dict_label = dict_label
         self.count = count
+        self.file_counts = {}
