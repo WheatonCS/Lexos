@@ -97,6 +97,7 @@ function analyze() {
             'language': {
                 'info': 'Showing _START_ to _END_ of _TOTAL_ phrases'
             },
+            'dom': "<'row'<'col-sm-12'tr>>",
             "scrollY":        "200px",
             "scrollCollapse": true,
             "paging":         false
