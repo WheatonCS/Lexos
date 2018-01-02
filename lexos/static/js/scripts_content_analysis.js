@@ -31,6 +31,7 @@ function analyze() {
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);
         update_check_all_checkbox(response['toggle_all_value']);
+        $('#search').show();
         $('#table').html(response['result_table']);
         $('.result').DataTable( {
             "scrollX": true,
@@ -237,3 +238,16 @@ function update_check_all_checkbox(toggle_all_value) {
     check_all += ">Check/Uncheck All</label>";
     $('#forAllCheckBox').append(check_all);
 }
+$.fn.dataTableExt.oApi.fnFilterAll = function (oSettings, sInput, iColumn, bRegex, bSmart) {
+    var settings = $.fn.dataTableSettings;
+
+    for (var i = 0; i < settings.length; i++) {
+        settings[i].oInstance.fnFilter(sInput, iColumn, bRegex, bSmart);
+    }
+};
+$(document).ready(function () {
+    $("#Search_All").keyup(function () {
+        var table = $('.file dataframe table table-striped table-bordered dataTable no-footer').dataTable();
+        table.fnFilterAll(this.value);
+    });
+});
