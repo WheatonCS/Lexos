@@ -206,28 +206,64 @@ def test_check_formula():
     assert test.check_formula() == ""
     test.test_option = TestOptions(formula="(")
     test.save_formula()
-    assert test.check_formula() == "Formula errors:<br>"\
+    assert test.check_formula() == "Formula errors:<br>" \
                                    "Mismatched parenthesis<br>"
     test.test_option = TestOptions(formula="sin()")
     test.save_formula()
-    assert test.check_formula() == "Formula errors:<br>"\
-                                   "sin takes exactly one argument (0 given)"\
+    assert test.check_formula() == "Formula errors:<br>" \
+                                   "sin takes exactly one argument (0 given)" \
                                    "<br>"
     test.test_option = TestOptions(formula="cos()")
     test.save_formula()
-    assert test.check_formula() == "Formula errors:<br>"\
-                                   "cos takes exactly one argument (0 given)"\
+    assert test.check_formula() == "Formula errors:<br>" \
+                                   "cos takes exactly one argument (0 given)" \
                                    "<br>"
     test.test_option = TestOptions(formula="tan()")
     test.save_formula()
-    assert test.check_formula() == "Formula errors:<br>"\
-                                   "tan takes exactly one argument (0 given)"\
+    assert test.check_formula() == "Formula errors:<br>" \
+                                   "tan takes exactly one argument (0 given)" \
                                    "<br>"
     test.test_option = TestOptions(formula="log()")
     test.save_formula()
-    assert test.check_formula() == "Formula errors:<br>"\
-                                   "log takes exactly one argument (0 given)"\
+    assert test.check_formula() == "Formula errors:<br>" \
+                                   "log takes exactly one argument (0 given)" \
                                    "<br>"
+
+
+def test_dictionary_colors():
+    test = ContentAnalysisModel()
+    test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
+    test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
+    colors = test.dictionary_colors
+    assert isinstance(colors["dict1"], str) and len(colors["dict1"]) > 0
+    assert isinstance(colors["dict2"], str) and len(colors["dict1"]) > 0
+
+
+def test_generate_corpus_counts_table():
+    test = ContentAnalysisModel()
+    test.test_option = TestOptions(formula="[]")
+    test.save_formula()
+    test.add_file(file_name="file1", label='file1', content='test')
+    test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
+    test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
+    html_table = test.generate_corpus_counts_table(test.count(),
+                                                   test.dictionary_colors)
+    assert html_table.startswith("<table")
+    assert html_table.endswith("</table>")
+
+
+def test_generate_files_raw_counts_tables():
+    test = ContentAnalysisModel()
+    test.test_option = TestOptions(formula="[]")
+    test.save_formula()
+    test.add_file(file_name="file1", label='file1', content='test')
+    test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
+    test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
+    html_tables = test.generate_files_raw_counts_tables(
+        test.count(), test.dictionary_colors)
+    for html_table in html_tables:
+        assert html_table.startswith("<table")
+        assert html_table.endswith("</table>")
 
 
 def test_analyze():
@@ -237,11 +273,13 @@ def test_analyze():
     test.add_file(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
-    result_table, formula_errors = test.analyze()
+    result_table, individual_counts_table, files_raw_counts_tables, \
+        formula_errors = test.analyze()
     assert result_table == ""
     assert isinstance(formula_errors, str)
     test.test_option = TestOptions(formula="[dict1]")
     test.save_formula()
-    result_table, formula_errors = test.analyze()
+    result_table, individual_counts_table, files_raw_counts_tables, \
+        formula_errors = test.analyze()
     assert result_table == test.to_html()
     assert formula_errors == ""
