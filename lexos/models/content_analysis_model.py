@@ -108,7 +108,8 @@ class ContentAnalysisModel(object):
         corpus_counts_html += "</tbody></table>"
         return corpus_counts_html
 
-    def generate_files_raw_counts_tables(self, dictionaries, colors):
+    def generate_files_raw_counts_tables(self, dictionaries: list,
+                                         colors: dict):
         """Generates a html table for each file in the corpus.
 
         Each row has a phrase, its count, and the dictionary it belongs to.
@@ -136,7 +137,7 @@ class ContentAnalysisModel(object):
             tables.append(html_table)
         return tables
 
-    def get_dictionary_counts(self, dictionaries):
+    def get_dictionary_counts(self, dictionaries: list):
         """Gets the counts for each dictionary.
 
         :param dictionaries: list of Phrase object
