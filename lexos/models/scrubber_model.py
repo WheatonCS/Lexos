@@ -377,7 +377,7 @@ class ScrubberModel(BaseModel):
 
         return text
 
-    def _keep_words(self, text: str, keep_list: List[str]) -> str:
+    def keep_words(self, text: str, keep_list: List[str]) -> str:
         """Removes words that are not in non_removal_string from the text.
 
         :param text: A unicode string representing the whole text that is being
@@ -555,7 +555,7 @@ class ScrubberModel(BaseModel):
             # whole text)
             elif self._options.additional_options.keep \
                     and self._options.additional_options.sw_kw != []:
-                return self._keep_words(
+                return self.keep_words(
                     text=text,
                     keep_list=self._options.additional_options.sw_kw)
             else:

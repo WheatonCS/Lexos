@@ -812,63 +812,62 @@ class TestDeleteWords:
 #         assert remove_stopwords(self.test_string, "This long story") == \
 #             remove_stopwords(self.test_string, "This,long,story")
 #         assert remove_stopwords(self.test_string, ".") == self.test_string
-#
-#
-# class TestKeepWords:
-#     test_string = "Test text is this text here"
-#     test_string_period = test_string + "."
-#
-#     def test_keep_words_normal(self):
-#         assert keep_words(self.test_string, "is") == " is"
-#         assert keep_words(self.test_string, "Test") == "Test"
-#         assert keep_words(self.test_string, "here") == " here"
-#         assert keep_words(self.test_string, "missing") == ""
-#         assert keep_words(self.test_string, "") == \
-#             keep_words(self.test_string, "missing")
-#         assert keep_words(self.test_string, " ") == \
-#             keep_words(self.test_string, "")
-#         assert keep_words(self.test_string, "text") == " text text"
-#         assert keep_words(self.test_string, "Test, here, is") == \
-#             "Test is here"
-#         assert keep_words(self.test_string, "Test,missing,text") == \
-#             "Test text text"
-#         assert keep_words(self.test_string, "Test missing text") == \
-#             keep_words(self.test_string, "Test,missing,text")
-#         assert keep_words(self.test_string, "Test\nmissing\ntext") == \
-#             keep_words(self.test_string, "Test,missing,text")
-#         assert keep_words("Word word word word gone word", "word") == \
-#             " word word word word"
-#         assert keep_words(self.test_string, self.test_string) == \
-#             self.test_string
-#         assert keep_words(self.test_string, "is, this") == \
-#             remove_stopwords(self.test_string, "Test, text, here")
-#         assert keep_words(
-#             "Test\u1680unicode\u205Fwhite\u2007spaces\u2001now",
-#             "unicode, white, now") == "\u1680unicode\u205Fwhite\u2001now"
-#         assert keep_words(
-#             "Test\nsome\t\tkeep words\n\nwhitespace\tpreservation\nwith  this"
-#             "\t sentence \n now", "Test, keep, whitespace, with, this, now") \
-#             == "Test\t\tkeep\n\nwhitespace\nwith  this\t \n now"
-#
-#     def test_keep_words_punctuation(self):
-#         assert keep_words(self.test_string_period, "here") == ""
-#         assert keep_words(self.test_string_period, "here.") == " here."
-#         assert keep_words(self.test_string_period, "") == ""
-#         assert keep_words("there is some?text here", "some?text\nhere") ==\
-#             " some?text here"
-#         assert keep_words("there is some?text here", "some\ntext\nhere") \
-#             == " here"
-#         assert keep_words("there is some.text here", "some.text\nhere") ==\
-#             " some.text here"
-#         assert keep_words("there is some-text here", "some\ntext\nhere") == \
-#             " here"
-#         assert keep_words(
-#             self.test_string_period, self.test_string_period) == \
-#             self.test_string_period
-#         assert keep_words("Can we . use periods .. safely", ".") == " ."
-#         assert keep_words("Question mark s? ? ?? ???", "s?") == " s?"
-#
-#
+
+
+class TestKeepWords:
+    test_string = "Test text is this text here"
+    test_string_period = test_string + "."
+
+    def test_keep_words_normal(self):
+        assert ScrubberModel().keep_words(self.test_string, ["is"]) == " is"
+        assert ScrubberModel().keep_words(self.test_string, ["Test"]) == "Test"
+        assert ScrubberModel().keep_words(self.test_string, ["here"]) == \
+            " here"
+        assert ScrubberModel().keep_words(self.test_string, ["missing"]) == ""
+        assert ScrubberModel().keep_words(self.test_string, [""]) == \
+            ScrubberModel().keep_words(self.test_string, ["missing"])
+        assert ScrubberModel().keep_words(self.test_string, [" "]) == \
+            ScrubberModel().keep_words(self.test_string, [""])
+        assert ScrubberModel().keep_words(self.test_string, ["text"]) == \
+            " text text"
+        assert ScrubberModel().keep_words(
+            self.test_string, ["Test", "here", "is"]) == "Test is here"
+        assert ScrubberModel().keep_words(
+            self.test_string, ["Test", "missing", "text"]) == "Test text text"
+        assert ScrubberModel().keep_words(
+            "Word word word word gone word", ["word"]) == \
+            " word word word word"
+        assert ScrubberModel().keep_words(
+            "Test\u1680unicode\u205Fwhite\u2007spaces\u2001now",
+            ["unicode", "white", "now"]) == "\u1680unicode\u205Fwhite\u2001now"
+        assert ScrubberModel().keep_words(
+            "Test\nsome\t\tkeep words\n\nwhitespace\tpreservation\nwith  this"
+            "\t sentence \n now",
+            ["Test", "keep", "whitespace", "with", "this", "now"]) == \
+            "Test\t\tkeep\n\nwhitespace\nwith  this\t \n now"
+
+    def test_keep_words_punctuation(self):
+        assert ScrubberModel().keep_words(self.test_string_period, ["here"]) \
+            == ""
+        assert ScrubberModel().keep_words(self.test_string_period, ["here."]) \
+            == " here."
+        assert ScrubberModel().keep_words(self.test_string_period, [""]) == ""
+        assert ScrubberModel().keep_words(
+            "there is some?text here", ["some?text", "here"]) == \
+            " some?text here"
+        assert ScrubberModel().keep_words(
+            "there is some?text here", ["some", "text", "here"]) == " here"
+        assert ScrubberModel().keep_words(
+            "there is some.text here", ["some.text", "here"]) == \
+            " some.text here"
+        assert ScrubberModel().keep_words(
+            "there is some-text here", ["some", "text", "here"]) == " here"
+        assert ScrubberModel().keep_words(
+            "Can we . use periods .. safely", ["."]) == " ."
+        assert ScrubberModel().keep_words(
+            "Question mark s? ? ?? ???", ["s?"]) == " s?"
+
+
 # class TestGetRemoveWhitespaceMap:
 #
 #     def test_remove_whitespace_map(self):
