@@ -407,7 +407,7 @@ class ScrubbingReceiver(BaseReceiver):
         return tag_options
 
     @staticmethod
-    def _get_all_punctuation_map() -> Dict[int, type(None)]:
+    def get_all_punctuation_map() -> Dict[int, type(None)]:
         """Creates a dictionary containing all unicode punctuation and symbols.
 
         :return: The dictionary, with the ord() of each char mapped to None.
@@ -475,7 +475,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         except FileNotFoundError:
             # Creates map of punctuation to be removed if it doesn't exist
-            remove_punctuation_map = self._get_all_punctuation_map()
+            remove_punctuation_map = self.get_all_punctuation_map()
 
             self._save_character_deletion_map(
                 remove_punctuation_map, constants.CACHE_FOLDER,

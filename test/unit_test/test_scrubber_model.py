@@ -5,8 +5,8 @@ from lexos.models.scrubber_model import ScrubberModel, ScrubberTestOptions
 from lexos.receivers.scrubber_receiver import ScrubbingOptions, BasicOptions, \
     PunctuationOptions, WhitespaceOptions, AdditionalOptions, SingleTagOptions
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
-#
-#
+
+
 # # handle_special_characters
 #
 #
@@ -551,12 +551,6 @@ class TestProcessTagReplaceOptions:
 
 
 # handle_tags
-
-
-# class TestGetAllPunctuationMap:
-#
-#     def test_get_all_punctuation_map(self):
-#         assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
 
 
 class TestScrubSelectApos:
