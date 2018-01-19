@@ -349,7 +349,7 @@ class ScrubberModel(BaseModel):
         return text
 
     @staticmethod
-    def _delete_words(text: str, remove_list: List[str]) -> str:
+    def delete_words(text: str, remove_list: List[str]) -> str:
         """Deletes the words in remove_list from the text.
 
         :param text: The original text string.
@@ -399,7 +399,7 @@ class ScrubberModel(BaseModel):
 
         # remove_list is a copy of word_list without the keepwords
         remove_list = [word for word in word_list if word not in keep_list]
-        scrubbed_text = self._delete_words(text, remove_list)
+        scrubbed_text = self.delete_words(text, remove_list)
 
         return scrubbed_text
 
@@ -548,7 +548,7 @@ class ScrubberModel(BaseModel):
 
             # User chose "stop"
             if self._options.additional_options.stop:
-                return self._delete_words(
+                return self.delete_words(
                     text=text,
                     remove_list=self._options.additional_options.sw_kw)
             # User chose "keep" and supplied a list (to avoid deleting the

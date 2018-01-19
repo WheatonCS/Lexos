@@ -741,32 +741,33 @@ class TestConsolidateAmpers:
 #         assert split_stop_keep_word_string(
 #             input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
 #             ["..", ".", ".", ".", "..."]
-#
-#
-# class TestDeleteWords:
-#     test_string = "Many words were written, but not many of all the words " \
-#                   "said much at all."
-#
-#     def test_delete_words(self):
-#         assert delete_words(
-#             text=self.test_string,
-#             remove_list=["Many", "words", "written", "all"]) == \
-#             " were written, but not many of the said much at all."
-#         assert delete_words(text=self.test_string, remove_list=[""]) == \
-#             self.test_string
-#         assert delete_words(text=self.test_string, remove_list=[]) == \
-#             self.test_string
-#         assert delete_words(text="", remove_list=["words"]) == ""
-#         assert delete_words(text="", remove_list=[]) == ""
-#         assert delete_words(
-#             text="Using\u200Aunicode\u3000whitespace\u2004!\u2008?",
-#             remove_list=["Using", "whitespace", "?"]) == "\u200Aunicode\u2004!"
-#         assert delete_words(
-#             text="test test. test? test! test$ test* ^test test",
-#             remove_list=["test.", "test$", "^test", "test!"]) == \
-#             "test test? test* test"
-#
-#
+
+
+class TestDeleteWords:
+    test_string = "Many words were written, but not many of all the words " \
+                  "said much at all."
+
+    def test_delete_words(self):
+        assert ScrubberModel().delete_words(
+            text=self.test_string,
+            remove_list=["Many", "words", "written", "all"]) == \
+            " were written, but not many of the said much at all."
+        assert ScrubberModel().delete_words(
+            text=self.test_string, remove_list=[""]) == self.test_string
+        assert ScrubberModel().delete_words(
+            text=self.test_string, remove_list=[]) == self.test_string
+        assert ScrubberModel().delete_words(
+            text="", remove_list=["words"]) == ""
+        assert ScrubberModel().delete_words(text="", remove_list=[]) == ""
+        assert ScrubberModel().delete_words(
+            text="Using\u200Aunicode\u3000whitespace\u2004!\u2008?",
+            remove_list=["Using", "whitespace", "?"]) == "\u200Aunicode\u2004!"
+        assert ScrubberModel().delete_words(
+            text="test test. test? test! test$ test* ^test test",
+            remove_list=["test.", "test$", "^test", "test!"]) == \
+            "test test? test* test"
+
+
 # class TestRemoveStopwords:
 #     test_string = "This is a 'long' story. It is time for this long story " \
 #                   "to end to-night. end."
