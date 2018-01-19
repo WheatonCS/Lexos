@@ -360,7 +360,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return conversion_dict
 
-    def _get_remove_digits_map(self) -> Dict[int, type(None)]:
+    def get_remove_digits_map(self) -> Dict[int, type(None)]:
         """Get the digit removal map.
 
         :return: A dictionary that contains all the digits that should be
@@ -452,9 +452,9 @@ class ScrubbingReceiver(BaseReceiver):
         return general_functions.load_file_from_disk(
             loc_folder=storage_folder, filename=filename)
 
-    def _get_remove_punctuation_map(self, apos: bool, hyphen: bool,
-                                    amper: bool,
-                                    previewing: bool) -> Dict[int, type(None)]:
+    def get_remove_punctuation_map(self, apos: bool, hyphen: bool,
+                                   amper: bool,
+                                   previewing: bool) -> Dict[int, type(None)]:
         """Gets the punctuation removal map.
 
         :param apos: A boolean indicating whether apostrophes should be kept in
@@ -516,7 +516,7 @@ class ScrubbingReceiver(BaseReceiver):
             apos = "aposbox" in self._front_end_data
             hyphen = "hyphensbox" in self._front_end_data
             amper = "ampersandbox" in self._front_end_data
-            remove_punctuation_map = self._get_remove_punctuation_map(
+            remove_punctuation_map = self.get_remove_punctuation_map(
                 apos=apos, hyphen=hyphen, amper=amper, previewing=previewing)
         else:
             apos = False
@@ -587,7 +587,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         digits = "digitbox" in self._front_end_data
         if digits:
-            remove_digits_map = self._get_remove_digits_map()
+            remove_digits_map = self.get_remove_digits_map()
         else:
             remove_digits_map = {}
 

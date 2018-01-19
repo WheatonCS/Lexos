@@ -591,7 +591,7 @@ class TestConsolidateAmpers:
         assert ScrubberModel().consolidate_ampers(text="") == ""
 
 
-# class TestGetRemovePunctuationMap:
+# class TestApplyRemovePunctuationMap:
 #
 #     def test_get_remove_punct_map_no_store(self):
 #         no_punct_string = "Some text with no punctuation"
@@ -669,14 +669,8 @@ class TestConsolidateAmpers:
 #         assert get_remove_punctuation_map(
 #             no_punct_string, apos=False, hyphen=False, amper=False,
 #             previewing=True) == (no_punct_string, map_previewing)
-#
-#
-# class TestGetRemoveDigitsMap:
-#
-#     def test_get_remove_digits_no_store(self):
-#         assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
-#
-#
+
+
 # class TestHandleFileAndManualStrings:
 #
 #     def test_handle_file_and_manual_strings(self):
