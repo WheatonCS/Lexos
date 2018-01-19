@@ -3,7 +3,7 @@
 # from lexos.helpers.exceptions import LexosException
 from lexos.models.scrubber_model import ScrubberModel, ScrubberTestOptions
 from lexos.receivers.scrubber_receiver import ScrubbingOptions, BasicOptions, \
-    PunctuationOptions, WhitespaceOptions, AdditionalOptions
+    PunctuationOptions, WhitespaceOptions, AdditionalOptions, SingleTagOptions
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 #
 #
@@ -420,14 +420,14 @@ class TestProcessTagReplaceOptions:
                         previewing=False,
                         remove_punctuation_map={}), digits=False,
                     remove_digits_map={}, tags=True,
-                    tag_options={tag: (action, attribute)},
+                    tag_options={tag: SingleTagOptions(action, attribute)},
                     whitespace=False, whitespace_options=WhitespaceOptions(
                         spaces=False, tabs=False, newlines=False,
                         remove_whitespace_map={})),
                 additional_options=AdditionalOptions(
                     consol={}, lemma={}, special_char={}, sw_kw=[], stop=False,
                     keep=False)), file_id_content_map={},
-            gutenberg_file_set={})
+            gutenberg_file_set=set())
 
         return test_options
 
@@ -438,17 +438,17 @@ class TestProcessTagReplaceOptions:
         second_test_options = self._make_options("second", action, attribute)
 
         assert ScrubberModel(first_test_options).handle_tags(self.tag_text) \
-            == "Text before tags.\n  Some text in the first tag  \nText " \
+            == "Text before tags.\n Some text in the first tag \nText " \
                "between the tags.\n<second tag_num= \"2-nd tag's num\">" \
                "Other text in the second tag</second>\nText after the tags."
         assert ScrubberModel(first_test_options).handle_tags(self.no_end) \
-            == "The ending   tags here   are a bit <second> messed up."
+            == "The ending tags here are a bit <second> messed up."
         assert ScrubberModel(second_test_options).handle_tags(self.tag_text) \
             == "Text before tags.\n<first> Some text in the first tag " \
                "</first>\nText between the tags.\n Other text in the second " \
                "tag \nText after the tags."
         assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
-            == "The ending <first> tags here <first> are a bit   messed up."
+            == "The ending <first> tags here <first> are a bit messed up."
 
     def test_process_tag_rep_options_remove_element(self):
         action = "remove-element"
