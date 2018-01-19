@@ -557,43 +557,46 @@ class TestProcessTagReplaceOptions:
 #
 #     def test_get_all_punctuation_map(self):
 #         assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
-#
-#
-# class TestScrubSelectApos:
-#
-#     def test_scrub_select_apos(self):
-#         assert scrub_select_apos(
-#             text="'Tes't test' ' 'test tes''t test'' '' ''test''") == \
-#             "Tes't test  test tes''t test  test"
-#         assert scrub_select_apos(text="Test test") == "Test test"
-#         assert scrub_select_apos(text="' ") == " "
-#         assert scrub_select_apos(text="'") == ""
-#         assert scrub_select_apos(text="") == ""
-#
-#
-# class TestConsolidateHyphens:
-#
-#     def test_consolidate_hyphens(self):
-#         assert consolidate_hyphens(
-#             text="Tes\u058At test\u2011 \u2012 \u2014test tes\uFE58\uFF0Dt "
-#             "test\u1400\u2E3A \u2E40\u2E17 \u3030\uFE31test "
-#             "tes\uFE32\u2E3B\u2013t test\u05BE\uFE63\u30A0 \u301C-\u2E1A\u2010"
-#             " \u2015\u1806") == "Tes-t test- - -test tes--t test-- -- " \
-#                                 "--test tes---t test--- ---- --"
-#         assert consolidate_hyphens(text="Test test") == "Test test"
-#         assert consolidate_hyphens(text="") == ""
-#
-#
-# class TestConsolidateAmpers:
-#
-#     def test_consolidate_ampers(self):
-#         assert consolidate_ampers(
-#             text="Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
-#             "test\u0026 \uFF06") == "Tes&t test& & &test tes&&t test& &"
-#         assert consolidate_ampers(text="Test test") == "Test test"
-#         assert consolidate_ampers(text="") == ""
-#
-#
+
+
+class TestScrubSelectApos:
+
+    def test_scrub_select_apos(self):
+        assert ScrubberModel().scrub_select_apos(
+            text="'Tes't test' ' 'test tes''t test'' '' ''test''") == \
+            "Tes't test  test tes''t test  test"
+        assert ScrubberModel().scrub_select_apos(text="Test test") == \
+            "Test test"
+        assert ScrubberModel().scrub_select_apos(text="' ") == " "
+        assert ScrubberModel().scrub_select_apos(text="'") == ""
+        assert ScrubberModel().scrub_select_apos(text="") == ""
+
+
+class TestConsolidateHyphens:
+
+    def test_consolidate_hyphens(self):
+        assert ScrubberModel().consolidate_hyphens(
+            text="Tes\u058At test\u2011 \u2012 \u2014test tes\uFE58\uFF0Dt "
+            "test\u1400\u2E3A \u2E40\u2E17 \u3030\uFE31test "
+            "tes\uFE32\u2E3B\u2013t test\u05BE\uFE63\u30A0 \u301C-\u2E1A\u2010"
+            " \u2015\u1806") == "Tes-t test- - -test tes--t test-- -- " \
+                                "--test tes---t test--- ---- --"
+        assert ScrubberModel().consolidate_hyphens(text="Test test") == \
+            "Test test"
+        assert ScrubberModel().consolidate_hyphens(text="") == ""
+
+
+class TestConsolidateAmpers:
+
+    def test_consolidate_ampers(self):
+        assert ScrubberModel().consolidate_ampers(
+            text="Tes\uFE60t test\u06FD \U0001F675 \u214Btest tes\U0001F674&t "
+            "test\u0026 \uFF06") == "Tes&t test& & &test tes&&t test& &"
+        assert ScrubberModel().consolidate_ampers(text="Test test") == \
+            "Test test"
+        assert ScrubberModel().consolidate_ampers(text="") == ""
+
+
 # class TestGetRemovePunctuationMap:
 #
 #     def test_get_remove_punct_map_no_store(self):

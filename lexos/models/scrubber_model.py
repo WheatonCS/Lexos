@@ -245,7 +245,7 @@ class ScrubberModel(BaseModel):
         return text
 
     @staticmethod
-    def _scrub_select_apos(text: str) -> str:
+    def scrub_select_apos(text: str) -> str:
         """Scrubs all non-word-internal apostrophes from a text.
 
         :param text: The string to be scrubbed of external apostrophes.
@@ -277,9 +277,8 @@ class ScrubberModel(BaseModel):
 
         return scrubbed_text
 
-
     @staticmethod
-    def _consolidate_hyphens(text: str) -> str:
+    def consolidate_hyphens(text: str) -> str:
         """Converts all hyphens in a text to the minus sign (-).
 
         :param text: A string which should have hyphens converted.
@@ -302,7 +301,7 @@ class ScrubberModel(BaseModel):
         return text
 
     @staticmethod
-    def _consolidate_ampers(text: str) -> str:
+    def consolidate_ampers(text: str) -> str:
         """Converts all ampersands in a text to a single one (&).
 
         :param text: A string which should have ampersands converted.
@@ -337,15 +336,15 @@ class ScrubberModel(BaseModel):
 
         # If Keep Word-Internal Apostropes
         if self._options.basic_options.punctuation_options.apos:
-            text = self._scrub_select_apos(text=text)
+            text = self.scrub_select_apos(text=text)
 
         # If Keep Hyphens
         if self._options.basic_options.punctuation_options.hyphen:
-            text = self._consolidate_hyphens(text=text)
+            text = self.consolidate_hyphens(text=text)
 
         # If Keep Ampersands
         if self._options.basic_options.punctuation_options.amper:
-            text = self._consolidate_ampers(text=text)
+            text = self.consolidate_ampers(text=text)
 
         return text
 
