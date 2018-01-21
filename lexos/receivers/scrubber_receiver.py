@@ -170,6 +170,101 @@ class ScrubbingReceiver(BaseReceiver):
 
     # Various helper functions---
     @staticmethod
+    def _load_character_deletion_map(storage_folder: str,
+                                     filename: str) -> Dict[int, type(None)]:
+        """Loads a character map that was previously saved in the storage folder.
+
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file that is being
+            loaded.
+        :return: The character deletion map that was saved in the folder (empty
+            if there is no map to load).
+        """
+
+        return general_functions.load_file_from_disk(
+            loc_folder=storage_folder, filename=filename)
+
+    @staticmethod
+    def _save_character_deletion_map(deletion_map: Dict[int, type(None)],
+                                     storage_folder: str, filename: str):
+        """Saves a character deletion map in the storage folder.
+
+        :param deletion_map: A character deletion map to be saved.
+        :param storage_folder: A string representing the path of the storage
+            folder.
+        :param filename: A string representing the name of the file the map
+            should be saved in.
+        """
+
+        general_functions.write_file_to_disk(
+            contents=deletion_map, dest_folder=storage_folder,
+            filename=filename)
+
+    @staticmethod
+    def get_all_punctuation_map() -> Dict[int, type(None)]:
+        """Creates a dictionary containing all unicode punctuation and symbols.
+
+        :return: The dictionary, with the ord() of each char mapped to None.
+        """
+
+        punctuation_map = dict.fromkeys(
+            [i for i in range(sys.maxunicode)
+             if unicodedata.category(chr(i)).startswith('P') or
+             unicodedata.category(chr(i)).startswith('S')])
+
+        return punctuation_map
+
+    def get_remove_punctuation_map(self, apos: bool, hyphen: bool,
+                                   amper: bool,
+                                   previewing: bool) -> Dict[int, type(None)]:
+        """Gets the punctuation removal map.
+
+        :param apos: A boolean indicating whether apostrophes should be kept in
+            the text.
+        :param hyphen: A boolean indicating whether hyphens should be kept in
+            the text.
+        :param amper: A boolean indicating whether ampersands should be kept in
+            the text.
+        :param previewing: A boolean indicating whether the user is previewing.
+        :returns: A dictionary that contains all the punctuation that should be
+            removed mapped to None.
+        """
+
+        try:
+            # Map of punctuation to be removed
+            remove_punctuation_map = self._load_character_deletion_map(
+                constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
+
+        except FileNotFoundError:
+            # Creates map of punctuation to be removed if it doesn't exist
+            remove_punctuation_map = self.get_all_punctuation_map()
+
+            self._save_character_deletion_map(
+                remove_punctuation_map, constants.CACHE_FOLDER,
+                constants.PUNCTUATION_MAP_FILENAME)
+
+        # If Remove All Punctuation & Keep Word-Internal Apostrophes are ticked
+        if apos:
+            del remove_punctuation_map[39]  # No further apos will be scrubbed
+
+        # If Remove All Punctuation and Keep Hyphens are ticked
+        if hyphen:
+
+            # Now that all those hyphens are the ascii minus, delete it from
+            # the map so no hyphens will be scrubbed from the text
+            del remove_punctuation_map[45]
+
+        # If Remove All Punctuation and Keep Ampersands are ticked
+        if amper:
+            del remove_punctuation_map[38]  # Delete chosen amper from map
+
+        if previewing:
+            del remove_punctuation_map[8230]  # ord(…)
+
+        return remove_punctuation_map
+
+    @staticmethod
     def _load_scrub_optional_upload(storage_folder: str,
                                     filename: str) -> str:
         """Loads a option file that was previously saved in the storage folder.
@@ -386,101 +481,6 @@ class ScrubbingReceiver(BaseReceiver):
                 constants.DIGIT_MAP_FILENAME)
 
         return remove_digit_map
-
-    @staticmethod
-    def get_all_punctuation_map() -> Dict[int, type(None)]:
-        """Creates a dictionary containing all unicode punctuation and symbols.
-
-        :return: The dictionary, with the ord() of each char mapped to None.
-        """
-
-        punctuation_map = dict.fromkeys(
-            [i for i in range(sys.maxunicode)
-             if unicodedata.category(chr(i)).startswith('P') or
-             unicodedata.category(chr(i)).startswith('S')])
-
-        return punctuation_map
-
-    @staticmethod
-    def _save_character_deletion_map(deletion_map: Dict[int, type(None)],
-                                     storage_folder: str, filename: str):
-        """Saves a character deletion map in the storage folder.
-
-        :param deletion_map: A character deletion map to be saved.
-        :param storage_folder: A string representing the path of the storage
-            folder.
-        :param filename: A string representing the name of the file the map
-            should be saved in.
-        """
-
-        general_functions.write_file_to_disk(
-            contents=deletion_map, dest_folder=storage_folder,
-            filename=filename)
-
-    @staticmethod
-    def _load_character_deletion_map(storage_folder: str,
-                                     filename: str) -> Dict[int, type(None)]:
-        """Loads a character map that was previously saved in the storage folder.
-
-        :param storage_folder: A string representing the path of the storage
-            folder.
-        :param filename: A string representing the name of the file that is being
-            loaded.
-        :return: The character deletion map that was saved in the folder (empty
-            if there is no map to load).
-        """
-
-        return general_functions.load_file_from_disk(
-            loc_folder=storage_folder, filename=filename)
-
-    def get_remove_punctuation_map(self, apos: bool, hyphen: bool,
-                                   amper: bool,
-                                   previewing: bool) -> Dict[int, type(None)]:
-        """Gets the punctuation removal map.
-
-        :param apos: A boolean indicating whether apostrophes should be kept in
-            the text.
-        :param hyphen: A boolean indicating whether hyphens should be kept in
-            the text.
-        :param amper: A boolean indicating whether ampersands should be kept in
-            the text.
-        :param previewing: A boolean indicating whether the user is previewing.
-        :returns: A dictionary that contains all the punctuation that should be
-            removed mapped to None.
-        """
-
-        try:
-            # Map of punctuation to be removed
-            remove_punctuation_map = self._load_character_deletion_map(
-                constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
-
-        except FileNotFoundError:
-            # Creates map of punctuation to be removed if it doesn't exist
-            remove_punctuation_map = self.get_all_punctuation_map()
-
-            self._save_character_deletion_map(
-                remove_punctuation_map, constants.CACHE_FOLDER,
-                constants.PUNCTUATION_MAP_FILENAME)
-
-        # If Remove All Punctuation & Keep Word-Internal Apostrophes are ticked
-        if apos:
-            del remove_punctuation_map[39]  # No further apos will be scrubbed
-
-        # If Remove All Punctuation and Keep Hyphens are ticked
-        if hyphen:
-
-            # Now that all those hyphens are the ascii minus, delete it from
-            # the map so no hyphens will be scrubbed from the text
-            del remove_punctuation_map[45]
-
-        # If Remove All Punctuation and Keep Ampersands are ticked
-        if amper:
-            del remove_punctuation_map[38]  # Delete chosen amper from map
-
-        if previewing:
-            del remove_punctuation_map[8230]  # ord(…)
-
-        return remove_punctuation_map
 
     @staticmethod
     def get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
