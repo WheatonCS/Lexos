@@ -7,6 +7,38 @@ from lexos.receivers.scrubber_receiver import ScrubbingOptions, BasicOptions, \
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
+class TestHandleGutenberg:
+
+    def test_handle_gutenberg_match(self):
+        assert ScrubberModel().handle_gutenberg(
+            text=guten.TEXT_FRONT_PLATE) == guten.FRONT_PLATE_EXTRA + \
+            guten.TEXT_NEITHER
+        assert ScrubberModel().handle_gutenberg(
+            text=guten.TEXT_FRONT_COPY) == guten.TEXT_NEITHER
+        assert ScrubberModel().handle_gutenberg(
+            text=guten.TEXT_BACK) == guten.TEXT_NEITHER
+        assert ScrubberModel().handle_gutenberg(
+            text=guten.TEXT_BOTH_PLATE) == guten.FRONT_PLATE_EXTRA + \
+            guten.TEXT_NEITHER
+        assert ScrubberModel().handle_gutenberg(
+            text=guten.TEXT_BOTH_COPY) == guten.TEXT_NEITHER
+        assert ScrubberModel().handle_gutenberg(
+            text="This text is Copyright Joe Schmoe.\n\n\nDone.") == "Done."
+        assert ScrubberModel().handle_gutenberg(
+            text="This text is copyright Joe Schmoe.\n\n\nDone.") == "Done."
+
+    def test_handle_gutenberg_no_match(self):
+        assert ScrubberModel().handle_gutenberg(text=guten.TEXT_NEITHER) == \
+               guten.TEXT_NEITHER
+        assert ScrubberModel().handle_gutenberg(text="") == ""
+        assert ScrubberModel().handle_gutenberg(
+            text="This text is copyright\nJoe Schmoe.\n\n\nDone.") == \
+            "This text is copyright\nJoe Schmoe.\n\n\nDone."
+        assert ScrubberModel().handle_gutenberg(
+            text="This text is copyright Joe Schmoe.\n\nDone.") == \
+            "This text is copyright Joe Schmoe.\n\nDone."
+
+
 class TestMenuSpecialChars:
     not_special_string = "This string contains no special chars?!\nWow."
 
@@ -355,38 +387,6 @@ class TestKeepWords:
             "Can we . use periods .. safely", ["."]) == " ."
         assert ScrubberModel().keep_words(
             "Question mark s? ? ?? ???", ["s?"]) == " s?"
-
-
-class TestHandleGutenberg:
-
-    def test_handle_gutenberg_match(self):
-        assert ScrubberModel().handle_gutenberg(
-            text=guten.TEXT_FRONT_PLATE) == guten.FRONT_PLATE_EXTRA + \
-            guten.TEXT_NEITHER
-        assert ScrubberModel().handle_gutenberg(
-            text=guten.TEXT_FRONT_COPY) == guten.TEXT_NEITHER
-        assert ScrubberModel().handle_gutenberg(
-            text=guten.TEXT_BACK) == guten.TEXT_NEITHER
-        assert ScrubberModel().handle_gutenberg(
-            text=guten.TEXT_BOTH_PLATE) == guten.FRONT_PLATE_EXTRA + \
-            guten.TEXT_NEITHER
-        assert ScrubberModel().handle_gutenberg(
-            text=guten.TEXT_BOTH_COPY) == guten.TEXT_NEITHER
-        assert ScrubberModel().handle_gutenberg(
-            text="This text is Copyright Joe Schmoe.\n\n\nDone.") == "Done."
-        assert ScrubberModel().handle_gutenberg(
-            text="This text is copyright Joe Schmoe.\n\n\nDone.") == "Done."
-
-    def test_handle_gutenberg_no_match(self):
-        assert ScrubberModel().handle_gutenberg(text=guten.TEXT_NEITHER) == \
-               guten.TEXT_NEITHER
-        assert ScrubberModel().handle_gutenberg(text="") == ""
-        assert ScrubberModel().handle_gutenberg(
-            text="This text is copyright\nJoe Schmoe.\n\n\nDone.") == \
-            "This text is copyright\nJoe Schmoe.\n\n\nDone."
-        assert ScrubberModel().handle_gutenberg(
-            text="This text is copyright Joe Schmoe.\n\nDone.") == \
-            "This text is copyright Joe Schmoe.\n\nDone."
 
 
 # class TestReplacementHandlerAlone:
