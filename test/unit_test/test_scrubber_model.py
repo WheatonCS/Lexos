@@ -397,8 +397,13 @@ class TestKeepWords:
 
 # scrub
 
-
 # get_all_scrubbed_text
+
+# _save_scrub_changes
+
+# _get_preview_of_scrubbed
+
+# scrub_active_files_and_return_preview
 
 
 # class TestReplacementHandlerAlone:
