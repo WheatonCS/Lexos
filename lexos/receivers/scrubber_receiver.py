@@ -388,25 +388,6 @@ class ScrubbingReceiver(BaseReceiver):
         return remove_digit_map
 
     @staticmethod
-    def _get_tag_options_from_front_end() -> Dict[str, SingleTagOptions]:
-        """Gets all the tag options from the front end.
-
-        :return: A dictionary of tags and corresponding SingleTagOptions
-        """
-
-        if 'xmlhandlingoptions' in session:  # Should always be true
-            # If user saved changes in Scrub Tags button (XML modal), then
-            # visit each tag
-            tag_options = {tag: SingleTagOptions(
-                session['xmlhandlingoptions'][tag]["action"],
-                session['xmlhandlingoptions'][tag]["attribute"])
-                for tag in session['xmlhandlingoptions']}
-        else:
-            tag_options = {}
-
-        return tag_options
-
-    @staticmethod
     def get_all_punctuation_map() -> Dict[int, type(None)]:
         """Creates a dictionary containing all unicode punctuation and symbols.
 
@@ -645,6 +626,25 @@ class ScrubbingReceiver(BaseReceiver):
             storage_folder=storage_folder, storage_filenames=storage_filenames,
             file_consol=file_strings[0], file_lemma=file_strings[1],
             file_special_char=file_strings[2], file_sw_kw=file_strings[3])
+
+    @staticmethod
+    def _get_tag_options_from_front_end() -> Dict[str, SingleTagOptions]:
+        """Gets all the tag options from the front end.
+
+        :return: A dictionary of tags and corresponding SingleTagOptions
+        """
+
+        if 'xmlhandlingoptions' in session:  # Should always be true
+            # If user saved changes in Scrub Tags button (XML modal), then
+            # visit each tag
+            tag_options = {tag: SingleTagOptions(
+                session['xmlhandlingoptions'][tag]["action"],
+                session['xmlhandlingoptions'][tag]["attribute"])
+                for tag in session['xmlhandlingoptions']}
+        else:
+            tag_options = {}
+
+        return tag_options
 
     def _get_manual_options_from_front_end(self) -> ManualOptions:
         """Gets all the manual options from the front end.
