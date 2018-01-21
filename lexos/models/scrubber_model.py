@@ -331,7 +331,7 @@ class ScrubberModel(BaseModel):
 
         return text
 
-    def _handle_preserved_punctuation(self, text: str) -> str:
+    def handle_preserved_punctuation(self, text: str) -> str:
         """Alters the text so internal apos, hyphens, and ampers are preserved.
 
         :param text: The unaltered text.
@@ -408,7 +408,7 @@ class ScrubberModel(BaseModel):
 
         return scrubbed_text
 
-    def _scrub(self, doc_id: int) -> str:
+    def scrub(self, doc_id: int) -> str:
         """Scrubs a single document with the provided ID.
 
         :param doc_id: The document's ID number.
@@ -487,7 +487,7 @@ class ScrubberModel(BaseModel):
 
         # -- 4. Punctuation (apostrophes, hyphens, ampersands) ----------------
         if self._options.basic_options.punct:
-            text = self._handle_preserved_punctuation(text=text)
+            text = self.handle_preserved_punctuation(text=text)
 
         # -- 5. Digits --------------------------------------------------------
         # Prep now handled entirely in ScrubberReceiver
@@ -581,7 +581,7 @@ class ScrubberModel(BaseModel):
     def _get_all_scrub_text(self) -> FileIDContentMap:
         """Returns all active id maps to their scrubbed text."""
 
-        return {file_id: self._scrub(file_id)
+        return {file_id: self.scrub(file_id)
                 for file_id, content in self._file_id_content_map.items()}
 
     @staticmethod
