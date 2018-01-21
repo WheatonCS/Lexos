@@ -83,3 +83,38 @@ class TestSplitStopKeepWordString:
         assert ScrubbingReceiver().split_stop_keep_word_string(
             input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
             ["..", ".", ".", ".", "..."]
+
+
+class TestGetRemoveWhitespaceMap:
+
+    def test_remove_whitespace_map(self):
+        # All possible combinations of three boolean parameters:
+        # 000
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=False, tabs=False, newlines=False) == {}
+        # 100
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=True, tabs=False, newlines=False) == {ord(' '): None}
+        # 010
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=False, tabs=True, newlines=False) == {ord('\t'): None}
+        # 110
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=True, tabs=True, newlines=False) == \
+            {ord(' '): None, ord('\t'): None}
+        # 001
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=False, tabs=False, newlines=True) == \
+            {ord('\n'): None, ord('\r'): None}
+        # 101
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=True, tabs=False, newlines=True) == \
+            {ord(' '): None, ord('\n'): None, ord('\r'): None}
+        # 011
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=False, tabs=True, newlines=True) == \
+            {ord('\t'): None, ord('\n'): None, ord('\r'): None}
+        # 111
+        assert ScrubbingReceiver().get_remove_whitespace_map(
+            spaces=True, tabs=True, newlines=True) == \
+            {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}

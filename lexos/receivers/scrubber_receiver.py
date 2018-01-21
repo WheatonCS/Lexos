@@ -510,8 +510,8 @@ class ScrubbingReceiver(BaseReceiver):
             remove_punctuation_map=remove_punctuation_map)
 
     @staticmethod
-    def _get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
-                                   ) -> Dict[int, type(None)]:
+    def get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
+                                  ) -> Dict[int, type(None)]:
         """Get the white space removal map.
         :param spaces: A boolean indicating whether spaces should be removed.
         :param tabs: A bool indicating whether or tabs should be removed.
@@ -542,7 +542,7 @@ class ScrubbingReceiver(BaseReceiver):
             spaces = "spacebox" in self._front_end_data
             tabs = "tabsbox" in self._front_end_data
             newlines = "newlinesbox" in self._front_end_data['newlinesbox']
-            remove_whitespace_map = self._get_remove_whitespace_map(
+            remove_whitespace_map = self.get_remove_whitespace_map(
                 spaces=spaces, tabs=tabs, newlines=newlines)
         else:
             spaces = False

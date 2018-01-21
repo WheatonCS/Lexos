@@ -796,39 +796,6 @@ class TestKeepWords:
             "Question mark s? ? ?? ???", ["s?"]) == " s?"
 
 
-# class TestGetRemoveWhitespaceMap:
-#
-#     def test_remove_whitespace_map(self):
-#         # All possible combinations of three boolean parameters:
-#         # 000
-#         assert get_remove_whitespace_map(
-#             spaces=False, tabs=False, new_lines=False) == {}
-#         # 100
-#         assert get_remove_whitespace_map(
-#             spaces=True, tabs=False, new_lines=False) == {ord(' '): None}
-#         # 010
-#         assert get_remove_whitespace_map(
-#             spaces=False, tabs=True, new_lines=False) == {ord('\t'): None}
-#         # 110
-#         assert get_remove_whitespace_map(
-#             spaces=True, tabs=True, new_lines=False) == \
-#             {ord(' '): None, ord('\t'): None}
-#         # 001
-#         assert get_remove_whitespace_map(
-#             spaces=False, tabs=False, new_lines=True) == \
-#             {ord('\n'): None, ord('\r'): None}
-#         # 101
-#         assert get_remove_whitespace_map(
-#             spaces=True, tabs=False, new_lines=True) == \
-#             {ord(' '): None, ord('\n'): None, ord('\r'): None}
-#         # 011
-#         assert get_remove_whitespace_map(
-#             spaces=False, tabs=True, new_lines=True) == \
-#             {ord('\t'): None, ord('\n'): None, ord('\r'): None}
-#         # 111
-#         assert get_remove_whitespace_map(
-#             spaces=True, tabs=True, new_lines=True) == \
-#             {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}
 #
 #
 # # save_character_deletion_map
