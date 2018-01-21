@@ -578,62 +578,62 @@ class ScrubberModel(BaseModel):
 
         return finished_text
 
-    def _get_all_scrub_text(self) -> FileIDContentMap:
-        """Returns all active id maps to their scrubbed text."""
+    def get_all_scrubbed_text(self) -> FileIDContentMap:
+        """Returns all active ids mapped to their scrubbed text."""
 
         return {file_id: self.scrub(file_id)
                 for file_id, content in self._file_id_content_map.items()}
 
     @staticmethod
-    def _save_scrub_changes(id_scrubbed_content_map: FileIDContentMap):
-        """Perform side effect to save scrubbed the file on the disk
+    def _save_scrub_changes(scrubbed_id_content_map: FileIDContentMap):
+        """Produces a side effect, to save scrubbed files onto the disk.
 
-        This function is not tested, because it performs side-effects.
-        For those looking at this function, beware that performing
-        performing side effect is dangerous and untestable.
-        make as few side-effect as possible and do not mix them with testable
-        functions.
-        :param id_scrubbed_content_map: a dictionary maps file id to
-                scrubbed content
+        This function is not tested, because it creates a side-effect.
+        For those looking at this function, beware that creating side effects
+            is dangerous and untestable.
+        Make as few side-effects as possible and do not mix them with testable
+            functions.
+        :param scrubbed_id_content_map: A dictionary mapping file ids to
+            scrubbed contents.
         """
 
         file_manager = FileManagerModel().load_file_manager()
         scrubbed_file_manager = file_manager.mass_update_content(
-            id_content_map=id_scrubbed_content_map)
+            id_content_map=scrubbed_id_content_map)
         FileManagerModel().save_file_manager(scrubbed_file_manager)
 
     @staticmethod
-    def _get_preview_of_scrubbed(id_scrubbed_content_map: FileIDContentMap) \
+    def _get_preview_of_scrubbed(scrubbed_id_content_map: FileIDContentMap) \
             -> FileIDContentMap:
-        """Make a dictionary maps file id to preview of the scrubbed content.
+        """Maps file ids to previews of their corresponding scrubbed contents.
 
-        :param id_scrubbed_content_map: a dictionary maps file id to the
-            scrubbed content
-        :return: a dictionary map file id to preview of the scrubbed content
+        :param scrubbed_id_content_map: A dictionary mapping file ids to
+            scrubbed contents.
+        :return: A dictionary mapping file ids to scrubbed contents previews
         """
 
         return {file_id: general_functions.make_preview_from(content)
-                for file_id, content in id_scrubbed_content_map.items()}
+                for file_id, content in scrubbed_id_content_map.items()}
 
-    def scrub_active_file_and_return_preview(self, save_changes: bool) \
+    def scrub_active_files_and_return_preview(self, save_changes: bool) \
             -> FileIDContentMap:
-        """scrubs the file and returns the preview
+        """Scrubs all active files and returns the previews.
 
-        :param save_changes: if true then we save the scrubbed file onto the
-            disk, else we only generate the previews.
-        :return: a dictionary maps file id to preview of scrubbed content
+        :param save_changes: If true then save the scrubbed files onto the
+            disk, else only generate the previews.
+        :return: A dictionary mapping file ids to scrubbed contents previews.
         """
 
-        id_scrubbed_content_map = self._get_all_scrub_text()
+        scrubbed_id_content_map = self.get_all_scrubbed_text()
 
         # Save the changes to the disk
         if save_changes:
             ScrubberModel._save_scrub_changes(
-                id_scrubbed_content_map=id_scrubbed_content_map)
+                scrubbed_id_content_map=scrubbed_id_content_map)
 
         # Return all the previews
         return ScrubberModel._get_preview_of_scrubbed(
-            id_scrubbed_content_map=id_scrubbed_content_map)
+            scrubbed_id_content_map=scrubbed_id_content_map)
 
 
 

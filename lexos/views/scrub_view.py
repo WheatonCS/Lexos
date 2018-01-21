@@ -69,7 +69,7 @@ def do_scrubbing():
     saving_changes = True if request.form["formAction"] == "apply" else False
 
     # preview_info is a tuple of (id, file_name(label), class_label, preview)
-    previews = ScrubberModel().scrub_active_file_and_return_preview(
+    previews = ScrubberModel().scrub_active_files_and_return_preview(
         save_changes=saving_changes)
 
     # generate the data to send to frontend
