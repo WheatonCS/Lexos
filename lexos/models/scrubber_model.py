@@ -161,8 +161,8 @@ class ScrubberModel(BaseModel):
         return all_of_replace_from.sub(_replacement_map_func, text)
 
     @staticmethod
-    def _process_tag_replace_options(orig_text: str, tag: str, action: str,
-                                     attribute: str) -> str:
+    def handle_single_tag(orig_text: str, tag: str, action: str,
+                          attribute: str) -> str:
         """Replaces html-style tags in text files according to user options.
 
         :param orig_text: The user's text containing the original tag.
@@ -238,7 +238,7 @@ class ScrubberModel(BaseModel):
             action = self._options.basic_options.tag_options[tag].action
             attribute = self._options.basic_options.tag_options[tag].attribute
 
-            text = self._process_tag_replace_options(
+            text = self.handle_single_tag(
                 text, tag, action, attribute)
 
         # TODO: Remove extra whitespace without massively changing formatting

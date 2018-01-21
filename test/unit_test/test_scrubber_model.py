@@ -123,7 +123,10 @@ class TestMenuSpecialChars:
             "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 
 
-class TestProcessTagReplaceOptions:
+# handle_single_tag
+
+
+class TestHandleTags:
     tag_text = "Text before tags.\n<first> Some text in the first tag " \
                "</first>\nText between the tags.\n<second tag_num= \"2-nd " \
                "tag's num\">Other text in the second tag</second>\nText" \
@@ -153,7 +156,7 @@ class TestProcessTagReplaceOptions:
 
         return test_options
 
-    def test_process_tag_rep_options_remove_tag(self):
+    def test_handle_tags_remove_tag(self):
         action = "remove-tag"
         attribute = ""
         first_test_options = self._make_options("first", action, attribute)
@@ -172,7 +175,7 @@ class TestProcessTagReplaceOptions:
         assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
             == "The ending <first> tags here <first> are a bit messed up."
 
-    def test_process_tag_rep_options_remove_element(self):
+    def test_handle_tags_remove_element(self):
         action = "remove-element"
         attribute = ""
         first_test_options = self._make_options("first", action, attribute)
@@ -190,7 +193,7 @@ class TestProcessTagReplaceOptions:
         assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
             == self.no_end
 
-    def test_process_tag_rep_options_replace_element(self):
+    def test_handle_tags_replace_element(self):
         action = "replace-element"
         attribute = "a very nice attribute"
         first_test_options = self._make_options("first", action, attribute)
@@ -208,7 +211,7 @@ class TestProcessTagReplaceOptions:
         assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
             == self.no_end
 
-    def test_process_tag_rep_options_leave_tag(self):
+    def test_handle_tags_leave_tag(self):
         action = "leave-alone"
         attribute = ""
         first_test_options = self._make_options("first", action, attribute)
@@ -223,7 +226,7 @@ class TestProcessTagReplaceOptions:
         assert ScrubberModel(second_test_options).handle_tags(self.no_end) \
             == self.no_end
 
-    def test_process_tag_rep_options_other(self):
+    def test_handle_tags_other(self):
         action = "fake-option"
         attribute = ""
         first_fake_options = self._make_options("first", action, attribute)
