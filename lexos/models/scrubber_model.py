@@ -222,6 +222,9 @@ class ScrubberModel(BaseModel):
         :return: The text after deletion of the tags, as a unicode string.
         """
 
+        # TODO: Find a non-regex alternative for tag handling
+        # See issue #638 on the github for example problems
+
         # Remove extra whitespace
         text = re.sub('[\t ]+', " ", text, re.UNICODE)
         text = re.sub(r"(<\?.*?>)", "", text)  # Remove xml declarations
@@ -238,8 +241,10 @@ class ScrubberModel(BaseModel):
             text = self._process_tag_replace_options(
                 text, tag, action, attribute)
 
-        # One last catch-all- removes extra whitespace from all the removed
-        # tags
+        # TODO: Remove extra whitespace without massively changing formatting
+        # See stop word/keep word regex handling for inspiration
+
+        # Remove extra whitespace left after deleting the tags
         text = re.sub('[\t ]+', " ", text, re.UNICODE)
 
         return text
