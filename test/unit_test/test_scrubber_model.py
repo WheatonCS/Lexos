@@ -671,37 +671,6 @@ class TestConsolidateAmpers:
 #             previewing=True) == (no_punct_string, map_previewing)
 
 
-# class TestSplitInputWordString:
-#
-#     def test_split_input_word_str_with_words(self):
-#         assert split_stop_keep_word_string(
-#             input_string="\nThis\nstring\n\nhas\nnewlines\n\n") \
-#             == ["This", "string", "has", "newlines"]
-#         assert split_stop_keep_word_string(
-#             input_string=",This,string,,has,commas,,") == \
-#             ["This", "string", "has", "commas"]
-#         assert split_stop_keep_word_string(
-#             input_string=".This.string..has.periods..") == \
-#             [".This.string..has.periods.."]
-#         assert split_stop_keep_word_string(
-#             input_string=" This string  has spaces  ") == \
-#             ["This", "string", "has", "spaces"]
-#         assert split_stop_keep_word_string(
-#             input_string="\n., This,.string\n,, has.\n.some, of,. "
-#                          "\neverything \n..") == [".", "This", ".string",
-#                                                   "has.", ".some", "of", ".",
-#                                                   "everything", ".."]
-#
-#     def test_split_input_word_str_no_words(self):
-#         assert split_stop_keep_word_string(input_string="") == []
-#         assert split_stop_keep_word_string(input_string="\n") == []
-#         assert split_stop_keep_word_string(input_string=",") == []
-#         assert split_stop_keep_word_string(input_string=" ") == []
-#         assert split_stop_keep_word_string(
-#             input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
-#             ["..", ".", ".", ".", "..."]
-
-
 class TestDeleteWords:
     test_string = "Many words were written, but not many of all the words " \
                   "said much at all."

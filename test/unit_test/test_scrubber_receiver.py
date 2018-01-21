@@ -49,3 +49,37 @@ class TestHandleFileAndManualStrings:
             storage_folder=storage_folder, storage_filename=storage_filename) \
             == string1 + "\n" + string2
 
+
+class TestSplitStopKeepWordString:
+
+    def test_split_string_with_words(self):
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string="\nThis\nstring\n\nhas\nnewlines\n\n") \
+            == ["This", "string", "has", "newlines"]
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string=",This,string,,has,commas,,") == \
+            ["This", "string", "has", "commas"]
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string=".This.string..has.periods..") == \
+            [".This.string..has.periods.."]
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string=" This string  has spaces  ") == \
+            ["This", "string", "has", "spaces"]
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string="\n., This,.string\n,, has.\n.some, of,. "
+                         "\neverything \n..") == [".", "This", ".string",
+                                                  "has.", ".some", "of", ".",
+                                                  "everything", ".."]
+
+    def test_split_string_no_words(self):
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string="") == []
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string="\n") == []
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string=",") == []
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string=" ") == []
+        assert ScrubbingReceiver().split_stop_keep_word_string(
+            input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
+            ["..", ".", ".", ".", "..."]

@@ -225,7 +225,7 @@ class ScrubbingReceiver(BaseReceiver):
         return merged_string
 
     @staticmethod
-    def _split_stop_keep_word_string(input_string: str) -> List[str]:
+    def split_stop_keep_word_string(input_string: str) -> List[str]:
         """Breaks stop and keep word string inputs into lists of words.
 
         :param input_string: A string of words input by the user.
@@ -708,7 +708,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         consol = self._create_replacements_dict(replacer_string=both_consol)
         lemma = self._create_replacements_dict(replacer_string=both_lemma)
-        sw_kw = self._split_stop_keep_word_string(input_string=both_sw_kw)
+        sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
         stop = self._front_end_data['sw_option'] == "stop"
         keep = self._front_end_data['sw_option'] == "keep"
 
