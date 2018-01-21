@@ -671,35 +671,6 @@ class TestConsolidateAmpers:
 #             previewing=True) == (no_punct_string, map_previewing)
 
 
-# class TestHandleFileAndManualStrings:
-#
-#     def test_handle_file_and_manual_strings(self):
-#         string1 = "and. the\n who,how why"
-#         string2 = "what where, but. of,\nnot,for"
-#         storage_folder = \
-#             '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-#         storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-#                              'stopwords.p']
-#         storage_number = 1
-#
-#         assert handle_file_and_manual_strings(
-#             file_string="", manual_string="", storage_folder=storage_folder,
-#             storage_filenames=storage_filenames,
-#             storage_number=storage_number) == "\n"
-#         assert handle_file_and_manual_strings(
-#             file_string=string1, manual_string="",
-#             storage_folder=storage_folder, storage_filenames=storage_filenames,
-#             storage_number=storage_number) == string1 + "\n"
-#         assert handle_file_and_manual_strings(
-#             file_string="", manual_string=string2,
-#             storage_folder=storage_folder, storage_filenames=storage_filenames,
-#             storage_number=storage_number) == "\n" + string2
-#         assert handle_file_and_manual_strings(
-#             file_string=string1, manual_string=string2,
-#             storage_folder=storage_folder, storage_filenames=storage_filenames,
-#             storage_number=storage_number) == string1 + "\n" + string2
-#
-#
 # class TestSplitInputWordString:
 #
 #     def test_split_input_word_str_with_words(self):

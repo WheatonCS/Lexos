@@ -203,10 +203,10 @@ class ScrubbingReceiver(BaseReceiver):
             contents=file_string, dest_folder=storage_folder,
             filename=filename)
 
-    def _handle_file_and_manual_strings(self, file_string: str,
-                                        manual_string: str,
-                                        storage_folder: str,
-                                        storage_filename: str):
+    def handle_file_and_manual_strings(self, file_string: str,
+                                       manual_string: str,
+                                       storage_folder: str,
+                                       storage_filename: str):
         """Saves uploaded files and merges file strings with manual strings.
 
         :param file_string: The user's uploaded file.
@@ -320,7 +320,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return conversion_dict
 
-    def _get_special_char_from_menu(self) -> Dict[str, str]:
+    def _get_special_char_dict_from_menu(self) -> Dict[str, str]:
         """Creates special character dictionaries based on drop down choice.
 
         :return: The appropriate special character replacement dictionary.
@@ -679,22 +679,22 @@ class ScrubbingReceiver(BaseReceiver):
 
         # Combine both types of additional option inputs
         storage_folder = file_options.storage_folder
-        both_consol = self._handle_file_and_manual_strings(
+        both_consol = self.handle_file_and_manual_strings(
             file_string=file_options.file_consol,
             manual_string=manual_options.manual_consol,
             storage_folder=storage_folder,
             storage_filename=constants.CONSOLIDATION_FILENAME)
-        both_lemma = self._handle_file_and_manual_strings(
+        both_lemma = self.handle_file_and_manual_strings(
             file_string=file_options.file_lemma,
             manual_string=manual_options.manual_lemma,
             storage_folder=storage_folder,
             storage_filename=constants.LEMMA_FILENAME)
-        both_special_char = self._handle_file_and_manual_strings(
+        both_special_char = self.handle_file_and_manual_strings(
             file_string=file_options.file_special_char,
             manual_string=manual_options.manual_special_char,
             storage_folder=storage_folder,
             storage_filename=constants.SPECIAL_CHAR_FILENAME)
-        both_sw_kw = self._handle_file_and_manual_strings(
+        both_sw_kw = self.handle_file_and_manual_strings(
             file_string=file_options.file_sw_kw,
             manual_string=manual_options.manual_sw_kw,
             storage_folder=storage_folder,
@@ -704,7 +704,7 @@ class ScrubbingReceiver(BaseReceiver):
             special_char = self._create_replacements_dict(
                 replacer_string=both_special_char)
         else:
-            special_char = self._get_special_char_from_menu()
+            special_char = self._get_special_char_dict_from_menu()
 
         consol = self._create_replacements_dict(replacer_string=both_consol)
         lemma = self._create_replacements_dict(replacer_string=both_lemma)

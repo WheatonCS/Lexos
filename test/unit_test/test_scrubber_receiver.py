@@ -24,3 +24,28 @@ class TestGetRemoveDigitsMap:
             chars.ORD_DIGIT_TO_NONE
 
 
+class TestHandleFileAndManualStrings:
+
+    def test_handle_file_and_manual_strings(self):
+        string1 = "and. the\n who,how why"
+        string2 = "what where, but. of,\nnot,for"
+        storage_folder = \
+            '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+        storage_filename = "lemmas.p"
+
+        assert ScrubbingReceiver().handle_file_and_manual_strings(
+            file_string="", manual_string="", storage_folder=storage_folder,
+            storage_filename=storage_filename) == "\n"
+        assert ScrubbingReceiver().handle_file_and_manual_strings(
+            file_string=string1, manual_string="",
+            storage_folder=storage_folder, storage_filename=storage_filename) \
+            == string1 + "\n"
+        assert ScrubbingReceiver().handle_file_and_manual_strings(
+            file_string="", manual_string=string2,
+            storage_folder=storage_folder, storage_filename=storage_filename) \
+            == "\n" + string2
+        assert ScrubbingReceiver().handle_file_and_manual_strings(
+            file_string=string1, manual_string=string2,
+            storage_folder=storage_folder, storage_filename=storage_filename) \
+            == string1 + "\n" + string2
+
