@@ -368,7 +368,7 @@ class ScrubbingReceiver(BaseReceiver):
         return merged_string
 
     @staticmethod
-    def _create_replacements_dict(replacer_string: str) -> Dict[str, str]:
+    def create_replacements_dict(replacer_string: str) -> Dict[str, str]:
         """Creates a dictionary of words and their desired replacements.
 
         :param replacer_string: The replacement instruction string.
@@ -411,7 +411,7 @@ class ScrubbingReceiver(BaseReceiver):
         return replacement_dict
 
     @staticmethod
-    def _get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
+    def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
         """Makes special character conversion dictionaries from resource files.
 
         :param char_set: A string which specifies which character set to use.
@@ -445,7 +445,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return conversion_dict
 
-    def _get_special_char_dict_from_menu(self) -> Dict[str, str]:
+    def get_special_char_dict_from_menu(self) -> Dict[str, str]:
         """Creates special character dictionaries based on drop down choice.
 
         :return: The appropriate special character replacement dictionary.
@@ -477,7 +477,7 @@ class ScrubbingReceiver(BaseReceiver):
                                '&gt;': '>', '&#383;': 'ſ'}
 
         elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
-            conversion_dict = self._get_special_char_dict_from_file(
+            conversion_dict = self.get_special_char_dict_from_file(
                 char_set=char_set)
 
         else:
@@ -701,13 +701,13 @@ class ScrubbingReceiver(BaseReceiver):
             storage_filename=constants.STOPWORD_FILENAME)
 
         if both_special_char != "\n":    # Comes from "" + "\n" + ""
-            special_char = self._create_replacements_dict(
+            special_char = self.create_replacements_dict(
                 replacer_string=both_special_char)
         else:
-            special_char = self._get_special_char_dict_from_menu()
+            special_char = self.get_special_char_dict_from_menu()
 
-        consol = self._create_replacements_dict(replacer_string=both_consol)
-        lemma = self._create_replacements_dict(replacer_string=both_lemma)
+        consol = self.create_replacements_dict(replacer_string=both_consol)
+        lemma = self.create_replacements_dict(replacer_string=both_lemma)
         sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
         stop = self._front_end_data['sw_option'] == "stop"
         keep = self._front_end_data['sw_option'] == "keep"
