@@ -118,3 +118,5 @@ class TestGetRemoveWhitespaceMap:
         assert ScrubbingReceiver().get_remove_whitespace_map(
             spaces=True, tabs=True, newlines=True) == \
             {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}
+
+#  Note to self: add exception for stop = keep, stop or keep not in {T/F} in receiver

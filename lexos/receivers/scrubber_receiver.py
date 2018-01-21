@@ -482,6 +482,27 @@ class ScrubbingReceiver(BaseReceiver):
 
         return remove_punctuation_map
 
+    @staticmethod
+    def get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
+                                  ) -> Dict[int, type(None)]:
+        """Get the white space removal map.
+        :param spaces: A boolean indicating whether spaces should be removed.
+        :param tabs: A bool indicating whether or tabs should be removed.
+        :param newlines: A bool indicating whether newlines should be removed.
+        :return: A dictionary that contains all the whitespaces that should be
+            removed (tabs, spaces or newlines) mapped to None.
+        """
+
+        remove_whitespace_map = {}
+        if spaces:
+            remove_whitespace_map.update({ord(' '): None})
+        if tabs:
+            remove_whitespace_map.update({ord('\t'): None})
+        if newlines:
+            remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
+
+        return remove_whitespace_map
+
     # Option getters---
     def _get_punctuation_options_from_front_end(self, punct: bool
                                                 ) -> PunctuationOptions:
@@ -510,25 +531,23 @@ class ScrubbingReceiver(BaseReceiver):
             remove_punctuation_map=remove_punctuation_map)
 
     @staticmethod
-    def get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
-                                  ) -> Dict[int, type(None)]:
-        """Get the white space removal map.
-        :param spaces: A boolean indicating whether spaces should be removed.
-        :param tabs: A bool indicating whether or tabs should be removed.
-        :param newlines: A bool indicating whether newlines should be removed.
-        :return: A dictionary that contains all the whitespaces that should be
-            removed (tabs, spaces or newlines) mapped to None.
+    def _get_tag_options_from_front_end() -> Dict[str, SingleTagOptions]:
+        """Gets all the tag options from the front end.
+
+        :return: A dictionary of tags and corresponding SingleTagOptions
         """
 
-        remove_whitespace_map = {}
-        if spaces:
-            remove_whitespace_map.update({ord(' '): None})
-        if tabs:
-            remove_whitespace_map.update({ord('\t'): None})
-        if newlines:
-            remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
+        if 'xmlhandlingoptions' in session:  # Should always be true
+            # If user saved changes in Scrub Tags button (XML modal), then
+            # visit each tag
+            tag_options = {tag: SingleTagOptions(
+                session['xmlhandlingoptions'][tag]["action"],
+                session['xmlhandlingoptions'][tag]["attribute"])
+                for tag in session['xmlhandlingoptions']}
+        else:
+            tag_options = {}
 
-        return remove_whitespace_map
+        return tag_options
 
     def _get_whitespace_options_from_front_end(self, whitespace: bool
                                                ) -> WhitespaceOptions:
@@ -626,25 +645,6 @@ class ScrubbingReceiver(BaseReceiver):
             storage_folder=storage_folder, storage_filenames=storage_filenames,
             file_consol=file_strings[0], file_lemma=file_strings[1],
             file_special_char=file_strings[2], file_sw_kw=file_strings[3])
-
-    @staticmethod
-    def _get_tag_options_from_front_end() -> Dict[str, SingleTagOptions]:
-        """Gets all the tag options from the front end.
-
-        :return: A dictionary of tags and corresponding SingleTagOptions
-        """
-
-        if 'xmlhandlingoptions' in session:  # Should always be true
-            # If user saved changes in Scrub Tags button (XML modal), then
-            # visit each tag
-            tag_options = {tag: SingleTagOptions(
-                session['xmlhandlingoptions'][tag]["action"],
-                session['xmlhandlingoptions'][tag]["attribute"])
-                for tag in session['xmlhandlingoptions']}
-        else:
-            tag_options = {}
-
-        return tag_options
 
     def _get_manual_options_from_front_end(self) -> ManualOptions:
         """Gets all the manual options from the front end.
