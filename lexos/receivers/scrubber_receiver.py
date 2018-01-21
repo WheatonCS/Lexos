@@ -368,24 +368,6 @@ class ScrubbingReceiver(BaseReceiver):
         return merged_string
 
     @staticmethod
-    def split_stop_keep_word_string(input_string: str) -> List[str]:
-        """Breaks stop and keep word string inputs into lists of words.
-
-        :param input_string: A string of words input by the user.
-        :return: A list of the user's string broken up into words.
-        """
-
-        input_lines = input_string.split("\n")
-
-        # A list of all words delimited by commas, spaces, and newlines
-        input_words = [word
-                       for line in input_lines
-                       for word in re.split('[, ]', line.strip())
-                       if word != '']
-
-        return input_words
-
-    @staticmethod
     def _create_replacements_dict(replacer_string: str) -> Dict[str, str]:
         """Creates a dictionary of words and their desired replacements.
 
@@ -502,6 +484,24 @@ class ScrubbingReceiver(BaseReceiver):
             raise ValueError("Invalid special character set")
 
         return conversion_dict
+
+    @staticmethod
+    def split_stop_keep_word_string(input_string: str) -> List[str]:
+        """Breaks stop and keep word string inputs into lists of words.
+
+        :param input_string: A string of words input by the user.
+        :return: A list of the user's string broken up into words.
+        """
+
+        input_lines = input_string.split("\n")
+
+        # A list of all words delimited by commas, spaces, and newlines
+        input_words = [word
+                       for line in input_lines
+                       for word in re.split('[, ]', line.strip())
+                       if word != '']
+
+        return input_words
 
     # Option getters---
     def _get_punctuation_options_from_front_end(self, punct: bool
