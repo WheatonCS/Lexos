@@ -606,6 +606,7 @@ class ScrubberModel(BaseModel):
             scrubbed content
         :return: a dictionary map file id to preview of the scrubbed content
         """
+
         return {file_id: general_functions.make_preview_from(content)
                 for file_id, content in id_scrubbed_content_map.items()}
 
@@ -617,6 +618,7 @@ class ScrubberModel(BaseModel):
             disk, else we only generate the previews.
         :return: a dictionary maps file id to preview of scrubbed content
         """
+
         id_scrubbed_content_map = self._get_all_scrub_text()
 
         # Save the changes to the disk
