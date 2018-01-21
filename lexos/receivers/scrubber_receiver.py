@@ -265,6 +265,54 @@ class ScrubbingReceiver(BaseReceiver):
         return remove_punctuation_map
 
     @staticmethod
+    def get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
+                                  ) -> Dict[int, type(None)]:
+        """Get the white space removal map.
+        :param spaces: A boolean indicating whether spaces should be removed.
+        :param tabs: A bool indicating whether or tabs should be removed.
+        :param newlines: A bool indicating whether newlines should be removed.
+        :return: A dictionary that contains all the whitespaces that should be
+            removed (tabs, spaces or newlines) mapped to None.
+        """
+
+        remove_whitespace_map = {}
+        if spaces:
+            remove_whitespace_map.update({ord(' '): None})
+        if tabs:
+            remove_whitespace_map.update({ord('\t'): None})
+        if newlines:
+            remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
+
+        return remove_whitespace_map
+
+    def get_remove_digits_map(self) -> Dict[int, type(None)]:
+        """Get the digit removal map.
+
+        :return: A dictionary that contains all the digits that should be
+            removed mapped to None.
+        """
+
+        # Map of digits to be removed
+        try:
+            remove_digits_map = self._load_character_deletion_map(
+                constants.CACHE_FOLDER, constants.DIGIT_MAP_FILENAME)
+
+        except FileNotFoundError:
+            # If the digit map does not already exist, generate it with all
+            # unicode characters that start with the category 'N'
+            # See http://www.fileformat.info/info/unicode/category/index.htm
+            # for the list of categories
+            remove_digits_map = dict.fromkeys(
+                [i for i in range(sys.maxunicode)
+                 if unicodedata.category(chr(i)).startswith('N')])
+
+            self._save_character_deletion_map(
+                remove_digits_map, constants.CACHE_FOLDER,
+                constants.DIGIT_MAP_FILENAME)
+
+        return remove_digits_map
+
+    @staticmethod
     def _load_scrub_optional_upload(storage_folder: str,
                                     filename: str) -> str:
         """Loads a option file that was previously saved in the storage folder.
@@ -454,54 +502,6 @@ class ScrubbingReceiver(BaseReceiver):
             raise ValueError("Invalid special character set")
 
         return conversion_dict
-
-    def get_remove_digits_map(self) -> Dict[int, type(None)]:
-        """Get the digit removal map.
-
-        :return: A dictionary that contains all the digits that should be
-            removed mapped to None.
-        """
-
-        # Map of digits to be removed
-        try:
-            remove_digit_map = self._load_character_deletion_map(
-                constants.CACHE_FOLDER, constants.DIGIT_MAP_FILENAME)
-
-        except FileNotFoundError:
-            # If the digit map does not already exist, generate it with all
-            # unicode characters that start with the category 'N'
-            # See http://www.fileformat.info/info/unicode/category/index.htm
-            # for the list of categories
-            remove_digit_map = dict.fromkeys(
-                [i for i in range(sys.maxunicode)
-                 if unicodedata.category(chr(i)).startswith('N')])
-
-            self._save_character_deletion_map(
-                remove_digit_map, constants.CACHE_FOLDER,
-                constants.DIGIT_MAP_FILENAME)
-
-        return remove_digit_map
-
-    @staticmethod
-    def get_remove_whitespace_map(spaces: bool, tabs: bool, newlines: bool
-                                  ) -> Dict[int, type(None)]:
-        """Get the white space removal map.
-        :param spaces: A boolean indicating whether spaces should be removed.
-        :param tabs: A bool indicating whether or tabs should be removed.
-        :param newlines: A bool indicating whether newlines should be removed.
-        :return: A dictionary that contains all the whitespaces that should be
-            removed (tabs, spaces or newlines) mapped to None.
-        """
-
-        remove_whitespace_map = {}
-        if spaces:
-            remove_whitespace_map.update({ord(' '): None})
-        if tabs:
-            remove_whitespace_map.update({ord('\t'): None})
-        if newlines:
-            remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
-
-        return remove_whitespace_map
 
     # Option getters---
     def _get_punctuation_options_from_front_end(self, punct: bool
