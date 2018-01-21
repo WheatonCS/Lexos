@@ -135,4 +135,22 @@ class TestSplitStopKeepWordString:
             input_string="\n \n ,.. ,\n.,, , \n\n.\n,   . \n... ,") == \
             ["..", ".", ".", ".", "..."]
 
+
+# _get_punctuation_options_from_front_end
+
+# _get_tag_options_from_front_end
+
+# _get_whitespace_options_from_front_end
+
+# _get_basic_options_from_front_end
+
+# _get_file_options_from_front_end
+
+# _get_manual_options_from_front_end
+
+# _get_additional_options_from_front_end
+
+# options_from_front_end
+
+
 #  Note to self: add exception for stop = keep, stop or keep not in {T/F} in receiver
