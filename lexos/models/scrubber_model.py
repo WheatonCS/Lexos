@@ -480,17 +480,17 @@ class ScrubberModel(BaseModel):
         if self._options.basic_options.tags:  # If Remove Tags was checked:
             text = self.handle_tags(text=text)
 
-        # -- 4. Punctuation (hyphens, apostrophes, ampersands) ----------------
+        # -- 4. Punctuation (apostrophes, hyphens, ampersands) ----------------
         if self._options.basic_options.punct:
             text = self._handle_preserved_punctuation(text=text)
 
         # -- 5. Digits --------------------------------------------------------
-        # Now handled entirely in ScrubberReceiver
+        # Prep now handled entirely in ScrubberReceiver
 
         # -- 6. Whitespace ----------------------------------------------------
         # Also handled entirely in ScrubberReceiver
 
-        # -- Create total removal function -----------------------------
+        # -- Create total removal function ------------------------------------
         # Merge all the removal maps
         total_removal_map = self._options.basic_options.punctuation_options.\
             remove_punctuation_map.copy()
@@ -619,12 +619,12 @@ class ScrubberModel(BaseModel):
         """
         id_scrubbed_content_map = self._get_all_scrub_text()
 
-        # saves the changes to the disk
+        # Save the changes to the disk
         if save_changes:
             ScrubberModel._save_scrub_changes(
                 id_scrubbed_content_map=id_scrubbed_content_map)
 
-        # return all the previews
+        # Return all the previews
         return ScrubberModel._get_preview_of_scrubbed(
             id_scrubbed_content_map=id_scrubbed_content_map)
 
