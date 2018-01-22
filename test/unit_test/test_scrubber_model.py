@@ -627,7 +627,7 @@ class TestKeepWords:
 # class TestReplacementHandlerWithMergeStrings:
 #     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
 #     storage_folder = \
-#         '/tmp/Lexos_emma_grace/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+#         '/tmp/Lexos_generic_test/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
 #     storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
 #                          'stopwords.p']
 #
