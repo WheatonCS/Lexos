@@ -1,3 +1,5 @@
+from lexos.helpers.constants import SPECIAL_CHAR_FILENAME, \
+    CONSOLIDATION_FILENAME, LEMMA_FILENAME
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
@@ -267,93 +269,94 @@ class TestCreateReplacementsDict:
             replacer_string="^:>\n$:%\n?:&") == {"^": ">", "$": "%", "?": "&"}
 
 
-# class TestReplacementHandlerWithMergeStrings:
-#     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
-#     storage_folder = \
-#         '/tmp/Lexos_generic_test/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-#     storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-#                          'stopwords.p']
-#
-#     # No tests with neither replacer because handle_special_characters()
-#     # uses requests
-#
-#     def test_replacement_handler_special(self):
-#         file_special_string = handle_file_and_manual_strings(
-#             file_string="-:_\n!:~\nn:ñ\na:@", manual_string="",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         manual_special_string = handle_file_and_manual_strings(
-#             file_string="", manual_string="-:_\n!:~\nn:ñ\na:@",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         split_special_string = handle_file_and_manual_strings(
-#             file_string="-:_\n!:~", manual_string="n:ñ\na:@",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         after_special = "This is... Some (r@ñdom) te_xt I 'wrote'~ Isñ't " \
-#                         "it ñice?"
-#
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=file_special_string,
-#             is_lemma=False) == after_special
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=manual_special_string,
-#             is_lemma=False) == after_special
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=split_special_string,
-#             is_lemma=False) == after_special
-#
-#     def test_replacement_handler_consol(self):
-#         file_consol_string = handle_file_and_manual_strings(
-#             file_string="o:u\nt,x:y\nI:i", manual_string="",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         manual_consol_string = handle_file_and_manual_strings(
-#             file_string="", manual_string="o:u\nt,x:y\nI:i",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         split_consol_string = handle_file_and_manual_strings(
-#             file_string="o:u\nt,x:y", manual_string="I:i",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         after_consol = "This is... Sume (randum) ye-yy i 'wruye'! isn'y iy" \
-#                        " nice?"
-#
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=file_consol_string,
-#             is_lemma=False) == after_consol
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=manual_consol_string,
-#             is_lemma=False) == after_consol
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=split_consol_string,
-#             is_lemma=False) == after_consol
-#
-#     def test_replacement_handler_lemma(self):
-#         file_lemma_string = handle_file_and_manual_strings(
-#             file_string="I,it:she\n(random):(interesting)", manual_string="",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         manual_lemma_string = handle_file_and_manual_strings(
-#             file_string="", manual_string="I,it:she\n(random):(interesting)",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         split_lemma_string = handle_file_and_manual_strings(
-#             file_string="I,it:she", manual_string="(random):(interesting)",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         after_lemma = "This is... Some (interesting) te-xt she 'wrote'! " \
-#                       "Isn't she nice?"
-#
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=file_lemma_string,
-#             is_lemma=True) == after_lemma
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=manual_lemma_string,
-#             is_lemma=True) == after_lemma
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=split_lemma_string,
-#             is_lemma=True) == after_lemma
+class TestCreateReplacementsDictWithMergeStrings:
+    storage_folder = \
+        '/tmp/Lexos_generic_test/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+
+    def test_create_replacements_dict_special(self):
+        file_special_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="-:_\n!:~\nn:ñ\na:@", manual_string="",
+            storage_folder=self.storage_folder,
+            storage_filename=SPECIAL_CHAR_FILENAME)
+        manual_special_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="", manual_string="-:_\n!:~\nn:ñ\na:@",
+            storage_folder=self.storage_folder,
+            storage_filename=SPECIAL_CHAR_FILENAME)
+        split_special_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="-:_\n!:~", manual_string="n:ñ\na:@",
+            storage_folder=self.storage_folder,
+            storage_filename=SPECIAL_CHAR_FILENAME)
+        special_dict = {"-": "_", "!": "~", "n": "ñ", "a": "@"}
+
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=file_special_string) == special_dict
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=manual_special_string) == special_dict
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=split_special_string) == special_dict
+
+    def test_create_replacements_dict_consol(self):
+        file_consol_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="o:u\nt,x:y\nI:i", manual_string="",
+            storage_folder=self.storage_folder,
+            storage_filename=CONSOLIDATION_FILENAME)
+        manual_consol_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="", manual_string="o:u\nt,x:y\nI:i",
+            storage_folder=self.storage_folder,
+            storage_filename=CONSOLIDATION_FILENAME)
+        split_consol_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="o:u\nt,x:y", manual_string="I:i",
+            storage_folder=self.storage_folder,
+            storage_filename=CONSOLIDATION_FILENAME)
+        consol_dict = {"o": "u", "t": "y", "x": "y", "I": "i"}
+
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=file_consol_string) == consol_dict
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=manual_consol_string) == consol_dict
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=split_consol_string) == consol_dict
+
+    def test_create_replacements_dict_lemma(self):
+        file_lemma_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="I,it:she\n(random):(interesting)", manual_string="",
+            storage_folder=self.storage_folder,
+            storage_filename=LEMMA_FILENAME)
+        manual_lemma_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="", manual_string="I,it:she\n(random):(interesting)",
+            storage_folder=self.storage_folder,
+            storage_filename=LEMMA_FILENAME)
+        split_lemma_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="I,it:she", manual_string="(random):(interesting)",
+            storage_folder=self.storage_folder,
+            storage_filename=LEMMA_FILENAME)
+        lemma_dict = {"I": "she", "it": "she", "(random)": "(interesting)"}
+
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=file_lemma_string) == lemma_dict
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=manual_lemma_string) == lemma_dict
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=split_lemma_string) == lemma_dict
+
+    def test_create_replacements_dict_blank(self):
+        blank_string = ScrubbingReceiver().\
+            handle_file_and_manual_strings(
+            file_string="", manual_string="",
+            storage_folder=self.storage_folder,
+            storage_filename=CONSOLIDATION_FILENAME)
+
+        assert ScrubbingReceiver().create_replacements_dict(
+            replacer_string=blank_string) == {}
 
 
 class TestGetSpecialCharDictFromFile:
