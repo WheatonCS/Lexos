@@ -16,7 +16,7 @@ TMP_FOLDER = os.path.expanduser(
     '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
 CACHE_FOLDER = os.path.join(UPLOAD_FOLDER, 'cache/')
-RESOURCE_DIR = "resources/"
+RESOURCE_DIR = "resources"
 
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'

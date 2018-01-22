@@ -429,13 +429,12 @@ class ScrubbingReceiver(BaseReceiver):
         # assign current working path to variable
         cur_file_dir = os.path.dirname(os.path.abspath(__file__))
 
-        # Go up two levels by splitting the path into two parts and discarding
+        # Go up a level by splitting the path into two parts and discarding
         # everything after the rightmost slash
         up_one_level, _ = os.path.split(cur_file_dir)
-        up_two_levels, _ = os.path.split(up_one_level)
 
         # Create full pathname to find the .tsv in resources directory
-        source_path = os.path.join(up_two_levels, constants.RESOURCE_DIR,
+        source_path = os.path.join(up_one_level, constants.RESOURCE_DIR,
                                    filename)
 
         with open(source_path, encoding='utf-8') as input_file:
@@ -445,7 +444,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return conversion_dict
 
-    def get_special_char_dict_from_menu(self) -> Dict[str, str]:
+    def _get_special_char_dict_from_menu(self) -> Dict[str, str]:
         """Creates special character dictionaries based on drop down choice.
 
         :return: The appropriate special character replacement dictionary.
@@ -704,7 +703,7 @@ class ScrubbingReceiver(BaseReceiver):
             special_char = self.create_replacements_dict(
                 replacer_string=both_special_char)
         else:
-            special_char = self.get_special_char_dict_from_menu()
+            special_char = self._get_special_char_dict_from_menu()
 
         consol = self.create_replacements_dict(replacer_string=both_consol)
         lemma = self.create_replacements_dict(replacer_string=both_lemma)

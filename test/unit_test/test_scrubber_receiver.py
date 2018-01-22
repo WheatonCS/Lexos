@@ -96,9 +96,23 @@ class TestHandleFileAndManualStrings:
 
 # create_replacements_dict
 
-# get_special_char_dict_from_file
 
-# get_special_char_dict_from_menu
+class TestGetSpecialCharDictFromFile:
+
+    def test_get_special_char_dict_from_file(self):
+        assert ScrubbingReceiver().get_special_char_dict_from_file(
+            char_set="MUFI-3") == chars.MUFI3
+        assert ScrubbingReceiver().get_special_char_dict_from_file(
+            char_set="MUFI-4") == chars.MUFI4
+        try:
+            ScrubbingReceiver().get_special_char_dict_from_file(
+                char_set="FAKE-5")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError
+
+# _get_special_char_dict_from_menu
 
 
 class TestSplitStopKeepWordString:
