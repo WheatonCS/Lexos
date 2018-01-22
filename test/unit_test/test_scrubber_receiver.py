@@ -427,6 +427,3 @@ class TestSplitStopKeepWordString:
 # _get_additional_options_from_front_end
 
 # options_from_front_end
-
-
-#  Note to self: add exception for stop = keep, stop or keep not in {T/F} in receiver

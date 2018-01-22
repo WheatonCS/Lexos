@@ -8,7 +8,8 @@ from flask import request, session
 
 from lexos.helpers import constants, general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE, \
+    INVALID_SW_KW_MODE_MESSAGE
 from lexos.helpers.exceptions import LexosException
 from lexos.managers import session_manager
 from lexos.receivers.base_receiver import BaseReceiver
@@ -708,8 +709,15 @@ class ScrubbingReceiver(BaseReceiver):
         consol = self.create_replacements_dict(replacer_string=both_consol)
         lemma = self.create_replacements_dict(replacer_string=both_lemma)
         sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
-        stop = self._front_end_data['sw_option'] == "stop"
-        keep = self._front_end_data['sw_option'] == "keep"
+
+        if self._front_end_data['sw_option'] == "stop":
+            stop = True
+            keep = False
+        elif self._front_end_data['sw_option'] == "keep":
+            stop = False
+            keep = True
+        else:
+            raise LexosException(INVALID_SW_KW_MODE_MESSAGE)
 
         return AdditionalOptions(consol=consol, lemma=lemma,
                                  special_char=special_char, sw_kw=sw_kw,
