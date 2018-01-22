@@ -444,46 +444,6 @@ class ScrubbingReceiver(BaseReceiver):
 
         return conversion_dict
 
-    def _get_special_char_dict_from_menu(self) -> Dict[str, str]:
-        """Creates special character dictionaries based on drop down choice.
-
-        :return: The appropriate special character replacement dictionary.
-        """
-
-        char_set = self._front_end_data['entityrules']
-
-        if char_set == 'default':
-            conversion_dict = {}
-
-        elif char_set == 'doe-sgml':
-            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                               '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
-                               '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
-                               '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
-                               '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
-                               '&amacron;': 'ā', '&cmacron;': 'c̄',
-                               '&emacron;': 'ē', '&imacron;': 'ī',
-                               '&nmacron;': 'n̄', '&omacron;': 'ō',
-                               '&pmacron;': 'p̄', '&qmacron;': 'q̄',
-                               '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
-                               '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
-
-        elif char_set == 'early-english-html':
-            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                               '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
-                               '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
-                               '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
-                               '&gt;': '>', '&#383;': 'ſ'}
-
-        elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
-            conversion_dict = self.get_special_char_dict_from_file(
-                char_set=char_set)
-
-        else:
-            raise ValueError("Invalid special character set")
-
-        return conversion_dict
-
     @staticmethod
     def split_stop_keep_word_string(input_string: str) -> List[str]:
         """Breaks stop and keep word string inputs into lists of words.
@@ -668,6 +628,46 @@ class ScrubbingReceiver(BaseReceiver):
             manual_consol=manual_consol, manual_lemma=manual_lemma,
             manual_special_char=manual_special_char, manual_sw_kw=manual_sw_kw)
 
+    def _get_special_char_dict_from_front_end(self) -> Dict[str, str]:
+        """Creates special character dictionaries based on drop down choice.
+
+        :return: The appropriate special character replacement dictionary.
+        """
+
+        char_set = self._front_end_data['entityrules']
+
+        if char_set == 'default':
+            conversion_dict = {}
+
+        elif char_set == 'doe-sgml':
+            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                               '&e;': 'ę', '&AE;': 'Æ', '&D;': 'Ð',
+                               '&T;': 'Þ', '&E;': 'Ę', '&oe;': 'œ',
+                               '&amp;': '⁊', '&egrave;': 'è', '&eacute;': 'é',
+                               '&auml;': 'ä', '&ouml;': 'ö', '&uuml;': 'ü',
+                               '&amacron;': 'ā', '&cmacron;': 'c̄',
+                               '&emacron;': 'ē', '&imacron;': 'ī',
+                               '&nmacron;': 'n̄', '&omacron;': 'ō',
+                               '&pmacron;': 'p̄', '&qmacron;': 'q̄',
+                               '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
+                               '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
+
+        elif char_set == 'early-english-html':
+            conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
+                               '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
+                               '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
+                               '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
+                               '&gt;': '>', '&#383;': 'ſ'}
+
+        elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
+            conversion_dict = self.get_special_char_dict_from_file(
+                char_set=char_set)
+
+        else:
+            raise ValueError("Invalid special character set")
+
+        return conversion_dict
+
     def _get_additional_options_from_front_end(self) -> AdditionalOptions:
         """Gets all the additional options from the front end.
 
@@ -703,7 +703,7 @@ class ScrubbingReceiver(BaseReceiver):
             special_char = self.create_replacements_dict(
                 replacer_string=both_special_char)
         else:
-            special_char = self._get_special_char_dict_from_menu()
+            special_char = self._get_special_char_dict_from_front_end()
 
         consol = self.create_replacements_dict(replacer_string=both_consol)
         lemma = self.create_replacements_dict(replacer_string=both_lemma)

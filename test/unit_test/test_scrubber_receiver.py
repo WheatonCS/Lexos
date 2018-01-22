@@ -112,8 +112,6 @@ class TestGetSpecialCharDictFromFile:
         else:
             raise AssertionError
 
-# _get_special_char_dict_from_menu
-
 
 class TestSplitStopKeepWordString:
 
@@ -161,6 +159,8 @@ class TestSplitStopKeepWordString:
 # _get_file_options_from_front_end
 
 # _get_manual_options_from_front_end
+
+# _get_special_char_dict_from_front_end
 
 # _get_additional_options_from_front_end
 
