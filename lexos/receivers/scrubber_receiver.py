@@ -462,7 +462,7 @@ class ScrubbingReceiver(BaseReceiver):
 
         return input_words
 
-    # Option getters---
+    # Front end option getters---
     def _get_punctuation_options_from_front_end(self, punct: bool
                                                 ) -> PunctuationOptions:
         """Gets all the punctuation options from the front end.
