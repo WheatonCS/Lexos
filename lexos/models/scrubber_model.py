@@ -164,8 +164,8 @@ class ScrubberModel(BaseModel):
         return all_of_replace_from.sub(_replacement_map_func, text)
 
     @staticmethod
-    def handle_single_tag(orig_text: str, tag: str, action: str,
-                          attribute: str) -> str:
+    def _handle_single_tag(orig_text: str, tag: str, action: str,
+                           attribute: str) -> str:
         """Replaces html-style tags in text files according to user options.
 
         :param orig_text: The user's text containing the original tag.
@@ -226,7 +226,7 @@ class ScrubberModel(BaseModel):
         """
 
         # TODO: Find a non-regex alternative for tag handling
-        # See issue #638 on the github for example problems
+        # See issue #638 on the github page for examples of why this is bad
 
         # Remove extra whitespace
         text = re.sub('[\t ]+', " ", text, re.UNICODE)
@@ -241,7 +241,7 @@ class ScrubberModel(BaseModel):
             action = self._options.basic_options.tag_options[tag].action
             attribute = self._options.basic_options.tag_options[tag].attribute
 
-            text = self.handle_single_tag(
+            text = self._handle_single_tag(
                 text, tag, action, attribute)
 
         # TODO: Remove extra whitespace without massively changing formatting

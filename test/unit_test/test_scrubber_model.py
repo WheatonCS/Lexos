@@ -232,7 +232,7 @@ class TestReplaceWithDictOther:
             is_lemma=False) == "Test> t%ext te&xt"
 
 
-# handle_single_tag
+# _handle_single_tag
 
 
 class TestHandleTags:
