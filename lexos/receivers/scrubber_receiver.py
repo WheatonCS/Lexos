@@ -365,7 +365,7 @@ class ScrubbingReceiver(BaseReceiver):
                                              filename=storage_filename)
         merged_string = file_string + "\n" + manual_string
 
-        return merged_string
+        return merged_string.strip()
 
     @staticmethod
     def create_replacements_dict(replacer_string: str) -> Dict[str, str]:
@@ -699,16 +699,23 @@ class ScrubbingReceiver(BaseReceiver):
             storage_folder=storage_folder,
             storage_filename=constants.STOPWORD_FILENAME)
 
-        if both_special_char != "\n":    # Comes from "" + "\n" + ""
+        if both_special_char != "":    # User typed/uploaded something
             special_char = self.create_replacements_dict(
                 replacer_string=both_special_char)
         else:
             special_char = self._get_special_char_dict_from_front_end()
 
-        consol = self.create_replacements_dict(replacer_string=both_consol)
-        lemma = self.create_replacements_dict(replacer_string=both_lemma)
-        sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
+        if both_consol != "":
+            consol = self.create_replacements_dict(replacer_string=both_consol)
+        else:
+            consol = {}
 
+        if both_lemma != "":
+            lemma = self.create_replacements_dict(replacer_string=both_lemma)
+        else:
+            lemma = {}
+
+        sw_kw = self.split_stop_keep_word_string(input_string=both_sw_kw)
         stop = self._front_end_data['sw_option'] == "stop"
         keep = self._front_end_data['sw_option'] == "keep"
 

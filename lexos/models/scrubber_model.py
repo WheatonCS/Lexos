@@ -466,20 +466,21 @@ class ScrubberModel(BaseModel):
                 return orig_text.lower()
 
         else:
-            def to_lower_function(original_text: str) -> str:
+            def to_lower_function(orig_text: str) -> str:
                 """Returns the string it is passed.
 
-                :param original_text: A text string.
-                :return: original_text, unchanged.
+                :param orig_text: A text string.
+                :return: orig_text, unchanged.
                 """
 
-                return original_text
+                return orig_text
 
         # -- 2. Special characters --------------------------------------------
-        text = self.replace_with_dict(
-            text=text,
-            replacement_dict=self._options.additional_options.special_char,
-            is_lemma=False)
+        if self._options.additional_options.special_char != {}:
+            text = self.replace_with_dict(
+                text=text,
+                replacement_dict=self._options.additional_options.special_char,
+                is_lemma=False)
 
         # -- 3. Tags ----------------------------------------------------------
         if self._options.basic_options.tags:  # If Remove Tags was checked:
@@ -515,31 +516,54 @@ class ScrubberModel(BaseModel):
             return orig_text.translate(total_removal_map)
 
         # -- 7. Consolidations ------------------------------------------------
-        def consolidation_function(orig_text: str) -> str:
-            """Replaces characters according to user input strings.
+        if self._options.additional_options.consol != {}:
+            def consolidation_function(orig_text: str) -> str:
+                """Replaces characters according to user input strings.
 
-            :param orig_text: A text string.
-            :return: The text with characters swapped according to the consol
-                dictionary.
-            """
+                :param orig_text: A text string.
+                :return: The text with characters swapped according to the
+                    consol dictionary.
+                """
 
-            return self.replace_with_dict(
-                text=orig_text,
-                replacement_dict=self._options.additional_options.consol,
-                is_lemma=False)
+                return self.replace_with_dict(
+                    text=orig_text,
+                    replacement_dict=self._options.additional_options.consol,
+                    is_lemma=False)
+
+        else:
+            def consolidation_function(orig_text: str) -> str:
+                """Returns the string it is passed.
+
+                :param orig_text: A text string.
+                :return: orig_text, unchanged.
+                """
+
+                return orig_text
 
         # -- 8. Lemmas --------------------------------------------------------
-        def lemmatize_function(orig_text: str) -> str:
-            """Replaces words according to user input strings.
+        if self._options.additional_options.lemma != {}:
+            def lemmatize_function(orig_text: str) -> str:
+                """Replaces words according to user input strings.
 
-            :param orig_text: A text string.
-            :return: The text with words swapped according to lemma dictionary.
-            """
+                :param orig_text: A text string.
+                :return: The text with words swapped according to lemma
+                    dictionary.
+                """
 
-            return self.replace_with_dict(
-                text=orig_text,
-                replacement_dict=self._options.additional_options.lemma,
-                is_lemma=True)
+                return self.replace_with_dict(
+                    text=orig_text,
+                    replacement_dict=self._options.additional_options.lemma,
+                    is_lemma=True)
+
+        else:
+            def lemmatize_function(orig_text: str) -> str:
+                """Returns the string it is passed.
+
+                :param orig_text: A text string.
+                :return: orig_text, unchanged.
+                """
+
+                return orig_text
 
         # -- 9. Stop words/keep words -----------------------------------------
         def stop_keep_words_function(orig_text: str) -> str:
