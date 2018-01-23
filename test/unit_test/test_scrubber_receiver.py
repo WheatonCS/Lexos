@@ -26,6 +26,26 @@ class TestGetRemovePunctuationMap:
             apos=False, amper=False, hyphen=False, previewing=False) == \
             ScrubbingReceiver().get_all_punctuation_map()
 
+    # map_no_apos = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+    #                if key != ord("'")}
+    # map_no_hyphen = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+    #                  if key != ord("-")}
+    # map_no_amper = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+    #                 if key != ord("&")}
+    # map_no_apos_hyphen = {
+    #     key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+    #     key != ord("'") and key != ord("-")}
+    # map_no_apos_amper = {
+    #     key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+    #     key != ord("'") and key != ord("&")}
+    # map_no_hyphen_amper = {
+    #     key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+    #     key != ord("-") and key != ord("&")}
+    # map_no_all = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+    #               key != ord("'") and key != ord("-") and key != ord("&")}
+    # map_previewing = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+    #                   if key != ord("…")}
+
 
 class TestGetRemoveWhitespaceMap:
 

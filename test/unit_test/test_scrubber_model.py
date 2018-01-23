@@ -313,7 +313,89 @@ class TestConsolidateAmpers:
         assert ScrubberModel().consolidate_ampers(text="") == ""
 
 
-# handle_preserved_punctuation
+class TestHandlePreservedPunctuation:
+
+    @staticmethod
+    def _make_options(apos, hyphen, amper):
+        test_options = ScrubberTestOptions(
+            front_end_options=ScrubbingOptions(
+                basic_options=BasicOptions(
+                    lower=False, punct=False,
+                    punctuation_options=PunctuationOptions(
+                        apos=apos, hyphen=hyphen, amper=amper,
+                        previewing=False,
+                        remove_punctuation_map={}), digits=False,
+                    remove_digits_map={}, tags=True,
+                    tag_options={},
+                    whitespace=False, whitespace_options=WhitespaceOptions(
+                        spaces=False, tabs=False, newlines=False,
+                        remove_whitespace_map={})),
+                additional_options=AdditionalOptions(
+                    consol={}, lemma={}, special_char={}, sw_kw=[], stop=False,
+                    keep=False)), file_id_content_map={},
+            gutenberg_file_set=set())
+
+        return test_options
+
+    def test_handle_preserved_punctuation(self):
+        no_punct_string = "Some text with no punctuation"
+        apos_string = "There's \"a lot\" of words in this text here ye' " \
+                      "isn''t 'ere a lot\"ve 'em?'!"
+        hyphen_string = "-\u2E3B\u058AMany\u05BE\u2010 \uFE32 " \
+                        "\u2E3Amany\u2E40 \uFE31many\u30A0\u3030 " \
+                        "\u2011types\u2012 of\u2013 \u301C\u2014" \
+                        " \u2015hyphens \uFE58\uFE63\uFF0D " \
+                        "\u1400in\u1806\u2E17 here!\u2E1A!"
+        amper_string = "We\uFF06 \u214B\u06FD have tons\uFE60 &\u0026 tons " \
+                       "\U0001F675 of ampers here!\U0001F674!"
+        mixed_string = "There's a lot o' punct. & \"chars\" \U0001F674 " \
+                       "mixed-up things in here! How''s it go\u30A0\ning to " \
+                       "go?"
+
+        options_all = self._make_options(apos=False, hyphen=False, amper=False)
+        options_no_apos = self._make_options(apos=True, hyphen=False,
+                                             amper=False)
+        options_no_hyphen = self._make_options(apos=False, hyphen=True,
+                                               amper=False)
+        options_no_amper = self._make_options(apos=False, hyphen=False,
+                                              amper=True)
+        options_no_apos_hyphen = self._make_options(apos=True, hyphen=True,
+                                                    amper=False)
+        options_no_apos_amper = self._make_options(apos=True, hyphen=False,
+                                                   amper=True)
+        options_no_hyphen_amper = self._make_options(apos=False, hyphen=True,
+                                                     amper=True)
+        options_no_all = self._make_options(apos=True, hyphen=True, amper=True)
+
+        assert ScrubberModel(options_all).handle_preserved_punctuation(
+            no_punct_string) == no_punct_string
+        assert ScrubberModel(options_no_apos).handle_preserved_punctuation(
+            apos_string) == "There's \"a lot\" of words in this text here " \
+                            "ye isn''t ere a lot\"ve em?'!"
+        assert ScrubberModel(options_no_hyphen).handle_preserved_punctuation(
+            hyphen_string) == "---Many-- - -many- -many-- -types- of- -- " \
+                              "-hyphens --- -in-- here!-!"
+        assert ScrubberModel(options_no_amper).handle_preserved_punctuation(
+            amper_string) == "We& && have tons& && tons & of ampers here!&!"
+        assert ScrubberModel(options_no_apos_hyphen).\
+            handle_preserved_punctuation(mixed_string) == \
+            "There's a lot o punct. & \"chars\" \U0001F674 mixed-up things " \
+            "in here! How''s it go-\ning to go?"
+        assert ScrubberModel(options_no_apos_amper).\
+            handle_preserved_punctuation(mixed_string) == \
+            "There's a lot o punct. & \"chars\" & mixed-up things in here! " \
+            "How''s it go\u30A0\ning to go?"
+        assert ScrubberModel(options_no_hyphen_amper).\
+            handle_preserved_punctuation(mixed_string) == \
+            "There's a lot o' punct. & \"chars\" & mixed-up things in here! " \
+            "How''s it go-\ning to go?"
+        assert ScrubberModel(options_no_all).handle_preserved_punctuation(
+            mixed_string) == "There's a lot o punct. & \"chars\" & mixed-up " \
+                             "things in here! How''s it go-\ning to go?"
+
+        # assert ScrubberModel().handle_preserved_punctuation(
+        #     no_punct_string, apos=False, hyphen=False, amper=False,
+        #     previewing=True) == (no_punct_string, map_previewing)
 
 
 class TestDeleteWords:
@@ -757,85 +839,5 @@ class TestKeepWords:
 #         assert remove_stopwords(self.test_string, "This long story") == \
 #             remove_stopwords(self.test_string, "This,long,story")
 #         assert remove_stopwords(self.test_string, ".") == self.test_string
-#
-#
-# class TestApplyRemovePunctuationMap:
-#
-#     def test_get_remove_punct_map_no_store(self):
-#         no_punct_string = "Some text with no punctuation"
-#         apos_string = "There's \"a lot\" of words in this text here ye' " \
-#                       "isn''t 'ere a lot\"ve 'em?'!"
-#         hyphen_string = "-\u2E3B\u058AMany\u05BE\u2010 \uFE32 " \
-#                         "\u2E3Amany\u2E40 \uFE31many\u30A0\u3030 " \
-#                         "\u2011types\u2012 of\u2013 \u301C\u2014" \
-#                         " \u2015hyphens \uFE58\uFE63\uFF0D " \
-#                         "\u1400in\u1806\u2E17 here!\u2E1A!"
-#         amper_string = "We\uFF06 \u214B\u06FD have tons\uFE60 &\u0026 tons " \
-#                        "\U0001F675 of ampers here!\U0001F674!"
-#         mixed_string = "There's a lot o' punct. & \"chars\" \U0001F674 " \
-#                        "mixed-up things in here! How''s it go\u30A0\ning to " \
-#                        "go?"
-#
-#         map_no_apos = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#                        if key != ord("'")}
-#         map_no_hyphen = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#                          if key != ord("-")}
-#         map_no_amper = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#                         if key != ord("&")}
-#         map_no_apos_hyphen = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("'") and key != ord("-")}
-#         map_no_apos_amper = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("'") and key != ord("&")}
-#         map_no_hyphen_amper = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("-") and key != ord("&")}
-#         map_no_all = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#                       key != ord("'") and key != ord("-") and key != ord("&")}
-#         map_previewing = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#                           if key != ord("…")}
-#
-#         assert get_remove_punctuation_map(
-#             no_punct_string, apos=False, hyphen=False, amper=False,
-#             previewing=False) == (no_punct_string,
-#                                   chars.ORD_PUNCT_SYMBOL_TO_NONE)
-#         assert get_remove_punctuation_map(
-#             apos_string, apos=True, hyphen=False, amper=False,
-#             previewing=False) == ("There's \"a lot\" of words in this text "
-#                                   "here ye isn''t ere a lot\"ve em?'!",
-#                                   map_no_apos)
-#         assert get_remove_punctuation_map(
-#             hyphen_string, apos=False, hyphen=True, amper=False,
-#             previewing=False) == ("---Many-- - -many- -many-- -types- of- -- "
-#                                   "-hyphens --- -in-- here!-!", map_no_hyphen)
-#         assert get_remove_punctuation_map(
-#             amper_string, apos=False, hyphen=False, amper=True,
-#             previewing=False) == ("We& && have tons& && tons & of ampers "
-#                                   "here!&!", map_no_amper)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=True, hyphen=True, amper=False,
-#             previewing=False) == ("There's a lot o punct. & \"chars\" "
-#                                   "\U0001F674 mixed-up things in here! How''s "
-#                                   "it go-\ning to go?", map_no_apos_hyphen)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=True, hyphen=False, amper=True,
-#             previewing=False) == ("There's a lot o punct. & \"chars\" & "
-#                                   "mixed-up things in here! How''s it "
-#                                   "go\u30A0\ning to go?", map_no_apos_amper)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=False, hyphen=True, amper=True,
-#             previewing=False) == ("There's a lot o' punct. & \"chars\" & "
-#                                   "mixed-up things in here! How''s it "
-#                                   "go-\ning to go?", map_no_hyphen_amper)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=True, hyphen=True, amper=True,
-#             previewing=False) == ("There's a lot o punct. & \"chars\" & "
-#                                   "mixed-up things in here! How''s it "
-#                                   "go-\ning to go?",
-#                                   map_no_all)
-#         assert get_remove_punctuation_map(
-#             no_punct_string, apos=False, hyphen=False, amper=False,
-#             previewing=True) == (no_punct_string, map_previewing)
 #
 #  Note to self: review commented imports at the end
