@@ -39,8 +39,6 @@ class TestGetRemovePunctuationMap:
             key != ord("-") and key != ord("&")}
         map_no_all = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
                       key != ord("'") and key != ord("-") and key != ord("&")}
-        # map_previewing = {key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-        #                   if key != ord("…")}
 
         # All possible combinations of three boolean parameters:
         # 000
@@ -130,19 +128,19 @@ class TestHandleFileAndManualStrings:
         string2 = "what where, but. of,\nnot,for"
         storage_folder = \
             '/tmp/Lexos_generic_test/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-        storage_filename = "lemmas.p"
+        storage_filename = LEMMA_FILENAME
 
         assert ScrubbingReceiver().handle_file_and_manual_strings(
             file_string="", manual_string="", storage_folder=storage_folder,
-            storage_filename=storage_filename) == "\n"
+            storage_filename=storage_filename) == ""
         assert ScrubbingReceiver().handle_file_and_manual_strings(
             file_string=string1, manual_string="",
             storage_folder=storage_folder, storage_filename=storage_filename) \
-            == string1 + "\n"
+            == string1
         assert ScrubbingReceiver().handle_file_and_manual_strings(
             file_string="", manual_string=string2,
             storage_folder=storage_folder, storage_filename=storage_filename) \
-            == "\n" + string2
+            == string2
         assert ScrubbingReceiver().handle_file_and_manual_strings(
             file_string=string1, manual_string=string2,
             storage_folder=storage_folder, storage_filename=storage_filename) \
