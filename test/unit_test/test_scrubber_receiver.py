@@ -182,18 +182,15 @@ class TestCreateReplacementsDict:
             ScrubbingReceiver().create_replacements_dict(replacer_string="")
         # Missing/too many colons
         try:
-            ScrubbingReceiver().create_replacements_dict(
-                replacer_string="s,f")
+            ScrubbingReceiver().create_replacements_dict(replacer_string="s,f")
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "s,f"
         try:
-            ScrubbingReceiver().create_replacements_dict(
-                replacer_string=",")
+            ScrubbingReceiver().create_replacements_dict(replacer_string=",")
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + ","
         try:
-            ScrubbingReceiver().create_replacements_dict(
-                replacer_string="k")
+            ScrubbingReceiver().create_replacements_dict(replacer_string="k")
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "k"
         try:
@@ -219,13 +216,11 @@ class TestCreateReplacementsDict:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + "s,t:u,v"
         # No argument on left of colon
         try:
-            ScrubbingReceiver().create_replacements_dict(
-               replacer_string=":k")
+            ScrubbingReceiver().create_replacements_dict(replacer_string=":k")
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":k"
         try:
-            ScrubbingReceiver().create_replacements_dict(
-                replacer_string=":")
+            ScrubbingReceiver().create_replacements_dict(replacer_string=":")
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
 

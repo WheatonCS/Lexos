@@ -172,12 +172,12 @@ class ScrubbingReceiver(BaseReceiver):
     @staticmethod
     def _load_character_deletion_map(storage_folder: str,
                                      filename: str) -> Dict[int, type(None)]:
-        """Loads a character map that was previously saved in the storage folder.
+        """Loads a char map that was previously saved in the storage folder.
 
         :param storage_folder: A string representing the path of the storage
             folder.
-        :param filename: A string representing the name of the file that is being
-            loaded.
+        :param filename: A string representing the name of the file that is
+            being loaded.
         :return: The character deletion map that was saved in the folder (empty
             if there is no map to load).
         """

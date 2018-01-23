@@ -26,7 +26,7 @@ class TestHandleGutenberg:
 
     def test_handle_gutenberg_no_match(self):
         assert ScrubberModel().handle_gutenberg(text=guten.TEXT_NEITHER) == \
-               guten.TEXT_NEITHER
+            guten.TEXT_NEITHER
         assert ScrubberModel().handle_gutenberg(text="") == ""
         assert ScrubberModel().handle_gutenberg(
             text="This text is copyright\nJoe Schmoe.\n\n\nDone.") == \
