@@ -123,6 +123,267 @@ class TestMenuSpecialChars:
             "Jklt. zghscbmtlsrp? q\nLvdy x jgdtbhn srydvlnmfk!w;"
 
 
+class TestReplaceWithDictAlone:
+    test_string = "Test string is testing"
+
+    def test_not_lemma_normal(self):
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"s": "f"},
+            is_lemma=False) == "Teft ftring if tefting"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"i": "a", "e": "a"},
+            is_lemma=False) == "Tast strang as tastang"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"q": "z"},
+            is_lemma=False) == self.test_string
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"e": "b", "i": "o"},
+            is_lemma=False) == "Tbst strong os tbstong"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"t": "l"},
+            is_lemma=False) == "Tesl slring is lesling"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"T": "a", "t": "b"},
+            is_lemma=False) == "aesb sbring is besbing"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"t": "t"},
+            is_lemma=False) == self.test_string
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"n": "t", "t": "x"},
+            is_lemma=False) == "Tesx sxritg is xesxitg"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={
+                "T": "p", "e": "p", "s": "p", "t": "p", "r": "p", "i": "p",
+                "n": "p", "g": "p", "p": "q"},
+            is_lemma=False) == "pppp pppppp pp ppppppp"
+
+    def test_not_lemma_incomplete_replacer(self):
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"g": ""}, is_lemma=False)\
+            == "Test strin is testin"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={
+                "T": "", "e": "", "s": "", "t": "", "r": "", "i": "",
+                "n": "", "g": ""}, is_lemma=False) == "   "
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={" ": ""}, is_lemma=False)\
+            == "Teststringistesting"
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={"": ""}, is_lemma=False) \
+            == self.test_string
+        assert ScrubberModel().replace_with_dict(
+            text=self.test_string, replacement_dict={}, is_lemma=False) == \
+            self.test_string
+
+#     def test_not_lemma_spacing(self):
+#         assert replacement_handler(
+#             text="", replacer_string="", is_lemma=False) == ""
+#         assert replacement_handler(
+#             text="", replacer_string="a:b", is_lemma=False) == ""
+#         assert replacement_handler(
+#             text=" test test ", replacer_string="e:u", is_lemma=False) == \
+#             " tust tust "
+#         assert replacement_handler(
+#             text="\nt", replacer_string="a:b", is_lemma=False) == "\nt"
+#
+#     def test_is_lemma_same(self):
+#         assert replacement_handler(
+#             text=self.test_string, replacer_string="string:thread",
+#             is_lemma=True) == "Test thread is testing"
+#         assert replacement_handler(
+#             text="Test test testing test test", replacer_string="test:work",
+#             is_lemma=True) == "Test work testing work work"
+#         assert replacement_handler(
+#             text=self.test_string, replacer_string="Test,testing:working",
+#             is_lemma=True) == "working string is working"
+#         assert replacement_handler(
+#             text=self.test_string,
+#             replacer_string="Test,is,testing:string\nstring:foo",
+#             is_lemma=True) == "foo foo foo foo"
+#         assert replacement_handler(
+#             text="lotsssssss\nof\ntexxxxxxxt", replacer_string="of:more",
+#             is_lemma=True) == "lotsssssss\nmore\ntexxxxxxxt"
+#         assert replacement_handler(
+#             text=" test ", replacer_string="test:text", is_lemma=True) == \
+#             " text "
+#
+#     def test_is_lemma_incomplete_replacer(self):
+#         assert replacement_handler(
+#             text=self.test_string, replacer_string="is:", is_lemma=True) == \
+#             "Test string  testing"
+#         # Missing/too many colons
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string="Test,testing,working",
+#                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
+#                 "Test,testing,working"
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string="word", is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "word"
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string="is::word",
+#                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "is::word"
+#         # Too many arguments on right of colon
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string="working:Test,testing",
+#                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
+#                 "working:Test,testing"
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string="is,string:how,what",
+#                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
+#                 "is,string:how,what"
+#         # No argument on left of colon
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string=":word", is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":word"
+#         try:
+#             replacement_handler(
+#                 text=self.test_string, replacer_string=":", is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
+#         # testing multiple error conditions
+#         try:
+#             replacement_handler(text=self.test_string,
+#                                 replacer_string="string:word\n"
+#                                                 "testing::working\n:yay",
+#                                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
+#                 "testing::working"
+#         try:
+#             replacement_handler(text=self.test_string,
+#                                 replacer_string=":yay\ntesting,working\n"
+#                                                 "string:word",
+#                                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":yay"
+#         try:
+#             replacement_handler(text=self.test_string,
+#                                 replacer_string="string:word,thing\n"
+#                                                 "testing,working\n:yay",
+#                                 is_lemma=True)
+#         except LexosException as excep:
+#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
+#                 "string:word,thing"
+#
+#     def test_replacement_handler_regex(self):
+#         assert replacement_handler(
+#             text="words ^words words$ word. wordss words+ words",
+#             replacer_string="^words:things\nwords$:junk\nword.:stuff"
+#             "\nwords+:text", is_lemma=True) == "words things junk stuff " \
+#                                                "wordss text words"
+#         assert replacement_handler(
+#             text="Hello there.", replacer_string=".,l:!\n", is_lemma=False) \
+#             == "He!!o there!"
+#         assert replacement_handler(
+#             text="Test^ t$ext te?xt", replacer_string="^:>\n$:%\n?:&",
+#             is_lemma=False) == "Test> t%ext te&xt"
+#
+#
+# class TestReplacementHandlerWithMergeStrings:
+#     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
+#     storage_folder = \
+#         '/tmp/Lexos_generic_test/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
+#     storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
+#                          'stopwords.p']
+#
+#     # No tests with neither replacer because handle_special_characters()
+#     # uses requests
+#
+#     def test_replacement_handler_special(self):
+#         file_special_string = handle_file_and_manual_strings(
+#             file_string="-:_\n!:~\nn:ñ\na:@", manual_string="",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         manual_special_string = handle_file_and_manual_strings(
+#             file_string="", manual_string="-:_\n!:~\nn:ñ\na:@",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         split_special_string = handle_file_and_manual_strings(
+#             file_string="-:_\n!:~", manual_string="n:ñ\na:@",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         after_special = "This is... Some (r@ñdom) te_xt I 'wrote'~ Isñ't " \
+#                         "it ñice?"
+#
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=file_special_string,
+#             is_lemma=False) == after_special
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=manual_special_string,
+#             is_lemma=False) == after_special
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=split_special_string,
+#             is_lemma=False) == after_special
+#
+#     def test_replacement_handler_consol(self):
+#         file_consol_string = handle_file_and_manual_strings(
+#             file_string="o:u\nt,x:y\nI:i", manual_string="",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         manual_consol_string = handle_file_and_manual_strings(
+#             file_string="", manual_string="o:u\nt,x:y\nI:i",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         split_consol_string = handle_file_and_manual_strings(
+#             file_string="o:u\nt,x:y", manual_string="I:i",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         after_consol = "This is... Sume (randum) ye-yy i 'wruye'! isn'y iy" \
+#                        " nice?"
+#
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=file_consol_string,
+#             is_lemma=False) == after_consol
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=manual_consol_string,
+#             is_lemma=False) == after_consol
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=split_consol_string,
+#             is_lemma=False) == after_consol
+#
+#     def test_replacement_handler_lemma(self):
+#         file_lemma_string = handle_file_and_manual_strings(
+#             file_string="I,it:she\n(random):(interesting)", manual_string="",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         manual_lemma_string = handle_file_and_manual_strings(
+#             file_string="", manual_string="I,it:she\n(random):(interesting)",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         split_lemma_string = handle_file_and_manual_strings(
+#             file_string="I,it:she", manual_string="(random):(interesting)",
+#             storage_folder=self.storage_folder,
+#             storage_filenames=self.storage_filenames, storage_number=2)
+#         after_lemma = "This is... Some (interesting) te-xt she 'wrote'! " \
+#                       "Isn't she nice?"
+#
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=file_lemma_string,
+#             is_lemma=True) == after_lemma
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=manual_lemma_string,
+#             is_lemma=True) == after_lemma
+#         assert replacement_handler(
+#             text=self.text_string, replacer_string=split_lemma_string,
+#             is_lemma=True) == after_lemma
+
+
 # handle_single_tag
 
 
@@ -393,10 +654,6 @@ class TestHandlePreservedPunctuation:
             mixed_string) == "There's a lot o punct. & \"chars\" & mixed-up " \
                              "things in here! How''s it go-\ning to go?"
 
-        # assert ScrubberModel().handle_preserved_punctuation(
-        #     no_punct_string, apos=False, hyphen=False, amper=False,
-        #     previewing=True) == (no_punct_string, map_previewing)
-
 
 class TestDeleteWords:
     test_string = "Many words were written, but not many of all the words " \
@@ -488,313 +745,6 @@ class TestKeepWords:
 # scrub_active_files_and_return_preview
 
 
-# class TestReplacementHandlerAlone:
-#     test_string = "Test string is testing"
-#
-#     def test_not_lemma_normal(self):
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="s:f", is_lemma=False) == \
-#             "Teft ftring if tefting"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="i,e:a", is_lemma=False) \
-#             == "Tast strang as tastang"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="q:z", is_lemma=False) == \
-#             self.test_string
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="t:l", is_lemma=False) == \
-#             "Tesl slring is lesling"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="t:t", is_lemma=False) == \
-#             self.test_string
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string=" r : t ", is_lemma=False)\
-#             == "Test stting is testing"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="e:b \n i:o ",
-#             is_lemma=False) == "Tbst strong os tbstong"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="n:t\nt:x", is_lemma=False)\
-#             == "Tesx sxrixg is xesxixg"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:q",
-#             is_lemma=False) == "qqqq qqqqqq qq qqqqqqq"
-#
-#     def test_not_lemma_incomplete_replacer(self):
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="g:", is_lemma=False) == \
-#             "Test strin is testin"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="T,e,s,t,r,i,n,g:p\np:",
-#             is_lemma=False) == "   "
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="", is_lemma=False) == \
-#             self.test_string
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string=" ", is_lemma=False) == \
-#             self.test_string
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="\n", is_lemma=False) == \
-#             self.test_string
-#         # Missing/too many colons
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="s,f", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "s,f"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string=",", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + ","
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="k", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "k"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="t:u:w", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "t:u:w"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="t::w", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "t::w"
-#         # Too many arguments on right of colon
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="a:i,e", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + "a:i,e"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="s,t:u,v",
-#                 is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + "s,t:u,v"
-#         # No argument on left of colon
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string=":k", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":k"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string=":", is_lemma=False)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
-#
-#     def test_not_lemma_spacing(self):
-#         assert replacement_handler(
-#             text="", replacer_string="", is_lemma=False) == ""
-#         assert replacement_handler(
-#             text="", replacer_string="a:b", is_lemma=False) == ""
-#         assert replacement_handler(
-#             text=" test test ", replacer_string="e:u", is_lemma=False) == \
-#             " tust tust "
-#         assert replacement_handler(
-#             text="\nt", replacer_string="a:b", is_lemma=False) == "\nt"
-#
-#     def test_is_lemma_same(self):
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="string:thread",
-#             is_lemma=True) == "Test thread is testing"
-#         assert replacement_handler(
-#             text="Test test testing test test", replacer_string="test:work",
-#             is_lemma=True) == "Test work testing work work"
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="Test,testing:working",
-#             is_lemma=True) == "working string is working"
-#         assert replacement_handler(
-#             text=self.test_string,
-#             replacer_string="Test,is,testing:string\nstring:foo",
-#             is_lemma=True) == "foo foo foo foo"
-#         assert replacement_handler(
-#             text="lotsssssss\nof\ntexxxxxxxt", replacer_string="of:more",
-#             is_lemma=True) == "lotsssssss\nmore\ntexxxxxxxt"
-#         assert replacement_handler(
-#             text=" test ", replacer_string="test:text", is_lemma=True) == \
-#             " text "
-#
-#     def test_is_lemma_incomplete_replacer(self):
-#         assert replacement_handler(
-#             text=self.test_string, replacer_string="is:", is_lemma=True) == \
-#             "Test string  testing"
-#         # Missing/too many colons
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="Test,testing,working",
-#                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
-#                 "Test,testing,working"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="word", is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "word"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="is::word",
-#                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "is::word"
-#         # Too many arguments on right of colon
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="working:Test,testing",
-#                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
-#                 "working:Test,testing"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string="is,string:how,what",
-#                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
-#                 "is,string:how,what"
-#         # No argument on left of colon
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string=":word", is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":word"
-#         try:
-#             replacement_handler(
-#                 text=self.test_string, replacer_string=":", is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
-#         # testing multiple error conditions
-#         try:
-#             replacement_handler(text=self.test_string,
-#                                 replacer_string="string:word\n"
-#                                                 "testing::working\n:yay",
-#                                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + \
-#                 "testing::working"
-#         try:
-#             replacement_handler(text=self.test_string,
-#                                 replacer_string=":yay\ntesting,working\n"
-#                                                 "string:word",
-#                                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":yay"
-#         try:
-#             replacement_handler(text=self.test_string,
-#                                 replacer_string="string:word,thing\n"
-#                                                 "testing,working\n:yay",
-#                                 is_lemma=True)
-#         except LexosException as excep:
-#             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
-#                 "string:word,thing"
-#
-#     def test_replacement_handler_regex(self):
-#         assert replacement_handler(
-#             text="words ^words words$ word. wordss words+ words",
-#             replacer_string="^words:things\nwords$:junk\nword.:stuff"
-#             "\nwords+:text", is_lemma=True) == "words things junk stuff " \
-#                                                "wordss text words"
-#         assert replacement_handler(
-#             text="Hello there.", replacer_string=".,l:!\n", is_lemma=False) \
-#             == "He!!o there!"
-#         assert replacement_handler(
-#             text="Test^ t$ext te?xt", replacer_string="^:>\n$:%\n?:&",
-#             is_lemma=False) == "Test> t%ext te&xt"
-#
-#
-# class TestReplacementHandlerWithMergeStrings:
-#     text_string = "This is... Some (random) te-xt I 'wrote'! Isn't it nice?"
-#     storage_folder = \
-#         '/tmp/Lexos_generic_test/OLME8BVT2A6S0ESK11S1VIAA01Y22K/scrub/'
-#     storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
-#                          'stopwords.p']
-#
-#     # No tests with neither replacer because handle_special_characters()
-#     # uses requests
-#
-#     def test_replacement_handler_special(self):
-#         file_special_string = handle_file_and_manual_strings(
-#             file_string="-:_\n!:~\nn:ñ\na:@", manual_string="",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         manual_special_string = handle_file_and_manual_strings(
-#             file_string="", manual_string="-:_\n!:~\nn:ñ\na:@",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         split_special_string = handle_file_and_manual_strings(
-#             file_string="-:_\n!:~", manual_string="n:ñ\na:@",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         after_special = "This is... Some (r@ñdom) te_xt I 'wrote'~ Isñ't " \
-#                         "it ñice?"
-#
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=file_special_string,
-#             is_lemma=False) == after_special
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=manual_special_string,
-#             is_lemma=False) == after_special
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=split_special_string,
-#             is_lemma=False) == after_special
-#
-#     def test_replacement_handler_consol(self):
-#         file_consol_string = handle_file_and_manual_strings(
-#             file_string="o:u\nt,x:y\nI:i", manual_string="",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         manual_consol_string = handle_file_and_manual_strings(
-#             file_string="", manual_string="o:u\nt,x:y\nI:i",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         split_consol_string = handle_file_and_manual_strings(
-#             file_string="o:u\nt,x:y", manual_string="I:i",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         after_consol = "This is... Sume (randum) ye-yy i 'wruye'! isn'y iy" \
-#                        " nice?"
-#
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=file_consol_string,
-#             is_lemma=False) == after_consol
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=manual_consol_string,
-#             is_lemma=False) == after_consol
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=split_consol_string,
-#             is_lemma=False) == after_consol
-#
-#     def test_replacement_handler_lemma(self):
-#         file_lemma_string = handle_file_and_manual_strings(
-#             file_string="I,it:she\n(random):(interesting)", manual_string="",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         manual_lemma_string = handle_file_and_manual_strings(
-#             file_string="", manual_string="I,it:she\n(random):(interesting)",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         split_lemma_string = handle_file_and_manual_strings(
-#             file_string="I,it:she", manual_string="(random):(interesting)",
-#             storage_folder=self.storage_folder,
-#             storage_filenames=self.storage_filenames, storage_number=2)
-#         after_lemma = "This is... Some (interesting) te-xt she 'wrote'! " \
-#                       "Isn't she nice?"
-#
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=file_lemma_string,
-#             is_lemma=True) == after_lemma
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=manual_lemma_string,
-#             is_lemma=True) == after_lemma
-#         assert replacement_handler(
-#             text=self.text_string, replacer_string=split_lemma_string,
-#             is_lemma=True) == after_lemma
-#
-#
 # class TestRemoveStopwords:
 #     test_string = "This is a 'long' story. It is time for this long story " \
 #                   "to end to-night. end."
