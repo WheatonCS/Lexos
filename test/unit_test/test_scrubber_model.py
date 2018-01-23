@@ -1,6 +1,3 @@
-# from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-#     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
-# from lexos.helpers.exceptions import LexosException
 from lexos.models.scrubber_model import ScrubberModel, ScrubberTestOptions
 from lexos.receivers.scrubber_receiver import ScrubbingOptions, BasicOptions, \
     PunctuationOptions, WhitespaceOptions, AdditionalOptions, SingleTagOptions
@@ -510,25 +507,47 @@ class TestDeleteWords:
     test_string = "Many words were written, but not many of all the words " \
                   "said much at all."
 
-    def test_delete_words(self):
+    def test_delete_words_normal(self):
         assert ScrubberModel().delete_words(
             text=self.test_string,
             remove_list=["Many", "words", "written", "all"]) == \
             " were written, but not many of the said much at all."
         assert ScrubberModel().delete_words(
-            text=self.test_string, remove_list=[""]) == self.test_string
+            "Another test", ["test", "test", "test"]) == "Another"
         assert ScrubberModel().delete_words(
-            text=self.test_string, remove_list=[]) == self.test_string
+            text=self.test_string, remove_list=["what"]) == self.test_string
         assert ScrubberModel().delete_words(
             text="", remove_list=["words"]) == ""
-        assert ScrubberModel().delete_words(text="", remove_list=[]) == ""
-        assert ScrubberModel().delete_words(
-            text="Using\u200Aunicode\u3000whitespace\u2004!\u2008?",
-            remove_list=["Using", "whitespace", "?"]) == "\u200Aunicode\u2004!"
         assert ScrubberModel().delete_words(
             text="test test. test? test! test$ test* ^test test",
             remove_list=["test.", "test$", "^test", "test!"]) == \
             "test test? test* test"
+        assert ScrubberModel().delete_words(
+            text="Using\u200Aunicode\u3000whitespace\u2004!\u2008?",
+            remove_list=["Using", "whitespace", "?"]) == "\u200Aunicode\u2004!"
+        assert ScrubberModel().delete_words(
+            "  Weird \t\t spacing\n\t\nhere   \tin\n\n\nthis\n \t text",
+            ["Weird", "here", "in", "text"]) == \
+            "  \t\t spacing\n\t   \n\n\nthis\n \t"
+
+    def test_delete_words_edge(self):
+        assert ScrubberModel().delete_words(
+            text=self.test_string, remove_list=["words were"]) == \
+            "Many written, but not many of all the words said much at all."
+        assert ScrubberModel().delete_words("test", ["test"]) == ""
+        assert ScrubberModel().delete_words(
+            "Test this code", ["Test", "this", "code"]) == ""
+        assert ScrubberModel().delete_words("   test   ", ["test"]) == "     "
+        assert ScrubberModel().delete_words("\ntest\n", ["test"]) == "\n"
+        assert ScrubberModel().delete_words(
+            text=self.test_string, remove_list=[""]) == self.test_string
+        assert ScrubberModel().delete_words(
+            text=self.test_string, remove_list=[" "]) == self.test_string
+        assert ScrubberModel().delete_words(
+            text="test\nstring", remove_list=["\n"]) == "test\nstring"
+        assert ScrubberModel().delete_words(
+            text=self.test_string, remove_list=[]) == self.test_string
+        assert ScrubberModel().delete_words(text="", remove_list=[]) == ""
 
 
 class TestKeepWords:
@@ -594,51 +613,3 @@ class TestKeepWords:
 # _get_preview_of_scrubbed
 
 # scrub_active_files_and_return_preview
-
-
-# class TestRemoveStopwords:
-#     test_string = "This is a 'long' story. It is time for this long story " \
-#                   "to end to-night. end."
-#
-#     def test_remove_stopwords_normal(self):
-#         assert remove_stopwords(self.test_string, "is") == \
-#             "This a 'long' story. It time for this long story to end " \
-#             "to-night. end."
-#         assert remove_stopwords(self.test_string, "This") == \
-#             " is a 'long' story. It is time for this long story to end " \
-#             "to-night. end."
-#         assert remove_stopwords(self.test_string, "this") == \
-#             "This is a 'long' story. It is time for long story to end " \
-#             "to-night. end."
-#         assert remove_stopwords(self.test_string, "This,this") == \
-#             " is a 'long' story. It is time for long story to end " \
-#             "to-night. end."
-#         assert remove_stopwords(self.test_string, "is,this\na, for") == \
-#             "This 'long' story. It time long story to end to-night. end."
-#         assert remove_stopwords(self.test_string, "story") == \
-#             "This is a 'long' story. It is time for this long to end " \
-#             "to-night. end."
-#         assert remove_stopwords(self.test_string, "long,to") == \
-#             "This is a 'long' story. It is time for this story end " \
-#             "to-night. end."
-#         assert remove_stopwords(
-#             "  Weird \t\t spacing\n\t\nhere   \tin\n\n\nthis\n \t text",
-#             "Weird, here, in, text") == "  \t\t spacing\n\t   \n\n\nthis\n \t"
-#
-#     def test_remove_stopwords_edge(self):
-#         assert remove_stopwords(self.test_string, "") == self.test_string
-#         assert remove_stopwords(self.test_string, " ") == self.test_string
-#         assert remove_stopwords("test\nstring", "\n") == "test\nstring"
-#         assert remove_stopwords("test", "test") == ""
-#         assert remove_stopwords("   test   ", "test") == "     "
-#         assert remove_stopwords("\ntest\n", "test") == "\n"
-#         assert remove_stopwords("Test this code", "Test,this,code") == ""
-#         assert remove_stopwords("Another test", "test, test, test") == \
-#             "Another"
-#         assert remove_stopwords(self.test_string, "This\nend.\nfor") == \
-#             " is a 'long' story. It is time this long story to end to-night."
-#         assert remove_stopwords(self.test_string, "This long story") == \
-#             remove_stopwords(self.test_string, "This,long,story")
-#         assert remove_stopwords(self.test_string, ".") == self.test_string
-#
-#  Note to self: review commented imports at the end
