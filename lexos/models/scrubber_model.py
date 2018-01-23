@@ -637,6 +637,3 @@ class ScrubberModel(BaseModel):
         # Return all the previews
         return ScrubberModel._get_preview_of_scrubbed(
             scrubbed_id_content_map=scrubbed_id_content_map)
-
-
-
