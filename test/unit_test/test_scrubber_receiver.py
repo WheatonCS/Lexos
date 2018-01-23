@@ -281,7 +281,7 @@ class TestCreateReplacementsDict:
                 replacer_string=":")
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
-        # testing multiple error conditions
+        # Testing multiple error conditions
         try:
             ScrubbingReceiver().create_replacements_dict(
                 replacer_string="string:word\ntesting::working\n:yay")
