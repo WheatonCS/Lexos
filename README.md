@@ -36,7 +36,7 @@ See the file LICENSE for information on the
 terms & conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation information:
-Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). Lexos. v3.0. https://github.com/WheatonCS/Lexos/. doi:10.5281/zenodo.56751.
+Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). _Lexos_. v3.1.1. https://github.com/WheatonCS/Lexos/. doi:10.5281/zenodo.839059.
 
-[//]: # "[Lexos Release 3.0](http://dx.doi.org/10.5281/zenodo.10956)"
-[//]: # "[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.10956.png)](http://dx.doi.org/10.5281/zenodo.10956)"
+[//]: # "[Lexos Release 3.1.1](http://dx.doi.org/10.5281/zenodo.839059)"
+[//]: # "![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.839059.svg)](https://doi.org/10.5281/zenodo.839059)"
