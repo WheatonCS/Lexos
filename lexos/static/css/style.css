@@ -1465,11 +1465,6 @@ textarea.manualinput {
   position: absolute;
   margin-left: 1%;
 }
-
-#visualize-submit {
-  margin-top: 40px;
-}
-
 .d3tooltip {
     position: absolute;
     width: auto;
