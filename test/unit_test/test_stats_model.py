@@ -102,9 +102,9 @@ class TestCorpusInfo:
         assert test_corpus_result_two.median == 46
 
     def test_quartiles(self):
-        assert test_corpus_result_one.q1 == test_corpus_result_one.q3 == 47.5
+        assert test_corpus_result_one.first_quartile == test_corpus_result_one.q3 == 47.5
         assert test_corpus_result_one.iqr == 0
-        assert test_corpus_result_two.q1 == 30.5
+        assert test_corpus_result_two.first_quartile == 30.5
         assert test_corpus_result_two.q3 == 63
         assert test_corpus_result_two.iqr == 32.5
 

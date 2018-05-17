@@ -3,7 +3,7 @@ from typing import Optional, List, NamedTuple
 import numpy as np
 import pandas as pd
 
-from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
+from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE, EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
@@ -15,16 +15,16 @@ class StatsTestOptions(NamedTuple):
     id_temp_label_map: IdTempLabelMap
 
 
-class CorpusInfo(NamedTuple):
+class CorpusStats(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
-    q1: float  # First quartile of all file sizes.
-    q3: float  # Third quartile of all file sizes.
-    iqr: float  # Interquartile range.
-    median: float  # Median (second quartile) of all file sizes.
-    average: float  # Average size of all files.
-    std_deviation: float  # Standard deviation of all file sizes.
-    anomaly_iqr: dict  # File anomaly found using interquartile range analysis
-    anomaly_std_err: dict  # File anomaly found using standard error analysis
+    mean: float            # Average size of all files.
+    median: float          # Median (second quartile) of all file sizes.
+    anomaly_se: dict       # File anomaly found using standard error.
+    anomaly_iqr: dict      # File anomaly found using interquartile range.
+    std_deviation: float   # Standard deviation of all file sizes.
+    first_quartile: float  # First quartile of all file sizes.
+    third_quartile: float  # Third quartile of all file sizes.
+    inter_quartile_range: float  # Interquartile range.
 
 
 class FileInfo(NamedTuple):
@@ -64,21 +64,38 @@ class StatsModel(BaseModel):
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
 
-    def get_corpus_info(self) -> CorpusInfo:
+    def get_corpus_info(self) -> CorpusStats:
         """Converts word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
 
         # Check if empty corpus is given.
-        assert np.sum(self._doc_term_matrix.values) > 0, EMPTY_LIST_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Get the file count sums by sum the column.
+        file_sizes = self._doc_term_matrix.sum(1)
+        # Get the average file word counts.
+        mean = file_sizes.mean(0)
+        # Get the standard deviation of the file word counts.
+        standard_div = file_sizes.std(0)
+        # Get the median of the file word counts.
+        median = file_sizes.mean(0)
+        # Get the iqr of the file word counts.
+        first_iqr = file_sizes.quantile(0.25)
+        third_iqr = file_sizes.quantile(0.75)
+        iqr = third_iqr - first_iqr
+
+
 
         # Initialize two dictionaries to hold anomaly analysis result.
         file_anomaly_iqr = {}
         file_anomaly_std_err = {}
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+
         # Find size of each file.
         file_sizes = np.sum(self._doc_term_matrix.values, axis=1)
         # Find average size of all files.
@@ -112,14 +129,14 @@ class StatsModel(BaseModel):
             elif file_sizes[count] < q1 - 1.5 * iqr:
                 file_anomaly_iqr.update({label: 'small'})
 
-        return CorpusInfo(q1=q1,
-                          q3=q3,
-                          iqr=iqr,
-                          median=median,
-                          average=average_file_size,
-                          anomaly_iqr=file_anomaly_iqr,
-                          std_deviation=round(std_dev_file_size, 4),
-                          anomaly_std_err=file_anomaly_std_err)
+        return CorpusStats(=q1,
+                           q3=q3,
+                           iqr=iqr,
+                           median=median,
+                           average=average_file_size,
+                           anomaly_iqr=file_anomaly_iqr,
+                           std_deviation=round(std_dev_file_size, 4),
+                           anomaly_std_err=file_anomaly_std_err)
 
     @staticmethod
     def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
@@ -127,7 +144,7 @@ class StatsModel(BaseModel):
 
         :param count_list: a list contains words count of a particular file.
         :param file_name: the file name of that file.
-        :return a typed tuple contains file name and statistics of that file.
+        :return: a typed tuple contains file name and statistics of that file.
         """
         # Check if input is empty.
         assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
