@@ -1,36 +1,28 @@
 ### project specific
 secret_key
 
-### JetBrains template
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+### JetBrains files
+# For now we ignore all the JetBrains IDE files, i.e. all the user defined
+# configurations, since interpreter path differs from platforms.
+# If we decide to share user defined configurations, smarter template can be
+# found at the link below.
+# https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 
-# User-specific stuff:
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/dictionaries
+## Everything but exclude code style and some commonly shared settings.
+.idea/*
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+!.idea/codeStyleSettings.xml
+!.idea/encodings.xml
+!.idea/jsLibraryMappings.xml
+!.idea/preferred-vcs.xml
+!.idea/vcs.xml
 
-# Sensitive or high-churn files:
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.xml
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-
-# Gradle:
-.idea/**/gradle.xml
-.idea/**/libraries
-
-# Mongo Explorer plugin:
-.idea/**/mongoSettings.xml
 
 ## File-based project format:
 *.iws
 
 ## Plugin-specific files:
-
 # IntelliJ
 /out/
 
@@ -45,6 +37,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
 ### Emacs template
 # -*- mode: gitignore; -*-
 *~
