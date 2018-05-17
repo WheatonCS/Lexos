@@ -57,7 +57,7 @@ fabric.properties
 .idea/httpRequests
 
 # For now we ignore all the user defined configurations, since interpreter path
-differs from platforms.
+# differs from platforms.
 .idea/**/runConfigurations/
 
 ### Emacs template
