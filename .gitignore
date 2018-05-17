@@ -58,7 +58,6 @@ fabric.properties
 
 # For now we ignore all the user defined configurations, since interpreter path
 # differs from platforms.
-.idea/**/runConfigurations/
 
 ### Emacs template
 # -*- mode: gitignore; -*-
