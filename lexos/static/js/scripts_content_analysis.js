@@ -31,8 +31,9 @@ function analyze() {
         update_dictionary_buttons(dict_labels,active_dicts);
         update_dictionary_checkboxes(dict_labels, active_dicts);
         update_check_all_checkbox(response['toggle_all_value']);
+        $('#search').show();
         $('#table').html(response['result_table']);
-        $('.dataframe').DataTable( {
+        $('.result').DataTable( {
             "scrollX": true,
             'language': {
                 'lengthMenu': 'Display _MENU_ documents',
@@ -54,6 +55,52 @@ function analyze() {
               },
               'pdfHtml5'
             ]
+        });
+        $('#corpus_counts').html(
+            "<legend id='Dictionaries' " +
+            "class='has-chevron'>Corpus Counts</legend>" +
+            response['corpus_raw_counts_table']);
+        $('.corpus').DataTable({
+            "scrollX": true,
+            "order": [2],
+            'language': {
+                'lengthMenu': 'Display _MENU_ phrases',
+                'info': 'Showing _START_ to _END_ of _TOTAL_ phrases'
+            },
+            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, 'All']],
+            'dom': "<'row'<'col-sm-2'l><'col-sm-3 pull-right'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            'buttons': [
+              'copyHtml5',
+              'excelHtml5',
+              'csvHtml5',
+              {
+                extend: 'csvHtml5',
+                text: 'TSV',
+                fieldSeparator: '\t',
+                extension: '.tsv'
+              },
+              'pdfHtml5'
+            ]
+        });
+        var file_tables = '<div class="row" style="margin-top: 20px;">';
+        for(var i = 0; i < response['files_raw_counts_tables'].length; i++) {
+            file_tables += '<div class="col-md-6">' + response['files_raw_counts_tables'][i] + "</div>";
+        }
+        file_tables += "</div>";
+        $('#files_raw_counts_tables').html(
+            "<legend id='Dictionaries' class='has-chevron'>File Counts" +
+            "</legend>" + file_tables);
+        $('.file').DataTable({
+            "order": [2],
+            'language': {
+                'info': 'Showing _START_ to _END_ of _TOTAL_ phrases'
+            },
+            'dom': "<'row'<'col-sm-12'tr>>",
+            "scrollY":        "200px",
+            "scrollCollapse": true,
+            "paging":         false
         });
     });
  }
@@ -192,3 +239,16 @@ function update_check_all_checkbox(toggle_all_value) {
     check_all += ">Check/Uncheck All</label>";
     $('#forAllCheckBox').append(check_all);
 }
+$.fn.dataTableExt.oApi.fnFilterAll = function (oSettings, sInput, iColumn, bRegex, bSmart) {
+    var settings = $.fn.dataTableSettings;
+
+    for (var i = 0; i < settings.length; i++) {
+        settings[i].oInstance.fnFilter(sInput, iColumn, bRegex, bSmart);
+    }
+};
+$(document).ready(function () {
+    $("#Search_All").keyup(function () {
+        var table = $('.file dataframe table table-striped table-bordered dataTable no-footer').dataTable();
+        table.fnFilterAll(this.value);
+    });
+});
