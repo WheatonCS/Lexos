@@ -63,8 +63,7 @@ class KmeansModel(BaseModel):
 
     def get_pca_result(self):
         # Test if get empty input
-        assert np.size(self._doc_term_matrix.values) > 0, \
-            EMPTY_NP_ARRAY_MESSAGE
+        assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
         # Get Kmeans
         reduced_data = \
@@ -89,13 +88,13 @@ class KmeansModel(BaseModel):
                 x=x_data[0],
                 y=y_data[0],
                 mode='markers',
-                name="group %f" % group_num,
+                name=f"group {group_num + 1}",
                 marker=go.Marker(
                     size=12,
                     line=go.Line(
                         color='rgba(217, 217, 217, 0.14)',
-                        width=0.5),
-                    opacity=0.8))
+                        width=0.6),
+                    opacity=0.9))
             traces.append(trace)
 
         data = go.Data(traces)
