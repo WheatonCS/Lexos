@@ -41,7 +41,7 @@ $(document).ready( function () {
 </script>
 {% endblock %}
 
-{% block title %}visualizer{% endblock %}
+{% block title %}word_cloud{% endblock %}
 
 {% block options %}
 <div class="row">
@@ -59,7 +59,7 @@ $(document).ready(function() {
   }
   var config = {
     columns: [{ title: "Term" }, { title: "Count" }],
-    data: data    
+    data: data
   }
   $('#termcounts').DataTable(config);
 });
@@ -100,7 +100,7 @@ $(document).ready(function() {
   </div>
 <!--   <div class="col-md-1">
     {% if JSONObj %}
-    <div id="statsBtn"> 
+    <div id="statsBtn">
       <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
     </div>
     {% endif %}
@@ -117,7 +117,7 @@ $(document).ready(function() {
       <div id="vizcreateoptions" style="padding-left:15px;">
         {% for fileID, label in labels.items() %}
           <div class="forCheckBox">
-            <label>{{label}} 
+            <label>{{label}}
               <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
             </label>
           </div>
@@ -159,7 +159,7 @@ $(document).ready(function() {
   <p><label for="maxwords">Number of words:</label> <input type="number" value="250" min="1" id="maxwords">
   <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
   <p><label>Download:</label>
-    <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a> 
+    <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a>
     <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
   </p>
 </div>
