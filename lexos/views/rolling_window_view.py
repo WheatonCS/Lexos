@@ -44,12 +44,12 @@ def rolling_window():
             numActiveDocs=num_active_docs)
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
-        dataPoints, dataList, graphTitle, xAxisLabel, yAxisLabel, \
+        data_points, data_list, graph_title, x_axis_label, y_axis_label, \
             legend_labels = utility.generate_rwa(file_manager)
         if 'get-RW-plot' in request.form:
             # The 'Graph Data' button is clicked on rollingwindow.html.
             save_path, file_extension = utility.generate_rw_matrix_plot(
-                dataPoints, legend_labels)
+                data_points, legend_labels)
             return send_file(
                 save_path,
                 attachment_filename="rollingwindow_matrix" +
@@ -57,7 +57,7 @@ def rolling_window():
                 as_attachment=True)
         if 'get-RW-data' in request.form:
             # The 'CSV Matrix' button is clicked on rollingwindow.html.
-            save_path, file_extension = utility.generate_rw_matrix(dataList)
+            save_path, file_extension = utility.generate_rw_matrix(data_list)
             return send_file(
                 save_path,
                 attachment_filename="rollingwindow_matrix" +
@@ -68,10 +68,10 @@ def rolling_window():
             return render_template(
                 'rwanalysis.html',
                 labels=labels,
-                data=dataPoints,
-                graphTitle=graphTitle,
-                xAxisLabel=xAxisLabel,
-                yAxisLabel=yAxisLabel,
+                data=data_points,
+                graphTitle=graph_title,
+                xAxisLabel=x_axis_label,
+                yAxisLabel=y_axis_label,
                 legendLabels=legend_labels,
                 rwadatagenerated=True,
                 itm="rolling-windows",
@@ -80,10 +80,10 @@ def rolling_window():
             return render_template(
                 'rwanalysis.html',
                 labels=labels,
-                data=dataPoints,
-                graphTitle=graphTitle,
-                xAxisLabel=xAxisLabel,
-                yAxisLabel=yAxisLabel,
+                data=data_points,
+                graphTitle=graph_title,
+                xAxisLabel=x_axis_label,
+                yAxisLabel=y_axis_label,
                 legendLabels=legend_labels,
                 rwadatagenerated=False,
                 itm="rolling-windows",
