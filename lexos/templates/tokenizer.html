@@ -357,34 +357,46 @@ $(document).ready(function() {
 	}
 	// When the user triggers clicks the button, redraw the table
 	$("#regenerateTable").click(function() {
-		// Set the warning modal language and detect table size
-		if ($("#csvorientation-filecolumn").is(':checked')) {
-			var lang = "columns";
-			var tableLength = $("#example").DataTable().columns().indexes().length;
-		}
-		else {
-			var lang = "rows";
-			var pageInfo = $("#example").DataTable().page.info();
-			var tableLength = pageInfo["recordsTotal"];
-		}
-		// If the table is larger than 1000 rows/columns, trigger the warning modal
-		if (tableLength > 1000) {
-			msg = "Your table has a large number of "+lang+". Transposing large tables can ";
-			msg += "cause the browser to freeze for several minutes or to crash entirely. ";
-			msg += "We recommend that you download the table directly and open it in a ";
-			msg += "spreadsheet application or text editor.";
-			footerButtons = '<button type="button" class="btn btn-default" id="warningCSV">Download CSV</button>';
-			footerButtons += '<button type="button" class="btn btn-default" id="warningTSV">Download TSV</button>';
-			footerButtons += '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
-			footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
-			$("#warning-modal-footer").html(footerButtons);
-			$('#warning-modal-message').html(msg);
-	        $('#warning-modal').modal();
-    	}
-    	else {
-			$("#status-analyze").css({"visibility":"visible", "z-index": "400000"});
-			redrawTable(config);
-    	}
+	    // First check if there are any documents
+        if(numActiveDocs > 0) {
+          // Set the warning modal language and detect table size
+          if ($("#csvorientation-filecolumn").is(':checked')) {
+            var lang = "columns";
+            var tableLength = $("#example").DataTable().columns().indexes().length;
+          }
+          else {
+            var lang = "rows";
+            var pageInfo = $("#example").DataTable().page.info();
+            var tableLength = pageInfo["recordsTotal"];
+          }
+          // If the table is larger than 1000 rows/columns, trigger the warning modal
+          if (tableLength > 1000) {
+            msg = "Your table has a large number of " + lang + ". Transposing large tables can ";
+            msg += "cause the browser to freeze for several minutes or to crash entirely. ";
+            msg += "We recommend that you download the table directly and open it in a ";
+            msg += "spreadsheet application or text editor.";
+            footerButtons = '<button type="button" class="btn btn-default" id="warningCSV">Download CSV</button>';
+            footerButtons += '<button type="button" class="btn btn-default" id="warningTSV">Download TSV</button>';
+            footerButtons += '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
+            footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+            $("#warning-modal-footer").html(footerButtons);
+            $('#warning-modal-message').html(msg);
+            $('#warning-modal').modal();
+          }
+          else {
+            $("#status-analyze").css({
+              "visibility": "visible",
+              "z-index": "400000"
+            });
+            redrawTable(config);
+          }
+        }
+        // If not documents throw an error message
+        else {
+            msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage.manage') }}">Manage</a> tool or <a href="{{ url_for('upload.upload') }}">upload</> a new document.';
+            $('#error-modal-message').html(msg);
+            $('#error-modal').modal();
+	    }
 	});
 	// Handle the Download CSV button in the warning modal
 	$(document).on("click", "#warningCSV", function(event){
