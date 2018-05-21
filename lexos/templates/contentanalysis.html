@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% set active_page = 'contentanalysis' %}
-{% block title %}Content Analysis{% endblock %}
+{% block title %}content_analysis{% endblock %}
 {% block head %}
   {% if config['LOCAL_MODE'] == True %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{version}}"/>
