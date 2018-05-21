@@ -386,7 +386,7 @@ $(document).ready(function() {
             redrawTable(config);
           }
         }
-        // If not documents throw an error message
+        // If no documents throw an error message
         else {
             msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage.manage') }}">Manage</a> tool or <a href="{{ url_for('upload.upload') }}">upload</> a new document.';
             $('#error-modal-message').html(msg);
