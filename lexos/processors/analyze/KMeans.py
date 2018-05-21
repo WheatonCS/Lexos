@@ -407,14 +407,14 @@ def get_k_means_voronoi(
     trans_x = abs(min(xs)) + 100
     trans_y = abs(min(ys)) + 100
 
-    transXs, transYs = translate_coords_to_positive(
+    trans_xs, trans_ys = translate_coords_to_positive(
         orig_xs, orig_ys, trans_x, trans_y)
 
     # Find the max coordinate to help determine the width (D3)
-    max_x = max(transXs)
+    max_x = max(trans_xs)
     text_data = []
     for i in range(0, len(orig_xs)):
-        temp = text_attrs_dictionary(file_names[i], transXs[i], transYs[i])
+        temp = text_attrs_dictionary(file_names[i], trans_xs[i], trans_ys[i])
         text_data.append(temp)
 
     # Make a color gradient with k colors
