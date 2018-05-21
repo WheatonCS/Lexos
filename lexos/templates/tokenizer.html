@@ -254,12 +254,7 @@ $(document).ready(function() {
 		    i++;
 		});
 	}
-	// Otherwise, trigger an error message
-	else {
-		msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage.manage') }}">Manage</a> tool or <a href="{{ url_for('upload.upload') }}">upload</> a new document.';
-		$('#error-modal-message').html(msg);
-		$('#error-modal').modal();
-	}
+
 	// Function to redraw the table with new options
 	function redrawTable(config) {
 		// Destroy the table and redraw it from scratch
