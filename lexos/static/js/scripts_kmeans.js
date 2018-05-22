@@ -60,7 +60,6 @@ $(function () {
     var tol = $('#tolerance').val()
 
     // Error messages
-    var err1 = '<p>K-means requires at least 2 active documents.</p>'
     var err2 = '<p>The number of clusters (K value) must not be larger than the number of active files!</p>'
     var err3 = '<p>Invalid input. Make sure the input is an integer.</p>'
     var err4 = '<p>Invalid input. The relative tolerance must be a decimal.</p>'
