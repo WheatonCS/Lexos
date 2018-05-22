@@ -8,7 +8,7 @@ function runModal (htmlMsg) {
 }
 
 /**
- * check all the easy error with js, in this case, you need more than 2 documents
+ * check all the easy error with js, in this case, one document is required
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
@@ -49,7 +49,7 @@ function sendAjaxRequest (url, form) {
 /**
  * display the result of the similarity query on web page
  */
-function generateSimResult () {
+function generateStatsResult () {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
@@ -58,6 +58,8 @@ function generateSimResult () {
 
     // the configuration for creating data table
     const dataTableConfig = {
+        // do not display pages
+        paging: false,
 
         // specify all the button that is put on to the page
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
@@ -79,7 +81,7 @@ function generateSimResult () {
             function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while generating the similarity query result.')
+                runModal('error encountered while generating the statistics result.')
             })
         .always(
             function () {
@@ -88,9 +90,8 @@ function generateSimResult () {
 }
 
 $(function () {
-    // hide the normalize options
+    // hide the normalize options and set it to raw count.
     $('#normalize-options').css({'visibility': 'hidden'})
-    // set the normalize option to raw count
     $('#normalizeTypeRaw').attr('checked', true)
 
     // Reset the maximum number of documents when a checkbox is clicked
@@ -109,17 +110,17 @@ $(function () {
         }
     })
 
-    // hide the similarity
+    // hide the stats result div.
     $('#statsResult').css({'display': 'none'})
 
     /**
-     * The event handler for generate similarity clicked
+     * The event handler for generate statistics clicked
      */
-    $('#statsgen').click(function () {
+    $('#get-stats').click(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            generateSimResult()
+            generateStatsResult()
         }
         else {
             runModal(error)
