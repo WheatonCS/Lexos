@@ -60,6 +60,7 @@ $(function () {
     var tol = $('#tolerance').val()
 
     // Error messages
+    var err1 = 'You do not have enough active documents. Please activate at least two documents using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
     var err2 = '<p>The number of clusters (K value) must not be larger than the number of active files!</p>'
     var err3 = '<p>Invalid input. Make sure the input is an integer.</p>'
     var err4 = '<p>Invalid input. The relative tolerance must be a decimal.</p>'
