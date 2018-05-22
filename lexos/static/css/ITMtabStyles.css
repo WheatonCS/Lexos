@@ -21,7 +21,7 @@
       position: absolute;
       bottom: 0px;
       top: 0px;
-      overflow: auto;           
+      overflow: auto;
 }
 
 .sidebar >.row{
@@ -124,15 +124,51 @@
       -webkit-box-shadow: 1px 0px 8px rgba(0, 0, 0, .175);
       box-shadow: 1px 0px 8px rgba(0, 0, 0, .175);
       right: -20px;
-} 
+}
 
 .sidebar-left > .toggler > span{
       margin:15px 2px;
-
 }
 
 .sidebar-left > .toggler > .glyphicon-chevron-right{
-      display:none;
+    display:block;
+    animation-name:move;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    -webkit-transition: ease-in-out 2s;
+    -moz-transition: ease-in-out 2s;
+    -ms-transition: ease-in-out 2s;
+    -o-transition: ease-in-out 2s;
+    transition: ease-in-out 2s;
+}
+/* Animation for syntax for safari*/
+@-webkit-keyframes move {
+    0%{margin:15px 2px;}
+    10%{margin:15px 5px;color: black;}
+    20%{margin:15px 2px;color: black;}
+    30%{margin:15px 5px;color: black;}
+    40%{margin:15px 2px;color: black;}
+    50%{margin:15px 5px;color: black;}
+    60%{margin:15px 2px;color: black;}
+    70%{margin:15px 5px;color: black;}
+    80%{margin:15px 2px;color: black;}
+    90%{margin:15px 5px;color: black;}
+    100%{margin:15px 2px;color: black;}
+}
+
+/* Animation for standard syntax */
+@keyframes move {
+    0%{margin:15px 2px;}
+    10%{margin:15px 5px;color: black;}
+    20%{margin:15px 2px;color: black;}
+    30%{margin:15px 5px;color: black;}
+    40%{margin:15px 2px;color: black;}
+    50%{margin:15px 5px;color: black;}
+    60%{margin:15px 2px;color: black;}
+    70%{margin:15px 5px;color: black;}
+    80%{margin:15px 2px;color: black;}
+    90%{margin:15px 5px;color: black;}
+    100%{margin:15px 2px;color: black;}
 }
 
 .sidebar-right > .toggler{
@@ -144,9 +180,9 @@
       border-bottom-left-radius: 4px;
       border-right: 1px solid #fff;
       -webkit-box-shadow: -1px 0px 8px rgba(0, 0, 0, .175);
-      box-shadow: -1px 0px 8px rgba(0, 0, 0, .175);         
+      box-shadow: -1px 0px 8px rgba(0, 0, 0, .175);
       left: -20px;
-} 
+}
 
 .sidebar-right > .toggler > span{
       margin:15px 2px;
@@ -159,7 +195,7 @@
 .sidebar .submenu{
       display: none;
       position: fixed;
-} 
+}
 
 /*Native BootStrap Hack*/
 .sidebar .list-group-item:last-child, .sidebar .list-group-item:first-child{
@@ -215,12 +251,12 @@
     margin-left: 0;
     margin-right: 0;
     padding-left: 40px;
-} 
-#panel-content ul { 
+}
+#panel-content ul {
     list-style-type: disc;
 }
 
-#panel-content ol { 
+#panel-content ol {
     list-style-type: decimal;
 }
 
@@ -230,7 +266,7 @@
         margin: 8px;
         font-size: 1.5em;
     }
-    
+
 #hamburger:link,
 #hamburger:visited {
   color: #fff;

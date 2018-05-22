@@ -671,7 +671,7 @@ footer {
 }
 #uploadbrowse {
   float: left;
-  width: 163px;
+  width: 175px;
   padding: 20px;
   line-height: 15px;
   font-size: 15px;
@@ -1082,6 +1082,9 @@ fieldset[disabled] .btn-delete-selected.active {
   margin-right:10px;
   cursor:pointer;
 }
+.lexos-tooltip-trigger:hover{
+  color:#3fd1ac;
+}
 
 /* Popover Styles */
 .popover-inner {
@@ -1291,6 +1294,7 @@ textarea.manualinput {
   cursor: pointer;
   text-align: right;
   color: #00B226;
+  margin-top:5px;
 }
 
 #entityrules {
@@ -1467,7 +1471,8 @@ textarea.manualinput {
 }
 
 #visualize-submit {
-  margin-top: 40px;
+  margin: 5px 0px 0px 0px;
+
 }
 
 .d3tooltip {
@@ -1493,7 +1498,9 @@ textarea.manualinput {
     background-color: rgba(247,247,247, 0.8);
     color: #000;
 }
-
+#copyright_tag{
+  margin-left:15px;
+}
 /* ================== RWANALYSIS STYLING ==================== */
 .rwanalysisradiosdiv {
 }
@@ -1545,7 +1552,7 @@ textarea.manualinput {
 }
 
 #getviz {
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 .vizoptions {
