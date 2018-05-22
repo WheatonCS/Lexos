@@ -68,12 +68,15 @@ function submitForm () {
  * @returns {string | null} - if it is null, it means no error, else then the string is the error message
  */
 function submissionError () {
-    const active_file_num_too_few_err = 'A dendrogram requires at least 2 active documents to be created.'
+    const active_file_num_too_few_err = 'You do not have enough active documents. Please activate at least two documents using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
     const activeFiles = $('#num_active_files').val()
-    if (activeFiles < 2)
+    if (activeFiles < 2) {
+
         return active_file_num_too_few_err
-    else
+    }
+    else {
         return null
+    }
 }
 
 /**
@@ -86,7 +89,6 @@ $(function () {
      */
     $('#getdendro').on('click', function () {
         const error = submissionError()  // the error happens during submission
-
         if (error === null) {  // if there is no error
             submitForm()
         }
