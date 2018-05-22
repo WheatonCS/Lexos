@@ -1,4 +1,4 @@
-from flask import request, session, render_template, Blueprint
+from flask import session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
@@ -25,23 +25,30 @@ def statistics():
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
     labels = file_manager.get_active_labels_with_id()
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'statisticoption' not in session:
-            session['statisticoption'] = {'segmentlist': list(
-                map(str,
-                    list(file_manager.files.keys())))}  # default is all on
-        return render_template(
-            'statistics.html',
-            labels=labels,
-            itm="statistics",
-            numActiveDocs=num_active_docs)
+
+    # "GET" request occurs when the page is first loaded.
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'statisticoption' not in session:
+        session['statisticoption'] = {'segmentlist': list(
+            map(str,
+                list(file_manager.files.keys())))}  # default is all on
+    return render_template(
+        'statistics.html',
+        labels=labels,
+        itm="statistics",
+        numActiveDocs=num_active_docs)
 
 
-@stats_blueprint.route("/statsHTML", methods=['POST'])
-def stats_file_html():
+@stats_blueprint.route("/statsFile", methods=["POST"])
+def stats_file():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
     return StatsModel().get_file_info()
+
+
+@stats_blueprint.route("/statsBoxPlot", methods=["POST"])
+def stats_box_plot():
+    session_manager.cache_analysis_option()
+    session_manager.cache_statistic_option()
+    return StatsModel().get_box_plot()
