@@ -3,8 +3,7 @@ $(function () {
   console.log($('#num_active_files').val())
   $('#gettopword').click(function () {
       //console.log(($('#num_active_files').val() == '0'))
-      if ($('#num_active_files').val() <  '2') {
-
+      if ($('#num_active_files').val() <  2) {
           $('#error-modal .modal-body').html(msg)
           $('#error-modal').modal()
       }
