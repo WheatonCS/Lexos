@@ -206,8 +206,10 @@ $(function () {
 
 function downloadScrubbing() {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
-  // Flask route seems to be the easiest method.
-  window.location = '/downloadScrubbing'
+  // Flask route seems to be the easiest method
+    if(numActiveDocs > 0) {
+        window.location = '/downloadScrubbing'
+    }
 }
 
 function doScrubbing(action) {
