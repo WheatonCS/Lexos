@@ -71,7 +71,6 @@ function submissionError () {
     const active_file_num_too_few_err = 'You do not have enough active documents. Please activate at least two documents using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
     const activeFiles = $('#num_active_files').val()
     if (activeFiles < 2) {
-
         return active_file_num_too_few_err
     }
     else {
