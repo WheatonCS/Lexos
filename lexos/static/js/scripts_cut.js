@@ -310,7 +310,14 @@ function jsonifyForm () {
 function downloadCutting () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
   // Flask route seems to be the easiest method.
-  window.location = '/downloadCutting'
+    if ($('#num_active_files').val() > '0') {
+        window.location = '/downloadCutting'
+    }
+    else {
+        $('#error-modal').modal()
+    }
+
+
 }
 
 $(function () {
