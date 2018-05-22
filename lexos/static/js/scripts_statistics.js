@@ -49,7 +49,7 @@ function sendAjaxRequest (url, form) {
 /**
  * display the result of the similarity query on web page
  */
-function generateStatsResult () {
+function generateStatsFileResult () {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
@@ -58,24 +58,53 @@ function generateStatsResult () {
 
     // the configuration for creating data table
     const dataTableConfig = {
-        // do not display pages
-        paging: false,
-
         // specify all the button that is put on to the page
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
     }
 
     // send the ajax request
-    sendAjaxRequest('/statsHTML', form)
+    sendAjaxRequest('/statsFile', form)
         .done(
             function (response) {
-                const outerTableDivSelector = $('#statsTable')
+                const outerTableDivSelector = $('#file-table')
                 // put the response onto the web page
                 outerTableDivSelector.html(response)
                 // initialize the data table
                 outerTableDivSelector.children().DataTable(dataTableConfig)
                 // display the similarity result
-                $('#statsResult').css({'display': 'block'})  // display everything
+                $('#stats-result').css({'display': 'block'})  // display everything
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
+                console.log('textStatus: ' + textStatus)
+                console.log('errorThrown: ' + errorThrown)
+                runModal('error encountered while generating the statistics result.')
+            })
+        .always(
+            function () {
+                $('#status-analyze').css({'visibility': 'hidden'})
+            })
+}
+
+/**
+ * display the result of the similarity query on web page
+ */
+function generateStatsBoxPlot () {
+    // show loading icon
+    $('#status-analyze').css({'visibility': 'visible'})
+
+    // convert form into an object map string to string
+    const form = jsonifyForm()
+
+    // send the ajax request
+    sendAjaxRequest('/statsBoxPlot', form)
+        .done(
+            function (response) {
+                const outerTableDivSelector = $('#box-plot')
+                // put the response onto the web page
+                outerTableDivSelector.html(response)
+                // display the similarity result
+                $('#stats-result').css({'display': 'block'})  // display everything
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
@@ -111,7 +140,7 @@ $(function () {
     })
 
     // hide the stats result div.
-    $('#statsResult').css({'display': 'none'})
+    $('#stats-result').css({'display': 'none'})
 
     /**
      * The event handler for generate statistics clicked
@@ -120,7 +149,8 @@ $(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            generateStatsResult()
+            generateStatsFileResult()
+            generateStatsBoxPlot()
         }
         else {
             runModal(error)
