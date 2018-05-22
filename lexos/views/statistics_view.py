@@ -40,7 +40,7 @@ def statistics():
             numActiveDocs=num_active_docs)
 
 
-@stats_blueprint.route("/statsHTML", methods=['GET', 'POST'])
+@stats_blueprint.route("/statsHTML", methods=['POST'])
 def stats_file_html():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
