@@ -14,7 +14,7 @@ stats_blueprint = Blueprint('statistics', __name__)
 
 
 # Tells Flask to load this function when someone is at '/statsgenerator'
-@stats_blueprint.route("/statistics", methods=["GET", "POST"])
+@stats_blueprint.route("/statistics", methods=["GET"])
 def statistics():
     """Handles the functionality on the Statistics page.
 
@@ -39,17 +39,9 @@ def statistics():
             itm="statistics",
             numActiveDocs=num_active_docs)
 
-    if request.method == "POST":
-        token = StatsModel.get_token_type()
-        file_info_list = StatsModel().get_all_file_info()
-        corpus_info = StatsModel().get_corpus_info()
-        session_manager.cache_analysis_option()
-        session_manager.cache_statistic_option()
 
-        return render_template(
-            'statistics.html',
-            token=token,
-            labels=labels,
-            corpusInfo=corpus_info,
-            FileInfoList=file_info_list,
-            numActiveDocs=num_active_docs)
+@stats_blueprint.route("/statsHTML", methods=['GET', 'POST'])
+def stats_file_html():
+    session_manager.cache_analysis_option()
+    session_manager.cache_statistic_option()
+    return StatsModel().get_file_info()

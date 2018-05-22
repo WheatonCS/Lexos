@@ -3,7 +3,7 @@ from typing import List, Tuple, Optional, NamedTuple
 import numpy as np
 import pandas as pd
 
-from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE, EMPTY_DTM_MESSAGE
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
@@ -126,7 +126,7 @@ class StatsModel(BaseModel):
                            third_quartile=third_quartile,
                            inter_quartile_range=iqr)
 
-    def get_file_info_deprec(self) -> pd.DataFrame:
+    def get_file_info(self) -> str:
         # Check if empty corpus is given.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -140,58 +140,19 @@ class StatsModel(BaseModel):
                                            "average_word_count",
                                            "distinct_word_count"])
 
-        file_stats["hapax"] = (self._doc_term_matrix.eq(1)).sum(axis=1)
-        file_stats["total_word_count"] = self._doc_term_matrix.sum(axis=0)
+        file_stats["hapax"] = self._doc_term_matrix.eq(1).sum(axis=1).values
+        file_stats["total_word_count"] = \
+            self._doc_term_matrix.sum(axis=1).values
         file_stats["distinct_word_count"] = \
-            (self._doc_term_matrix.ne(0)).sum(axis=1)
+            self._doc_term_matrix.ne(0).sum(axis=1).values
         file_stats["average_word_count"] = \
             file_stats["total_word_count"] / file_stats["distinct_word_count"]
 
-        return file_stats
+        result = file_stats.round(4).to_html(
+            classes="table table-striped table-bordered"
+        )
 
-    @staticmethod
-    def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
-        """Gives statistics of a particular file in a given file list.
-
-        :param count_list: a list contains words count of a particular file.
-        :param file_name: the file name of that file.
-        :return: a typed tuple contains file name and statistics of that file.
-        """
-        # Check if input is empty.
-        assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
-
-        # Initialize: remove all zeros from count_list.
-        nonzero_count_list = count_list[count_list != 0]
-
-        # Count number of distinct words.
-        distinct_word_count = np.size(nonzero_count_list)
-        # Count number of total words.
-        total_word_count = int(sum(nonzero_count_list).item())
-        # Find average word count
-        average_word_count = round(total_word_count / distinct_word_count,
-                                   3)
-        # Count number of words that only appear once in the given input.
-        hapax = ((count_list == 1).sum()).item()
-
-        return FileInfo(hapax=hapax,
-                        file_name=file_name,
-                        total_word_count=total_word_count,
-                        average_word_count=average_word_count,
-                        distinct_word_count=distinct_word_count)
-
-    def get_all_file_info(self) -> List[FileInfo]:
-        """Find statistics of all files and put each result into a list.
-
-        :return: a list of typed tuple, where each typed tuple contains file
-                 name and statistics of that file.
-        """
-
-        file_info_list = \
-            [self._get_file_info(
-                count_list=self._doc_term_matrix.loc[file_id].values,
-                file_name=temp_label)
-                for file_id, temp_label in self._id_temp_label_map.items()]
-        return file_info_list
+        return result
 
     @staticmethod
     def get_token_type() -> str:

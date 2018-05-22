@@ -2,18 +2,13 @@
 {% set active_page = 'statistics' %}
 
 {% block head %}
- <!-- Latest compiled and minified DataTables CSS and JS -->
-  {% if config['LOCAL_MODE'] == True %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{version}}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-select-bs/css/select.bootstrap.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.js') }}?ver={{version}}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-select/js/dataTables.select.js') }}?ver={{version}}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
-  {% else %}
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
-  {% endif %}
+     <!-- Latest compiled and minified DataTables CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+
+    <!-- Latest compiled and minified DataTables JS -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
 
@@ -85,81 +80,25 @@ $(document).ready( function () {
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-md-12">
-			<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics" style="margin:20px 15px;"/>
-		</div>
-	</div>
+
 </div>
 {% endblock %}
 
 {% block results %}
-{% if FileInfoList %}
-<div class="row">
-	<div class="col-md-12">
-	<legend style="width: 475px;">Statistics for Entire Corpus</legend>
-	{% if corpusInfo %}
-		<p>Average Document Size: {{ corpusInfo.average }}</p>
-		<p>Median Document Size: {{ corpusInfo.median }}</p>
-        <p>Standard Deviation of Document Sizes: {{ corpusInfo.std_deviation }}</p>
-        <p>First Quartile of Document Sizes: {{ corpusInfo.q1 }}</p>
-        <p>Third Quartile of Document Sizes: {{ corpusInfo.q3 }}</p>
-        <p>Interquartile Range of Document Sizes: {{ corpusInfo.iqr }}</p>
-		<p>{% if corpusInfo.anomaly_std_err == {} %}
-			No anomalies found using Standard Error test.
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-            {% else %}
-			<strong>Anomalies found</strong> using Standard Error test:
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-			{% for key in corpusInfo.anomaly_std_err %}
-				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo.anomaly_std_err[key] }}</strong></span>
-			{% endfor %}
-		{% endif %}
-        <p>{% if corpusInfo.anomaly_iqr == {} %}
-			No anomalies found using Interquartile Range test.
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-            {% else %}
-			<strong>Anomalies found</strong> using Interquartile Range test:
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Any file sizes that are unusually small or large compared to the average file size are noted here." style="padding-left:4px;font-size:18px;"></i>
-			{% for key in corpusInfo.anomaly_iqr %}
-				<br/><span style="padding-left:15px;">{{key}} is <strong>{{ corpusInfo.anomaly_iqr[key] }}</strong></span>
-			{% endfor %}
-		{% endif %}
-        </p>
-	{% endif %}
+    <div class="row">
+		<div class="col-md-12">
+			<input type="submit" class="bttn bttn-action" id="statsgen" name="gen-stats" value="Generate Statistics" style="margin:20px 15px;"/>
+		</div>
 	</div>
-</div>
-<div class="row" style="margin-top: 20px;">
-	<div class="col-md-12">
-		<legend style="width: 475px;">Statistics for Each Document</legend>
-	 	<table id="statstable" class="table table-bordered table-striped table-condensed">
-		<thead>
-			<tr>
-				<th>Document Name</th>
-				<th>Number of Distinct Terms</th>
-				<th>Number of {% if token == 'word' %} Terms {% elif token == 'char' %} Characters {% endif %}  Occurring Once</th>
-				<th>Total Term Count</th>
-				<th>Average Term Frequency</th>
-			</tr>
-		</thead>
-		<tbody>
-		{% for file in FileInfoList %}
-			<tr>
-				<td>{{ file.file_name }}</td>
-				<td>{{ file.distinct_word_count }}</td>
-				<td>{{ file.hapax }} </td>
-				<td>{{ file.total_word_count }}</td>
-				<td>{{ file.average_word_count }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-		</table>
-	</div>
+<div id="statsResult" style="width: 100%; float:left; margin-top:30px;margin-right:300px">
+    <div id="statsTable"></div>
 </div>
 <div class="row">
 	<div class="col-md-12">
 		<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
 	</div>
 </div>
-{% endif %}
+{% endblock %}
+
+{% block submit %}
 {% endblock %}
