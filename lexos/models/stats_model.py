@@ -1,12 +1,13 @@
 from typing import List, Tuple, Optional, NamedTuple
-
+from plotly.offline import plot
+import plotly.plotly as py
 import pandas as pd
+import plotly.graph_objs as go
 
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
-from lexos.receivers.stats_receiver import StatsReceiver
 
 
 class StatsTestOptions(NamedTuple):
@@ -65,10 +66,6 @@ class StatsModel(BaseModel):
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
-
-    @property
-    def _stats_option(self):
-        return StatsReceiver().options_from_front_end()
 
     def get_corpus_info(self) -> CorpusStats:
         """Converts word lists completely to statistic.
@@ -134,33 +131,49 @@ class StatsModel(BaseModel):
         # Check if empty corpus is given.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        A = StatsReceiver().options_from_front_end()
-
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        file_stats = pd.DataFrame(index=labels,
-                                  columns=["hapax",
-                                           "total_word_count",
-                                           "average_word_count",
-                                           "distinct_word_count"])
+        # Get proper name headers.
+        token_type = \
+            MatrixReceiver().options_from_front_end().token_option.token_type
 
-        file_stats["hapax"] = self._doc_term_matrix.eq(1).sum(axis=1).values
-        file_stats["total_word_count"] = \
+        token_name = "Terms" if token_type == "word" else "Characters"
+
+        file_stats = pd.DataFrame(
+            columns=["Documents",
+                     f"Number of {token_name} occuring once",
+                     f"Total number of {token_name}",
+                     f"Average number of {token_name}",
+                     f"Distinct number of {token_name}"])
+
+        file_stats["Documents"] = labels
+        file_stats[f"Number of {token_name} occuring once"] = \
+            self._doc_term_matrix.eq(1).sum(axis=1).values
+        file_stats[f"Total number of {token_name}"] = \
             self._doc_term_matrix.sum(axis=1).values
-        file_stats["distinct_word_count"] = \
+        file_stats[f"Distinct number of {token_name}"] = \
             self._doc_term_matrix.ne(0).sum(axis=1).values
-        file_stats["average_word_count"] = \
-            file_stats["total_word_count"] / file_stats["distinct_word_count"]
+        file_stats[f"Average number of {token_name}"] = \
+            file_stats[f"Total number of {token_name}"] / \
+            file_stats[f"Distinct number of {token_name}"]
 
         return file_stats.round(4).to_html(
+            index=False,
             classes="table table-striped table-bordered"
         )
 
-    @staticmethod
-    def get_token_type() -> str:
-        """:return: token type that was used for analyzing."""
+    def get_box_plot(self):
+        data = [
+            go.Box(
+                y=self._doc_term_matrix.sum(1).values,
+                boxpoints='all',
+                pointpos=-2
+            )
+        ]
 
-        return \
-            MatrixReceiver().options_from_front_end().token_option.token_type
+        result = plot(data,
+                      show_link=False,
+                      output_type="div")
+        return result
