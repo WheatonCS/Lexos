@@ -1,4 +1,4 @@
-from typing import Optional, List, NamedTuple
+from typing import List, Tuple, Optional, NamedTuple
 
 import numpy as np
 import pandas as pd
@@ -19,8 +19,10 @@ class CorpusStats(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
     mean: float  # Average size of all files.
     median: float  # Median (second quartile) of all file sizes.
-    anomaly_se: dict  # File anomaly found using standard error.
-    anomaly_iqr: dict  # File anomaly found using interquartile range.
+    # File anomaly found using standard error.
+    anomaly_se: List[Optional[Tuple[str, str]]]
+    # File anomaly found using interquartile range.
+    anomaly_iqr: List[Optional[Tuple[str, str]]]
     std_deviation: float  # Standard deviation of all file sizes.
     first_quartile: float  # First quartile of all file sizes.
     third_quartile: float  # Third quartile of all file sizes.
@@ -82,7 +84,7 @@ class StatsModel(BaseModel):
         # Get the average file word counts.
         mean = file_sizes.mean(0)
         # Get the standard deviation of the file word counts.
-        standard_div = file_sizes.std(0)
+        std_deviation = file_sizes.std(0)
         # Get the median of the file word counts.
         median = file_sizes.mean(0)
         # Get the iqr of the file word counts.
@@ -97,9 +99,9 @@ class StatsModel(BaseModel):
 
         anomaly_se = [
             ("small", label)
-            if file_sizes[count] < mean - 2 * standard_div
+            if file_sizes[count] < mean - 2 * std_deviation
             else ("large", label)
-            if file_sizes[count] > mean + 2 * standard_div
+            if file_sizes[count] > mean + 2 * std_deviation
             else None
             for count, label in enumerate(labels)]
 
@@ -115,56 +117,85 @@ class StatsModel(BaseModel):
             else None
             for count, label in enumerate(labels)]
 
-        return
+        return CorpusStats(mean=mean,
+                           median=median,
+                           anomaly_se=anomaly_se,
+                           anomaly_iqr=anomaly_iqr,
+                           std_deviation=std_deviation,
+                           first_quartile=first_quartile,
+                           third_quartile=third_quartile,
+                           inter_quartile_range=iqr)
 
+    def get_file_info_deprec(self) -> pd.DataFrame:
+        # Check if empty corpus is given.
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        @staticmethod
-        def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
-            """Gives statistics of a particular file in a given file list.
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
-            :param count_list: a list contains words count of a particular file.
-            :param file_name: the file name of that file.
-            :return: a typed tuple contains file name and statistics of that file.
-            """
-            # Check if input is empty.
-            assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
+        file_stats = pd.DataFrame(index=labels,
+                                  columns=["hapax",
+                                           "total_word_count",
+                                           "average_word_count",
+                                           "distinct_word_count"])
 
-            # Initialize: remove all zeros from count_list.
-            nonzero_count_list = count_list[count_list != 0]
+        file_stats["hapax"] = (self._doc_term_matrix.eq(1)).sum(axis=1)
+        file_stats["total_word_count"] = self._doc_term_matrix.sum(axis=0)
+        file_stats["distinct_word_count"] = \
+            (self._doc_term_matrix.ne(0)).sum(axis=1)
+        file_stats["average_word_count"] = \
+            file_stats["total_word_count"] / file_stats["distinct_word_count"]
 
-            # Count number of distinct words.
-            distinct_word_count = np.size(nonzero_count_list)
-            # Count number of total words.
-            total_word_count = int(sum(nonzero_count_list).item())
-            # Find average word count
-            average_word_count = round(total_word_count / distinct_word_count,
-                                       3)
-            # Count number of words that only appear once in the given input.
-            hapax = ((count_list == 1).sum()).item()
+        return file_stats
 
-            return FileInfo(hapax=hapax,
-                            file_name=file_name,
-                            total_word_count=total_word_count,
-                            average_word_count=average_word_count,
-                            distinct_word_count=distinct_word_count)
+    @staticmethod
+    def _get_file_info(count_list: np.ndarray, file_name: str) -> FileInfo:
+        """Gives statistics of a particular file in a given file list.
 
-        def get_all_file_info(self) -> List[FileInfo]:
-            """Find statistics of all files and put each result into a list.
+        :param count_list: a list contains words count of a particular file.
+        :param file_name: the file name of that file.
+        :return: a typed tuple contains file name and statistics of that file.
+        """
+        # Check if input is empty.
+        assert np.sum(count_list) > 0, EMPTY_LIST_MESSAGE
 
-            :return: a list of typed tuple, where each typed tuple contains file
-                     name and statistics of that file.
-            """
+        # Initialize: remove all zeros from count_list.
+        nonzero_count_list = count_list[count_list != 0]
 
-            file_info_list = \
-                [self._get_file_info(
-                    count_list=self._doc_term_matrix.loc[file_id].values,
-                    file_name=temp_label)
-                    for file_id, temp_label in self._id_temp_label_map.items()]
-            return file_info_list
+        # Count number of distinct words.
+        distinct_word_count = np.size(nonzero_count_list)
+        # Count number of total words.
+        total_word_count = int(sum(nonzero_count_list).item())
+        # Find average word count
+        average_word_count = round(total_word_count / distinct_word_count,
+                                   3)
+        # Count number of words that only appear once in the given input.
+        hapax = ((count_list == 1).sum()).item()
 
-        @staticmethod
-        def get_token_type() -> str:
-            """:return: token type that was used for analyzing."""
+        return FileInfo(hapax=hapax,
+                        file_name=file_name,
+                        total_word_count=total_word_count,
+                        average_word_count=average_word_count,
+                        distinct_word_count=distinct_word_count)
 
-            return \
-                MatrixReceiver().options_from_front_end().token_option.token_type
+    def get_all_file_info(self) -> List[FileInfo]:
+        """Find statistics of all files and put each result into a list.
+
+        :return: a list of typed tuple, where each typed tuple contains file
+                 name and statistics of that file.
+        """
+
+        file_info_list = \
+            [self._get_file_info(
+                count_list=self._doc_term_matrix.loc[file_id].values,
+                file_name=temp_label)
+                for file_id, temp_label in self._id_temp_label_map.items()]
+        return file_info_list
+
+    @staticmethod
+    def get_token_type() -> str:
+        """:return: token type that was used for analyzing."""
+
+        return \
+            MatrixReceiver().options_from_front_end().token_option.token_type
