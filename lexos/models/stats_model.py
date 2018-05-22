@@ -1,6 +1,5 @@
 from typing import List, Tuple, Optional, NamedTuple
 from plotly.offline import plot
-import plotly.plotly as py
 import pandas as pd
 import plotly.graph_objs as go
 
