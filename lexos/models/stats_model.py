@@ -1,12 +1,12 @@
 from typing import List, Tuple, Optional, NamedTuple
 
-import numpy as np
 import pandas as pd
 
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
+from lexos.receivers.stats_receiver import StatsReceiver
 
 
 class StatsTestOptions(NamedTuple):
@@ -65,6 +65,10 @@ class StatsModel(BaseModel):
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
+
+    @property
+    def _stats_option(self):
+        return StatsReceiver().options_from_front_end()
 
     def get_corpus_info(self) -> CorpusStats:
         """Converts word lists completely to statistic.
@@ -129,6 +133,8 @@ class StatsModel(BaseModel):
     def get_file_info(self) -> str:
         # Check if empty corpus is given.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
+        A = StatsReceiver().options_from_front_end()
 
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
