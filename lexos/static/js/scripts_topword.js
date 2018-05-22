@@ -1,4 +1,15 @@
 $(function () {
+  var msg = 'You do not have enough active documents. Please activate at least two documents using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+  console.log($('#num_active_files').val())
+  $('#gettopword').click(function () {
+      //console.log(($('#num_active_files').val() == '0'))
+      if ($('#num_active_files').val() <  '2') {
+
+          $('#error-modal .modal-body').html(msg)
+          $('#error-modal').modal()
+      }
+  })
+
   // Hide unnecessary div for DTM
   $('#normalize-options').css({ 'visibility': 'hidden' })
   // set the normalize option to raw count
