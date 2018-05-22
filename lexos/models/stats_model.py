@@ -127,6 +127,10 @@ class StatsModel(BaseModel):
                            inter_quartile_range=iqr)
 
     def get_file_info(self) -> str:
+        """Get statistics of each file.
+
+        :return: A HTML table converted from a pandas data frame.
+        """
         # Check if empty corpus is given.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -163,16 +167,28 @@ class StatsModel(BaseModel):
             classes="table table-striped table-bordered"
         )
 
-    def get_box_plot(self):
-        data = [
-            go.Box(
-                y=self._doc_term_matrix.sum(1).values,
-                boxpoints='all',
-                pointpos=-2
-            )
-        ]
+    def get_box_plot(self) -> str:
+        """Get box plot for the entire corpus.
 
-        result = plot(data,
-                      show_link=False,
-                      output_type="div")
-        return result
+        :return: A plotly object that contains the box plot.
+        """
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Set up the box plot.
+        box_plot = go.Box(y=self._doc_term_matrix.sum(1).values,
+                          name="Corpus box plot")
+
+        # Set up the points.
+        scatter_plot = go.Scatter(y=self._doc_term_matrix.sum(1).values,
+                                  x=[1, 2],
+                                  name="A",
+                                  text=labels,
+                                  mode="markers")
+
+        data = [scatter_plot]
+
+        return plot(data,
+                    show_link=False,
+                    output_type="div")
