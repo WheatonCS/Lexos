@@ -148,11 +148,9 @@ class StatsModel(BaseModel):
         file_stats["average_word_count"] = \
             file_stats["total_word_count"] / file_stats["distinct_word_count"]
 
-        result = file_stats.round(4).to_html(
+        return file_stats.round(4).to_html(
             classes="table table-striped table-bordered"
         )
-
-        return result
 
     @staticmethod
     def get_token_type() -> str:
