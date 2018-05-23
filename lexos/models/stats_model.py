@@ -169,23 +169,26 @@ class StatsModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Set up the box plot.
-        box_plot = go.Box(x0=0.5,
+        box_plot = go.Box(x0=0.5,  # Initial position of the box plot
                           y=self._doc_term_matrix.sum(1).values,
                           name="Corpus Box Plot",
                           hoverinfo="y",
                           marker=dict(color='rgb(10, 140, 200)'))
 
         # Set up the points.
-        scatter_plot = go.Scatter(x0=-0.25,
-                                  dx=0.025,
-                                  y=self._doc_term_matrix.sum(1).values,
-                                  name="Corpus Scatter Plot",
-                                  hoverinfo="text",
-                                  mode="markers",
-                                  text=labels)
+        scatter_plot = go.Scatter(
+            # Get random x values with the range.
+            x=[np.random.uniform(-0.3, 0) for _, _ in enumerate(labels)],
+            y=self._doc_term_matrix.sum(1).values,
+            name="Corpus Scatter Plot",
+            hoverinfo="text",
+            mode="markers",
+            text=labels)
 
+        # Set up the plot data set.
         data = [scatter_plot, box_plot]
 
+        # Hide information on x-axis as we do not really need any of those.
         layout = go.Layout(
             xaxis=dict(
                 autorange=True,
@@ -197,8 +200,7 @@ class StatsModel(BaseModel):
             )
         )
 
-        fig = go.Figure(data=data, layout=layout)
-
-        return plot(fig,
+        # Return plotly object as a div.
+        return plot(go.Figure(data=data, layout=layout),
                     show_link=False,
                     output_type="div")
