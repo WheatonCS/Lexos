@@ -65,7 +65,11 @@ class KmeansModel(BaseModel):
         # Test if get empty input
         assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
-        # Get Kmeans
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Get KMeans
         reduced_data = \
             PCA(n_components=2).fit_transform(self._doc_term_matrix)
 
@@ -75,19 +79,21 @@ class KmeansModel(BaseModel):
                          max_iter=self._kmeans_front_end_option.max_iter,
                          n_clusters=self._kmeans_front_end_option.k_value)
 
-        kmeans_index = k_means.fit_predict(reduced_data)
+        k_means_index = k_means.fit_predict(reduced_data)
 
         traces = []
 
-        for group_num in set(kmeans_index):
+        for group_num in set(k_means_index):
             x_data = reduced_data[
-                np.where(kmeans_index == group_num), 0].tolist()
+                np.where(k_means_index == group_num), 0].tolist()
             y_data = reduced_data[
-                np.where(kmeans_index == group_num), 1].tolist()
+                np.where(k_means_index == group_num), 1].tolist()
             trace = go.Scatter(
                 x=x_data[0],
                 y=y_data[0],
+                text="weiqi <br /> Feng",
                 mode='markers',
+                hoverinfo="text",
                 name=f"group {group_num + 1}",
                 marker=go.Marker(
                     size=12,
@@ -104,8 +110,7 @@ class KmeansModel(BaseModel):
         figure = go.Figure(data=data, layout=layout)
 
         # update the style of the image
-        figure['layout'].update({'width': 600, 'height': 600,
-                                 'hovermode': 'x'})
+        figure['layout'].update({'width': 600, 'height': 600})
 
         div = plot(figure, show_link=False, output_type="div",
                    include_plotlyjs=False)
