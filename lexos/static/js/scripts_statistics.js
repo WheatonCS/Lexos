@@ -143,8 +143,8 @@ $(function () {
             // Select the loading icon.
             const loading_icon = $('#status-analyze')
             loading_icon.css({'visibility': 'visible'})
-            generateStatsBoxPlot()
             generateStatsFileResult()
+            generateStatsBoxPlot()
             loading_icon.css({'visibility': 'hidden'})
         }
         else {
