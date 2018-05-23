@@ -58,6 +58,11 @@ function generateStatsFileResult () {
 
     // the configuration for creating data table
     const dataTableConfig = {
+
+        // specify where the download button is
+        dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
+        '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+
         // specify all the button that is put on to the page
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
     }
