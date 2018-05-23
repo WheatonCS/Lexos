@@ -189,7 +189,7 @@ function doAjax (action) {
     processData: false, // important
     contentType: false,
     data: formData,
-    error: function (jqXHR, textStatus, errorThrown) {
+    : function (jqXHR, textStatus, errorThrown) {
       $('#status-prepare').css({ 'visibility': 'hidden' })
       // Show an error if the user has not cancelled the action
       if (errorThrown != 'abort') {

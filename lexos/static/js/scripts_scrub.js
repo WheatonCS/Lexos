@@ -62,10 +62,10 @@ $(function () {
       beforeSend: function () {
         // alert('Sending...');
       },
-      success: function (response) {
+      done: function (response) {
         // console.log(response);
       },
-      error: function (jqXHR, textStatus, errorThrown) {
+      fail: function (jqXHR, textStatus, errorThrown) {
         console.log('Error: ' + errorThrown)
       }
     })
@@ -121,7 +121,7 @@ $(function () {
           }).appendTo('#xmlModalBody')
           $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
         },
-        success: function (response) {
+        done: function (response) {
           var selection = $('#allTags option:selected').val()
           $('#tagTable').empty().remove()
           var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
@@ -141,7 +141,7 @@ $(function () {
 	    		var value = $('#myselect option:selected').val()
 	    		var text = $('#myselect option:selected').text()
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        fail: function (jqXHR, textStatus, errorThrown) {
           console.log('Error: ' + errorThrown)
         }
       })
@@ -172,7 +172,7 @@ $(function () {
 
         $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
       },
-      success: function (response) {
+      done: function (response) {
         j = JSON.parse(response)
         var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
         $('#xmlModalBody').append(t)
@@ -193,7 +193,7 @@ $(function () {
         var value = $('#myselect option:selected').val()
         var text = $('#myselect option:selected').text()
       },
-      error: function (jqXHR, textStatus, errorThrown) {
+      fail: function (jqXHR, textStatus, errorThrown) {
         console.log('Error: ' + errorThrown)
       }
     })
@@ -227,7 +227,7 @@ function doScrubbing(action) {
     processData: false, // important
     contentType: false, // important
     data: formData,
-    error: function (jqXHR, textStatus, errorThrown) {
+    fail: function (jqXHR, textStatus, errorThrown) {
       $('#error-modal-message').html('Lexos could not apply the scrubbing actions.')
       $('#error-modal').modal()
       console.log('bad: ' + textStatus + ': ' + errorThrown)
