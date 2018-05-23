@@ -100,11 +100,7 @@ function generateStatsBoxPlot () {
     sendAjaxRequest('/statsBoxPlot', form)
         .done(
             function (response) {
-                const outerTableDivSelector = $('#box-plot')
-                // put the response onto the web page
-                outerTableDivSelector.html(response)
-                // display the similarity result
-                $('#stats-result').css({'display': 'block'})  // display everything
+                $('#box-plot').html(response)
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
