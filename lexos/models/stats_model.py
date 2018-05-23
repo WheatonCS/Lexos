@@ -1,6 +1,7 @@
 from typing import List, Tuple, Optional, NamedTuple
 from plotly.offline import plot
 import pandas as pd
+import numpy as np
 import plotly.graph_objs as go
 
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
@@ -177,18 +178,35 @@ class StatsModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Set up the box plot.
-        box_plot = go.Box(y=self._doc_term_matrix.sum(1).values,
-                          name="Corpus box plot")
+        box_plot = go.Box(x0=0.5,
+                          y=self._doc_term_matrix.sum(1).values,
+                          name="Corpus Box Plot",
+                          hoverinfo="y")
 
         # Set up the points.
-        scatter_plot = go.Scatter(y=self._doc_term_matrix.sum(1).values,
-                                  x=[1, 2],
-                                  name="A",
-                                  text=labels,
-                                  mode="markers")
+        scatter_plot = go.Scatter(x0=-0.25,
+                                  dx=0.025,
+                                  y=self._doc_term_matrix.sum(1).values,
+                                  name="Corpus Scatter Plot",
+                                  hoverinfo="text",
+                                  mode="markers",
+                                  text=labels)
 
-        data = [scatter_plot]
+        data = [scatter_plot, box_plot]
 
-        return plot(data,
+        layout = go.Layout(
+            xaxis=dict(
+                autorange=True,
+                showgrid=False,
+                zeroline=False,
+                autotick=False,
+                showline=False,
+                showticklabels=False
+            )
+        )
+
+        fig = go.Figure(data=data, layout=layout)
+
+        return plot(fig,
                     show_link=False,
                     output_type="div")
