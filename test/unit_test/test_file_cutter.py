@@ -354,13 +354,16 @@ class TestCutByMileStone:
         assert cut_by_milestone(text="test\ntest", milestone="test") == [
             "", "\n", ""]
         assert cut_by_milestone(text="Hello, world", milestone=",") == [
-            "Hello", " ", "world"]
+            "Hello", " world"]
 
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
         milestone = "bobcat"
         assert cut_by_milestone(text=text_content, milestone=milestone) == [
             "The ", " slept all day.."]
+        milestone = "bob"
+        assert cut_by_milestone(text=text_content, milestone=milestone) == [
+            "The ", "cat slept all day.."]
 
     def test_milestone_no_milestone_in_text(self):
         text_content = "The bobcat slept all day."
@@ -394,15 +397,12 @@ class TestCutByMileStone:
 
 
 class TestCutterFunction:
-    # this unit test DOES NOT work
     def test_cutter_blank(self):
         assert cut(text=" ", cutting_value="1", cutting_type="words",
                    overlap="0", last_prop_percent="100%") == [""]
         assert cut(text="\n", cutting_value="1", cutting_type="lines",
                    overlap="0", last_prop_percent="100%") == ["\n"]
 
-    # these unit tests DO NOT work if add one
-    # whitespace in the front of word, due to some unknown bug
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value="1",
                    cutting_type="lines", overlap="0",
@@ -416,8 +416,11 @@ class TestCutterFunction:
                    overlap="0", last_prop_percent="100%") == ["te", "st"]
         assert cut(text="test", cutting_value="1", cutting_type="milestone",
                    overlap="0", last_prop_percent="100%") == ["test"]
+
+        #cutting_value="test"?
         assert cut(text="test", cutting_value="test", cutting_type="milestone",
                    overlap="0", last_prop_percent="100%") == ["", ""]
+
         assert cut(text="test", cutting_value="e", cutting_type="milestone",
                    overlap="0", last_prop_percent="100%") == ["t", "st"]
         assert cut(text="test\ntesttest", cutting_value="3",
