@@ -22,6 +22,10 @@ class TestCutByCharacters:
                                  last_prop=1) == ["ABA", "BABAB"]
         assert cut_by_characters(text="A", seg_size=100, overlap=0,
                                  last_prop=1) == ["A"]
+        assert cut_by_characters(text="ABCD",
+                                 seg_size=1, overlap=0,
+                                 last_prop=1) == ["A", "B", "C", "D"]
+
 
     def test_string_overlap(self):
         assert cut_by_characters(text="WORD", seg_size=2, overlap=0,
@@ -38,15 +42,16 @@ class TestCutByCharacters:
                                  last_prop=0.2) == ["ABABA", "BABAB", "A"]
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=0.21) == ["ABABA", "BABABA"]
+        ######
+        # last_prop greater than 1?
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=2) == ["ABABABABABA"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=2) == ["ABC", "DEF", "GHIJKL"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=5) == ["ABCDEFGHIJKL"]
+        ######
 
-        assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
-                                 last_prop=.2) == ["ABABA", "BABAB", "A"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=.2) == ["ABC", "DEF", "GHI", "JKL"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
@@ -54,8 +59,8 @@ class TestCutByCharacters:
 
     def test_string_all_funcs(self):
         assert cut_by_characters(text="ABABABABABA", seg_size=4, overlap=1,
-                                 last_prop=0.5) == \
-            ["ABAB", "BABA", "ABAB", "BA"]
+                                 last_prop=0.5) == ["ABAB", "BABA", "ABAB",
+                                                    "BA"]
 
     def test_pre_conditions(self):
         try:
@@ -93,6 +98,7 @@ class TestCutByWords:
                             last_prop=1) == [""]
         assert cut_by_words(text="test test", seg_size=1, overlap=0,
                             last_prop=1) == ["test ", "test"]
+
         assert cut_by_words(text="abc abc abc abc abc abc abc abc abc abc abc "
                                  "abc abc abc abc abc abc abc abc abc abc "
                                  "abc", seg_size=4, overlap=0, last_prop=.5)\
@@ -110,6 +116,9 @@ class TestCutByWords:
         assert cut_by_words(text="test test test", seg_size=2, overlap=1,
                             last_prop=.5) == ["test test ",
                                               "test test", "test"]
+        assert cut_by_words(text="dog cat duck bird", seg_size=3, overlap=2,
+                            last_prop=.5) == ["dog cat duck ", "cat duck bird",
+                                              "duck bird"]
 
     def test_seg_size_assertion_error(self):
         try:
@@ -252,12 +261,19 @@ class TestCutByNumbers:
                                                 "words ", "in ", "this ",
                                                 "text"]
 
+        #add extra words to the beginning substrings not to the end substrings
+        assert cut_by_number(text="Odd number of words in this text",
+                             num_segment=6) != ["Odd", "number ", "of ",
+                                                "words ", "in ",
+                                                "this text"]
+
         assert cut_by_number(text="Almost enough words here but not quite",
                              num_segment=4) == ["Almost enough ",
                                                 "words here ", "but not ",
                                                 "quite"]
 
     def test_cut_by_number_spacing(self):
+        # cut after space
         assert cut_by_number(text="Hanging space ", num_segment=2) == [
             "Hanging ", "space "]
 
@@ -268,6 +284,7 @@ class TestCutByNumbers:
         assert cut_by_number(text="      <-There are six spaces here",
                              num_segment=5) == ["<-There ", "are ", "six ",
                                                 "spaces ", "here"]
+
         assert cut_by_number(text="\n\n\n\n\nword\n\n\n\n\n",
                              num_segment=1) == ["word\n\n\n\n\n"]
 
@@ -321,7 +338,6 @@ class TestCutByMileStone:
 
     def test_milestone_empty_milestone(self):
         try:
-            _ = cut_by_milestone(text="", milestone="")
             _ = cut_by_milestone(text="The bobcat slept all day.",
                                  milestone="")
             raise AssertionError("empty milestone error does not raise")
@@ -335,6 +351,10 @@ class TestCutByMileStone:
             "", "es", "\n", "es", ""]
         assert cut_by_milestone(text="ABAAB", milestone="A") \
             == ["", "B", "", "B"]
+        assert cut_by_milestone(text="test\ntest", milestone="test") == [
+            "", "\n", ""]
+        assert cut_by_milestone(text="Hello, world", milestone=",") == [
+            "Hello", " ", "world"]
 
     def test_milestone_regular(self):
         text_content = "The bobcat slept all day.."
@@ -353,6 +373,12 @@ class TestCutByMileStone:
         milestone = "The cute bobcat slept all day."
         assert cut_by_milestone(text=text_content, milestone=milestone) == [
             "The bobcat slept all day."]
+
+    def test_milestone_phrase(self):
+        text_content = "The bobcat slept all day."
+        milestone = "bobcat slept all"
+        assert cut_by_milestone(text=text_content, milestone=milestone) == [
+            "The ", " day."]
 
     def test_milestone_check_case_sensative(self):
         text_content = "The bobcat slept all day."
