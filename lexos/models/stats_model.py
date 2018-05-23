@@ -181,7 +181,8 @@ class StatsModel(BaseModel):
         box_plot = go.Box(x0=0.5,
                           y=self._doc_term_matrix.sum(1).values,
                           name="Corpus Box Plot",
-                          hoverinfo="y")
+                          hoverinfo="y",
+                          marker=dict(color='rgb(10, 140, 200)'))
 
         # Set up the points.
         scatter_plot = go.Scatter(x0=-0.25,
