@@ -74,8 +74,7 @@ class StatsModel(BaseModel):
         mean = file_sizes.mean(0)
         # Get the standard deviation of the file word counts.
         std_deviation = file_sizes.std(0)
-        # Get the median of the file word counts.
-        median = file_sizes.mean(0)
+
         # Get the iqr of the file word counts.
         first_quartile = file_sizes.quantile(0.25)
         third_quartile = file_sizes.quantile(0.75)
@@ -172,7 +171,7 @@ class StatsModel(BaseModel):
         # Set up the points.
         scatter_plot = go.Scatter(
             # Get random x values with the range.
-            x=[np.random.uniform(-0.3, 0) for _, _ in enumerate(labels)],
+            x=[np.random.uniform(-0.3, 0) for _ in labels],
             y=self._doc_term_matrix.sum(1).values,
             name="Corpus Scatter Plot",
             hoverinfo="text",
@@ -183,7 +182,9 @@ class StatsModel(BaseModel):
         data = [scatter_plot, box_plot]
 
         # Hide information on x-axis as we do not really need any of those.
+        # Set the title of the graph.
         layout = go.Layout(
+            title="Statistics of the Given Corpus",
             xaxis=dict(
                 autorange=True,
                 showgrid=False,
