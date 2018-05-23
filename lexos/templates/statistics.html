@@ -10,42 +10,53 @@
     <script type="text/javascript"
             src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <script type="text/javascript" charset="utf8"
-            src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
+            src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
 
     <!-- Lexos Scripts -->
     <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{version}}"></script>
+            src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{ version }}"></script>
 {% endblock %}
 
 {% block title %}statistics{% endblock %}
 
 {% block options %}
-<div class="row">
-	<div class="col-md-12">
-		<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
-		<legend style="width: 400px;">Select Document(s)</legend>
-		{% if labels|len > 0 %}
-		    <div class="forAllCheckBox"><label><input type="checkbox" id="allCheckBoxSelector" checked>Check/Uncheck All</label></div>
-		{%- endif %}
-		<div class="col-md-8" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
-		<div id="statsFileSelect">
-		    {% for fileID, label in labels.items() %}
-		    <div class="forCheckBox">
-		      <label id= "statSelect">{{label}}
-		        <input type="checkbox" name="segmentlist" class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
-		      </label>
-		    </div>
-		    {%- endfor %}
-		    {% if labels|len == 0 %}
-		      <span id="no-labels">No Documents are Selected</span>
-		    {%- endif %}
-		</div>
-		</div>
-	</div>
-
-
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="hidden" id="num_active_files"
+                   value="{{ labels|len }}"/>
+            <legend style="width: 400px;">Select Document(s)</legend>
+            {% if labels|len > 0 %}
+                <div class="forAllCheckBox">
+                    <label>
+                        <input type="checkbox"
+                               id="allCheckBoxSelector" checked>
+                        Check/Uncheck All
+                    </label>
+                </div>
+            {%- endif %}
+            <div class="col-md-8" id="statsFileSelectcontainer"
+                 style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
+                <div id="statsFileSelect">
+                    {% for fileID, label in labels.items() %}
+                        <div class="forCheckBox">
+                            <label id="statSelect">{{ label }}
+                                <input type="checkbox" name="segmentlist"
+                                       class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }}
+                                       id="{{ fileID }}_selector"
+                                       value="{{ fileID }}">
+                            </label>
+                        </div>
+                    {%- endfor %}
+                    {% if labels|len == 0 %}
+                        <span id="no-labels">No Documents Activated.</span>
+                    {%- endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block results %}
@@ -53,11 +64,13 @@
         <input type="button" class="bttn bttn-action" id="get-stats"
                name="gen-stats" value="Generate Statistics"/>
     </div>
-    <div id="stats-result" style="width: 100%; float:left; margin-top:30px;margin-right:300px">
+    <div id="stats-result"
+         style="width: 100%; float:left; margin-top:30px;margin-right:300px">
         <div id="box-plot"></div>
         <div id="file-table"></div>
     </div>
-
 {% endblock %}
 
-{% block submit %}{% endblock %}
+{% block submit %}
+
+{% endblock %}
