@@ -1,4 +1,4 @@
-# This model uses kmeans method to analyze files.
+# This model uses KMeans method to analyze files.
 # It uses sklearn.cluster.KMeans for most important analysis, please see:
 # http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 # for more details
@@ -91,22 +91,19 @@ class KmeansModel(BaseModel):
             trace = go.Scatter(
                 x=x_data[0],
                 y=y_data[0],
-                text="weiqi <br /> Feng",
+                text="weiqi Feng",
                 mode='markers',
                 hoverinfo="text",
                 name=f"group {group_num + 1}",
                 marker=go.Marker(
                     size=12,
-                    line=go.Line(
-                        color='rgba(217, 217, 217, 0.14)',
-                        width=0.6),
                     opacity=0.9))
             traces.append(trace)
 
         data = go.Data(traces)
 
-        layout = go.Layout(xaxis=go.XAxis(title='PC1', showline=False),
-                           yaxis=go.YAxis(title='PC2', showline=False))
+        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
+                           yaxis=go.YAxis(title='y-axis', showline=False))
         figure = go.Figure(data=data, layout=layout)
 
         # update the style of the image
