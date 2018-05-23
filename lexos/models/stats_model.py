@@ -198,4 +198,5 @@ class StatsModel(BaseModel):
         # Return plotly object as a div.
         return plot(go.Figure(data=data, layout=layout),
                     show_link=False,
+                    include_plotlyjs=False,
                     output_type="div")
