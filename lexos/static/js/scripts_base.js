@@ -7,6 +7,9 @@ $.fn.center = function () {
 $('form').attr('method', 'post')
 
 $(document).ready(function () {
+  $('#ITMPanel').animate({left: '-450px'});
+  $('#ITMPanel').animate({left: '-500px'}, 'fast');
+
   $('#getviz').click(function (e) {
     if (numActiveDocs < 1) {
       msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
