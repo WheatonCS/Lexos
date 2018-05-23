@@ -21,7 +21,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABAB", seg_size=3, overlap=0,
                                  last_prop=1) == ["ABA", "BABAB"]
         assert cut_by_characters(text="A", seg_size=100, overlap=0,
-                                 last_prop=5) == ["A"]
+                                 last_prop=1) == ["A"]
 
     def test_string_overlap(self):
         assert cut_by_characters(text="WORD", seg_size=2, overlap=0,
@@ -39,11 +39,11 @@ class TestCutByCharacters:
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=0.21) == ["ABABA", "BABABA"]
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
-                                 last_prop=2) == ["ABABABABABA"]
+                                 last_prop=.2) == ["ABABABABABA"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
-                                 last_prop=2) == ["ABC", "DEF", "GHIJKL"]
+                                 last_prop=.2) == ["ABC", "DEF", "GHIJKL"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
-                                 last_prop=5) == ["ABCDEFGHIJKL"]
+                                 last_prop=.5) == ["ABCDEFGHIJKL"]
 
     def test_string_all_funcs(self):
         assert cut_by_characters(text="ABABABABABA", seg_size=4, overlap=1,
