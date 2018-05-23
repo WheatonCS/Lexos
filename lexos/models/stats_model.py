@@ -30,15 +30,6 @@ class CorpusStats(NamedTuple):
     inter_quartile_range: float  # Interquartile range.
 
 
-class FileInfo(NamedTuple):
-    """A typed tuple to represent statistics of each file in corpus."""
-    hapax: int  # Number of words that appear only once in a file.
-    file_name: str  # Name of the file.
-    total_word_count: int  # Total count of words in a file.
-    average_word_count: float  # Average count of words in a file.
-    distinct_word_count: int  # Number of distinct words in a file.
-
-
 class StatsModel(BaseModel):
     def __init__(self, test_options: Optional[StatsTestOptions] = None):
         """This is the class to generate statistics of the input file.
