@@ -1864,7 +1864,7 @@ select#orientation {
 }
 
 #kmeansPCA-result .plot {
-  opacity: 1;
+  opacity: 1 !important;
 }
 .silhouette-options,
 .kmeans-options {
