@@ -12,7 +12,7 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
-    if ($('#num_active_files').val() < 1)
+    if ($('#num_active_files').val() < 2)
         return 'You must have at least 1 active documents to proceed!'
     else
         return null
@@ -50,16 +50,12 @@ function sendAjaxRequest (url, form) {
  * display the result of the similarity query on web page
  */
 function generateStatsFileResult () {
-    // show loading icon
-    $('#status-analyze').css({'visibility': 'visible'})
-
     // convert form into an object map string to string
     const form = jsonifyForm()
 
     // the configuration for creating data table
     const dataTableConfig = {
-
-        // specify where the download button is
+        // specify where the button is
         dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
         '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
 
@@ -81,13 +77,11 @@ function generateStatsFileResult () {
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
+                // If fail hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
                 runModal('error encountered while generating the statistics result.')
-            })
-        .always(
-            function () {
-                $('#status-analyze').css({'visibility': 'hidden'})
             })
 }
 
@@ -95,9 +89,6 @@ function generateStatsFileResult () {
  * display the result of the similarity query on web page
  */
 function generateStatsBoxPlot () {
-    // show loading icon
-    $('#status-analyze').css({'visibility': 'visible'})
-
     // convert form into an object map string to string
     const form = jsonifyForm()
 
@@ -109,13 +100,11 @@ function generateStatsBoxPlot () {
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
+                // If fail hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
                 runModal('error encountered while generating the statistics result.')
-            })
-        .always(
-            function () {
-                $('#status-analyze').css({'visibility': 'hidden'})
             })
 }
 
@@ -150,8 +139,13 @@ $(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            generateStatsFileResult()
+            // show loading icon
+            // Select the loading icon.
+            const loading_icon = $('#status-analyze')
+            loading_icon.css({'visibility': 'visible'})
             generateStatsBoxPlot()
+            generateStatsFileResult()
+            loading_icon.css({'visibility': 'hidden'})
         }
         else {
             runModal(error)
