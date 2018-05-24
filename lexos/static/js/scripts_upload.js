@@ -1,3 +1,8 @@
+$(document).ready(function () {
+    $('#ITMPanel').animate({left: '-450px'});
+    $('#ITMPanel').animate({left: '-500px'}, 'fast');
+})
+
 $(function () {
   if ($('.fa-folder-open-o')[0].style.display != 'none' &&
     $('.fa-folder-open-o')[0].innerText.indexOf('Response') != -1) {
