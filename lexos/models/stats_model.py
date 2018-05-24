@@ -84,7 +84,6 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
-
         anomaly_se = [
             ("small", label)
             if file_sizes[count] < mean - 2 * std_deviation
@@ -96,7 +95,6 @@ class StatsModel(BaseModel):
         # Interquartile range analysis: We detect anomaly by finding files with
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
-
         anomaly_iqr = [
             ("small", label)
             if file_sizes[count] < first_quartile - 1.5 * iqr
@@ -105,11 +103,11 @@ class StatsModel(BaseModel):
             else None
             for count, label in enumerate(labels)]
 
-        return CorpusStats(mean=mean,
+        return CorpusStats(mean=round(mean, 4),
                            anomaly_se=anomaly_se,
                            anomaly_iqr=anomaly_iqr,
-                           std_deviation=std_deviation,
-                           inter_quartile_range=iqr)
+                           std_deviation=round(std_deviation, 4),
+                           inter_quartile_range=round(iqr, 4))
 
     def get_file_info(self) -> str:
         """Get statistics of each file.
