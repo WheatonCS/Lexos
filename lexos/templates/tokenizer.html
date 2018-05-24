@@ -365,10 +365,11 @@ $(document).ready(function() {
         }
         // If the table is larger than 1000 rows/columns, trigger the warning modal
         if (tableLength > 1000) {
-          msg = "Your table has a large number of " + lang + ". Transposing large tables can ";
-          msg += "cause the browser to freeze for several minutes or to crash entirely. ";
-          msg += "We recommend that you download the table directly and open it in a ";
-          msg += "spreadsheet application or text editor.";
+          const msg = "Your table has a large number of " + lang + ". \
+          Transposing large tables can cause the browser to freeze for \
+          several minutes or to crash entirely.We recommend that you \
+          download the table directly and open it in a  spreadsheet \
+          application or text editor.";
           footerButtons = '<button type="button" class="btn btn-default" id="warningCSV">Download CSV</button>';
           footerButtons += '<button type="button" class="btn btn-default" id="warningTSV">Download TSV</button>';
           footerButtons += '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
