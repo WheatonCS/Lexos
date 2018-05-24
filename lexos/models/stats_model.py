@@ -142,9 +142,10 @@ class StatsModel(BaseModel):
         # Find total number of tokens.
         file_stats[f"Total number of {token_name}"] = \
             self._doc_term_matrix.sum(axis=1).values
-
+        # Find distinct number of tokens.
         file_stats[f"Distinct number of {token_name}"] = \
             self._doc_term_matrix.ne(0).sum(axis=1).values
+        # Find average number of appearance of tokens.
         file_stats[f"Average number of {token_name}"] = \
             file_stats[f"Total number of {token_name}"] / \
             file_stats[f"Distinct number of {token_name}"]
