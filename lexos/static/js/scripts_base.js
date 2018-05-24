@@ -78,7 +78,7 @@ $(function () {
 $(function () {
   // Handle exceptions for submitting forms and display error messages on screen
   $('form').attr('method', 'post')
-  $('form').submit(function () {
+  $('form').on('submit', function () {
     $('#num_active_files').val()
     if ($('#num_active_files').val() == '0') {
       $('#error-modal').modal()
@@ -111,9 +111,9 @@ $(function () {
   })
 
   // Show the nested submenu of clustering when mouse hover over the corresponding navbar, otherwise hide the nested menu
-  $('#clustering-menu, #clustering-submenu').mouseover(function () {
+  $('#clustering-menu, #clustering-submenu').on('mouseover', function () {
     $('#clustering-submenu').css({ 'opacity': 1, 'visibility': 'visible' })
-  }).mouseleave(function () {
+  }).on('mouseleave', function () {
     $('#clustering-submenu').css({ 'opacity': 0, 'visibility': 'hidden' })
   })
 
