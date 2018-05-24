@@ -150,7 +150,8 @@ class StatsModel(BaseModel):
             file_stats[f"Total number of {token_name}"] / \
             file_stats[f"Distinct number of {token_name}"]
 
-        return file_stats.round(4).to_html(
+        # Round all the values and return as a HTML string.
+        return file_stats.round(3).to_html(
             index=False,
             classes="table table-striped table-bordered"
         )
@@ -205,11 +206,20 @@ class StatsModel(BaseModel):
                     output_type="div")
 
     def formatted_file_result(self) -> str:
+        """Format the corpus statistics object to display on browser.
+
+        :return: A formatted string in HTML syntax that contains corpus
+                 statistics.
+        """
+        # Get the correct token type.
         token_type = \
             MatrixReceiver().options_from_front_end().token_option.token_type
         token = "terms" if token_type == "word" else "characters"
 
+        # Get corpus stats result.
         stats = self.get_corpus_stats()
+
+        # Format result.
         result = \
             f"<p>Average document size is {stats.mean} {token} </p>" + \
             f"<p>Standard deviation of documents is " \
@@ -217,6 +227,7 @@ class StatsModel(BaseModel):
             f"<p>Inter quartile range of documents is " \
             f"{stats.inter_quartile_range} {token}</p>"
 
+        # Format standard deviation anomaly result.
         if not any(stats.anomaly_se):
             result += \
                 "<p><b>No</b> anomaly detected by standard deviation test.</p>"
@@ -227,6 +238,7 @@ class StatsModel(BaseModel):
                 result += f"<p style=\"padding-left: 10px\">{anomaly}</p>" \
                     if anomaly is not None else ""
 
+        # Format inter quartile range anomaly result.
         if not any(stats.anomaly_iqr):
             result += "<p><b>No</b> anomaly detected by IQR test.</p>"
         else:
