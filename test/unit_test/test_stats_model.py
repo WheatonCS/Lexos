@@ -14,7 +14,7 @@ test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
 test_option_one = StatsTestOptions(doc_term_matrix=test_dtm_one,
                                    id_temp_label_map=test_id_temp_table_one)
 test_stats_model_one = StatsModel(test_options=test_option_one)
-test_corpus_result_one = test_stats_model_one.get_corpus_info()
+test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_all_file_info()
 # ------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_option_two = StatsTestOptions(doc_term_matrix=test_dtm_two,
                                    id_temp_label_map=test_id_temp_table_two)
 test_stats_model_two = StatsModel(test_options=test_option_two)
-test_corpus_result_two = test_stats_model_two.get_corpus_info()
+test_corpus_result_two = test_stats_model_two.get_corpus_stats()
 test_file_result_two = test_stats_model_two.get_all_file_info()
 # ------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ test_option_anomaly = \
     StatsTestOptions(doc_term_matrix=test_dtm_anomaly,
                      id_temp_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
-test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_info()
+test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
 test_file_result_anomaly = test_stats_model_anomaly.get_all_file_info()
 # ------------------------------------------------------------------
 
@@ -131,7 +131,7 @@ class TestSpecialCase:
             assert str(error) == EMPTY_LIST_MESSAGE
 
         try:
-            _ = test_stats_model_special.get_corpus_info()
+            _ = test_stats_model_special.get_corpus_stats()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
