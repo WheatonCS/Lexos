@@ -4,7 +4,6 @@
 # for more details
 
 from typing import Optional, NamedTuple
-import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
@@ -17,15 +16,15 @@ from lexos.receivers.kmeans_receiver import KmeansOption, KmeansReceiver
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 
 
-class KmeansTestOptions(NamedTuple):
+class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: KmeansOption
 
 
-class KmeansModel(BaseModel):
-    def __init__(self, test_options: Optional[KmeansTestOptions] = None):
+class KMeansModel(BaseModel):
+    def __init__(self, test_options: Optional[KMeansTestOptions] = None):
         """This is the class to run k-means analysis.
 
         :param test_options: the input used in testing to override the
@@ -55,7 +54,7 @@ class KmeansModel(BaseModel):
             else MatrixModel().get_id_temp_label_map()
 
     @property
-    def _kmeans_front_end_option(self) -> KmeansOption:
+    def _k_means_front_end_option(self) -> KmeansOption:
         """:return: a typed tuple that holds the k-means front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
@@ -73,43 +72,41 @@ class KmeansModel(BaseModel):
         reduced_data = \
             PCA(n_components=2).fit_transform(self._doc_term_matrix)
 
-        k_means = KMeans(tol=self._kmeans_front_end_option.tolerance,
-                         n_init=self._kmeans_front_end_option.n_init,
-                         init=self._kmeans_front_end_option.init_method,
-                         max_iter=self._kmeans_front_end_option.max_iter,
-                         n_clusters=self._kmeans_front_end_option.k_value)
+        k_means = KMeans(tol=self._k_means_front_end_option.tolerance,
+                         n_init=self._k_means_front_end_option.n_init,
+                         init=self._k_means_front_end_option.init_method,
+                         max_iter=self._k_means_front_end_option.max_iter,
+                         n_clusters=self._k_means_front_end_option.k_value)
 
         k_means_index = k_means.fit_predict(reduced_data)
 
-        traces = []
+        x_value = reduced_data[:, 0]
+        y_value = reduced_data[:, 1]
 
-        for group_num in set(k_means_index):
-            x_data = reduced_data[
-                np.where(k_means_index == group_num), 0].tolist()
-            y_data = reduced_data[
-                np.where(k_means_index == group_num), 1].tolist()
-            trace = go.Scatter(
-                x=x_data[0],
-                y=y_data[0],
-                text="weiqi Feng",
-                mode='markers',
-                hoverinfo="text",
-                name=f"group {group_num + 1}",
-                marker=go.Marker(
-                    size=12,
-                    opacity=0.9))
-            traces.append(trace)
-
-        data = go.Data(traces)
+        data = [
+            go.Scatter(
+                x=[x_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                y=[y_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                text=[labels[index]
+                      for index, group_index in enumerate(k_means_index)
+                      if group_index == group_number],
+                mode="markers",
+                hoverinfo="text+x"
+            )
+            for group_number in set(k_means_index)
+        ]
 
         layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
                            yaxis=go.YAxis(title='y-axis', showline=False))
         figure = go.Figure(data=data, layout=layout)
 
-        # update the style of the image
-        figure['layout'].update({'width': 600, 'height': 600})
-
-        div = plot(figure, show_link=False, output_type="div",
+        div = plot(figure,
+                   show_link=False,
+                   output_type="div",
                    include_plotlyjs=False)
 
         return div
