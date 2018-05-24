@@ -49,14 +49,14 @@ def statistics():
 def file_report():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
-    return StatsModel().get_corpus_info()
+    return StatsModel().formatted_file_result()
 
 
 @stats_blueprint.route("/fileTable", methods=["POST"])
 def file_table():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
-    return StatsModel().get_file_info()
+    return StatsModel().get_file_stats()
 
 
 @stats_blueprint.route("/boxPlot", methods=["POST"])
