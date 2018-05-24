@@ -31,8 +31,7 @@
             {% if labels|len > 0 %}
                 <div class="forAllCheckBox">
                     <label>
-                        <input type="checkbox"
-                               id="allCheckBoxSelector" checked>
+                        <input type="checkbox" id="allCheckBoxSelector" checked>
                         Check/Uncheck All
                     </label>
                 </div>
@@ -60,13 +59,14 @@
 {% endblock %}
 
 {% block results %}
-    <div>
+    <div class="row col-sm-12 col-lg-12 col-md-12">
         <input type="button" class="bttn bttn-action" id="get-stats"
                name="gen-stats" value="Generate Statistics"/>
     </div>
     <div id="stats-result"
          style="width: 100%; float:left; margin-top:30px;margin-right:300px">
-        <div id="box-plot"></div>
+        <div id="file-report" class="col-lg-3"></div>
+        <div id="box-plot" class="col-lg-9"></div>
         <div id="file-table"></div>
     </div>
 {% endblock %}
