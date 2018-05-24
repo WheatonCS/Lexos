@@ -55,7 +55,7 @@ class StatsModel(BaseModel):
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
 
-    def get_corpus_info(self) -> CorpusStats:
+    def get_corpus_stats(self) -> CorpusStats:
         """Converts word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
@@ -85,9 +85,9 @@ class StatsModel(BaseModel):
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
         anomaly_se = [
-            ("small", label)
+            f"<b>small: </b>{label}"
             if file_sizes[count] < mean - 2 * std_deviation
-            else ("large", label)
+            else f"<b>large: </b>{label}"
             if file_sizes[count] > mean + 2 * std_deviation
             else None
             for count, label in enumerate(labels)]
@@ -96,20 +96,20 @@ class StatsModel(BaseModel):
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr = [
-            ("small", label)
+            f"<b>  small: </b>{label}"
             if file_sizes[count] < first_quartile - 1.5 * iqr
-            else ("large", label)
+            else f"<b>  large: </b>{label}"
             if file_sizes[count] > third_quartile + 1.5 * iqr
             else None
             for count, label in enumerate(labels)]
 
-        return CorpusStats(mean=round(mean, 4),
+        return CorpusStats(mean=round(mean, 2),
                            anomaly_se=anomaly_se,
                            anomaly_iqr=anomaly_iqr,
-                           std_deviation=round(std_deviation, 4),
-                           inter_quartile_range=round(iqr, 4))
+                           std_deviation=round(std_deviation, 2),
+                           inter_quartile_range=round(iqr, 2))
 
-    def get_file_info(self) -> str:
+    def get_file_stats(self) -> str:
         """Get statistics of each file.
 
         :return: A HTML table converted from a pandas data frame.
@@ -198,3 +198,36 @@ class StatsModel(BaseModel):
                     show_link=False,
                     include_plotlyjs=False,
                     output_type="div")
+
+    def formatted_file_result(self) -> str:
+        token_type = \
+            MatrixReceiver().options_from_front_end().token_option.token_type
+        token = "terms" if token_type == "word" else "characters"
+
+        stats = self.get_corpus_stats()
+        result = \
+            f"<p>Average document size is {stats.mean} {token} </p>" + \
+            f"<p>Standard deviation of documents is " \
+            f"{stats.std_deviation} {token} </p>" + \
+            f"<p>Inter quartile range of documents is " \
+            f"{stats.inter_quartile_range} {token}</p>"
+
+        if not any(stats.anomaly_se):
+            result += \
+                "<p><b>No</b> anomaly detected by standard deviation test.</p>"
+        else:
+            result += \
+                "<p>Anomaly detected using the standard deviation test.</P>"
+            for anomaly in stats.anomaly_se:
+                result += f"<p style=\"padding-left: 10px\">{anomaly}</p>" \
+                    if anomaly is not None else ""
+
+        if not any(stats.anomaly_iqr):
+            result += "<p><b>No</b> anomaly detected by IQR test.</p>"
+        else:
+            result += "<p>Anomaly detected using the IQR test.</p>"
+            for anomaly in stats.anomaly_iqr:
+                result += f"<p style=\"padding-left: 10px\">{anomaly}</p>" \
+                    if anomaly is not None else ""
+
+        return result
