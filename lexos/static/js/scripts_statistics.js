@@ -46,7 +46,7 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
- * display the result of the similarity query on web page
+ * display the result of the corpus statistics report on web.
  */
 function generateStatsFileReport () {
     $('#status-analyze').css({'visibility': 'visible'})
@@ -60,15 +60,18 @@ function generateStatsFileReport () {
                 $('#file-report').html(response)
             })
         .fail(
+
             function (jqXHR, textStatus, errorThrown) {
+                // If fail hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while generating the statistics result.')
+                runModal('Error encountered while generating the corpus statistics.')
             })
 }
 
 /**
- * display the result of the similarity query on web page
+ * display the result of the file statistics on web.
  */
 function generateStatsFileTable () {
     $('#status-analyze').css({'visibility': 'visible'})
@@ -77,16 +80,20 @@ function generateStatsFileTable () {
 
     // the configuration for creating data table
     const dataTableConfig = {
-        pageLength: 5,
+        // Set the initial page length.
+        pageLength: 10,
+
+        // Replace entries to documents.
         language: {
             'lengthMenu': 'Display _MENU_ documents',
             'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
         },
-        // specify where the button is
+
+        // Specify where the button is.
         dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
         '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
 
-        // specify all the button that is put on to the page
+        // Specify all the download buttons that are displayed on the page.
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
     }
 
@@ -99,8 +106,8 @@ function generateStatsFileTable () {
                 outerTableDivSelector.html(response)
                 // initialize the data table
                 outerTableDivSelector.children().DataTable(dataTableConfig)
-                // display the similarity result
-                $('#stats-result').css({'display': 'block'})  // display everything
+                // display the corpus statistics result
+                $('#stats-result').css({'display': 'block'})
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
@@ -108,12 +115,12 @@ function generateStatsFileTable () {
                 $('#status-analyze').css({'visibility': 'hidden'})
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while generating the statistics result.')
+                runModal('Error encountered while generating the file statistics.')
             })
 }
 
 /**
- * display the result of the similarity query on web page
+ * display the result of the box plot on web page
  */
 function generateStatsBoxPlot () {
     $('#status-analyze').css({'visibility': 'visible'})
@@ -130,7 +137,7 @@ function generateStatsBoxPlot () {
             function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while generating the statistics result.')
+                runModal('Error encountered while generating the box plot.')
             })
         .always(
             function () {
