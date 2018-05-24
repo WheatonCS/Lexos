@@ -43,18 +43,51 @@ function sendAjaxRequest (url, form) {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(form)
     })
-
 }
 
 /**
  * display the result of the similarity query on web page
  */
-function generateStatsFileResult () {
+function generateStatsFileReport () {
+    $('#status-analyze').css({'visibility': 'visible'})
+    // convert form into an object map string to string
+    const form = jsonifyForm()
+
+    // send the ajax request
+    sendAjaxRequest('/boxPlot', form)
+        .done(
+            function (response) {
+                $('#file-report').html(response)
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
+                console.log('textStatus: ' + textStatus)
+                console.log('errorThrown: ' + errorThrown)
+                runModal('error encountered while generating the statistics result.')
+            })
+        .always(
+            function () {
+                // Always hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
+            }
+        )
+}
+
+/**
+ * display the result of the similarity query on web page
+ */
+function generateStatsFileTable () {
+    $('#status-analyze').css({'visibility': 'visible'})
     // convert form into an object map string to string
     const form = jsonifyForm()
 
     // the configuration for creating data table
     const dataTableConfig = {
+        pageLength: 5,
+        language: {
+            'lengthMenu': 'Display _MENU_ documents',
+            'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
+        },
         // specify where the button is
         dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
         '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
@@ -64,7 +97,7 @@ function generateStatsFileResult () {
     }
 
     // send the ajax request
-    sendAjaxRequest('/statsFile', form)
+    sendAjaxRequest('/fileTable', form)
         .done(
             function (response) {
                 const outerTableDivSelector = $('#file-table')
@@ -89,23 +122,28 @@ function generateStatsFileResult () {
  * display the result of the similarity query on web page
  */
 function generateStatsBoxPlot () {
+    $('#status-analyze').css({'visibility': 'visible'})
     // convert form into an object map string to string
     const form = jsonifyForm()
 
     // send the ajax request
-    sendAjaxRequest('/statsBoxPlot', form)
+    sendAjaxRequest('/boxPlot', form)
         .done(
             function (response) {
                 $('#box-plot').html(response)
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
-                // If fail hide the loading icon.
-                $('#status-analyze').css({'visibility': 'hidden'})
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
                 runModal('error encountered while generating the statistics result.')
             })
+        .always(
+            function () {
+                // Always hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
+            }
+        )
 }
 
 $(function () {
@@ -139,13 +177,12 @@ $(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
-            // show loading icon
-            // Select the loading icon.
-            const loading_icon = $('#status-analyze')
-            loading_icon.css({'visibility': 'visible'})
-            generateStatsFileResult()
+            // Get the file report result.
+            generateStatsFileReport()
+            // Get the file table.
+            generateStatsFileTable()
+            // Get the box plot.
             generateStatsBoxPlot()
-            loading_icon.css({'visibility': 'hidden'})
         }
         else {
             runModal(error)
