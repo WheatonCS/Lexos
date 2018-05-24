@@ -54,7 +54,7 @@ function generateStatsFileReport () {
     const form = jsonifyForm()
 
     // send the ajax request
-    sendAjaxRequest('/boxPlot', form)
+    sendAjaxRequest('/fileReport', form)
         .done(
             function (response) {
                 $('#file-report').html(response)
@@ -65,12 +65,6 @@ function generateStatsFileReport () {
                 console.log('errorThrown: ' + errorThrown)
                 runModal('error encountered while generating the statistics result.')
             })
-        .always(
-            function () {
-                // Always hide the loading icon.
-                $('#status-analyze').css({'visibility': 'hidden'})
-            }
-        )
 }
 
 /**
