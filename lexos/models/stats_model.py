@@ -121,12 +121,12 @@ class StatsModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        # Get proper name headers.
+        # Get the correct token name.
         token_type = \
             MatrixReceiver().options_from_front_end().token_option.token_type
-
         token_name = "Terms" if token_type == "word" else "Characters"
 
+        # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
             columns=["Documents",
                      f"Number of {token_name} occuring once",
@@ -134,11 +134,15 @@ class StatsModel(BaseModel):
                      f"Average number of {token_name}",
                      f"Distinct number of {token_name}"])
 
+        # Save document names in the data frame.
         file_stats["Documents"] = labels
+        # Find number of token that appears only once.
         file_stats[f"Number of {token_name} occuring once"] = \
             self._doc_term_matrix.eq(1).sum(axis=1).values
+        # Find total number of tokens.
         file_stats[f"Total number of {token_name}"] = \
             self._doc_term_matrix.sum(axis=1).values
+
         file_stats[f"Distinct number of {token_name}"] = \
             self._doc_term_matrix.ne(0).sum(axis=1).values
         file_stats[f"Average number of {token_name}"] = \
