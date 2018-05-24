@@ -1,15 +1,3 @@
-
-
-
-
-
-an anonymous volunteer and david widger
-
-
-
-
-
-
 war and peace
 
 
@@ -22,7 +10,7 @@ by leo tolstoytolstoi
 contents
 
 
-book one 
+book one
 
 chapter i
 
@@ -81,7 +69,7 @@ chapter xxvii
 chapter xxviii
 
 
-book two 
+book two
 
 chapter i
 
@@ -126,7 +114,7 @@ chapter xx
 chapter xxi
 
 
-book three 
+book three
 
 chapter i
 
@@ -167,7 +155,7 @@ chapter xviii
 chapter xix
 
 
-book four 
+book four
 
 chapter i
 
@@ -202,7 +190,7 @@ chapter xv
 chapter xvi
 
 
-book five   
+book five
 
 chapter i
 
@@ -249,7 +237,7 @@ chapter xxi
 chapter xxii
 
 
-book six   
+book six
 
 chapter i
 
@@ -304,7 +292,7 @@ chapter xxv
 chapter xxvi
 
 
-book seven   
+book seven
 
 chapter i
 
@@ -333,7 +321,7 @@ chapter xii
 chapter xiii
 
 
-book eight   
+book eight
 
 chapter i
 
@@ -380,7 +368,7 @@ chapter xxi
 chapter xxii
 
 
-book nine 
+book nine
 
 chapter i
 
@@ -429,7 +417,7 @@ chapter xxii
 chapter xxiii
 
 
-book ten 
+book ten
 
 chapter i
 
@@ -510,7 +498,7 @@ chapter xxxviii
 chapter xxxix
 
 
-book eleven 
+book eleven
 
 chapter i
 
@@ -581,7 +569,7 @@ chapter xxxiii
 chapter xxxiv
 
 
-book twelve 
+book twelve
 
 chapter i
 
@@ -616,48 +604,7 @@ chapter xv
 chapter xvi
 
 
-book thirteen 
-
-chapter i
-
-chapter ii
-
-chapter iii
-
-chapter iv
-
-chapter v
-
-chapter vi
-
-chapter vii
-
-chapter viii
-
-chapter ix
-
-chapter x
-
-chapter xi
-
-chapter xii
-
-chapter xiii
-
-chapter xiv
-
-chapter xv
-
-chapter xvi
-
-chapter xvii
-
-chapter xviii
-
-chapter xix
-
-
-book fourteen 
+book thirteen
 
 chapter i
 
@@ -698,7 +645,48 @@ chapter xviii
 chapter xix
 
 
-book fifteen   
+book fourteen
+
+chapter i
+
+chapter ii
+
+chapter iii
+
+chapter iv
+
+chapter v
+
+chapter vi
+
+chapter vii
+
+chapter viii
+
+chapter ix
+
+chapter x
+
+chapter xi
+
+chapter xii
+
+chapter xiii
+
+chapter xiv
+
+chapter xv
+
+chapter xvi
+
+chapter xvii
+
+chapter xviii
+
+chapter xix
+
+
+book fifteen
 
 chapter i
 
@@ -741,7 +729,7 @@ chapter xix
 chapter xx
 
 
-first epilogue   
+first epilogue
 
 chapter i
 
@@ -811,7 +799,7 @@ chapter xii
 
 
 
-book one 
+book one
 
 
 
@@ -1504,7 +1492,7 @@ my dear benefactor this is what i expected from youi knew your
 kindness he turned to go
 
 waitjust a word when he has been transferred to the guards she
-faltered you are on good terms with michael ilariónovich kutúzov 
+faltered you are on good terms with michael ilariónovich kutúzov
 recommend borís to him as adjutant then i shall be at rest and
 then
 
@@ -2004,7 +1992,7 @@ oh dont speak of his going dont i wont hear it spoken of said
 the princess in the same petulantly playful tone in which she had spoken
 to hippolyte in the drawing room and which was so plainly illsuited to
 the family circle of which pierre was almost a member today when i
-remembered that all these delightful associations must be broken off 
+remembered that all these delightful associations must be broken off
 and then you know andre she looked significantly at her husband
 im afraid im afraid she whispered and a shudder ran down her
 back
@@ -5890,7 +5878,7 @@ said thats bad go on go on
 
 the third interruption came when prince andrew was finishing his
 description the old man began to sing in the cracked voice of old age
-malbrook sen vaten guerre dieu sait quand reviendra 
+malbrook sen vaten guerre dieu sait quand reviendra
 
  marlborough is going to the wars god knows when hell return
 
@@ -6492,7 +6480,7 @@ the door
 
 
 
-book two 
+book two
 
 
 
@@ -7327,7 +7315,7 @@ excitement dont you understand that either we are officers serving
 our tsar and our country rejoicing in the successes and grieving at the
 misfortunes of our common cause or we are merely lackeys who care
 nothing for their masters business quarante mille hommes massacres et
-larmee de nos allies detruite et vous trouvez la le mot pour rire 
+larmee de nos allies detruite et vous trouvez la le mot pour rire
 he said as if strengthening his views by this french sentence cest
 bien pour un garcon de rien comme cet individu dont vous avez fait un
 ami mais pas pour vous pas pour vous  only a hobbledehoy could
@@ -7404,7 +7392,7 @@ emperor alexander
 the german laughed came out of the cowshed pulled off his cap and
 waving it above his head cried
 
-und die ganze welt hoch 
+und die ganze welt hoch
 
  and hurrah for the whole world
 
@@ -8930,7 +8918,7 @@ bilibin smiled and the wrinkles on his face disappeared
 cependant mon cher he remarked examining his nails from a distance
 and puckering the skin above his left eye malgre la haute estime que
 je professe pour the orthodox russian army javoue que votre victoire
-nest pas des plus victorieuses 
+nest pas des plus victorieuses
 
  but my dear fellow with all my respect for the orthodox russian
 army i must say that your victory was not particularly victorious
@@ -9366,7 +9354,7 @@ stop this jesting he said
 i am not jesting bilibin went on nothing is truer or sadder these
 gentlemen ride onto the bridge alone and wave white handkerchiefs they
 assure the officer on duty that they the marshals are on their way to
-negotiate with prince auersperg he lets them enter the têtedepont 
+negotiate with prince auersperg he lets them enter the têtedepont
 they spin him a thousand gasconades saying that the war is over that
 the emperor francis is arranging a meeting with bonaparte that they
 desire to see prince auersperg and so on the officer sends for
@@ -9836,7 +9824,7 @@ hollabrunn received murats dispatch with the proposal of a truce and a
 capitulation he detected a ruse and wrote the following letter to
 murat
 
-schonbrunn th brumaire 
+schonbrunn th brumaire
 
 at eight oclock in the morning
 
@@ -11360,7 +11348,7 @@ bagrations detachment was reunited to kutúzovs army
 
 
 
-book three 
+book three
 
 
 
@@ -12487,7 +12475,7 @@ about her native land when he saw the pretty little bourienne anatole
 came to the conclusion that he would not find bald hills dull either
 not at all bad he thought examining her not at all bad that
 little companion i hope she will bring her along with her when were
-married la petite est gentille 
+married la petite est gentille
 
  the little one is charming
 
@@ -14508,7 +14496,7 @@ loud monotonous voice began to read out the dispositions for the
 impending battle under a heading which he also read out
 
 dispositions for an attack on the enemy position behind kobelnitz and
-sokolnitz november  
+sokolnitz november
 
 the dispositions were very complicated and difficult they began as
 follows
@@ -15360,7 +15348,7 @@ in his horse before the emperor
 
 god be with you general said the emperor
 
-ma foi sire nous ferons ce qui sera dans notre possibilite sire 
+ma foi sire nous ferons ce qui sera dans notre possibilite sire
 he answered gaily raising nevertheless ironic smiles among the
 gentlemen of the tsars suite by his poor french
 
@@ -16256,7 +16244,7 @@ the inhabitants of the district
 
 
 
-book four 
+book four
 
 
 
@@ -17209,7 +17197,7 @@ intention of killing your man as quickly and surely as possible and
 then all will be right as our bear huntsman at kostroma used to tell
 me everyone fears a bear he says but when you see one your fears
 all gone and your only thought is not to let him get away and thats
-how it is with me a demain mon cher 
+how it is with me a demain mon cher
 
  till tomorrow my dear fellow
 
@@ -17453,7 +17441,7 @@ then he recalled the coarseness and bluntness of her thoughts and the
 vulgarity of the expressions that were natural to her though she had
 been brought up in the most aristocratic circles
 
-im not such a fool just you try it on allezvous promener 
+im not such a fool just you try it on allezvous promener
 she used to say often seeing the success she had with young and old men
 and women pierre could not understand why he did not love her
 
@@ -19038,7 +19026,7 @@ his acquaintances to overtake his regiment which was already in poland
 
 
 
-book five   
+book five
 
 
 
@@ -19634,7 +19622,7 @@ half an hour later the rhetor returned to inform the seeker of the
 seven virtues corresponding to the seven steps of solomons temple
 which every freemason should cultivate in himself these virtues were
  discretion the keeping of the secrets of the order  obedience to
-those of higher ranks in the order  morality  love of mankind 
+those of higher ranks in the order  morality  love of mankind
 courage  generosity  the love of death
 
 in the seventh place try by the frequent thought of death the
@@ -20087,7 +20075,7 @@ of such a thing it is only the cabinet that says it
 ah my dear vicomte put in anna pávlovna lurope for some reason
 she called it urope as if that were a specially refined french
 pronunciation which she could allow herself when conversing with a
-frenchman lurope ne sera jamais notre alliee sincere 
+frenchman lurope ne sera jamais notre alliee sincere
 
  europe will never be our sincere ally
 
@@ -20223,7 +20211,7 @@ heard curses on bonaparte the enemy of mankind militiamen and
 recruits were being enrolled in the villages and from the seat of war
 came contradictory news false as usual and therefore variously
 interpreted the life of old prince bolkónski prince andrew and
-princess mary had greatly changed since 
+princess mary had greatly changed since
 
 in  the old prince was made one of the eight commanders in chief
 then appointed to supervise the enrollment decreed throughout russia
@@ -21353,7 +21341,7 @@ customary longestablished relations on the matter
 
 mais ma bonne amie said prince andrew vous devriez au contraire
 mêtre reconnaissante de ce que jexplique a pierre votre intimité avec
-ce jeune homme 
+ce jeune homme
 
  but my dear you ought on the contrary to be grateful to me for
 explaining to pierre your intimacy with this young man
@@ -22823,7 +22811,7 @@ with napoleon bonaparte and from all the schemes of reconstruction
 
 
 
-book six   
+book six
 
 
 
@@ -23177,7 +23165,7 @@ the emperor and that the latter disliked his face and personality
 generally and in the cold repellent glance the emperor gave him he
 now found further confirmation of this surmise the courtiers explained
 the emperors neglect of him by his majestys displeasure at bolkónskis
-not having served since 
+not having served since
 
 i know myself that one cannot help ones sympathies and antipathies
 thought prince andrew so it will not do to present my proposal for the
@@ -23467,7 +23455,7 @@ what do you mean asked speranski quietly lowering his eyes
 i am an admirer of montesquieu replied prince andrew and his idea
 that le principe des monarchies est lhonneur me parait incontestable
 certains droits et privileges de la noblesse me paraissent etre des
-moyens de soutenir ce sentiment 
+moyens de soutenir ce sentiment
 
  the principle of monarchies is honor seems to me incontestable
 certain rights and privileges for the aristocracy appear to me a means
@@ -24247,7 +24235,7 @@ up the scrap of a grenade that had killed an aidedecamp standing near
 the commanderinchief and had taken it to his commander just as he had
 done after austerlitz he related this occurrence at such length and so
 insistently that everyone again believed it had been necessary to do
-this and he received two decorations for the finnish war also in 
+this and he received two decorations for the finnish war also in
 he was a captain in the guards wore medals and held some special
 lucrative posts in petersburg
 
@@ -26498,7 +26486,7 @@ was a sinner who loved her father and little nephew more than god
 
 
 
-book seven   
+book seven
 
 
 
@@ -29135,7 +29123,7 @@ natásha with him went to moscow at the end of january
 
 
 
-book eight   
+book eight
 
 
 
@@ -29677,7 +29665,7 @@ affairs into which we had been drawn by the peace of tilsit we ought
 not to fight either for or against austria our political interests are
 all in the east and in regard to bonaparte the only thing is to have an
 armed frontier and a firm policy and he will never dare to cross the
-russian frontier as was the case in 
+russian frontier as was the case in
 
 how can we fight the french prince said count rostopchin can we
 arm ourselves against our teachers and divinities look at our youths
@@ -29912,7 +29900,7 @@ your dark branches shed gloom and melancholy upon me
 on another page he drew a tomb and wrote
 
 la mort est secourable et la mort est tranquille ah contre les
-douleurs il ny a pas dautre asile 
+douleurs il ny a pas dautre asile
 
  death gives relief and death is peaceful
 
@@ -29930,7 +29918,7 @@ in reply borís wrote these lines
 aliment de poison dune ame trop sensible toi sans qui le bonheur me
 serait impossible tendre melancholie ah viens me consoler viens
 calmer les tourments de ma sombre retraite et mele une douceur secrete
-a ces pleurs que je sens couler 
+a ces pleurs que je sens couler
 
 poisonous nourishment of a too sensitive soul thou without whom
 happiness would for me be impossible tender melancholy ah come to
@@ -32750,7 +32738,7 @@ his own softened and uplifted soul now blossoming into a new life
 
 
 
-book nine 
+book nine
 
 
 
@@ -33080,7 +33068,7 @@ found napoleon also gave instructions that the polish colonel who had
 needlessly plunged into the river should be enrolled in the legion
 dhonneur of which napoleon was himself the head
 
-quos vult perdere dementat 
+quos vult perdere dementat
 
  those whom god wishes to destroy he drives mad
 
@@ -34370,7 +34358,7 @@ he will show what he can do as he did in finland if our army is well
 organized and strong and has withdrawn to drissa without suffering any
 defeats we owe this entirely to barclay if barclay is now to be
 superseded by bennigsen all will be lost for bennigsen showed his
-incapacity already in 
+incapacity already in
 
 the sixth party the bennigsenites said on the contrary that at any
 rate there was no one more active and experienced than bennigsen and
@@ -35472,7 +35460,7 @@ the symptoms of natáshas illness were that she ate little slept
 little coughed and was always lowspirited the doctors said that she
 could not get on without medical treatment so they kept her in the
 stifling atmosphere of the town and the rostóvs did not move to the
-country that summer of 
+country that summer of
 
 in spite of the many pills she swallowed and the drops and powders out
 of the little bottles and boxes of which madame schoss who was fond of
@@ -35879,9 +35867,9 @@ the french alphabet written out with the same numerical values as the
 hebrew in which the first nine letters denote units and the others
 tens will have the following significance
 
-a   b   c   d   e   f   g   h   i   k                         
- l    m    n    o    p    q    r    s                   
- t    u    v    w    x    y            z 
+a   b   c   d   e   f   g   h   i   k
+ l    m    n    o    p    q    r    s
+ t    u    v    w    x    y            z
 
 writing the words lempereur napoleon in numbers it appears that the
 sum of them is  and that napoleon was therefore the beast foretold
@@ -36805,7 +36793,7 @@ feeling amazed themselves at what they had done
 
 
 
-book ten 
+book ten
 
 
 
@@ -37537,7 +37525,7 @@ warrior in our valiant ranks has perished from this you will see that
 you have a perfect right to reassure the inhabitants of smolensk for
 those defended by two such brave armies may feel assured of victory
 instructions from barclay de tolly to baron asch the civil governor of
-smolensk 
+smolensk
 
 people were anxiously roaming about the streets
 
@@ -38121,7 +38109,7 @@ european sovereigns a malicious conspiracy the sole object of which was
 to cause unpleasantness and anxiety to the court circle of which anna
 pávlovna was the representative and in hélènes salon which rumyántsev
 himself honored with his visits regarding hélène as a remarkably
-intelligent woman they talked with the same ecstasy in  as in 
+intelligent woman they talked with the same ecstasy in  as in
 of the great nation and the great man and regretted our rupture
 with france a rupture which according to them ought to be promptly
 terminated by peace
@@ -38390,7 +38378,7 @@ smile says thiers after riding a few paces in silence napoleon
 turned to berthier and said he wished to see how the news that he was
 talking to the emperor himself to that very emperor who had written his
 immortally victorious name on the pyramids would affect this enfant du
-don 
+don
 
  child of the don
 
@@ -40193,7 +40181,7 @@ honor he paused i missed you at bucharest but i needed someone to
 send and changing the subject kutúzov began to speak of the turkish
 war and the peace that had been concluded yes i have been much
 blamed he said both for that war and the peace but everything
-came at the right time tout vient a point a celui qui sait attendre 
+came at the right time tout vient a point a celui qui sait attendre
 and there were as many advisers there as here he went on returning
 to the subject of advisers which evidently occupied him ah those
 advisers said he if we had listened to them all we should not have
@@ -40421,7 +40409,7 @@ souzas novels
 what knights what do you mean demanded pierre blushing
 
 oh come my dear count cest la fable de tout moscou je vous admire
-ma parole dhonneur 
+ma parole dhonneur
 
  it is the talk of all moscow my word i admire you
 
@@ -40467,7 +40455,7 @@ flight has been arranged to get all the old maids married off catiche
 is one and princess bolkónskaya another
 
 do you know i really believe she is un petit peu amoureuse du jeune
-homme 
+homme
 
  a little bit in love with the young man
 
@@ -41806,7 +41794,7 @@ view
 
 oh ja said the other der zweck ist nur den feind zu schwächen so
 kann man gewiss nicht den verlust der privatpersonen in achtung
-nehmen 
+nehmen
 
  oh yes the only aim is to weaken the enemy so of course one cannot
 take into account the loss of private individuals
@@ -42199,7 +42187,7 @@ will operate
 
  guns of the artillery of the guards  guns of campans division
 
-and      guns of friants and dessaixs divisions 
+and      guns of friants and dessaixs divisions
 
 in all  guns
 
@@ -42236,7 +42224,7 @@ methode as far as possible retaining troops in reserve
 
 the imperial camp near mozhaysk
 
-september  
+september
 
 these dispositions which are very obscure and confused if one allows
 oneself to regard the arrangements without religious awe of his genius
@@ -44232,7 +44220,7 @@ spirit had been laid
 
 
 
-book eleven 
+book eleven
 
 
 
@@ -45151,7 +45139,7 @@ just then the lady companion who lived with hélène came in to announce
 that his highness was in the ballroom and wished to see her
 
 non diteslui que je ne veux pas le voir que je suis furieuse contre
-lui parce quil ma manque parole 
+lui parce quil ma manque parole
 
  no tell him i dont wish to see him i am furious with him for not
 keeping his word to me
@@ -48427,7 +48415,7 @@ moscow concealing his name and must meet napoleon and kill him and
 either perish or put an end to the misery of all europewhich it seemed
 to him was solely due to napoleon
 
-pierre knew all the details of the attempt on bonapartes life in 
+pierre knew all the details of the attempt on bonapartes life in
 by a german student in vienna and knew that the student had been shot
 and the risk to which he would expose his life by carrying out his
 design excited him still more
@@ -50101,7 +50089,7 @@ being used as a guardhouse pierre was placed apart under strict guard
 
 
 
-book twelve 
+book twelve
 
 
 
@@ -50392,7 +50380,7 @@ the emperor at once received this messenger in his study at the palace
 on stone island michaud who had never seen moscow before the campaign
 and who did not know russian yet felt deeply moved as he wrote when
 he appeared before notre tres gracieux souverain  with the news of the
-burning of moscow dont les flammes eclairaient sa route 
+burning of moscow dont les flammes eclairaient sa route
 
  our most gracious sovereign
 
@@ -52272,7 +52260,7 @@ meet her with a look of emotion this was the countess she embraced
 princess mary and kissed her
 
 mon enfant she muttered je vous aime et vous connais depuis
-longtemps 
+longtemps
 
  my child i love you and have known you a long time
 
@@ -52463,7 +52451,7 @@ that my dear you must ask the doctor he replied and again making
 an evident effort to be affectionate he said with his lips only his
 words clearly did not correspond to his thoughts
 
-merci chere amie detre venue 
+merci chere amie detre venue
 
  thank you for coming my dear
 
@@ -52848,7 +52836,7 @@ presence
 
 
 
-book thirteen 
+book thirteen
 
 
 
@@ -53025,7 +53013,7 @@ sentiment of esteem and special regard i have long entertained for your
 person this letter having no other object i pray god monsieur le
 prince koutouzov to keep you in his holy and gracious protection
 
-napoleon moscow october  
+napoleon moscow october
 
 kutúzov replied i should be cursed by posterity were i looked on as
 the initiator of a settlement of any sort such is the present spirit of
@@ -53881,7 +53869,7 @@ nothing new except that the soldiers are robbing and pillagingoctober
 
 
 robbery and pillaging continue there is a band of thieves in our
-district who ought to be arrested by a strong forceoctober 
+district who ought to be arrested by a strong forceoctober
 
 the emperor is extremely displeased that despite the strict orders to
 stop pillage parties of marauding guards are continually seen returning
@@ -55077,7 +55065,7 @@ away to pursue its fatal path to smolensk
 
 
 
-book fourteen 
+book fourteen
 
 
 
@@ -55215,7 +55203,7 @@ national character in such actions instead of two crowds opposing each
 other the men disperse attack singly run away when attacked by
 stronger forces but again attack when opportunity offers this was done
 by the guerrillas in spain by the mountain tribes in the caucasus and
-by the russians in 
+by the russians in
 
 people have called this kind of war guerrilla warfare and assume that
 by so calling it they have explained its meaning but such a war does
@@ -55230,7 +55218,7 @@ that rule
 this contradiction arises from the fact that military science assumes
 the strength of an army to be identical with its numbers military
 science says that the more troops the greater the strength les gros
-bataillons ont toujours raison 
+bataillons ont toujours raison
 
  large battalions are always victorious
 
@@ -56008,7 +55996,7 @@ darkness and the drummer boy came to the door
 
 ah cest vous said pétya voulezvous manger nayez pas peur on
 ne vous fera pas de mal  he added shyly and affectionately touching
-the boys hand entrez entrez 
+the boys hand entrez entrez
 
  ah its you do you want something to eat dont be afraid they
 wont hurt you
@@ -56160,7 +56148,7 @@ if were caught i wont be taken alive i have a pistol whispered
 he
 
 dont talk russian said dólokhov in a hurried whisper and at that
-very moment they heard through the darkness the challenge qui vive 
+very moment they heard through the darkness the challenge qui vive
 and the click of a musket
 
  who goes there
@@ -56174,7 +56162,7 @@ his horses pace
 
 the black figure of a sentinel stood on the bridge
 
-mot dordre 
+mot dordre
 
  password
 
@@ -56188,7 +56176,7 @@ mot dordre repeated the sentinel barring the way and not replying
 
 quand un officier fait sa ronde les sentinelles ne demandent pas le
 mot dordre cried dólokhov suddenly flaring up and riding straight
-at the sentinel je vous demande si le colonel est ici 
+at the sentinel je vous demande si le colonel est ici
 
  when an officer is making his round sentinels dont ask him for the
 password i am asking you if the colonel is here
@@ -57486,7 +57474,7 @@ menace than to strike the running animal on the head
 
 
 
-book fifteen   
+book fifteen
 
 
 
@@ -58018,7 +58006,7 @@ was dissatisfied with him and in a history recently written by order of
 the highest authorities it is said that kutúzov was a cunning court
 liar frightened of the name of napoleon and that by his blunders at
 krasnoe and the berezina he deprived the russian army of the glory of
-complete victory over the french 
+complete victory over the french
 
  history of the year  the character of kutúzov and reflections on
 the unsatisfactory results of the battles at krasnoe by bogdanovich
@@ -58046,7 +58034,7 @@ difficult to imagine any aim more worthy or more consonant with the will
 of the whole people still more difficult would it be to find an
 instance in history of the aim of an historical personage being so
 completely accomplished as that to which all kutúzovs efforts were
-directed in 
+directed in
 
 kutúzov never talked of forty centuries looking down from the
 pyramids of the sacrifices he offered for the fatherland or of what
@@ -58650,7 +58638,7 @@ now then now then teach us how it goes ill soon pick it up how is
 it said the mana singer and a wagwhom morel was embracing
 
 vive henri quatre vive ce roi valiant sang morel winking ce
-diable a quatre 
+diable a quatre
 
  long live henry the fourth that valiant king that rowdy devil
 
@@ -58664,7 +58652,7 @@ morel wrinkling up his face laughed too
 well go on go on
 
 qui eut le triple talent de boire de battre et detre un vert
-galant 
+galant
 
  who had a triple talent for drinking for fighting and for being a
 gallant old boy
@@ -60318,7 +60306,7 @@ to her own question but no no he must yes mary he must
 
 
 
-first epilogue   
+first epilogue
 
 
 
@@ -60379,7 +60367,7 @@ what do these reproaches mean
 
 do not the very actions for which the historians praise alexander i the
 liberal attempts at the beginning of his reign his struggle with
-napoleon the firmness he displayed in  and the campaign of 
+napoleon the firmness he displayed in  and the campaign of
 flow from the same sourcesthe circumstances of his birth education
 and lifethat made his personality what it was and from which the
 actions for which they blame him the holy alliance the restoration of
@@ -60638,7 +60626,7 @@ and his ideal of grandeur and glory which seems excellent and
 reasonable to them all
 
 as if measuring themselves and preparing for the coming movement the
-western forces push toward the east several times in   
+western forces push toward the east several times in
 and  gaining strength and growing in  the group of people that
 had formed in france unites into one group with the peoples of central
 europe the strength of the justification of the man who stands at the
@@ -62545,7 +62533,7 @@ but i dont understand it and cant even pwonounce it interposed
 denisov in a loud and resolute voice i agwee that evewything here is
 wotten and howwible but the tugendbund i dont understand if were not
 satisfied let us have a bunt of our own thats all wight je suis
-vote homme 
+vote homme
 
  im your man
 
@@ -63268,7 +63256,7 @@ historic character is first the product of his time and his power only
 the resultant of various forces and then his power is itself a force
 producing events gervinus schlosser and others for instance at one
 time prove napoleon to be a product of the revolution of the ideas of
- and so forth and at another plainly say that the campaign of 
+ and so forth and at another plainly say that the campaign of
 and other things they do not like were simply the product of napoleons
 misdirected will and that the very ideas of  were arrested in their
 development by napoleons caprice the ideas of the revolution and the
@@ -63917,7 +63905,7 @@ we say that napoleon wished to invade russia and invaded it in reality
 in all napoleons activity we never find anything resembling an
 expression of that wish but find a series of orders or expressions of
 his will very variously and indefinitely directed amid a long series
-of unexecuted orders of napoleons one series for the campaign of 
+of unexecuted orders of napoleons one series for the campaign of
 was carried outnot because those orders differed in any way from the
 other unexecuted orders but because they coincided with the course of
 events that led the french army into russia just as in stencil work
@@ -64930,13 +64918,3 @@ unreal immobility in space and to recognize a motion we did not feel in
 the present case it is similarly necessary to renounce a freedom that
 does not exist and to recognize a dependence of which we are not
 conscious
-
-
-
-
-
-
-
-
-
-
