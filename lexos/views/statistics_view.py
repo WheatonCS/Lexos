@@ -5,7 +5,6 @@ from lexos.managers import utility, session_manager as session_manager
 from lexos.models.stats_model import StatsModel
 from lexos.models.filemanager_model import FileManagerModel
 
-
 # this is a flask blue print
 # it helps us to manage groups of views
 # see here for more detail:
@@ -37,7 +36,7 @@ def statistics():
         # Default is all on
         session['statisticoption'] = \
             {'segmentlist':
-                list(map(str, list(file_manager.files.keys())))}
+                 list(map(str, list(file_manager.files.keys())))}
     return render_template(
         'statistics.html',
         itm="statistics",
