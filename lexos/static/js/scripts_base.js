@@ -7,7 +7,7 @@ $.fn.center = function () {
 $('form').attr('method', 'post')
 
 $(document).ready(function () {
-  $('#getviz').click(function (e) {
+  $('#getviz').on('click', function (e) {
     if (numActiveDocs < 1) {
       msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
       $('#error-modal-message').html(msg)
@@ -43,7 +43,7 @@ $(function () {
 	   The default is margin-right:10px;font-size:14px;.
 	*/
 
-  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-toggle="tooltip"]').tooltip();
 
   // Initialise popovers -- mouseleave handling from http://www.bootply.com/98529
 
@@ -68,7 +68,7 @@ $(function () {
 			<h3 class="popover-title"></h3>\
 			<div class="popover-content"><p></p></div>\
 	  	  </div>'
-  }).click(function (e) {
+  }).on('click', function (e) {
     e.preventDefault()
   }).mouseenter(function (e) {
     $(this).popover('show')
@@ -92,7 +92,7 @@ $(function () {
   $('.sublist li .selected').parents('.headernavitem').addClass('selected')
 
   // display/hide expandable divs here
-  $('.has-expansion .icon-arrow-right').click(function () {
+  $('.has-expansion .icon-arrow-right').on('click', function () {
     $(this).toggleClass('showing')
 
     $(this).parent('legend').siblings('.expansion').slideToggle(500)
@@ -106,7 +106,7 @@ $(function () {
   })
 
   // Redirect all clicks on "Upload Buttons" to their file upload input
-  $('.upload-bttn').click(function () {
+  $('.upload-bttn').on('click', function () {
     $(this).siblings('input[type=file]').click()
   })
 

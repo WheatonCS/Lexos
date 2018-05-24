@@ -19,12 +19,12 @@ $(function () {
   })
 
   // Toggle the state on click for checkboxes
-  $('input[type=checkbox]').click(function () {
+  $('input[type=checkbox]').on('click', function () {
     $(this).parent('label.icon-checkbox').toggleClass('checked')
   })
 
   // Toggle the state on click for radio buttons
-  $('input[type=radio]').click(function () {
+  $('input[type=radio]').on('click', function () {
     var name = $(this).attr('name')
 
     $('input[type=radio][name=' + name + ']').parent('label.icon-radio').removeClass('checked')
