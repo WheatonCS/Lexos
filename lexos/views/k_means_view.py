@@ -3,7 +3,7 @@ from flask import session, render_template, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
 from lexos.models.filemanager_model import FileManagerModel
-from lexos.models.kmeans_model import KmeansModel
+from lexos.models.kmeans_model import KMeansModel
 from lexos.views.base_view import detect_active_docs
 
 # this is a flask blue print
@@ -44,4 +44,4 @@ def k_means():
 def kmeans_div():
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
-    return KmeansModel().get_pca_result()
+    return KMeansModel().get_pca_result()
