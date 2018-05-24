@@ -21,7 +21,7 @@
 	  //document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
 
 	  // Handle the return to top links
-	  $('.to-top').click(function(){
+	  $('.to-top').on('click', function(){
 	      $("html, body").animate({ scrollTop: 0 }, 800);
 	      return false;
 	  });

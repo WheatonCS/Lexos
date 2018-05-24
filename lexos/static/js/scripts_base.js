@@ -70,7 +70,7 @@ $(function () {
 	  	  </div>'
   }).on('click', function (e) {
     e.preventDefault()
-  }).mouseenter(function (e) {
+  }).on('mouseenter', function (e) {
     $(this).popover('show')
   })
 })

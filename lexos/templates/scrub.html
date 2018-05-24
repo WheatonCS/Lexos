@@ -16,7 +16,10 @@
   {% endif %}
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.0.1.js"></script>
 <script>
+
     $(function(){
        $('#save-button').on('click', function(e){
             e.preventDefault();
@@ -327,7 +330,7 @@
 <script>
 $(document).ready( function () {
 	// I'm not sure if this function is needed. Display of the loading icon can be moved to the ajax functions
-	$('.scrubTrigger').click(function() {
+	$('.scrubTrigger').on('click', function() {
 		{% if (previews|len) != 0 %}
 			//$("#status-prepare").css({"visibility":"visible"});
 		{% endif %}

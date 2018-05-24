@@ -247,7 +247,7 @@ $.fn.dataTableExt.oApi.fnFilterAll = function (oSettings, sInput, iColumn, bRege
     }
 };
 $(document).ready(function () {
-    $("#Search_All").keyup(function () {
+    $("#Search_All").on('keyup', function () {
         var table = $('.file dataframe table table-striped table-bordered dataTable no-footer').dataTable();
         table.fnFilterAll(this.value);
     });

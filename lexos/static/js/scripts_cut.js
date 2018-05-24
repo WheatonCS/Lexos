@@ -363,7 +363,7 @@ $(function () {
     }
   }
 
-  $('#cutByMS').click(showMilestoneOptions)
+  $('#cutByMS').on('click', showMilestoneOptions)
 
   // showMilestoneOptions();
 
