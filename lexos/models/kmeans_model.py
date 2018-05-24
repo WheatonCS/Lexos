@@ -83,6 +83,8 @@ class KMeansModel(BaseModel):
         x_value = reduced_data[:, 0]
         y_value = reduced_data[:, 1]
 
+        result_table = pd.Series(index=)
+
         data = [
             go.Scatter(
                 x=[x_value[index]
