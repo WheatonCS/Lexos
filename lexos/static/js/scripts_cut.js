@@ -325,7 +325,7 @@ $(function () {
       // check number of files
       if ($('#num_active_files').val() <  1) {
           // display error
-          $('#error-modal .modal-body').html(msg)
+          $('#error-modal-message').html(msg)
           $('#error-modal').modal()
       }
   })
