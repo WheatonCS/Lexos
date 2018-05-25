@@ -1,9 +1,9 @@
-from typing import List, Tuple, Optional, NamedTuple
-from plotly.offline import plot
+import json
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
-
+from plotly.offline import plot
+from typing import List, Tuple, Optional, NamedTuple
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -103,11 +103,13 @@ class StatsModel(BaseModel):
             else None
             for count, label in enumerate(labels)]
 
-        return CorpusStats(mean=round(mean, 2),
-                           anomaly_se=anomaly_se,
-                           anomaly_iqr=anomaly_iqr,
-                           std_deviation=round(std_deviation, 2),
-                           inter_quartile_range=round(iqr, 2))
+        return json.dumps({
+            "mean": round(mean, 2),
+            "anomaly_se": anomaly_se,
+            "anomaly_iqr": anomaly_iqr,
+            "std_deviation": round(std_deviation, 2),
+            "inter_quartile_range": round(iqr, 2)
+        })
 
     def get_file_stats(self) -> str:
         """Get statistics of each file.

@@ -35,8 +35,7 @@ def statistics():
     if 'statisticoption' not in session:
         # Default is all on
         session['statisticoption'] = \
-            {'segmentlist':
-                 list(map(str, list(file_manager.files.keys())))}
+            {'segmentlist': list(map(str, list(file_manager.files.keys())))}
     return render_template(
         'statistics.html',
         itm="statistics",
@@ -48,7 +47,7 @@ def statistics():
 def file_report():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
-    return StatsModel().formatted_file_result()
+    return StatsModel().get_corpus_stats()
 
 
 @stats_blueprint.route("/fileTable", methods=["POST"])
