@@ -699,9 +699,7 @@ def handle_gutenberg(text: str) -> str:
 
 def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
                                storage_options: List[str], storage_folder: str,
-                               storage_filenames: List[str]) -> (str, str, str,
-                                                                 str, str, str,
-                                                                 str, str):
+                               storage_filenames: List[str]) -> List[str]:
     """Gathers all the strings used by the "Additional Options" scrub section.
 
     :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
@@ -733,11 +731,18 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     # Create an array of option strings:
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
     #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
-    all_options = (file_strings[0], file_strings[1], file_strings[2],
-                   file_strings[3], request.form['manualconsolidations'],
+
+    all_options = [file_strings[0], file_strings[1], file_strings[2],
+                   file_strings[3],  file_strings[4],  file_strings[5],
+                   file_strings[6],  file_strings[7],
+                   request.form['consfileselect[]'],
+                   request.form['lemfileselect[]'],
+                   request.form['scfileselect[]'],
+                   request.form['swfileselect[]'],
+                   request.form['manualconsolidations'],
                    request.form['manuallemmas'],
                    request.form['manualspecialchars'],
-                   request.form['manualstopwords'])
+                   request.form['manualstopwords']]
 
     return all_options
 
