@@ -224,9 +224,6 @@ function downloadScrubbing() {
     if ($('#num_active_files').val() > '0') {
         window.location = '/downloadScrubbing'
     }
-    else {
-        $('#error-modal').modal()
-    }
 }
 
 function doScrubbing(action) {
