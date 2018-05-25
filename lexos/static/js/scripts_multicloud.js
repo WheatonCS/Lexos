@@ -22,12 +22,12 @@ $(document).ready(function () {
     }); */
 
   // Show filename of uploaded file
-  $('.multicloud-upload').change(function (ev) {
+  $('.multicloud-upload').on('click', function (ev) {
     filename = ev.target.files[0].name
     $('#bttnlabel').html(filename)
   })
 
-  $('#allCheckBoxSelector').click(function () {
+  $('#allCheckBoxSelector').on('click', function () {
     if (this.checked) {
       $('.minifilepreview:not(:checked)').trigger('click')
     } else {
