@@ -68,23 +68,25 @@ class KMeansModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        # Get KMeans
+        # Get reduced data set, 2-D matrix that contains coordinates.
         reduced_data = \
             PCA(n_components=2).fit_transform(self._doc_term_matrix)
 
+        # Set the KMeans settings.
         k_means = KMeans(tol=self._k_means_front_end_option.tolerance,
                          n_init=self._k_means_front_end_option.n_init,
                          init=self._k_means_front_end_option.init_method,
                          max_iter=self._k_means_front_end_option.max_iter,
                          n_clusters=self._k_means_front_end_option.k_value)
 
+        # Get cluster result back.
         k_means_index = k_means.fit_predict(reduced_data)
 
+        # Separate x, y coordinates from the reduced data set.
         x_value = reduced_data[:, 0]
         y_value = reduced_data[:, 1]
 
-        result_table = pd.Series(index=)
-
+        # Create scatter plot for each file.
         data = [
             go.Scatter(
                 x=[x_value[index]
@@ -102,13 +104,15 @@ class KMeansModel(BaseModel):
             for group_number in set(k_means_index)
         ]
 
+        # Set the layout of the plot.
         layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
                            yaxis=go.YAxis(title='y-axis', showline=False))
+
+        # Pack data and layout.
         figure = go.Figure(data=data, layout=layout)
 
-        div = plot(figure,
-                   show_link=False,
-                   output_type="div",
-                   include_plotlyjs=False)
-
-        return div
+        # Output plot as a div.
+        return plot(figure,
+                    show_link=False,
+                    output_type="div",
+                    include_plotlyjs=False)
