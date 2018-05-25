@@ -1,6 +1,8 @@
 $(function () {
   // define error message
-  const msg = 'You do not have enough active documents. Please activate at least two documents using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+  const msg = 'You do not have enough active documents. Please activate at \
+  least two documents using the <a href="./manage">Manage</a> tool or \
+  <a href="./upload">upload</a> a new document.'
   // When get topwords button is clicked
   $('#gettopword').click(function () {
       // Check number of active files
