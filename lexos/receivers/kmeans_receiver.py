@@ -19,13 +19,14 @@ class KMeansReceiver(BaseReceiver):
         :return: a KmeansOption object to hold all the options.
         """
         n_init = int(self._front_end_data['n_init'])
-        k_value = int(self._front_end_data['nclusters'])
         max_iter = int(self._front_end_data['max_iter'])
         tolerance = float(self._front_end_data['tolerance'])
         init_method = self._front_end_data['init']
 
-        # Check if no input, use the default k value.
-        if k_value == '':
+        # Check if no input from front-end, use the default k value.
+        try:
+            k_value = int(self._front_end_data['nclusters'])
+        except ValueError:
             k_value = int(len(FileManagerModel().load_file_manager().
                               get_active_files()) / 2)
 
