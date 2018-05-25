@@ -188,7 +188,7 @@ class LexosFile:
 
         self.name = filename
 
-    def get_scrub_options(self) -> Dict[str, object]:
+    def get_scrub_options(self) -> Dict[str, bool]:
         """Gets the options for scrubbing from the request.form.
 
         :return: a formatted dictionary of the chosen options for scrubbing a
@@ -207,7 +207,7 @@ class LexosFile:
             scrub_options[text_area] = request.form[text_area]
         for upload_file in request.files:
             file_name = request.files[upload_file].filename
-            if (file_name != ''):
+            if file_name != '':
                 scrub_options[upload_file] = file_name
         if 'tags' in request.form:
             scrub_options['keepDOEtags'] = request.form['tags'] == 'keep'
