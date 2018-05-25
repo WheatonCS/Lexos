@@ -313,14 +313,22 @@ function downloadCutting () {
     if ($('#num_active_files').val() > '0') {
         window.location = '/downloadCutting'
     }
-    else {
-        $('#error-modal').modal()
-    }
-
-
 }
 
 $(function () {
+  const msg = 'You do not have enough active documents. Please activate \
+  at least two documents using the <a href="./manage">Manage</a> tool or\
+  <a href="./upload">upload</a> a new document.'
+
+  $('#action-buttons').click(function () {
+      if ($('#num_active_files').val() <  2) {
+          //change button type to button so no request is made
+          $("input[name='gen-topword']").prop("type", "button");
+          // display error
+          $('#error-modal .modal-body').html(msg)
+          $('#error-modal').modal()
+      }
+  })
   $('#actions').addClass('actions-cut')
 
   // Toggle cutting options when radio buttons with different classes are clicked
