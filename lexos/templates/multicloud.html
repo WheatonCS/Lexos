@@ -34,7 +34,7 @@ $(document).ready( function () {
 	}
 
 	// Show the Get Graphs button when a file is uploaded
-	$('#optuploadname').change(function() {
+	$('#optuploadname').on('click', function() {
 		$("#getmultiviz").show();
 	});
 
@@ -46,7 +46,7 @@ $(document).ready( function () {
     });
 
     // Trigger validation when the Get Graphs button is clicked
-	$("#getmultiviz").click(function() {
+	$("#getmultiviz").on('click', function() {
 		valid = validate();
 		if (valid == true) {
 			$("#multicloud-container").empty();
