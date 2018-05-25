@@ -44,4 +44,4 @@ def k_means():
 def kmeans_div():
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
-    return KMeansModel().get_pca_result()
+    return KMeansModel().get_cluster_result()

@@ -3,9 +3,10 @@
 # http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 # for more details
 
-from typing import Optional, NamedTuple
+import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
+from typing import Optional, NamedTuple, List
 from plotly.offline import plot
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
@@ -21,6 +22,11 @@ class KMeansTestOptions(NamedTuple):
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: KmeansOption
+
+
+class KMeansClusterResult(NamedTuple):
+    reduced_data: np.ndarray
+    k_means_index: List[int]
 
 
 class KMeansModel(BaseModel):
@@ -60,7 +66,7 @@ class KMeansModel(BaseModel):
             if self._test_front_end_option is not None \
             else KmeansReceiver().options_from_front_end()
 
-    def get_pca_result(self):
+    def get_cluster_result(self):
         # Test if get empty input
         assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
@@ -82,9 +88,14 @@ class KMeansModel(BaseModel):
         # Get cluster result back.
         k_means_index = k_means.fit_predict(reduced_data)
 
+        return KMeansClusterResult(reduced_data=reduced_data,
+                                   k_means_index=k_means_index)
+
+    def get_pca_plot(self):
+        cluster_result = self.get_cluster_result()
         # Separate x, y coordinates from the reduced data set.
-        x_value = reduced_data[:, 0]
-        y_value = reduced_data[:, 1]
+        x_value = cluster_result.reduced_data[:, 0]
+        y_value = cluster_result.reduced_data[:, 1]
 
         # Create scatter plot for each file.
         data = [
