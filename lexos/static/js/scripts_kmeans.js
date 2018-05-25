@@ -1,172 +1,143 @@
+/**
+ * the function to run the error modal
+ * @param htmlMsg {string} - the message to display, you can put html in it
+ */
+function runModal (htmlMsg) {
+    $('#error-modal-message').html(htmlMsg)
+    $('#error-modal').modal()
+}
+
+/**
+ * check all the easy error with js, in this case, one document is required
+ * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
+ */
+function submissionError () {
+    if ($('#num_active_files').val() < 3)
+        return 'You must have at least 2 active documents to proceed!'
+    else
+        return null
+}
+
+/**
+ * the function to convert the from into json
+ * @returns {{string: string}} - the from converted to json
+ */
+function jsonifyForm () {
+    const form = {}
+    $.each($('form').serializeArray(), function (i, field) {
+        form[field.name] = field.value || ''
+    })
+    return form
+}
+
+/**
+ * send the ajax request
+ * @param url: the url to post
+ * @param form: the form data packed into an object
+ * @returns {jQuery.Ajax}: an jQuery Ajax object
+ */
+function sendAjaxRequest (url, form) {
+    return $.ajax({
+        type: 'POST',
+        url: url,
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(form)
+    })
+}
+
+/**
+ * display the table of the k means result on web.
+ */
+function generateKMeansTable () {
+    $('#status-analyze').css({'visibility': 'visible'})
+    // convert form into an object map string to string
+    const form = jsonifyForm()
+
+    // the configuration for creating data table
+    const dataTableConfig = {
+
+        // Do not paging.
+        paging: false,
+
+        // Replace entries to documents.
+        language: {
+            'lengthMenu': 'Display _MENU_ documents',
+            'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
+        },
+
+        // Specify where the button is.
+        dom: "Bfrtip",
+
+        // Specify all the download buttons that are displayed on the page.
+        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+    }
+
+    // send the ajax request
+    sendAjaxRequest('/KMeansTable', form)
+        .done(
+            function (response) {
+                const outerTableDivSelector = $('#KMeans-table')
+                // put the response onto the web page
+                outerTableDivSelector.html(response)
+                // initialize the data table
+                outerTableDivSelector.children().DataTable(dataTableConfig)
+                // display the corpus statistics result
+                $('#stats-result').css({'display': 'block'})
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
+                // If fail hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
+                console.log('textStatus: ' + textStatus)
+                console.log('errorThrown: ' + errorThrown)
+                runModal('Error encountered while generating the file statistics.')
+            })
+}
+
+/**
+ * display the result of the box plot on web page
+ */
+function generateKMeansPlot () {
+    $('#status-analyze').css({'visibility': 'visible'})
+    // convert form into an object map string to string
+    const form = jsonifyForm()
+
+    // send the ajax request
+    sendAjaxRequest('/KMeansPlot', form)
+        .done(
+            function (response) {
+                $('#KMeans-plot').html(response)
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
+                console.log('textStatus: ' + textStatus)
+                console.log('errorThrown: ' + errorThrown)
+                runModal('Error encountered while generating the box plot.')
+            })
+        .always(
+            function () {
+                // Always hide the loading icon.
+                $('#status-analyze').css({'visibility': 'hidden'})
+            }
+        )
+}
+
 $(function () {
-  // Show the silhouette score results based whether the results are shown
-  if ($('#kmeansresults').length) {
-    $('#silhouetteResults').show()
-  } else {
-    $('#silhouetteResults').hide()
-  }
-  function doAjax(action) {
-    $.ajax({
-      'complete': function (response) {
-        rand = Math.round(Math.random() * 100) + 1
-        $('#plotlyFrame').attr('src', $('#plotlyFrame').attr('src') + '?' + rand)
-        $('#plotlyFrame').hide()
-        // Handle labels separately (eventual solution to the Unicode problem)
-        $.each(response['responseJSON']['labels'], function (index, label) {
-          lb.push(label)
-        })
-        lb = JSON.stringify(lb)
-        var bdiv = response['responseJSON']['bdiv']
-        bdiv = bdiv.replace('"ticktext":', '"tickangle":90,"ticktext":')
-        var re = /"ticktext": \[.+?\]/
-        bdiv = bdiv.replace(re, '"ticktext": ' + lb)
-        $('.PCAImage').html(bdiv)
-      }
-    }// end ajax
-    )
-  }
-  // Hide unnecessary divs for DTM
-  var newLabelsLocation = $('#normalize-options').parent()
-  var newNormalizeLocation = $('#temp-label-div').parent()
-  var tempNormalize = $('#normalize-options').html()
-  var tempLabels = $('#temp-label-div').html()
-  $('#normalize-options').remove()
-  $('#temp-label-div').remove()
-  newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels)
-  newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize)
-  newLabelsLocation.append(newLabels)
-  newNormalizeLocation.append(newNormalize)
+    /**
+     * The event handler for generate statistics clicked
+     */
+    $('#get-k-means-result').click(function () {
+        const error = submissionError()  // the error happens during submission
 
-  $('#normalize-options').hide()
-
-	/* This event is handled in scripts_analyze.js, but for some reason it has to be
-	   repeated here to function. */
-  $('.has-chevron').on('click', function () {
-    $(this).find('span').toggleClass('down')
-    $(this).next().collapse('toggle')
-  })
-
-  // $("#normalize-options").css({"visibility":"hidden"});
-
-  $('#getkmeans').on('click', function (e) {
-    // Display the processing icon
-    $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
-
-    // Get variable values from the DOM
-    var activeFiles = $('#num_active_files').val()
-    var nclusters = $('#nclusters').val()
-    var max_iter = $('#max_iter').val()
-    var n_init = $('#n_init').val()
-    var tol = $('#tolerance').val()
-
-    // Error messages
-    var err1 = '<p>K-means requires at least 2 active documents.</p>'
-    var err2 = '<p>The number of clusters (K value) must not be larger than the number of active files!</p>'
-    var err3 = '<p>Invalid input. Make sure the input is an integer.</p>'
-    var err4 = '<p>Invalid input. The relative tolerance must be a decimal.</p>'
-
-    // Less than 2 active documents
-    if (activeFiles < 2) {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err1)
-      $('#error-modal').modal()
-    }
-    // K is larger than the number of active documents
-    else if (nclusters > totalFileNumber) {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err2)
-      $('#error-modal').modal()
-    }
-    // Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
-    else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)) {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err3)
-      $('#error-modal').modal()
-    } else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != '') {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err3)
-      $('#error-modal').modal()
-    } else if (Math.abs(Math.round(tol)) == tol && tol != '') {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err4)
-      $('#error-modal').modal()
-    } else {
-      // $("form").submit();
-    }
-    $('#error-modal').on('hidden.bs.modal', function () {
-      $('#status-analyze').fadeOut()
+        if (error === null) {  // if there is no error
+            // Get the file report result.
+            generateKMeansPlot()
+            generateKMeansTable()
+        }
+        else {
+            runModal(error)
+        }
     })
-  })
 
-  function createDictionary() {
-    var ChunkSetDict = new Array()
-
-    for (key = 0; key < KValue; key++) {
-      ChunkSetDict[key] = []
-    }
-
-    for (i = 0; i < tablelabels.length; i++) {
-      ChunkSetDict[dataset[i]].push(tablelabels[i])
-    }
-
-    return ChunkSetDict
-  };// end createDictionary
-
-  function createTable(ChunkSetDict) {
-    if ($('#kmeansresultscheck').text() == 'True') {
-      $('#kmeansresults').removeClass('hidden')
-      $('#kmeansresultscheck').text('')
-
-      // for each different cluster
-      var maxCluster = ChunkSetDict.length
-      var j = 1
-      for (var i = 0; i < maxCluster; i++) {
-        var listOfFilesInThisCluster = ChunkSetDict[i]
-        // make rows
-        for (nextFile = 0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
-          var row = $('<tr id="text' + j + '-toggle"></tr>')
-            .css('backgroundColor', colorChart[i])
-            .css('opacity', 1.0)
-            .attr('class', listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
-            .appendTo('#basicTable tbody')
-          $('<td style="text-align:center;"/>').text(i).appendTo(row)
-          $('<td style="text-align:left;"/>')
-            .text(listOfFilesInThisCluster[nextFile])
-            .appendTo(row)
-          j += 1
-        }// end for nextFile
-      }// end for each row
-    } // end if
-  }// end createTable()
-
-  // The if clause prevents functions from running on initial page load
-  if (dataset.length > 0) {
-    ChunkSetDict = createDictionary()
-    createTable(ChunkSetDict)
-  }
-
-  $('svg circle').tooltip({
-    'container': 'body',
-    'placement': 'right'
-  })
-
-  // Handle table mouseovers for Voronoi points
-  $('#basicTable tbody tr')
-    .on('mouseenter', function () {
-      $(this).css('opacity', '0.6')
-      id = $(this).attr('class')
-      point = '.P' + id
-      text = '.T' + id
-      $(point).appendTo('#voronoi')
-      $(text).appendTo('#voronoi')
-      $(point).css('fill', 'yellow')
-      $(point).tooltip('show')
-    })
-    .on('mouseleave', function () {
-      $(this).css('opacity', '1.0')
-      id = $(this).attr('class')
-      point = '.P' + id
-      $(point).css('fill', 'red')
-      $(point).tooltip('hide')
-    })
 })
+
