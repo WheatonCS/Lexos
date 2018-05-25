@@ -17,625 +17,1485 @@
  * permissions and limitations under the License.
  */
 
-var scalarapi = new ScalarAPI();
+var scalarapi = new ScalarAPI()
 
-function is_array(input) {
-  return typeof (input) == 'object' && (input instanceof Array);
+function is_array (input) {
+    return typeof (input) == 'object' && (input instanceof Array)
 }
 
 /**
  * Creates a new instance of the API utility. You do not need to
  * call this constructor; the utility calls it itself and places
  * the resulting instance in the global variable scalarapi.
- * @class 		A jQuery-dependent JavaScript library which allows easy access to the Scalar API.
- * @author		<a href="mailto:erik@song.nu">Erik Loyer</a>
- * @version		1.0
+ * @class        A jQuery-dependent JavaScript library which allows easy access to the Scalar API.
+ * @author        <a href="mailto:erik@song.nu">Erik Loyer</a>
+ * @version        1.0
  */
-function ScalarAPI() {
+function ScalarAPI () {
 
-  var me = this;
+    var me = this
 
-  this.model = new ScalarModel({
-    parent_uri: $('link#parent').attr('href'),
-    logged_in: $('link#logged_in').attr('href'),
-    user_level: $('link#user_level').attr('href')
-  });
+    this.model = new ScalarModel({
+        parent_uri: $('link#parent').attr('href'),
+        logged_in: $('link#logged_in').attr('href'),
+        user_level: $('link#user_level').attr('href')
+    })
 
-	/**
-	 * Browser detection script from http://www.quirksmode.org/js/detect.html
-	 * @private
-	 *
-	 * User agent sniffing is notoriously unreliable, but at the moment it's the best way to tell
-	 * which media types (not which objects) a browser supports.
-	 */
-  this.browserDetect = {
-    init: function () {
-      this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
-      this.version = this.searchVersion(navigator.userAgent)
-        || this.searchVersion(navigator.appVersion)
-        || "an unknown version";
-      this.OS = this.searchString(this.dataOS) || "an unknown OS";
-    },
-    searchString: function (data) {
-      for (var i = 0; i < data.length; i++) {
-        var dataString = data[i].string;
-        var dataProp = data[i].prop;
-        this.versionSearchString = data[i].versionSearch || data[i].identity;
-        if (dataString) {
-          if (dataString.indexOf(data[i].subString) != -1)
-            return data[i].identity;
-        }
-        else if (dataProp)
-          return data[i].identity;
-      }
-    },
-    searchVersion: function (dataString) {
-      var index = dataString.indexOf(this.versionSearchString);
-      if (index == -1) return;
-      return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
-    },
-    dataBrowser: [
-      {
-        string: navigator.userAgent,
-        subString: "Chrome",
-        identity: "Chrome"
-      },
-      {
-        string: navigator.userAgent,
-        subString: "OmniWeb",
-        versionSearch: "OmniWeb/",
-        identity: "OmniWeb"
-      },
-      {
-        string: navigator.vendor,
-        subString: "Apple",
-        identity: "Safari",
-        versionSearch: "Version"
-      },
-      {
-        prop: window.opera,
-        identity: "Opera",
-        versionSearch: "Version"
-      },
-      {
-        string: navigator.vendor,
-        subString: "iCab",
-        identity: "iCab"
-      },
-      {
-        string: navigator.vendor,
-        subString: "KDE",
-        identity: "Konqueror"
-      },
-      {
-        string: navigator.userAgent,
-        subString: "Firefox",
-        identity: "Mozilla"
-      },
-      {
-        string: navigator.vendor,
-        subString: "Camino",
-        identity: "Camino"
-      },
-      {	// for newer Netscapes (6+)
-        string: navigator.userAgent,
-        subString: "Netscape",
-        identity: "Netscape"
-      },
-      {
-        string: navigator.userAgent,
-        subString: "MSIE",
-        identity: "Explorer",
-        versionSearch: "MSIE"
-      },
-      {	// For IE 11
-        string: navigator.userAgent,
-        subString: "Trident/7.0",
-        identity: "Explorer"
-      },
-      {
-        string: navigator.userAgent,
-        subString: "Gecko",
-        identity: "Mozilla",
-        versionSearch: "rv"
-      },
-      { 	// for older Netscapes (4-)
-        string: navigator.userAgent,
-        subString: "Mozilla",
-        identity: "Netscape",
-        versionSearch: "Mozilla"
-      }
-    ],
-    dataOS: [
-      {
-        string: navigator.platform,
-        subString: "Win",
-        identity: "Windows"
-      },
-      {
-        string: navigator.platform,
-        subString: "Mac",
-        identity: "Mac"
-      },
-      {
-        string: navigator.userAgent,
-        subString: "iPhone",
-        identity: "iPhone/iPod"
-      },
-      {
-        string: navigator.platform,
-        subString: "Linux",
-        identity: "Linux"
-      }
-    ]
+    /**
+     * Browser detection script from http://www.quirksmode.org/js/detect.html
+     * @private
+     *
+     * User agent sniffing is notoriously unreliable, but at the moment it's the best way to tell
+     * which media types (not which objects) a browser supports.
+     */
+    this.browserDetect = {
+        init: function () {
+            this.browser = this.searchString(this.dataBrowser) || 'An unknown browser'
+            this.version = this.searchVersion(navigator.userAgent)
+                || this.searchVersion(navigator.appVersion)
+                || 'an unknown version'
+            this.OS = this.searchString(this.dataOS) || 'an unknown OS'
+        },
+        searchString: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var dataString = data[i].string
+                var dataProp = data[i].prop
+                this.versionSearchString = data[i].versionSearch || data[i].identity
+                if (dataString) {
+                    if (dataString.indexOf(data[i].subString) != -1)
+                        return data[i].identity
+                }
+                else if (dataProp)
+                    return data[i].identity
+            }
+        },
+        searchVersion: function (dataString) {
+            var index = dataString.indexOf(this.versionSearchString)
+            if (index == -1) return
+            return parseFloat(dataString.substring(index + this.versionSearchString.length + 1))
+        },
+        dataBrowser: [
+            {
+                string: navigator.userAgent,
+                subString: 'Chrome',
+                identity: 'Chrome'
+            },
+            {
+                string: navigator.userAgent,
+                subString: 'OmniWeb',
+                versionSearch: 'OmniWeb/',
+                identity: 'OmniWeb'
+            },
+            {
+                string: navigator.vendor,
+                subString: 'Apple',
+                identity: 'Safari',
+                versionSearch: 'Version'
+            },
+            {
+                prop: window.opera,
+                identity: 'Opera',
+                versionSearch: 'Version'
+            },
+            {
+                string: navigator.vendor,
+                subString: 'iCab',
+                identity: 'iCab'
+            },
+            {
+                string: navigator.vendor,
+                subString: 'KDE',
+                identity: 'Konqueror'
+            },
+            {
+                string: navigator.userAgent,
+                subString: 'Firefox',
+                identity: 'Mozilla'
+            },
+            {
+                string: navigator.vendor,
+                subString: 'Camino',
+                identity: 'Camino'
+            },
+            {	// for newer Netscapes (6+)
+                string: navigator.userAgent,
+                subString: 'Netscape',
+                identity: 'Netscape'
+            },
+            {
+                string: navigator.userAgent,
+                subString: 'MSIE',
+                identity: 'Explorer',
+                versionSearch: 'MSIE'
+            },
+            {	// For IE 11
+                string: navigator.userAgent,
+                subString: 'Trident/7.0',
+                identity: 'Explorer'
+            },
+            {
+                string: navigator.userAgent,
+                subString: 'Gecko',
+                identity: 'Mozilla',
+                versionSearch: 'rv'
+            },
+            { 	// for older Netscapes (4-)
+                string: navigator.userAgent,
+                subString: 'Mozilla',
+                identity: 'Netscape',
+                versionSearch: 'Mozilla'
+            }
+        ],
+        dataOS: [
+            {
+                string: navigator.platform,
+                subString: 'Win',
+                identity: 'Windows'
+            },
+            {
+                string: navigator.platform,
+                subString: 'Mac',
+                identity: 'Mac'
+            },
+            {
+                string: navigator.userAgent,
+                subString: 'iPhone',
+                identity: 'iPhone/iPod'
+            },
+            {
+                string: navigator.platform,
+                subString: 'Linux',
+                identity: 'Linux'
+            }
+        ]
 
-  };
-
-  this.browserDetect.init();
-
-  switch (this.browserDetect.browser) {
-
-    case 'Safari':
-      if (this.browserDetect.OS != 'Mac') {
-        this.scalarBrowser = 'MobileSafari';
-      } else {
-        this.scalarBrowser = 'Safari';
-      }
-      break;
-
-    case 'Chrome':
-    case 'Explorer':
-    case 'Mozilla':
-      this.scalarBrowser = this.browserDetect.browser;
-      break;
-
-    default:
-      this.scalarBrowser = 'Other';
-      break;
-
-  }
-
-  var prismSrcExt = ['js', 'java', 'xml', 'css', 'php', 'c', 'cpp', 'cs', 'html', 'php', 'py', 'rb'];
-  var otherSrcExt = ['txt', 'code', '4th', 'actionscript', 'as', 'adt', 'agl', 'asm', 'asi', 'hla', 'asp', 'aspx', 'bas', 'b', 'bash', 'bat', 'bsh', 'cbl', 'cgi', 'cl', 'class', 'cmd', 'cob', 'cobol', 'csh', 'dot', 'el', 'erl', 'f', 'f03', 'f40', 'f77', 'f90', 'f95', 'fcg', 'fcgi', 'for', 'forth', 'fpp', 'gcl', 'gemfile', 'graphml', 'gv', 'h', 'has', 'hrl', 'i6', 'i7', 'inc', 'inf', 'json', 'ksh', 'lisp', 'lsp', 'lua', 'm', 'mak', 'make', 'mk', 'nt', 'p', 'pas', 'pat', 'pd', 'pl', 'pls', 'ps', 'qlb', 'r', 'rake', 'rakefile', 'scheme', 'scm', 'scpt', 'AppleScript', 'sh', 'sql', 'ss', 't', 'taf', 'vb', 'vbs', 'vbscript', 'zsh'];
-
-  this.mediaSources = {
-    '3GPP': {
-      name: '3GPP',
-      extensions: ['3gp'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['3gp'], format: '3GPP', player: 'QuickTime', specifiesDimensions: true },
-        'Explorer': { extensions: ['3gp'], format: '3GPP', player: 'QuickTime', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['3gp'], format: '3GPP', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['3gp'], format: '3GPP', player: 'QuickTime', specifiesDimensions: true },
-        'Other': { extensions: ['3gp'], format: '3GPP', player: 'QuickTime', specifiesDimensions: true }
-      }
-    },
-    'AIFF': {
-      name: 'AIFF',
-      extensions: ['aif', 'aiff'],
-      isProprietary: false,
-      contentType: 'audio',
-      browserSupport: {
-        'Mozilla': { extensions: ['aif', 'aiff'], format: 'AIFF', player: 'QuickTime', specifiesDimensions: false },
-        'Explorer': { extensions: ['aif', 'aiff'], format: 'AIFF', player: 'QuickTime', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['aif', 'aiff'], format: 'AIFF', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: ['aif', 'aiff'], format: 'AIFF', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['aif', 'aiff'], format: 'AIFF', player: 'QuickTime', specifiesDimensions: false }
-      }
-    },
-    'CriticalCommons-LegacyVideo': {
-      name: 'CriticalCommons-LegacyVideo',
-      extensions: ['mp4'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mp4'], format: 'MPEG-4', player: 'Flash', specifiesDimensions: true },
-        'Explorer': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['mp4'], format: 'MPEG-4', player: 'Flash', specifiesDimensions: true },
-        'Other': { extensions: ['mp4'], format: 'MPEG-4', player: 'Flash', specifiesDimensions: true }
-      }
-    },
-    'CriticalCommons-Video': {
-      name: 'CriticalCommons-Video',
-      extensions: ['mp4', 'webm'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['webm'], format: 'WebM', player: 'native', specifiesDimensions: true },
-        'Explorer': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['webm'], format: 'WebM', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['webm'], format: 'WebM', player: 'native', specifiesDimensions: true }
-      }
-    },
-    'Deep Zoom Image': {
-      name: 'DeepZoomImage',
-      extensions: ['dzi'],
-      isProprietary: false,
-      contentType: 'tiledImage',
-      browserSupport: {
-        'Mozilla': { extensions: ['dzi'], format: 'DZI', player: 'OpenSeadragon', specifiesDimensions: false },
-        'Explorer': { extensions: ['dzi'], format: 'DZI', player: 'OpenSeadragon', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['dzi'], format: 'DZI', player: 'OpenSeadragon', specifiesDimensions: false },
-        'Safari': { extensions: ['dzi'], format: 'DZI', player: 'OpenSeadragon', specifiesDimensions: false },
-        'Chrome': { extensions: ['dzi'], format: 'DZI', player: 'OpenSeadragon', specifiesDimensions: false },
-        'Other': { extensions: ['dzi'], format: 'DZI', player: 'OpenSeadragon', specifiesDimensions: false }
-      }
-    },
-    'FlashVideo': {
-      name: 'FlashVideo',
-      extensions: ['flv'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['flv'], format: 'Flash Video', player: 'Flash', specifiesDimensions: false },
-        'Explorer': { extensions: ['flv'], format: 'Flash Video', player: 'Flash', specifiesDimensions: false },
-        'Safari': { extensions: ['flv'], format: 'Flash Video', player: 'Flash', specifiesDimensions: false },
-        'Chrome': { extensions: ['flv'], format: 'Flash Video', player: 'Flash', specifiesDimensions: false },
-        'Other': { extensions: ['flv'], format: 'Flash Video', player: 'Flash', specifiesDimensions: false }
-      }
-    },
-    'GIF': {
-      name: 'GIF',
-      extensions: ['gif'],
-      isProprietary: false,
-      contentType: 'image',
-      browserSupport: {
-        'Mozilla': { extensions: ['gif'], format: 'GIF', player: 'native', specifiesDimensions: true },
-        'Explorer': { extensions: ['gif'], format: 'GIF', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['gif'], format: 'GIF', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['gif'], format: 'GIF', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['gif'], format: 'GIF', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['gif'], format: 'GIF', player: 'native', specifiesDimensions: true }
-      }
-    },
-    'HIDVL': {
-      name: 'HIDVL',
-      extensions: ['mp4'],
-      isProprietary: true,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: true },
-        'Chrome': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false }
-      }
-    },
-    'HTML': {
-      name: 'HTML',
-      extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
-      isProprietary: false,
-      contentType: 'document',
-      browserSupport: {
-        'Mozilla': { extensions: ['htm', 'html', 'php', 'com', 'org', 'net'], format: 'HTML', player: 'native', specifiesDimensions: false },
-        'Explorer': { extensions: ['htm', 'html', 'php', 'com', 'org', 'net'], format: 'HTML', player: 'native', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['htm', 'html', 'php', 'com', 'org', 'net'], format: 'HTML', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: ['htm', 'html', 'php', 'com', 'org', 'net'], format: 'HTML', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: ['htm', 'html', 'php', 'com', 'org', 'net'], format: 'HTML', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['htm', 'html', 'php', 'com', 'org', 'net'], format: 'HTML', player: 'native', specifiesDimensions: false }
-      }
-    },
-    'HyperCities': {
-      name: 'HyperCities',
-      extensions: [],
-      isProprietary: true,
-      contentType: 'map',
-      browserSupport: {
-        'Mozilla': { extensions: [], format: 'HyperCities Collection', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: [], format: 'HyperCities Collection', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: [], format: 'HyperCities Collection', player: 'proprietary', specifiesDimensions: false },
-        'Chrome': { extensions: [], format: 'HyperCities Collection', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: [], format: 'HyperCities Collection', player: 'proprietary', specifiesDimensions: false }
-      }
-    },
-    'JPEG': {
-      name: 'JPEG',
-      extensions: ['jpg', 'jpeg'],
-      isProprietary: false,
-      contentType: 'image',
-      browserSupport: {
-        'Mozilla': { extensions: ['jpg', 'jpeg'], format: 'JPEG', player: 'native', specifiesDimensions: true },
-        'Explorer': { extensions: ['jpg', 'jpeg'], format: 'JPEG', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['jpg', 'jpeg'], format: 'JPEG', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['jpg', 'jpeg'], format: 'JPEG', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['jpg', 'jpeg'], format: 'JPEG', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['jpg', 'jpeg'], format: 'JPEG', player: 'native', specifiesDimensions: true }
-      }
-    },
-    'KML': {
-      name: 'KML',
-      extensions: ['kml', 'kmz'],
-      isProprietary: false,
-      contentType: 'map',
-      browserSupport: {
-        'Mozilla': { extensions: ['kml', 'kmz'], format: 'KML', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: ['kml', 'kmz'], format: 'KML', player: 'proprietary', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['kml', 'kmz'], format: 'KML', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: ['kml', 'kmz'], format: 'KML', player: 'proprietary', specifiesDimensions: false },
-        'Chrome': { extensions: ['kml', 'kmz'], format: 'KML', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: ['kml', 'kmz'], format: 'KML', player: 'proprietary', specifiesDimensions: false }
-      }
-    },
-    'M4V': {
-      name: 'M4V',
-      extensions: ['m4v'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['m4v'], format: 'M4V', player: 'QuickTime', specifiesDimensions: true },
-        'Explorer': { extensions: ['m4v'], format: 'M4V', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['m4v'], format: 'M4V', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['m4v'], format: 'M4V', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['m4v'], format: 'M4V', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['m4v'], format: 'M4V', player: 'QuickTime', specifiesDimensions: true }
-      }
-    },
-    'MPEG-1': {
-      name: 'MPEG-1',
-      extensions: ['mpg'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mpg'], format: 'MPEG-1', player: 'QuickTime', specifiesDimensions: false },
-        'Explorer': { extensions: ['mpg'], format: 'MPEG-1', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['mpg'], format: 'MPEG-1', player: 'QuickTime', specifiesDimensions: false }
-      }
-    },
-    'MPEG-2': {
-      name: 'MPEG-2',
-      extensions: ['mpg'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mpg'], format: 'MPEG-2', player: 'QuickTime', specifiesDimensions: false },
-        'Explorer': { extensions: ['mpg'], format: 'MPEG-2', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['mpg'], format: 'MPEG-2', player: 'QuickTime', specifiesDimensions: false }
-      }
-    },
-    'MPEG-3': {
-      name: 'MPEG-3',
-      extensions: ['mp3'],
-      isProprietary: false,
-      contentType: 'audio',
-      browserSupport: {
-        'Mozilla': { extensions: ['mp3'], format: 'MPEG-3', player: 'jPlayer', specifiesDimensions: false },
-        'Explorer': { extensions: ['mp3'], format: 'MPEG-3', player: 'jPlayer', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['mp3'], format: 'MPEG-3', player: 'jPlayer', specifiesDimensions: false },
-        'Safari': { extensions: ['mp3'], format: 'MPEG-3', player: 'jPlayer', specifiesDimensions: false },
-        'Chrome': { extensions: ['mp3'], format: 'MPEG-3', player: 'jPlayer', specifiesDimensions: false },
-        'Other': { extensions: ['mp3'], format: 'MPEG-3', player: 'jPlayer', specifiesDimensions: false }
-      }
-    },
-    'MPEG-4': {
-      name: 'MPEG-4',
-      extensions: ['mp4'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mp4'], format: 'MPEG-4', player: 'Flash', specifiesDimensions: true },
-        'Explorer': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['mp4'], format: 'MPEG-4', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['mp4'], format: 'MPEG-4', player: 'Flash', specifiesDimensions: true },
-        'Other': { extensions: ['mp4'], format: 'MPEG-4', player: 'Flash', specifiesDimensions: true }
-      }
-    },
-    'Ogg-Audio': {
-      name: 'OGA',
-      extensions: ['oga'],
-      isProprietary: false,
-      contentType: 'audio',
-      browserSupport: {
-        'Mozilla': { extensions: ['oga'], format: 'Ogg', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: ['oga'], format: 'Ogg', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['oga'], format: 'Ogg', player: 'native', specifiesDimensions: false }
-      }
-    },
-    'Ogg-Video': {
-      name: 'OGG',
-      extensions: ['ogg', 'ogv'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['ogg', 'ogv'], format: 'Ogg', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['ogg', 'ogv'], format: 'Ogg', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['ogg', 'ogv'], format: 'Ogg', player: 'native', specifiesDimensions: true }
-      }
-    },
-    'PDF': {
-      name: 'PDF',
-      extensions: ['pdf'],
-      isProprietary: true,
-      contentType: 'document',
-      browserSupport: {
-        'Mozilla': { extensions: ['pdf'], format: 'PDF', player: 'native', specifiesDimensions: false },
-        'Explorer': { extensions: ['pdf'], format: 'PDF', player: 'native', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['pdf'], format: 'PDF', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: ['pdf'], format: 'PDF', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: ['pdf'], format: 'PDF', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['pdf'], format: 'PDF', player: 'native', specifiesDimensions: false }
-      }
-    },
-    'PNG': {
-      name: 'PNG',
-      extensions: ['png'],
-      isProprietary: false,
-      contentType: 'image',
-      browserSupport: {
-        'Mozilla': { extensions: ['png'], format: 'PNG', player: 'native', specifiesDimensions: true },
-        'Explorer': { extensions: ['png'], format: 'PNG', player: 'native', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['png'], format: 'PNG', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['png'], format: 'PNG', player: 'native', specifiesDimensions: true },
-        'Chrome': { extensions: ['png'], format: 'PNG', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['png'], format: 'PNG', player: 'native', specifiesDimensions: true }
-      }
-    },
-    'Prezi': {
-      name: 'Prezi',
-      extensions: [],
-      isProprietary: true,
-      contentType: 'document',
-      browserSupport: {
-        'Mozilla': { extensions: [], format: 'Prezi', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: [], format: 'Prezi', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: [], format: 'Prezi', player: 'proprietary', specifiesDimensions: false },
-        'Chrome': { extensions: [], format: 'Prezi', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: [], format: 'Prezi', player: 'proprietary', specifiesDimensions: false }
-      }
-    },
-    'QuickTime': {
-      name: 'QuickTime',
-      extensions: ['mov'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mov'], format: 'QuickTime', player: 'QuickTime', specifiesDimensions: true },
-        'Explorer': { extensions: ['mov'], format: 'QuickTime', player: 'QuickTime', specifiesDimensions: true },
-        'MobileSafari': { extensions: ['mov'], format: 'QuickTime', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['mov'], format: 'QuickTime', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['mov'], format: 'QuickTime', player: 'QuickTime', specifiesDimensions: true }
-      }
-    },
-    'QuickTimeStreaming': {
-      name: 'QuickTimeStreaming',
-      extensions: ['mp4'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['mp4'], format: 'QuickTime', player: 'QuickTime', specifiesDimensions: true },
-        'Explorer': { extensions: ['mp4'], format: 'QuickTime', player: 'QuickTime', specifiesDimensions: true },
-        'Other': { extensions: ['mp4'], format: 'QuickTime', player: 'QuickTime', specifiesDimensions: true }
-      }
-    },
-    'TIFF': {
-      name: 'TIFF',
-      extensions: ['tif', 'tiff'],
-      isProprietary: false,
-      contentType: 'image',
-      browserSupport: {
-        'Explorer': { extensions: ['tif', 'tiff'], format: 'TIFF', player: 'QuickTime', specifiesDimensions: true },
-        'Safari': { extensions: ['tif', 'tiff'], format: 'TIFF', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['tif', 'tiff'], format: 'TIFF', player: 'QuickTime', specifiesDimensions: true }
-      }
-    },
-    'PlainText': {
-      name: 'PlainText',
-      extensions: otherSrcExt,
-      isProprietary: false,
-      contentType: 'document',
-      browserSupport: {
-        'Mozilla': { extensions: otherSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Explorer': { extensions: otherSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'MobileSafari': { extensions: otherSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: otherSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: otherSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: otherSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false }
-      }
-    },
-    'SoundCloud': {
-      name: 'SoundCloud',
-      extensions: [],
-      isProprietary: true,
-      contentType: 'audio',
-      browserSupport: {
-        'Mozilla': { extensions: [], format: '', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: [], format: '', player: 'proprietary', specifiesDimensions: false },
-        'MobileSafari': { extensions: [], format: '', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: [], format: '', player: 'proprietary', specifiesDimensions: false },
-        'Chrome': { extensions: [], format: '', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: [], format: '', player: 'proprietary', specifiesDimensions: false }
-      }
-    },
-    'SourceCode': {
-      name: 'SourceCode',
-      extensions: prismSrcExt,
-      isProprietary: false,
-      contentType: 'document',
-      browserSupport: {
-        'Mozilla': { extensions: prismSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Explorer': { extensions: prismSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'MobileSafari': { extensions: prismSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: prismSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: prismSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: prismSrcExt, format: 'PlainText', player: 'native', specifiesDimensions: false }
-      }
-    },
-    'Unsupported': {
-      name: 'Unsupported',
-      extensions: [],
-      isProprietary: false,
-      contentType: 'other',
-      browserSupport: {
-        'Mozilla': { extensions: [], format: 'Unsupported', player: 'native', specifiesDimensions: false },
-        'Explorer': { extensions: [], format: 'Unsupported', player: 'native', specifiesDimensions: false },
-        'MobileSafari': { extensions: [], format: 'Unsupported', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: [], format: 'Unsupported', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: [], format: 'Unsupported', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: [], format: 'Unsupported', player: 'native', specifiesDimensions: false }
-      }
-    },
-    'Vimeo': {
-      name: 'Vimeo',
-      extensions: ['flv'],
-      isProprietary: true,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Chrome': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false }
-      }
-    },
-    'WAV': {
-      name: 'WAV',
-      extensions: ['wav'],
-      isProprietary: false,
-      contentType: 'audio',
-      browserSupport: {
-        'Mozilla': { extensions: ['wav'], format: 'WAV', player: 'native', specifiesDimensions: false },
-        'Explorer': { extensions: ['wav'], format: 'WAV', player: 'jPlayer', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['wav'], format: 'WAV', player: 'native', specifiesDimensions: false },
-        'Safari': { extensions: ['wav'], format: 'WAV', player: 'native', specifiesDimensions: false },
-        'Chrome': { extensions: ['wav'], format: 'WAV', player: 'native', specifiesDimensions: false },
-        'Other': { extensions: ['wav'], format: 'WAV', player: 'jPlayer', specifiesDimensions: false }
-      }
-    },
-    'WebM': {
-      name: 'WebM',
-      extensions: ['webm'],
-      isProprietary: false,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['webm'], format: 'WebM', player: 'native', specifiesDimensions: true },
-        'Safari': { extensions: ['webm'], format: 'WebM', player: 'QuickTime', specifiesDimensions: true },
-        'Chrome': { extensions: ['webm'], format: 'WebM', player: 'native', specifiesDimensions: true },
-        'Other': { extensions: ['webm'], format: 'WebM', player: 'native', specifiesDimensions: true }
-      }
-    },
-    'YouTube': {
-      name: 'YouTube',
-      extensions: ['flv'],
-      isProprietary: true,
-      contentType: 'video',
-      browserSupport: {
-        'Mozilla': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false },
-        'Explorer': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false },
-        'MobileSafari': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Safari': { extensions: ['mp4'], format: 'MPEG-4', player: 'proprietary', specifiesDimensions: false },
-        'Chrome': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false },
-        'Other': { extensions: ['flv'], format: 'Flash Video', player: 'proprietary', specifiesDimensions: false }
-      }
     }
-  }
+
+    this.browserDetect.init()
+
+    switch (this.browserDetect.browser) {
+
+        case 'Safari':
+            if (this.browserDetect.OS != 'Mac') {
+                this.scalarBrowser = 'MobileSafari'
+            } else {
+                this.scalarBrowser = 'Safari'
+            }
+            break
+
+        case 'Chrome':
+        case 'Explorer':
+        case 'Mozilla':
+            this.scalarBrowser = this.browserDetect.browser
+            break
+
+        default:
+            this.scalarBrowser = 'Other'
+            break
+
+    }
+
+    var prismSrcExt = ['js', 'java', 'xml', 'css', 'php', 'c', 'cpp', 'cs', 'html', 'php', 'py', 'rb']
+    var otherSrcExt = ['txt', 'code', '4th', 'actionscript', 'as', 'adt', 'agl', 'asm', 'asi', 'hla', 'asp', 'aspx', 'bas', 'b', 'bash', 'bat', 'bsh', 'cbl', 'cgi', 'cl', 'class', 'cmd', 'cob', 'cobol', 'csh', 'dot', 'el', 'erl', 'f', 'f03', 'f40', 'f77', 'f90', 'f95', 'fcg', 'fcgi', 'for', 'forth', 'fpp', 'gcl', 'gemfile', 'graphml', 'gv', 'h', 'has', 'hrl', 'i6', 'i7', 'inc', 'inf', 'json', 'ksh', 'lisp', 'lsp', 'lua', 'm', 'mak', 'make', 'mk', 'nt', 'p', 'pas', 'pat', 'pd', 'pl', 'pls', 'ps', 'qlb', 'r', 'rake', 'rakefile', 'scheme', 'scm', 'scpt', 'AppleScript', 'sh', 'sql', 'ss', 't', 'taf', 'vb', 'vbs', 'vbscript', 'zsh']
+
+    this.mediaSources = {
+        '3GPP': {
+            name: '3GPP',
+            extensions: ['3gp'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['3gp'],
+                    format: '3GPP',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['3gp'],
+                    format: '3GPP',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['3gp'],
+                    format: '3GPP',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['3gp'],
+                    format: '3GPP',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['3gp'],
+                    format: '3GPP',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'AIFF': {
+            name: 'AIFF',
+            extensions: ['aif', 'aiff'],
+            isProprietary: false,
+            contentType: 'audio',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['aif', 'aiff'],
+                    format: 'AIFF',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['aif', 'aiff'],
+                    format: 'AIFF',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['aif', 'aiff'],
+                    format: 'AIFF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['aif', 'aiff'],
+                    format: 'AIFF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['aif', 'aiff'],
+                    format: 'AIFF',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'CriticalCommons-LegacyVideo': {
+            name: 'CriticalCommons-LegacyVideo',
+            extensions: ['mp4'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'Flash',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'Flash',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'Flash',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'CriticalCommons-Video': {
+            name: 'CriticalCommons-Video',
+            extensions: ['mp4', 'webm'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'native',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'Deep Zoom Image': {
+            name: 'DeepZoomImage',
+            extensions: ['dzi'],
+            isProprietary: false,
+            contentType: 'tiledImage',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['dzi'],
+                    format: 'DZI',
+                    player: 'OpenSeadragon',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['dzi'],
+                    format: 'DZI',
+                    player: 'OpenSeadragon',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['dzi'],
+                    format: 'DZI',
+                    player: 'OpenSeadragon',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['dzi'],
+                    format: 'DZI',
+                    player: 'OpenSeadragon',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['dzi'],
+                    format: 'DZI',
+                    player: 'OpenSeadragon',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['dzi'],
+                    format: 'DZI',
+                    player: 'OpenSeadragon',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'FlashVideo': {
+            name: 'FlashVideo',
+            extensions: ['flv'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'Flash',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'Flash',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'Flash',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'Flash',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'Flash',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'GIF': {
+            name: 'GIF',
+            extensions: ['gif'],
+            isProprietary: false,
+            contentType: 'image',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['gif'],
+                    format: 'GIF',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['gif'],
+                    format: 'GIF',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['gif'],
+                    format: 'GIF',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['gif'],
+                    format: 'GIF',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['gif'],
+                    format: 'GIF',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['gif'],
+                    format: 'GIF',
+                    player: 'native',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'HIDVL': {
+            name: 'HIDVL',
+            extensions: ['mp4'],
+            isProprietary: true,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'HTML': {
+            name: 'HTML',
+            extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+            isProprietary: false,
+            contentType: 'document',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+                    format: 'HTML',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+                    format: 'HTML',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+                    format: 'HTML',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+                    format: 'HTML',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+                    format: 'HTML',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['htm', 'html', 'php', 'com', 'org', 'net'],
+                    format: 'HTML',
+                    player: 'native',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'HyperCities': {
+            name: 'HyperCities',
+            extensions: [],
+            isProprietary: true,
+            contentType: 'map',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: [],
+                    format: 'HyperCities Collection',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: [],
+                    format: 'HyperCities Collection',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: [],
+                    format: 'HyperCities Collection',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: [],
+                    format: 'HyperCities Collection',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: [],
+                    format: 'HyperCities Collection',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'JPEG': {
+            name: 'JPEG',
+            extensions: ['jpg', 'jpeg'],
+            isProprietary: false,
+            contentType: 'image',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['jpg', 'jpeg'],
+                    format: 'JPEG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['jpg', 'jpeg'],
+                    format: 'JPEG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['jpg', 'jpeg'],
+                    format: 'JPEG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['jpg', 'jpeg'],
+                    format: 'JPEG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['jpg', 'jpeg'],
+                    format: 'JPEG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['jpg', 'jpeg'],
+                    format: 'JPEG',
+                    player: 'native',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'KML': {
+            name: 'KML',
+            extensions: ['kml', 'kmz'],
+            isProprietary: false,
+            contentType: 'map',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['kml', 'kmz'],
+                    format: 'KML',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['kml', 'kmz'],
+                    format: 'KML',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['kml', 'kmz'],
+                    format: 'KML',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['kml', 'kmz'],
+                    format: 'KML',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['kml', 'kmz'],
+                    format: 'KML',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['kml', 'kmz'],
+                    format: 'KML',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'M4V': {
+            name: 'M4V',
+            extensions: ['m4v'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['m4v'],
+                    format: 'M4V',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['m4v'],
+                    format: 'M4V',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['m4v'],
+                    format: 'M4V',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['m4v'],
+                    format: 'M4V',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['m4v'],
+                    format: 'M4V',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['m4v'],
+                    format: 'M4V',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'MPEG-1': {
+            name: 'MPEG-1',
+            extensions: ['mpg'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mpg'],
+                    format: 'MPEG-1',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['mpg'],
+                    format: 'MPEG-1',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['mpg'],
+                    format: 'MPEG-1',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'MPEG-2': {
+            name: 'MPEG-2',
+            extensions: ['mpg'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mpg'],
+                    format: 'MPEG-2',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['mpg'],
+                    format: 'MPEG-2',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['mpg'],
+                    format: 'MPEG-2',
+                    player: 'QuickTime',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'MPEG-3': {
+            name: 'MPEG-3',
+            extensions: ['mp3'],
+            isProprietary: false,
+            contentType: 'audio',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mp3'],
+                    format: 'MPEG-3',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['mp3'],
+                    format: 'MPEG-3',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['mp3'],
+                    format: 'MPEG-3',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['mp3'],
+                    format: 'MPEG-3',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['mp3'],
+                    format: 'MPEG-3',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['mp3'],
+                    format: 'MPEG-3',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'MPEG-4': {
+            name: 'MPEG-4',
+            extensions: ['mp4'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'Flash',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'Flash',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'Flash',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'Ogg-Audio': {
+            name: 'OGA',
+            extensions: ['oga'],
+            isProprietary: false,
+            contentType: 'audio',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['oga'],
+                    format: 'Ogg',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['oga'],
+                    format: 'Ogg',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['oga'],
+                    format: 'Ogg',
+                    player: 'native',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'Ogg-Video': {
+            name: 'OGG',
+            extensions: ['ogg', 'ogv'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['ogg', 'ogv'],
+                    format: 'Ogg',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['ogg', 'ogv'],
+                    format: 'Ogg',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['ogg', 'ogv'],
+                    format: 'Ogg',
+                    player: 'native',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'PDF': {
+            name: 'PDF',
+            extensions: ['pdf'],
+            isProprietary: true,
+            contentType: 'document',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['pdf'],
+                    format: 'PDF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['pdf'],
+                    format: 'PDF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['pdf'],
+                    format: 'PDF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['pdf'],
+                    format: 'PDF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['pdf'],
+                    format: 'PDF',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['pdf'],
+                    format: 'PDF',
+                    player: 'native',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'PNG': {
+            name: 'PNG',
+            extensions: ['png'],
+            isProprietary: false,
+            contentType: 'image',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['png'],
+                    format: 'PNG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['png'],
+                    format: 'PNG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['png'],
+                    format: 'PNG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['png'],
+                    format: 'PNG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['png'],
+                    format: 'PNG',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['png'],
+                    format: 'PNG',
+                    player: 'native',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'Prezi': {
+            name: 'Prezi',
+            extensions: [],
+            isProprietary: true,
+            contentType: 'document',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: [],
+                    format: 'Prezi',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: [],
+                    format: 'Prezi',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: [],
+                    format: 'Prezi',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: [],
+                    format: 'Prezi',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: [],
+                    format: 'Prezi',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'QuickTime': {
+            name: 'QuickTime',
+            extensions: ['mov'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mov'],
+                    format: 'QuickTime',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['mov'],
+                    format: 'QuickTime',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'MobileSafari': {
+                    extensions: ['mov'],
+                    format: 'QuickTime',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['mov'],
+                    format: 'QuickTime',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['mov'],
+                    format: 'QuickTime',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'QuickTimeStreaming': {
+            name: 'QuickTimeStreaming',
+            extensions: ['mp4'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['mp4'],
+                    format: 'QuickTime',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Explorer': {
+                    extensions: ['mp4'],
+                    format: 'QuickTime',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['mp4'],
+                    format: 'QuickTime',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'TIFF': {
+            name: 'TIFF',
+            extensions: ['tif', 'tiff'],
+            isProprietary: false,
+            contentType: 'image',
+            browserSupport: {
+                'Explorer': {
+                    extensions: ['tif', 'tiff'],
+                    format: 'TIFF',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['tif', 'tiff'],
+                    format: 'TIFF',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['tif', 'tiff'],
+                    format: 'TIFF',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'PlainText': {
+            name: 'PlainText',
+            extensions: otherSrcExt,
+            isProprietary: false,
+            contentType: 'document',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: otherSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: otherSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: otherSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: otherSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: otherSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: otherSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'SoundCloud': {
+            name: 'SoundCloud',
+            extensions: [],
+            isProprietary: true,
+            contentType: 'audio',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: [],
+                    format: '',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: [],
+                    format: '',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: [],
+                    format: '',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: [],
+                    format: '',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: [],
+                    format: '',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: [],
+                    format: '',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'SourceCode': {
+            name: 'SourceCode',
+            extensions: prismSrcExt,
+            isProprietary: false,
+            contentType: 'document',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: prismSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: prismSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: prismSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: prismSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: prismSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: prismSrcExt,
+                    format: 'PlainText',
+                    player: 'native',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'Unsupported': {
+            name: 'Unsupported',
+            extensions: [],
+            isProprietary: false,
+            contentType: 'other',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: [],
+                    format: 'Unsupported',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: [],
+                    format: 'Unsupported',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: [],
+                    format: 'Unsupported',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: [],
+                    format: 'Unsupported',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: [],
+                    format: 'Unsupported',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: [],
+                    format: 'Unsupported',
+                    player: 'native',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'Vimeo': {
+            name: 'Vimeo',
+            extensions: ['flv'],
+            isProprietary: true,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'WAV': {
+            name: 'WAV',
+            extensions: ['wav'],
+            isProprietary: false,
+            contentType: 'audio',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['wav'],
+                    format: 'WAV',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['wav'],
+                    format: 'WAV',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['wav'],
+                    format: 'WAV',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['wav'],
+                    format: 'WAV',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['wav'],
+                    format: 'WAV',
+                    player: 'native',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['wav'],
+                    format: 'WAV',
+                    player: 'jPlayer',
+                    specifiesDimensions: false
+                }
+            }
+        },
+        'WebM': {
+            name: 'WebM',
+            extensions: ['webm'],
+            isProprietary: false,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Safari': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'QuickTime',
+                    specifiesDimensions: true
+                },
+                'Chrome': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'native',
+                    specifiesDimensions: true
+                },
+                'Other': {
+                    extensions: ['webm'],
+                    format: 'WebM',
+                    player: 'native',
+                    specifiesDimensions: true
+                }
+            }
+        },
+        'YouTube': {
+            name: 'YouTube',
+            extensions: ['flv'],
+            isProprietary: true,
+            contentType: 'video',
+            browserSupport: {
+                'Mozilla': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Explorer': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'MobileSafari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Safari': {
+                    extensions: ['mp4'],
+                    format: 'MPEG-4',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Chrome': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                },
+                'Other': {
+                    extensions: ['flv'],
+                    format: 'Flash Video',
+                    player: 'proprietary',
+                    specifiesDimensions: false
+                }
+            }
+        }
+    }
 
     // TODO: loadPageStatus could eventually get very large if they store status data for
     // each page request permanently. Could be an issue for pages with editors that the user might
@@ -1271,15 +2131,6 @@ ScalarAPI.prototype.runManyRelations = function (completeCallback, errorCallback
 
 }
 
-function sendAjaxRequestSaveRelate (url) {
-    return $.ajax({
-        url: url,
-        data: data,
-        type: 'POST',
-        dataType: 'json'
-    })
-}
-
 /**
  * Establish page relationships through the API
  *
@@ -1288,7 +2139,6 @@ function sendAjaxRequestSaveRelate (url) {
  * @param    errorCallback        Handler to be called when the data failed to load.
  * @return                        A string indicating the state of the request.
  */
-
 ScalarAPI.prototype.saveRelate = function (data, successCallback, errorCallback) {
 
     var action_types = ['RELATE']
@@ -1308,23 +2158,25 @@ ScalarAPI.prototype.saveRelate = function (data, successCallback, errorCallback)
         data['api_key'] = jQuery.trim(data['api_key'])
         if (!data['id'].length) throw 'Empty required user field \'id\''
         if (!data['native'] && !tosend['api_key'].length) throw 'Empty required user field \'api_key\''
-        console.log('inside scalar api')
-        var url = this.model.urlPrefix + 'api/' + data['action'].toLowerCase()
 
-        sendAjaxRequestSaveRelate(url)
-
-            .done(function (json) {
-                console.log('scalar api: ' + json)
+        $.ajax({
+            url: this.model.urlPrefix + 'api/' + data['action'].toLowerCase(),
+            data: data,
+            type: 'POST',
+            dataType: 'json',
+            success: function (json) {
                 successCallback(json)
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
                 errorCallback(jqXHR)
-            })
+            }
+        })
 
     } catch (e) {
         errorCallback('ScalarAPI save page error: ' + e)
     }
     return false
+
 }
 
 /**
