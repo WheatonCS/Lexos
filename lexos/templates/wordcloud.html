@@ -25,6 +25,7 @@
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
 
+
 <script>
   var dataset = {{ JSONObj|safe or {} }};
   var numActiveDocs = {{ numActiveDocs }};

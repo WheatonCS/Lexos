@@ -211,7 +211,7 @@ $(document).ready(function () {
   })
 
   // When the save button is clicked, call the save function
-  $('#save').click(function () {
+  $('#save').on('click', function () {
     merge = $('#merge').val()
     row_id = $('#tmp-row').val()
     column = $('#tmp-column').val()
@@ -235,15 +235,15 @@ $(document).ready(function () {
   })
 
   // When the Delete Selected button is clicked, call the deletion function
-  $('#delete').click(function () {
+  $('#delete').on("click", function () {
     selected_rows = table.rows({ selected: true }).nodes().to$()
     deleteAllSelected(selected_rows)
   })
 
   // Trigger selection buttons
-  $('#selectAllDocs').click(function () { selectAll() })
-  $('#disableAllDocs').click(function () { deselectAll() })
-  $('#deleteSelectedDocs').click(function () {
+  $('#selectAllDocs').on('click', function () { selectAll() })
+  $('#disableAllDocs').on('click', function () { deselectAll() })
+  $('#deleteSelectedDocs').on('click', function () {
     selected_rows = table.rows({ selected: true }).nodes().to$()
     deleteAllSelected(selected_rows)
   })
@@ -673,7 +673,7 @@ function deleteDoc(row_id) {
   $('#delete-modal .modal-body').html(html)
   $('#delete-modal .modal-body').append(footer)
   $('#delete-modal').modal()
-    .one('click', '#confirm-delete-bttn', function () {
+    .on('click', '#confirm-delete-bttn', function () {
       row_id = $('#deleteId').text()
       deleteOne(row_id)
     })
@@ -727,7 +727,7 @@ function deleteAllSelected(selected_rows) {
   $('#delete-modal .modal-body').html(html)
   $('#delete-modal .modal-body').append(footer)
   $('#delete-modal').modal()
-    .one('click', '#confirm-delete-bttn', function () {
+    .on('click', '#confirm-delete-bttn', function () {
       row_ids = $('#deleteIds').text()
       deleteSelected(row_ids)
     })
