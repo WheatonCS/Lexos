@@ -22,7 +22,7 @@
 <script>
 $(document).ready( function () {
   // Handle the return to top links
-  $('.to-top').click(function(){
+  $('.to-top').on('click', function(){
       $("html, body").animate({ scrollTop: 0 }, 800);
       return false;
   });
@@ -34,7 +34,7 @@ $(document).ready( function () {
 		$(this).next().collapse('toggle');
 	});
 
-	$("#statsgen").click(function(e) {
+	$("#statsgen").on('click', function(e) {
 		// No documents have been selected
 		if ($("input:checkbox:checked").length < 1) {
 		    const msg = 'You have no active documents. Please activate \
@@ -65,7 +65,7 @@ $(document).ready( function () {
 <style type="text/css">
 .to-right { text-align: right; float: right !important; margin: 4px auto;}
 </style>{% endblock %}
-{% block title %}statistics{% endblock %}
+{% block title %}Statistics{% endblock %}
 
 {% block options %}
 <div class="row">
