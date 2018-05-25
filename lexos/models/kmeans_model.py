@@ -66,13 +66,9 @@ class KMeansModel(BaseModel):
             if self._test_front_end_option is not None \
             else KmeansReceiver().options_from_front_end()
 
-    def get_cluster_result(self):
+    def get_cluster_result(self) -> KMeansClusterResult:
         # Test if get empty input
         assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
 
         # Get reduced data set, 2-D matrix that contains coordinates.
         reduced_data = \
@@ -91,11 +87,19 @@ class KMeansModel(BaseModel):
         return KMeansClusterResult(reduced_data=reduced_data,
                                    k_means_index=k_means_index)
 
-    def get_pca_plot(self):
+    def get_pca_plot(self) -> str:
+        # Get kMeans analyze result and unpack it.
         cluster_result = self.get_cluster_result()
+        reduced_data = cluster_result.reduced_data
+        k_means_index = cluster_result.k_means_index
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
         # Separate x, y coordinates from the reduced data set.
-        x_value = cluster_result.reduced_data[:, 0]
-        y_value = cluster_result.reduced_data[:, 1]
+        x_value = reduced_data[:, 0]
+        y_value = reduced_data[:, 1]
 
         # Create scatter plot for each file.
         data = [
