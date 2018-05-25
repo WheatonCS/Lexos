@@ -232,10 +232,10 @@ class LexosFile:
             self.options['scrub'] = {}
         scrub_options = self.get_scrub_options()
 
-        text_string = self.load_contents()
+        text_strfile_managering = self.load_contents()
 
         text_string = scrubber.scrub(
-            text_string,
+            text_strfile_managering,
             gutenberg=self.is_gutenberg,
             lower=scrub_options['lowercasebox'],
             punct=scrub_options['punctuationbox'],
