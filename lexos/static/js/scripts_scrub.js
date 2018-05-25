@@ -28,31 +28,31 @@ $(function () {
   advancedOptions.find('.icon-arrow-right').addClass('showing')
   advancedOptions.siblings('.expansion').slideToggle(0)
 
-  $('#swfileselect').on('change', function (ev) {
+  $('#swfileselect').change(function (ev) {
     filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#swfileselectbttnlabel').html(filename)
   })
 
-  $('#lemfileselect').on('change', function (ev) {
+  $('#lemfileselect').change(function (ev) {
     filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#lemfileselectbttnlabel').html(filename)
   })
 
-  $('#consfileselect').on('change', function (ev) {
+  $('#consfileselect').change(function (ev) {
     filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#consfileselectbttnlabel').html(filename)
   })
 
-  $('#scfileselect').on('change', function (ev) {
+  $('#scfileselect').change(function (ev) {
     filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#scfileselectbttnlabel').html(filename)
   })
 
-  $('.bttnfilelabels').on('click', function () {
+  $('.bttnfilelabels').click(function () {
     // swfileselect, lemfileselect, consfileselect, scfileselect
     var filetype = $(this).attr('id').replace('bttnlabel', '')
     usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
@@ -85,7 +85,7 @@ $(function () {
     })
   })
 
-  $('#whitespacebox').on('click', function () {
+  $('#whitespacebox').click(function () {
     var timeToToggle = 100
     if ($(this).is(':checked')) {
       $('#whitespace').removeClass('hidden')
@@ -95,7 +95,7 @@ $(function () {
       // $("#whitespace").fadeOut(timeToToggle);
     }
   })
-  $('#entityrules').on('change', function () {
+  $('#entityrules').change(function () {
     console.log($('#entityrules')[0].value)
     if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
       document.getElementById('MUFI-warning').style.display = 'inline-block'
@@ -107,7 +107,7 @@ $(function () {
     }
   })
 
-  $('#tagbox').on('click', function () {
+  $('#tagbox').click(function () {
     var timeToToggle = 100
     if ($(this).is(':checked')) {
       $('#tag').removeClass('hidden')
@@ -162,7 +162,7 @@ $(function () {
     }
   })
 
-  $('#punctbox').on('mousedown', function () {
+  $('#punctbox').mousedown(function () {
     var timeToToggle = 300
 
     if ($('#aposhyph')[0].style.cssText == 'display: none;') {

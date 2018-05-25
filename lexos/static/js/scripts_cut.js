@@ -333,7 +333,7 @@ $(function () {
 
   // Toggle cutting options when radio buttons with different classes are clicked
   var timeToToggle = 150
-  $('.sizeradio').on('click', function () {
+  $('.sizeradio').click(function () {
     var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
     cuttingValueLabel.text('Segment Size:')
 
@@ -346,7 +346,7 @@ $(function () {
       .find('.overlap-input').prop('disabled', false)
   })
 
-  $('.numberradio').on('click', function () {
+  $('.numberradio').click(function () {
     var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
     cuttingValueLabel.text('Number of Segments:')
 
@@ -360,7 +360,7 @@ $(function () {
   })
 
   // Toggle individual cut options on load
-  $('.indivcutbuttons').on('click', function () {
+  $('.indivcutbuttons').click(function () {
     var toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
     toggleDiv.toggleClass('hidden')
     // slideToggle() only works if the div is first set to 'display:none'
@@ -378,7 +378,7 @@ $(function () {
     }
   }
 
-  $('#cutByMS').on('click', showMilestoneOptions)
+  $('#cutByMS').click(showMilestoneOptions)
 
   // showMilestoneOptions();
 

@@ -48,23 +48,23 @@ $(function () {
   }
 
   updateGroupOptionDiv()
-  $('.groupOption-div').on('click', function () {
+  $('.groupOption-div').click(function () {
     updateGroupOptionDiv()
   })
 
   // Dynamically change the upper and lower bounds based on user inputs (Proportional Counts)
-  $('#upperboundPC').on('click', function () {
+  $('#upperboundPC').click(function () {
     $(this).context.min = $('#lowerboundPC').val()
     $('#upperboundRC, #lowerboundRC').val(0)
   })
 
-  $('#lowerboundPC').on('click', function () {
+  $('#lowerboundPC').click(function () {
     $(this).context.max = $('#upperboundPC').val()
     $('#upperboundRC, #lowerboundRC').val(0)
   })
 
   // Reset proportional counts input fields while raw counts is chosed
-  $('#upperboundRC, #lowerboundRC').on('click', function () {
+  $('#upperboundRC, #lowerboundRC').click(function () {
     $('#upperboundPC, #lowerboundPC').val(0)
   })
 })

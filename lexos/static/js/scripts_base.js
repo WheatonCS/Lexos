@@ -7,7 +7,7 @@ $.fn.center = function () {
 $('form').attr('method', 'post')
 
 $(document).ready(function () {
-  $('#getviz').on('click', function (e) {
+  $('#getviz').click(function (e) {
     if (numActiveDocs < 1) {
       msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
       $('#error-modal-message').html(msg)
@@ -43,7 +43,7 @@ $(function () {
 	   The default is margin-right:10px;font-size:14px;.
 	*/
 
-  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="tooltip"]').tooltip()
 
   // Initialise popovers -- mouseleave handling from http://www.bootply.com/98529
 
@@ -68,9 +68,9 @@ $(function () {
 			<h3 class="popover-title"></h3>\
 			<div class="popover-content"><p></p></div>\
 	  	  </div>'
-  }).on('click', function (e) {
+  }).click(function (e) {
     e.preventDefault()
-  }).on('mouseenter', function (e) {
+  }).mouseenter(function (e) {
     $(this).popover('show')
   })
 })
@@ -78,7 +78,7 @@ $(function () {
 $(function () {
   // Handle exceptions for submitting forms and display error messages on screen
   $('form').attr('method', 'post')
-  $('form').on('submit', function () {
+  $('form').submit(function () {
     $('#num_active_files').val()
     if ($('#num_active_files').val() == '0') {
       $('#error-modal').modal()
@@ -92,7 +92,7 @@ $(function () {
   $('.sublist li .selected').parents('.headernavitem').addClass('selected')
 
   // display/hide expandable divs here
-  $('.has-expansion .icon-arrow-right').on('click', function () {
+  $('.has-expansion .icon-arrow-right').click(function () {
     $(this).toggleClass('showing')
 
     $(this).parent('legend').siblings('.expansion').slideToggle(500)
@@ -106,14 +106,14 @@ $(function () {
   })
 
   // Redirect all clicks on "Upload Buttons" to their file upload input
-  $('.upload-bttn').on('click', function () {
+  $('.upload-bttn').click(function () {
     $(this).siblings('input[type=file]').click()
   })
 
   // Show the nested submenu of clustering when mouse hover over the corresponding navbar, otherwise hide the nested menu
-  $('#clustering-menu, #clustering-submenu').on('mouseover', function () {
+  $('#clustering-menu, #clustering-submenu').mouseover(function () {
     $('#clustering-submenu').css({ 'opacity': 1, 'visibility': 'visible' })
-  }).on('mouseleave', function () {
+  }).mouseleave(function () {
     $('#clustering-submenu').css({ 'opacity': 0, 'visibility': 'hidden' })
   })
 
