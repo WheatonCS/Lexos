@@ -6,7 +6,7 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
-from typing import Optional, NamedTuple, List
+from typing import Optional, List, Tuple, NamedTuple
 from plotly.offline import plot
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
@@ -131,3 +131,25 @@ class KMeansModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
+
+    def get_table_result(self):
+        # Get kMeans analyze result.
+        cluster_result = self.get_cluster_result()
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Initialize the table with proper headers.
+        result_table = pd.DataFrame(columns=["Cluster Number", "Document"])
+
+        # Fill the pandas data frame.
+        result_table["Cluster Number"] = cluster_result.k_means_index
+        result_table["Document"] = labels
+
+        return result_table.to_html(
+            index=False,
+            classes="table table-striped table-bordered")
+
+
+
