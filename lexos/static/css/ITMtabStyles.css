@@ -104,7 +104,6 @@
   background: #FFF;
       -webkit-background-clip: padding-box;
       background-clip: padding-box;
-      border: 1px solid #ccc;
       border: 1px solid rgba(0, 0, 0, .15);
       width: 20px;
       height: 48px;
@@ -141,36 +140,9 @@
     -o-transition: ease-in-out 2s;
     transition: ease-in-out 2s;
 }
-/* Animation for syntax for safari*/
-@-webkit-keyframes move {
-    0%{margin:15px 2px;}
-    10%{margin:15px 5px;color: black;}
-    20%{margin:15px 2px;color: black;}
-    30%{margin:15px 5px;color: black;}
-    40%{margin:15px 2px;color: black;}
-    50%{margin:15px 5px;color: black;}
-    60%{margin:15px 2px;color: black;}
-    70%{margin:15px 5px;color: black;}
-    80%{margin:15px 2px;color: black;}
-    90%{margin:15px 5px;color: black;}
-    100%{margin:15px 2px;color: black;}
-}
 
-/* Animation for standard syntax */
-@keyframes move {
-    0%{margin:15px 2px;}
-    10%{margin:15px 5px;color: black;}
-    20%{margin:15px 2px;color: black;}
-    30%{margin:15px 5px;color: black;}
-    40%{margin:15px 2px;color: black;}
-    50%{margin:15px 5px;color: black;}
-    60%{margin:15px 2px;color: black;}
-    70%{margin:15px 5px;color: black;}
-    80%{margin:15px 2px;color: black;}
-    90%{margin:15px 5px;color: black;}
-    100%{margin:15px 2px;color: black;}
-}
 
+}
 .sidebar-right > .toggler{
       -webkit-border-top-left-radius: 4px;
       -webkit-border-bottom-left-radius: 4px;

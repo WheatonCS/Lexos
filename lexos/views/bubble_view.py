@@ -16,7 +16,7 @@ viz_blueprint = Blueprint('viz', __name__)
 
 
 # Tells Flask to load this function when someone is at '/viz'
-@viz_blueprint.route("/viz", methods=["GET", "POST"])
+@viz_blueprint.route("/viz", methods=["GET"])
 def viz():
     """Handles the functionality on the alternate bubbleViz page.
 
@@ -42,6 +42,7 @@ def viz():
             labels=labels,
             itm="bubbleviz",
             numActiveDocs=num_active_docs)
+
     if request.method == "POST":
         # "POST" request occur when html form is submitted
         # (i.e. 'Get Dendrogram', 'Download...')
@@ -116,6 +117,7 @@ def viz():
         json_str = json.dumps(json_obj)
         session_manager.cache_cloud_option()
         session_manager.cache_bubble_viz_option()
+
         return render_template(
             'viz.html',
             JSONObj=json_str,
