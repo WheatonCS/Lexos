@@ -687,26 +687,26 @@ function saveOne (row_id, column, value) {
     }
 
     // Do Ajax
-sendAjaxRequestSaveOne(url, data)
-    .done(
-        function (response) {
-            // Update the UI
-            console.log("SaveOne: " + response)
-            cell = 'td:eq(' + column + ')'
-            $('#' + row_id).find(cell).text(value)
-            $('#edit-modal').modal('hide')
-            $('#edit-form').remove()
-            table.draw()
-            toggleActiveDocsIcon()
-        })
-    .fail(
-        function (jqXHR, textStatus, errorThrown) {
-            $('#error-modal .modal-body').html(err_msg)
-            $('#error-modal').modal()
-            $('#edit-form').remove()
-            $('#edit-modal').modal('hide')
-            console.log('bad: ' + textStatus + ': ' + errorThrown)
-        })
+    sendAjaxRequestSaveOne(url, data)
+        .done(
+            function (response) {
+                // Update the UI
+                console.log('SaveOne: ' + response)
+                cell = 'td:eq(' + column + ')'
+                $('#' + row_id).find(cell).text(value)
+                $('#edit-modal').modal('hide')
+                $('#edit-form').remove()
+                table.draw()
+                toggleActiveDocsIcon()
+            })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
+                $('#error-modal .modal-body').html(err_msg)
+                $('#error-modal').modal()
+                $('#edit-form').remove()
+                $('#edit-modal').modal('hide')
+                console.log('bad: ' + textStatus + ': ' + errorThrown)
+            })
 
 }
 
@@ -715,7 +715,7 @@ sendAjaxRequestSaveOne(url, data)
 /* #### deleteOne() #### */
 
 // Helper function deletes selected row and updates table
-function sendAjaxRequestDeleteOne(url, row_id){
+function sendAjaxRequestDeleteOne (url, row_id) {
     return $.ajax({
         type: 'POST',
         url: url,
@@ -725,23 +725,23 @@ function sendAjaxRequestDeleteOne(url, row_id){
     })
 
 }
+
 function deleteOne (row_id) {
     // alert("Delete: " + row_id);
     url = '/deleteOne'
 
-
-sendAjaxRequestDeleteOne (url, row_id)
-    .done(
-        function (response) {
-        console.log("Delete One: " + response)
-            // Update the UI
-            id = '#' + row_id
-            table.row(id).remove()
-            handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
-            toggleActiveDocsIcon()
-            table.draw()
-        })
-    .fail( function (jqXHR, textStatus, errorThrown) {
+    sendAjaxRequestDeleteOne(url, row_id)
+        .done(
+            function (response) {
+                console.log('Delete One: ' + response)
+                // Update the UI
+                id = '#' + row_id
+                table.row(id).remove()
+                handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+                toggleActiveDocsIcon()
+                table.draw()
+            })
+        .fail(function (jqXHR, textStatus, errorThrown) {
             $('#error-modal .modal-body').html('Lexos could not delete the requested document.')
             $('#error-modal').modal()
             $('#delete-modal').modal('hide')
@@ -772,8 +772,8 @@ function deleteDoc (row_id) {
 /* #### deleteSelected() #### */
 
 // Helper function deletes selected rows and updates table
-function sendajaxRequestDeleteSelected(url, row_ids){
-    return  $.ajax({
+function sendajaxRequestDeleteSelected (url, row_ids) {
+    return $.ajax({
         type: 'POST',
         url: url,
         data: row_ids,
@@ -781,32 +781,33 @@ function sendajaxRequestDeleteSelected(url, row_ids){
         cache: false
     })
 }
+
 function deleteSelected (row_ids) {
     url = '/deleteSelected'
 
     // Do Ajax
-sendajaxRequestDeleteSelected(url, row_ids)
-    .done(
-        function (response) {
-            // Update the UI
-            console.log("delete selected: success: " + response)
-            row_ids = JSON.parse(response)
-            // row_ids = row_ids.split(",");
-            $.each(row_ids, function (i) {
-                id = '#' + row_ids[i]
-                table.row(id).remove()
+    sendajaxRequestDeleteSelected(url, row_ids)
+        .done(
+            function (response) {
+                // Update the UI
+                console.log('delete selected: success: ' + response)
+                row_ids = JSON.parse(response)
+                // row_ids = row_ids.split(",");
+                $.each(row_ids, function (i) {
+                    id = '#' + row_ids[i]
+                    table.row(id).remove()
+                })
+                handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+                toggleActiveDocsIcon()
+                table.draw()
             })
-            handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
-            toggleActiveDocsIcon()
-            table.draw()
-        })
-    .fail(
-        function (jqXHR, textStatus, errorThrown) {
-            $('#error-modal .modal-body').html('Lexos could not delete the requested documents.')
-            $('#error-modal').modal()
-            $('#delete-modal').modal('hide')
-            console.log('bad: ' + textStatus + ': ' + errorThrown)
-        })
+        .fail(
+            function (jqXHR, textStatus, errorThrown) {
+                $('#error-modal .modal-body').html('Lexos could not delete the requested documents.')
+                $('#error-modal').modal()
+                $('#delete-modal').modal('hide')
+                console.log('bad: ' + textStatus + ': ' + errorThrown)
+            })
 }
 
 /* #### END OF deleteSelected() #### */
