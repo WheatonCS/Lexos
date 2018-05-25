@@ -6,14 +6,14 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
-from typing import Optional, List, Tuple, NamedTuple
+from typing import Optional, List, NamedTuple
 from plotly.offline import plot
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.kmeans_receiver import KmeansOption, KmeansReceiver
+from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 
 
@@ -21,7 +21,7 @@ class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
-    front_end_option: KmeansOption
+    front_end_option: KMeansOption
 
 
 class KMeansClusterResult(NamedTuple):
@@ -60,11 +60,11 @@ class KMeansModel(BaseModel):
             else MatrixModel().get_id_temp_label_map()
 
     @property
-    def _k_means_front_end_option(self) -> KmeansOption:
+    def _k_means_front_end_option(self) -> KMeansOption:
         """:return: a typed tuple that holds the k-means front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
-            else KmeansReceiver().options_from_front_end()
+            else KMeansReceiver().options_from_front_end()
 
     def get_cluster_result(self) -> KMeansClusterResult:
         # Test if get empty input
