@@ -48,7 +48,7 @@ $(function () {
 
   // $("#normalize-options").css({"visibility":"hidden"});
 
-  $('#getkmeans').on('click', function (e) {
+  $('#getkmeans').click(function (e) {
     // Display the processing icon
     $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
 
@@ -152,7 +152,7 @@ $(function () {
 
   // Handle table mouseovers for Voronoi points
   $('#basicTable tbody tr')
-    .on('mouseenter', function () {
+    .mouseenter(function () {
       $(this).css('opacity', '0.6')
       id = $(this).attr('class')
       point = '.P' + id
@@ -162,7 +162,7 @@ $(function () {
       $(point).css('fill', 'yellow')
       $(point).tooltip('show')
     })
-    .on('mouseleave', function () {
+    .mouseleave(function () {
       $(this).css('opacity', '1.0')
       id = $(this).attr('class')
       point = '.P' + id
