@@ -1471,7 +1471,7 @@ textarea.manualinput {
 }
 
 #visualize-submit {
-  margin: 5px 0px 0px 0px;
+  margin: 5px 0 0 0;
 
 }
 
@@ -1552,7 +1552,7 @@ textarea.manualinput {
 }
 
 #getviz {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .vizoptions {
