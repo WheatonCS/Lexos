@@ -5,6 +5,14 @@
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{ version }}"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Latest compiled and minimized DataTables CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+
+    <!-- Latest compiled and minimized DataTables JS -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+
 {% endblock %}
 
 {% block title %}K-Means Clustering{% endblock %}
@@ -90,13 +98,14 @@
 {% block results %}
     <div class="row submit-button-row">
         <div class="col-md-12">
-            <input class="bttn bttn-action" id="getkmeansPCA"
-                   name="getkmeansPCA" type="button" value="Get kmeans PCA"
-                   style=""/>
+            <input type="button" class="bttn bttn-action" id="get-k-means-result"
+                   name="get-k-means-result" value="Get KMeans Result"/>
         </div>
     </div>
-
-    <div id="kmeansPCA-result" class="row col-lg-12 col-md-12"></div>
+    <div id="KMeans-result" class="row col-lg-12 col-md-12">
+        <div id="KMeans-table" class="row col-lg-3 col-md-3"></div>
+        <div id="KMeans-plot" class="row col-lg-offset-1 col-md-offset-1 col-lg-8 col-md-8"></div>
+    </div>
 {% endblock %}
 
 {% block submit %}
