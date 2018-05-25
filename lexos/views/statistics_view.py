@@ -1,9 +1,9 @@
-from flask import session, render_template, Blueprint
-
+from flask import session, render_template, Blueprint, request
 from lexos.helpers import constants as constants
+from lexos.views.base_view import detect_active_docs
 from lexos.managers import utility, session_manager as session_manager
 from lexos.models.stats_model import StatsModel
-from lexos.views.base_view import detect_active_docs
+from lexos.models.filemanager_model import FileManagerModel
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -23,34 +23,43 @@ def statistics():
     """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
+    # Get labels with their ids.
+    id_label_map = \
+        FileManagerModel().load_file_manager().get_active_labels_with_id()
+    # Get file manager.
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels_with_id()
 
     # "GET" request occurs when the page is first loaded.
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     if 'statisticoption' not in session:
-        session['statisticoption'] = {'segmentlist': list(
-            map(str,
-                list(file_manager.files.keys())))}  # default is all on
+        # Default is all on
+        session['statisticoption'] = \
+            {'segmentlist':
+                 list(map(str, list(file_manager.files.keys())))}
     return render_template(
         'statistics.html',
-        labels=labels,
         itm="statistics",
-        numActiveDocs=num_active_docs
+        labels=id_label_map,
+        numActiveDocs=num_active_docs)
 
-    )
 
-
-@stats_blueprint.route("/statsFile", methods=["POST"])
-def stats_file():
+@stats_blueprint.route("/fileReport", methods=["POST"])
+def file_report():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
-    return StatsModel().get_file_info()
+    return StatsModel().formatted_file_result()
 
 
-@stats_blueprint.route("/statsBoxPlot", methods=["POST"])
-def stats_box_plot():
+@stats_blueprint.route("/fileTable", methods=["POST"])
+def file_table():
+    session_manager.cache_analysis_option()
+    session_manager.cache_statistic_option()
+    return StatsModel().get_file_stats()
+
+
+@stats_blueprint.route("/boxPlot", methods=["POST"])
+def box_plot():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
     return StatsModel().get_box_plot()
