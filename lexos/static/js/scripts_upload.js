@@ -12,7 +12,7 @@ $(function () {
 
   $('[data-toggle="tooltip"]').tooltip()
 
-  $('#uploadbrowse').click(function () {
+  $('#uploadbrowse').on('click', function () {
     $('#fileselect').click()
   })
 

@@ -9,12 +9,12 @@ $(document).ready(function () {
 
 
   // Reset the maximum number of documents when a checkbox is clicked
-  $('.minifilepreview').click(function () {
+  $('.minifilepreview').on('click', function () {
     $('#cullnumber').attr('max', $('.minifilepreview:checked').length)
   })
 
   // Toggle file selection & reset the maximum number of documents when 'Toggle All' is clicked
-  $('#allCheckBoxSelector').click(function () {
+  $('#allCheckBoxSelector').on('click', function () {
     if (this.checked) {
       $('.minifilepreview:not(:checked)').trigger('click')
       $('#cullnumber').attr('max', $('.minifilepreview:checked').length)
