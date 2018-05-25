@@ -22,7 +22,7 @@
 <script>
 $(document).ready( function () {
   // Handle the return to top links
-  $('.to-top').click(function(){
+  $('.to-top').on('click', function(){
       $("html, body").animate({ scrollTop: 0 }, 800);
       return false;
   });
@@ -34,7 +34,7 @@ $(document).ready( function () {
 		$(this).next().collapse('toggle');
 	});
 
-	$("#statsgen").click(function(e) {
+	$("#statsgen").on('click', function(e) {
 		// No documents have been selected
 		if ($("input:checkbox:checked").length < 1) {
 		    const msg = 'You have no active documents. Please activate at least one document using the <a href="{{ url_for('manage.manage') }}">Manage</a> tool or <a href="{{ url_for('upload.upload') }}">upload</> a new document.';
