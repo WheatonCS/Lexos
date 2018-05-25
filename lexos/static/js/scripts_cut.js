@@ -316,14 +316,14 @@ function downloadCutting () {
 }
 
 $(function () {
-  const msg = 'You do not have enough active documents. Please activate \
-  at least two documents using the <a href="./manage">Manage</a> tool or\
+  const msg = 'You have no active documents. Please activate \
+  at least one document using the <a href="./manage">Manage</a> tool or\
   <a href="./upload">upload</a> a new document.'
 
+  // When download, preview, or apply is clicked
   $('#action-buttons').click(function () {
-      if ($('#num_active_files').val() <  2) {
-          //change button type to button so no request is made
-          $("input[name='gen-topword']").prop("type", "button");
+      // check number of files
+      if ($('#num_active_files').val() <  1) {
           // display error
           $('#error-modal .modal-body').html(msg)
           $('#error-modal').modal()
