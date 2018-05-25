@@ -4,7 +4,7 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class KMeansOption(NamedTuple):
-    """The typed tuple to hold kmeans options."""
+    """The typed tuple to hold k means options."""
     n_init: int  # number of iterations with different centroids.
     k_value: int  # k value-for k-means analysis. (k groups)
     max_iter: int  # maximum number of iterations.
@@ -16,7 +16,7 @@ class KMeansReceiver(BaseReceiver):
     def options_from_front_end(self) -> KMeansOption:
         """Get the K-means option from front end.
 
-        :return: a KmeansOption object to hold all the options.
+        :return: a KMeansOption object to hold all the options.
         """
         n_init = int(self._front_end_data['n_init'])
         max_iter = int(self._front_end_data['max_iter'])
