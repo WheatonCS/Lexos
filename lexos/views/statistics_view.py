@@ -1,9 +1,9 @@
-from flask import request, session, render_template, Blueprint
-
+from flask import session, render_template, Blueprint, request
 from lexos.helpers import constants as constants
+from lexos.views.base_view import detect_active_docs
 from lexos.managers import utility, session_manager as session_manager
 from lexos.models.stats_model import StatsModel
-from lexos.views.base_view import detect_active_docs
+from lexos.models.filemanager_model import FileManagerModel
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -14,7 +14,7 @@ stats_blueprint = Blueprint('statistics', __name__)
 
 
 # Tells Flask to load this function when someone is at '/statsgenerator'
-@stats_blueprint.route("/statistics", methods=["GET", "POST"])
+@stats_blueprint.route("/statistics", methods=["GET"])
 def statistics():
     """Handles the functionality on the Statistics page.
 
@@ -23,33 +23,43 @@ def statistics():
     """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
+    # Get labels with their ids.
+    id_label_map = \
+        FileManagerModel().load_file_manager().get_active_labels_with_id()
+    # Get file manager.
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels_with_id()
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        if 'statisticoption' not in session:
-            session['statisticoption'] = {'segmentlist': list(
-                map(str,
-                    list(file_manager.files.keys())))}  # default is all on
-        return render_template(
-            'statistics.html',
-            labels=labels,
-            itm="statistics",
-            numActiveDocs=num_active_docs)
 
-    if request.method == "POST":
-        token = StatsModel.get_token_type()
-        file_info_list = StatsModel().get_all_file_info()
-        corpus_info = StatsModel().get_corpus_info()
-        session_manager.cache_analysis_option()
-        session_manager.cache_statistic_option()
+    # "GET" request occurs when the page is first loaded.
+    if 'analyoption' not in session:
+        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    if 'statisticoption' not in session:
+        # Default is all on
+        session['statisticoption'] = \
+            {'segmentlist':
+                 list(map(str, list(file_manager.files.keys())))}
+    return render_template(
+        'statistics.html',
+        itm="statistics",
+        labels=id_label_map,
+        numActiveDocs=num_active_docs)
 
-        return render_template(
-            'statistics.html',
-            token=token,
-            labels=labels,
-            corpusInfo=corpus_info,
-            FileInfoList=file_info_list,
-            numActiveDocs=num_active_docs)
+
+@stats_blueprint.route("/fileReport", methods=["POST"])
+def file_report():
+    session_manager.cache_analysis_option()
+    session_manager.cache_statistic_option()
+    return StatsModel().formatted_file_result()
+
+
+@stats_blueprint.route("/fileTable", methods=["POST"])
+def file_table():
+    session_manager.cache_analysis_option()
+    session_manager.cache_statistic_option()
+    return StatsModel().get_file_stats()
+
+
+@stats_blueprint.route("/boxPlot", methods=["POST"])
+def box_plot():
+    session_manager.cache_analysis_option()
+    session_manager.cache_statistic_option()
+    return StatsModel().get_box_plot()
