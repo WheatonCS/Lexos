@@ -17,15 +17,15 @@
 }
 
 .sidebar > .row > .col-xs-12, .sidebar > .row > .col-sm-12, .sidebar > .row > .col-md-12, .sidebar > .row > .col-lg-12{
-      padding:0px;
+      padding:0;
       position: absolute;
-      bottom: 0px;
-      top: 0px;
-      overflow: auto;           
+      bottom: 0;
+      top: 0;
+      overflow: auto;
 }
 
 .sidebar >.row{
-      margin:0px;
+      margin:0;
 }
 
 .sidebar {
@@ -37,7 +37,7 @@
 }
 
 .sidebar.sidebar-right{
-      right:0px;
+      right:0;
       left:20px;
 }
 
@@ -49,12 +49,12 @@
             width: 300px;
       }
       .sidebar.sidebar-left{
-            left:0px;
+            left:0;
             right:auto;
       }
 
       .sidebar.sidebar-right{
-            right:0px;
+            right:0;
             left:auto;
       }
 }
@@ -63,12 +63,12 @@
             width: 230px;
       }
       .sidebar.sidebar-left{
-            left:0px;
+            left:0;
             right:auto;
       }
 
       .sidebar.sidebar-right{
-            right:0px;
+            right:0;
             left:auto;
       }
 }
@@ -77,12 +77,12 @@
             width: 230px;
       }
       .sidebar.sidebar-left{
-            left:0px;
+            left:0;
             right:auto;
       }
 
       .sidebar.sidebar-right{
-            right:0px;
+            right:0;
             left:auto;
       }
 }
@@ -91,12 +91,12 @@
             width: 230px;
       }
       .sidebar.sidebar-left{
-            left:0px;
+            left:0;
             right:auto;
       }
 
       .sidebar.sidebar-right{
-            right:0px;
+            right:0;
             left:auto;
       }
 }
@@ -104,7 +104,6 @@
   background: #FFF;
       -webkit-background-clip: padding-box;
       background-clip: padding-box;
-      border: 1px solid #ccc;
       border: 1px solid rgba(0, 0, 0, .15);
       width: 20px;
       height: 48px;
@@ -121,20 +120,18 @@
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px;
       border-left: 1px solid #fff;
-      -webkit-box-shadow: 1px 0px 8px rgba(0, 0, 0, .175);
-      box-shadow: 1px 0px 8px rgba(0, 0, 0, .175);
+      -webkit-box-shadow: 1px 0 8px rgba(0, 0, 0, .175);
+      box-shadow: 1px 0 8px rgba(0, 0, 0, .175);
       right: -20px;
-} 
+}
 
 .sidebar-left > .toggler > span{
       margin:15px 2px;
-
 }
 
 .sidebar-left > .toggler > .glyphicon-chevron-right{
-      display:none;
+    display:block;
 }
-
 .sidebar-right > .toggler{
       -webkit-border-top-left-radius: 4px;
       -webkit-border-bottom-left-radius: 4px;
@@ -143,10 +140,10 @@
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
       border-right: 1px solid #fff;
-      -webkit-box-shadow: -1px 0px 8px rgba(0, 0, 0, .175);
-      box-shadow: -1px 0px 8px rgba(0, 0, 0, .175);         
+      -webkit-box-shadow: -1px 0 8px rgba(0, 0, 0, .175);
+      box-shadow: -1px 0 8px rgba(0, 0, 0, .175);
       left: -20px;
-} 
+}
 
 .sidebar-right > .toggler > span{
       margin:15px 2px;
@@ -159,22 +156,22 @@
 .sidebar .submenu{
       display: none;
       position: fixed;
-} 
+}
 
 /*Native BootStrap Hack*/
 .sidebar .list-group-item:last-child, .sidebar .list-group-item:first-child{
-      border-radius:0px;
+      border-radius:0;
 }
 
 .sidebar .list-group{
-      margin-bottom:0px;
+      margin-bottom:0;
 }
 .sidebar .list-group-item{
       padding: 5px;
       border: 1px solid #DDD;
-      border-left: 0px;
-      border-right: 0px;
-      margin-bottom: 0px;
+      border-left: 0;
+      border-right: 0;
+      margin-bottom: 0;
       margin-top: -1px;
 }
 
@@ -211,16 +208,16 @@
 #panel-content ul, #panel-content ol {
     display: block;
     margin-top: 1em;
-    margin-bottom: 1 em;
+    margin-bottom: 1em;
     margin-left: 0;
     margin-right: 0;
     padding-left: 40px;
-} 
-#panel-content ul { 
+}
+#panel-content ul {
     list-style-type: disc;
 }
 
-#panel-content ol { 
+#panel-content ol {
     list-style-type: decimal;
 }
 
@@ -230,7 +227,7 @@
         margin: 8px;
         font-size: 1.5em;
     }
-    
+
 #hamburger:link,
 #hamburger:visited {
   color: #fff;
