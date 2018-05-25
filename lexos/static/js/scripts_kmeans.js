@@ -55,19 +55,12 @@ function generateKMeansTable () {
 
     // the configuration for creating data table
     const dataTableConfig = {
-
+        // Do not show number of file.
+        info: false,
         // Do not paging.
         paging: false,
-
-        // Replace entries to documents.
-        language: {
-            'lengthMenu': 'Display _MENU_ documents',
-            'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
-        },
-
         // Specify where the button is.
         dom: "Bfrtip",
-
         // Specify all the download buttons that are displayed on the page.
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
     }
