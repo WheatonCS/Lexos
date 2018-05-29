@@ -62,7 +62,7 @@
             <div class="col-md-8 col-md-offset-4" style="padding-right:10%;">
                 <label class="pull-right">
                     <span class="cut-label-text cut-label">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
-                    <input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
+                    <input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="1"/>
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)." style=""></i>
                     </span>
                 </label>
