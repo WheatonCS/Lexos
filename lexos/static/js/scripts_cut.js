@@ -193,13 +193,17 @@ function doAjax (action) {
     // Initiate a timer to allow user to cancel if processing takes too long
     var loadingTimeout = window.setTimeout(function () {
         $('#needsWarning').val('true')
-        var timeWarning = 'Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.'
-        footerButtons = '<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>'
-        footerButtons += '<button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>'
+        const timeWarning = 'Lexos seems to be taking a long time. This may \
+        be because you are cutting a large number of documents. \
+        If not, we suggest that you cancel, reload the page, and try again.'
+        const footerButtons = '<button type="button" class="btn btn-default"\
+        data-dismiss="modal">Continue Anyway</button>\
+        <button type="button" class="btn btn-default" id="timerCancel" >\
+        Cancel</button>'
         $('#warning-modal-footer').html(footerButtons)
         $('#warning-modal-message').html(timeWarning)
         $('#warning-modal').modal()
-    }, 10000) // 10 weconds
+    }, 10000) // 10 seconds
     xhr = $.ajax({
         url: '/doCutting',
         type: 'POST',
