@@ -2,7 +2,10 @@
 const checkForErrors = function () {
     // Set Error and Warning Messages
     let errors = []
-    const err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.'
+    const err1 = 'You have no active documents. Please activate at least \
+    one document using the \
+    <a href=\"{{ url_for("manage") }}\">Manage</a> tool or \
+    <a href=\"{{ url_for("upload") }}\">upload</> a new document.'
     const err2 = 'You must provide a string to cut on.'
     const err3 = 'You must provide a default cutting value.'
     const err4 = 'Default cutting: Invalid segment size.'
