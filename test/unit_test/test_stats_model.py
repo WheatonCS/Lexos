@@ -106,8 +106,8 @@ class TestFileResult:
 
 class TestCorpusInfo:
     def test_average(self):
-        assert test_corpus_result_one.average == 47.5
-        assert test_corpus_result_two.average == 47
+        assert test_corpus_result_one.mean == 47.5
+        assert test_corpus_result_two.mean == 47
 
     def test_std(self):
         assert round(test_corpus_result_one.std_deviation, 4) == 32.5
