@@ -371,7 +371,8 @@ $(function () {
         if ($('#cutByMS').is(':checked')) {
             $('#MSoptspan').removeClass('hidden')
             $('#cuttingdiv').hide()
-        } else {
+        }
+        else {
             $('#MSoptspan').addClass('hidden')
             $('#cuttingdiv').show()
         }
@@ -387,7 +388,8 @@ $(function () {
             $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').show()
             $(this).parents('#cutByMSdiv').filter(':first')
                 .parents('.cuttingoptionswrapper').find('.individcut').hide()
-        } else {
+        }
+        else {
             $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').hide()
             $(this).parents('#cutByMSdiv').filter(':first')
                 .parents('.cuttingoptionswrapper').find('.individcut').show()
