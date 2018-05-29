@@ -18,7 +18,8 @@ test_option_one = StatsTestOptions(
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_file_stats()
-test_box_plot_result_one = test_stats_model_one.get_box_plot()
+# noinspection PyProtectedMember
+test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
 test_pandas_one = pd.read_html(test_file_result_one)[0]
 # ------------------------------------------------------------------
 
@@ -142,10 +143,7 @@ class TestSpecialCase:
 
 
 class TestStatsBoxplot:
-    model = StatsModel(test_options=test_option_one)
-
     def test_get_stats_boxplot(self):
-        basic_fig = self.model.get_box_plot_object()
         np.testing.assert_equal(
             basic_fig['layout']['yaxis']['ticktext'],
             ['I look so good!', 'this is a test', 'Cheng is handsome']
