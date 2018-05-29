@@ -121,8 +121,8 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
-                           yaxis=go.YAxis(title='y-axis', showline=False))
-
+                           yaxis=go.YAxis(title='y-axis', showline=False),
+                           height=600)
         # Pack data and layout.
         figure = go.Figure(data=data, layout=layout)
 
