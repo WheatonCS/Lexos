@@ -46,6 +46,48 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
+ * format the ajax call response to HTML format string.
+ * @param response {json}: a json format string.
+ * @return string formatted file report.
+ */
+function formatFileReportResponse (response) {
+    // Extract constant result from response.
+    const token_name = response['token_name']
+    const mean = `<p>Average document size is ${response['mean']} ${token_name}</p>`
+    const std_deviation = `<p>Standard deviation of documents is ${response['std_deviation']} ${token_name}</p>`
+    const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']} ${token_name}</p>`
+
+    // Extract standard deviation anomaly information.
+    let anomaly_se
+    if (response['anomaly_se'].every(_.isNull)) {
+        anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
+    }
+    else {
+        anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
+        response['anomaly_se'].forEach(function (element) {
+            if (element !== null)
+                anomaly_se += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>`
+        })
+    }
+
+    // Extract inter quartile range anomaly information.
+    let anomaly_iqr
+    if (response['anomaly_iqr'].every(_.isNull)) {
+        anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
+    }
+    else {
+        anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
+        response['anomaly_iqr'].forEach(function (element) {
+            if (element !== null)
+                anomaly_iqr += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>`
+        })
+    }
+
+    // Return the retracted information.
+    return `${mean}${std_deviation}${inter_quartile_range}${anomaly_se}${anomaly_iqr}`
+}
+
+/**
  * display the result of the corpus statistics report on web.
  */
 function generateStatsFileReport () {
@@ -57,10 +99,9 @@ function generateStatsFileReport () {
     sendAjaxRequest('/fileReport', form)
         .done(
             function (response) {
-                $('#file-report').html(response)
+                $('#file-report').html(formatFileReportResponse(response))
             })
         .fail(
-
             function (jqXHR, textStatus, errorThrown) {
                 // If fail hide the loading icon.
                 $('#status-analyze').css({'visibility': 'hidden'})

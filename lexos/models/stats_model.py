@@ -85,9 +85,9 @@ class StatsModel(BaseModel):
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
         anomaly_se = [
-            f"<b>small: </b>{label}"
+            f"small: {label}"
             if file_sizes[count] < mean - 2 * std_deviation
-            else f"<b>large: </b>{label}"
+            else f"large: {label}"
             if file_sizes[count] > mean + 2 * std_deviation
             else None
             for count, label in enumerate(labels)]
@@ -96,9 +96,9 @@ class StatsModel(BaseModel):
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr = [
-            f"<b>  small: </b>{label}"
+            f"small: {label}"
             if file_sizes[count] < first_quartile - 1.5 * iqr
-            else f"<b>  large: </b>{label}"
+            else f"large: {label}"
             if file_sizes[count] > third_quartile + 1.5 * iqr
             else None
             for count, label in enumerate(labels)]
@@ -123,10 +123,8 @@ class StatsModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        # Get the correct token name.
-        token_type = \
-            MatrixReceiver().options_from_front_end().token_option.token_type
-        token_name = "Terms" if token_type == "word" else "Characters"
+        # Get token name.
+        token_name = self.get_token_name()
 
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
@@ -207,46 +205,13 @@ class StatsModel(BaseModel):
                     include_plotlyjs=False,
                     output_type="div")
 
-    def formatted_file_result(self) -> str:
-        """Format the corpus statistics object to display on browser.
+    @staticmethod
+    def get_token_name() -> str:
+        """Get current token name.
 
-        :return: A formatted string in HTML syntax that contains corpus
-                 statistics.
+        :return: A string represent the toke name.
         """
-        # Get the correct token type.
+        # Get the correct token name.
         token_type = \
             MatrixReceiver().options_from_front_end().token_option.token_type
-        token = "terms" if token_type == "word" else "characters"
-
-        # Get corpus stats result.
-        stats = self.get_corpus_stats()
-
-        # Format result.
-        result = \
-            f"<p>Average document size is {stats.mean} {token} </p>" + \
-            f"<p>Standard deviation of documents is " \
-            f"{stats.std_deviation} {token} </p>" + \
-            f"<p>Inter quartile range of documents is " \
-            f"{stats.inter_quartile_range} {token}</p>"
-
-        # Format standard deviation anomaly result.
-        if not any(stats.anomaly_se):
-            result += \
-                "<p><b>No</b> anomaly detected by standard deviation test.</p>"
-        else:
-            result += \
-                "<p>Anomaly detected using the standard deviation test.</P>"
-            for anomaly in stats.anomaly_se:
-                result += f"<p style=\"padding-left: 10px\">{anomaly}</p>" \
-                    if anomaly is not None else ""
-
-        # Format inter quartile range anomaly result.
-        if not any(stats.anomaly_iqr):
-            result += "<p><b>No</b> anomaly detected by IQR test.</p>"
-        else:
-            result += "<p>Anomaly detected using the IQR test.</p>"
-            for anomaly in stats.anomaly_iqr:
-                result += f"<p style=\"padding-left: 10px\">{anomaly}</p>" \
-                    if anomaly is not None else ""
-
-        return result
+        return "terms" if token_type == "word" else "characters"
