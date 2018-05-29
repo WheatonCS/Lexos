@@ -46,6 +46,21 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
+ * format the ajax call response to HTML format string.
+ * @param response {json}: a json format string.
+ * @return string formatted file report.
+ */
+function formatFileReportResponse (response) {
+    const mean = `<p>Average document size is ${response['mean']}</p>`
+    const anomaly_se = response['anomaly_se']
+    const anomaly_iqr = response['anomaly_iqr']
+    const std_deviation = `<p>Standard deviation of documents is ${response['std_deviation']}</p>`
+    const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']}</p>`
+
+    return `${mean}${std_deviation}${inter_quartile_range}`
+}
+
+/**
  * display the result of the corpus statistics report on web.
  */
 function generateStatsFileReport () {
@@ -57,10 +72,9 @@ function generateStatsFileReport () {
     sendAjaxRequest('/fileReport', form)
         .done(
             function (response) {
-                $('#file-report').html(response)
+                $('#file-report').html(formatFileReportResponse(response))
             })
         .fail(
-
             function (jqXHR, textStatus, errorThrown) {
                 // If fail hide the loading icon.
                 $('#status-analyze').css({'visibility': 'hidden'})
