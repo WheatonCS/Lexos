@@ -210,6 +210,7 @@ $(document).ready(function () {
         prepareContextMenu()
     })
 
+
     // When the save button is clicked, call the save function
     $('#save').click(function () {
         merge = $('#merge').val()
@@ -229,9 +230,89 @@ $(document).ready(function () {
             } else {
                 saveMultiple(row_ids, column, value)
             }
+
+  document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // default, the other ones are dynamic on select and deselect
+  $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
+
+  /* #### END OF TABLE INITIATION #### */
+
+  /* #### DEFINE CONTEXT MENU #### */
+
+  // Get the number of rows, selected or unselected, for context menu
+  var num_rows = table.rows().ids().length
+  var num_rows_selected = table.rows({ selected: true }).ids().length
+  handleSelectButtons(num_rows, num_rows_selected)
+
+  $('#demo').contextmenu({
+    target: '#context-menu',
+    scopes: 'td',
+    before: function () {
+      prepareContextMenu()
+    },
+    onItem: function (cell, e) {
+      // Use if scopes = tr
+      var target = cell.parent().attr('id')
+      action = $(e.target).attr('data-context')
+      switch (action) {
+        case 'preview':
+          showPreviewText(target)
+          break
+        case 'edit_doc_name':
+          editName(target)
+          break
+        case 'edit_doc_class':
+          editClass(target)
+          break
+        case 'clone_doc':
+          // clone(target);
+          break
+        case 'delete_doc':
+          deleteDoc(target)
+          break
+        case 'select_all':
+          selectAll()
+          break
+        case 'deselect_all':
+          deselectAll()
+          break
+        case 'merge_selected':
+          selected_rows = table.rows({ selected: true }).nodes().to$()
+          mergeSelected(cell, selected_rows)
+          break
+        case 'apply_class_selected':
+          selected_rows = table.rows({ selected: true }).nodes().to$()
+          applyClassSelected(cell, selected_rows)
+          break
+        case 'delete_all_selected':
+          selected_rows = table.rows({ selected: true }).nodes().to$()
+          deleteAllSelected(selected_rows)
+          break
+      }
+    }
+  })
+
+  // Refresh context menu on show
+  $('#context-menu').on('show.bs.context', function () {
+    prepareContextMenu()
+  })
+
+  // When the save button is clicked, call the save function
+  $('#save').click(function () {
+    merge = $('#merge').val()
+    row_id = $('#tmp-row').val()
+    column = $('#tmp-column').val()
+    value = $('#tmp').val()
+    if (row_id.match(/,/)) {
+      row_ids = row_id.split(',')
+      source = $('#' + row_id).children().eq(3).text()
+      if (merge == 'true') {
+        if ($('#addMilestone').prop('checked') == true) {
+          milestone = $('#milestone').val()
+
         } else {
             saveOne(row_id, column, value)
         }
+
     })
 
     // When the Delete Selected button is clicked, call the deletion function
@@ -252,6 +333,35 @@ $(document).ready(function () {
     $('#alert-modal').on('hidden.bs.modal', function (e) {
         $('#alert-modal .modal-footer').remove()
     })
+
+        mergeDocuments(row_ids, column, source, value, milestone)
+      } else {
+        saveMultiple(row_ids, column, value)
+      }
+    } else {
+      saveOne(row_id, column, value)
+    }
+  })
+
+  // When the Delete Selected button is clicked, call the deletion function
+  $('#delete').click(function () {
+    selected_rows = table.rows({ selected: true }).nodes().to$()
+    deleteAllSelected(selected_rows)
+  })
+
+  // Trigger selection buttons
+  $('#selectAllDocs').click(function () { selectAll() })
+  $('#disableAllDocs').click(function () { deselectAll() })
+  $('#deleteSelectedDocs').click(function () {
+    selected_rows = table.rows({ selected: true }).nodes().to$()
+    deleteAllSelected(selected_rows)
+  })
+
+  // Remove the footer from alert modals when hidden
+  $('#alert-modal').on('hidden.bs.modal', function (e) {
+    $('#alert-modal .modal-footer').remove()
+  })
+
 })
 /* #### END OF $(DOCUMENT).REAoDY() SCRIPTS #### */
 
@@ -753,6 +863,7 @@ function deleteOne (row_id) {
 /* #### END OF deleteOne() #### */
 
 /* #### deleteDoc() #### */
+
 function deleteDoc (row_id) {
     doc_name = $('#' + row_id).find('td:eq(1)').text()
     html = '<p>Are you sure you wish to delete <b>' + doc_name + '</b>?</p>'
@@ -765,6 +876,20 @@ function deleteDoc (row_id) {
             row_id = $('#deleteId').text()
             deleteOne(row_id)
         })
+
+function deleteDoc(row_id) {
+  doc_name = $('#' + row_id).find('td:eq(1)').text()
+  html = '<p>Are you sure you wish to delete <b>' + doc_name + '</b>?</p>'
+  html += '<span id="deleteId" style="display:none;">' + row_id + '</span>'
+  footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
+  $('#delete-modal .modal-body').html(html)
+  $('#delete-modal .modal-body').append(footer)
+  $('#delete-modal').modal()
+    .one('click', '#confirm-delete-bttn', function () {
+      row_id = $('#deleteId').text()
+      deleteOne(row_id)
+    })
+
 }
 
 /* #### END OF deleteDoc() #### */
@@ -813,11 +938,29 @@ function deleteSelected (row_ids) {
 /* #### END OF deleteSelected() #### */
 
 /* #### deleteAllSelected() #### */
+
 function deleteAllSelected (selected_rows) {
     row_ids = []
     selected_rows.each(function () {
         id = $(this).attr('id')
         row_ids.push(id)
+
+function deleteAllSelected(selected_rows) {
+  row_ids = []
+  selected_rows.each(function () {
+    id = $(this).attr('id')
+    row_ids.push(id)
+  })
+  html = '<p>Are you sure you wish to delete the selected documents?</p>'
+  html += '<span id="deleteIds" style="display:none;">' + row_ids.toString() + '</span>'
+  footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
+  $('#delete-modal .modal-body').html(html)
+  $('#delete-modal .modal-body').append(footer)
+  $('#delete-modal').modal()
+    .one('click', '#confirm-delete-bttn', function () {
+      row_ids = $('#deleteIds').text()
+      deleteSelected(row_ids)
+
     })
     html = '<p>Are you sure you wish to delete the selected documents?</p>'
     html += '<span id="deleteIds" style="display:none;">' + row_ids.toString() + '</span>'
