@@ -57,7 +57,7 @@ const checkForErrors = function () {
             let overlap_check1 = (overallcutvalue <= overallOverlapValue)
             let overlap_check2 = Math.abs(Math.round(overallOverlapValue))
             overlap_check2 = (overlap_check2 !== overallOverlapValue)
-            if (overlap_check1 || (overlap_check2)) {
+            if (overlap_check1 || overlap_check2) {
                 errors.push(err5)
             }
 
@@ -71,7 +71,8 @@ const checkForErrors = function () {
                 }
 
                 // Make sure the individual segment size not a decimal
-                if (individualCutValueStr !== Math.abs(individualCutValue).toString()) {
+                const not_dec_check = Math.abs(individualCutValue).toString()
+                if (individualCutValueStr !== not_dec_check) {
                     errors.push(err6)
                 }
 
@@ -80,8 +81,11 @@ const checkForErrors = function () {
                     errors.push(err6)
                 }
 
+                let overlap_check1 = individualCutValue <= individualOverlap
+                let overlap_check2 = Math.abs(Math.round(individualOverlap))
+                overlap_check2 = (overlap_check2 !== individualOverlap)
                 // Make sure the individual overlap is valid
-                if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) {
+                if (overlap_check1 || overlap_check2) {
                     errors.push(err7)
                 }
             }
