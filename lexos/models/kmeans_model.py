@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import plotly.tools as tls
 import plotly.graph_objs as go
+import colorlover as cl
 import matplotlib.pyplot as plt
 from typing import Optional, List, NamedTuple
 from plotly.offline import plot
@@ -166,12 +167,71 @@ class KMeansModel(BaseModel):
         # Get kMeans analyze result.
         reduced_data = self.get_cluster_result().reduced_data
 
-        voronoi_data = Voronoi(reduced_data)
-        fig = voronoi_plot_2d(voronoi_data)
-        plotly = tls.mpl_to_plotly(fig=fig, resize=True, strip_style=True,
-                                   verbose=True)
-        plt.show()
-        plot(plotly)
-        print("DONE")
+        # Get file names.
+        labels = np.array([self._id_temp_label_map[file_id]
+                           for file_id in self._doc_term_matrix.index.values])
 
-        return "SS"
+        voronoi_data = Voronoi(reduced_data)
+
+        voronoi_index = voronoi_data.point_region
+
+        cluster_labels = [labels[np.where(voronoi_index == index)]
+                          for index in set(voronoi_index)]
+
+        cluster_values = [reduced_data[np.where(voronoi_index == index)]
+                          for index in set(voronoi_index)]
+
+        centroid_values = [np.mean(cluster, axis=0, dtype="float_")
+                           for cluster in cluster_values]
+
+        color = cl.scales["10"]["qual"]["Paired"]
+
+        points_data = [
+            go.Scatter(
+                x=cluster_value[:, 0],
+                y=cluster_value[:, 1],
+                text=cluster_labels[index],
+                mode="markers",
+                name=f"Cluster {index + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    color=color[index],
+                    line=dict(width=1)
+                )
+            )
+            for index, cluster_value in enumerate(cluster_values)
+        ]
+
+        centroids_data = [
+            go.Scatter(
+                x=[centroid_value[0]],
+                y=[centroid_value[1]],
+                mode="markers",
+                hoverinfo="text",
+                text=f"Centroid {index + 1}",
+                marker=dict(
+                    size=14,
+                    line=dict(width=1),
+                    color=color[index],
+                    symbol="cross",
+                    opacity=0.5
+                )
+            )
+            for index, centroid_value in enumerate(centroid_values)
+        ]
+
+        # Set the layout of the plot.
+        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
+                           yaxis=go.YAxis(title='y-axis', showline=False),
+                           hovermode="closest",
+                           height=600)
+        # Pack data and layout.
+        figure = go.Figure(data=centroids_data + points_data, layout=layout)
+        plot(figure)
+
+        # Output plot as a div.
+        return plot(figure,
+                    show_link=False,
+                    output_type="div",
+                    include_plotlyjs=False)
