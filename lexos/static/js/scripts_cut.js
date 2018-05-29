@@ -111,7 +111,7 @@ const checkForWarnings = function () {
     let cutVal = parseInt($('input[name=\'cutValue\']').val()) // Segment Size
     let overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
     let indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
-    let eltswithoutindividualopts = new Array() // Elements without individual cutsets
+    let eltswithoutindividualopts = [] // Elements without individual cutsets
 
     // Check each individual cutset
     indivdivs.each(function () {
