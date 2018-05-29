@@ -314,83 +314,83 @@ $(document).on('click', '#timerCancel', function (event) {
 
 // Function to convert the form data into a JSON object
 function jsonifyForm () {
-  var form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
-}
+    var form = {}
+    $.each($('form').serializeArray(), function (i, field) {
+        form[field.name] = field.value || ''
+    })
+    return form
+} // end jsonifyForm
 
 function downloadCutting () {
-  // Unfortunately, you can't trigger a download with an ajax request; calling a
-  // Flask route seems to be the easiest method.
-  window.location = '/downloadCutting'
-}
+    // Unfortunately, you can't trigger a download with an ajax request; calling a
+    // Flask route seems to be the easiest method.
+    window.location = '/downloadCutting'
+} // end downloadCutting
 
 $(function () {
-  $('#actions').addClass('actions-cut')
+    $('#actions').addClass('actions-cut')
 
-  // Toggle cutting options when radio buttons with different classes are clicked
-  var timeToToggle = 150
-  $('.sizeradio').click(function () {
-    var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
-    cuttingValueLabel.text('Segment Size:')
+    // Toggle cutting options when radio buttons with different classes are clicked
+    const timeToToggle = 150
+    $('.sizeradio').click(function () {
+        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
+        cuttingValueLabel.text('Segment Size:')
 
-    $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
-      .animate({ opacity: 1 }, timeToToggle)
-      .find('.lastprop-input').prop('disabled', false)
+        $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
+            .animate({opacity: 1}, timeToToggle)
+            .find('.lastprop-input').prop('disabled', false)
 
-    $(this).parents('.cuttingoptionswrapper').find('.overlap-div')
-      .animate({ opacity: 1 }, timeToToggle)
-      .find('.overlap-input').prop('disabled', false)
-  })
+        $(this).parents('.cuttingoptionswrapper').find('.overlap-div')
+            .animate({opacity: 1}, timeToToggle)
+            .find('.overlap-input').prop('disabled', false)
+    })
 
-  $('.numberradio').click(function () {
-    var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
-    cuttingValueLabel.text('Number of Segments:')
+    $('.numberradio').click(function () {
+        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
+        cuttingValueLabel.text('Number of Segments:')
 
-    $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
-      .animate({ opacity: 0.2 }, timeToToggle)
-      .find('.lastprop-input').prop('disabled', true)
+        $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
+            .animate({opacity: 0.2}, timeToToggle)
+            .find('.lastprop-input').prop('disabled', true)
 
-    $(this).parents('.cuttingoptionswrapper').find('.overlap-div')
-      .animate({ opacity: 0.2 }, timeToToggle)
-      .find('.overlap-input').prop('disabled', true)
-  })
+        $(this).parents('.cuttingoptionswrapper').find('.overlap-div')
+            .animate({opacity: 0.2}, timeToToggle)
+            .find('.overlap-input').prop('disabled', true)
+    })
 
-  // Toggle individual cut options on load
-  $('.indivcutbuttons').click(function () {
-    var toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
-    toggleDiv.toggleClass('hidden')
-    // slideToggle() only works if the div is first set to 'display:none'
-    // toggleDiv.slideToggle(timeToToggle);
-  })
+    // Toggle individual cut options on load
+    $('.indivcutbuttons').click(function () {
+        var toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
+        toggleDiv.toggleClass('hidden')
+        // slideToggle() only works if the div is first set to 'display:none'
+        // toggleDiv.slideToggle(timeToToggle);
+    })
 
-  // Toggle milestone options
-  function showMilestoneOptions () {
-    if ($('#cutByMS').is(':checked')) {
-      $('#MSoptspan').removeClass('hidden')
-      $('#cuttingdiv').hide()
-    } else {
-      $('#MSoptspan').addClass('hidden')
-      $('#cuttingdiv').show()
+    // Toggle milestone options
+    function showMilestoneOptions () {
+        if ($('#cutByMS').is(':checked')) {
+            $('#MSoptspan').removeClass('hidden')
+            $('#cuttingdiv').hide()
+        } else {
+            $('#MSoptspan').addClass('hidden')
+            $('#cuttingdiv').show()
+        }
     }
-  }
 
-  $('#cutByMS').click(showMilestoneOptions)
+    $('#cutByMS').click(showMilestoneOptions)
 
-  // showMilestoneOptions();
+    // showMilestoneOptions();
 
-  $(document).on('click', '.indivMS', function (event) {
-    showMilestoneOptions()
-    if ($(this).is(':checked')) {
-      $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').show()
-      $(this).parents('#cutByMSdiv').filter(':first')
-        .parents('.cuttingoptionswrapper').find('.individcut').hide()
-    } else {
-      $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').hide()
-      $(this).parents('#cutByMSdiv').filter(':first')
-        .parents('.cuttingoptionswrapper').find('.individcut').show()
-    }
-  })
+    $(document).on('click', '.indivMS', function (event) {
+        showMilestoneOptions()
+        if ($(this).is(':checked')) {
+            $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').show()
+            $(this).parents('#cutByMSdiv').filter(':first')
+                .parents('.cuttingoptionswrapper').find('.individcut').hide()
+        } else {
+            $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').hide()
+            $(this).parents('#cutByMSdiv').filter(':first')
+                .parents('.cuttingoptionswrapper').find('.individcut').show()
+        }
+    })
 })
