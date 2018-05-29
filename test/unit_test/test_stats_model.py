@@ -113,19 +113,12 @@ class TestCorpusInfo:
         assert round(test_corpus_result_one.std_deviation, 4) == 45.96
         assert round(test_corpus_result_two.std_deviation, 4) == 32.51
 
-    def test_median(self):
-        assert test_corpus_result_one.median == 47.5
-        assert test_corpus_result_two.median == 46
-
     def test_quartiles(self):
-        assert test_corpus_result_one.first_quartile == 31.25
         assert test_corpus_result_one.inter_quartile_range == 32.5
-        assert test_corpus_result_two.first_quartile == 30.5
-        assert test_corpus_result_two.third_quartile == 63
         assert test_corpus_result_two.inter_quartile_range == 32.5
 
     def test_file_anomaly_iqr(self):
-        assert test_corpus_result_one.anomaly_iqr["F1.txt"] == "large"
+        assert test_corpus_result_one.anomaly_iqr[0] == "large: "
         assert test_corpus_result_one.anomaly_iqr["F2.txt"] == "small"
         assert test_corpus_result_two.anomaly_iqr == {}
         assert test_corpus_result_anomaly.anomaly_iqr["F1.txt"] == "small"

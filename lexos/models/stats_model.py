@@ -20,15 +20,12 @@ class StatsTestOptions(NamedTuple):
 class CorpusStats(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
     mean: float  # Average size of all files.
-    median: float  # Median of all file sizes
     # File anomaly found using standard error.
-    anomaly_se: List[Optional[Tuple[str, str]]]
+    anomaly_se: List[Optional[str]]
     # File anomaly found using interquartile range.
-    anomaly_iqr: List[Optional[Tuple[str, str]]]
+    anomaly_iqr: List[Optional[str]]
     std_deviation: float  # Standard deviation of all file sizes.
     inter_quartile_range: float  # Interquartile range.
-    first_quartile: float  # First quartile of all file sizes
-    third_quartile: float  # Third quartile of all file sizes
 
 
 class StatsModel(BaseModel):
@@ -91,9 +88,6 @@ class StatsModel(BaseModel):
         # Get the average file word counts.
         mean = file_sizes.mean(0)
 
-        # Get the median file word counts.
-        median = file_sizes.median(0)
-
         # Get the standard deviation of the file word counts.
         std_deviation = file_sizes.std(0)
 
@@ -127,13 +121,10 @@ class StatsModel(BaseModel):
 
         return CorpusStats(
             mean=round(mean, 2),
-            median=median,
             anomaly_se=anomaly_se,
             anomaly_iqr=anomaly_iqr,
             std_deviation=round(std_deviation, 2),
             inter_quartile_range=round(iqr, 2),
-            first_quartile=first_quartile,
-            third_quartile=third_quartile
         )
 
     def get_file_stats(self) -> str:
