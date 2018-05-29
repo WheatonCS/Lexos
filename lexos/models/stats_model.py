@@ -169,7 +169,7 @@ class StatsModel(BaseModel):
             classes="table table-striped table-bordered"
         )
 
-    def _get_box_plot_object(self) -> go.Figure:
+    def get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.
 
         :return: A plotly object that contains the box plot.

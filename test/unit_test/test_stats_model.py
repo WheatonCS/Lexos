@@ -142,8 +142,10 @@ class TestSpecialCase:
 
 
 class TestStatsBoxplot:
+    model = StatsModel(test_options=test_option_one)
+
     def test_get_stats_boxplot(self):
-        basic_fig = self._get_box_plot_object()
+        basic_fig = self.model.get_box_plot_object()
         np.testing.assert_equal(
             basic_fig['layout']['yaxis']['ticktext'],
             ['I look so good!', 'this is a test', 'Cheng is handsome']
