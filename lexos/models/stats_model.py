@@ -12,6 +12,7 @@ from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
 
 class StatsTestOptions(NamedTuple):
     """A typed tuple to hold test options."""
+    token_type: str
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
 
@@ -37,9 +38,11 @@ class StatsModel(BaseModel):
         super().__init__()
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
+            self._test_token_type = test_options.token_type
             self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
+            self._test_token_type = None
             self._test_id_temp_label_map = None
 
     @property
@@ -54,6 +57,18 @@ class StatsModel(BaseModel):
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
+
+    @property
+    def token_type(self) -> str:
+        """:return: the token type that was used."""
+        if self._test_id_temp_label_map is not None:
+            return self._test_token_type
+        else:
+            # Get dtm front end options.
+            dtm_options = MatrixReceiver().options_from_front_end()
+            # Get the correct current type.
+            token_type = dtm_options.token_option.token_type
+            return "terms" if token_type == "word" else "characters"
 
     def get_corpus_stats(self) -> CorpusStats:
         """Converts word lists completely to statistic.
@@ -103,13 +118,13 @@ class StatsModel(BaseModel):
             else None
             for count, label in enumerate(labels)]
 
-        return json.dumps({
-            "mean": round(mean, 2),
-            "anomaly_se": anomaly_se,
-            "anomaly_iqr": anomaly_iqr,
-            "std_deviation": round(std_deviation, 2),
-            "inter_quartile_range": round(iqr, 2)
-        })
+        return CorpusStats(
+            mean=round(mean, 2),
+            anomaly_se=anomaly_se,
+            anomaly_iqr=anomaly_iqr,
+            std_deviation=round(std_deviation, 2),
+            inter_quartile_range=round(iqr, 2)
+        )
 
     def get_file_stats(self) -> str:
         """Get statistics of each file.
@@ -123,32 +138,29 @@ class StatsModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        # Get token name.
-        token_name = self.get_token_name()
-
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
             columns=["Documents",
-                     f"Number of {token_name} occuring once",
-                     f"Total number of {token_name}",
-                     f"Average number of {token_name}",
-                     f"Distinct number of {token_name}"])
+                     f"Number of {self.token_type} occuring once",
+                     f"Total number of {self.token_type}",
+                     f"Average number of {self.token_type}",
+                     f"Distinct number of {self.token_type}"])
 
         # Save document names in the data frame.
         file_stats["Documents"] = labels
         # Find number of token that appears only once.
-        file_stats[f"Number of {token_name} occuring once"] = \
+        file_stats[f"Number of {self.token_type} occuring once"] = \
             self._doc_term_matrix.eq(1).sum(axis=1).values
         # Find total number of tokens.
-        file_stats[f"Total number of {token_name}"] = \
+        file_stats[f"Total number of {self.token_type}"] = \
             self._doc_term_matrix.sum(axis=1).values
         # Find distinct number of tokens.
-        file_stats[f"Distinct number of {token_name}"] = \
+        file_stats[f"Distinct number of {self.token_type}"] = \
             self._doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
-        file_stats[f"Average number of {token_name}"] = \
-            file_stats[f"Total number of {token_name}"] / \
-            file_stats[f"Distinct number of {token_name}"]
+        file_stats[f"Average number of {self.token_type}"] = \
+            file_stats[f"Total number of {self.token_type}"] / \
+            file_stats[f"Distinct number of {self.token_type}"]
 
         # Round all the values and return as a HTML string.
         return file_stats.round(3).to_html(
@@ -204,14 +216,3 @@ class StatsModel(BaseModel):
                     show_link=False,
                     include_plotlyjs=False,
                     output_type="div")
-
-    @staticmethod
-    def get_token_name() -> str:
-        """Get current token name.
-
-        :return: A string represent the toke name.
-        """
-        # Get the correct token name.
-        token_type = \
-            MatrixReceiver().options_from_front_end().token_option.token_type
-        return "terms" if token_type == "word" else "characters"
