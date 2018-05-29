@@ -44,7 +44,7 @@ def k_means():
 def k_means_plot():
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
-    return KMeansModel().get_pca_plot()
+    return KMeansModel().get_voronoi_plot()
 
 
 @k_means_blueprint.route("/KMeansTable", methods=['POST'])

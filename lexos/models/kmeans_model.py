@@ -5,9 +5,12 @@
 
 import numpy as np
 import pandas as pd
+import plotly.tools as tls
 import plotly.graph_objs as go
+import matplotlib.pyplot as plt
 from typing import Optional, List, NamedTuple
 from plotly.offline import plot
+from scipy.spatial import Voronoi, voronoi_plot_2d
 from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
@@ -101,6 +104,7 @@ class KMeansModel(BaseModel):
         x_value = reduced_data[:, 0]
         y_value = reduced_data[:, 1]
 
+        # TODO: Why display x, y and text same time not working?
         # Create scatter plot for each file.
         data = [
             go.Scatter(
@@ -114,7 +118,12 @@ class KMeansModel(BaseModel):
                       for index, group_index in enumerate(k_means_index)
                       if group_index == group_number],
                 mode="markers",
-                hoverinfo="text+x"
+                name=f"Cluster {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    line=dict(width=1)
+                )
             )
             for group_number in set(k_means_index)
         ]
@@ -122,6 +131,7 @@ class KMeansModel(BaseModel):
         # Set the layout of the plot.
         layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
                            yaxis=go.YAxis(title='y-axis', showline=False),
+                           hovermode="closest",
                            height=600)
         # Pack data and layout.
         figure = go.Figure(data=data, layout=layout)
@@ -144,12 +154,24 @@ class KMeansModel(BaseModel):
         result_table = pd.DataFrame(columns=["Cluster Number", "Document"])
 
         # Fill the pandas data frame.
-        result_table["Cluster Number"] = cluster_result.k_means_index
+        result_table["Cluster Number"] = \
+            [index + 1 for index in cluster_result.k_means_index]
         result_table["Document"] = labels
 
         return result_table.to_html(
             index=False,
             classes="table table-striped table-bordered")
 
+    def get_voronoi_plot(self):
+        # Get kMeans analyze result.
+        reduced_data = self.get_cluster_result().reduced_data
 
+        voronoi_data = Voronoi(reduced_data)
+        fig = voronoi_plot_2d(voronoi_data)
+        plotly = tls.mpl_to_plotly(fig=fig, resize=True, strip_style=True,
+                                   verbose=True)
+        plt.show()
+        plot(plotly)
+        print("DONE")
 
+        return "SS"
