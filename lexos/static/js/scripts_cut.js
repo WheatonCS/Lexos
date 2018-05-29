@@ -72,100 +72,107 @@ const checkForErrors = function () {
 
 // Function to check whether the user needs a warning
 var checkForWarnings = function () {
-  let needsWarning = false
-  const maxSegs = 100
-  var defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
-  var cutVal = parseInt($("input[name='cutValue']").val()) // Segment Size
-  var overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
-  var indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
-  var eltswithoutindividualopts = new Array() // Elements without individual cutsets
+    let needsWarning = false
+    const maxSegs = 100
+    var defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
+    var cutVal = parseInt($('input[name=\'cutValue\']').val()) // Segment Size
+    var overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
+    var indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
+    var eltswithoutindividualopts = new Array() // Elements without individual cutsets
 
-  // Check each individual cutset
-  indivdivs.each(function () {
-    var thisCutVal = $('#individualCutValue', this).val() // Individual segment size
-    var thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
-    // Parse as integers
-    if (thisCutVal != '') {
-      thisCutVal = parseInt(thisCutVal)
-      thisOverVal = parseInt(thisOverVal)
-    }
-    // Get a list of each of the cutset indices
-    var listindex = indivdivs.index(this)
-    currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
-    var isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
-    // If not cut by milestone and no segment size, add to no individual cutsets array
-    if (!isCutByMS && thisCutVal == '') {
-      eltswithoutindividualopts.push(listindex)
-    }
-    // If no segment size
-    if (thisCutVal != '') {
-      // Get segment cut type
-      var thisCutType = $("input[name='cutType_" + currID + "']:checked").val()
-      // If not cut by milestone, use num_ variables set in template file
-      if (!(isCutByMS)) {
-        // Needs warning...
-        // If the number of characters-overlap size/segment size-overlap size > 100
-        if (thisCutType == 'letters' && (numChar[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
-          needsWarning = true
-          // Same for segments and lines
-        } else if (thisCutType == 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
-          needsWarning = true
-        } else if (thisCutType == 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
-          needsWarning = true
-          // Or if the segment size > 100
-        } else if (thisCutVal > maxSegs && eltswithoutindividualopts.length > 0) {
-          needsWarning = true
+    // Check each individual cutset
+    indivdivs.each(function () {
+        var thisCutVal = $('#individualCutValue', this).val() // Individual segment size
+        var thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
+        // Parse as integers
+        if (thisCutVal != '') {
+            thisCutVal = parseInt(thisCutVal)
+            thisOverVal = parseInt(thisOverVal)
         }
-      }
-    }
-  })
+        // Get a list of each of the cutset indices
+        var listindex = indivdivs.index(this)
+        currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
+        var isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
+        // If not cut by milestone and no segment size, add to no individual cutsets array
+        if (!isCutByMS && thisCutVal == '') {
+            eltswithoutindividualopts.push(listindex)
+        }
+        // If no segment size
+        if (thisCutVal != '') {
+            // Get segment cut type
+            var thisCutType = $('input[name=\'cutType_' + currID + '\']:checked').val()
+            // If not cut by milestone, use num_ variables set in template file
+            if (!(isCutByMS)) {
+                // Needs warning...
+                // If the number of characters-overlap size/segment size-overlap size > 100
+                if (thisCutType == 'letters' && (numChar[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+                    needsWarning = true
+                    // Same for segments and lines
+                }
+                else if (thisCutType == 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+                    needsWarning = true
+                }
+                else if (thisCutType == 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+                    needsWarning = true
+                    // Or if the segment size > 100
+                }
+                else if (thisCutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+                    needsWarning = true
+                }
+            }
+        }
+    })
 
-  // If cut by milestone is checked
-  if ($("input[name='cutByMS']:checked").length == 0) {
-    // For cutting by characters
-    if (defCutTypeValue == 'letters') {
-      // Check each document without individual options
-      eltswithoutindividualopts.forEach(function (elt) {
-        // Needs warning...
-        // If the number of characters-segment size/segment size-overlap size > 100
-        if ((numChar[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
-          needsWarning = true
+    // If cut by milestone is checked
+    if ($('input[name=\'cutByMS\']:checked').length == 0) {
+        // For cutting by characters
+        if (defCutTypeValue == 'letters') {
+            // Check each document without individual options
+            eltswithoutindividualopts.forEach(function (elt) {
+                // Needs warning...
+                // If the number of characters-segment size/segment size-overlap size > 100
+                if ((numChar[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
+                    needsWarning = true
+                }
+            })
+            // Do the same with words and lines
         }
-      })
-      // Do the same with words and lines
-    } else if (defCutTypeValue == 'words') {
-      eltswithoutindividualopts.forEach(function (elt) {
-        if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
-          needsWarning = true
+        else if (defCutTypeValue == 'words') {
+            eltswithoutindividualopts.forEach(function (elt) {
+                if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
+                    needsWarning = true
+                }
+            })
         }
-      })
-    } else if (defCutTypeValue == 'lines') {
-      eltswithoutindividualopts.forEach(function (elt) {
-        if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
-          needsWarning = true
+        else if (defCutTypeValue == 'lines') {
+            eltswithoutindividualopts.forEach(function (elt) {
+                if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
+                    needsWarning = true
+                }
+            })
+            // If the segment size > 100 and there are documents without individual options
         }
-      })
-      // If the segment size > 100 and there are documents without individual options
-    } else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
-      needsWarning = true
+        else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+            needsWarning = true
+        }
     }
-  }
 
-  // needsWarning = true; // For testing
-  if (needsWarning == true) {
-    $('#needsWarning').val('true')
-    var sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
-    footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>'
-    footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>'
-    $('#warning-modal-footer').html(footerButtons)
-    $('#warning-modal-message').html(sizeWarning)
-    // Hide the processing icon and show the modal
-    $('#status-prepare').css({ 'visibility': 'hidden' })
-    $('#warning-modal').modal()
-  } else {
-    $('#needsWarning').val('false')
-  }
-}
+    // needsWarning = true; // For testing
+    if (needsWarning == true) {
+        $('#needsWarning').val('true')
+        var sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
+        footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>'
+        footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>'
+        $('#warning-modal-footer').html(footerButtons)
+        $('#warning-modal-message').html(sizeWarning)
+        // Hide the processing icon and show the modal
+        $('#status-prepare').css({'visibility': 'hidden'})
+        $('#warning-modal').modal()
+    }
+    else {
+        $('#needsWarning').val('false')
+    }
+} // end checkForWarnings
 
 var xhr
 function doAjax (action) {
