@@ -110,19 +110,19 @@ class TestCorpusInfo:
         assert test_corpus_result_two.mean == 47
 
     def test_std(self):
-        assert round(test_corpus_result_one.std_deviation, 4) == 32.5
-        assert round(test_corpus_result_two.std_deviation, 4) == 26.5456
+        assert round(test_corpus_result_one.std_deviation, 4) == 45.96
+        assert round(test_corpus_result_two.std_deviation, 4) == 32.51
 
     def test_median(self):
         assert test_corpus_result_one.median == 47.5
         assert test_corpus_result_two.median == 46
 
     def test_quartiles(self):
-        assert test_corpus_result_one.first_quartile == test_corpus_result_one.q3 == 47.5
-        assert test_corpus_result_one.iqr == 0
+        assert test_corpus_result_one.first_quartile == 31.25
+        assert test_corpus_result_one.inter_quartile_range == 32.5
         assert test_corpus_result_two.first_quartile == 30.5
-        assert test_corpus_result_two.q3 == 63
-        assert test_corpus_result_two.iqr == 32.5
+        assert test_corpus_result_two.third_quartile == 63
+        assert test_corpus_result_two.inter_quartile_range == 32.5
 
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr["F1.txt"] == "large"
@@ -132,16 +132,16 @@ class TestCorpusInfo:
         assert test_corpus_result_anomaly.anomaly_iqr["F10.txt"] == "large"
 
     def test_file_anomaly_std(self):
-        assert test_corpus_result_one.anomaly_std_err == {}
-        assert test_corpus_result_two.anomaly_std_err == {}
-        assert test_corpus_result_anomaly.anomaly_std_err["F1.txt"] == "small"
-        assert test_corpus_result_anomaly.anomaly_std_err["F10.txt"] == "large"
+        assert test_corpus_result_one.anomaly_se == {}
+        assert test_corpus_result_two.anomaly_se == {}
+        assert test_corpus_result_anomaly.anomaly_se["F1.txt"] == "small"
+        assert test_corpus_result_anomaly.anomaly_se["F10.txt"] == "large"
 
 
 class TestSpecialCase:
     def test_empty_list(self):
         try:
-            _ = test_stats_model_special.get_all_file_info()
+            _ = test_stats_model_special.get_file_stats()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_LIST_MESSAGE
