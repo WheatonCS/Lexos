@@ -55,6 +55,7 @@ function generateKMeansTable () {
 
     // the configuration for creating data table
     const dataTableConfig = {
+        scrollY: "600px",
         // Do not show number of file.
         info: false,
         // Do not paging.
