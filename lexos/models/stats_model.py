@@ -85,9 +85,9 @@ class StatsModel(BaseModel):
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
         anomaly_se = [
-            f"<b>small: </b>{label}"
+            f"small: {label}"
             if file_sizes[count] < mean - 2 * std_deviation
-            else f"<b>large: </b>{label}"
+            else f"large: {label}"
             if file_sizes[count] > mean + 2 * std_deviation
             else None
             for count, label in enumerate(labels)]
@@ -96,9 +96,9 @@ class StatsModel(BaseModel):
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr = [
-            f"<b>  small: </b>{label}"
+            f"small: {label}"
             if file_sizes[count] < first_quartile - 1.5 * iqr
-            else f"<b>  large: </b>{label}"
+            else f"large: {label}"
             if file_sizes[count] > third_quartile + 1.5 * iqr
             else None
             for count, label in enumerate(labels)]
