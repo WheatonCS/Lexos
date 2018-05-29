@@ -54,7 +54,10 @@ const checkForErrors = function () {
             }
 
             // Make sure the overall overlap is valid
-            if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) {
+            let overlap_check1 = (overallcutvalue <= overallOverlapValue)
+            let overlap_check2 = Math.abs(Math.round(overallOverlapValue))
+            overlap_check2 = (overlap_check2 !== overallOverlapValue)
+            if (overlap_check1 || (overlap_check2)) {
                 errors.push(err5)
             }
 
