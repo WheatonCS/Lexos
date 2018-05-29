@@ -175,103 +175,104 @@ var checkForWarnings = function () {
 } // end checkForWarnings
 
 var xhr
+
 function doAjax (action) {
-  /* It's not really efficient to create a FormData and a json object,
-     but the former is easier to pass to lexos.py functions, and the
-     latter is easier for the ajax response to use. */
-  var formData = new FormData($('form')[0])
-  formData.append('action', action)
-  var jsonform = jsonifyForm()
-  $.extend(jsonform, { 'action': action })
-  // Initiate a timer to allow user to cancel if processing takes too long
-  var loadingTimeout = window.setTimeout(function () {
-    $('#needsWarning').val('true')
-    var timeWarning = 'Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.'
-    footerButtons = '<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>'
-    footerButtons += '<button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>'
-    $('#warning-modal-footer').html(footerButtons)
-    $('#warning-modal-message').html(timeWarning)
-    $('#warning-modal').modal()
-  }, 10000) // 10 weconds
-  xhr = $.ajax({
-    url: '/doCutting',
-    type: 'POST',
-    processData: false, // important
-    contentType: false,
-    data: formData,
-    error: function (jqXHR, textStatus, errorThrown) {
-      $('#status-prepare').css({ 'visibility': 'hidden' })
-      // Show an error if the user has not cancelled the action
-      if (errorThrown != 'abort') {
-        $('#error-modal-message').html('Lexos could not apply the cutting actions.')
-        $('#error-modal').modal()
-      }
-      console.log('bad: ' + textStatus + ': ' + errorThrown)
-    }
-  }).done(function (response) {
-    clearTimeout(loadingTimeout)
-    $('#warning-modal').modal('hide') // Hide the warning if it is displayed
-    response = JSON.parse(response)
-    $('#preview-body').empty() // Correct
-    j = 0
-    $.each(response['data'], function (i, item) {
-      fileID = $(this)[0]
-      filename = $(this)[1]
-      fileLabel = $(this)[2]
-      fileLabel = filename
-      fileContents = $(this)[3]
-      var indivcutbuttons = '<a id="indivcutbuttons_' + fileID + '" onclick="toggleIndivCutOptions(' + fileID + ');" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>'
-      // CSS truncates the document label
-      fieldset = $('<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + fileLabel + ' ' + indivcutbuttons + '</fieldset>')
-      var indcutoptswrap = '<div id="indcutoptswrap_' + fileID + '" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndLetters_' + fileID + '" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndWords_' + fileID + '" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndLines_' + fileID + '" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndNumber_' + fileID + '" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;"><label><span id="numOf' + fileID + '" class="cut-label-text">Number of Segments:</span><input type="number" min="1" step="1" name="cutValue_' + fileID + '" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_' + fileID + '" class="cut-text-input overlap-input" id="individualOverlap" value="0"/></label></div></div><div id="lastprop-div_' + fileID + '" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_' + fileID + '" name="cutLastProp_' + fileID + '" class="cut-text-input lastprop-input" value="50" style="width:54px;margin-right:3px;"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Cutset Label: <input type="text" name="cutsetnaming_' + fileID + '" class="cutsetnaming" value="' + filename + '" style="width:155px;display:inline; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-sm-4"><label><input type="checkbox" class="indivMS" name="cutByMS_' + fileID + '" id="cutByMS_' + fileID + '"/>Cut by Milestone</label></div><div class="col-sm-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_' + fileID + '" id="MScutWord' + fileID + '" value="" style="margin-left:3px;width:130px;"/></span></div></div></fieldset></div>'
-      fieldset.append(indcutoptswrap)
-      if ($.type(fileContents) === 'string') {
-        j++
-        fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
-      } else {
-        $.each(fileContents, function (i, segment) {
-          j++
-          segmentLabel = segment[0]
-          segmentString = segment[1]
-          fieldset.append('<div class="filechunk"><span class="filechunklabel">' + segmentLabel + '</span><div>' + segmentString + '</div></div>')
+    /* It's not really efficient to create a FormData and a json object,
+       but the former is easier to pass to lexos.py functions, and the
+       latter is easier for the ajax response to use. */
+    var formData = new FormData($('form')[0])
+    formData.append('action', action)
+    var jsonform = jsonifyForm()
+    $.extend(jsonform, {'action': action})
+    // Initiate a timer to allow user to cancel if processing takes too long
+    var loadingTimeout = window.setTimeout(function () {
+        $('#needsWarning').val('true')
+        var timeWarning = 'Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.'
+        footerButtons = '<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>'
+        footerButtons += '<button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>'
+        $('#warning-modal-footer').html(footerButtons)
+        $('#warning-modal-message').html(timeWarning)
+        $('#warning-modal').modal()
+    }, 10000) // 10 weconds
+    xhr = $.ajax({
+        url: '/doCutting',
+        type: 'POST',
+        processData: false, // important
+        contentType: false,
+        data: formData,
+        error: function (jqXHR, textStatus, errorThrown) {
+            $('#status-prepare').css({'visibility': 'hidden'})
+            // Show an error if the user has not cancelled the action
+            if (errorThrown != 'abort') {
+                $('#error-modal-message').html('Lexos could not apply the cutting actions.')
+                $('#error-modal').modal()
+            }
+            console.log('bad: ' + textStatus + ': ' + errorThrown)
+        }
+    }).done(function (response) {
+        clearTimeout(loadingTimeout)
+        $('#warning-modal').modal('hide') // Hide the warning if it is displayed
+        response = JSON.parse(response)
+        $('#preview-body').empty() // Correct
+        j = 0
+        $.each(response['data'], function (i, item) {
+            fileID = $(this)[0]
+            filename = $(this)[1]
+            fileLabel = $(this)[2]
+            fileLabel = filename
+            fileContents = $(this)[3]
+            var indivcutbuttons = '<a id="indivcutbuttons_' + fileID + '" onclick="toggleIndivCutOptions(' + fileID + ');" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>'
+            // CSS truncates the document label
+            fieldset = $('<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + fileLabel + ' ' + indivcutbuttons + '</fieldset>')
+            var indcutoptswrap = '<div id="indcutoptswrap_' + fileID + '" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndLetters_' + fileID + '" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndWords_' + fileID + '" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndLines_' + fileID + '" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndNumber_' + fileID + '" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;"><label><span id="numOf' + fileID + '" class="cut-label-text">Number of Segments:</span><input type="number" min="1" step="1" name="cutValue_' + fileID + '" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_' + fileID + '" class="cut-text-input overlap-input" id="individualOverlap" value="0"/></label></div></div><div id="lastprop-div_' + fileID + '" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_' + fileID + '" name="cutLastProp_' + fileID + '" class="cut-text-input lastprop-input" value="50" style="width:54px;margin-right:3px;"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Cutset Label: <input type="text" name="cutsetnaming_' + fileID + '" class="cutsetnaming" value="' + filename + '" style="width:155px;display:inline; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-sm-4"><label><input type="checkbox" class="indivMS" name="cutByMS_' + fileID + '" id="cutByMS_' + fileID + '"/>Cut by Milestone</label></div><div class="col-sm-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_' + fileID + '" id="MScutWord' + fileID + '" value="" style="margin-left:3px;width:130px;"/></span></div></div></fieldset></div>'
+            fieldset.append(indcutoptswrap)
+            if ($.type(fileContents) === 'string') {
+                j++
+                fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
+            } else {
+                $.each(fileContents, function (i, segment) {
+                    j++
+                    segmentLabel = segment[0]
+                    segmentString = segment[1]
+                    fieldset.append('<div class="filechunk"><span class="filechunklabel">' + segmentLabel + '</span><div>' + segmentString + '</div></div>')
+                })
+            }
+            $('#preview-body').append(fieldset)
+            // Hide the individual cutting wrapper if the form doesn't contain values for it
+            if (!('cutType_' + fileID in formData) && formData['cutType_' + fileID] != '') {
+                $('#indcutoptswrap_' + fileID).addClass('hidden')
+            }
+            // Check the cut type boxes
+            if (formData['cutTypeInd'] == 'letters') {
+                $('#cutTypeIndLetters_' + fileID).prop('checked', true)
+            }
+            if (formData['cutTypeInd'] == 'words') {
+                $('#cutTypeIndWords_' + fileID).prop('checked', true)
+            }
+            if (formData['cutTypeInd'] == 'lines') {
+                $('#cutTypeIndLines_' + fileID).prop('checked', true)
+            }
+            if (formData['cutTypeInd'] == 'number') {
+                $('#cutTypeIndNumber_' + fileID).prop('checked', true)
+                $('#numOf_' + fileID).html('Number of Segments')
+                $('#lastprop-div').addClass('transparent')
+                $('#cutLastProp_' + fileID).prop('disabled', true)
+            }
+            if (formData['Overlap']) { $('#cutOverlap_' + fileID).val(formData['Overlap']) } else { $('#cutOverlap_' + fileID).val(0) }
+            if (formData['cutLastProp_' + fileID]) {
+                $('#lastprop-div_' + fileID).val(formData['#cutLastProp_' + fileID])
+            }
+            if (formData['cutType'] == 'milestone') {
+                $('#cutTypeIndNumber_' + fileID).prop('checked', true)
+            }
+            if (formData['MScutWord_' + fileID] == 'milestone') {
+                $('#MScutWord' + fileID).val(formData['cuttingoptions']['cutValue'])
+            }
         })
-      }
-      $('#preview-body').append(fieldset)
-      // Hide the individual cutting wrapper if the form doesn't contain values for it
-      if (!('cutType_' + fileID in formData) && formData['cutType_' + fileID] != '') {
-        $('#indcutoptswrap_' + fileID).addClass('hidden')
-      }
-      // Check the cut type boxes
-      if (formData['cutTypeInd'] == 'letters') {
-        $('#cutTypeIndLetters_' + fileID).prop('checked', true)
-      }
-      if (formData['cutTypeInd'] == 'words') {
-        $('#cutTypeIndWords_' + fileID).prop('checked', true)
-      }
-      if (formData['cutTypeInd'] == 'lines') {
-        $('#cutTypeIndLines_' + fileID).prop('checked', true)
-      }
-      if (formData['cutTypeInd'] == 'number') {
-        $('#cutTypeIndNumber_' + fileID).prop('checked', true)
-        $('#numOf_' + fileID).html('Number of Segments')
-        $('#lastprop-div').addClass('transparent')
-        $('#cutLastProp_' + fileID).prop('disabled', true)
-      }
-      if (formData['Overlap']) { $('#cutOverlap_' + fileID).val(formData['Overlap']) } else { $('#cutOverlap_' + fileID).val(0) }
-      if (formData['cutLastProp_' + fileID]) {
-        $('#lastprop-div_' + fileID).val(formData['#cutLastProp_' + fileID])
-      }
-      if (formData['cutType'] == 'milestone') {
-        $('#cutTypeIndNumber_' + fileID).prop('checked', true)
-      }
-      if (formData['MScutWord_' + fileID] == 'milestone') {
-        $('#MScutWord' + fileID).val(formData['cuttingoptions']['cutValue'])
-      }
+        $('.fa-folder-open-o').attr('data-original-title', 'You have ' + j + ' active document(s).')
+        $('#status-prepare').css({'visibility': 'hidden'})
     })
-    $('.fa-folder-open-o').attr('data-original-title', 'You have ' + j + ' active document(s).')
-    $('#status-prepare').css({ 'visibility': 'hidden' })
-  })
-}
+} // end doAjax
 
 // Function to check the form data for errors and warnings
 function process (action) {
@@ -287,7 +288,7 @@ function process (action) {
             })
         }
     })
-}
+} // end process
 
 // Handle the Continue button in the warning modal
 $(document).on('click', '#warningContinue', function (event) {
