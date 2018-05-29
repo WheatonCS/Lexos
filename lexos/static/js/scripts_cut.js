@@ -214,7 +214,8 @@ function doAjax (action) {
             $('#status-prepare').css({'visibility': 'hidden'})
             // Show an error if the user has not cancelled the action
             if (errorThrown != 'abort') {
-                $('#error-modal-message').html('Lexos could not apply the cutting actions.')
+                const cull_msg = 'Lexos could not apply the cutting actions.'
+                $('#error-modal-message').html(cull_msg)
                 $('#error-modal').modal()
             }
             console.log('bad: ' + textStatus + ': ' + errorThrown)
