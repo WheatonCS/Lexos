@@ -11,11 +11,15 @@ test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                             columns=np.array(["A", "B", "C", "D", "E", "F",
                                               "G", "H", "I"]))
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
-test_option_one = StatsTestOptions(doc_term_matrix=test_dtm_one,
-                                   id_temp_label_map=test_id_temp_table_one)
+test_option_one = StatsTestOptions(
+    token_type="terms",
+    doc_term_matrix=test_dtm_one,
+    id_temp_label_map=test_id_temp_table_one)
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
-test_file_result_one = test_stats_model_one.get_all_file_info()
+test_file_result_one = test_stats_model_one.get_file_stats()
+test_box_plot_result_one = test_stats_model_one.get_box_plot()
+test_pandas_one = pd.read_html(test_file_result_one)[0]
 # ------------------------------------------------------------------
 
 # ------------------------ Second test suite -----------------------
@@ -27,11 +31,15 @@ test_dtm_two = pd.DataFrame(
     columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H",
                       "I", "J", "K", "L"]))
 test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
-test_option_two = StatsTestOptions(doc_term_matrix=test_dtm_two,
-                                   id_temp_label_map=test_id_temp_table_two)
+test_option_two = StatsTestOptions(
+    token_type="characters",
+    doc_term_matrix=test_dtm_two,
+    id_temp_label_map=test_id_temp_table_two)
 test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
-test_file_result_two = test_stats_model_two.get_all_file_info()
+test_file_result_two = test_stats_model_two.get_file_stats()
+test_box_plot_result_two = test_stats_model_two.get_box_plot()
+test_pandas_two = pd.read_html(test_file_result_two)[0]
 # ------------------------------------------------------------------
 
 # ------------------- test suite for anomaly test ------------------
@@ -44,11 +52,13 @@ test_id_temp_table_anomaly = \
     {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt", 4: "F5.txt",
      5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
 test_option_anomaly = \
-    StatsTestOptions(doc_term_matrix=test_dtm_anomaly,
+    StatsTestOptions(token_type="characters", doc_term_matrix=test_dtm_anomaly,
                      id_temp_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
-test_file_result_anomaly = test_stats_model_anomaly.get_all_file_info()
+test_file_result_anomaly = test_stats_model_anomaly.get_file_stats()
+test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
+test_pandas_anomaly = pd.read_html(test_file_result_anomaly)[0]
 # ------------------------------------------------------------------
 
 # -------------------- Special case test suite ---------------------
@@ -57,9 +67,13 @@ test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
                                 columns=np.array(["A", "B"]))
 test_id_temp_table_special = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_option_special = \
-    StatsTestOptions(doc_term_matrix=test_dtm_special,
+    StatsTestOptions(token_type="terms", doc_term_matrix=test_dtm_special,
                      id_temp_label_map=test_id_temp_table_special)
 test_stats_model_special = StatsModel(test_options=test_option_special)
+test_corpus_result_special = test_stats_model_special.get_corpus_stats()
+test_file_result_special = test_stats_model_special.get_file_stats()
+test_box_plot_special = test_stats_model_special.get_box_plot()
+test_pandas_special = pd.read_html(test_file_result_special)[0]
 # ------------------------------------------------------------------
 
 
