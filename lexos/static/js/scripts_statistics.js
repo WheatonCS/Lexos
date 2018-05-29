@@ -52,9 +52,10 @@ function sendAjaxRequest (url, form) {
  */
 function formatFileReportResponse (response) {
     // Extract constant result from response.
-    const mean = `<p>Average document size is ${response['mean']}</p>`
-    const std_deviation = `<p>Standard deviation of documents is ${response['std_deviation']}</p>`
-    const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']}</p>`
+    const token_name = response['token_name']
+    const mean = `<p>Average document size is ${response['mean']} ${token_name}</p>`
+    const std_deviation = `<p>Standard deviation of documents is ${response['std_deviation']} ${token_name}</p>`
+    const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']} ${token_name}</p>`
 
     // Extract standard deviation anomaly information.
     let anomaly_se
