@@ -26,7 +26,6 @@ class TestCutByCharacters:
                                  seg_size=1, overlap=0,
                                  last_prop=1) == ["A", "B", "C", "D"]
 
-
     def test_string_overlap(self):
         assert cut_by_characters(text="WORD", seg_size=2, overlap=0,
                                  last_prop=1) == ["WO", "RD"]
@@ -42,16 +41,12 @@ class TestCutByCharacters:
                                  last_prop=0.2) == ["ABABA", "BABAB", "A"]
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=0.21) == ["ABABA", "BABABA"]
-        ######
-        # last_prop greater than 1?
         assert cut_by_characters(text="ABABABABABA", seg_size=5, overlap=0,
                                  last_prop=2) == ["ABABABABABA"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=2) == ["ABC", "DEF", "GHIJKL"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=5) == ["ABCDEFGHIJKL"]
-        ######
-
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
                                  last_prop=.2) == ["ABC", "DEF", "GHI", "JKL"]
         assert cut_by_characters(text="ABCDEFGHIJKL", seg_size=3, overlap=0,
@@ -261,7 +256,7 @@ class TestCutByNumbers:
                                                 "words ", "in ", "this ",
                                                 "text"]
 
-        #add extra words to the beginning substrings not to the end substrings
+        # add extra words to the beginning substrings not to the end substrings
         assert cut_by_number(text="Odd number of words in this text",
                              num_segment=6) != ["Odd", "number ", "of ",
                                                 "words ", "in ",
@@ -416,8 +411,6 @@ class TestCutterFunction:
                    overlap="0", last_prop_percent="100%") == ["te", "st"]
         assert cut(text="test", cutting_value="1", cutting_type="milestone",
                    overlap="0", last_prop_percent="100%") == ["test"]
-
-        #cutting_value="test"?
         assert cut(text="test", cutting_value="test", cutting_type="milestone",
                    overlap="0", last_prop_percent="100%") == ["", ""]
 
