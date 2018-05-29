@@ -290,24 +290,27 @@ function process (action) {
     })
 } // end process
 
+
+//==Warning Modal Click Functions=================
 // Handle the Continue button in the warning modal
 $(document).on('click', '#warningContinue', function (event) {
-  $('#needsWarning').val('false')
-  action = $('#formAction').val()
-  $('#warning-modal').modal('hide')
-  doAjax(action)
-  $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
-})
+    $('#needsWarning').val('false')
+    action = $('#formAction').val()
+    $('#warning-modal').modal('hide')
+    doAjax(action)
+    $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
+}) // end click #warningContinue
 
 // Handle the Timer Cancel button in the warning modal
 $(document).on('click', '#timerCancel', function (event) {
-  $('#needsWarning').val('false')
-  $('#hasErrors').val('false')
-  xhr.abort()
-  $('#warning-modal-footer').append('<button>Moo</button>')
-  $('#warning-modal').modal('hide')
-  $('#status-prepare').css('visibility', 'hidden')
-})
+    $('#needsWarning').val('false')
+    $('#hasErrors').val('false')
+    xhr.abort()
+    $('#warning-modal-footer').append('<button>Moo</button>')
+    $('#warning-modal').modal('hide')
+    $('#status-prepare').css('visibility', 'hidden')
+}) // end click #timerCancel
+//=====================================================
 
 // Function to convert the form data into a JSON object
 function jsonifyForm () {
