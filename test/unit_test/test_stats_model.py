@@ -79,27 +79,29 @@ test_pandas_special = pd.read_html(test_file_result_special)[0]
 
 class TestFileResult:
     def test_basic_info(self):
-        assert test_file_result_one[0].file_name == "F1.txt"
-        assert test_file_result_one[1].file_name == "F2.txt"
-        assert test_file_result_two[2].file_name == "F3.txt"
+        assert test_pandas_one["Documents"][0] == "F1.txt"
+        assert test_pandas_one["Documents"][1] == "F2.txt"
+        assert test_pandas_two["Documents"][2] == "F3.txt"
 
     def test_distinct_words(self):
-        assert test_file_result_one[0].distinct_word_count == 4
-        assert test_file_result_one[1].distinct_word_count == 5
-        assert test_file_result_two[1].distinct_word_count == 5
+        assert test_pandas_one["Distinct number of terms"][0] == 4
+        assert test_pandas_one["Distinct number of terms"][1] == 5
+        assert test_pandas_two["Distinct number of characters"][2] == 4
 
     def test_total_words(self):
-        assert test_file_result_one[0].total_word_count == 80
-        assert test_file_result_one[1].total_word_count == 15
+        assert test_pandas_one["Total number of terms"][0] == 80
+        assert test_pandas_one["Total number of terms"][1] == 15
+        assert test_pandas_two["Total number of characters"][2] == 46
 
     def test_average(self):
-        assert test_file_result_one[0].average_word_count == 20
-        assert test_file_result_one[1].average_word_count == 3
+        assert test_pandas_one["Average number of terms"][0] == 20
+        assert test_pandas_one["Average number of terms"][1] == 3
+        assert test_pandas_two["Average number of characters"][2] == 11.5
 
     def test_hapax(self):
-        assert test_file_result_one[0].hapax == 0
-        assert test_file_result_one[1].hapax == 1
-        assert test_file_result_two[2].hapax == 0
+        assert test_pandas_one["Number of terms occuring once"][0] == 0
+        assert test_pandas_one["Number of terms occuring once"][1] == 1
+        assert test_pandas_two["Number of characters occuring once"][2] == 0
 
 
 class TestCorpusInfo:
