@@ -164,9 +164,11 @@ const checkForWarnings = function () {
     // needsWarning = true; // For testing
     if (needsWarning === true) {
         $('#needsWarning').val('true')
-        const sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
-        footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>'
-        footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>'
+        const sizeWarning = 'Current cut settings will result in over 100 \
+        new segments. Please be patient if you continue.'
+        const footerButtons = '<button type="button" class="btn btn-default" \
+        id="warningContinue">Continue Anyway</button> <button type="button" \
+        class="btn btn-default" data-dismiss="modal">Cancel</button>'
         $('#warning-modal-footer').html(footerButtons)
         $('#warning-modal-message').html(sizeWarning)
         // Hide the processing icon and show the modal
