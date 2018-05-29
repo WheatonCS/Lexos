@@ -74,25 +74,25 @@ const checkForErrors = function () {
 var checkForWarnings = function () {
     let needsWarning = false
     const maxSegs = 100
-    var defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
-    var cutVal = parseInt($('input[name=\'cutValue\']').val()) // Segment Size
-    var overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
-    var indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
-    var eltswithoutindividualopts = new Array() // Elements without individual cutsets
+    let defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
+    let cutVal = parseInt($('input[name=\'cutValue\']').val()) // Segment Size
+    let overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
+    let indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
+    let eltswithoutindividualopts = new Array() // Elements without individual cutsets
 
     // Check each individual cutset
     indivdivs.each(function () {
-        var thisCutVal = $('#individualCutValue', this).val() // Individual segment size
-        var thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
+        let thisCutVal = $('#individualCutValue', this).val() // Individual segment size
+        let thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
         // Parse as integers
         if (thisCutVal != '') {
             thisCutVal = parseInt(thisCutVal)
             thisOverVal = parseInt(thisOverVal)
         }
         // Get a list of each of the cutset indices
-        var listindex = indivdivs.index(this)
-        currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
-        var isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
+        let listindex = indivdivs.index(this)
+        const currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
+        let isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
         // If not cut by milestone and no segment size, add to no individual cutsets array
         if (!isCutByMS && thisCutVal == '') {
             eltswithoutindividualopts.push(listindex)
@@ -100,7 +100,7 @@ var checkForWarnings = function () {
         // If no segment size
         if (thisCutVal != '') {
             // Get segment cut type
-            var thisCutType = $('input[name=\'cutType_' + currID + '\']:checked').val()
+            const thisCutType = $('input[name=\'cutType_' + currID + '\']:checked').val()
             // If not cut by milestone, use num_ variables set in template file
             if (!(isCutByMS)) {
                 // Needs warning...
@@ -160,7 +160,7 @@ var checkForWarnings = function () {
     // needsWarning = true; // For testing
     if (needsWarning == true) {
         $('#needsWarning').val('true')
-        var sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
+        const sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
         footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>'
         footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>'
         $('#warning-modal-footer').html(footerButtons)
