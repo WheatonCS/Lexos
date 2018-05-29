@@ -121,10 +121,8 @@ class StatsModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        # Get the correct token name.
-        token_type = \
-            MatrixReceiver().options_from_front_end().token_option.token_type
-        token_name = "Terms" if token_type == "word" else "Characters"
+        # Get token name.
+        token_name = self.get_token_name()
 
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
@@ -204,3 +202,14 @@ class StatsModel(BaseModel):
                     show_link=False,
                     include_plotlyjs=False,
                     output_type="div")
+
+    @staticmethod
+    def get_token_name() -> str:
+        """Get current token name.
+
+        :return: A string represent the toke name.
+        """
+        # Get the correct token name.
+        token_type = \
+            MatrixReceiver().options_from_front_end().token_option.token_type
+        return "Terms" if token_type == "word" else "Characters"
