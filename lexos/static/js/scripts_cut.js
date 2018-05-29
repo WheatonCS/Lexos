@@ -15,15 +15,21 @@ const checkForErrors = function () {
 
     // Confirm that there are active files
 
-    if ($('#num_active_files').val() === '0') { errors.push(err1) }
+    if ($('#num_active_files').val() === '0') {
+        errors.push(err1)
+    }
 
     // If cut by milestone is checked make sure there is a milestone value
     if ($('#cutByMS').is(':checked')) {
-        if ($('#MScutWord').val() === '') { errors.push(err2) }
+        if ($('#MScutWord').val() === '') {
+            errors.push(err2)
+        }
     }
     else {
         // Make sure there is a default cutting value
-        if ($('#overallcutvalue').val() === '') { errors.push(err3) }
+        if ($('#overallcutvalue').val() === '') {
+            errors.push(err3)
+        }
         else {
             let overallcutvalueStr = $('#overallcutvalue').val()
             let overallcutvalue = parseInt($('#overallcutvalue').val())
