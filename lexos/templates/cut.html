@@ -79,7 +79,7 @@
         <div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
             <div class="col-md-8 col-md-offset-4" style="padding-right:10%; padding-left:5px">
                 <label class="pull-right txt-right cut-label">Last Segment Size Threshold:
-                    <input type="number" min="0" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
+                    <input type="number" min="0" max = "100" name="cutLastProp" class="cut-text-input lastprop-input" value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/> %
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The value the last segment has to reach relative to the others in order to be considered a separate segment." style=""></i>
                 </label>
             </div>

@@ -17,7 +17,7 @@ $(function () {
     }
   }
 
-  $('input[type=radio][name=tokenType]').on('click', updateTokenizeCheckbox)
+  $('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox)
 
   updateTokenizeCheckbox()
 
@@ -29,7 +29,7 @@ $(function () {
     }
   }
 
-  $('input[type=radio][name=normalizeType]').on('click', updateNorm)
+  $('input[type=radio][name=normalizeType]').click(updateNorm)
 
   updateNorm()
 
@@ -55,7 +55,7 @@ $(function () {
     }
   }
 
-  $('input[type=checkbox][name=mfwcheckbox]').on('click', updateMFWinput)
+  $('input[type=checkbox][name=mfwcheckbox]').click(updateMFWinput)
 
   updateMFWinput()
 
@@ -81,7 +81,7 @@ $(function () {
     }
   }
 
-  $('input[type=checkbox][name=cullcheckbox]').on('click', updatecullinput)
+  $('input[type=checkbox][name=cullcheckbox]').click(updatecullinput)
 
   updatecullinput()
 
@@ -90,7 +90,7 @@ $(function () {
   var buttonsFixed = false
   var buttons = $('#analyze-submit')
 
-  $(window).on('scroll', function () {
+  $(window).scroll(function () {
     // Timer stuff
     if (timer) {
       clearTimeout(timer)
@@ -116,5 +116,5 @@ $(function () {
     }, 10)
   })
 
-  $(window).on('scroll') // Call a dummy scroll event after everything is loaded.
+  $(window).scroll() // Call a dummy scroll event after everything is loaded.
 })
