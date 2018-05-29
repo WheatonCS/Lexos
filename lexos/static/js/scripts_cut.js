@@ -275,18 +275,18 @@ function doAjax (action) {
 
 // Function to check the form data for errors and warnings
 function process (action) {
-  $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
-  $('#formAction').val(action)
-  $.when(checkForErrors()).done(function () {
-    if ($('#hasErrors').val() == 'false') {
-      checkForWarnings()
-      $.when(checkForWarnings()).done(function () {
-        if ($('#needsWarning').val() == 'false') {
-          doAjax(action)
+    $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
+    $('#formAction').val(action)
+    $.when(checkForErrors()).done(function () {
+        if ($('#hasErrors').val() == 'false') {
+            checkForWarnings()
+            $.when(checkForWarnings()).done(function () {
+                if ($('#needsWarning').val() == 'false') {
+                    doAjax(action)
+                }
+            })
         }
-      })
-    }
-  })
+    })
 }
 
 // Handle the Continue button in the warning modal
