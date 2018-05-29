@@ -212,4 +212,4 @@ class StatsModel(BaseModel):
         # Get the correct token name.
         token_type = \
             MatrixReceiver().options_from_front_end().token_option.token_type
-        return "Terms" if token_type == "word" else "Characters"
+        return "terms" if token_type == "word" else "characters"
