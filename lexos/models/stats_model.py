@@ -169,7 +169,7 @@ class StatsModel(BaseModel):
             classes="table table-striped table-bordered"
         )
 
-    def get_box_plot(self) -> str:
+    def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.
 
         :return: A plotly object that contains the box plot.
@@ -212,8 +212,11 @@ class StatsModel(BaseModel):
             )
         )
 
+        return go.Figure(data=data, layout=layout)
+
+    def get_box_plot(self) -> str:
         # Return plotly object as a div.
-        return plot(go.Figure(data=data, layout=layout),
+        return plot(self._get_box_plot_object(),
                     show_link=False,
                     include_plotlyjs=False,
                     output_type="div")

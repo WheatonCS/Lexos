@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from lexos.helpers.error_messages import EMPTY_LIST_MESSAGE
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.stats_model import StatsModel, StatsTestOptions
 
 # ------------------------ First test suite ------------------------
@@ -61,21 +61,6 @@ test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
 test_pandas_anomaly = pd.read_html(test_file_result_anomaly)[0]
 # ------------------------------------------------------------------
 
-# -------------------- Special case test suite ---------------------
-test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
-                                index=np.array([0, 1, 2]),
-                                columns=np.array(["A", "B"]))
-test_id_temp_table_special = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
-test_option_special = \
-    StatsTestOptions(token_type="terms", doc_term_matrix=test_dtm_special,
-                     id_temp_label_map=test_id_temp_table_special)
-test_stats_model_special = StatsModel(test_options=test_option_special)
-test_corpus_result_special = test_stats_model_special.get_corpus_stats()
-test_file_result_special = test_stats_model_special.get_file_stats()
-test_box_plot_special = test_stats_model_special.get_box_plot()
-test_pandas_special = pd.read_html(test_file_result_special)[0]
-# ------------------------------------------------------------------
-
 
 class TestFileResult:
     def test_basic_info(self):
@@ -118,29 +103,60 @@ class TestCorpusInfo:
         assert test_corpus_result_two.inter_quartile_range == 32.5
 
     def test_file_anomaly_iqr(self):
-        assert test_corpus_result_one.anomaly_iqr[0] == "large: "
-        assert test_corpus_result_one.anomaly_iqr["F2.txt"] == "small"
-        assert test_corpus_result_two.anomaly_iqr == {}
-        assert test_corpus_result_anomaly.anomaly_iqr["F1.txt"] == "small"
-        assert test_corpus_result_anomaly.anomaly_iqr["F10.txt"] == "large"
+        assert test_corpus_result_one.anomaly_iqr[0] == [None, None][0]
+        assert test_corpus_result_one.anomaly_iqr[1] == [None, None][1]
+        assert test_corpus_result_two.anomaly_iqr == [None, None, None]
+        assert test_corpus_result_anomaly.anomaly_iqr[0] == "small: F1.txt"
+        assert test_corpus_result_anomaly.anomaly_iqr[9] == "large: F10.txt"
 
     def test_file_anomaly_std(self):
-        assert test_corpus_result_one.anomaly_se == {}
-        assert test_corpus_result_two.anomaly_se == {}
-        assert test_corpus_result_anomaly.anomaly_se["F1.txt"] == "small"
-        assert test_corpus_result_anomaly.anomaly_se["F10.txt"] == "large"
+        assert test_corpus_result_one.anomaly_se == [None, None]
+        assert test_corpus_result_two.anomaly_se == [None, None, None]
+        assert test_corpus_result_anomaly.anomaly_se[0] == "small: F1.txt"
+        assert test_corpus_result_anomaly.anomaly_se[9] == "large: F10.txt"
+
+
+# -------------------- Empty data frame case test suite ---------------------
+test_dtm_empty = pd.DataFrame()
+test_id_temp_table_empty = {}
+test_option_empty = \
+    StatsTestOptions(token_type="terms",
+                     doc_term_matrix=test_dtm_empty,
+                     id_temp_label_map=test_id_temp_table_empty)
+test_stats_model_empty = StatsModel(test_options=test_option_empty)
 
 
 class TestSpecialCase:
     def test_empty_list(self):
         try:
-            _ = test_stats_model_special.get_file_stats()
+            _ = test_stats_model_empty.get_file_stats()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
-            assert str(error) == EMPTY_LIST_MESSAGE
+            assert str(error) == EMPTY_DTM_MESSAGE
 
         try:
-            _ = test_stats_model_special.get_corpus_stats()
+            _ = test_stats_model_empty.get_corpus_stats()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
-            assert str(error) == EMPTY_LIST_MESSAGE
+            assert str(error) == EMPTY_DTM_MESSAGE
+
+
+class TestStatsBoxplot:
+    def test_get_stats_boxplot(self):
+        basic_fig = self._get_box_plot_object()
+        np.testing.assert_equal(
+            basic_fig['layout']['yaxis']['ticktext'],
+            ['I look so good!', 'this is a test', 'Cheng is handsome']
+        )
+        np.testing.assert_allclose(
+            basic_fig['data'][0]['x'], [0., 5., 5., 0.]
+        )
+        np.testing.assert_allclose(
+            basic_fig['data'][0]['y'], [-15., -15., -25., -25.]
+        )
+        np.testing.assert_allclose(
+            basic_fig['data'][1]['x'], [0., 20.98597876, 20.98597876, 5.]
+        )
+        np.testing.assert_allclose(
+            basic_fig['data'][1]['y'], [-5., -5., -20., -20.]
+        )
