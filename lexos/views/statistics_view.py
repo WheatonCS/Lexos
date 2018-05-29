@@ -1,4 +1,4 @@
-from flask import session, render_template, Blueprint, request
+from flask import session, render_template, Blueprint, request, jsonify
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
 from lexos.managers import utility, session_manager as session_manager
@@ -48,7 +48,14 @@ def statistics():
 def file_report():
     session_manager.cache_analysis_option()
     session_manager.cache_statistic_option()
-    return StatsModel().formatted_file_result()
+    file_result = StatsModel().get_corpus_stats()
+    return jsonify(
+        mean=file_result.mean,
+        anomaly_se=file_result.anomaly_se,
+        anomaly_iqr=file_result.anomaly_iqr,
+        std_deviation=file_result.std_deviation,
+        inter_quartile_range=file_result.inter_quartile_range
+    )
 
 
 @stats_blueprint.route("/fileTable", methods=["POST"])
