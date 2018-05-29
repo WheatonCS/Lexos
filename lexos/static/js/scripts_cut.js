@@ -314,7 +314,7 @@ $(document).on('click', '#timerCancel', function (event) {
 
 // Function to convert the form data into a JSON object
 function jsonifyForm () {
-    var form = {}
+    let form = {}
     $.each($('form').serializeArray(), function (i, field) {
         form[field.name] = field.value || ''
     })
@@ -333,7 +333,7 @@ $(function () {
     // Toggle cutting options when radio buttons with different classes are clicked
     const timeToToggle = 150
     $('.sizeradio').click(function () {
-        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
+        let cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
         cuttingValueLabel.text('Segment Size:')
 
         $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
@@ -346,7 +346,7 @@ $(function () {
     })
 
     $('.numberradio').click(function () {
-        var cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
+        let cuttingValueLabel = $(this).parents('.cuttingoptionswrapper').find('.cut-label-text')
         cuttingValueLabel.text('Number of Segments:')
 
         $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
@@ -360,7 +360,7 @@ $(function () {
 
     // Toggle individual cut options on load
     $('.indivcutbuttons').click(function () {
-        var toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
+        let toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
         toggleDiv.toggleClass('hidden')
         // slideToggle() only works if the div is first set to 'display:none'
         // toggleDiv.slideToggle(timeToToggle);
