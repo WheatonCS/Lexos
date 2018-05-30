@@ -431,23 +431,23 @@ function process (action) {
 
 //==Warning Modal Click Functions=================
 // Handle the Continue button in the warning modal
-$('#warningContinue').click(function () {
-    $('#needsWarning').val('false')
-    const action = $('#formAction').val()
-    $('#warning-modal').modal('hide')
-    doAjax(action)
-    $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
-}) // end click #warningContinue
+$(document).on('click', '#warningContinue', function (event) {
+  $('#needsWarning').val('false')
+  action = $('#formAction').val()
+  $('#warning-modal').modal('hide')
+  doAjax(action)
+  $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
+})
 
 // Handle the Timer Cancel button in the warning modal
-$('#timerCancel').click(function () {
-    $('#needsWarning').val('false')
-    $('#hasErrors').val('false')
-    xhr.abort()
-    $('#warning-modal-footer').append('<button>Moo</button>')
-    $('#warning-modal').modal('hide')
-    $('#status-prepare').css('visibility', 'hidden')
-}) // end click #timerCancel
+$(document).on('click', '#timerCancel', function (event) {
+  $('#needsWarning').val('false')
+  $('#hasErrors').val('false')
+  xhr.abort()
+  $('#warning-modal-footer').append('<button>Moo</button>')
+  $('#warning-modal').modal('hide')
+  $('#status-prepare').css('visibility', 'hidden')
+})
 //=====================================================
 
 // Function to convert the form data into a JSON object
