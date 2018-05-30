@@ -17,7 +17,7 @@ $(document).ready(function () {
   })
 
   // Toggle file selection when 'Toggle All' is clicked
-  $('#allCheckBoxSelector').click(function () {
+  $('#allCheckBoxSelector').on('click', function () {
     if (this.checked) {
       $('.minifilepreview:not(:checked)').trigger('click')
     } else {

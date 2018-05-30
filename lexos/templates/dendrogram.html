@@ -8,7 +8,7 @@
     <script>
       $(document).ready(function () {
         // Handle the return to top links
-        $('.to-top').click(function () {
+        $('.to-top').on('click', function () {
           $('html, body').animate({scrollTop: 0}, 800)
           return false
         })
@@ -17,7 +17,7 @@
     <style type="text/css"></style>
 {% endblock %}
 
-{% block title %}analyzer{% endblock %}
+{% block title %}Hierarchical Clustering{% endblock %}
 
 
 {% block options %}

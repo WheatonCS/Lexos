@@ -188,7 +188,7 @@ class LexosFile:
 
         self.name = filename
 
-    def get_scrub_options(self) -> Dict[str, object]:
+    def get_scrub_options(self) -> Dict[str, bool]:
         """Gets the options for scrubbing from the request.form.
 
         :return: a formatted dictionary of the chosen options for scrubbing a
@@ -207,7 +207,7 @@ class LexosFile:
             scrub_options[text_area] = request.form[text_area]
         for upload_file in request.files:
             file_name = request.files[upload_file].filename
-            if (file_name != ''):
+            if file_name != '':
                 scrub_options[upload_file] = file_name
         if 'tags' in request.form:
             scrub_options['keepDOEtags'] = request.form['tags'] == 'keep'
@@ -232,10 +232,10 @@ class LexosFile:
             self.options['scrub'] = {}
         scrub_options = self.get_scrub_options()
 
-        text_string = self.load_contents()
+        text_strfile_managering = self.load_contents()
 
         text_string = scrubber.scrub(
-            text_string,
+            text_strfile_managering,
             gutenberg=self.is_gutenberg,
             lower=scrub_options['lowercasebox'],
             punct=scrub_options['punctuationbox'],
