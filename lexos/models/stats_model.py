@@ -8,6 +8,7 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
+from lexos.receivers.stats_receiver import StatsReceiver
 
 
 class StatsTestOptions(NamedTuple):
@@ -57,6 +58,11 @@ class StatsModel(BaseModel):
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
+
+    @property
+    def _stats_option(self):
+
+        return StatsReceiver().options_from_front_end()
 
     @property
     def token_type(self) -> str:

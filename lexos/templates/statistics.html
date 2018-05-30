@@ -34,28 +34,32 @@
                 <div class="forAllCheckBox">
                     <label>
                         <input type="checkbox" id="allCheckBoxSelector"
-                               checked> Check/Uncheck All
+                               checked="checked"> Check/Uncheck All
                     </label>
                 </div>
-            {%- endif %}
-            <div class="col-md-8" id="statsFileSelectContainer"
-                 style="overflow:auto; float: left; max-height: 135px; min-height: 2em;">
-                <div id="statsFileSelect">
-                    {% for fileID, label in labels.items() %}
-                        <div class="forCheckBox">
-                            <label id="statSelect">{{ label }}
-                                <input type="checkbox" name="segmentlist"
-                                       class="minifilepreview"  {{ 'checked' if fileID|unicode in session['statisticoption']['segmentlist'] }}
-                                       id="{{ fileID }}_selector"
-                                       value="{{ fileID }}">
-                            </label>
-                        </div>
-                    {%- endfor %}
-                    {% if labels|len == 0 %}
-                        <span id="no-labels">No Documents Activated.</span>
-                    {%- endif %}
+                <div class="col-md-10 col-lg-10" id="statsFileSelectContainer"
+                     style="overflow:auto; float: left; max-height: 140px; min-height: 2em;">
+                    <div id="statsFileSelect">
+                    <form>
+                        {% for fileID, label in labels.items() %}
+                            <div class="forCheckBox" id="eachCheckBox">
+                                <label id="statSelect">{{ label }}
+                                    <input type="checkbox"
+                                           name="{{ label }}"
+                                           checked="checked"
+                                           class="file-selector">
+                                </label>
+                            </div>
+                        {%- endfor %}
+                    </form>
+
+                    </div>
                 </div>
-            </div>
+            {%- endif %}
+            {% if labels|len == 0 %}
+                <span id="no-labels">No Documents Activated.</span>
+            {%- endif %}
+            <input type="radio" id="active_file_ids" value="2" name="2"/>
         </div>
     </div>
 {% endblock %}

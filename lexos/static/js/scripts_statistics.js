@@ -1,4 +1,3 @@
-
 /**
  * the function to run the error modal
  * @param htmlMsg {string} - the message to display, you can put html in it
@@ -197,21 +196,20 @@ $(function () {
     $('#normalize-options').css({'visibility': 'hidden'})
 
     // Toggle file selection & reset the maximum number of documents when 'Toggle All' is clicked
-    $('#allCheckBoxSelector').click(function () {
+    $('#allCheckBoxSelector').on('click', function () {
         if (this.checked) {
-            $('.minifilepreview:not(:checked)').trigger('click')
-            $('#cullnumber').attr('max', $('.minifilepreview:checked').length)
+            $('.file-selector:not(:checked)').trigger('click')
+            $('#cullnumber').attr('max', $('.file-selector:checked').length)
         } else {
-            $('.minifilepreview:checked').trigger('click')
+            $('.file-selector:checked').trigger('click')
             $('#cullnumber').attr('max', '0')
         }
     })
 
     /**
- * The function to check if all input file are selected and dynamically
- * change the value of check all button.
- */
-
+     * The function to check if all input file are selected and dynamically
+     * change the value of check all button.
+     */
     $('.file-selector').click(function () {
         // Select the all check radio box.
         const all_check_box = $('#allCheckBoxSelector')
@@ -224,8 +222,10 @@ $(function () {
         $('#cullnumber').attr('max', num_file_selected)
 
         // Check if the check all button should be checked or unchecked.
-        if (num_file_selected === num_file_activated && !all_check_box.is(':checked'))
+        if (num_file_selected === num_file_activated && !all_check_box.is(':checked')){
             all_check_box.trigger('click')
+        }
+
         else {
             if (num_file_selected !== num_file_activated && all_check_box.is(':checked'))
                 all_check_box.trigger('click')
