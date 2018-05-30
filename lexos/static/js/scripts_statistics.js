@@ -1,3 +1,4 @@
+
 /**
  * the function to run the error modal
  * @param htmlMsg {string} - the message to display, you can put html in it
@@ -189,14 +190,11 @@ function generateStatsBoxPlot () {
 }
 
 $(function () {
-    // hide the normalize options and set it to raw count.
-    $('#normalize-options').css({'visibility': 'hidden'})
+    // Hide the stats result div.
+    $('#stats-result').css({'display': 'none'})
+    // Hide the normalize options and set it to raw count.
     $('#normalizeTypeRaw').attr('checked', true)
-
-    // Reset the maximum number of documents when a checkbox is clicked
-    $('.minifilepreview').click(function () {
-        $('#cullnumber').attr('max', $('.minifilepreview:checked').length)
-    })
+    $('#normalize-options').css({'visibility': 'hidden'})
 
     // Toggle file selection & reset the maximum number of documents when 'Toggle All' is clicked
     $('#allCheckBoxSelector').click(function () {
@@ -209,8 +207,30 @@ $(function () {
         }
     })
 
-    // hide the stats result div.
-    $('#stats-result').css({'display': 'none'})
+    /**
+ * The function to check if all input file are selected and dynamically
+ * change the value of check all button.
+ */
+
+    $('.file-selector').click(function () {
+        // Select the all check radio box.
+        const all_check_box = $('#allCheckBoxSelector')
+
+        // Get number of file selected and number of file activated.
+        const num_file_activated = Number($('#num_active_files').val())
+        const num_file_selected = $('#statsFileSelect').find('input:checked').length
+
+        // Update the culling number.
+        $('#cullnumber').attr('max', num_file_selected)
+
+        // Check if the check all button should be checked or unchecked.
+        if (num_file_selected === num_file_activated && !all_check_box.is(':checked'))
+            all_check_box.trigger('click')
+        else {
+            if (num_file_selected !== num_file_activated && all_check_box.is(':checked'))
+                all_check_box.trigger('click')
+        }
+    })
 
     /**
      * The event handler for generate statistics clicked
