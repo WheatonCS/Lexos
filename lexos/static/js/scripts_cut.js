@@ -1,7 +1,10 @@
-// Function to check for errors
+/**
+ * checks for errors
+ */
 const checkForErrors = function () {
     // Set Error and Warning Messages
     let errors = []
+    // links to 404 so not working
     const err1 = 'You have no active documents. Please activate at least \
     one document using the \
     <a href=\"{{ url_for("manage") }}\">Manage</a> tool or \
@@ -104,7 +107,9 @@ const checkForErrors = function () {
     }
 } // end checkForErrors
 
-// Function to check whether the user needs a warning
+/**
+ * checks whether the user needs a warning
+ */
 const checkForWarnings = function () {
     let needsWarning = false
     const maxSegs = 100
@@ -221,6 +226,10 @@ const checkForWarnings = function () {
 
 let xhr
 
+/**
+ * performs the ajax request
+ * @param {string} action - the type of action needed to be performed
+ */
 function doAjax (action) {
     /* It's not really efficient to create a FormData and a json object,
        but the former is easier to pass to lexos.py functions, and the
@@ -413,6 +422,10 @@ function doAjax (action) {
 } // end doAjax
 
 // Function to check the form data for errors and warnings
+/**
+ * checks the form data for errors and warnings
+ * @param {string} action
+ */
 function process (action) {
     $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
     $('#formAction').val(action)
@@ -450,7 +463,10 @@ $(document).on('click', '#timerCancel', function (event) {
 })
 //=====================================================
 
-// Function to convert the form data into a JSON object
+
+/**
+ *  converts the form data into a JSON object
+ */
 function jsonifyForm () {
     let form = {}
     $.each($('form').serializeArray(), function (i, field) {
@@ -459,6 +475,9 @@ function jsonifyForm () {
     return form
 } // end jsonifyForm
 
+/**
+ * calls a flask route to trigger a download
+ */
 function downloadCutting () {
     // Unfortunately, you can't trigger a download with an ajax request; calling a
     // Flask route seems to be the easiest method.
