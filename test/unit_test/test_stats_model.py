@@ -142,21 +142,49 @@ class TestSpecialCase:
             assert str(error) == EMPTY_DTM_MESSAGE
 
 
-class TestStatsBoxplot:
+class TestStatsPlotly:
+    def test_get_stats_scatter(self):
+        basic_fig = test_box_plot_result_one
+        assert basic_fig['data'][0]['type'] == 'scatter'
+
+        assert basic_fig['data'][0]['y'][0] == 80
+
+        assert basic_fig['data'][0]['y'][1] == 15
+
+        assert basic_fig['data'][0]['name'] == 'Corpus Scatter Plot'
+
+        assert basic_fig['data'][0]['hoverinfo'] == 'text'
+
+        assert basic_fig['data'][0]['mode'] == 'markers'
+
+        assert basic_fig['data'][0]['text'] == ['F1.txt', 'F2.txt']
+
     def test_get_stats_boxplot(self):
-        np.testing.assert_equal(
-            basic_fig['layout']['yaxis']['ticktext'],
-            ['I look so good!', 'this is a test', 'Cheng is handsome']
-        )
-        np.testing.assert_allclose(
-            basic_fig['data'][0]['x'], [0., 5., 5., 0.]
-        )
-        np.testing.assert_allclose(
-            basic_fig['data'][0]['y'], [-15., -15., -25., -25.]
-        )
-        np.testing.assert_allclose(
-            basic_fig['data'][1]['x'], [0., 20.98597876, 20.98597876, 5.]
-        )
-        np.testing.assert_allclose(
-            basic_fig['data'][1]['y'], [-5., -5., -20., -20.]
-        )
+        basic_fig = test_box_plot_result_one
+        assert basic_fig['data'][1]['type'] == 'box'
+
+        assert basic_fig['data'][1]['y'][0] == 80
+
+        assert basic_fig['data'][1]['y'][1] == 15
+
+        assert basic_fig['data'][1]['name'] == 'Corpus Box Plot'
+
+        assert basic_fig['data'][1]['hoverinfo'] == 'y'
+
+        assert basic_fig['data'][1]['marker']['color'] == 'rgb(10, 140, 200)'
+
+    def test_get_stats_layout(self):
+        basic_fig = test_box_plot_result_one
+        assert basic_fig['layout']['title'] == 'Statistics of the Given Corpus'
+
+        assert basic_fig['layout']['xaxis']['autorange'] == True
+
+        assert basic_fig['layout']['xaxis']['showgrid'] == False
+
+        assert basic_fig['layout']['xaxis']['zeroline'] == False
+
+        assert basic_fig['layout']['xaxis']['autotick'] == False
+
+        assert basic_fig['layout']['xaxis']['showline'] == False
+
+        assert basic_fig['layout']['xaxis']['showticklabels'] == False
