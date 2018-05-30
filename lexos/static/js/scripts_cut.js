@@ -27,15 +27,16 @@ const checkForErrors = function () {
     }
     else {
         // Make sure there is a default cutting value
-        if ($('#overallcutvalue').val() === '') {
+        const cutValues = $('#overallcutvalue')
+        if (cutValues.val() === '') {
             errors.push(err3)
         }
         else {
-            let overallcutvalueStr = $('#overallcutvalue').val()
-            let overallcutvalue = parseInt($('#overallcutvalue').val())
+            let overallcutvalueStr = cutValues.val()
+            let overallcutvalue = parseInt(cutValues.val())
             let overallOverlapValue = parseInt($('#overallOverlapValue').val())
             let individualOverlap = parseInt($('#individualOverlap').val())
-            let individualCutValueStr = $('#individualCutValue').val()
+            let individualCutValueStr = cutValues.val()
             let individualCutValue = $('#individualCutValue').val()
 
             // Make sure the overall segment size not negative
