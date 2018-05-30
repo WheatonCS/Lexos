@@ -524,7 +524,7 @@ $(function () {
 
     // showMilestoneOptions();
 
-    $(document).on('click', '.indivMS', function (event) {
+    $(document).on('click', '.indivMS', function () {
         showMilestoneOptions()
         if ($(this).is(':checked')) {
             $(this).parents('#cutByMSdiv').filter(':first')
