@@ -60,7 +60,7 @@ class StatsModel(BaseModel):
 
     @property
     def token_type(self) -> str:
-        """:return: the token type that was used."""
+        """:return: the token type that was used when calculating the stats."""
         if self._test_id_temp_label_map is not None:
             return self._test_token_type
         else:
@@ -212,11 +212,16 @@ class StatsModel(BaseModel):
             )
         )
 
+        # Return a plotly figure.
         return go.Figure(data=data, layout=layout)
 
     def get_box_plot(self) -> str:
+        """Return a HTML string that is ready to be displayed on the web.
+
+        :return: A string in HTML format that contains the plotly boxplot.
+        """
         # Return plotly object as a div.
         return plot(self._get_box_plot_object(),
-                    show_link=False,
                     include_plotlyjs=False,
-                    output_type="div")
+                    output_type="div",
+                    show_link=False)
