@@ -268,8 +268,7 @@ function doAjax (action) {
         $.each(response['data'], function () {
             let fileID = $(this)[0]
             let filename = $(this)[1]
-            let fileLabel = $(this)[2]
-            fileLabel = filename
+            let fileLabel = filename
             let fileContents = $(this)[3]
             const indivcutbuttons = '<a id="indivcutbuttons_' + fileID + '"\
             onclick="toggleIndivCutOptions(' + fileID + ');" \
