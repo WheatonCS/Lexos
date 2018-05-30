@@ -74,5 +74,4 @@ class TokenizerModel(BaseModel):
                               value=transposed_dtm["Total"] / len(labels))
 
         return transposed_dtm.to_html(
-            classes="table table-striped table-bordered "
-                    "display responsive no-wrap")
+            classes="table table-striped table-bordered")
