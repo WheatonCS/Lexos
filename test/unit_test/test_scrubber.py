@@ -827,6 +827,7 @@ class TestRemoveStopwords:
         assert remove_stopwords(self.test_string, "") == self.test_string
         assert remove_stopwords(self.test_string, " ") == self.test_string
         assert remove_stopwords("test\nstring", "\n") == "test\nstring"
+        assert remove_stopwords("test\nstring", "\nstring") == "test"
         assert remove_stopwords("test", "test") == ""
         assert remove_stopwords("   test   ", "test") == "     "
         assert remove_stopwords("\ntest\n", "test") == "\n"
