@@ -58,17 +58,16 @@ function generateTokenizeResult () {
 
     // the configuration for creating data table
     const dataTableConfig = {
-        responsive: true,
         scrollX: true,
         // specify where the button is
-        dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-0 pull-right\'B>>' +
-        '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+        dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
+        <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
 
         // specify all the button that is put on to the page
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
 
         fixedColumns: {
-            leftColumns: 1
+            leftColumns: 3
         }
     }
 
@@ -97,8 +96,7 @@ function generateTokenizeResult () {
 }
 
 $(function () {
-    // Hide the tokenize result div.
-    $('#tokenizeResult').css({'display': 'none'})
+
 
     /**
      * The event handler for generate tokenize clicked.
@@ -116,4 +114,3 @@ $(function () {
     })
 
 })
-
