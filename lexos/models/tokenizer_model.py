@@ -47,7 +47,7 @@ class TokenizerModel(BaseModel):
             else MatrixModel().get_id_temp_label_map()
 
     @property
-    def _tokenizer_front_end_option(self) -> TokenizerTableOrientation:
+    def _front_end_option(self) -> TokenizerTableOrientation:
         """:return: a typed tuple that holds the topword front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
@@ -88,13 +88,11 @@ class TokenizerModel(BaseModel):
         return transposed_dtm
 
     def get_table(self) -> str:
-        if self._tokenizer_front_end_option == \
-                TokenizerTableOrientation.FILE_COLUMN:
+        if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
             return self._get_dtm().to_html(
                 classes="table table-bordered table-striped display no-wrap")
 
-        elif self._tokenizer_front_end_option == \
-                TokenizerTableOrientation.FILE_ROW:
+        elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
             return self._get_dtm().transpose().to_html(
                 classes="table table-bordered table-striped display no-wrap")
 
