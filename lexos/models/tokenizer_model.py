@@ -159,6 +159,10 @@ class TokenizerModel(BaseModel):
         return file_column_dtm_soup.prettify()
 
     def get_dtm(self) -> str:
+        """Get the dtm based on front end required table orientation option.
+
+        :return: The dtm corresponding to users choice.
+        """
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
             return self._get_file_column_dtm()
 
