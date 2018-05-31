@@ -28,6 +28,7 @@
 
 {% block options %}
     <div class="row col-md-12 col-lg-12">
+		<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
         <fieldset class="tokenizeOption" id="tokenizeDiv">
             <legend>Data Orientation:</legend>
             <label>
