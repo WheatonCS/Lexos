@@ -1,7 +1,5 @@
-from typing import Optional, NamedTuple
-
 import pandas as pd
-
+from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
@@ -74,4 +72,4 @@ class TokenizerModel(BaseModel):
                               value=transposed_dtm["Total"] / len(labels))
 
         return transposed_dtm.to_html(
-            classes="table table-striped table-bordered")
+            classes="table table-bordered table-striped display no-wrap")
