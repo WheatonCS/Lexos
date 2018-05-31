@@ -148,7 +148,10 @@ def test_generate_averages():
 
 def test_to_html():
     test = ContentAnalysisModel()
-    assert test.to_html()
+    test.add_file(file_name="file1", label='file1', content='test')
+    test_frame = pd.read_html(test.to_html())[0]
+    assert test_frame.values.tolist()[0] == ["Averages", "Averages",
+                                             "Averages", "Averages"]
 
 
 def test_to_data_frame():
@@ -274,12 +277,12 @@ def test_analyze():
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
     result_table, individual_counts_table, files_raw_counts_tables, \
-        formula_errors = test.analyze()
+    formula_errors = test.analyze()
     assert result_table == ""
     assert isinstance(formula_errors, str)
     test.test_option = TestOptions(formula="[dict1]")
     test.save_formula()
     result_table, individual_counts_table, files_raw_counts_tables, \
-        formula_errors = test.analyze()
+    formula_errors = test.analyze()
     assert result_table == test.to_html()
     assert formula_errors == ""
