@@ -2,34 +2,24 @@
 {% set active_page = 'tokenizer' %}
 
 {% block head %}
-    <!-- Latest compiled and minified DataTables CSS and JS -->
-    {% if config['LOCAL_MODE'] == True %}
-        <link rel="stylesheet" type="text/css"
-              href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{ version }}"/>
-        <link rel="stylesheet" type="text/css"
-              href="{{ url_for('static', filename='node_modules/datatables.net-select-bs/css/select.bootstrap.css') }}?ver={{ version }}"/>
-        <script type="text/javascript"
-                src="{{ url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.js') }}?ver={{ version }}"></script>
-        <script type="text/javascript"
-                src="{{ url_for('static', filename='node_modules/datatables.net-select/js/dataTables.select.js') }}?ver={{ version }}"></script>
-        <script type="text/javascript"
-                src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{ version }}"></script>
-    {% else %}
-        <link rel="stylesheet" type="text/css"
-              href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
-        <script type="text/javascript"
-                src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
-        <script type="text/javascript"
-                src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{ version }}"></script>
-    {% endif %}
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{ version }}"></script>
-
     <script type="text/javascript" charset="utf8"
             src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
 
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{ version }}"></script>
+
+    <!-- Data Table -->
+    <!-- Latest compiled and minified DataTables CSS -->
     <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap.min.css">
+          href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+
+    <!-- Latest compiled and minified DataTables JS -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css"/>
+
     <script type="text/javascript"
             src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
 {% endblock %}
@@ -68,7 +58,7 @@
                name="gen-tokenize" value="Get tokenize table"/>
     </div>
 
-    <div id="tokenizeResult" style="width: 100%; margin-top:20px;">
-        <div id="tokenizeTable" class="row col-lg-12 col-md-12" style="width: 100%"></div>
+    <div id="tokenizeResult" style="margin-top:50px;">
+        <div id="tokenizeTable"></div>
     </div>
 {% endblock %}
