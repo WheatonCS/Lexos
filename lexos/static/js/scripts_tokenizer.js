@@ -8,7 +8,7 @@ function runModal (htmlMsg) {
 }
 
 /**
- * check all the easy error with js, in this case, you need more than 2 documents
+ * check all the easy error with js, in this case, you need more than 1 document
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
@@ -19,8 +19,8 @@ function submissionError () {
 }
 
 /**
- * the function to convert the from into json
- * @returns {{string: string}} - the from converted to json
+ * the function to convert the form into json
+ * @returns {{string: string}} - the form converted to json
  */
 function jsonifyForm () {
     const form = {}
@@ -48,14 +48,10 @@ function sendAjaxRequest (url, form) {
 function getDataTableConfig () {
     // Declare the variable that holds the number of fixed left columns.
     let num_fixed_columns
-    if ($('#table-orientation-column').is(':checked')) {
-        console.log("in column")
+    if ($('#table-orientation-column').is(':checked'))
         num_fixed_columns = 1
-    }
-    else if ($('#table-orientation-row').is(':checked')) {
-        console.log("in row")
+    else if ($('#table-orientation-row').is(':checked'))
         num_fixed_columns = 3
-    }
 
     return {
         scrollX: true,
