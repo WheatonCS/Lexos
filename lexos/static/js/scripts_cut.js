@@ -5,7 +5,6 @@
 const checkForErrors = function () {
     // Set Error and Warning Messages
     let errors = []
-
     pushErrors(errors)
 
     // if any errors load the first one into the error modal.
@@ -15,7 +14,6 @@ const checkForErrors = function () {
         $('#error-modal-message').html(errors[0])
         $('#error-modal').modal()
     }
-
     else {
         $('#hasErrors').val('false')
     }
@@ -182,7 +180,6 @@ const checkForWarnings = function () {
         $('#status-prepare').css({'visibility': 'hidden'})
         $('#warning-modal').modal()
     }
-
     else {
         $('#needsWarning').val('false')
     }
@@ -361,8 +358,8 @@ function doAjax (action) {
             let filename = $(this)[1]
             let fileLabel = filename
             let fileContents = $(this)[3]
-            const indivcutbuttons = '<a id="indivcutbuttons_' + fileID + '"\
-            onclick="toggleIndivCutOptions(' + fileID + ');" \
+            const indivcutbuttons = '<a id="indivcutbuttons_${fileID}" \
+            onclick="toggleIndivCutOptions(${fileID});" \
             class="bttn indivcutbuttons" \
             role="button">Individual Options</a></legend>'
 
