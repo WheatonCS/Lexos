@@ -65,31 +65,26 @@ class TokenizerModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "Terms" if token_type == "word" else "Characters"
 
-    def _get_dtm(self) -> pd.DataFrame:
+    def _get_file_row_dtm(self) -> pd.DataFrame:
         # Transpose the dtm for easier calculation.
-        transposed_dtm = self._doc_term_matrix.transpose()
+        file_row_dtm = self._doc_term_matrix.transpose()
 
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
         # Change matrix column names to file labels.
-        transposed_dtm.columns = labels
+        file_row_dtm.columns = labels
+        file_row_dtm.columns.name = self._token_type
 
         # Find total and average of each row's data.
-        transposed_dtm.insert(loc=0,
-                              column="Total",
-                              value=transposed_dtm.sum(axis=1))
+        file_row_dtm.insert(loc=0,
+                            column="Total",
+                            value=file_row_dtm.sum(axis=1))
 
-        transposed_dtm.insert(loc=1,
-                              column="Average",
-                              value=transposed_dtm["Total"] / len(labels))
-
-        return transposed_dtm
-
-    def _get_file_row_dtm(self):
-        file_row_dtm = self._get_dtm()
-        file_row_dtm.columns.name = self._token_type
+        file_row_dtm.insert(loc=1,
+                            column="Average",
+                            value=file_row_dtm["Total"] / len(labels))
 
         # Convert the HTML to beautiful soup object.
         file_row_dtm_soup = BeautifulSoup(
