@@ -65,13 +65,13 @@ class TokenizerModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "Terms" if token_type == "word" else "Characters"
 
-    def _get_file_row_dtm(self) -> pd.DataFrame:
-        # Transpose the dtm for easier calculation.
-        file_row_dtm = self._doc_term_matrix.transpose()
-
+    def _get_file_row_dtm(self) -> str:
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
+
+        # Transpose the dtm for easier calculation.
+        file_row_dtm = self._doc_term_matrix.transpose()
 
         # Change matrix column names to file labels.
         file_row_dtm.columns = labels
@@ -99,14 +99,36 @@ class TokenizerModel(BaseModel):
         return file_row_dtm_soup.prettify()
 
     def _get_file_column_dtm(self):
-        file_column_dtm = self._get_dtm().transpose()
+        # Get temp file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Get the main dtm, set proper column names and use labels as index.
+        file_column_dtm = self._doc_term_matrix
+        file_column_dtm.index = labels
         file_column_dtm.columns.name = "Documents / Stats"
 
-        # Convert the HTML to beautiful soup object.
+        # Convert the main dtm to beautiful soup object.
         file_column_dtm_soup = BeautifulSoup(
             file_column_dtm.to_html(
                 classes="table table-bordered table-striped display no-wrap"),
             "html.parser")
+
+        # Find the table head of the main dtm in order to insert stats info.
+        dtm_head = file_column_dtm_soup.find("thead")
+
+        # Form the stats total frame and set column name.
+        stats_total_frame = pd.DataFrame(columns=file_column_dtm.sum(axis=0))
+        stats_total_frame.columns.name = "Total"
+
+        # Convert the stats total frame to beautiful soup object.
+        stats_total_soup = BeautifulSoup(
+            stats_total_frame.to_html(classes="table"),
+            "html.parser"
+        )
+
+        # Insert the stats total into the table head.
+        dtm_head.contents.append(stats_total_soup.find("thead").contents[1])
 
         # Set the table style to 100% so it always takes up the space.
         file_column_dtm_soup.find('table')['style'] = 'width: 100%'
