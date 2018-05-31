@@ -1,10 +1,9 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(function () {
-    initTable()
+    initTable() //call the function to initiate the main table
     tableAction()
 })
-/* #### INITIATE MAIN DATATABLE #### */
-
+/* INITIATE MAIN DATATABLE */
 //* Change the element name and test whether the table variable persists
 function initTable () {
     return (table = $('#demo').DataTable({
@@ -45,7 +44,7 @@ function initTable () {
 }
 
 function tableAction () {
-    registerColumn()
+    registerColumn() // Draw the table column and make it searchable.
 
     /* Add all rows with .selected to the DataTables activeRows array
      It does not appear that this array needs to be maintained after
@@ -62,11 +61,12 @@ function tableAction () {
         }
     })
 
-    //TODO: comment
+
     $('.col-sm-5').append('<p style=\'display:inline; float:left; width:200px !important;\' id=\'name\'></p>')
-    // Data tables active documents counter wasn't
+    // Data tables active documents counter wasn't working.
     // I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
     // NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
+
     registerSelectEvents() // Area Select events callback
 
     $('#demo').DataTable()
@@ -89,8 +89,31 @@ function tableAction () {
     /* #### END OF TABLE INITIATION #### */
 
     tableDocumentActions()
-    tableSave()
 
+    //TODO: separate it into a function.
+    // When the save button is clicked, call the save function
+    $('#save').click(function () {
+        merge = $('#merge').val()
+        row_id = $('#tmp-row').val()
+        column = $('#tmp-column').val()
+        value = $('#tmp').val()
+        if (row_id.match(/,/)) {
+            row_ids = row_id.split(',')
+            source = $('#' + row_id).children().eq(3).text()
+            if (merge == 'true') {
+                if ($('#addMilestone').prop('checked') == true) {
+                    milestone = $('#milestone').val()
+                } else {
+                    milestone = ''
+                }
+                mergeDocuments(row_ids, column, source, value, milestone)
+            } else {
+                saveMultiple(row_ids, column, value)
+            }
+        } else {
+            saveOne(row_id, column, value)
+        }
+    })
     // When the Delete Selected button is clicked, call the deletion function
     $('#delete').click(function () {
         selected_rows = table.rows({selected: true}).nodes().to$()
@@ -109,12 +132,12 @@ function tableAction () {
         $('#alert-modal .modal-footer').remove()
     })
 }
-
 //------------------------------------
 function registerColumn () {
     // Draw the index column
     table.on('order.dt search.dt', function () {
         table
+            // 0 corresponds to the index column
             .column(0, {
                     search: 'applied',
                     order: 'applied'
@@ -130,16 +153,19 @@ function registerColumn () {
     // Make all columns searchable
     table.on('order.dt search.dt', function () {
         table
+            // 1 corresponds to the 'Document Name' column
             .column(1, {
                     search: 'applied',
                     order: 'applied'
                 }
             )
+            // 2 corresponds to the 'Original Source' column
             .column(2, {
                     search: 'applied',
                     order: 'applied'
                 }
             )
+            // 3 corresponds to the 'Excerpt' column
             .column(3, {
                     search: 'applied',
                     order: 'applied'
@@ -177,7 +203,6 @@ function registerSelectEvents () {
             }
         })
 }
-
 //-------------------------------------
 /* #### DEFINE CONTEXT MENU #### */
 
@@ -195,7 +220,6 @@ function tableDocumentActions () {
             prepareContextMenu()
         },
         onItem: function (cell, e) {
-            // Use if scopes = tr
             var target = cell.parent().attr('id')
             action = $(e.target).attr('data-context')
             switch (action) {
@@ -242,31 +266,8 @@ function tableDocumentActions () {
     })
 }
 
-function tableSave () {
-    // When the save button is clicked, call the save function
-    $('#save').click(function () {
-        merge = $('#merge').val()
-        row_id = $('#tmp-row').val()
-        column = $('#tmp-column').val()
-        value = $('#tmp').val()
-        if (row_id.match(/,/)) {
-            row_ids = row_id.split(',')
-            source = $('#' + row_id).children().eq(3).text()
-            if (merge == 'true') {
-                if ($('#addMilestone').prop('checked') == true) {
-                    milestone = $('#milestone').val()
-                } else {
-                    milestone = ''
-                }
-                mergeDocuments(row_ids, column, source, value, milestone)
-            } else {
-                saveMultiple(row_ids, column, value)
-            }
-        } else {
-            saveOne(row_id, column, value)
-        }
-    })
-}
+
+
 
 //-------------------------------------
 
