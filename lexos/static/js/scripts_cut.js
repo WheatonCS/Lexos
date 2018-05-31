@@ -1,3 +1,4 @@
+// checkForErrors
 /**
  * checks for errors
  */
@@ -20,14 +21,16 @@ const checkForErrors = function () {
     }
 } // end checkForErrors
 
+
+// pushErrors
 /**
  * detects errors regarding bad inputs
  * @param {array} errors
  */
 function pushErrors (errors) {
     // links to 404 so not working
-    const no_active_docs_msg = 'You have no active documents. Please activate at least \
-    one document using the \
+    const no_active_docs_msg = 'You have no active documents. \
+    Please activate at least one document using the \
     <a href=\"{{ url_for("manage") }}\">Manage</a> tool or \
     <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
     const no_cut_string_msg = 'You must provide a string to cut on.'
@@ -58,6 +61,8 @@ function pushErrors (errors) {
     } // end else
 } // end pushErrors
 
+
+// pushOverallErrors
 /**
  * detects errors regarding default cutting
  * @param {array} errors
@@ -94,6 +99,8 @@ function pushOverallErrors (errors) {
     }
 } //end pushOverallErrors
 
+
+// pushIndividualErrors
 /**
  * detects errors regarding individual cutting.
  * @param {array} errors
@@ -138,6 +145,7 @@ function pushIndividualErrors (errors) {
 } // end pushIndividualErrors
 
 
+// checkForWarnings
 /**
  * checks whether the user needs a warning
  */
@@ -180,6 +188,8 @@ const checkForWarnings = function () {
     }
 } // end checkForWarnings
 
+
+// checkMilestone
 /**
  * checks milestone for warnings
  * @param {number} maxSegs - maximum number of segments
@@ -228,7 +238,7 @@ function checkMilestone (maxSegs, defCutTypeValue, cutVal,
 } // end checkMilestone
 
 
-
+// checkIndividualCutset
 /**
  * checks each individual cutset for warnings
  * @param {number} maxSegs - maximum number of segments
@@ -297,7 +307,7 @@ function checkIndividualCutset(maxSegs,defCutTypeValue, cutVal,
 
 
 let xhr
-
+// doAjax
 /**
  * performs the ajax request
  * @param {string} action - the type of action needed to be performed
@@ -493,7 +503,8 @@ function doAjax (action) {
     })
 } // end doAjax
 
-// Function to check the form data for errors and warnings
+
+// process
 /**
  * checks the form data for errors and warnings
  * @param {string} action
@@ -534,6 +545,8 @@ $(document).on('click', '#timerCancel', function () {
 })
 //=====================================================
 
+
+// jsonifyForm
 /**
  *  converts the form data into a JSON object
  */
@@ -545,6 +558,8 @@ function jsonifyForm () {
     return form
 } // end jsonifyForm
 
+
+// downloadCutting
 /**
  * calls a flask route to trigger a download
  */
