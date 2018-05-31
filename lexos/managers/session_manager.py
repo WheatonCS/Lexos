@@ -181,11 +181,11 @@ def cache_cutting_options():
 def cache_csv_options():
     """Stores csv options from request.form in session cookie object."""
     if request.json:
-        session['tokenizeroption'] = {
+        session['tokenizerOption'] = {
             'tableorientation': request.json['tableorientation']}
 
     else:
-        session['tokenizeroption'] = {
+        session['tokenizerOption'] = {
             'tableorientation': request.form['tableorientation']}
 
 
