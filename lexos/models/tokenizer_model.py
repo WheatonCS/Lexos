@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from bs4 import BeautifulSoup
 from typing import Optional, NamedTuple
@@ -88,7 +89,7 @@ class TokenizerModel(BaseModel):
 
         # Convert the HTML to beautiful soup object.
         file_row_dtm_soup = BeautifulSoup(
-            file_row_dtm.to_html(
+            file_row_dtm.round(3).to_html(
                 classes="table table-bordered table-striped display no-wrap"),
             "html.parser")
 
@@ -117,18 +118,31 @@ class TokenizerModel(BaseModel):
         # Find the table head of the main dtm in order to insert stats info.
         dtm_head = file_column_dtm_soup.find("thead")
 
-        # Form the stats total frame and set column name.
-        stats_total_frame = pd.DataFrame(columns=file_column_dtm.sum(axis=0))
-        stats_total_frame.columns.name = "Total"
+        # Form the total frame and set column name.
+        total_fame = pd.DataFrame(
+            columns=np.round(file_column_dtm.sum(axis=0), 3))
+        total_fame.columns.name = "Total"
 
-        # Convert the stats total frame to beautiful soup object.
-        stats_total_soup = BeautifulSoup(
-            stats_total_frame.to_html(classes="table"),
+        # Convert the total frame to beautiful soup object.
+        total_soup = BeautifulSoup(total_fame.to_html(classes="table"),
+                                   "html.parser")
+
+        # Insert the total into the table head.
+        dtm_head.contents.append(total_soup.find("thead").contents[1])
+
+        # Form the average frame and set column name.
+        average_frame = pd.DataFrame(
+            columns=np.around(total_fame.columns / len(labels), 3))
+        average_frame.columns.name = "Average"
+
+        # Convert the average total frame to beautiful soup object.
+        average_soup = BeautifulSoup(
+            average_frame.round(3).to_html(classes="table"),
             "html.parser"
         )
 
-        # Insert the stats total into the table head.
-        dtm_head.contents.append(stats_total_soup.find("thead").contents[1])
+        # Insert the average into the table head.
+        dtm_head.contents.append(average_soup.find("thead").contents[1])
 
         # Set the table style to 100% so it always takes up the space.
         file_column_dtm_soup.find('table')['style'] = 'width: 100%'
