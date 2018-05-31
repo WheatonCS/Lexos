@@ -127,39 +127,12 @@ const checkForWarnings = function () {
         defCutTypeValue, cutVal, overVal,
         indivdivs, eltswithoutindividualopts))
 
-    // If cut by milestone is checked
-    if ($('input[name=\'cutByMS\']:checked').length === 0) {
-        // For cutting by characters
-        if (defCutTypeValue === 'letters') {
-            // Check each document without individual options
-            eltswithoutindividualopts.forEach(function (elt) {
-                // Needs warning...
-                // If the number of characters-segment size/segment size-overlap size > 100
-                if ((numChar[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
-                    needsWarning = true
-                }
-            })
-            // Do the same with words and lines
-        }
-        else if (defCutTypeValue === 'words') {
-            eltswithoutindividualopts.forEach(function (elt) {
-                if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
-                    needsWarning = true
-                }
-            })
-        }
-        else if (defCutTypeValue === 'lines') {
-            eltswithoutindividualopts.forEach(function (elt) {
-                if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
-                    needsWarning = true
-                }
-            })
-            // If the segment size > 100 and there are documents without individual options
-        }
-        else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
-            needsWarning = true
-        }
-    } // end if
+    if(needsWarning === false){
+        needsWarning = checkMilestone(maxSegs, defCutTypeValue, cutVal,
+            overVal, eltswithoutindividualopts)
+    }
+
+
 
     // needsWarning = true; // For testing
     if (needsWarning === true) {
@@ -180,6 +153,54 @@ const checkForWarnings = function () {
         $('#needsWarning').val('false')
     }
 } // end checkForWarnings
+
+/**
+ * checks milestone for warnings
+ * @param {number} maxSegs - maximum number of segments
+ * @param {string} defCutTypeValue - cut type
+ * @param {number} cutVal - segment size
+ * @param {number} overVal - overlap size
+ * @param {array} eltswithoutindividualopts - elements without cutsets
+ * @returns {boolean}
+ */
+function checkMilestone (maxSegs, defCutTypeValue, cutVal,
+                         overVal, eltswithoutindividualopts) {
+    // If cut by milestone is checked
+    if ($('input[name=\'cutByMS\']:checked').length === 0) {
+        // For cutting by characters
+        if (defCutTypeValue === 'letters') {
+            // Check each document without individual options
+            eltswithoutindividualopts.forEach(function (elt) {
+                // Needs warning...
+                // If the number of characters-segment size/segment size-overlap size > 100
+                if ((numChar[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
+                    return true
+                }
+            })
+            // Do the same with words and lines
+        }
+        else if (defCutTypeValue === 'words') {
+            eltswithoutindividualopts.forEach(function (elt) {
+                if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
+                    return true
+                }
+            })
+        }
+        else if (defCutTypeValue === 'lines') {
+            eltswithoutindividualopts.forEach(function (elt) {
+                if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
+                    return true
+                }
+            })
+            // If the segment size > 100 and there are documents without individual options
+        }
+        else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+            return true
+        }
+    } // end if
+    return false
+} // end checkMilestone
+
 
 
 /**
