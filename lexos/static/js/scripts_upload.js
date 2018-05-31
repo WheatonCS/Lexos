@@ -7,7 +7,7 @@ $(function () {
 
   $('[data-toggle="tooltip"]').tooltip()
 
-  $('#uploadbrowse').on('click', function () {
+  $('#uploadbrowse').click(function () {
     $('#fileselect').click()
   })
 

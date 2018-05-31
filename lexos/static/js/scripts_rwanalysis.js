@@ -423,10 +423,10 @@ $(function () {
   updateMSopt()
 
   // Bind the function to the checkbox
-  $('#rollinghasmilestone').on('click', updateMSopt)
+  $('#rollinghasmilestone').click(updateMSopt)
 
   // Handle the return to top links
-  $('.to-top').on('click', function () {
+  $('.to-top').click(function () {
     $('html, body').animate({ scrollTop: 0 }, 800)
     return false
   })
@@ -436,7 +436,7 @@ $(function () {
   // Make the graph when the Get Graph button is clicked
   makeRWAGraph()
 
-  $('#getgraph').on('click', function (e) {
+  $('#getgraph').click(function (e) {
     /* Validation */
 
     if (numActiveDocs == 0) {
@@ -464,7 +464,7 @@ $(function () {
   })
 
   /* On-Click Validation */
-  $('#radiowindowletter').on('click', function () {
+  $('#radiowindowletter').click(function () {
     if ($('#inputword').prop('checked')) {
       $('#windowword').click()
       msg = 'You cannot use a window of characters when analyzing a token. '
@@ -477,33 +477,33 @@ $(function () {
   /* Other UI functionality */
 
   // Fixes bug where you cannot click second text box in firefox
-  $('#rollingsearchwordopt, #rollingsearchword').on('hover', function () {
+  $('#rollingsearchwordopt, #rollingsearchword').hover(function () {
     $(this).focus()
   })
 
   // Sets the value of the hidden input
-  $('.minifilepreview').on('click', function () {
+  $('.minifilepreview').click(function () {
     $('#filetorollinganalyze').val($(this).prop('id'))
   })
 
   // Shows the second textbox when rolling ratio gets clicked
-  $('#radioratio').on('click', function () {
+  $('#radioratio').click(function () {
     $('.rollingsearchwordoptdiv').removeClass('hidden')
   })
 
   // Removes the second textbox when rolling ratio is not selected
-  $('#radioaverage').on('click', function () {
+  $('#radioaverage').click(function () {
     $('.rollingsearchwordoptdiv').addClass('hidden')
   })
 
   // Transfers the value when the input field is checkd
-  $('#radioinputletter').on('click', function () {
+  $('#radioinputletter').click(function () {
     var oldVal = $('.rollinginput').val()
     $('.rollinginput').val(oldVal)
   })
 
   // Keyboard navigation
-  $('.rollinginput').on('keyup', function (evt) {
+  $('.rollinginput').keyup(function (evt) {
     var theEvent = evt || window.event
     var key = theEvent.keyCode || theEvent.which
     if (key != 8) { // 8 is backspace
@@ -514,7 +514,7 @@ $(function () {
   })
 
   // Keyboard navigation
-  $('#rollingwindowsize').on('keypress', function (evt) {
+  $('#rollingwindowsize').keypress(function (evt) {
     var theEvent = evt || window.event
     var key = theEvent.keyCode || theEvent.which
     if (key != 8) { // 8 is backspace

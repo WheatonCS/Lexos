@@ -8,7 +8,7 @@ $(function () {
     }
   }
   updateMaxWordsOpt()
-  $('#vizmaxwords').on('click', updateMaxWordsOpt)
+  $('#vizmaxwords').click(updateMaxWordsOpt)
 })
 
 function preprocess(dataset) { // Used to decode utf-8
@@ -41,7 +41,7 @@ $(document).ready(function () {
     .style('opacity', 0)
   d3.select('.d3tooltip').attr('role', 'tooltip')
 
-  $('#allCheckBoxSelector').on('click', function () {
+  $('#allCheckBoxSelector').click(function () {
     if (this.checked) {
       $('.minifilepreview:not(:checked)').trigger('click')
     } else {
