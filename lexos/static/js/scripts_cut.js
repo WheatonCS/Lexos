@@ -5,26 +5,27 @@ const checkForErrors = function () {
     // Set Error and Warning Messages
     let errors = []
     // links to 404 so not working
-    const err1 = 'You have no active documents. Please activate at least \
+    const no_active_docs_msg = 'You have no active documents. Please activate at least \
     one document using the \
     <a href=\"{{ url_for("manage") }}\">Manage</a> tool or \
     <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
-    const err2 = 'You must provide a string to cut on.'
-    const err3 = 'You must provide a default cutting value.'
-    const err4 = 'Default cutting: Invalid segment size.'
-    const err5 = 'Default cutting: Invalid overlap value.'
-    const err6 = 'Individual cutting: Invalid segment size.'
-    const err7 = 'Individual cutting: Invalid overlap value.'
+    const no_cut_string_msg = 'You must provide a string to cut on.'
+    const no_cut_val_msg = 'You must provide a default cutting value.'
+    const def_invalid_seg_size = 'Default cutting: Invalid segment size.'
+    const def_invalid_overlap_val = 'Default cutting: Invalid overlap value.'
+    const ind_invalid_seg_size = 'Individual cutting: Invalid segment size.'
+    const ind_invalid_overlap_val = 'Individual cutting: \
+    Invalid overlap value.'
 
     // Confirm that there are active files
     if ($('#num_active_files').val() === '0') {
-        errors.push(err1)
+        errors.push(no_active_docs_msg)
     }
 
     // If cut by milestone is checked make sure there is a milestone value
     if ($('#cutByMS').is(':checked')) {
         if ($('#MScutWord').val() === '') {
-            errors.push(err2)
+            errors.push(no_cut_string_msg)
         }
     }
 
@@ -32,7 +33,7 @@ const checkForErrors = function () {
         // Make sure there is a default cutting value
         const cutValues = $('#overallcutvalue')
         if (cutValues.val() === '') {
-            errors.push(err3)
+            errors.push(no_cut_val_msg)
         }
 
         else {
@@ -45,17 +46,17 @@ const checkForErrors = function () {
 
             // Make sure the overall segment size not negative
             if (overallcutvalue !== Math.floor(overallcutvalue)) {
-                errors.push(err4)
+                errors.push(def_invalid_seg_size)
             }
 
             // Make sure the overall segment size not a decimal
             if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) {
-                errors.push(err4)
+                errors.push(def_invalid_seg_size)
             }
 
             // Make sure the overall segment size not 0
             if (overallcutvalue === 0) {
-                errors.push(err4)
+                errors.push(def_invalid_seg_size)
             }
 
             // Make sure the overall overlap is valid
@@ -63,7 +64,7 @@ const checkForErrors = function () {
             let overlap_check2 = Math.abs(Math.round(overallOverlapValue))
             let overlap_check2_con = (overlap_check2 !== overallOverlapValue)
             if (overlap_check1 || overlap_check2_con) {
-                errors.push(err5)
+                errors.push(def_invalid_overlap_val)
             }
 
             // If there are individual segment cuts
@@ -72,18 +73,18 @@ const checkForErrors = function () {
 
                 // Make sure the individual segment size not negative
                 if (individualCutValue !== Math.floor(individualCutValue)) {
-                    errors.push(err6)
+                    errors.push(ind_invalid_seg_size)
                 }
 
                 // Make sure the individual segment size not a decimal
                 const not_dec_check = Math.abs(individualCutValue).toString()
                 if (individualCutValueStr !== not_dec_check) {
-                    errors.push(err6)
+                    errors.push(ind_invalid_seg_size)
                 }
 
                 // Make sure the individual segment size not 0
                 if (individualCutValue === 0) {
-                    errors.push(err6)
+                    errors.push(ind_invalid_seg_size)
                 }
 
                 overlap_check1 = individualCutValue <= individualOverlap
@@ -91,7 +92,7 @@ const checkForErrors = function () {
                 overlap_check2_con = (overlap_check2 !== individualOverlap)
                 // Make sure the individual overlap is valid
                 if (overlap_check1 || overlap_check2_con) {
-                    errors.push(err7)
+                    errors.push(ind_invalid_overlap_val)
                 }
             } // end if
         } // end else
@@ -131,8 +132,6 @@ const checkForWarnings = function () {
         needsWarning = checkMilestone(maxSegs, defCutTypeValue, cutVal,
             overVal, eltswithoutindividualopts)
     }
-
-
 
     // needsWarning = true; // For testing
     if (needsWarning === true) {
