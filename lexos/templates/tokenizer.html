@@ -351,8 +351,8 @@ $(document).ready(function() {
 	}
 	// When the user triggers clicks the button, redraw the table
 	$("#regenerateTable").click(function() {
-	  // first check if there are active documents
-	  if (numActiveDocs > 0) {
+	  // first check if there are active document
+      if (numActiveDocs > 0) {
         // Set the warning modal language and detect table size
         if ($("#csvorientation-filecolumn").is(':checked')) {
           var lang = "columns";
@@ -370,10 +370,14 @@ $(document).ready(function() {
           several minutes or to crash entirely.We recommend that you \
           download the table directly and open it in a  spreadsheet \
           application or text editor.";
-          footerButtons = '<button type="button" class="btn btn-default" id="warningCSV">Download CSV</button>';
-          footerButtons += '<button type="button" class="btn btn-default" id="warningTSV">Download TSV</button>';
-          footerButtons += '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>';
-          footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+          let footerButtons = '<button type="button" class="btn btn-default" \
+          id="warningCSV">Download CSV</button> \
+          <button type="button" class="btn btn-default" \
+          id="warningTSV">Download TSV</button> \
+          <button type="button" class="btn btn-default" \
+          id="warningContinue">Continue Anyway</button> \
+          <button type="button" class="btn btn-default" \
+          data-dismiss="modal">Cancel</button>'
           $("#warning-modal-footer").html(footerButtons);
           $('#warning-modal-message').html(msg);
           $('#warning-modal').modal();
