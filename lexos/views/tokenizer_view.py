@@ -38,4 +38,4 @@ def tokenizer_result():
     # Cache front end result and return table.
     session_manager.cache_analysis_option()
     session_manager.cache_tokenizer_option()
-    return TokenizerModel().get_table()
+    return TokenizerModel().get_dtm()
