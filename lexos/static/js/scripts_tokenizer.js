@@ -12,8 +12,8 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
-    if ($('#num_active_files').val() < 2)
-        return 'You must have at least 2 active documents to proceed!'
+    if ($('#num_active_files').val() < 1)
+        return 'You must have at least one active document to proceed!'
     else
         return null
 }
@@ -49,7 +49,7 @@ function sendAjaxRequest (url, form) {
 /**
  * display the result of the similarity query on web page
  */
-function generateSimResult () {
+function generateTokenizeResult () {
     // show loading icon
     $('#status-analyze').css({'visibility': 'visible'})
 
@@ -69,7 +69,7 @@ function generateSimResult () {
     }
 
     // send the ajax request
-    sendAjaxRequest('/tokenizerTable', form)
+    sendAjaxRequest('/tokenizeTable', form)
         .done(
             function (response) {
                 const outerTableDivSelector = $('#tokenizeTable')
@@ -77,14 +77,14 @@ function generateSimResult () {
                 outerTableDivSelector.html(response)
                 // initialize the data table
                 outerTableDivSelector.children().DataTable(dataTableConfig)
-                // display the similarity result
-                $('#similaritiesResults').css({'display': 'block'})  // display everything
+                // display everything in the tokenize div.
+                $('#tokenizeResult').css({'display': 'block'})
             })
         .fail(
             function (jqXHR, textStatus, errorThrown) {
                 console.log('textStatus: ' + textStatus)
                 console.log('errorThrown: ' + errorThrown)
-                runModal('error encountered while generating the similarity query result.')
+                runModal('Error encountered while generating the tokenize table result.')
             })
         .always(
             function () {
@@ -93,18 +93,18 @@ function generateSimResult () {
 }
 
 $(function () {
-
-    // hide the similarity
-    $('#tokenizerResult').css({'display': 'none'})
+    // Hide the tokenize result div.
+    $('#tokenizeResult').css({'display': 'none'})
 
     /**
      * The event handler for generate similarity clicked
      */
-    $('#get-sims').click(function () {
-        const error = submissionError()  // the error happens during submission
+    $('#get-tokenize').click(function () {
+        // Get the possible error happened during submission the ajax call.
+        const error = submissionError()
 
         if (error === null) {  // if there is no error
-            generateSimResult()
+            generateTokenizeResult()
         }
         else {
             runModal(error)
