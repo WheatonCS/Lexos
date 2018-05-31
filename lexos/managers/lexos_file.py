@@ -413,8 +413,7 @@ class LexosFile:
 
     # TODO: Legacy code
     def generate_d3_json_object(self, word_label: str,
-                                count_label: str) -> Dict[
-            str, List[Dict[str, int]]]:
+                                count_label: str) -> object:
         """ Generates a JSON object for d3 from the word counts of the file.
 
         :param word_label: label to use for identifying words in the
