@@ -1,9 +1,13 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
-$(document).ready(function () {
-    /* #### INITIATE MAIN DATATABLE #### */
-    //* Change the element name and test whether the table variable persists
+$(function () {
+    initTable()
+    tableAction()
+})
+/* #### INITIATE MAIN DATATABLE #### */
 
-    table = $('#demo').DataTable({
+//* Change the element name and test whether the table variable persists
+function initTable () {
+    return (table = $('#demo').DataTable({
         paging: true,
         scrollY: 400,
         autoWidth: false,
@@ -11,7 +15,7 @@ $(document).ready(function () {
         destroy: true,
         ordering: true,
         select: true,
-        initComplete: function () {
+        'initComplete': function () {
             // enables area selection extension
             $('#demo').AreaSelect()
         },
@@ -21,9 +25,8 @@ $(document).ready(function () {
         dom: '<\'row\'<\'col-sm-6\'l><\'col-sm-6 pull-right\'f>>' +
         '<\'row\'<\'col-sm-12\'rt>>' +
         '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
-        buttons: [
-            'copy', 'excel', 'pdf'
-        ],
+        buttons:
+            ['copy', 'excel', 'pdf'],
         language: {
             lengthMenu: 'Display _MENU_ documents',
             info: 'Showing _START_ to _END_ of _TOTAL_ documents',
@@ -38,16 +41,77 @@ $(document).ready(function () {
             //				{width: "150", type: 'natural', targets: "_all"},
         ],
         order: [[1, 'asc']]
+    }))
+}
+
+function tableAction () {
+    registerColumn()
+
+    /* Add all rows with .selected to the DataTables activeRows array
+     It does not appear that this array needs to be maintained after
+     initialisation, but the code to do so is commented out for de-bugging. */
+    activeRows = []
+    $('tbody tr').each(function (index) {
+        if ($(this).hasClass('selected')) {
+            i = ':eq(' + index + ')'
+            table.rows(i).select()
+            activeRows.push($(this).attr('id'))
+        }
+        if (activeRows.length != 0) {
+            $('#bttn-downloadSelectedDocs').show()
+        }
     })
 
-    var selectee = table.rows('.selected').data().length
-    // console.log($('.dataTables_info'));
+    //TODO: comment
+    $('.col-sm-5').append('<p style=\'display:inline; float:left; width:200px !important;\' id=\'name\'></p>')
+    // Data tables active documents counter wasn't
+    // I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
+    // NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
+    registerSelectEvents() // Area Select events callback
 
-    /* table.on('page.dt', function() {
-      table.state.clear();
-      window.location.reload();
-    }); */
+    $('#demo').DataTable()
+        .on('select', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                var data = $('#demo').DataTable().rows(indexes).data()[0]
+                console.info('select: ', data)
+            }
+        })
+        .on('deselect', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                var data = $('#demo').DataTable().rows(indexes).data()
+                console.info('deselect', data)
+            }
+        })
 
+    $('#name').innerHTML = table.rows('.selected').data().length + ' active documents' // default, the other ones are dynamic on select and deselect
+    $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
+
+    /* #### END OF TABLE INITIATION #### */
+
+    tableDocumentActions()
+    tableSave()
+
+    // When the Delete Selected button is clicked, call the deletion function
+    $('#delete').click(function () {
+        selected_rows = table.rows({selected: true}).nodes().to$()
+        deleteAllSelected(selected_rows)
+    })
+
+    // Trigger selection buttons
+    $('#selectAllDocs').click(function () { selectAll() })
+    $('#disableAllDocs').click(function () { deselectAll() })
+    $('#deleteSelectedDocs').click(function () {
+        selected_rows = table.rows({selected: true}).nodes().to$()
+        deleteAllSelected(selected_rows)
+    })
+    // Remove the footer from alert modals when hidden
+    $('#alert-modal').on('hidden.bs.modal', function (e) {
+        $('#alert-modal .modal-footer').remove()
+    })
+}
+
+//------------------------------------
+function registerColumn () {
     // Draw the index column
     table.on('order.dt search.dt', function () {
         table
@@ -84,28 +148,11 @@ $(document).ready(function () {
     })
         .nodes()
         .draw()
+}
 
-    /* Add all rows with .selected to the DataTables activeRows array
-     It does not appear that this array needs to be maintained after
-     initialisation, but the code to do so is commented out for de-bugging. */
-    activeRows = []
-    $('tbody tr').each(function (index) {
-        if ($(this).hasClass('selected')) {
-            i = ':eq(' + index + ')'
-            table.rows(i).select()
-            activeRows.push($(this).attr('id'))
-        }
-        if (activeRows.length != 0) {
-            $('#bttn-downloadSelectedDocs').show()
-        }
-    })
-    var numberOfFileDone = parseInt($('.fa-folder-open-o')[0].id)
-    $('.col-sm-5').append('<p style=\'display:inline; float:left; width:200px !important;\' id=\'name\'></p>')
-    // Data tables active documents counter wasn't
-    // I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
-    // NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
-
-    // Handle select events
+//------------------------------------
+// Handle select events
+function registerSelectEvents () {
     table
         .on('select', function (e, dt, type, indexes) {
             // Get selected rows as a jQuery object
@@ -129,29 +176,13 @@ $(document).ready(function () {
                 $('#bttn-downloadSelectedDocs').hide()
             }
         })
+}
 
-    // Area Select events callback
-    $('#demo').DataTable()
-        .on('select', function (e, dt, type, indexes) {
-            if (type === 'row') {
-                var data = $('#demo').DataTable().rows(indexes).data()[0]
-                // console.info("select", data);
-            }
-        })
-        .on('deselect', function (e, dt, type, indexes) {
-            if (type === 'row') {
-                var data = $('#demo').DataTable().rows(indexes).data()
-                // console.info("deselect", data);
-            }
-        })
+//-------------------------------------
+/* #### DEFINE CONTEXT MENU #### */
 
-    document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // default, the other ones are dynamic on select and deselect
-    $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
-
-    /* #### END OF TABLE INITIATION #### */
-
-    /* #### DEFINE CONTEXT MENU #### */
-
+/*Right click options on the documents*/
+function tableDocumentActions () {
     // Get the number of rows, selected or unselected, for context menu
     var num_rows = table.rows().ids().length
     var num_rows_selected = table.rows({selected: true}).ids().length
@@ -209,7 +240,9 @@ $(document).ready(function () {
     $('#context-menu').on('show.bs.context', function () {
         prepareContextMenu()
     })
+}
 
+function tableSave () {
     // When the save button is clicked, call the save function
     $('#save').click(function () {
         merge = $('#merge').val()
@@ -233,26 +266,10 @@ $(document).ready(function () {
             saveOne(row_id, column, value)
         }
     })
+}
 
-    // When the Delete Selected button is clicked, call the deletion function
-    $('#delete').click(function () {
-        selected_rows = table.rows({selected: true}).nodes().to$()
-        deleteAllSelected(selected_rows)
-    })
+//-------------------------------------
 
-    // Trigger selection buttons
-    $('#selectAllDocs').on('click', function () { selectAll() })
-    $('#disableAllDocs').click(function () { deselectAll() })
-    $('#deleteSelectedDocs').click(function () {
-        selected_rows = table.rows({selected: true}).nodes().to$()
-        deleteAllSelected(selected_rows)
-    })
-
-    // Remove the footer from alert modals when hidden
-    $('#alert-modal').on('hidden.bs.modal', function (e) {
-        $('#alert-modal .modal-footer').remove()
-    })
-})
 /* #### END OF $(DOCUMENT).REAoDY() SCRIPTS #### */
 
 /* #### SUPPORT FOR DYNAMICALLY CREATED ELEMENTS #### */
