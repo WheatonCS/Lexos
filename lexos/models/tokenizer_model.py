@@ -1,4 +1,5 @@
 import pandas as pd
+from bs4 import BeautifulSoup
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -65,16 +66,15 @@ class TokenizerModel(BaseModel):
             return "Terms" if token_type == "word" else "Characters"
 
     def _get_dtm(self) -> pd.DataFrame:
+        # Transpose the dtm for easier calculation.
+        transposed_dtm = self._doc_term_matrix.transpose()
+
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
-        # Transpose the dtm for easier calculation.
-        transposed_dtm = self._doc_term_matrix.transpose()
-
         # Change matrix column names to file labels.
         transposed_dtm.columns = labels
-        transposed_dtm.columns.name = self._token_type
 
         # Find total and average of each row's data.
         transposed_dtm.insert(loc=0,
@@ -87,14 +87,44 @@ class TokenizerModel(BaseModel):
 
         return transposed_dtm
 
-    def get_table(self) -> str:
+    def _get_file_row_dtm(self):
+        file_row_dtm = self._get_dtm()
+        file_row_dtm.columns.name = self._token_type
+
+        # Convert the HTML to beautiful soup object.
+        file_row_dtm_soup = BeautifulSoup(
+            file_row_dtm.to_html(
+                classes="table table-bordered table-striped display no-wrap"),
+            "html.parser")
+
+        # Set the table style to 100% so it always takes up the space.
+        file_row_dtm_soup.find('table')['style'] = 'width: 100%'
+
+        # Return the beautiful soup object as a string.
+        return file_row_dtm_soup.prettify()
+
+    def _get_file_column_dtm(self):
+        file_column_dtm = self._get_dtm().transpose()
+        file_column_dtm.columns.name = "Documents / Stats"
+
+        # Convert the HTML to beautiful soup object.
+        file_column_dtm_soup = BeautifulSoup(
+            file_column_dtm.to_html(
+                classes="table table-bordered table-striped display no-wrap"),
+            "html.parser")
+
+        # Set the table style to 100% so it always takes up the space.
+        file_column_dtm_soup.find('table')['style'] = 'width: 100%'
+
+        # Return the beautiful soup object as a string.
+        return file_column_dtm_soup.prettify()
+
+    def get_dtm(self) -> str:
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
-            return self._get_dtm().to_html(
-                classes="table table-bordered table-striped display no-wrap")
+            return self._get_file_column_dtm()
 
         elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
-            return self._get_dtm().transpose().to_html(
-                classes="table table-bordered table-striped display no-wrap")
+            return self._get_file_row_dtm()
 
         else:
             raise ValueError("Invalid tokenizer orientation from front end.")
