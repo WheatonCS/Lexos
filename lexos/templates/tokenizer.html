@@ -34,18 +34,16 @@
     <div class="row col-md-12 col-lg-12">
         <fieldset class="csvoptions" id="csvorientdiv">
             <legend>Data Orientation:</legend>
-            <label class="radio label-csvorientation"
-                   for="csvorientation-filecolumn">
-                <input class="pivot" type="radio" name="csvorientation"
-                       id="csvorientation-filecolumn"
-                       value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
+            <label>
+                <input class="pivot" type="radio" name="tableorientation"
+                       id="tableorientation-filecolumn"
+                       value="fileColumn" {{ "checked" if session['tokenizeroption']['tableorientation'] == "fileColumn" }} />
                 Documents as Columns, Terms as Rows
             </label>
-            <label class="radio label-csvorientation"
-                   for="csvorientation-filerow">
-                <input class="pivot" type="radio" name="csvorientation"
-                       id="csvorientation-filerow"
-                       value="filerow" {{ "checked" if session['csvoptions']['csvorientation'] == "filerow" }} />
+            <label>
+                <input class="pivot" type="radio" name="tableorientation"
+                       id="tableorientation-filerow"
+                       value="fileRow" {{ "checked" if session['tokenizeroption']['tableorientation'] == "fileRow" }} />
                 Documents as Rows, Terms as Columns
             </label>
         </fieldset>
