@@ -792,7 +792,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     while count <= 7:
         if option_strings[count] is None:
             option_strings[count] = ""
-            count = count + 1
+        count = count + 1
 
     # handle uploaded FILES: consolidations, lemmas, special characters,
     # stop-keep words
