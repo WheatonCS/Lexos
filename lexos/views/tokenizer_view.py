@@ -22,11 +22,10 @@ def tokenizer():
     id_label_map = \
         FileManagerModel().load_file_manager().get_active_labels_with_id()
 
-    # 'GET' request occurs when the page is first loaded
-    if 'analyoption' not in session:
-        session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'tokenizeroption' not in session:
-        session['tokenizeroption'] = constants.DEFAULT_TOKENIZER_OPTIONS
+    # Fill session with default options.
+    session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
+    session['tokenizerOption'] = constants.DEFAULT_TOKENIZER_OPTIONS
+
     return render_template(
         'tokenizer.html',
         labels=id_label_map,
@@ -36,7 +35,7 @@ def tokenizer():
 
 @tokenizer_blueprint.route("/tokenizeTable", methods=["POST"])
 def tokenizer_result():
-    # Get result
+    # Cache front end result and return table.
     session_manager.cache_analysis_option()
-    session_manager.cache_csv_options()
+    session_manager.cache_tokenizer_option()
     return TokenizerModel().get_table()
