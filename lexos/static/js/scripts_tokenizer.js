@@ -59,13 +59,17 @@ function generateTokenizeResult () {
     // the configuration for creating data table
     const dataTableConfig = {
         responsive: true,
-
+        scrollX: true,
         // specify where the button is
         dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-0 pull-right\'B>>' +
         '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
 
         // specify all the button that is put on to the page
-        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+
+        fixedColumns: {
+            leftColumns: 1
+        }
     }
 
     // send the ajax request
@@ -97,7 +101,7 @@ $(function () {
     $('#tokenizeResult').css({'display': 'none'})
 
     /**
-     * The event handler for generate similarity clicked
+     * The event handler for generate tokenize clicked.
      */
     $('#get-tokenize').click(function () {
         // Get the possible error happened during submission the ajax call.
