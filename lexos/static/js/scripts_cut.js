@@ -215,7 +215,8 @@ function checkIndividualCutset(maxSegs,defCutTypeValue, cutVal,
     if (thisCutVal !== '') {
         // Get segment cut type
         const thisCutType =
-            $('input[name=\'cutType_' + currID + '\']:checked').val()
+            $('input[name=\'cutType_${currID}\']:checked').val()
+            //$('input[name=\'cutType_' + currID + '\']:checked').val()
         // If not cut by milestone, use num_ variables set in template file
         if (!(isCutByMS)) {
             // Needs warning...
@@ -244,6 +245,7 @@ function checkIndividualCutset(maxSegs,defCutTypeValue, cutVal,
             }
         } // end if
     } // end if
+    return false
 } // end checkIndividualCutset
 
 
