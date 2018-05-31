@@ -148,7 +148,10 @@ def test_generate_averages():
 
 def test_to_html():
     test = ContentAnalysisModel()
-    assert test.to_html()
+    test.add_file(file_name="file1", label='file1', content='test')
+    test_frame = pd.read_html(test.to_html())[0]
+    assert test_frame.values.tolist()[0] == ["Averages", "Averages",
+                                             "Averages", "Averages"]
 
 
 def test_to_data_frame():
