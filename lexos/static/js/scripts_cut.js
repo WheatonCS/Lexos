@@ -376,7 +376,90 @@ function doAjax (action) {
 
             let fieldset = $(fieldsetSelector)
 
-            const indcutoptswrap = '<div \
+            const indcutoptswrap = setIndCutOptWrap(fileID, filename)
+
+            fieldset.append(indcutoptswrap)
+            if ($.type(fileContents) === 'string') {
+                j++
+                const fieldsetAppend1 = '<div\
+                class="filecontents">' + fileContents + '</div>'
+                fieldset.append(fieldsetAppend1) // Keep this with no whitespace!
+            } else {
+                $.each(fileContents, function (i, segment) {
+                    j++
+                    const segmentLabel = segment[0]
+                    const segmentString = segment[1]
+                    const fieldsetAppend2 = '<div class="filechunk"><span \
+                    class="filechunklabel">' + segmentLabel + '</span>\
+                    <div>' + segmentString + '</div></div>'
+                    fieldset.append(fieldsetAppend2)
+                })
+            }
+            $('#preview-body').append(fieldset)
+            // Hide the individual cutting wrapper if the form doesn't contain values for it
+            hideIndividualCuttingWrapper(fileID, formData)
+        })
+        const documentNum = 'You have ' + j + ' active document(s).'
+        $('.fa-folder-open-o').attr('data-original-title', documentNum)
+        $('#status-prepare').css({'visibility': 'hidden'})
+    })
+} // end doAjax
+
+
+// hideIndividualCuttingWrapper
+/**
+ * Hides individual cutting wrapper if the form doesn't contain values for it
+ * @param {string} fileID
+ * @param formData
+ */
+function hideIndividualCuttingWrapper (fileID, formData) {
+    const cutTypeID = 'cutType_' + fileID
+    if (!(cutTypeID in formData) && formData[cutTypeID] !== '') {
+        $('#indcutoptswrap_' + fileID).addClass('hidden')
+    }
+    // Check the cut type boxes
+    if (formData['cutTypeInd'] === 'letters') {
+        $('#cutTypeIndLetters_' + fileID).prop('checked', true)
+    }
+    if (formData['cutTypeInd'] === 'words') {
+        $('#cutTypeIndWords_' + fileID).prop('checked', true)
+    }
+    if (formData['cutTypeInd'] === 'lines') {
+        $('#cutTypeIndLines_' + fileID).prop('checked', true)
+    }
+    if (formData['cutTypeInd'] === 'number') {
+        $('#cutTypeIndNumber_' + fileID).prop('checked', true)
+        $('#numOf_' + fileID).html('Number of Segments')
+        $('#lastprop-div').addClass('transparent')
+        $('#cutLastProp_' + fileID).prop('disabled', true)
+    }
+    if (formData['Overlap']) {
+        $('#cutOverlap_' + fileID).val(formData['Overlap'])
+    }
+    else {
+        $('#cutOverlap_' + fileID).val(0)
+    }
+    if (formData['cutLastProp_' + fileID]) {
+        const lastPropID = '#lastprop-div_' + fileID
+        $(lastPropID).val(formData['#cutLastProp_' + fileID])
+    }
+    if (formData['cutType'] === 'milestone') {
+        $('#cutTypeIndNumber_' + fileID).prop('checked', true)
+    }
+    if (formData['MScutWord_' + fileID] === 'milestone') {
+        const MScutID = '#MScutWord' + fileID
+        $(MScutID).val(formData['cuttingoptions']['cutValue'])
+    }
+}
+
+/**
+ * passes this massive html markup
+ * @param {string} fileID
+ * @param {string} filename
+ * @returns {string}
+ */
+function setIndCutOptWrap (fileID, filename) {
+    return '<div \
             id="indcutoptswrap_' + fileID + '" \
             class="cuttingoptionswrapper ind hidden"><fieldset \
             class="cuttingoptionsfieldset"><legend \
@@ -439,70 +522,7 @@ function doAjax (action) {
             value="" \
             style="margin-left:3px;width:130px;"/></span></div>\
             </div></fieldset></div>'
-
-            fieldset.append(indcutoptswrap)
-            if ($.type(fileContents) === 'string') {
-                j++
-                const fieldsetAppend1 = '<div\
-                class="filecontents">' + fileContents + '</div>'
-                fieldset.append(fieldsetAppend1) // Keep this with no whitespace!
-            } else {
-                $.each(fileContents, function (i, segment) {
-                    j++
-                    const segmentLabel = segment[0]
-                    const segmentString = segment[1]
-                    const fieldsetAppend2 = '<div class="filechunk"><span \
-                    class="filechunklabel">' + segmentLabel + '</span>\
-                    <div>' + segmentString + '</div></div>'
-                    fieldset.append(fieldsetAppend2)
-                })
-            }
-            $('#preview-body').append(fieldset)
-            // Hide the individual cutting wrapper if the form doesn't contain values for it
-            const cutTypeID = 'cutType_' + fileID
-            if (!(cutTypeID in formData) && formData[cutTypeID] !== '') {
-                $('#indcutoptswrap_' + fileID).addClass('hidden')
-            }
-            // Check the cut type boxes
-            if (formData['cutTypeInd'] === 'letters') {
-                $('#cutTypeIndLetters_' + fileID).prop('checked', true)
-            }
-            if (formData['cutTypeInd'] === 'words') {
-                $('#cutTypeIndWords_' + fileID).prop('checked', true)
-            }
-            if (formData['cutTypeInd'] === 'lines') {
-                $('#cutTypeIndLines_' + fileID).prop('checked', true)
-            }
-            if (formData['cutTypeInd'] === 'number') {
-                $('#cutTypeIndNumber_' + fileID).prop('checked', true)
-                $('#numOf_' + fileID).html('Number of Segments')
-                $('#lastprop-div').addClass('transparent')
-                $('#cutLastProp_' + fileID).prop('disabled', true)
-            }
-            if (formData['Overlap']) {
-                $('#cutOverlap_' + fileID).val(formData['Overlap'])
-            }
-            else {
-                $('#cutOverlap_' + fileID).val(0)
-            }
-            if (formData['cutLastProp_' + fileID]) {
-                const lastPropID = '#lastprop-div_' + fileID
-                $(lastPropID).val(formData['#cutLastProp_' + fileID])
-            }
-            if (formData['cutType'] === 'milestone') {
-                $('#cutTypeIndNumber_' + fileID).prop('checked', true)
-            }
-            if (formData['MScutWord_' + fileID] === 'milestone') {
-                const MScutID = '#MScutWord' + fileID
-                $(MScutID).val(formData['cuttingoptions']['cutValue'])
-            }
-        })
-        const documentNum = 'You have ' + j + ' active document(s).'
-        $('.fa-folder-open-o').attr('data-original-title', documentNum)
-        $('#status-prepare').css({'visibility': 'hidden'})
-    })
-} // end doAjax
-
+}
 
 // process
 /**
