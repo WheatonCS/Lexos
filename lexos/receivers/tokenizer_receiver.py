@@ -17,9 +17,9 @@ class TokenizerReceiver(BaseReceiver):
 
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
-        if self._front_end_data["tableorientation"] == "fileColumn":
+        if self._front_end_data["tableOrientation"] == "fileColumn":
             return TokenizerTableOrientation.FILE_COLUMN
-        elif self._front_end_data["tableorientation"] == "fileRow":
+        elif self._front_end_data["tableOrientation"] == "fileRow":
             return TokenizerTableOrientation.FILE_ROW
         else:
             raise ValueError("Invalid tokenizer orientation from front end.")
