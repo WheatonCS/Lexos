@@ -67,6 +67,10 @@ class TokenizerModel(BaseModel):
             return "Terms" if token_type == "word" else "Characters"
 
     def _get_file_row_dtm(self) -> str:
+        """Get dtm with documents as rows and terms/characters as columns.
+
+        :return: string in data table format that contains the dtm.
+        """
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
@@ -100,6 +104,10 @@ class TokenizerModel(BaseModel):
         return file_row_dtm_soup.prettify()
 
     def _get_file_column_dtm(self):
+        """Get dtm with documents as columns and terms/characters as rows.
+
+        :return: string in data table format that contains the dtm.
+        """
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
