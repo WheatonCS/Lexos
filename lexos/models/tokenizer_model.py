@@ -3,11 +3,14 @@ from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
+from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
+    TokenizerReceiver
 
 
 class TokenizerTestOption(NamedTuple):
     token_type: str
     doc_term_matrix: pd.DataFrame
+    front_end_option: TokenizerTableOrientation
     id_temp_label_map: IdTempLabelMap
 
 
@@ -22,10 +25,12 @@ class TokenizerModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type = test_options.token_type
+            self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_token_type = None
+            self._test_front_end_option = None
             self._test_id_temp_label_map = None
 
     @property
@@ -42,6 +47,13 @@ class TokenizerModel(BaseModel):
             else MatrixModel().get_id_temp_label_map()
 
     @property
+    def _tokenizer_front_end_option(self) -> TokenizerTableOrientation:
+        """:return: a typed tuple that holds the topword front end option."""
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
+            else TokenizerReceiver().options_from_front_end()
+
+    @property
     def _token_type(self) -> str:
         if self._test_token_type is not None:
             return self._test_token_type
@@ -53,6 +65,7 @@ class TokenizerModel(BaseModel):
             return "Terms" if token_type == "word" else "Characters"
 
     def get_table(self) -> str:
+        A = self._tokenizer_front_end_option
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
