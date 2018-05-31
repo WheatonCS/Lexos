@@ -57,12 +57,14 @@ class TokenizerModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
+        # Transpose the dtm for easier calculation.
         transposed_dtm = self._doc_term_matrix.transpose()
 
         # Change matrix column names to file labels.
         transposed_dtm.columns = labels
         transposed_dtm.columns.name = self._token_type
 
+        # Find total and average of each row's data.
         transposed_dtm.insert(loc=0,
                               column="Total",
                               value=transposed_dtm.sum(axis=1))
