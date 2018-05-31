@@ -97,12 +97,14 @@ const checkForErrors = function () {
         } // end else
     } // end else
 
+    // if any errors load the first one into the error modal.
     if (errors.length > 0) {
         $('#hasErrors').val('true')
         $('#status-prepare').css({ 'visibility': 'hidden' })
         $('#error-modal-message').html(errors[0])
         $('#error-modal').modal()
     }
+
     else {
         $('#hasErrors').val('false')
     }
@@ -121,56 +123,9 @@ const checkForWarnings = function () {
     let eltswithoutindividualopts = [] // Elements without individual cutsets
 
     // Check each individual cutset
-    indivdivs.each(function () {
-        let thisCutVal = $('#individualCutValue', this).val() // Individual segment size
-        let thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
-        // Parse as integers
-        if (thisCutVal !== '') {
-            thisCutVal = parseInt(thisCutVal)
-            thisOverVal = parseInt(thisOverVal)
-        }
-        // Get a list of each of the cutset indices
-        let listindex = indivdivs.index(this)
-        const currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
-        let isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
-        // If not cut by milestone and no segment size, add to no individual cutsets array
-        if (!isCutByMS && thisCutVal === '') {
-            eltswithoutindividualopts.push(listindex)
-        }
-        // If no segment size
-        if (thisCutVal !== '') {
-            // Get segment cut type
-            const thisCutType =
-                $('input[name=\'cutType_' + currID + '\']:checked').val()
-            // If not cut by milestone, use num_ variables set in template file
-            if (!(isCutByMS)) {
-                // Needs warning...
-                // If the number of characters-overlap size/segment size-overlap size > 100
-                const numCharSub = numChar[listindex] - thisOverVal
-                const valSub = thisCutVal - thisOverVal
-                const charDivVal = numCharSub/valSub
-                const numWordSub = numWord[listindex] - thisOverVal
-                const wordDivVal = numWordSub / valSub
-                const numLineSub = numLine[listindex] - thisOverVal
-                const lineDivVal = numLineSub / valSub
-                const eltsLength = eltswithoutindividualopts.length
-                if (thisCutType === 'letters' && (charDivVal) > maxSegs) {
-                    needsWarning = true
-                }
-                // Same for segments and lines
-                else if (thisCutType === 'words' && (wordDivVal) > maxSegs) {
-                    needsWarning = true
-                }
-                else if (thisCutType === 'lines' && (lineDivVal) > maxSegs) {
-                    needsWarning = true
-                    // Or if the segment size > 100
-                }
-                else if (thisCutVal > maxSegs && eltsLength > 0) {
-                    needsWarning = true
-                }
-            }
-        }
-    })
+    needsWarning = indivdivs.each(checkIndividualCutset(maxSegs,
+        defCutTypeValue, cutVal, overVal,
+        indivdivs, eltswithoutindividualopts))
 
     // If cut by milestone is checked
     if ($('input[name=\'cutByMS\']:checked').length === 0) {
@@ -204,7 +159,7 @@ const checkForWarnings = function () {
         else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
             needsWarning = true
         }
-    }
+    } // end if
 
     // needsWarning = true; // For testing
     if (needsWarning === true) {
@@ -220,10 +175,77 @@ const checkForWarnings = function () {
         $('#status-prepare').css({'visibility': 'hidden'})
         $('#warning-modal').modal()
     }
+
     else {
         $('#needsWarning').val('false')
     }
 } // end checkForWarnings
+
+
+/**
+ * checks each individual cutset for warnings
+ * @param {number} maxSegs - maximum number of segments
+ * @param {string} defCutTypeValue - cut type
+ * @param {number} cutVal - segment size
+ * @param {number} overVal - overlap size
+ * @param {array} indivdivs - all individual cutsets
+ * @param {array} eltswithoutindividualopts - elements without cutsets
+ * @returns {boolean}
+ */
+function checkIndividualCutset(maxSegs,defCutTypeValue, cutVal,
+                         overVal, indivdivs, eltswithoutindividualopts) {
+    let thisCutVal = $('#individualCutValue', this).val() // Individual segment size
+    let thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
+    // Parse as integers
+    if (thisCutVal !== '') {
+        thisCutVal = parseInt(thisCutVal)
+        thisOverVal = parseInt(thisOverVal)
+    }
+
+    // Get a list of each of the cutset indices
+    let listindex = indivdivs.index(this)
+    const currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
+    let isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
+    // If not cut by milestone and no segment size, add to no individual cutsets array
+    if (!isCutByMS && thisCutVal === '') {
+        eltswithoutindividualopts.push(listindex)
+    }
+
+    // If no segment size
+    if (thisCutVal !== '') {
+        // Get segment cut type
+        const thisCutType =
+            $('input[name=\'cutType_' + currID + '\']:checked').val()
+        // If not cut by milestone, use num_ variables set in template file
+        if (!(isCutByMS)) {
+            // Needs warning...
+            // If the number of characters-overlap size/segment size-overlap size > 100
+            const numCharSub = numChar[listindex] - thisOverVal
+            const valSub = thisCutVal - thisOverVal
+            const charDivVal = numCharSub/valSub
+            const numWordSub = numWord[listindex] - thisOverVal
+            const wordDivVal = numWordSub / valSub
+            const numLineSub = numLine[listindex] - thisOverVal
+            const lineDivVal = numLineSub / valSub
+            const eltsLength = eltswithoutindividualopts.length
+            if (thisCutType === 'letters' && (charDivVal) > maxSegs) {
+                return true
+            }
+            // Same for segments and lines
+            else if (thisCutType === 'words' && (wordDivVal) > maxSegs) {
+                return true
+            }
+            else if (thisCutType === 'lines' && (lineDivVal) > maxSegs) {
+                return true
+                // Or if the segment size > 100
+            }
+            else if (thisCutVal > maxSegs && eltsLength > 0) {
+                return true
+            }
+        } // end if
+    } // end if
+} // end checkIndividualCutset
+
 
 let xhr
 
