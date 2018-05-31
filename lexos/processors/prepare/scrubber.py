@@ -732,14 +732,19 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
     #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
 
-    all_options = [request.form['consfileselect[]'],
-                   request.form['lemfileselect[]'],
-                   request.form['scfileselect[]'],
-                   request.form['swfileselect[]'],
-                   request.form['manualconsolidations'],
-                   request.form['manuallemmas'],
-                   request.form['manualspecialchars'],
-                   request.form['manualstopwords']]
+    count=0
+    while count<=7:
+        file_strings[count]=""
+        count=count+1
+
+    all_options = [file_strings.get(0),
+                   file_strings.get(1),
+                   file_strings.get(2),
+                   file_strings.get(3),
+                   file_strings.get(4),
+                   file_strings.get(5),
+                   file_strings.get(6),
+                   file_strings.get(7)]
 
     return all_options
 
@@ -856,16 +861,16 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         # since lower is ON, apply lowercase to other options
         # apply to contents of any uploaded files
-        cons_file_string = cons_file_string.lower()
-        lem_file_string = lem_file_string.lower()
-        sc_file_string = sc_file_string.lower()
-        sw_kw_file_string = sw_kw_file_string.lower()
+            cons_file_string = cons_file_string.lower()
+            lem_file_string = lem_file_string.lower()
+            sc_file_string = sc_file_string.lower()
+            sw_kw_file_string = sw_kw_file_string.lower()
 
-        # apply to contents manually entered
-        cons_manual = cons_manual.lower()
-        lem_manual = lem_manual.lower()
-        sc_manual = sc_manual.lower()
-        sw_kw_manual = sw_kw_manual.lower()
+            # apply to contents manually entered
+            cons_manual = cons_manual.lower()
+            lem_manual = lem_manual.lower()
+            sc_manual = sc_manual.lower()
+            sw_kw_manual = sw_kw_manual.lower()
 
     else:
         def to_lower_function(orig_text: str) -> str:
