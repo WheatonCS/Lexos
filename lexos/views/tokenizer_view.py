@@ -25,8 +25,8 @@ def tokenizer():
     # 'GET' request occurs when the page is first loaded
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'csvoptions' not in session:
-        session['csvoptions'] = constants.DEFAULT_CSV_OPTIONS
+    if 'tokenizeroption' not in session:
+        session['tokenizeroption'] = constants.DEFAULT_TOKENIZER_OPTIONS
     return render_template(
         'tokenizer.html',
         labels=id_label_map,
@@ -38,5 +38,5 @@ def tokenizer():
 def tokenizer_result():
     # Get result
     session_manager.cache_analysis_option()
-    # session_manager.cache_csv_options()
+    session_manager.cache_csv_options()
     return TokenizerModel().get_table()
