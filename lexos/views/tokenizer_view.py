@@ -34,7 +34,7 @@ def tokenizer():
     )
 
 
-@tokenizer_blueprint.route("/tokenizerTable", methods=["POST"])
+@tokenizer_blueprint.route("/tokenizeTable", methods=["POST"])
 def tokenizer_result():
     # Get result
     session_manager.cache_analysis_option()
