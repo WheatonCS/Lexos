@@ -178,15 +178,14 @@ def cache_cutting_options():
         session['cuttingoptions']['cutValue'] = request.form['MScutWord']
 
 
-def cache_csv_options():
+def cache_tokenizer_option():
     """Stores csv options from request.form in session cookie object."""
     if request.json:
         session['tokenizerOption'] = {
-            'tableorientation': request.json['tableorientation']}
-
+            'tableOrientation': request.json['tableOrientation']}
     else:
         session['tokenizerOption'] = {
-            'tableorientation': request.form['tableorientation']}
+            'tableOrientation': request.form['tableOrientation']}
 
 
 def cache_analysis_option():
