@@ -64,8 +64,7 @@ class TokenizerModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "Terms" if token_type == "word" else "Characters"
 
-    def get_table(self) -> str:
-        A = self._tokenizer_front_end_option
+    def _get_dtm(self) -> pd.DataFrame:
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
@@ -86,5 +85,18 @@ class TokenizerModel(BaseModel):
                               column="Average",
                               value=transposed_dtm["Total"] / len(labels))
 
-        return transposed_dtm.to_html(
-            classes="table table-bordered table-striped display no-wrap")
+        return transposed_dtm
+
+    def get_table(self) -> str:
+        if self._tokenizer_front_end_option == \
+                TokenizerTableOrientation.FILE_COLUMN:
+            return self._get_dtm().to_html(
+                classes="table table-bordered table-striped display no-wrap")
+
+        elif self._tokenizer_front_end_option == \
+                TokenizerTableOrientation.FILE_ROW:
+            return self._get_dtm().transpose().to_html(
+                classes="table table-bordered table-striped display no-wrap")
+
+        else:
+            raise ValueError("Invalid tokenizer orientation from front end.")
