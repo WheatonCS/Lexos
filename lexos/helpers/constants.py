@@ -219,7 +219,7 @@ DEFAULT_CUT_OPTIONS = {
 }
 
 DEFAULT_TOKENIZER_OPTIONS = {
-    'tokenizerOption': 'fileColumn'
+    'tableOrientation': 'fileColumn'
 }
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {
