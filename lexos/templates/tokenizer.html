@@ -27,6 +27,11 @@
 
     <script type="text/javascript" charset="utf8"
             src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.bootstrap.min.css">
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
 {% endblock %}
 
 {% block title %}Tokenizer{% endblock %}
@@ -63,7 +68,7 @@
                name="gen-tokenize" value="Get tokenize table"/>
     </div>
 
-    <div id="tokenizeResult" style="width: 100%; float:left; margin-top:30px;">
-        <div id="tokenizeTable" class="row col-lg-12 col-md-12"></div>
+    <div id="tokenizeResult" style="width: 100%; margin-top:20px;">
+        <div id="tokenizeTable" class="row col-lg-12 col-md-12" style="width: 100%"></div>
     </div>
 {% endblock %}
