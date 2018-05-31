@@ -180,23 +180,13 @@ def cache_cutting_options():
 
 def cache_csv_options():
     """Stores csv options from request.form in session cookie object."""
-
     if request.json:
-        session['csvoptions'] = {
-            'csvorientation': request.json['csvorientation'],
-            'csvdelimiter': request.json['csvdelimiter']}
+        session['tokenizeroption'] = {
+            'tableorientation': request.json['tableorientation']}
 
-        if 'onlygreyword' in request.json:
-            session['csvoptions'].update(
-                {'onlygreyword': request.json['onlygreyword']})
     else:
-        session['csvoptions'] = {
-            'csvorientation': request.form['csvorientation'],
-            'csvdelimiter': request.form['csvdelimiter']}
-
-        if 'onlygreyword' in request.form:
-            session['csvoptions'].update(
-                {'onlygreyword': request.form['onlygreyword']})
+        session['tokenizeroption'] = {
+            'tableorientation': request.form['tableorientation']}
 
 
 def cache_analysis_option():
