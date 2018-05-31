@@ -17,7 +17,6 @@ const checkForErrors = function () {
     const err7 = 'Individual cutting: Invalid overlap value.'
 
     // Confirm that there are active files
-
     if ($('#num_active_files').val() === '0') {
         errors.push(err1)
     }
@@ -28,12 +27,14 @@ const checkForErrors = function () {
             errors.push(err2)
         }
     }
+
     else {
         // Make sure there is a default cutting value
         const cutValues = $('#overallcutvalue')
         if (cutValues.val() === '') {
             errors.push(err3)
         }
+
         else {
             let overallcutvalueStr = cutValues.val()
             let overallcutvalue = parseInt(cutValues.val())
@@ -60,8 +61,8 @@ const checkForErrors = function () {
             // Make sure the overall overlap is valid
             let overlap_check1 = (overallcutvalue <= overallOverlapValue)
             let overlap_check2 = Math.abs(Math.round(overallOverlapValue))
-            overlap_check2 = (overlap_check2 !== overallOverlapValue)
-            if (overlap_check1 || overlap_check2) {
+            let overlap_check2_con = (overlap_check2 !== overallOverlapValue)
+            if (overlap_check1 || overlap_check2_con) {
                 errors.push(err5)
             }
 
@@ -85,16 +86,16 @@ const checkForErrors = function () {
                     errors.push(err6)
                 }
 
-                let overlap_check1 = individualCutValue <= individualOverlap
-                let overlap_check2 = Math.abs(Math.round(individualOverlap))
-                overlap_check2 = (overlap_check2 !== individualOverlap)
+                overlap_check1 = individualCutValue <= individualOverlap
+                overlap_check2 = Math.abs(Math.round(individualOverlap))
+                overlap_check2_con = (overlap_check2 !== individualOverlap)
                 // Make sure the individual overlap is valid
-                if (overlap_check1 || overlap_check2) {
+                if (overlap_check1 || overlap_check2_con) {
                     errors.push(err7)
                 }
-            }
-        }
-    }
+            } // end if
+        } // end else
+    } // end else
 
     if (errors.length > 0) {
         $('#hasErrors').val('true')
