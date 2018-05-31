@@ -9,11 +9,11 @@
             src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{ version }}"></script>
 
     <!-- Data Table -->
-    <!-- Latest compiled and minified DataTables CSS -->
+    <!-- Latest compiled and minimized DataTables CSS -->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
 
-    <!-- Latest compiled and minified DataTables JS -->
+    <!-- Latest compiled and minimized DataTables JS -->
     <script type="text/javascript"
             src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
 
@@ -27,23 +27,19 @@
 {% block title %}Tokenizer{% endblock %}
 
 {% block options %}
-    <div class="row col-md-12">
-        <input type="hidden" id="num_active_files"
-               value="{{ labels|len }}"/>
-    </div>
     <div class="row col-md-12 col-lg-12">
-        <fieldset class="csvoptions" id="csvorientdiv">
+        <fieldset class="tokenizeOption" id="tokenizeDiv">
             <legend>Data Orientation:</legend>
             <label>
-                <input class="pivot" type="radio" name="tableorientation"
-                       id="tableorientation-filecolumn"
-                       value="fileColumn" {{ "checked" if session['tokenizeroption']['tableorientation'] == "fileColumn" }} />
+                <input class="pivot" type="radio" name="tableOrientation"
+                       id="table-orientation-column"
+                       value="fileColumn" {{ "checked" if session['tokenizerOption']['tableOrientation'] == "fileColumn" }} />
                 Documents as Columns, Terms as Rows
             </label>
             <label>
-                <input class="pivot" type="radio" name="tableorientation"
-                       id="tableorientation-filerow"
-                       value="fileRow" {{ "checked" if session['tokenizeroption']['tableorientation'] == "fileRow" }} />
+                <input class="pivot" type="radio" name="tableOrientation"
+                       id="table-orientation-row"
+                       value="fileRow" {{ "checked" if session['tokenizerOption']['tableOrientation'] == "fileRow" }} />
                 Documents as Rows, Terms as Columns
             </label>
         </fieldset>
