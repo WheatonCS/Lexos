@@ -48,30 +48,24 @@ function sendAjaxRequest (url, form) {
 function getDataTableConfig () {
     // Declare the variable that holds the number of fixed left columns.
     let num_fixed_columns
-    // Declare the variable to hold aoColumnDefs.
-    let column_defs
     if ($('#table-orientation-column').is(':checked')) {
         console.log("in column")
         num_fixed_columns = 1
-        column_defs = [ {
-            "bSortable" : false,
-            "aTargets": [1, 2]
-        } ]
     }
     else if ($('#table-orientation-row').is(':checked')) {
         console.log("in row")
         num_fixed_columns = 3
     }
+
     return {
         scrollX: true,
+        bSortCellsTop: true,
         // specify where the button is
         dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
         <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
 
         // specify all the button that is put on to the page
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-
-        aoColumnDefs: column_defs,
 
         fixedColumns: {
             leftColumns: num_fixed_columns
