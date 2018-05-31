@@ -1,5 +1,4 @@
 from flask import session, Blueprint, render_template
-
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager
 from lexos.models.filemanager_model import FileManagerModel
