@@ -103,7 +103,7 @@ class TokenizerModel(BaseModel):
         # Return the beautiful soup object as a string.
         return file_row_dtm_soup.prettify()
 
-    def _get_file_column_dtm(self):
+    def _get_file_column_dtm(self) -> str:
         """Get dtm with documents as columns and terms/characters as rows.
 
         :return: string in data table format that contains the dtm.
