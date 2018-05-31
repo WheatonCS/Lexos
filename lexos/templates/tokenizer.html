@@ -34,13 +34,13 @@
                 <input class="pivot" type="radio" name="tableOrientation"
                        id="table-orientation-column"
                        value="fileColumn" {{ "checked" if session['tokenizerOption']['tableOrientation'] == "fileColumn" }} />
-                Documents as Columns, Terms as Rows
+                Documents as Columns, Terms/Characters as Rows
             </label>
             <label>
                 <input class="pivot" type="radio" name="tableOrientation"
                        id="table-orientation-row"
                        value="fileRow" {{ "checked" if session['tokenizerOption']['tableOrientation'] == "fileRow" }} />
-                Documents as Rows, Terms as Columns
+                Documents as Rows, Terms/Characters as Columns
             </label>
         </fieldset>
     </div>
