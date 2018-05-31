@@ -443,16 +443,16 @@ function process (action) {
 
 //==Warning Modal Click Functions=================
 // Handle the Continue button in the warning modal
-$(document).on('click', '#warningContinue', function (event) {
+$(document).on('click', '#warningContinue', function () {
     $('#needsWarning').val('false')
-    action = $('#formAction').val()
+    let action = $('#formAction').val()
     $('#warning-modal').modal('hide')
     doAjax(action)
     $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
 })
 
 // Handle the Timer Cancel button in the warning modal
-$(document).on('click', '#timerCancel', function (event) {
+$(document).on('click', '#timerCancel', function () {
     $('#needsWarning').val('false')
     $('#hasErrors').val('false')
     xhr.abort()
