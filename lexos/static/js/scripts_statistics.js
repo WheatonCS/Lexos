@@ -12,10 +12,7 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
-    if ($('#num_active_files').val() < 2)
-        return 'You must have at least 1 active documents to proceed!'
-    else
-        return null
+    if ($('#num_active_files').val() < 2) { return 'You must have at least 1 active documents to proceed!' } else { return null }
 }
 
 /**
@@ -61,12 +58,10 @@ function formatFileReportResponse (response) {
     let anomaly_se
     if (response['anomaly_se'].every(_.isNull)) {
         anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
-    }
-    else {
+    } else {
         anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
         response['anomaly_se'].forEach(function (element) {
-            if (element !== null)
-                anomaly_se += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>`
+            if (element !== null) { anomaly_se += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
         })
     }
 
@@ -74,12 +69,10 @@ function formatFileReportResponse (response) {
     let anomaly_iqr
     if (response['anomaly_iqr'].every(_.isNull)) {
         anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
-    }
-    else {
+    } else {
         anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
         response['anomaly_iqr'].forEach(function (element) {
-            if (element !== null)
-                anomaly_iqr += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>`
+            if (element !== null) { anomaly_iqr += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
         })
     }
 
@@ -188,6 +181,24 @@ function generateStatsBoxPlot () {
         )
 }
 
+/**
+ * Get number of active files and id of active files and save them to input field.
+ */
+function checkActiveFile () {
+    // Get all the checked files.
+    const checked_files = $('.eachFileCheck :checked')
+    // Set a variable to store checked file ids.
+    let active_file_ids = ''
+    // Store checked file ids to the variable.
+    checked_files.each(function () {
+        active_file_ids += `${$(this).val()} `
+    })
+    // Store the variable to input field.
+    $('#active_file_ids').val(active_file_ids)
+    // Store the number of active files.
+    $('#num_active_files').val(checked_files.length)
+}
+
 $(function () {
     // Hide the stats result div.
     $('#stats-result').css({'display': 'none'})
@@ -206,50 +217,24 @@ $(function () {
         }
     })
 
-    /**
-     * The function to check if all input file are selected and dynamically
-     * change the value of check all button.
-     */
-    $('.file-selector').click(function () {
-        // Select the all check radio box.
-        const all_check_box = $('#allCheckBoxSelector')
-
-        // Get number of file selected and number of file activated.
-        const num_file_activated = Number($('#num_active_files').val())
-        const num_file_selected = $('#statsFileSelect').find('input:checked').length
-
-        // Update the culling number.
-        $('#cullnumber').attr('max', num_file_selected)
-
-        // Check if the check all button should be checked or unchecked.
-        if (num_file_selected === num_file_activated && !all_check_box.is(':checked')){
-            all_check_box.trigger('click')
-        }
-
-        else {
-            if (num_file_selected !== num_file_activated && all_check_box.is(':checked'))
-                all_check_box.trigger('click')
-        }
-    })
+    // Check number of selected files when check/uncheck a file.
+    $('.file-selector').click(checkActiveFile())
 
     /**
      * The event handler for generate statistics clicked
      */
     $('#get-stats').click(function () {
-        const error = submissionError()  // the error happens during submission
+        const error = submissionError() // the error happens during submission
 
-        if (error === null) {  // if there is no error
+        if (error === null) { // if there is no error
             // Get the file report result.
             generateStatsFileReport()
             // Get the file table.
             generateStatsFileTable()
             // Get the box plot.
             generateStatsBoxPlot()
-        }
-        else {
+        } else {
             runModal(error)
         }
     })
-
 })
-
