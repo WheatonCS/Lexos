@@ -182,8 +182,9 @@ function generateStatsFileTable () {
 
 $(function () {
   // Hide the stats result div.
-  $('#stats-result').css({'display': 'none'})
   $('#file-stats-result').css({'display': 'none'})
+  $('#corpus-stats-result').css({'display': 'none'})
+
   // Hide the normalize options and set it to raw count.
   $('#normalizeTypeRaw').attr('checked', true)
   $('#normalize-options').css({'visibility': 'hidden'})
@@ -208,7 +209,7 @@ $(function () {
     const checked_files = $('.eachFileCheck :checked')
     // Set a variable to store checked file ids.
     let active_file_ids = ''
-    // Store checked file ids to the variable.
+    // Store checked file ids by putting a blank between each id.
     checked_files.each(function () {
       active_file_ids += `${$(this).val()} `
     })
@@ -221,19 +222,20 @@ $(function () {
     const error = submissionError()
 
     if (error === null) {
-
       // Get the file stats table.
       generateStatsFileTable()
+      // Display the file result table.
       $('#file-stats-result').css({'display': 'block'})
+
       // Only get corpus info when there are more than one file.
       if (checked_files.length > 1) {
         // Get the corpus result.
         generateStatsFileReport()
         // Get the box plot.
         generateStatsBoxPlot()
-        $('#stats-result').css({'display': 'block'})
+        // Display the result.
+        $('#corpus-stats-result').css({'display': 'block'})
       }
-      else {$('#stats-result').css({'display': 'none'})}
     } else {
       runModal(error)
     }
