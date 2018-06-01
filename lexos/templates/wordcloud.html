@@ -25,7 +25,6 @@
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
 
-
 <script>
   var dataset = {{ JSONObj|safe or {} }};
   var numActiveDocs = {{ numActiveDocs }};
@@ -189,7 +188,7 @@ $(document).ready(function() {
 <hr>
 
 <p id="wordcloudcopyright"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
-<p>Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
+<p id="copyright_tag">Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
 Modified slightly to use Lexos data.</p>
 </form>
 

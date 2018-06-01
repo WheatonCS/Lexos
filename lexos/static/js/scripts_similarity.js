@@ -101,7 +101,7 @@ $(function () {
     /**
      * The event handler for generate similarity clicked
      */
-    $('#get-sims').on('click', function () {
+    $('#get-sims').click(function () {
         const error = submissionError()  // the error happens during submission
 
         if (error === null) {  // if there is no error
