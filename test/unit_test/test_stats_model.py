@@ -36,7 +36,8 @@ test_dtm_two = pd.DataFrame(
     columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H",
                       "I", "J", "K", "L"]))
 test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
-test_stats_front_end_option_two = StatsFrontEndOption(active_file_ids=[0, 1, 2])
+test_stats_front_end_option_two = \
+    StatsFrontEndOption(active_file_ids=[0, 1, 2])
 test_option_two = StatsTestOptions(
     token_type="characters",
     doc_term_matrix=test_dtm_two,
@@ -58,9 +59,8 @@ test_dtm_anomaly = pd.DataFrame(
 test_id_temp_table_anomaly = \
     {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt", 4: "F5.txt",
      5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
-test_stats_front_end_option_anomaly = StatsFrontEndOption(active_file_ids=
-                                                          [0, 1, 2, 3, 4, 5, 6,
-                                                           7, 8, 9])
+test_stats_front_end_option_anomaly = \
+    StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 test_option_anomaly = \
     StatsTestOptions(token_type="characters", doc_term_matrix=test_dtm_anomaly,
                      front_end_option=test_stats_front_end_option_anomaly,
@@ -70,6 +70,8 @@ test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
 test_file_result_anomaly = test_stats_model_anomaly.get_file_stats()
 test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
 test_pandas_anomaly = pd.read_html(test_file_result_anomaly)[0]
+
+
 # ------------------------------------------------------------------
 
 
@@ -154,6 +156,7 @@ class TestSpecialCase:
             assert str(error) == EMPTY_DTM_MESSAGE
 
 
+# -------------------- Plotly result test suite -----------------------------
 class TestStatsPlotly:
     def test_get_stats_scatter(self):
         basic_fig = test_box_plot_result_one
@@ -171,7 +174,7 @@ class TestStatsPlotly:
 
         assert basic_fig['data'][0]['text'] == ['F1.txt', 'F2.txt']
 
-    def test_get_stats_boxplot(self):
+    def test_get_stats_box_plot(self):
         basic_fig = test_box_plot_result_one
         assert basic_fig['data'][1]['type'] == 'box'
 
