@@ -88,7 +88,7 @@ function generateStatsFileReport () {
   const form = jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/fileReport', form)
+  sendAjaxRequest('/corpusStatsReport', form)
     .done(
       function (response) {
         $('#file-report').html(formatFileReportResponse(response))
@@ -112,7 +112,7 @@ function generateStatsBoxPlot () {
   const form = jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/boxPlot', form)
+  sendAjaxRequest('/corpusBoxPlot', form)
     .done(
       function (response) {
         $('#box-plot').html(response)
@@ -153,7 +153,7 @@ function generateStatsFileTable () {
   }
 
   // send the ajax request
-  sendAjaxRequest('/fileTable', form)
+  sendAjaxRequest('/fileStatsTable', form)
     .done(
       function (response) {
         const outerTableDivSelector = $('#file-stats-table')
@@ -235,6 +235,10 @@ $(function () {
         generateStatsBoxPlot()
         // Display the result.
         $('#corpus-stats-result').css({'display': 'block'})
+      }
+      // Else hide the corpus stats result div.
+      else {
+        $('#corpus-stats-result').css({'display': 'none'})
       }
     } else {
       runModal(error)
