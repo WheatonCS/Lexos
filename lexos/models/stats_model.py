@@ -66,7 +66,7 @@ class StatsModel(BaseModel):
         """:return: statistics front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
-            else StatsReceiver.options_from_front_end()
+            else StatsReceiver().options_from_front_end()
 
     @property
     def token_type(self) -> str:
