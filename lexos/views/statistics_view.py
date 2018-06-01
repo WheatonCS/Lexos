@@ -38,8 +38,8 @@ def statistics():
         numActiveDocs=num_active_docs)
 
 
-@stats_blueprint.route("/fileReport", methods=["POST"])
-def file_report():
+@stats_blueprint.route("/corpusStatsReport", methods=["POST"])
+def corpus_stats_report():
     session_manager.cache_analysis_option()
     file_result = StatsModel().get_corpus_stats()
     return jsonify(
@@ -52,13 +52,13 @@ def file_report():
     )
 
 
-@stats_blueprint.route("/fileTable", methods=["POST"])
-def file_table():
-    session_manager.cache_analysis_option()
-    return StatsModel().get_file_stats()
-
-
-@stats_blueprint.route("/boxPlot", methods=["POST"])
-def box_plot():
+@stats_blueprint.route("/corpusBoxPlot", methods=["POST"])
+def corpus_box_plot():
     session_manager.cache_analysis_option()
     return StatsModel().get_box_plot()
+
+
+@stats_blueprint.route("/fileStatsTable", methods=["POST"])
+def file_stats_table():
+    session_manager.cache_analysis_option()
+    return StatsModel().get_file_stats()
