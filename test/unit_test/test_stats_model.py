@@ -13,11 +13,11 @@ test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                             columns=np.array(["A", "B", "C", "D", "E", "F",
                                               "G", "H", "I"]))
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
-test_stats_front_end_option = StatsFrontEndOption(active_file_ids=[0, 1])
+test_stats_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1])
 test_option_one = StatsTestOptions(
     token_type="terms",
     doc_term_matrix=test_dtm_one,
-    front_end_option=test_stats_front_end_option,
+    front_end_option=test_stats_front_end_option_one,
     id_temp_label_map=test_id_temp_table_one)
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
@@ -36,9 +36,11 @@ test_dtm_two = pd.DataFrame(
     columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H",
                       "I", "J", "K", "L"]))
 test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
+test_stats_front_end_option_two = StatsFrontEndOption(active_file_ids=[0, 1, 2])
 test_option_two = StatsTestOptions(
     token_type="characters",
     doc_term_matrix=test_dtm_two,
+    front_end_option=test_stats_front_end_option_two,
     id_temp_label_map=test_id_temp_table_two)
 test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
@@ -56,8 +58,12 @@ test_dtm_anomaly = pd.DataFrame(
 test_id_temp_table_anomaly = \
     {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt", 4: "F5.txt",
      5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
+test_stats_front_end_option_anomaly = StatsFrontEndOption(active_file_ids=
+                                                          [0, 1, 2, 3, 4, 5, 6,
+                                                           7, 8, 9])
 test_option_anomaly = \
     StatsTestOptions(token_type="characters", doc_term_matrix=test_dtm_anomaly,
+                     front_end_option=test_stats_front_end_option_anomaly,
                      id_temp_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
@@ -124,9 +130,11 @@ class TestCorpusInfo:
 # -------------------- Empty data frame case test suite ---------------------
 test_dtm_empty = pd.DataFrame()
 test_id_temp_table_empty = {}
+test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[])
 test_option_empty = \
     StatsTestOptions(token_type="terms",
                      doc_term_matrix=test_dtm_empty,
+                     front_end_option=test_stats_front_end_option_empty,
                      id_temp_label_map=test_id_temp_table_empty)
 test_stats_model_empty = StatsModel(test_options=test_option_empty)
 
