@@ -95,9 +95,9 @@ class TestFileResult:
         assert test_pandas_two["Average number of characters"][2] == 11.5
 
     def test_hapax(self):
-        assert test_pandas_one["Number of terms occuring once"][0] == 0
-        assert test_pandas_one["Number of terms occuring once"][1] == 1
-        assert test_pandas_two["Number of characters occuring once"][2] == 0
+        assert test_pandas_one["Number of terms occurring once"][0] == 0
+        assert test_pandas_one["Number of terms occurring once"][1] == 1
+        assert test_pandas_two["Number of characters occurring once"][2] == 0
 
 
 class TestCorpusInfo:
@@ -189,14 +189,14 @@ class TestStatsPlotly:
         basic_fig = test_box_plot_result_one
         assert basic_fig['layout']['title'] == 'Statistics of the Given Corpus'
 
-        assert basic_fig['layout']['xaxis']['autorange'] == True
+        assert basic_fig['layout']['xaxis']['autorange'] is True
 
-        assert basic_fig['layout']['xaxis']['showgrid'] == False
+        assert basic_fig['layout']['xaxis']['showgrid'] is False
 
-        assert basic_fig['layout']['xaxis']['zeroline'] == False
+        assert basic_fig['layout']['xaxis']['zeroline'] is False
 
-        assert basic_fig['layout']['xaxis']['autotick'] == False
+        assert basic_fig['layout']['xaxis']['autotick'] is False
 
-        assert basic_fig['layout']['xaxis']['showline'] == False
+        assert basic_fig['layout']['xaxis']['showline'] is False
 
-        assert basic_fig['layout']['xaxis']['showticklabels'] == False
+        assert basic_fig['layout']['xaxis']['showticklabels'] is False
