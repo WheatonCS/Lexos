@@ -100,7 +100,7 @@ const checkForWarnings = function () {
   const cutVal = parseInt($("input[name='cutValue']").val()) // Segment Size
   const overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
   const indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
-  const eltswithoutindividualopts = new Array() // Elements without individual cutsets
+  const eltswithoutindividualopts = [] // Elements without individual cutsets
 
   // Check each individual cutset
   indivdivs.each(function () {
@@ -236,7 +236,7 @@ function doAjax (action) {
     response = JSON.parse(response)
     $('#preview-body').empty() // Correct
     j = 0
-    $.each(response['data'], function (i, item) {
+    $.each(response['data'], function () {
       const fileID = $(this)[0]
       const filename = $(this)[1]
       const fileLabel = filename
@@ -312,7 +312,7 @@ function process (action) {
 }
 
 // Handle the Continue button in the warning modal
-$(document).on('click', '#warningContinue', function (event) {
+$(document).on('click', '#warningContinue', function () {
   $('#needsWarning').val('false')
   const action = $('#formAction').val()
   $('#warning-modal').modal('hide')
@@ -321,7 +321,7 @@ $(document).on('click', '#warningContinue', function (event) {
 })
 
 // Handle the Timer Cancel button in the warning modal
-$(document).on('click', '#timerCancel', function (event) {
+$(document).on('click', '#timerCancel', function () {
   $('#needsWarning').val('false')
   $('#hasErrors').val('false')
   xhr.abort()
@@ -415,7 +415,7 @@ $(function () {
 
   // showMilestoneOptions();
 
-  $(document).on('click', '.indivMS', function (event) {
+  $(document).on('click', '.indivMS', function () {
     showMilestoneOptions()
     if ($(this).is(':checked')) {
       $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').show()
