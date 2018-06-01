@@ -1,9 +1,10 @@
 from typing import List, NamedTuple
-
 from lexos.receivers.base_receiver import BaseReceiver
 
 
 class StatsFrontEndOption(NamedTuple):
+    """The typed tuple to hold stats front end option."""
+    # This is the list of active file ids.
     active_file_ids: List[int]
 
 
@@ -21,7 +22,9 @@ class StatsReceiver(BaseReceiver):
         active_file_ids_string = self._front_end_data["active_file_ids"]
         # Split the file ids.
         active_file_ids = active_file_ids_string.split(" ")
-        # Force file ids to be stri
-        active_file_ids = [int(file_id) for file_id in active_file_ids
-                           if file_id != ""]
+        # Force file ids to be integer type and remove extra blank.
+        active_file_ids = \
+            [int(file_id) for file_id in active_file_ids if file_id != ""]
+
+        # Return stats front end option.
         return StatsFrontEndOption(active_file_ids=active_file_ids)
