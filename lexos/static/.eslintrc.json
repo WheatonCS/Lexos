@@ -1,10 +1,21 @@
 {
   "extends": "standard",
-
-  "rules":{
-    "space-before-function-paren": "error"
+  "rules": {
+    "space-before-function-paren": "error",
+    "valid-jsdoc": "error",
+    "require-jsdoc": [
+      "error",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+        }
+      }
+    ]
   },
-
   "env": {
     "browser": true,
     "commonjs": true,
