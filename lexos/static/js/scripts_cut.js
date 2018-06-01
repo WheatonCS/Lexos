@@ -1,5 +1,5 @@
 // Function to check for errors
-const checkForErrors = function () {
+function checkForErrors () {
   // Set Error and Warning Messages
   const errors = []
   const no_active_docs_msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
@@ -93,7 +93,7 @@ const checkForErrors = function () {
 }
 
 // Function to check whether the user needs a warning
-const checkForWarnings = function () {
+function checkForWarnings () {
   let needsWarning = false
   const maxSegs = 100
   const defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
