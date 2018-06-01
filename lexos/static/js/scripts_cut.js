@@ -11,19 +11,19 @@ const checkForErrors = function () {
   const ind_invalid_overlap_val = 'Individual cutting: Invalid overlap value.'
 
   // Confirm that there are active files
-  if ($('#num_active_files').val() == '0') {
+  if ($('#num_active_files').val() === '0') {
     errors.push(no_active_docs_msg)
   }
 
   // If cut by milestone is checked make sure there is a milestone value
   if ($('#cutByMS').is(':checked')) {
-    if ($('#MScutWord').val() == '') {
+    if ($('#MScutWord').val() === '') {
       errors.push(no_cut_string_msg)
     }
   }
   else {
     // Make sure there is a default cutting value
-    if ($('#overallcutvalue').val() == '') {
+    if ($('#overallcutvalue').val() === '') {
       errors.push(no_cut_val_msg)
     }
     else {
