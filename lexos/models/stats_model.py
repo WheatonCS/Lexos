@@ -80,23 +80,23 @@ class StatsModel(BaseModel):
 
     @property
     def _selected_doc_term_matrix(self) -> pd.DataFrame:
-        return self._doc_term_matrix.loc[self._stats_option.active_file_ids]
+        """:return: A dtm that contains only user selected files."""
+        return self._doc_term_matrix.iloc[self._stats_option.active_file_ids]
 
     def get_corpus_stats(self) -> CorpusStats:
         """Converts word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
-        A = self._selected_doc_term_matrix
         # Check if empty corpus is given.
-        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        assert not self._selected_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+                  for file_id in self._selected_doc_term_matrix.index.values]
 
         # Get the file count sums by sum the column.
-        file_sizes = self._doc_term_matrix.sum(1)
+        file_sizes = self._selected_doc_term_matrix.sum(1)
         # Get the average file word counts.
         mean = file_sizes.mean(0)
 
@@ -145,16 +145,16 @@ class StatsModel(BaseModel):
         :return: A HTML table converted from a pandas data frame.
         """
         # Check if empty corpus is given.
-        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        assert not self._selected_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+                  for file_id in self._selected_doc_term_matrix.index.values]
 
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
             columns=["Documents",
-                     f"Number of {self.token_type} occuring once",
+                     f"Number of {self.token_type} occurring once",
                      f"Total number of {self.token_type}",
                      f"Average number of {self.token_type}",
                      f"Distinct number of {self.token_type}"])
@@ -162,14 +162,14 @@ class StatsModel(BaseModel):
         # Save document names in the data frame.
         file_stats["Documents"] = labels
         # Find number of token that appears only once.
-        file_stats[f"Number of {self.token_type} occuring once"] = \
-            self._doc_term_matrix.eq(1).sum(axis=1).values
+        file_stats[f"Number of {self.token_type} occurring once"] = \
+            self._selected_doc_term_matrix.eq(1).sum(axis=1).values
         # Find total number of tokens.
         file_stats[f"Total number of {self.token_type}"] = \
-            self._doc_term_matrix.sum(axis=1).values
+            self._selected_doc_term_matrix.sum(axis=1).values
         # Find distinct number of tokens.
         file_stats[f"Distinct number of {self.token_type}"] = \
-            self._doc_term_matrix.ne(0).sum(axis=1).values
+            self._selected_doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
         file_stats[f"Average number of {self.token_type}"] = \
             file_stats[f"Total number of {self.token_type}"] / \
@@ -188,7 +188,7 @@ class StatsModel(BaseModel):
         """
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+                  for file_id in self._selected_doc_term_matrix.index.values]
 
         # Set up the box plot.
         box_plot = go.Box(x0=0.5,  # Initial position of the box plot
