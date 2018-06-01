@@ -220,10 +220,12 @@ $(function () {
     const error = submissionError()
 
     if (error === null) {
+
+        // Get the file table.
+      generateStatsFileTable()
       // Get the file report result.
       generateStatsFileReport()
-      // Get the file table.
-      generateStatsFileTable()
+
       // Get the box plot.
       generateStatsBoxPlot()
     } else {
