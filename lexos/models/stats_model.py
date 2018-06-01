@@ -1,20 +1,20 @@
-import json
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
 from plotly.offline import plot
-from typing import List, Tuple, Optional, NamedTuple
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
+from typing import List, Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
-from lexos.receivers.stats_receiver import StatsReceiver
+from lexos.receivers.stats_receiver import StatsReceiver, StatsFrontEndOption
 
 
 class StatsTestOptions(NamedTuple):
     """A typed tuple to hold test options."""
     token_type: str
     doc_term_matrix: pd.DataFrame
+    front_end_option: StatsFrontEndOption
     id_temp_label_map: IdTempLabelMap
 
 
