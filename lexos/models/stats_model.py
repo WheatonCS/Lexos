@@ -188,7 +188,7 @@ class StatsModel(BaseModel):
 
         # Set up the box plot.
         box_plot = go.Box(x0=0.5,  # Initial position of the box plot
-                          y=self._doc_term_matrix.sum(1).values,
+                          y=self._selected_doc_term_matrix.sum(1).values,
                           name="Corpus Box Plot",
                           hoverinfo="y",
                           marker=dict(color='rgb(10, 140, 200)'))
@@ -197,7 +197,7 @@ class StatsModel(BaseModel):
         scatter_plot = go.Scatter(
             # Get random x values with the range.
             x=[np.random.uniform(-0.3, 0) for _ in labels],
-            y=self._doc_term_matrix.sum(1).values,
+            y=self._selected_doc_term_matrix.sum(1).values,
             name="Corpus Scatter Plot",
             hoverinfo="text",
             mode="markers",
