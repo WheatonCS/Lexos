@@ -81,7 +81,7 @@ class StatsModel(BaseModel):
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
-
+        A = self._stats_option
         # Check if empty corpus is given.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
