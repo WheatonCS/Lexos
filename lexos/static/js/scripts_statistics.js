@@ -182,8 +182,10 @@ function generateStatsFileTable () {
 }
 
 $(function () {
-  // Hide the stats result div.
-  $('#stats-result').css({'display': 'none'})
+  // Hide the two result divs.
+  $('#file-result').css({'display': 'none'})
+  $('#corpus-result').css({'display': 'none'})
+
   // Hide the normalize options and set it to raw count.
   $('#normalizeTypeRaw').attr('checked', true)
   $('#normalize-options').css({'visibility': 'hidden'})
