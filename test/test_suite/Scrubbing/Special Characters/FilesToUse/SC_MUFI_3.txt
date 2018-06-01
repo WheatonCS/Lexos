@@ -1,0 +1,7 @@
+five dot mark: &fivedots;
+medieval comma: &medcom;
+small letter: ae &aelig;
+capital letter AE: &AElig;
+small letter sharp s: &szlig;
+capital letter sharp s: &SZlig;
+
