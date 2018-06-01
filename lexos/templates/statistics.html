@@ -64,19 +64,23 @@
         <input type="button" class="bttn bttn-action" id="get-stats"
                name="gen-stats" value="Generate Statistics"/>
     </div>
-    <div id="stats-result" style="width: 100%; margin-top:50px;">
+    <div id="corpus-result" class="row col-lg-12 col-md-12"
+         style="width: 100%; margin-top:50px;">
         <fieldset class="row col-lg-12 col-md-12">
             <legend>Statistics for Corpus</legend>
         </fieldset>
         <div id="box-plot" class="row col-lg-8 col-md-8"></div>
-        <div id="file-report"
+        <div id="corpus-stats-report"
              class="row col-lg-4 col-md-4"
              style="margin-left: 30px; margin-top: 35px; box-shadow: 0 0 10px 0 #888; padding:20px"></div>
+    </div>
+    <div id="file-result" class="row col-lg-12 col-md-12">
         <fieldset class="row col-lg-12 col-md-12">
             <legend>Statistics for each document</legend>
         </fieldset>
-        <div id="file-table" class="row col-lg-12 col-md-12"></div>
+        <div id="file-stats-table" class="row col-lg-12 col-md-12"></div>
     </div>
+
 {% endblock %}
 
 {% block submit %}
