@@ -1,24 +1,32 @@
 // Function to check for errors
-var checkForErrors = function () {
+const checkForErrors = function () {
   // Set Error and Warning Messages
-  var errors = []
-  var err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.'
-  var err2 = 'You must provide a string to cut on.'
-  var err3 = 'You must provide a default cutting value.'
-  var err4 = 'Default cutting: Invalid segment size.'
-  var err5 = 'Default cutting: Invalid overlap value.'
-  var err6 = 'Individual cutting: Invalid segment size.'
-  var err7 = 'Individual cutting: Invalid overlap value.'
+  let errors = []
+  const err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.'
+  const err2 = 'You must provide a string to cut on.'
+  const err3 = 'You must provide a default cutting value.'
+  const err4 = 'Default cutting: Invalid segment size.'
+  const err5 = 'Default cutting: Invalid overlap value.'
+  const err6 = 'Individual cutting: Invalid segment size.'
+  const err7 = 'Individual cutting: Invalid overlap value.'
 
   // Confirm that there are active files
-  if ($('#num_active_files').val() == '0') { errors.push(err1) }
+  if ($('#num_active_files').val() == '0') {
+    errors.push(err1)
+  }
 
   // If cut by milestone is checked make sure there is a milestone value
   if ($('#cutByMS').is(':checked')) {
-    if ($('#MScutWord').val() == '') { errors.push(err2) }
-  } else {
+    if ($('#MScutWord').val() == '') {
+      errors.push(err2)
+    }
+  }
+  else {
     // Make sure there is a default cutting value
-    if ($('#overallcutvalue').val() == '') { errors.push(err3) } else {
+    if ($('#overallcutvalue').val() == '') {
+      errors.push(err3)
+    }
+    else {
       var overallcutvalueStr = $('#overallcutvalue').val()
       var overallcutvalue = parseInt($('#overallcutvalue').val())
       var overallOverlapValue = parseInt($('#overallOverlapValue').val())
@@ -27,32 +35,48 @@ var checkForErrors = function () {
       var individualCutValue = $('#individualCutValue').val()
 
       // Make sure the overall segment size not negative
-      if (overallcutvalue != Math.floor(overallcutvalue)) { errors.push(err4) }
+      if (overallcutvalue != Math.floor(overallcutvalue)) {
+        errors.push(err4)
+      }
 
       // Make sure the overall segment size not a decimal
-      if (overallcutvalueStr != Math.abs(overallcutvalue).toString()) { errors.push(err4) }
+      if (overallcutvalueStr != Math.abs(overallcutvalue).toString()) {
+        errors.push(err4)
+      }
 
       // Make sure the overall segment size not 0
-      if (overallcutvalue == 0) { errors.push(err4) }
+      if (overallcutvalue == 0) {
+        errors.push(err4)
+      }
 
       // Make sure the overall overlap is valid
-      if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) { errors.push(err5) }
+      if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) {
+        errors.push(err5)
+      }
 
       // If there are individual segment cuts
       if (individualCutValue != '') {
         individualCutValue = parseInt(individualCutValue)
 
         // Make sure the individual segment size not negative
-        if (individualCutValue != Math.floor(individualCutValue)) { errors.push(err6) }
+        if (individualCutValue != Math.floor(individualCutValue)) {
+          errors.push(err6)
+        }
 
         // Make sure the individual segment size not a decimal
-        if (individualCutValueStr != Math.abs(individualCutValue).toString()) { errors.push(err6) }
+        if (individualCutValueStr != Math.abs(individualCutValue).toString()) {
+          errors.push(err6)
+        }
 
         // Make sure the individual segment size not 0
-        if (individualCutValue == 0) { errors.push(err6) }
+        if (individualCutValue == 0) {
+          errors.push(err6)
+        }
 
         // Make sure the individual overlap is valid
-        if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) { errors.push(err7) }
+        if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) {
+          errors.push(err7)
+        }
       }
     }
   }
@@ -62,7 +86,8 @@ var checkForErrors = function () {
     $('#status-prepare').css({ 'visibility': 'hidden' })
     $('#error-modal-message').html(errors[0])
     $('#error-modal').modal()
-  } else {
+  }
+  else {
     $('#hasErrors').val('false')
   }
 }
@@ -105,12 +130,15 @@ var checkForWarnings = function () {
         if (thisCutType == 'letters' && (numChar[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
           // Same for segments and lines
-        } else if (thisCutType == 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+        }
+        else if (thisCutType == 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
-        } else if (thisCutType == 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+        }
+        else if (thisCutType == 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
           // Or if the segment size > 100
-        } else if (thisCutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+        }
+        else if (thisCutVal > maxSegs && eltswithoutindividualopts.length > 0) {
           needsWarning = true
         }
       }
@@ -130,20 +158,23 @@ var checkForWarnings = function () {
         }
       })
       // Do the same with words and lines
-    } else if (defCutTypeValue == 'words') {
+    }
+    else if (defCutTypeValue == 'words') {
       eltswithoutindividualopts.forEach(function (elt) {
         if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
         }
       })
-    } else if (defCutTypeValue == 'lines') {
+    }
+    else if (defCutTypeValue == 'lines') {
       eltswithoutindividualopts.forEach(function (elt) {
         if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
         }
       })
       // If the segment size > 100 and there are documents without individual options
-    } else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+    }
+    else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
       needsWarning = true
     }
   }
@@ -159,7 +190,8 @@ var checkForWarnings = function () {
     // Hide the processing icon and show the modal
     $('#status-prepare').css({ 'visibility': 'hidden' })
     $('#warning-modal').modal()
-  } else {
+  }
+  else {
     $('#needsWarning').val('false')
   }
 }
@@ -218,7 +250,8 @@ function doAjax (action) {
       if ($.type(fileContents) === 'string') {
         j++
         fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
-      } else {
+      }
+      else {
         $.each(fileContents, function (i, segment) {
           j++
           segmentLabel = segment[0]
@@ -372,7 +405,8 @@ $(function () {
     if ($('#cutByMS').is(':checked')) {
       $('#MSoptspan').removeClass('hidden')
       $('#cuttingdiv').hide()
-    } else {
+    }
+    else {
       $('#MSoptspan').addClass('hidden')
       $('#cuttingdiv').show()
     }
@@ -388,7 +422,8 @@ $(function () {
       $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').show()
       $(this).parents('#cutByMSdiv').filter(':first')
         .parents('.cuttingoptionswrapper').find('.individcut').hide()
-    } else {
+    }
+    else {
       $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').hide()
       $(this).parents('#cutByMSdiv').filter(':first')
         .parents('.cuttingoptionswrapper').find('.individcut').show()
