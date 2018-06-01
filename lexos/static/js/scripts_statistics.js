@@ -200,15 +200,8 @@ $(function () {
   })
 
   /**
-   * Get number of active files and id of active files and save them to input
-   * field when check/uncheck a file.
-   */
-  $('.file-selector').click(function () {
-
-  })
-
-  /**
-   * The event handler for generate statistics clicked
+   * The event handler for generate statistics clicked. Before generate
+   * stats result, get number of active files and id of active files.
    */
   $('#get-stats').click(function () {
     // Get all the checked files.
@@ -224,10 +217,10 @@ $(function () {
     // Store the number of active files.
     $('#num_active_files').val(checked_files.length)
 
+    // Get the possible error during the submission.
+    const error = submissionError()
 
-    const error = submissionError() // the error happens during submission
-
-    if (error === null) { // if there is no error
+    if (error === null) {
       // Get the file report result.
       generateStatsFileReport()
       // Get the file table.
