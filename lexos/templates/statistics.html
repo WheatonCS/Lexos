@@ -29,6 +29,7 @@
         <div class="col-md-12">
             <input type="hidden" id="num_active_files"
                    value="{{ labels|len }}"/>
+            <input type="hidden" id="active_file_ids" name="active_file_ids"/>
             <legend style="width: 400px;">Select Document(s)</legend>
             {% if labels|len > 0 %}
                 <div class="forAllCheckBox">
@@ -42,10 +43,10 @@
                     <div id="statsFileSelect">
                     <form>
                         {% for fileID, label in labels.items() %}
-                            <div class="forCheckBox" id="eachCheckBox">
+                            <div class="eachFileCheck">
                                 <label id="statSelect">{{ label }}
                                     <input type="checkbox"
-                                           name="{{ label }}"
+                                           value="{{ fileID }}"
                                            checked="checked"
                                            class="file-selector">
                                 </label>
@@ -59,13 +60,13 @@
             {% if labels|len == 0 %}
                 <span id="no-labels">No Documents Activated.</span>
             {%- endif %}
-            <input type="radio" id="active_file_ids" value="2" name="2"/>
+
         </div>
     </div>
 {% endblock %}
 
 {% block results %}
-    <div class="row col-sm-12 col-lg-12 col-md-12">
+    <div class="row col-lg-12 col-md-12">
         <input type="button" class="bttn bttn-action" id="get-stats"
                name="gen-stats" value="Generate Statistics"/>
     </div>
