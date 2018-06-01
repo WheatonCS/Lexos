@@ -37,7 +37,9 @@ test_script:
   # test for javascript code style
   - cd ./lexos/static
   # following line is commented out, because frontend refactor is not yet compeleted
-  # - .\node_modules\.bin\eslint ./js/script_*.js
+  # - .\node_modules\.bin\eslint .\js\scripts_*.js
+  # following line is temporary, when you finish refactoring a function, just add the js file to this line
+  - .\node_modules\.bin\eslint .\js\scripts_cut.js
   - cd ../..
 
 build: off
