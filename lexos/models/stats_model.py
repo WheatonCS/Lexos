@@ -91,10 +91,6 @@ class StatsModel(BaseModel):
         # Check if empty corpus is given.
         assert not self._selected_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._selected_doc_term_matrix.index.values]
-
         # Get the file count sums by sum the column.
         file_sizes = self._selected_doc_term_matrix.sum(1)
         # Get the average file word counts.
@@ -113,23 +109,23 @@ class StatsModel(BaseModel):
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
         anomaly_se = [
-            f"small: {label}"
-            if file_sizes[count] < mean - 2 * std_deviation
-            else f"large: {label}"
-            if file_sizes[count] > mean + 2 * std_deviation
+            f"small: {self._id_temp_label_map[file_id]}"
+            if file_sizes[file_id] < mean - 2 * std_deviation
+            else f"large: {self._id_temp_label_map[file_id]}"
+            if file_sizes[file_id] > mean + 2 * std_deviation
             else None
-            for count, label in enumerate(labels)]
+            for file_id in self._selected_doc_term_matrix.index.values]
 
         # Interquartile range analysis: We detect anomaly by finding files with
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr = [
-            f"small: {label}"
-            if file_sizes[count] < first_quartile - 1.5 * iqr
-            else f"large: {label}"
-            if file_sizes[count] > third_quartile + 1.5 * iqr
+            f"small: {self._id_temp_label_map[file_id]}"
+            if file_sizes[file_id] < first_quartile - 1.5 * iqr
+            else f"large: {self._id_temp_label_map[file_id]}"
+            if file_sizes[file_id] > third_quartile + 1.5 * iqr
             else None
-            for count, label in enumerate(labels)]
+            for file_id in self._selected_doc_term_matrix.index.values]
 
         return CorpusStats(
             mean=round(mean, 2),
