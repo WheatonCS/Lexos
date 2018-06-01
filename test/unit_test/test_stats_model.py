@@ -5,15 +5,19 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.stats_model import StatsModel, StatsTestOptions
 
 # ------------------------ First test suite ------------------------
+from lexos.receivers.stats_receiver import StatsFrontEndOption
+
 test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
                             index=np.array([0, 1]),
                             columns=np.array(["A", "B", "C", "D", "E", "F",
                                               "G", "H", "I"]))
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
+test_stats_front_end_option = StatsFrontEndOption(active_file_ids=[0, 1])
 test_option_one = StatsTestOptions(
     token_type="terms",
     doc_term_matrix=test_dtm_one,
+    front_end_option=test_stats_front_end_option,
     id_temp_label_map=test_id_temp_table_one)
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
