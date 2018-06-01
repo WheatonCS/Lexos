@@ -27,12 +27,12 @@ const checkForErrors = function () {
       errors.push(err3)
     }
     else {
-      var overallcutvalueStr = $('#overallcutvalue').val()
-      var overallcutvalue = parseInt($('#overallcutvalue').val())
-      var overallOverlapValue = parseInt($('#overallOverlapValue').val())
-      var individualOverlap = parseInt($('#individualOverlap').val())
-      var individualCutValueStr = $('#individualCutValue').val()
-      var individualCutValue = $('#individualCutValue').val()
+      const overallcutvalueStr = $('#overallcutvalue').val()
+      const overallcutvalue = parseInt($('#overallcutvalue').val())
+      const overallOverlapValue = parseInt($('#overallOverlapValue').val())
+      const individualOverlap = parseInt($('#individualOverlap').val())
+      const individualCutValueStr = $('#individualCutValue').val()
+      let individualCutValue = $('#individualCutValue').val()
 
       // Make sure the overall segment size not negative
       if (overallcutvalue != Math.floor(overallcutvalue)) {
