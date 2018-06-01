@@ -1,9 +1,9 @@
-from flask import session, render_template, Blueprint, request, jsonify
+from flask import session, render_template, Blueprint, jsonify
+from lexos.models.stats_model import StatsModel
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
-from lexos.managers import utility, session_manager as session_manager
-from lexos.models.stats_model import StatsModel
 from lexos.models.filemanager_model import FileManagerModel
+from lexos.managers import session_manager as session_manager
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -13,7 +13,7 @@ from lexos.models.filemanager_model import FileManagerModel
 stats_blueprint = Blueprint('statistics', __name__)
 
 
-# Tells Flask to load this function when someone is at '/statsgenerator'
+# Tells Flask to load this function when someone is at '/statistics'
 @stats_blueprint.route("/statistics", methods=["GET"])
 def statistics():
     """Handles the functionality on the Statistics page.
@@ -26,16 +26,11 @@ def statistics():
     # Get labels with their ids.
     id_label_map = \
         FileManagerModel().load_file_manager().get_active_labels_with_id()
-    # Get file manager.
-    file_manager = utility.load_file_manager()
 
     # "GET" request occurs when the page is first loaded.
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'statisticoption' not in session:
-        # Default is all on
-        session['statisticoption'] = \
-            {'segmentlist': list(map(str, list(file_manager.files.keys())))}
+
     return render_template(
         'statistics.html',
         itm="statistics",
