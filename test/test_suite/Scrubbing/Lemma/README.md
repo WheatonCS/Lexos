@@ -1,16 +1,16 @@
 Lemmas
 ======
 
-This folder has files for testing consolidation functionality
+#### Test Lemmas
 
-## Test file: experiment.txt
+Test file: experiment.txt
 
-0. UPLOAD experiment.txt
+1. UPLOAD experiment.txt
 
-1. SCRUB: 
-    - deselect Remove all Punct
+2. SCRUB: 
+    - deselect Remove All Punctuation
     - deselect Make Lowercase
     - deselect Remove Digits
     
 2. LEMMAS:
-    - Upload lemmas_for_experiment.txt
+    - UPLOAD lemmas_for_experiment.txt
