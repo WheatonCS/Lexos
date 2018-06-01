@@ -53,10 +53,9 @@ function formatFileReportResponse (response) {
   const mean = `<p>Average document size is ${response['mean']} ${token_name}</p>`
   const std_deviation = `<p>Standard deviation of documents is ${response['std_deviation']} ${token_name}</p>`
   const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']} ${token_name}</p>`
-
   // Extract standard deviation anomaly information.
   let anomaly_se
-  if (response['anomaly_se'].every(_.isNull)) {
+  if (response['anomaly_se'].every(function (element) { return element === null})) {
     anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
   } else {
     anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
@@ -67,7 +66,7 @@ function formatFileReportResponse (response) {
 
   // Extract inter quartile range anomaly information.
   let anomaly_iqr
-  if (response['anomaly_iqr'].every(_.isNull)) {
+  if (response['anomaly_iqr'].every(function (element) { return element === null})) {
     anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
   } else {
     anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
