@@ -40,10 +40,12 @@ class StatsModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type = test_options.token_type
+            self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_token_type = None
+            self._test_front_end_option = None
             self._test_id_temp_label_map = None
 
     @property
@@ -61,7 +63,7 @@ class StatsModel(BaseModel):
 
     @property
     def _stats_option(self):
-
+        """:return: statistics front end option."""
         return StatsReceiver().options_from_front_end()
 
     @property
@@ -75,6 +77,10 @@ class StatsModel(BaseModel):
             # Get the correct current type.
             token_type = dtm_options.token_option.token_type
             return "terms" if token_type == "word" else "characters"
+
+    @property
+    def _selected_doc_term_matrix(self) -> pd.DataFrame:
+        return self._doc_term_matrix.loc(self._stats_option.active_file_ids)
 
     def get_corpus_stats(self) -> CorpusStats:
         """Converts word lists completely to statistic.
