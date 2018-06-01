@@ -15,7 +15,13 @@
     width:40px;
     height:40px;
     margin:1px;
-    padding:0;}
+    padding:0;
+    transition: all ease-in-out 500ms;
+}
+.calc_button:hover{
+    background-color: rgba(200,252,219 ,0.2);
+    transition: all ease-in-out 500ms;
+}
 
 .number {
     font-size:16px;
@@ -30,7 +36,9 @@
     font-weight:bold;
 }
 .delete {
-    color: #16A085;
+    color: #969696;
+    float: right;
+    padding-right: 50px;
 }
 .delete:hover {
     color: red;
@@ -44,8 +52,8 @@ a:hover {
     width: 100px;
 }
 #upload_files {
-    margin-top: 5px;
-    margin-left: 30px;
+    margin-top: 0px;
+    margin-left: 0px;
     width:100px;
     padding-top: 10px;
     padding-bottom: 10px;

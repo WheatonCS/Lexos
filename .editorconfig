@@ -17,7 +17,7 @@ indent_size = 4
 # 2 space indentation for js
 [*.js]
 indent_style = space
-indent_size = 4
+indent_size = 2
 
 # all the yaml and json file
 [{*.json,*.yml}]
