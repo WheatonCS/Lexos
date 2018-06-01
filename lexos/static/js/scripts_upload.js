@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     $('#ITMPanel').animate({left: '-450px'});
     $('#ITMPanel').animate({left: '-500px'}, 'fast');
 })
