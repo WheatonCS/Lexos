@@ -2,7 +2,9 @@ language: python
 
 # command to install dependencies
 install:
+  # update the apt-get database
   - sudo apt-get update
+
   # We do this conditionally because it saves us some downloading if the
   # version is the same.
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -20,6 +22,15 @@ install:
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
 
+  # install nodejs 10. Remember to change this when nodejs updated!
+  - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
+
+  # use npm to install all the dependencies (including dev)
+  - cd ./lexos/static
+  - npm install
+  - cd ../..
+
 script:
   # test for python static analysis
   # including code style, doc style, and basic code analysis
@@ -29,3 +40,9 @@ script:
   # unit testing
   - pytest --cov=./lexos
   - codecov
+
+  # test for javascript code style
+  - cd ./lexos/static
+  # following line is commented out, because frontend refactor is not yet compeleted
+  # - .\node_modules\.bin\eslint ./js/script_*.js
+  - cd ../..
