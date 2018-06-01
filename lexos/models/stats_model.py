@@ -80,14 +80,14 @@ class StatsModel(BaseModel):
 
     @property
     def _selected_doc_term_matrix(self) -> pd.DataFrame:
-        return self._doc_term_matrix.loc(self._stats_option.active_file_ids)
+        return self._doc_term_matrix.loc[self._stats_option.active_file_ids]
 
     def get_corpus_stats(self) -> CorpusStats:
         """Converts word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
-        A = self._stats_option
+        A = self._selected_doc_term_matrix
         # Check if empty corpus is given.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
