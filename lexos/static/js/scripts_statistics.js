@@ -115,6 +115,7 @@ function generateStatsBoxPlot () {
     .done(
       function (response) {
         $('#box-plot').html(response)
+        $('#corpus-result').css({'display': 'block'})
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -138,23 +139,20 @@ function generateStatsFileTable () {
   const dataTableConfig = {
     // Set the initial page length.
     pageLength: 10,
-
     // Replace entries to documents.
     language: {
       'lengthMenu': 'Display _MENU_ documents',
       'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
     },
-
     // Specify where the button is.
     dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
           <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
-
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
   }
 
   // send the ajax request
-  sendAjaxRequest('/fileTable', form)
+  sendAjaxRequest('/fileStatsTable', form)
     .done(
       function (response) {
         const outerTableDivSelector = $('#file-table')
@@ -163,7 +161,7 @@ function generateStatsFileTable () {
         // initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
         // display the corpus statistics result
-        $('#stats-result').css({'display': 'block'})
+        $('#file-result').css({'display': 'block'})
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
