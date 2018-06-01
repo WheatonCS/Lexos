@@ -1,8 +1,8 @@
 // Function to check for errors
 const checkForErrors = function () {
   // Set Error and Warning Messages
-  let errors = []
-  const err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</> a new document.'
+  const errors = []
+  const err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
   const err2 = 'You must provide a string to cut on.'
   const err3 = 'You must provide a default cutting value.'
   const err4 = 'Default cutting: Invalid segment size.'
@@ -93,28 +93,28 @@ const checkForErrors = function () {
 }
 
 // Function to check whether the user needs a warning
-var checkForWarnings = function () {
-  needsWarning = false
-  var maxSegs = 100
-  var defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
-  var cutVal = parseInt($("input[name='cutValue']").val()) // Segment Size
-  var overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
-  var indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
-  var eltswithoutindividualopts = new Array() // Elements without individual cutsets
+const checkForWarnings = function () {
+  let needsWarning = false
+  const maxSegs = 100
+  const defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
+  const cutVal = parseInt($("input[name='cutValue']").val()) // Segment Size
+  const overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
+  const indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
+  const eltswithoutindividualopts = new Array() // Elements without individual cutsets
 
   // Check each individual cutset
   indivdivs.each(function () {
-    var thisCutVal = $('#individualCutValue', this).val() // Individual segment size
-    var thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
+    let thisCutVal = $('#individualCutValue', this).val() // Individual segment size
+    let thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
     // Parse as integers
     if (thisCutVal != '') {
       thisCutVal = parseInt(thisCutVal)
       thisOverVal = parseInt(thisOverVal)
     }
     // Get a list of each of the cutset indices
-    var listindex = indivdivs.index(this)
-    currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
-    var isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
+    const listindex = indivdivs.index(this)
+    const currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
+    const isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
     // If not cut by milestone and no segment size, add to no individual cutsets array
     if (!isCutByMS && thisCutVal == '') {
       eltswithoutindividualopts.push(listindex)
@@ -122,7 +122,7 @@ var checkForWarnings = function () {
     // If no segment size
     if (thisCutVal != '') {
       // Get segment cut type
-      var thisCutType = $("input[name='cutType_" + currID + "']:checked").val()
+      const thisCutType = $("input[name='cutType_" + currID + "']:checked").val()
       // If not cut by milestone, use num_ variables set in template file
       if (!(isCutByMS)) {
         // Needs warning...
@@ -182,9 +182,9 @@ var checkForWarnings = function () {
   // needsWarning = true; // For testing
   if (needsWarning == true) {
     $('#needsWarning').val('true')
-    var sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
-    footerButtons = '<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>'
-    footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>'
+    const sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
+    const footerButtons = `<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>`
     $('#warning-modal-footer').html(footerButtons)
     $('#warning-modal-message').html(sizeWarning)
     // Hide the processing icon and show the modal
@@ -196,25 +196,25 @@ var checkForWarnings = function () {
   }
 }
 
-var xhr
+let xhr
 function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
      but the former is easier to pass to lexos.py functions, and the
      latter is easier for the ajax response to use. */
-  var formData = new FormData($('form')[0])
+  const formData = new FormData($('form')[0])
   formData.append('action', action)
-  var jsonform = jsonifyForm()
+  const jsonform = jsonifyForm()
   $.extend(jsonform, { 'action': action })
   // Initiate a timer to allow user to cancel if processing takes too long
-  var loadingTimeout = window.setTimeout(function () {
+  const loadingTimeout = window.setTimeout(function () {
     $('#needsWarning').val('true')
-    var timeWarning = 'Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.'
-    footerButtons = '<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>'
-    footerButtons += '<button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>'
+    const timeWarning = 'Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.'
+    const footerButtons = `<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>
+    <button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>`
     $('#warning-modal-footer').html(footerButtons)
     $('#warning-modal-message').html(timeWarning)
     $('#warning-modal').modal()
-  }, 10000) // 10 weconds
+  }, 10000) // 10 seconds
   xhr = $.ajax({
     url: '/doCutting',
     type: 'POST',
