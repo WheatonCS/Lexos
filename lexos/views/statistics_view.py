@@ -41,7 +41,6 @@ def statistics():
 @stats_blueprint.route("/fileReport", methods=["POST"])
 def file_report():
     session_manager.cache_analysis_option()
-    session_manager.cache_statistic_option()
     file_result = StatsModel().get_corpus_stats()
     return jsonify(
         mean=file_result.mean,
@@ -56,12 +55,10 @@ def file_report():
 @stats_blueprint.route("/fileTable", methods=["POST"])
 def file_table():
     session_manager.cache_analysis_option()
-    session_manager.cache_statistic_option()
     return StatsModel().get_file_stats()
 
 
 @stats_blueprint.route("/boxPlot", methods=["POST"])
 def box_plot():
     session_manager.cache_analysis_option()
-    session_manager.cache_statistic_option()
     return StatsModel().get_box_plot()
