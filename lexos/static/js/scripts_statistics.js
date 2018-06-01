@@ -82,48 +82,24 @@ function formatFileReportResponse (response) {
 /**
  * Display the result of the corpus statistics report on web.
  */
-function generateCorpusStatsReport () {
+function generateStatsFileReport () {
   $('#status-analyze').css({'visibility': 'visible'})
-  // Convert form into an object map string to string
+  // convert form into an object map string to string
   const form = jsonifyForm()
 
-  // Send the ajax request
-  sendAjaxRequest('/corpusStatsReport', form)
+  // send the ajax request
+  sendAjaxRequest('/fileReport', form)
     .done(
       function (response) {
-        $('#corpus-stats-report').html(formatFileReportResponse(response))
+        $('#file-report').html(formatFileReportResponse(response))
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        // If fail, hide the loading icon.
+        // If fail hide the loading icon.
         $('#status-analyze').css({'visibility': 'hidden'})
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
         runModal('Error encountered while generating the corpus statistics.')
-      })
-}
-
-/**
- * Display the result of the box plot on web page.
- */
-function generateStatsBoxPlot () {
-  // Convert form into an object map string to string
-  const form = jsonifyForm()
-
-  // Send the ajax request
-  sendAjaxRequest('/corpusBoxPlot', form)
-    .done(
-      function (response) {
-        $('#box-plot').html(response)
-        $('#corpus-result').css({'display': 'block'})
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        // If fail, hide the loading icon.
-        $('#status-analyze').css({'visibility': 'hidden'})
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the box plot.')
       })
 }
 
@@ -139,20 +115,23 @@ function generateStatsFileTable () {
   const dataTableConfig = {
     // Set the initial page length.
     pageLength: 10,
+
     // Replace entries to documents.
     language: {
       'lengthMenu': 'Display _MENU_ documents',
       'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
     },
+
     // Specify where the button is.
-    dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
-          <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
+    dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
+    '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
   }
 
   // send the ajax request
-  sendAjaxRequest('/fileStatsTable', form)
+  sendAjaxRequest('/fileTable', form)
     .done(
       function (response) {
         const outerTableDivSelector = $('#file-table')
@@ -161,7 +140,7 @@ function generateStatsFileTable () {
         // initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
         // display the corpus statistics result
-        $('#file-result').css({'display': 'block'})
+        $('#stats-result').css({'display': 'block'})
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -170,6 +149,28 @@ function generateStatsFileTable () {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
         runModal('Error encountered while generating the file statistics.')
+      })
+}
+
+/**
+ * Display the result of the box plot on web page
+ */
+function generateStatsBoxPlot () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = jsonifyForm()
+
+  // send the ajax request
+  sendAjaxRequest('/boxPlot', form)
+    .done(
+      function (response) {
+        $('#box-plot').html(response)
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        runModal('Error encountered while generating the box plot.')
       })
     .always(
       function () {
@@ -180,10 +181,8 @@ function generateStatsFileTable () {
 }
 
 $(function () {
-  // Hide the two result divs.
-  $('#file-result').css({'display': 'none'})
-  $('#corpus-result').css({'display': 'none'})
-
+  // Hide the stats result div.
+  $('#stats-result').css({'display': 'none'})
   // Hide the normalize options and set it to raw count.
   $('#normalizeTypeRaw').attr('checked', true)
   $('#normalize-options').css({'visibility': 'hidden'})
@@ -221,15 +220,12 @@ $(function () {
     const error = submissionError()
 
     if (error === null) {
-      // Only get corpus info when there are more than one file.
-      if (checked_files.length > 1) {
-        // Get the corpus result.
-        generateCorpusStatsReport()
-        // Get the box plot.
-        generateStatsBoxPlot()
-      }
-      // Get the file stats table.
+      // Get the file report result.
+      generateStatsFileReport()
+      // Get the file table.
       generateStatsFileTable()
+      // Get the box plot.
+      generateStatsBoxPlot()
     } else {
       runModal(error)
     }
