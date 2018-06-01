@@ -28,7 +28,7 @@ $(function() {
 </style>
 {% endblock %}
 
-{% block title %}visualizer{% endblock %}
+{% block title %}BubbleViz{% endblock %}
 
 {% block options %}
 <div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
@@ -44,7 +44,7 @@ $(function() {
 			<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}
 			<div class="forCheckBox">
-				<label>{{label}} 
+				<label>{{label}}
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
 				</label>
 			</div>
@@ -55,7 +55,7 @@ $(function() {
 		</div>
 	</div>
 </div>
-<div class="col-md-6">	
+<div class="col-md-6">
 	<legend>Filtering Options</legend>
 		<label>Graph Size:
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize']}}"/>
@@ -86,7 +86,7 @@ $(function() {
 </div>
 
 <!-- Canvg Used for Save to PNG -->
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script> 
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
 <script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
 <script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
 <canvas id="svg-canvas" style="display:none;"></canvas>
