@@ -219,7 +219,8 @@ class StatsModel(BaseModel):
                 autotick=False,
                 showline=False,
                 showticklabels=False
-            )
+            ),
+            hovermode="closest"
         )
 
         # Return a plotly figure.
