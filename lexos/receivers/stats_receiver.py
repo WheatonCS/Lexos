@@ -1,4 +1,10 @@
+from typing import List, NamedTuple
+
 from lexos.receivers.base_receiver import BaseReceiver
+
+
+class StatsFrontEndOption(NamedTuple):
+    active_file_ids: List[int]
 
 
 class StatsReceiver(BaseReceiver):
@@ -8,6 +14,6 @@ class StatsReceiver(BaseReceiver):
 
     def options_from_front_end(self):
         """So far there is no frontend option for statistics analysis"""
-        A = self._get_all_options_from_front_end()
-        print("DONE")
-        return "haha"
+        active_file_ids = self._front_end_data["active_file_ids"]
+        active_file_ids = active_file_ids.split(" ")[: -1]
+        return active_file_ids
