@@ -12,7 +12,7 @@ function runModal (htmlMsg) {
  * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
  */
 function submissionError () {
-  if ($('#num_active_files').val() < 2) { return 'You must have at least 1 active documents to proceed!' } else { return null }
+  if ($('#num_active_files').val() < 1) { return 'You must have at least 1 active documents to proceed!' } else { return null }
 }
 
 /**
