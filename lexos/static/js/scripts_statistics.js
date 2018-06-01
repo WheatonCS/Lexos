@@ -82,20 +82,20 @@ function formatFileReportResponse (response) {
 /**
  * Display the result of the corpus statistics report on web.
  */
-function generateStatsFileReport () {
+function generateCorpusStatsReport () {
   $('#status-analyze').css({'visibility': 'visible'})
-  // convert form into an object map string to string
+  // Convert form into an object map string to string
   const form = jsonifyForm()
 
-  // send the ajax request
-  sendAjaxRequest('/fileReport', form)
+  // Send the ajax request
+  sendAjaxRequest('/corpusStatsReport', form)
     .done(
       function (response) {
-        $('#file-report').html(formatFileReportResponse(response))
+        $('#corpus-stats-report').html(formatFileReportResponse(response))
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        // If fail hide the loading icon.
+        // If fail, hide the loading icon.
         $('#status-analyze').css({'visibility': 'hidden'})
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
@@ -104,21 +104,22 @@ function generateStatsFileReport () {
 }
 
 /**
- * Display the result of the box plot on web page
+ * Display the result of the box plot on web page.
  */
 function generateStatsBoxPlot () {
-  $('#status-analyze').css({'visibility': 'visible'})
-  // convert form into an object map string to string
+  // Convert form into an object map string to string
   const form = jsonifyForm()
 
-  // send the ajax request
-  sendAjaxRequest('/boxPlot', form)
+  // Send the ajax request
+  sendAjaxRequest('/corpusBoxPlot', form)
     .done(
       function (response) {
         $('#box-plot').html(response)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
+        // If fail, hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
         runModal('Error encountered while generating the box plot.')
@@ -223,7 +224,7 @@ $(function () {
       // Only get corpus info when there are more than one file.
       if (checked_files.length > 1) {
         // Get the corpus result.
-        generateStatsFileReport()
+        generateCorpusStatsReport()
         // Get the box plot.
         generateStatsBoxPlot()
       }
