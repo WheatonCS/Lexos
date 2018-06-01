@@ -13,7 +13,7 @@ class StatsReceiver(BaseReceiver):
         """The receiver to get stats front end options."""
         super().__init__()
 
-    def options_from_front_end(self):
+    def options_from_front_end(self) -> StatsFrontEndOption:
         """Get the option from front end.
 
         The only option is selected files ids.
