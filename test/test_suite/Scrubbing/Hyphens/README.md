@@ -1,17 +1,16 @@
 Hyphens
 =======
 
-This folder contains files for testing the hyphens function.
+#### Test Keep Hyphens
 
-## Test file: hyphens.txt
+Test files: hyphens.txt, puncPc.txt, puncPd.txt
+- puncPc.txt contains NO hyphens so puncPcResults.txt is an empty file
 
-0. UPLOAD hyphens.txt
+1. UPLOAD FILES
 
 1. SCRUB: 
-    - Remove all Punct
+    - Remove All Punctuation
     - Make Lowercase (optional)
     - Remove Digits (optional)
     - Keep Hyphens
 
-Results:
-- file content: -Hyphens a-test --- to s-ee if they are kept--- black-bird

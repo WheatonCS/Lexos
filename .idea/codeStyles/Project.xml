@@ -22,5 +22,9 @@
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
+    <codeStyleSettings language="Python">
+      <option name="WRAP_LONG_LINES" value="true" />
+      <option name="WRAP_ON_TYPING" value="1" />
+    </codeStyleSettings>
   </code_scheme>
 </component>

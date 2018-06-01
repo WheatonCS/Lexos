@@ -1,16 +1,16 @@
 Consolidations
 ==============
 
-This folder has files for testing consolidation functionality
+#### Test Consolidations
 
-## Test file: experiment.txt
+Test files: experiment.txt, consolidations_for_experiment.txt
 
-0. UPLOAD experiment.txt
+1. UPLOAD experiment.txt
 
-1. SCRUB: 
-    - deselect Remove all Punct
+2. SCRUB: 
+    - deselect Remove All Punctuation
     - deselect Make Lowercase
     - deselect Remove Digits
     
 2. CONSOLIDATIONS:
-    - Upload consolidations_for_experiment.txt
+    - UPLOAD consolidations_for_experiment.txt
