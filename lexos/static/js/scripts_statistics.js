@@ -1,6 +1,6 @@
 /**
- * the function to run the error modal
- * @param htmlMsg {string} - the message to display, you can put html in it
+ * The function to run the error modal.
+ * @param htmlMsg {string}: the message to display.
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -8,16 +8,16 @@ function runModal (htmlMsg) {
 }
 
 /**
- * check all the easy error with js, in this case, one document is required
- * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
+ * At least one document is required to run the stats.
+ * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
  */
 function submissionError () {
   if ($('#num_active_files').val() < 2) { return 'You must have at least 1 active documents to proceed!' } else { return null }
 }
 
 /**
- * the function to convert the from into json
- * @returns {{string: string}} - the from converted to json
+ * The function to convert the form into json
+ * @returns {{string: string}}: the form converted to json
  */
 function jsonifyForm () {
   const form = {}
@@ -28,10 +28,10 @@ function jsonifyForm () {
 }
 
 /**
- * send the ajax request
- * @param url: the url to post
- * @param form: the form data packed into an object
- * @returns {jQuery.Ajax}: an jQuery Ajax object
+ * Send the ajax request.
+ * @param url {string}: the url to post.
+ * @param form {{string: string}}: the form data packed into an object.
+ * @returns {jQuery.Ajax}: an jQuery Ajax object.
  */
 function sendAjaxRequest (url, form) {
   return $.ajax({
@@ -43,9 +43,9 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
- * format the ajax call response to HTML format string.
+ * Format the ajax call response to HTML format string.
  * @param response {json}: a json format string.
- * @return string formatted file report.
+ * @return {string}: formatted file report.
  */
 function formatFileReportResponse (response) {
   // Extract constant result from response.
@@ -81,7 +81,7 @@ function formatFileReportResponse (response) {
 }
 
 /**
- * display the result of the corpus statistics report on web.
+ * Display the result of the corpus statistics report on web.
  */
 function generateStatsFileReport () {
   $('#status-analyze').css({'visibility': 'visible'})
@@ -105,7 +105,7 @@ function generateStatsFileReport () {
 }
 
 /**
- * display the result of the file statistics on web.
+ * Display the result of the file statistics on web.
  */
 function generateStatsFileTable () {
   $('#status-analyze').css({'visibility': 'visible'})
@@ -154,7 +154,7 @@ function generateStatsFileTable () {
 }
 
 /**
- * display the result of the box plot on web page
+ * Display the result of the box plot on web page
  */
 function generateStatsBoxPlot () {
   $('#status-analyze').css({'visibility': 'visible'})
