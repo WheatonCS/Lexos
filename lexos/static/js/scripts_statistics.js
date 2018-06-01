@@ -12,6 +12,7 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
+    console.log($('#num_active_files').val())
     if ($('#num_active_files').val() < 2) { return 'You must have at least 1 active documents to proceed!' } else { return null }
 }
 
@@ -181,24 +182,6 @@ function generateStatsBoxPlot () {
         )
 }
 
-/**
- * Get number of active files and id of active files and save them to input field.
- */
-function checkActiveFile () {
-    // Get all the checked files.
-    const checked_files = $('.eachFileCheck :checked')
-    // Set a variable to store checked file ids.
-    let active_file_ids = ''
-    // Store checked file ids to the variable.
-    checked_files.each(function () {
-        active_file_ids += `${$(this).val()} `
-    })
-    // Store the variable to input field.
-    $('#active_file_ids').val(active_file_ids)
-    // Store the number of active files.
-    $('#num_active_files').val(checked_files.length)
-}
-
 $(function () {
     // Hide the stats result div.
     $('#stats-result').css({'display': 'none'})
@@ -217,8 +200,24 @@ $(function () {
         }
     })
 
-    // Check number of selected files when check/uncheck a file.
-    $('.file-selector').click(checkActiveFile())
+    /**
+     * Get number of active files and id of active files and save them to input
+     * field when check/uncheck a file.
+     */
+    $('.file-selector').click(function () {
+        // Get all the checked files.
+        const checked_files = $('.eachFileCheck :checked')
+        // Set a variable to store checked file ids.
+        let active_file_ids = ''
+        // Store checked file ids to the variable.
+        checked_files.each(function () {
+            active_file_ids += `${$(this).val()} `
+        })
+        // Store the variable to input field.
+        $('#active_file_ids').val(active_file_ids)
+        // Store the number of active files.
+        $('#num_active_files').val(checked_files.length)
+    })
 
     /**
      * The event handler for generate statistics clicked
