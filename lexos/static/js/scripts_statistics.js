@@ -204,6 +204,13 @@ $(function () {
    * field when check/uncheck a file.
    */
   $('.file-selector').click(function () {
+
+  })
+
+  /**
+   * The event handler for generate statistics clicked
+   */
+  $('#get-stats').click(function () {
     // Get all the checked files.
     const checked_files = $('.eachFileCheck :checked')
     // Set a variable to store checked file ids.
@@ -216,12 +223,8 @@ $(function () {
     $('#active_file_ids').val(active_file_ids)
     // Store the number of active files.
     $('#num_active_files').val(checked_files.length)
-  })
 
-  /**
-   * The event handler for generate statistics clicked
-   */
-  $('#get-stats').click(function () {
+
     const error = submissionError() // the error happens during submission
 
     if (error === null) { // if there is no error
