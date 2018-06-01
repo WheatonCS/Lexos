@@ -104,6 +104,28 @@ function generateStatsFileReport () {
 }
 
 /**
+ * Display the result of the box plot on web page
+ */
+function generateStatsBoxPlot () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = jsonifyForm()
+
+  // send the ajax request
+  sendAjaxRequest('/boxPlot', form)
+    .done(
+      function (response) {
+        $('#box-plot').html(response)
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        runModal('Error encountered while generating the box plot.')
+      })
+}
+
+/**
  * Display the result of the file statistics on web.
  */
 function generateStatsFileTable () {
@@ -123,8 +145,8 @@ function generateStatsFileTable () {
     },
 
     // Specify where the button is.
-    dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
-    '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+    dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
+          <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
 
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
@@ -149,28 +171,6 @@ function generateStatsFileTable () {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
         runModal('Error encountered while generating the file statistics.')
-      })
-}
-
-/**
- * Display the result of the box plot on web page
- */
-function generateStatsBoxPlot () {
-  $('#status-analyze').css({'visibility': 'visible'})
-  // convert form into an object map string to string
-  const form = jsonifyForm()
-
-  // send the ajax request
-  sendAjaxRequest('/boxPlot', form)
-    .done(
-      function (response) {
-        $('#box-plot').html(response)
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the box plot.')
       })
     .always(
       function () {
@@ -220,12 +220,15 @@ $(function () {
     const error = submissionError()
 
     if (error === null) {
-      // Get the file report result.
-      generateStatsFileReport()
-      // Get the file table.
+      // Only get corpus info when there are more than one file.
+      if (checked_files.length > 1) {
+        // Get the corpus result.
+        generateStatsFileReport()
+        // Get the box plot.
+        generateStatsBoxPlot()
+      }
+      // Get the file stats table.
       generateStatsFileTable()
-      // Get the box plot.
-      generateStatsBoxPlot()
     } else {
       runModal(error)
     }
