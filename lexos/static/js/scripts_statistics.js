@@ -156,13 +156,13 @@ function generateStatsFileTable () {
   sendAjaxRequest('/fileTable', form)
     .done(
       function (response) {
-        const outerTableDivSelector = $('#file-table')
+        const outerTableDivSelector = $('#file-stats-table')
         // put the response onto the web page
         outerTableDivSelector.html(response)
         // initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
         // display the corpus statistics result
-        $('#stats-result').css({'display': 'block'})
+
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -183,6 +183,7 @@ function generateStatsFileTable () {
 $(function () {
   // Hide the stats result div.
   $('#stats-result').css({'display': 'none'})
+  $('#file-stats-result').css({'display': 'none'})
   // Hide the normalize options and set it to raw count.
   $('#normalizeTypeRaw').attr('checked', true)
   $('#normalize-options').css({'visibility': 'hidden'})
@@ -220,15 +221,19 @@ $(function () {
     const error = submissionError()
 
     if (error === null) {
+
+      // Get the file stats table.
+      generateStatsFileTable()
+      $('#file-stats-result').css({'display': 'block'})
       // Only get corpus info when there are more than one file.
       if (checked_files.length > 1) {
         // Get the corpus result.
         generateStatsFileReport()
         // Get the box plot.
         generateStatsBoxPlot()
+        $('#stats-result').css({'display': 'block'})
       }
-      // Get the file stats table.
-      generateStatsFileTable()
+      else {$('#stats-result').css({'display': 'none'})}
     } else {
       runModal(error)
     }
