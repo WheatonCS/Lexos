@@ -9,11 +9,19 @@ class StatsFrontEndOption(NamedTuple):
 
 class StatsReceiver(BaseReceiver):
     def __init__(self):
-        """So far there is no frontend option for statistics analysis"""
+        """The receiver to get stats front end options."""
         super().__init__()
 
     def options_from_front_end(self):
-        """So far there is no frontend option for statistics analysis"""
-        active_file_ids = self._front_end_data["active_file_ids"]
-        active_file_ids = active_file_ids.split(" ")[: -1]
-        return active_file_ids
+        """Get the option from front end.
+
+        The only option is selected files ids.
+        """
+        # Get active file ids from front end as a string.
+        active_file_ids_string = self._front_end_data["active_file_ids"]
+        # Split the file ids.
+        active_file_ids = active_file_ids_string.split(" ")
+        # Force file ids to be stri
+        active_file_ids = [int(file_id) for file_id in active_file_ids
+                           if file_id != ""]
+        return StatsFrontEndOption(active_file_ids=active_file_ids)
