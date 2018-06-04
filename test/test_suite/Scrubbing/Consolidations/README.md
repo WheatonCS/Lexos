@@ -16,3 +16,7 @@ Consolidations
     
 2. CONSOLIDATIONS:
     - UPLOAD consolidations_for_experiment.txt
+
+3. RESULTS
+    - a file(experimentResults.txt) with
+        * all 'o's consolidated to 'a's
