@@ -1,27 +1,27 @@
 Stop Words & Keep Words
 ==========
 
-#### Test sto
+#### Test Stop Words & Keep Words
 
-*Test files:* lineBreaks.txt, spaces.txt, tabs.txt, whitespace.txt
+*Test files:* kw_for_experiment.txt, kw_text.txt, sw_for_experiment.txt,
+sw_kw_experiment.txt
 
-*Result file:* lineBreaksResults.txt, spacesResults.txt, tabsResults.txt,
-whitespaceResults.txt
+*Result files:* kw_experimentResults.txt, sw_experimentResults.txt
 
-1. UPLOAD FILES
+1. UPLOAD kw_text.txt and sw_kw_experiment.txt
 
 2. SCRUB: 
     - Remove All Punctuation
     - Make Lowercase
     - Remove Digits
-    - Remove Whitespace
-        * Remove Spaces
-        * Remove Tabs
-        * Remove Line Breaks
-
+    - Stop Words/Keep Words
+        * Toggle to Stop Words and upload sw_for_experiment.txt
+        * Toggle to Keep Words and upload kw_for_experiment.txt
+    
 3. RESULTS
-    - Four files containing
+    - Two files containing
         * lowercase letters
         * no digits
         * no punctuation
-        * type of whitespace removed depends on user selection
+    - sw_experimentResults.txt with the, dog, and ran removed
+    - kw_experimentResults.txt with no content

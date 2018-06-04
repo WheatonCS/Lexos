@@ -19,7 +19,7 @@ whitespaceResults.txt
         * Remove Tabs
         * Remove Line Breaks
 
-3. RESULTS
+3. RESULTS:
     - Four files containing
         * lowercase letters
         * no digits
