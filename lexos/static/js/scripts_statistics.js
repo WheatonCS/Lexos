@@ -49,39 +49,43 @@ function sendAjaxRequest (url, form) {
 
 /**
  * Format the ajax call response to HTML format string.
- * @param {Object} response: a json format string.
- * @return {string}: formatted file report.
+ * @param {object} response: a json format string.
+ * @return {object}: a json formatted file report.
  */
 function formatFileReportResponse (response) {
   // Extract constant result from response.
-  const token_name = response['token_name']
-  const mean = `<p>Average document size is ${response['mean']} ${token_name}</p>`
-  const std_deviation = `<p>Standard deviation of documents is ${response['std_deviation']} ${token_name}</p>`
-  const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']} ${token_name}</p>`
+  const unit = response['unit']
+  const mean = `Average document size is ${response['mean']} ${unit}.`
+  const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
+  const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
   // Extract standard deviation anomaly information.
-  let anomaly_se
-  if (response['anomaly_se'].every(function (element) { return element === null })) {
-    anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
-  } else {
-    anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
-    response['anomaly_se'].forEach(function (element) {
-      if (element !== null) { anomaly_se += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
-    })
-  }
-
-  // Extract inter quartile range anomaly information.
-  let anomaly_iqr
-  if (response['anomaly_iqr'].every(function (element) { return element === null })) {
-    anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
-  } else {
-    anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
-    response['anomaly_iqr'].forEach(function (element) {
-      if (element !== null) { anomaly_iqr += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
-    })
-  }
+  // let anomaly_se
+  // if (response['anomaly_se'].every(function (element) { return element === null })) {
+  //   anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
+  // } else {
+  //   anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
+  //   response['anomaly_se'].forEach(function (element) {
+  //     if (element !== null) { anomaly_se += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
+  //   })
+  // }
+  //
+  // // Extract inter quartile range anomaly information.
+  // let anomaly_iqr
+  // if (response['anomaly_iqr'].every(function (element) { return element === null })) {
+  //   anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
+  // } else {
+  //   anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
+  //   response['anomaly_iqr'].forEach(function (element) {
+  //     if (element !== null) { anomaly_iqr += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
+  //   })
+  // }
 
   // Return the retracted information.
-  return `${mean}${std_deviation}${inter_quartile_range}${anomaly_se}${anomaly_iqr}`
+  return {
+    'mean': mean,
+    'stdDeviation': stdDeviation,
+    'IQR': IQR
+  }
 }
 
 /**
@@ -97,7 +101,10 @@ function generateStatsFileReport () {
   sendAjaxRequest('/corpusStatsReport', form)
     .done(
       function (response) {
-        $('#file-report').html(formatFileReportResponse(response))
+        const formattedResult = formatFileReportResponse(response)
+        $('#file-report-mean').html(formattedResult.mean)
+        $('#file-report-std-deviation').html(formattedResult.stdDeviation)
+        $('#file-report-IQR').html(formattedResult.IQR)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -213,17 +220,17 @@ $(function () {
    */
   $('#get-stats').click(function () {
     // Get all the checked files.
-    const checked_files = $('.eachFileCheck :checked')
+    const checkedFiles = $('.eachFileCheck :checked')
     // Set a variable to store checked file ids.
-    let active_file_ids = ''
+    let activeFileIds = ''
     // Store checked file ids by putting a blank between each id.
-    checked_files.each(function () {
-      active_file_ids += `${$(this).val()} `
+    checkedFiles.each(function () {
+      activeFileIds += `${$(this).val()} `
     })
     // Store the variable to input field.
-    $('#active_file_ids').val(active_file_ids)
+    $('#active_file_ids').val(activeFileIds)
     // Store the number of active files.
-    $('#num_active_files').val(checked_files.length)
+    $('#num_active_files').val(checkedFiles.length)
 
     // Get the possible error during the submission.
     const error = submissionError()
@@ -235,7 +242,7 @@ $(function () {
       $('#file-stats-result').css({'display': 'block'})
 
       // Only get corpus info when there are more than one file.
-      if (checked_files.length > 1) {
+      if (checkedFiles.length > 1) {
         // Get the corpus result.
         generateStatsFileReport()
         // Get the box plot.
