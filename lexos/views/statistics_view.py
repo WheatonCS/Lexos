@@ -44,7 +44,7 @@ def corpus_stats_report():
     file_result = StatsModel().get_corpus_stats()
     return jsonify(
         mean=file_result.mean,
-        token_name=StatsModel().token_type,
+        token_name=StatsModel().token_type_str,
         anomaly_se=file_result.anomaly_se,
         anomaly_iqr=file_result.anomaly_iqr,
         std_deviation=file_result.std_deviation,

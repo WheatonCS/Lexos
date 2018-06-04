@@ -1,8 +1,8 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
-from typing import List, Optional, NamedTuple, Set
+from typing import Optional, NamedTuple, Set
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
@@ -20,9 +20,9 @@ class CorpusStats(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
     mean: float  # Average size of all files.
     # File anomaly found using standard error.
-    anomaly_se: List[Optional[str]]
+    anomaly_se: TextAnomalies
     # File anomaly found using interquartile range.
-    anomaly_iqr: List[Optional[str]]
+    anomaly_iqr: TextAnomalies
     std_deviation: float  # Standard deviation of all file sizes.
     inter_quartile_range: float  # Interquartile range.
 
@@ -75,7 +75,12 @@ class StatsModel(BaseModel):
             else StatsReceiver().options_from_front_end()
 
     @property
-    def token_type(self) -> str:
+    def _active_doc_term_matrix(self) -> pd.DataFrame:
+        """:return: A dtm that contains only user selected files."""
+        return self._doc_term_matrix.iloc[self._stats_option.active_file_ids]
+
+    @property
+    def token_type_str(self) -> str:
         """:return: the token type that was used when calculating the stats."""
         if self._test_id_temp_label_map is not None:
             return self._test_token_type
@@ -86,11 +91,6 @@ class StatsModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "terms" if token_type == "word" else "characters"
 
-    @property
-    def _active_doc_term_matrix(self) -> pd.DataFrame:
-        """:return: A dtm that contains only user selected files."""
-        return self._doc_term_matrix.iloc[self._stats_option.active_file_ids]
-
     def get_corpus_stats(self) -> CorpusStats:
         """Converts word lists completely to statistic.
 
@@ -99,13 +99,16 @@ class StatsModel(BaseModel):
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
+        # Get the active file ids.
+        active_file_ids = self._active_doc_term_matrix.index
+
         # Get the file count sums by sum the column.
-        file_sizes = self._active_doc_term_matrix.sum(1)
+        file_sizes = self._active_doc_term_matrix.sum(axis="columns")
         # Get the average file word counts.
-        mean = file_sizes.mean(0)
+        mean = file_sizes.mean(axis="index")
 
         # Get the standard deviation of the file word counts.
-        std_deviation = file_sizes.std(0)
+        std_deviation = file_sizes.std(axis="index")
 
         # Get the iqr of the file word counts.
         first_quartile = file_sizes.quantile(0.25)
@@ -116,25 +119,40 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
-        anomaly_se = [
-            f"small: {self._id_temp_label_map[file_id]}"
+        anomaly_se_small = Set(
+            self._id_temp_label_map[file_id]
+            for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
-            else f"large: {self._id_temp_label_map[file_id]}"
+        )
+
+        anomaly_se_large = Set(
+            self._id_temp_label_map[file_id]
+            for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
-            else None
-            for file_id in self._active_doc_term_matrix.index.values]
+        )
+
+        anomaly_se = TextAnomalies(small_items=anomaly_se_small,
+                                   large_items=anomaly_se_large)
 
         # Interquartile range analysis: We detect anomaly by finding files with
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
-        anomaly_iqr = [
-            f"small: {self._id_temp_label_map[file_id]}"
+        anomaly_iqr_small = Set(
+            self._id_temp_label_map[file_id]
+            for file_id in active_file_ids
             if file_sizes[file_id] < first_quartile - 1.5 * iqr
-            else f"large: {self._id_temp_label_map[file_id]}"
-            if file_sizes[file_id] > third_quartile + 1.5 * iqr
-            else None
-            for file_id in self._active_doc_term_matrix.index.values]
+        )
 
+        anomaly_iqr_large = Set(
+            self._id_temp_label_map[file_id]
+            for file_id in active_file_ids
+            if file_sizes[file_id] > third_quartile + 1.5 * iqr
+        )
+
+        anomaly_iqr = TextAnomalies(small_items=anomaly_iqr_small,
+                                    large_items=anomaly_iqr_large)
+
+        # Return the namedTuple and round each value.
         return CorpusStats(
             mean=round(mean, 2),
             anomaly_se=anomaly_se,
@@ -158,26 +176,26 @@ class StatsModel(BaseModel):
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
             columns=["Documents",
-                     f"Number of {self.token_type} occurring once",
-                     f"Total number of {self.token_type}",
-                     f"Average number of {self.token_type}",
-                     f"Distinct number of {self.token_type}"])
+                     f"Number of {self.token_type_str} occurring once",
+                     f"Total number of {self.token_type_str}",
+                     f"Average number of {self.token_type_str}",
+                     f"Distinct number of {self.token_type_str}"])
 
         # Save document names in the data frame.
         file_stats["Documents"] = labels
         # Find number of token that appears only once.
-        file_stats[f"Number of {self.token_type} occurring once"] = \
+        file_stats[f"Number of {self.token_type_str} occurring once"] = \
             self._active_doc_term_matrix.eq(1).sum(axis=1).values
         # Find total number of tokens.
-        file_stats[f"Total number of {self.token_type}"] = \
+        file_stats[f"Total number of {self.token_type_str}"] = \
             self._active_doc_term_matrix.sum(axis=1).values
         # Find distinct number of tokens.
-        file_stats[f"Distinct number of {self.token_type}"] = \
+        file_stats[f"Distinct number of {self.token_type_str}"] = \
             self._active_doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
-        file_stats[f"Average number of {self.token_type}"] = \
-            file_stats[f"Total number of {self.token_type}"] / \
-            file_stats[f"Distinct number of {self.token_type}"]
+        file_stats[f"Average number of {self.token_type_str}"] = \
+            file_stats[f"Total number of {self.token_type_str}"] / \
+            file_stats[f"Distinct number of {self.token_type_str}"]
 
         # Round all the values and return as a HTML string.
         return file_stats.round(3).to_html(
