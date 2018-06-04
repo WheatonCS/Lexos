@@ -45,9 +45,11 @@ def corpus_stats_report():
     return jsonify(
         unit=file_result.unit,
         mean=file_result.mean,
-        anomaly_se=file_result.anomaly_se,
-        anomaly_iqr=file_result.anomaly_iqr,
         std_deviation=file_result.std_deviation,
+        anomaly_se_small=file_result.anomaly_se.small_items,
+        anomaly_se_large=file_result.anomaly_se.large_items,
+        anomaly_iqr_small=file_result.anomaly_iqr.small_items,
+        anomaly_iqr_large=file_result.anomaly_iqr.large_items,
         inter_quartile_range=file_result.inter_quartile_range
     )
 
