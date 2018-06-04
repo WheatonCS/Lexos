@@ -715,31 +715,35 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         option text fields and files.
     """
 
-    file_strings = {}
+    file_strings = {'consfileselect[]': '', 'lemfileselect[]': '',
+                    'scfileselect[]': '', 'swfileselect[]': '',
+                    'manualconsolidations': '', 'manuallemmas': '',
+                    'manualspecialchars': '', 'manualstopwords': ''}
+
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
             file_content = opt_uploads[key].read()
-            file_strings[index] = general_functions.decode_bytes(file_content)
+            file_strings[key] = general_functions.decode_bytes(file_content)
             opt_uploads[key].seek(0)
         elif key.strip('[]') in storage_options:
-            file_strings[index] = load_scrub_optional_upload(
+            file_strings[key] = load_scrub_optional_upload(
                 storage_folder, storage_filenames[index])
         else:
             session['scrubbingoptions']['optuploadnames'][key] = ''
-            file_strings[index] = ""
+            file_strings[key] = ""
 
     # Create an array of option strings:
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
     #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
 
-    all_options = [file_strings.get(0),
-                   file_strings.get(1),
-                   file_strings.get(2),
-                   file_strings.get(3),
-                   file_strings.get(4),
-                   file_strings.get(5),
-                   file_strings.get(6),
-                   file_strings.get(7)]
+    all_options = [file_strings.get('consfileselect[]'),
+                   file_strings.get('lemfileselect[]'),
+                   file_strings.get('scfileselect[]'),
+                   file_strings.get('swfileselect[]'),
+                   request.form('manualconsolidations'),
+                   request.form('manuallemmas'),
+                   request.form('manualspecialchars'),
+                   request.form('manualstopwords')]
 
     return all_options
 
