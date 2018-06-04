@@ -740,10 +740,10 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
                    file_strings.get('lemfileselect[]'),
                    file_strings.get('scfileselect[]'),
                    file_strings.get('swfileselect[]'),
-                   request.form('manualconsolidations'),
-                   request.form('manuallemmas'),
-                   request.form('manualspecialchars'),
-                   request.form('manualstopwords')]
+                   request.form['manualconsolidations'],
+                   request.form['manuallemmas'],
+                   request.form['manualspecialchars'],
+                   request.form['manualstopwords']]
 
     return all_options
 
