@@ -1,9 +1,12 @@
+import os
 import numpy as np
 import pandas as pd
 from bs4 import BeautifulSoup
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
+from lexos.helpers.constants import RESULTS_FOLDER
+from lexos.managers.session_manager import session_folder
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
     TokenizerReceiver
@@ -178,3 +181,21 @@ class TokenizerModel(BaseModel):
             return self._get_file_row_dtm_table()
         else:
             raise ValueError("Invalid tokenizer orientation from front end.")
+
+    def download_dtm(self) -> str:
+        if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
+            required_dtm = self._get_file_col_dtm()
+        elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
+            required_dtm = self._get_file_row_dtm()
+        else:
+            raise ValueError("Invalid tokenizer orientation from front end.")
+
+        folder_path = os.path.join(session_folder(), RESULTS_FOLDER)
+        if not os.path.isdir(folder_path):
+            os.makedirs(folder_path)
+
+        file_path = f"{folder_path}tokenizer_result.csv"
+
+        required_dtm.to_csv(file_path)
+
+        return file_path

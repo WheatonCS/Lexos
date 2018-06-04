@@ -120,5 +120,4 @@ $(function () {
       runModal(error)
     }
   })
-
 })
