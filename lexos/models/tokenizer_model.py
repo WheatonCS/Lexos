@@ -194,7 +194,7 @@ class TokenizerModel(BaseModel):
         if not os.path.isdir(folder_path):
             os.makedirs(folder_path)
 
-        file_path = f"{folder_path}tokenizer_result.csv"
+        file_path = f"{folder_path}/tokenizer_result.csv"
 
         required_dtm.to_csv(file_path)
 
