@@ -14,7 +14,7 @@ test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
 test_stats_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1])
 test_option_one = StatsTestOptions(
-    token_type="terms",
+    token_type_str="terms",
     doc_term_matrix=test_dtm_one,
     front_end_option=test_stats_front_end_option_one,
     id_temp_label_map=test_id_temp_table_one)
@@ -38,7 +38,7 @@ test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_stats_front_end_option_two = \
     StatsFrontEndOption(active_file_ids=[0, 1, 2])
 test_option_two = StatsTestOptions(
-    token_type="characters",
+    token_type_str="characters",
     doc_term_matrix=test_dtm_two,
     front_end_option=test_stats_front_end_option_two,
     id_temp_label_map=test_id_temp_table_two)
@@ -61,7 +61,7 @@ test_id_temp_table_anomaly = \
 test_stats_front_end_option_anomaly = \
     StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 test_option_anomaly = \
-    StatsTestOptions(token_type="characters", doc_term_matrix=test_dtm_anomaly,
+    StatsTestOptions(token_type_str="characters", doc_term_matrix=test_dtm_anomaly,
                      front_end_option=test_stats_front_end_option_anomaly,
                      id_temp_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
@@ -128,13 +128,17 @@ class TestCorpusInfo:
         assert test_corpus_result_anomaly.anomaly_se.small_items == {"F1.txt"}
         assert test_corpus_result_anomaly.anomaly_se.large_items == {"F10.txt"}
 
+    def test_file_unit(self):
+        assert test_corpus_result_one.unit == "terms"
+        assert test_corpus_result_two.unit == "characters"
+
 
 # -------------------- Empty data frame case test suite ---------------------
 test_dtm_empty = pd.DataFrame()
 test_id_temp_table_empty = {}
 test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[])
 test_option_empty = \
-    StatsTestOptions(token_type="terms",
+    StatsTestOptions(token_type_str="terms",
                      doc_term_matrix=test_dtm_empty,
                      front_end_option=test_stats_front_end_option_empty,
                      id_temp_label_map=test_id_temp_table_empty)

@@ -18,6 +18,7 @@ class TextAnomalies(NamedTuple):
 
 class CorpusStats(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
+    unit: str  # Unit of all statistics.
     mean: float  # Average size of all files.
     # File anomaly found using standard error.
     anomaly_se: TextAnomalies
@@ -29,7 +30,7 @@ class CorpusStats(NamedTuple):
 
 class StatsTestOptions(NamedTuple):
     """A typed tuple to hold all statistics test options."""
-    token_type: str
+    token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: StatsFrontEndOption
     id_temp_label_map: IdTempLabelMap
@@ -45,12 +46,12 @@ class StatsModel(BaseModel):
         super().__init__()
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
-            self._test_token_type = test_options.token_type
+            self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
-            self._test_token_type = None
+            self._test_token_type_str = None
             self._test_front_end_option = None
             self._test_id_temp_label_map = None
 
@@ -80,10 +81,10 @@ class StatsModel(BaseModel):
         return self._doc_term_matrix.iloc[self._stats_option.active_file_ids]
 
     @property
-    def token_type_str(self) -> str:
+    def _token_type_str(self) -> str:
         """:return: the token type that was used when calculating the stats."""
         if self._test_id_temp_label_map is not None:
-            return self._test_token_type
+            return self._test_token_type_str
         else:
             # Get dtm front end options.
             dtm_options = MatrixReceiver().options_from_front_end()
@@ -154,6 +155,7 @@ class StatsModel(BaseModel):
 
         # Return the namedTuple and round each value.
         return CorpusStats(
+            unit=self._token_type_str,
             mean=round(mean, 2),
             anomaly_se=anomaly_se,
             anomaly_iqr=anomaly_iqr,
@@ -176,26 +178,26 @@ class StatsModel(BaseModel):
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
             columns=["Documents",
-                     f"Number of {self.token_type_str} occurring once",
-                     f"Total number of {self.token_type_str}",
-                     f"Average number of {self.token_type_str}",
-                     f"Distinct number of {self.token_type_str}"])
+                     f"Number of {self._token_type_str} occurring once",
+                     f"Total number of {self._token_type_str}",
+                     f"Average number of {self._token_type_str}",
+                     f"Distinct number of {self._token_type_str}"])
 
         # Save document names in the data frame.
         file_stats["Documents"] = labels
         # Find number of token that appears only once.
-        file_stats[f"Number of {self.token_type_str} occurring once"] = \
+        file_stats[f"Number of {self._token_type_str} occurring once"] = \
             self._active_doc_term_matrix.eq(1).sum(axis=1).values
         # Find total number of tokens.
-        file_stats[f"Total number of {self.token_type_str}"] = \
+        file_stats[f"Total number of {self._token_type_str}"] = \
             self._active_doc_term_matrix.sum(axis=1).values
         # Find distinct number of tokens.
-        file_stats[f"Distinct number of {self.token_type_str}"] = \
+        file_stats[f"Distinct number of {self._token_type_str}"] = \
             self._active_doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
-        file_stats[f"Average number of {self.token_type_str}"] = \
-            file_stats[f"Total number of {self.token_type_str}"] / \
-            file_stats[f"Distinct number of {self.token_type_str}"]
+        file_stats[f"Average number of {self._token_type_str}"] = \
+            file_stats[f"Total number of {self._token_type_str}"] / \
+            file_stats[f"Distinct number of {self._token_type_str}"]
 
         # Round all the values and return as a HTML string.
         return file_stats.round(3).to_html(
