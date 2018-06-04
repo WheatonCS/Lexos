@@ -1,6 +1,7 @@
 /**
  * The function to run the error modal.
- * @param htmlMsg {string}: the message to display.
+ * @param {string} htmlMsg: the message to display.
+ * @returns {void}.
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -12,7 +13,11 @@ function runModal (htmlMsg) {
  * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
  */
 function submissionError () {
-  if ($('#num_active_files').val() < 1) { return 'You must have at least 1 active documents to proceed!' } else { return null }
+  if ($('#num_active_files').val() < 1) {
+    return 'You must have at least 1 active documents to proceed!'
+  } else {
+    return null
+  }
 }
 
 /**
@@ -29,8 +34,8 @@ function jsonifyForm () {
 
 /**
  * Send the ajax request.
- * @param url {string}: the url to post.
- * @param form {{string: string}}: the form data packed into an object.
+ * @param {string} url: the url to post.
+ * @param {{string: string}} form: the form data packed into an object.
  * @returns {jQuery.Ajax}: an jQuery Ajax object.
  */
 function sendAjaxRequest (url, form) {
@@ -44,7 +49,7 @@ function sendAjaxRequest (url, form) {
 
 /**
  * Format the ajax call response to HTML format string.
- * @param response {json}: a json format string.
+ * @param {Object} response: a json format string.
  * @return {string}: formatted file report.
  */
 function formatFileReportResponse (response) {
@@ -55,7 +60,7 @@ function formatFileReportResponse (response) {
   const inter_quartile_range = `<p>Inter quartile range of documents is ${response['inter_quartile_range']} ${token_name}</p>`
   // Extract standard deviation anomaly information.
   let anomaly_se
-  if (response['anomaly_se'].every(function (element) { return element === null})) {
+  if (response['anomaly_se'].every(function (element) { return element === null })) {
     anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
   } else {
     anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
@@ -66,7 +71,7 @@ function formatFileReportResponse (response) {
 
   // Extract inter quartile range anomaly information.
   let anomaly_iqr
-  if (response['anomaly_iqr'].every(function (element) { return element === null})) {
+  if (response['anomaly_iqr'].every(function (element) { return element === null })) {
     anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
   } else {
     anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
@@ -81,6 +86,7 @@ function formatFileReportResponse (response) {
 
 /**
  * Display the result of the corpus statistics report on web.
+ * @return {string}: formatted file report.
  */
 function generateStatsFileReport () {
   $('#status-analyze').css({'visibility': 'visible'})
@@ -104,7 +110,8 @@ function generateStatsFileReport () {
 }
 
 /**
- * Display the result of the box plot on web page
+ * Display the result of the box plot on web page.
+ * @return {string}: formatted file report.
  */
 function generateStatsBoxPlot () {
   $('#status-analyze').css({'visibility': 'visible'})
@@ -127,6 +134,7 @@ function generateStatsBoxPlot () {
 
 /**
  * Display the result of the file statistics on web.
+ * @return {string}: formatted file report.
  */
 function generateStatsFileTable () {
   $('#status-analyze').css({'visibility': 'visible'})
@@ -162,7 +170,6 @@ function generateStatsFileTable () {
         // initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
         // display the corpus statistics result
-
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -235,9 +242,7 @@ $(function () {
         generateStatsBoxPlot()
         // Display the result.
         $('#corpus-stats-result').css({'display': 'block'})
-      }
-      // Else hide the corpus stats result div.
-      else {
+      } else { // Else hide the corpus stats result div.
         $('#corpus-stats-result').css({'display': 'none'})
       }
     } else {
