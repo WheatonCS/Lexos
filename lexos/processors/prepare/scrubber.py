@@ -792,12 +792,6 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     option_strings = prepare_additional_options(
         opt_uploads, storage_options, storage_folder, storage_filenames)
 
-    count = 0
-    while count <= 7:
-        if option_strings[count] is None:
-            option_strings[count] = ""
-        count = count + 1
-
     # handle uploaded FILES: consolidations, lemmas, special characters,
     # stop-keep words
     cons_file_string = option_strings[0]
