@@ -43,8 +43,8 @@ def corpus_stats_report():
     session_manager.cache_analysis_option()
     file_result = StatsModel().get_corpus_stats()
     return jsonify(
+        unit=file_result.unit,
         mean=file_result.mean,
-        token_name=StatsModel().token_type_str,
         anomaly_se=file_result.anomaly_se,
         anomaly_iqr=file_result.anomaly_iqr,
         std_deviation=file_result.std_deviation,
