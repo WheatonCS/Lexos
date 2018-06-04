@@ -125,7 +125,7 @@ function checkForWarnings () {
     // If no segment size
     if (thisCutVal !== '') {
       // Get segment cut type
-      const thisCutType = $("input[name='cutType_" + currID + "']:checked").val()
+      const thisCutType = $(`input[name='cutType_${currID}']:checked`).val()
       // If not cut by milestone, use num_ variables set in template file
       if (!(isCutByMS)) {
         // Needs warning...
@@ -235,7 +235,7 @@ function doAjax (action) {
         $('#error-modal-message').html(not_apply_msg)
         $('#error-modal').modal()
       }
-      console.log('bad: ' + textStatus + ': ' + errorThrown)
+      console.log(`bad: ${textStatus}: ${errorThrown}`)
     }
   }).done(function (response) {
     clearTimeout(loadingTimeout)
@@ -326,49 +326,49 @@ function doAjax (action) {
       fieldset.append(indcutoptswrap)
       if ($.type(fileContents) === 'string') {
         j++
-        fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
+        fieldset.append(`<div class="filecontents">${fileContents}</div>`) // Keep this with no whitespace!
       }
       else {
         $.each(fileContents, function (i, segment) {
           j++
           const segmentLabel = segment[0]
           const segmentString = segment[1]
-          fieldset.append('<div class="filechunk"><span class="filechunklabel">' + segmentLabel + '</span><div>' + segmentString + '</div></div>')
+          fieldset.append(`<div class="filechunk"><span class="filechunklabel">${segmentLabel}</span><div>${segmentString}</div></div>`)
         })
       }
       $('#preview-body').append(fieldset)
       // Hide the individual cutting wrapper if the form doesn't contain values for it
-      if (!('cutType_' + fileID in formData) && formData['cutType_' + fileID] !== '') {
-        $('#indcutoptswrap_' + fileID).addClass('hidden')
+      if (!(`cutType_${fileID}` in formData) && formData[`cutType_${fileID}`] !== '') {
+        $(`#indcutoptswrap_${fileID}`).addClass('hidden')
       }
       // Check the cut type boxes
       if (formData['cutTypeInd'] === 'letters') {
-        $('#cutTypeIndLetters_' + fileID).prop('checked', true)
+        $(`#cutTypeIndLetters_${fileID}`).prop('checked', true)
       }
       if (formData['cutTypeInd'] === 'words') {
-        $('#cutTypeIndWords_' + fileID).prop('checked', true)
+        $(`#cutTypeIndWords_${fileID}`).prop('checked', true)
       }
       if (formData['cutTypeInd'] === 'lines') {
-        $('#cutTypeIndLines_' + fileID).prop('checked', true)
+        $(`#cutTypeIndLines_${fileID}`).prop('checked', true)
       }
       if (formData['cutTypeInd'] === 'number') {
-        $('#cutTypeIndNumber_' + fileID).prop('checked', true)
-        $('#numOf_' + fileID).html('Number of Segments')
+        $(`#cutTypeIndNumber_${fileID}`).prop('checked', true)
+        $(`#numOf_${fileID}`).html('Number of Segments')
         $('#lastprop-div').addClass('transparent')
-        $('#cutLastProp_' + fileID).prop('disabled', true)
+        $(`#cutLastProp_${fileID}`).prop('disabled', true)
       }
-      if (formData['Overlap']) { $('#cutOverlap_' + fileID).val(formData['Overlap']) } else { $('#cutOverlap_' + fileID).val(0) }
-      if (formData['cutLastProp_' + fileID]) {
-        $('#lastprop-div_' + fileID).val(formData['#cutLastProp_' + fileID])
+      if (formData['Overlap']) { $(`#cutOverlap_${fileID}`).val(formData['Overlap']) } else { $(`#cutOverlap_${fileID}`).val(0) }
+      if (formData[`cutLastProp_${fileID}`]) {
+        $(`#lastprop-div_${fileID}`).val(formData[`#cutLastProp_${fileID}`])
       }
       if (formData['cutType'] === 'milestone') {
-        $('#cutTypeIndNumber_' + fileID).prop('checked', true)
+        $(`#cutTypeIndNumber_${fileID}`).prop('checked', true)
       }
-      if (formData['MScutWord_' + fileID] === 'milestone') {
-        $('#MScutWord' + fileID).val(formData['cuttingoptions']['cutValue'])
+      if (formData[`MScutWord_${fileID}`] === 'milestone') {
+        $(`#MScutWord${fileID}`).val(formData['cuttingoptions']['cutValue'])
       }
     })
-    $('.fa-folder-open-o').attr('data-original-title', 'You have ' + j + ' active document(s).')
+    $('.fa-folder-open-o').attr('data-original-title', `You have ${j} active document(s).`)
     $('#status-prepare').css({ 'visibility': 'hidden' })
   })
 }
