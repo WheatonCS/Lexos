@@ -1,98 +1,101 @@
 // Function to check for errors
 function checkForErrors () {
   // Set Error and Warning Messages
-  const errors = []
+
+  let error_msg = doCheck()
+
+  if (error_msg !== '') {
+    $('#hasErrors').val('true')
+    $('#status-prepare').css({'visibility': 'hidden'})
+    console.log(error_msg)
+    $('#error-modal-message').html(error_msg)
+    $('#error-modal').modal()
+  }
+  else {
+    $('#hasErrors').val('false')
+  }
+}
+
+function doCheck () {
   const no_active_docs_msg = `You have no active documents. Please \
   activate at least one document using the 
   <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or 
   <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.`
   const no_cut_string_msg = 'You must provide a string to cut on.'
   const no_cut_val_msg = 'You must provide a default cutting value.'
-  const def_invalid_seg_size = 'Default cutting: Invalid segment size.'
-  const def_invalid_overlap_val = 'Default cutting: Invalid overlap value.'
-  const ind_invalid_seg_size = 'Individual cutting: Invalid segment size.'
-  const ind_invalid_overlap_val = 'Individual cutting: Invalid overlap value.'
 
   // Confirm that there are active files
   if ($('#num_active_files').val() === '0') {
-    errors.push(no_active_docs_msg)
+    return no_active_docs_msg
   }
 
   // If cut by milestone is checked make sure there is a milestone value
   if ($('#cutByMS').is(':checked')) {
     if ($('#MScutWord').val() === '') {
-      errors.push(no_cut_string_msg)
+      return no_cut_string_msg
     }
   }
   else {
     // Make sure there is a default cutting value
     if ($('#overallcutvalue').val() === '') {
-      errors.push(no_cut_val_msg)
+      return no_cut_val_msg
     }
     else {
-      const overallcutvalueStr = $('#overallcutvalue').val()
-      const overallcutvalue = parseInt($('#overallcutvalue').val())
-      const overallOverlapValue = parseInt($('#overallOverlapValue').val())
-      const individualOverlap = parseInt($('#individualOverlap').val())
-      const individualCutValueStr = $('#individualCutValue').val()
-      let individualCutValue = $('#individualCutValue').val()
-
-      // Make sure the overall segment size not negative
-      if (overallcutvalue !== Math.floor(overallcutvalue)) {
-        errors.push(def_invalid_seg_size)
-      }
-
-      // Make sure the overall segment size not a decimal
-      if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) {
-        errors.push(def_invalid_seg_size)
-      }
-
-      // Make sure the overall segment size not 0
-      if (overallcutvalue === 0) {
-        errors.push(def_invalid_seg_size)
-      }
-
-      // Make sure the overall overlap is valid
-      if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) {
-        errors.push(def_invalid_overlap_val)
-      }
-
-      // If there are individual segment cuts
-      if (individualCutValue !== '') {
-        individualCutValue = parseInt(individualCutValue)
-
-        // Make sure the individual segment size not negative
-        if (individualCutValue !== Math.floor(individualCutValue)) {
-          errors.push(ind_invalid_seg_size)
-        }
-
-        // Make sure the individual segment size not a decimal
-        if (individualCutValueStr !== Math.abs(individualCutValue).toString()) {
-          errors.push(ind_invalid_seg_size)
-        }
-
-        // Make sure the individual segment size not 0
-        if (individualCutValue === 0) {
-          errors.push(ind_invalid_seg_size)
-        }
-
-        // Make sure the individual overlap is valid
-        if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) {
-          errors.push(ind_invalid_overlap_val)
-        }
-      }
+      return checkValues()
     }
   }
+}
 
-  if (errors.length > 0) {
-    $('#hasErrors').val('true')
-    $('#status-prepare').css({ 'visibility': 'hidden' })
-    $('#error-modal-message').html(errors[0])
-    $('#error-modal').modal()
+function checkValues () {
+  const def_invalid_seg_size = 'Default cutting: Invalid segment size.'
+  const def_invalid_overlap_val = 'Default cutting: Invalid overlap value.'
+  const ind_invalid_seg_size = 'Individual cutting: Invalid segment size.'
+  const ind_invalid_overlap_val = 'Individual cutting: Invalid overlap value.'
+
+  const overallcutvalueStr = $('#overallcutvalue').val()
+  const overallcutvalue = parseInt($('#overallcutvalue').val())
+  const overallOverlapValue = parseInt($('#overallOverlapValue').val())
+  const individualOverlap = parseInt($('#individualOverlap').val())
+  const individualCutValueStr = $('#individualCutValue').val()
+  let individualCutValue = $('#individualCutValue').val()
+
+  // Make sure the overall segment size not negative
+  if (overallcutvalue !== Math.floor(overallcutvalue)) {
+    return def_invalid_seg_size
   }
-  else {
-    $('#hasErrors').val('false')
+  // Make sure the overall segment size not a decimal
+  if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) {
+    return def_invalid_seg_size
   }
+  // Make sure the overall segment size not 0
+  if (overallcutvalue === 0) {
+    return def_invalid_seg_size
+  }
+  // Make sure the overall overlap is valid
+  if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) {
+    return def_invalid_overlap_val
+  }
+  // If there are individual segment cuts
+  if (individualCutValue !== '') {
+    individualCutValue = parseInt(individualCutValue)
+    // Make sure the individual segment size not negative
+    if (individualCutValue !== Math.floor(individualCutValue)) {
+      return ind_invalid_seg_size
+    }
+    // Make sure the individual segment size not a decimal
+    if (individualCutValueStr !== Math.abs(individualCutValue).toString()) {
+      return ind_invalid_seg_size
+    }
+    // Make sure the individual segment size not 0
+    if (individualCutValue === 0) {
+      return ind_invalid_seg_size
+    }
+    // Make sure the individual overlap is valid
+    if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) {
+      return ind_invalid_overlap_val
+    }
+  }
+  return ''
 }
 
 // Function to check whether the user needs a warning
