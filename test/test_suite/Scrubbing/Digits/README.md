@@ -3,8 +3,11 @@ Digits
 
 #### Test Remove Digits 
 
-Test files: all_digits_and_test.txt, digits.txt, digits_Chinese.txt,
+*Test files:* all_digits_and_test.txt, digits.txt, digits_Chinese.txt,
             digits_easternArabic.txt
+
+*Result file:* all_digits_and_test_Results.txt, digitsResults.txt, 
+               digits_Chinese_Results.txt, digits_easternArabicResults.txt
 
 - allDigits.txt and numberLetter.txt could NOT be tested
 - digits_Chinese.txt does NOT contain any digits
@@ -16,3 +19,4 @@ Test files: all_digits_and_test.txt, digits.txt, digits_Chinese.txt,
     - Make Lowercase (optional)
     - Remove Digits
 
+Results

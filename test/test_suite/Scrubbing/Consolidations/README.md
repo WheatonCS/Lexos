@@ -3,7 +3,9 @@ Consolidations
 
 #### Test Consolidations
 
-Test files: experiment.txt, consolidations_for_experiment.txt
+*Test files:* experiment.txt, consolidations_for_experiment.txt
+
+*Result file:* experimentResults.txt
 
 1. UPLOAD experiment.txt
 

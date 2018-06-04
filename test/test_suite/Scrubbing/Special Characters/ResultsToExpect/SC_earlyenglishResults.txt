@@ -1,1 +1,9 @@
-ash lower aelig ash upper aelig eth lower eth eth upper eth thorn lower thorn thorn upper thorn yogh lower ȝ yogh upper ȝ long s lower ſ
+ash lower aelig
+ash upper AElig
+eth lower eth
+eth upper ETH
+thorn lower thorn
+thorn upper THORN
+yogh lower ȝ
+yogh upper Ȝ
+long s lower ſ

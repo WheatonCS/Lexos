@@ -3,7 +3,11 @@ Apostrophes
 
 #### Test Keep Word-Internal Apostrophes
 
-Test files: apos.txt, apos2.txt, apos2_pinyin.txt, apos3.txt
+*Test files:* apos.txt, apos2.txt, apos2_pinyin.txt, apos3.txt  
+
+*Result files:* aposResults.txt, apos2Results.txt, apos2_pinyinResults.txt,
+                apos3Results.txt
+            
 
 1. UPLOAD FILES
 
