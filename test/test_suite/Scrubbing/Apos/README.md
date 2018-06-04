@@ -16,4 +16,15 @@ Apostrophes
     - Make Lowercase
     - Remove Digits
     - Keep Word-Internal Apostrophes
+    
+3. RESULTS
+    - a file(aposResults.txt) containing
+        * lowercase letters
+        * no digits
+        * no punctuation except for word-internal apostrophes
+        
+    - a file(apos2Results.txt) containing
+        * lowercase letters
+        * no digits
+        * no punctuation except for word-internal apostrophes
 

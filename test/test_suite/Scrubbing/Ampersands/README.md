@@ -16,5 +16,8 @@ Ampersands
     - Keep Ampersands
 
 3. RESULTS
-    - 
+    - a file(AmpersandsResults.txt) containing
+        * lowercase letters
+        * no digits
+        * no punctuation except for ampersands
 
