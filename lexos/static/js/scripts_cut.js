@@ -205,6 +205,7 @@ function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
      but the former is easier to pass to lexos.py functions, and the
      latter is easier for the ajax response to use. */
+  const num_active_files = $('#num_active_files').val()
   const formData = new FormData($('form')[0])
   formData.append('action', action)
   const jsonform = jsonifyForm()
@@ -242,7 +243,6 @@ function doAjax (action) {
     $('#warning-modal').modal('hide') // Hide the warning if it is displayed
     response = JSON.parse(response)
     $('#preview-body').empty() // Correct
-    j = 0
     $.each(response['data'], function () {
       const fileID = $(this)[0]
       const filename = $(this)[1]
@@ -325,12 +325,10 @@ function doAjax (action) {
       </div>`
       fieldset.append(indcutoptswrap)
       if ($.type(fileContents) === 'string') {
-        j++
         fieldset.append(`<div class="filecontents">${fileContents}</div>`) // Keep this with no whitespace!
       }
       else {
         $.each(fileContents, function (i, segment) {
-          j++
           const segmentLabel = segment[0]
           const segmentString = segment[1]
           fieldset.append(`<div class="filechunk"><span class="filechunklabel">${segmentLabel}</span><div>${segmentString}</div></div>`)
@@ -368,7 +366,7 @@ function doAjax (action) {
         $(`#MScutWord${fileID}`).val(formData['cuttingoptions']['cutValue'])
       }
     })
-    $('.fa-folder-open-o').attr('data-original-title', `You have ${j} active document(s).`)
+    $('.fa-folder-open-o').attr('data-original-title', `You have ${num_active_files} active document(s).`)
     $('#status-prepare').css({ 'visibility': 'hidden' })
   })
 }
