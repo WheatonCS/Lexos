@@ -73,8 +73,6 @@ test_pandas_anomaly = pd.read_html(test_file_result_anomaly)[0]
 
 
 # ------------------------------------------------------------------
-
-
 class TestFileResult:
     def test_basic_info(self):
         assert test_pandas_one["Documents"][0] == "F1.txt"
@@ -120,8 +118,8 @@ class TestCorpusInfo:
         assert test_corpus_result_one.anomaly_iqr.large_items == []
         assert test_corpus_result_two.anomaly_iqr.small_items == []
         assert test_corpus_result_anomaly.anomaly_iqr.small_items == ["F1.txt"]
-        assert test_corpus_result_anomaly.anomaly_iqr.large_items == \
-            ["F10.txt"]
+        assert \
+            test_corpus_result_anomaly.anomaly_iqr.large_items == ["F10.txt"]
 
     def test_file_anomaly_std(self):
         assert test_corpus_result_one.anomaly_se.small_items == []
