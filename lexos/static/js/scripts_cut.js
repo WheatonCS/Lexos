@@ -1,5 +1,6 @@
 /**
  * function to check if there are errors.
+ * @returns {void}
  */
 function checkForErrors () {
   // Set Error and Warning Messages
@@ -11,8 +12,7 @@ function checkForErrors () {
     $('#status-prepare').css({'visibility': 'hidden'})
     $('#error-modal-message').html(errorMsg)
     $('#error-modal').modal()
-  }
-  else {
+  } else {
     $('#hasErrors').val('false')
   }
 }
@@ -22,10 +22,10 @@ function checkForErrors () {
  * @returns {*}
  */
 function doCheck () {
-  const noActiveDocsMsg = `You have no active documents. Please \
+  const noActiveDocsMsg = `You have no active documents. Please
   activate at least one document using the 
-  <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or 
-  <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.`
+  <a href=\"{{ url_for("manage.manage") }}">Manage</a> tool or 
+  <a href=\"{{ url_for("upload.upload") }}">upload</a> a new document.`
   const noCutStringMsg = 'You must provide a string to cut on.'
   const noCutValMsg = 'You must provide a default cutting value.'
 
@@ -39,13 +39,11 @@ function doCheck () {
     if ($('#MScutWord').val() === '') {
       return noCutStringMsg
     }
-  }
-  else {
+  } else {
     // Make sure there is a default cutting value
     if ($('#overallcutvalue').val() === '') {
       return noCutValMsg
-    }
-    else {
+    } else {
       return checkValues()
     }
   }
@@ -107,9 +105,9 @@ function checkValues () {
   return ''
 }
 
-
 /**
  * function to check whether the user needs a warning.
+ * @returns {void}
  */
 function checkForWarnings () {
   let needsWarning = false
@@ -148,15 +146,12 @@ function checkForWarnings () {
         if (thisCutType === 'letters' && (numChar[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
           // Same for segments and lines
-        }
-        else if (thisCutType === 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+        } else if (thisCutType === 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
-        }
-        else if (thisCutType === 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+        } else if (thisCutType === 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
           // Or if the segment size > 100
-        }
-        else if (thisCutVal > maxSegs && eltsWithoutIndividualOpts.length > 0) {
+        } else if (thisCutVal > maxSegs && eltsWithoutIndividualOpts.length > 0) {
           needsWarning = true
         }
       }
@@ -429,7 +424,6 @@ $(document).on('click', '#timerCancel', function () {
   $('#warning-modal').modal('hide')
   $('#status-prepare').css('visibility', 'hidden')
 })
-
 
 /**
  * Convert the form data into a JSON object.
