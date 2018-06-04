@@ -12,11 +12,11 @@ test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                             columns=np.array(["A", "B", "C", "D", "E", "F",
                                               "G", "H", "I"]))
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
-test_stats_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1])
+test_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1])
 test_option_one = StatsTestOptions(
     token_type_str="terms",
     doc_term_matrix=test_dtm_one,
-    front_end_option=test_stats_front_end_option_one,
+    front_end_option=test_front_end_option_one,
     id_temp_label_map=test_id_temp_table_one)
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
@@ -61,7 +61,8 @@ test_id_temp_table_anomaly = \
 test_stats_front_end_option_anomaly = \
     StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 test_option_anomaly = \
-    StatsTestOptions(token_type_str="characters", doc_term_matrix=test_dtm_anomaly,
+    StatsTestOptions(token_type_str="characters",
+                     doc_term_matrix=test_dtm_anomaly,
                      front_end_option=test_stats_front_end_option_anomaly,
                      id_temp_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
@@ -115,18 +116,18 @@ class TestCorpusInfo:
         assert test_corpus_result_two.inter_quartile_range == 32.5
 
     def test_file_anomaly_iqr(self):
-        assert test_corpus_result_one.anomaly_iqr.small_items == set()
-        assert test_corpus_result_one.anomaly_iqr.large_items == set()
-        assert test_corpus_result_two.anomaly_iqr.small_items == set()
-        assert test_corpus_result_anomaly.anomaly_iqr.small_items == {"F1.txt"}
+        assert test_corpus_result_one.anomaly_iqr.small_items == []
+        assert test_corpus_result_one.anomaly_iqr.large_items == []
+        assert test_corpus_result_two.anomaly_iqr.small_items == []
+        assert test_corpus_result_anomaly.anomaly_iqr.small_items == ["F1.txt"]
         assert test_corpus_result_anomaly.anomaly_iqr.large_items == \
-            {"F10.txt"}
+            ["F10.txt"]
 
     def test_file_anomaly_std(self):
-        assert test_corpus_result_one.anomaly_se.small_items == set()
-        assert test_corpus_result_two.anomaly_se.large_items == set()
-        assert test_corpus_result_anomaly.anomaly_se.small_items == {"F1.txt"}
-        assert test_corpus_result_anomaly.anomaly_se.large_items == {"F10.txt"}
+        assert test_corpus_result_one.anomaly_se.small_items == []
+        assert test_corpus_result_two.anomaly_se.large_items == []
+        assert test_corpus_result_anomaly.anomaly_se.small_items == ["F1.txt"]
+        assert test_corpus_result_anomaly.anomaly_se.large_items == ["F10.txt"]
 
     def test_file_unit(self):
         assert test_corpus_result_one.unit == "terms"
