@@ -2,7 +2,10 @@
 function checkForErrors () {
   // Set Error and Warning Messages
   const errors = []
-  const no_active_docs_msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
+  const no_active_docs_msg = `You have no active documents. Please \
+  activate at least one document using the 
+  <a href=\"{{ url_for("manage") }}\">Manage</a> tool or 
+  <a href=\"{{ url_for("upload") }}\">upload</a> a new document.`
   const no_cut_string_msg = 'You must provide a string to cut on.'
   const no_cut_val_msg = 'You must provide a default cutting value.'
   const def_invalid_seg_size = 'Default cutting: Invalid segment size.'
@@ -182,7 +185,8 @@ function checkForWarnings () {
   // needsWarning = true; // For testing
   if (needsWarning === true) {
     $('#needsWarning').val('true')
-    const sizeWarning = 'Current cut settings will result in over 100 new segments. Please be patient if you continue.'
+    const sizeWarning = `Current cut settings will result in over \ 
+    100 new segments. Please be patient if you continue.`
     const footerButtons = `<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>
     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>`
     $('#warning-modal-footer').html(footerButtons)
@@ -208,7 +212,9 @@ function doAjax (action) {
   // Initiate a timer to allow user to cancel if processing takes too long
   const loadingTimeout = window.setTimeout(function () {
     $('#needsWarning').val('true')
-    const timeWarning = 'Lexos seems to be taking a long time. This may be because you are cutting a large number of documents. If not, we suggest that you cancel, reload the page, and try again.'
+    const timeWarning = `Lexos seems to be taking a long time.  \
+    This may be because you are cutting a large number of documents. \ 
+    If not, we suggest that you cancel, reload the page, and try again.`
     const footerButtons = `<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>
     <button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>`
     $('#warning-modal-footer').html(footerButtons)
@@ -225,7 +231,8 @@ function doAjax (action) {
       $('#status-prepare').css({ 'visibility': 'hidden' })
       // Show an error if the user has not cancelled the action
       if (errorThrown !== 'abort') {
-        $('#error-modal-message').html('Lexos could not apply the cutting actions.')
+        const not_apply_msg = 'Lexos could not apply the cutting actions.'
+        $('#error-modal-message').html(not_apply_msg)
         $('#error-modal').modal()
       }
       console.log('bad: ' + textStatus + ': ' + errorThrown)
@@ -241,10 +248,81 @@ function doAjax (action) {
       const filename = $(this)[1]
       const fileLabel = filename
       const fileContents = $(this)[3]
-      const indivcutbuttons = '<a id="indivcutbuttons_' + fileID + '" onclick="toggleIndivCutOptions(' + fileID + ');" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>'
+      const indivcutbuttons = `<a id="indivcutbuttons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>`
       // CSS truncates the document label
-      const fieldset = $('<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + fileLabel + ' ' + indivcutbuttons + '</fieldset>')
-      const indcutoptswrap = '<div id="indcutoptswrap_' + fileID + '" class="cuttingoptionswrapper ind hidden"><fieldset class="cuttingoptionsfieldset"><legend class="individualcuttingoptionstitle">Individual Cutting Options</legend><div class="cuttingdiv individcut"><div class="row"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndLetters_' + fileID + '" value="letters"/>Characters/Segment</label></div><div class="col-md-7"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndWords_' + fileID + '" value="words"/>Tokens/Segment</label></div></div><div class="row cutting-radio"><div class="col-md-5"><label class="radio sizeradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndLines_' + fileID + '" value="lines"/>Lines/Segment</label></div><div class="col-md-7"><label class="radio numberradio"><input type="radio" name="cutType_' + fileID + '" id="cutTypeIndNumber_' + fileID + '" value="number"/>Segments/Document</label></div></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;"><label><span id="numOf' + fileID + '" class="cut-label-text">Number of Segments:</span><input type="number" min="1" step="1" name="cutValue_' + fileID + '" class="cut-text-input" id="individualCutValue" value=""/></label></div></div><div class="row overlap-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;"><label>Overlap: <input type="number" min="0" name="cutOverlap_' + fileID + '" class="cut-text-input overlap-input" id="individualOverlap" value="0"/></label></div></div><div id="lastprop-div_' + fileID + '" class="row lastprop-div"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Last Proportion Threshold: <input type="number" min="0" id="cutLastProp_' + fileID + '" name="cutLastProp_' + fileID + '" class="cut-text-input lastprop-input" value="50" style="width:54px;margin-right:3px;"/> %</label></div></div><div class="row"><div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;"><label>Cutset Label: <input type="text" name="cutsetnaming_' + fileID + '" class="cutsetnaming" value="' + filename + '" style="width:155px;display:inline; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;></label></div></div><div class="row cuttingdiv" id="cutByMSdiv"><div class="col-sm-4"><label><input type="checkbox" class="indivMS" name="cutByMS_' + fileID + '" id="cutByMS_' + fileID + '"/>Cut by Milestone</label></div><div class="col-sm-8 pull-right" id="MSoptspan" style="display:none;"><span>Cut document on this term <input type="text" class="indivMSinput" name="MScutWord_' + fileID + '" id="MScutWord' + fileID + '" value="" style="margin-left:3px;width:130px;"/></span></div></div></fieldset></div>'
+      const fieldset = $(`<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileLabel} ${indivcutbuttons}</fieldset>`)
+      const indcutoptswrap = `<div id="indcutoptswrap_${fileID}" class="cuttingoptionswrapper ind hidden">\
+      <fieldset class="cuttingoptionsfieldset">\
+      <legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>\
+      <div class="cuttingdiv individcut">\
+      <div class="row">\
+      <div class="col-md-5">\
+      <label class="radio sizeradio">\
+      <input type="radio" name="cutType_${fileID}" id="cutTypeIndLetters_${fileID}" value="letters"/>\
+      Characters/Segment</label>\
+      </div>\
+      <div class="col-md-7">\
+      <label class="radio sizeradio">\
+      <input type="radio" name="cutType_${fileID}" id="cutTypeIndWords_${fileID}" value="words"/>\
+      Tokens/Segment</label>\
+      </div>\
+      </div>\
+      <div class="row cutting-radio">\
+      <div class="col-md-5">\
+      <label class="radio sizeradio">\
+      <input type="radio" name="cutType_${fileID}" id="cutTypeIndLines_${fileID}" value="lines"/>\
+      Lines/Segment</label>\
+      </div>\
+      <div class="col-md-7">\
+      <label class="radio numberradio">\
+      <input type="radio" name="cutType_${fileID}" id="cutTypeIndNumber_${fileID}" value="number"/>\
+      Segments/Document</label>\
+      </div>\
+      </div>\
+      </div>\
+      <div class="row">\
+      <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;">\
+      <label>\
+      <span id="numOf${fileID}" class="cut-label-text">Number of Segments:</span>\
+      <input type="number" min="1" step="1" name="cutValue_${fileID}" class="cut-text-input" id="individualCutValue" value=""/>\
+      </label>\
+      </div>\
+      </div>\
+      <div class="row overlap-div">\
+      <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:3%;">\
+      <label>Overlap: \
+      <input type="number" min="0" name="cutOverlap_${fileID}" class="cut-text-input overlap-input" id="individualOverlap" value="0"/>\
+      </label>\
+      </div>\
+      </div>\
+      <div id="lastprop-div_${fileID}" class="row lastprop-div">\
+      <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;">\
+      <label>Last Proportion Threshold: \
+      <input type="number" min="0" id="cutLastProp_${fileID}" name="cutLastProp_${fileID}" class="cut-text-input lastprop-input" value="50" style="width:54px;margin-right:3px;"/>\
+      %</label>\
+      </div>\
+      </div>\
+      <div class="row">\
+      <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;">\
+      <label>Cutset Label: \
+      <input type="text" name="cutsetnaming_${fileID}" class="cutsetnaming" value="${filename}" style="width:155px;display:inline; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>\
+      </label>\
+      </div>\
+      </div>\
+      <div class="row cuttingdiv" id="cutByMSdiv">\
+      <div class="col-sm-4">\
+      <label>\
+      <input type="checkbox" class="indivMS" name="cutByMS_${fileID}" id="cutByMS_${fileID}"/>\
+      Cut by Milestone</label>\
+      </div>\
+      <div class="col-sm-8 pull-right" id="MSoptspan" style="display:none;">\
+      <span>Cut document on this term \
+      <input type="text" class="indivMSinput" name="MScutWord_${fileID}" id="MScutWord${fileID}" value="" style="margin-left:3px;width:130px;"/>\
+      </span>\
+      </div>\
+      </div>\
+      </fieldset>\
+      </div>`
       fieldset.append(indcutoptswrap)
       if ($.type(fileContents) === 'string') {
         j++
