@@ -21,10 +21,11 @@ class StatsReceiver(BaseReceiver):
         # Get active file ids from front end as a string.
         active_file_ids_string = self._front_end_data["active_file_ids"]
         # Split the file ids.
-        active_file_ids = active_file_ids_string.split(" ")
+        active_file_ids_string_list = active_file_ids_string.split(" ")
         # Force file ids to be integer type and remove extra blank.
         active_file_ids = \
-            [int(file_id) for file_id in active_file_ids if file_id != ""]
+            [int(file_id)
+             for file_id in active_file_ids_string_list if file_id != ""]
 
         # Return stats front end option.
         return StatsFrontEndOption(active_file_ids=active_file_ids)
