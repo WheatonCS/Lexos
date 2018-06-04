@@ -1,0 +1,1 @@
+<>If remove punctuation works, <this><should><work>
