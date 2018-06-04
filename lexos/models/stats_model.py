@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
 from plotly.offline import plot
-from typing import List, Optional, NamedTuple
+from typing import List, Optional, NamedTuple, Set
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
@@ -10,12 +10,10 @@ from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
 from lexos.receivers.stats_receiver import StatsReceiver, StatsFrontEndOption
 
 
-class StatsTestOptions(NamedTuple):
-    """A typed tuple to hold test options."""
-    token_type: str
-    doc_term_matrix: pd.DataFrame
-    front_end_option: StatsFrontEndOption
-    id_temp_label_map: IdTempLabelMap
+class TextAnomalies(NamedTuple):
+    """A typed tuple to represent text anomalies of the whole corpus."""
+    small_items: Set[str]
+    large_items: Set[str]
 
 
 class CorpusStats(NamedTuple):
@@ -27,6 +25,14 @@ class CorpusStats(NamedTuple):
     anomaly_iqr: List[Optional[str]]
     std_deviation: float  # Standard deviation of all file sizes.
     inter_quartile_range: float  # Interquartile range.
+
+
+class StatsTestOptions(NamedTuple):
+    """A typed tuple to hold all statistics test options."""
+    token_type: str
+    doc_term_matrix: pd.DataFrame
+    front_end_option: StatsFrontEndOption
+    id_temp_label_map: IdTempLabelMap
 
 
 class StatsModel(BaseModel):
@@ -81,7 +87,7 @@ class StatsModel(BaseModel):
             return "terms" if token_type == "word" else "characters"
 
     @property
-    def _selected_doc_term_matrix(self) -> pd.DataFrame:
+    def _active_doc_term_matrix(self) -> pd.DataFrame:
         """:return: A dtm that contains only user selected files."""
         return self._doc_term_matrix.iloc[self._stats_option.active_file_ids]
 
@@ -91,10 +97,10 @@ class StatsModel(BaseModel):
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
         # Check if empty corpus is given.
-        assert not self._selected_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Get the file count sums by sum the column.
-        file_sizes = self._selected_doc_term_matrix.sum(1)
+        file_sizes = self._active_doc_term_matrix.sum(1)
         # Get the average file word counts.
         mean = file_sizes.mean(0)
 
@@ -116,7 +122,7 @@ class StatsModel(BaseModel):
             else f"large: {self._id_temp_label_map[file_id]}"
             if file_sizes[file_id] > mean + 2 * std_deviation
             else None
-            for file_id in self._selected_doc_term_matrix.index.values]
+            for file_id in self._active_doc_term_matrix.index.values]
 
         # Interquartile range analysis: We detect anomaly by finding files with
         # sizes that are either 1.5 interquartile ranges above third quartile
@@ -127,7 +133,7 @@ class StatsModel(BaseModel):
             else f"large: {self._id_temp_label_map[file_id]}"
             if file_sizes[file_id] > third_quartile + 1.5 * iqr
             else None
-            for file_id in self._selected_doc_term_matrix.index.values]
+            for file_id in self._active_doc_term_matrix.index.values]
 
         return CorpusStats(
             mean=round(mean, 2),
@@ -143,11 +149,11 @@ class StatsModel(BaseModel):
         :return: A HTML table converted from a pandas data frame.
         """
         # Check if empty corpus is given.
-        assert not self._selected_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._selected_doc_term_matrix.index.values]
+                  for file_id in self._active_doc_term_matrix.index.values]
 
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
@@ -161,13 +167,13 @@ class StatsModel(BaseModel):
         file_stats["Documents"] = labels
         # Find number of token that appears only once.
         file_stats[f"Number of {self.token_type} occurring once"] = \
-            self._selected_doc_term_matrix.eq(1).sum(axis=1).values
+            self._active_doc_term_matrix.eq(1).sum(axis=1).values
         # Find total number of tokens.
         file_stats[f"Total number of {self.token_type}"] = \
-            self._selected_doc_term_matrix.sum(axis=1).values
+            self._active_doc_term_matrix.sum(axis=1).values
         # Find distinct number of tokens.
         file_stats[f"Distinct number of {self.token_type}"] = \
-            self._selected_doc_term_matrix.ne(0).sum(axis=1).values
+            self._active_doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
         file_stats[f"Average number of {self.token_type}"] = \
             file_stats[f"Total number of {self.token_type}"] / \
@@ -186,11 +192,11 @@ class StatsModel(BaseModel):
         """
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._selected_doc_term_matrix.index.values]
+                  for file_id in self._active_doc_term_matrix.index.values]
 
         # Set up the box plot.
         box_plot = go.Box(x0=0.5,  # Initial position of the box plot
-                          y=self._selected_doc_term_matrix.sum(1).values,
+                          y=self._active_doc_term_matrix.sum(1).values,
                           name="Corpus Box Plot",
                           hoverinfo="y",
                           marker=dict(color='rgb(10, 140, 200)'))
@@ -199,7 +205,7 @@ class StatsModel(BaseModel):
         scatter_plot = go.Scatter(
             # Get random x values with the range.
             x=[np.random.uniform(-0.3, 0) for _ in labels],
-            y=self._selected_doc_term_matrix.sum(1).values,
+            y=self._active_doc_term_matrix.sum(1).values,
             name="Corpus Scatter Plot",
             hoverinfo="text",
             mode="markers",
