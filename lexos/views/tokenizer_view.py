@@ -1,4 +1,4 @@
-from flask import session, Blueprint, render_template
+from flask import session, Blueprint, render_template, send_file
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
@@ -36,3 +36,14 @@ def tokenizer_result():
     session_manager.cache_analysis_option()
     session_manager.cache_tokenizer_option()
     return TokenizerModel().get_dtm()
+
+
+@tokenizer_blueprint.route("/tokenizerDownload", methods=["POST"])
+def tokenizer_download():
+    # Cache front end result and return rendered template for download.
+    session_manager.cache_analysis_option()
+    session_manager.cache_tokenizer_option()
+    file_path = TokenizerModel().download_dtm()
+    return send_file(file_path,
+                     as_attachment=True,
+                     attachment_filename="tokenizer_result.csv")
