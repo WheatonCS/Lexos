@@ -21,8 +21,8 @@ function submissionError () {
 }
 
 /**
- * The function to convert the form into json
- * @returns {{string: string}}: the form converted to json
+ * The function to convert the form into json.
+ * @returns {{string: string}}: the form converted to json.
  */
 function jsonifyForm () {
   const form = {}
