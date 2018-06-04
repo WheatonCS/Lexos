@@ -53,38 +53,53 @@ function sendAjaxRequest (url, form) {
  * @return {object}: a json formatted file report.
  */
 function formatFileReportResponse (response) {
-  // Extract constant result from response.
+  // Extract constant result from response and put the result into a reasonable report sentence.
   const unit = response['unit']
   const mean = `Average document size is ${response['mean']} ${unit}.`
   const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
   const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
-  // Extract standard deviation anomaly information.
-  // let anomaly_se
-  // if (response['anomaly_se'].every(function (element) { return element === null })) {
-  //   anomaly_se = `<p><b>No</b> anomaly detected by standard deviation test.</p>`
-  // } else {
-  //   anomaly_se = `<p>Anomaly <b>detected</b> by standard error test.</p>`
-  //   response['anomaly_se'].forEach(function (element) {
-  //     if (element !== null) { anomaly_se += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
-  //   })
-  // }
-  //
-  // // Extract inter quartile range anomaly information.
-  // let anomaly_iqr
-  // if (response['anomaly_iqr'].every(function (element) { return element === null })) {
-  //   anomaly_iqr = `<p><b>No</b> anomaly detected by inter quartile range test.</p>`
-  // } else {
-  //   anomaly_iqr = `<p>Anomaly <b>detected</b> by inter quartile range test.</p>`
-  //   response['anomaly_iqr'].forEach(function (element) {
-  //     if (element !== null) { anomaly_iqr += `<p style="padding-left: 20px">${element.slice(0, 5).bold()}${element.slice(5, element.length)}</p>` }
-  //   })
-  // }
+
+  // Extract standard error anomaly information. First get the result.
+  let anomalySeResult = ''
+  response['anomaly_se_small'].forEach(function (each_result) {
+    anomalySeResult += `<b>Small:</b> ${each_result}.`
+  })
+  response['anomaly_se_large'].forEach(function (each_result) {
+    anomalySeResult += `<b>Large:</b> ${each_result}.`
+  })
+  // Set corresponding header based on the result.
+  let anomalySeHeader = ''
+  if (anomalySeResult === '') {
+    anomalySeHeader = '<b>No</b> anomaly detected by standard error test.'
+  } else {
+    anomalySeHeader = 'Anomaly <b>detected</b> by standard error test.'
+  }
+
+  // Extract standard error anomaly information. First get the result.
+  let anomalyIqrResult = ''
+  response['anomaly_iqr_small'].forEach(function (each_result) {
+    anomalyIqrResult += `<b>Small:</b> ${each_result}.`
+  })
+  response['anomaly_iqr_large'].forEach(function (each_result) {
+    anomalyIqrResult += `<b>Large:</b> ${each_result}.`
+  })
+  // Set corresponding header based on the result.
+  let anomalyIqrHeader = ''
+  if (anomalyIqrResult === '') {
+    anomalyIqrHeader = '<b>No</b> anomaly detected by inter quartile range test.'
+  } else {
+    anomalyIqrHeader = 'Anomaly <b>detected</b> by inter quartile range test.'
+  }
 
   // Return the retracted information.
   return {
+    'IQR': IQR,
     'mean': mean,
     'stdDeviation': stdDeviation,
-    'IQR': IQR
+    'anomalySeHeader': anomalySeHeader,
+    'anomalySeResult': anomalySeResult,
+    'anomalyIqrHeader': anomalyIqrHeader,
+    'anomalyIqrResult': anomalyIqrResult
   }
 }
 
@@ -105,6 +120,8 @@ function generateStatsFileReport () {
         $('#file-report-mean').html(formattedResult.mean)
         $('#file-report-std-deviation').html(formattedResult.stdDeviation)
         $('#file-report-IQR').html(formattedResult.IQR)
+        $('#file-report-anomaly-se-header').html(formattedResult.anomalySeHeader)
+        $('#file-report-anomaly-se-result').html(formattedResult.anomalySeResult)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -219,6 +236,10 @@ $(function () {
    * stats result, get number of active files and id of active files.
    */
   $('#get-stats').click(function () {
+    // Hide the stats result div.
+    $('#file-stats-result').css({'display': 'none'})
+    $('#corpus-stats-result').css({'display': 'none'})
+
     // Get all the checked files.
     const checkedFiles = $('.eachFileCheck :checked')
     // Set a variable to store checked file ids.
