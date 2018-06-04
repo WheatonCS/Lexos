@@ -119,13 +119,13 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
-        anomaly_se_small = Set(
+        anomaly_se_small = set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
         )
 
-        anomaly_se_large = Set(
+        anomaly_se_large = set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
@@ -137,13 +137,13 @@ class StatsModel(BaseModel):
         # Interquartile range analysis: We detect anomaly by finding files with
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
-        anomaly_iqr_small = Set(
+        anomaly_iqr_small = set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < first_quartile - 1.5 * iqr
         )
 
-        anomaly_iqr_large = Set(
+        anomaly_iqr_large = set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > third_quartile + 1.5 * iqr
