@@ -4,8 +4,8 @@ function checkForErrors () {
   const errors = []
   const no_active_docs_msg = `You have no active documents. Please \
   activate at least one document using the 
-  <a href=\"{{ url_for("manage") }}\">Manage</a> tool or 
-  <a href=\"{{ url_for("upload") }}\">upload</a> a new document.`
+  <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or 
+  <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.`
   const no_cut_string_msg = 'You must provide a string to cut on.'
   const no_cut_val_msg = 'You must provide a default cutting value.'
   const def_invalid_seg_size = 'Default cutting: Invalid segment size.'
