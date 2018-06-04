@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
-from typing import Optional, NamedTuple, Set
+from typing import Optional, NamedTuple, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
@@ -12,8 +12,8 @@ from lexos.receivers.stats_receiver import StatsReceiver, StatsFrontEndOption
 
 class TextAnomalies(NamedTuple):
     """A typed tuple to represent text anomalies of the whole corpus."""
-    small_items: Set[str]
-    large_items: Set[str]
+    small_items: List[str]
+    large_items: List[str]
 
 
 class CorpusStats(NamedTuple):
@@ -120,17 +120,17 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
-        anomaly_se_small = set(
+        anomaly_se_small = list(set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
-        )
+        ))
 
-        anomaly_se_large = set(
+        anomaly_se_large = list(set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
-        )
+        ))
 
         anomaly_se = TextAnomalies(small_items=anomaly_se_small,
                                    large_items=anomaly_se_large)
@@ -138,17 +138,17 @@ class StatsModel(BaseModel):
         # Interquartile range analysis: We detect anomaly by finding files with
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
-        anomaly_iqr_small = set(
+        anomaly_iqr_small = list(set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < first_quartile - 1.5 * iqr
-        )
+        ))
 
-        anomaly_iqr_large = set(
+        anomaly_iqr_large = list(set(
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > third_quartile + 1.5 * iqr
-        )
+        ))
 
         anomaly_iqr = TextAnomalies(small_items=anomaly_iqr_small,
                                     large_items=anomaly_iqr_large)
@@ -255,7 +255,7 @@ class StatsModel(BaseModel):
     def get_box_plot(self) -> str:
         """Return a HTML string that is ready to be displayed on the web.
 
-        :return: A string in HTML format that contains the plotly boxplot.
+        :return: A string in HTML format that contains the plotly box plot.
         """
         # Return plotly object as a div.
         return plot(self._get_box_plot_object(),
