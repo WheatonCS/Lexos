@@ -1,6 +1,5 @@
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.stats_model import StatsModel, StatsTestOptions
 
@@ -108,25 +107,26 @@ class TestCorpusInfo:
         assert test_corpus_result_two.mean == 47
 
     def test_std(self):
-        assert round(test_corpus_result_one.std_deviation, 4) == 45.96
-        assert round(test_corpus_result_two.std_deviation, 4) == 32.51
+        assert test_corpus_result_one.std_deviation == 45.96
+        assert test_corpus_result_two.std_deviation == 32.51
 
     def test_quartiles(self):
         assert test_corpus_result_one.inter_quartile_range == 32.5
         assert test_corpus_result_two.inter_quartile_range == 32.5
 
     def test_file_anomaly_iqr(self):
-        assert test_corpus_result_one.anomaly_iqr[0] == [None, None][0]
-        assert test_corpus_result_one.anomaly_iqr[1] == [None, None][1]
-        assert test_corpus_result_two.anomaly_iqr == [None, None, None]
-        assert test_corpus_result_anomaly.anomaly_iqr[0] == "small: F1.txt"
-        assert test_corpus_result_anomaly.anomaly_iqr[9] == "large: F10.txt"
+        assert test_corpus_result_one.anomaly_iqr.small_items == set()
+        assert test_corpus_result_one.anomaly_iqr.large_items == set()
+        assert test_corpus_result_two.anomaly_iqr.small_items == set()
+        assert test_corpus_result_anomaly.anomaly_iqr.small_items == {"F1.txt"}
+        assert test_corpus_result_anomaly.anomaly_iqr.large_items == \
+            {"F10.txt"}
 
     def test_file_anomaly_std(self):
-        assert test_corpus_result_one.anomaly_se == [None, None]
-        assert test_corpus_result_two.anomaly_se == [None, None, None]
-        assert test_corpus_result_anomaly.anomaly_se[0] == "small: F1.txt"
-        assert test_corpus_result_anomaly.anomaly_se[9] == "large: F10.txt"
+        assert test_corpus_result_one.anomaly_se.small_items == set()
+        assert test_corpus_result_two.anomaly_se.large_items == set()
+        assert test_corpus_result_anomaly.anomaly_se.small_items == {"F1.txt"}
+        assert test_corpus_result_anomaly.anomaly_se.large_items == {"F10.txt"}
 
 
 # -------------------- Empty data frame case test suite ---------------------
@@ -157,9 +157,11 @@ class TestSpecialCase:
 
 
 # -------------------- Plotly result test suite -----------------------------
+basic_fig = test_box_plot_result_one
+
+
 class TestStatsPlotly:
     def test_get_stats_scatter(self):
-        basic_fig = test_box_plot_result_one
         assert basic_fig['data'][0]['type'] == 'scatter'
 
         assert basic_fig['data'][0]['y'][0] == 80
@@ -175,7 +177,6 @@ class TestStatsPlotly:
         assert basic_fig['data'][0]['text'] == ['F1.txt', 'F2.txt']
 
     def test_get_stats_box_plot(self):
-        basic_fig = test_box_plot_result_one
         assert basic_fig['data'][1]['type'] == 'box'
 
         assert basic_fig['data'][1]['y'][0] == 80
@@ -189,7 +190,6 @@ class TestStatsPlotly:
         assert basic_fig['data'][1]['marker']['color'] == 'rgb(10, 140, 200)'
 
     def test_get_stats_layout(self):
-        basic_fig = test_box_plot_result_one
         assert basic_fig['layout']['title'] == 'Statistics of the Given Corpus'
 
         assert basic_fig['layout']['xaxis']['autorange'] is True
