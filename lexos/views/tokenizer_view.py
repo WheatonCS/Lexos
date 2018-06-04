@@ -1,9 +1,9 @@
 from flask import session, Blueprint, render_template
-from lexos.helpers import constants as constants
 from lexos.managers import session_manager
-from lexos.models.filemanager_model import FileManagerModel
-from lexos.models.tokenizer_model import TokenizerModel
+from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
+from lexos.models.tokenizer_model import TokenizerModel
+from lexos.models.filemanager_model import FileManagerModel
 
 # this is a flask blue print
 # it helps us to manage groups of views
@@ -25,11 +25,9 @@ def tokenizer():
     session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     session['tokenizerOption'] = constants.DEFAULT_TOKENIZER_OPTIONS
 
-    return render_template(
-        'tokenizer.html',
-        labels=id_label_map,
-        numActiveDocs=num_active_docs
-    )
+    return render_template('tokenizer.html',
+                           labels=id_label_map,
+                           numActiveDocs=num_active_docs)
 
 
 @tokenizer_blueprint.route("/tokenizeTable", methods=["POST"])

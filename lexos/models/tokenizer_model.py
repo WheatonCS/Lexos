@@ -10,7 +10,7 @@ from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
 
 
 class TokenizerTestOption(NamedTuple):
-    token_type: str
+    token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerTableOrientation
     id_temp_label_map: IdTempLabelMap
@@ -26,12 +26,12 @@ class TokenizerModel(BaseModel):
         super().__init__()
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
-            self._test_token_type = test_options.token_type
+            self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
-            self._test_token_type = None
+            self._test_token_type_str = None
             self._test_front_end_option = None
             self._test_id_temp_label_map = None
 
@@ -56,9 +56,9 @@ class TokenizerModel(BaseModel):
             else TokenizerReceiver().options_from_front_end()
 
     @property
-    def _token_type(self) -> str:
-        if self._test_token_type is not None:
-            return self._test_token_type
+    def _token_type_str(self) -> str:
+        if self._test_token_type_str is not None:
+            return self._test_token_type_str
         else:
             # Get dtm front end options.
             dtm_options = MatrixReceiver().options_from_front_end()
@@ -66,7 +66,7 @@ class TokenizerModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "Terms" if token_type == "word" else "Characters"
 
-    def _get_file_row_dtm(self) -> str:
+    def _get_file_col_dtm(self) -> str:
         """Get dtm with documents as rows and terms/characters as columns.
 
         :return: string in data table format that contains the dtm.
@@ -76,34 +76,34 @@ class TokenizerModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Transpose the dtm for easier calculation.
-        file_row_dtm = self._doc_term_matrix.transpose()
+        file_col_dtm = self._doc_term_matrix.transpose()
 
         # Change matrix column names to file labels.
-        file_row_dtm.columns = labels
-        file_row_dtm.columns.name = self._token_type
+        file_col_dtm.columns = labels
+        file_col_dtm.columns.name = self._token_type_str
 
         # Find total and average of each row's data.
-        file_row_dtm.insert(loc=0,
+        file_col_dtm.insert(loc=0,
                             column="Total",
-                            value=file_row_dtm.sum(axis=1))
+                            value=file_col_dtm.sum(axis=1))
 
-        file_row_dtm.insert(loc=1,
+        file_col_dtm.insert(loc=1,
                             column="Average",
-                            value=file_row_dtm["Total"] / len(labels))
+                            value=file_col_dtm["Total"] / len(labels))
 
         # Convert the HTML to beautiful soup object.
-        file_row_dtm_soup = BeautifulSoup(
-            file_row_dtm.round(3).to_html(
+        file_col_dtm_soup = BeautifulSoup(
+            file_col_dtm.round(3).to_html(
                 classes="table table-bordered table-striped display no-wrap"),
             "html.parser")
 
         # Set the table style to 100% so it always takes up the space.
-        file_row_dtm_soup.find('table')['style'] = 'width: 100%'
+        file_col_dtm_soup.find('table')['style'] = 'width: 100%'
 
         # Return the beautiful soup object as a string.
-        return file_row_dtm_soup.prettify()
+        return file_col_dtm_soup.prettify()
 
-    def _get_file_column_dtm(self) -> str:
+    def _get_file_row_dtm(self) -> str:
         """Get dtm with documents as columns and terms/characters as rows.
 
         :return: string in data table format that contains the dtm.
@@ -113,22 +113,22 @@ class TokenizerModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Get the main dtm, set proper column names and use labels as index.
-        file_column_dtm = self._doc_term_matrix
-        file_column_dtm.index = labels
-        file_column_dtm.columns.name = "Documents / Stats"
+        file_row_dtm = self._doc_term_matrix
+        file_row_dtm.index = labels
+        file_row_dtm.columns.name = "Documents / Stats"
 
         # Convert the main dtm to beautiful soup object.
-        file_column_dtm_soup = BeautifulSoup(
-            file_column_dtm.to_html(
+        file_row_dtm_soup = BeautifulSoup(
+            file_row_dtm.to_html(
                 classes="table table-bordered table-striped display no-wrap"),
             "html.parser")
 
         # Find the table head of the main dtm in order to insert stats info.
-        dtm_head = file_column_dtm_soup.find("thead")
+        dtm_head = file_row_dtm_soup.find("thead")
 
         # Form the total frame and set column name.
         total_fame = pd.DataFrame(
-            columns=np.round(file_column_dtm.sum(axis=0), 3))
+            columns=np.round(file_row_dtm.sum(axis=0), 3))
         total_fame.columns.name = "Total"
 
         # Convert the total frame to beautiful soup object.
@@ -153,10 +153,10 @@ class TokenizerModel(BaseModel):
         dtm_head.contents.append(average_soup.find("thead").contents[1])
 
         # Set the table style to 100% so it always takes up the space.
-        file_column_dtm_soup.find('table')['style'] = 'width: 100%'
+        file_row_dtm_soup.find('table')['style'] = 'width: 100%'
 
         # Return the beautiful soup object as a string.
-        return file_column_dtm_soup.prettify()
+        return file_row_dtm_soup.prettify()
 
     def get_dtm(self) -> str:
         """Get the dtm based on front end required table orientation option.
@@ -164,7 +164,7 @@ class TokenizerModel(BaseModel):
         :return: The dtm corresponding to users choice.
         """
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
-            return self._get_file_column_dtm()
+            return self._get_file_col_dtm()
 
         elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
             return self._get_file_row_dtm()
