@@ -14,9 +14,9 @@ Consolidations
     - deselect Make Lowercase
     - deselect Remove Digits
     
-2. CONSOLIDATIONS:
+3. CONSOLIDATIONS:
     - UPLOAD consolidations_for_experiment.txt
 
-3. RESULTS
+4. RESULTS
     - a file(experimentResults.txt) with
         * all 'o's consolidated to 'a's

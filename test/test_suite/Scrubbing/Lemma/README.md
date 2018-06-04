@@ -3,7 +3,9 @@ Lemmas
 
 #### Test Lemmas
 
-Test file: experiment.txt
+*Test files:* lemma_experiment.txt, lemmas_for_experiment.txt
+
+*Result file:* lemma_experimentResults.txt
 
 1. UPLOAD experiment.txt
 
@@ -12,5 +14,12 @@ Test file: experiment.txt
     - deselect Make Lowercase
     - deselect Remove Digits
     
-2. LEMMAS:
+3. LEMMAS:
     - UPLOAD lemmas_for_experiment.txt
+
+4. RESULTS
+    - a file(lemma_experimentResults.txt) with
+        * all 'a' changed to 'the'
+        * all 'Mary' changed to 'Margaret'
+        * all 'little' changed to 'tiny'
+        * all 'lamb' changed to 'sheep'
