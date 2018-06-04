@@ -716,18 +716,22 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     """
 
     file_strings = {}
+    for newKey in enumerate(sorted(constants.OPTUPLOADNAMES)):
+        file_strings[newKey] = ""
+    for newKey in enumerate(sorted(constants.SCRUBINPUTS)):
+        file_strings[newKey] = ""
 
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
             file_content = opt_uploads[key].read()
-            file_strings[index] = general_functions.decode_bytes(file_content)
+            file_strings[key] = general_functions.decode_bytes(file_content)
             opt_uploads[key].seek(0)
         elif key.strip('[]') in storage_options:
-            file_strings[index] = load_scrub_optional_upload(
+            file_strings[key] = load_scrub_optional_upload(
                 storage_folder, storage_filenames[index])
         else:
             session['scrubbingoptions']['optuploadnames'][key] = ''
-            file_strings[index] = ""
+            file_strings[key] = ""
 
     # Create an array of option strings:
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
@@ -799,15 +803,15 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # stop-keep words
     cons_file_string = option_strings[0]
     lem_file_string = option_strings[1]
-    sc_file_string = option_strings[2]
-    sw_kw_file_string = option_strings[3]
+    sc_file_string = option_strings[6]
+    sw_kw_file_string = option_strings[7]
 
     # handle manual entries: consolidations, lemmas, special characters,
     # stop-keep words
-    cons_manual = option_strings[4]
-    lem_manual = option_strings[5]
-    sc_manual = option_strings[6]
-    sw_kw_manual = option_strings[7]
+    cons_manual = option_strings[2]
+    lem_manual = option_strings[3]
+    sc_manual = option_strings[4]
+    sw_kw_manual = option_strings[5]
 
     # Scrubbing order:
     #
