@@ -122,6 +122,8 @@ function generateStatsFileReport () {
         $('#file-report-IQR').html(formattedResult.IQR)
         $('#file-report-anomaly-se-header').html(formattedResult.anomalySeHeader)
         $('#file-report-anomaly-se-result').html(formattedResult.anomalySeResult)
+        $('#file-report-anomaly-iqr-header').html(formattedResult.anomalyIqrHeader)
+        $('#file-report-anomaly-iqr-result').html(formattedResult.anomalyIqrResult)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -236,10 +238,6 @@ $(function () {
    * stats result, get number of active files and id of active files.
    */
   $('#get-stats').click(function () {
-    // Hide the stats result div.
-    $('#file-stats-result').css({'display': 'none'})
-    $('#corpus-stats-result').css({'display': 'none'})
-
     // Get all the checked files.
     const checkedFiles = $('.eachFileCheck :checked')
     // Set a variable to store checked file ids.
