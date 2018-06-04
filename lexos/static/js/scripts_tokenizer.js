@@ -105,6 +105,31 @@ function generateTokenizeResult () {
       })
 }
 
+/**
+ * display the result of the similarity query on web page
+ */
+function downloadTokenizeResult () {
+  // show loading icon
+  $('#status-analyze').css({'visibility': 'visible'})
+
+  // convert form into an object map string to string
+  const form = jsonifyForm()
+
+  // send the ajax request
+  sendAjaxRequest('/tokenizeDownload', form)
+    .done()
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        runModal('Error encountered while generating the tokenize table result.')
+      })
+    .always(
+      function () {
+        $('#status-analyze').css({'visibility': 'hidden'})
+      })
+}
+
 $(function () {
   /**
    * The event handler for generate tokenize clicked.
@@ -119,5 +144,8 @@ $(function () {
     else {
       runModal(error)
     }
+  })
+  $('#download-tokenize').click(function () {
+    window.location = "{ file_path} "
   })
 })
