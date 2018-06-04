@@ -49,20 +49,21 @@ function getDataTableConfig () {
     // Declare the variable that holds the number of fixed left columns.
     let num_fixed_columns
     if ($('#table-orientation-column').is(':checked'))
-        num_fixed_columns = 1
-    else if ($('#table-orientation-row').is(':checked'))
         num_fixed_columns = 3
+    else if ($('#table-orientation-row').is(':checked'))
+        num_fixed_columns = 1
 
     return {
         scrollX: true,
         bSortCellsTop: true,
         // specify where the button is
         dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
-        <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
+              <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
 
         // specify all the button that is put on to the page
         buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
 
+        // Set number of fixed columns on left of the data table.
         fixedColumns: {
             leftColumns: num_fixed_columns
         }
