@@ -37,7 +37,7 @@
                 </label>
             </div>
             <div class="col-md-6" style="padding-right:10%;text-align:right;">
-                <label class="radio sizeradio" style="padding-right:10%;"">
+                <label class="radio sizeradio" style="padding-right:10%;">
                     <input type="radio" name="cutType" value="words" {{ "checked" if session['cuttingoptions']['cutType'] == 'words' or session['cuttingoptions']['cutType'] == 'milestone' }}/>
                     Tokens&nbsp;&nbsp;/&nbsp;&nbsp;Segment
                 </label>
@@ -64,7 +64,6 @@
                     <span class="cut-label-text cut-label">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
                     <input type="number" min="1" name="cutValue" class="cut-text-input" id="overallcutvalue" value="{{ session['cuttingoptions']['cutValue'] }}"/>
                     <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A positive integer used to divide up the text (e.g. either the number of letters, words, or lines per segment, or the number of segments per document)." style=""></i>
-                    </span>
                 </label>
             </div>
         </div>
@@ -90,7 +89,7 @@
         <div class="col-sm-4" style="padding-left:3%;">
             <label class="pull-left txt-left">
                 <input type="checkbox" name="cutByMS" id="cutByMS" {{ 'checked' if session['cuttingoptions']['cutType'] == 'milestone'}}/>Cut by Milestone
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearence of the provided string. Child segments will not contain the Milestone delimeter." style="padding-left:4px;margin-right:0;"></i>
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Splits the document into segments at each appearance of the provided string. Child segments will not contain the Milestone delimiter." style="padding-left:4px;margin-right:0;"></i>
             </label>
         </div>
         <div class="col-sm-8">
