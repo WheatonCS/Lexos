@@ -66,7 +66,7 @@ class TokenizerModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "Terms" if token_type == "word" else "Characters"
 
-    def _get_file_col_dtm(self) -> str:
+    def _get_file_col_dtm(self) -> pd.DataFrame:
         """Get dtm with documents as rows and terms/characters as columns.
 
         :return: string in data table format that contains the dtm.
@@ -91,9 +91,12 @@ class TokenizerModel(BaseModel):
                             column="Average",
                             value=file_col_dtm["Total"] / len(labels))
 
+        return file_col_dtm
+
+    def _get_file_col_dtm_table(self) -> str:
         # Convert the HTML to beautiful soup object.
         file_col_dtm_soup = BeautifulSoup(
-            file_col_dtm.round(3).to_html(
+            self._get_file_col_dtm().round(3).to_html(
                 classes="table table-bordered table-striped display no-wrap"),
             "html.parser")
 
@@ -103,7 +106,7 @@ class TokenizerModel(BaseModel):
         # Return the beautiful soup object as a string.
         return file_col_dtm_soup.prettify()
 
-    def _get_file_row_dtm(self) -> str:
+    def _get_file_row_dtm(self) -> pd.DataFrame:
         """Get dtm with documents as columns and terms/characters as rows.
 
         :return: string in data table format that contains the dtm.
@@ -116,6 +119,12 @@ class TokenizerModel(BaseModel):
         file_row_dtm = self._doc_term_matrix
         file_row_dtm.index = labels
         file_row_dtm.columns.name = "Documents / Stats"
+
+        return file_row_dtm
+
+    def _get_file_row_dtm_table(self) -> str:
+        # Get the file_row_dtm.
+        file_row_dtm = self._get_file_row_dtm()
 
         # Convert the main dtm to beautiful soup object.
         file_row_dtm_soup = BeautifulSoup(
@@ -140,7 +149,7 @@ class TokenizerModel(BaseModel):
 
         # Form the average frame and set column name.
         average_frame = pd.DataFrame(
-            columns=np.around(total_fame.columns / len(labels), 3))
+            columns=np.around(total_fame.columns / file_row_dtm.index.size, 3))
         average_frame.columns.name = "Average"
 
         # Convert the average total frame to beautiful soup object.
@@ -164,10 +173,8 @@ class TokenizerModel(BaseModel):
         :return: The dtm corresponding to users choice.
         """
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
-            return self._get_file_col_dtm()
-
+            return self._get_file_col_dtm_table()
         elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
-            return self._get_file_row_dtm()
-
+            return self._get_file_row_dtm_table()
         else:
             raise ValueError("Invalid tokenizer orientation from front end.")
