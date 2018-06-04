@@ -1,4 +1,6 @@
-// Function to check for errors
+/**
+ * function to check if there are errors.
+ */
 function checkForErrors () {
   // Set Error and Warning Messages
 
@@ -15,6 +17,10 @@ function checkForErrors () {
   }
 }
 
+/**
+ * function to figure out where general errors are.
+ * @returns {*}
+ */
 function doCheck () {
   const noActiveDocsMsg = `You have no active documents. Please \
   activate at least one document using the 
@@ -45,6 +51,10 @@ function doCheck () {
   }
 }
 
+/**
+ * function to figure out if errors with cut and overlap values.
+ * @returns {string} - the error message.
+ */
 function checkValues () {
   const defInvalidSegSize = 'Default cutting: Invalid segment size.'
   const defInvalidOverlapVal = 'Default cutting: Invalid overlap value.'
@@ -97,7 +107,10 @@ function checkValues () {
   return ''
 }
 
-// Function to check whether the user needs a warning
+
+/**
+ * function to check whether the user needs a warning.
+ */
 function checkForWarnings () {
   let needsWarning = false
   const maxSegs = 100
@@ -203,6 +216,11 @@ function checkForWarnings () {
 }
 
 let xhr
+
+/**
+ * Performs the ajax request.
+ * @param {string} action
+ */
 function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
      but the former is easier to pass to lexos.py functions, and the
@@ -373,7 +391,11 @@ function doAjax (action) {
   })
 }
 
-// Function to check the form data for errors and warnings
+
+/**
+ * Checks the form data for errors and warnings.
+ * @param {string} action
+ */
 function process (action) {
   $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
   $('#formAction').val(action)
@@ -408,7 +430,10 @@ $(document).on('click', '#timerCancel', function () {
   $('#status-prepare').css('visibility', 'hidden')
 })
 
-// Function to convert the form data into a JSON object
+
+/**
+ * Convert the form data into a JSON object.
+ */
 function jsonifyForm () {
   const form = {}
   $.each($('form').serializeArray(), function (i, field) {
@@ -417,6 +442,9 @@ function jsonifyForm () {
   return form
 }
 
+/**
+ * performs the download request (through flask)
+ */
 function downloadCutting () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
   // Flask route seems to be the easiest method.
