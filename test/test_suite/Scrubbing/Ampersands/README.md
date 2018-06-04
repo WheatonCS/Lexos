@@ -3,7 +3,9 @@ Ampersands
 
 #### Test Keep Ampersands
 
-Test file: Ampersands.txt
+*Test file:* Ampersands.txt
+
+*Result file:* AmpersandsResults.txt
 
 1. UPLOAD Ampersands.txt
 
@@ -14,5 +16,5 @@ Test file: Ampersands.txt
     - Keep Ampersands
 
 3. RESULTS
-- 
+    - 
 
