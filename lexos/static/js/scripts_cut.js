@@ -2,13 +2,12 @@
 function checkForErrors () {
   // Set Error and Warning Messages
 
-  let error_msg = doCheck()
+  const errorMsg = doCheck()
 
-  if (error_msg !== '') {
+  if (errorMsg !== '') {
     $('#hasErrors').val('true')
     $('#status-prepare').css({'visibility': 'hidden'})
-    console.log(error_msg)
-    $('#error-modal-message').html(error_msg)
+    $('#error-modal-message').html(errorMsg)
     $('#error-modal').modal()
   }
   else {
@@ -17,28 +16,28 @@ function checkForErrors () {
 }
 
 function doCheck () {
-  const no_active_docs_msg = `You have no active documents. Please \
+  const noActiveDocsMsg = `You have no active documents. Please \
   activate at least one document using the 
   <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or 
   <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.`
-  const no_cut_string_msg = 'You must provide a string to cut on.'
-  const no_cut_val_msg = 'You must provide a default cutting value.'
+  const noCutStringMsg = 'You must provide a string to cut on.'
+  const noCutValMsg = 'You must provide a default cutting value.'
 
   // Confirm that there are active files
-  if ($('#num_active_files').val() === '0') {
-    return no_active_docs_msg
+  if ($('#numActiveFiles').val() === '0') {
+    return noActiveDocsMsg
   }
 
   // If cut by milestone is checked make sure there is a milestone value
   if ($('#cutByMS').is(':checked')) {
     if ($('#MScutWord').val() === '') {
-      return no_cut_string_msg
+      return noCutStringMsg
     }
   }
   else {
     // Make sure there is a default cutting value
     if ($('#overallcutvalue').val() === '') {
-      return no_cut_val_msg
+      return noCutValMsg
     }
     else {
       return checkValues()
@@ -47,10 +46,10 @@ function doCheck () {
 }
 
 function checkValues () {
-  const def_invalid_seg_size = 'Default cutting: Invalid segment size.'
-  const def_invalid_overlap_val = 'Default cutting: Invalid overlap value.'
-  const ind_invalid_seg_size = 'Individual cutting: Invalid segment size.'
-  const ind_invalid_overlap_val = 'Individual cutting: Invalid overlap value.'
+  const defInvalidSegSize = 'Default cutting: Invalid segment size.'
+  const defInvalidOverlapVal = 'Default cutting: Invalid overlap value.'
+  const indInvalidSegSize = 'Individual cutting: Invalid segment size.'
+  const indInvalidOverlapVal = 'Individual cutting: Invalid overlap value.'
 
   const overallcutvalueStr = $('#overallcutvalue').val()
   const overallcutvalue = parseInt($('#overallcutvalue').val())
@@ -61,38 +60,38 @@ function checkValues () {
 
   // Make sure the overall segment size not negative
   if (overallcutvalue !== Math.floor(overallcutvalue)) {
-    return def_invalid_seg_size
+    return defInvalidSegSize
   }
   // Make sure the overall segment size not a decimal
   if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) {
-    return def_invalid_seg_size
+    return defInvalidSegSize
   }
   // Make sure the overall segment size not 0
   if (overallcutvalue === 0) {
-    return def_invalid_seg_size
+    return defInvalidSegSize
   }
   // Make sure the overall overlap is valid
   if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) {
-    return def_invalid_overlap_val
+    return defInvalidOverlapVal
   }
   // If there are individual segment cuts
   if (individualCutValue !== '') {
     individualCutValue = parseInt(individualCutValue)
     // Make sure the individual segment size not negative
     if (individualCutValue !== Math.floor(individualCutValue)) {
-      return ind_invalid_seg_size
+      return indInvalidSegSize
     }
     // Make sure the individual segment size not a decimal
     if (individualCutValueStr !== Math.abs(individualCutValue).toString()) {
-      return ind_invalid_seg_size
+      return indInvalidSegSize
     }
     // Make sure the individual segment size not 0
     if (individualCutValue === 0) {
-      return ind_invalid_seg_size
+      return indInvalidSegSize
     }
     // Make sure the individual overlap is valid
     if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) {
-      return ind_invalid_overlap_val
+      return indInvalidOverlapVal
     }
   }
   return ''
@@ -105,11 +104,11 @@ function checkForWarnings () {
   const defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
   const cutVal = parseInt($("input[name='cutValue']").val()) // Segment Size
   const overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
-  const indivdivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
-  const eltswithoutindividualopts = [] // Elements without individual cutsets
+  const indivDivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
+  const eltsWithoutIndividualOpts = [] // Elements without individual cutsets
 
   // Check each individual cutset
-  indivdivs.each(function () {
+  indivDivs.each(function () {
     let thisCutVal = $('#individualCutValue', this).val() // Individual segment size
     let thisOverVal = $('#individualOverlap', this).val() // Individual overlap size
     // Parse as integers
@@ -118,12 +117,12 @@ function checkForWarnings () {
       thisOverVal = parseInt(thisOverVal)
     }
     // Get a list of each of the cutset indices
-    const listindex = indivdivs.index(this)
+    const listindex = indivDivs.index(this)
     const currID = activeFileIDs[listindex] // activeFileIDs is defined in the template file
     const isCutByMS = $('.indivMS', this).is(':checked') // True if cut by milestone checked
     // If not cut by milestone and no segment size, add to no individual cutsets array
     if (!isCutByMS && thisCutVal === '') {
-      eltswithoutindividualopts.push(listindex)
+      eltsWithoutIndividualOpts.push(listindex)
     }
     // If no segment size
     if (thisCutVal !== '') {
@@ -144,7 +143,7 @@ function checkForWarnings () {
           needsWarning = true
           // Or if the segment size > 100
         }
-        else if (thisCutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+        else if (thisCutVal > maxSegs && eltsWithoutIndividualOpts.length > 0) {
           needsWarning = true
         }
       }
@@ -152,11 +151,11 @@ function checkForWarnings () {
   })
 
   // If cut by milestone is checked
-  if ($("input[name='cutByMS']:checked").length === 0) {
+  if ($("input[name='cutByMS']:checked").length == 0) {
     // For cutting by characters
     if (defCutTypeValue === 'letters') {
       // Check each document without individual options
-      eltswithoutindividualopts.forEach(function (elt) {
+      eltsWithoutIndividualOpts.forEach(function (elt) {
         // Needs warning...
         // If the number of characters-segment size/segment size-overlap size > 100
         if ((numChar[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
@@ -166,21 +165,21 @@ function checkForWarnings () {
       // Do the same with words and lines
     }
     else if (defCutTypeValue === 'words') {
-      eltswithoutindividualopts.forEach(function (elt) {
+      eltsWithoutIndividualOpts.forEach(function (elt) {
         if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
         }
       })
     }
     else if (defCutTypeValue === 'lines') {
-      eltswithoutindividualopts.forEach(function (elt) {
+      eltsWithoutIndividualOpts.forEach(function (elt) {
         if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
         }
       })
       // If the segment size > 100 and there are documents without individual options
     }
-    else if (cutVal > maxSegs && eltswithoutindividualopts.length > 0) {
+    else if (cutVal > maxSegs && eltsWithoutIndividualOpts.length > 0) {
       needsWarning = true
     }
   }
@@ -208,11 +207,11 @@ function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
      but the former is easier to pass to lexos.py functions, and the
      latter is easier for the ajax response to use. */
-  const num_active_files = $('#num_active_files').val()
+  const numActiveFiles = $('#numActiveFiles').val()
   const formData = new FormData($('form')[0])
   formData.append('action', action)
-  const jsonform = jsonifyForm()
-  $.extend(jsonform, { 'action': action })
+  const jsonForm = jsonifyForm()
+  $.extend(jsonForm, { 'action': action })
   // Initiate a timer to allow user to cancel if processing takes too long
   const loadingTimeout = window.setTimeout(function () {
     $('#needsWarning').val('true')
@@ -248,14 +247,14 @@ function doAjax (action) {
     $('#preview-body').empty() // Correct
     $.each(response['data'], function () {
       const fileID = $(this)[0]
-      const filename = $(this)[1]
-      const fileLabel = filename
+      const fileName = $(this)[1]
+      const fileLabel = fileName
       const fileContents = $(this)[3]
-      const indivcutbuttons = `<a id="indivcutbuttons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>`
+      const indivCutButtons = `<a id="indivCutButtons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivCutButtons" role="button">Individual Options</a></legend>`
       // CSS truncates the document label
-      const fieldset = $(`<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileLabel} ${indivcutbuttons}</fieldset>`)
-      const indcutoptswrap = `<div id="indcutoptswrap_${fileID}" class="cuttingoptionswrapper ind hidden">\
-      <fieldset class="cuttingoptionsfieldset">\
+      const fieldSet = $(`<fieldSet class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileLabel} ${indivCutButtons}</fieldSet>`)
+      const indCutOptsWrap = `<div id="indCutOptsWrap_${fileID}" class="cuttingoptionswrapper ind hidden">\
+      <fieldSet class="cuttingoptionsfieldSet">\
       <legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>\
       <div class="cuttingdiv individcut">\
       <div class="row">\
@@ -308,7 +307,7 @@ function doAjax (action) {
       <div class="row">\
       <div class="col-md-6 pull-right" style="padding-left:2px;padding-right:1%;">\
       <label>Cutset Label: \
-      <input type="text" name="cutsetnaming_${fileID}" class="cutsetnaming" value="${filename}" style="width:155px;display:inline; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>\
+      <input type="text" name="cutsetnaming_${fileID}" class="cutsetnaming" value="${fileName}" style="width:155px;display:inline; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>\
       </label>\
       </div>\
       </div>\
@@ -324,23 +323,23 @@ function doAjax (action) {
       </span>\
       </div>\
       </div>\
-      </fieldset>\
+      </fieldSet>\
       </div>`
-      fieldset.append(indcutoptswrap)
+      fieldSet.append(indCutOptsWrap)
       if ($.type(fileContents) === 'string') {
-        fieldset.append(`<div class="filecontents">${fileContents}</div>`) // Keep this with no whitespace!
+        fieldSet.append(`<div class="filecontents">${fileContents}</div>`) // Keep this with no whitespace!
       }
       else {
         $.each(fileContents, function (i, segment) {
           const segmentLabel = segment[0]
           const segmentString = segment[1]
-          fieldset.append(`<div class="filechunk"><span class="filechunklabel">${segmentLabel}</span><div>${segmentString}</div></div>`)
+          fieldSet.append(`<div class="filechunk"><span class="filechunklabel">${segmentLabel}</span><div>${segmentString}</div></div>`)
         })
       }
-      $('#preview-body').append(fieldset)
+      $('#preview-body').append(fieldSet)
       // Hide the individual cutting wrapper if the form doesn't contain values for it
       if (!(`cutType_${fileID}` in formData) && formData[`cutType_${fileID}`] !== '') {
-        $(`#indcutoptswrap_${fileID}`).addClass('hidden')
+        $(`#indCutOptsWrap_${fileID}`).addClass('hidden')
       }
       // Check the cut type boxes
       if (formData['cutTypeInd'] === 'letters') {
@@ -369,7 +368,7 @@ function doAjax (action) {
         $(`#MScutWord${fileID}`).val(formData['cuttingoptions']['cutValue'])
       }
     })
-    $('.fa-folder-open-o').attr('data-original-title', `You have ${num_active_files} active document(s).`)
+    $('.fa-folder-open-o').attr('data-original-title', `You have ${numActiveFiles} active document(s).`)
     $('#status-prepare').css({ 'visibility': 'hidden' })
   })
 }
@@ -471,7 +470,7 @@ $(function () {
   })
 
   // Toggle individual cut options on load
-  $('.indivcutbuttons').click(function () {
+  $('.indivCutButtons').click(function () {
     const toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
     toggleDiv.toggleClass('hidden')
     // slideToggle() only works if the div is first set to 'display:none'
