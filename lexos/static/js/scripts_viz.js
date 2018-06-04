@@ -56,7 +56,7 @@ $(document).ready(function () {
         var currnet = $(ui.selecting.tagName, e.target).index(ui.selecting);   //gets index of current taget label
         if (e.shiftKey && prev > -1) {      //if you were holding the shift key and there was a box previously clicked
           //take the slice of labels from index prev to index curr and give them the 'ui-selected' class
-          $(ui.selecting.tagName,e.target).slice(Math.min(prev,currnet)+1, Math.max(prev,currnet)+1).addClass('ui-selected');
+          $(ui.selecting.tagName,e.target).slice(Math.min(prev,current)+1, Math.max(prev,current)+1).addClass('ui-selected');
           prev = -1;  //reset prev index
         }else{
           prev = currnet;  //set prev to current if not shift click
@@ -174,7 +174,7 @@ $(window).on('load', function () {
       canvas = document.getElementById('svg-canvas')
 
     // Draw svg on canvas
-    canvg(canvas, content)
+    //canvg(canvas, content)
 
     // Change img from SVG representation
     var theImage = canvas.toDataURL('image/png')
