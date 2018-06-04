@@ -199,6 +199,8 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     norm_seg_size = int(total_num_words / num_segment)
 
     # long segment will have one more words in them than norm_seg_size
+
+
     num_long_seg = total_num_words % num_segment
     long_seg_size = norm_seg_size + 1
 
