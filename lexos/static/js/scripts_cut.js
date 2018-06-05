@@ -384,7 +384,7 @@ function doAjax (action) {
  * @param {string} action - the action type being requested.
  * @returns {void} - nothing is returned from this function.
  */
-function process (action) {
+$(document).on('click', '.cutTrigger', function (action) {
   $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
   $('#formAction').val(action)
   $.when(checkForErrors()).done(function () {
@@ -397,7 +397,7 @@ function process (action) {
       })
     }
   })
-}
+})
 
 // Handle the Continue button in the warning modal
 $(document).on('click', '#warningContinue', function () {
