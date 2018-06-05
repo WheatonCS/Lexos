@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from lexos.models.tokenizer_model import TokenizerModel, TokenizerTestOption
 from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation
-
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 # ------------------------ Test file as columns ------------------------
 test_dtm_col = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
@@ -73,3 +73,37 @@ class TestFileRowResult:
         assert test_file_result_row.loc[1][7] == 3
         assert test_file_result_row.loc[1][8] == 4
         assert test_file_result_row.loc[1][9] == 5
+
+
+# -------------------- Special case test suite ---------------------
+test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
+                                index=np.array([0, 1, 2]),
+                                columns=np.array(["A", "B"]))
+test_id_temp_table_special = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
+test_token_type_str_special = "Characters"
+test_front_end_option_special = TokenizerTableOrientation.FILE_COLUMN
+test_option_special = \
+    TokenizerTestOption(token_type_str=test_token_type_str_special,
+                        doc_term_matrix=test_dtm_special,
+                        front_end_option=test_front_end_option_special,
+                        id_temp_label_map=test_id_temp_table_special)
+test_tokenizer_model_special = TokenizerModel(test_options=test_option_special)
+# ------------------------------------------------------------------
+
+# noinspection PyProtectedMember
+
+
+class TestSpecialCase:
+    def test_empty_list(self):
+        try:
+            _ = test_tokenizer_model_special._get_file_col_dtm()
+            raise AssertionError("Empty DTM received, please upload files.")
+        except AssertionError as error:
+            assert str(error) == EMPTY_DTM_MESSAGE
+
+        try:
+            _ = test_tokenizer_model_special._get_file_row_dtm()
+            raise AssertionError("Empty DTM received, please upload files.")
+        except AssertionError as error:
+            assert str(error) == EMPTY_DTM_MESSAGE
+

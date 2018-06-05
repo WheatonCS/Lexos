@@ -10,6 +10,7 @@ from lexos.managers.session_manager import session_folder
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
     TokenizerReceiver
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 
 
 class TokenizerTestOption(NamedTuple):
@@ -77,6 +78,9 @@ class TokenizerModel(BaseModel):
         :return: A pandas data frame that contains the DTM where each document
                  is a column with total and average added to the original DTM.
         """
+
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
@@ -121,6 +125,8 @@ class TokenizerModel(BaseModel):
         :return: A pandas data frame that contains the DTM where each document
                  is a row with total and average added to the original DTM.
         """
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
