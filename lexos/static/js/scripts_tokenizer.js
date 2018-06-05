@@ -72,26 +72,22 @@ function getDataTableConfig () {
 }
 
 function checkTokenizerSize () {
-  // convert form into an object map string to string
+  // convert form into an object map string to string.
   const form = jsonifyForm()
-
+  // Send the ajax request to get the tokenizer matrix size.
   sendAjaxRequest('/tokenizerSize', form)
     .done(
       function (response) {
+        // Cast the response to an integer.
         const size = Number(response)
-        console.log(size)
-        console.log("IN RESPONSE")
-        if (size < 10000) {
-          console.log("IN IF")
+
+        if (size < 50000) {  // If less than 50000 data, render the table.
           generateTokenizerResult()
-        } else {
-          const outerTableDivSelector = $('#tokenizerMatrix')
-          // put the response onto the web page
-          outerTableDivSelector.html(response)
+        } else {             // Else give user the option to download or keep waiting.
+          $('#decision-button').click()
         }
       }
     )
-
     .fail(
       function (jqXHR, textStatus, errorThrown) {
         console.log('textStatus: ' + textStatus)
@@ -157,5 +153,11 @@ $(function () {
     } else {               // If error found, do modal.
       runModal(error)
     }
+  })
+  $('#choose-download').click(function () {
+    $('#download-tokenizer').click()
+  })
+  $('#choose-continue').click(function () {
+    generateTokenizerResult()
   })
 })
