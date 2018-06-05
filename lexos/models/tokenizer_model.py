@@ -14,7 +14,7 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 
 
 class TokenizerTestOption(NamedTuple):
-    """A typed tuple that holds all the tokenizer test option."""
+    """A typed tuple that holds all the tokenizer test options."""
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerTableOrientation
@@ -55,14 +55,15 @@ class TokenizerModel(BaseModel):
 
     @property
     def _front_end_option(self) -> TokenizerTableOrientation:
-        """:return: A typed tuple that holds the topword front end option."""
+        """:return: A typed tuple that holds the orientation front end
+                    option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else TokenizerReceiver().options_from_front_end()
 
     @property
     def _token_type_str(self) -> str:
-        """:return: A string that represents the token type has been used."""
+        """:return: A string that represents the token type used."""
         if self._test_token_type_str is not None:
             return self._test_token_type_str
         else:
@@ -105,7 +106,7 @@ class TokenizerModel(BaseModel):
     def _get_file_col_dtm_table(self) -> str:
         """Get DTM with documents as columns and terms/characters as rows.
 
-        :return: A HTML formatted string that contains the desired DTM.
+        :return: An HTML formatted string that contains the desired DTM.
         """
         # Convert the HTML to beautiful soup object.
         file_col_dtm_soup = BeautifulSoup(
@@ -142,7 +143,7 @@ class TokenizerModel(BaseModel):
     def _get_file_row_dtm_table(self) -> str:
         """Get DTM with documents as rows and terms/characters as columns.
 
-        :return: A HTML formatted string that contains the desired DTM.
+        :return: An HTML formatted string that contains the desired DTM.
         """
         # Get the file_row_dtm.
         file_row_dtm = self._get_file_row_dtm()
@@ -191,7 +192,7 @@ class TokenizerModel(BaseModel):
     def get_dtm(self) -> str:
         """Get the DTM based on front end required table orientation option.
 
-        :return: The DTM corresponding to users choice.
+        :return: The DTM corresponding to user's choice.
         """
         # Check front end option, if no valid option get, raise an error.
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
