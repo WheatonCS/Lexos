@@ -36,18 +36,17 @@
                 Documents as Rows, Terms/Characters as Columns
             </label>
         </fieldset>
+        <fieldset>
+            <legend style="padding-top: 20px">Make new Document-Term Matrix:</legend>
+            <input type="button" class="btn btn-success" id="get-tokenize"
+                   name="gen-tokenize" value="Show matrix"/>
+            <input type="submit" class="btn btn-primary" id="download-tokenize"
+                   name="down-tokenize" value="Download matrix"/>
+        </fieldset>
     </div>
 {% endblock %}
 
 {% block results %}
-    <div class="row col-lg-12 col-md-12">
-        <input type="button" class="bttn bttn-action" id="get-tokenize"
-               name="gen-tokenize" value="Get tokenize table"/>
-    </div>
-    <div class="row col-lg-12 col-md-12">
-        <a href={{ file_path }}>Download</a>
-    </div>
-
     <div id="tokenizeResult" style="margin-top:50px;">
         <div id="tokenizeTable"></div>
     </div>
