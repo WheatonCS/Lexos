@@ -71,10 +71,40 @@ function getDataTableConfig () {
   }
 }
 
+function checkTokenizerSize () {
+  // convert form into an object map string to string
+  const form = jsonifyForm()
+
+  sendAjaxRequest('/tokenizerSize', form)
+    .done(
+      function (response) {
+        const size = Number(response)
+        console.log(size)
+        console.log("IN RESPONSE")
+        if (size < 10000) {
+          console.log("IN IF")
+          generateTokenizerResult()
+        } else {
+          const outerTableDivSelector = $('#tokenizerMatrix')
+          // put the response onto the web page
+          outerTableDivSelector.html(response)
+        }
+      }
+    )
+
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        runModal('Error encountered while generating the lol result.')
+      }
+    )
+}
+
 /**
  * display the result of the similarity query on web page
  */
-function generateTokenizeResult () {
+function generateTokenizerResult () {
   // show loading icon
   $('#status-analyze').css({'visibility': 'visible'})
 
@@ -82,16 +112,16 @@ function generateTokenizeResult () {
   const form = jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/tokenizeTable', form)
+  sendAjaxRequest('/tokenizerMatrix', form)
     .done(
       function (response) {
-        const outerTableDivSelector = $('#tokenizeTable')
+        const outerTableDivSelector = $('#tokenizerMatrix')
         // put the response onto the web page
         outerTableDivSelector.html(response)
         // initialize the data table
         outerTableDivSelector.children().DataTable(getDataTableConfig())
         // display everything in the tokenize div.
-        $('#tokenizeResult').css({'display': 'block'})
+        $('#tokenizerResult').css({'display': 'block'})
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -109,7 +139,7 @@ $(function () {
   /**
    * The event handler for generate tokenize clicked.
    */
-  $('#download-tokenize').click(function (event) {
+  $('#download-tokenizer').click(function (event) {
     // On check possible submission error on click.
     const error = submissionError()
     // If error found, run modal to display message and prevent the submission from happening.
@@ -118,12 +148,12 @@ $(function () {
       event.preventDefault()
     }
   })
-  $('#get-tokenize').click(function () {
+  $('#get-tokenizer').click(function () {
     // Get the possible error happened during submission the ajax call.
     const error = submissionError()
 
     if (error === null) {  // If there is no error, do the ajax call.
-      generateTokenizeResult()
+      checkTokenizerSize()
     } else {               // If error found, do modal.
       runModal(error)
     }

@@ -40,11 +40,9 @@
             <legend style="padding-top: 20px">Make new Document-Term Matrix:
             </legend>
             <input type="button" class="btn btn-success col-md-5 col-lg-5"
-                   id="get-tokenize" name="gen-tokenize" value="Show matrix"/>
-            <input type="submit"
-                   class="btn btn-primary col-lg-offset-1 col-md-offset-1 col-md-5 col-lg-5"
-                   id="download-tokenize" name="down-tokenize"
-                   value="Download matrix"/>
+                   id="get-tokenizer" value="Show matrix"/>
+            <input type="submit" class="btn btn-primary col-lg-offset-1 col-md-offset-1 col-md-5 col-lg-5"
+                   id="download-tokenizer" value="Download matrix"/>
         </fieldset>
     </div>
 
@@ -83,7 +81,7 @@
 {% endblock %}
 
 {% block results %}
-    <div id="tokenizeResult" style="margin-top:50px;">
-        <div id="tokenizeTable"></div>
+    <div id="tokenizerResult" style="margin-top:50px;">
+        <div id="tokenizerMatrix"></div>
     </div>
 {% endblock %}
