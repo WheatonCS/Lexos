@@ -94,6 +94,11 @@ function generateSimResult () {
 }
 
 $(function () {
+  $('.has-chevron').on('click', function () {
+    $(this).find('#cullingOptsChev').toggleClass('down')
+
+    $(this).next().collapse('toggle')
+  })
 
     // hide the similarity
     $('#similaritiesResults').css({'display': 'none'})
