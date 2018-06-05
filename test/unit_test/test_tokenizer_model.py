@@ -24,8 +24,6 @@ test_file_size_col = test_tokenizer_model_col.get_dtm_size()
 
 
 # ------------------------------------------------------------------
-
-
 class TestFileColResult:
     def test_column_names(self):
         assert test_file_result_col.columns.values[0] == "word"
@@ -40,6 +38,9 @@ class TestFileColResult:
         assert test_file_result_col["Average"][0] == 20
         assert test_file_result_col["F1.txt"][0] == 40
         assert test_file_result_col["F2.txt"][0] == 0
+
+    def test_column_size(self):
+        assert test_file_size_col == "36"
 
 
 # ------------------------ Test file as rows ------------------------
@@ -58,11 +59,9 @@ test_option_row = TokenizerTestOption(
     id_temp_label_map=test_id_temp_table_row)
 test_tokenizer_model_row = TokenizerModel(test_options=test_option_row)
 test_file_result_row = pd.read_html(test_tokenizer_model_row.get_dtm())[0]
-test_file_size_row = test_tokenizer_model_row.get_dtm_size()
-print("done")
+
+
 # ------------------------------------------------------------------
-
-
 class TestFileRowResult:
     def test_row_names(self):
         assert test_file_result_row.loc[0][0] == "F1.txt"
@@ -73,7 +72,6 @@ class TestFileRowResult:
         assert test_file_result_row.loc[0][2] == 20
         assert test_file_result_row.loc[0][3] == 15
         assert test_file_result_row.loc[0][4] == 5
-
         assert test_file_result_row.loc[1][5] == 1
         assert test_file_result_row.loc[1][6] == 2
         assert test_file_result_row.loc[1][7] == 3
@@ -97,28 +95,10 @@ test_tokenizer_model_special = TokenizerModel(test_options=test_option_special)
 
 
 # ------------------------------------------------------------------
-
-# noinspection PyProtectedMember
-
-
 class TestSpecialCase:
     def test_empty_list(self):
         try:
-            _ = test_tokenizer_model_special._get_file_col_dtm()
+            _ = test_tokenizer_model_special.get_dtm()
             raise AssertionError("Empty DTM received, please upload files.")
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE
-
-        try:
-            _ = test_tokenizer_model_special._get_file_row_dtm()
-            raise AssertionError("Empty DTM received, please upload files.")
-        except AssertionError as error:
-            assert str(error) == EMPTY_DTM_MESSAGE
-
-
-class TestSizeDTM:
-    def test_size_file_col(self):
-        assert test_file_size_col == 36
-
-    def test_size_file_row(self):
-        assert test_file_size_row == 1
