@@ -39,17 +39,19 @@
         <fieldset>
             <legend style="padding-top: 20px">Make new Document-Term Matrix:
             </legend>
-            <input type="button" class="btn btn-success" id="get-tokenize"
-                   name="gen-tokenize" value="Show matrix"/>
-            <input type="submit" class="btn btn-primary" id="download-tokenize"
-                   name="down-tokenize" value="Download matrix"/>
+            <input type="button" class="btn btn-success col-md-5 col-lg-5"
+                   id="get-tokenize" name="gen-tokenize" value="Show matrix"/>
+            <input type="submit"
+                   class="btn btn-primary col-lg-offset-1 col-md-offset-1 col-md-5 col-lg-5"
+                   id="download-tokenize" name="down-tokenize"
+                   value="Download matrix"/>
         </fieldset>
     </div>
 
     <!-- Click this button will trigger if continue download. -->
     <button id="decision-button" type="button" class="btn btn-primary"
             data-toggle="modal" data-target="#decide-modal"
-            style="display: block">Try
+            style="display: None">Try
     </button>
 
     <!-- This part define the model that was used above. -->
