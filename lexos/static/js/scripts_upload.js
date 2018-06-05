@@ -1,9 +1,4 @@
 $(function () {
-    $('#ITMPanel').animate({left: '-450px'});
-    $('#ITMPanel').animate({left: '-500px'}, 'fast');
-})
-
-$(function () {
   if ($('.fa-folder-open-o')[0].style.display != 'none' &&
     $('.fa-folder-open-o')[0].innerText.indexOf('Response') != -1) {
     alert("Steven's special bug detected! Click OK and the page will load.")
