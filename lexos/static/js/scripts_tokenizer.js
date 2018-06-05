@@ -1,6 +1,7 @@
 /**
- * the function to run the error modal
- * @param htmlMsg {string} - the message to display, you can put html in it
+ * The function to run the error modal.
+ * @param {string} htmlMsg: the message to display.
+ * @returns {void}.
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -8,8 +9,8 @@ function runModal (htmlMsg) {
 }
 
 /**
- * check all the easy error with js, in this case, you need more than 1 document
- * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
+ * At least one document is required to run the stats.
+ * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
  */
 function submissionError () {
   if ($('#num_active_files').val() < 1) {
@@ -20,8 +21,8 @@ function submissionError () {
 }
 
 /**
- * the function to convert the form into json
- * @returns {{string: string}} - the form converted to json
+ * The function to convert the form into json.
+ * @returns {{string: string}}: the form converted to json.
  */
 function jsonifyForm () {
   const form = {}
@@ -32,10 +33,10 @@ function jsonifyForm () {
 }
 
 /**
- * send the ajax request
- * @param url: the url to post
- * @param form: the form data packed into an object
- * @returns {jQuery.Ajax}: an jQuery Ajax object
+ * Send the ajax request.
+ * @param {string} url: the url to post.
+ * @param {{string: string}} form: the form data packed into an object.
+ * @returns {jQuery.Ajax}: an jQuery Ajax object.
  */
 function sendAjaxRequest (url, form) {
   return $.ajax({
@@ -46,20 +47,27 @@ function sendAjaxRequest (url, form) {
   })
 }
 
+/**
+ * Generate the desired data table configuration based on users selection.
+ * @returns {{scrollX: boolean, bSortCellsTop: boolean, dom: string, buttons: string[], fixedColumns: {leftColumns: *}}}: data table configurations.
+ */
 function getDataTableConfig () {
   // Declare the variable that holds the number of fixed left columns.
   let numFixedColumns
-  if ($('#table-orientation-column').is(':checked'))
+  if ($('#table-orientation-column').is(':checked')) {
     numFixedColumns = 3
-  else if ($('#table-orientation-row').is(':checked'))
+  } else if ($('#table-orientation-row').is(':checked')) {
     numFixedColumns = 1
+  }
 
   return {
+    // Allow scroll horizontally.
     scrollX: true,
+    // Do not sort headers.
     bSortCellsTop: true,
     // specify where the button is
     dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
-              <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
+          <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
 
     // specify all the button that is put on to the page
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
@@ -71,6 +79,10 @@ function getDataTableConfig () {
   }
 }
 
+/**
+ * Check if the table is too large, if too large, give user the option to choose.
+ * @returns {void}.
+ */
 function checkTokenizerSize () {
   // convert form into an object map string to string.
   const form = jsonifyForm()
@@ -81,9 +93,9 @@ function checkTokenizerSize () {
         // Cast the response to an integer.
         const size = Number(response)
 
-        if (size < 50000) {  // If less than 50000 data, render the table.
+        if (size < 50000) { // If less than 50000 data, render the table.
           generateTokenizerResult()
-        } else {             // Else give user the option to download or keep waiting.
+        } else { // Else give user the option to download or keep waiting.
           $('#decision-button').click()
         }
       }
@@ -98,7 +110,8 @@ function checkTokenizerSize () {
 }
 
 /**
- * display the result of the similarity query on web page
+ * Display the result of the tokenizer matrix on web page.
+ * @returns {void}.
  */
 function generateTokenizerResult () {
   // show loading icon
@@ -132,9 +145,17 @@ function generateTokenizerResult () {
 }
 
 $(function () {
-  /**
-   * The event handler for generate tokenize clicked.
-   */
+  // The event handler for clicking on download matrix in the modal.
+  $('#choose-download').click(function () {
+    $('#download-tokenizer').click()
+  })
+
+  // The event handler for clicking on continue rendering in the modal.
+  $('#choose-continue').click(function () {
+    generateTokenizerResult()
+  })
+
+  // The event handler for generate tokenize clicked.
   $('#download-tokenizer').click(function (event) {
     // On check possible submission error on click.
     const error = submissionError()
@@ -144,20 +165,16 @@ $(function () {
       event.preventDefault()
     }
   })
+
+  // The event handler for generate tokenize clicked.
   $('#get-tokenizer').click(function () {
     // Get the possible error happened during submission the ajax call.
     const error = submissionError()
 
-    if (error === null) {  // If there is no error, do the ajax call.
+    if (error === null) { // If there is no error, do the ajax call.
       checkTokenizerSize()
-    } else {               // If error found, do modal.
+    } else { // If error found, do modal.
       runModal(error)
     }
-  })
-  $('#choose-download').click(function () {
-    $('#download-tokenizer').click()
-  })
-  $('#choose-continue').click(function () {
-    generateTokenizerResult()
   })
 })
