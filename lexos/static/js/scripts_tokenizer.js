@@ -109,14 +109,22 @@ $(function () {
   /**
    * The event handler for generate tokenize clicked.
    */
+  $('#download-tokenize').click(function (event) {
+    // On check possible submission error on click.
+    const error = submissionError()
+    // If error found, run modal to display message and prevent the submission from happening.
+    if (error !== null) {
+      runModal(error)
+      event.preventDefault()
+    }
+  })
   $('#get-tokenize').click(function () {
     // Get the possible error happened during submission the ajax call.
     const error = submissionError()
 
-    if (error === null) {  // if there is no error
+    if (error === null) {  // If there is no error, do the ajax call.
       generateTokenizeResult()
-    }
-    else {
+    } else {               // If error found, do modal.
       runModal(error)
     }
   })
