@@ -13,6 +13,7 @@ from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
 
 
 class TokenizerTestOption(NamedTuple):
+    """A typed tuple that holds all the tokenizer test option."""
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerTableOrientation
@@ -23,7 +24,7 @@ class TokenizerModel(BaseModel):
     def __init__(self, test_options: Optional[TokenizerTestOption] = None):
         """This is the class to generate statistics of the input file.
 
-        :param test_options: the input used in testing to override the
+        :param test_options: The input used in testing to override the
                              dynamically loaded option
         """
         super().__init__()
@@ -40,26 +41,27 @@ class TokenizerModel(BaseModel):
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-        """:return: the document term matrix"""
+        """:return: The document term matrix"""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
     def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels"""
+        """:return: A map takes an id to temp labels"""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
 
     @property
     def _front_end_option(self) -> TokenizerTableOrientation:
-        """:return: a typed tuple that holds the topword front end option."""
+        """:return: A typed tuple that holds the topword front end option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else TokenizerReceiver().options_from_front_end()
 
     @property
     def _token_type_str(self) -> str:
+        """:return: A string that represents the token type has been used."""
         if self._test_token_type_str is not None:
             return self._test_token_type_str
         else:
@@ -70,9 +72,10 @@ class TokenizerModel(BaseModel):
             return "Terms" if token_type == "word" else "Characters"
 
     def _get_file_col_dtm(self) -> pd.DataFrame:
-        """Get dtm with documents as rows and terms/characters as columns.
+        """Get DTM with documents as columns and terms/characters as rows.
 
-        :return: string in data table format that contains the dtm.
+        :return: A pandas data frame that contains the DTM where each document
+                 is a column with total and average added to the original DTM.
         """
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
@@ -93,10 +96,13 @@ class TokenizerModel(BaseModel):
         file_col_dtm.insert(loc=1,
                             column="Average",
                             value=file_col_dtm["Total"] / len(labels))
-
         return file_col_dtm
 
     def _get_file_col_dtm_table(self) -> str:
+        """Get DTM with documents as columns and terms/characters as rows.
+
+        :return: A HTML formatted string that contains the desired DTM.
+        """
         # Convert the HTML to beautiful soup object.
         file_col_dtm_soup = BeautifulSoup(
             self._get_file_col_dtm().round(3).to_html(
@@ -110,9 +116,10 @@ class TokenizerModel(BaseModel):
         return file_col_dtm_soup.prettify()
 
     def _get_file_row_dtm(self) -> pd.DataFrame:
-        """Get dtm with documents as columns and terms/characters as rows.
+        """Get DTM with documents as rows and terms/characters as columns.
 
-        :return: string in data table format that contains the dtm.
+        :return: A pandas data frame that contains the DTM where each document
+                 is a row with total and average added to the original DTM.
         """
         # Get temp file names.
         labels = [self._id_temp_label_map[file_id]
@@ -126,6 +133,10 @@ class TokenizerModel(BaseModel):
         return file_row_dtm
 
     def _get_file_row_dtm_table(self) -> str:
+        """Get DTM with documents as rows and terms/characters as columns.
+
+        :return: A HTML formatted string that contains the desired DTM.
+        """
         # Get the file_row_dtm.
         file_row_dtm = self._get_file_row_dtm()
 
@@ -171,10 +182,11 @@ class TokenizerModel(BaseModel):
         return file_row_dtm_soup.prettify()
 
     def get_dtm(self) -> str:
-        """Get the dtm based on front end required table orientation option.
+        """Get the DTM based on front end required table orientation option.
 
-        :return: The dtm corresponding to users choice.
+        :return: The DTM corresponding to users choice.
         """
+        # Check front end option, if no valid option get, raise an error.
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
             return self._get_file_col_dtm_table()
         elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
@@ -183,6 +195,11 @@ class TokenizerModel(BaseModel):
             raise ValueError("Invalid tokenizer orientation from front end.")
 
     def download_dtm(self) -> str:
+        """Download the desired DTM as a CSV file.
+
+        :return: The file path that saves the CSV file.
+        """
+        # Select proper DTM based on users choice.
         if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
             required_dtm = self._get_file_col_dtm()
         elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
@@ -190,12 +207,16 @@ class TokenizerModel(BaseModel):
         else:
             raise ValueError("Invalid tokenizer orientation from front end.")
 
+        # Get the default folder path, if it does not exist, create one.
         folder_path = os.path.join(session_folder(), RESULTS_FOLDER)
         if not os.path.isdir(folder_path):
             os.makedirs(folder_path)
 
+        # Set the default file path.
         file_path = os.path.join(folder_path, "tokenizer_result.csv")
 
-        required_dtm.to_csv(file_path)
+        # Round the DTM and save it to the file path.
+        required_dtm.round(4).to_csv(file_path)
 
+        # Return where the file is.
         return file_path
