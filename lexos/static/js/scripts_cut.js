@@ -3,8 +3,6 @@
  * @returns {void} - returns nothing.
  */
 function checkForErrors () {
-  // Set Error and Warning Messages
-
   const errorMsg = doCheck()
 
   if (errorMsg !== '') {
@@ -189,7 +187,6 @@ function checkForWarnings () {
     }
   }
 
-  // needsWarning = true; // For testing
   if (needsWarning === true) {
     $('#needsWarning').val('true')
     const sizeWarning = `Current cut settings will result in over
@@ -211,6 +208,7 @@ let xhr
 /**
  * Performs the ajax request.
  * @param {string} action - the action type being requested.
+ * @returns {void} - nothing is returned from this function.
  */
 function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
@@ -384,6 +382,7 @@ function doAjax (action) {
 /**
  * Checks the form data for errors and warnings.
  * @param {string} action - the action type being requested.
+ * @returns {void} - nothing is returned from this function.
  */
 function process (action) {
   $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
@@ -421,6 +420,7 @@ $(document).on('click', '#timerCancel', function () {
 
 /**
  * Convert the form data into a JSON object.
+ * @returns {array} - returns the form data as a json object.
  */
 function jsonifyForm () {
   const form = {}
@@ -432,6 +432,7 @@ function jsonifyForm () {
 
 /**
  * Performs the download request (through flask)
+ * @returns {void} - nothing is returned from this function.
  */
 function downloadCutting () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
@@ -488,15 +489,16 @@ $(function () {
       .find('.overlap-input').prop('disabled', true)
   })
 
-  /**
-   * Toggle individual cut option on load.
-   */
+  // Toggle individual cut option on load.
   $('.indivCutButtons').click(function () {
     const toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
     toggleDiv.toggleClass('hidden')
   })
 
-  // Toggle milestone options
+  /**
+   * Toggles milestone options.
+   * @returns {void} - this function does not return anything.
+   */
   function showMilestoneOptions () {
     if ($('#cutByMS').is(':checked')) {
       $('#MSoptspan').removeClass('hidden')
