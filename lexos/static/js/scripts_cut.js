@@ -1,6 +1,6 @@
 /**
  * function to check if there are errors.
- * @returns {void}
+ * @returns {void} - returns nothing.
  */
 function checkForErrors () {
   // Set Error and Warning Messages
@@ -19,7 +19,7 @@ function checkForErrors () {
 
 /**
  * function to figure out where general errors are.
- * @returns {string}
+ * @returns {string} - returns the appropriate error message
  */
 function doCheck () {
   const noActiveDocsMsg = `You have no active documents. Please
@@ -107,7 +107,7 @@ function checkValues () {
 
 /**
  * function to check whether the user needs a warning.
- * @returns {void}
+ * @returns {void} - returns nothing.
  */
 function checkForWarnings () {
   let needsWarning = false
@@ -192,7 +192,7 @@ function checkForWarnings () {
   // needsWarning = true; // For testing
   if (needsWarning === true) {
     $('#needsWarning').val('true')
-    const sizeWarning = `Current cut settings will result in over \ 
+    const sizeWarning = `Current cut settings will result in over
     100 new segments. Please be patient if you continue.`
     const footerButtons = `<button type="button" class="btn btn-default" id="warningContinue">Continue Anyway</button>
     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>`
@@ -210,7 +210,7 @@ let xhr
 
 /**
  * Performs the ajax request.
- * @param {string} action
+ * @param {string} action - the action type being requested.
  */
 function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
@@ -225,7 +225,7 @@ function doAjax (action) {
   const loadingTimeout = window.setTimeout(function () {
     $('#needsWarning').val('true')
     const timeWarning = `Lexos seems to be taking a long time.  \
-    This may be because you are cutting a large number of documents. \ 
+    This may be because you are cutting a large number of documents. 
     If not, we suggest that you cancel, reload the page, and try again.`
     const footerButtons = `<button type="button" class="btn btn-default" data-dismiss="modal">Continue Anyway</button>
     <button type="button" class="btn btn-default" id="timerCancel" >Cancel</button>`
@@ -383,7 +383,7 @@ function doAjax (action) {
 
 /**
  * Checks the form data for errors and warnings.
- * @param {string} action
+ * @param {string} action - the action type being requested.
  */
 function process (action) {
   $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
@@ -431,7 +431,7 @@ function jsonifyForm () {
 }
 
 /**
- * performs the download request (through flask)
+ * Performs the download request (through flask)
  */
 function downloadCutting () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
@@ -441,6 +441,9 @@ function downloadCutting () {
     }
 }
 
+/**
+ * Document ready function.
+ */
 $(function () {
   const msg = 'You have no active documents. Please activate \
   at least one document using the <a href="./manage">Manage</a> tool or\
@@ -485,12 +488,12 @@ $(function () {
       .find('.overlap-input').prop('disabled', true)
   })
 
-  // Toggle individual cut options on load
+  /**
+   * Toggle individual cut option on load.
+   */
   $('.indivCutButtons').click(function () {
     const toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
     toggleDiv.toggleClass('hidden')
-    // slideToggle() only works if the div is first set to 'display:none'
-    // toggleDiv.slideToggle(timeToToggle);
   })
 
   // Toggle milestone options
@@ -505,8 +508,6 @@ $(function () {
   }
 
   $('#cutByMS').click(showMilestoneOptions)
-
-  // showMilestoneOptions();
 
   $(document).on('click', '.indivMS', function () {
     showMilestoneOptions()
