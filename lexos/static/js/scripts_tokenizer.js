@@ -105,47 +105,27 @@ function generateTokenizeResult () {
       })
 }
 
-/**
- * display the result of the similarity query on web page
- */
-function downloadTokenizeResult () {
-  // show loading icon
-  $('#status-analyze').css({'visibility': 'visible'})
-
-  // convert form into an object map string to string
-  const form = jsonifyForm()
-
-  // send the ajax request
-  sendAjaxRequest('/tokenizeDownload', form)
-    .done()
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the tokenize table result.')
-      })
-    .always(
-      function () {
-        $('#status-analyze').css({'visibility': 'hidden'})
-      })
-}
-
 $(function () {
   /**
    * The event handler for generate tokenize clicked.
    */
+  $('#download-tokenize').click(function (event) {
+    // On check possible submission error on click.
+    const error = submissionError()
+    // If error found, run modal to display message and prevent the submission from happening.
+    if (error !== null) {
+      runModal(error)
+      event.preventDefault()
+    }
+  })
   $('#get-tokenize').click(function () {
     // Get the possible error happened during submission the ajax call.
     const error = submissionError()
 
-    if (error === null) {  // if there is no error
+    if (error === null) {  // If there is no error, do the ajax call.
       generateTokenizeResult()
-    }
-    else {
+    } else {               // If error found, do modal.
       runModal(error)
     }
-  })
-  $('#download-tokenize').click(function () {
-    window.location = "{ file_path} "
   })
 })
