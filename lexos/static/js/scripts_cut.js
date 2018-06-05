@@ -243,8 +243,8 @@ function doAjax (action) {
       $('#status-prepare').css({ 'visibility': 'hidden' })
       // Show an error if the user has not cancelled the action
       if (errorThrown !== 'abort') {
-        const not_apply_msg = 'Lexos could not apply the cutting actions.'
-        $('#error-modal-message').html(not_apply_msg)
+        const notApplyMsg = 'Lexos could not apply the cutting actions.'
+        $('#error-modal-message').html(notApplyMsg)
         $('#error-modal').modal()
       }
       console.log(`bad: ${textStatus}: ${errorThrown}`)
@@ -337,8 +337,7 @@ function doAjax (action) {
       fieldSet.append(indCutOptsWrap)
       if ($.type(fileContents) === 'string') {
         fieldSet.append(`<div class="filecontents">${fileContents}</div>`) // Keep this with no whitespace!
-      }
-      else {
+      } else {
         $.each(fileContents, function (i, segment) {
           const segmentLabel = segment[0]
           const segmentString = segment[1]
@@ -499,8 +498,7 @@ $(function () {
     if ($('#cutByMS').is(':checked')) {
       $('#MSoptspan').removeClass('hidden')
       $('#cuttingdiv').hide()
-    }
-    else {
+    } else {
       $('#MSoptspan').addClass('hidden')
       $('#cuttingdiv').show()
     }
@@ -516,8 +514,7 @@ $(function () {
       $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').show()
       $(this).parents('#cutByMSdiv').filter(':first')
         .parents('.cuttingoptionswrapper').find('.individcut').hide()
-    }
-    else {
+    } else {
       $(this).parents('#cutByMSdiv').filter(':first').children('#MSoptspan').hide()
       $(this).parents('#cutByMSdiv').filter(':first')
         .parents('.cuttingoptionswrapper').find('.individcut').show()
