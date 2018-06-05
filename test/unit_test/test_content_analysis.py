@@ -146,10 +146,7 @@ def test_generate_averages():
     assert test.averages == [0.5, 2.0, 1.5, 2.0]
 
 
-def test_to_html():
-    test = ContentAnalysisModel()
-    assert test.to_html()
-
+# TODO: add test for to_html function.
 
 def test_to_data_frame():
     test = ContentAnalysisModel()

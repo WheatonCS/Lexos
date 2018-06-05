@@ -12,6 +12,14 @@ install:
   - pip install -r ./requirements.txt
   - pip install -r ./dev_requirements.txt
 
+  # install npm
+  - choco install nodejs
+
+  # use npm to install all the dependencies (including dev)
+  - cd ./lexos/static
+  - npm install
+  - cd ../..
+
 branches:
   only:
     - master
@@ -26,6 +34,11 @@ test_script:
   - pytest --cov=./lexos
   - codecov
 
+  # test for javascript code style
+  - cd ./lexos/static
+  # following line is commented out, because frontend refactor is not yet compeleted
+  # - .\node_modules\.bin\eslint ./js/script_*.js
+  - cd ../..
 
 build: off
 
