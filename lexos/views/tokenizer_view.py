@@ -42,10 +42,19 @@ def tokenizer():
                          attachment_filename="tokenizer_result.csv")
 
 
-@tokenizer_blueprint.route("/tokenizeTable", methods=["POST"])
-def tokenizer_result():
+@tokenizer_blueprint.route("/tokenizerMatrix", methods=["POST"])
+def tokenizer_matrix():
     # Cache the front options for matrix model and tokenizer model.
     session_manager.cache_analysis_option()
     session_manager.cache_tokenizer_option()
     # Return the generated DTM to ajax call.
     return TokenizerModel().get_dtm()
+
+
+@tokenizer_blueprint.route("/tokenizerSize", methods=["POST"])
+def tokenizer_size():
+    # Cache the front options for matrix model and tokenizer model.
+    session_manager.cache_analysis_option()
+    session_manager.cache_tokenizer_option()
+    # Return the size of the DTM to ajax call.
+    return TokenizerModel().get_dtm_size()
