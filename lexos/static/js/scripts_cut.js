@@ -19,13 +19,13 @@ function checkForErrors () {
 
 /**
  * function to figure out where general errors are.
- * @returns {*}
+ * @returns {string}
  */
 function doCheck () {
   const noActiveDocsMsg = `You have no active documents. Please
   activate at least one document using the 
-  <a href=\"{{ url_for("manage.manage") }}">Manage</a> tool or 
-  <a href=\"{{ url_for("upload.upload") }}">upload</a> a new document.`
+  <a href="{{ url_for("manage.manage") }}">Manage</a> tool or 
+  <a href="{{ url_for("upload.upload") }}">upload</a> a new document.`
   const noCutStringMsg = 'You must provide a string to cut on.'
   const noCutValMsg = 'You must provide a default cutting value.'
 
@@ -159,7 +159,7 @@ function checkForWarnings () {
   })
 
   // If cut by milestone is checked
-  if ($("input[name='cutByMS']:checked").length == 0) {
+  if ($("input[name='cutByMS']:checked").length === 0) {
     // For cutting by characters
     if (defCutTypeValue === 'letters') {
       // Check each document without individual options
@@ -171,23 +171,20 @@ function checkForWarnings () {
         }
       })
       // Do the same with words and lines
-    }
-    else if (defCutTypeValue === 'words') {
+    } else if (defCutTypeValue === 'words') {
       eltsWithoutIndividualOpts.forEach(function (elt) {
         if ((numWord[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
         }
       })
-    }
-    else if (defCutTypeValue === 'lines') {
+    } else if (defCutTypeValue === 'lines') {
       eltsWithoutIndividualOpts.forEach(function (elt) {
         if ((numLine[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
         }
       })
       // If the segment size > 100 and there are documents without individual options
-    }
-    else if (cutVal > maxSegs && eltsWithoutIndividualOpts.length > 0) {
+    } else if (cutVal > maxSegs && eltsWithoutIndividualOpts.length > 0) {
       needsWarning = true
     }
   }
@@ -204,8 +201,7 @@ function checkForWarnings () {
     // Hide the processing icon and show the modal
     $('#status-prepare').css({ 'visibility': 'hidden' })
     $('#warning-modal').modal()
-  }
-  else {
+  } else {
     $('#needsWarning').val('false')
   }
 }
@@ -385,7 +381,6 @@ function doAjax (action) {
     $('#status-prepare').css({ 'visibility': 'hidden' })
   })
 }
-
 
 /**
  * Checks the form data for errors and warnings.
