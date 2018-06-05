@@ -3,6 +3,7 @@ import pandas as pd
 from lexos.models.tokenizer_model import TokenizerModel, TokenizerTestOption
 from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
+
 # ------------------------ Test file as columns ------------------------
 test_dtm_col = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
@@ -19,6 +20,9 @@ test_option_col = TokenizerTestOption(
     id_temp_label_map=test_id_temp_table_col)
 test_tokenizer_model_col = TokenizerModel(test_options=test_option_col)
 test_file_result_col = pd.read_html(test_tokenizer_model_col.get_dtm())[0]
+test_file_size_col = test_tokenizer_model_col.get_dtm_size()
+
+
 # ------------------------------------------------------------------
 
 
@@ -54,6 +58,8 @@ test_option_row = TokenizerTestOption(
     id_temp_label_map=test_id_temp_table_row)
 test_tokenizer_model_row = TokenizerModel(test_options=test_option_row)
 test_file_result_row = pd.read_html(test_tokenizer_model_row.get_dtm())[0]
+test_file_size_row = test_tokenizer_model_row.get_dtm_size()
+print("done")
 # ------------------------------------------------------------------
 
 
@@ -88,6 +94,8 @@ test_option_special = \
                         front_end_option=test_front_end_option_special,
                         id_temp_label_map=test_id_temp_table_special)
 test_tokenizer_model_special = TokenizerModel(test_options=test_option_special)
+
+
 # ------------------------------------------------------------------
 
 # noinspection PyProtectedMember
@@ -107,3 +115,10 @@ class TestSpecialCase:
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE
 
+
+class TestSizeDTM:
+    def test_size_file_col(self):
+        assert test_file_size_col == 36
+
+    def test_size_file_row(self):
+        assert test_file_size_row == 1
