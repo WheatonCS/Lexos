@@ -22,15 +22,21 @@ def tokenizer():
         FileManagerModel().load_file_manager().get_active_labels_with_id()
 
     if request.method == "GET":
-        # Fill session with default options.
+        # When first get to this page, fill session with default options.
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
         session['tokenizerOption'] = constants.DEFAULT_TOKENIZER_OPTIONS
-
+        # Return rendered template wih desired information.
         return render_template('tokenizer.html',
                                labels=id_label_map,
                                numActiveDocs=num_active_docs)
     else:
+        # If post method is get, do the download.
+        # First cache the useful options.
+        session_manager.cache_analysis_option()
+        session_manager.cache_tokenizer_option()
+        # Generate file and get the file path.
         file_path = TokenizerModel().download_dtm()
+        # Return the file by sending the file path.
         return send_file(file_path,
                          as_attachment=True,
                          attachment_filename="tokenizer_result.csv")
@@ -43,14 +49,3 @@ def tokenizer_result():
     session_manager.cache_tokenizer_option()
     # Return the generated DTM to ajax call.
     return TokenizerModel().get_dtm()
-
-
-@tokenizer_blueprint.route("/tokenizerDownload", methods=["POST"])
-def tokenizer_download():
-    # Cache front end result and return rendered template for download.
-    session_manager.cache_analysis_option()
-    session_manager.cache_tokenizer_option()
-    file_path = TokenizerModel().download_dtm()
-    return send_file(file_path,
-                     as_attachment=True,
-                     attachment_filename="tokenizer_result.csv")
