@@ -1,12 +1,4 @@
 /**
- * Toggle individual cut options after applying.
- * @param {string} id - the file id.
- */
-function toggleIndivCutOptions (id) {
-  $('#indcutoptswrap_' + id).toggleClass('hidden')
-}
-
-/**
  * function to check if there are errors.
  * @returns {void} - returns nothing.
  */
@@ -116,10 +108,6 @@ function checkValues () {
  * @returns {void} - returns nothing.
  */
 function checkForWarnings () {
-  const numChar = '{{ numChar|default(0) }}'
-  const numWord = '{{ numWord|default(0) }}'
-  const numLine = '{{ numLine|default(0) }}'
-  const activeFileIDs = '{{ activeFileIDs|default(0) }}'
   let needsWarning = false
   const maxSegs = 100
   const defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
