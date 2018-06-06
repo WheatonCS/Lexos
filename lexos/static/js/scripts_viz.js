@@ -174,7 +174,7 @@ $(window).on('load', function () {
       canvas = document.getElementById('svg-canvas')
 
     // Draw svg on canvas
-    //canvg(canvas, content)
+    canvg(canvas, content)
 
     // Change img from SVG representation
     var theImage = canvas.toDataURL('image/png')
