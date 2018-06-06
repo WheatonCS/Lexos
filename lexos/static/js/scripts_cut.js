@@ -1,3 +1,12 @@
+let numChar = "{{ numChar|default(0) }}";
+let numWord = "{{ numWord|default(0) }}";
+let numLine = "{{ numLine|default(0) }}";
+let maxChar = "{{ maxChar|default(0) }}";
+let maxWord = "{{ maxWord|default(0) }}";
+let maxLine = "{{ maxLine|default(0) }}";
+let activeFileIDs = "{{ activeFileIDs|default(0) }}";
+
+
 /**
  * function to check if there are errors.
  * @returns {void} - returns nothing.
