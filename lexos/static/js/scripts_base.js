@@ -1,3 +1,20 @@
+$(function () {
+   if (localStorage.getItem('visited') !== 'yes') {
+     localStorage.setItem('visited', 'yes')
+     $('#toggler').popover({
+       'html': 'true',
+       'title': "In the Margins!",
+       'content': 'View instructions for any screen in Lexos by clicking the In the Margins Tab!\n<div class="text-center"><button type="button" id="gotit" class="btn btn-primary" style="background-color: #0068AF">Got it!</button></div>'
+     }).popover('show').data("bs.popover").tip().css({"width": "170px", "text-align": "center"})
+     $('#gotit').on('click', function () {
+       $('#toggler').popover('destroy');
+     })
+     $('#toggler').on('click', function () {
+       $('#toggler').popover('destroy');
+     })
+   }
+})
+
 $.fn.center = function () {
   this.css('top', Math.max(0, ((($(window).height()) - $(this).outerHeight()) / 2) - 200) + 'px')
   this.css('left', Math.max(0, (($(window).width() - $(this).outerWidth()) / 2)) + 'px')
