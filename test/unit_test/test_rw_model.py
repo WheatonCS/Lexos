@@ -1,19 +1,5 @@
-import re
-from typing import NamedTuple, Optional, List, Iterator, Callable
-
-import numpy as np
-import pandas as pd
-import plotly.graph_objs as go
-from plotly.offline import plot
-
-from lexos.helpers.definitions import get_words_with_right_boundary, \
-    get_single_word_count_in_text
-from lexos.models.base_model import BaseModel
-from lexos.models.filemanager_model import FileManagerModel
-from lexos.models.matrix_model import FileIDContentMap
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
-    RollingWindowsReceiver, WindowUnitType, RWATokenType, RWARatioTokenOptions, \
-    RWAAverageTokenOptions, RWAWindowOptions
+    WindowUnitType, RWATokenType, RWARatioTokenOptions, RWAWindowOptions
 from lexos.models.rolling_windows_model import RollingWindowsModel, \
     RWATestOptions
 
@@ -55,7 +41,8 @@ test_average_count_one = RWATestOptions(file_id_content_map=
                                        WindowUnitType("letter")),
                                        milestone=None))
 
-rw_average_model_one = RollingWindowsModel(test_option=test_average_count_one)
+rw_average_count_model_one = RollingWindowsModel\
+    (test_option=test_average_count_one)
 #---------------------------------------------------------------------------
 
 print("DONE")
