@@ -1,6 +1,7 @@
 /**
  * the function to run the error modal
- * @param htmlMsg {string} - the message to display, you can put html in it
+ * @param {string} htmlMsg - the message to display, you can put html in it
+ * @returns {void}
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -12,10 +13,11 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
-  if ($('#num_active_files').val() < 2)
+  if ($('#num_active_files').val() < 2) {
     return 'You must have at least 2 active documents to proceed!'
-  else
+  } else {
     return null
+  }
 }
 
 /**
@@ -32,8 +34,8 @@ function jsonifyForm () {
 
 /**
  * send the ajax request
- * @param url: the url to post
- * @param form: the form data packed into an object
+ * @param {string} url: the url to post
+ * @param {object.<string, string>} form: the form data packed into an object
  * @returns {jQuery.Ajax}: an jQuery Ajax object
  */
 function sendAjaxRequest (url, form) {
@@ -43,11 +45,11 @@ function sendAjaxRequest (url, form) {
     contentType: 'application/json; charset=utf-8',
     data: JSON.stringify(form)
   })
-
 }
 
 /**
  * display the result of the similarity query on web page
+ * @returns {void}
  */
 function generateSimResult () {
   // show loading icon
@@ -79,7 +81,7 @@ function generateSimResult () {
         // initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
         // display the similarity result
-        $('#similaritiesResults').css({'display': 'block'})  // display everything
+        $('#similaritiesResults').css({'display': 'block'}) // display everything
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -94,23 +96,18 @@ function generateSimResult () {
 }
 
 $(function () {
-
   // hide the similarity
   $('#similaritiesResults').css({'display': 'none'})
-
   /**
    * The event handler for generate similarity clicked
    */
   $('#get-sims').click(function () {
-    const error = submissionError()  // the error happens during submission
+    const error = submissionError() // the error happens during submission
 
-    if (error === null) {  // if there is no error
+    if (error === null) { // if there is no error
       generateSimResult()
-    }
-    else {
+    } else {
       runModal(error)
     }
   })
-
 })
-
