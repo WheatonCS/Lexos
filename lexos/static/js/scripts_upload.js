@@ -194,4 +194,51 @@ $(function () {
   if (window.File && window.FileList && window.FileReader) {
     Init()
   }
+
+  browserDetection()
 })
+
+function browserDetection () {
+  // Display a warning if using an unsupported browser
+
+  var browserWarningMsg = `You are currently using an unsupported browser.\
+  Some Lexos features may not function properly or be unavailable. Please\
+  use either Chrome or Firefox when using Lexos.`
+
+  // Opera 8.0+
+  var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+  // Firefox 1.0+
+  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+  // Safari 3.0+ "[object HTMLElementConstructor]"
+  var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+
+  // Internet Explorer 6-11
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+  // Edge 20+
+  var isEdge = !isIE && !!window.StyleMedia;
+
+  // Chrome 1+
+  var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+  // If first time on page, show error message if browser is not supported
+  if (typeof(Storage) !== "undefined") {
+    if (!sessionStorage.visited){
+      if (isOpera) {
+        alert(browserWarningMsg)
+      }
+      else if (isSafari) {
+        alert(browserWarningMsg)
+      }
+      else if (isIE){
+        alert(browserWarningMsg)
+      }
+      else if(isEdge){
+        alert(browserWarningMsg)
+      }
+      sessionStorage.visited = true
+    }
+  }
+}
