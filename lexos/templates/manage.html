@@ -71,9 +71,9 @@
                     {% for row in rows %}
                     <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
                         <td style="text-align:right;"></td>
-                        <td class="context" style="word-wrap: break-word;"><span id="doc-name" style="word-wrap: break-word;">{{ row["label"] }}</span></td>
+                        <td class="context" style="word-wrap: break-word;"><span id="doc-name" style="word-wrap: break-word;">{{ row["label"]|truncate(36,True,'...') }}</span></td>
                         <td class="context" style="word-wrap: break-word;">{{ row["class"] }}</td>
-                        <td class="context" style="word-wrap: break-word;">{{ row["source"] }}</td>
+                        <td class="context" style="word-wrap: break-word;">{{ row["source"]|truncate(40,True,'...') }}</td>
                         <td class="context">{{ row["preview"]|truncate(155,True,'...') }}</td>
                     </tr>
                     {% endfor %}

@@ -75,7 +75,7 @@ $(document).ready( function () {
 		<input type="hidden" value="{{ request.form['filetorollinganalyze'] }}" id="filetorollinganalyze"/>
 		<div id="rwFileselect" style="overflow:auto; width: 100%; max-height: 125px;">
 			{% for fileID, label in labels.items() %}
-				<label>{{label}}
+				<label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
 					<input type="radio" class="minifilepreview" {{ 'checked' if fileID|unicode == session['rwoption']['filetorollinganalyze'] or loop.first }} name="filetorollinganalyze" id="{{fileID}}_selector" value="{{fileID}}">
 				</label><br/>
 			{%- endfor %}
