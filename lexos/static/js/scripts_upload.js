@@ -199,7 +199,8 @@ $(function () {
 })
 
 /**
- * Display a warning in an alert if using an unsupported browser.
+ * Display a warning in an alert if using an unsupported browser. Supported
+ * browsers include Chrome and Firefox.
  */
 function browserDetection () {
 
