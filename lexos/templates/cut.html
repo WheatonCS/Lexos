@@ -5,13 +5,13 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{version}}"></script>
 <script type="text/javascript">
-    var numChar = {{ numChar|default(0) }};
-    var numWord = {{ numWord|default(0) }};
-    var numLine = {{ numLine|default(0) }};
-    var maxChar = {{ maxChar|default(0) }};
-    var maxWord = {{ maxWord|default(0) }};
-    var maxLine = {{ maxLine|default(0) }};
-    var activeFileIDs = {{ activeFileIDs|default(0) }};
+    let numChar = {{ numChar|default(0) }};
+    let numWord = {{ numWord|default(0) }};
+    let numLine = {{ numLine|default(0) }};
+    let maxChar = {{ maxChar|default(0) }};
+    let maxWord = {{ maxWord|default(0) }};
+    let maxLine = {{ maxLine|default(0) }};
+    let activeFileIDs = {{ activeFileIDs|default(0) }};
 
     // Toggle individual cut options after applying
     function toggleIndivCutOptions(id) {
