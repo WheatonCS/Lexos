@@ -62,22 +62,7 @@ $(document).ready(function() {
     data: data
   }
   $('#termcounts').DataTable(config);
-
-  changeDocStyle()
 });
-
-function changeDocStyle () {
-  var docNamesUnchecked = $('.icon-checkbox ui-selectee')
-  var docNamesChecked = $('.icon-checkbox ui-selectee ui-selected checked')
-
-  for( var docName in docNamesUnchecked ) {
-    docName.style.width = '90%'
-    docName.style.margin = 'auto'
-    docName.style.whitespace = 'nowrap'
-    docName.style.overflow = 'hidden'
-    docName.style.textoverflow = 'ellipsis'
-  }
-}
 </script>
 <style type="text/css">
 #statsBtn { float: right; }
