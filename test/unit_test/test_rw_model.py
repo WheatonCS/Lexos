@@ -1,5 +1,6 @@
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
-    WindowUnitType, RWATokenType, RWARatioTokenOptions, RWAWindowOptions
+    WindowUnitType, RWATokenType, RWARatioTokenOptions, RWAWindowOptions,\
+    RWAAverageTokenOptions
 from lexos.models.rolling_windows_model import RollingWindowsModel, \
     RWATestOptions
 
@@ -34,7 +35,7 @@ test_average_count_one = RWATestOptions(file_id_content_map=
                                       rolling_windows_options=
                                       RWAFrontEndOptions
                                       (ratio_token_options=None,
-                                       average_token_options=,
+                                       average_token_options=RWAAverageTokenOptions("string"), tokens=["string"]),
                                        passage_file_id=1,
                                        window_options=RWAWindowOptions
                                        (window_size=3, window_unit=
