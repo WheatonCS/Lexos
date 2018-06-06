@@ -14,7 +14,7 @@
 	{% if config['LOCAL_MODE'] == True %}
     <script type="text/javascript" src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}?ver={{version}}"></script>
 	{% else %}
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	{% endif %}
 
 	<!-- === Load jQuery UI only for selected pages === -->
