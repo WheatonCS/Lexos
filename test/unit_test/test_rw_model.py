@@ -13,11 +13,12 @@ from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import FileIDContentMap
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType, RWARatioTokenOptions,\
-    RWAAverageTokenOptions
+    RWAAverageTokenOptions, RWAWindowOptions
 from lexos.models.rolling_windows_model import RollingWindowsModel, \
     RWATestOptions
 
 
+# --------------------test by ratio count-----------------------------------
 test_option_one = RWATestOptions(file_id_content_map=
                                  {0: "ha ha ha ha la ta ha",
                                   2: "la la ta ta da da ha",
@@ -25,7 +26,12 @@ test_option_one = RWATestOptions(file_id_content_map=
                                   },
                                  rolling_windows_options=RWAFrontEndOptions
                                  (ratio_token_options=RWARatioTokenOptions
-                                 (token_type=RWATokenType("string"),
-                                  numerator_token="ta", denominator_token="ha")
-                                  , average_token_options=
-                                  RWAAverageTokenOptions()))
+                                  (token_type=RWATokenType("string"),
+                                   numerator_token="ta",
+                                   denominator_token="ha"),
+                                  average_token_options=RWAAverageTokenOptions
+                                  (token_type=RWATokenType(None), tokens=
+                                   List[None]), passage_file_id=1,
+                                  window_options=RWAWindowOptions
+                                  (window_size=3, window_unit=
+                                   WindowUnitType("letter")), milestone=None))

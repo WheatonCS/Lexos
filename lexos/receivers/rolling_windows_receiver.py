@@ -68,7 +68,7 @@ class RWAFrontEndOptions(NamedTuple):
     # the setting related to the windows
     window_options: RWAWindowOptions
 
-    # an milestone, it is none if it is not given from frontend
+    # a milestone, it is none if it is not given from frontend
     milestone: Optional[str]
 
 
