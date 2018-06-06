@@ -31,7 +31,7 @@
             <input type="hidden" id="num_active_files"/>
             <!-- Hidden input to store active file ids. -->
             <input type="hidden" id="active_file_ids" name="active_file_ids"/>
-            <legend style="width: 400px;">Select Document(s)</legend>
+            <legend style="width: 420px;">Select Document(s)</legend>
             <!-- Check box for files. -->
             {% if labels|len > 0 %}
                 <div class="forAllCheckBox">
@@ -40,12 +40,12 @@
                                checked="checked"> Check/Uncheck All
                     </label>
                 </div>
-                <div class="col-md-10 col-lg-10" id="statsFileSelectContainer"
+                <div class="col-md-11 col-lg-11" id="statsFileSelectContainer"
                      style="overflow:auto; float: left; max-height: 140px; min-height: 2em;">
                     <div id="statsFileSelect">
                         {% for fileID, label in labels.items() %}
                             <div class="eachFileCheck">
-                                <label id="statSelect">{{ label }}
+                                <label id="statSelect" style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ label }}
                                     <input type="checkbox" checked="checked"
                                            value="{{ fileID }}"
                                            class="file-selector">
