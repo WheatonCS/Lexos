@@ -198,33 +198,36 @@ $(function () {
   browserDetection()
 })
 
+/**
+ * Display a warning in an alert if using an unsupported browser.
+ */
 function browserDetection () {
-  // Display a warning if using an unsupported browser
 
-  var browserWarningMsg = `You are currently using an unsupported browser.\
+  const browserWarningMsg = `You are currently using an unsupported browser.\
   Some Lexos features may not function properly or be unavailable. Please\
   use either Chrome or Firefox when using Lexos.`
 
   // Opera 8.0+
-  var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+  const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 
   // Firefox 1.0+
-  var isFirefox = typeof InstallTrigger !== 'undefined';
+  const isFirefox = typeof InstallTrigger !== 'undefined';
 
   // Safari 3.0+ "[object HTMLElementConstructor]"
-  var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+  const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
 
   // Internet Explorer 6-11
-  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+  const isIE = /*@cc_on!@*/false || !!document.documentMode;
 
   // Edge 20+
-  var isEdge = !isIE && !!window.StyleMedia;
+  const isEdge = !isIE && !!window.StyleMedia;
 
   // Chrome 1+
-  var isChrome = !!window.chrome && !!window.chrome.webstore;
+  const isChrome = !!window.chrome && !!window.chrome.webstore;
 
   // If first time on page, show error message if browser is not supported
   if (typeof(Storage) !== "undefined") {
+    // check browser if user has not previously visited page
     if (!sessionStorage.visited){
       if (isOpera) {
         alert(browserWarningMsg)
@@ -238,6 +241,7 @@ function browserDetection () {
       else if(isEdge){
         alert(browserWarningMsg)
       }
+      // Set visited to true after the user visits the page
       sessionStorage.visited = true
     }
   }
