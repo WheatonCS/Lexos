@@ -1,11 +1,10 @@
-let numChar = "{{ numChar|default(0) }}";
-let numWord = "{{ numWord|default(0) }}";
-let numLine = "{{ numLine|default(0) }}";
-let maxChar = "{{ maxChar|default(0) }}";
-let maxWord = "{{ maxWord|default(0) }}";
-let maxLine = "{{ maxLine|default(0) }}";
-let activeFileIDs = "{{ activeFileIDs|default(0) }}";
-
+/**
+ * Toggle individual cut options after applying.
+ * @param {string} id - the file id.
+ */
+function toggleIndivCutOptions (id) {
+  $('#indcutoptswrap_' + id).toggleClass('hidden')
+}
 
 /**
  * function to check if there are errors.
@@ -117,6 +116,10 @@ function checkValues () {
  * @returns {void} - returns nothing.
  */
 function checkForWarnings () {
+  const numChar = '{{ numChar|default(0) }}'
+  const numWord = '{{ numWord|default(0) }}'
+  const numLine = '{{ numLine|default(0) }}'
+  const activeFileIDs = '{{ activeFileIDs|default(0) }}'
   let needsWarning = false
   const maxSegs = 100
   const defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
