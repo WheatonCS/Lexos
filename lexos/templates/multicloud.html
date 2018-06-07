@@ -176,7 +176,7 @@ $(document).ready( function () {
 			<div id="vizcreateoptions" style="padding-left:15px;">
 				{% for fileID, label in labels.items() %}
 					<div class="forCheckBox">
-					<label>{{label}}
+					<label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
 						<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
 					</label>
 				</div>
