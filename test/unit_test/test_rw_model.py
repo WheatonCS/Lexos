@@ -125,7 +125,7 @@ class TestAverageCount:
 # --------------------test by window unit type-------------------------------
 # noinspection PyProtectedMember
 rw_test_letters = RollingWindowsModel._get_letters_windows(
-    passage="hello goodbye dog hi", windows_size=2)
+    passage="hello good", windows_size=2)
 # noinspection PyProtectedMember
 rw_test_words = RollingWindowsModel._get_word_windows(
     passage="hello goodbye dog hi", window_size=1)
@@ -138,7 +138,17 @@ rw_test_lines = RollingWindowsModel._get_line_windows(
 
 class TestWindowUnitTypes:
     def test_get_letters_window(self):
-        assert (rw_test_letters ==
-                ['he', 'el', ' ll', 'lo', 'o ', ' g', 'go', 'oo', 'od',
-                 'db', 'by', ' ye', 'e ', ' d', 'do', 'og', 'g ', ' h']).all()
+        assert rw_test_letters[0] == 'he'
+        assert rw_test_letters[1] == 'el'
+        assert rw_test_letters[2] == 'll'
+        assert rw_test_letters[3] == 'lo'
+        assert rw_test_letters[4] == 'o '
+        assert rw_test_letters[5] == ' g'
+        assert rw_test_letters[6] == 'go'
+        assert rw_test_letters[7] == 'oo'
+
+    def test_get_words_window(self):
+        assert (rw_test_words[0:3] == ['hello''goodbye''dog']).all()
+
+
         print("DONE")
