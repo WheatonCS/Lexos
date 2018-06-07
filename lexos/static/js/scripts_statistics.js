@@ -1,17 +1,6 @@
 /* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
 $(document).ready(function () {
 
-  $('.has-chevron').on('click', function () {
-    $(this).find('span').toggleClass('down')
-
-    // Nasty hack because find("span") does not work in kmeans
-    $(this).find('#kmeansAdvancedChev').toggleClass('down')
-    $(this).find('#kmeansSilhouetteChev').toggleClass('down')
-    $(this).find('#cullingOptsChev').toggleClass('down')
-
-    $(this).next().collapse('toggle')
-  })
-
   // hide the normalize options
   $("#normalize-options").css({"visibility":"hidden"});
 

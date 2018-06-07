@@ -81,12 +81,6 @@ function submissionError () {
  */
 $(function () {
 
-  $('.has-chevron').on('click', function () {
-    $(this).find('#cullingOptsChev').toggleClass('down')
-
-    $(this).next().collapse('toggle')
-  })
-
     /**
      * the events after dendrogram is clicked
      */
