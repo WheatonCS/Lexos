@@ -24,6 +24,7 @@ $(function () {
 
 /**
  * Update tokenize checkbox for selecting documents
+ * @returns {void}
  */
 function updateTokenizeCheckbox () {
   if ($('#tokenByWords').is(':checked')) {
@@ -34,7 +35,9 @@ function updateTokenizeCheckbox () {
 }
 
 /**
- *
+ * Show the options for weighted counts normalization if selected and hide
+ * these options when another normalization technique is selected
+ * @returns {void}
  */
 function updateNorm () {
   if ($('#normalizeTypeRaw').is(':checked') || $('#normalizeTypeFreq').is(':checked')) {
@@ -44,10 +47,19 @@ function updateNorm () {
   }
 }
 
+/**
+ * Change CSS to make room for most frequent words number input when most
+ * frequent words is checked
+ * @returns {void}
+ */
 function updateMFWinput () {
+  // If most frequent words is checked
   if ($('#MFW').is(':checked')) {
+    // Show top number of words input
     $('span[id=mfwnumber-input]').show()
+    // If culling is checked
     if ($('#culling').is(':checked')) {
+      // Change CSS to make room
       $('#temp-label-div').css('max-height', '221px')
       $('#modifylabels').css('max-height', '160px')
     } else {
@@ -62,14 +74,24 @@ function updateMFWinput () {
       $('#temp-label-div').css('max-height', '161px')
       $('#modifylabels').css('max-height', '100px')
     }
+    // Hide most frequent words input if MFW is not checked
     $('span[id=mfwnumber-input]').hide()
   }
 }
 
+/**
+ * Change CSS to make room for must be in x documents number input when culling
+ * is checked
+ * @returns {void}
+ */
 function updatecullinput () {
+  // If culling is checked
   if ($('#culling').is(':checked')) {
+    // Show documents number input
     $('span[id=cullnumber-input]').show()
+    // If most frequent words is checked
     if ($('#MFW').is(':checked')) {
+      // Change CSS to make room
       $('#temp-label-div').css('max-height', '221px')
       $('#modifylabels').css('max-height', '160px')
     } else {
@@ -84,10 +106,16 @@ function updatecullinput () {
       $('#temp-label-div').css('max-height', '161px')
       $('#modifylabels').css('max-height', '100px')
     }
+    // Hide culling input if culling is not checked
     $('span[id=cullnumber-input]').hide()
   }
 }
 
+/**
+ * Toggle chevron class in order to handle chevron drop down button rotate
+ * animation
+ * @returns {void}
+ */
 function rotateChevron () {
   $(this).find('span').toggleClass('down')
 
@@ -99,8 +127,12 @@ function rotateChevron () {
   $(this).next().collapse('toggle')
 }
 
+/**
+ * Change position of submit div while scrolling the window
+ * Unnecessary function?
+ * @returns {void}
+ */
 function changeSubmitDivPosition () {
-  // Change position of submit div while scrolling the window
   let timer
   // Timer stuff
   if (timer) {
@@ -110,6 +142,11 @@ function changeSubmitDivPosition () {
   timer = setTimeout(throttleScrollTimer(), 10)
 }
 
+/**
+ * Throttle the scroll event so it doesn't happen too often
+ * Unnecessary function?
+ * @returns {void}
+ */
 function throttleScrollTimer () {
   let buttonsFixed = false
   let buttons = $('#analyze-submit')
