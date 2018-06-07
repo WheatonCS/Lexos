@@ -1,5 +1,6 @@
 /**
  * display/hide expandable divs (define group div) here
+ * @returns {void}
  */
 function updateGroupOptionDiv () {
   const $choice = $('.show-options div').siblings('input')
