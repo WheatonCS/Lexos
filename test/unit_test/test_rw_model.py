@@ -25,43 +25,16 @@ test_ratio_count_one = RWATestOptions(file_id_content_map=
                                        window_options=RWAWindowOptions
                                        (window_size=3, window_unit=
                                        WindowUnitType("letter")),
-                                       milestone=None))
+                                       milestone="ta"))
 
 rw_ratio_model_one = RollingWindowsModel(test_option=test_ratio_count_one)
 
 # noinspection PyProtectedMember
 rw_ratio_windows = rw_ratio_model_one._get_windows()
 # ---------------------------------------------------------------------------
-# --------------------test by average count-----------------------------------
-test_average_count_one = RWATestOptions(file_id_content_map=
-                                        {0: "ha ha ha ha la ta ha",
-                                         2: "la la ta ta da da ha",
-                                         3: "ta da ha"
-                                         },
-                                        rolling_windows_options=
-                                        RWAFrontEndOptions
-                                        (ratio_token_options=None,
-                                         average_token_options=
-                                         RWAAverageTokenOptions
-                                         (token_type=RWATokenType("string"),
-                                          tokens=["h"]),
-                                         passage_file_id=0,
-                                         window_options=RWAWindowOptions
-                                         (window_size=3, window_unit=
-                                         WindowUnitType("letter")),
-                                         milestone=None))
-rw_average_count_model_one = RollingWindowsModel \
-    (test_option=test_average_count_one)
 # noinspection PyProtectedMember
-rw_average_windows = rw_average_count_model_one._get_windows()
-# noinspection PyProtectedMember
-x = rw_average_count_model_one._get_token_average_graph()
 
 
-# ---------------------------------------------------------------------------
-
-
-# noinspection PyProtectedMember
 class TestRatioCount:
     def test_get_windows(self):
         assert (rw_ratio_model_one._get_windows() ==
@@ -86,8 +59,38 @@ class TestRatioCount:
         assert rw_ratio_model_one._get_token_ratio_graph()['mode'] == 'lines'
         assert rw_ratio_model_one._get_token_ratio_graph()['name'] == 't / a'
 
+    def test_find_milestone(self):
+        assert rw_ratio_model_one.\
+                   _find_mile_stone_windows_indexes_in_all_windows\
+                   (rw_ratio_windows) == [15]
 
+
+# --------------------test by average count-----------------------------------
+test_average_count_one = RWATestOptions(file_id_content_map=
+                                        {0: "ha ha ha ha la ta ha",
+                                         2: "la la ta ta da da ha",
+                                         3: "ta da ha"
+                                         },
+                                        rolling_windows_options=
+                                        RWAFrontEndOptions
+                                        (ratio_token_options=None,
+                                         average_token_options=
+                                         RWAAverageTokenOptions
+                                         (token_type=RWATokenType("string"),
+                                          tokens=["h"]),
+                                         passage_file_id=0,
+                                         window_options=RWAWindowOptions
+                                         (window_size=3, window_unit=
+                                         WindowUnitType("letter")),
+                                         milestone="ta"))
+rw_average_count_model_one = RollingWindowsModel \
+    (test_option=test_average_count_one)
 # noinspection PyProtectedMember
+rw_average_windows = rw_average_count_model_one._get_windows()
+# ---------------------------------------------------------------------------
+# noinspection PyProtectedMember
+
+
 class TestAverageCount:
     def test_get_windows(self):
         assert (rw_average_count_model_one._get_windows() ==
@@ -112,3 +115,8 @@ class TestAverageCount:
                    'mode'] == 'lines'
         assert rw_average_count_model_one._get_token_average_graph()[0][
                    'name'] == 'h'
+
+    def test_find_milestone(self):
+        assert rw_average_count_model_one.\
+                   _find_mile_stone_windows_indexes_in_all_windows\
+                   (rw_average_windows) == [15]
