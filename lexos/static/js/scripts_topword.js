@@ -1,23 +1,25 @@
+/**
+ * display/hide expandable divs (define group div) here
+ */
+function updateGroupOptionDiv () {
+  const $choice = $('.show-options div').siblings('input')
+  $.each($choice, function () {
+    if ($(this).is(':checked')) {
+      $(this).siblings('div').show()
+    } else { $(this).siblings('div').hide() }
+  })
+}
+
 $(function () {
   // Hide unnecessary div for DTM
-  $('#normalize-options').css({ 'visibility': 'hidden' })
+  $('#normalize-options').css({'visibility': 'hidden'})
   // set the normalize option to raw count
-  $("#normalizeTypeRaw").attr("checked", true)
+  $('#normalizeTypeRaw').attr('checked', true)
 
   $('#temp-label-div').css('position', 'relative').css('left', '-6px').css('top', '0px')
 
-
-  // display/hide expandable divs (Define Groups div) here
-  function updateGroupOptionDiv() {
-    $choice = $('.show-options div').siblings('input')
-    $.each($choice, function () {
-      if ($(this).is(':checked')) {
-        $(this).siblings('div').show()
-      } else { $(this).siblings('div').hide() }
-    })
-  }
-
   updateGroupOptionDiv()
+
   $('.groupOption-div').click(function () {
     updateGroupOptionDiv()
   })
