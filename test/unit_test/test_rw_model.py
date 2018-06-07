@@ -122,19 +122,23 @@ class TestAverageCount:
                    (rw_average_windows) == [15]
 
 
-# --------------------test by ratio count-----------------------------------
+# --------------------test by window unit type-------------------------------
 # noinspection PyProtectedMember
-RollingWindowsModel._get_letters_windows(passage="hello goodbye dog hi", windows_size=2)
-
-
-
-
-
-test_letters_windows = _get_letters_windows(passage="hello goodbye dog hi", windows_size=2)
-
-
-rw_ratio_model_one = RollingWindowsModel(test_option=test_ratio_count_one)
-
+rw_test_letters = RollingWindowsModel._get_letters_windows(
+    passage="hello goodbye dog hi", windows_size=2)
 # noinspection PyProtectedMember
-rw_ratio_windows = rw_ratio_model_one._get_windows()
+rw_test_words = RollingWindowsModel._get_word_windows(
+    passage="hello goodbye dog hi", window_size=1)
+# noinspection PyProtectedMember
+rw_test_lines = RollingWindowsModel._get_line_windows(
+    passage="hello goodbye dog hi \n this is a test \n this is another test",
+    window_size=1)
 # ---------------------------------------------------------------------------
+
+
+class TestWindowUnitTypes:
+    def test_get_letters_window(self):
+        assert (rw_test_letters ==
+                ['he', 'el', ' ll', 'lo', 'o ', ' g', 'go', 'oo', 'od',
+                 'db', 'by', ' ye', 'e ', ' d', 'do', 'og', 'g ', ' h']).all()
+        print("DONE")
