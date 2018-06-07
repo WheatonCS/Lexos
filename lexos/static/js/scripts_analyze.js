@@ -10,77 +10,17 @@ $(function () {
     $(this).next().collapse('toggle')
   })
 
-  function updateTokenizeCheckbox() {
-    if ($('#tokenByWords').is(':checked')) {
-      $('#inWordsOnly').hide()
-    } else {
-      $('#inWordsOnly').show()
-    }
-  }
-
   $('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox)
 
   updateTokenizeCheckbox()
-
-  function updateNorm() {
-    if ($('#normalizeTypeRaw').is(':checked') || $('#normalizeTypeFreq').is(':checked')) {
-      $('#tfidfspan').hide()
-    } else {
-      $('#tfidfspan').show()
-    }
-  }
 
   $('input[type=radio][name=normalizeType]').click(updateNorm)
 
   updateNorm()
 
-  function updateMFWinput() {
-    if ($('#MFW').is(':checked')) {
-      $('span[id=mfwnumber-input]').show()
-      if ($('#culling').is(':checked')) {
-        $('#temp-label-div').css('max-height', '221px')
-        $('#modifylabels').css('max-height', '160px')
-      } else {
-        $('#temp-label-div').css('max-height', '191px')
-        $('#modifylabels').css('max-height', '130px')
-      }
-    } else {
-      if ($('#culling').is(':checked')) {
-        $('#temp-label-div').css('max-height', '191px')
-        $('#modifylabels').css('max-height', '130px')
-      } else {
-        $('#temp-label-div').css('max-height', '161px')
-        $('#modifylabels').css('max-height', '100px')
-      }
-      $('span[id=mfwnumber-input]').hide()
-    }
-  }
-
   $('input[type=checkbox][name=mfwcheckbox]').click(updateMFWinput)
 
   updateMFWinput()
-
-  function updatecullinput() {
-    if ($('#culling').is(':checked')) {
-      $('span[id=cullnumber-input]').show()
-      if ($('#MFW').is(':checked')) {
-        $('#temp-label-div').css('max-height', '221px')
-        $('#modifylabels').css('max-height', '160px')
-      } else {
-        $('#temp-label-div').css('max-height', '191px')
-        $('#modifylabels').css('max-height', '130px')
-      }
-    } else {
-      if ($('#MFW').is(':checked')) {
-        $('#temp-label-div').css('max-height', '191px')
-        $('#modifylabels').css('max-height', '130px')
-      } else {
-        $('#temp-label-div').css('max-height', '161px')
-        $('#modifylabels').css('max-height', '100px')
-      }
-      $('span[id=cullnumber-input]').hide()
-    }
-  }
 
   $('input[type=checkbox][name=cullcheckbox]').click(updatecullinput)
 
@@ -119,3 +59,63 @@ $(function () {
 
   $(window).scroll() // Call a dummy scroll event after everything is loaded.
 })
+
+function updateTokenizeCheckbox () {
+  if ($('#tokenByWords').is(':checked')) {
+    $('#inWordsOnly').hide()
+  } else {
+    $('#inWordsOnly').show()
+  }
+}
+
+function updateNorm () {
+  if ($('#normalizeTypeRaw').is(':checked') || $('#normalizeTypeFreq').is(':checked')) {
+    $('#tfidfspan').hide()
+  } else {
+    $('#tfidfspan').show()
+  }
+}
+
+function updateMFWinput () {
+  if ($('#MFW').is(':checked')) {
+    $('span[id=mfwnumber-input]').show()
+    if ($('#culling').is(':checked')) {
+      $('#temp-label-div').css('max-height', '221px')
+      $('#modifylabels').css('max-height', '160px')
+    } else {
+      $('#temp-label-div').css('max-height', '191px')
+      $('#modifylabels').css('max-height', '130px')
+    }
+  } else {
+    if ($('#culling').is(':checked')) {
+      $('#temp-label-div').css('max-height', '191px')
+      $('#modifylabels').css('max-height', '130px')
+    } else {
+      $('#temp-label-div').css('max-height', '161px')
+      $('#modifylabels').css('max-height', '100px')
+    }
+    $('span[id=mfwnumber-input]').hide()
+  }
+}
+
+function updatecullinput () {
+  if ($('#culling').is(':checked')) {
+    $('span[id=cullnumber-input]').show()
+    if ($('#MFW').is(':checked')) {
+      $('#temp-label-div').css('max-height', '221px')
+      $('#modifylabels').css('max-height', '160px')
+    } else {
+      $('#temp-label-div').css('max-height', '191px')
+      $('#modifylabels').css('max-height', '130px')
+    }
+  } else {
+    if ($('#MFW').is(':checked')) {
+      $('#temp-label-div').css('max-height', '191px')
+      $('#modifylabels').css('max-height', '130px')
+    } else {
+      $('#temp-label-div').css('max-height', '161px')
+      $('#modifylabels').css('max-height', '100px')
+    }
+    $('span[id=cullnumber-input]').hide()
+  }
+}
