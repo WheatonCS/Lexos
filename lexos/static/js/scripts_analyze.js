@@ -1,5 +1,5 @@
 $(function () {
-  $('.has-chevron').on('click', rotateChevron )
+  $('.has-chevron').on('click', rotateChevron)
 
   $('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox)
 
@@ -17,36 +17,7 @@ $(function () {
 
   updatecullinput()
 
-  // Change position of submit div while scrolling the window
-  var timer
-  var buttonsFixed = false
-  var buttons = $('#analyze-submit')
-
-  $(window).scroll(function () {
-    // Timer stuff
-    if (timer) {
-      clearTimeout(timer)
-    }
-    // Timer to throttle the scroll event so it doesn't happen too often
-    timer = setTimeout(function () {
-      var scrollBottom = $(window).scrollTop() + $(window).height()
-      var scrollTop = $(window).scrollTop()
-
-      // if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
-      if ((buttonsFixed && (scrollBottom >= ($('footer').offset().top)))) {
-        // console.log("Scroll bottom hit footer! On the way down");
-        buttons.removeClass('fixed')
-        buttonsFixed = false
-      }
-
-      // if bottom of scroll window at the footer, fix button to the screen
-      if (!buttonsFixed && (scrollBottom < ($('footer').offset().top))) {
-        // console.log("Scroll bottom hit footer! On the way up");
-        buttons.addClass('fixed')
-        buttonsFixed = true
-      }
-    }, 10)
-  })
+  $(window).scroll(changeSubmitDivPosition())
 
   $(window).scroll() // Call a dummy scroll event after everything is loaded.
 })
@@ -120,4 +91,34 @@ function rotateChevron () {
   $(this).find('#cullingOptsChev').toggleClass('down')
 
   $(this).next().collapse('toggle')
+}
+
+function changeSubmitDivPosition () {
+  // Change position of submit div while scrolling the window
+  var timer
+  var buttonsFixed = false
+  var buttons = $('#analyze-submit')
+  // Timer stuff
+  if (timer) {
+    clearTimeout(timer)
+  }
+  // Timer to throttle the scroll event so it doesn't happen too often
+  timer = setTimeout(function () {
+    var scrollBottom = $(window).scrollTop() + $(window).height()
+    var scrollTop = $(window).scrollTop()
+
+    // if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
+    if ((buttonsFixed && (scrollBottom >= ($('footer').offset().top)))) {
+      // console.log("Scroll bottom hit footer! On the way down");
+      buttons.removeClass('fixed')
+      buttonsFixed = false
+    }
+
+    // if bottom of scroll window at the footer, fix button to the screen
+    if (!buttonsFixed && (scrollBottom < ($('footer').offset().top))) {
+      // console.log("Scroll bottom hit footer! On the way up");
+      buttons.addClass('fixed')
+      buttonsFixed = true
+    }
+  }, 10)
 }
