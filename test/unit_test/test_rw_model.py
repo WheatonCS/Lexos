@@ -37,9 +37,11 @@ rw_ratio_windows = rw_ratio_model_one._get_windows()
 
 class TestRatioCount:
     def test_get_windows(self):
-        assert (rw_ratio_model_one._get_windows() ==
-                ['ha ', 'a h', ' ha', 'ha ', 'a h', ' ha', 'ha ', 'a h', ' ha',
-                 'ha ', 'a l', ' la', 'la ', 'a t', ' ta', 'ta ', 'a h']).all()
+        np.testing.assert_array_equal(rw_ratio_windows,
+                                      ['ha ', 'a h', ' ha', 'ha ', 'a h',
+                                       ' ha', 'ha ', 'a h', ' ha',
+                                       'ha ', 'a l', ' la', 'la ', 'a t',
+                                       ' ta', 'ta ', 'a h', ' ha'])
 
     def test_token_ratio_windows(self):
         pd.testing.assert_series_equal(
@@ -47,7 +49,7 @@ class TestRatioCount:
                 rw_ratio_windows),
             right=pd.Series(
                 data=[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                      0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0],
+                      0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0],
             ), check_names=False)
 
     def test_get_token_ratio_graph(self):
@@ -55,7 +57,7 @@ class TestRatioCount:
                'scattergl'
         assert (rw_ratio_model_one._get_token_ratio_graph()['x'] ==
                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-                 16]).all()
+                 16, 17]).all()
         assert rw_ratio_model_one._get_token_ratio_graph()['mode'] == 'lines'
         assert rw_ratio_model_one._get_token_ratio_graph()['name'] == 't / a'
 
@@ -95,14 +97,16 @@ class TestAverageCount:
     def test_get_windows(self):
         assert (rw_average_count_model_one._get_windows() ==
                 ['ha ', 'a h', ' ha', 'ha ', 'a h', ' ha', 'ha ', 'a h', ' ha',
-                 'ha ', 'a l', ' la', 'la ', 'a t', ' ta', 'ta ', 'a h']).all()
+                 'ha ', 'a l', ' la', 'la ', 'a t', ' ta', 'ta ', 'a h',
+                 ' ha']).all()
 
     def test_token_average_windows(self):
         assert (rw_average_count_model_one._find_tokens_average_in_windows(
-            rw_average_windows).loc['h', 0:16] == [1 / 3, 1 / 3, 1 / 3, 1 / 3,
+            rw_average_windows).loc['h', 0:17] == [1 / 3, 1 / 3, 1 / 3, 1 / 3,
                                                    1 / 3, 1 / 3, 1 / 3, 1 / 3,
                                                    1 / 3, 1 / 3, 0.0, 0.0, 0.0,
-                                                   0.0, 0.0, 0.0, 1 / 3]).all()
+                                                   0.0, 0.0, 0.0, 1 / 3,
+                                                   1 / 3]).all()
 
     def test_get_token_average_graph(self):
         assert rw_average_count_model_one._get_token_average_graph()[0][
@@ -110,7 +114,7 @@ class TestAverageCount:
         assert (rw_average_count_model_one._get_token_average_graph()[0][
                     'x'] ==
                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-                 16]).all()
+                 16, 17]).all()
         assert rw_average_count_model_one._get_token_average_graph()[0][
                    'mode'] == 'lines'
         assert rw_average_count_model_one._get_token_average_graph()[0][
@@ -128,7 +132,7 @@ rw_test_letters = RollingWindowsModel._get_letters_windows(
     passage="hello good", windows_size=2)
 # noinspection PyProtectedMember
 rw_test_words = RollingWindowsModel._get_word_windows(
-    passage="hello goodbye dog ", window_size=1)
+    passage="hello goodbye dog", window_size=1)
 # noinspection PyProtectedMember
 rw_test_lines = RollingWindowsModel._get_line_windows(
     passage="hello goodbye dog hi \n this is a test \n this is another test",
@@ -138,17 +142,13 @@ rw_test_lines = RollingWindowsModel._get_line_windows(
 
 class TestWindowUnitTypes:
     def test_get_letters_window(self):
-        assert rw_test_letters[0] == 'he'
-        assert rw_test_letters[1] == 'el'
-        assert rw_test_letters[2] == 'll'
-        assert rw_test_letters[3] == 'lo'
-        assert rw_test_letters[4] == 'o '
-        assert rw_test_letters[5] == ' g'
-        assert rw_test_letters[6] == 'go'
-        assert rw_test_letters[7] == 'oo'
+        np.testing.assert_array_equal(rw_test_letters[0:9],
+                                      ['he', 'el', 'll', 'lo', 'o ', ' g',
+                                       'go', 'oo', 'od'])
 
     def test_get_words_window(self):
-        assert rw_test_words[0:4] == ['hello goodbye dog hi']
+        np.testing.assert_array_equal(rw_test_words[0:4],
+                                      ['hello ', 'goodbye ', 'dog'])
 
 
         print("DONE")
