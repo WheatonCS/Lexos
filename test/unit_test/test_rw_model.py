@@ -120,3 +120,21 @@ class TestAverageCount:
         assert rw_average_count_model_one.\
                    _find_mile_stone_windows_indexes_in_all_windows\
                    (rw_average_windows) == [15]
+
+
+# --------------------test by ratio count-----------------------------------
+# noinspection PyProtectedMember
+RollingWindowsModel._get_letters_windows(passage="hello goodbye dog hi", windows_size=2)
+
+
+
+
+
+test_letters_windows = _get_letters_windows(passage="hello goodbye dog hi", windows_size=2)
+
+
+rw_ratio_model_one = RollingWindowsModel(test_option=test_ratio_count_one)
+
+# noinspection PyProtectedMember
+rw_ratio_windows = rw_ratio_model_one._get_windows()
+# ---------------------------------------------------------------------------
