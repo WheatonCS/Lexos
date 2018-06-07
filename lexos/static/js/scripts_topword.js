@@ -19,8 +19,6 @@ $(function () {
 
   $('#temp-label-div').css('position', 'relative').css('left', '-6px').css('top', '0px')
 
-  updateGroupOptionDiv()
-
   $('.groupOption-div').click(function () {
     updateGroupOptionDiv()
   })
