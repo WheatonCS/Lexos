@@ -22,6 +22,9 @@ $(function () {
   $(window).scroll() // Call a dummy scroll event after everything is loaded.
 })
 
+/**
+ * Update tokenize checkbox for selecting documents
+ */
 function updateTokenizeCheckbox () {
   if ($('#tokenByWords').is(':checked')) {
     $('#inWordsOnly').hide()
@@ -30,6 +33,9 @@ function updateTokenizeCheckbox () {
   }
 }
 
+/**
+ *
+ */
 function updateNorm () {
   if ($('#normalizeTypeRaw').is(':checked') || $('#normalizeTypeFreq').is(':checked')) {
     $('#tfidfspan').hide()
@@ -96,8 +102,6 @@ function rotateChevron () {
 function changeSubmitDivPosition () {
   // Change position of submit div while scrolling the window
   let timer
-  let buttonsFixed = false
-  let buttons = $('#analyze-submit')
   // Timer stuff
   if (timer) {
     clearTimeout(timer)
@@ -110,7 +114,6 @@ function throttleScrollTimer () {
   let buttonsFixed = false
   let buttons = $('#analyze-submit')
   let scrollBottom = $(window).scrollTop() + $(window).height()
-  let scrollTop = $(window).scrollTop()
 
   // if bottom of scroll window at the footer, allow buttons to rejoin page as it goes by
   if ((buttonsFixed && (scrollBottom >= ($('footer').offset().top)))) {
