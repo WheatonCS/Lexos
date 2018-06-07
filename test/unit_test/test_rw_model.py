@@ -175,3 +175,7 @@ class TestStaticMethods:
 
     def test_find_string(self):
         assert rw_test_find_string == 2
+
+
+
+#test get_rwa_graph
