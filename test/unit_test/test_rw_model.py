@@ -126,7 +126,7 @@ class TestAverageCount:
                    (rw_average_windows) == [15]
 
 
-# --------------------test by window unit type-------------------------------
+# --------------------test static methods-------------------------------
 # noinspection PyProtectedMember
 rw_test_letters = RollingWindowsModel._get_letters_windows(
     passage="hello good", windows_size=2)
@@ -137,18 +137,41 @@ rw_test_words = RollingWindowsModel._get_word_windows(
 rw_test_lines = RollingWindowsModel._get_line_windows(
     passage="hello goodbye dog hi \n this is a test \n this is another test",
     window_size=1)
+
+# noinspection PyProtectedMember
+rw_test_find_regex = RollingWindowsModel._find_regex_in_window(
+    window="hello this the test", regex="^h")
+# noinspection PyProtectedMember
+rw_test_find_word = RollingWindowsModel._find_word_in_window(
+    window="hello this the test", word="the")
+# noinspection PyProtectedMember
+rw_test_find_string = RollingWindowsModel._find_string_in_window(
+    window="hello this the test the test", string="the test")
 # ---------------------------------------------------------------------------
+print("Stop")
 
 
-class TestWindowUnitTypes:
+class TestStaticMethods:
     def test_get_letters_window(self):
         np.testing.assert_array_equal(rw_test_letters[0:9],
                                       ['he', 'el', 'll', 'lo', 'o ', ' g',
                                        'go', 'oo', 'od'])
 
     def test_get_words_window(self):
-        np.testing.assert_array_equal(rw_test_words[0:4],
+        np.testing.assert_array_equal(rw_test_words[0:3],
                                       ['hello ', 'goodbye ', 'dog'])
 
+    def test_get_lines_window(self):
+        np.testing.assert_array_equal(rw_test_lines[0:3],
+                                      ["hello goodbye dog hi \n",
+                                       " this is a test \n",
+                                       " this is another test"])
 
-        print("DONE")
+    def test_find_regex(self):
+        assert rw_test_find_regex == 1
+
+    def test_find_word(self):
+        assert rw_test_find_word == 1
+
+    def test_find_string(self):
+        assert rw_test_find_string == 2
