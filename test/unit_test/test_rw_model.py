@@ -128,7 +128,7 @@ rw_test_letters = RollingWindowsModel._get_letters_windows(
     passage="hello good", windows_size=2)
 # noinspection PyProtectedMember
 rw_test_words = RollingWindowsModel._get_word_windows(
-    passage="hello goodbye dog hi", window_size=1)
+    passage="hello goodbye dog ", window_size=1)
 # noinspection PyProtectedMember
 rw_test_lines = RollingWindowsModel._get_line_windows(
     passage="hello goodbye dog hi \n this is a test \n this is another test",
@@ -148,7 +148,7 @@ class TestWindowUnitTypes:
         assert rw_test_letters[7] == 'oo'
 
     def test_get_words_window(self):
-        assert (rw_test_words[0:3] == ['hello''goodbye''dog']).all()
+        assert rw_test_words[0:4] == ['hello goodbye dog hi']
 
 
         print("DONE")

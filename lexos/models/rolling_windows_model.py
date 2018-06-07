@@ -82,7 +82,7 @@ class RollingWindowsModel(BaseModel):
         num_item = len(input_list)
 
         # get the total number of windows
-        num_window = num_item - window_size
+        num_window = num_item - window_size + 1
 
         # get the rolling list, should be a array of str
         return np.array([
