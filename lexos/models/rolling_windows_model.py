@@ -203,7 +203,7 @@ class RollingWindowsModel(BaseModel):
         :param windows: an array of windows to calculate
         :return: a panda data frame where:
             - the index header is the tokens
-            - the column header corresponds to the windows but but there is
+            - the column header corresponds to the windows but there is
                 no column header, because it is impossible to set the header
                 as windows
         """
