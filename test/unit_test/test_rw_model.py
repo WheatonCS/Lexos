@@ -55,8 +55,7 @@ rw_average_count_model_one = RollingWindowsModel \
 # noinspection PyProtectedMember
 rw_average_windows = rw_average_count_model_one._get_windows()
 # noinspection PyProtectedMember
-x = rw_average_count_model_one._find_tokens_average_in_windows(
-    rw_average_windows)
+x = rw_average_count_model_one._get_token_average_graph()
 
 
 # ---------------------------------------------------------------------------
@@ -102,16 +101,14 @@ class TestAverageCount:
                                                    1 / 3, 1 / 3, 0.0, 0.0, 0.0,
                                                    0.0, 0.0, 0.0, 1 / 3]).all()
 
-
-
-    def test_get_token_ratio_graph(self):
-        assert rw_ratio_model_one._get_token_ratio_graph()['type'] == \
-               'scattergl'
-        assert (rw_ratio_model_one._get_token_ratio_graph()['x'] ==
+    def test_get_token_average_graph(self):
+        assert rw_average_count_model_one._get_token_average_graph()[0][
+                   'type'] == 'scattergl'
+        assert (rw_average_count_model_one._get_token_average_graph()[0][
+                    'x'] ==
                 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
                  16]).all()
-        assert rw_ratio_model_one._get_token_ratio_graph()['mode'] == 'lines'
-        assert rw_ratio_model_one._get_token_ratio_graph()['name'] == 't / a'
-
-
-print("DONE")
+        assert rw_average_count_model_one._get_token_average_graph()[0][
+                   'mode'] == 'lines'
+        assert rw_average_count_model_one._get_token_average_graph()[0][
+                   'name'] == 'h'
