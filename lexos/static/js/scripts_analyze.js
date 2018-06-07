@@ -1,14 +1,5 @@
 $(function () {
-  $('.has-chevron').on('click', function () {
-    $(this).find('span').toggleClass('down')
-
-    // Nasty hack because find("span") does not work in kmeans
-    $(this).find('#kmeansAdvancedChev').toggleClass('down')
-    $(this).find('#kmeansSilhouetteChev').toggleClass('down')
-    $(this).find('#cullingOptsChev').toggleClass('down')
-
-    $(this).next().collapse('toggle')
-  })
+  $('.has-chevron').on('click', rotateChevron )
 
   $('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox)
 
@@ -118,4 +109,15 @@ function updatecullinput () {
     }
     $('span[id=cullnumber-input]').hide()
   }
+}
+
+function rotateChevron () {
+  $(this).find('span').toggleClass('down')
+
+  // Nasty hack because find("span") does not work in kmeans
+  $(this).find('#kmeansAdvancedChev').toggleClass('down')
+  $(this).find('#kmeansSilhouetteChev').toggleClass('down')
+  $(this).find('#cullingOptsChev').toggleClass('down')
+
+  $(this).next().collapse('toggle')
 }
