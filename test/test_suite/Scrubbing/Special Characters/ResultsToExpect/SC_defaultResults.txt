@@ -1,0 +1,13 @@
+ash lower ae
+ash upper AE
+eth lower d
+eth upper D
+thorn lower t
+thorn upper T
+etail lower e
+etail upper E
+yogh lower
+yogh upper
+less than lt
+greater than gt
+ampersand amp
