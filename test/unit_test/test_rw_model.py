@@ -31,6 +31,7 @@ rw_ratio_model_one = RollingWindowsModel(test_option=test_ratio_count_one)
 
 # noinspection PyProtectedMember
 rw_ratio_windows = rw_ratio_model_one._get_windows()
+
 # ---------------------------------------------------------------------------
 # noinspection PyProtectedMember
 
@@ -89,6 +90,7 @@ rw_average_count_model_one = RollingWindowsModel \
     (test_option=test_average_count_one)
 # noinspection PyProtectedMember
 rw_average_windows = rw_average_count_model_one._get_windows()
+rw_average_plotly = rw_average_count_model_one .get_rwa_graph()
 # ---------------------------------------------------------------------------
 # noinspection PyProtectedMember
 
@@ -176,6 +178,53 @@ class TestStaticMethods:
     def test_find_string(self):
         assert rw_test_find_string == 2
 
+
+class TestRWPlotly:
+    def test_get_stats_scatter(self):
+        basic_fig = test_box_plot_result_one
+        assert basic_fig['data'][0]['type'] == 'scatter'
+
+        assert basic_fig['data'][0]['y'][0] == 80
+
+        assert basic_fig['data'][0]['y'][1] == 15
+
+        assert basic_fig['data'][0]['name'] == 'Corpus Scatter Plot'
+
+        assert basic_fig['data'][0]['hoverinfo'] == 'text'
+
+        assert basic_fig['data'][0]['mode'] == 'markers'
+
+        assert basic_fig['data'][0]['text'] == ['F1.txt', 'F2.txt']
+
+    def test_get_stats_box_plot(self):
+        basic_fig = test_box_plot_result_one
+        assert basic_fig['data'][1]['type'] == 'box'
+
+        assert basic_fig['data'][1]['y'][0] == 80
+
+        assert basic_fig['data'][1]['y'][1] == 15
+
+        assert basic_fig['data'][1]['name'] == 'Corpus Box Plot'
+
+        assert basic_fig['data'][1]['hoverinfo'] == 'y'
+
+        assert basic_fig['data'][1]['marker']['color'] == 'rgb(10, 140, 200)'
+
+    def test_get_stats_layout(self):
+        basic_fig = test_box_plot_result_one
+        assert basic_fig['layout']['title'] == 'Statistics of the Given Corpus'
+
+        assert basic_fig['layout']['xaxis']['autorange'] is True
+
+        assert basic_fig['layout']['xaxis']['showgrid'] is False
+
+        assert basic_fig['layout']['xaxis']['zeroline'] is False
+
+        assert basic_fig['layout']['xaxis']['autotick'] is False
+
+        assert basic_fig['layout']['xaxis']['showline'] is False
+
+        assert basic_fig['layout']['xaxis']['showticklabels'] is False
 
 x= rw_average_count_model_one .get_rwa_graph()
 data=go.Data('Scattergl')
