@@ -1,3 +1,4 @@
+"""This is a class to manage the files of the current session."""
 import os
 import pickle
 
@@ -8,9 +9,10 @@ from lexos.models.base_model import BaseModel
 
 
 class FileManagerModel(BaseModel):
+    """The FileManagerModel inherits from the BaseModel."""
 
     def __init__(self):
-        """A model to control file manager.
+        """Control file manager (using a model).
 
         the _file_manager_path is where the file manager is stored
         the file_manager is the file_manager for current session.
@@ -20,17 +22,16 @@ class FileManagerModel(BaseModel):
 
     @property
     def _file_manager_path(self) -> str:
-        """The path of the file manager pickle file"""
+        """Get the path of the file manager pickle file."""
         return os.path.join(session_folder(), constants.FILEMANAGER_FILENAME)
 
     def load_file_manager(self) -> FileManager:
-        """Loads the file manager for the current session from the hard drive.
+        """Load the file manager for the current session from the hard drive.
 
         :return: file manager object for the session.
         """
         return pickle.load(open(self._file_manager_path, 'rb'))
 
     def save_file_manager(self, file_manager: FileManager):
-        """saves file manager to file manger path."""
-
+        """Save file manager to file manger path."""
         pickle.dump(file_manager, open(self._file_manager_path, 'wb'))
