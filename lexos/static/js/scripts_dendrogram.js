@@ -68,7 +68,11 @@ function submitForm () {
  * @returns {string | null} - if it is null, it means no error, else then the string is the error message
  */
 function submissionError () {
-  const activeFileNumTooFewErr = 'A dendrogram requires at least 2 active documents to be created.'
+  const manageUrl = $('#manage-url').data().url
+  const uploadUrl = $('#upload-url').data().url
+  const activeFileNumTooFewErr = `You do not have enough active documents. 
+  Please activate at least two documents using the <a href=${manageUrl}>Manage</a> tool 
+  or <a href=${uploadUrl}>upload</a> a new document.`
   const activeFiles = $('#num_active_files').val()
   if (activeFiles < 2) {
     return activeFileNumTooFewErr
