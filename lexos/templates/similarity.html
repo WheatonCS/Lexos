@@ -20,6 +20,8 @@
 {% block options %}
     <input type="hidden" id="num_active_files" value="{{ labels|len }}"
            style="visibility: hidden;"/>
+    <input type="hidden" id="uploadname"
+           value="{{ request.form['uploadname'] }}"/>
 
     <fieldset id="similarityoptions">
         <legend>Select Comparison Document:
@@ -29,51 +31,45 @@
                data-container="body"
                title="Select one document to be the external comparison. All other documents shown below will be used to make the model and will be ranked in order of most to least similar to the comparison document in your results. For more info click <a href='http://scalar.usc.edu/works/lexos/similarity-query?path=the-analyze-tab' target='_blank'>here.</a>"></i>
         </legend>
-
-        <input type="hidden" value="{{ request.form['uploadname'] }}"
-               id="uploadname"/>
-        <div id="similarityFileselect"
-             style="overflow:auto; width: 400px; height: 125px; float: left;">
-            {% for fileID, label in labels.items() %}
-                <label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ label }}
-                    <input type="radio"
-                           class="minifilepreview" {{ 'checked' if fileID == session['similarities']['uploadname'] or loop.first }}
-                           name="uploadname" id="{{ fileID }}_selector"
-                           value="{{ fileID }}">
-                </label><br>
-            {%- endfor %}
-            {% if labels|len == 0 %}
-                <span id="no-labels">No Documents are Selected</span>
-            {%- endif %}
-        </div>
-
     </fieldset>
 
+    <div id="similarityFileselect"
+         style="overflow:auto; width: 400px; height: 180px; float: left;">
+        {% for fileID, label in labels.items() %}
+            <label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ label }}
+                <input type="radio"
+                       class="minifilepreview" {{ 'checked' if fileID == session['similarities']['uploadname'] or loop.first }}
+                       name="uploadname" id="{{ fileID }}_selector"
+                       value="{{ fileID }}">
+            </label><br>
+        {%- endfor %}
+        {% if labels|len == 0 %}
+            <span id="no-labels">No Documents are Selected</span>
+        {%- endif %}
+    </div>
 {% endblock %}
 
 {% block results %}
-    <div style="margin-left:15px;">
-        <br/>
+    <div style="margin-top: 20px">
         <input type="button" class="bttn bttn-action" id="get-sims"
                name="gen-sims" value="Get Similarity Rankings"/>
     </div>
 
     <div id="similaritiesResults"
          style="width: 100%; float:left; margin-top:30px;margin-right:300px">
-
-        <legend>Similarity Rankings:<i
-                class="fa fa-question-circle lexos-tooltip-trigger"
-                data-toggle="tooltip" data-html="true" data-placement="right"
-                data-container="body"
-                title="The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."
-                style="font-size:18px;padding-left:4px;"></i>
-        </legend>
-
+        <fieldset>
+            <legend>Similarity Rankings:<i
+                    class="fa fa-question-circle lexos-tooltip-trigger"
+                    data-toggle="tooltip" data-html="true"
+                    data-placement="right"
+                    data-container="body"
+                    title="The rankings are determined by 'distance between documents' where small distances (near zero) represent documents that are 'similar' and unlike documents have distances closer to one."
+                    style="font-size:18px;padding-left:4px;"></i>
+            </legend>
+        </fieldset>
         <div id="simTable"></div>
-
     </div>
 {% endblock %}
-
 
 {% block submit %}
 {% endblock %}
