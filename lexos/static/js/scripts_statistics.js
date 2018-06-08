@@ -62,10 +62,10 @@ function formatFileReportResponse (response) {
   // Extract standard error anomaly information. First get the result.
   let anomalySeResult = ''
   response['anomaly_se_small'].forEach(function (result) {
-    anomalySeResult += `<b>Small:</b> ${result}.`
+    anomalySeResult += `<b>Small:</b> ${result}<br>`
   })
   response['anomaly_se_large'].forEach(function (result) {
-    anomalySeResult += `<b>Large:</b> ${result}.`
+    anomalySeResult += `<b>Large:</b> ${result}<br>`
   })
   // Set corresponding header based on the result.
   let anomalySeHeader = ''
@@ -78,10 +78,10 @@ function formatFileReportResponse (response) {
   // Extract standard error anomaly information. First get the result.
   let anomalyIqrResult = ''
   response['anomaly_iqr_small'].forEach(function (result) {
-    anomalyIqrResult += `<b>Small:</b> ${result}.`
+    anomalyIqrResult += `<b>Small:</b> ${result}<br>`
   })
   response['anomaly_iqr_large'].forEach(function (result) {
-    anomalyIqrResult += `<b>Large:</b> ${result}.`
+    anomalyIqrResult += `<b>Large:</b> ${result}<br>`
   })
   // Set corresponding header based on the result.
   let anomalyIqrHeader = ''
