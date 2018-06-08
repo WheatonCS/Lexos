@@ -1,4 +1,8 @@
-$(function () {
+/**
+ * Function to create popover help for new lexos users.
+ * @returns {void}
+ */
+function sidebarPopover () {
   if (localStorage.getItem('visited') !== 'yes') {
     localStorage.setItem('visited', 'yes')
     $('#toggler').popover({
@@ -16,7 +20,7 @@ $(function () {
       $('#toggler').popover('destroy')
     })
   }
-})
+}
 
 $.fn.center = function () {
   this.css('top', Math.max(0, ((($(window).height()) - $(this).outerHeight()) / 2) - 200) + 'px')
@@ -45,6 +49,7 @@ $(document).ready(function () {
 })
 
 $(function () {
+  sidebarPopover();
   // Load the Scalar API and cache it.
   /*	$.ajax({
           url: "/static/lib/scalarapi.js",
