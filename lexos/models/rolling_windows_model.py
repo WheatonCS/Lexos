@@ -399,11 +399,16 @@ class RollingWindowsModel(BaseModel):
                 x=np.arange(len(row)),
                 y=row,
                 mode="lines",
-                name=token
+                name=token,
+                marker=dict(
+                    line=dict(
+                        colorscale=[[0, 'rgb(0,0,0)', [1, 'rgb(128,128,128)']]]
+                    )
+                )
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
-    def _get_rwa_plotly(self) -> Union[List[go.Scattergl], go.Scattergl]:
+    def get_rwa_graph(self) -> Union[List[go.Scattergl], go.Scattergl]:
         """Get the rolling window graph
 
         :return: a plotly scatter object or a list of plotly scatter objects.
@@ -417,14 +422,17 @@ class RollingWindowsModel(BaseModel):
         assert count_average ^ count_ratio
 
         if count_average:
-            return self._get_token_average_graph()
+            result_plot = self._get_token_average_graph()
         elif count_ratio:
-            return self._get_token_ratio_graph()
+            result_plot = self._get_token_ratio_graph()
         else:
             raise ValueError("unhandled count type")
 
-    def get_rwa_graph(self) -> str:
+        return plot(result_plot, include_plotlyjs=False, output_type='div')
+
+    def _get_rwa_graph(self) -> str:
 
         return plot(
-            self._get_rwa_plotly(), include_plotlyjs=False, output_type='div'
+            self._get_rwa_plotly(), include_plotlyjs=False, output_type='div',
+            validate=False
         )
