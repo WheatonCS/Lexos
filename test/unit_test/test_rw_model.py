@@ -5,10 +5,6 @@ from lexos.models.rolling_windows_model import RollingWindowsModel, \
     RWATestOptions
 import numpy as np
 import pandas as pd
-import plotly.graph_objs as go
-import plotly.offline as offline
-import bs4
-from bs4 import BeautifulSoup
 
 
 # --------------------test by ratio count-----------------------------------
@@ -35,7 +31,7 @@ rw_ratio_model_one = RollingWindowsModel(test_option=test_ratio_count_one)
 # noinspection PyProtectedMember
 rw_ratio_windows = rw_ratio_model_one._get_windows()
 # noinspection PyProtectedMember
-basic_fig = rw_ratio_model_one._get_rwa_plotly()
+basic_fig_ratio = rw_ratio_model_one._get_rwa_plotly()
 # ---------------------------------------------------------------------------
 # noinspection PyProtectedMember
 
@@ -94,6 +90,8 @@ rw_average_count_model_one = RollingWindowsModel \
     (test_option=test_average_count_one)
 # noinspection PyProtectedMember
 rw_average_windows = rw_average_count_model_one._get_windows()
+# noinspection PyProtectedMember
+basic_fig_average = rw_average_count_model_one._get_rwa_plotly()
 # ---------------------------------------------------------------------------
 # noinspection PyProtectedMember
 
@@ -153,7 +151,6 @@ rw_test_find_word = RollingWindowsModel._find_word_in_window(
 rw_test_find_string = RollingWindowsModel._find_string_in_window(
     window="hello this the test the test", string="the test")
 # ---------------------------------------------------------------------------
-print("Stop")
 
 
 class TestStaticMethods:
@@ -183,9 +180,34 @@ class TestStaticMethods:
 
 
 class TestRWPlotly:
-    def test_get_rwa_plotly(self):
-        # noinspection PyProtectedMember
-        basic_fig = rw_ratio_model_one._get_rwa_plotly()
+    def test_get_rwa_ratio_plotly(self):
+        assert basic_fig_ratio['type'] == 'scattergl'
 
+        assert (basic_fig_ratio['x'] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                                         12, 13, 14, 15, 16, 17]).all()
 
-print("DONE")
+        assert (basic_fig_ratio['y'] == [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                         0.0, 0.0, 0.0,
+                                         0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0,
+                                         0.0]).all()
+
+        assert basic_fig_ratio['mode'] == 'lines'
+
+        assert basic_fig_ratio['name'] == 't / a'
+
+    def test_get_rwa_average_plotly(self):
+        assert basic_fig_average[0]['type'] == 'scattergl'
+
+        assert (basic_fig_average[0]['x'] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+                                              11,
+                                              12, 13, 14, 15, 16, 17]).all()
+
+        assert (basic_fig_average[0]['y'] == [1 / 3, 1 / 3, 1 / 3, 1 / 3,
+                                              1 / 3, 1 / 3, 1 / 3, 1 / 3,
+                                              1 / 3, 1 / 3, 0.0, 0.0, 0.0,
+                                              0.0, 0.0, 0.0, 1 / 3,
+                                              1 / 3]).all()
+
+        assert basic_fig_average[0]['mode'] == 'lines'
+
+        assert basic_fig_average[0]['name'] == 'h'
