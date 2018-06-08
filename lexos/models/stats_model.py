@@ -1,3 +1,5 @@
+"""This is the Stats model which gets basic statistics."""
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
@@ -12,12 +14,14 @@ from lexos.receivers.stats_receiver import StatsReceiver, StatsFrontEndOption
 
 class TextAnomalies(NamedTuple):
     """A typed tuple to represent text anomalies of the whole corpus."""
+
     small_items: List[str]
     large_items: List[str]
 
 
 class CorpusStats(NamedTuple):
     """A typed tuple to represent statistics of the whole corpus."""
+
     unit: str  # Unit of all statistics.
     mean: float  # Average size of all files.
     # File anomaly found using standard error.
@@ -30,6 +34,7 @@ class CorpusStats(NamedTuple):
 
 class StatsTestOptions(NamedTuple):
     """A typed tuple to hold all statistics test options."""
+
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: StatsFrontEndOption
@@ -37,8 +42,10 @@ class StatsTestOptions(NamedTuple):
 
 
 class StatsModel(BaseModel):
+    """The StatsModel inherits from the BaseModel."""
+
     def __init__(self, test_options: Optional[StatsTestOptions] = None):
-        """This is the class to generate statistics of the input file.
+        """Generate statistics of the input file.
 
         :param test_options: the input used in testing to override the
                              dynamically loaded option
@@ -57,13 +64,13 @@ class StatsModel(BaseModel):
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-        """:return: the document term matrix"""
+        """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
     def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels"""
+        """:return: a map takes an id to temp labels."""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
@@ -93,7 +100,7 @@ class StatsModel(BaseModel):
             return "terms" if token_type == "word" else "characters"
 
     def get_corpus_stats(self) -> CorpusStats:
-        """Converts word lists completely to statistic.
+        """Convert word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
