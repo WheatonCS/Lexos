@@ -41,10 +41,7 @@ $(function () {
 
 	/* This event is handled in scripts_analyze.js, but for some reason it has to be
 	   repeated here to function. */
-  $('.has-chevron').on('click', function () {
-    $(this).find('span').toggleClass('down')
-    $(this).next().collapse('toggle')
-  })
+
 
   // $("#normalize-options").css({"visibility":"hidden"});
 

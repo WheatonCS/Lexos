@@ -122,10 +122,10 @@ $(document).ready(function() {
 				<fieldset class="analyze-advanced-options" id="culling-options" >
 					<legend class="has-chevron" id="culling-title">Culling Options
 					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Culling options allow the user to place statistical bounds on the terms included in the DTM." style=""></i>
-					<span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}" data-target="#cullingOptsPanel" aria-expanded="false" aria-controls="cullingOptsPanel"></span>
+					<span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True}}" id="cullingOptsChev" data-target="#cullingOptsPanel" aria-expanded="false" aria-controls="cullingOptsPanel"></span>
 					</legend>
 					<div class="collapse" id="cullingoptsdiv">
-						<div style="" aria-expanded="true" class="collapse in" id="cullingOptsPanel" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True or session['analyoption']['greyword'] == True}}">
+						<div style="" aria-expanded="true" class="collapse in" id="cullingOptsPanel" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True}}">
 							<label>Most Frequent Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use only the most frequently occurring terms in the DTM." style="padding-left:4px;"></i>
 								<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
 							</label>
@@ -141,8 +141,6 @@ $(document).ready(function() {
 							<span id="cullnumber-input">
 							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ numActiveDocs }}" step="1" value="{{ numActiveDocs }}" /> documents</label>
 							</span>
-							<label>Grey Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Exclude the terms with the lowest frequencies from the DTM." style="padding-left:4px;"></i>
-							<input type="checkbox" id="greyword" name="greyword"{{ 'checked' if session['analyoption']['greyword']}}/>
 							</label>
 						</div>
 					</div>
@@ -154,9 +152,9 @@ $(document).ready(function() {
 
 				<!-- Fieldset - Temp-Label-Div -->
 				<fieldset class="analyze-advanced-options" id="temp-label-div">
-					<legend class="has-chevron">Assign Temporary Labels
+					<legend id="assign-title" class="has-chevron">Assign Temporary Labels
 					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Assign temporary names to documents for use in tables and graphs produced by the Lexos tools that use the Tokenize, Normalize, and Culling options." style=""></i>
-					<span class="fa fa-chevron-right rotate " data-target="#tempLabelPanel" aria-expanded="false" aria-controls="tempLabelPanel"></span>
+					<span class="fa fa-chevron-right rotate" id="assignLabelsChev" data-target="#tempLabelPanel" aria-expanded="false" aria-controls="tempLabelPanel"></span>
 					</legend>
 					<div class="collapse" id="modifylabels" style="overflow:auto;width:100%;">
 						<div style="" aria-expanded="true" class="collapse in" id="tempLabelPanel">
