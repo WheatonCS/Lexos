@@ -111,33 +111,20 @@ function updatecullinput () {
   }
 }
 
+
 /**
  * Toggle chevron class in order to handle chevron drop down button rotate
  * animation
  * @returns {void}
  */
 function rotateChevron () {
-  alert("rotate")
   $(this).find('span').toggleClass('down')
-  console.log(this)
-  //alert(".5")
-
-  // Nasty hack because find("span") does not work in kmeans
-  //$(this).find('#kmeansAdvancedChev').toggleClass('down')
-  //alert("1")
-  //$(this).find('#kmeansSilhouetteChev').toggleClass('down')
-  //alert("2")
-  //$(this).find('#cullingOptsChev').toggleClass('down')
-  //$(this).find('#assignLabelsChev').toggleClass('down')
-  //alert("3")
 
   $(this).next().collapse('toggle')
-  //alert("4")
 }
 
 /**
  * Change position of submit div while scrolling the window
- * Unnecessary function?
  * @returns {void}
  */
 function changeSubmitDivPosition () {
@@ -152,7 +139,6 @@ function changeSubmitDivPosition () {
 
 /**
  * Throttle the scroll event so it doesn't happen too often
- * Unnecessary function?
  * @returns {void}
  */
 function throttleScrollTimer () {
