@@ -1,0 +1,14 @@
+tags foo fee fee fi foo a list of old english texts a plan for the dictionary of
+old english a microfiche concordance to old english the list of texts and index of
+editions the old english corpus was originally prepared for internal use at the dictionary
+of old english  we hope that other scholars will be able to use the material and we
+would be grateful to receive comments about errors or problems you discover
+
+<THISONEWONTWORK>dictionary of old english</THISONEWONTWORK>
+ room   robarts library
+ university of toronto
+ toronto on ms a canada
+ corpusdoeutorontoca
+
+
+end tags
