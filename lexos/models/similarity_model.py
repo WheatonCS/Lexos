@@ -53,10 +53,10 @@ class SimilarityModel(BaseModel):
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()
 
-    def _gen_exact_similarity(self) -> pd.Series:
+    def _gen_exact_similarity(self) -> pd.DataFrame:
         """Get the exact (not rounded) cos-similarity between files
 
-        :return a panda series where
+        :return a pandas data frame where
             - the index is the temp labels
             - the value is the cos distance between this file and "comp_file"
         """
@@ -66,7 +66,7 @@ class SimilarityModel(BaseModel):
 
         # select the row with comp_file_id
         comp_file_word_count = self._doc_term_matrix.loc[
-            self._similarity_option.comp_file_id, :]
+                               self._similarity_option.comp_file_id, :]
 
         # select the all the other rows (index is not comp_file_id)
         # or drop the comp_file_id row
@@ -87,7 +87,8 @@ class SimilarityModel(BaseModel):
                   for file_id in other_file_word_counts.index]
 
         # pack score and labels into a series
-        return pd.Series(cos_scores, index=labels, name="cos_similarity")
+        return pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+                            data=[labels, cos_scores])
 
     def generate_sims_html(self) -> str:
         """Generate the html for sim query
@@ -95,6 +96,7 @@ class SimilarityModel(BaseModel):
         We also round all the data to 4 digits for better display
         :return: the html table to put into the web page
         """
-        return self._gen_exact_similarity().round(4).to_frame().to_html(
-            classes="table table-striped table-bordered"
-        )
+
+        return self._gen_exact_similarity().transpose().round(4).to_html(
+            classes="table table-striped table-bordered",
+            index=False)
