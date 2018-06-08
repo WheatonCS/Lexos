@@ -21,8 +21,7 @@ class SimilarityModel(BaseModel):
     def __init__(self, test_options: SimilarityTestOption = None):
         """This is the class to generate similarity.
 
-        :param test_options:
-            The option to send in for testing
+        :param test_options: The option to send in for testing.
         """
         super().__init__()
         if test_options is not None:
@@ -54,11 +53,12 @@ class SimilarityModel(BaseModel):
             else SimilarityReceiver().options_from_front_end()
 
     def _gen_exact_similarity(self) -> pd.DataFrame:
-        """Get the exact (not rounded) cos-similarity between files
+        """Get the exact (not rounded) cos-similarity between files.
 
-        :return a pandas data frame where
-            - the index is the temp labels
-            - the value is the cos distance between this file and "comp_file"
+        :return a two rows pandas data frame where
+            - the name of the first row is Documents, contains file names.
+            - the name of the second row is Cosine Similarity Scores, contains
+              distance between this file and "comp_file".
         """
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
