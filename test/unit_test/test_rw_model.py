@@ -34,7 +34,8 @@ rw_ratio_model_one = RollingWindowsModel(test_option=test_ratio_count_one)
 
 # noinspection PyProtectedMember
 rw_ratio_windows = rw_ratio_model_one._get_windows()
-rw_ratio_plotly = (go.Data(rw_ratio_model_one.get_rwa_graph()))
+# noinspection PyProtectedMember
+basic_fig = rw_ratio_model_one._get_rwa_plotly()
 # ---------------------------------------------------------------------------
 # noinspection PyProtectedMember
 
@@ -182,7 +183,9 @@ class TestStaticMethods:
 
 
 class TestRWPlotly:
-    def test_get_stats_scatter(self):
-        basic_fig = rw_ratio_plotly
+    def test_get_rwa_plotly(self):
+        # noinspection PyProtectedMember
+        basic_fig = rw_ratio_model_one._get_rwa_plotly()
+
 
 print("DONE")
