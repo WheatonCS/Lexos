@@ -65,8 +65,8 @@ class SimilarityModel(BaseModel):
             NON_NEGATIVE_INDEX_MESSAGE
 
         # select the row with comp_file_id
-        comp_file_word_count = self._doc_term_matrix.loc[
-                               self._similarity_option.comp_file_id, :]
+        comp_file_word_count = \
+            self._doc_term_matrix.loc[self._similarity_option.comp_file_id, :]
 
         # select the all the other rows (index is not comp_file_id)
         # or drop the comp_file_id row
