@@ -5,6 +5,7 @@ $(function () {
     // Nasty hack because find("span") does not work in kmeans
     $(this).find('#kmeansAdvancedChev').toggleClass('down')
     $(this).find('#kmeansSilhouetteChev').toggleClass('down')
+    $(this).find('#cullingOptsChev').toggleClass('down')
 
     $(this).next().collapse('toggle')
   })
