@@ -240,12 +240,6 @@ function browserDetection () {
       else if (isEdge){
         alert(browserWarningMsg)
       }
-      else if (isChrome){
-        alert("hello")
-      }
-      else if (isFirefox){
-        alert("fire")
-      }
       // Set visited to true after the user visits the page
       sessionStorage.visited = true
     }
