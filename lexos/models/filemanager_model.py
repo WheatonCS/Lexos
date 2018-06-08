@@ -1,4 +1,4 @@
-"""This is a class to manage the files of the current session."""
+"""This is a model to manage the files of the current session."""
 import os
 import pickle
 
@@ -16,7 +16,7 @@ class FileManagerModel(BaseModel):
 
         the _file_manager_path is where the file manager is stored
         the file_manager is the file_manager for current session.
-        We uses pickel library to save and load filemanager on our disk
+        We uses pickle library to save and load filemanager on our disk
         """
         super().__init__()
 

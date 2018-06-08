@@ -1,4 +1,4 @@
-"""This is a class to produce dendrograms of the dtms."""
+"""This is a model to produce dendrograms of the dtms."""
 
 from typing import NamedTuple, Optional
 
