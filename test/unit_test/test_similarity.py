@@ -30,6 +30,8 @@ def test_with_similarity_equal_one():
         pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
                      data=[["F1.txt", "F2.txt"], [1., 1.]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
@@ -54,6 +56,8 @@ def test_with_all_same_content_file():
         pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
                      data=[["F1.txt", "F3.txt"], [0., 0.]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
@@ -77,6 +81,8 @@ def test_with_two_dimension():
         pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
                      data=[["F2.txt", "F3.txt"], [.105572809, .5527864045]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
@@ -101,6 +107,8 @@ def test_with_three_dimension():
         pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
                      data=[["F1.txt", "F3.txt"], [.42264973081, 1.]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
