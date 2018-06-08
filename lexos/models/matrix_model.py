@@ -39,7 +39,6 @@ class MatrixModel(BaseModel):
             self._test_file_id_content_map = None
             self._test_front_end_option = None
 
-
     @property
     def _file_id_content_map(self) -> FileIDContentMap:
         """Get result from higher level class: file manager of current session.
