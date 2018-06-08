@@ -1,30 +1,25 @@
 Punctuation
 ===========
 
-# Summary
-This folder contains files for testing the punctuation function.
+#### Test Remove All Punctuation
 
-## ChinesePunc1.txt
-This file contains all the different kinds of brackets.
+*Test Files:* accents.txt, ChinesePunc1.txt, ChinesePunc2.txt, ChinesePunc3.txt, 
+SpanishPunc1.txt, currencySymbol.txt, currencySymbols.txt, currencyWiki.txt,
+punct1.txt
 
-## ChinesePunc2.txt
-This file contains a sentence with triangle brackets (< >) and a period and comma. 
+*Result Files:* accentsResults.txt, ChinesePunc1Results.txt,
+ChinesePunc2Results.txt, ChinesePunc3Results.txt, currencySymbolResult.txt,
+currencySymbolsResults.txt, currencyWikiResults.txt, punct1Results.txt,
+SpanishPunc1Results.txt
 
-## ChinesePunc3.txt
-This file is a punctuation test.
 
-## SpanishPunc1.txt
-This file contains the different punctuations in Spanish. 
+1. UPLOAD FILES
 
-## currencySymbol.txt
-This file contains different currency symbols.
+2. SCRUB:
+    - Remove All Punctuation
+    - Make Lowercase
+    - Remove Digits
 
-## currencySymbols.txt
-This file contains the currency symbols for all the countries from the source:http://www.currencysymbols.in/
-
-## currencyWiki.txt
-This file contains different currency symbols from the source http://en.wikipedia.org/wiki/Punctuation
-
-## punct1.txt
-This file contains an assortment of symbols and punctuation used for testing.
-
+3. RESULTS:
+    - nine files with all forms of punctuation removed
+    
