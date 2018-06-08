@@ -13,10 +13,10 @@ function sidebarPopover () {
       'width': '170px',
       'text-align': 'center'
     })
-    $('#gotit').on('click', function () {
+    $('#gotit').click(function () {
       $('#toggler').popover('destroy')
     })
-    $('#toggler').on('click', function () {
+    $('#toggler').click(function () {
       $('#toggler').popover('destroy')
     })
   }
