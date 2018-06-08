@@ -1,3 +1,27 @@
+/**
+ * Function to create popover help for new lexos users.
+ * @returns {void}
+ */
+function sidebarPopover () {
+  if (localStorage.getItem('visited') !== 'yes') {
+    localStorage.setItem('visited', 'yes')
+    $('#toggler').popover({
+      'html': 'true',
+      'title': 'In the Margins!',
+      'content': 'View instructions for any screen in Lexos by clicking the In the Margins Tab!\n<div class="text-center"><button type="button" id="gotit" class="btn btn-primary" style="background-color: #0068AF">Got it!</button></div>'
+    }).popover('show').data('bs.popover').tip().css({
+      'width': '170px',
+      'text-align': 'center'
+    })
+    $('#gotit').click(function () {
+      $('#toggler').popover('destroy')
+    })
+    $('#toggler').click(function () {
+      $('#toggler').popover('destroy')
+    })
+  }
+}
+
 $.fn.center = function () {
   this.css('top', Math.max(0, ((($(window).height()) - $(this).outerHeight()) / 2) - 200) + 'px')
   this.css('left', Math.max(0, (($(window).width() - $(this).outerWidth()) / 2)) + 'px')
@@ -25,6 +49,7 @@ $(document).ready(function () {
 })
 
 $(function () {
+  sidebarPopover();
   // Load the Scalar API and cache it.
   /*	$.ajax({
           url: "/static/lib/scalarapi.js",
