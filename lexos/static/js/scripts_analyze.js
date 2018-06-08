@@ -119,14 +119,16 @@ function updatecullinput () {
 function rotateChevron () {
   alert("rotate")
   $(this).find('span').toggleClass('down')
+  console.log(this)
   //alert(".5")
 
   // Nasty hack because find("span") does not work in kmeans
-  $(this).find('#kmeansAdvancedChev').toggleClass('down')
+  //$(this).find('#kmeansAdvancedChev').toggleClass('down')
   //alert("1")
-  $(this).find('#kmeansSilhouetteChev').toggleClass('down')
+  //$(this).find('#kmeansSilhouetteChev').toggleClass('down')
   //alert("2")
   //$(this).find('#cullingOptsChev').toggleClass('down')
+  //$(this).find('#assignLabelsChev').toggleClass('down')
   //alert("3")
 
   $(this).next().collapse('toggle')

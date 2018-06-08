@@ -6,12 +6,6 @@ $(function () {
 
   $('#temp-label-div').css('position', 'relative').css('left', '-6px').css('top', '0px')
 
-  $('.has-chevron').on('click', function () {
-    $(this).find('#cullingOptsChev').toggleClass('down')
-
-    $(this).next().collapse('toggle')
-  })
-
 
   // display/hide expandable divs (Define Groups div) here
   function updateGroupOptionDiv() {
