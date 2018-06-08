@@ -25,10 +25,10 @@ function runModal (htmlMsg) {
  * @param {object.<string, string>} form the form converted into a json
  * @returns {jquery.Ajax} - the jquery ajax object (a deferred object)
  */
-function sendAjaxRequest (form) {
+function sendAjaxRequest (url, form) {
   return $.ajax({
     type: 'POST',
-    url: '/dendrogramDiv',
+    url: url,
     contentType: 'application/json; charset=utf-8',
     data: JSON.stringify(form)
   })
@@ -46,7 +46,7 @@ function submitForm () {
   const form = jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest(form)
+  sendAjaxRequest('/dendrogramDiv', form)
     .done(
       function (response) {
         $('#dendrogram-result').html(response)
