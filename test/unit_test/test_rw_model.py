@@ -177,5 +177,7 @@ class TestStaticMethods:
         assert rw_test_find_string == 2
 
 
-
+x= rw_average_count_model_one .get_rwa_graph()
+data=go.Data('Scattergl')
 #test get_rwa_graph
+print("DONE")
