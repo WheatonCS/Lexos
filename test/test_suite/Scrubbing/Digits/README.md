@@ -1,16 +1,22 @@
 Digits
-==========
+=======
 
-This folder has files to test the Remove Digits functionality
+#### Test Remove Digits 
 
-## Test file: allDigits.txt
+*Test files:* all_digits_and_test.txt, digits.txt, digits_Chinese.txt,
+            digits_easternArabic.txt
 
-0. UPLOAD allDigits.txt
+*Result file:* all_digits_and_test_Results.txt, digitsResults.txt, 
+               digits_Chinese_Results.txt, digits_easternArabicResults.txt
 
-1. SCRUB: 
-    - Remove all Punct (optional)
+- allDigits.txt and numberLetter.txt could NOT be tested
+- digits_Chinese.txt does NOT contain any digits
+
+1. UPLOAD FILES
+
+2. SCRUB: 
+    - Remove All Punctuation (optional)
     - Make Lowercase (optional)
     - Remove Digits
 
-Results:
-- file content: abc
+Results
