@@ -86,7 +86,7 @@ class SimilarityModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in other_file_word_counts.index]
 
-        # pack score and labels into a series
+        # pack score and labels into a pandas data frame
         return pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
                             data=[labels, cos_scores])
 
@@ -96,7 +96,5 @@ class SimilarityModel(BaseModel):
         We also round all the data to 4 digits for better display
         :return: the html table to put into the web page
         """
-
         return self._gen_exact_similarity().transpose().round(4).to_html(
-            classes="table table-striped table-bordered",
-            index=False)
+            index=False, classes="table table-striped table-bordered")
