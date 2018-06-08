@@ -1,3 +1,5 @@
+"""This is the model to find similarity between dtms."""
+
 from typing import NamedTuple
 
 import pandas as pd
@@ -12,12 +14,16 @@ from lexos.receivers.similarity_receiver import SimilarityFrontEndOption, \
 
 
 class SimilarityTestOption(NamedTuple):
+    """A typed tuple to hold topword test options."""
+
     doc_term_matrix: pd.DataFrame
     front_end_option: SimilarityFrontEndOption
     id_temp_label_map: IdTempLabelMap
 
 
 class SimilarityModel(BaseModel):
+    """The TopwordModel inherits from the BaseModel."""
+
     def __init__(self, test_options: SimilarityTestOption = None):
         """This is the class to generate similarity.
 
