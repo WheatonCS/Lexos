@@ -1,0 +1,29 @@
+ash lower æ
+ash upper Æ
+eth lower ð
+eth upper Ð
+thorn lower þ
+thorn upper Þ
+etail lower ę
+etail upper Ę
+tironian note
+oeligature œ
+e grave è
+e acute é
+a umlaut ä
+o umlaut ö
+u umlaut ü
+barred l ł
+barred thorn ꝥ
+barred b ƀ
+a macron ā
+c macron c̄
+e macron ē
+i macron ī
+n macron n̄
+o macron ō
+p macron p̄
+q macron q̄
+r macron r̄
+less than
+greater than
