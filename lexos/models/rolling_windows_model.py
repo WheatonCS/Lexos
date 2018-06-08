@@ -1,5 +1,5 @@
 import re
-from typing import NamedTuple, Optional, List, Iterator, Callable
+from typing import NamedTuple, Optional, List, Iterator, Callable, Union
 
 import numpy as np
 import pandas as pd
@@ -403,10 +403,10 @@ class RollingWindowsModel(BaseModel):
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
-    def get_rwa_graph(self) -> str:
+    def _get_rwa_plotly(self) -> Union[List[go.Scattergl], go.Scattergl]:
         """Get the rolling window graph
 
-        :return: a html string
+        :return: a plotly scatter object or a list of plotly scatter objects.
         """
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
@@ -417,12 +417,14 @@ class RollingWindowsModel(BaseModel):
         assert count_average ^ count_ratio
 
         if count_average:
-            graph_to_plot = self._get_token_average_graph()
+            return self._get_token_average_graph()
         elif count_ratio:
-            graph_to_plot = self._get_token_ratio_graph()
+            return self._get_token_ratio_graph()
         else:
             raise ValueError("unhandled count type")
 
+    def get_rwa_graph(self) -> str:
+
         return plot(
-            graph_to_plot, include_plotlyjs=False, output_type='div'
+            self._get_rwa_plotly(), include_plotlyjs=False, output_type='div'
         )
