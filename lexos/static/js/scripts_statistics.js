@@ -59,33 +59,23 @@ function formatFileReportResponse (response) {
   const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
   const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
 
-  console.log(response['anomaly_se_small'])
-
+  // Find if anomaly detected by standard error analysis.
   const noAnomalySe = response['anomaly_se_small'] === [] && response['anomaly_se_large'] === []
-
-  console.log(noAnomalySe)
-
+  // Pick appropriate result for standard error analysis.
   const anomalySeResult =
     noAnomalySe ? '<b>No</b> anomaly detected by standard error test.' :
       'Anomaly <b>detected</b> by standard error test.' +
       response['anomaly_se_small'].map(function (file) {return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>`}) +
       response['anomaly_se_large'].map(function (file) {return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>`})
 
-  // Extract standard error anomaly information. First get the result.
-  let anomalyIqrResult = ''
-  response['anomaly_iqr_small'].forEach(function (result) {
-    anomalyIqrResult += `<b>Small:</b> ${result}<br>`
-  })
-  response['anomaly_iqr_large'].forEach(function (result) {
-    anomalyIqrResult += `<b>Large:</b> ${result}<br>`
-  })
-  // Set corresponding header based on the result.
-  let anomalyIqrHeader = ''
-  if (anomalyIqrResult === '') {
-    anomalyIqrHeader = '<b>No</b> anomaly detected by inter quartile range test.'
-  } else {
-    anomalyIqrHeader = 'Anomaly <b>detected</b> by inter quartile range test.'
-  }
+  // Find if anomaly detected by standard error analysis.
+  const noAnomalyIqr = response['anomaly_iqr_small'] === [] && response['anomaly_iqr_large'] === []
+  // Pick appropriate result for standard error analysis.
+  const anomalyIqrResult =
+    noAnomalyIqr ? '<b>No</b> anomaly detected by inter quartile range test.' :
+      'Anomaly <b>detected</b> by inter quartile range test.' +
+      response['anomaly_iqr_small'].map(function (file) {return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>`}) +
+      response['anomaly_iqr_large'].map(function (file) {return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>`})
 
   // Return the retracted information.
   return {
