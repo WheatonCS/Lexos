@@ -9,6 +9,8 @@
 
 {% block options %}
     <input type="hidden" id="num_active_files" value="{{ labels|len }}"/>
+    <input type="hidden" id="num_active_classes"
+           value="{{ classDivisionMap.shape[0] }}">
     <div class="row col-lg-12 col-md-12">
         <fieldset>
             <legend>
@@ -21,8 +23,7 @@
                                  to compare individual documents to classes of
                                  documents or to compare classes of documents
                                  to other classes, go to the <a href={{ url_for("manage.manage") }}>Manage</a>
-                                 tool to edit class labels.">
-                </i>
+                                 tool to edit class labels."></i>
             </legend>
         </fieldset>
         <label for="allToPara">
@@ -34,8 +35,7 @@
                data-placement="right" data-container="body"
                title="Compares the proportion of each term in individual
                       documents to their proportions in the whole collection.
-                      Example: Find topwords for one chapter compared to the entire book.">
-            </i>
+                      Example: Find topwords for one chapter compared to the entire book."></i>
         </label>
         <label for="classToPara">
             <input type="radio" name="testInput" id="classToPara"
@@ -48,8 +48,7 @@
                       one class to that in another class as a whole. Example:
                       With two books (two classes), find topwords in every
                       chapter (document) from one of the books compared to the
-                      entire other book (class).">
-            </i>
+                      entire other book (class)."></i>
         </label>
         <label for="classToClass">
             <input type="radio" name="testInput" id="classToClass"
@@ -60,86 +59,44 @@
                data-placement="right" data-container="body"
                title="Comparing the proportion of each term in one class to
                       that in another class. Example: Find topwords between two
-                      books (classes).">
-            </i>
+                      books (classes)."></i>
         </label>
     </div>
 {% endblock %}
 
 {% block results %}
-    <input class="bttn bttn-action" id="gettopword" name="gen-topword"
-           type="submit" value="Get Topwords"/>
-    <input type="submit" class="bttn bttn-exit bttndownload"
-           id="topworddownload" name="get-topword" value="Download Results"/>
-    {% if topwordsgenerated == 'class_div' %}
-        {% if classmap.shape[1] == 0 %}
-            <br/><br/><br/>
-            <h3> Please go to the <a href='{{ url_for("upload.upload") }}'>Upload
-                page</a> to upload documents first</h3>
-        {% elif classmap.shape[1] == 1 %}
-            <br/><br/><br/>
-            <h3> Please go to the <a href='{{ url_for("manage.manage") }}'>Manage
-                page</a> to upload more documents to compare</h3>
-        {% else %}
-            <legend class="topwordResultLegend">Class Division:</legend>
-            {% if classmap.shape[0]==1 %}
-                <span><strong>Only one class found, if desired to compare between class:</strong></span>
-                <span><strong>please go to the <a
-                        href='{{ url_for("manage.manage") }}'>Manage page</a> to assign class labels to documents</strong></span>
-            {% endif %}
-        {% endif %}
-
-        <div class="row">
-            {% for i in range(classmap.shape[0]) %}
-                <div class="col-md-6 topwordTableDivv topwordTableDivClass">
-                    {% if classmap.index.values[i] == "" %}
-                        <p class="topwordResultTableTitle"><strong>Class:
-                            untitled</strong></p>
-                    {% else %}
-                        <p class="topwordResultTableTitle"><strong>Class:
-                            "{{ classmap.index.values[i] }}"</strong></p>
-                    {% endif %}
-                    <div class="topwordFileTable">
-                        {% for file_id in classmap.columns.values %}
-                            {% if classmap[file_id][classmap.index.values[i]] %}
-                                <p class="topwordFile">{{ labels[file_id] }}</p>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-    {% elif topwordsgenerated == 'True' %}
-        <div class="row">
-            <div class="col-md-12">
-                <legend class="topwordResultLegend">{{ header }}</legend>
-            </div>
-        </div>
-        <div class="row">
-            {% for file_result in result %}
-                <div class="col-md-6 topwordTableDivv topwordTableDivPZAlll">
-                    <p class="topwordResultTableTitle">
-                        <strong> {{ file_result.name }} </strong></p>
-                    <table style="border:1px solid #ddd;"
-                           class="table table-striped table-condensed table-hover header-fixed">
-                        <thead>
-                        <th>Top Word</th>
-                        <th>Z Score</th>
-                        </thead>
-                        <tbody>
-                        {% for word, score in file_result.iteritems() %}
+    <input type="button" class="btn btn-primary" id="get-topwords"
+           value="Get Topwords"/>
+    <input type="submit" class="btn btn-success" id="download-topwords"
+           value="Download Topwords"/>
+    <div class="row col-md-12 col-lg-12" id="class-division-map"
+         style="padding-top: 20px">
+        <fieldset>
+            <legend>
+                Class Divisions
+            </legend>
+        </fieldset>
+        {% for class_name in classDivisionMap.index %}
+            <div class="row col-lg-4 col-md-4">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="info">{{ class_name }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for file_id in classDivisionMap.columns %}
+                        {% if classDivisionMap[file_id][class_name] %}
                             <tr>
-                                <td>{{ word }}</td>
-                                <td>{{ score }}</td>
+                                <td>{{ labels[file_id] }}</td>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}
 
