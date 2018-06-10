@@ -127,17 +127,17 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
-        anomaly_se_small = list(set(
+        anomaly_se_small = [
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
-        ))
+        ]
 
-        anomaly_se_large = list(set(
+        anomaly_se_large = [
             self._id_temp_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
-        ))
+        ]
 
         anomaly_se = TextAnomalies(small_items=anomaly_se_small,
                                    large_items=anomaly_se_large)
