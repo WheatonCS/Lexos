@@ -1827,6 +1827,10 @@ a.active {
 }
 
 /* ================== STATS STYLING =========================== */
+/* Resolve the transparent box plot issue. */
+#box-plot .plot {
+  opacity: 1 !important;
+}
 
 #entire-corpus {
     font-size: 15px;
@@ -1837,9 +1841,7 @@ a.active {
     margin-bottom:25px;
 }
 
-/* ================== DENDROGRAM STYLING ========================= */
-
-
+/* ========================= DENDROGRAM STYLING ========================= */
 select#orientation {
   width: 140px;
 }
