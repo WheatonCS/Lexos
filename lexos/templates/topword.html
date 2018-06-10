@@ -1,20 +1,11 @@
 {% extends "base_analyze.html" %}
 {% set active_page = 'topword' %}
 
-
 {% block head %}
-    <style type="text/css">
-        .topwordResultLegend {
-        }
-    </style>
     <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}">
-    </script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+            src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
 {% endblock %}
 {% block title %}Topwords{% endblock %}
-
 
 {% block options %}
     <input type="hidden" id="num_active_files" value="{{ labels|len }}"/>
