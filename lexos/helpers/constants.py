@@ -182,11 +182,6 @@ TOPWORDINPUT = (
     'upperboundRC',
     'useFreq')
 
-# for statistic
-# if there is no comma in the end, python recognize this var as a string
-# instead of a tuple
-STATISTIC_LIST = ('segmentlist',)
-
 '''the request form default value'''
 DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
 
@@ -279,9 +274,6 @@ DEFAULT_KMEAN_OPTIONS = {
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
 DEFAULT_TOPWORD_OPTIONS = {'testInput': 'allToPara'}
-
-# never used, go to lexos_core.py `statistic()` function to see why
-DEFAULT_STATISTICS_OPTIONS = {}
 
 DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 

@@ -26,6 +26,12 @@ class TestGetSpecialCharDictFromFile:
         else:
             raise AssertionError
         try:
+            get_special_char_dict_from_file(char_set="early-english-html")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError
+        try:
             get_special_char_dict_from_file(char_set="MADEUP-6")
         except ValueError:
             pass
@@ -84,6 +90,7 @@ class TestReplacementHandlerAlone:
         assert replacement_handler(
             text=self.test_string, replacer_string="\n", is_lemma=False) == \
             self.test_string
+
         # Missing/too many colons
         try:
             replacement_handler(
@@ -110,6 +117,7 @@ class TestReplacementHandlerAlone:
                 text=self.test_string, replacer_string="t::w", is_lemma=False)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "t::w"
+
         # Too many arguments on right of colon
         try:
             replacement_handler(
@@ -170,6 +178,7 @@ class TestReplacementHandlerAlone:
         assert replacement_handler(
             text=self.test_string, replacer_string="is:", is_lemma=True) == \
             "Test string  testing"
+
         # Missing/too many colons
         try:
             replacement_handler(
@@ -189,6 +198,7 @@ class TestReplacementHandlerAlone:
                 is_lemma=True)
         except LexosException as excep:
             assert str(excep) == NOT_ONE_REPLACEMENT_COLON_MESSAGE + "is::word"
+
         # Too many arguments on right of colon
         try:
             replacement_handler(
@@ -204,6 +214,7 @@ class TestReplacementHandlerAlone:
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_RIGHT_OPERAND_MESSAGE + \
                 "is,string:how,what"
+
         # No argument on left of colon
         try:
             replacement_handler(
@@ -215,6 +226,7 @@ class TestReplacementHandlerAlone:
                 text=self.test_string, replacer_string=":", is_lemma=True)
         except LexosException as excep:
             assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
+
         # testing multiple error conditions
         try:
             replacement_handler(text=self.test_string,
@@ -815,6 +827,7 @@ class TestRemoveStopwords:
         assert remove_stopwords(self.test_string, "") == self.test_string
         assert remove_stopwords(self.test_string, " ") == self.test_string
         assert remove_stopwords("test\nstring", "\n") == "test\nstring"
+        assert remove_stopwords("test\nstring", "\nstring") == "test"
         assert remove_stopwords("test", "test") == ""
         assert remove_stopwords("   test   ", "test") == "     "
         assert remove_stopwords("\ntest\n", "test") == "\n"
