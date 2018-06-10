@@ -69,13 +69,17 @@
            value="Get Topwords"/>
     <input type="submit" class="btn btn-success" id="download-topwords"
            value="Download Topwords"/>
-    <div class="row col-md-12 col-lg-12" id="class-division-map"
+
+    <!-- This div sets the class division. -->
+    <div class="row col-md-12 col-lg-12" id="class-division"
          style="padding-top: 20px">
+        <!-- Header of the class division. -->
         <fieldset>
             <legend>
                 Class Divisions
             </legend>
         </fieldset>
+        <!-- The class divisions. -->
         {% for class_name in classDivisionMap.index %}
             <div class="row col-lg-4 col-md-4">
                 <table class="table table-bordered table-hover table-striped">
@@ -97,6 +101,8 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="row col-lg-12 col-md-12" id="topword-result"></div>
 
 {% endblock %}
 
