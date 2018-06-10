@@ -25,9 +25,9 @@ class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
 
     doc_term_matrix: pd.DataFrame
-    front_end_option: TopwordAnalysisType
-    id_temp_label_map: IdTempLabelMap
     class_division_map: pd.DataFrame
+    id_temp_label_map: IdTempLabelMap
+    front_end_option: TopwordAnalysisType
 
 
 class TopwordResult(NamedTuple):
@@ -225,7 +225,7 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def _analyze_file_to_class(self, class_division_map: pd.DataFrame) -> \
-            AnalysisResult:
+        AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
@@ -285,7 +285,7 @@ class TopwordModel(BaseModel):
         return readable_result
 
     def _analyze_class_to_class(self, class_division_map: pd.DataFrame) -> \
-            AnalysisResult:
+        AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
@@ -386,7 +386,7 @@ class TopwordModel(BaseModel):
             raise ValueError("Invalid topword analysis option.")
 
     def get_readable_result(self, class_division_map: pd.DataFrame) -> \
-            TopwordResult:
+        TopwordResult:
         """Get the readable result to display on the web page.
 
         :param class_division_map: a pandas data frame where:
