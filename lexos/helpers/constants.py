@@ -278,17 +278,7 @@ DEFAULT_KMEAN_OPTIONS = {
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
-DEFAULT_TOPWORD_OPTIONS = {
-    'testInput': 'classToPara',
-    'groupOptionType': 'all',
-    'outlierMethodType': 'stdErr',
-    "outlierTypeStd": 'top',
-    "outlierTypeIQR": 'top',
-    'lowerboundPC': '0',
-    'upperboundPC': '1',
-    'lowerboundRC': '0',
-    'upperboundRC': '0',
-    'useFreq': 'PC'}
+DEFAULT_TOPWORD_OPTIONS = {'testInput': 'allToPara'}
 
 # never used, go to lexos_core.py `statistic()` function to see why
 DEFAULT_STATISTICS_OPTIONS = {}
