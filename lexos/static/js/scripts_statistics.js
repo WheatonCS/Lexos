@@ -83,7 +83,6 @@ function formatFileReportResponse (response) {
     'mean': mean,
     'stdDeviation': stdDeviation,
     'anomalySeResult': anomalySeResult,
-    'anomalyIqrHeader': anomalyIqrHeader,
     'anomalyIqrResult': anomalyIqrResult
   }
 }
@@ -106,7 +105,6 @@ function generateStatsFileReport () {
         $('#file-report-std-deviation').html(formattedResult.stdDeviation)
         $('#file-report-IQR').html(formattedResult.IQR)
         $('#file-report-anomaly-se-result').html(formattedResult.anomalySeResult)
-        $('#file-report-anomaly-iqr-header').html(formattedResult.anomalyIqrHeader)
         $('#file-report-anomaly-iqr-result').html(formattedResult.anomalyIqrResult)
       })
     .fail(
