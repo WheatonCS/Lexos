@@ -1,23 +1,21 @@
 """This is a model to find the topwords."""
 
-import itertools
-import math
 import os
+import math
+import itertools
+import pandas as pd
 from collections import OrderedDict
 from typing import List, Optional, NamedTuple
-
-import pandas as pd
-
-from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
-    NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
-from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.models.filemanager_model import FileManagerModel
+from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.receivers.topword_receiver import TopwordReceiver, \
     TopwordAnalysisType
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
+    NOT_ENOUGH_CLASSES_MESSAGE, EMPTY_DTM_MESSAGE
 
 # Type hinting for the analysis result each function returns.
 AnalysisResult = List[pd.Series]
@@ -119,7 +117,6 @@ class TopwordModel(BaseModel):
         standard_error = math.sqrt(p_hat * (1 - p_hat) * ((1 / n1) + (1 / n2)))
 
         # Trap possible division by 0 error.
-        # TODO: Do we may need more complicate check here?
         if math.isclose(standard_error, 0):
             return 0.0
         # If not division by 0, return the calculated z-score.
@@ -187,7 +184,7 @@ class TopwordModel(BaseModel):
         # Convert the sorted result to a panda series.
         result_series = pd.Series(sorted_dict)
         # Set the result series name.
-        result_series.name = f"{word_count_series_one.name} compared to " \
+        result_series.name = f"{word_count_series_one.name} compares to " \
                              f"{word_count_series_two.name}"
 
         return result_series
@@ -204,7 +201,7 @@ class TopwordModel(BaseModel):
             - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
-        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
@@ -245,7 +242,7 @@ class TopwordModel(BaseModel):
             - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
-        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
@@ -305,7 +302,7 @@ class TopwordModel(BaseModel):
             - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
-        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns

@@ -29,15 +29,15 @@ REPLACEMENT_NO_LEFTHAND_MESSAGE = "Missing value on the left side of " \
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
 
-# ============= General Errors ===============================
+# ========================= General Errors ===============================
 EMPTY_DTM_MESSAGE = "Empty DTM received, please upload files."
 
 
-# ============= Base Model Errors ===========================
+# ========================= Base Model Errors ============================
 NO_DATA_SENT_ERROR_MESSAGE = 'Front end did not send data to backend'
 INVALID_DATA_KEY_MESSAGE_FORMAT = \
     'no data with name {data_key} sent to backend'
 
-# ============= Topword Model Error =========================
+# ========================= Topword Model Error ==========================
 NOT_ENOUGH_CLASSES_MESSAGE = "Only one class given, cannot do Z-test by " \
                              "class, at least 2 classes needed."
