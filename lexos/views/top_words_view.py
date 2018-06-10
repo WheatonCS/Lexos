@@ -32,7 +32,7 @@ def top_words():
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
 
-    # get the class division map and number of existing classes
+    # get the class division map.
     class_division_map = file_manager.get_class_division_map()
 
     return render_template(
