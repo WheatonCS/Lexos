@@ -1103,6 +1103,10 @@ http://blog.craigsworks.com/bootstrap-3-disabled-dropdown-links/ **/
 
 /* Mimic cursor style from native .dropdown-menu > .disabled > a{} styles,
 since `pointer-events: none` kills the cursor state, too.  */
+.popover.fade.right.in .arrow {
+  top: 43% !important;
+}
+
 .dropdown-menu > .disabled {
  cursor: not-allowed;
 }
