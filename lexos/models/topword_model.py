@@ -224,18 +224,13 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_file_to_class(self, class_division_map: pd.DataFrame) -> \
-        AnalysisResult:
+    def _analyze_file_to_class(self) -> AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
         in a particular segment to the occurrence of the same word in other
         class of segments.
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
+
         :return: a list of pandas series, where each series formed by:
             - the data, which is the sorted z-scores.
             - the index, which the corresponding words.
@@ -243,12 +238,15 @@ class TopwordModel(BaseModel):
         """
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        # Check if more than one class exists.
+        assert self._class_division_map.shape[0] > 1, \
+            NOT_ENOUGH_CLASSES_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
 
         # Get all class labels.
-        class_labels = class_division_map.index
+        class_labels = self._class_division_map.index
 
         # Get all combinations of file ids and class labels, if the file is not
         # in the class.
@@ -256,11 +254,11 @@ class TopwordModel(BaseModel):
             [(file_id, class_label)
              for file_id in self._doc_term_matrix.index.values
              for class_label in class_labels
-             if not class_division_map[file_id][class_label]]
+             if not self._class_division_map[file_id][class_label]]
 
         # Split DTM into groups and find word count sums of each group.
         group_word_sums = [self._doc_term_matrix[group_index].sum()
-                           for group_index in class_division_map.values]
+                           for group_index in self._class_division_map.values]
 
         # Put groups word count sums into a data frame, where data is the word
         # sums of each class of segments, index is the class labels and columns
@@ -284,18 +282,13 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_class_to_class(self, class_division_map: pd.DataFrame) -> \
-        AnalysisResult:
+    def _analyze_class_to_class(self) -> AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
         in a class of segments to the occurrence of the same word in other
         class of segments.
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
+
         :return: a list of pandas series, where each series formed by:
             - the data, which is the sorted z-scores.
             - the index, which the corresponding words.
@@ -303,12 +296,15 @@ class TopwordModel(BaseModel):
         """
         # Trap possible empty input error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        # Check if more than one class exists.
+        assert self._class_division_map.shape[0] > 1, \
+            NOT_ENOUGH_CLASSES_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
 
         # Get all class labels.
-        class_labels = class_division_map.index
+        class_labels = self._class_division_map.index
 
         # Get all unique combinations of every two labels, so we can compare
         # one class against other class(es).
@@ -316,7 +312,7 @@ class TopwordModel(BaseModel):
 
         # Split DTM into groups and find word count sums of each group.
         group_word_sums = [self._doc_term_matrix[group_index].sum()
-                           for group_index in class_division_map.values]
+                           for group_index in self._class_division_map.values]
 
         # Put groups word count sums into a data frame, where data is the word
         # sums of each class of segments, index is the class labels and columns
@@ -340,14 +336,9 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
+    def _get_result(self) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
         :return: a namedtuple that holds the topword result, which contains a
                  header and a list of pandas series.
         """
@@ -361,59 +352,39 @@ class TopwordModel(BaseModel):
             return TopwordResult(header=header, results=results)
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_PARA:
-            # Check if more than one class exists.
-            assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
-
             # Get header and result.
             header = "Compare Each Document to Other Class(es)."
-            results = self._analyze_file_to_class(
-                class_division_map=class_division_map)
+            results = self._analyze_file_to_class()
 
             return TopwordResult(header=header, results=results)
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_CLASS:
-            # Check if more than one class exists.
-            assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
-
             # Get header and result.
             header = "Compare a Class to Each Other Class(es)."
-            results = self._analyze_class_to_class(
-                class_division_map=class_division_map)
+            results = self._analyze_class_to_class()
 
             return TopwordResult(header=header, results=results)
 
         else:
             raise ValueError("Invalid topword analysis option.")
 
-    def get_readable_result(self, class_division_map: pd.DataFrame) -> \
-        TopwordResult:
+    def get_readable_result(self) -> TopwordResult:
         """Get the readable result to display on the web page.
 
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
         :return: a namedtuple that holds the topword result, which contains a
                  header and a list of pandas series. However it will check the
                  length of each pandas series and only return the first 20 rows
                  if the pandas series has length that is longer than 20.
         """
-        topword_result = \
-            self._get_result(class_division_map=class_division_map)
+        topword_result = self._get_result()
         readable_result = [result[:20] for result in topword_result.results]
 
         return TopwordResult(header=topword_result.header,
                              results=readable_result)
 
-    def get_topword_csv_path(self, class_division_map: pd.DataFrame) -> str:
+    def get_topword_csv_path(self) -> str:
         """Write the generated top word results to an output CSV file.
 
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
         :return: path of the generated CSV file.
         """
         # Make the path.
@@ -430,8 +401,7 @@ class TopwordModel(BaseModel):
         save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
 
         # Get topword result.
-        topword_result = \
-            self._get_result(class_division_map=class_division_map)
+        topword_result = self._get_result()
 
         with open(save_path, 'w', encoding='utf-8') as f:
             # Write header to the file.
