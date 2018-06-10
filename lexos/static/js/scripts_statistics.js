@@ -59,21 +59,17 @@ function formatFileReportResponse (response) {
   const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
   const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
 
-  // Extract standard error anomaly information. First get the result.
-  let anomalySeResult = ''
-  response['anomaly_se_small'].forEach(function (result) {
-    anomalySeResult += `<b>Small:</b> ${result}<br>`
-  })
-  response['anomaly_se_large'].forEach(function (result) {
-    anomalySeResult += `<b>Large:</b> ${result}<br>`
-  })
-  // Set corresponding header based on the result.
-  let anomalySeHeader = ''
-  if (anomalySeResult === '') {
-    anomalySeHeader = '<b>No</b> anomaly detected by standard error test.'
-  } else {
-    anomalySeHeader = 'Anomaly <b>detected</b> by standard error test.'
-  }
+  console.log(response['anomaly_se_small'])
+
+  const noAnomalySe = response['anomaly_se_small'] === [] && response['anomaly_se_large'] === []
+
+  console.log(noAnomalySe)
+
+  const anomalySeResult =
+    noAnomalySe ? '<b>No</b> anomaly detected by standard error test.' :
+      'Anomaly <b>detected</b> by standard error test.' +
+      response['anomaly_se_small'].map(function (file) {return `<p style="padding-left: 4em"><b>Small:</b> ${file}</p>`}) +
+      response['anomaly_se_large'].map(function (file) {return `<p style="padding-left: 4em"><b>Large:</b> ${file}</p>`})
 
   // Extract standard error anomaly information. First get the result.
   let anomalyIqrResult = ''
@@ -96,7 +92,6 @@ function formatFileReportResponse (response) {
     'IQR': IQR,
     'mean': mean,
     'stdDeviation': stdDeviation,
-    'anomalySeHeader': anomalySeHeader,
     'anomalySeResult': anomalySeResult,
     'anomalyIqrHeader': anomalyIqrHeader,
     'anomalyIqrResult': anomalyIqrResult
@@ -120,7 +115,6 @@ function generateStatsFileReport () {
         $('#file-report-mean').html(formattedResult.mean)
         $('#file-report-std-deviation').html(formattedResult.stdDeviation)
         $('#file-report-IQR').html(formattedResult.IQR)
-        $('#file-report-anomaly-se-header').html(formattedResult.anomalySeHeader)
         $('#file-report-anomaly-se-result').html(formattedResult.anomalySeResult)
         $('#file-report-anomaly-iqr-header').html(formattedResult.anomalyIqrHeader)
         $('#file-report-anomaly-iqr-result').html(formattedResult.anomalyIqrResult)
