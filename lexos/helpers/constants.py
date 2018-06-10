@@ -170,17 +170,7 @@ SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
 
 # for topword
-TOPWORDINPUT = (
-    'testInput',
-    'groupOptionType',
-    'outlierMethodType',
-    "outlierTypeStd",
-    "outlierTypeIQR",
-    'lowerboundPC',
-    'upperboundPC',
-    'lowerboundRC',
-    'upperboundRC',
-    'useFreq')
+TOPWORDINPUT = ['testInput']
 
 '''the request form default value'''
 DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
