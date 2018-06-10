@@ -76,6 +76,7 @@ class TopwordModel(BaseModel):
 
     @property
     def _class_division_map(self) -> pd.DataFrame:
+        """:return: a pandas data frame that holds the class division map."""
         return self._test_class_division_map \
             if self._test_class_division_map is not None else \
             FileManagerModel().load_file_manager().get_class_division_map()

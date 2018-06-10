@@ -16,7 +16,13 @@
                 <i class="fa fa-question-circle lexos-popover-trigger"
                    data-trigger="hover" data-html="true" data-toggle="popover"
                    data-placement="right" data-container="body"
-                   data-content="By default, Topwords compares individual documents to the entire set of active documents. If you wish to compare individual documents to classes of documents or to compare classes of documents to other classes, go to the <a href={{ url_for("manage.manage") }}>Manage</a> tool to edit class labels."></i>
+                   data-content="By default, Topwords compares individual documents
+                                 to the entire set of active documents. If you wish
+                                 to compare individual documents to classes of
+                                 documents or to compare classes of documents
+                                 to other classes, go to the <a href={{ url_for("manage.manage") }}>Manage</a>
+                                 tool to edit class labels.">
+                </i>
             </legend>
         </fieldset>
         <label for="allToPara">
@@ -26,7 +32,10 @@
             <i class="fa fa-question-circle lexos-tooltip-trigger"
                data-trigger="hover" data-html="true" data-toggle="tooltip"
                data-placement="right" data-container="body"
-               title="Compares the proportion of each term in individual documents to their proportions in the whole collection. Example: Find topwords for one chapter compared to the entire book."></i>
+               title="Compares the proportion of each term in individual
+                      documents to their proportions in the whole collection.
+                      Example: Find topwords for one chapter compared to the entire book.">
+            </i>
         </label>
         <label for="classToPara">
             <input type="radio" name="testInput" id="classToPara"
@@ -35,7 +44,12 @@
             <i class="fa fa-question-circle lexos-tooltip-trigger"
                data-trigger="hover" data-html="true" data-toggle="tooltip"
                data-placement="right" data-container="body"
-               title="Comparing the proportion of each term in a document in one class to that in another class as a whole. Example: With two books (two classes), find topwords in every chapter (document) from one of the books compared to the entire other book (class)."></i>
+               title="Comparing the proportion of each term in a document in
+                      one class to that in another class as a whole. Example:
+                      With two books (two classes), find topwords in every
+                      chapter (document) from one of the books compared to the
+                      entire other book (class).">
+            </i>
         </label>
         <label for="classToClass">
             <input type="radio" name="testInput" id="classToClass"
@@ -44,11 +58,13 @@
             <i class="fa fa-question-circle lexos-tooltip-trigger"
                data-trigger="hover" data-html="true" data-toggle="tooltip"
                data-placement="right" data-container="body"
-               title="Comparing the proportion of each term in one class to that in another class. Example: Find topwords between two books (classes)."></i>
+               title="Comparing the proportion of each term in one class to
+                      that in another class. Example: Find topwords between two
+                      books (classes).">
+            </i>
         </label>
     </div>
 {% endblock %}
-
 
 {% block results %}
     <input class="bttn bttn-action" id="gettopword" name="gen-topword"
