@@ -4,6 +4,7 @@ import os
 import math
 import itertools
 import pandas as pd
+from flask import jsonify
 from collections import OrderedDict
 from typing import List, Optional, NamedTuple
 from lexos.managers import session_manager
@@ -377,10 +378,12 @@ class TopwordModel(BaseModel):
                  if the pandas series has length that is longer than 20.
         """
         topword_result = self._get_result()
-        readable_result = [result[:20] for result in topword_result.results]
+        readable_result = [result.to_frame().to_html(
+            classes="table table-striped table-bordered")
+            for result in topword_result.results]
 
-        return TopwordResult(header=topword_result.header,
-                             results=readable_result)
+        return jsonify(header=topword_result.header,
+                       results=readable_result)
 
     def get_topword_csv_path(self) -> str:
         """Write the generated top word results to an output CSV file.
