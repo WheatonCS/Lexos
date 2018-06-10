@@ -11,6 +11,7 @@ from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
+from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.receivers.topword_receiver import TopwordReceiver, \
@@ -23,8 +24,9 @@ AnalysisResult = List[pd.Series]
 class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
     doc_term_matrix: pd.DataFrame
-    id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
+    id_temp_label_map: IdTempLabelMap
+    class_division_map: pd.DataFrame
 
 
 class TopwordResult(NamedTuple):
@@ -45,10 +47,12 @@ class TopwordModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
+            self._test_class_division_map = test_options.class_division_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
             self._test_id_temp_label_map = None
+            self._test_class_division_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
@@ -69,6 +73,12 @@ class TopwordModel(BaseModel):
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else TopwordReceiver().options_from_front_end()
+
+    @property
+    def _class_division_map(self) -> pd.DataFrame:
+        return self._test_class_division_map \
+            if self._test_class_division_map is not None else \
+            FileManagerModel().load_file_manager().get_class_division_map()
 
     @staticmethod
     def _z_test(p1: float, p2: float, n1: int, n2: int) -> float:
