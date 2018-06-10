@@ -68,8 +68,8 @@ function formatFileReportResponse (response) {
   const anomalySeResult =
     noAnomalySe ? '<b>No</b> anomaly detected by standard error test.' :
       'Anomaly <b>detected</b> by standard error test.' +
-      response['anomaly_se_small'].map(function (file) {return `<p style="padding-left: 4em"><b>Small:</b> ${file}</p>`}) +
-      response['anomaly_se_large'].map(function (file) {return `<p style="padding-left: 4em"><b>Large:</b> ${file}</p>`})
+      response['anomaly_se_small'].map(function (file) {return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>`}) +
+      response['anomaly_se_large'].map(function (file) {return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>`})
 
   // Extract standard error anomaly information. First get the result.
   let anomalyIqrResult = ''
