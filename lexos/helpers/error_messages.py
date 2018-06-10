@@ -29,6 +29,7 @@ REPLACEMENT_NO_LEFTHAND_MESSAGE = "Missing value on the left side of " \
 EMPTY_STRING_MESSAGE = "the string should not be empty"
 WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
 
+# ============= General Erros ===============================
 EMPTY_DTM_MESSAGE = "Empty DTM received, please upload files."
 
 
