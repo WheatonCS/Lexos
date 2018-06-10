@@ -63,8 +63,11 @@ function generateTopWordResult () {
     .done(
       function (response) {
         const outerTableDivSelector = $('#topword-result')
+        const headerSelector = $('#topword-header')
         // put the response onto the web page
-        outerTableDivSelector.html(response)
+        console.log(response["header"])
+        headerSelector.html(response["header"])
+        outerTableDivSelector.html(response["results"])
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
