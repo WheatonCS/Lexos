@@ -38,6 +38,7 @@ test_script:
   - cd ./lexos/static
   # following line is commented out, because frontend refactor is not yet compeleted
   # - .\node_modules\.bin\eslint ./js/script_*.js
+  - .\node_modules\.bin\eslint .\js\scripts_statistics.js
   - .\node_modules\.bin\eslint .\js\scripts_similarity.js
   - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
   - cd ../..
