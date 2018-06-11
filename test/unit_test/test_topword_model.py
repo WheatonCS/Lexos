@@ -49,6 +49,7 @@ test_topword_model = TopwordModel(test_options=test_option)
 
 # noinspection PyProtectedMember
 test_results = test_topword_model._get_result()
+
 # ---------------------------------------------------------------------------
 # Create test suite for special case.
 test_option_empty = TopwordTestOptions(
@@ -65,8 +66,12 @@ class TestParaToGroup:
         assert test_results[0]\
                == "Compare Each Document to All the Documents As a Whole."
 
-        assert test_results[1]['Name'] == 'Document "F1" compares to the whole corpus'
+        assert test_results[1][0]['D'] == -2.1483
 
+        pd.testing.assert_series_equal(
+            left=test_results[1][1],
+            right=pd.Series([], name='Document "F2" compares to the whole corpus',
+                      dtype=None), check_names=False)
     def test_normal_case_header(self):
         assert test_topword_model.get_displayable_result().header \
                == "Compare Each Document to All the Documents As a Whole."
