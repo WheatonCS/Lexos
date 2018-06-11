@@ -17,7 +17,7 @@ $(function () {
 
   $('#tagbox').click(changeTagBoxClass())
 
-  $(document).on('click', '#set-tags-button', function (event) {
+  $('#set-tags-button').click(function (event) {
     if ($('#allTags')) {
       let allTags = ($('#allTags')[0].value)
       allTags = JSON.stringify(allTags)
