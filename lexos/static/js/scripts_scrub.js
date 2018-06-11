@@ -17,47 +17,7 @@ $(function () {
 
   $('#tagbox').click(changeTagBoxClass())
 
-  $('#set-tags-button').click(function (event) {
-    if ($('#allTags')) {
-      let allTags = ($('#allTags')[0].value)
-      allTags = JSON.stringify(allTags)
-      $.ajax({
-        type: 'POST',
-        url: '/setAllTagsTable',
-        data: allTags,
-        'contentType': 'application/json; charset=utf-8',
-        'dataType': 'json',
-        beforeSend: function () {
-          $('<p/>', {
-            id: 'xmlModalStatus',
-            style: 'width:100px;margin:50px auto;z-index:1000;'
-          }).appendTo('#xmlModalBody')
-          $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
-        },
-        success: function (response) {
-          const selection = $('#allTags option:selected').val()
-          $('#tagTable').empty().remove()
-          const t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
-          $('#xmlModalBody').append(t)
-          let select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
-          select += '<option value="remove-tag,allTags">Remove Tag Only</option>'
-          select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>'
-          select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>'
-          select += '<option value="leave-alone,allTags">Leave Tag Alone</option>'
-          select += '</select>'
-          select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
-          $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
-          $('#tagTable').append('<tbody></tbody>')
-          $('#tagTable tbody').append(response)
-          $('#xmlModalStatus').remove()
-          $('#allTags option[value=\'' + selection + '\']').prop('selected', true)
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.log('Error: ' + errorThrown)
-        }
-      })
-    }
-  })
+  $('#set-tags-button').click(setTagsButtonAjax())
 
   $('#punctbox').mousedown(function () {
     const timeToToggle = 300
@@ -252,5 +212,47 @@ function entityRulesChangeFunction () {
   } else {
     $('.filecontents').removeClass('Junicode')
     document.getElementById('MUFI-warning').style.display = 'none'
+  }
+}
+
+function setTagsButtonAjax () {
+  if ($('#allTags')) {
+    let allTags = ($('#allTags')[0].value)
+    allTags = JSON.stringify(allTags)
+    $.ajax({
+      type: 'POST',
+      url: '/setAllTagsTable',
+      data: allTags,
+      'contentType': 'application/json; charset=utf-8',
+      'dataType': 'json',
+      beforeSend: function () {
+        $('<p/>', {
+          id: 'xmlModalStatus',
+          style: 'width:100px;margin:50px auto;z-index:1000;'
+        }).appendTo('#xmlModalBody')
+        $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
+      },
+      success: function (response) {
+        const selection = $('#allTags option:selected').val()
+        $('#tagTable').empty().remove()
+        const t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
+        $('#xmlModalBody').append(t)
+        let select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
+        select += '<option value="remove-tag,allTags">Remove Tag Only</option>'
+        select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>'
+        select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>'
+        select += '<option value="leave-alone,allTags">Leave Tag Alone</option>'
+        select += '</select>'
+        select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
+        $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
+        $('#tagTable').append('<tbody></tbody>')
+        $('#tagTable tbody').append(response)
+        $('#xmlModalStatus').remove()
+        $('#allTags option[value=\'' + selection + '\']').prop('selected', true)
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + errorThrown)
+      }
+    })
   }
 }
