@@ -29,7 +29,6 @@ class TestZTest:
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
-
 # ---------------------------------------------------------------------------
 
 
@@ -186,6 +185,10 @@ test_option_class_to_class = TopwordTestOptions(
 test_topword_model_two_class_to_class = TopwordModel(
     test_options=test_option_class_to_class)
 
+# noinspection PyProtectedMember
+test_results_class_to_class = \
+    test_topword_model_two_class_to_class._get_result()
+
 # ---------------------Test Special CLASS_TO_CLASS----------------------------
 # Create test suite for special case.
 test_option_empty_class_to_class = TopwordTestOptions(
@@ -193,33 +196,31 @@ test_option_empty_class_to_class = TopwordTestOptions(
     id_temp_label_map={},
     front_end_option=test_front_end_option_class_to_class,
     class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
-test_topword_model_empty_two = TopwordModel(
+test_topword_model_empty_two_class_to_class = TopwordModel(
     test_options=test_option_empty_class_to_class)
 # ---------------------------------------------------------------------------
 
 
 class TestClassToClass:
     def test_normal_case_result(self):
-        pd.testing.assert_series_equal(
-            test_topword_model_two.get_displayable_result().results[0],
-            pd.Series([-7.70470, 5.09830, 5.09830, 5.09830, 5.09830],
-                      index=["H", "A", "B", "C", "D"],
-                      name='Class "C1" compares to Class "C2"'))
+        assert test_results_class_to_class[1][0]['H'] == -7.7047
+        assert test_results_class_to_class[1][0]['A'] == 5.0983
+        assert test_results_class_to_class[1][0]['B'] == 5.0983
+        assert test_results_class_to_class[1][0]['C'] == 5.0983
+        assert test_results_class_to_class[1][0]['D'] == 5.0983
+        assert test_results_class_to_class.results[0].dtype == 'float64'
+        assert test_results_class_to_class.results[
+                   0].name == 'Class "C1" compares to Class "C2"'
 
     def test_normal_case_header(self):
-        assert test_topword_model_two.get_displayable_result().header == \
+        assert test_results_class_to_class.header == \
                'Compare a Class to Each Other Class(es).'
 
     def test_special_case(self):
         try:
-            _ = test_topword_model_empty_two.get_displayable_result()
+            # noinspection PyProtectedMember
+            _ = test_topword_model_empty_two_class_to_class._get_result()
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE
-
-        try:
-            _ = test_topword_model_empty_two.get_displayable_result()
-            raise AssertionError("Error message did not raise")
-        except AssertionError as error:
-            assert str(error) == NOT_ENOUGH_CLASSES_MESSAGE
 # ---------------------------------------------------------------------------
