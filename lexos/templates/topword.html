@@ -18,7 +18,7 @@
                 <i class="fa fa-question-circle lexos-popover-trigger"
                    data-trigger="hover" data-html="true" data-toggle="popover"
                    data-placement="right" data-container="body"
-                   data-content="By default, Topwords compares individual documents
+                   data-content="By default, topwords compares individual documents
                                  to the entire set of active documents. If you wish
                                  to compare individual documents to classes of
                                  documents or to compare classes of documents
@@ -46,7 +46,7 @@
                data-placement="right" data-container="body"
                title="Comparing the proportion of each term in a document in
                       one class to that in another class as a whole. Example:
-                      With two books (two classes), find topwords in every
+                      With two books (two classes), find topwords in any
                       chapter (document) from one of the books compared to the
                       entire other book (class)."></i>
         </label>
@@ -81,20 +81,21 @@
         </fieldset>
         <!-- The class divisions. -->
         {% for class_name in classDivisionMap.index %}
-            <div class="row col-lg-4 col-md-4">
+            <div class="row col-lg-4 col-md-4 padfix-top">
                 <table class="table table-bordered table-hover table-striped">
                     <thead>
                     <tr>
                         <th class="info">{{ class_name }}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="tbody-top">
                     {% for file_id in classDivisionMap.columns %}
                         {% if classDivisionMap[file_id][class_name] %}
                             <tr>
-                                <td>{{ labels[file_id] }}</td>
+                                <td class="td-top">{{ labels[file_id] }}</td>
                             </tr>
                         {% endif %}
+
                     {% endfor %}
                     </tbody>
                 </table>
@@ -103,9 +104,8 @@
     </div>
 
     <fieldset class="row col-lg-12 col-md-12">
-    <legend  id="topword-header">
-
-    </legend>
+        <legend id="topword-header">
+        </legend>
     </fieldset>
 
     <div class="row col-lg-12 col-md-12" id="topword-result"></div>
