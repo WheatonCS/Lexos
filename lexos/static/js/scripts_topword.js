@@ -68,7 +68,7 @@ function generateTopWordResult () {
         topWordHeader.html(response['header'])
         // Format each table and put them in the result div.
         topWordResult.html(response['results'].map(
-          function (table) { return `<div class="row col-lg-6 col-md-6">${table}</div>` }))
+          function (result) { return `<div class="row col-lg-6 col-md-6"><legend>${result["header"]}</legend>${result["result"]}</div>` }))
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
