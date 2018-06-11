@@ -19,16 +19,7 @@ $(function () {
 
   $('#set-tags-button').click(setTagsButtonAjax())
 
-  $('#punctbox').mousedown(function () {
-    const timeToToggle = 300
-
-    if ($('#aposhyph')[0].style.cssText == 'display: none;') {
-      $('#aposhyph').fadeIn(timeToToggle)
-    } else {
-      $('#aposhyph').fadeOut(timeToToggle)
-      $('#aposhyph')[0].style.cssText == 'display: none;'
-    }
-  })
+  $('#punctbox').mousedown(puncTboxFade())
 
   $('#xml-modal').on('show.bs.modal', function (e) {
     $.ajax({
@@ -254,5 +245,16 @@ function setTagsButtonAjax () {
         console.log('Error: ' + errorThrown)
       }
     })
+  }
+}
+
+function puncTboxFade () {
+  const timeToToggle = 300
+
+  if ($('#aposhyph')[0].style.cssText == 'display: none;') {
+    $('#aposhyph').fadeIn(timeToToggle)
+  } else {
+    $('#aposhyph').fadeOut(timeToToggle)
+    $('#aposhyph')[0].style.cssText == 'display: none;'
   }
 }
