@@ -109,6 +109,11 @@ function displayAdditionalOptions () {
   $('#scfileselect').change(truncateFileName())
 }
 
+/**
+ * Truncate file names if needed
+ * @param ev
+ * @returns {void}
+ */
 function truncateFileName (ev) {
   let filename = ev.target.files[0].name
   if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
