@@ -10,38 +10,38 @@ $(function () {
   })
 
   // display additional options on load
-  var advancedOptions = $('#advanced-title')
+  const advancedOptions = $('#advanced-title')
   advancedOptions.find('.icon-arrow-right').addClass('showing')
   advancedOptions.siblings('.expansion').slideToggle(0)
 
   $('#swfileselect').change(function (ev) {
-    filename = ev.target.files[0].name
+    let filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#swfileselectbttnlabel').html(filename)
   })
 
   $('#lemfileselect').change(function (ev) {
-    filename = ev.target.files[0].name
+    let filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#lemfileselectbttnlabel').html(filename)
   })
 
   $('#consfileselect').change(function (ev) {
-    filename = ev.target.files[0].name
+    let filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#consfileselectbttnlabel').html(filename)
   })
 
   $('#scfileselect').change(function (ev) {
-    filename = ev.target.files[0].name
+    let filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#scfileselectbttnlabel').html(filename)
   })
 
   $('.bttnfilelabels').click(function () {
     // swfileselect, lemfileselect, consfileselect, scfileselect
-    var filetype = $(this).attr('id').replace('bttnlabel', '')
-    usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
+    const filetype = $(this).attr('id').replace('bttnlabel', '')
+    const usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
 
     if ((usingCache) || ($(this).attr('id') != '')) {
       // $(this).siblings('.scrub-upload').attr('value', '');
@@ -72,13 +72,10 @@ $(function () {
   })
 
   $('#whitespacebox').click(function () {
-    var timeToToggle = 100
     if ($(this).is(':checked')) {
       $('#whitespace').removeClass('hidden')
-      // $("#whitespace").fadeIn(timeToToggle);
     } else {
       $('#whitespace').addClass('hidden')
-      // $("#whitespace").fadeOut(timeToToggle);
     }
   })
   $('#entityrules').change(function () {
@@ -94,19 +91,16 @@ $(function () {
   })
 
   $('#tagbox').click(function () {
-    var timeToToggle = 100
     if ($(this).is(':checked')) {
       $('#tag').removeClass('hidden')
-      // $("#whitespace").fadeIn(timeToToggle);
     } else {
       $('#tag').addClass('hidden')
-      // $("#whitespace").fadeOut(timeToToggle);
     }
   })
 
   $(document).on('click', '#set-tags-button', function (event) {
     if ($('#allTags')) {
-      var allTags = ($('#allTags')[0].value)
+      let allTags = ($('#allTags')[0].value)
       allTags = JSON.stringify(allTags)
       $.ajax({
         type: 'POST',
@@ -122,11 +116,11 @@ $(function () {
           $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
         },
         success: function (response) {
-          var selection = $('#allTags option:selected').val()
+          const selection = $('#allTags option:selected').val()
           $('#tagTable').empty().remove()
-          var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
+          const t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
           $('#xmlModalBody').append(t)
-          var select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
+          let select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
           select += '<option value="remove-tag,allTags">Remove Tag Only</option>'
           select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>'
           select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>'
@@ -138,8 +132,6 @@ $(function () {
           $('#tagTable tbody').append(response)
           $('#xmlModalStatus').remove()
           $('#allTags option[value=\'' + selection + '\']').prop('selected', true)
-          var value = $('#myselect option:selected').val()
-          var text = $('#myselect option:selected').text()
         },
         error: function (jqXHR, textStatus, errorThrown) {
           console.log('Error: ' + errorThrown)
@@ -149,7 +141,7 @@ $(function () {
   })
 
   $('#punctbox').mousedown(function () {
-    var timeToToggle = 300
+    const timeToToggle = 300
 
     if ($('#aposhyph')[0].style.cssText == 'display: none;') {
       $('#aposhyph').fadeIn(timeToToggle)
@@ -174,9 +166,9 @@ $(function () {
       },
       success: function (response) {
         j = JSON.parse(response)
-        var t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
+        const t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
         $('#xmlModalBody').append(t)
-        var select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
+        let select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
         select += '<option value="remove-tag,allTags">Remove Tag Only</option>'
         select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>'
         select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>'
@@ -190,8 +182,6 @@ $(function () {
         if (j['selected-options'] != 'multiple') {
           $('#allTags option[value=\'' + j['selected-options'] + '\']').prop('selected', true)
         }
-        var value = $('#myselect option:selected').val()
-        var text = $('#myselect option:selected').text()
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log('Error: ' + errorThrown)
@@ -219,7 +209,7 @@ function doScrubbing (action) {
   $('#status-prepare').css({'visibility': 'visible'})
 
   $('#formAction').val(action)
-  var formData = new FormData($('form')[0])
+  const formData = new FormData($('form')[0])
 
   $.ajax({
     url: '/doScrubbing',
@@ -236,11 +226,11 @@ function doScrubbing (action) {
     response = JSON.parse(response)
     $('#preview-body').empty()
     $.each(response['data'], function (i, item) {
-      fileID = $(this)[0]
-      filename = $(this)[1]
-      fileLabel = $(this)[2]
-      fileContents = $(this)[3]
-      fieldset = $('<fieldset></fieldset>')
+      const fileID = $(this)[0]
+      const filename = $(this)[1]
+      const fileLabel = $(this)[2]
+      const fileContents = $(this)[3]
+      const fieldset = $('<fieldset></fieldset>')
       // CSS truncates the document name
       fieldset.append('<legend class="has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + filename + '</legend>')
       fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
