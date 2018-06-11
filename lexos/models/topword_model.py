@@ -26,7 +26,7 @@ class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
 
     doc_term_matrix: pd.DataFrame
-    class_division_map:\
+    class_division_map: \
         pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
@@ -377,9 +377,18 @@ class TopwordModel(BaseModel):
                  header and a list of HTML tables.
         """
         topword_result = self._get_result()
-        readable_result = [result.to_frame().to_html(
-            classes="table table-striped table-bordered")
-            for result in topword_result.results]
+
+        def helper_series_to_table(series: pd.Series) -> str:
+            frame = pd.DataFrame(index=["Terms/Characters", "Z-Score"],
+                                 data=[series.index, series.data])
+
+            return frame.transpose().to_html(
+                index=False,
+                classes="table table-striped table-bordered")
+
+        readable_result = [{"header": result.name,
+                            "result": helper_series_to_table(series=result)}
+                           for result in topword_result.results]
 
         return jsonify(header=topword_result.header,
                        results=readable_result)
