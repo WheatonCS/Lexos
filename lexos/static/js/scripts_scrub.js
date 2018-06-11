@@ -4,7 +4,10 @@ $(function () {
   }
   $('#actions').addClass('actions-scrub')
 
-  $('.has-chevron').click(rotateChevron())
+  $('.has-chevron').click(function () {
+    $(this).find('span').toggleClass('down')
+    $(this).next().collapse('toggle')
+  })
 
   // display additional options on load
   displayAdditionalOptions()
