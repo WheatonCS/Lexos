@@ -2037,60 +2037,7 @@ select#orientation {
 
 /* ================== TOPWORD STYLING ==================== */
 
-#words-options {
-}
 
-#test-input-options {
-}
-
-.topwordTableDiv {
-  float: left;
-  margin-left: 2.5%;
-  margin-right: 2.5%;
-  text-align: center;
-  width: 45%;
-  margin-top: 10px;
-}
-
-.topwordResultDiv {
-  float: left;
-  min-width: 100%;
-  position: relative;
-  margin-bottom: 5%;
-}
-
-.topwordFile {
-  line-height: 70%;
-}
-
-.topwordResultTableTitle {
-  border-bottom: 1px solid #bbb;
-  font-size: 1.2em;
-  margin-bottom: 2%;
-  margin-top: 1%;
-}
-
-.topwordFileTable {
-  height: 81px;
-  overflow-y: auto;
-}
-
-.topwordResultTable {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.topwordResultTableBody {
-  height: 200px;
-}
-
-.topwordResultTableHead {
-  text-align: center;
-}
-
-.topwordResultLegend {
-  margin-top: 40px;
-}
 
 /*====================== bootstrap table =========================*/
 .header-fixed {
