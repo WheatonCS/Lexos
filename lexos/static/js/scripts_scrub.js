@@ -91,34 +91,28 @@ function rotateChevron () {
   $(this).next().collapse('toggle')
 }
 
+/**
+ * Get additional options and truncate file names when necessary
+ * @returns {void}
+ */
 function displayAdditionalOptions () {
   const advancedOptions = $('#advanced-title')
   advancedOptions.find('.icon-arrow-right').addClass('showing')
   advancedOptions.siblings('.expansion').slideToggle(0)
 
-  $('#swfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#swfileselectbttnlabel').html(filename)
-  })
+  $('#swfileselect').change(truncateFileName())
 
-  $('#lemfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#lemfileselectbttnlabel').html(filename)
-  })
+  $('#lemfileselect').change(truncateFileName())
 
-  $('#consfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#consfileselectbttnlabel').html(filename)
-  })
+  $('#consfileselect').change(truncateFileName())
 
-  $('#scfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#scfileselectbttnlabel').html(filename)
-  })
+  $('#scfileselect').change(truncateFileName())
+}
+
+function truncateFileName (ev) {
+  let filename = ev.target.files[0].name
+  if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
+  $(this).html(filename)
 }
 
 function buttonFileLabelsFunction () {
