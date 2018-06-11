@@ -284,6 +284,10 @@ function xmlModalAjax () {
   })
 }
 
+/**
+ * Remove empty portions of tag table
+ * @returns {void}
+ */
 function removeEmptyTagTable () {
   $('#tagTable').empty().remove()
 }
