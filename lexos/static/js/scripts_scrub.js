@@ -11,24 +11,9 @@ $(function () {
 
   $('.bttnfilelabels').click(buttonFileLabelsFunction())
 
-  $('#whitespacebox').click(function () {
-    if ($(this).is(':checked')) {
-      $('#whitespace').removeClass('hidden')
-    } else {
-      $('#whitespace').addClass('hidden')
-    }
-  })
-  $('#entityrules').change(function () {
-    console.log($('#entityrules')[0].value)
-    if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
-      document.getElementById('MUFI-warning').style.display = 'inline-block'
-      $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
-      $('.filecontents').addClass('Junicode')
-    } else {
-      $('.filecontents').removeClass('Junicode')
-      document.getElementById('MUFI-warning').style.display = 'none'
-    }
-  })
+  $('#whitespacebox').click(changeWhitespaceBoxClass()
+  )
+  $('#entityrules').change(entityRulesChangeFunction())
 
   $('#tagbox').click(function () {
     if ($(this).is(':checked')) {
@@ -246,4 +231,24 @@ function buttonFileLabelsFunction () {
       console.log('Error: ' + errorThrown)
     }
   })
+}
+
+function changeWhitespaceBoxClass () {
+  if ($(this).is(':checked')) {
+    $('#whitespace').removeClass('hidden')
+  } else {
+    $('#whitespace').addClass('hidden')
+  }
+}
+
+function entityRulesChangeFunction () {
+  console.log($('#entityrules')[0].value)
+  if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
+    document.getElementById('MUFI-warning').style.display = 'inline-block'
+    $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
+    $('.filecontents').addClass('Junicode')
+  } else {
+    $('.filecontents').removeClass('Junicode')
+    document.getElementById('MUFI-warning').style.display = 'none'
+  }
 }
