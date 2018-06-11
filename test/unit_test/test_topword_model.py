@@ -32,7 +32,7 @@ class TestZTest:
 
 
 # ------------------- Test method analyze file to corpus --------------------
-# Create test suit for normal case.
+# Create test suite for normal case.
 test_dtm = pd.DataFrame(data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
                         index=np.array([0, 1]),
                         columns=np.array(["A", "B", "C", "D"]))
@@ -47,25 +47,25 @@ test_option = TopwordTestOptions(doc_term_matrix=test_dtm,
                                  class_division_map=test_class_division_map)
 test_topword_model = TopwordModel(test_options=test_option)
 
-# Create test suit for special case.
+# noinspection PyProtectedMember
+test_results = test_topword_model._get_result()
+# ---------------------------------------------------------------------------
+# Create test suite for special case.
 test_option_empty = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
     id_temp_label_map={},
     front_end_option=test_front_end_option,
     class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty = TopwordModel(test_options=test_option_empty)
+# ---------------------------------------------------------------------------
 
 
 class TestParaToGroup:
     def test_normal_case_result(self):
-        pd.testing.assert_series_equal(
-            test_topword_model.get_displayable_result().results[0],
-            pd.Series([-2.1483], index=["D"],
-                      name='Document "F1" compares to the whole corpus'))
-        pd.testing.assert_series_equal(
-            test_topword_model.get_displayable_result().results[1],
-            pd.Series([], index=[],
-                      name='Document "F2" compares to the whole corpus'))
+        assert test_results[0]\
+               == "Compare Each Document to All the Documents As a Whole."
+
+        assert test_results[1]['Name'] == 'Document "F1" compares to the whole corpus'
 
     def test_normal_case_header(self):
         assert test_topword_model.get_displayable_result().header \
