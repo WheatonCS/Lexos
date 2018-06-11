@@ -9,9 +9,9 @@ $(function () {
 
   updateNorm()
 
-  $('input[type=checkbox][name=mfwcheckbox]').click(updateMFWinput)
+  $('input[type=checkbox][name=mfwcheckbox]').click(updateMfwInput)
 
-  updateMFWinput()
+  updateMfwInput()
 
   $('input[type=checkbox][name=cullcheckbox]').click(updateCullInput)
 
@@ -48,7 +48,7 @@ function updateNorm () {
  * frequent words is checked
  * @returns {void}
  */
-function updateMFWinput () {
+function updateMfwInput () {
   // If most frequent words is checked
   if ($('#MFW').is(':checked')) {
     // Show top number of words input
