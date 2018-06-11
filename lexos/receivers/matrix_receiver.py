@@ -1,3 +1,5 @@
+"""This is the receiver for the matrix model."""
+
 import re
 from typing import NamedTuple, Optional, Dict
 
@@ -8,6 +10,7 @@ IdTempLabelMap = Dict[int, str]
 
 class TokenOption(NamedTuple):
     """A typed tuple to represent token option."""
+
     # the size of each token
     n_gram_size: int
 
@@ -18,6 +21,7 @@ class TokenOption(NamedTuple):
 
 class NormOption(NamedTuple):
     """A typed tuple to keep the normalize option."""
+
     # True if we are using proportional count, False if we are using raw count
     use_freq: bool
 
@@ -30,7 +34,8 @@ class NormOption(NamedTuple):
 
 
 class CullingOption(NamedTuple):
-    """A typed tuple to represent all the culling option."""
+    """A typed tuple to represent all the culling options."""
+
     # the lowest word rank to keep in DTM
     # if none, then don't apply most frequent word
     mfw_lowest_rank: Optional[int]
@@ -41,7 +46,8 @@ class CullingOption(NamedTuple):
 
 
 class MatrixFrontEndOption(NamedTuple):
-    """A typed tuple to represent all the matrix option."""
+    """A typed tuple to represent all the matrix options."""
+
     # the token options
     token_option: TokenOption
 
@@ -56,13 +62,14 @@ class MatrixFrontEndOption(NamedTuple):
 
 
 class MatrixReceiver(BaseReceiver):
+    """This class receives the front end options."""
 
     def __init__(self):
-        """The receiver to the all the matrix option"""
+        """Get all the matrix options using the receiver."""
         super().__init__()
 
     def _get_token_option_from_front_end(self) -> TokenOption:
-        """get the token option from front end
+        """Get the token option from front end.
 
         :return: a token option struct
         """
@@ -107,7 +114,7 @@ class MatrixReceiver(BaseReceiver):
                           tf_idf_norm_option=norm_option)
 
     def _get_culling_option_from_front_end(self) -> CullingOption:
-        """Get the culling option from the front end
+        """Get the culling option from the front end.
 
         :return: a culling option struct
         """
@@ -125,18 +132,17 @@ class MatrixReceiver(BaseReceiver):
                              mfw_lowest_rank=lower_rank_bound)
 
     def _get_id_temp_label_map_from_front_end(self) -> Dict[int, str]:
-        """Get all the file id maps to temp labels from front end
+        """Get all the file id maps to temp labels from front end.
 
         :return: a dict maps id to temp labels
         """
         label_key_regex = re.compile(r"file_(\d+)")
 
         def parse_temp_label_data(label_key: str) -> (int, str):
-            """parse the key of the temp label into a tuple
+            """Parse the key of the temp label into a tuple.
 
-            get the id from the label key and find the label correspond to
-            the label key.
-            then return a tuple of id and the label
+            Get the id from the label key and find the label corresponding to
+            the label key, then return a tuple of id and the label.
             :param label_key: key of the label in _front_end_data
             :return: a tuple where the first element is the file id
                      and the second element is the temp label
@@ -159,9 +165,9 @@ class MatrixReceiver(BaseReceiver):
         return dict(id_temp_label_list)
 
     def options_from_front_end(self) -> MatrixFrontEndOption:
-        """Get all the matrix option from front end.
+        """Get all the matrix options from front end.
 
-        :return: all the option packed together into a matrix option class
+        :return: all the options packed together into a matrix option class
         """
         return MatrixFrontEndOption(
             token_option=self._get_token_option_from_front_end(),

@@ -1,10 +1,13 @@
+"""This is the receiver for the dendro model."""
+
 from typing import NamedTuple
 
 from lexos.receivers.base_receiver import BaseReceiver
 
 
 class DendroOption(NamedTuple):
-    """The typed tuple to implement dendro options"""
+    """The typed tuple to implement dendro options."""
+
     # the orientation of the dendrogram to send to plotly
     # available options are: 'top', 'right', 'bottom', or 'left'
     # see:
@@ -23,15 +26,16 @@ class DendroOption(NamedTuple):
 
 
 class DendroReceiver(BaseReceiver):
+    """This is the class to receive dendro options."""
 
     def __init__(self):
-        """The Receiver to get all the dendrogram options"""
+        """Get all the dendrogram options using the receiver."""
         super().__init__()
 
     def options_from_front_end(self) -> DendroOption:
-        """Get the dendrogram option from front end
+        """Get the dendrogram option from front end.
 
-        :return: a DendroOption object to hold all the options
+        :return: a DendroOption object to hold all the options.
         """
         orientation = self._front_end_data['orientation']
         linkage_method = self._front_end_data['linkage']
