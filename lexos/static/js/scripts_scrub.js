@@ -4,7 +4,7 @@ $(function () {
   }
   $('#actions').addClass('actions-scrub')
 
-  $('.has-chevron').on('click', function () {
+  $('.has-chevron').click(function () {
     $(this).find('span').toggleClass('down')
     $(this).next().collapse('toggle')
   })
@@ -226,9 +226,9 @@ function doScrubbing (action) {
     response = JSON.parse(response)
     $('#preview-body').empty()
     $.each(response['data'], function (i, item) {
-      const fileID = $(this)[0]
+      // const fileID = $(this)[0]
       const filename = $(this)[1]
-      const fileLabel = $(this)[2]
+      // const fileLabel = $(this)[2]
       const fileContents = $(this)[3]
       const fieldset = $('<fieldset></fieldset>')
       // CSS truncates the document name
