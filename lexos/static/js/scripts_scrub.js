@@ -9,38 +9,7 @@ $(function () {
   // display additional options on load
   displayAdditionalOptions()
 
-  $('.bttnfilelabels').click(function () {
-    // swfileselect, lemfileselect, consfileselect, scfileselect
-    const filetype = $(this).attr('id').replace('bttnlabel', '')
-    const usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
-
-    if ((usingCache) || ($(this).attr('id') != '')) {
-      // $(this).siblings('.scrub-upload').attr('value', '');
-      // Next two lines clear the file input; it's hard to find a cross-browser solution
-      $('#' + filetype).val('')
-      $('#' + filetype).replaceWith($('#' + filetype).clone(true))
-      $('#usecache' + filetype).attr('disabled', 'disabled')
-      $(this).text('')
-    }
-
-    // Do Ajax
-    $.ajax({
-      type: 'POST',
-      url: '/removeUploadLabels',
-      data: $(this).text().toString(),
-      contentType: 'text/plain',
-      headers: {'option': filetype + '[]'},
-      beforeSend: function () {
-        // alert('Sending...');
-      },
-      success: function (response) {
-        // console.log(response);
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.log('Error: ' + errorThrown)
-      }
-    })
-  })
+  $('.bttnfilelabels').click(buttonFileLabelsFunction())
 
   $('#whitespacebox').click(function () {
     if ($(this).is(':checked')) {
@@ -243,5 +212,38 @@ function displayAdditionalOptions () {
     let filename = ev.target.files[0].name
     if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
     $('#scfileselectbttnlabel').html(filename)
+  })
+}
+
+function buttonFileLabelsFunction () {
+  // swfileselect, lemfileselect, consfileselect, scfileselect
+  const filetype = $(this).attr('id').replace('bttnlabel', '')
+  const usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
+
+  if ((usingCache) || ($(this).attr('id') != '')) {
+    // $(this).siblings('.scrub-upload').attr('value', '');
+    // Next two lines clear the file input; it's hard to find a cross-browser solution
+    $('#' + filetype).val('')
+    $('#' + filetype).replaceWith($('#' + filetype).clone(true))
+    $('#usecache' + filetype).attr('disabled', 'disabled')
+    $(this).text('')
+  }
+
+  // Do Ajax
+  $.ajax({
+    type: 'POST',
+    url: '/removeUploadLabels',
+    data: $(this).text().toString(),
+    contentType: 'text/plain',
+    headers: {'option': filetype + '[]'},
+    beforeSend: function () {
+      // alert('Sending...');
+    },
+    success: function (response) {
+      // console.log(response);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log('Error: ' + errorThrown)
+    }
   })
 }
