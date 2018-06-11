@@ -36,6 +36,11 @@ function downloadScrubbing () {
   window.location = '/downloadScrubbing'
 }
 
+/**
+ * Send ajax request to do scrubbing
+ * @param action
+ * @returns {void}
+ */
 function doScrubbing (action) {
   if ($('#num_active_files').val() == '0') {
     $('#error-modal').modal()
