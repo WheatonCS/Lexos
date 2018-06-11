@@ -370,7 +370,7 @@ class TopwordModel(BaseModel):
         else:
             raise ValueError("Invalid topword analysis option.")
 
-    def get_readable_result(self) -> jsonify:
+    def get_displayable_result(self) -> jsonify:
         """Get the readable result to display on the web page.
 
         :return: a json object that holds the topword result, which contains a
@@ -384,7 +384,7 @@ class TopwordModel(BaseModel):
         return jsonify(header=topword_result.header,
                        results=readable_result)
 
-    def get_topword_csv_path(self) -> str:
+    def get_download_path(self) -> str:
         """Write the generated top word results to an output CSV file.
 
         :return: path of the generated CSV file.

@@ -46,7 +46,7 @@ def top_words():
 def topword_download():
     session_manager.cache_analysis_option()
     session_manager.cache_top_word_options()
-    file_path = TopwordModel().get_topword_csv_path()
+    file_path = TopwordModel().get_download_path()
     return send_file(file_path,
                      as_attachment=True,
                      attachment_filename=constants.TOPWORD_CSV_FILE_NAME)
@@ -56,4 +56,4 @@ def topword_download():
 def topword_result():
     session_manager.cache_analysis_option()
     session_manager.cache_top_word_options()
-    return TopwordModel().get_readable_result()
+    return TopwordModel().get_displayable_result()
