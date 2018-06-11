@@ -1,5 +1,5 @@
 $(function () {
-  if ($("input[name='haveGutenberg']")) {
+  if ($('input[name=\'haveGutenberg\']')) {
     $('#gutenberg-modal').modal()
   }
   $('#actions').addClass('actions-scrub')
@@ -58,7 +58,7 @@ $(function () {
       url: '/removeUploadLabels',
       data: $(this).text().toString(),
       contentType: 'text/plain',
-      headers: { 'option': filetype + '[]' },
+      headers: {'option': filetype + '[]'},
       beforeSend: function () {
         // alert('Sending...');
       },
@@ -85,7 +85,7 @@ $(function () {
     console.log($('#entityrules')[0].value)
     if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
       document.getElementById('MUFI-warning').style.display = 'inline-block'
-      $('head').append("<link href='../static/lib/junicode/Junicode.woff' rel='stylesheet' type='text/css'>")
+      $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
       $('.filecontents').addClass('Junicode')
     } else {
       $('.filecontents').removeClass('Junicode')
@@ -135,11 +135,11 @@ $(function () {
           select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
           $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
           $('#tagTable').append('<tbody></tbody>')
-		      $('#tagTable tbody').append(response)
+          $('#tagTable tbody').append(response)
           $('#xmlModalStatus').remove()
-          $("#allTags option[value='"+selection+"']").prop("selected", true)
-	    		var value = $('#myselect option:selected').val()
-	    		var text = $('#myselect option:selected').text()
+          $('#allTags option[value=\'' + selection + '\']').prop('selected', true)
+          var value = $('#myselect option:selected').val()
+          var text = $('#myselect option:selected').text()
         },
         error: function (jqXHR, textStatus, errorThrown) {
           console.log('Error: ' + errorThrown)
@@ -185,10 +185,10 @@ $(function () {
         select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
         $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
         $('#tagTable').append('<tbody></tbody>')
-        $('#tagTable tbody').append(j["menu"])
+        $('#tagTable tbody').append(j['menu'])
         $('#xmlModalStatus').remove()
-        if (j["selected-options"] != "multiple") {
-          $("#allTags option[value='"+j["selected-options"]+"']").prop("selected", true)
+        if (j['selected-options'] != 'multiple') {
+          $('#allTags option[value=\'' + j['selected-options'] + '\']').prop('selected', true)
         }
         var value = $('#myselect option:selected').val()
         var text = $('#myselect option:selected').text()
@@ -204,19 +204,19 @@ $(function () {
   })
 })
 
-function downloadScrubbing() {
+function downloadScrubbing () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
   // Flask route seems to be the easiest method.
   window.location = '/downloadScrubbing'
 }
 
-function doScrubbing(action) {
+function doScrubbing (action) {
   if ($('#num_active_files').val() == '0') {
     $('#error-modal').modal()
     return
   }
 
-  $('#status-prepare').css({ 'visibility': 'visible' })
+  $('#status-prepare').css({'visibility': 'visible'})
 
   $('#formAction').val(action)
   var formData = new FormData($('form')[0])
@@ -245,7 +245,7 @@ function doScrubbing(action) {
       fieldset.append('<legend class="has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + filename + '</legend>')
       fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
       $('#preview-body').append(fieldset)
-      $('#status-prepare').css({ 'visibility': 'hidden' })
+      $('#status-prepare').css({'visibility': 'hidden'})
     })
   })
 }
