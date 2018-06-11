@@ -153,6 +153,10 @@ function buttonFileLabelsFunction () {
   })
 }
 
+/**
+ * Change white space box class when checked or unchecked
+ * @returns {void}
+ */
 function changeWhitespaceBoxClass () {
   if ($(this).is(':checked')) {
     $('#whitespace').removeClass('hidden')
