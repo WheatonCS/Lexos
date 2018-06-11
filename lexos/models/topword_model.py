@@ -26,7 +26,8 @@ class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
 
     doc_term_matrix: pd.DataFrame
-    class_division_map: pd.DataFrame
+    class_division_map:\
+        pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
 
