@@ -369,13 +369,11 @@ class TopwordModel(BaseModel):
         else:
             raise ValueError("Invalid topword analysis option.")
 
-    def get_readable_result(self) -> TopwordResult:
+    def get_readable_result(self) -> jsonify:
         """Get the readable result to display on the web page.
 
-        :return: a namedtuple that holds the topword result, which contains a
-                 header and a list of pandas series. However it will check the
-                 length of each pandas series and only return the first 20 rows
-                 if the pandas series has length that is longer than 20.
+        :return: a json object that holds the topword result, which contains a
+                 header and a list of HTML tables.
         """
         topword_result = self._get_result()
         readable_result = [result.to_frame().to_html(
