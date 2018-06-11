@@ -62,12 +62,13 @@ function generateTopWordResult () {
   sendAjaxRequest('/topwordResult', form)
     .done(
       function (response) {
-        const outerTableDivSelector = $('#topword-result')
-        const headerSelector = $('#topword-header')
-        // put the response onto the web page
-        console.log(response["header"])
-        headerSelector.html(response["header"])
-        outerTableDivSelector.html(response["results"])
+        const topWordHeader = $('#topword-header')
+        const topWordResult = $('#topword-result')
+        // Put the header in response to the legend.
+        topWordHeader.html(response['header'])
+        // Format each table and put them in the result div.
+        topWordResult.html(response['results'].map(
+          function (table) { return `<div class="row col-lg-6 col-md-6">${table}</div>` }))
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
