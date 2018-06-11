@@ -81,6 +81,11 @@ function doScrubbing (action) {
   })
 }
 
+/**
+ * Function to handle the chevron drop down button rotate animation by toggling
+ * the class so the appropriate CSS applies.
+ * @returns {void}
+ */
 function rotateChevron () {
   $(this).find('span').toggleClass('down')
   $(this).next().collapse('toggle')
