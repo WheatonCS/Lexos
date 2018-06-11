@@ -4,10 +4,7 @@ $(function () {
   }
   $('#actions').addClass('actions-scrub')
 
-  $('.has-chevron').click(function () {
-    $(this).find('span').toggleClass('down')
-    $(this).next().collapse('toggle')
-  })
+  $('.has-chevron').click(rotateChevron())
 
   // display additional options on load
   const advancedOptions = $('#advanced-title')
@@ -238,4 +235,9 @@ function doScrubbing (action) {
       $('#status-prepare').css({'visibility': 'hidden'})
     })
   })
+}
+
+function rotateChevron () {
+  $(this).find('span').toggleClass('down')
+  $(this).next().collapse('toggle')
 }
