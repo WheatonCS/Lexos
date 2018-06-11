@@ -19,7 +19,7 @@ $(function () {
 
   $('#set-tags-button').click(setTagsButtonAjax())
 
-  $('#punctbox').mousedown(puncTboxFade())
+  $('#punctbox').mousedown(puncTBoxFade())
 
   $('#xml-modal').on('show.bs.modal', xmlModalAjax())
 
@@ -189,6 +189,10 @@ function entityRulesChangeFunction () {
   }
 }
 
+/**
+ * Function to send ajax request for tags button
+ * @returns {void}
+ */
 function setTagsButtonAjax () {
   if ($('#allTags')) {
     let allTags = ($('#allTags')[0].value)
@@ -231,7 +235,7 @@ function setTagsButtonAjax () {
   }
 }
 
-function puncTboxFade () {
+function puncTBoxFade () {
   const timeToToggle = 300
 
   if ($('#aposhyph')[0].style.cssText == 'display: none;') {
