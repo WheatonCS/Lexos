@@ -23,9 +23,7 @@ $(function () {
 
   $('#xml-modal').on('show.bs.modal', xmlModalAjax())
 
-  $('#xml-modal').on('hidden.bs.modal', function () {
-    $('#tagTable').empty().remove()
-  })
+  $('#xml-modal').on('hidden.bs.modal', removeEmptyTagTable())
 })
 
 function downloadScrubbing () {
@@ -259,4 +257,8 @@ function xmlModalAjax () {
       console.log('Error: ' + errorThrown)
     }
   })
+}
+
+function removeEmptyTagTable () {
+  $('#tagTable').empty().remove()
 }
