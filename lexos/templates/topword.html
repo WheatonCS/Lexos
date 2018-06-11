@@ -81,20 +81,21 @@
         </fieldset>
         <!-- The class divisions. -->
         {% for class_name in classDivisionMap.index %}
-            <div class="row col-lg-4 col-md-4">
+            <div class="row col-lg-4 col-md-4 padfix-top">
                 <table class="table table-bordered table-hover table-striped">
                     <thead>
                     <tr>
                         <th class="info">{{ class_name }}</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="tbody-top">
                     {% for file_id in classDivisionMap.columns %}
                         {% if classDivisionMap[file_id][class_name] %}
                             <tr>
-                                <td>{{ labels[file_id] }}</td>
+                                <td class="td-top">{{ labels[file_id] }}</td>
                             </tr>
                         {% endif %}
+
                     {% endfor %}
                     </tbody>
                 </table>
