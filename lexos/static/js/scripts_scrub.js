@@ -15,13 +15,7 @@ $(function () {
   )
   $('#entityrules').change(entityRulesChangeFunction())
 
-  $('#tagbox').click(function () {
-    if ($(this).is(':checked')) {
-      $('#tag').removeClass('hidden')
-    } else {
-      $('#tag').addClass('hidden')
-    }
-  })
+  $('#tagbox').click(changeTagBoxClass())
 
   $(document).on('click', '#set-tags-button', function (event) {
     if ($('#allTags')) {
@@ -238,6 +232,14 @@ function changeWhitespaceBoxClass () {
     $('#whitespace').removeClass('hidden')
   } else {
     $('#whitespace').addClass('hidden')
+  }
+}
+
+function changeTagBoxClass () {
+  if ($(this).is(':checked')) {
+    $('#tag').removeClass('hidden')
+  } else {
+    $('#tag').addClass('hidden')
   }
 }
 
