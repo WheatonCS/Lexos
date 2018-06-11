@@ -165,6 +165,10 @@ function changeWhitespaceBoxClass () {
   }
 }
 
+/**
+ * Change tag box class when checked or unchecked
+ * @returns {void}
+ */
 function changeTagBoxClass () {
   if ($(this).is(':checked')) {
     $('#tag').removeClass('hidden')
