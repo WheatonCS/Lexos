@@ -1,3 +1,5 @@
+"""This is a model to find the topwords."""
+
 import itertools
 import math
 import os
@@ -22,6 +24,7 @@ AnalysisResult = List[pd.Series]
 
 class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
+
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
@@ -29,13 +32,16 @@ class TopwordTestOptions(NamedTuple):
 
 class TopwordResult(NamedTuple):
     """A typed tuple to hold topword results."""
+
     header: str
     results: AnalysisResult
 
 
 class TopwordModel(BaseModel):
+    """The TopwordModel inherits from the BaseModel."""
+
     def __init__(self, test_options: Optional[TopwordTestOptions] = None):
-        """This is the class to run topword analysis.
+        """Run topword analysis.
 
         :param test_options: the input used in testing to override the
                              dynamically loaded option.
@@ -373,7 +379,7 @@ class TopwordModel(BaseModel):
 
     def get_readable_result(self, class_division_map: pd.DataFrame) -> \
             TopwordResult:
-        """Gets the readable result to display on the web page.
+        """Get the readable result to display on the web page.
 
         :param class_division_map: a pandas data frame where:
             - the data is the division map with boolean values that indicate
@@ -385,7 +391,6 @@ class TopwordModel(BaseModel):
                  length of each pandas series and only return the first 20 rows
                  if the pandas series has length that is longer than 20.
         """
-
         topword_result = \
             self._get_result(class_division_map=class_division_map)
         readable_result = [result[:20] for result in topword_result.results]
@@ -394,7 +399,7 @@ class TopwordModel(BaseModel):
                              results=readable_result)
 
     def get_topword_csv_path(self, class_division_map: pd.DataFrame) -> str:
-        """Writes the generated top word results to an output CSV file.
+        """Write the generated top word results to an output CSV file.
 
         :param class_division_map: a pandas data frame where:
             - the data is the division map with boolean values that indicate

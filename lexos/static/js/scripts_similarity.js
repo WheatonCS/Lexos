@@ -64,11 +64,16 @@ function generateSimResult () {
     paging: false,
 
     // specify where the button is
-    dom: '<\'row\'<\'col-sm-2\'l><\'col-sm-3 pull-right\'B>>' +
-    '<\'row\'<\'col-sm-12\'tr>>' + '<\'row\'<\'col-sm-5\'i><\'col-sm-7\'p>>',
+    dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
+          <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
 
     // specify all the button that is put on to the page
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+
+    // Center all the data in the table.
+    columnDefs: [
+      {'className': 'text-center', 'targets': '_all'}
+    ]
   }
 
   // send the ajax request
