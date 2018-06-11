@@ -25,7 +25,7 @@ class SimilarityModel(BaseModel):
     """The TopwordModel inherits from the BaseModel."""
 
     def __init__(self, test_options: SimilarityTestOption = None):
-        """This is the class to generate similarity.
+        """Generate similarity.
 
         :param test_options: The option to send in for testing.
         """
@@ -97,7 +97,7 @@ class SimilarityModel(BaseModel):
                             data=[labels, cos_scores])
 
     def generate_sims_html(self) -> str:
-        """Generate the html for sim query
+        """Generate the html for sim query.
 
         We also round all the data to 4 digits for better display
         :return: the html table to put into the web page

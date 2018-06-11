@@ -1,6 +1,7 @@
 flake8
-pep8-naming
 pytest
 codecov
-pytest-cov
 cx_freeze
+pytest-cov
+pydocstyle
+pep8-naming
