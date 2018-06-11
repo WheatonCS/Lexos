@@ -123,24 +123,10 @@ function rotateChevron () {
 }
 
 /**
- * Change position of submit div while scrolling the window
- * @returns {void}
- */
-function changeSubmitDivPosition () {
-  let timer
-  // Timer stuff
-  if (timer) {
-    clearTimeout(timer)
-  }
-  // Timer to throttle the scroll event so it doesn't happen too often
-  timer = setTimeout(throttleScrollTimer(), 10)
-}
-
-/**
  * Throttle the scroll event so it doesn't happen too often
  * @returns {void}
  */
-function throttleScrollTimer () {
+function changeSubmitDivPosition () {
   let buttonsFixed = false
   let buttons = $('#analyze-submit')
   let scrollBottom = $(window).scrollTop() + $(window).height()
@@ -156,6 +142,5 @@ function throttleScrollTimer () {
   if (!buttonsFixed && (scrollBottom < ($('footer').offset().top))) {
     // console.log("Scroll bottom hit footer! On the way up");
     buttons.addClass('fixed')
-    buttonsFixed = true
   }
 }
