@@ -1,16 +1,22 @@
+"""This is the topword receiver for the topword model."""
+
 from enum import Enum
 from lexos.receivers.base_receiver import BaseReceiver
 
 
 class TopwordAnalysisType(Enum):
+    """This is the class that assigns the options to constants."""
+
     ALL_TO_PARA = "allToPara"
     CLASS_TO_PARA = "classToPara"
     CLASS_TO_CLASS = "classToClass"
 
 
 class TopwordReceiver(BaseReceiver):
+    """This is the class that receives the options from front end."""
+
     def __init__(self):
-        """The Receiver to get the topword analysis type from front end."""
+        """Get the topword analysis type from front end using this receiver."""
         super().__init__()
 
     def options_from_front_end(self) -> TopwordAnalysisType:
