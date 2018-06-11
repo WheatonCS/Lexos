@@ -2036,12 +2036,6 @@ select#orientation {
 }
 
 /* ================== TOPWORD STYLING ==================== */
-.scroll-height {
-  overflow: hidden;
-  overflow-y: scroll;
-  height: 250px;
-}
-
 .tbody-top {
   display: block;
   overflow-y: scroll;
@@ -2050,7 +2044,6 @@ select#orientation {
 
 .td-top {
   width: 400px !important;
-
 }
 
 .padfix-top {
@@ -2058,7 +2051,6 @@ select#orientation {
   padding-left: 10px;
   margin-right: 0px;
 }
-
 /*====================== bootstrap table =========================*/
 .header-fixed {
     width: 100%
