@@ -1,208 +1,308 @@
 {% extends "base.html" %}
 
 {% block section_head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{version}}"></script>
-<script>
-// Hack because Jinja refuses to do it in the template
-$(document).ready(function() {
-	sessionCullNumber = "{{ session['analyoption']['cullnumber'] }}";
-	if (sessionCullNumber != "") {
-		$("#cullnumber").val(sessionCullNumber);
-	}
-});
-</script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{ version }}"></script>
+    <script>
+      // Hack because Jinja refuses to do it in the template
+      $(document).ready(function () {
+        sessionCullNumber = "{{ session['analyoption']['cullnumber'] }}"
+        if (sessionCullNumber != '') {
+          $('#cullnumber').val(sessionCullNumber)
+        }
+      })
+    </script>
 {% endblock %}
 
 {% block content %}
-<!-- Loading Icon -->
-<div id="status-analyze"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+    <!-- Loading Icon -->
+    <div id="status-analyze"><img
+            src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{ version }}"
+            alt="Loading..."></div>
 
-<!-- Top Row -->
-<div class="row">
+    <!-- Top Row -->
+    <div class="row">
 
-	<!-- Left Column - Analyze-Options -->
-	<div id="analyze-options" class="col-md-5">
-		{% block options %}{% endblock %}
-	</div>
-	<!-- End Left Column - Analyze-Options -->
+        <!-- Left Column - Analyze-Options -->
+        <div id="analyze-options" class="col-md-5">
+            {% block options %}{% endblock %}
+        </div>
+        <!-- End Left Column - Analyze-Options -->
 
-	<!-- Right Column - Analyze-Advanced -->
-	<div id="analyze-advanced" class="col-md-7">
+        <!-- Right Column - Analyze-Advanced -->
+        <div id="analyze-advanced" class="col-md-7">
 
-		<!-- Analyze-Advanced Row 1 -->
-		<div class="row">
+            <!-- Analyze-Advanced Row 1 -->
+            <div class="row">
 
-			<!-- Analyze-Advanced Left Column -->
-			<div class="col-md-5">
+                <!-- Analyze-Advanced Left Column -->
+                <div class="col-md-5">
 
-				<!-- Fieldset - Tokenize-Options -->
-				<fieldset class="analyze-advanced-options" id="tokenize-options">
-					<legend id="tokenize-title" style="width:210px;">Tokenize
-                        <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This feature divides the text into n-grams of the user's desired length, by tokens or characters." style=""></i>
-					</legend>
+                    <!-- Fieldset - Tokenize-Options -->
+                    <fieldset class="analyze-advanced-options"
+                              id="tokenize-options">
+                        <legend id="tokenize-title" style="width:210px;">
+                            Tokenize
+                            <i class="fa fa-question-circle lexos-tooltip-trigger"
+                               data-toggle="tooltip" data-html="true"
+                               data-placement="right" data-container="body"
+                               title="This feature divides the text into n-grams of the user's desired length, by tokens or characters."
+                               style=""></i>
+                        </legend>
                         <div class="row" id="tokenize-input">
-						<div class="col-sm-5" id="tokenize-size-input">
-							<table>
-							<tr>
-							<td style="width:100px;vertical-align:top;">
-							<input type="number" name="tokenSize" id="tokenSize" min="1" max="5" step="1" style="width:45px;" value="{{ session['analyoption']['tokenSize']}}" />
-							-gram
-							</td>
-							<td>
-<!-- 						</div>
-						<div class="col-sm-7" id="tokenize-radios" style="border:1px solid #000;"> -->
-							<label>
-								by Tokens
-								<input type="radio" name="tokenType" id="tokenByWords" value="word" checked/>
-							</label>
-							<br/>
-							<label>
-								by Characters
-								<input type="radio" name="tokenType" value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
-							</label>
-							</td>
-							</tr>
-							</table>
-			{#	This is disabled because countVectorizer counts front and end markers as ' ' if this is checked #}
-			{# <div id="inWordsOnly"> #}
-			{# <label >Only within words #}
-			{# <input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/> #}
-			{# </label> #}
-			{# </div> #}
-						</div>
-					</div>
-				</fieldset>
-			</div>
+                            <div class="col-sm-5" id="tokenize-size-input">
+                                <table>
+                                    <tr>
+                                        <td style="width:100px;vertical-align:top;">
+                                            <input type="number"
+                                                   name="tokenSize"
+                                                   id="tokenSize" min="1"
+                                                   max="5" step="1"
+                                                   style="width:45px;"
+                                                   value="{{ session['analyoption']['tokenSize'] }}"/>
+                                            -gram
+                                        </td>
+                                        <td>
+                                            <!-- 						</div>
+                                                                    <div class="col-sm-7" id="tokenize-radios" style="border:1px solid #000;"> -->
+                                            <label>
+                                                by Tokens
+                                                <input type="radio"
+                                                       name="tokenType"
+                                                       id="tokenByWords"
+                                                       value="word" checked/>
+                                            </label>
+                                            <br/>
+                                            <label>
+                                                by Characters
+                                                <input type="radio"
+                                                       name="tokenType"
+                                                       value="char" {{ 'checked' if session['analyoption']['tokenType'] == 'char' }}/>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </table>
+                                {#	This is disabled because countVectorizer counts front and end markers as ' ' if this is checked #}
+                                {# <div id="inWordsOnly"> #}
+                                {# <label >Only within words #}
+                                {# <input type="checkbox" name="inWordsOnly" {{ 'checked' if "inWordsOnly" in session['analyoption'] }}/> #}
+                                {# </label> #}
+                                {# </div> #}
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
 
-			<!-- Analyze-Advanced Right Column -->
-			<div class="col-md-7">
+                <!-- Analyze-Advanced Right Column -->
+                <div class="col-md-7">
 
-				<!-- Fieldset - Normalize-Options -->
-				<fieldset class="analyze-advanced-options" id="normalize-options">
-					<legend id="normalize-title">Normalize
-					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="This feature allows the user to perform analysis based on the term raw counts in their DTM or to attempt to account for document length by using proportional or TF-IDF weighted counts." style=""></i>
-					</legend>
+                    <!-- Fieldset - Normalize-Options -->
+                    <fieldset class="analyze-advanced-options"
+                              id="normalize-options">
+                        <legend id="normalize-title">Normalize
+                            <i class="fa fa-question-circle lexos-tooltip-trigger"
+                               data-toggle="tooltip" data-html="true"
+                               data-placement="right" data-container="body"
+                               title="This feature allows the user to perform analysis based on the term raw counts in their DTM or to attempt to account for document length by using proportional or TF-IDF weighted counts."
+                               style=""></i>
+                        </legend>
 
-					<div class="normalize-div" id="normalize-radios">
-						<label>Proportional Counts
-							<input type="radio" id="normalizeTypeFreq" name="normalizeType" value="freq" checked/>
-						</label>
-						<br/>
-						<label>Raw Counts
-							<input type="radio" id="normalizeTypeRaw" name="normalizeType" value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
-						</label>
-        						<br/>
+                        <div class="normalize-div" id="normalize-radios">
+                            <label>Proportional Counts
+                                <input type="radio" id="normalizeTypeFreq"
+                                       name="normalizeType" value="freq"
+                                       checked/>
+                            </label>
+                            <br/>
+                            <label>Raw Counts
+                                <input type="radio" id="normalizeTypeRaw"
+                                       name="normalizeType"
+                                       value="raw" {{ 'checked' if session['analyoption']['normalizeType'] == 'raw' }}/>
+                            </label>
+                            <br/>
 
-						<label>Weighted Counts (TF-IDF) <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="popover" data-html="true" data-placement="right" data-container="body" data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.' style=""></i>
-							<br/>
-							<input type="radio"  id="normalizeTypeTFIDF" name="normalizeType" value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/><input type="hidden" name="norm" value="None"/>
+                            <label>Weighted Counts (TF-IDF) <i
+                                    class="fa fa-question-circle lexos-tooltip-trigger"
+                                    data-toggle="popover" data-html="true"
+                                    data-placement="right"
+                                    data-container="body"
+                                    data-content='Normalize the data for different document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">Term Frequency-Inverse Document Frequency (TF-IDF)</a>. Selecting TF-IDF allows you to choose the distance metric according to which each document vector is normalized. Lexos uses base <em>e</em> (natural log) as the default.'
+                                    style=""></i>
+                                <br/>
+                                <input type="radio" id="normalizeTypeTFIDF"
+                                       name="normalizeType"
+                                       value="tfidf" {{ 'checked' if session['analyoption']['normalizeType'] == 'tfidf' }}/><input
+                                        type="hidden" name="norm"
+                                        value="None"/>
 
-                            <span id="tfidfspan">
+                                <span id="tfidfspan">
 							<ul id="tfidfNorm">
-								<li><label>Euclidean Distance<input type="radio" name="norm" value="l2" checked/></label></li>
-								<li><label>Manhattan Distance<input type="radio" name="norm" value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
-								<li><label>Norm: None<input type="radio" name="norm" value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
+								<li><label>Euclidean Distance<input
+                                        type="radio" name="norm" value="l2"
+                                        checked/></label></li>
+								<li><label>Manhattan Distance<input
+                                        type="radio" name="norm"
+                                        value="l1" {{ 'checked' if session['analyoption']['norm'] == 'l1' }}/></label></li>
+								<li><label>Norm: None<input type="radio"
+                                                            name="norm"
+                                                            value="None" {{ 'checked' if session['analyoption']['norm'] == 'None' }}/></label></li>
 							</ul>
 							</span>
-                        </label>
+                            </label>
 
-					</div>
-				</fieldset>
-			</div>
-		</div>
-		<!-- End Analyze-Advanced Row 1 -->
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <!-- End Analyze-Advanced Row 1 -->
 
-		<!-- Analyze-Advanced Row 2 -->
-		<div class="row">
+            <!-- Analyze-Advanced Row 2 -->
+            <div class="row">
 
-			<!-- Analyze-Advanced Left Column -->
-			<div class="col-md-5">
+                <!-- Analyze-Advanced Left Column -->
+                <div class="col-md-5">
 
-				<!-- Fieldset - Culling-Options -->
-				<fieldset class="analyze-advanced-options" id="culling-options" >
-					<legend class="has-chevron" id="culling-title">Culling Options
-					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Culling options allow the user to place statistical bounds on the terms included in the DTM." style=""></i>
-					<span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True}}" id="cullingOptsChev" data-target="#cullingOptsPanel" aria-expanded="false" aria-controls="cullingOptsPanel"></span>
-					</legend>
-					<div class="collapse" id="cullingoptsdiv">
-						<div style="" aria-expanded="true" class="collapse in" id="cullingOptsPanel" style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True}}">
-							<label>Most Frequent Words<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Use only the most frequently occurring terms in the DTM." style="padding-left:4px;"></i>
-								<input type="checkbox" id="MFW" name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
-							</label>
+                    <!-- Fieldset - Culling-Options -->
+                    <fieldset class="analyze-advanced-options"
+                              id="culling-options">
+                        <legend class="has-chevron" id="culling-title">Culling
+                            Options
+                            <i class="fa fa-question-circle lexos-tooltip-trigger"
+                               data-toggle="tooltip" data-html="true"
+                               data-placement="right" data-container="body"
+                               title="Culling options allow the user to place statistical bounds on the terms included in the DTM."
+                               style=""></i>
+                            <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True }}"
+                                  id="cullingOptsChev"
+                                  data-target="#cullingOptsPanel"
+                                  aria-expanded="false"
+                                  aria-controls="cullingOptsPanel"></span>
+                        </legend>
+                        <div class="collapse" id="cullingoptsdiv">
+                            <div style="" aria-expanded="true"
+                                 class="collapse in" id="cullingOptsPanel"
+                                 style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True }}">
+                                <label>Most Frequent Words<i
+                                        class="fa fa-question-circle lexos-tooltip-trigger"
+                                        data-toggle="tooltip" data-html="true"
+                                        data-placement="right"
+                                        data-container="body"
+                                        title="Use only the most frequently occurring terms in the DTM."
+                                        style="padding-left:4px;"></i>
+                                    <input type="checkbox" id="MFW"
+                                           name="mfwcheckbox" {{ 'checked' if session['analyoption']['mfwcheckbox'] }}/>
+                                </label>
 
-							<span id="mfwnumber-input">
-							<label>Use top <input type="number" name="mfwnumber" id="mfwnumber" style="width:60px;" min="1" step="1" value="{{ session['analyoption']['mfwnumber'] }}" /> terms</label>
+                                <span id="mfwnumber-input">
+							<label>Use top <input type="number"
+                                                  name="mfwnumber"
+                                                  id="mfwnumber"
+                                                  style="width:60px;" min="1"
+                                                  step="1"
+                                                  value="{{ session['analyoption']['mfwnumber'] }}"/> terms</label>
 							</span>
 
-							<label>Culling<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Set the minimum number of documents in which terms must occur to be included in the DTM." style="padding-left:4px;"></i>
-								<input type="checkbox" id="culling" name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
-							</label>
+                                <label>Culling<i
+                                        class="fa fa-question-circle lexos-tooltip-trigger"
+                                        data-toggle="tooltip" data-html="true"
+                                        data-placement="right"
+                                        data-container="body"
+                                        title="Set the minimum number of documents in which terms must occur to be included in the DTM."
+                                        style="padding-left:4px;"></i>
+                                    <input type="checkbox" id="culling"
+                                           name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
+                                </label>
 
-							<span id="cullnumber-input">
-							<label>Must be in <input type="number" name="cullnumber" id="cullnumber" style="width:60px;" min="1" max="{{ numActiveDocs }}" step="1" value="{{ numActiveDocs }}" /> documents</label>
+                                <span id="cullnumber-input">
+							<label>Must be in <input type="number"
+                                                     name="cullnumber"
+                                                     id="cullnumber"
+                                                     style="width:60px;"
+                                                     min="1"
+                                                     max="{{ numActiveDocs }}"
+                                                     step="1"
+                                                     value="{{ numActiveDocs }}"/> documents</label>
 							</span>
-							</label>
-						</div>
-					</div>
-				</fieldset>
-			</div>
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
 
-			<!-- Analyze-Advanced Left Column -->
-			<div class="col-md-7">
+                <!-- Analyze-Advanced Left Column -->
+                <div class="col-md-7">
 
-				<!-- Fieldset - Temp-Label-Div -->
-				<fieldset class="analyze-advanced-options" id="temp-label-div">
-					<legend id="assign-title" class="has-chevron">Assign Temporary Labels
-					<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Assign temporary names to documents for use in tables and graphs produced by the Lexos tools that use the Tokenize, Normalize, and Culling options." style=""></i>
-					<span class="fa fa-chevron-right rotate" id="assignLabelsChev" data-target="#tempLabelPanel" aria-expanded="false" aria-controls="tempLabelPanel"></span>
-					</legend>
-					<div class="collapse" id="modifylabels" style="overflow:auto;width:100%;">
-						<div style="" aria-expanded="true" class="collapse in" id="tempLabelPanel">
-							<table style="width:100%;border:none;">
-                            {% set i = 1  %}
-								{% for fileID, label in labels.items() %}
-								    <tr>
-							        <td style="width:40px;">{{i}}</td>
-							        <td><input type="text" class="filenames" name="file_{{fileID}}" id="{{fileID}}" value="{{ request.form['file_'+(fileID|str)] or label }}" style="min-width:240px;"></td>
-							        </tr>
-                                    {%  set i = i+1 %}
-								{%- endfor %}
-							</table>
-							{% if labels|len == 0 %}
-								<span id="no-labels">No Documents are Selected</span>
-							{%- endif %}
-						</div>
-					</div>
-				</fieldset>
-			</div>
-		</div>
-		<!-- End Analyze-Advanced Row 2 -->
-	</div>
-	<!-- End Right Column - Analyze-Advanced -->
-</div>
-<!-- End Top Row -->
+                    <!-- Fieldset - Temp-Label-Div -->
+                    <fieldset class="analyze-advanced-options"
+                              id="temp-label-div">
+                        <legend id="assign-title" class="has-chevron">Assign
+                            Temporary Labels
+                            <i class="fa fa-question-circle lexos-tooltip-trigger"
+                               data-toggle="tooltip" data-html="true"
+                               data-placement="right" data-container="body"
+                               title="Assign temporary names to documents for use in tables and graphs produced by the Lexos tools that use the Tokenize, Normalize, and Culling options."
+                               style=""></i>
+                            <span class="fa fa-chevron-right rotate"
+                                  id="assignLabelsChev"
+                                  data-target="#tempLabelPanel"
+                                  aria-expanded="false"
+                                  aria-controls="tempLabelPanel"></span>
+                        </legend>
+                        <div class="collapse" id="modifylabels"
+                             style="overflow:auto;width:100%;">
+                            <div style="" aria-expanded="true"
+                                 class="collapse in" id="tempLabelPanel">
+                                <table style="width:100%;border:none;">
+                                    {% set i = 1 %}
+                                    {% for fileID, label in labels.items() %}
+                                        <tr>
+                                            <td style="width:40px;">{{ i }}</td>
+                                            <td><input type="text"
+                                                       class="filenames"
+                                                       name="file_{{ fileID }}"
+                                                       id="{{ fileID }}"
+                                                       value="{{ request.form['file_'+(fileID|str)] or label }}"
+                                                       style="min-width:240px;">
+                                            </td>
+                                        </tr>
+                                        {% set i = i+1 %}
+                                    {%- endfor %}
+                                </table>
+                                {% if labels|len == 0 %}
+                                    <span id="no-labels">No Documents are Selected</span>
+                                {%- endif %}
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <!-- End Analyze-Advanced Row 2 -->
+        </div>
+        <!-- End Right Column - Analyze-Advanced -->
+    </div>
+    <!-- End Top Row -->
 
-<!-- Analyze-Results Row -->
-<div id="analyze-results" class="row">
-	<div class="col-md-12">
-		<!-- For hierarchy and kmeans, add a row for the silhouette score results -->
-		{% if request.path == "/hierarchy" or request.path == "/kmeans" %}
-		<div id="silhouetteResults" class="row" style="display:none;">
-			<div class="col-md-12">
-				{% block silhouetteResults %}{% endblock %}
-			</div>
-		</div>
-		{% endif %}
+    <!-- Analyze-Results Row -->
+    <div id="analyze-results" class="row">
+        <div class="col-md-12">
+            <!-- For hierarchy and kmeans, add a row for the silhouette score results -->
+            {% if request.path == "/hierarchy" or request.path == "/kmeans" %}
+                <div id="silhouetteResults" class="row" style="display:none;">
+                    <div class="col-md-12">
+                        {% block silhouetteResults %}{% endblock %}
+                    </div>
+                </div>
+            {% endif %}
 
-		<!-- Results Row -->
-		<div class="row">
-			<div class="col-md-12">
-				{% block results %}{% endblock %}
-			</div>
-		</div>
-	</div>
-</div>
-<!-- End Analyze-Results Row -->
+            <!-- Results Row -->
+            <div class="row">
+                <div class="col-md-12">
+                    {% block results %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Analyze-Results Row -->
 
 {% endblock %}
 <!-- End Block Content -->

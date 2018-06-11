@@ -111,7 +111,6 @@ function updatecullinput () {
   }
 }
 
-
 /**
  * Toggle chevron class in order to handle chevron drop down button rotate
  * animation
