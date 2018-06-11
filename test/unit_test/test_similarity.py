@@ -25,10 +25,13 @@ def test_with_similarity_equal_one():
             id_temp_label_map=test_id_table
         )
     )
-    pd.testing.assert_series_equal(
+    pd.testing.assert_frame_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([1., 1.], index=["F1.txt", "F2.txt"], name="cos_similarity")
+        pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+                     data=[["F1.txt", "F2.txt"], [1., 1.]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
@@ -48,10 +51,13 @@ def test_with_all_same_content_file():
             id_temp_label_map=test_id_table
         )
     )
-    pd.testing.assert_series_equal(
+    pd.testing.assert_frame_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([0., 0.], index=["F1.txt", "F3.txt"], name="cos_similarity")
+        pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+                     data=[["F1.txt", "F3.txt"], [0., 0.]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
@@ -70,12 +76,13 @@ def test_with_two_dimension():
         )
     )
     # assertion
-    pd.testing.assert_series_equal(
+    pd.testing.assert_frame_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([.105572809, .5527864045],
-                  index=["F2.txt", "F3.txt"],
-                  name="cos_similarity")
+        pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+                     data=[["F2.txt", "F3.txt"], [.105572809, .5527864045]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
@@ -95,12 +102,13 @@ def test_with_three_dimension():
         )
     )
     # assertion
-    pd.testing.assert_series_equal(
+    pd.testing.assert_frame_equal(
         similarity_model._gen_exact_similarity(),
-        pd.Series([.42264973081, 1.],
-                  index=["F1.txt", "F3.txt"],
-                  name="cos_similarity")
+        pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+                     data=[["F1.txt", "F3.txt"], [.42264973081, 1.]])
     )
+
+
 # --------------------------------------------------------------------------
 
 
