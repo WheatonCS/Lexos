@@ -33,13 +33,13 @@ $('form').attr('method', 'post')
 $(function () {
   $('#getviz').click(function (e) {
     if (numActiveDocs < 1) {
-      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+      const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
       $('#error-modal-message').html(msg)
       $('#error-modal').modal()
       e.preventDefault()
       return false
     } else if ($('input[name=\'segmentlist\']:checked').length < 1) {
-      msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+      const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
       $('#error-modal-message').html(msg)
       $('#error-modal').modal()
       e.preventDefault()
@@ -99,7 +99,7 @@ $(function () {
   $('form').attr('method', 'post')
   $('form').submit(function () {
     $('#num_active_files').val()
-    if ($('#num_active_files').val() == '0') {
+    if ($('#num_active_files').val() === '0') {
       $('#error-modal').modal()
       return false
     } else {
@@ -169,6 +169,12 @@ $(function () {
   })
 })
 
+/**
+ * Gathers all the form values and returns them as a FormData object. In Flask,
+ * access for values through request.form and files through request.files.
+ * Returns a JSON object.
+ * @returns {json}
+ */
 function getFormValues () {
   /* Gathers all the form values and returns them as a FormData object. In Flask,
   access form values through request.form and files through request.files. Returns
