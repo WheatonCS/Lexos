@@ -13,9 +13,9 @@ $(function () {
 
   updateMFWinput()
 
-  $('input[type=checkbox][name=cullcheckbox]').click(updatecullinput)
+  $('input[type=checkbox][name=cullcheckbox]').click(updateCullInput)
 
-  updatecullinput()
+  updateCullInput()
 })
 
 /**
@@ -80,7 +80,7 @@ function updateMFWinput () {
  * is checked
  * @returns {void}
  */
-function updatecullinput () {
+function updateCullInput () {
   // If culling is checked
   if ($('#culling').is(':checked')) {
     // Show documents number input
