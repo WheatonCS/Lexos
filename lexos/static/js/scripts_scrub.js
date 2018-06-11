@@ -7,33 +7,7 @@ $(function () {
   $('.has-chevron').click(rotateChevron())
 
   // display additional options on load
-  const advancedOptions = $('#advanced-title')
-  advancedOptions.find('.icon-arrow-right').addClass('showing')
-  advancedOptions.siblings('.expansion').slideToggle(0)
-
-  $('#swfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#swfileselectbttnlabel').html(filename)
-  })
-
-  $('#lemfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#lemfileselectbttnlabel').html(filename)
-  })
-
-  $('#consfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#consfileselectbttnlabel').html(filename)
-  })
-
-  $('#scfileselect').change(function (ev) {
-    let filename = ev.target.files[0].name
-    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-    $('#scfileselectbttnlabel').html(filename)
-  })
+  displayAdditionalOptions()
 
   $('.bttnfilelabels').click(function () {
     // swfileselect, lemfileselect, consfileselect, scfileselect
@@ -240,4 +214,34 @@ function doScrubbing (action) {
 function rotateChevron () {
   $(this).find('span').toggleClass('down')
   $(this).next().collapse('toggle')
+}
+
+function displayAdditionalOptions () {
+  const advancedOptions = $('#advanced-title')
+  advancedOptions.find('.icon-arrow-right').addClass('showing')
+  advancedOptions.siblings('.expansion').slideToggle(0)
+
+  $('#swfileselect').change(function (ev) {
+    let filename = ev.target.files[0].name
+    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
+    $('#swfileselectbttnlabel').html(filename)
+  })
+
+  $('#lemfileselect').change(function (ev) {
+    let filename = ev.target.files[0].name
+    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
+    $('#lemfileselectbttnlabel').html(filename)
+  })
+
+  $('#consfileselect').change(function (ev) {
+    let filename = ev.target.files[0].name
+    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
+    $('#consfileselectbttnlabel').html(filename)
+  })
+
+  $('#scfileselect').change(function (ev) {
+    let filename = ev.target.files[0].name
+    if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
+    $('#scfileselectbttnlabel').html(filename)
+  })
 }
