@@ -26,6 +26,10 @@ $(function () {
   $('#xml-modal').on('hidden.bs.modal', removeEmptyTagTable())
 })
 
+/**
+ * Download the scrubbing results
+ * @returns {void}
+ */
 function downloadScrubbing () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
   // Flask route seems to be the easiest method.
