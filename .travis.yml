@@ -5,8 +5,7 @@ install:
   # update the apt-get database
   - sudo apt-get update
 
-  # We do this conditionally because it saves us some downloading if the
-  # version is the same.
+  # Install latest version of Mini conda 3
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
@@ -40,6 +39,9 @@ script:
   # unit testing
   - pytest --cov=./lexos
   - codecov
+  # doc style, at the moment only test files under models and receivers.
+  - pydocstyle lexos/models/
+  - pydocstyle lexos/receivers/
 
   # test for javascript code style
   - cd ./lexos/static
