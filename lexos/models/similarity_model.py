@@ -25,10 +25,9 @@ class SimilarityModel(BaseModel):
     """The TopwordModel inherits from the BaseModel."""
 
     def __init__(self, test_options: SimilarityTestOption = None):
-        """This is the class to generate similarity.
+        """Generate similarity.
 
-        :param test_options:
-            The option to send in for testing
+        :param test_options: The option to send in for testing.
         """
         super().__init__()
         if test_options is not None:
@@ -59,20 +58,21 @@ class SimilarityModel(BaseModel):
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()
 
-    def _gen_exact_similarity(self) -> pd.Series:
-        """Get the exact (not rounded) cos-similarity between files
+    def _gen_exact_similarity(self) -> pd.DataFrame:
+        """Get the exact (not rounded) cos-similarity between files.
 
-        :return a panda series where
-            - the index is the temp labels
-            - the value is the cos distance between this file and "comp_file"
+        :return a two rows pandas data frame where
+            - the name of the first row is Documents, contains file names.
+            - the name of the second row is Cosine Similarity Scores, contains
+              distance between this file and "comp_file".
         """
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
 
         # select the row with comp_file_id
-        comp_file_word_count = self._doc_term_matrix.loc[
-            self._similarity_option.comp_file_id, :]
+        comp_file_word_count = \
+            self._doc_term_matrix.loc[self._similarity_option.comp_file_id, :]
 
         # select the all the other rows (index is not comp_file_id)
         # or drop the comp_file_id row
@@ -92,15 +92,15 @@ class SimilarityModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in other_file_word_counts.index]
 
-        # pack score and labels into a series
-        return pd.Series(cos_scores, index=labels, name="cos_similarity")
+        # pack score and labels into a pandas data frame
+        return pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+                            data=[labels, cos_scores])
 
     def generate_sims_html(self) -> str:
-        """Generate the html for sim query
+        """Generate the html for sim query.
 
         We also round all the data to 4 digits for better display
         :return: the html table to put into the web page
         """
-        return self._gen_exact_similarity().round(4).to_frame().to_html(
-            classes="table table-striped table-bordered"
-        )
+        return self._gen_exact_similarity().transpose().round(4).to_html(
+            index=False, classes="table table-striped table-bordered")
