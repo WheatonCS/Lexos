@@ -2045,6 +2045,16 @@ select#orientation {
 .td-top {
   width: 400px !important;
 }
+
+.result-table tbody {
+  display: table-header-group;
+  overflow-y: scroll;
+  height: 200px;
+}
+
+.result-table td {
+  width: 100%;
+}
 /*====================== bootstrap table =========================*/
 .header-fixed {
     width: 100%
