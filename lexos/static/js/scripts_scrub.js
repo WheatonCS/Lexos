@@ -41,11 +41,11 @@ function downloadScrubbing () {
 
 /**
  * Send ajax request to do scrubbing
- * @param action
- * @returns {void}
+ * @param {string} action - preview or apply
+ * @returns {void} - returns nothing.
  */
 function doScrubbing (action) {
-  if ($('#num_active_files').val() == '0') {
+  if ($('#num_active_files').val() === '0') {
     $('#error-modal').modal()
     return
   }
@@ -69,10 +69,8 @@ function doScrubbing (action) {
   }).done(function (response) {
     response = JSON.parse(response)
     $('#preview-body').empty()
-    $.each(response['data'], function (i, item) {
-      // const fileID = $(this)[0]
+    $.each(response['data'], function () {
       const filename = $(this)[1]
-      // const fileLabel = $(this)[2]
       const fileContents = $(this)[3]
       const fieldset = $('<fieldset></fieldset>')
       // CSS truncates the document name
@@ -123,12 +121,15 @@ function truncateFileName (ev) {
   $(this).html(filename)
 }
 
+/**
+ * @returns {void}
+ */
 function buttonFileLabelsFunction () {
   // swfileselect, lemfileselect, consfileselect, scfileselect
   const filetype = $(this).attr('id').replace('bttnlabel', '')
-  const usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
+  const usingCache = $('#usecache' + filetype).attr('disabled') !== 'disabled'
 
-  if ((usingCache) || ($(this).attr('id') != '')) {
+  if ((usingCache) || ($(this).attr('id') !== '')) {
     // $(this).siblings('.scrub-upload').attr('value', '');
     // Next two lines clear the file input; it's hard to find a cross-browser solution
     $('#' + filetype).val('')
@@ -182,7 +183,7 @@ function changeTagBoxClass () {
 
 function entityRulesChangeFunction () {
   console.log($('#entityrules')[0].value)
-  if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
+  if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules')[0].value === 'MUFI-4') {
     document.getElementById('MUFI-warning').style.display = 'inline-block'
     $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
     $('.filecontents').addClass('Junicode')
@@ -218,13 +219,13 @@ function setTagsButtonAjax () {
         $('#tagTable').empty().remove()
         const t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
         $('#xmlModalBody').append(t)
-        let select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
-        select += '<option value="remove-tag,allTags">Remove Tag Only</option>'
-        select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>'
-        select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>'
-        select += '<option value="leave-alone,allTags">Leave Tag Alone</option>'
-        select += '</select>'
-        select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
+        const select = `<select id="allTags" style="margin-top:3px;margin-right:5px;"> \
+        <option value="remove-tag,allTags">Remove Tag Only</option> \
+        <option value="remove-element,allTags">Remove Element and All Its Contents</option> \
+        <option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option> \
+        <option value="leave-alone,allTags">Leave Tag Alone</option> \
+        </select> \
+        <button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>`
         $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
         $('#tagTable').append('<tbody></tbody>')
         $('#tagTable tbody').append(response)
@@ -238,14 +239,17 @@ function setTagsButtonAjax () {
   }
 }
 
+/**
+ * Fade in/out animation
+ * @returns {void}
+ */
 function puncTBoxFade () {
   const timeToToggle = 300
 
-  if ($('#aposhyph')[0].style.cssText == 'display: none;') {
+  if ($('#aposhyph')[0].style.cssText === 'display: none;') {
     $('#aposhyph').fadeIn(timeToToggle)
   } else {
     $('#aposhyph').fadeOut(timeToToggle)
-    $('#aposhyph')[0].style.cssText == 'display: none;'
   }
 }
 
@@ -263,21 +267,21 @@ function xmlModalAjax () {
       $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
     },
     success: function (response) {
-      j = JSON.parse(response)
+      const j = JSON.parse(response)
       const t = '<table id="tagTable" class="table table-condensed table-striped table-bordered"></table>'
       $('#xmlModalBody').append(t)
-      let select = '<select id="allTags" style="margin-top:3px;margin-right:5px;">'
-      select += '<option value="remove-tag,allTags">Remove Tag Only</option>'
-      select += '<option value="remove-element,allTags">Remove Element and All Its Contents</option>'
-      select += '<option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option>'
-      select += '<option value="leave-alone,allTags">Leave Tag Alone</option>'
-      select += '</select>'
-      select += '<button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>'
+      const select = `<select id="allTags" style="margin-top:3px;margin-right:5px;"> \
+      <option value="remove-tag,allTags">Remove Tag Only</option> \
+      <option value="remove-element,allTags">Remove Element and All Its Contents</option> \
+      <option value="replace-element,allTags">Replace Element and Its Contents with Attribute Value</option> \
+      <option value="leave-alone,allTags">Leave Tag Alone</option> \
+      </select> \
+      <button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>`
       $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
       $('#tagTable').append('<tbody></tbody>')
       $('#tagTable tbody').append(j['menu'])
       $('#xmlModalStatus').remove()
-      if (j['selected-options'] != 'multiple') {
+      if (j['selected-options'] !== 'multiple') {
         $('#allTags option[value=\'' + j['selected-options'] + '\']').prop('selected', true)
       }
     },
