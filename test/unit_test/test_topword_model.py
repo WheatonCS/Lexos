@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE,\
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     EMPTY_DTM_MESSAGE
 from lexos.models.topword_model import TopwordModel, TopwordTestOptions
 from lexos.receivers.topword_receiver import TopwordAnalysisType
@@ -28,6 +28,8 @@ class TestZTest:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -35,8 +37,8 @@ class TestZTest:
 # Create test suite for normal case.
 test_dtm_all_to_para = pd.DataFrame(
     data=np.array([(1, 1, 0, 0), (0, 0, 1, 10)]),
-    index=np.array([0, 1]),
-    columns=np.array(["A", "B", "C", "D"]))
+    columns=np.array(["A", "B", "C", "D"]),
+    index=np.array([0, 1]))
 test_front_end_option_all_to_para = TopwordAnalysisType.ALL_TO_PARA
 test_id_temp_label_map_all_to_para = {0: "F1", 1: "F2"}
 test_class_division_map_all_to_para = pd.DataFrame(
@@ -45,11 +47,9 @@ test_class_division_map_all_to_para = pd.DataFrame(
     columns=[0, 1])
 test_option_all_to_para = TopwordTestOptions(
     doc_term_matrix=test_dtm_all_to_para,
-    id_temp_label_map=
-    test_id_temp_label_map_all_to_para,
+    id_temp_label_map=test_id_temp_label_map_all_to_para,
     front_end_option=test_front_end_option_all_to_para,
-    class_division_map=
-    test_class_division_map_all_to_para)
+    class_division_map=test_class_division_map_all_to_para)
 test_topword_model_all_to_para = TopwordModel(
     test_options=test_option_all_to_para)
 
@@ -65,6 +65,8 @@ test_option_empty_all_to_para = TopwordTestOptions(
     class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_all_to_para = TopwordModel(
     test_options=test_option_empty_all_to_para)
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -72,14 +74,14 @@ class TestParaToGroup:
     def test_normal_case_result(self):
         assert test_results_all_to_para[1][0]['D'] == -2.1483
 
-        assert test_results_all_to_para.results[1].dtype == 'float64'
+        assert test_results_all_to_para.results[1].dtype == "float64"
 
-        assert test_results_all_to_para.results[
-                   1].name == 'Document "F2" compares to the whole corpus'
+        assert test_results_all_to_para.results[1].name == \
+            "Document \"F2\" compares to the whole corpus"
 
     def test_normal_case_header(self):
-        assert test_results_all_to_para.header \
-               == "Compare Each Document to All the Documents As a Whole."
+        assert test_results_all_to_para.header == \
+            "Compare Each Document to All the Documents As a Whole."
 
     def test_special_case(self):
         try:
@@ -88,19 +90,20 @@ class TestParaToGroup:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE
+
+
 # ---------------------------------------------------------------------------
 
 
 # -------------------- Test CLASS_TO_PARA------------------------------------
 # Create test suite for normal case.
-test_dtm_class_to_para = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
-                                                     (0, 0, 1, 1, 0, 0, 0, 0),
-                                                     (0, 0, 0, 0, 1, 1, 0, 0),
-                                                     (0, 0, 0, 0, 0, 0, 1,
-                                                      100)]),
-                                      index=np.array([0, 1, 2, 3]),
-                                      columns=np.array(["A", "B", "C", "D",
-                                                        "E", "F", "G", "H"]))
+test_dtm_class_to_para = pd.DataFrame(
+    data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
+                   (0, 0, 1, 1, 0, 0, 0, 0),
+                   (0, 0, 0, 0, 1, 1, 0, 0),
+                   (0, 0, 0, 0, 0, 0, 1, 100)]),
+    index=np.array([0, 1, 2, 3]),
+    columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H"]))
 test_id_temp_label_map_class_to_para = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
 test_front_end_option_class_to_para = TopwordAnalysisType.CLASS_TO_PARA
 test_class_division_map_class_to_para = pd.DataFrame(
@@ -109,12 +112,9 @@ test_class_division_map_class_to_para = pd.DataFrame(
     columns=np.array([0, 1, 2, 3]))
 test_option_class_to_para = TopwordTestOptions(
     doc_term_matrix=test_dtm_class_to_para,
-    id_temp_label_map=
-    test_id_temp_label_map_class_to_para,
-    front_end_option=
-    test_front_end_option_class_to_para,
-    class_division_map=
-    test_class_division_map_class_to_para)
+    id_temp_label_map=test_id_temp_label_map_class_to_para,
+    front_end_option=test_front_end_option_class_to_para,
+    class_division_map=test_class_division_map_class_to_para)
 test_topword_model_one_class_to_para = TopwordModel(
     test_options=test_option_class_to_para)
 
@@ -130,6 +130,8 @@ test_option_empty_class_to_para = TopwordTestOptions(
     class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_one_class_to_para = \
     TopwordModel(test_options=test_option_empty_class_to_para)
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -140,12 +142,12 @@ class TestClassToAll:
         assert test_results_class_to_para[1][0]['B'] == 7.2108
         assert test_results_class_to_para[1][0]['H'] == -6.3857
         assert test_results_class_to_para.results[1].dtype == 'float64'
-        assert test_results_class_to_para.results[
-                   1].name == 'Document "F2" compares to Class "C2"'
+        assert test_results_class_to_para.results[1].name == \
+            'Document "F2" compares to Class "C2"'
 
     def test_normal_case_header(self):
         assert test_results_class_to_para.header == \
-               "Compare Each Document to Other Class(es)."
+            "Compare Each Document to Other Class(es)."
 
     def test_special_case(self):
         try:
@@ -155,19 +157,19 @@ class TestClassToAll:
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE
 
+
 # ---------------------------------------------------------------------------
 
 
 # ------------------- Test CLASS_TO_CLASS ----------------------------------
 # Create test suite for normal case.
-test_dtm_class_to_class = pd.DataFrame(data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
-                                                      (0, 0, 1, 1, 0, 0, 0, 0),
-                                                      (0, 0, 0, 0, 1, 1, 0, 0),
-                                                      (0, 0, 0, 0, 0, 0, 1,
-                                                       100)]),
-                                       index=np.array([0, 1, 2, 3]),
-                                       columns=np.array(["A", "B", "C", "D",
-                                                         "E", "F", "G", "H"]))
+test_dtm_class_to_class = pd.DataFrame(
+    data=np.array([(1, 1, 0, 0, 0, 0, 0, 0),
+                   (0, 0, 1, 1, 0, 0, 0, 0),
+                   (0, 0, 0, 0, 1, 1, 0, 0),
+                   (0, 0, 0, 0, 0, 0, 1, 100)]),
+    index=np.array([0, 1, 2, 3]),
+    columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H"]))
 test_id_temp_label_map_class_to_class = {0: "F1", 1: "F2", 2: "F3", 3: "F4"}
 test_front_end_option_class_to_class = TopwordAnalysisType.CLASS_TO_CLASS
 test_class_division_map_class_to_class = pd.DataFrame(
@@ -176,12 +178,9 @@ test_class_division_map_class_to_class = pd.DataFrame(
     columns=np.array([0, 1, 2, 3]))
 test_option_class_to_class = TopwordTestOptions(
     doc_term_matrix=test_dtm_class_to_class,
-    id_temp_label_map=
-    test_id_temp_label_map_class_to_class,
-    front_end_option=
-    test_front_end_option_class_to_class,
-    class_division_map=
-    test_class_division_map_class_to_class)
+    id_temp_label_map=test_id_temp_label_map_class_to_class,
+    front_end_option=test_front_end_option_class_to_class,
+    class_division_map=test_class_division_map_class_to_class)
 test_topword_model_two_class_to_class = TopwordModel(
     test_options=test_option_class_to_class)
 
@@ -198,6 +197,8 @@ test_option_empty_class_to_class = TopwordTestOptions(
     class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_two_class_to_class = TopwordModel(
     test_options=test_option_empty_class_to_class)
+
+
 # ---------------------------------------------------------------------------
 
 
@@ -209,12 +210,12 @@ class TestClassToClass:
         assert test_results_class_to_class[1][0]['C'] == 5.0983
         assert test_results_class_to_class[1][0]['D'] == 5.0983
         assert test_results_class_to_class.results[0].dtype == 'float64'
-        assert test_results_class_to_class.results[
-                   0].name == 'Class "C1" compares to Class "C2"'
+        assert test_results_class_to_class.results[0].name == \
+            'Class "C1" compares to Class "C2"'
 
     def test_normal_case_header(self):
         assert test_results_class_to_class.header == \
-               'Compare a Class to Each Other Class(es).'
+            'Compare a Class to Each Other Class(es).'
 
     def test_special_case(self):
         try:
