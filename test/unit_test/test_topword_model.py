@@ -49,7 +49,7 @@ test_option_all_to_para = TopwordTestOptions(
     doc_term_matrix=test_dtm_all_to_para,
     id_temp_label_map=test_id_temp_label_map_all_to_para,
     front_end_option=test_front_end_option_all_to_para,
-    class_division_map=test_class_division_map_all_to_para)
+    division_map=test_class_division_map_all_to_para)
 test_topword_model_all_to_para = TopwordModel(
     test_options=test_option_all_to_para)
 
@@ -62,7 +62,7 @@ test_option_empty_all_to_para = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
     id_temp_label_map={},
     front_end_option=test_front_end_option_all_to_para,
-    class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
+    division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_all_to_para = TopwordModel(
     test_options=test_option_empty_all_to_para)
 
@@ -114,7 +114,7 @@ test_option_class_to_para = TopwordTestOptions(
     doc_term_matrix=test_dtm_class_to_para,
     id_temp_label_map=test_id_temp_label_map_class_to_para,
     front_end_option=test_front_end_option_class_to_para,
-    class_division_map=test_class_division_map_class_to_para)
+    division_map=test_class_division_map_class_to_para)
 test_topword_model_one_class_to_para = TopwordModel(
     test_options=test_option_class_to_para)
 
@@ -127,7 +127,7 @@ test_option_empty_class_to_para = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
     id_temp_label_map={},
     front_end_option=test_front_end_option_class_to_para,
-    class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
+    division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_one_class_to_para = \
     TopwordModel(test_options=test_option_empty_class_to_para)
 
@@ -180,7 +180,7 @@ test_option_class_to_class = TopwordTestOptions(
     doc_term_matrix=test_dtm_class_to_class,
     id_temp_label_map=test_id_temp_label_map_class_to_class,
     front_end_option=test_front_end_option_class_to_class,
-    class_division_map=test_class_division_map_class_to_class)
+    division_map=test_class_division_map_class_to_class)
 test_topword_model_two_class_to_class = TopwordModel(
     test_options=test_option_class_to_class)
 
@@ -194,7 +194,7 @@ test_option_empty_class_to_class = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
     id_temp_label_map={},
     front_end_option=test_front_end_option_class_to_class,
-    class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
+    division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_two_class_to_class = TopwordModel(
     test_options=test_option_empty_class_to_class)
 
