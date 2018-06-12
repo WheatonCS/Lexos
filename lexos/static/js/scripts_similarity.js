@@ -13,8 +13,13 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
+  const manageUrl = $('#manage-url').data().url
+  const uploadUrl = $('#upload-url').data().url
+  const activeFileNumTooFewErr = `You do not have enough active documents. 
+  Please activate at least two documents using the <a href=${manageUrl}>Manage</a> tool 
+  or <a href=${uploadUrl}>Upload</a> a new document.`
   if ($('#num_active_files').val() < 2) {
-    return 'You must have at least 2 active documents to proceed!'
+    return activeFileNumTooFewErr
   } else {
     return null
   }
