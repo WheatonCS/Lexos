@@ -65,6 +65,25 @@
           })
         })
 
+        // I'm not sure if this function is needed. Display of the loading icon can be moved to the ajax functions
+        $('.scrubTrigger').click(function () {
+          {% if (previews|len) != 0 %}
+            //$("#status-prepare").css({"visibility":"visible"});
+          {% endif %}
+          if ($('#num_active_files').val() == '0') {
+            msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.'
+            $('#error-modal-message').html(msg)
+            $('#error-modal').modal()
+            return
+          }
+        })
+
+        $('.bttnfilelabels').tooltip({
+          container: 'body',
+          placement: 'right',
+          title: 'Click the filename to de-activate the stored version.'
+        })
+
       })
 
     </script>
@@ -505,34 +524,13 @@
 
     {%- endfor %}
 
-    <script>
-      $(document).ready(function () {
-        // I'm not sure if this function is needed. Display of the loading icon can be moved to the ajax functions
-        $('.scrubTrigger').click(function () {
-          {% if (previews|len) != 0 %}
-            //$("#status-prepare").css({"visibility":"visible"});
-          {% endif %}
-          if ($('#num_active_files').val() == '0') {
-            msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.'
-            $('#error-modal-message').html(msg)
-            $('#error-modal').modal()
-            return
-          }
-        })
-
-        $('.bttnfilelabels').tooltip({
-          container: 'body',
-          placement: 'right',
-          title: 'Click the filename to de-activate the stored version.'
-        })
-      })
-    </script>
-
 {% endblock %}
 {% block actions %}
-    <a class="btn btn-primary scrubTrigger" id="previewButton" onclick="doScrubbing('preview')"
+    <a class="btn btn-primary scrubTrigger" id="previewButton"
+       onclick="doScrubbing('preview')"
        role="button">Preview Scrubbing</a>
-    <a class="btn btn-success scrubTrigger" id="applyButton" onclick="doScrubbing('apply')"
+    <a class="btn btn-success scrubTrigger" id="applyButton"
+       onclick="doScrubbing('apply')"
        role="button">Apply Scrubbing</a>
     <a class="btn btn-info" id="downloadButton" role="button">Download
         Scrubbed Files</a>
