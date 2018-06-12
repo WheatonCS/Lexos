@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
-    NOT_ENOUGH_CLASSES_MESSAGE, EMPTY_DTM_MESSAGE
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE,\
+    EMPTY_DTM_MESSAGE
 from lexos.models.topword_model import TopwordModel, TopwordTestOptions
 from lexos.receivers.topword_receiver import TopwordAnalysisType
 
@@ -28,21 +28,8 @@ class TestZTest:
             raise AssertionError("Error message did not raise")
         except AssertionError as error:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
-
 # ---------------------------------------------------------------------------
-# ---------------------------- Test for z-test Word List---------------------
 
-
-series_one = pd.Series(data=[1, 2, 3, 4, 5],
-                       index=["the", "dog", "ran", "quickly", "fox"],
-                       name="F1")
-
-series_two = pd.Series(data=[6, 7, 8, 9, 10],
-                       index=["the", "cat", "ran", "slowly", "fox"],
-                       name="F2")
-
-# noinspection PyProtectedMember
-x = TopwordModel._z_test_word_list(series_one, series_two)
 
 # ------------------- Test ALL_TO_PARA --------------------------------------
 # Create test suite for normal case.
@@ -78,7 +65,6 @@ test_option_empty_all_to_para = TopwordTestOptions(
     class_division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_all_to_para = TopwordModel(
     test_options=test_option_empty_all_to_para)
-
 # ---------------------------------------------------------------------------
 
 
@@ -151,6 +137,8 @@ test_topword_model_empty_one_class_to_para = \
 class TestClassToAll:
     def test_normal_case_result(self):
         assert test_results_class_to_para[1][0]['A'] == 7.2108
+        assert test_results_class_to_para[1][0]['B'] == 7.2108
+        assert test_results_class_to_para[1][0]['H'] == -6.3857
         assert test_results_class_to_para.results[1].dtype == 'float64'
         assert test_results_class_to_para.results[
                    1].name == 'Document "F2" compares to Class "C2"'
