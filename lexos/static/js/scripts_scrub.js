@@ -31,7 +31,7 @@ $(function () {
 
 /**
  * Download the scrubbing results
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function downloadScrubbing () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
@@ -42,7 +42,7 @@ function downloadScrubbing () {
 /**
  * Send ajax request to do scrubbing
  * @param {string} action - preview or apply
- * @returns {void} - returns nothing.
+ * @returns {void} - returns nothing
  */
 function doScrubbing (action) {
   if ($('#num_active_files').val() === '0') {
@@ -85,7 +85,7 @@ function doScrubbing (action) {
 /**
  * Function to handle the chevron drop down button rotate animation by toggling
  * the class so the appropriate CSS applies.
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function rotateChevron () {
   $(this).find('span').toggleClass('down')
@@ -94,7 +94,7 @@ function rotateChevron () {
 
 /**
  * Get additional options and truncate file names when necessary
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function displayAdditionalOptions () {
   const advancedOptions = $('#advanced-title')
@@ -122,7 +122,8 @@ function truncateFileName (ev) {
 }
 
 /**
- * @returns {void}
+ * Clone file labels and do ajax request
+ * @returns {void} - returns nothing
  */
 function buttonFileLabelsFunction () {
   // swfileselect, lemfileselect, consfileselect, scfileselect
@@ -159,7 +160,7 @@ function buttonFileLabelsFunction () {
 
 /**
  * Change white space box class when checked or unchecked
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function changeWhitespaceBoxClass () {
   if ($(this).is(':checked')) {
@@ -171,7 +172,7 @@ function changeWhitespaceBoxClass () {
 
 /**
  * Change tag box class when checked or unchecked
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function changeTagBoxClass () {
   if ($(this).is(':checked')) {
@@ -181,21 +182,25 @@ function changeTagBoxClass () {
   }
 }
 
+/**
+ * Use special character options
+ * @returns {void} - returns nothing
+ */
 function entityRulesChangeFunction () {
   console.log($('#entityrules')[0].value)
   if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules')[0].value === 'MUFI-4') {
-    document.getElementById('MUFI-warning').style.display = 'inline-block'
+    $('#MUFI-warning').style.display = 'inline-block'
     $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
     $('.filecontents').addClass('Junicode')
   } else {
     $('.filecontents').removeClass('Junicode')
-    document.getElementById('MUFI-warning').style.display = 'none'
+    $('#MUFI-warning').style.display = 'none'
   }
 }
 
 /**
  * Function to send ajax request for tags button
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function setTagsButtonAjax () {
   if ($('#allTags')) {
@@ -241,7 +246,7 @@ function setTagsButtonAjax () {
 
 /**
  * Fade in/out animation
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function puncTBoxFade () {
   const timeToToggle = 300
@@ -293,7 +298,7 @@ function xmlModalAjax () {
 
 /**
  * Remove empty portions of tag table
- * @returns {void}
+ * @returns {void} - returns nothing
  */
 function removeEmptyTagTable () {
   $('#tagTable').empty().remove()
