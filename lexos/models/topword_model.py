@@ -25,9 +25,8 @@ AnalysisResult = List[pd.Series]
 class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
 
+    division_map: pd.DataFrame
     doc_term_matrix: pd.DataFrame
-    class_division_map: \
-        pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
 
@@ -53,7 +52,7 @@ class TopwordModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
-            self._test_class_division_map = test_options.class_division_map
+            self._test_class_division_map = test_options.division_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
