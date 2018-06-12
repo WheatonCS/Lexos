@@ -530,9 +530,9 @@
 
 {% endblock %}
 {% block actions %}
-    <a class="btn btn-primary scrubTrigger" onclick="doScrubbing('preview')"
+    <a class="btn btn-primary scrubTrigger" id="previewButton" onclick="doScrubbing('preview')"
        role="button">Preview Scrubbing</a>
-    <a class="btn btn-success scrubTrigger" onclick="doScrubbing('apply')"
+    <a class="btn btn-success scrubTrigger" id="applyButton" onclick="doScrubbing('apply')"
        role="button">Apply Scrubbing</a>
     <a class="btn btn-info" onclick="downloadScrubbing()" role="button">Download
         Scrubbed Files</a>
