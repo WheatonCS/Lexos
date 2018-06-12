@@ -258,6 +258,10 @@ function puncTBoxFade () {
   }
 }
 
+/**
+ * Get document tags table
+ * @returns {void} - returns nothing
+ */
 function xmlModalAjax () {
   $.ajax({
     type: 'POST',
