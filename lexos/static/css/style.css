@@ -2045,12 +2045,6 @@ select#orientation {
 .td-top {
   width: 400px !important;
 }
-
-.padfix-top {
-  padding-right: 10px;
-  padding-left: 10px;
-  margin-right: 0px;
-}
 /*====================== bootstrap table =========================*/
 .header-fixed {
     width: 100%
