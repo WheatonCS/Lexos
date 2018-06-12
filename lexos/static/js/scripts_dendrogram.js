@@ -72,7 +72,7 @@ function submissionError () {
   const uploadUrl = $('#upload-url').data().url
   const activeFileNumTooFewErr = `You do not have enough active documents. 
   Please activate at least two documents using the <a href=${manageUrl}>Manage</a> tool 
-  or <a href=${uploadUrl}>upload</a> a new document.`
+  or <a href=${uploadUrl}>Upload</a> a new document.`
   const activeFiles = $('#num_active_files').val()
   if (activeFiles < 2) {
     return activeFileNumTooFewErr
