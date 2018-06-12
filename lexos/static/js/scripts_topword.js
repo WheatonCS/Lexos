@@ -47,6 +47,19 @@ function sendAjaxRequest (url, form) {
   })
 }
 
+
+function format(result) {
+  return `<div class="row col-lg-6 col-md-6">
+              <fieldset class="row col-lg-12 col-md-12">
+                  <legend style="font-size: 18px">${result["header"]}</legend>
+              </fieldset>
+              <div class="row col-lg-12 col-md-12">
+                  ${result["result"]}
+              </div>
+          </div>`
+}
+
+
 /**
  * display the result of the top words on web page
  * @returns {void}
@@ -68,7 +81,7 @@ function generateTopWordResult () {
         topWordHeader.html(response['header'])
         // Format each table and put them in the result div.
         topWordResult.html(response['results'].map(
-          function (result) { return `<div class="row col-lg-6 col-md-6"><legend>${result["header"]}</legend>${result["result"]}</div>` }))
+          function (result) { return format(result) }))
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
