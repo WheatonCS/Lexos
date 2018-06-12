@@ -1,3 +1,5 @@
+"""This is a model to produce dendrograms of the dtms."""
+
 from typing import NamedTuple, Optional
 
 import pandas as pd
@@ -13,14 +15,18 @@ from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
 
 
 class DendroTestOptions(NamedTuple):
+    """A typed tuple to hold test options."""
+
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: DendroOption
 
 
 class DendrogramModel(BaseModel):
+    """The DendrogramModel inherits from the BaseModel."""
+
     def __init__(self, test_options: Optional[DendroTestOptions] = None):
-        """This is the class to generate dendrogram.
+        """Generate dendrogram.
 
         :param test_options:
             the input used in testing to override the dynamically loaded option
@@ -37,13 +43,13 @@ class DendrogramModel(BaseModel):
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-        """:return: the document term matrix"""
+        """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
     def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels"""
+        """:return: a map takes an id to temp labels."""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
@@ -60,7 +66,6 @@ class DendrogramModel(BaseModel):
 
         :return: A plotly figure object
         """
-
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
@@ -78,7 +83,7 @@ class DendrogramModel(BaseModel):
         )
 
     def get_dendrogram_div(self) -> str:
-        """Generate the dendrogram div to send to the front end
+        """Generate the dendrogram div to send to the front end.
 
         :return: a div
         """

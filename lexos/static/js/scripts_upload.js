@@ -1,7 +1,7 @@
 $(function () {
   if ($('.fa-folder-open-o')[0].style.display != 'none' &&
     $('.fa-folder-open-o')[0].innerText.indexOf('Response') != -1) {
-    alert("Steven's special bug detected! Click OK and the page will load.")
+    alert('Steven\'s special bug detected! Click OK and the page will load.')
     $('.fa-folder-open-o')[0].style.display = 'none'
   }
 

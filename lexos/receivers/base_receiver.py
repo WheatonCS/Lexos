@@ -1,3 +1,5 @@
+"""This is the base receiver for the base model."""
+
 from typing import Optional, Dict
 
 from flask import request
@@ -6,8 +8,10 @@ RequestData = Dict[str, str]
 
 
 class BaseReceiver:
+    """This is the base receiver class for the base model."""
+
     def __init__(self):
-        """This is the base model for all the models.
+        """Use base model for all the models.
 
         used to handle requests and other common stuff
         """
@@ -15,7 +19,7 @@ class BaseReceiver:
 
     @property
     def _front_end_data_nullable(self) -> Optional[RequestData]:
-        """An nullable front-end data
+        """Get nullable front-end data.
 
         the front end data, possibly None:
         - if not in an request context, you will get None
@@ -29,7 +33,7 @@ class BaseReceiver:
 
     @property
     def _front_end_data(self) -> RequestData:
-        """The null-safe version of front end data.
+        """Get null-safe version of front end data.
 
         :return: all the front end data pack in a dict
         """
@@ -52,7 +56,7 @@ class BaseReceiver:
             return None
 
     def options_from_front_end(self):
-        """A virtual method to pack the specific option needed.
+        """Pack specific option needed using the virtual method.
 
         find all the option needed and pack them into a struct.
         Needs to be implemented in other receivers
