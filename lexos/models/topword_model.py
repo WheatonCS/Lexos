@@ -398,28 +398,30 @@ class TopwordModel(BaseModel):
 
         :return: path of the generated CSV file.
         """
-        # Make the path.
+        # Get topword result.
+        topword_result = self._get_result()
+
+        # Get the default saving directory of topword result.
         result_folder_path = os.path.join(
             session_manager.session_folder(), RESULTS_FOLDER)
 
-        # Attempt to make the save path directory.
+        # Attempt to make the directory.
         try:
             os.makedirs(result_folder_path)
         except OSError:
             pass
 
-        # Get the path to save file.
+        # Get the complete saving path of topword result.
         save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
 
-        # Get topword result.
-        topword_result = self._get_result()
-
-        with open(save_path, 'w', encoding='utf-8') as f:
+        # Write to the file.
+        with open(save_path, 'w', encoding='utf-8') as file:
             # Write header to the file.
-            f.write(topword_result.header + '\n')
+            file.write(topword_result.header + '\n')
             # Write results to the file.
             # Since we want indexes and data in rows, we get the transpose.
             for result in topword_result.results:
-                f.write(pd.DataFrame(result).transpose().to_csv(header=True))
+                file.write(
+                    pd.DataFrame(result).transpose().to_csv(header=True))
 
         return save_path
