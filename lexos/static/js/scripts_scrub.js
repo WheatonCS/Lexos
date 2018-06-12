@@ -27,67 +27,6 @@ $(function () {
   $('#xml-modal').on('show.bs.modal', xmlModalAjax())
 
   $('#xml-modal').on('hidden.bs.modal', removeEmptyTagTable())
-
-  $('#save-button').on('click', function (e) {
-    e.preventDefault()
-    var tagDict = {}
-    var a = $(this).closest('form').serializeArray()
-    $.each(a, function () {
-      //name and value
-      if (tagDict[this.name] !== undefined) {
-        if (!tagDict[this.name].push) {
-          tagDict[this.name] = [tagDict[this.name]]
-        }
-        tagDict[this.name].push(this.value || '')
-      } else {
-        tagDict[this.name] = this.value || ''
-      }
-    })
-    tagDict = JSON.stringify(tagDict)
-    console.log(tagDict)
-    $.ajax({
-      type: 'POST',
-      url: '/xml',
-      data: tagDict,
-      contentType: 'application/json;charset=UTF-8',
-      cache: false,
-      beforeSend: function () {
-        $('#xml-modal-status').show()
-      },
-      success: function (response) {
-        $('#xml-modal-status').hide()
-        $('.modal.in').modal('hide')
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not perform the requested function.')
-        $('#error-modal').modal()
-        console.log('bad: ' + textStatus + ': ' + errorThrown)
-      }
-    })
-  })
-  // I'm not sure if this function is needed. Display of the loading icon can be moved to the ajax functions
-  $('.scrubTrigger').click(function () {
-    {%
-      if (previews | len) !=
-      0 %
-    }
-    //$("#status-prepare").css({"visibility":"visible"});
-    {%
-      endif %
-    }
-    if ($('#num_active_files').val() == '0') {
-      msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.'
-      $('#error-modal-message').html(msg)
-      $('#error-modal').modal()
-      return
-    }
-  })
-
-  $('.bttnfilelabels').tooltip({
-    container: 'body',
-    placement: 'right',
-    title: 'Click the filename to de-activate the stored version.'
-  })
 })
 
 /**
