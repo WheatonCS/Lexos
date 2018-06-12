@@ -112,7 +112,7 @@ function displayAdditionalOptions () {
 
 /**
  * Truncate file names if needed
- * @param ev
+ * @param ev - event? not sure how to pass in function call...
  * @returns {void}
  */
 function truncateFileName (ev) {
