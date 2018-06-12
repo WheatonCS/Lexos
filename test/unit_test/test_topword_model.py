@@ -30,7 +30,19 @@ class TestZTest:
             assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
 # ---------------------------------------------------------------------------
+# ---------------------------- Test for z-test Word List---------------------
 
+
+series_one = pd.Series(data=[1, 2, 3, 4, 5],
+                       index=["the", "dog", "ran", "quickly", "fox"],
+                       name="F1")
+
+series_two = pd.Series(data=[6, 7, 8, 9, 10],
+                       index=["the", "cat", "ran", "slowly", "fox"],
+                       name="F2")
+
+# noinspection PyProtectedMember
+x = TopwordModel._z_test_word_list(series_one, series_two)
 
 # ------------------- Test ALL_TO_PARA --------------------------------------
 # Create test suite for normal case.
