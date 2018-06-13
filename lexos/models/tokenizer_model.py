@@ -111,7 +111,8 @@ class TokenizerModel(BaseModel):
         # Convert the HTML to beautiful soup object.
         file_col_dtm_soup = BeautifulSoup(
             self._get_file_col_dtm().round(3).to_html(
-                classes="table table-bordered table-striped display no-wrap"),
+                classes="table text-center table-bordered table-striped "
+                        "display no-wrap"),
             "html.parser")
 
         # Set the table style to 100% so it always takes up the space.
@@ -151,7 +152,8 @@ class TokenizerModel(BaseModel):
         # Convert the main dtm to beautiful soup object.
         file_row_dtm_soup = BeautifulSoup(
             file_row_dtm.to_html(
-                classes="table table-bordered table-striped display no-wrap"),
+                classes="table text-center table-bordered table-striped "
+                        "display no-wrap"),
             "html.parser")
 
         # Find the table head of the main dtm in order to insert stats info.
@@ -166,7 +168,8 @@ class TokenizerModel(BaseModel):
         total_soup = BeautifulSoup(total_fame.to_html(classes="table"),
                                    "html.parser")
 
-        # Insert the total into the table head.
+        # Insert the total into the table head, since we want to fix total
+        # at the top of the table.
         dtm_head.contents.append(total_soup.find("thead").contents[1])
 
         # Form the average frame and set column name.
@@ -180,7 +183,8 @@ class TokenizerModel(BaseModel):
             "html.parser"
         )
 
-        # Insert the average into the table head.
+        # Insert the average into the table head, since we want to fix average
+        # at the top of the table.
         dtm_head.contents.append(average_soup.find("thead").contents[1])
 
         # Set the table style to 100% so it always takes up the space.
