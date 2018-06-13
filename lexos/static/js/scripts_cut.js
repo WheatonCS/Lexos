@@ -25,13 +25,15 @@ function checkForErrors () {
     if ($('#MScutWord').val() === '') { errors.push(noStringMsg) }
   } else {
     // Make sure there is a default cutting value
-    if ($('#overallcutvalue').val() === '') { errors.push(noCutValMsg) } else {
-      const overallcutvalueStr = $('#overallcutvalue').val()
-      const overallcutvalue = parseInt($('#overallcutvalue').val())
+    const overallCutVal = $('#overallcutvalue')
+    const indivCutVal =  $('#individualCutValue')
+    if (overallCutVal.val() === '') { errors.push(noCutValMsg) } else {
+      const overallcutvalueStr = overallCutVal.val()
+      const overallcutvalue = parseInt(overallCutVal.val())
       const overallOverlapValue = parseInt($('#overallOverlapValue').val())
       const individualOverlap = parseInt($('#individualOverlap').val())
-      const individualCutValueStr = $('#individualCutValue').val()
-      let individualCutValue = $('#individualCutValue').val()
+      const individualCutValueStr = indivCutVal.val()
+      let individualCutValue = indivCutVal.val()
 
       // Make sure the overall segment size not negative
       if (overallcutvalue !== Math.floor(overallcutvalue)) {
