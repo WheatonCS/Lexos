@@ -1,109 +1,69 @@
-/**
- * function to check if there are errors.
- * @returns {void} - returns nothing.
- */
-function checkForErrors () {
-  // search for error messages
-  const errorMsg = doCheck()
+var checkForErrors = function () {
+  // Set Error and Warning Messages
+  var errors = []
+  var err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
+  var err2 = 'You must provide a string to cut on.'
+  var err3 = 'You must provide a default cutting value.'
+  var err4 = 'Default cutting: Invalid segment size.'
+  var err5 = 'Default cutting: Invalid overlap value.'
+  var err6 = 'Individual cutting: Invalid segment size.'
+  var err7 = 'Individual cutting: Invalid overlap value.'
 
-  // throw error modal if error found.
-  if (errorMsg !== '') {
+  // Confirm that there are active files
+  if ($('#num_active_files').val() == '0') { errors.push(err1) }
+
+  // If cut by milestone is checked make sure there is a milestone value
+  if ($('#cutByMS').is(':checked')) {
+    if ($('#MScutWord').val() == '') { errors.push(err2) }
+  } else {
+    // Make sure there is a default cutting value
+    if ($('#overallcutvalue').val() == '') { errors.push(err3) } else {
+      var overallcutvalueStr = $('#overallcutvalue').val()
+      var overallcutvalue = parseInt($('#overallcutvalue').val())
+      var overallOverlapValue = parseInt($('#overallOverlapValue').val())
+      var individualOverlap = parseInt($('#individualOverlap').val())
+      var individualCutValueStr = $('#individualCutValue').val()
+      var individualCutValue = $('#individualCutValue').val()
+
+      // Make sure the overall segment size not negative
+      if (overallcutvalue != Math.floor(overallcutvalue)) { errors.push(err4) }
+
+      // Make sure the overall segment size not a decimal
+      if (overallcutvalueStr != Math.abs(overallcutvalue).toString()) { errors.push(err4) }
+
+      // Make sure the overall segment size not 0
+      if (overallcutvalue == 0) { errors.push(err4) }
+
+      // Make sure the overall overlap is valid
+      if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) != overallOverlapValue)) { errors.push(err5) }
+
+      // If there are individual segment cuts
+      if (individualCutValue != '') {
+        individualCutValue = parseInt(individualCutValue)
+
+        // Make sure the individual segment size not negative
+        if (individualCutValue != Math.floor(individualCutValue)) { errors.push(err6) }
+
+        // Make sure the individual segment size not a decimal
+        if (individualCutValueStr != Math.abs(individualCutValue).toString()) { errors.push(err6) }
+
+        // Make sure the individual segment size not 0
+        if (individualCutValue == 0) { errors.push(err6) }
+
+        // Make sure the individual overlap is valid
+        if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) != individualOverlap)) { errors.push(err7) }
+      }
+    }
+  }
+
+  if (errors.length > 0) {
     $('#hasErrors').val('true')
-    $('#status-prepare').css({'visibility': 'hidden'})
-    $('#error-modal-message').html(errorMsg)
+    $('#status-prepare').css({ 'visibility': 'hidden' })
+    $('#error-modal-message').html(errors[0])
     $('#error-modal').modal()
   } else {
     $('#hasErrors').val('false')
   }
-}
-
-/**
- * function to figure out where general errors are.
- * @returns {string} - returns the appropriate error message
- */
-function doCheck () {
-  const noActiveDocsMsg = `You have no active documents. Please
-  activate at least one document using the 
-  <a href="{{ url_for("manage.manage") }}">Manage</a> tool or 
-  <a href="{{ url_for("upload.upload") }}">upload</a> a new document.`
-  const noCutStringMsg = 'You must provide a string to cut on.'
-  const noCutValMsg = 'You must provide a default cutting value.'
-
-  // Confirm that there are active files
-  if ($('#numActiveFiles').val() === '0') {
-    return noActiveDocsMsg
-  }
-
-  // If cut by milestone is checked make sure there is a milestone value
-  if ($('#cutByMS').is(':checked')) {
-    if ($('#MScutWord').val() === '') {
-      return noCutStringMsg
-    }
-  } else {
-    // Make sure there is a default cutting value
-    if ($('#overallcutvalue').val() === '') {
-      return noCutValMsg
-    } else {
-      return checkValues()
-    }
-  }
-}
-
-/**
- * function to figure out if errors with cut and overlap values.
- * @returns {string} - the error message.
- */
-function checkValues () {
-  const defInvalidSegSize = 'Default cutting: Invalid segment size.'
-  const defInvalidOverlapVal = 'Default cutting: Invalid overlap value.'
-  const indInvalidSegSize = 'Individual cutting: Invalid segment size.'
-  const indInvalidOverlapVal = 'Individual cutting: Invalid overlap value.'
-
-  const overallcutvalueStr = $('#overallcutvalue').val()
-  const overallcutvalue = parseInt($('#overallcutvalue').val())
-  const overallOverlapValue = parseInt($('#overallOverlapValue').val())
-  const individualOverlap = parseInt($('#individualOverlap').val())
-  const individualCutValueStr = $('#individualCutValue').val()
-  let individualCutValue = $('#individualCutValue').val()
-
-  // Make sure the overall segment size not negative
-  if (overallcutvalue !== Math.floor(overallcutvalue)) {
-    return defInvalidSegSize
-  }
-  // Make sure the overall segment size not a decimal
-  if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) {
-    return defInvalidSegSize
-  }
-  // Make sure the overall segment size not 0
-  if (overallcutvalue === 0) {
-    return defInvalidSegSize
-  }
-  // Make sure the overall overlap is valid
-  if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) {
-    return defInvalidOverlapVal
-  }
-  // If there are individual segment cuts
-  if (individualCutValue !== '') {
-    individualCutValue = parseInt(individualCutValue)
-    // Make sure the individual segment size not negative
-    if (individualCutValue !== Math.floor(individualCutValue)) {
-      return indInvalidSegSize
-    }
-    // Make sure the individual segment size not a decimal
-    if (individualCutValueStr !== Math.abs(individualCutValue).toString()) {
-      return indInvalidSegSize
-    }
-    // Make sure the individual segment size not 0
-    if (individualCutValue === 0) {
-      return indInvalidSegSize
-    }
-    // Make sure the individual overlap is valid
-    if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) {
-      return indInvalidOverlapVal
-    }
-  }
-  // no errors
-  return ''
 }
 
 /**
@@ -448,6 +408,7 @@ $(document).on('click', '#downloadCutting', function () {
  * Document ready function.
  */
 $(function () {
+  /*
   const msg = 'You have no active documents. Please activate \
   at least one document using the <a href="./manage">Manage</a> tool or\
   <a href="./upload">upload</a> a new document.'
@@ -461,6 +422,8 @@ $(function () {
       $('#error-modal').modal()
     }
   })
+  */
+
   $('#actions').addClass('actions-cut')
 
   // Toggle cutting options when radio buttons with different classes are clicked
