@@ -1,5 +1,9 @@
+/**
+ * This function gives the user an appropriate error message if applicable.
+ * @returns {void}
+ */
 function checkForErrors () {
-  // Set Error and Warning Messages
+  // Set Error messages
   const errors = []
   const manageUrl = $('#manage-url').data().url
   const uploadUrl = $('#upload-url').data().url
