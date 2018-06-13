@@ -29,8 +29,8 @@
       $(function () {
         $('#save-button').on('click', function (e) {
           e.preventDefault()
-          var tagDict = {}
-          var a = $(this).closest('form').serializeArray()
+          let tagDict = {}
+          const a = $(this).closest('form').serializeArray()
           $.each(a, function () {
             //name and value
             if (tagDict[this.name] !== undefined) {
@@ -53,7 +53,7 @@
             beforeSend: function () {
               $('#xml-modal-status').show()
             },
-            success: function (response) {
+            success: function () {
               $('#xml-modal-status').hide()
               $('.modal.in').modal('hide')
             },
@@ -70,11 +70,10 @@
           {% if (previews|len) != 0 %}
             //$("#status-prepare").css({"visibility":"visible"});
           {% endif %}
-          if ($('#num_active_files').val() == '0') {
+          if ($('#num_active_files').val() === '0') {
             msg = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage.manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload.upload") }}\">upload</a> a new document.'
             $('#error-modal-message').html(msg)
             $('#error-modal').modal()
-            return
           }
         })
 
@@ -247,8 +246,8 @@
             </div>
             <div class="col-md-7"
                  style="padding-left: 0px; padding-right: 0px;">
-                <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}"
-                     id="aposhyph" style="margin-left: 0px; width :200px">
+                <div style="display:{{ 'none' if not session['scrubbingoptions']['punctuationbox'] }}; margin-left: 0px; width :200px"
+                     id="aposhyph">
                     <label for="hyphensbox">
                         <input type="checkbox" name="hyphensbox"
                                id="hyphensbox" {{ "checked" if session['scrubbingoptions']['hyphensbox'] }}>
