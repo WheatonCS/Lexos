@@ -134,7 +134,6 @@ function checkForWarnings () {
       const thisCutType = $(`input[name='cutType_${currID}']:checked`).val()
       // If not cut by milestone, use num_ variables set in template file
       if (!(isCutByMS)) {
-        // Needs warning...
         // If the number of characters-overlap size/segment size-overlap size > 100
         if (thisCutType === 'letters' && (numChar[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
@@ -157,7 +156,6 @@ function checkForWarnings () {
     if (defCutTypeValue === 'letters') {
       // Check each document without individual options
       eltsWithoutIndividualOpts.forEach(function (elt) {
-        // Needs warning...
         // If the number of characters-segment size/segment size-overlap size > 100
         if ((numChar[elt] - cutVal) / (cutVal - overVal) > maxSegs) {
           needsWarning = true
