@@ -1,16 +1,25 @@
 Lemmas
 ======
 
-This folder has files for testing consolidation functionality
+#### Test Lemmas
 
-## Test file: experiment.txt
+*Test files:* lemma_experiment.txt, lemmas_for_experiment.txt
 
-0. UPLOAD experiment.txt
+*Result file:* lemma_experimentResults.txt
 
-1. SCRUB: 
-    - deselect Remove all Punct
+1. UPLOAD experiment.txt
+
+2. SCRUB: 
+    - deselect Remove All Punctuation
     - deselect Make Lowercase
     - deselect Remove Digits
     
-2. LEMMAS:
-    - Upload lemmas_for_experiment.txt
+3. LEMMAS:
+    - UPLOAD lemmas_for_experiment.txt
+
+4. RESULTS
+    - a file(lemma_experimentResults.txt) with
+        * all 'a' changed to 'the'
+        * all 'Mary' changed to 'Margaret'
+        * all 'little' changed to 'tiny'
+        * all 'lamb' changed to 'sheep'

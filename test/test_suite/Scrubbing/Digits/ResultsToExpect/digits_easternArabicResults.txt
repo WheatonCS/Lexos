@@ -1,0 +1,1 @@
+this is a test to see if all eastern arabic digits can be removed

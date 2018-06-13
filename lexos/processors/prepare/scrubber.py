@@ -715,11 +715,10 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         option text fields and files.
     """
 
-    file_strings = {}
-    for newKey in enumerate(sorted(constants.OPTUPLOADNAMES)):
-        file_strings[newKey] = ""
-    for newKey in enumerate(sorted(constants.SCRUBINPUTS)):
-        file_strings[newKey] = ""
+    file_strings = {'consfileselect[]': '', 'lemfileselect[]': '',
+                    'scfileselect[]': '', 'swfileselect[]': '',
+                    'manualconsolidations': '', 'manuallemmas': '',
+                    'manualspecialchars': '', 'manualstopwords': ''}
 
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
@@ -737,14 +736,14 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
     #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
 
-    all_options = [file_strings.get(0),
-                   file_strings.get(1),
-                   file_strings.get(2),
-                   file_strings.get(3),
-                   file_strings.get(4),
-                   file_strings.get(5),
-                   file_strings.get(6),
-                   file_strings.get(7)]
+    all_options = [file_strings.get('consfileselect[]'),
+                   file_strings.get('lemfileselect[]'),
+                   file_strings.get('scfileselect[]'),
+                   file_strings.get('swfileselect[]'),
+                   request.form['manualconsolidations'],
+                   request.form['manuallemmas'],
+                   request.form['manualspecialchars'],
+                   request.form['manualstopwords']]
 
     return all_options
 
@@ -793,25 +792,19 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     option_strings = prepare_additional_options(
         opt_uploads, storage_options, storage_folder, storage_filenames)
 
-    count = 0
-    while count <= 7:
-        if option_strings[count] is None:
-            option_strings[count] = ""
-        count = count + 1
-
     # handle uploaded FILES: consolidations, lemmas, special characters,
     # stop-keep words
     cons_file_string = option_strings[0]
     lem_file_string = option_strings[1]
-    sc_file_string = option_strings[6]
-    sw_kw_file_string = option_strings[7]
+    sc_file_string = option_strings[2]
+    sw_kw_file_string = option_strings[3]
 
     # handle manual entries: consolidations, lemmas, special characters,
     # stop-keep words
-    cons_manual = option_strings[2]
-    lem_manual = option_strings[3]
-    sc_manual = option_strings[4]
-    sw_kw_manual = option_strings[5]
+    cons_manual = option_strings[4]
+    lem_manual = option_strings[5]
+    sc_manual = option_strings[6]
+    sw_kw_manual = option_strings[7]
 
     # Scrubbing order:
     #
