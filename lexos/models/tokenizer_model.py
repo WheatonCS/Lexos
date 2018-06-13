@@ -240,15 +240,11 @@ class TokenizerModel(BaseModel):
         # Return where the file is.
         return file_path
 
-    def get_dtm_size(self) -> str:
+    def get_dtm_size(self) -> int:
         """Return the size of the dtm.
 
         :return: An integer which represents the number of data contained in
                  the generated dtm.
         """
-        if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
-            return self._get_file_col_dtm().size.astype(str)
-        elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
-            return self._get_file_row_dtm().size.astype(str)
-        else:
-            raise ValueError("Invalid tokenizer orientation from front end.")
+        row_size, col_size = self._doc_term_matrix.shape
+        return (row_size + 2) * col_size
