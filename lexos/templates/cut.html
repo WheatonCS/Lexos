@@ -18,6 +18,8 @@
         $("#indcutoptswrap_"+id).toggleClass("hidden");
     }
 </script>
+<meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
+<meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
 {% endblock %}
 
 {% block title %}Cutter{% endblock %}
