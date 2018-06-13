@@ -412,21 +412,6 @@ $(document).on('click', '#downloadCutting', function () {
  * Document ready function.
  */
 $(function () {
-  /*
-  const msg = 'You have no active documents. Please activate \
-  at least one document using the <a href="./manage">Manage</a> tool or\
-  <a href="./upload">upload</a> a new document.'
-
-  // When download, preview, or apply is clicked
-  $('#action-buttons').click(function () {
-    // check number of files
-    if ($('#num_active_files').val() < 1) {
-      // display error
-      $('#error-modal-message').html(msg)
-      $('#error-modal').modal()
-    }
-  })
-  */
   $('#actions').addClass('actions-cut')
 
   // Toggle cutting options when radio buttons with different classes are clicked
