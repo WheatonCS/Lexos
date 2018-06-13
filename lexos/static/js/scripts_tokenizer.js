@@ -1,3 +1,5 @@
+
+
 /**
  * The function to run the error modal.
  * @param {string} htmlMsg: the message to display.
@@ -59,18 +61,17 @@ function getDataTableConfig () {
   } else if ($('#table-orientation-row').is(':checked')) {
     numFixedColumns = 1
   }
-
   return {
     // Allow scroll horizontally.
     scrollX: true,
     // Do not sort headers.
     bSortCellsTop: true,
     // specify where the button is
-    dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
+    dom: `<'row'<'col-sm-6'B><'col-sm-6 text-right'l>>
           <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
 
     // specify all the button that is put on to the page
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5','colvis'],
 
     // Set number of fixed columns on left of the data table.
     fixedColumns: {
@@ -157,7 +158,6 @@ $(function () {
   $('#choose-download').click(function () {
     $('#download-tokenizer').click()
   })
-
   // The event handler for clicking on continue rendering in the modal.
   $('#choose-continue').click(function () {
     generateTokenizerResult()
