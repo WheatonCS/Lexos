@@ -4,7 +4,7 @@ from lexos.models.tokenizer_model import TokenizerModel, TokenizerTestOption
 from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 
-# ------------------------ Test file as columns ------------------------
+# -------------------------- Test file as columns -----------------------------
 test_dtm_col = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
                             index=np.array([0, 1]),
@@ -23,7 +23,7 @@ test_file_result_col = pd.read_html(test_tokenizer_model_col.get_dtm())[0]
 test_file_size_col = test_tokenizer_model_col.get_dtm_size()
 
 
-# ------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class TestFileColResult:
     def test_column_names(self):
         assert test_file_result_col.columns.values[0] == "word"
@@ -40,10 +40,10 @@ class TestFileColResult:
         assert test_file_result_col["F2.txt"][0] == 0
 
     def test_column_size(self):
-        assert test_file_size_col == "36"
+        assert test_file_size_col == 36
 
 
-# ------------------------ Test file as rows ------------------------
+# -------------------------- Test file as rows --------------------------------
 test_dtm_row = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
                             index=np.array([0, 1]),
@@ -61,7 +61,7 @@ test_tokenizer_model_row = TokenizerModel(test_options=test_option_row)
 test_file_result_row = pd.read_html(test_tokenizer_model_row.get_dtm())[0]
 
 
-# ------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class TestFileRowResult:
     def test_row_names(self):
         assert test_file_result_row.loc[0][0] == "F1.txt"
@@ -78,11 +78,14 @@ class TestFileRowResult:
         assert test_file_result_row.loc[1][8] == 4
         assert test_file_result_row.loc[1][9] == 5
 
+    def test_row_size(self):
+        assert test_tokenizer_model_row.get_dtm_size() == 36
 
-# -------------------- Special case test suite ---------------------
-test_dtm_special = pd.DataFrame(data=np.array([(0, 0), (0, 0), (0, 0)]),
-                                index=np.array([0, 1, 2]),
-                                columns=np.array(["A", "B"]))
+
+# -------------------------- Empty dtm test suite -----------------------------
+test_dtm_special = pd.DataFrame(data=[],
+                                index=[],
+                                columns=[])
 test_id_temp_table_special = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_token_type_str_special = "Characters"
 test_front_end_option_special = TokenizerTableOrientation.FILE_COLUMN
@@ -94,11 +97,31 @@ test_option_special = \
 test_tokenizer_model_special = TokenizerModel(test_options=test_option_special)
 
 
-# ------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 class TestSpecialCase:
     def test_empty_list(self):
         try:
             _ = test_tokenizer_model_special.get_dtm()
-            raise AssertionError("Empty DTM received, please upload files.")
+            raise AssertionError("Empty DTM message did not show up.")
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE
+
+
+# -------------------------- Test non exist orientation -----------------------
+test_option_orientation = TokenizerTestOption(
+    token_type_str=test_token_type_str_row,
+    doc_term_matrix=test_dtm_row,
+    front_end_option="Lexos",
+    id_temp_label_map=test_id_temp_table_row)
+test_orientation = TokenizerModel(test_options=test_option_orientation)
+
+
+class TestSpecialOrientation:
+    def test_orientation(self):
+        try:
+            _ = test_orientation.get_dtm()
+            raise AssertionError("Empty DTM message did not show up.")
+        except ValueError as error:
+            assert str(error) == \
+                   "Invalid tokenizer orientation from front end."
+# -----------------------------------------------------------------------------
