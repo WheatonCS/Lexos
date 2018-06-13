@@ -70,13 +70,13 @@ function doScrubbing (action) {
     response = JSON.parse(response)
     $('#preview-body').empty()
     $.each(response['data'], function () {
-      const filename = $(this)[1]
+      const fileName = $(this)[1]
       const fileContents = $(this)[3]
-      const fieldset = $('<fieldset></fieldset>')
+      const fieldSet = $('<fieldSet></fieldSet>')
       // CSS truncates the document name
-      fieldset.append('<legend class="has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + filename + '</legend>')
-      fieldset.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
-      $('#preview-body').append(fieldset)
+      fieldSet.append('<legend class="has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + fileName + '</legend>')
+      fieldSet.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
+      $('#preview-body').append(fieldSet)
       $('#status-prepare').css({'visibility': 'hidden'})
     })
   })
@@ -116,9 +116,9 @@ function displayAdditionalOptions () {
  * @returns {void}
  */
 function truncateFileName (ev) {
-  let filename = ev.target.files[0].name
-  if (filename.length > 25) { filename = filename.substring(0, 24) + '...' }
-  $(this).html(filename)
+  let fileName = ev.target.files[0].name
+  if (fileName.length > 25) { fileName = fileName.substring(0, 24) + '...' }
+  $(this).html(fileName)
 }
 
 /**
