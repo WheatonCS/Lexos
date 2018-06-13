@@ -247,4 +247,5 @@ class TokenizerModel(BaseModel):
                  the generated dtm.
         """
         row_size, col_size = self._doc_term_matrix.shape
+        # Add two more rows since total and average will be calculated.
         return (row_size + 2) * col_size
