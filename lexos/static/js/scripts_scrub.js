@@ -44,7 +44,7 @@ function downloadScrubbing () {
  * @param {string} action - preview or apply
  * @returns {void} - returns nothing
  */
-function doScrubbing (action) {
+function sendScrubbing (action) {
   if ($('#num_active_files').val() === '0') {
     $('#error-modal').modal()
     return
