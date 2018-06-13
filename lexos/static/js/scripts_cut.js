@@ -1,17 +1,17 @@
-var checkForErrors = function () {
+function checkForErrors () {
   // Set Error and Warning Messages
-  var errors = []
+  const errors = []
   const manageUrl = $('#manage-url').data().url
   const uploadUrl = $('#upload-url').data().url
   const err1 = `You do not have enough active documents. 
   Please activate at least two documents using the <a href=${manageUrl}>Manage</a> tool 
   or <a href=${uploadUrl}>upload</a> a new document.`
-  var err2 = 'You must provide a string to cut on.'
-  var err3 = 'You must provide a default cutting value.'
-  var err4 = 'Default cutting: Invalid segment size.'
-  var err5 = 'Default cutting: Invalid overlap value.'
-  var err6 = 'Individual cutting: Invalid segment size.'
-  var err7 = 'Individual cutting: Invalid overlap value.'
+  const err2 = 'You must provide a string to cut on.'
+  const err3 = 'You must provide a default cutting value.'
+  const err4 = 'Default cutting: Invalid segment size.'
+  const err5 = 'Default cutting: Invalid overlap value.'
+  const err6 = 'Individual cutting: Invalid segment size.'
+  const err7 = 'Individual cutting: Invalid overlap value.'
 
   // Confirm that there are active files
   if ($('#num_active_files').val() == '0') { errors.push(err1) }
@@ -22,12 +22,12 @@ var checkForErrors = function () {
   } else {
     // Make sure there is a default cutting value
     if ($('#overallcutvalue').val() == '') { errors.push(err3) } else {
-      var overallcutvalueStr = $('#overallcutvalue').val()
-      var overallcutvalue = parseInt($('#overallcutvalue').val())
-      var overallOverlapValue = parseInt($('#overallOverlapValue').val())
-      var individualOverlap = parseInt($('#individualOverlap').val())
-      var individualCutValueStr = $('#individualCutValue').val()
-      var individualCutValue = $('#individualCutValue').val()
+      const overallcutvalueStr = $('#overallcutvalue').val()
+      const overallcutvalue = parseInt($('#overallcutvalue').val())
+      const overallOverlapValue = parseInt($('#overallOverlapValue').val())
+      const individualOverlap = parseInt($('#individualOverlap').val())
+      const individualCutValueStr = $('#individualCutValue').val()
+      let individualCutValue = $('#individualCutValue').val()
 
       // Make sure the overall segment size not negative
       if (overallcutvalue != Math.floor(overallcutvalue)) { errors.push(err4) }
@@ -62,7 +62,7 @@ var checkForErrors = function () {
 
   if (errors.length > 0) {
     $('#hasErrors').val('true')
-    $('#status-prepare').css({ 'visibility': 'hidden' })
+    $('#status-prepare').css({'visibility': 'hidden'})
     $('#error-modal-message').html(errors[0])
     $('#error-modal').modal()
   } else {
