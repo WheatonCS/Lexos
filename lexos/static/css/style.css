@@ -1103,6 +1103,10 @@ http://blog.craigsworks.com/bootstrap-3-disabled-dropdown-links/ **/
 
 /* Mimic cursor style from native .dropdown-menu > .disabled > a{} styles,
 since `pointer-events: none` kills the cursor state, too.  */
+.popover.fade.right.in .arrow {
+  top: 43% !important;
+}
+
 .dropdown-menu > .disabled {
  cursor: not-allowed;
 }
@@ -1823,6 +1827,10 @@ a.active {
 }
 
 /* ================== STATS STYLING =========================== */
+/* Resolve the transparent box plot issue. */
+#box-plot .plot {
+  opacity: 1 !important;
+}
 
 #entire-corpus {
     font-size: 15px;
@@ -1833,9 +1841,7 @@ a.active {
     margin-bottom:25px;
 }
 
-/* ================== DENDROGRAM STYLING ========================= */
-
-
+/* ========================= DENDROGRAM STYLING ========================= */
 select#orientation {
   width: 140px;
 }
