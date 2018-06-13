@@ -1,3 +1,5 @@
+"""This is the matrix model which makes the dtm."""
+
 from typing import Counter, Dict, NamedTuple, Optional
 
 import pandas as pd
@@ -14,11 +16,14 @@ FileIDContentMap = Dict[int, str]
 
 
 class MatrixTestOptions(NamedTuple):
+    """A typed tuple to hold test options."""
+
     front_end_option: MatrixFrontEndOption
     file_id_content_map: FileIDContentMap
 
 
 class MatrixModel(BaseModel):
+    """Class MatrixModel inherits from BaseModel."""
 
     def __init__(self, test_options: Optional[MatrixTestOptions] = None):
         """Class to generate and manipulate dtm.
@@ -36,7 +41,7 @@ class MatrixModel(BaseModel):
 
     @property
     def _file_id_content_map(self) -> FileIDContentMap:
-        """Result form higher level class: the file manager of current session.
+        """Get result from higher level class: file manager of current session.
 
         :return: a file manager object
         """
@@ -47,7 +52,7 @@ class MatrixModel(BaseModel):
 
     @property
     def _opts(self) -> MatrixFrontEndOption:
-        """Get all the options to use
+        """Get all the options to use.
 
         :return: either a frontend option or a fake option used for testing
         """
@@ -56,7 +61,7 @@ class MatrixModel(BaseModel):
             else MatrixReceiver().options_from_front_end()
 
     def get_temp_label(self) -> Counter[str]:
-        """An unordered list (counter) of all the temp labels"""
+        """Get an unordered list (counter) of all the temp labels."""
         return Counter(self._opts.id_temp_label_map.values())
 
     def get_id_temp_label_map(self) -> IdTempLabelMap:
@@ -64,7 +69,7 @@ class MatrixModel(BaseModel):
         return self._opts.id_temp_label_map
 
     def _get_raw_count_matrix(self) -> pd.DataFrame:
-        """Get the raw count matrix for the whole corpus
+        """Get the raw count matrix for the whole corpus.
 
         :return: a panda data frame
             where
@@ -135,7 +140,7 @@ class MatrixModel(BaseModel):
 
     def _apply_transformations_to_matrix(self, dtm_data_frame: pd.DataFrame) \
             -> pd.DataFrame:
-        """Apply all the transitions to the matrix
+        """Apply all the transitions to the matrix.
 
         Currently there are following transitions with following order:
         - culling
@@ -145,7 +150,6 @@ class MatrixModel(BaseModel):
         :param dtm_data_frame: the initial raw count data frame.
         :return: the final data frame after all the transformation
         """
-
         # apply culling to dtm
         if self._opts.culling_option.cull_least_seg is not None:
             dtm_after_cull = self._get_culled_matrix(
@@ -230,14 +234,13 @@ class MatrixModel(BaseModel):
         return dtm_after_freq
 
     def get_matrix(self)-> pd.DataFrame:
-        """Get the document term matrix (DTM) of all the active files
+        """Get the document term matrix (DTM) of all the active files.
 
         :return:
             a panda data frame with:
             - the index (row) header are file ids
             - the column header are words
         """
-
         raw_count_matrix = self._get_raw_count_matrix()
 
         return self._apply_transformations_to_matrix(raw_count_matrix)
@@ -245,7 +248,7 @@ class MatrixModel(BaseModel):
     @staticmethod
     def _get_most_frequent_word(lower_rank_bound: int,
                                 dtm_data_frame: pd.DataFrame) -> pd.DataFrame:
-        """ Gets the most frequent words in final_matrix and words.
+        """Get the most frequent words in final_matrix and words.
 
         The new count matrix will consists of only the most frequent words in
         the whole corpus.
@@ -259,7 +262,6 @@ class MatrixModel(BaseModel):
         :return:
             dtm data frame with only the most frequent words
         """
-
         # get the word count of each word in the corpus (a panda series)
         corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
@@ -279,7 +281,7 @@ class MatrixModel(BaseModel):
     @staticmethod
     def _get_culled_matrix(least_num_seg: int,
                            dtm_data_frame: pd.DataFrame) -> pd.DataFrame:
-        """Gets the culled final_matrix and culled words.
+        """Get the culled final_matrix and culled words.
 
         Gives a matrix that only contains the words that appears in more than
         `least_num_seg` segments.
@@ -291,7 +293,6 @@ class MatrixModel(BaseModel):
         :return:
              the culled dtm data frame
         """
-
         # create a bool matrix to indicate whether a word is in a segment
         # at the line of segment s and the column of word w,
         # if the value is True, then means w is in s
