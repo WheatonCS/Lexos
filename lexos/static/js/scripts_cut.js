@@ -30,32 +30,48 @@ function checkForErrors () {
       let individualCutValue = $('#individualCutValue').val()
 
       // Make sure the overall segment size not negative
-      if (overallcutvalue !== Math.floor(overallcutvalue)) { errors.push(invalidSegSizeMsg) }
+      if (overallcutvalue !== Math.floor(overallcutvalue)) {
+        errors.push(invalidSegSizeMsg)
+      }
 
       // Make sure the overall segment size not a decimal
-      if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) { errors.push(invalidSegSizeMsg) }
+      if (overallcutvalueStr !== Math.abs(overallcutvalue).toString()) {
+        errors.push(invalidSegSizeMsg)
+      }
 
       // Make sure the overall segment size not 0
-      if (overallcutvalue === 0) { errors.push(invalidSegSizeMsg) }
+      if (overallcutvalue === 0) {
+        errors.push(invalidSegSizeMsg)
+      }
 
       // Make sure the overall overlap is valid
-      if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) { errors.push(invalidOverlapValMsg) }
+      if ((overallcutvalue <= overallOverlapValue) || (Math.abs(Math.round(overallOverlapValue)) !== overallOverlapValue)) {
+        errors.push(invalidOverlapValMsg)
+      }
 
       // If there are individual segment cuts
       if (individualCutValue !== '') {
         individualCutValue = parseInt(individualCutValue)
 
         // Make sure the individual segment size not negative
-        if (individualCutValue !== Math.floor(individualCutValue)) { errors.push(indivInvalidSegSizeMsg) }
+        if (individualCutValue !== Math.floor(individualCutValue)) {
+          errors.push(indivInvalidSegSizeMsg)
+        }
 
         // Make sure the individual segment size not a decimal
-        if (individualCutValueStr !== Math.abs(individualCutValue).toString()) { errors.push(indivInvalidSegSizeMsg) }
+        if (individualCutValueStr !== Math.abs(individualCutValue).toString()) {
+          errors.push(indivInvalidSegSizeMsg)
+        }
 
         // Make sure the individual segment size not 0
-        if (individualCutValue === 0) { errors.push(indivInvalidSegSizeMsg) }
+        if (individualCutValue === 0) {
+          errors.push(indivInvalidSegSizeMsg)
+        }
 
         // Make sure the individual overlap is valid
-        if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) { errors.push(indivInvalidOverlapVal) }
+        if ((individualCutValue <= individualOverlap) || (Math.abs(Math.round(individualOverlap)) !== individualOverlap)) {
+          errors.push(indivInvalidOverlapVal)
+        }
       }
     }
   }
