@@ -127,15 +127,15 @@ function truncateFileName (ev) {
  */
 function buttonFileLabelsFunction () {
   // swfileselect, lemfileselect, consfileselect, scfileselect
-  const filetype = $(this).attr('id').replace('bttnlabel', '')
-  const usingCache = $('#usecache' + filetype).attr('disabled') !== 'disabled'
+  const fileType = $(this).attr('id').replace('bttnlabel', '')
+  const usingCache = $('#usecache' + fileType).attr('disabled') !== 'disabled'
 
   if ((usingCache) || ($(this).attr('id') !== '')) {
     // $(this).siblings('.scrub-upload').attr('value', '');
     // Next two lines clear the file input; it's hard to find a cross-browser solution
-    $('#' + filetype).val('')
-    $('#' + filetype).replaceWith($('#' + filetype).clone(true))
-    $('#usecache' + filetype).attr('disabled', 'disabled')
+    $('#' + fileType).val('')
+    $('#' + fileType).replaceWith($('#' + fileType).clone(true))
+    $('#usecache' + fileType).attr('disabled', 'disabled')
     $(this).text('')
   }
 
@@ -145,7 +145,7 @@ function buttonFileLabelsFunction () {
     url: '/removeUploadLabels',
     data: $(this).text().toString(),
     contentType: 'text/plain',
-    headers: {'option': filetype + '[]'},
+    headers: {'option': fileType + '[]'},
     beforeSend: function () {
       // alert('Sending...');
     },
