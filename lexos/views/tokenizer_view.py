@@ -1,4 +1,4 @@
-from flask import session, Blueprint, render_template, send_file, request
+from flask import session, Blueprint, render_template, send_file
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
