@@ -2036,9 +2036,9 @@ select#orientation {
 }
 
 /* ================== TOPWORD STYLING ==================== */
-.tbody-top {
-  display: block;
-  overflow-y: scroll;
+
+.class-division-table tbody {
+  overflow-y: auto;
   height: 150px;
 }
 
