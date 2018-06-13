@@ -113,8 +113,8 @@ function checkValues () {
 function checkForWarnings () {
   let needsWarning = false
   const maxSegs = 100
-  const defCutTypeValue = $("input[name='cutType']:checked").val() // Cut Type
-  const cutVal = parseInt($("input[name='cutValue']").val()) // Segment Size
+  const defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
+  const cutVal = parseInt($('input[name=\'cutValue\']').val()) // Segment Size
   const overVal = parseInt($('#overallOverlapValue').val()) // Overlap Size
   const indivDivs = $('.cuttingoptionswrapper.ind') // All individual cutsets
   const eltsWithoutIndividualOpts = [] // Elements without individual cutsets
@@ -160,7 +160,7 @@ function checkForWarnings () {
   })
 
   // If cut by milestone is checked
-  if ($("input[name='cutByMS']:checked").length === 0) {
+  if ($('input[name=\'cutByMS\']:checked').length === 0) {
     // For cutting by characters
     if (defCutTypeValue === 'letters') {
       // Check each document without individual options
@@ -199,7 +199,7 @@ function checkForWarnings () {
     $('#warning-modal-footer').html(footerButtons)
     $('#warning-modal-message').html(sizeWarning)
     // Hide the processing icon and show the modal
-    $('#status-prepare').css({ 'visibility': 'hidden' })
+    $('#status-prepare').css({'visibility': 'hidden'})
     $('#warning-modal').modal()
   } else {
     $('#needsWarning').val('false')
@@ -221,7 +221,7 @@ function doAjax (action) {
   const formData = new FormData($('form')[0])
   formData.append('action', action)
   const jsonForm = jsonifyForm()
-  $.extend(jsonForm, { 'action': action })
+  $.extend(jsonForm, {'action': action})
   // Initiate a timer to allow user to cancel if processing takes too long
   const loadingTimeout = window.setTimeout(function () {
     $('#needsWarning').val('true')
@@ -241,7 +241,7 @@ function doAjax (action) {
     contentType: false,
     data: formData,
     error: function (jqXHR, textStatus, errorThrown) {
-      $('#status-prepare').css({ 'visibility': 'hidden' })
+      $('#status-prepare').css({'visibility': 'hidden'})
       // Show an error if the user has not cancelled the action
       if (errorThrown !== 'abort') {
         const notApplyMsg = 'Lexos could not apply the cutting actions.'
@@ -378,7 +378,7 @@ function doAjax (action) {
       }
     })
     $('.fa-folder-open-o').attr('data-original-title', `You have ${numActiveFiles} active document(s).`)
-    $('#status-prepare').css({ 'visibility': 'hidden' })
+    $('#status-prepare').css({'visibility': 'hidden'})
   })
 }
 
@@ -387,7 +387,7 @@ function doAjax (action) {
  * @param {string} action - the action type being requested.
  */
 function process (action) {
-  $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
+  $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
   $('#formAction').val(action)
   $.when(checkForErrors()).done(function () {
     if ($('#hasErrors').val() === 'false') {
@@ -407,7 +407,7 @@ $(document).on('click', '#warningContinue', function () {
   const action = $('#formAction').val()
   $('#warning-modal').modal('hide')
   doAjax(action)
-  $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
+  $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
 })
 
 // Handle the Timer Cancel button in the warning modal
@@ -438,9 +438,9 @@ function jsonifyForm () {
 $(document).on('click', '#downloadCutting', function () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
   // Flask route seems to be the easiest method.
-    if ($('#num_active_files').val() > '0') {
-        window.location = '/downloadCutting'
-    }
+  if ($('#num_active_files').val() > '0') {
+    window.location = '/downloadCutting'
+  }
 })
 
 /**
@@ -453,12 +453,12 @@ $(function () {
 
   // When download, preview, or apply is clicked
   $('#action-buttons').click(function () {
-      // check number of files
-      if ($('#num_active_files').val() <  1) {
-          // display error
-          $('#error-modal-message').html(msg)
-          $('#error-modal').modal()
-      }
+    // check number of files
+    if ($('#num_active_files').val() < 1) {
+      // display error
+      $('#error-modal-message').html(msg)
+      $('#error-modal').modal()
+    }
   })
   $('#actions').addClass('actions-cut')
 
@@ -469,11 +469,11 @@ $(function () {
     cuttingValueLabel.text('Segment Size:')
 
     $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
-      .animate({ opacity: 1 }, timeToToggle)
+      .animate({opacity: 1}, timeToToggle)
       .find('.lastprop-input').prop('disabled', false)
 
     $(this).parents('.cuttingoptionswrapper').find('.overlap-div')
-      .animate({ opacity: 1 }, timeToToggle)
+      .animate({opacity: 1}, timeToToggle)
       .find('.overlap-input').prop('disabled', false)
   })
 
@@ -482,11 +482,11 @@ $(function () {
     cuttingValueLabel.text('Number of Segments:')
 
     $(this).parents('.cuttingoptionswrapper').find('.lastprop-div')
-      .animate({ opacity: 0.2 }, timeToToggle)
+      .animate({opacity: 0.2}, timeToToggle)
       .find('.lastprop-input').prop('disabled', true)
 
     $(this).parents('.cuttingoptionswrapper').find('.overlap-div')
-      .animate({ opacity: 0.2 }, timeToToggle)
+      .animate({opacity: 0.2}, timeToToggle)
       .find('.overlap-input').prop('disabled', true)
   })
 
