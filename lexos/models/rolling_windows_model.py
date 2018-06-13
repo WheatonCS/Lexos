@@ -399,11 +399,12 @@ class RollingWindowsModel(BaseModel):
                 x=np.arange(len(row)),
                 y=row,
                 name=token,
+                mode="lines"
+                '''
                 line=dict(
                     color=('rgb(0, 0, 0)'),
-
                 ),
-                mode="lines",
+                '''
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
