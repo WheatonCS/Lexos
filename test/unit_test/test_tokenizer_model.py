@@ -108,6 +108,7 @@ class TestSpecialCase:
 
 
 # -------------------------- Test non exist orientation -----------------------
+# noinspection PyTypeChecker
 test_option_orientation = TokenizerTestOption(
     token_type_str=test_token_type_str_row,
     doc_term_matrix=test_dtm_row,
@@ -123,5 +124,5 @@ class TestSpecialOrientation:
             raise AssertionError("Empty DTM message did not show up.")
         except ValueError as error:
             assert str(error) == \
-                   "Invalid tokenizer orientation from front end."
+                "Invalid tokenizer orientation from front end."
 # -----------------------------------------------------------------------------
