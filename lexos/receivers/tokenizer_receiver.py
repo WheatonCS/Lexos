@@ -1,8 +1,12 @@
+"""This is the receiver for the tokenizer model."""
+
 from enum import Enum
 from lexos.receivers.base_receiver import BaseReceiver
 
 
 class TokenizerTableOrientation(Enum):
+    """The typed tuple to hold tokenizer front end option."""
+
     FILE_ROW = "fileRow"
     FILE_COLUMN = "fileColumn"
 
@@ -11,6 +15,7 @@ class TokenizerReceiver(BaseReceiver):
     """Get the tokenizer table orientation from front end."""
 
     def __init__(self):
+        """Initialize the class."""
         super().__init__()
 
     def options_from_front_end(self) -> TokenizerTableOrientation:
