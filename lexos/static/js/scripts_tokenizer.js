@@ -1,5 +1,3 @@
-
-
 /**
  * The function to run the error modal.
  * @param {string} htmlMsg: the message to display.
