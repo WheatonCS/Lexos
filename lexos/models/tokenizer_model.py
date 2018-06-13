@@ -1,3 +1,5 @@
+"""This is the tokenizer model which gets the tokenizer table."""
+
 import os
 import numpy as np
 import pandas as pd
@@ -15,6 +17,7 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 
 class TokenizerTestOption(NamedTuple):
     """A typed tuple that holds all the tokenizer test options."""
+
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerTableOrientation
@@ -22,11 +25,16 @@ class TokenizerTestOption(NamedTuple):
 
 
 class TokenizerModel(BaseModel):
-    def __init__(self, test_options: Optional[TokenizerTestOption] = None):
-        """This is the class to generate statistics of the input file.
+    """This is the class to generate statistics of the input file.
 
-        :param test_options: The input used in testing to override the
-                             dynamically loaded option
+    :param test_options: The input used in testing to override the
+                         dynamically loaded option
+    """
+
+    def __init__(self, test_options: Optional[TokenizerTestOption] = None):
+        """Initialize the class.
+
+        Assign variables based on if test option is passed.
         """
         super().__init__()
         if test_options is not None:
@@ -42,21 +50,20 @@ class TokenizerModel(BaseModel):
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
-        """:return: The document term matrix"""
+        """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
 
     @property
     def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: A map takes an id to temp labels"""
+        """:return: A map takes an id to temp labels."""
         return self._test_id_temp_label_map \
             if self._test_id_temp_label_map is not None \
             else MatrixModel().get_id_temp_label_map()
 
     @property
     def _front_end_option(self) -> TokenizerTableOrientation:
-        """:return: A typed tuple that holds the orientation front end
-                    option."""
+        """:return: A typed tuple that holds the orientation option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else TokenizerReceiver().options_from_front_end()
