@@ -25,7 +25,7 @@ class ContentAnalysisModel(object):
         the corpus
         formulas: List of string that represent a formula for each file
         scores: List of formula/total word count of each file
-        averages: Lis of averages count of each dictionary
+        averages: List of averages count of each dictionary
         """
         self._test_options = test_options
         self._dictionaries = []
@@ -148,8 +148,8 @@ class ContentAnalysisModel(object):
         """
         counter = []
         active_dicts = self.get_active_dicts()
+        count = 0
         for dictionary in active_dicts:
-            count = 0
             for phrase in dictionaries:
                 if phrase.dict_label == dictionary.label:
                     count += phrase.count

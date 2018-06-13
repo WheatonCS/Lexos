@@ -1,6 +1,6 @@
 # Organizational Hardiness
 
-This is an example that shows how to use content analysis to do organizational hardines.
+This is an example that shows how to use content analysis to do organizational hardiness.
 Organizational hardiness is the provability of a company to recover from an issue or set back.
 
 STEP:
