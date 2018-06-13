@@ -101,7 +101,6 @@ function checkTokenizerSize () {
       function (response) {
         // Cast the response to an integer.
         const size = Number(response)
-
         if (size < 50000) { // If less than 50000 data, render the table.
           generateTokenizerResult()
         } else { // Else give user the option to download or keep waiting.
@@ -113,7 +112,7 @@ function checkTokenizerSize () {
       function (jqXHR, textStatus, errorThrown) {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the lol result.')
+        runModal('Error encountered while calculating the size of the tokenizer result.')
       }
     )
 }
