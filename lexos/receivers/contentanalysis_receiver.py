@@ -1,10 +1,15 @@
+"""This is the reciever for the content analysis model."""
+
 from lexos.receivers.base_receiver import BaseReceiver
 
 
 class ContentAnalysisOption:
+    """This is the class that gets the content analysis options."""
+
     def __init__(self, formula: str, dict_label: str, toggle_all: bool,
                  dict_labels: [str], active_dicts: [bool],
                  toggle_all_value: bool):
+        """Assign content analysis options."""
         self.formula = formula
         self.dict_label = dict_label
         self.toggle_all = toggle_all
@@ -14,13 +19,14 @@ class ContentAnalysisOption:
 
 
 class ContentAnalysisReceiver(BaseReceiver):
+    """This is the class that receives the options from front end."""
 
     def __init__(self):
-        """The Receiver to get all the content analysis options"""
+        """Get all the content analysis options using the receiver."""
         super().__init__()
 
     def options_from_front_end(self) -> ContentAnalysisOption:
-        """Get the content analysis option from front end
+        """Get the content analysis option from front end.
 
         :return: a ContentAnalysisOption object to hold all the options
         """
@@ -43,6 +49,9 @@ class ContentAnalysisReceiver(BaseReceiver):
 
 
 class Option(object):
+    """This class gets names and values for each option."""
+
     def __init__(self, name, value):
+        """Get name and value."""
         self.name = name
         self.value = value

@@ -33,6 +33,9 @@ test_script:
   # unit testing
   - pytest --cov=./lexos
   - codecov
+  # doc style, at the moment only test files under models and receivers.
+  - pydocstyle lexos/models/
+  - pydocstyle lexos/receivers/
 
   # test for javascript code style
   - cd ./lexos/static
