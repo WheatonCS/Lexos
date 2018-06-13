@@ -139,24 +139,6 @@ function buttonFileLabelsFunction () {
     $('#usecache' + fileType).attr('disabled', 'disabled')
     $(this).text('')
   }
-
-  // Do Ajax
-  $.ajax({
-    type: 'POST',
-    url: '/removeUploadLabels',
-    data: $(this).text().toString(),
-    contentType: 'text/plain',
-    headers: {'option': fileType + '[]'},
-    beforeSend: function () {
-      // alert('Sending...');
-    },
-    success: function (response) {
-      // console.log(response);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      console.log('Error: ' + errorThrown)
-    }
-  })
 }
 
 /**
