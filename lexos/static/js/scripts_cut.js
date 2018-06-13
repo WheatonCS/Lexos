@@ -408,7 +408,6 @@ $(document).on('click', '#downloadCutting', function () {
  * Document ready function.
  */
 $(function () {
-  /*
   const msg = 'You have no active documents. Please activate \
   at least one document using the <a href="./manage">Manage</a> tool or\
   <a href="./upload">upload</a> a new document.'
@@ -422,7 +421,6 @@ $(function () {
       $('#error-modal').modal()
     }
   })
-  */
 
   $('#actions').addClass('actions-cut')
 
