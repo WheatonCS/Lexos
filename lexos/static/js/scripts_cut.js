@@ -26,8 +26,10 @@ function checkForErrors () {
   } else {
     // Make sure there is a default cutting value
     const overallCutVal = $('#overallcutvalue')
-    const indivCutVal =  $('#individualCutValue')
-    if (overallCutVal.val() === '') { errors.push(noCutValMsg) } else {
+    const indivCutVal = $('#individualCutValue')
+    if (overallCutVal.val() === '') {
+      errors.push(noCutValMsg)
+    } else {
       const overallcutvalueStr = overallCutVal.val()
       const overallcutvalue = parseInt(overallCutVal.val())
       const overallOverlapValue = parseInt($('#overallOverlapValue').val())
