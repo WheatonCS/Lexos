@@ -129,7 +129,7 @@ function truncateFileName (ev) {
 function buttonFileLabelsFunction () {
   // swfileselect, lemfileselect, consfileselect, scfileselect
   const fileType = $(this).attr('id').replace('bttnlabel', '')
-  const usingCache = $('#usecache' + fileType).attr('disabled') !== 'disabled'
+  const usingCache = $(`#usecache + ${fileType}`).attr('disabled') !== 'disabled'
 
   if ((usingCache) || ($(this).attr('id') !== '')) {
     // $(this).siblings('.scrub-upload').attr('value', '');
