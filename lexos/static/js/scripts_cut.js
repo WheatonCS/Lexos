@@ -1,7 +1,11 @@
 var checkForErrors = function () {
   // Set Error and Warning Messages
   var errors = []
-  var err1 = 'You have no active documents. Please activate at least one document using the <a href=\"{{ url_for("manage") }}\">Manage</a> tool or <a href=\"{{ url_for("upload") }}\">upload</a> a new document.'
+  const manageUrl = $('#manage-url').data().url
+  const uploadUrl = $('#upload-url').data().url
+  const err1 = `You do not have enough active documents. 
+  Please activate at least two documents using the <a href=${manageUrl}>Manage</a> tool 
+  or <a href=${uploadUrl}>upload</a> a new document.`
   var err2 = 'You must provide a string to cut on.'
   var err3 = 'You must provide a default cutting value.'
   var err4 = 'Default cutting: Invalid segment size.'
@@ -408,6 +412,7 @@ $(document).on('click', '#downloadCutting', function () {
  * Document ready function.
  */
 $(function () {
+  /*
   const msg = 'You have no active documents. Please activate \
   at least one document using the <a href="./manage">Manage</a> tool or\
   <a href="./upload">upload</a> a new document.'
@@ -421,7 +426,7 @@ $(function () {
       $('#error-modal').modal()
     }
   })
-
+  */
   $('#actions').addClass('actions-cut')
 
   // Toggle cutting options when radio buttons with different classes are clicked
