@@ -1236,7 +1236,39 @@ input[type="search"]{
   left: -20px;
 }
 /*=================== TOKENIZER ==================================*/
+/* buttons used for 'Tokenize/Count' page under prepare */
+/*button to make the columns visible and not visible*/
 
+/*the parent div for the 'column visibility' button*/
+.dt-button-collection {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+/*This is the 'Column visibility' button*/
+.buttons-colvis {
+  transition: 200ms ease;
+  background: #337ab7
+}
+/*Make the font color for 'Color visibility' button white*/
+.buttons-colvis span {
+  color: white
+}
+
+/*Change the 'Column visibility' button color slightly on hover*/
+.buttons-colvis:hover {
+  background: #007bab;
+  transition: 200ms ease;
+}
+
+/*Set the color to gray when the buttons are not active*/
+.dt-button-collection .dt-button {
+  background-color: gray;
+}
+
+/*Set the color to blue when the buttons are active*/
+.dt-button-collection .dt-button:active {
+  background-color: #337ab7;
+}
 
 /* ================== SCRUB STYLING ============================== */
 
