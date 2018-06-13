@@ -429,6 +429,20 @@ $(document).on('click', '#downloadCutting', function () {
 })
 
 /**
+ * Toggles milestone options.
+ * @returns {void}
+ */
+function showMilestoneOptions () {
+  if ($('#cutByMS').is(':checked')) {
+    $('#MSoptspan').removeClass('hidden')
+    $('#cuttingdiv').hide()
+  } else {
+    $('#MSoptspan').addClass('hidden')
+    $('#cuttingdiv').show()
+  }
+}
+
+/**
  * Document ready function.
  */
 $(function () {
@@ -467,20 +481,6 @@ $(function () {
     const toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
     toggleDiv.toggleClass('hidden')
   })
-
-  /**
-   * Toggles milestone options.
-   * @returns {void}
-   */
-  function showMilestoneOptions () {
-    if ($('#cutByMS').is(':checked')) {
-      $('#MSoptspan').removeClass('hidden')
-      $('#cuttingdiv').hide()
-    } else {
-      $('#MSoptspan').addClass('hidden')
-      $('#cuttingdiv').show()
-    }
-  }
 
   $('#cutByMS').click(showMilestoneOptions)
 
