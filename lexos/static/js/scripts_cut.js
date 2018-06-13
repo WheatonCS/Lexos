@@ -92,7 +92,7 @@ function checkForErrors () {
 
 /**
  * function to check whether the user needs a warning.
- * @returns {void} - returns nothing.
+ * @returns {void}
  */
 function checkForWarnings () {
   let needsWarning = false
@@ -195,7 +195,7 @@ let xhr
 /**
  * Performs the ajax request.
  * @param {string} action - the action type being requested.
- * @returns {void} - nothing is returned from this function.
+ * @returns {void}
  */
 function doAjax (action) {
   /* It's not really efficient to create a FormData and a json object,
@@ -470,7 +470,7 @@ $(function () {
 
   /**
    * Toggles milestone options.
-   * @returns {void} - this function does not return anything.
+   * @returns {void}
    */
   function showMilestoneOptions () {
     if ($('#cutByMS').is(':checked')) {
