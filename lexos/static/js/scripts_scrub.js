@@ -72,10 +72,11 @@ function sendScrubbing (action) {
     $.each(response['data'], function () {
       const fileName = $(this)[1]
       const fileContents = $(this)[3]
-      const fieldSet = $('<fieldSet></fieldSet>')
       // CSS truncates the document name
-      fieldSet.append('<legend class="has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + fileName + '</legend>')
-      fieldSet.append('<div class="filecontents">' + fileContents + '</div>') // Keep this with no whitespace!
+      const fieldSet = `<fieldSet></fieldSet> <legend class="has-tooltip" \
+      style="color:#999; width:90%;margin: auto; white-space: nowrap; \
+      overflow: hidden; text-overflow: ellipsis;">${fileName}</legend> \
+      <div class="filecontents">${fileContents}</div>` // Keep this with no whitespace!
       $('#preview-body').append(fieldSet)
       $('#status-prepare').css({'visibility': 'hidden'})
     })
