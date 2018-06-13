@@ -3,8 +3,10 @@
  * @returns {void} - returns nothing.
  */
 function checkForErrors () {
+  // search for error messages
   const errorMsg = doCheck()
 
+  // throw error modal if error found.
   if (errorMsg !== '') {
     $('#hasErrors').val('true')
     $('#status-prepare').css({'visibility': 'hidden'})
@@ -100,6 +102,7 @@ function checkValues () {
       return indInvalidOverlapVal
     }
   }
+  // no errors
   return ''
 }
 
