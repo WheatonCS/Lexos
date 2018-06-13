@@ -75,7 +75,15 @@ function getDataTableConfig () {
     // Set number of fixed columns on left of the data table.
     fixedColumns: {
       leftColumns: numFixedColumns
-    }
+    },
+
+    // Truncate the long words in most left column.
+    columnDefs: [
+      {
+        targets: 0,
+        render: $.fn.dataTable.render.ellipsis(15, true)
+      }
+    ]
   }
 }
 
