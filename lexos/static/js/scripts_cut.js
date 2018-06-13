@@ -385,7 +385,6 @@ function doAjax (action) {
 /**
  * Checks the form data for errors and warnings.
  * @param {string} action - the action type being requested.
- * @returns {void} - nothing is returned from this function.
  */
 $(document).on('click', '.cutTrigger', function (action) {
   $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
@@ -434,8 +433,7 @@ function jsonifyForm () {
 }
 
 /**
- * Performs the download request (through flask)
- * @returns {void} - nothing is returned from this function.
+ * Performs the download request (through flask) when download button clicked.
  */
 $(document).on('click', '#downloadCutting', function () {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
