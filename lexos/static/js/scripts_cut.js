@@ -3,8 +3,8 @@ function checkForErrors () {
   const errors = []
   const manageUrl = $('#manage-url').data().url
   const uploadUrl = $('#upload-url').data().url
-  const err1 = `You do not have enough active documents. 
-  Please activate at least two documents using the <a href=${manageUrl}>Manage</a> tool 
+  const err1 = `You have no active documents. 
+  Please activate at least one document using the <a href=${manageUrl}>Manage</a> tool 
   or <a href=${uploadUrl}>upload</a> a new document.`
   const err2 = 'You must provide a string to cut on.'
   const err3 = 'You must provide a default cutting value.'
