@@ -29,6 +29,7 @@ class KMeansTestOptions(NamedTuple):
 
 
 class KMeansClusterResult(NamedTuple):
+    k_means: KMeans
     reduced_data: np.ndarray
     k_means_index: List[int]
 
@@ -70,7 +71,7 @@ class KMeansModel(BaseModel):
             if self._test_front_end_option is not None \
             else KMeansReceiver().options_from_front_end()
 
-    def get_cluster_result(self) -> KMeansClusterResult:
+    def _get_cluster_result(self) -> KMeansClusterResult:
         # Test if get empty input
         assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
@@ -88,12 +89,13 @@ class KMeansModel(BaseModel):
         # Get cluster result back.
         k_means_index = k_means.fit_predict(reduced_data)
 
-        return KMeansClusterResult(reduced_data=reduced_data,
+        return KMeansClusterResult(k_means=k_means,
+                                   reduced_data=reduced_data,
                                    k_means_index=k_means_index)
 
     def get_pca_plot(self) -> str:
         # Get kMeans analyze result and unpack it.
-        cluster_result = self.get_cluster_result()
+        cluster_result = self._get_cluster_result()
         reduced_data = cluster_result.reduced_data
         k_means_index = cluster_result.k_means_index
 
@@ -145,7 +147,7 @@ class KMeansModel(BaseModel):
 
     def get_table_result(self):
         # Get kMeans analyze result.
-        cluster_result = self.get_cluster_result()
+        cluster_result = self._get_cluster_result()
 
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
@@ -164,29 +166,45 @@ class KMeansModel(BaseModel):
             classes="table table-striped table-bordered")
 
     def get_voronoi_plot(self):
-        # Get kMeans analyze result.
-        reduced_data = self.get_cluster_result().reduced_data
+        # Get kMeans analyze result and unpack it.
+        cluster_result = self._get_cluster_result()
+        k_means = cluster_result.k_means
+        reduced_data = cluster_result.reduced_data
+        k_means_index = cluster_result.k_means_index
+
+        color = cl.scales["10"]["qual"]["Paired"]
+
+        # Plot the decision boundary. For that, we will assign a color to each
+        x_min, x_max = reduced_data[:, 0].min() - 1, reduced_data[:,
+                                                     0].max() + 1
+        y_min, y_max = reduced_data[:, 1].min() - 1, reduced_data[:,
+                                                     1].max() + 1
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                             np.arange(y_min, y_max, 0.01))
+
+        Z = k_means.predict(np.c_[xx.ravel(), yy.ravel()])
+
+        Z = Z.reshape(xx.shape)
+
+        back = go.Heatmap(x=xx[0][:len(Z)],
+                           y=xx[0][:len(Z)],
+                           z=Z,
+                           hoverinfo="name",
+                           showscale=False,
+                           colorscale='YIGnBu')
 
         # Get file names.
         labels = np.array([self._id_temp_label_map[file_id]
                            for file_id in self._doc_term_matrix.index.values])
 
-        voronoi_data = Voronoi(reduced_data)
+        cluster_labels = [labels[np.where(k_means_index == index)]
+                          for index in set(k_means_index)]
 
-        test_one, test_two = voronoi_plot(vor=voronoi_data)
-
-        voronoi_index = voronoi_data.point_region
-
-        cluster_labels = [labels[np.where(voronoi_index == index)]
-                          for index in set(voronoi_index)]
-
-        cluster_values = [reduced_data[np.where(voronoi_index == index)]
-                          for index in set(voronoi_index)]
+        cluster_values = [reduced_data[np.where(k_means_index == index)]
+                          for index in set(k_means_index)]
 
         centroid_values = [np.mean(cluster, axis=0, dtype="float_")
                            for cluster in cluster_values]
-
-        color = cl.scales["10"]["qual"]["Paired"]
 
         points_data = [
             go.Scatter(
@@ -228,8 +246,13 @@ class KMeansModel(BaseModel):
                            yaxis=go.YAxis(title='y-axis', showline=False),
                            hovermode="closest",
                            height=600)
+
+        data = centroids_data + points_data
+        data.append(back)
+
         # Pack data and layout.
-        figure = go.Figure(data=centroids_data + points_data, layout=layout)
+        figure = go.Figure(data=data,
+                           layout=layout)
         plot(figure)
 
         # Output plot as a div.
@@ -237,64 +260,3 @@ class KMeansModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
-
-
-def voronoi_plot(vor: Voronoi):
-    if vor.points.shape[1] != 2:
-        raise ValueError("Requires 2D input")
-
-    new_regions = []
-    new_vertices = vor.vertices.tolist()
-
-    center = vor.points.mean(axis=0)
-    radius = vor.points.ptp().max() * 2
-
-    # Construct a map containing all ridges for a given point
-    all_ridges = {}
-    for (p1, p2), (v1, v2) in zip(vor.ridge_points, vor.ridge_vertices):
-        all_ridges.setdefault(p1, []).append((p2, v1, v2))
-        all_ridges.setdefault(p2, []).append((p1, v1, v2))
-
-    # Reconstruct infinite regions
-    for p1, region in enumerate(vor.point_region):
-        vertices = vor.regions[region]
-
-        if all([v >= 0 for v in vertices]):
-            # finite region
-            new_regions.append(vertices)
-            continue
-
-        # reconstruct a non-finite region
-        ridges = all_ridges[p1]
-        new_region = [v for v in vertices if v >= 0]
-
-        for p2, v1, v2 in ridges:
-            if v2 < 0:
-                v1, v2 = v2, v1
-            if v1 >= 0:
-                # finite ridge: already in the region
-                continue
-
-            # Compute the missing endpoint of an infinite ridge
-
-            t = vor.points[p2] - vor.points[p1]  # tangent
-            t /= np.linalg.norm(t)
-            n = np.array([-t[1], t[0]])  # normal
-
-            midpoint = vor.points[[p1, p2]].mean(axis=0)
-            direction = np.sign(np.dot(midpoint - center, n)) * n
-            far_point = vor.vertices[v2] + direction * radius
-
-            new_region.append(len(new_vertices))
-            new_vertices.append(far_point.tolist())
-
-        # sort region counterclockwise
-        vs = np.asarray([new_vertices[v] for v in new_region])
-        c = vs.mean(axis=0)
-        angles = np.arctan2(vs[:, 1] - c[1], vs[:, 0] - c[0])
-        new_region = np.array(new_region)[np.argsort(angles)]
-
-        # finish
-        new_regions.append(new_region.tolist())
-
-    return new_regions, np.asarray(new_vertices)
