@@ -386,7 +386,7 @@ function doAjax (action) {
  * Checks the form data for errors and warnings.
  * @param {string} action - the action type being requested.
  */
-$(document).on('click', '.cutTrigger', function (action) {
+function process (action) {
   $('#status-prepare').css({ 'visibility': 'visible', 'z-index': '400000' })
   $('#formAction').val(action)
   $.when(checkForErrors()).done(function () {
@@ -399,7 +399,7 @@ $(document).on('click', '.cutTrigger', function (action) {
       })
     }
   })
-})
+}
 
 // Handle the Continue button in the warning modal
 $(document).on('click', '#warningContinue', function () {
