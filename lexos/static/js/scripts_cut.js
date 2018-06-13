@@ -385,6 +385,7 @@ function doAjax (action) {
 /**
  * Checks the form data for errors and warnings.
  * @param {string} action - the action type being requested.
+ * @returns {void}
  */
 function process (action) {
   $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
