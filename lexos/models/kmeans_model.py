@@ -213,7 +213,7 @@ class KMeansModel(BaseModel):
                                       z=z_value,
                                       hoverinfo="skip",
                                       showscale=False,
-                                      colorscale='Viridis')]
+                                      colorscale='YlGnBu')]
 
         # Pick a color for following scatter plots.
         color = cl.scales["10"]["qual"]["Paired"]
