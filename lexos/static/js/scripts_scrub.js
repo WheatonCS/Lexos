@@ -214,7 +214,7 @@ function setTagsButtonAjax () {
         <option value="leave-alone,allTags">Leave Tag Alone</option>
         </select>
         <button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>`
-        $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
+        $('#tagTable').append(`<thead><tr><th>Element</th><th>Action</th><th>${select}</th></tr></thead>`)
         $('#tagTable').append('<tbody></tbody>')
         $('#tagTable tbody').append(response)
         $('#xmlModalStatus').remove()
