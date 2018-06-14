@@ -2047,18 +2047,23 @@ select#orientation {
   height: 150px;
 
 }
+
 .td-top {
   /*we set the 1000px so that it takes all the space  */
   width: 1000px !important;
 }
 
+/*this is to remove the middle border of the table*/
 .result-table>tbody>tr>td:nth-of-type(odd){
   border-right:0;
 }
+
+/*this is to remove the middle border of the table*/
 .result-table>tbody>tr>td:nth-of-type(even){
   border-left:0;
 }
 
+/*table for the generated result*/
 .result-table tbody {
   display: table-header-group;
   overflow:auto;
@@ -2067,10 +2072,11 @@ select#orientation {
   overflow-x:hidden;
 }
 
-/*====================== bootstrap table =========================*/
+/*The header column covers the full length of the table*/
 .header-fixed {
     width: 100%
 }
+/*the display is set as block so that the header position can be fixed*/
 .header-fixed > thead,
 .header-fixed > tbody,
 .header-fixed > thead > tr,
@@ -2103,33 +2109,6 @@ select#orientation {
     margin-bottom: 20px;
     max-width: 100%;
     width: 100%;
-}
-
-table {
-    background-color: transparent;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
-    border-top: 0 none;
-}
-.table > thead > tr > th {
-    border-bottom: 2px solid #ddd;
-    vertical-align: bottom;
-}
-.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
-    border-top: 1px solid #ddd;
-    line-height: 1.42857;
-    padding: 8px;
-    vertical-align: top;
-}
-
-.table-striped > tbody > tr:nth-of-type(2n+1) {
-    background-color: #f9f9f9;
 }
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
