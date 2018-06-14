@@ -17,7 +17,7 @@ k_means_blueprint = Blueprint('k_means', __name__)
 # Tells Flask to load this function when someone is at '/kmeans'
 @k_means_blueprint.route("/kmeans", methods=["GET"])
 def k_means():
-    """Handles the functionality on the kmeans page.
+    """Handles the functionality on the K Means page.
 
     It analyzes the various texts and displays the class label of the files.
     :return: a response object (often a render_template call) to flask and
@@ -25,18 +25,19 @@ def k_means():
     """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
+    # Set default number of clusters to be half of the number of documents.
     default_k = int(num_active_docs / 2)
+    # Get file labels.
     labels = FileManagerModel().load_file_manager().get_active_labels_with_id()
-    # 'GET' request occurs when the page is first loaded
+    # Fill the default options.
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     if 'kmeanoption' not in session:
         session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
+        session['kmeanoption']['nclusters'] = default_k
     return render_template(
         'kmeans.html',
-        itm="kmeans",
         labels=labels,
-        defaultK=default_k,
         numActiveDocs=num_active_docs)
 
 
