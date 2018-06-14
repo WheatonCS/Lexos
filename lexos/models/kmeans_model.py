@@ -107,7 +107,7 @@ class KMeansModel(BaseModel):
                                    reduced_data=reduced_data,
                                    k_means_index=k_means_index)
 
-    def _get_pca_plot(self) -> str:
+    def _get_pca_plot(self) -> go.Figure:
         """Generate a 2D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -158,12 +158,9 @@ class KMeansModel(BaseModel):
         figure = go.Figure(data=data, layout=layout)
 
         # Output plot as a div.
-        return plot(figure,
-                    show_link=False,
-                    output_type="div",
-                    include_plotlyjs=False)
+        return figure
 
-    def _get_voronoi_plot(self) -> str:
+    def _get_voronoi_plot(self) -> go.Figure:
         """Generate voronoi formatted graph for K Means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -269,26 +266,25 @@ class KMeansModel(BaseModel):
                            layout=layout)
 
         # Output plot as a div.
-        return plot(figure,
-                    show_link=False,
-                    output_type="div",
-                    include_plotlyjs=False)
+        return figure
 
     def get_plot(self) -> str:
         """Get the plotly graph based on users selection.
 
         :return: A HTML formatted plotly graph that is ready to be displayed.
         """
+        # Save front end visualization method.
+        visualization = self._k_means_front_end_option.viz
         # If the user selects Voronoi visualization.
-        if self._k_means_front_end_option == KMeansVisualizationOption.Voronoi:
-            return plot(self._get_voronoi_plot(),
+        if visualization == KMeansVisualizationOption.PCA:
+            return plot(self._get_pca_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
 
         # If the user selects PCA visualization.
-        elif self._k_means_front_end_option == KMeansVisualizationOption.PCA:
-            return plot(self._get_pca_plot(),
+        elif visualization == KMeansVisualizationOption.Voronoi:
+            return plot(self._get_voronoi_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
