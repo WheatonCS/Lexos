@@ -55,20 +55,21 @@ function generateKMeansTable () {
 
   // the configuration for creating data table
   const dataTableConfig = {
-    scrollY: 300,
-    scrollCollapse: true,
     // Do not paging.
     paging: false,
+    // Set the Scroll Height.
+    scrollY: 300,
+    // If not enough height, shrink the table height.
+    scrollCollapse: true,
     // Specify where the button is.
     dom: `<'row'<'col-sm-12 text-right'f>><'row'<'col-sm-12 'tr>><'row'<'col-sm-12 text-right'B>>`,
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-    columnDefs: [
-      {
-        targets: 1,
-        render: $.fn.dataTable.render.ellipsis(15, true)
-      }
-    ]
+    // Truncate long documentation names.
+    columnDefs: [{
+      targets: 1,
+      render: $.fn.dataTable.render.ellipsis(15, true)
+    }]
   }
 
   // send the ajax request
@@ -115,8 +116,7 @@ function generateKMeansPlot () {
       function () {
         // Always hide the loading icon.
         $('#status-analyze').css({'visibility': 'hidden'})
-      }
-    )
+      })
 }
 
 $(function () {
