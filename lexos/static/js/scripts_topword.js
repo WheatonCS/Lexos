@@ -49,7 +49,7 @@ function sendAjaxRequest (url, form) {
 
 
 function format(result) {
-  return `<div class="row col-lg-6 col-md-6">
+  return `<div class="topword-result col-lg-6 col-md-6">
               <fieldset class="row col-lg-12 col-md-12">
                   <legend style="font-size: 16px">${result["header"]}</legend>
               </fieldset>
@@ -75,7 +75,7 @@ function generateTopWordResult () {
   sendAjaxRequest('/topwordResult', form)
     .done(
       function (response) {
-        const topWordHeader = $('#topword-header')
+        const topWordHeader = $('#topword-title')
         const topWordResult = $('#topword-result')
         // Put the header in response to the legend.
         topWordHeader.html(response['header'])
@@ -93,7 +93,9 @@ function generateTopWordResult () {
       function () {
         $('#status-analyze').css({'visibility': 'hidden'})
       })
+
 }
+
 
 $(function () {
   // Hide unnecessary div for DTM
@@ -113,4 +115,6 @@ $(function () {
       runModal(error)
     }
   })
+
 })
+

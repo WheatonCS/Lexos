@@ -383,7 +383,8 @@ class TopwordModel(BaseModel):
 
             return frame.transpose().to_html(
                 index=False,
-                classes="result-table table table-striped table-bordered")
+                classes="result-table table table-striped table-bordered"
+                        " header-fixed")
 
         readable_result = [{"header": result.name,
                             "result": helper_series_to_table(series=result)}

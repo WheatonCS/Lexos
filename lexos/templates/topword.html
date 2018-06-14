@@ -4,7 +4,10 @@
 {% block head %}
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
+    <script type="text/javascript" src="https://unpkg.com/sticky-table-headers"></script>
+
 {% endblock %}
+
 {% block title %}Topwords{% endblock %}
 
 {% block options %}
@@ -71,7 +74,7 @@
            value="Download Topwords"/>
 
     <!-- This div sets the class division. -->
-    <div class="row col-md-12 col-lg-12" id="class-division"
+    <div class="row col-md-12 col-lg-12"
          style="padding-top: 20px">
         <!-- Header of the class division. -->
         <fieldset>
@@ -100,7 +103,7 @@
                         {% for file_id in classDivisionMap.columns %}
                             {% if classDivisionMap[file_id][class_name] %}
                                 <tr>
-                                    <td class="td-top">{{ labels[file_id] }}</td>
+                                    <td class="td-top">{{ labels[file_id]|truncate(35, True) }}</td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
@@ -110,9 +113,9 @@
             </div>
         {% endfor %}
     </div>
-
+    <!--this is for the title above the individual table's title-->
     <fieldset class="row col-lg-12 col-md-12">
-        <legend id="topword-header">
+        <legend id="topword-title">
         </legend>
     </fieldset>
 
