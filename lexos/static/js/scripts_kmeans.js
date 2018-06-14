@@ -137,10 +137,8 @@ $(function () {
       $('#KMeans-result').css({'display': 'block'})
       generateKMeansTable()
       generateKMeansPlot()
-    }
-    else {
+    } else {
       runModal(error)
     }
   })
 })
-
