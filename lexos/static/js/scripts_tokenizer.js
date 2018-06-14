@@ -48,17 +48,14 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
- * Generate the desired data table configuration based on users selection.
- * @returns {{scrollX: boolean, bSortCellsTop: boolean, dom: string, buttons: string[], fixedColumns: {leftColumns: *}}}: data table configurations.
+ * Get the data table configuration based on selected orientation.
+ * @returns {{scrollX: boolean, bSortCellsTop: boolean, dom: string, buttons: string[], fixedColumns: {leftColumns: number}, columnDefs: *[]}}
+ * The desired data table configuration.
  */
 function getDataTableConfig () {
   // Declare the variable that holds the number of fixed left columns.
-  let numFixedColumns
-  if ($('#table-orientation-column').is(':checked')) {
-    numFixedColumns = 3
-  } else if ($('#table-orientation-row').is(':checked')) {
-    numFixedColumns = 1
-  }
+  const numFixedColumns = $('#table-orientation-column').is(':checked') ? 3 : 1
+
   return {
     // Allow scroll horizontally.
     scrollX: true,
@@ -69,7 +66,7 @@ function getDataTableConfig () {
           <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
 
     // specify all the button that is put on to the page
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5','colvis'],
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
 
     // Set number of fixed columns on left of the data table.
     fixedColumns: {
@@ -160,14 +157,14 @@ $(function () {
     generateTokenizerResult()
   })
 
-  // The event handler for generate tokenize clicked.
-  $('#download-tokenizer').click(function (event) {
+  // The event handler for download tokenize clicked.
+  $('#download-tokenizer').click(function (download) {
     // On check possible submission error on click.
     const error = submissionError()
     // If error found, run modal to display message and prevent the submission from happening.
     if (error !== null) {
       runModal(error)
-      event.preventDefault()
+      download.preventDefault()
     }
   })
 
