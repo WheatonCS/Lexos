@@ -152,8 +152,7 @@ class KMeansModel(BaseModel):
         # Set the layout of the plot.
         layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
                            yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest",
-                           height=600)
+                           hovermode="closest")
         # Pack data and layout.
         figure = go.Figure(data=data, layout=layout)
 
@@ -257,8 +256,7 @@ class KMeansModel(BaseModel):
         # Set the layout of the plot.
         layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
                            yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest",
-                           height=600)
+                           hovermode="closest")
 
         # Pack data and layout.
         # noinspection PyTypeChecker
@@ -308,10 +306,10 @@ class KMeansModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster Number", "Document"])
+        result_table = pd.DataFrame(columns=["Cluster #", "Document"])
 
         # Fill the pandas data frame.
-        result_table["Cluster Number"] = \
+        result_table["Cluster #"] = \
             [index + 1 for index in cluster_result.k_means_index]
         result_table["Document"] = labels
 
