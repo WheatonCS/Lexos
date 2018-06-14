@@ -148,8 +148,8 @@ class ContentAnalysisModel(object):
         """
         counter = []
         active_dicts = self.get_active_dicts()
-        count = 0
         for dictionary in active_dicts:
+            count = 0
             for phrase in dictionaries:
                 if phrase.dict_label == dictionary.label:
                     count += phrase.count
@@ -437,6 +437,8 @@ def count_phrases(dictionary: list, file: object):
     :return: list of Phrase objects with their counts
     """
     for phrase in dictionary:
+        phrase.count = count_phrase_in_text(phrase=phrase.content,
+                                            text=file.content)
         phrase.file_counts[file.label] = count_phrase_in_text(
             phrase=phrase.content, text=file.content)
         if ' ' in phrase.content:
@@ -553,16 +555,6 @@ class File(Document):
     def total_word_count(self, total_word_counts: int):
         """Set the file's word count."""
         self._total_word_counts = total_word_counts
-
-    @property
-    def label(self) -> str:
-        """:return: file content."""
-        return self._label
-
-    @label.setter
-    def label(self, label: str):
-        """Set file content."""
-        self._label = label
 
 
 class Phrase(object):
