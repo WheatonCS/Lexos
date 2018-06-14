@@ -1,6 +1,7 @@
 /**
- * the function to run the error modal
- * @param htmlMsg {string} - the message to display, you can put html in it
+ * The function to run the error modal.
+ * @param {string} htmlMsg: the message to display.
+ * @returns {void}.
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -8,19 +9,20 @@ function runModal (htmlMsg) {
 }
 
 /**
- * check all the easy error with js, in this case, one document is required
- * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
+ * At least two documents are required to run the K-Means clustering.
+ * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
  */
 function submissionError () {
-  if ($('#num_active_files').val() < 3)
+  if ($('#num_active_files').val() < 3) {
     return 'You must have at least 2 active documents to proceed!'
-  else
+  } else {
     return null
+  }
 }
 
 /**
- * the function to convert the from into json
- * @returns {{string: string}} - the from converted to json
+ * The function to convert the form into json.
+ * @returns {{string: string}}: the form converted to json.
  */
 function jsonifyForm () {
   const form = {}
@@ -31,10 +33,10 @@ function jsonifyForm () {
 }
 
 /**
- * send the ajax request
- * @param url: the url to post
- * @param form: the form data packed into an object
- * @returns {jQuery.Ajax}: an jQuery Ajax object
+ * Send the ajax request.
+ * @param {string} url: the url to post.
+ * @param {{string: string}} form: the form data packed into an object.
+ * @returns {jQuery.Ajax}: an jQuery Ajax object.
  */
 function sendAjaxRequest (url, form) {
   return $.ajax({
@@ -46,14 +48,15 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
- * display the table of the k means result on web.
+ * Display the K-Means clustering result as a table on web though an Ajax call.
+ * @returns {void}.
  */
 function generateKMeansTable () {
   $('#status-analyze').css({'visibility': 'visible'})
-  // convert form into an object map string to string
+  // Convert form into an object map string to string
   const form = jsonifyForm()
 
-  // the configuration for creating data table
+  // Set the configuration for creating data table
   const dataTableConfig = {
     // Do not paging.
     paging: false,
@@ -72,14 +75,14 @@ function generateKMeansTable () {
     }]
   }
 
-  // send the ajax request
+  // Send the ajax request
   sendAjaxRequest('/KMeansTable', form)
     .done(
       function (response) {
         const outerTableDivSelector = $('#KMeans-table')
-        // put the response onto the web page
+        // Put the response onto the web page
         outerTableDivSelector.html(response)
-        // initialize the data table
+        // Initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
       })
     .fail(
@@ -93,14 +96,15 @@ function generateKMeansTable () {
 }
 
 /**
- * display the result of the box plot on web page
+ * Display the visualization of K-Means on web page through an Ajax call.
+ * @returns {void}.
  */
 function generateKMeansPlot () {
   $('#status-analyze').css({'visibility': 'visible'})
-  // convert form into an object map string to string
+  // Convert form into an object map string to string
   const form = jsonifyForm()
 
-  // send the ajax request
+  // Send the ajax request
   sendAjaxRequest('/KMeansPlot', form)
     .done(
       function (response) {
@@ -123,19 +127,16 @@ $(function () {
   // Hide the K-Means result div when first get to the page.
   $('#KMeans-result').css({'display': 'none'})
 
-  /**
-   * The event handler for generate statistics clicked.
-   */
+  // The event handler when generate K-Means result is clicked.
   $('#get-k-means-result').click(function () {
-    // the error happens during submission
+    // Catch the possible error during submission.
     const error = submissionError()
 
-    if (error === null) {  // if there is no error
-      // Get the file report result.
+    if (error === null) {
+      // If there is no error, get the result.
       $('#KMeans-result').css({'display': 'block'})
       generateKMeansTable()
       generateKMeansPlot()
-
     }
     else {
       runModal(error)
