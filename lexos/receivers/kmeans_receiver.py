@@ -25,6 +25,7 @@ class KMeansOption(NamedTuple):
 
 class KMeansReceiver(BaseReceiver):
     """Class to get K-Means front end option."""
+
     def options_from_front_end(self) -> KMeansOption:
         """Get the K-Means option from front end.
 
