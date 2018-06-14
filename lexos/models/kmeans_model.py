@@ -195,23 +195,25 @@ class KMeansModel(BaseModel):
         y_min = reduced_data[:, 1].min() - 1
         y_max = reduced_data[:, 1].max() + 1
 
+        # Find x, y mesh grids.
+        x_mesh_grid, y_mesh_grid = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                                               np.arange(y_min, y_max, 0.01))
 
-        xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
-                             np.arange(y_min, y_max, 0.01))
+        # Find K Means predicted z values.
+        z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
+                                        y_mesh_grid.ravel()])
 
-        Z = k_means.predict(np.c_[xx.ravel(), yy.ravel()])
+        # Reshape Z value based on shape of x mesh grid.
+        z_value = z_value.reshape(x_mesh_grid.shape)
 
-        Z = Z.reshape(xx.shape)
-
-        back = go.Heatmap(x=xx[0][:len(Z)],
-                          y=xx[0][:len(Z)],
-                          z=Z,
-                          hoverinfo="skip",
-                          showscale=False,
-                          colorscale='Viridis')
-
-
-
+        # Draw the regions with heat map.
+        # This method could be updated once plotly better support polygons.
+        voronoi_regions = [go.Heatmap(x=x_mesh_grid[0][:len(z_value)],
+                                      y=x_mesh_grid[0][:len(z_value)],
+                                      z=z_value,
+                                      hoverinfo="skip",
+                                      showscale=False,
+                                      colorscale='Viridis')]
 
         # Pick a color for following scatter plots.
         color = cl.scales["10"]["qual"]["Paired"]
@@ -260,12 +262,10 @@ class KMeansModel(BaseModel):
                            hovermode="closest",
                            height=600)
 
-        data = centroids_data + points_data + [back]
-
         # Pack data and layout.
-        figure = go.Figure(data=data,
+        # noinspection PyTypeChecker
+        figure = go.Figure(data=voronoi_regions + centroids_data + points_data,
                            layout=layout)
-        plot(figure)
 
         # Output plot as a div.
         return plot(figure,
