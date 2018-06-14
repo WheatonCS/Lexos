@@ -3,8 +3,8 @@
  * @param htmlMsg {string} - the message to display, you can put html in it
  */
 function runModal (htmlMsg) {
-    $('#error-modal-message').html(htmlMsg)
-    $('#error-modal').modal()
+  $('#error-modal-message').html(htmlMsg)
+  $('#error-modal').modal()
 }
 
 /**
@@ -12,10 +12,10 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
-    if ($('#num_active_files').val() < 3)
-        return 'You must have at least 2 active documents to proceed!'
-    else
-        return null
+  if ($('#num_active_files').val() < 3)
+    return 'You must have at least 2 active documents to proceed!'
+  else
+    return null
 }
 
 /**
@@ -23,11 +23,11 @@ function submissionError () {
  * @returns {{string: string}} - the from converted to json
  */
 function jsonifyForm () {
-    const form = {}
-    $.each($('form').serializeArray(), function (i, field) {
-        form[field.name] = field.value || ''
-    })
-    return form
+  const form = {}
+  $.each($('form').serializeArray(), function (i, field) {
+    form[field.name] = field.value || ''
+  })
+  return form
 }
 
 /**
@@ -37,101 +37,103 @@ function jsonifyForm () {
  * @returns {jQuery.Ajax}: an jQuery Ajax object
  */
 function sendAjaxRequest (url, form) {
-    return $.ajax({
-        type: 'POST',
-        url: url,
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(form)
-    })
+  return $.ajax({
+    type: 'POST',
+    url: url,
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(form)
+  })
 }
 
 /**
  * display the table of the k means result on web.
  */
 function generateKMeansTable () {
-    $('#status-analyze').css({'visibility': 'visible'})
-    // convert form into an object map string to string
-    const form = jsonifyForm()
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = jsonifyForm()
 
-    // the configuration for creating data table
-    const dataTableConfig = {
-        scrollY: "600px",
-        // Do not show number of file.
-        info: false,
-        // Do not paging.
-        paging: false,
-        // Specify where the button is.
-        dom: "Bfrtip",
-        // Specify all the download buttons that are displayed on the page.
-        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
-    }
+  // the configuration for creating data table
+  const dataTableConfig = {
+    scrollY: 300,
+    scrollCollapse: true,
+    // Do not show number of file.
+    info: false,
+    // Do not paging.
+    paging: false,
+    // Specify where the button is.
+    dom: `<'row'<'col-sm-12 text-right'f>>
+          <'row'<'col-sm-12 'tr>>
+          <'row'<'col-sm-12 text-right'B>>`,
+    // Specify all the download buttons that are displayed on the page.
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+  }
 
-    // send the ajax request
-    sendAjaxRequest('/KMeansTable', form)
-        .done(
-            function (response) {
-                const outerTableDivSelector = $('#KMeans-table')
-                // put the response onto the web page
-                outerTableDivSelector.html(response)
-                // initialize the data table
-                outerTableDivSelector.children().DataTable(dataTableConfig)
-                // display the corpus statistics result
-                $('#stats-result').css({'display': 'block'})
-            })
-        .fail(
-            function (jqXHR, textStatus, errorThrown) {
-                // If fail hide the loading icon.
-                $('#status-analyze').css({'visibility': 'hidden'})
-                console.log('textStatus: ' + textStatus)
-                console.log('errorThrown: ' + errorThrown)
-                runModal('Error encountered while generating the file statistics.')
-            })
+  // send the ajax request
+  sendAjaxRequest('/KMeansTable', form)
+    .done(
+      function (response) {
+        const outerTableDivSelector = $('#KMeans-table')
+        // put the response onto the web page
+        outerTableDivSelector.html(response)
+        // initialize the data table
+        outerTableDivSelector.children().DataTable(dataTableConfig)
+        // display the corpus statistics result
+        $('#stats-result').css({'display': 'block'})
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        // If fail hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        runModal('Error encountered while generating the file statistics.')
+      })
 }
 
 /**
  * display the result of the box plot on web page
  */
 function generateKMeansPlot () {
-    $('#status-analyze').css({'visibility': 'visible'})
-    // convert form into an object map string to string
-    const form = jsonifyForm()
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = jsonifyForm()
 
-    // send the ajax request
-    sendAjaxRequest('/KMeansPlot', form)
-        .done(
-            function (response) {
-                $('#KMeans-plot').html(response)
-            })
-        .fail(
-            function (jqXHR, textStatus, errorThrown) {
-                console.log('textStatus: ' + textStatus)
-                console.log('errorThrown: ' + errorThrown)
-                runModal('Error encountered while generating the box plot.')
-            })
-        .always(
-            function () {
-                // Always hide the loading icon.
-                $('#status-analyze').css({'visibility': 'hidden'})
-            }
-        )
+  // send the ajax request
+  sendAjaxRequest('/KMeansPlot', form)
+    .done(
+      function (response) {
+        $('#KMeans-plot').html(response)
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        runModal('Error encountered while generating the box plot.')
+      })
+    .always(
+      function () {
+        // Always hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+      }
+    )
 }
 
 $(function () {
-    /**
-     * The event handler for generate statistics clicked
-     */
-    $('#get-k-means-result').click(function () {
-        const error = submissionError()  // the error happens during submission
+  /**
+   * The event handler for generate statistics clicked.
+   */
+  $('#get-k-means-result').click(function () {
+    const error = submissionError()  // the error happens during submission
 
-        if (error === null) {  // if there is no error
-            // Get the file report result.
-            generateKMeansPlot()
-            generateKMeansTable()
-        }
-        else {
-            runModal(error)
-        }
-    })
-
+    if (error === null) {  // if there is no error
+      // Get the file report result.
+      generateKMeansTable()
+      generateKMeansPlot()
+    }
+    else {
+      runModal(error)
+    }
+  })
 })
 
