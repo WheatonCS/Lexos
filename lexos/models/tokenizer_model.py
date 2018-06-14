@@ -240,7 +240,7 @@ class TokenizerModel(BaseModel):
         # Return where the file is.
         return file_path
 
-    def get_dtm_size(self) -> int:
+    def get_dtm_size(self) -> str:
         """Return the size of the dtm.
 
         :return: An integer which represents the number of data contained in
@@ -248,4 +248,5 @@ class TokenizerModel(BaseModel):
         """
         row_size, col_size = self._doc_term_matrix.shape
         # Add two more rows since total and average will be calculated.
-        return (row_size + 2) * col_size
+        # Concat the result into a string in order to pass it by ajax.
+        return str((row_size + 2) * col_size)

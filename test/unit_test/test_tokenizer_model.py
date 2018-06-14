@@ -40,7 +40,7 @@ class TestFileColResult:
         assert test_file_result_col["F2.txt"][0] == 0
 
     def test_column_size(self):
-        assert test_file_size_col == 36
+        assert test_file_size_col == "36"
 
 
 # -------------------------- Test file as rows --------------------------------
@@ -79,7 +79,7 @@ class TestFileRowResult:
         assert test_file_result_row.loc[1][9] == 5
 
     def test_row_size(self):
-        assert test_tokenizer_model_row.get_dtm_size() == 36
+        assert test_tokenizer_model_row.get_dtm_size() == "36"
 
 
 # -------------------------- Empty dtm test suite -----------------------------
