@@ -187,14 +187,14 @@ class KMeansModel(BaseModel):
                            for cluster in cluster_values]
 
         # Find the decision boundary of the graph.
-        x_min = reduced_data[:, 0].min() - 1
-        x_max = reduced_data[:, 0].max() + 1
-        y_min = reduced_data[:, 1].min() - 1
-        y_max = reduced_data[:, 1].max() + 1
+        x_min = reduced_data[:, 0].min() - 0.1
+        x_max = reduced_data[:, 0].max() + 0.1
+        y_min = reduced_data[:, 1].min() - 0.1
+        y_max = reduced_data[:, 1].max() + 0.1
 
-        # Find x, y mesh grids.
-        x_mesh_grid, y_mesh_grid = np.meshgrid(np.arange(x_min, x_max, 0.01),
-                                               np.arange(y_min, y_max, 0.01))
+        # Find x, y mesh grids, decrease the step to make lines smoother.
+        x_mesh_grid, y_mesh_grid = np.meshgrid(np.arange(x_min, x_max, 0.005),
+                                               np.arange(y_min, y_max, 0.005))
 
         # Find K Means predicted z values.
         z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
