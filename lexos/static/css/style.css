@@ -1889,6 +1889,15 @@ select#orientation {
   width: 110px;
 }
 
+#n_init {
+  width: 110px;
+}
+
+#tolerance {
+  width: 110px;
+}
+
+
 .icon-help#kValueTooltip,
 #KMeans-maxIter-tooltip,
 #KMeans-initailize-tip,
@@ -1900,17 +1909,10 @@ select#orientation {
   padding-left: 5px;
 }
 
-#advancedKMeansOptions {
-  margin-bottom: 30px;
+.k-means-result-download-button {
+  margin-top: 5px;
 }
 
-#n_init {
-  width: 110px;
-}
-
-#tolerance {
-  width: 110px;
-}
 
 /* ================== SIMILARITY QUERY STYLING ==================== */
 

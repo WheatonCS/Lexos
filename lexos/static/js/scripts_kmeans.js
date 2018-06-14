@@ -65,7 +65,9 @@ function generateKMeansTable () {
     // If not enough height, shrink the table height.
     scrollCollapse: true,
     // Specify where the button is.
-    dom: `<'row'<'col-sm-12 text-right'f>><'row'<'col-sm-12 'tr>><'row'<'col-sm-12 text-right'B>>`,
+    dom: `<'row'<'col-sm-12 text-right'f>>
+          <'row'<'col-sm-12 'tr>>
+          <'row k-means-result-download-button'<'col-sm-12'B>>`,
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
     // Truncate long documentation names.
