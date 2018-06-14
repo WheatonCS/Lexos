@@ -2036,9 +2036,11 @@ select#orientation {
 }
 
 /* ================== TOPWORD STYLING ==================== */
+/*increased the width of the table rows to adjust for the scroll bar on the right*/
 .result-table>tbody> tr{
   width:103.5%;
 }
+/*the table containing all the document names*/
 .class-division-table tbody {
   display: block;
   overflow-y: auto;
@@ -2049,12 +2051,7 @@ select#orientation {
   /*we set the 1000px so that it takes all the space  */
   width: 1000px !important;
 }
-/*.topword-result{
-  overflow-y:scroll;
-  display:block;
-  max-height:300px;
 
-}*/
 .result-table>tbody>tr>td:nth-of-type(odd){
   border-right:0;
 }
@@ -2069,42 +2066,11 @@ select#orientation {
   height: 200px;
   overflow-x:hidden;
 }
-.header-fixed {
-    width: 100%;
-}
-.header-fixed > thead,
-.header-fixed > tbody,
-.header-fixed > thead > tr,
-.header-fixed > tbody > tr,
-.header-fixed > thead > tr > th,
-.header-fixed > tbody > tr > td {
-    display: block;
-}
-
-.header-fixed > tbody > tr:after,
-.header-fixed > thead > tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
-}
-
-.header-fixed > tbody {
-    overflow-y: auto;
-    height: 150px;
-}
-
-.header-fixed > tbody > tr > td,
-.header-fixed > thead > tr > th {
-    width: 20%;
-    float: left;
-}
 
 /*====================== bootstrap table =========================*/
 .header-fixed {
     width: 100%
 }
-
 .header-fixed > thead,
 .header-fixed > tbody,
 .header-fixed > thead > tr,
@@ -2121,7 +2087,6 @@ select#orientation {
     visibility: hidden;
     clear: both;
 }
-
 .header-fixed > tbody {
     overflow-y: auto;
     height: 150px;
