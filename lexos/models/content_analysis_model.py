@@ -83,7 +83,6 @@ class ContentAnalysisModel(object):
             self.get_dictionary_counts(dictionaries)
         return dictionaries
 
-
     def generate_corpus_counts_table(self, dictionaries: list, colors) -> str:
         """Generate a html table.
 
@@ -579,4 +578,5 @@ class Phrase(object):
         self.content = content
         self.dict_label = dict_label
         self.count = count
+
         self.file_counts = {}
