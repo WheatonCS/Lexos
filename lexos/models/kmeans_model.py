@@ -75,6 +75,15 @@ class KMeansModel(BaseModel):
             else KMeansReceiver().options_from_front_end()
 
     def _get_cluster_result(self) -> KMeansClusterResult:
+        """Get the cluster result produced by K Means.
+
+        :return: A KMeansClusterResult object which contains:
+            k_means: A KMeans object from sklearn that contains K-Means
+                     analysis settings.
+            reduced_data: PCA reduced 2 Dimensional DTM.
+            k_means_index: the clustering result.
+
+        """
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
@@ -98,7 +107,7 @@ class KMeansModel(BaseModel):
                                    k_means_index=k_means_index)
 
     def get_pca_plot(self) -> str:
-        """Get 2D plot that contains just the dots for K means result.
+        """Generate a 2D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
         """
@@ -153,7 +162,11 @@ class KMeansModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def get_voronoi_plot(self):
+    def get_voronoi_plot(self) -> str:
+        """Generate voronoi formatted graph for K Means result.
+
+        :return: A plotly object hat has been converted to HTML format string.
+        """
         # Get kMeans analyze result and unpack it.
         cluster_result = self._get_cluster_result()
         k_means = cluster_result.k_means
@@ -260,7 +273,13 @@ class KMeansModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def get_table_result(self):
+    def get_table_result(self) -> str:
+        """Generate a table indicating cluster result.
+
+        The table has two columns. One column is for cluster numbers and the
+        other one contains document names.
+        :return: A table that is in HTML string format.
+        """
         # Get kMeans analyze result.
         cluster_result = self._get_cluster_result()
 
@@ -276,6 +295,7 @@ class KMeansModel(BaseModel):
             [index + 1 for index in cluster_result.k_means_index]
         result_table["Document"] = labels
 
+        # Convert the pandas data frame to a HTML formatted table.
         return result_table.to_html(
             index=False,
             classes="table table-striped table-bordered")
