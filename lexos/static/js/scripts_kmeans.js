@@ -57,16 +57,18 @@ function generateKMeansTable () {
   const dataTableConfig = {
     scrollY: 300,
     scrollCollapse: true,
-    // Do not show number of file.
-    info: false,
     // Do not paging.
     paging: false,
     // Specify where the button is.
-    dom: `<'row'<'col-sm-12 text-right'f>>
-          <'row'<'col-sm-12 'tr>>
-          <'row'<'col-sm-12 text-right'B>>`,
+    dom: `<'row'<'col-sm-12 text-right'f>><'row'<'col-sm-12 'tr>><'row'<'col-sm-12 text-right'B>>`,
     // Specify all the download buttons that are displayed on the page.
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+    columnDefs: [
+      {
+        targets: 1,
+        render: $.fn.dataTable.render.ellipsis(15, true)
+      }
+    ]
   }
 
   // send the ajax request
