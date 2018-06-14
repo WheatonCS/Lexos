@@ -78,8 +78,6 @@ function generateKMeansTable () {
         outerTableDivSelector.html(response)
         // initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
-        // display the corpus statistics result
-        $('#stats-result').css({'display': 'block'})
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -120,16 +118,22 @@ function generateKMeansPlot () {
 }
 
 $(function () {
+  // Hide the K-Means result div when first get to the page.
+  $('#KMeans-result').css({'display': 'none'})
+
   /**
    * The event handler for generate statistics clicked.
    */
   $('#get-k-means-result').click(function () {
-    const error = submissionError()  // the error happens during submission
+    // the error happens during submission
+    const error = submissionError()
 
     if (error === null) {  // if there is no error
       // Get the file report result.
+      $('#KMeans-result').css({'display': 'block'})
       generateKMeansTable()
       generateKMeansPlot()
+
     }
     else {
       runModal(error)
