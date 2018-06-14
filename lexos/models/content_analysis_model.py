@@ -570,5 +570,4 @@ class Phrase(object):
         self.content = content
         self.dict_label = dict_label
         self.count = count
-
         self.file_counts = {}
