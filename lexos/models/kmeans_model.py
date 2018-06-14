@@ -153,26 +153,6 @@ class KMeansModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def get_table_result(self):
-        # Get kMeans analyze result.
-        cluster_result = self._get_cluster_result()
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster Number", "Document"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster Number"] = \
-            [index + 1 for index in cluster_result.k_means_index]
-        result_table["Document"] = labels
-
-        return result_table.to_html(
-            index=False,
-            classes="table table-striped table-bordered")
-
     def get_voronoi_plot(self):
         # Get kMeans analyze result and unpack it.
         cluster_result = self._get_cluster_result()
@@ -180,14 +160,29 @@ class KMeansModel(BaseModel):
         reduced_data = cluster_result.reduced_data
         k_means_index = cluster_result.k_means_index
 
-        color = cl.scales["10"]["qual"]["Paired"]
+        # Get file names.
+        labels = np.array([self._id_temp_label_map[file_id]
+                           for file_id in self._doc_term_matrix.index.values])
 
-        # Plot the decision boundary. For that, we will assign a color to each
+        # Get a list of lists of file names based on the cluster result.
+        cluster_labels = [labels[np.where(k_means_index == index)]
+                          for index in set(k_means_index)]
+
+        # Get a list of lists of file coordinates based on the cluster result.
+        cluster_values = [reduced_data[np.where(k_means_index == index)]
+                          for index in set(k_means_index)]
+
+        # Get a list of centroid results based on the cluster result.
+        centroid_values = [np.mean(cluster, axis=0, dtype="float_")
+                           for cluster in cluster_values]
+
         # Find the decision boundary of the graph.
         x_min = reduced_data[:, 0].min() - 1
         x_max = reduced_data[:, 0].max() + 1
         y_min = reduced_data[:, 1].min() - 1
         y_max = reduced_data[:, 1].max() + 1
+
+
         xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
                              np.arange(y_min, y_max, 0.01))
 
@@ -202,19 +197,13 @@ class KMeansModel(BaseModel):
                           showscale=False,
                           colorscale='Viridis')
 
-        # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
 
-        cluster_labels = [labels[np.where(k_means_index == index)]
-                          for index in set(k_means_index)]
 
-        cluster_values = [reduced_data[np.where(k_means_index == index)]
-                          for index in set(k_means_index)]
 
-        centroid_values = [np.mean(cluster, axis=0, dtype="float_")
-                           for cluster in cluster_values]
+        # Pick a color for following scatter plots.
+        color = cl.scales["10"]["qual"]["Paired"]
 
+        # Plot sets of points based on the cluster they are in.
         points_data = [
             go.Scatter(
                 x=cluster_value[:, 0],
@@ -232,20 +221,21 @@ class KMeansModel(BaseModel):
             for index, cluster_value in enumerate(cluster_values)
         ]
 
+        # Plot centroids based on the cluster they are in.
         centroids_data = [
             go.Scatter(
                 x=[centroid_value[0]],
                 y=[centroid_value[1]],
                 mode="markers",
                 name=f"Centroid {index + 1}",
-                hoverinfo="text",
                 text=f"Centroid {index + 1}",
+                hoverinfo="text",
                 marker=dict(
                     size=14,
                     line=dict(width=1),
                     color=color[index],
                     symbol="cross",
-                    opacity=0.6
+                    opacity=0.8
                 )
             )
             for index, centroid_value in enumerate(centroid_values)
@@ -269,3 +259,23 @@ class KMeansModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
+
+    def get_table_result(self):
+        # Get kMeans analyze result.
+        cluster_result = self._get_cluster_result()
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Initialize the table with proper headers.
+        result_table = pd.DataFrame(columns=["Cluster Number", "Document"])
+
+        # Fill the pandas data frame.
+        result_table["Cluster Number"] = \
+            [index + 1 for index in cluster_result.k_means_index]
+        result_table["Document"] = labels
+
+        return result_table.to_html(
+            index=False,
+            classes="table table-striped table-bordered")
