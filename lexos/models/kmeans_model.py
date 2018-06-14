@@ -16,7 +16,8 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
-from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver
+from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
+    KMeansVisualizationOption
 
 
 class KMeansTestOptions(NamedTuple):
@@ -106,7 +107,7 @@ class KMeansModel(BaseModel):
                                    reduced_data=reduced_data,
                                    k_means_index=k_means_index)
 
-    def get_pca_plot(self) -> str:
+    def _get_pca_plot(self) -> str:
         """Generate a 2D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -162,7 +163,7 @@ class KMeansModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def get_voronoi_plot(self) -> str:
+    def _get_voronoi_plot(self) -> str:
         """Generate voronoi formatted graph for K Means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -273,6 +274,29 @@ class KMeansModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
+    def get_plot(self) -> str:
+        """Get the plotly graph based on users selection.
+
+        :return: A HTML formatted plotly graph that is ready to be displayed.
+        """
+        # If the user selects Voronoi visualization.
+        if self._k_means_front_end_option == KMeansVisualizationOption.Voronoi:
+            return plot(self._get_voronoi_plot(),
+                        show_link=False,
+                        output_type="div",
+                        include_plotlyjs=False)
+
+        # If the user selects PCA visualization.
+        elif self._k_means_front_end_option == KMeansVisualizationOption.PCA:
+            return plot(self._get_pca_plot(),
+                        show_link=False,
+                        output_type="div",
+                        include_plotlyjs=False)
+
+        # Invalid token is received.
+        else:
+            raise ValueError("Invalid K-Means analysis option from front end.")
+
     def get_table_result(self) -> str:
         """Generate a table indicating cluster result.
 
@@ -298,4 +322,4 @@ class KMeansModel(BaseModel):
         # Convert the pandas data frame to a HTML formatted table.
         return result_table.to_html(
             index=False,
-            classes="table table-striped table-bordered")
+            classes="table table-striped table-bordered text-center")
