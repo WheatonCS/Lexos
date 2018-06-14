@@ -1,46 +1,49 @@
-# This model uses KMeans method to analyze files.
-# It uses sklearn.cluster.KMeans for most important analysis, please see:
-# http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
-# for more details
+"""This model uses KMeans method to analyze files.
+
+It uses sklearn.cluster.KMeans for most important analysis, please see:
+http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
+"""
 
 import numpy as np
 import pandas as pd
-import plotly.tools as tls
-import plotly.graph_objs as go
 import colorlover as cl
-import matplotlib.pyplot as plt
-from typing import Optional, List, NamedTuple
+import plotly.graph_objs as go
 from plotly.offline import plot
-from scipy.spatial import Voronoi, voronoi_plot_2d
-from sklearn.cluster import KMeans as KMeans
 from sklearn.decomposition import PCA
-from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
+from sklearn.cluster import KMeans as KMeans
+from typing import Optional, List, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver
 from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
+from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver
 
 
 class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
+
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: KMeansOption
 
 
 class KMeansClusterResult(NamedTuple):
+    """A typed tuple to hold k-means cluster results."""
+
     k_means: KMeans
     reduced_data: np.ndarray
     k_means_index: List[int]
 
 
 class KMeansModel(BaseModel):
-    def __init__(self, test_options: Optional[KMeansTestOptions] = None):
-        """This is the class to run k-means analysis.
+    """This is the class to run k-means analysis.
 
-        :param test_options: the input used in testing to override the
-                             dynamically loaded option.
-        """
+    :param test_options: the input used in testing to override the
+                         dynamically loaded option.
+    """
+
+    def __init__(self, test_options: Optional[KMeansTestOptions] = None):
+        """Initialize the class based if test option is given."""
         super().__init__()
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
@@ -72,7 +75,7 @@ class KMeansModel(BaseModel):
             else KMeansReceiver().options_from_front_end()
 
     def _get_cluster_result(self) -> KMeansClusterResult:
-        # Test if get empty input
+        # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
         # Get reduced data set, 2-D matrix that contains coordinates.
@@ -89,11 +92,16 @@ class KMeansModel(BaseModel):
         # Get cluster result back.
         k_means_index = k_means.fit_predict(reduced_data)
 
+        # Return the desired results and K means settings.
         return KMeansClusterResult(k_means=k_means,
                                    reduced_data=reduced_data,
                                    k_means_index=k_means_index)
 
     def get_pca_plot(self) -> str:
+        """Get 2D plot that contains just the dots for K means result.
+
+        :return: A plotly object hat has been converted to HTML format string.
+        """
         # Get kMeans analyze result and unpack it.
         cluster_result = self._get_cluster_result()
         reduced_data = cluster_result.reduced_data
@@ -108,7 +116,7 @@ class KMeansModel(BaseModel):
         y_value = reduced_data[:, 1]
 
         # TODO: Why display x, y and text same time not working?
-        # Create scatter plot for each file.
+        # Create plot for each cluster so the color will differ among clusters.
         data = [
             go.Scatter(
                 x=[x_value[index]
@@ -175,10 +183,11 @@ class KMeansModel(BaseModel):
         color = cl.scales["10"]["qual"]["Paired"]
 
         # Plot the decision boundary. For that, we will assign a color to each
-        x_min, x_max = reduced_data[:, 0].min() - 1, reduced_data[:,
-                                                     0].max() + 1
-        y_min, y_max = reduced_data[:, 1].min() - 1, reduced_data[:,
-                                                     1].max() + 1
+        # Find the decision boundary of the graph.
+        x_min = reduced_data[:, 0].min() - 1
+        x_max = reduced_data[:, 0].max() + 1
+        y_min = reduced_data[:, 1].min() - 1
+        y_max = reduced_data[:, 1].max() + 1
         xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
                              np.arange(y_min, y_max, 0.01))
 
@@ -187,11 +196,11 @@ class KMeansModel(BaseModel):
         Z = Z.reshape(xx.shape)
 
         back = go.Heatmap(x=xx[0][:len(Z)],
-                           y=xx[0][:len(Z)],
-                           z=Z,
-                           hoverinfo="name",
-                           showscale=False,
-                           colorscale='YIGnBu')
+                          y=xx[0][:len(Z)],
+                          z=Z,
+                          hoverinfo="skip",
+                          showscale=False,
+                          colorscale='Viridis')
 
         # Get file names.
         labels = np.array([self._id_temp_label_map[file_id]
@@ -228,6 +237,7 @@ class KMeansModel(BaseModel):
                 x=[centroid_value[0]],
                 y=[centroid_value[1]],
                 mode="markers",
+                name=f"Centroid {index + 1}",
                 hoverinfo="text",
                 text=f"Centroid {index + 1}",
                 marker=dict(
@@ -247,8 +257,7 @@ class KMeansModel(BaseModel):
                            hovermode="closest",
                            height=600)
 
-        data = centroids_data + points_data
-        data.append(back)
+        data = centroids_data + points_data + [back]
 
         # Pack data and layout.
         figure = go.Figure(data=data,
