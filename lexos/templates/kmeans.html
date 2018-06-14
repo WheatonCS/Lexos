@@ -56,23 +56,22 @@
 
     <fieldset class="row col-lg-12 col-md-12">
         <legend class="has-chevron">Advanced K-Means Options
-            <span id="kmeansAdvancedChev"
-                  class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != '' }}"
-                  data-target="#advancedkmeansOpts" aria-expanded="false"
+            <span id="kmeansAdvancedChev" class="fa fa-chevron-right rotate"
+                  aria-expanded="false" data-target="#advancedkmeansOpts"
                   aria-controls="advancedkmeansOpts">
             </span>
         </legend>
 
         <div class="collapse" id="advancedkmeansOpts">
             <label for="max_iter">Maximum Number of Iterations:
-                <input type="number" name="max_iter" id="max_iter" min="1"
-                       step="1" placeholder="Default is 300"
+                <input type="number" name="max_iter" id="max_iter"
+                       min="1" step="1"
                        value="{{ session['kmeanoption']['max_iter'] }}"/>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
-                   data-toggle="tooltip" data-html="true"
-                   data-placement="right" data-container="body"
-                   title="Maximum number of iterations of the k-means algorithm for a single run."
-                   style="font-size:12px;"></i>
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px;"
+                   title="Maximum number of iterations of the k-means algorithm
+                          for a single run. The default is 300."></i>
             </label>
 
             <label for="init">Method of Initialization:
@@ -85,21 +84,25 @@
                     </option>
                 </select>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
-                   data-toggle="tooltip" data-html="true"
-                   data-placement="right" data-container="body"
-                   title="'k-means++' selects initial cluster centers for k-means clustering using a weighted probability distribution to speed up convergence. The 'random' option chooses k observations (rows) at random from data for the initial centroids."
-                   style="font-size:12px;"></i>
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px;"
+                   title="'k-means++' selects initial cluster centers for
+                          k-means clustering using a weighted probability
+                          distribution to speed up convergence. The 'random'
+                          option chooses k observations (rows) at random from
+                          data for the initial centroids."></i>
             </label>
 
             <label for="n_init">Number of Iterations with Different Centroids:
-                <input type="number" name="n_init" id="n_init"
-                       placeholder="Default is 10" min="1" step="1"
+                <input type="number" name="n_init" id="n_init" min="1" step="1"
                        value="{{ session['kmeanoption']['n_init'] }}"/>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="tooltip" data-html="true" data-container="body"
                    data-placement="right" style="font-size:12px"
-                   title="The number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia."
-                ></i>
+                   title="The number of time the k-means algorithm will be run
+                          with different centroid seeds. The final results will
+                          be the best output of n_init consecutive runs in terms
+                          of inertia. (The default is 10.)"></i>
             </label>
 
             <label for="tolerance">Relative Tolerance:
@@ -110,30 +113,29 @@
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="tooltip" data-html="true" data-container="body"
                    data-placement="right" style="font-size:12px"
-                   title="Decimal, relative tolerance with respect to inertia to declare convergence."
-                ></i>
+                   title="Decimal, relative tolerance with respect to inertia
+                          to declare convergence."></i>
             </label>
         </div>
     </fieldset>
-
-
 {% endblock %}
 
 {% block results %}
     <div class="row col-lg-12 col-md-12" style="padding-top: 20px">
-        <input type="button" class="bttn bttn-action"
+        <input type="button" class="btn btn-success"
                id="get-k-means-result" name="get-k-means-result"
                value="Get KMeans Result"/>
     </div>
 
-    <div id="KMeans-result" class="row col-lg-12 col-md-12" style="padding-top: 20px">
+    <div class="row col-lg-12 col-md-12"
+         style="padding-top: 20px">
         <fieldset class="row col-lg-12 col-md-12">
-            <legend>
+            <legend id="KMeans-header">
                 K-Means Result
             </legend>
         </fieldset>
-        <div id="KMeans-table" class="row col-lg-4 col-md-4"></div>
-        <div id="KMeans-plot" class="col-lg-8 col-md-8"></div>
+        <div id="KMeans-table" class="row col-lg-3 col-md-3"></div>
+        <div id="KMeans-plot" class="col-lg-9 col-md-9"></div>
     </div>
 {% endblock %}
 
