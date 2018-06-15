@@ -34,7 +34,8 @@ def k_means():
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     if 'kmeanoption' not in session:
         session['kmeanoption'] = constants.DEFAULT_KMEAN_OPTIONS
-        session['kmeanoption']['nclusters'] = default_k
+    # Always update the nclusters.
+    session['kmeanoption']['nclusters'] = default_k
     return render_template(
         'kmeans.html',
         labels=labels,
