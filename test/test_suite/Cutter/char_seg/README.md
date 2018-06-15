@@ -18,7 +18,7 @@ This function cuts the text into segments based on the number of characters in e
 	- Keep Last Segment Size Threshold (%) at 50
 
 Results:
-- After the cut you should have 9 different segments containing 10 characters 
+- After the cut you should have 13 different segments containing 10 characters 
 each with an overlap of 3 characters. 
 
 
@@ -37,17 +37,17 @@ Results:
 - After the cut you should have 16 different segments containing 2-3 characters each. 
 
 
-## Test file: 1_alpha.txt
+## Test file: 3_numbered_large.txt
 
-0. UPLOAD 1_alpha.txt
+0. UPLOAD 3_numbered_large.txt
 
 1. CUT: 
 
 	- Select Characters/Segment
-	- Change the Segment Size to 5
-	- Change Overlap to 3
+	- Change the Segment Size to 100
+	- Keep Overlap at 0
 	- Keep Last Segment Size Threshold (%) at 50
 
 Results:
-- After the cut you should have 9 different segments containing 10 characters 
-each with an overlap of 3 characters. 
+- After the cut you should have 5 different segments containing 100 characters 
+except for the last one which is shorter
