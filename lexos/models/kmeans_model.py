@@ -17,7 +17,7 @@ from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
-    KMeansVisualizationOption
+    KMeansViz
 
 
 class KMeansTestOptions(NamedTuple):
@@ -81,8 +81,10 @@ class KMeansModel(BaseModel):
         :return: The reduced 2D or 3D DTM.
         """
         # Find number of components required by the user selected viz method.
-        n_comp = 3 if self._k_means_front_end_option.viz is \
-                      KMeansVisualizationOption.three_d_scatter else 2
+        n_comp = 3 \
+            if self._k_means_front_end_option.viz is KMeansViz.three_d \
+            else 2
+        # Return the PCA reduced DTM.
         return PCA(n_components=n_comp).fit_transform(self._doc_term_matrix)
 
     def _get_k_means(self) -> KMeans:
@@ -104,7 +106,6 @@ class KMeansModel(BaseModel):
                      analysis settings.
             reduced_data: PCA reduced 2 Dimensional DTM.
             k_means_index: the clustering result.
-
         """
 
         # Get reduced data set, 2-D matrix that contains coordinates.
@@ -352,21 +353,21 @@ class KMeansModel(BaseModel):
         visualization = self._k_means_front_end_option.viz
 
         # If the user selects 2D-Scatter visualization.
-        if visualization is KMeansVisualizationOption.two_d_scatter:
+        if visualization is KMeansViz.two_d:
             return plot(self._get_2d_scatter_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
 
         # If the user selects 3D-Scatter visualization.
-        if visualization is KMeansVisualizationOption.three_d_scatter:
+        if visualization is KMeansViz.three_d:
             return plot(self._get_3d_scatter_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
 
         # If the user selects Voronoi visualization.
-        elif visualization is KMeansVisualizationOption.voronoi:
+        elif visualization is KMeansViz.voronoi:
             return plot(self._get_voronoi_plot(),
                         show_link=False,
                         output_type="div",
