@@ -1,19 +1,18 @@
 # Sentiment Analysis
 
-####File to use: .../test_suite/Experiments/LargeFiles/Moby_Dick.txt, negative.txt, and positive.txt
+####Files to use: Melville_MobyDick.txt, negative.txt, positive.txt
 
-This is an example that shows how to use content analysis to do sentiment analysis.
+This is an example that shows how to use content analysis to do sentiment 
+analysis.
 
-STEP:
-================================================================================
-0. Upload Moby_Dick.txt
+1. Upload Melville_MobyDick.txt
 
-1. Scrub using default settings
+2. Scrub using default settings
     - Remove all Punct
     - Make Lowercase
     - Remove Digits
 
-2. Content Analysis
+3. Content Analysis
     - Upload dictionaries: positive.txt, negative.txt
-    - Set formula = positive - negative
+    - Set formula = negative - positive
     - Analyze
