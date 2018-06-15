@@ -158,13 +158,13 @@ HIERARCHICALINPUT = (
 
 # for kmeans Clustering
 KMEANINPUT = (
-    'nclusters',
-    'max_iter',
+    'viz',
     'init',
     'n_init',
-    'tolerance',
-    'KMeans_metric',
-    'viz')
+    'max_iter',
+    'nclusters',
+    'tolerance'
+)
 
 # for sklearn.kmeans function
 # N_INIT: Number of time the k_means algorithm will be run with different
@@ -275,13 +275,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'degenerated': False}
 
 DEFAULT_KMEAN_OPTIONS = {
-    'nclusters': '',
-    'max_iter': 300,
+    'nclusters': '',  # This value has to be decided by number of files.
+    'viz': 'Voronoi',
     'init': 'k-means++',
     'n_init': 10,
-    'tolerance': 1e-4,
-    'KMeans_metric': 'euclidean',
-    'viz': 'PCA'}
+    'max_iter': 300,
+    'tolerance': 1e-4}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 

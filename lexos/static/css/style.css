@@ -1889,27 +1889,27 @@ select#orientation {
   width: 110px;
 }
 
+#n_init {
+  width: 110px;
+}
+
+#tolerance {
+  width: 110px;
+}
+
+.k-means-result-download-button {
+  margin-top: 10px;
+}
+
 .icon-help#kValueTooltip,
 #KMeans-maxIter-tooltip,
 #KMeans-initailize-tip,
 #KMeans-n_init-tooltip,
 #KMeans-viz-tip,
 #KMeans-tolerance-tooltip {
-  position: relative;
   float: right;
+  position: relative;
   padding-left: 5px;
-}
-
-#advancedKMeansOptions {
-  margin-bottom: 30px;
-}
-
-#n_init {
-  width: 110px;
-}
-
-#tolerance {
-  width: 120px;
 }
 
 /* ================== SIMILARITY QUERY STYLING ==================== */
