@@ -1,7 +1,8 @@
 import pandas as pd
 
 from lexos.models.content_analysis_model import \
-    ContentAnalysisModel
+    ContentAnalysisModel, ContentAnalysisOption
+from typing import Optional
 
 
 class TestOptions(object):
@@ -77,7 +78,7 @@ def test_count_words():
 
 
 def test_generate_scores():
-    test = ContentAnalysisModel(TestOptions(formula=""))
+    test = ContentAnalysisModel(Optional[ContentAnalysisOption])
     test.add_file(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.count()
@@ -193,13 +194,16 @@ def test_join_active_dicts():
 
 
 def test_save_formula():
-    test = ContentAnalysisModel(TestOptions(formula="√([dict1])^([dict2])"))
+    test = ContentAnalysisModel(Optional[ContentAnalysisOption])
+    test.test_option = TestOptions(formula="√([dict1])^([dict2])")
     test.save_formula()
+    # noinspection PyProtectedMember
     assert test._formula == "sqrt([dict1])**([dict2])"
 
 
 def test_check_formula():
-    test = ContentAnalysisModel(TestOptions(formula="()sin(1)"))
+    test = ContentAnalysisModel(Optional[ContentAnalysisOption])
+    test.test_option = TestOptions(formula="()sin(1)")
     assert test.check_formula() == ""
     test.test_option = TestOptions(formula="(")
     test.save_formula()
