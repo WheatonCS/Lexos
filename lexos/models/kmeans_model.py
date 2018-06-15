@@ -306,14 +306,85 @@ class KMeansModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #", "Document"])
+        result_table = pd.DataFrame(
+            columns=["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
 
         # Fill the pandas data frame.
         result_table["Cluster #"] = \
             [index + 1 for index in cluster_result.k_means_index]
         result_table["Document"] = labels
+        result_table["X-Coordinate"] = cluster_result.reduced_data[:, 0]
+        result_table["Y-Coordinate"] = cluster_result.reduced_data[:, 1]
 
         # Convert the pandas data frame to a HTML formatted table.
         return result_table.to_html(
             index=False,
             classes="table table-striped table-bordered text-center")
+
+    def get_three_dimension_plot(self) -> str:
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Get reduced data set, 2-D matrix that contains coordinates.
+        reduced_data = \
+            PCA(n_components=3).fit_transform(self._doc_term_matrix)
+
+        # Set the KMeans settings.
+        k_means = KMeans(tol=self._k_means_front_end_option.tolerance,
+                         n_init=self._k_means_front_end_option.n_init,
+                         init=self._k_means_front_end_option.init_method,
+                         max_iter=self._k_means_front_end_option.max_iter,
+                         n_clusters=self._k_means_front_end_option.k_value)
+
+        # Get cluster result back.
+        k_means_index = k_means.fit_predict(reduced_data)
+
+        x_value = reduced_data[:, 0]
+        y_value = reduced_data[:, 1]
+        z_value = reduced_data[:, 2]
+
+        # Create plot for each cluster so the color will differ among clusters.
+        data = [
+            go.Scatter3d(
+                x=[x_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                y=[y_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                z=[z_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                text=[labels[index]
+                      for index, group_index in enumerate(k_means_index)
+                      if group_index == group_number],
+                mode="markers",
+                name=f"Cluster {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    line=dict(width=1)
+                )
+            )
+            for group_number in set(k_means_index)
+        ]
+
+        # Set the layout of the plot.
+        layout = go.Layout(height=600,
+                           scene=dict(
+                               xaxis=dict(showbackground=True,
+                                          backgroundcolor="rgb(230,230,230)"),
+                               yaxis=dict(showbackground=True,
+                                          backgroundcolor="rgb(230,230,230)"),
+                               zaxis=dict(showbackground=True,
+                                          backgroundcolor="rgb(230,230,230)"))
+                           )
+        # Pack data and layout.
+        figure = go.Figure(data=data, layout=layout)
+
+        return plot(figure,
+                    show_link=False,
+                    output_type="div",
+                    include_plotlyjs=False)
