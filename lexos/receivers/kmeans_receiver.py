@@ -6,10 +6,17 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class KMeansVisualizationOption(Enum):
-    """The typed tuple to hold K-Means Visualization method."""
+    """The Enum object to hold K-Means Visualization method."""
 
-    PCA = "PCA"
-    Voronoi = "Voronoi"
+    two_d_scatter = "2DScatter"
+    three_d_scatter = "3DScatter"
+    voronoi = "Voronoi"
+
+
+class KMeansInitOption(Enum):
+    """The Enum object to hold K-Means initialization method."""
+    k_means = "k-means++"
+    random = "random"
 
 
 class KMeansOption(NamedTuple):
@@ -20,7 +27,7 @@ class KMeansOption(NamedTuple):
     k_value: int  # k value-for k-means analysis. (k groups)
     max_iter: int  # maximum number of iterations.
     tolerance: float  # relative tolerance, inertia to declare convergence.
-    init_method: str  # method of initialization: "K++" or "random".
+    init_method: KMeansInitOption  # method of initialization.
 
 
 class KMeansReceiver(BaseReceiver):
@@ -32,14 +39,23 @@ class KMeansReceiver(BaseReceiver):
         :return: a KMeansOption object to hold all the options.
         """
         # Get all front end data.
-        viz = KMeansVisualizationOption.PCA \
-            if self._front_end_data['viz'] == "PCA" \
-            else KMeansVisualizationOption.Voronoi
-        n_init = int(self._front_end_data['n_init'])
-        k_value = int(self._front_end_data['nclusters'])
-        max_iter = int(self._front_end_data['max_iter'])
-        tolerance = float(self._front_end_data['tolerance'])
-        init_method = self._front_end_data['init']
+        if self._front_end_data["viz"] == "2DScatter":
+            viz = KMeansVisualizationOption.two_d_scatter
+        elif self._front_end_data["viz"] == "3DScatter":
+            viz = KMeansVisualizationOption.three_d_scatter
+        elif self._front_end_data["viz"] == "Voronoi":
+            viz = KMeansVisualizationOption.voronoi
+        else:
+            raise ValueError("Invalid K-Means visualization method.")
+
+        init_method = KMeansInitOption.k_means \
+            if self._front_end_data["init"] == "k-means++" \
+            else KMeansInitOption.random
+
+        n_init = int(self._front_end_data["n_init"])
+        k_value = int(self._front_end_data["nclusters"])
+        max_iter = int(self._front_end_data["max_iter"])
+        tolerance = float(self._front_end_data["tolerance"])
 
         return KMeansOption(viz=viz,
                             n_init=n_init,
