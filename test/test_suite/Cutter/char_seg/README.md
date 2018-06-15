@@ -2,6 +2,9 @@
 
 This function cuts the text into segments based on the number of characters in each segment.
 
+*Test Files:*  1_alpha.txt, 2_numbered.txt, 3_numbered_large.txt
+*Result Files:*  
+
 ## Test file: 2_numbered.txt
 
 0. UPLOAD 2_numbered.txt
