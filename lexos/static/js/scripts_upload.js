@@ -1,11 +1,11 @@
 $(function () {
-
   /*message for when you hover on the open folder icon on the top right*/
   $('[data-toggle="tooltip"]').tooltip()
   $('#uploadbrowse').click(function () {
     $('#fileselect').click()
   })
 
+  //alias function
   function $id(id) {
     return document.getElementById(id)
   }
@@ -19,7 +19,7 @@ $(function () {
     let files = e.target.files || e.dataTransfer.files
     // total number of files uploaded
     let totalFiles = files.length
-
+    //resets the progress bar to defualt message after a file upload
     resetProgressBar()
 
     const progress = $('#progress'),
@@ -87,6 +87,7 @@ $(function () {
 /**
  * @return {boolean}
  */
+//Checks the type of file uploaded.
 function AllowedFileType(filename) {
   const allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos']
   //Get the file file extension
@@ -96,7 +97,6 @@ function AllowedFileType(filename) {
   return $.inArray(fileType, allowedFileTypes) > -1;
 }
 
-
 //File drag hover
 function fileDragHover(e) {
   e.stopPropagation()
@@ -105,7 +105,9 @@ function fileDragHover(e) {
 }
 
 
-//Make process bar back to 0
+/*Set progress bar back to default.
+  when a file is uploaded: bar changes to 'Complete'
+  After the upload it set the bar back to 'Ready for Files to Upload'*/
 function resetProgressBar() {
   const progressBar = $('#progress-bar')
   const status = $('#status')
