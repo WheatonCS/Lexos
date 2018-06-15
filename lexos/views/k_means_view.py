@@ -1,5 +1,4 @@
 from flask import session, render_template, Blueprint, jsonify
-
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
 from lexos.models.filemanager_model import FileManagerModel
@@ -47,7 +46,5 @@ def k_means_result():
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
     result = KMeansModel().get_result()
-    return jsonify(
-        table=result.table,
-        plot=result.plot
-    )
+    return jsonify(table=result.table,
+                   plot=result.plot)

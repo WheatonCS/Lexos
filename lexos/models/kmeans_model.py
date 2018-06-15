@@ -29,11 +29,15 @@ class KMeansTestOptions(NamedTuple):
 
 
 class KMeansUnprocessedResult(NamedTuple):
+    """A typed tuple to hold unprocessed k-means results."""
+
     plot: go.Figure
     table: pd.DataFrame
 
 
 class KMeansResult(NamedTuple):
+    """A typed tuple to hold processed k-means results."""
+
     plot: str
     table: str
 
@@ -101,6 +105,13 @@ class KMeansModel(BaseModel):
                       n_clusters=self._k_means_front_end_option.k_value)
 
     def _get_2d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
+        """Generate 2 dimensional table result for K-Means analysis.
+
+        :param k_means_index: the cluster result of K-Means analysis.
+        :return: A pandas data frame with four columns.The first column
+        contains cluster numbers and the second column contains document names,
+        the rest columns contain the coordinates of the files.
+        """
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
@@ -122,6 +133,13 @@ class KMeansModel(BaseModel):
         return result_table
 
     def _get_3d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
+        """Generate 3 dimensional table result for K-Means analysis.
+
+        :param k_means_index: the cluster result of K-Means analysis.
+        :return: A pandas data frame with four columns.The first column
+        contains cluster numbers and the second column contains document names,
+        the rest columns contain the coordinates of the files.
+        """
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
