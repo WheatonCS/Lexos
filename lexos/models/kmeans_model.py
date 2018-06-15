@@ -321,8 +321,7 @@ class KMeansModel(BaseModel):
                                              "Y-Coordinate"])
 
         # Fill the pandas data frame.
-        result_table["Cluster #"] = \
-            [index + 1 for index in k_means_index]
+        result_table["Cluster #"] = [index + 1 for index in k_means_index]
         result_table["Document"] = labels
         result_table["X-Coordinate"] = reduced_data[:, 0]
         result_table["Y-Coordinate"] = reduced_data[:, 1]
@@ -347,8 +346,7 @@ class KMeansModel(BaseModel):
                                              "Z-Coordinate"])
 
         # Fill the pandas data frame.
-        result_table["Cluster #"] = \
-            [index + 1 for index in k_means_index]
+        result_table["Cluster #"] = [index + 1 for index in k_means_index]
         result_table["Document"] = labels
         result_table["X-Coordinate"] = reduced_data[:, 0]
         result_table["Y-Coordinate"] = reduced_data[:, 1]
@@ -392,8 +390,9 @@ class KMeansModel(BaseModel):
     def get_table_result(self) -> str:
         """Generate a table indicating cluster result.
 
-        The table has two columns. One column is for cluster numbers and the
-        other one contains document names.
+        The table has four or five columns. The first column is for cluster
+        numbers and the second column contains document names. The rest columns
+        contains reduced coordinate of the file.
         :return: A table that is in HTML string format.
         """
         # Get result table based on users selection.
