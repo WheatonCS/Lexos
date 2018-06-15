@@ -70,13 +70,13 @@ function generateKMeansTable () {
           <'row k-means-result-download-button'<'col-sm-12'B>>`,
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
-    // Truncate long documentation names.
+
     columnDefs: [
-      {
+      { // Truncate long documentation names.
         targets: 1,
         render: $.fn.dataTable.render.ellipsis(15, true)
       },
-      {
+      { // Hide columns which hold the coordinates.
         targets: [2, 3],
         visible: false,
         searchable: false

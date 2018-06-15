@@ -1907,8 +1907,8 @@ select#orientation {
 #KMeans-n_init-tooltip,
 #KMeans-viz-tip,
 #KMeans-tolerance-tooltip {
-  position: relative;
   float: right;
+  position: relative;
   padding-left: 5px;
 }
 
