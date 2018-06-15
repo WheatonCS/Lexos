@@ -55,6 +55,7 @@ function generateKMeansTable () {
   $('#status-analyze').css({'visibility': 'visible'})
   // Convert form into an object map string to string
   const form = jsonifyForm()
+  const hide_columns = $('#vizMethod').val() === '3DScatter' ? [2, 3, 4] : [2, 3]
 
   // Set the configuration for creating data table
   const dataTableConfig = {
@@ -77,7 +78,7 @@ function generateKMeansTable () {
         render: $.fn.dataTable.render.ellipsis(15, true)
       },
       { // Hide columns which hold the coordinates.
-        targets: [2, 3],
+        targets: hide_columns,
         visible: false,
         searchable: false
       }
