@@ -100,7 +100,51 @@ class KMeansModel(BaseModel):
                       max_iter=self._k_means_front_end_option.max_iter,
                       n_clusters=self._k_means_front_end_option.k_value)
 
-    def _get_voronoi_result(self) -> go.Figure:
+    def _get_2d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
+        # Get reduced data.
+        reduced_data = self._get_reduced_data()
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Initialize the table with proper headers.
+        result_table = pd.DataFrame(columns=["Cluster #",
+                                             "Document",
+                                             "X-Coordinate",
+                                             "Y-Coordinate"])
+
+        # Fill the pandas data frame.
+        result_table["Cluster #"] = [index + 1 for index in k_means_index]
+        result_table["Document"] = labels
+        result_table["X-Coordinate"] = reduced_data[:, 0]
+        result_table["Y-Coordinate"] = reduced_data[:, 1]
+
+        return result_table
+
+    def _get_3d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
+        # Get reduced data.
+        reduced_data = self._get_reduced_data()
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Initialize the table with proper headers.
+        result_table = pd.DataFrame(columns=["Cluster #",
+                                             "Document",
+                                             "X-Coordinate",
+                                             "Y-Coordinate",
+                                             "Z-Coordinate"])
+
+        # Fill the pandas data frame.
+        result_table["Cluster #"] = [index + 1 for index in k_means_index]
+        result_table["Document"] = labels
+        result_table["X-Coordinate"] = reduced_data[:, 0]
+        result_table["Y-Coordinate"] = reduced_data[:, 1]
+        result_table["Z-Coordinate"] = reduced_data[:, 2]
+
+        return result_table
+
+    def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -205,10 +249,16 @@ class KMeansModel(BaseModel):
         # noinspection PyTypeChecker
         data = voronoi_regions + centroids_data + points_data
 
-        # Return the plotly figure.
-        return go.Figure(data=data, layout=layout)
+        # Return the plotly figure and table.
+        # The reason we have to do this together is that K-Means cluster result
+        # is randomized. So if we want to be consistent, plot and table must
+        # be done together.
+        return KMeansUnprocessedResult(
+            plot=go.Figure(data=data, layout=layout),
+            table=self._get_2d_frame(k_means_index=k_means_index)
+        )
 
-    def _get_2d_scatter_plot(self) -> go.Figure:
+    def _get_2d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 2D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -226,7 +276,6 @@ class KMeansModel(BaseModel):
         x_value = reduced_data[:, 0]
         y_value = reduced_data[:, 1]
 
-        # TODO: Why display x, y and text same time not working?
         # Create plot for each cluster so the color will differ among clusters.
         data = [
             go.Scatter(
@@ -255,10 +304,16 @@ class KMeansModel(BaseModel):
                            yaxis=go.YAxis(title='y-axis', showline=False),
                            hovermode="closest")
 
-        # Return the plotly figure.
-        return go.Figure(data=data, layout=layout)
+        # Return the plotly figure and table.
+        # The reason we have to do this together is that K-Means cluster result
+        # is randomized. So if we want to be consistent, plot and table must
+        # be done together.
+        return KMeansUnprocessedResult(
+            plot=go.Figure(data=data, layout=layout),
+            table=self._get_2d_frame(k_means_index=k_means_index)
+        )
 
-    def _get_3d_scatter_plot(self) -> go.Figure:
+    def _get_3d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 3D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -314,62 +369,16 @@ class KMeansModel(BaseModel):
                                           backgroundcolor="rgb(230,230,230)"))
                            )
 
-        # Return the plotly figure.
-        return go.Figure(data=data, layout=layout)
+        # Return the plotly figure and table.
+        # The reason we have to do this together is that K-Means cluster result
+        # is randomized. So if we want to be consistent, plot and table must
+        # be done together.
+        return KMeansUnprocessedResult(
+            plot=go.Figure(data=data, layout=layout),
+            table=self._get_3d_frame(k_means_index=k_means_index)
+        )
 
-    def _get_2d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
-        # Get kMeans analyze result and unpack it.
-        k_means = self._get_k_means()
-        reduced_data = self._get_reduced_data()
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #",
-                                             "Document",
-                                             "X-Coordinate",
-                                             "Y-Coordinate"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = [index + 1 for index in k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = reduced_data[:, 0]
-        result_table["Y-Coordinate"] = reduced_data[:, 1]
-
-        return result_table
-
-    def _get_3d_frame(self):
-        # Get kMeans analyze result and unpack it.
-        k_means = self._get_k_means()
-        reduced_data = self._get_reduced_data()
-        k_means_index = k_means.fit_predict(reduced_data)
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #",
-                                             "Document",
-                                             "X-Coordinate",
-                                             "Y-Coordinate",
-                                             "Z-Coordinate"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = [index + 1 for index in k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = reduced_data[:, 0]
-        result_table["Y-Coordinate"] = reduced_data[:, 1]
-        result_table["Z-Coordinate"] = reduced_data[:, 2]
-
-        return result_table
-
-    def get_k_means_index(self) -> List[int]:
-        return self._get_k_means().fit_predict(self._get_reduced_data())
-
-    def get_plot(self) -> str:
+    def get_result(self) -> KMeansResult:
         """Get the plotly graph based on users selection.
 
         :return: A HTML formatted plotly graph that is ready to be displayed.
@@ -379,44 +388,30 @@ class KMeansModel(BaseModel):
 
         # If the user selects 2D-Scatter visualization.
         if self._k_means_front_end_option.viz is KMeansViz.two_d:
-            return plot(self._get_2d_scatter_plot(),
-                        show_link=False,
-                        output_type="div",
-                        include_plotlyjs=False)
+            k_means_unprocessed_result = self._get_2d_scatter_result()
 
         # If the user selects 3D-Scatter visualization.
-        if self._k_means_front_end_option.viz is KMeansViz.three_d:
-            return plot(self._get_3d_scatter_plot(),
-                        show_link=False,
-                        output_type="div",
-                        include_plotlyjs=False)
+        elif self._k_means_front_end_option.viz is KMeansViz.three_d:
+            k_means_unprocessed_result = self._get_3d_scatter_result()
 
         # If the user selects Voronoi visualization.
         elif self._k_means_front_end_option.viz is KMeansViz.voronoi:
-            return plot(self._get_voronoi_result(),
-                        show_link=False,
-                        output_type="div",
-                        include_plotlyjs=False)
+            k_means_unprocessed_result = self._get_voronoi_result()
 
         # Invalid token is received.
         else:
             raise ValueError("Invalid K-Means analysis option from front end.")
 
-    def get_table_result(self) -> str:
-        """Generate a table indicating cluster result.
-
-        The table has four or five columns. The first column is for cluster
-        numbers and the second column contains document names. The rest columns
-        contains reduced coordinate of the file.
-        :return: A table that is in HTML string format.
-        """
-        # Get result table based on users selection.
-        if self._k_means_front_end_option.viz is KMeansViz.three_d:
-            result_table = self._get_3d_frame()
-        else:
-            result_table = self._get_2d_frame()
-
-        # Convert the pandas data frame to a HTML formatted table.
-        return result_table.to_html(
-            index=False,
-            classes="table table-striped table-bordered text-center")
+        # Process the result before return them.
+        return KMeansResult(
+            plot=plot(
+                k_means_unprocessed_result.plot,
+                show_link=False,
+                output_type="div",
+                include_plotlyjs=False
+            ),
+            table=k_means_unprocessed_result.table.to_html(
+                index=False,
+                classes="table table-striped table-bordered text-center"
+            )
+        )
