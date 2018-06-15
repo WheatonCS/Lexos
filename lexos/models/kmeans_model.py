@@ -15,7 +15,7 @@ from typing import Optional, List, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.helpers.error_messages import EMPTY_NP_ARRAY_MESSAGE
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansVisualizationOption
 
@@ -75,6 +75,27 @@ class KMeansModel(BaseModel):
             if self._test_front_end_option is not None \
             else KMeansReceiver().options_from_front_end()
 
+    def _get_reduced_data(self) -> np.ndarray:
+        """Perform PCA on DTM to reduce dimensions of the DTM.
+
+        :return: The reduced 2D or 3D DTM.
+        """
+        # Find number of components required by the user selected viz method.
+        n_comp = 3 if self._k_means_front_end_option.viz is \
+                      KMeansVisualizationOption.three_d_scatter else 2
+        return PCA(n_components=n_comp).fit_transform(self._doc_term_matrix)
+
+    def _get_k_means(self) -> KMeans:
+        """Set K-Means object based on users inputs.
+
+        :return: A K-Means object that has all required values.
+        """
+        return KMeans(tol=self._k_means_front_end_option.tolerance,
+                      n_init=self._k_means_front_end_option.n_init,
+                      init=self._k_means_front_end_option.init_method,
+                      max_iter=self._k_means_front_end_option.max_iter,
+                      n_clusters=self._k_means_front_end_option.k_value)
+
     def _get_cluster_result(self) -> KMeansClusterResult:
         """Get the cluster result produced by K Means.
 
@@ -85,8 +106,6 @@ class KMeansModel(BaseModel):
             k_means_index: the clustering result.
 
         """
-        # Trap possible getting empty DTM error.
-        assert not self._doc_term_matrix.empty > 0, EMPTY_NP_ARRAY_MESSAGE
 
         # Get reduced data set, 2-D matrix that contains coordinates.
         reduced_data = \
@@ -107,68 +126,15 @@ class KMeansModel(BaseModel):
                                    reduced_data=reduced_data,
                                    k_means_index=k_means_index)
 
-    def _get_pca_plot(self) -> go.Figure:
-        """Generate a 2D plot that contains just the dots for K means result.
-
-        :return: A plotly object hat has been converted to HTML format string.
-        """
-        # Get kMeans analyze result and unpack it.
-        cluster_result = self._get_cluster_result()
-        reduced_data = cluster_result.reduced_data
-        k_means_index = cluster_result.k_means_index
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Separate x, y coordinates from the reduced data set.
-        x_value = reduced_data[:, 0]
-        y_value = reduced_data[:, 1]
-
-        # TODO: Why display x, y and text same time not working?
-        # Create plot for each cluster so the color will differ among clusters.
-        data = [
-            go.Scatter(
-                x=[x_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                y=[y_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                text=[labels[index]
-                      for index, group_index in enumerate(k_means_index)
-                      if group_index == group_number],
-                mode="markers",
-                name=f"Cluster {group_number + 1}",
-                hoverinfo="text",
-                marker=dict(
-                    size=12,
-                    line=dict(width=1)
-                )
-            )
-            for group_number in set(k_means_index)
-        ]
-
-        # Set the layout of the plot.
-        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
-                           yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest")
-        # Pack data and layout.
-        figure = go.Figure(data=data, layout=layout)
-
-        # Output plot as a div.
-        return figure
-
     def _get_voronoi_plot(self) -> go.Figure:
         """Generate voronoi formatted graph for K Means result.
 
         :return: A plotly object hat has been converted to HTML format string.
         """
         # Get kMeans analyze result and unpack it.
-        cluster_result = self._get_cluster_result()
-        k_means = cluster_result.k_means
-        reduced_data = cluster_result.reduced_data
-        k_means_index = cluster_result.k_means_index
+        k_means = self._get_k_means()
+        reduced_data = self._get_reduced_data()
+        k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
         labels = np.array([self._id_temp_label_map[file_id]
@@ -260,28 +226,147 @@ class KMeansModel(BaseModel):
 
         # Pack data and layout.
         # noinspection PyTypeChecker
-        figure = go.Figure(data=voronoi_regions + centroids_data + points_data,
-                           layout=layout)
+        data = voronoi_regions + centroids_data + points_data
 
-        # Output plot as a div.
-        return figure
+        # Return the plotly figure.
+        return go.Figure(data=data, layout=layout)
+
+    def _get_2d_scatter_plot(self) -> go.Figure:
+        """Generate a 2D plot that contains just the dots for K means result.
+
+        :return: A plotly object hat has been converted to HTML format string.
+        """
+        # Get kMeans analyze result and unpack it.
+        k_means = self._get_k_means()
+        reduced_data = self._get_reduced_data()
+        k_means_index = k_means.fit_predict(reduced_data)
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Separate x, y coordinates from the reduced data set.
+        x_value = reduced_data[:, 0]
+        y_value = reduced_data[:, 1]
+
+        # TODO: Why display x, y and text same time not working?
+        # Create plot for each cluster so the color will differ among clusters.
+        data = [
+            go.Scatter(
+                x=[x_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                y=[y_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                text=[labels[index]
+                      for index, group_index in enumerate(k_means_index)
+                      if group_index == group_number],
+                mode="markers",
+                name=f"Cluster {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    line=dict(width=1)
+                )
+            )
+            for group_number in set(k_means_index)
+        ]
+
+        # Set the layout of the plot.
+        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
+                           yaxis=go.YAxis(title='y-axis', showline=False),
+                           hovermode="closest")
+
+        # Return the plotly figure.
+        return go.Figure(data=data, layout=layout)
+
+    def _get_3d_scatter_plot(self) -> go.Figure:
+        """Generate a 3D plot that contains just the dots for K means result.
+
+        :return: A plotly object hat has been converted to HTML format string.
+        """
+        # Get kMeans analyze result and unpack it.
+        k_means = self._get_k_means()
+        reduced_data = self._get_reduced_data()
+        k_means_index = k_means.fit_predict(reduced_data)
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Get x, y, z coordinates.
+        x_value = reduced_data[:, 0]
+        y_value = reduced_data[:, 1]
+        z_value = reduced_data[:, 2]
+
+        # Create plot for each cluster so the color will differ among clusters.
+        data = [
+            go.Scatter3d(
+                x=[x_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                y=[y_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                z=[z_value[index]
+                   for index, group_index in enumerate(k_means_index)
+                   if group_index == group_number],
+                text=[labels[index]
+                      for index, group_index in enumerate(k_means_index)
+                      if group_index == group_number],
+                mode="markers",
+                name=f"Cluster {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    line=dict(width=1)
+                )
+            )
+            for group_number in set(k_means_index)
+        ]
+
+        # Set the layout of the plot, mainly set the background of the plot.
+        layout = go.Layout(height=600,
+                           scene=dict(
+                               xaxis=dict(showbackground=True,
+                                          backgroundcolor="rgb(230,230,230)"),
+                               yaxis=dict(showbackground=True,
+                                          backgroundcolor="rgb(230,230,230)"),
+                               zaxis=dict(showbackground=True,
+                                          backgroundcolor="rgb(230,230,230)"))
+                           )
+
+        # Return the plotly figure.
+        return go.Figure(data=data, layout=layout)
 
     def get_plot(self) -> str:
         """Get the plotly graph based on users selection.
 
         :return: A HTML formatted plotly graph that is ready to be displayed.
         """
+        # Trap possible getting empty DTM error.
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
         # Save front end visualization method.
         visualization = self._k_means_front_end_option.viz
-        # If the user selects Voronoi visualization.
-        if visualization == KMeansVisualizationOption.PCA:
-            return plot(self._get_pca_plot(),
+
+        # If the user selects 2D-Scatter visualization.
+        if visualization is KMeansVisualizationOption.two_d_scatter:
+            return plot(self._get_2d_scatter_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
 
-        # If the user selects PCA visualization.
-        elif visualization == KMeansVisualizationOption.Voronoi:
+        # If the user selects 3D-Scatter visualization.
+        if visualization is KMeansVisualizationOption.three_d_scatter:
+            return plot(self._get_3d_scatter_plot(),
+                        show_link=False,
+                        output_type="div",
+                        include_plotlyjs=False)
+
+        # If the user selects Voronoi visualization.
+        elif visualization is KMeansVisualizationOption.voronoi:
             return plot(self._get_voronoi_plot(),
                         show_link=False,
                         output_type="div",
@@ -320,71 +405,3 @@ class KMeansModel(BaseModel):
         return result_table.to_html(
             index=False,
             classes="table table-striped table-bordered text-center")
-
-    def get_three_dimension_plot(self) -> str:
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Get reduced data set, 2-D matrix that contains coordinates.
-        reduced_data = \
-            PCA(n_components=3).fit_transform(self._doc_term_matrix)
-
-        # Set the KMeans settings.
-        k_means = KMeans(tol=self._k_means_front_end_option.tolerance,
-                         n_init=self._k_means_front_end_option.n_init,
-                         init=self._k_means_front_end_option.init_method,
-                         max_iter=self._k_means_front_end_option.max_iter,
-                         n_clusters=self._k_means_front_end_option.k_value)
-
-        # Get cluster result back.
-        k_means_index = k_means.fit_predict(reduced_data)
-
-        x_value = reduced_data[:, 0]
-        y_value = reduced_data[:, 1]
-        z_value = reduced_data[:, 2]
-
-        # Create plot for each cluster so the color will differ among clusters.
-        data = [
-            go.Scatter3d(
-                x=[x_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                y=[y_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                z=[z_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                text=[labels[index]
-                      for index, group_index in enumerate(k_means_index)
-                      if group_index == group_number],
-                mode="markers",
-                name=f"Cluster {group_number + 1}",
-                hoverinfo="text",
-                marker=dict(
-                    size=12,
-                    line=dict(width=1)
-                )
-            )
-            for group_number in set(k_means_index)
-        ]
-
-        # Set the layout of the plot.
-        layout = go.Layout(height=600,
-                           scene=dict(
-                               xaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"),
-                               yaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"),
-                               zaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"))
-                           )
-        # Pack data and layout.
-        figure = go.Figure(data=data, layout=layout)
-
-        return plot(figure,
-                    show_link=False,
-                    output_type="div",
-                    include_plotlyjs=False)
