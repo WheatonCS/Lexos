@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 from plotly.offline import plot
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
-from typing import Optional, List, NamedTuple
+from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
@@ -100,17 +100,20 @@ class KMeansModel(BaseModel):
         reduced_data = self._get_reduced_data()
         k_means_index = k_means.fit_predict(reduced_data)
 
+        # This is important, such that plot and table results are consistent.
+        sorted_k_means_unique_index = sorted(set(k_means_index))
+
         # Get file names.
         labels = np.array([self._id_temp_label_map[file_id]
                            for file_id in self._doc_term_matrix.index.values])
 
         # Get a list of lists of file names based on the cluster result.
         cluster_labels = [labels[np.where(k_means_index == index)]
-                          for index in set(k_means_index)]
+                          for index in sorted_k_means_unique_index]
 
         # Get a list of lists of file coordinates based on the cluster result.
         cluster_values = [reduced_data[np.where(k_means_index == index)]
-                          for index in set(k_means_index)]
+                          for index in sorted_k_means_unique_index]
 
         # Get a list of centroid results based on the cluster result.
         centroid_values = [np.mean(cluster, axis=0, dtype="float_")
