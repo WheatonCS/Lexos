@@ -5,6 +5,23 @@ This function cuts the text into segments based on the number of characters in e
 *Test Files:*  1_alpha.txt, 2_numbered.txt, 3_numbered_large.txt
 *Result Files:*  
 
+
+## Test file: 1_alpha.txt
+
+0. UPLOAD 1_alpha.txt
+
+1. CUT: 
+
+	- Select Characters/Segment
+	- Change the Segment Size to 10
+	- Change Overlap to 3
+	- Keep Last Segment Size Threshold (%) at 50
+
+Results:
+- After the cut you should have 9 different segments containing 10 characters 
+each with an overlap of 3 characters. 
+
+
 ## Test file: 2_numbered.txt
 
 0. UPLOAD 2_numbered.txt
@@ -20,9 +37,9 @@ Results:
 - After the cut you should have 16 different segments containing 2-3 characters each. 
 
 
-## Test file: 2_numbered.txt
+## Test file: 1_alpha.txt
 
-0. UPLOAD 2_numbered.txt
+0. UPLOAD 1_alpha.txt
 
 1. CUT: 
 
@@ -32,4 +49,5 @@ Results:
 	- Keep Last Segment Size Threshold (%) at 50
 
 Results:
-- After the cut you should have 23 different segments containing 3-5 characters each. 
+- After the cut you should have 9 different segments containing 10 characters 
+each with an overlap of 3 characters. 
