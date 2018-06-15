@@ -21,11 +21,11 @@ class ContentAnalysisModel(object):
 
         dictionaries: List of Dictionary objects
         corpus: List of File objects
-        counters: a 2D array with count of every dictionary for evey file in
-        the corpus
-        formulas: List of string that represent a formula for each file
-        scores: List of formula/total word count of each file
-        averages: Lis of averages count of each dictionary
+        counters: a 2D array with the count of every dictionary referenced in
+        each file of the corpus
+        formulas: List of strings that represent a formula for each file
+        scores: List of scores for each file (scores=formula/total_word_count)
+        averages: List of averages count of each dictionary
         """
         self._test_options = test_options
         self._dictionaries = []
@@ -41,7 +41,7 @@ class ContentAnalysisModel(object):
         """Add a file to the corpus.
 
         :param content: file content
-        :param file_name: file name
+        :param file_name: name of the file
         :param label: file label
         """
         total_word_counts = len(str(content).split(" "))
@@ -423,16 +423,16 @@ class ContentAnalysisModel(object):
 def count_phrases(dictionary: list, file: object):
     """Count each phrase in the dictionary in the given file.
 
-    If a has with more than 1 word is found in a file, it is deleted
-    from the file to prevent double count.
+    If a file has more than 1 phrase from any of the dictionaries, it is
+    deleted from the file to prevent double counts.
     For example:
-    dictionary[1].content = "not very good"
-    dictionary[2].content = "very good"
+    dictionary[0].content = "not very good"
+    dictionary[1].content = "very good"
     file.content = "not very good"
     count: "not very good" = 1
            "very good" = 0
-    :param dictionary: list of Phrase objects sorted by number of word in
-    descending order
+    :param dictionary: list of Phrase objects from all dictionaries sorted by
+    number of words in each individual phrase in descending order
     :param file: a File object
     :return: list of Phrase objects with their counts
     """
@@ -499,6 +499,7 @@ class Dictionary(Document):
         :param label: file label
         :param active: Boolean that indicates if the document is active
         """
+        super().__init__()
         self._content = content
         self._name = file_name
         self._label = label
@@ -528,6 +529,7 @@ class File(Document):
         :param total_word_counts: count of word in the file
         :param active: Boolean that indicates if the document is active
         """
+        super().__init__()
         self._content = content
         self._name = file_name
         self._label = label
@@ -556,7 +558,7 @@ class File(Document):
 
 
 class Phrase(object):
-    """This is a class that treats an object as a phrase."""
+    """This is a class that treats a phrase as an object."""
 
     def __init__(self, content: str, dict_label: str, count: int = 0):
         """Represent a Phrase using an object from this class.

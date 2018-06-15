@@ -1,4 +1,4 @@
-# ====== Host all the text definition =======
+# ====== Host all the text definitions =======
 import re
 
 _WORD_REGEX_STR = r'\S+'
@@ -19,10 +19,8 @@ def count_phrase_in_text(phrase: str, text: str):
     phrase = phrase.strip()
     # Substitute multiple whitespace with single whitespace
     phrase = ' '.join(phrase.split())
-    if text.startswith(phrase + " "):
-        count += 1
     if text.endswith(" " + phrase + "\n") or text.endswith(" " + phrase) or \
             text.endswith(" " + phrase + "\r\n") or text.endswith(phrase):
         count += 1
-    count += len(text.split(" " + phrase + " ")) - 1
+    count += len(text.split(phrase + " ")) - 1
     return count
