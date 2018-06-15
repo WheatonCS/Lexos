@@ -11,7 +11,7 @@ import plotly.graph_objs as go
 from plotly.offline import plot
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
-from typing import Optional, NamedTuple
+from typing import Optional, NamedTuple, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
@@ -356,6 +356,9 @@ class KMeansModel(BaseModel):
         result_table["Z-Coordinate"] = reduced_data[:, 2]
 
         return result_table
+
+    def get_k_means_index(self) -> List[int]:
+        return self._get_k_means().fit_predict(self._get_reduced_data())
 
     def get_plot(self) -> str:
         """Get the plotly graph based on users selection.
