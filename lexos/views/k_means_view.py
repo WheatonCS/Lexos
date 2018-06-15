@@ -42,18 +42,12 @@ def k_means():
         numActiveDocs=num_active_docs)
 
 
-@k_means_blueprint.route("/KMeansPlot", methods=['POST'])
-def k_means_plot():
+@k_means_blueprint.route("/KMeansResult", methods=['POST'])
+def k_means_result():
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
-    return KMeansModel().get_plot()
-
-
-@k_means_blueprint.route("/KMeansTable", methods=['POST'])
-def k_means_table():
-    session_manager.cache_analysis_option()
-    session_manager.cache_k_mean_option()
+    result = KMeansModel().get_result()
     return jsonify(
-        table=KMeansModel().get_table_result(),
-        plot=KMeansModel().get_plot()
+        table=result.table,
+        plot=result.plot
     )
