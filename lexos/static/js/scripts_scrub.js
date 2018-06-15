@@ -4,15 +4,16 @@ $(function () {
   }
   $('#actions').addClass('actions-scrub')
 
-  $('.has-chevron').click(function () {
-    $(this).find('span').toggleClass('down')
-    $(this).next().collapse('toggle')
+  $('.has-chevron').click(function (ev) {
+    rotateChevron(ev.currentTarget)
   })
 
   // display additional options on load
   displayAdditionalOptions()
 
-  $('.bttnfilelabels').click(buttonFileLabelsFunction())
+  $('.bttnfilelabels').click(function (ev) {
+    buttonFileLabelsFunction(ev.currentTarget)
+  })
 
   $('#whitespacebox').click(changeWhitespaceBoxClass()
   )
@@ -88,9 +89,9 @@ function sendScrubbing (action) {
  * the class so the appropriate CSS applies.
  * @returns {void} - returns nothing
  */
-function rotateChevron () {
-  $(this).find('span').toggleClass('down')
-  $(this).next().collapse('toggle')
+function rotateChevron (chevContainer) {
+  $(chevContainer).find('span').toggleClass('down')
+  $(chevContainer).next().collapse('toggle')
 }
 
 /**
@@ -119,25 +120,25 @@ function displayAdditionalOptions () {
 function truncateFileName (ev) {
   let fileName = ev.target.files[0].name
   if (fileName.length > 25) { fileName = fileName.substring(0, 24) + '...' }
-  $(this).html(fileName)
+  $(ev.currentTarget).html(fileName)
 }
 
 /**
  * Clone file labels and do ajax request
  * @returns {void} - returns nothing
  */
-function buttonFileLabelsFunction () {
+function buttonFileLabelsFunction (bttnFileLabels) {
   // swfileselect, lemfileselect, consfileselect, scfileselect
-  const fileType = $(this).attr('id').replace('bttnlabel', '')
+  const fileType = $(bttnFileLabels).attr('id').replace('bttnlabel', '')
   const usingCache = $(`#usecache${fileType}`).attr('disabled') !== 'disabled'
 
-  if ((usingCache) || ($(this).attr('id') !== '')) {
+  if ((usingCache) || ($(bttnFileLabels).attr('id') !== '')) {
     // $(this).siblings('.scrub-upload').attr('value', '');
     // Next two lines clear the file input; it's hard to find a cross-browser solution
     $(`#${fileType}`).val('')
     $('#' + fileType).replaceWith($(`#${fileType}`).clone(true))
     $(`#${fileType}`).attr('disabled', 'disabled')
-    $(this).text('')
+    $(bttnFileLabels).text('')
   }
 }
 
