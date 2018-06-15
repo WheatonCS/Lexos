@@ -42,7 +42,10 @@
                     <option value="Voronoi" {{ 'selected' if session['kmeanoption']['viz'] == 'Voronoi' }}>
                         Voronoi
                     </option>
-                    <option value="PCA" {{ 'selected' if session['kmeanoption']['viz'] == 'PCA' }}>
+                    <option value="2D-Scatter" {{ 'selected' if session['kmeanoption']['viz'] == '2D-Scatter' }}>
+                        PCA
+                    </option>
+                    <option value="3D-Scatter" {{ 'selected' if session['kmeanoption']['viz'] == '3D-Scatter' }}>
                         PCA
                     </option>
                 </select>
@@ -124,14 +127,14 @@
 {% endblock %}
 
 {% block results %}
-    <div class="row col-lg-12 col-md-12" style="padding-top: 20px">
+    <div class="row col-lg-12 col-md-12" style="padding-top: 10px">
         <input type="button" class="btn btn-success"
                id="get-k-means-result" name="get-k-means-result"
                value="Get KMeans Result"/>
     </div>
 
     <div id="KMeans-result" class="row col-lg-12 col-md-12"
-         style="padding-top: 20px">
+         style="padding-top: 10px">
         <fieldset class="row col-lg-12 col-md-12">
             <legend>
                 K-Means Result

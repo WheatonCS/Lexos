@@ -276,7 +276,7 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
 
 DEFAULT_KMEAN_OPTIONS = {
     'nclusters': '',  # This value has to be decided by number of files.
-    'viz': 'PCA',
+    'viz': 'Voronoi',
     'init': 'k-means++',
     'n_init': 10,
     'max_iter': 300,
