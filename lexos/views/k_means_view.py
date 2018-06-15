@@ -1,4 +1,4 @@
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, jsonify
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
@@ -53,4 +53,7 @@ def k_means_plot():
 def k_means_table():
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
-    return KMeansModel().get_table_result()
+    return jsonify(
+        table=KMeansModel().get_table_result(),
+        plot=KMeansModel().get_plot()
+    )

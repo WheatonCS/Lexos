@@ -28,6 +28,16 @@ class KMeansTestOptions(NamedTuple):
     front_end_option: KMeansOption
 
 
+class KMeansUnprocessedResult(NamedTuple):
+    plot: go.Figure
+    table: pd.DataFrame
+
+
+class KMeansResult(NamedTuple):
+    plot: str
+    table: str
+
+
 class KMeansModel(BaseModel):
     """This is the class to run k-means analysis.
 
@@ -90,7 +100,7 @@ class KMeansModel(BaseModel):
                       max_iter=self._k_means_front_end_option.max_iter,
                       n_clusters=self._k_means_front_end_option.k_value)
 
-    def _get_voronoi_plot(self) -> go.Figure:
+    def _get_voronoi_result(self) -> go.Figure:
         """Generate voronoi formatted graph for K Means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -307,11 +317,10 @@ class KMeansModel(BaseModel):
         # Return the plotly figure.
         return go.Figure(data=data, layout=layout)
 
-    def _get_2d_frame(self):
+    def _get_2d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
-        k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
         labels = [self._id_temp_label_map[file_id]
@@ -384,7 +393,7 @@ class KMeansModel(BaseModel):
 
         # If the user selects Voronoi visualization.
         elif self._k_means_front_end_option.viz is KMeansViz.voronoi:
-            return plot(self._get_voronoi_plot(),
+            return plot(self._get_voronoi_result(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
