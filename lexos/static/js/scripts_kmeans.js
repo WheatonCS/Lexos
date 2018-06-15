@@ -71,10 +71,17 @@ function generateKMeansTable () {
     // Specify all the download buttons that are displayed on the page.
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
     // Truncate long documentation names.
-    columnDefs: [{
-      targets: 1,
-      render: $.fn.dataTable.render.ellipsis(15, true)
-    }]
+    columnDefs: [
+      {
+        targets: 1,
+        render: $.fn.dataTable.render.ellipsis(15, true)
+      },
+      {
+        targets: [2, 3],
+        visible: false,
+        searchable: false
+      }
+    ]
   }
 
   // Send the ajax request
