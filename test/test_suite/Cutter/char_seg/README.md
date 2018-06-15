@@ -51,3 +51,20 @@ Results:
 Results:
 - After the cut you should have 5 different segments containing 100 characters 
 except for the last one which is shorter
+
+
+## Test file: 4_randomCharacters.txt
+
+0. UPLOAD 4_randomCharacters.txt
+
+1. CUT: 
+
+	- Select Characters/Segment
+	- Change the Segment Size to 5
+	- Change Overlap at 2
+	- Keep Last Segment Size Threshold (%) at 50
+
+Results:
+- After the cut you should have 20 different segments containing 5 characters 
+except for the last one which is shorter, overlapping by 2
+
