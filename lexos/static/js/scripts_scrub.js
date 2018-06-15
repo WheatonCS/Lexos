@@ -1,5 +1,5 @@
 $(function () {
-  if ($("input[name='haveGutenberg']")) {
+  if ($('input[name=\'haveGutenberg\']')) {
     $('#gutenberg-modal').modal()
   }
   $('#actions').addClass('actions-scrub')
@@ -51,6 +51,8 @@ function downloadScrubbing () {
  */
 function sendScrubbing (action) {
   if ($('#num_active_files').val() === '0') {
+    const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+    $('#error-modal-message').html(msg)
     $('#error-modal').modal()
     return
   }
