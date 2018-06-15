@@ -15,15 +15,19 @@ $(function () {
     buttonFileLabelsFunction(ev.currentTarget)
   })
 
-  $('#whitespacebox').click(changeWhitespaceBoxClass()
-  )
+  $('#whitespacebox').click(function (ev) {
+    changeWhitespaceBoxClass(ev.currentTarget)
+  })
+
   $('#entityrules').change(entityRulesChangeFunction())
 
-  $('#tagbox').click(changeTagBoxClass())
+  $('#tagbox').click(function (ev) {
+    changeTagBoxClass(ev.currentTarget)
+  })
 
   $('#set-tags-button').click(setTagsButtonAjax())
 
-  $('#punctbox').mousedown(puncTBoxFade())
+  $('#punctbox').mousedown(punctBoxFade())
 
   $('#xml-modal').on('show.bs.modal', xmlModalAjax())
 
@@ -146,8 +150,8 @@ function buttonFileLabelsFunction (bttnFileLabels) {
  * Change white space box class when checked or unchecked
  * @returns {void} - returns nothing
  */
-function changeWhitespaceBoxClass () {
-  if ($(this).is(':checked')) {
+function changeWhitespaceBoxClass (whiteSpaceBox) {
+  if ($(whiteSpaceBox).is(':checked')) {
     $('#whitespace').removeClass('hidden')
   } else {
     $('#whitespace').addClass('hidden')
@@ -158,8 +162,8 @@ function changeWhitespaceBoxClass () {
  * Change tag box class when checked or unchecked
  * @returns {void} - returns nothing
  */
-function changeTagBoxClass () {
-  if ($(this).is(':checked')) {
+function changeTagBoxClass (tagBox) {
+  if ($(tagBox).is(':checked')) {
     $('#tag').removeClass('hidden')
   } else {
     $('#tag').addClass('hidden')
@@ -232,7 +236,7 @@ function setTagsButtonAjax () {
  * Fade in/out animation
  * @returns {void} - returns nothing
  */
-function puncTBoxFade () {
+function punctBoxFade () {
   const timeToToggle = 300
 
   if ($('#aposhyph')[0].style.cssText === 'display: none;') {
