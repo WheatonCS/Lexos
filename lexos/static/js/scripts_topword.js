@@ -1,4 +1,34 @@
 $(function () {
+  // define error message
+  const msg = 'You do not have enough active documents. Please activate at \
+  least two documents using the <a href="./manage">Manage</a> tool or \
+  <a href="./upload">upload</a> a new document.'
+  // When get topwords button is clicked
+  $('#gettopword').click(function () {
+      // Check number of active files
+      if ($('#num_active_files').val() <  2) {
+          //change button type to button so no request is made
+          $("input[name='gen-topword']").prop("type", "button");
+          // display error
+          $('#error-modal .modal-body').html(msg)
+          $('#error-modal').modal()
+      }
+
+  })
+
+  //when download results is clicked
+  $('#topworddownload').click(function () {
+      // Check number of active files
+      if ($('#num_active_files').val() <  2) {
+          //change button type to button so no request is made
+          $("input[name='gen-topword']").prop("type", "button");
+          // display error
+          $('#error-modal .modal-body').html(msg)
+          $('#error-modal').modal()
+      }
+
+  })
+
   // Hide unnecessary div for DTM
   $('#normalize-options').css({ 'visibility': 'hidden' })
   // set the normalize option to raw count

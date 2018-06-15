@@ -1,4 +1,18 @@
 $(function () {
+  const msg = 'You have no active documents. Please activate \
+  at least one document using the <a href="./manage">Manage</a> tool or\
+  <a href="./upload">upload</a> a new document.'
+
+  // When download, preview, or apply is clicked
+  $('#action-buttons').click(function () {
+      // check number of files
+      if ($('#num_active_files').val() <  1) {
+          // display error
+          $('#error-modal-message').html(msg)
+          $('#error-modal').modal()
+      }
+  })
+
   if ($("input[name='haveGutenberg']")) {
     $('#gutenberg-modal').modal()
   }
@@ -206,8 +220,10 @@ $(function () {
 
 function downloadScrubbing() {
   // Unfortunately, you can't trigger a download with an ajax request; calling a
-  // Flask route seems to be the easiest method.
-  window.location = '/downloadScrubbing'
+  // Flask route seems to be the easiest method
+    if ($('#num_active_files').val() > '0') {
+        window.location = '/downloadScrubbing'
+    }
 }
 
 function doScrubbing(action) {

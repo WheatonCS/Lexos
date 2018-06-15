@@ -1,17 +1,31 @@
 Hyphens
 =======
 
-This folder contains files for testing the hyphens function.
+#### Test Keep Hyphens
 
-## Test file: hyphens.txt
+*Test files:* hyphens.txt, puncPc.txt, puncPd.txt
 
-0. UPLOAD hyphens.txt
+*Result files:* hyphensResults.txt, puncPcResults.txt, puncPdResults.txt
 
-1. SCRUB: 
-    - Remove all Punct
-    - Make Lowercase (optional)
-    - Remove Digits (optional)
+1. UPLOAD FILES
+
+2. SCRUB: 
+    - Remove All Punctuation
+    - Make Lowercase 
+    - Remove Digits 
     - Keep Hyphens
 
-Results:
-- file content: -Hyphens a-test --- to s-ee if they are kept--- black-bird
+3. RESULTS
+    - a file(hyphensResults.txt) containing
+        * lowercase letters
+        * no digits
+        * no punctuation except for hyphens
+        
+    - a file(puncPcResults.txt) containing
+        * no digits
+        * no punctuation except for hyphens  
+        * **THIS FILE WILL BE EMPTY**
+        
+    - a file(puncPdResults.txt) containing
+        * no digits
+        * no punctuation except for hyphens  

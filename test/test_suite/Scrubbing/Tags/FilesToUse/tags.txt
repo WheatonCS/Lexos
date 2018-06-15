@@ -1,0 +1,20 @@
+tags
+
+foo fee
+fee= fi
+
+<h1> foo </h1>
+<title>A List of Old English Texts</title>
+<title>A Plan for the Dictionary of Old English</title>
+
+<title>A Microfiche Concordance to Old English: The List of Texts and Index of Editions</title>
+<p>The Old English Corpus was originally prepared for internal use at the Dictionary of Old English.  We hope that other scholars will be able to use the material and we would be grateful to receive comments about errors or problems you discover.</p>
+
+<THISONEWONTWORK>Dictionary of Old English</THISONEWONTWORK>
+<addrline>Room 14285 - Robarts Library</addrline>
+<addrline>University of Toronto</addrline>
+<addrline>Toronto, ON, M5S 1A1, Canada</addrline>
+<addrline>corpus@doe.utoronto.ca</addrline>
+
+
+end tags

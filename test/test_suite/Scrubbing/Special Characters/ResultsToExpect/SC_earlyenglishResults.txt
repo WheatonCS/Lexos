@@ -1,0 +1,9 @@
+ash lower aelig
+ash upper AElig
+eth lower eth
+eth upper ETH
+thorn lower thorn
+thorn upper THORN
+yogh lower ȝ
+yogh upper Ȝ
+long s lower ſ
