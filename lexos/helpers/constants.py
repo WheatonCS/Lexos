@@ -275,13 +275,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'degenerated': False}
 
 DEFAULT_KMEAN_OPTIONS = {
-    'nclusters': '',
-    'max_iter': 300,
+    'nclusters': '',  # This value has to be decided by number of files.
+    'viz': 'PCA',
     'init': 'k-means++',
     'n_init': 10,
-    'tolerance': 1e-4,
-    'KMeans_metric': 'euclidean',
-    'viz': 'PCA'}
+    'max_iter': 300,
+    'tolerance': 1e-4}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
