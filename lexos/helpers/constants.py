@@ -158,13 +158,13 @@ HIERARCHICALINPUT = (
 
 # for kmeans Clustering
 KMEANINPUT = (
-    'nclusters',
-    'max_iter',
+    'viz',
     'init',
     'n_init',
-    'tolerance',
-    'KMeans_metric',
-    'viz')
+    'max_iter',
+    'nclusters',
+    'tolerance'
+)
 
 # for sklearn.kmeans function
 # N_INIT: Number of time the k_means algorithm will be run with different
