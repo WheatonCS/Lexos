@@ -28,14 +28,6 @@ class KMeansTestOptions(NamedTuple):
     front_end_option: KMeansOption
 
 
-class KMeansClusterResult(NamedTuple):
-    """A typed tuple to hold k-means cluster results."""
-
-    k_means: KMeans
-    reduced_data: np.ndarray
-    k_means_index: List[int]
-
-
 class KMeansModel(BaseModel):
     """This is the class to run k-means analysis.
 
@@ -94,38 +86,9 @@ class KMeansModel(BaseModel):
         """
         return KMeans(tol=self._k_means_front_end_option.tolerance,
                       n_init=self._k_means_front_end_option.n_init,
-                      init=self._k_means_front_end_option.init_method,
+                      init=self._k_means_front_end_option.init_method.value,
                       max_iter=self._k_means_front_end_option.max_iter,
                       n_clusters=self._k_means_front_end_option.k_value)
-
-    def _get_cluster_result(self) -> KMeansClusterResult:
-        """Get the cluster result produced by K Means.
-
-        :return: A KMeansClusterResult object which contains:
-            k_means: A KMeans object from sklearn that contains K-Means
-                     analysis settings.
-            reduced_data: PCA reduced 2 Dimensional DTM.
-            k_means_index: the clustering result.
-        """
-
-        # Get reduced data set, 2-D matrix that contains coordinates.
-        reduced_data = \
-            PCA(n_components=2).fit_transform(self._doc_term_matrix)
-
-        # Set the KMeans settings.
-        k_means = KMeans(tol=self._k_means_front_end_option.tolerance,
-                         n_init=self._k_means_front_end_option.n_init,
-                         init=self._k_means_front_end_option.init_method,
-                         max_iter=self._k_means_front_end_option.max_iter,
-                         n_clusters=self._k_means_front_end_option.k_value)
-
-        # Get cluster result back.
-        k_means_index = k_means.fit_predict(reduced_data)
-
-        # Return the desired results and K means settings.
-        return KMeansClusterResult(k_means=k_means,
-                                   reduced_data=reduced_data,
-                                   k_means_index=k_means_index)
 
     def _get_voronoi_plot(self) -> go.Figure:
         """Generate voronoi formatted graph for K Means result.
@@ -341,6 +304,58 @@ class KMeansModel(BaseModel):
         # Return the plotly figure.
         return go.Figure(data=data, layout=layout)
 
+    def _get_2d_frame(self):
+        # Get kMeans analyze result and unpack it.
+        k_means = self._get_k_means()
+        reduced_data = self._get_reduced_data()
+        k_means_index = k_means.fit_predict(reduced_data)
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Initialize the table with proper headers.
+        result_table = pd.DataFrame(columns=["Cluster #",
+                                             "Document",
+                                             "X-Coordinate",
+                                             "Y-Coordinate"])
+
+        # Fill the pandas data frame.
+        result_table["Cluster #"] = \
+            [index + 1 for index in k_means_index]
+        result_table["Document"] = labels
+        result_table["X-Coordinate"] = reduced_data[:, 0]
+        result_table["Y-Coordinate"] = reduced_data[:, 1]
+
+        return result_table
+
+    def _get_3d_frame(self):
+        # Get kMeans analyze result and unpack it.
+        k_means = self._get_k_means()
+        reduced_data = self._get_reduced_data()
+        k_means_index = k_means.fit_predict(reduced_data)
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Initialize the table with proper headers.
+        result_table = pd.DataFrame(columns=["Cluster #",
+                                             "Document",
+                                             "X-Coordinate",
+                                             "Y-Coordinate",
+                                             "Z-Coordinate"])
+
+        # Fill the pandas data frame.
+        result_table["Cluster #"] = \
+            [index + 1 for index in k_means_index]
+        result_table["Document"] = labels
+        result_table["X-Coordinate"] = reduced_data[:, 0]
+        result_table["Y-Coordinate"] = reduced_data[:, 1]
+        result_table["Z-Coordinate"] = reduced_data[:, 2]
+
+        return result_table
+
     def get_plot(self) -> str:
         """Get the plotly graph based on users selection.
 
@@ -349,25 +364,22 @@ class KMeansModel(BaseModel):
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        # Save front end visualization method.
-        visualization = self._k_means_front_end_option.viz
-
         # If the user selects 2D-Scatter visualization.
-        if visualization is KMeansViz.two_d:
+        if self._k_means_front_end_option.viz is KMeansViz.two_d:
             return plot(self._get_2d_scatter_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
 
         # If the user selects 3D-Scatter visualization.
-        if visualization is KMeansViz.three_d:
+        if self._k_means_front_end_option.viz is KMeansViz.three_d:
             return plot(self._get_3d_scatter_plot(),
                         show_link=False,
                         output_type="div",
                         include_plotlyjs=False)
 
         # If the user selects Voronoi visualization.
-        elif visualization is KMeansViz.voronoi:
+        elif self._k_means_front_end_option.viz is KMeansViz.voronoi:
             return plot(self._get_voronoi_plot(),
                         show_link=False,
                         output_type="div",
@@ -384,23 +396,11 @@ class KMeansModel(BaseModel):
         other one contains document names.
         :return: A table that is in HTML string format.
         """
-        # Get kMeans analyze result.
-        cluster_result = self._get_cluster_result()
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Initialize the table with proper headers.
-        result_table = pd.DataFrame(
-            columns=["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = \
-            [index + 1 for index in cluster_result.k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = cluster_result.reduced_data[:, 0]
-        result_table["Y-Coordinate"] = cluster_result.reduced_data[:, 1]
+        # Get result table based on users selection.
+        if self._k_means_front_end_option.viz is KMeansViz.three_d:
+            result_table = self._get_3d_frame()
+        else:
+            result_table = self._get_2d_frame()
 
         # Convert the pandas data frame to a HTML formatted table.
         return result_table.to_html(
