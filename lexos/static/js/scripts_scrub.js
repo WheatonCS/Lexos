@@ -107,13 +107,21 @@ function displayAdditionalOptions () {
   advancedOptions.find('.icon-arrow-right').addClass('showing')
   advancedOptions.siblings('.expansion').slideToggle(0)
 
-  $('#swfileselect').change(truncateFileName())
+  $('#swfileselect').change(function (ev) {
+    truncateFileName(ev)
+  })
 
-  $('#lemfileselect').change(truncateFileName())
+  $('#lemfileselect').change(function (ev) {
+    truncateFileName(ev)
+  })
 
-  $('#consfileselect').change(truncateFileName())
+  $('#consfileselect').change(function (ev) {
+    truncateFileName(ev)
+  })
 
-  $('#scfileselect').change(truncateFileName())
+  $('#scfileselect').change(function (ev) {
+    truncateFileName(ev)
+  })
 }
 
 /**
