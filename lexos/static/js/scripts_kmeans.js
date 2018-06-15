@@ -48,17 +48,14 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
- * Display the K-Means clustering result as a table on web though an Ajax call.
- * @returns {void}.
+ * Return the desired data table configuration.
+ * @returns {{paging: boolean, scrollY: number, scrollCollapse: boolean, dom: string, buttons: string[], columnDefs: *[]}}
  */
-function generateKMeansTable () {
-  $('#status-analyze').css({'visibility': 'visible'})
-  // Convert form into an object map string to string
-  const form = jsonifyForm()
-  const hide_columns = $('#vizMethod').val() === '3DScatter' ? [2, 3, 4] : [2, 3]
+function getDataTableConfiguration () {
+  const hide_columns =
+    $('#vizMethod').val() === '3DScatter' ? [2, 3, 4] : [2, 3]
 
-  // Set the configuration for creating data table
-  const dataTableConfig = {
+  return {
     // Do not paging.
     paging: false,
     // Set the Scroll Height.
@@ -84,16 +81,27 @@ function generateKMeansTable () {
       }
     ]
   }
+}
+
+/**
+ * Display the K-Means clustering result as a table on web though an Ajax call.
+ * @returns {void}.
+ */
+function generateKMeansResult () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // Convert form into an object map string to string
+  const form = jsonifyForm()
 
   // Send the ajax request
-  sendAjaxRequest('/KMeansTable', form)
+  sendAjaxRequest('/KMeansResult', form)
     .done(
       function (response) {
-        const outerTableDivSelector = $('#KMeans-table')
-        // Put the response onto the web page
-        outerTableDivSelector.html(response['table'])
-        // Initialize the data table
-        outerTableDivSelector.children().DataTable(dataTableConfig)
+        // Insert the table result.
+        const tableDiv = $('#KMeans-table')
+        tableDiv.html(response['table'])
+        // Change the HTML table to a data table with desired configurations.
+        tableDiv.children().DataTable(getDataTableConfiguration())
+        // Insert the plot result.
         $('#KMeans-plot').html(response['plot'])
       })
     .fail(
@@ -103,29 +111,6 @@ function generateKMeansTable () {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
         runModal('Error encountered while generating the file statistics.')
-      })
-}
-
-/**
- * Display the visualization of K-Means on web page through an Ajax call.
- * @returns {void}.
- */
-function generateKMeansPlot () {
-  $('#status-analyze').css({'visibility': 'visible'})
-  // Convert form into an object map string to string
-  const form = jsonifyForm()
-
-  // Send the ajax request
-  sendAjaxRequest('/KMeansPlot', form)
-    .done(
-      function (response) {
-
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the box plot.')
       })
     .always(
       function () {
@@ -146,7 +131,7 @@ $(function () {
     if (error === null) {
       // If there is no error, get the result.
       $('#KMeans-result').css({'display': 'block'})
-      generateKMeansTable()
+      generateKMeansResult()
     } else {
       runModal(error)
     }
