@@ -91,9 +91,10 @@ function generateKMeansTable () {
       function (response) {
         const outerTableDivSelector = $('#KMeans-table')
         // Put the response onto the web page
-        outerTableDivSelector.html(response)
+        outerTableDivSelector.html(response['table'])
         // Initialize the data table
         outerTableDivSelector.children().DataTable(dataTableConfig)
+        $('#KMeans-plot').html(response['plot'])
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -118,7 +119,7 @@ function generateKMeansPlot () {
   sendAjaxRequest('/KMeansPlot', form)
     .done(
       function (response) {
-        $('#KMeans-plot').html(response)
+
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -146,7 +147,6 @@ $(function () {
       // If there is no error, get the result.
       $('#KMeans-result').css({'display': 'block'})
       generateKMeansTable()
-      generateKMeansPlot()
     } else {
       runModal(error)
     }
