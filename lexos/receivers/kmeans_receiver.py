@@ -15,6 +15,7 @@ class KMeansViz(Enum):
 
 class KMeansInit(Enum):
     """The Enum object to hold K-Means initialization method."""
+
     k_means = "k-means++"
     random = "random"
 
