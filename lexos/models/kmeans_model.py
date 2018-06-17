@@ -19,6 +19,17 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
 
+# Alias for typed tuple to increase readability.
+PlotlyHTMLPlot = str
+HTMLTable = str
+
+
+class KMeansResult(NamedTuple):
+    """A typed tuple to hold processed k-means results."""
+
+    plot: PlotlyHTMLPlot
+    table: HTMLTable
+
 
 class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
@@ -33,13 +44,6 @@ class KMeansUnprocessedResult(NamedTuple):
 
     plot: go.Figure
     table: pd.DataFrame
-
-
-class KMeansResult(NamedTuple):
-    """A typed tuple to hold processed k-means results."""
-
-    plot: str
-    table: str
 
 
 class KMeansModel(BaseModel):
@@ -119,18 +123,12 @@ class KMeansModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #",
-                                             "Document",
-                                             "X-Coordinate",
-                                             "Y-Coordinate"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = [index + 1 for index in k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = reduced_data[:, 0]
-        result_table["Y-Coordinate"] = reduced_data[:, 1]
-
-        return result_table
+        return pd.DataFrame(data={
+            "Cluster #": [index + 1 for index in k_means_index],
+            "Document": labels,
+            "X-Coordinate": reduced_data[:, 0],
+            "Y-Coordinate": reduced_data[:, 1]
+        })
 
     def _get_3d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
         """Generate 3 dimensional table result for K-Means analysis.
@@ -147,20 +145,13 @@ class KMeansModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #",
-                                             "Document",
-                                             "X-Coordinate",
-                                             "Y-Coordinate",
-                                             "Z-Coordinate"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = [index + 1 for index in k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = reduced_data[:, 0]
-        result_table["Y-Coordinate"] = reduced_data[:, 1]
-        result_table["Z-Coordinate"] = reduced_data[:, 2]
-
-        return result_table
+        return pd.DataFrame(data={
+            "Cluster #": [index + 1 for index in k_means_index],
+            "Document": labels,
+            "X-Coordinate": reduced_data[:, 0],
+            "Y-Coordinate": reduced_data[:, 1],
+            "Z-Coordinate": reduced_data[:, 2]
+        })
 
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
@@ -302,8 +293,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = np.array([self._id_temp_label_map[file_id]
+                           for file_id in self._doc_term_matrix.index.values])
 
         # Separate x, y coordinates from the reduced data set.
         x_value = reduced_data[:, 0]
@@ -312,15 +303,9 @@ class KMeansModel(BaseModel):
         # Create plot for each cluster so the color will differ among clusters.
         data = [
             go.Scatter(
-                x=[x_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                y=[y_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                text=[labels[index]
-                      for index, group_index in enumerate(k_means_index)
-                      if group_index == group_number],
+                x=x_value[np.where(group_number == k_means_index)],
+                y=y_value[np.where(group_number == k_means_index)],
+                text=labels[np.where(group_number == k_means_index)],
                 mode="markers",
                 name=f"Cluster {group_number + 1}",
                 hoverinfo="text",
@@ -329,7 +314,7 @@ class KMeansModel(BaseModel):
                     line=dict(width=1)
                 )
             )
-            for group_number in set(k_means_index)
+            for group_number in np.unique(k_means_index)
         ]
 
         # Set the layout of the plot.
@@ -359,8 +344,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = np.array([self._id_temp_label_map[file_id]
+                           for file_id in self._doc_term_matrix.index.values])
 
         # Get x, y, z coordinates.
         x_value = reduced_data[:, 0]
@@ -370,18 +355,10 @@ class KMeansModel(BaseModel):
         # Create plot for each cluster so the color will differ among clusters.
         data = [
             go.Scatter3d(
-                x=[x_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                y=[y_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                z=[z_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                text=[labels[index]
-                      for index, group_index in enumerate(k_means_index)
-                      if group_index == group_number],
+                x=x_value[np.where(group_number == k_means_index)],
+                y=y_value[np.where(group_number == k_means_index)],
+                z=z_value[np.where(group_number == k_means_index)],
+                text=labels[np.where(group_number == k_means_index)],
                 mode="markers",
                 name=f"Cluster {group_number + 1}",
                 hoverinfo="text",
@@ -390,10 +367,10 @@ class KMeansModel(BaseModel):
                     line=dict(width=1)
                 )
             )
-            for group_number in set(k_means_index)
+            for group_number in np.unique(k_means_index)
         ]
 
-        # Set the layout of the plot, mainly set the background of the plot.
+        # Set the layout of the plot, mainly set the background color to grey.
         layout = go.Layout(
             title="K-Means Three Dimensional Scatter Plot Result",
             height=600,
