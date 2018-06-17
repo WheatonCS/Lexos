@@ -35,7 +35,6 @@ test_voronoi = KMeansModel(test_options=test_option_voronoi)
 # noinspection PyProtectedMember
 voronoi_result = test_voronoi._get_voronoi_result()
 
-
 # ------------------------- Test voronoi table result -------------------------
 # Get table result.
 table = voronoi_result.table
@@ -48,5 +47,71 @@ class TestVoronoiTable:
             np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
         )
 
+    def test_file_names(self):
+        pd.testing.assert_series_equal(
+            table["Document"],
+            pd.Series(index=[0, 1, 2, 3],
+                      data=["F1.txt", "F2.txt", "F3.txt", "F4.txt"]),
+            check_names=False
+        )
+
     def test_cluster(self):
         assert set(table["Cluster #"]) == {1, 2}
+        assert (table["Cluster #"] == 1).sum() in [1, 3]
+        assert (table["Cluster #"] == 2).sum() in [1, 3]
+
+    def test_coordinate(self):
+        pd.testing.assert_series_equal(
+            table.loc[0, ["X-Coordinate"]],
+            pd.Series(index=["X-Coordinate"], data=[-128.5943]),
+            check_names=False,
+            check_dtype=False
+        )
+
+        pd.testing.assert_series_equal(
+            table.loc[3, ["Y-Coordinate"]],
+            pd.Series(index=["Y-Coordinate"], data=[-404.50449]),
+            check_names=False,
+            check_dtype=False
+        )
+
+
+# ------------------------- Test voronoi plot result --------------------------
+# Get plot result.
+plot = voronoi_result.plot
+
+
+class TestVoronoiPlot:
+    def test_layout(self):
+        assert plot.layout["title"] == "K-Means Voronoi Result"
+        assert plot.layout["hovermode"] == "closest"
+
+    def test_heat_map(self):
+        assert plot.data[0]["type"] == "heatmap"
+        assert plot.data[0]["hoverinfo"] == "skip"
+        assert plot.data[0]["colorscale"] == "YlGnBu"
+
+    def test_centroid(self):
+        assert plot.data[1]["type"] == "scatter"
+        assert plot.data[1]["text"] == "Centroid 1"
+        assert round(plot.data[1]["x"][0], 4) in [738.6971, -246.2324]
+        assert round(plot.data[1]["y"][0], 4) in [38.3726, -115.1177]
+
+    def test_scatter(self):
+        assert plot.data[3]["mode"] == "markers"
+        assert round(plot.data[3]["x"][0], 4) in [738.6971, -128.5943]
+        assert round(plot.data[3]["y"][0], 4) in [411.5624, -115.1177]
+
+
+# ------------------------- Test voronoi processed result ---------------------
+class TestVoronoiProcessed:
+    def test_processed_table(self):
+        pd.testing.assert_series_equal(
+            pd.read_html(test_voronoi.get_result().table)[0]["X-Coordinate"],
+            table["X-Coordinate"]
+        )
+
+        pd.testing.assert_series_equal(
+            pd.read_html(test_voronoi.get_result().table)[0]["Y-Coordinate"],
+            table["Y-Coordinate"]
+        )
