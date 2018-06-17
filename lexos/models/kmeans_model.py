@@ -192,14 +192,27 @@ class KMeansModel(BaseModel):
                            for cluster in cluster_values]
 
         # Find the decision boundary of the graph.
-        x_min = reduced_data[:, 0].min() - 0.5
-        x_max = reduced_data[:, 0].max() + 0.5
-        y_min = reduced_data[:, 1].min() - 0.5
-        y_max = reduced_data[:, 1].max() + 0.5
+        # First find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
+        # Find min, max for x and then calculate bounds and step.
+        x_min, x_max = x_value.min(), x_value.max()
+        x_low_bound = x_min - (x_max - x_min) / 10
+        x_up_bound = x_max + (x_max - x_min) / 10
+        # Increase 200 will make lines smoother.
+        x_step = (x_up_bound - x_low_bound) / 200
+
+        # Find min, max for y and then calculate bounds and step.
+        y_min, y_max = y_value.min(), y_value.max()
+        y_low_bound = y_min - (y_max - y_min) / 10
+        y_up_bound = y_max + (y_max - y_min) / 10
+        # Increase 200 will make lines smoother.
+        y_step = (y_up_bound - y_low_bound) / 200
 
         # Find x, y mesh grids, decrease the step to make lines smoother.
-        x_mesh_grid, y_mesh_grid = np.meshgrid(np.arange(x_min, x_max, 0.005),
-                                               np.arange(y_min, y_max, 0.005))
+        x_mesh_grid, y_mesh_grid = \
+            np.meshgrid(np.arange(x_low_bound, x_up_bound, x_step),
+                        np.arange(y_low_bound, y_up_bound, y_step))
 
         # Find K Means predicted z values.
         z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
