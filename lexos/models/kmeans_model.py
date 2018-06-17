@@ -272,9 +272,11 @@ class KMeansModel(BaseModel):
         ]
 
         # Set the layout of the plot.
-        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
-                           yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest")
+        layout = go.Layout(
+            title="K-Means Voronoi Result",
+            xaxis=go.XAxis(title='x-axis', showline=False),
+            yaxis=go.YAxis(title='y-axis', showline=False),
+            hovermode="closest")
 
         # Pack data and layout.
         # noinspection PyTypeChecker
@@ -331,9 +333,11 @@ class KMeansModel(BaseModel):
         ]
 
         # Set the layout of the plot.
-        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
-                           yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest")
+        layout = go.Layout(
+            title="K-Means Two Dimensional Scatter Plot Result",
+            xaxis=go.XAxis(title='x-axis', showline=False),
+            yaxis=go.YAxis(title='y-axis', showline=False),
+            hovermode="closest")
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
@@ -390,15 +394,18 @@ class KMeansModel(BaseModel):
         ]
 
         # Set the layout of the plot, mainly set the background of the plot.
-        layout = go.Layout(height=600,
-                           scene=dict(
-                               xaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"),
-                               yaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"),
-                               zaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"))
-                           )
+        layout = go.Layout(
+            title="K-Means Three Dimensional Scatter Plot Result",
+            height=600,
+            scene=dict(
+                xaxis=dict(showbackground=True,
+                           backgroundcolor="rgb(230,230,230)"),
+                yaxis=dict(showbackground=True,
+                           backgroundcolor="rgb(230,230,230)"),
+                zaxis=dict(showbackground=True,
+                           backgroundcolor="rgb(230,230,230)")
+            )
+        )
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
