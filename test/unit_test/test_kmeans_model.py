@@ -3,7 +3,7 @@ import pandas as pd
 from lexos.models.kmeans_model import KMeansTestOptions, KMeansModel
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansViz, KMeansInit
 
-# ------------------------ Voronoi test suite ------------------------
+# ------------------------- Voronoi test suite --------------------------------
 # Create test DTM.
 dtm_voronoi = pd.DataFrame(
     data=np.array([(100, 100, 100, 100, 100, 200, 900, 100),
@@ -33,6 +33,20 @@ test_option_voronoi = KMeansTestOptions(
 # Create test Model and get test result.
 test_voronoi = KMeansModel(test_options=test_option_voronoi)
 # noinspection PyProtectedMember
-voronoi_result = test_voronoi.get_result()
+voronoi_result = test_voronoi._get_voronoi_result()
 
-print("DONE")
+
+# ------------------------- Test voronoi table result -------------------------
+# Get table result.
+table = voronoi_result.table
+
+
+class TestVoronoiTable:
+    def test_table_header(self):
+        np.testing.assert_array_equal(
+            table.columns,
+            np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
+        )
+
+    def test_cluster(self):
+        assert set(table["Cluster #"]) == {1, 2}
