@@ -197,15 +197,15 @@ class KMeansModel(BaseModel):
 
         # Find min, max for x and then calculate bounds and step.
         x_min, x_max = x_value.min(), x_value.max()
-        x_low_bound = x_min - (x_max - x_min) / 10
-        x_up_bound = x_max + (x_max - x_min) / 10
+        x_low_bound = x_min - (x_max - x_min) / 5
+        x_up_bound = x_max + (x_max - x_min) / 5
         # Increase 200 will make lines smoother.
         x_step = (x_up_bound - x_low_bound) / 200
 
         # Find min, max for y and then calculate bounds and step.
         y_min, y_max = y_value.min(), y_value.max()
-        y_low_bound = y_min - (y_max - y_min) / 10
-        y_up_bound = y_max + (y_max - y_min) / 10
+        y_low_bound = y_min - (y_max - y_min) / 5
+        y_up_bound = y_max + (y_max - y_min) / 5
         # Increase 200 will make lines smoother.
         y_step = (y_up_bound - y_low_bound) / 200
 
