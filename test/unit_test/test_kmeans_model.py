@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.kmeans_model import KMeansTestOptions, KMeansModel
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansViz, KMeansInit
 
@@ -115,3 +117,63 @@ class TestVoronoiProcessed:
             pd.read_html(test_voronoi.get_result().table)[0]["Y-Coordinate"],
             table["Y-Coordinate"]
         )
+
+
+# -----------------------------------------------------------------------------
+
+
+# ------------------------- Special test suite --------------------------------
+# Create test DTM.
+dtm_empty = pd.DataFrame()
+# Create test id temp label map.
+id_temp_label_map_empty = {}
+# Create front end option for voronoi.
+# noinspection PyTypeChecker
+front_end_option_special = KMeansOption(
+    viz="wrong",
+    n_init=10,
+    k_value=2,
+    max_iter=100,
+    tolerance=1e-4,
+    init_method=KMeansInit.k_means
+)
+# Pack all test components.
+test_option_empty = KMeansTestOptions(
+    doc_term_matrix=dtm_empty,
+    front_end_option=front_end_option_special,
+    id_temp_label_map=id_temp_label_map_empty
+)
+# Create empty K-Means test.
+test_empty = KMeansModel(test_options=test_option_empty)
+# -----------------------------------------------------------------------------
+# Create dtm special.
+dtm_special = pd.DataFrame(data=[[1, 2], [1, 2]],
+                           index=[0, 1],
+                           columns=["A", "B"])
+# Create test id temp label map.
+id_temp_label_map_special = {0: "F1.txt", 1: "F2.txt"}
+# Create special front end option.
+test_option_special = KMeansTestOptions(
+    doc_term_matrix=dtm_special,
+    front_end_option=front_end_option_special,
+    id_temp_label_map=id_temp_label_map_special
+)
+# Create special K-Means test.
+test_special = KMeansModel(test_options=test_option_special)
+
+
+class TestSpecialCase:
+    def test_empty_dtm(self):
+        try:
+            _ = test_empty.get_result()
+            raise AssertionError("Expected error message did not raise.")
+        except AssertionError as error:
+            assert str(error) == EMPTY_DTM_MESSAGE
+
+    def test_special_dtm(self):
+        try:
+            _ = test_special.get_result()
+            raise AssertionError("Expected error message did not raise.")
+        except ValueError as error:
+            assert str(error) == \
+                   "Invalid K-Means analysis option from front end."
