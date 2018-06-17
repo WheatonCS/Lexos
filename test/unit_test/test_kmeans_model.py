@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.kmeans_model import KMeansTestOptions, KMeansModel
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansViz, KMeansInit
@@ -181,4 +180,4 @@ class TestSpecialCase:
             raise AssertionError("Expected error message did not raise.")
         except ValueError as error:
             assert str(error) == \
-                   "Invalid K-Means analysis option from front end."
+                "Invalid K-Means analysis option from front end."
