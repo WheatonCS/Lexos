@@ -107,10 +107,12 @@ function checkForWarnings () {
   const numWordLoad = $('#num-word').data()
   const numCharLoad = $('#num-char').data()
   const numLineLoad = $('#num-line').data()
+  const activeFileIDsLoad = $('#active-file-ids').data()
   // Access arrays within objects
   const numWord = numWordLoad.numword
   const numChar = numCharLoad.numchar
   const numLine = numLineLoad.numline
+  const activeFileIDs = activeFileIDsLoad.activefileids
   let needsWarning = false
   const maxSegs = 100
   const defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
