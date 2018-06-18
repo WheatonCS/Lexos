@@ -403,6 +403,7 @@ function process (action) {
   })
 }
 
+// When preview or apply is clicked
 $(document).on('click', '#action-buttons', process)
 
 // Handle the Continue button in the warning modal
