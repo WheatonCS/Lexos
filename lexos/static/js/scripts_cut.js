@@ -404,7 +404,7 @@ function process (action) {
 }
 
 // When preview or apply is clicked
-$(document).on('click', '#preview-btn', process('preview'))
+//$(document).on('click', '#preview-btn', process('preview'))
 
 // Handle the Continue button in the warning modal
 $(document).on('click', '#warningContinue', function () {
