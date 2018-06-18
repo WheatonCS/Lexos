@@ -48,14 +48,14 @@ function sendAjaxRequest (url, form) {
 }
 
 /**
- * Return the desired data table configuration.
- * @returns {{paging: boolean, scrollY: number, scrollCollapse: boolean, dom: string, buttons: string[], columnDefs: *[]}} data table configuration.
+ * Convert HTML table to data table with desired configurations.
+ * @param {string} table: A HTML formatted table.
  */
-function getDataTableConfiguration () {
+function convertToDataTable (table) {
   const hideColumns =
     $('#vizMethod').val() === '3DScatter' ? [2, 3, 4] : [2, 3]
 
-  return {
+  table.DataTable({
     // Do not paging.
     paging: false,
     // Set the Scroll Height.
@@ -80,7 +80,7 @@ function getDataTableConfiguration () {
         searchable: false
       }
     ]
-  }
+  })
 }
 
 /**
@@ -99,8 +99,8 @@ function generateKMeansResult () {
         // Insert the table result.
         const tableDiv = $('#KMeans-table')
         tableDiv.html(response['table'])
-        // Change the HTML table to a data table with desired configurations.
-        tableDiv.children().DataTable(getDataTableConfiguration())
+        // Change the HTML table to a data table.
+        convertToDataTable(tableDiv.children())
         // Insert the plot result.
         $('#KMeans-plot').html(response['plot'])
       })
@@ -108,8 +108,8 @@ function generateKMeansResult () {
       function (jqXHR, textStatus, errorThrown) {
         // If fail hide the loading icon.
         $('#status-analyze').css({'visibility': 'hidden'})
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
+        console.log(`textStatus: ${textStatus}`)
+        console.log(`errorThrown: ${errorThrown}`)
         runModal('Error encountered while generating the file statistics.')
       })
     .always(
