@@ -179,9 +179,69 @@ class Test2DScatter:
         assert round(twoD_scatter.data[1]["x"][0], 4) in [738.6971, -128.5943]
         assert round(twoD_scatter.data[1]["y"][0], 4) in [411.5624, -115.1177]
 
-print("DONE")
+# ------------------------- Test 2D table result -------------------------
+
+
+# Get table result.
+table_twoD = twoD_result.table
+
+
+class Test2DTable:
+    def test_table_header(self):
+        np.testing.assert_array_equal(
+            table_twoD.columns,
+            np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
+        )
+
+    def test_file_names(self):
+        pd.testing.assert_series_equal(
+            table_twoD["Document"],
+            pd.Series(index=[0, 1, 2, 3],
+                      data=["F1.txt", "F2.txt", "F3.txt", "F4.txt"]),
+            check_names=False
+        )
+
+    def test_cluster(self):
+        np.testing.assert_array_equal(
+            np.unique(table_twoD["Cluster #"]),
+            np.array([1, 2])
+        )
+        assert (table_twoD["Cluster #"] == 1).sum() in [1, 3]
+        assert (table_twoD["Cluster #"] == 2).sum() in [1, 3]
+
+    def test_coordinate(self):
+        pd.testing.assert_series_equal(
+            table_twoD.loc[1, ["X-Coordinate"]],
+            pd.Series(index=["X-Coordinate"], data=[-212.31992]),
+            check_names=False,
+            check_dtype=False
+        )
+
+        pd.testing.assert_series_equal(
+            table_twoD.loc[2, ["Y-Coordinate"]],
+            pd.Series(index=["Y-Coordinate"], data=[-115.11773]),
+            check_names=False,
+            check_dtype=False
+        )
+
+
+# ------------------------- Test 2D processed result ---------------------
+class Test2DProcessed:
+    def test_processed_table(self):
+        pd.testing.assert_series_equal(
+            pd.read_html(test_twoD.get_result().table)[0]["X-Coordinate"],
+            table_twoD["X-Coordinate"]
+        )
+
+        pd.testing.assert_series_equal(
+            pd.read_html(test_twoD.get_result().table)[0]["Y-Coordinate"],
+            table_twoD["Y-Coordinate"]
+        )
+
 # -----------------------------------------------------------------------------
 # ------------------------- 3D scatter test suite -----------------------------
+
+
 dtm_threeD = pd.DataFrame(
     data=np.array([(100, 100, 100, 100, 100, 200, 900, 100),
                    (100, 200, 200, 100, 300, 100, 600, 100),
@@ -225,21 +285,99 @@ class Test3DScatter:
 
     def test_scatter(self):
         assert threeD_scatter.data[0]["type"] == "scatter3d"
-        assert round(threeD_scatter.data[0]["x"][0], 4) in [738.6971, -128.5943]
-        assert round(threeD_scatter.data[0]["y"][0], 4) in [411.5624, -115.1177]
+        assert round(threeD_scatter.data[0]["x"][0], 4) in [738.6971,
+                                                            -128.5943]
+        assert round(threeD_scatter.data[0]["y"][0], 4) in [411.5624,
+                                                            -115.1177]
         assert round(threeD_scatter.data[0]["z"][0], 4) in [-2.3939, -94.6634]
         assert threeD_scatter.data[0]["hoverinfo"] == "text"
         assert threeD_scatter.data[0]["mode"] == "markers"
         assert threeD_scatter.data[0]["name"] == "Cluster 1"
 
         assert threeD_scatter.data[1]["type"] == "scatter3d"
-        assert round(threeD_scatter.data[1]["x"][0], 4) in [738.6971, -128.5943]
-        assert round(threeD_scatter.data[1]["y"][0], 4) in [411.5624, -115.1177]
+        assert round(threeD_scatter.data[1]["x"][0], 4) in [738.6971,
+                                                            -128.5943]
+        assert round(threeD_scatter.data[1]["y"][0], 4) in [411.5624,
+                                                            -115.1177]
         assert round(threeD_scatter.data[1]["z"][0], 4) in [-2.3939, -94.6634]
 
 # -----------------------------------------------------------------------------
+# ------------------------- Test 3D table result -------------------------
 
+
+# Get table result.
+table_threeD = threeD_result.table
+
+
+class Test3DTable:
+    def test_table_header(self):
+        np.testing.assert_array_equal(
+            table_threeD.columns,
+            np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate",
+                      "Z-Coordinate"])
+        )
+
+    def test_file_names(self):
+        pd.testing.assert_series_equal(
+            table_threeD["Document"],
+            pd.Series(index=[0, 1, 2, 3],
+                      data=["F1.txt", "F2.txt", "F3.txt", "F4.txt"]),
+            check_names=False
+        )
+
+    def test_cluster(self):
+        np.testing.assert_array_equal(
+            np.unique(table_threeD["Cluster #"]),
+            np.array([1, 2])
+        )
+        assert (table_threeD["Cluster #"] == 1).sum() in [1, 3]
+        assert (table_threeD["Cluster #"] == 2).sum() in [1, 3]
+
+    def test_coordinate(self):
+        pd.testing.assert_series_equal(
+            table_threeD.loc[2, ["X-Coordinate"]],
+            pd.Series(index=["X-Coordinate"], data=[738.69711]),
+            check_names=False,
+            check_dtype=False
+        )
+
+        pd.testing.assert_series_equal(
+            table_threeD.loc[3, ["Y-Coordinate"]],
+            pd.Series(index=["Y-Coordinate"], data=[-404.50449]),
+            check_names=False,
+            check_dtype=False
+        )
+
+        pd.testing.assert_series_equal(
+            table_threeD.loc[3, ["Z-Coordinate"]],
+            pd.Series(index=["Z-Coordinate"], data=[-55.01033]),
+            check_names=False,
+            check_dtype=False
+        )
+
+
+# ------------------------- Test 2D processed result ---------------------
+class Test3DProcessed:
+    def test_processed_table(self):
+        pd.testing.assert_series_equal(
+            pd.read_html(test_threeD.get_result().table)[0]["X-Coordinate"],
+            table_threeD["X-Coordinate"]
+        )
+
+        pd.testing.assert_series_equal(
+            pd.read_html(test_threeD.get_result().table)[0]["Y-Coordinate"],
+            table_threeD["Y-Coordinate"]
+        )
+
+        pd.testing.assert_series_equal(
+            pd.read_html(test_threeD.get_result().table)[0]["Z-Coordinate"],
+            table_threeD["Z-Coordinate"]
+        )
+
+# -----------------------------------------------------------------------------
 # ------------------------- Special test suite --------------------------------
+
+
 # Create test DTM.
 dtm_empty = pd.DataFrame()
 # Create test id temp label map.
