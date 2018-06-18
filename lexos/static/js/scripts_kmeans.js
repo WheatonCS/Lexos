@@ -50,6 +50,7 @@ function sendAjaxRequest (url, form) {
 /**
  * Convert HTML table to data table with desired configurations.
  * @param {string} table: A HTML formatted table.
+ * @returns {void}.
  */
 function convertToDataTable (table) {
   const hideColumns =
