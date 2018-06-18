@@ -103,10 +103,10 @@ function checkForErrors () {
  * @returns {void}
  */
 function checkForWarnings () {
+  // load numWord from metadata
   const numWordLoad = $('#num-word').data()
-  //console.log(numWord.numword[0])
-  const numWord = numWordLoad.numword[0]
-  console.log(numWord)
+  // Access array within object
+  const numWord = numWordLoad.numword
   let needsWarning = false
   const maxSegs = 100
   const defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
@@ -142,9 +142,7 @@ function checkForWarnings () {
         if (thisCutType === 'letters' && (numChar[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           needsWarning = true
           // Same for segments and lines
-        }
-
-        else if (thisCutType === 'words' && (numWord - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
+        } else if (thisCutType === 'words' && (numWord[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
           console.log(numWord)
           needsWarning = true
         } else if (thisCutType === 'lines' && (numLine[listindex] - thisOverVal) / (thisCutVal - thisOverVal) > maxSegs) {
