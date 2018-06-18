@@ -207,6 +207,11 @@ function checkForWarnings () {
   }
 }
 
+// Toggle individual cut options after applying
+function toggleIndivCutOptions (id) {
+  $('#indcutoptswrap_' + id).toggleClass('hidden')
+}
+
 let xhr
 
 /**
