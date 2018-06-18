@@ -2049,7 +2049,7 @@ select#orientation {
 }
 
 .td-top {
-  /*we set the 1000px so that it takes all the space  */
+  /*we set the 1000px so that it takes all the space. */
   width: 1000px !important;
 }
 

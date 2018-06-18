@@ -378,10 +378,14 @@ class TopwordModel(BaseModel):
         topword_result = self._get_result()
 
         def helper_series_to_table(series: pd.Series) -> str:
-            frame = pd.DataFrame(index=["Terms/Characters", "Z-Score"],
-                                 data=[series.index, series.data])
+            # Only take the most significant 30 data.
+            series = series[: 30]
+            frame = pd.DataFrame(data={
+                "Terms/Characters": series.index,
+                "Z-Score": series.data
+            })
 
-            return frame.transpose().to_html(
+            return frame.to_html(
                 index=False,
                 classes="result-table table table-striped table-bordered"
                         " header-fixed")
@@ -406,10 +410,8 @@ class TopwordModel(BaseModel):
             session_manager.session_folder(), RESULTS_FOLDER)
 
         # Attempt to make the directory.
-        try:
+        if not os.path.isdir(result_folder_path):
             os.makedirs(result_folder_path)
-        except OSError:
-            pass
 
         # Get the complete saving path of topword result.
         save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
