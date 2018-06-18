@@ -164,7 +164,7 @@ class KMeansModel(BaseModel):
         :param reduced_data: PCA reduced two dimensional data.
         :return: A plotly heat map object that contains all polygons.
         """
-        # First find list of x, y coordinates.
+        # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
         # Find min, max for x and then calculate bounds and step.
@@ -201,6 +201,58 @@ class KMeansModel(BaseModel):
                           showscale=False,
                           colorscale='YlGnBu')
 
+    @staticmethod
+    def _get_voronoi_points(color: list,
+                            labels: np.ndarray,
+                            reduced_data: np.ndarray,
+                            k_means_index: List[int]) -> List[go.Scatter]:
+
+        # Find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
+        return [
+            go.Scatter(
+                x=x_value[np.where(group_number == k_means_index)],
+                y=y_value[np.where(group_number == k_means_index)],
+                text=labels[np.where(group_number == k_means_index)],
+                mode="markers",
+                name=f"Cluster {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    color=color[group_number],
+                    line=dict(width=1)
+                )
+            )
+            for group_number in np.unique(k_means_index)
+        ]
+
+    @staticmethod
+    def _get_voronoi_centroids(color: list,
+                               reduced_data: np.ndarray,
+                               k_means_index: List[int]):
+        # Find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
+        return [
+            go.Scatter(
+                x=[np.mean(x_value[np.where(group_number == k_means_index)])],
+                y=[np.mean(y_value[np.where(group_number == k_means_index)])],
+                mode="markers",
+                name=f"Centroid {group_number + 1}",
+                text=f"Centroid {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=14,
+                    line=dict(width=1),
+                    color=color[group_number],
+                    symbol="cross",
+                    opacity=0.8
+                )
+            )
+            for group_number in np.unique(k_means_index)
+        ]
+
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
 
@@ -211,70 +263,34 @@ class KMeansModel(BaseModel):
         reduced_data = self._get_reduced_data()
         k_means_index = k_means.fit_predict(reduced_data)
 
-        # This is important, such that plot and table results are consistent.
-        sorted_k_means_unique_index = sorted(set(k_means_index))
-
         # Get file names.
         labels = np.array([self._id_temp_label_map[file_id]
                            for file_id in self._doc_term_matrix.index.values])
 
-        # Get a list of lists of file names based on the cluster result.
-        cluster_labels = [labels[np.where(k_means_index == index)]
-                          for index in sorted_k_means_unique_index]
-
-        # Get a list of lists of file coordinates based on the cluster result.
-        cluster_values = [reduced_data[np.where(k_means_index == index)]
-                          for index in sorted_k_means_unique_index]
-
-        # Get a list of centroid results based on the cluster result.
-        centroid_values = [np.mean(cluster, axis=0, dtype="float_")
-                           for cluster in cluster_values]
+        # Pick a color for following scatter plots.
+        color = cl.scales["10"]["qual"]["Paired"]
 
         # Draw the regions with heat map.
         # This method could be updated once plotly better support polygons.
         voronoi_regions = self._get_voronoi_background(
-            k_means=k_means, reduced_data=reduced_data)
-
-        # Pick a color for following scatter plots.
-        color = cl.scales["10"]["qual"]["Paired"]
+            k_means=k_means,
+            reduced_data=reduced_data
+        )
 
         # Plot sets of points based on the cluster they are in.
-        points_data = [
-            go.Scatter(
-                x=cluster_value[:, 0],
-                y=cluster_value[:, 1],
-                text=cluster_labels[index],
-                mode="markers",
-                name=f"Cluster {index + 1}",
-                hoverinfo="text",
-                marker=dict(
-                    size=12,
-                    color=color[index],
-                    line=dict(width=1)
-                )
-            )
-            for index, cluster_value in enumerate(cluster_values)
-        ]
+        points_data = self._get_voronoi_points(
+            color=color,
+            labels=labels,
+            reduced_data=reduced_data,
+            k_means_index=k_means_index
+        )
 
         # Plot centroids based on the cluster they are in.
-        centroids_data = [
-            go.Scatter(
-                x=[centroid_value[0]],
-                y=[centroid_value[1]],
-                mode="markers",
-                name=f"Centroid {index + 1}",
-                text=f"Centroid {index + 1}",
-                hoverinfo="text",
-                marker=dict(
-                    size=14,
-                    line=dict(width=1),
-                    color=color[index],
-                    symbol="cross",
-                    opacity=0.8
-                )
-            )
-            for index, centroid_value in enumerate(centroid_values)
-        ]
+        centroids_data = self._get_voronoi_centroids(
+            color=color,
+            reduced_data=reduced_data,
+            k_means_index=k_means_index
+        )
 
         # Set the layout of the plot.
         layout = go.Layout(
@@ -283,8 +299,8 @@ class KMeansModel(BaseModel):
             yaxis=go.YAxis(title='y-axis', showline=False),
             hovermode="closest")
 
-        # Pack data and layout.
         # noinspection PyTypeChecker
+        # Pack all data together in a list.
         data = [voronoi_regions] + centroids_data + points_data
 
         # Return the plotly figure and table.
