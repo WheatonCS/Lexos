@@ -388,7 +388,7 @@ function doAjax (action) {
  * @param {string} action - the action type being requested.
  * @returns {void}
  */
-function process (action) {
+function process (action) { // eslint-disable-line no-unused-vars
   $('#status-prepare').css({'visibility': 'visible', 'z-index': '400000'})
   $('#formAction').val(action)
   $.when(checkForErrors()).done(function () {
