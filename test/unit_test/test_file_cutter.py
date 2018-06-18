@@ -1,4 +1,4 @@
-from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NEG_OVERLAP_LAST_PROP_MESSAGE, LARGER_SEG_SIZE_MESSAGE, \
     INVALID_CUTTING_TYPE_MESSAGE, \
     EMPTY_MILESTONE_MESSAGE
@@ -63,7 +63,7 @@ class TestCutByCharacters:
                                   last_prop=1)
             raise AssertionError("Larger than zero error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
         try:
             _ = cut_by_characters(text="ABAB", seg_size=2, overlap=-1,
@@ -157,14 +157,14 @@ class TestCutByWords:
             _ = cut_by_words(text=" ", seg_size=0, overlap=0, last_prop=.5)
             raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
         try:
             _ = cut_by_words(text="test test", seg_size=0, overlap=0,
                              last_prop=.5)
             raise AssertionError("zero_division error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
     def test_cut_by_words_neg_chunk_precondition(self):
         try:
@@ -172,7 +172,7 @@ class TestCutByWords:
                              last_prop=.5)
             raise AssertionError("did not throw error")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
     def test_cut_by_words_neg_prop_precondition(self):
         try:
@@ -226,7 +226,7 @@ class TestCutByLines:
             _ = cut_by_lines(text="", seg_size=0, overlap=0, last_prop=1)
             raise AssertionError("zero seg_size error did not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
     def test_cut_by_lines_neg_nums(self):
         try:
@@ -318,12 +318,12 @@ class TestCutByNumbers:
         try:
             _ = cut_by_number(text="Danger zone!", num_segment=0)
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
         # Invalid index exception
         try:
             _ = cut_by_number(text="Oh gawd...", num_segment=-1)
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE
 
 
 class TestCutByMileStone:
@@ -437,4 +437,4 @@ class TestCutterFunction:
                     overlap="0", last_prop_percent="100%") == ["test"]
             raise AssertionError("negative number error does not raise")
         except AssertionError as error:
-            assert str(error) == NON_POSITIVE_SEGMENT_MESSAGE
+            assert str(error) == SEG_NON_POSITIVE_MESSAGE

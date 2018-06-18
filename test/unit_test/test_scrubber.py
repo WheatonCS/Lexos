@@ -1,5 +1,5 @@
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFT_HAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 from lexos.processors.prepare.scrubber import replacement_handler, \
     get_remove_whitespace_map, replace_with_dict, get_remove_punctuation_map, \
@@ -135,12 +135,12 @@ class TestReplacementHandlerAlone:
             replacement_handler(
                 text=self.test_string, replacer_string=":k", is_lemma=False)
         except LexosException as excep:
-            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":k"
+            assert str(excep) == REPLACEMENT_NO_LEFT_HAND_MESSAGE + ":k"
         try:
             replacement_handler(
                 text=self.test_string, replacer_string=":", is_lemma=False)
         except LexosException as excep:
-            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
+            assert str(excep) == REPLACEMENT_NO_LEFT_HAND_MESSAGE + ":"
 
     def test_not_lemma_spacing(self):
         assert replacement_handler(
@@ -220,12 +220,12 @@ class TestReplacementHandlerAlone:
             replacement_handler(
                 text=self.test_string, replacer_string=":word", is_lemma=True)
         except LexosException as excep:
-            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":word"
+            assert str(excep) == REPLACEMENT_NO_LEFT_HAND_MESSAGE + ":word"
         try:
             replacement_handler(
                 text=self.test_string, replacer_string=":", is_lemma=True)
         except LexosException as excep:
-            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":"
+            assert str(excep) == REPLACEMENT_NO_LEFT_HAND_MESSAGE + ":"
 
         # testing multiple error conditions
         try:
@@ -242,7 +242,7 @@ class TestReplacementHandlerAlone:
                                                 "string:word",
                                 is_lemma=True)
         except LexosException as excep:
-            assert str(excep) == REPLACEMENT_NO_LEFTHAND_MESSAGE + ":yay"
+            assert str(excep) == REPLACEMENT_NO_LEFT_HAND_MESSAGE + ":yay"
         try:
             replacement_handler(text=self.test_string,
                                 replacer_string="string:word,thing\n"
