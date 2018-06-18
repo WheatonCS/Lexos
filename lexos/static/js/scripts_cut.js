@@ -103,10 +103,12 @@ function checkForErrors () {
  * @returns {void}
  */
 function checkForWarnings () {
-  // load numWord from metadata
+  // load num_variables from metadata
   const numWordLoad = $('#num-word').data()
-  // Access array within object
+  const numCharLoad =$('#num-char').data()
+  // Access arrays within objects
   const numWord = numWordLoad.numword
+  const numChar = numCharLoad.numchar
   let needsWarning = false
   const maxSegs = 100
   const defCutTypeValue = $('input[name=\'cutType\']:checked').val() // Cut Type
