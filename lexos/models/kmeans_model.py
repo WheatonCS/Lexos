@@ -167,6 +167,7 @@ class KMeansModel(BaseModel):
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
+        # TODO: A helper function here might be good, since same code repeats.
         # Find min, max for x and then calculate bounds and step.
         x_min, x_max = x_value.min(), x_value.max()
         x_low_bound = x_min - (x_max - x_min) / 5
