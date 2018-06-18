@@ -57,7 +57,10 @@ class TestVoronoiTable:
         )
 
     def test_cluster(self):
-        assert np.unique(table["Cluster #"]) == {1, 2}
+        np.testing.assert_array_equal(
+            np.unique(table["Cluster #"]),
+            np.array([1, 2])
+        )
         assert (table["Cluster #"] == 1).sum() in [1, 3]
         assert (table["Cluster #"] == 2).sum() in [1, 3]
 
@@ -179,5 +182,5 @@ class TestSpecialCase:
             _ = test_special.get_result()
             raise AssertionError("Expected error message did not raise.")
         except ValueError as error:
-            assert str(error) == \
-                "Invalid K-Means analysis option from front end."
+            assert \
+                str(error) == "Invalid K-Means analysis option from front end."

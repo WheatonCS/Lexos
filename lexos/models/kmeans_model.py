@@ -206,10 +206,17 @@ class KMeansModel(BaseModel):
                             labels: np.ndarray,
                             reduced_data: np.ndarray,
                             k_means_index: List[int]) -> List[go.Scatter]:
+        """Plot points for each cluster.
 
+        :param color: List of RGB color.
+        :param labels: List of document names.
+        :param reduced_data: PCA reduced two dimensional data.
+        :param k_means_index: Cluster result for all files.
+        :return: A list of scatter plot contains points for each cluster.
+        """
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
-
+        # Create scatter plots for points in each cluster.
         return [
             go.Scatter(
                 x=x_value[np.where(group_number == k_means_index)],
@@ -231,9 +238,16 @@ class KMeansModel(BaseModel):
     def _get_voronoi_centroids(color: list,
                                reduced_data: np.ndarray,
                                k_means_index: List[int]):
+        """Plot centroid for each cluster.
+
+        :param color: List of RGB color.
+        :param reduced_data: PCA reduced two dimensional data.
+        :param k_means_index: Cluster result for all files.
+        :return: A list of scatter plot contains centroid for each cluster.
+        """
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
-
+        # Create scatter plots for centroid in each cluster.
         return [
             go.Scatter(
                 x=[np.mean(x_value[np.where(group_number == k_means_index)])],
@@ -271,7 +285,6 @@ class KMeansModel(BaseModel):
         color = cl.scales["10"]["qual"]["Paired"]
 
         # Draw the regions with heat map.
-        # This method could be updated once plotly better support polygons.
         voronoi_regions = self._get_voronoi_background(
             k_means=k_means,
             reduced_data=reduced_data
