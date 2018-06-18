@@ -13,11 +13,24 @@ function runModal (htmlMsg) {
  * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
  */
 function submissionError () {
-  if ($('#num_active_files').val() < 2) {
-    return 'You must have at least 2 active documents to proceed!'
+  const manageUrl = $('#manage-url').data().url
+  const uploadUrl = $('#upload-url').data().url
+  const activeFileNumTooFewErr = `You do not have enough active documents. 
+                                  Please activate at least two documents using 
+                                  the <a href=${manageUrl}>Manage</a> tool or 
+                                  <a href=${uploadUrl}>Upload</a> a new document.`
+  if ($('#num-active-files').data().number < 2) {
+    return activeFileNumTooFewErr
   } else {
     return null
   }
+}
+
+function checkAllowClassComparison () {
+  const enableClassComparison = $('#num-active-classes').data().number < 2
+  $('#classToPara').attr('disabled', enableClassComparison)
+  $('#classToClass').attr('disabled', enableClassComparison)
+
 }
 
 /**
@@ -47,18 +60,16 @@ function sendAjaxRequest (url, form) {
   })
 }
 
-
-function format(result) {
+function format (result) {
   return `<div class="topword-result col-lg-6 col-md-6">
               <fieldset class="row col-lg-12 col-md-12">
-                  <legend style="font-size: 16px">${result["header"]}</legend>
+                  <legend style="font-size: 16px">${result['header']}</legend>
               </fieldset>
               <div class="row col-lg-12 col-md-12">
-                  ${result["result"]}
+                  ${result['result']}
               </div>
           </div>`
 }
-
 
 /**
  * display the result of the top words on web page
@@ -96,13 +107,13 @@ function generateTopWordResult () {
 
 }
 
-
 $(function () {
-  // Hide unnecessary div for DTM
+  // Hide unnecessary div for DTM.
   $('#normalize-options').css({'visibility': 'hidden'})
-  // set the normalize option to raw count
+  // set the normalize option to raw count.
   $('#normalizeTypeRaw').attr('checked', true)
 
+  checkAllowClassComparison()
   /**
    * The event handler for generate similarity clicked
    */
