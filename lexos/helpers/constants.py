@@ -166,17 +166,6 @@ KMEANINPUT = (
     'tolerance'
 )
 
-# for sklearn.kmeans function
-# N_INIT: Number of time the k_means algorithm will be run with different
-# centroid seeds.
-N_INIT = 300
-# MAX_ITER: Maximum number of iterations of the k-means algorithm for a single
-# run.
-MAX_ITER = 300
-# TOLERANCE: Relative tolerance with regards to inertia to declare
-# convergence.
-TOLERANCE = 1e-4
-
 # for similarity query
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)

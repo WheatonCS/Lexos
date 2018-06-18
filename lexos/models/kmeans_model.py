@@ -19,6 +19,17 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
 
+# Alias for typed tuple to increase readability.
+PlotlyHTMLPlot = str
+HTMLTable = str
+
+
+class KMeansResult(NamedTuple):
+    """A typed tuple to hold processed k-means results."""
+
+    plot: PlotlyHTMLPlot
+    table: HTMLTable
+
 
 class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
@@ -33,13 +44,6 @@ class KMeansUnprocessedResult(NamedTuple):
 
     plot: go.Figure
     table: pd.DataFrame
-
-
-class KMeansResult(NamedTuple):
-    """A typed tuple to hold processed k-means results."""
-
-    plot: str
-    table: str
 
 
 class KMeansModel(BaseModel):
@@ -119,18 +123,12 @@ class KMeansModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #",
-                                             "Document",
-                                             "X-Coordinate",
-                                             "Y-Coordinate"])
-
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = [index + 1 for index in k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = reduced_data[:, 0]
-        result_table["Y-Coordinate"] = reduced_data[:, 1]
-
-        return result_table
+        return pd.DataFrame(data={
+            "Cluster #": [index + 1 for index in k_means_index],
+            "Document": labels,
+            "X-Coordinate": reduced_data[:, 0],
+            "Y-Coordinate": reduced_data[:, 1]
+        })
 
     def _get_3d_frame(self, k_means_index: List[int]) -> pd.DataFrame:
         """Generate 3 dimensional table result for K-Means analysis.
@@ -147,20 +145,127 @@ class KMeansModel(BaseModel):
                   for file_id in self._doc_term_matrix.index.values]
 
         # Initialize the table with proper headers.
-        result_table = pd.DataFrame(columns=["Cluster #",
-                                             "Document",
-                                             "X-Coordinate",
-                                             "Y-Coordinate",
-                                             "Z-Coordinate"])
+        return pd.DataFrame(data={
+            "Cluster #": [index + 1 for index in k_means_index],
+            "Document": labels,
+            "X-Coordinate": reduced_data[:, 0],
+            "Y-Coordinate": reduced_data[:, 1],
+            "Z-Coordinate": reduced_data[:, 2]
+        })
 
-        # Fill the pandas data frame.
-        result_table["Cluster #"] = [index + 1 for index in k_means_index]
-        result_table["Document"] = labels
-        result_table["X-Coordinate"] = reduced_data[:, 0]
-        result_table["Y-Coordinate"] = reduced_data[:, 1]
-        result_table["Z-Coordinate"] = reduced_data[:, 2]
+    @staticmethod
+    def _get_voronoi_background(k_means: KMeans,
+                                reduced_data: np.ndarray) -> go.Heatmap:
+        """Plot polygons around each cluster.
 
-        return result_table
+        The function first finds the decision boundary of the entire graph.
+        Then it calculates boundaries for each polygon around the clusters.
+        :param k_means: The fitted KMeans object.
+        :param reduced_data: PCA reduced two dimensional data.
+        :return: A plotly heat map object that contains all polygons.
+        """
+        # Find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
+        # Find min, max for x and then calculate bounds and step.
+        x_min, x_max = x_value.min(), x_value.max()
+        x_low_bound = x_min - (x_max - x_min) / 5
+        x_up_bound = x_max + (x_max - x_min) / 5
+        # Increase 200 will make lines smoother.
+        x_step = (x_up_bound - x_low_bound) / 200
+
+        # Find min, max for y and then calculate bounds and step.
+        y_min, y_max = y_value.min(), y_value.max()
+        y_low_bound = y_min - (y_max - y_min) / 5
+        y_up_bound = y_max + (y_max - y_min) / 5
+        y_step = (y_up_bound - y_low_bound) / 200
+
+        # Find x, y mesh grids, decrease the step to make lines smoother.
+        x_mesh_grid, y_mesh_grid = \
+            np.meshgrid(np.arange(x_low_bound, x_up_bound, x_step),
+                        np.arange(y_low_bound, y_up_bound, y_step))
+
+        # Find K Means predicted z values.
+        z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
+                                        y_mesh_grid.ravel()])
+
+        # Reshape Z value based on shape of x mesh grid.
+        z_value = z_value.reshape(x_mesh_grid.shape)
+
+        # Draw the regions with heat map.
+        # TODO: This could be updated when plotly better support polygons.
+        return go.Heatmap(x=x_mesh_grid[0][:len(z_value)],
+                          y=x_mesh_grid[0][:len(z_value)],
+                          z=z_value,
+                          hoverinfo="skip",
+                          showscale=False,
+                          colorscale='YlGnBu')
+
+    @staticmethod
+    def _get_voronoi_points(color: list,
+                            labels: np.ndarray,
+                            reduced_data: np.ndarray,
+                            k_means_index: List[int]) -> List[go.Scatter]:
+        """Plot points for each cluster.
+
+        :param color: List of RGB color.
+        :param labels: List of document names.
+        :param reduced_data: PCA reduced two dimensional data.
+        :param k_means_index: Cluster result for all files.
+        :return: A list of scatter plot contains points for each cluster.
+        """
+        # Find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+        # Create scatter plots for points in each cluster.
+        return [
+            go.Scatter(
+                x=x_value[np.where(group_number == k_means_index)],
+                y=y_value[np.where(group_number == k_means_index)],
+                text=labels[np.where(group_number == k_means_index)],
+                mode="markers",
+                name=f"Cluster {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=12,
+                    color=color[group_number],
+                    line=dict(width=1)
+                )
+            )
+            for group_number in np.unique(k_means_index)
+        ]
+
+    @staticmethod
+    def _get_voronoi_centroids(color: list,
+                               reduced_data: np.ndarray,
+                               k_means_index: List[int]):
+        """Plot centroid for each cluster.
+
+        :param color: List of RGB color.
+        :param reduced_data: PCA reduced two dimensional data.
+        :param k_means_index: Cluster result for all files.
+        :return: A list of scatter plot contains centroid for each cluster.
+        """
+        # Find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+        # Create scatter plots for centroid in each cluster.
+        return [
+            go.Scatter(
+                x=[np.mean(x_value[np.where(group_number == k_means_index)])],
+                y=[np.mean(y_value[np.where(group_number == k_means_index)])],
+                mode="markers",
+                name=f"Centroid {group_number + 1}",
+                text=f"Centroid {group_number + 1}",
+                hoverinfo="text",
+                marker=dict(
+                    size=14,
+                    line=dict(width=1),
+                    color=color[group_number],
+                    symbol="cross",
+                    opacity=0.8
+                )
+            )
+            for group_number in np.unique(k_means_index)
+        ]
 
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
@@ -172,100 +277,44 @@ class KMeansModel(BaseModel):
         reduced_data = self._get_reduced_data()
         k_means_index = k_means.fit_predict(reduced_data)
 
-        # This is important, such that plot and table results are consistent.
-        sorted_k_means_unique_index = sorted(set(k_means_index))
-
         # Get file names.
         labels = np.array([self._id_temp_label_map[file_id]
                            for file_id in self._doc_term_matrix.index.values])
 
-        # Get a list of lists of file names based on the cluster result.
-        cluster_labels = [labels[np.where(k_means_index == index)]
-                          for index in sorted_k_means_unique_index]
-
-        # Get a list of lists of file coordinates based on the cluster result.
-        cluster_values = [reduced_data[np.where(k_means_index == index)]
-                          for index in sorted_k_means_unique_index]
-
-        # Get a list of centroid results based on the cluster result.
-        centroid_values = [np.mean(cluster, axis=0, dtype="float_")
-                           for cluster in cluster_values]
-
-        # Find the decision boundary of the graph.
-        x_min = reduced_data[:, 0].min() - 0.5
-        x_max = reduced_data[:, 0].max() + 0.5
-        y_min = reduced_data[:, 1].min() - 0.5
-        y_max = reduced_data[:, 1].max() + 0.5
-
-        # Find x, y mesh grids, decrease the step to make lines smoother.
-        x_mesh_grid, y_mesh_grid = np.meshgrid(np.arange(x_min, x_max, 0.005),
-                                               np.arange(y_min, y_max, 0.005))
-
-        # Find K Means predicted z values.
-        z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
-                                        y_mesh_grid.ravel()])
-
-        # Reshape Z value based on shape of x mesh grid.
-        z_value = z_value.reshape(x_mesh_grid.shape)
-
-        # Draw the regions with heat map.
-        # This method could be updated once plotly better support polygons.
-        voronoi_regions = [go.Heatmap(x=x_mesh_grid[0][:len(z_value)],
-                                      y=x_mesh_grid[0][:len(z_value)],
-                                      z=z_value,
-                                      hoverinfo="skip",
-                                      showscale=False,
-                                      colorscale='YlGnBu')]
-
         # Pick a color for following scatter plots.
         color = cl.scales["10"]["qual"]["Paired"]
 
+        # Draw the regions with heat map.
+        voronoi_regions = self._get_voronoi_background(
+            k_means=k_means,
+            reduced_data=reduced_data
+        )
+
         # Plot sets of points based on the cluster they are in.
-        points_data = [
-            go.Scatter(
-                x=cluster_value[:, 0],
-                y=cluster_value[:, 1],
-                text=cluster_labels[index],
-                mode="markers",
-                name=f"Cluster {index + 1}",
-                hoverinfo="text",
-                marker=dict(
-                    size=12,
-                    color=color[index],
-                    line=dict(width=1)
-                )
-            )
-            for index, cluster_value in enumerate(cluster_values)
-        ]
+        points_data = self._get_voronoi_points(
+            color=color,
+            labels=labels,
+            reduced_data=reduced_data,
+            k_means_index=k_means_index
+        )
 
         # Plot centroids based on the cluster they are in.
-        centroids_data = [
-            go.Scatter(
-                x=[centroid_value[0]],
-                y=[centroid_value[1]],
-                mode="markers",
-                name=f"Centroid {index + 1}",
-                text=f"Centroid {index + 1}",
-                hoverinfo="text",
-                marker=dict(
-                    size=14,
-                    line=dict(width=1),
-                    color=color[index],
-                    symbol="cross",
-                    opacity=0.8
-                )
-            )
-            for index, centroid_value in enumerate(centroid_values)
-        ]
+        centroids_data = self._get_voronoi_centroids(
+            color=color,
+            reduced_data=reduced_data,
+            k_means_index=k_means_index
+        )
 
         # Set the layout of the plot.
-        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
-                           yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest")
+        layout = go.Layout(
+            title="K-Means Voronoi Result",
+            xaxis=go.XAxis(title='x-axis', showline=False),
+            yaxis=go.YAxis(title='y-axis', showline=False),
+            hovermode="closest")
 
-        # Pack data and layout.
         # noinspection PyTypeChecker
-        data = voronoi_regions + centroids_data + points_data
+        # Pack all data together in a list.
+        data = [voronoi_regions] + centroids_data + points_data
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
@@ -287,8 +336,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = np.array([self._id_temp_label_map[file_id]
+                           for file_id in self._doc_term_matrix.index.values])
 
         # Separate x, y coordinates from the reduced data set.
         x_value = reduced_data[:, 0]
@@ -297,15 +346,9 @@ class KMeansModel(BaseModel):
         # Create plot for each cluster so the color will differ among clusters.
         data = [
             go.Scatter(
-                x=[x_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                y=[y_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                text=[labels[index]
-                      for index, group_index in enumerate(k_means_index)
-                      if group_index == group_number],
+                x=x_value[np.where(group_number == k_means_index)],
+                y=y_value[np.where(group_number == k_means_index)],
+                text=labels[np.where(group_number == k_means_index)],
                 mode="markers",
                 name=f"Cluster {group_number + 1}",
                 hoverinfo="text",
@@ -314,13 +357,15 @@ class KMeansModel(BaseModel):
                     line=dict(width=1)
                 )
             )
-            for group_number in set(k_means_index)
+            for group_number in np.unique(k_means_index)
         ]
 
         # Set the layout of the plot.
-        layout = go.Layout(xaxis=go.XAxis(title='x-axis', showline=False),
-                           yaxis=go.YAxis(title='y-axis', showline=False),
-                           hovermode="closest")
+        layout = go.Layout(
+            title="K-Means Two Dimensional Scatter Plot Result",
+            xaxis=go.XAxis(title='x-axis', showline=False),
+            yaxis=go.YAxis(title='y-axis', showline=False),
+            hovermode="closest")
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
@@ -342,8 +387,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = np.array([self._id_temp_label_map[file_id]
+                           for file_id in self._doc_term_matrix.index.values])
 
         # Get x, y, z coordinates.
         x_value = reduced_data[:, 0]
@@ -353,18 +398,10 @@ class KMeansModel(BaseModel):
         # Create plot for each cluster so the color will differ among clusters.
         data = [
             go.Scatter3d(
-                x=[x_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                y=[y_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                z=[z_value[index]
-                   for index, group_index in enumerate(k_means_index)
-                   if group_index == group_number],
-                text=[labels[index]
-                      for index, group_index in enumerate(k_means_index)
-                      if group_index == group_number],
+                x=x_value[np.where(group_number == k_means_index)],
+                y=y_value[np.where(group_number == k_means_index)],
+                z=z_value[np.where(group_number == k_means_index)],
+                text=labels[np.where(group_number == k_means_index)],
                 mode="markers",
                 name=f"Cluster {group_number + 1}",
                 hoverinfo="text",
@@ -373,19 +410,22 @@ class KMeansModel(BaseModel):
                     line=dict(width=1)
                 )
             )
-            for group_number in set(k_means_index)
+            for group_number in np.unique(k_means_index)
         ]
 
-        # Set the layout of the plot, mainly set the background of the plot.
-        layout = go.Layout(height=600,
-                           scene=dict(
-                               xaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"),
-                               yaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"),
-                               zaxis=dict(showbackground=True,
-                                          backgroundcolor="rgb(230,230,230)"))
-                           )
+        # Set the layout of the plot, mainly set the background color to grey.
+        layout = go.Layout(
+            title="K-Means Three Dimensional Scatter Plot Result",
+            height=600,
+            scene=dict(
+                xaxis=dict(showbackground=True,
+                           backgroundcolor="rgb(230,230,230)"),
+                yaxis=dict(showbackground=True,
+                           backgroundcolor="rgb(230,230,230)"),
+                zaxis=dict(showbackground=True,
+                           backgroundcolor="rgb(230,230,230)")
+            )
+        )
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result

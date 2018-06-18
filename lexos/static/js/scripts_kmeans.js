@@ -49,10 +49,10 @@ function sendAjaxRequest (url, form) {
 
 /**
  * Return the desired data table configuration.
- * @returns {{paging: boolean, scrollY: number, scrollCollapse: boolean, dom: string, buttons: string[], columnDefs: *[]}}
+ * @returns {{paging: boolean, scrollY: number, scrollCollapse: boolean, dom: string, buttons: string[], columnDefs: *[]}} data table configuration.
  */
 function getDataTableConfiguration () {
-  const hide_columns =
+  const hideColumns =
     $('#vizMethod').val() === '3DScatter' ? [2, 3, 4] : [2, 3]
 
   return {
@@ -75,7 +75,7 @@ function getDataTableConfiguration () {
         render: $.fn.dataTable.render.ellipsis(15, true)
       },
       { // Hide columns which hold the coordinates.
-        targets: hide_columns,
+        targets: hideColumns,
         visible: false,
         searchable: false
       }
