@@ -7,7 +7,6 @@
             src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{ version }}"></script>
     <script type="text/javascript">
       let numLine = {{ numLine|default(0) }};
-      let maxChar = {{ maxChar|default(0) }};
       let maxWord = {{ maxWord|default(0) }};
       let maxLine = {{ maxLine|default(0) }};
       let activeFileIDs = {{ activeFileIDs|default(0) }};
