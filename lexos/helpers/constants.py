@@ -158,13 +158,14 @@ HIERARCHICALINPUT = (
 
 # for kmeans Clustering
 KMEANINPUT = (
-    'nclusters',
-    'max_iter',
+    'viz',
     'init',
     'n_init',
-    'tolerance',
-    'KMeans_metric',
-    'viz')
+    'max_iter',
+    'nclusters',
+    'tolerance'
+)
+
 # for similarity query
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
@@ -253,13 +254,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'degenerated': False}
 
 DEFAULT_KMEAN_OPTIONS = {
-    'nclusters': '',
-    'max_iter': '',
+    'nclusters': '',  # This value has to be decided by number of files.
+    'viz': 'Voronoi',
     'init': 'k-means++',
-    'n_init': '',
-    'tolerance': '',
-    'KMeans_metric': '',
-    'viz': 'Voronoi'}
+    'n_init': 10,
+    'max_iter': 300,
+    'tolerance': 1e-4}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
