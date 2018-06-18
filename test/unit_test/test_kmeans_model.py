@@ -159,8 +159,8 @@ twoD_scatter = twoD_result.plot
 
 class Test2DScatter:
     def test_layout(self):
-        assert twoD_scatter.layout[
-                   "title"] == "K-Means Two Dimensional Scatter Plot Result"
+        assert twoD_scatter.layout["title"] == \
+            "K-Means Two Dimensional Scatter Plot Result"
         assert twoD_scatter.layout["hovermode"] == "closest"
         assert twoD_scatter.layout["xaxis"] == dict(
             {'title': 'x-axis', 'showline': False})
@@ -178,6 +178,7 @@ class Test2DScatter:
         assert twoD_scatter.data[1]["type"] == "scatter"
         assert round(twoD_scatter.data[1]["x"][0], 4) in [738.6971, -128.5943]
         assert round(twoD_scatter.data[1]["y"][0], 4) in [411.5624, -115.1177]
+
 
 # ------------------------- Test 2D table result -------------------------
 
@@ -238,6 +239,7 @@ class Test2DProcessed:
             table_twoD["Y-Coordinate"]
         )
 
+
 # -----------------------------------------------------------------------------
 # ------------------------- 3D scatter test suite -----------------------------
 
@@ -279,8 +281,8 @@ threeD_scatter = threeD_result.plot
 
 class Test3DScatter:
     def test_layout(self):
-        assert threeD_scatter.layout[
-                   "title"] == "K-Means Three Dimensional Scatter Plot Result"
+        assert threeD_scatter.layout["title"] == \
+            "K-Means Three Dimensional Scatter Plot Result"
         assert threeD_scatter.layout["height"] == 600
 
     def test_scatter(self):
@@ -300,6 +302,7 @@ class Test3DScatter:
         assert round(threeD_scatter.data[1]["y"][0], 4) in [411.5624,
                                                             -115.1177]
         assert round(threeD_scatter.data[1]["z"][0], 4) in [-2.3939, -94.6634]
+
 
 # -----------------------------------------------------------------------------
 # ------------------------- Test 3D table result -------------------------
@@ -373,6 +376,7 @@ class Test3DProcessed:
             pd.read_html(test_threeD.get_result().table)[0]["Z-Coordinate"],
             table_threeD["Z-Coordinate"]
         )
+
 
 # -----------------------------------------------------------------------------
 # ------------------------- Special test suite --------------------------------
