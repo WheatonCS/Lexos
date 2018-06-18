@@ -162,22 +162,81 @@ class Test2DScatter:
         assert twoD_scatter.layout[
                    "title"] == "K-Means Two Dimensional Scatter Plot Result"
         assert twoD_scatter.layout["hovermode"] == "closest"
+        assert twoD_scatter.layout["xaxis"] == dict(
+            {'title': 'x-axis', 'showline': False})
+        assert twoD_scatter.layout['yaxis'] == dict(
+            {'title': 'y-axis', 'showline': False})
 
     def test_scatter(self):
         assert twoD_scatter.data[0]["type"] == "scatter"
+        assert round(twoD_scatter.data[0]["x"][0], 4) in [738.6971, -128.5943]
+        assert round(twoD_scatter.data[0]["y"][0], 4) in [411.5624, -115.1177]
         assert twoD_scatter.data[0]["hoverinfo"] == "text"
         assert twoD_scatter.data[0]["mode"] == "markers"
         assert twoD_scatter.data[0]["name"] == "Cluster 1"
 
         assert twoD_scatter.data[1]["type"] == "scatter"
-        assert twoD_scatter.data[1]["text"] == ['F3.txt']
-        assert round(twoD_scatter.data[1]["x"][0], 4) in [738.6971, -246.2324]
-        assert round(twoD_scatter.data[1]["y"][0], 4) in [38.3726, -115.1177]
+        assert round(twoD_scatter.data[1]["x"][0], 4) in [738.6971, -128.5943]
+        assert round(twoD_scatter.data[1]["y"][0], 4) in [411.5624, -115.1177]
 
 print("DONE")
 # -----------------------------------------------------------------------------
+# ------------------------- 3D scatter test suite -----------------------------
+dtm_threeD = pd.DataFrame(
+    data=np.array([(100, 100, 100, 100, 100, 200, 900, 100),
+                   (100, 200, 200, 100, 300, 100, 600, 100),
+                   (10, 300, 400, 100, 200, 400, 700, 1000),
+                   (100, 400, 100, 100, 100, 100, 100, 100)]),
+    index=np.array([0, 1, 2, 3]),
+    columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H"]))
+# Create test id temp label map.
+id_temp_label_map_threeD = \
+    {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt"}
+# Create test front end option for 3D.
+front_end_option_threeD = KMeansOption(
+    viz=KMeansViz.three_d,
+    n_init=10,
+    k_value=2,
+    max_iter=100,
+    tolerance=1e-4,
+    init_method=KMeansInit.k_means
+)
+# Pack all test components.
+test_option_threeD = KMeansTestOptions(
+    doc_term_matrix=dtm_twoD,
+    front_end_option=front_end_option_threeD,
+    id_temp_label_map=id_temp_label_map_threeD
+)
+# Create test Model and get test result.
+test_threeD = KMeansModel(test_options=test_option_threeD)
+# noinspection PyProtectedMember
+threeD_result = test_threeD._get_3d_scatter_result()
 
 # ------------------------- 3D scatter test suite -----------------------------
+# Get plot result.
+threeD_scatter = threeD_result.plot
+
+
+class Test3DScatter:
+    def test_layout(self):
+        assert threeD_scatter.layout[
+                   "title"] == "K-Means Three Dimensional Scatter Plot Result"
+        assert threeD_scatter.layout["height"] == 600
+
+    def test_scatter(self):
+        assert threeD_scatter.data[0]["type"] == "scatter3d"
+        assert round(threeD_scatter.data[0]["x"][0], 4) in [738.6971, -128.5943]
+        assert round(threeD_scatter.data[0]["y"][0], 4) in [411.5624, -115.1177]
+        assert round(threeD_scatter.data[0]["z"][0], 4) in [-2.3939, -94.6634]
+        assert threeD_scatter.data[0]["hoverinfo"] == "text"
+        assert threeD_scatter.data[0]["mode"] == "markers"
+        assert threeD_scatter.data[0]["name"] == "Cluster 1"
+
+        assert threeD_scatter.data[1]["type"] == "scatter3d"
+        assert round(threeD_scatter.data[1]["x"][0], 4) in [738.6971, -128.5943]
+        assert round(threeD_scatter.data[1]["y"][0], 4) in [411.5624, -115.1177]
+        assert round(threeD_scatter.data[1]["z"][0], 4) in [-2.3939, -94.6634]
+
 # -----------------------------------------------------------------------------
 
 # ------------------------- Special test suite --------------------------------
