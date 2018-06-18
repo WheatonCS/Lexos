@@ -7,7 +7,6 @@
             src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{ version }}"></script>
     <script type="text/javascript">
       let numChar = {{ numChar|default(0) }};
-      let numWord = {{ numWord|default(0) }};
       let numLine = {{ numLine|default(0) }};
       let maxChar = {{ maxChar|default(0) }};
       let maxWord = {{ maxWord|default(0) }};
@@ -21,6 +20,7 @@
     </script>
     <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
     <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
+    <meta id="num-word" data-numWord="{{ numWord|default(0) }}">
 {% endblock %}
 
 {% block title %}Cutter{% endblock %}
