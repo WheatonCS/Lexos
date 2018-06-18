@@ -4,14 +4,15 @@
 {% block head %}
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
+    <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
+    <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
+    <meta id="num-active-files" data-number="{{ labels|len }}">
+    <meta id="num-active-classes" data-number="{{ classDivisionMap.shape[0] }}">
 {% endblock %}
 
 {% block title %}Topwords{% endblock %}
 
 {% block options %}
-    <input type="hidden" id="num_active_files" value="{{ labels|len }}"/>
-    <input type="hidden" id="num_active_classes"
-           value="{{ classDivisionMap.shape[0] }}">
     <div class="row col-lg-12 col-md-12">
         <fieldset>
             <legend>
@@ -79,9 +80,9 @@
             <legend>
                 Class Divisions
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
-               data-trigger="hover" data-html="true" data-toggle="tooltip"
-               data-placement="right" data-container="body"
-               title="This indicates assigned classes and the documents contained
+                   data-trigger="hover" data-html="true" data-toggle="tooltip"
+                   data-placement="right" data-container="body"
+                   title="This indicates assigned classes and the documents contained
                       in each class. Please assign at least two classes to enable
                       comparisons between documents to classes and comparison
                       between classes."></i>
