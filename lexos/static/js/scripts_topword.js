@@ -1,7 +1,7 @@
 /**
  * the function to run the error modal
  * @param {string} htmlMsg - the message to display, you can put html in it
- * @returns {void}
+ * @returns {void}.
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -26,6 +26,10 @@ function submissionError () {
   }
 }
 
+/**
+ * Check if allow comparison among classes or classes to corpus.
+ * @returns {void}.
+ */
 function checkAllowClassComparison () {
   const enableClassComparison = $('#num-active-classes').data().number < 2
   $('#classToPara').attr('disabled', enableClassComparison)
@@ -60,10 +64,15 @@ function sendAjaxRequest (url, form) {
   })
 }
 
+/**
+ * Format json result into a more readable HTML format.
+ * @param {object.<string, string>} result: contains result title and contents.
+ * @returns {string}: A HTML formatted DIV contains result title and contents.
+ */
 function format (result) {
   return `<div class="topword-result col-lg-6 col-md-6">
               <fieldset class="row col-lg-12 col-md-12">
-                  <legend style="font-size: 16px">${result['header']}</legend>
+                  <legend style="font-size: 16px">${result['title']}</legend>
               </fieldset>
               <div class="row col-lg-12 col-md-12">
                   ${result['result']}
@@ -112,14 +121,13 @@ $(function () {
   $('#normalize-options').css({'visibility': 'hidden'})
   // set the normalize option to raw count.
   $('#normalizeTypeRaw').attr('checked', true)
-
+  // Check if comparison among classes should be enabled.
   checkAllowClassComparison()
   /**
    * The event handler for generate similarity clicked
    */
   $('#get-topwords').click(function () {
     const error = submissionError() // the error happens during submission
-
     if (error === null) { // if there is no error
       generateTopWordResult()
     } else {

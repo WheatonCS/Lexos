@@ -390,7 +390,7 @@ class TopwordModel(BaseModel):
                 classes="result-table table table-striped table-bordered"
                         " header-fixed")
 
-        readable_result = [{"header": result.name,
+        readable_result = [{"title": result.name,
                             "result": helper_series_to_table(series=result)}
                            for result in topword_result.results]
 
