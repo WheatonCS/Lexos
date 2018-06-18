@@ -129,7 +129,7 @@ class RollingWindowsReceiver(BaseReceiver):
             window_unit = WindowUnitType.letter
         elif self._front_end_data['windowtype'] == 'word':
             window_unit = WindowUnitType.word
-        elif self._front_end_data['windowtype'] == 'lines':
+        elif self._front_end_data['windowtype'] == 'line':
             window_unit = WindowUnitType.line
         else:
             raise ValueError("invalid window unit from front end")
