@@ -57,7 +57,7 @@ class TestVoronoiTable:
         )
 
     def test_cluster(self):
-        assert set(table["Cluster #"]) == {1, 2}
+        assert np.unique(table["Cluster #"]) == {1, 2}
         assert (table["Cluster #"] == 1).sum() in [1, 3]
         assert (table["Cluster #"] == 2).sum() in [1, 3]
 

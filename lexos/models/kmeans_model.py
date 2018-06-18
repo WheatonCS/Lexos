@@ -153,6 +153,54 @@ class KMeansModel(BaseModel):
             "Z-Coordinate": reduced_data[:, 2]
         })
 
+    @staticmethod
+    def _get_voronoi_background(k_means: KMeans,
+                                reduced_data: np.ndarray) -> go.Heatmap:
+        """Plot polygons around each cluster.
+
+        The function first finds the decision boundary of the entire graph.
+        Then it calculates boundaries for each polygon around the clusters.
+        :param k_means: The fitted KMeans object.
+        :param reduced_data: PCA reduced two dimensional data.
+        :return: A plotly heat map object that contains all polygons.
+        """
+        # First find list of x, y coordinates.
+        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
+        # Find min, max for x and then calculate bounds and step.
+        x_min, x_max = x_value.min(), x_value.max()
+        x_low_bound = x_min - (x_max - x_min) / 5
+        x_up_bound = x_max + (x_max - x_min) / 5
+        # Increase 200 will make lines smoother.
+        x_step = (x_up_bound - x_low_bound) / 200
+
+        # Find min, max for y and then calculate bounds and step.
+        y_min, y_max = y_value.min(), y_value.max()
+        y_low_bound = y_min - (y_max - y_min) / 5
+        y_up_bound = y_max + (y_max - y_min) / 5
+        y_step = (y_up_bound - y_low_bound) / 200
+
+        # Find x, y mesh grids, decrease the step to make lines smoother.
+        x_mesh_grid, y_mesh_grid = \
+            np.meshgrid(np.arange(x_low_bound, x_up_bound, x_step),
+                        np.arange(y_low_bound, y_up_bound, y_step))
+
+        # Find K Means predicted z values.
+        z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
+                                        y_mesh_grid.ravel()])
+
+        # Reshape Z value based on shape of x mesh grid.
+        z_value = z_value.reshape(x_mesh_grid.shape)
+
+        # Draw the regions with heat map.
+        # TODO: This could be updated when plotly better support polygons.
+        return go.Heatmap(x=x_mesh_grid[0][:len(z_value)],
+                          y=x_mesh_grid[0][:len(z_value)],
+                          z=z_value,
+                          hoverinfo="skip",
+                          showscale=False,
+                          colorscale='YlGnBu')
+
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
 
@@ -182,44 +230,10 @@ class KMeansModel(BaseModel):
         centroid_values = [np.mean(cluster, axis=0, dtype="float_")
                            for cluster in cluster_values]
 
-        # Find the decision boundary of the graph.
-        # First find list of x, y coordinates.
-        x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
-
-        # Find min, max for x and then calculate bounds and step.
-        x_min, x_max = x_value.min(), x_value.max()
-        x_low_bound = x_min - (x_max - x_min) / 5
-        x_up_bound = x_max + (x_max - x_min) / 5
-        # Increase 200 will make lines smoother.
-        x_step = (x_up_bound - x_low_bound) / 200
-
-        # Find min, max for y and then calculate bounds and step.
-        y_min, y_max = y_value.min(), y_value.max()
-        y_low_bound = y_min - (y_max - y_min) / 5
-        y_up_bound = y_max + (y_max - y_min) / 5
-        # Increase 200 will make lines smoother.
-        y_step = (y_up_bound - y_low_bound) / 200
-
-        # Find x, y mesh grids, decrease the step to make lines smoother.
-        x_mesh_grid, y_mesh_grid = \
-            np.meshgrid(np.arange(x_low_bound, x_up_bound, x_step),
-                        np.arange(y_low_bound, y_up_bound, y_step))
-
-        # Find K Means predicted z values.
-        z_value = k_means.predict(np.c_[x_mesh_grid.ravel(),
-                                        y_mesh_grid.ravel()])
-
-        # Reshape Z value based on shape of x mesh grid.
-        z_value = z_value.reshape(x_mesh_grid.shape)
-
         # Draw the regions with heat map.
         # This method could be updated once plotly better support polygons.
-        voronoi_regions = [go.Heatmap(x=x_mesh_grid[0][:len(z_value)],
-                                      y=x_mesh_grid[0][:len(z_value)],
-                                      z=z_value,
-                                      hoverinfo="skip",
-                                      showscale=False,
-                                      colorscale='YlGnBu')]
+        voronoi_regions = self._get_voronoi_background(
+            k_means=k_means, reduced_data=reduced_data)
 
         # Pick a color for following scatter plots.
         color = cl.scales["10"]["qual"]["Paired"]
@@ -271,7 +285,7 @@ class KMeansModel(BaseModel):
 
         # Pack data and layout.
         # noinspection PyTypeChecker
-        data = voronoi_regions + centroids_data + points_data
+        data = [voronoi_regions] + centroids_data + points_data
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
