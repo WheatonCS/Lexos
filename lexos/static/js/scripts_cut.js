@@ -403,6 +403,8 @@ function process (action) {
   })
 }
 
+$(document).on('click', '#action-buttons', process)
+
 // Handle the Continue button in the warning modal
 $(document).on('click', '#warningContinue', function () {
   $('#needsWarning').val('false')
