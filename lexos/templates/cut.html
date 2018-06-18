@@ -5,18 +5,13 @@
 {% block head %}
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript">
-      // Toggle individual cut options after applying
-      //function toggleIndivCutOptions (id) {
-        //$('#indcutoptswrap_' + id).toggleClass('hidden')
-      //}
-    </script>
     <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
     <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
     <meta id="num-word" data-numWord="{{ numWord|default(0) }}">
     <meta id="num-char" data-numChar="{{ numChar|default(0) }}">
     <meta id="num-line" data-numLine="{{ numLine|default(0) }}">
-    <meta id="active-file-ids" data-activeFileIDs="{{ activeFileIDs|default(0) }}">
+    <meta id="active-file-ids"
+          data-activeFileIDs="{{ activeFileIDs|default(0) }}">
 {% endblock %}
 
 {% block title %}Cutter{% endblock %}
