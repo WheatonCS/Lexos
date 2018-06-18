@@ -4,7 +4,7 @@ import pickle
 import re
 from os import makedirs
 from os.path import join as path_join
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 import numpy as np
 from flask import request
