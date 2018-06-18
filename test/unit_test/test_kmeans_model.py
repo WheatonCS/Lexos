@@ -122,8 +122,59 @@ class TestVoronoiProcessed:
 
 
 # -----------------------------------------------------------------------------
-
 # ------------------------- 2D scatter test suite -----------------------------
+dtm_twoD = pd.DataFrame(
+    data=np.array([(100, 100, 100, 100, 100, 200, 900, 100),
+                   (100, 200, 200, 100, 300, 100, 600, 100),
+                   (10, 300, 400, 100, 200, 400, 700, 1000),
+                   (100, 400, 100, 100, 100, 100, 100, 100)]),
+    index=np.array([0, 1, 2, 3]),
+    columns=np.array(["A", "B", "C", "D", "E", "F", "G", "H"]))
+# Create test id temp label map.
+id_temp_label_map_twoD = \
+    {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt"}
+# Create test front end option for 2D.
+front_end_option_twoD = KMeansOption(
+    viz=KMeansViz.two_d,
+    n_init=10,
+    k_value=2,
+    max_iter=100,
+    tolerance=1e-4,
+    init_method=KMeansInit.k_means
+)
+# Pack all test components.
+test_option_twoD = KMeansTestOptions(
+    doc_term_matrix=dtm_twoD,
+    front_end_option=front_end_option_twoD,
+    id_temp_label_map=id_temp_label_map_twoD
+)
+# Create test Model and get test result.
+test_twoD = KMeansModel(test_options=test_option_twoD)
+# noinspection PyProtectedMember
+twoD_result = test_twoD._get_2d_scatter_result()
+# ------------------------- Test 2D scatter result --------------------------
+# Get plot result.
+twoD_scatter = twoD_result.plot
+
+
+class Test2DScatter:
+    def test_layout(self):
+        assert twoD_scatter.layout[
+                   "title"] == "K-Means Two Dimensional Scatter Plot Result"
+        assert twoD_scatter.layout["hovermode"] == "closest"
+
+    def test_scatter(self):
+        assert twoD_scatter.data[0]["type"] == "scatter"
+        assert twoD_scatter.data[0]["hoverinfo"] == "text"
+        assert twoD_scatter.data[0]["mode"] == "markers"
+        assert twoD_scatter.data[0]["name"] == "Cluster 1"
+
+        assert twoD_scatter.data[1]["type"] == "scatter"
+        assert twoD_scatter.data[1]["text"] == ['F3.txt']
+        assert round(twoD_scatter.data[1]["x"][0], 4) in [738.6971, -246.2324]
+        assert round(twoD_scatter.data[1]["y"][0], 4) in [38.3726, -115.1177]
+
+print("DONE")
 # -----------------------------------------------------------------------------
 
 # ------------------------- 3D scatter test suite -----------------------------
