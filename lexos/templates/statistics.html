@@ -13,12 +13,8 @@
     <!-- Latest compiled and minimized plotly JS -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <!-- Natural language JS -->
-    <script type="text/javascript" charset="utf8"
-            src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
-
     <!-- Lexos Scripts -->
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{ version }}"></script>
 {% endblock %}
 
