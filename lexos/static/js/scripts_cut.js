@@ -209,9 +209,10 @@ function checkForWarnings () {
 
 /**
  * Toggle individual cut options after applying
- * @param id - file id
+ * @param {string} id - file id
+ * @returns {void}
  */
-function toggleIndivCutOptions (id) {
+function toggleIndivCutOptions (id) { // eslint-disable-line no-unused-vars
   $('#indcutoptswrap_' + id).toggleClass('hidden')
 }
 
