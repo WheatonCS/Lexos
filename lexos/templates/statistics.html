@@ -23,6 +23,8 @@
 {% block options %}
     <div class="row">
         <div class="col-md-12">
+            <!-- Hidden input to store active file ids. -->
+            <input type="hidden" id="active_file_ids" name="active_file_ids"/>
             <legend style="width: 420px;">Select Document(s)</legend>
             <!-- Check box for files. -->
             {% if labels|len > 0 %}
