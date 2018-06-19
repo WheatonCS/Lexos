@@ -2,8 +2,11 @@
 
 This function cuts the text into segments based on the number of characters in each segment.
 
-*Test Files:*  1_alpha.txt, 2_numbered.txt, 3_numbered_large.txt
-*Result Files:*  
+*Test Files:*  1_alpha.txt, 2_numbered.txt, 3_numbered_large.txt, 
+4_randomCharacters.txt  
+
+*Result Folders:*  ResultFiles_1_alpha, ResultFiles_2_numbered, 
+ResultFiles_3_numbered_large, ResultFiles_4_randomCharacters
 
 
 ## Test file: 1_alpha.txt
