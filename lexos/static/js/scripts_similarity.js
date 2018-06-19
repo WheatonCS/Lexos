@@ -38,21 +38,6 @@ function jsonifyForm () {
 }
 
 /**
- * send the ajax request
- * @param {string} url: the url to post
- * @param {object.<string, string>} form: the form data packed into an object
- * @returns {jQuery.Ajax}: an jQuery Ajax object
- */
-function sendAjaxRequest (url, form) {
-  return $.ajax({
-    type: 'POST',
-    url: url,
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
-}
-
-/**
  * display the result of the similarity query on web page
  * @returns {void}
  */

@@ -118,3 +118,17 @@ $(function () {
 
   $(window).scroll() // Call a dummy scroll event after everything is loaded.
 })
+
+/**
+ * The function to create the ajax object
+ * @param {object.<string, string>} form the form converted into a json
+ * @returns {jquery.Ajax} - the jquery ajax object (a deferred object)
+ */
+function sendAjaxRequest (url, form) {
+  return $.ajax({
+    type: 'POST',
+    url: url,
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(form)
+  })
+}
