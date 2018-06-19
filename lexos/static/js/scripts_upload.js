@@ -1,12 +1,11 @@
-
-  /**
-   * Alias function
-   * @return {element}
-   * @param {string} id
-   * */
-  function $id (id) {
-    return document.getElementById(id)
-  }
+/**
+ * Alias function
+ * @return {object} element id object
+ * @param {string} id - id of an html element
+ * */
+function $id (id) {
+  return document.getElementById(id)
+}
 
 $(function () {
   /* Message for when you hover on the open folder icon on the top right. */
@@ -20,6 +19,10 @@ $(function () {
   let numberOfFileDone = parseInt($('.fa-folder-open-o')[0].id)
 
   // file selection
+  /**
+   * @return {void}
+   * @param {object} e - event
+   */
   function FileSelectHandler (e) {
     // cancel event and hover styling
     fileDragHover(e)
@@ -102,7 +105,7 @@ $(function () {
 /**
  * Checks if the file type is valid.
  * @return {boolean} bool - true if file type is valid
- * @param filename
+ * @param {string}  filename - name of the file
  */
 function AllowedFileType (filename) {
   const allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos']
@@ -116,6 +119,7 @@ function AllowedFileType (filename) {
 /**
  * File Drag Hover
  * @return {void}
+ * @param {object} e - event
  * */
 function fileDragHover (e) {
   e.stopPropagation()
@@ -150,8 +154,7 @@ function UploadAndParseFile (file, fileSize) {
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
       alert(`Cannot process blank file -- ${file.name}`)
-    }
-    else {
+    } else {
       sendAjaxRequest(file, filename)
         .done(function () {
           let reader = new FileReader()
@@ -170,20 +173,17 @@ function UploadAndParseFile (file, fileSize) {
             if (file.type === '') {
               fileType = 'Lexos Workspace'
               template.find('.file-information').find('.file-type').html(fileType)
-            }
-            else {
+            } else {
               template.find('.file-information').find('.file-type').html(file.type)
               e.target.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')
             }
             let fileSize = file.size
             if (fileSize < 1024) {
               template.find('.file-information').find('.file-size').html(`${file.size} bytes`)
-            }
-            else if (file.size < 1048576) {
+            } else if (file.size < 1048576) {
               const fileSizeInKB = (file.size / 1024).toFixed(1)
               template.find('.file-information').find('.file-size').html(`${fileSizeInKB} KB`)
-            }
-            else {
+            } else {
               const fileSizeInMB = (file.size / 1024 / 1024).toFixed(1)
               template.find('.file-information').find('.file-size').html(`${fileSizeInMB} MB`)
             }
@@ -198,17 +198,16 @@ function UploadAndParseFile (file, fileSize) {
           alert(`${textStatus} : ${errorThrown}`)
         })
     }
-  }
-  else if (!AllowedFileType(file.name)) {
+  } else if (!AllowedFileType(file.name)) {
     alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
-  }
-  else {
-    alert(`Upload for ${filename}  failed.\n\nFile bigger than ${MAX_FILE_SIZE_INT.value}   ${MAX_FILE_SIZE_UNITS.title} B`)
+  } else {
+    alert(`Upload for ${filename}  failed.\n\nFile bigger than
+     ${MAX_FILE_SIZE_INT.value}   ${MAX_FILE_SIZE_UNITS.title} B`)
   }
 }
 
 /**
- * @return {ajax}
+ * @return {ajax} ajax data
  * @param {object} file - file object
  * @param {string} filename - name of the file
  */
