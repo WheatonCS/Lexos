@@ -103,7 +103,7 @@ function checkForErrors () {
  * @returns {void}
  */
 function checkForWarnings () {
-  // load num_variables from metadata
+  // Load num_variables from metadata
   const numWordLoad = $('#num-word').data()
   const numCharLoad = $('#num-char').data()
   const numLineLoad = $('#num-line').data()
