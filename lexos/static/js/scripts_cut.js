@@ -207,6 +207,10 @@ function checkForWarnings () {
   }
 }
 
+/**
+ * Toggle individual cut options after applying
+ * @param id - file id
+ */
 function toggleIndivCutOptions (id) {
   $('#indcutoptswrap_' + id).toggleClass('hidden')
 }
