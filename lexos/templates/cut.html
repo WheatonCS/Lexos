@@ -5,10 +5,6 @@
 {% block head %}
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_cut.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript">
-      // Toggle individual cut options after applying
-
-    </script>
     <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
     <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
     <meta id="num-word" data-numWord="{{ numWord|default(0) }}">
