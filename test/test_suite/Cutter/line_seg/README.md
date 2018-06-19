@@ -6,6 +6,7 @@ In this function the segments are divided based on the number of lines per segme
 *Test Files:* Sentences.txt, dog_cat.txt
 
 *Result Folders:* ResultFiles_Sentences_1, ResultFiles_Sentences_2
+ResultFiles_dog_cat
 
 
 
@@ -47,9 +48,10 @@ Results:
 
 	- Select Lines/Segment
 	- Change the Segment Size to 2
-	- Keep Overlap at 1
-	- Keep Last Segment Size Threshold (%) at 15
+	- change Overlap to 1
+	- Change Last Segment Size Threshold (%) to 15
 
 Results:
-- After the cut you should have 9 segments, all with 2 lines.
+- After the cut you should have 9 segments, all with 2 lines except last one.
+- ResultFiles_dog_cat
 
