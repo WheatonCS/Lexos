@@ -1,169 +1,140 @@
-$(function () {
-  // Show the silhouette score results based whether the results are shown
-  if ($('#kmeansresults').length) {
-    $('#silhouetteResults').show()
+/**
+ * The function to run the error modal.
+ * @param {string} htmlMsg: the message to display.
+ * @returns {void}.
+ */
+function runModal (htmlMsg) {
+  $('#error-modal-message').html(htmlMsg)
+  $('#error-modal').modal()
+}
+
+/**
+ * At least two documents are required to run the K-Means clustering.
+ * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
+ */
+function submissionError () {
+  if ($('#num_active_files').val() < 3) {
+    return 'You must have at least 2 active documents to proceed!'
   } else {
-    $('#silhouetteResults').hide()
+    return null
   }
-  function doAjax(action) {
-    $.ajax({
-      'complete': function (response) {
-        rand = Math.round(Math.random() * 100) + 1
-        $('#plotlyFrame').attr('src', $('#plotlyFrame').attr('src') + '?' + rand)
-        $('#plotlyFrame').hide()
-        // Handle labels separately (eventual solution to the Unicode problem)
-        $.each(response['responseJSON']['labels'], function (index, label) {
-          lb.push(label)
-        })
-        lb = JSON.stringify(lb)
-        var bdiv = response['responseJSON']['bdiv']
-        bdiv = bdiv.replace('"ticktext":', '"tickangle":90,"ticktext":')
-        var re = /"ticktext": \[.+?\]/
-        bdiv = bdiv.replace(re, '"ticktext": ' + lb)
-        $('.PCAImage').html(bdiv)
+}
+
+/**
+ * The function to convert the form into json.
+ * @returns {{string: string}}: the form converted to json.
+ */
+function jsonifyForm () {
+  const form = {}
+  $.each($('form').serializeArray(), function (i, field) {
+    form[field.name] = field.value || ''
+  })
+  return form
+}
+
+/**
+ * Send the ajax request.
+ * @param {string} url: the url to post.
+ * @param {{string: string}} form: the form data packed into an object.
+ * @returns {jQuery.Ajax}: an jQuery Ajax object.
+ */
+function sendAjaxRequest (url, form) {
+  return $.ajax({
+    type: 'POST',
+    url: url,
+    contentType: 'application/json; charset=utf-8',
+    data: JSON.stringify(form)
+  })
+}
+
+/**
+ * Convert HTML table to data table with desired configurations.
+ * @param {string} table: A HTML formatted table.
+ * @returns {void}.
+ */
+function convertToDataTable (table) {
+  const hideColumns =
+    $('#vizMethod').val() === '3DScatter' ? [2, 3, 4] : [2, 3]
+
+  table.DataTable({
+    // Do not paging.
+    paging: false,
+    // Set the Scroll Height.
+    scrollY: 300,
+    // If not enough height, shrink the table height.
+    scrollCollapse: true,
+    // Specify where the button is.
+    dom: `<'row'<'col-sm-12 text-right'f>>
+          <'row'<'col-sm-12 'tr>>
+          <'row k-means-result-download-button'<'col-sm-12'B>>`,
+    // Specify all the download buttons that are displayed on the page.
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5'],
+
+    columnDefs: [
+      { // Truncate long documentation names.
+        targets: 1,
+        render: $.fn.dataTable.render.ellipsis(15, true)
+      },
+      { // Hide columns which hold the coordinates.
+        targets: hideColumns,
+        visible: false,
+        searchable: false
       }
-    }// end ajax
-    )
-  }
-  // Hide unnecessary divs for DTM
-  var newLabelsLocation = $('#normalize-options').parent()
-  var newNormalizeLocation = $('#temp-label-div').parent()
-  var tempNormalize = $('#normalize-options').html()
-  var tempLabels = $('#temp-label-div').html()
-  $('#normalize-options').remove()
-  $('#temp-label-div').remove()
-  newLabels = $('<fieldset class="analyze-advanced-options" id="temp-label-div"></fieldset>').append(tempLabels)
-  newNormalize = $('<fieldset class="analyze-advanced-options" id="normalize-options"></fieldset>').append(tempNormalize)
-  newLabelsLocation.append(newLabels)
-  newNormalizeLocation.append(newNormalize)
+    ]
+  })
+}
 
-  $('#normalize-options').hide()
+/**
+ * Display the K-Means clustering result as a table on web though an Ajax call.
+ * @returns {void}.
+ */
+function generateKMeansResult () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // Convert form into an object map string to string
+  const form = jsonifyForm()
 
-	/* This event is handled in scripts_analyze.js, but for some reason it has to be
-	   repeated here to function. */
+  // Send the ajax request
+  sendAjaxRequest('/KMeansResult', form)
+    .done(
+      function (response) {
+        // Insert the table result.
+        const tableDiv = $('#KMeans-table')
+        tableDiv.html(response['table'])
+        // Change the HTML table to a data table.
+        convertToDataTable(tableDiv.children())
+        // Insert the plot result.
+        $('#KMeans-plot').html(response['plot'])
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        // If fail hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+        console.log(`textStatus: ${textStatus}`)
+        console.log(`errorThrown: ${errorThrown}`)
+        runModal('Error encountered while generating the file statistics.')
+      })
+    .always(
+      function () {
+        // Always hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+      })
+}
 
+$(function () {
+  // Hide the K-Means result div when first get to the page.
+  $('#KMeans-result').css({'display': 'none'})
 
-  // $("#normalize-options").css({"visibility":"hidden"});
+  // The event handler when generate K-Means result is clicked.
+  $('#get-k-means-result').click(function () {
+    // Catch the possible error during submission.
+    const error = submissionError()
 
-  $('#getkmeans').click(function (e) {
-    // Display the processing icon
-    $('#status-analyze').css({ 'visibility': 'visible', 'z-index': '400000' })
-
-    // Get variable values from the DOM
-    var activeFiles = $('#num_active_files').val()
-    var nclusters = $('#nclusters').val()
-    var max_iter = $('#max_iter').val()
-    var n_init = $('#n_init').val()
-    var tol = $('#tolerance').val()
-
-    // Error messages
-    var err1 = 'You do not have enough active documents. Please activate at least two documents using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
-    var err2 = '<p>The number of clusters (K value) must not be larger than the number of active files!</p>'
-    var err3 = '<p>Invalid input. Make sure the input is an integer.</p>'
-    var err4 = '<p>Invalid input. The relative tolerance must be a decimal.</p>'
-
-    // Less than 2 active documents
-    if (activeFiles < 2) {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err1)
-      $('#error-modal').modal()
-    }
-    // K is larger than the number of active documents
-    else if (nclusters > totalFileNumber) {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err2)
-      $('#error-modal').modal()
-    }
-    // Trap invalid inputs: e.g. input is a float instead of an int (for FireFox)
-    else if ((Math.abs(Math.round(nclusters)) != nclusters) || (Math.abs(Math.round(max_iter)) != max_iter)) {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err3)
-      $('#error-modal').modal()
-    } else if ((Math.abs(Math.round(n_init)) != n_init) && n_init != '') {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err3)
-      $('#error-modal').modal()
-    } else if (Math.abs(Math.round(tol)) == tol && tol != '') {
-      e.preventDefault()
-      $('#error-modal .modal-body').html(err4)
-      $('#error-modal').modal()
+    if (error === null) {
+      // If there is no error, get the result.
+      $('#KMeans-result').css({'display': 'block'})
+      generateKMeansResult()
     } else {
-      // $("form").submit();
+      runModal(error)
     }
-    $('#error-modal').on('hidden.bs.modal', function () {
-      $('#status-analyze').fadeOut()
-    })
   })
-
-  function createDictionary() {
-    var ChunkSetDict = new Array()
-
-    for (key = 0; key < KValue; key++) {
-      ChunkSetDict[key] = []
-    }
-
-    for (i = 0; i < tablelabels.length; i++) {
-      ChunkSetDict[dataset[i]].push(tablelabels[i])
-    }
-
-    return ChunkSetDict
-  };// end createDictionary
-
-  function createTable(ChunkSetDict) {
-    if ($('#kmeansresultscheck').text() == 'True') {
-      $('#kmeansresults').removeClass('hidden')
-      $('#kmeansresultscheck').text('')
-
-      // for each different cluster
-      var maxCluster = ChunkSetDict.length
-      var j = 1
-      for (var i = 0; i < maxCluster; i++) {
-        var listOfFilesInThisCluster = ChunkSetDict[i]
-        // make rows
-        for (nextFile = 0; nextFile < listOfFilesInThisCluster.length; nextFile++) {
-          var row = $('<tr id="text' + j + '-toggle"></tr>')
-            .css('backgroundColor', colorChart[i])
-            .css('opacity', 1.0)
-            .attr('class', listOfFilesInThisCluster[nextFile].replace(/\./g, ''))
-            .appendTo('#basicTable tbody')
-          $('<td style="text-align:center;"/>').text(i).appendTo(row)
-          $('<td style="text-align:left;"/>')
-            .text(listOfFilesInThisCluster[nextFile])
-            .appendTo(row)
-          j += 1
-        }// end for nextFile
-      }// end for each row
-    } // end if
-  }// end createTable()
-
-  // The if clause prevents functions from running on initial page load
-  if (dataset.length > 0) {
-    ChunkSetDict = createDictionary()
-    createTable(ChunkSetDict)
-  }
-
-  $('svg circle').tooltip({
-    'container': 'body',
-    'placement': 'right'
-  })
-
-  // Handle table mouseovers for Voronoi points
-  $('#basicTable tbody tr')
-    .mouseenter(function () {
-      $(this).css('opacity', '0.6')
-      id = $(this).attr('class')
-      point = '.P' + id
-      text = '.T' + id
-      $(point).appendTo('#voronoi')
-      $(text).appendTo('#voronoi')
-      $(point).css('fill', 'yellow')
-      $(point).tooltip('show')
-    })
-    .mouseleave(function () {
-      $(this).css('opacity', '1.0')
-      id = $(this).attr('class')
-      point = '.P' + id
-      $(point).css('fill', 'red')
-      $(point).tooltip('hide')
-    })
 })

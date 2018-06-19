@@ -1,3 +1,4 @@
+colorlover
 gensim
 beautifulsoup4
 chardet
