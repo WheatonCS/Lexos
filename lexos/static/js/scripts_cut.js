@@ -263,7 +263,7 @@ function doAjax (action) {
       const fileName = $(this)[1]
       const fileLabel = fileName
       const fileContents = $(this)[3]
-      const indivCutButtons = `<a id="indivcutbuttons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivCutButtons" role="button">Individual Options</a></legend>`
+      const indivCutButtons = `<a id="indivcutbuttons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivcutbuttons" role="button">Individual Options</a></legend>`
       // CSS truncates the document label
       const fieldSet = $(`<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileLabel} ${indivCutButtons}</fieldset>`)
       const indCutOptsWrap = `<div id="indcutoptswrap_${fileID}" class="cuttingoptionswrapper ind hidden">\
