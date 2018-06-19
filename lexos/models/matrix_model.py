@@ -218,11 +218,7 @@ class MatrixModel(BaseModel):
                 use_idf=True,
                 smooth_idf=False,
                 sublinear_tf=False)
-            dtm_after_tf_idf = pd.DataFrame(
-                index=dtm_after_mfw.index,
-                columns=dtm_after_mfw.columns,
-                data=transformer.fit_transform(dtm_after_mfw).toarray()
-            )
+            dtm_after_tf_idf = transformer.fit_transform(dtm_after_mfw)
         else:
             dtm_after_tf_idf = dtm_after_mfw
 
