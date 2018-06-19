@@ -207,8 +207,6 @@ function checkForWarnings () {
   }
 }
 
-let xhr
-
 /**
  * Performs the ajax request.
  * @param {string} action - the action type being requested.
@@ -235,7 +233,7 @@ function doAjax (action) {
     $('#warning-modal-message').html(timeWarning)
     $('#warning-modal').modal()
   }, 10000) // 10 seconds
-  xhr = $.ajax({
+  $.ajax({
     url: '/doCutting',
     type: 'POST',
     processData: false, // important
@@ -416,7 +414,6 @@ $(document).on('click', '#warningContinue', function () {
 $(document).on('click', '#timerCancel', function () {
   $('#needsWarning').val('false')
   $('#hasErrors').val('false')
-  xhr.abort()
   $('#warning-modal-footer').append('<button>Moo</button>')
   $('#warning-modal').modal('hide')
   $('#status-prepare').css('visibility', 'hidden')
