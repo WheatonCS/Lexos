@@ -11,7 +11,7 @@ from werkzeug.datastructures import FileStorage
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFTHAND_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFT_HAND_MESSAGE
 from lexos.helpers.exceptions import LexosException
 
 
@@ -124,7 +124,7 @@ def replacement_handler(
         # Not valid inputs -- ":word" or ":a"
         if replace_from_line == "":
             raise LexosException(
-                REPLACEMENT_NO_LEFTHAND_MESSAGE + replacement_line)
+                REPLACEMENT_NO_LEFT_HAND_MESSAGE + replacement_line)
         # Not valid inputs -- "a:b,c" or "a,b:c,d"
         if ',' in replace_to:
             raise LexosException(
