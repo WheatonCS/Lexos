@@ -1,12 +1,4 @@
-/**
- * The function to run the error modal.
- * @param {string} htmlMsg: the message to display.
- * @returns {void}.
- */
-function runModal (htmlMsg) {
-  $('#error-modal-message').html(htmlMsg)
-  $('#error-modal').modal()
-}
+import * as utility from './utility.js'
 
 /**
  * At least two documents are required to run the K-Means clustering.
@@ -18,33 +10,6 @@ function submissionError () {
   } else {
     return null
   }
-}
-
-/**
- * The function to convert the form into json.
- * @returns {{string: string}}: the form converted to json.
- */
-function jsonifyForm () {
-  const form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
-}
-
-/**
- * Send the ajax request.
- * @param {string} url: the url to post.
- * @param {{string: string}} form: the form data packed into an object.
- * @returns {jQuery.Ajax}: an jQuery Ajax object.
- */
-function sendAjaxRequest (url, form) {
-  return $.ajax({
-    type: 'POST',
-    url: url,
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
 }
 
 /**
@@ -91,10 +56,10 @@ function convertToDataTable (table) {
 function generateKMeansResult () {
   $('#status-analyze').css({'visibility': 'visible'})
   // Convert form into an object map string to string
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
 
   // Send the ajax request
-  sendAjaxRequest('/KMeansResult', form)
+  utility.sendAjaxRequest('/KMeansResult', form)
     .done(
       function (response) {
         // Insert the table result.
@@ -111,7 +76,7 @@ function generateKMeansResult () {
         $('#status-analyze').css({'visibility': 'hidden'})
         console.log(`textStatus: ${textStatus}`)
         console.log(`errorThrown: ${errorThrown}`)
-        runModal('Error encountered while generating the file statistics.')
+        utility.runModal('Error encountered while generating the file statistics.')
       })
     .always(
       function () {
@@ -134,7 +99,7 @@ $(function () {
       $('#KMeans-result').css({'display': 'block'})
       generateKMeansResult()
     } else {
-      runModal(error)
+      utility.runModal(error)
     }
   })
 })
