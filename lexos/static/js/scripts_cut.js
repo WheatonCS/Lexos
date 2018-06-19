@@ -208,6 +208,14 @@ function checkForWarnings () {
 }
 
 /**
+ * Toggle individual cut options after applying
+ * @param {string} id - file ids.
+ */
+function toggleIndivCutOptions (id) {
+  $('#indcutoptswrap_' + id).toggleClass('hidden')
+}
+
+/**
  * Performs the ajax request.
  * @param {string} action - the action type being requested.
  * @returns {void}
