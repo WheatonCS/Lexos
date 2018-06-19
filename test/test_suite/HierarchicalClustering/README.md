@@ -7,7 +7,7 @@ similarity between texts
 Lippard_BelOfPrairieEden.txt, Melville_MobyDick.txt, 
 Poe_FallOfHouseUsher_1839.txt
 
-*Result Files:* 
+*Result Files:* results_defaults.png, results_byCharacters.png
 
 
 
@@ -24,7 +24,7 @@ Poe_FallOfHouseUsher_1839.txt
 	- Change **NO** settings  
 	
 Results:
-- 
+- results_defaults.png
 
 ## Test Tokenize by Characters
 
@@ -40,5 +40,5 @@ Results:
 	- Keep all other settings the same
 	
 Results:
-- After the cut you should have 10 equal length segments
+- results_byCharacters.png
 
