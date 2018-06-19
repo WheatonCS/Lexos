@@ -64,7 +64,7 @@ function generateKMeansResult () {
         $('#status-analyze').css({'visibility': 'hidden'})
         console.log(`textStatus: ${textStatus}`)
         console.log(`errorThrown: ${errorThrown}`)
-        utility.runModal('Error encountered while generating the file statistics.')
+        utility.runModal('Error encountered while generating the K-Means result.')
       })
     .always(
       function () {
