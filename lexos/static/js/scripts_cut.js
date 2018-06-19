@@ -207,10 +207,6 @@ function checkForWarnings () {
   }
 }
 
-/**
- * Toggle individual cut options after applying
- * @param {string} id - file ids.
- */
 function toggleIndivCutOptions (id) {
   $('#indcutoptswrap_' + id).toggleClass('hidden')
 }
@@ -267,11 +263,11 @@ function doAjax (action) {
       const fileName = $(this)[1]
       const fileLabel = fileName
       const fileContents = $(this)[3]
-      const indivCutButtons = `<a id="indivCutButtons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivCutButtons" role="button">Individual Options</a></legend>`
+      const indivCutButtons = `<a id="indivcutbuttons_${fileID}" onclick="toggleIndivCutOptions(${fileID});" class="bttn indivCutButtons" role="button">Individual Options</a></legend>`
       // CSS truncates the document label
-      const fieldSet = $(`<fieldSet class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileLabel} ${indivCutButtons}</fieldSet>`)
-      const indCutOptsWrap = `<div id="indCutOptsWrap_${fileID}" class="cuttingoptionswrapper ind hidden">\
-      <fieldSet class="cuttingoptionsfieldSet">\
+      const fieldSet = $(`<fieldset class="individualpreviewwrapper"><legend class="individualpreviewlegend has-tooltip" style="color:#999; width:90%;margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${fileLabel} ${indivCutButtons}</fieldset>`)
+      const indCutOptsWrap = `<div id="indcutoptswrap_${fileID}" class="cuttingoptionswrapper ind hidden">\
+      <fieldset class="cuttingoptionsfieldset">\
       <legend class="individualcuttingoptionstitle">Individual Cutting Options</legend>\
       <div class="cuttingdiv individcut">\
       <div class="row">\
@@ -340,7 +336,7 @@ function doAjax (action) {
       </span>\
       </div>\
       </div>\
-      </fieldSet>\
+      </fieldset>\
       </div>`
       fieldSet.append(indCutOptsWrap)
       if ($.type(fileContents) === 'string') {
@@ -355,7 +351,7 @@ function doAjax (action) {
       $('#preview-body').append(fieldSet)
       // Hide the individual cutting wrapper if the form doesn't contain values for it
       if (!(`cutType_${fileID}` in formData) && formData[`cutType_${fileID}`] !== '') {
-        $(`#indCutOptsWrap_${fileID}`).addClass('hidden')
+        $(`#indcutoptswrap_${fileID}`).addClass('hidden')
       }
       // Check the cut type boxes
       if (formData['cutTypeInd'] === 'letters') {
@@ -499,7 +495,7 @@ $(function () {
   })
 
   // Toggle individual cut option on load.
-  $('.indivCutButtons').click(function () {
+  $('.indivcutbuttons').click(function () {
     const toggleDiv = $(this).closest('.individualpreviewwrapper').find('.cuttingoptionswrapper')
     toggleDiv.toggleClass('hidden')
   })
