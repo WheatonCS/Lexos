@@ -1,18 +1,6 @@
 import * as utility from './utility.js'
 
 /**
- * At least two documents are required to run the K-Means clustering.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
- */
-function submissionError () {
-  if ($('#num_active_files').val() < 3) {
-    return 'You must have at least 2 active documents to proceed!'
-  } else {
-    return null
-  }
-}
-
-/**
  * Convert HTML table to data table with desired configurations.
  * @param {string} table: A HTML formatted table.
  * @returns {void}.
@@ -92,7 +80,7 @@ $(function () {
   // The event handler when generate K-Means result is clicked.
   $('#get-k-means-result').click(function () {
     // Catch the possible error during submission.
-    const error = submissionError()
+    const error = utility.submissionError(2)
 
     if (error === null) {
       // If there is no error, get the result.
