@@ -1,9 +1,13 @@
- // Alias function
+
   /**
-   * @return {}*/
+   * Alias function
+   * @return {element}
+   * @param {string} id
+   * */
   function $id (id) {
     return document.getElementById(id)
   }
+
 $(function () {
   /* Message for when you hover on the open folder icon on the top right. */
   $('[data-toggle="tooltip"]').tooltip()
