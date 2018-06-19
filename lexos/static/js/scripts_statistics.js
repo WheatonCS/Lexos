@@ -1,18 +1,6 @@
 import * as utility from './utility.js'
 
 /**
- * At least one document is required to run the stats.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
- */
-function submissionError () {
-  if ($('#num_active_files').val() < 1) {
-    return 'You must have at least 1 active documents to proceed!'
-  } else {
-    return null
-  }
-}
-
-/**
  * Format the ajax call response to HTML format string.
  * @param {object} response: a json format string.
  * @return {object}: a json formatted file report.
@@ -203,7 +191,7 @@ $(function () {
     $('#num_active_files').val(checkedFiles.length)
 
     // Get the possible error during the submission.
-    const error = submissionError()
+    const error = utility.submissionError(1)
 
     if (error === null) {
       // Get the file stats table.
