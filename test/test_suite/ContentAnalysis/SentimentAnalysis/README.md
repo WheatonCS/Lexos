@@ -1,6 +1,6 @@
 # Sentiment Analysis
 
-####File to use: .../test_suite/Experiments/LargeFiles/Moby_Dick.txt, negative.txt, and positive.txt
+####Files to use: Moby_Dick.txt, negative.txt, and positive.txt
 
 This is an example that shows how to use content analysis to do sentiment analysis.
 
