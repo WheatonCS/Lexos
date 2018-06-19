@@ -60,7 +60,7 @@ function formatFileReportResponse (response) {
   const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
 
   // Find if anomaly detected by standard error analysis.
-  const noAnomalySe = response['anomaly_se_small'] === [] && response['anomaly_se_large'] === []
+  const noAnomalySe = response['anomaly_se_small'].length === 0 && response['anomaly_se_large'].length === 0
   // Pick appropriate result for standard error analysis.
   const anomalySeResult =
     noAnomalySe ? '<b>No</b> anomaly detected by standard error test.'
@@ -71,7 +71,7 @@ function formatFileReportResponse (response) {
         function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` })
 
   // Find if anomaly detected by standard error analysis.
-  const noAnomalyIqr = response['anomaly_iqr_small'] === [] && response['anomaly_iqr_large'] === []
+  const noAnomalyIqr = response['anomaly_iqr_small'].length === 0 && response['anomaly_iqr_large'].length === 0
   // Pick appropriate result for standard error analysis.
   const anomalyIqrResult =
     noAnomalyIqr ? '<b>No</b> anomaly detected by inter quartile range test.'
