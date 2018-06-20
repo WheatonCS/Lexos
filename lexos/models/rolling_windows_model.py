@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
-from typing import NamedTuple, Optional, List, Iterator, Callable, Union
+from typing import NamedTuple, Optional, List, Iterator, Callable, Union, Dict
 from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
 from lexos.models.base_model import BaseModel
@@ -49,7 +49,7 @@ class RollingWindowsModel(BaseModel):
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
-                self._test_front_end_options is not None:
+            self._test_front_end_options is not None:
             file_id = self._test_front_end_options.passage_file_id
             file_id_content_map = self._test_file_id_content_map
 
@@ -199,8 +199,8 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError(f"unhandled window type: {window_unit}")
 
-    def _find_tokens_average_in_windows(self, windows: Iterator[str]) \
-            -> pd.DataFrame:
+    def _find_tokens_average_in_windows(
+        self, windows: Iterator[str]) -> pd.DataFrame:
         """find the token average in the given windows
 
         a token average is calculated by the number of times the token
@@ -219,8 +219,8 @@ class RollingWindowsModel(BaseModel):
         window_size = self._options.window_options.window_size
 
         def _average_matrix_helper(
-                window_term_count_func: Callable[[str, str], int]) \
-                -> pd.DataFrame:
+            window_term_count_func: Callable[[str, str], int]) \
+            -> pd.DataFrame:
             """The helper to get the average matrix
 
             :param window_term_count_func:
@@ -273,8 +273,8 @@ class RollingWindowsModel(BaseModel):
         denominator_token = self._options.ratio_token_options.denominator_token
 
         def _get_ratio_helper(
-                window: str,
-                window_term_count_func: Callable[[str, str], int]) -> float:
+            window: str,
+            window_term_count_func: Callable[[str, str], int]) -> float:
             """the helper method to find a ratio for a single window
 
             :param window: the window to find ratio in
@@ -343,7 +343,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-            self, windows: Iterator[str]) -> List[Optional[int]]:
+        self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
         """Get a indexes of the mile stone windows
 
         A "mile stone window" is a window where the window that starts with
@@ -354,16 +354,20 @@ class RollingWindowsModel(BaseModel):
 
         # get an empty graph if the milestone is empty
         if self._options.milestone is None:
-            return []
+            return None
 
         # if the milestone string exists
         else:
             # get the mile stone str
-            milestone_str = self._options.milestone
+            list_milestone_str = self._options.milestone
 
-            # get the index fo the mile stone window
-            return [index for index, window in enumerate(windows)
-                    if window.startswith(milestone_str)]
+            return {
+                milestone_str
+                : [index for index, window in enumerate(windows)
+                   if window.startswith(milestone_str)]
+
+                for milestone_str in list_milestone_str
+            }
 
     def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
@@ -421,6 +425,11 @@ class RollingWindowsModel(BaseModel):
 
         :return: a plotly scatter object or a list of plotly scatter objects.
         """
+
+        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
+            windows=self._get_windows()
+        )
+
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
 
@@ -436,5 +445,26 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled count type")
 
-        return plot(result_plot, show_link=False, include_plotlyjs=False,
+        y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
+        y_max = max(y_max_in_each_plot) * 1.1
+
+        layout = go.Layout(
+            shapes=[
+                dict(
+                    type="line",
+                    x0=mile_stone,
+                    x1=mile_stone,
+                    y0=0,
+                    y1=y_max,
+                    line=dict(
+                        color="rgb(50, 171, 96)",
+                        width=3
+                    )
+                )
+                for mile_stone in mile_stones]
+        )
+
+        return plot(go.Figure(data=result_plot, layout=layout),
+                    show_link=False,
+                    include_plotlyjs=False,
                     output_type='div')
