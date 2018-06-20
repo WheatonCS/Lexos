@@ -6,11 +6,11 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Iterator, Callable, Union, Dict
+from lexos.models.base_model import BaseModel
+from lexos.models.matrix_model import FileIDContentMap
+from lexos.models.filemanager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
-from lexos.models.base_model import BaseModel
-from lexos.models.filemanager_model import FileManagerModel
-from lexos.models.matrix_model import FileIDContentMap
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
 
@@ -448,23 +448,23 @@ class RollingWindowsModel(BaseModel):
         y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
         y_max = max(y_max_in_each_plot) * 1.1
 
-        layout = go.Layout(
-            shapes=[
-                dict(
-                    type="line",
-                    x0=mile_stone,
-                    x1=mile_stone,
-                    y0=0,
-                    y1=y_max,
-                    line=dict(
-                        color="rgb(50, 171, 96)",
-                        width=3
-                    )
-                )
-                for mile_stone in mile_stones]
-        )
+        # layout = go.Layout(
+        #     shapes=[
+        #         dict(
+        #             type="line",
+        #             x0=mile_stone,
+        #             x1=mile_stone,
+        #             y0=0,
+        #             y1=y_max,
+        #             line=dict(
+        #                 color="rgb(50, 171, 96)",
+        #                 width=3
+        #             )
+        #         )
+        #         for mile_stone in mile_stones]
+        # )
 
-        return plot(go.Figure(data=result_plot, layout=layout),
+        return plot(go.Figure(data=result_plot),
                     show_link=False,
                     include_plotlyjs=False,
                     output_type='div')
