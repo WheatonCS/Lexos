@@ -93,7 +93,7 @@ function sendScrubbing (action) { // eslint-disable-line no-unused-vars
 /**
  * Function to handle the chevron drop down button rotate animation by toggling
  * the class so the appropriate CSS applies.
- * @param chevContainer - legend containing chevron
+ * @param {string} chevContainer - legend containing chevron
  * @returns {void} - returns nothing
  */
 function rotateChevron (chevContainer) {
@@ -129,7 +129,7 @@ function displayAdditionalOptions () {
 
 /**
  * Truncate file names if needed
- * @param ev {jQuery.Event} - jQuery event object
+ * @param {jQuery.Event} ev - jQuery event object
  * @returns {void} - returns nothing
  */
 function truncateFileName (ev) {
@@ -140,7 +140,7 @@ function truncateFileName (ev) {
 
 /**
  * Clone file labels and do ajax request
- * @param bttnFileLabels - File labels DOM elements
+ * @param {string} bttnFileLabels - File labels DOM elements
  * @returns {void} - returns nothing
  */
 function buttonFileLabelsFunction (bttnFileLabels) {
@@ -160,7 +160,7 @@ function buttonFileLabelsFunction (bttnFileLabels) {
 
 /**
  * Change white space box class when checked or unchecked
- * @param whiteSpaceBox - white space box DOM element
+ * @param {object} whiteSpaceBox - white space box DOM element
  * @returns {void} - returns nothing
  */
 function changeWhitespaceBoxClass (whiteSpaceBox) {
@@ -173,10 +173,12 @@ function changeWhitespaceBoxClass (whiteSpaceBox) {
 
 /**
  * Change tag box class when checked or unchecked
- * @param tagBox - scrub tags checkbox DOM element
+ * @param {object} tagBox - scrub tags checkbox DOM element
  * @returns {void} - returns nothing
  */
 function changeTagBoxClass (tagBox) {
+  console.log('hello')
+  console.log(typeof tagBox)
   if ($(tagBox).is(':checked')) {
     $('#tag').removeClass('hidden')
   } else {
