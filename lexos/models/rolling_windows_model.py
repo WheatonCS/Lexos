@@ -360,7 +360,7 @@ class RollingWindowsModel(BaseModel):
             return [index for index, window in enumerate(windows)
                     if window.startswith(milestone_str)]
 
-    def _get_token_ratio_graph(self) -> go.Scattergl:
+    def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
 
         :return: plotly graph object
@@ -373,14 +373,14 @@ class RollingWindowsModel(BaseModel):
         # TODO: support black and white color scheme
         # TODO: support show dots, (just change the mode)
         # construct the graph object
-        return go.Scattergl(
+        return [go.Scattergl(
             # the x coordinates are the index of the window, starting from 0
             x=np.arange(len(token_ratio_series)),
             # the y coordinates is the token ratios
             y=token_ratio_series,
-            mode="lines",
+            mode="markers",
             name=token_ratio_series.name
-        )
+        )]
 
     def _get_token_average_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for token average without milestone.
@@ -400,11 +400,6 @@ class RollingWindowsModel(BaseModel):
                 y=row,
                 name=token,
                 mode="lines"
-                '''
-                line=dict(
-                    color=('rgb(0, 0, 0)'),
-                ),
-                '''
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
