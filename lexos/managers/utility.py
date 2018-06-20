@@ -798,19 +798,27 @@ def xml_handling_options(data: dict = {}):
     file_manager = load_file_manager()
     from lexos.managers import session_manager
     from lxml import etree
+    import xml.etree.ElementTree as ET
     tags = []
+
     # etree.lxml to get all the tags
     for file in file_manager.get_active_files():
         try:
-            root = etree.fromstring(file.load_contents())
+            #tree = ET.parse(file.load_contents())
+            #root = tree.getroot()
+            root = ET.fromstring(file.load_contents())
             # Remove processing instructions --
             # not necessary to get a list of tags
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
             # Get the list of the tags
+            for child in root:
+                print(child.tag)
+            '''    
             for e in root.iter():
                 # Add to tags list, stripping all namespaces
                 tags.append(e.tag.split('}', 1)[1])
+            '''
         except etree.XMLSyntaxError:
             import bs4
             from bs4 import BeautifulSoup
