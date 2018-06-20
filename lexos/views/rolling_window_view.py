@@ -1,8 +1,6 @@
-from collections import OrderedDict
-
-from flask import request, session, render_template, Blueprint
 from natsort import natsorted
-
+from collections import OrderedDict
+from flask import session, render_template, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
 from lexos.models.filemanager_model import FileManagerModel
@@ -29,24 +27,24 @@ def rolling_window():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = FileManagerModel().load_file_manager()
+    # Get active labels with id and sort all labels.
     labels = file_manager.get_active_labels_with_id()
     labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'rwoption' not in session:
-            session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
-        # default legendlabels
-        legend_labels = [""]
-        return render_template(
-            'rwanalysis.html',
-            labels=labels,
-            legendLabels=legend_labels,
-            rwadatagenerated=False,
-            itm="rolling-windows",
-            numActiveDocs=num_active_docs)
+
+    # Fill in the default options if the option was not already there.
+    if 'rwoption' not in session:
+        session['rwoption'] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
+
+    # Return the rendered template.
+    return render_template(
+        'rwanalysis.html',
+        labels=labels,
+        numActiveDocs=num_active_docs)
 
 
 @rwa_blueprint.route("/rollingWindowGraph", methods=["POST"])
 def rwa_plot():
+    # Cache RWA option.
     session_manager.cache_rw_analysis_option()
+    # Return plotly graph.
     return RollingWindowsModel().get_rwa_graph()

@@ -2,7 +2,6 @@
 
 from enum import Enum
 from typing import NamedTuple, Optional, List
-
 from lexos.receivers.base_receiver import BaseReceiver
 
 
@@ -155,12 +154,13 @@ class RollingWindowsReceiver(BaseReceiver):
         return RWAWindowOptions(window_size=window_size,
                                 window_unit=window_unit)
 
-    def _get_milestone(self) -> Optional[str]:
+    def _get_milestone(self) -> Optional[List[str]]:
         """Get the milestone from front end."""
         if 'rollinghasmilestone' not in self._front_end_data:
             return None
         else:
-            return self._front_end_data['rollingmilestonetype']
+            return self._front_end_data['rollingmilestonetype']. \
+                replace(" ", "").split(',')
 
     def _get_passage_file_id(self) -> int:
         """Get the file id for the passage to run rolling window."""
