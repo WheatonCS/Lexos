@@ -2095,7 +2095,7 @@ select#orientation {
 }
 .header-fixed > tbody {
     overflow-y: auto;
-    height: 150px;
+    height: 190px;
 }
 
 .header-fixed > tbody > tr > td,
