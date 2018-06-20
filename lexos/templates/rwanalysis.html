@@ -16,8 +16,7 @@
     <!-- Title -->
     <div class="row">
         <div class="col-md-12">
-            <legend>Rolling Window Options <a id="{{ rwadatagenerated }}"
-                                              class="btn bttn bttn-video"
+            <legend>Rolling Window Options <a class="btn bttn bttn-video"
                                               href="#" data-toggle="tooltip"
                                               data-html="true"
                                               data-placement="right"
@@ -220,9 +219,9 @@
         <div class="col-sm-4">
             <fieldset class="rwanalysisradiosdiv">
                 <legend>5. Choose Display Options</legend>
-                <label>Hide individual points<input type="checkbox"
-                                                    name="hideDots"
-                                                    id="hideDots" {{ 'checked' if session['rwoption']['hideDots'] or not rwadatagenerated }}></label>
+                <label>Show individual points<input type="checkbox"
+                                                    name="showDots"
+                                                    id="showDots" {{ 'checked' if session['rwoption']['showDots'] }}></label>
                 <br/>
                 <label>Black and White only<input type="checkbox"
                                                   name="BWoutput"
