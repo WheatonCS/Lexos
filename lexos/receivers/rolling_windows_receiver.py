@@ -1,3 +1,5 @@
+"""This is the receiver for rolling windows analysis model."""
+
 from enum import Enum
 from typing import NamedTuple, Optional, List
 
@@ -26,67 +28,72 @@ class WindowUnitType(Enum):
 class RWAWindowOptions(NamedTuple):
     """The options related to window creation."""
 
-    # the size of the window
+    # The size of the window.
     window_size: int
-    # the unit of the window, see WindowUnitType for more detail
+    # The unit of the window, see WindowUnitType for more detail.
     window_unit: WindowUnitType
 
 
 class RWARatioTokenOptions(NamedTuple):
     """The option if you choose to count by ratio."""
 
-    # the type of the token, see RWATokenType for more detail
+    # The type of the token, see RWATokenType for more detail.
     token_type: RWATokenType
 
-    # the token to count as numerator of the ratio
+    # The token to count as numerator of the ratio.
     numerator_token: str
 
-    # the token to count as the denominator of the ratio
+    # The token to count as the denominator of the ratio.
     denominator_token: str
 
 
 class RWAAverageTokenOptions(NamedTuple):
     """The options if you choose to count by average."""
 
-    # the type of the token, see RWATokenType for more detail
+    # The type of the token, see RWATokenType for more detail.
     token_type: RWATokenType
-    # a list of tokens to count
+    # A list of tokens to count.
     tokens: List[str]
 
 
 class RWAPlotOptions(NamedTuple):
     """The option for adjusting plotly result."""
 
+    # Show individual points if true.
     individual_points: bool
+    # Return plot in black-white scale if true.
     black_white: bool
 
 
 class RWAFrontEndOptions(NamedTuple):
     """All the options to get from the front end."""
 
-    # the options if you choose ratio count,
-    # it will be None if you did not choose ratio
+    # The options if you choose ratio count,
+    # it will be None if you did not choose ratio.
     ratio_token_options: Optional[RWARatioTokenOptions]
 
-    # the option if you choose average count
-    # it will be None if you did not choose Average
+    # The option if you choose average count
+    # it will be None if you did not choose Average.
     average_token_options: Optional[RWAAverageTokenOptions]
 
-    # the id of the passage to run rolling window
+    # The id of the passage to run rolling window.
     passage_file_id: int
 
-    # the setting related to the windows
+    # The setting related to the windows.
     window_options: RWAWindowOptions
 
-    # a milestone, it is none if it is not given from frontend
+    # The settings related to the plot result.
+    plot_options: RWAPlotOptions
+
+    # A milestone, it is none if it is not given from frontend.
     milestone: Optional[str]
 
 
 class RollingWindowsReceiver(BaseReceiver):
+    """Get all the options to generate rolling windows result."""
 
     def _get_ratio_token_options(self) -> RWARatioTokenOptions:
         """Get all the options to generate ratio count."""
-
         if self._front_end_data['inputtype'] == 'string':
             token_type = RWATokenType.string
             numerator_token = self._front_end_data['rollingsearchword']
@@ -112,7 +119,6 @@ class RollingWindowsReceiver(BaseReceiver):
 
     def _get_average_token_options(self) -> RWAAverageTokenOptions:
         """Get all the options to generate average count."""
-
         # the unprocessed token
         raw_token = self._front_end_data['rollingsearchword']
 
@@ -134,7 +140,7 @@ class RollingWindowsReceiver(BaseReceiver):
         return RWAAverageTokenOptions(token_type=token_type, tokens=tokens)
 
     def _get_window_option(self) -> RWAWindowOptions:
-        """Get all the option for windows"""
+        """Get all the option for windows."""
         if self._front_end_data['windowtype'] == 'letter':
             window_unit = WindowUnitType.letter
         elif self._front_end_data['windowtype'] == 'word':
@@ -150,15 +156,24 @@ class RollingWindowsReceiver(BaseReceiver):
                                 window_unit=window_unit)
 
     def _get_milestone(self) -> Optional[str]:
-        """Get the milestone from front end"""
+        """Get the milestone from front end."""
         if 'rollinghasmilestone' not in self._front_end_data:
             return None
         else:
             return self._front_end_data['rollingmilestonetype']
 
     def _get_passage_file_id(self) -> int:
-        """Get the file id for the passage to run rolling window"""
+        """Get the file id for the passage to run rolling window."""
         return int(self._front_end_data['filetorollinganalyze'])
+
+    def _get_plot_option(self) -> RWAPlotOptions:
+        """Get the plot option from front end."""
+        individual_points = \
+            True if 'showDots' in self._front_end_data else False
+        black_white = True if 'BWoutput' in self._front_end_data else False
+
+        return RWAPlotOptions(individual_points=individual_points,
+                              black_white=black_white)
 
     def options_from_front_end(self) -> RWAFrontEndOptions:
         """Pack all the front end options together."""
@@ -167,6 +182,7 @@ class RollingWindowsReceiver(BaseReceiver):
                 average_token_options=None,
                 ratio_token_options=self._get_ratio_token_options(),
                 window_options=self._get_window_option(),
+                plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
                 passage_file_id=self._get_passage_file_id()
             )
@@ -175,6 +191,7 @@ class RollingWindowsReceiver(BaseReceiver):
                 average_token_options=self._get_average_token_options(),
                 ratio_token_options=None,
                 window_options=self._get_window_option(),
+                plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
                 passage_file_id=self._get_passage_file_id()
             )
