@@ -1,11 +1,11 @@
-import re
-from typing import NamedTuple, Optional, List, Iterator, Callable, Union
+"""This is the model that generates rolling window results."""
 
+import re
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import plot
-
+from typing import NamedTuple, Optional, List, Iterator, Callable, Union
 from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
 from lexos.models.base_model import BaseModel
@@ -14,19 +14,24 @@ from lexos.models.matrix_model import FileIDContentMap
 from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
 
+# Set the rwa regex flags.
 rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
 
 
 class RWATestOptions(NamedTuple):
+    """RWA test front end options."""
+
     file_id_content_map: FileIDContentMap
     rolling_windows_options: RWAFrontEndOptions
 
 
 class RollingWindowsModel(BaseModel):
-    def __init__(self, test_option: Optional[RWATestOptions] = None):
-        """The class for rolling window calculation.
+    """The class for rolling window calculation."""
 
-        :param test_option: the options to send in for testing
+    def __init__(self, test_option: Optional[RWATestOptions] = None):
+        """Initialize the class based on if test option was passed in.
+
+        :param test_option: the options to send in for testing.
         """
         super().__init__()
         if test_option is not None:
@@ -38,9 +43,9 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _passage(self) -> str:
-        """The passage to run rolling windows on
+        """The passage to run rolling windows on.
 
-        :return: the content of the passage as a string
+        :return: the content of the passage as a string.
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
@@ -50,7 +55,7 @@ class RollingWindowsModel(BaseModel):
 
         # if test option is not specified, get option from front end
         else:
-            file_id = RollingWindowsReceiver().options_from_front_end()\
+            file_id = RollingWindowsReceiver().options_from_front_end() \
                 .passage_file_id
             file_id_content_map = FileManagerModel().load_file_manager() \
                 .get_content_of_active_with_id()
@@ -59,9 +64,9 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _options(self) -> RWAFrontEndOptions:
-        """the front end option packed into one named tuple
+        """The front end option packed into one named tuple.
 
-        :return: a RWAFrontEndOption packs all the frontend option
+        :return: a RWAFrontEndOption packs all the frontend option.
         """
         return self._test_front_end_options \
             if self._test_front_end_options is not None \
@@ -70,12 +75,12 @@ class RollingWindowsModel(BaseModel):
     @staticmethod
     def _get_rolling_window_from_list(input_list: List[str],
                                       window_size: int) -> np.ndarray:
-        """A helper function to get the rolling window from the list of terms
+        """A helper function to get the rolling window from the list of terms.
 
-        :param input_list: a list of terms (word, char or line),
-            depends on the window type (word and line are with endings)
-        :param window_size: the size of the window (number of terms in window)
-        :return: an array of strings, each element is a window
+        :param input_list: A list of terms (word, char or line),
+            depends on the window type (word and line are with endings).
+        :param window_size: The size of the window (number of terms in window).
+        :return: An array of strings, each element is a window.
         """
 
         # number of items in the input list
@@ -92,7 +97,7 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _get_letters_windows(passage: str, windows_size: int) -> np.ndarray:
-        """Get the windows of letters with specific window size
+        """Get the windows of letters with specific window size.
 
         :param passage: the whole text to generate the windows
             (the text to run rolling window analysis on)
@@ -251,8 +256,8 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError(f"unhandled token type: {token_type}")
 
-    def _find_token_ratio_in_windows(self, windows: Iterator[str]) \
-            -> pd.Series:
+    def _find_token_ratio_in_windows(self,
+                                     windows: Iterator[str]) -> pd.Series:
         """Find the token ratios in all the windows
 
         get the ratio of the count of the numerator token and denominator token
@@ -338,7 +343,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-            self, windows: Iterator[str]) -> List[int]:
+            self, windows: Iterator[str]) -> List[Optional[int]]:
         """Get a indexes of the mile stone windows
 
         A "mile stone window" is a window where the window that starts with
@@ -365,20 +370,23 @@ class RollingWindowsModel(BaseModel):
 
         :return: plotly graph object
         """
-
+        # Get the windows and token ratio series.
         windows = self._get_windows()
-
         token_ratio_series = self._find_token_ratio_in_windows(windows)
 
+        # Find the proper plotting mode.
+        plot_mode = "lines+markers" \
+            if self._options.plot_options.individual_points \
+            else "lines"
+
         # TODO: support black and white color scheme
-        # TODO: support show dots, (just change the mode)
-        # construct the graph object
+        # Construct the graph object
         return [go.Scattergl(
             # the x coordinates are the index of the window, starting from 0
             x=np.arange(len(token_ratio_series)),
             # the y coordinates is the token ratios
             y=token_ratio_series,
-            mode="markers",
+            mode=plot_mode,
             name=token_ratio_series.name
         )]
 
@@ -387,19 +395,24 @@ class RollingWindowsModel(BaseModel):
 
         :return: a list of plotly graph object
         """
+        # Get the windows and toke average data frame.
         windows = self._get_windows()
-
         token_average_data_frame = self._find_tokens_average_in_windows(
             windows=windows)
 
+        # Find the proper plotting mode.
+        plot_mode = "lines+markers" \
+            if self._options.plot_options.individual_points \
+            else "lines"
+
         # TODO: support black and white color scheme
-        # TODO: support show dots, (just change the mode)
+        # Construct the graph object.
         return [
             go.Scattergl(
                 x=np.arange(len(row)),
                 y=row,
                 name=token,
-                mode="lines"
+                mode=plot_mode
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
@@ -423,4 +436,5 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled count type")
 
-        return plot(result_plot, include_plotlyjs=False, output_type='div')
+        return plot(result_plot, show_link=False, include_plotlyjs=False,
+                    output_type='div')
