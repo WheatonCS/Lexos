@@ -130,6 +130,7 @@ function displayAdditionalOptions () {
 /**
  * Truncate file names if needed
  * @param {jQuery.Event} ev - jQuery event object
+ * @param container {string} - id of file label container
  * @returns {void} - returns nothing
  */
 function truncateFileName (ev, container) {
