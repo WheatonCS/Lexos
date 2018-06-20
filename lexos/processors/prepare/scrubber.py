@@ -200,14 +200,16 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
 
     # in GUI:  Remove Tag Only
     if action == "remove-tag":
+       # pattern = re.sub('<a\b[^>]*>(.*?)<\/a>', tag)
         # searching for variants this specific tag:  <tag> ...
+        '''
         pattern = re.compile(
             '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
             '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
             '\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
-
+'''
         # substitute all matching patterns with one space
-        processed_text = re.sub(pattern, " ", orig_text)
+        processed_text = re.sub('[<>]', "", orig_text)
 
     # in GUI:  Remove Element and All Its Contents
     elif action == "remove-element":
