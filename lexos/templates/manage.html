@@ -29,7 +29,7 @@
 </style>
 {% endblock %}
 
-{% block title %}manage{% endblock %}
+{% block title %}Manage{% endblock %}
 
 {% block options %}
 <div class="row container">
@@ -71,9 +71,9 @@
                     {% for row in rows %}
                     <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
                         <td style="text-align:right;"></td>
-                        <td class="context" style="word-wrap: break-word;"><span id="doc-name" style="word-wrap: break-word;">{{ row["label"] }}</span></td>
+                        <td class="context" style="word-wrap: break-word;"><span id="doc-name" style="word-wrap: break-word;">{{ row["label"]|truncate(36,True,'...') }}</span></td>
                         <td class="context" style="word-wrap: break-word;">{{ row["class"] }}</td>
-                        <td class="context" style="word-wrap: break-word;">{{ row["source"] }}</td>
+                        <td class="context" style="word-wrap: break-word;">{{ row["source"]|truncate(40,True,'...') }}</td>
                         <td class="context">{{ row["preview"]|truncate(155,True,'...') }}</td>
                     </tr>
                     {% endfor %}
@@ -168,7 +168,7 @@
       <li><a data-context="preview" tabindex="-1"><i class="fa fa-search context-glyph"></i> Preview Document</a></li>
       <li><a data-context="edit_doc_name" tabindex="-1"><i class="fa fa-pencil context-glyph"></i> Edit Document Name</a></li>
       <li><a data-context="edit_doc_class" tabindex="-1"><i class="fa fa-tag context-glyph"></i> Edit Document Class</a></li>
-      <li><a data-context="delete_doc" tabindex="-1"><i class="fa fa-trash context-glyph"></i>Delete Document</a></li>
+      <li><a data-context="delete_doc" tabindex="-1"><i class="fa fa-trash context-glyph"></i> Delete Document</a></li>
       <li class="divider"></li>
       <li><a data-context="select_all" tabindex="-1"><i class="fa fa-check context-glyph"></i> Select All Documents</a></li>
       <li><a data-context="deselect_all" tabindex="-1"><i class="fa fa-ban context-glyph"></i> Deselect All Documents</a></li>

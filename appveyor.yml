@@ -12,6 +12,14 @@ install:
   - pip install -r ./requirements.txt
   - pip install -r ./dev_requirements.txt
 
+  # install npm
+  - choco install nodejs
+
+  # use npm to install all the dependencies (including dev)
+  - cd ./lexos/static
+  - npm install
+  - cd ../..
+
 branches:
   only:
     - master
@@ -25,7 +33,19 @@ test_script:
   # unit testing
   - pytest --cov=./lexos
   - codecov
+  # doc style, at the moment only test files under models and receivers.
+  - pydocstyle lexos/models/
+  - pydocstyle lexos/receivers/
 
+  # test for javascript code style
+  - cd ./lexos/static
+  # following line is commented out, because frontend refactor is not yet completed
+  # - .\node_modules\.bin\eslint ./js/script_*.js
+  - .\node_modules\.bin\eslint .\js\scripts_statistics.js
+  - .\node_modules\.bin\eslint .\js\scripts_similarity.js
+  - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
+  - .\node_modules\.bin/eslint .\js\scripts_kmeans.js
+  - cd ../..
 
 build: off
 

@@ -14,10 +14,12 @@
         })
       })
     </script>
+    <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
+    <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
     <style type="text/css"></style>
 {% endblock %}
 
-{% block title %}analyzer{% endblock %}
+{% block title %}Hierarchical Clustering{% endblock %}
 
 
 {% block options %}

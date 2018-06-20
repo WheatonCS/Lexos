@@ -671,7 +671,7 @@ footer {
 }
 #uploadbrowse {
   float: left;
-  width: 163px;
+  width: 175px;
   padding: 20px;
   line-height: 15px;
   font-size: 15px;
@@ -1082,6 +1082,9 @@ fieldset[disabled] .btn-delete-selected.active {
   margin-right:10px;
   cursor:pointer;
 }
+.lexos-tooltip-trigger:hover{
+  color:#3fd1ac;
+}
 
 /* Popover Styles */
 .popover-inner {
@@ -1100,6 +1103,10 @@ http://blog.craigsworks.com/bootstrap-3-disabled-dropdown-links/ **/
 
 /* Mimic cursor style from native .dropdown-menu > .disabled > a{} styles,
 since `pointer-events: none` kills the cursor state, too.  */
+.popover.fade.right.in .arrow {
+  top: 43% !important;
+}
+
 .dropdown-menu > .disabled {
  cursor: not-allowed;
 }
@@ -1291,6 +1298,7 @@ textarea.manualinput {
   cursor: pointer;
   text-align: right;
   color: #00B226;
+  margin-top:5px;
 }
 
 #entityrules {
@@ -1467,7 +1475,8 @@ textarea.manualinput {
 }
 
 #visualize-submit {
-  margin-top: 40px;
+  margin: 5px 0 0 0;
+
 }
 
 .d3tooltip {
@@ -1493,7 +1502,9 @@ textarea.manualinput {
     background-color: rgba(247,247,247, 0.8);
     color: #000;
 }
-
+#copyright_tag{
+  margin-left:15px;
+}
 /* ================== RWANALYSIS STYLING ==================== */
 .rwanalysisradiosdiv {
 }
@@ -1545,7 +1556,7 @@ textarea.manualinput {
 }
 
 #getviz {
-  margin-left: 10px;
+  margin-left: 0;
 }
 
 .vizoptions {
@@ -1816,6 +1827,10 @@ a.active {
 }
 
 /* ================== STATS STYLING =========================== */
+/* Resolve the transparent box plot issue. */
+#box-plot .plot {
+  opacity: 1 !important;
+}
 
 #entire-corpus {
     font-size: 15px;
@@ -1826,9 +1841,7 @@ a.active {
     margin-bottom:25px;
 }
 
-/* ================== DENDROGRAM STYLING ========================= */
-
-
+/* ========================= DENDROGRAM STYLING ========================= */
 select#orientation {
   width: 140px;
 }
@@ -1856,73 +1869,8 @@ select#orientation {
 
 
 /* ================== K MEANS STYLING ==================== */
-
-.silhouette-options,
-.kmeans-options {
-  float: left;
-}
-
-.silhouette-options,
-.kmeans-options label{
-  clear: both;
-  float: left;
-  line-height: 34px;
-}
-
-#kmeanscreateoptions {
-  margin-bottom: 20px;
-  width: 400px;
-}
-
-#kmeansresultsLeft {
-  border: 1px solid #BBB;
-  border-radius: 6px;
-  border-spacing: 10px;
-  max-height:600px;
-  float:left;
-  overflow:auto;
-  width: 27%;
-  margin-top: 10px;
-  padding: 10px 4px 4px 4px;
-}
-
-#kmeansresultsRight {
-  margin-left: 27%;
-  height: 500px;
-  overflow: hidden;
-}
-
-.imageLinkBtn {
-  width: 27%;
-  margin: -20px auto 10px auto;
-}
-
-#basicTable {
-  border: none;
-  width: 100%;
-  margin: 0 auto 4px auto;
-  font-size: 13px;
-}
-
-#basicTable tr.white-header {
-  background-color: white;
-}
-
-#basicTable th {
-  padding: 9px;
-  text-align: center;
-  vertical-align: top;
-}
-
-#basicTable td {
-  padding: 8px;
-  text-align: center;
-}
-
-#kmeansimage {
-  max-width: 100%;
-  max-height:100%;
-  margin-top:-30px;
+#KMeans-plot .plot {
+  opacity: 1 !important;
 }
 
 #nclusters {
@@ -1941,27 +1889,27 @@ select#orientation {
   width: 110px;
 }
 
+#n_init {
+  width: 110px;
+}
+
+#tolerance {
+  width: 110px;
+}
+
+.k-means-result-download-button {
+  margin-top: 10px;
+}
+
 .icon-help#kValueTooltip,
 #KMeans-maxIter-tooltip,
 #KMeans-initailize-tip,
 #KMeans-n_init-tooltip,
 #KMeans-viz-tip,
 #KMeans-tolerance-tooltip {
-  position: relative;
   float: right;
+  position: relative;
   padding-left: 5px;
-}
-
-#advancedKMeansOptions {
-  margin-bottom: 30px;
-}
-
-#n_init {
-  width: 110px;
-}
-
-#tolerance {
-  width: 120px;
 }
 
 /* ================== SIMILARITY QUERY STYLING ==================== */

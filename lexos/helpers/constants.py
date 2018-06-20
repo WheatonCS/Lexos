@@ -158,13 +158,14 @@ HIERARCHICALINPUT = (
 
 # for kmeans Clustering
 KMEANINPUT = (
-    'nclusters',
-    'max_iter',
+    'viz',
     'init',
     'n_init',
-    'tolerance',
-    'KMeans_metric',
-    'viz')
+    'max_iter',
+    'nclusters',
+    'tolerance'
+)
+
 # for similarity query
 SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
@@ -181,11 +182,6 @@ TOPWORDINPUT = (
     'lowerboundRC',
     'upperboundRC',
     'useFreq')
-
-# for statistic
-# if there is no comma in the end, python recognize this var as a string
-# instead of a tuple
-STATISTIC_LIST = ('segmentlist',)
 
 '''the request form default value'''
 DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
@@ -268,13 +264,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'degenerated': False}
 
 DEFAULT_KMEAN_OPTIONS = {
-    'nclusters': '',
-    'max_iter': '',
+    'nclusters': '',  # This value has to be decided by number of files.
+    'viz': 'Voronoi',
     'init': 'k-means++',
-    'n_init': '',
-    'tolerance': '',
-    'KMeans_metric': '',
-    'viz': 'Voronoi'}
+    'n_init': 10,
+    'max_iter': 300,
+    'tolerance': 1e-4}
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
@@ -289,9 +284,6 @@ DEFAULT_TOPWORD_OPTIONS = {
     'lowerboundRC': '0',
     'upperboundRC': '0',
     'useFreq': 'PC'}
-
-# never used, go to lexos_core.py `statistic()` function to see why
-DEFAULT_STATISTICS_OPTIONS = {}
 
 DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 

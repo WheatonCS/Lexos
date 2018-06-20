@@ -2,443 +2,147 @@
 {% set active_page = 'kmeans' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{version}}"></script>
-<script type="text/javascript">
-	var dataset 	    = {{ kmeansIndex }};
-	var fileNameStr     = "{{ fileNameStr }}";
-	var tablelabels     = fileNameStr.split("#");
-	var totalFileNumber = {{ fileNumber }};
-	var defaultK 		= {{ defaultK }};
-	var KValue 			= {{ KValue }};
-
-	var colorChartStr   = "{{ colorChartStr }};"
-	var colorChart      = colorChartStr.split("#");
-</script>
-<script>
-	$(document).ready( function () {
-
-	  // If there is data scroll down to the graph on page load
-	  //document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
-
-	  // Handle the return to top links
-	  $('.to-top').click(function(){
-	      $("html, body").animate({ scrollTop: 0 }, 800);
-	      return false;
-	  });
-	});
-</script>
-<style type="text/css">
-/*.has-chevron {
-    cursor: pointer;
-}
-.rotate {
-    color: gray;
-    margin-left: 5px;
-    -webkit-transition: all 0.25s ease;
-    -moz-transition:    all 0.25s ease;
-    -o-transition:      all 0.25s ease;
-    transition:         all 0.25s ease;
-}*/
-</style>
-
+    <!-- Lexos K Means Script -->
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{ version }}"></script>
+    <!-- Latest plotly js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Latest compiled and minimized DataTables CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.32/dt-1.10.16/b-1.5.1/b-colvis-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.css"/>
+    <!-- Latest compiled and minimized DataTables JS -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.32/dt-1.10.16/b-1.5.1/b-colvis-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
+    <!-- Datable plug in to truncate the columns. -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/plug-ins/1.10.16/dataRender/ellipsis.js"></script>
 {% endblock %}
 
-{% block title %}analyzer{% endblock %}
-
+{% block title %}K-Means Clustering{% endblock %}
 
 {% block options %}
-<input type="hidden" id="num_active_files" value="{{ labels|len }}" />
+    <input type="hidden" id="num_active_files" value="{{ numActiveDocs }}"/>
+    <fieldset class="row col-lg-12 col-md-12">
+        <legend>K-Means Options</legend>
+        <div>
+            <label for="n_clusters">Number of Clusters (K-Value):
+                <input type="number" name="nclusters" id="nclusters" min="1"
+                       step="1" max="{{ numActiveDocs }}"
+                       value="{{ session['kmeanoption']['nclusters'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right"
+                   title="The number of clusters or the number of centroids.
+                          The K-value should be always less or equal to the
+                          number of active documents. By default, we set this
+                          value to be half of the amount of active documents."></i>
+            </label>
+            <label for="viz">Method of Visualization:
+                <select name="viz" id="vizMethod">
+                    <option value="Voronoi" {{ 'selected' if session['kmeanoption']['viz'] == 'Voronoi' }}>
+                        Voronoi
+                    </option>
+                    <option value="2DScatter" {{ 'selected' if session['kmeanoption']['viz'] == '2DScatter' }}>
+                        2D-Scatter
+                    </option>
+                    <option value="3DScatter" {{ 'selected' if session['kmeanoption']['viz'] == '3DScatter' }}>
+                        3D-Scatter
+                    </option>
+                </select>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right"
+                   title='2D-Scatter plot and <a href="https://en.wikipedia.org/wiki/Voronoi_diagram" target="_blank">Voronoi diagram</a>
+                          will reduce DTM to a two dimensional matrix. 3D-Scatter plot will reduce DTM to a three dimensional matrix.
+                          Comparing to scatter plot, Voronoi diagram display centroids and draw polygons for each document cluster.'></i>
+            </label>
+        </div>
+    </fieldset>
 
-<fieldset>
-	<legend>K-Means Options</legend>
-	<div class="kmeans-options cf" id="kmeanscreateoptions">
-		<label for="n_clusters">Number of Clusters (K value):
-			<input type="number" name="nclusters" id="nclusters" min="1" step="1" max="{{numActiveDocs}}" placeholder="Default is {{ defaultK }}" value="{{ session['kmeanoption']['nclusters'] }}" />
-		<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of clusters or the number of centroids. The K-value should be always less or equal to the number of active documents." style=""></i>
-		</label>
+    <fieldset class="row col-lg-12 col-md-12">
+        <legend class="has-chevron">Advanced K-Means Options
+            <span id="kmeansAdvancedChev" class="fa fa-chevron-right rotate"
+                  aria-expanded="false" data-target="#advancedkmeansOpts"
+                  aria-controls="advancedkmeansOpts">
+            </span>
+        </legend>
 
-		<label for="viz">Method of Visualization:
-			<select name="viz" id="vizMethod">
-				<option value="Voronoi" {{ 'selected' if session['kmeanoption']['viz'] == 'Voronoi' }}>Voronoi</option>
-				<option value="PCA" {{ 'selected' if session['kmeanoption']['viz'] == 'PCA' }}>PCA</option>
-			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title='Choose either a <a href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">Principal Component Analysis (PCA)</a> graph of xy coordinates with document points colored to reflect document clusters or a <a href="https://en.wikipedia.org/wiki/Voronoi_diagram" target="_blank">Voronoi diagram</a> with polygons drawn around them to represent document clusters.' style=""></i>
-		</label>
-	</div>
-</fieldset>
+        <div class="collapse" id="advancedkmeansOpts">
+            <label for="max_iter">Maximum Number of Iterations:
+                <input type="number" name="max_iter" id="max_iter"
+                       min="1" step="1"
+                       value="{{ session['kmeanoption']['max_iter'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px;"
+                   title="Maximum number of iterations of the k-means algorithm
+                          for a single run. The default is 300."></i>
+            </label>
 
-<fieldset>
-	<legend class="has-chevron">Advanced K-Means Options
-	    <span id="kmeansAdvancedChev" class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['n_init'] != '' or session['kmeanoption']['tolerance'] != '' }}" data-target="#advancedkmeansOpts" aria-expanded="false" aria-controls="advancedkmeansOpts"></span>
-	</legend>
-	<div class="collapse" id="advancedkmeansOpts">
-		<label for="max_iter">Maximum Number of Iterations:
-			<input type="number" name="max_iter" id="max_iter" min="1" step="1" placeholder="Default is 300" value="{{ session['kmeanoption']['max_iter'] }}" />
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Maximum number of iterations of the k-means algorithm for a single run." style="font-size:12px;"></i>
-		</label>
+            <label for="init">Method of Initialization:
+                <select name="init" id="initMethod">
+                    <option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>
+                        k-means++
+                    </option>
+                    <option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>
+                        random
+                    </option>
+                </select>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px;"
+                   title="'k-means++' selects initial cluster centers for
+                          k-means clustering using a weighted probability
+                          distribution to speed up convergence. The 'random'
+                          option chooses k observations (rows) at random from
+                          data for the initial centroids."></i>
+            </label>
 
-		<label for="init">Method of Initialization:
-			<select name="init" id="initMethod">
-				<option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>k-means++</option>
-				<option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>random</option>
-			</select>
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="'k-means++' selects initial cluster centers for k-means clustering using a weighted probability distribution to speed up convergence. The 'random' option chooses k observations (rows) at random from data for the initial centroids." style="font-size:12px;"></i>
-		</label>
+            <label for="n_init">Number of Iterations with Different Centroids:
+                <input type="number" name="n_init" id="n_init" min="1" step="1"
+                       value="{{ session['kmeanoption']['n_init'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px"
+                   title="The number of time the k-means algorithm will be run
+                          with different centroid seeds. The final results will
+                          be the best output of n_init consecutive runs in terms
+                          of inertia. (The default is 10.)"></i>
+            </label>
 
-		<label for="n_init">Number of Iterations with Different Centroids:
-			<input type="number" name="n_init" id="n_init" placeholder="Default is 300" min="1" step="1" value="{{ session['kmeanoption']['n_init'] }}" />
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia." style="font-size:12px;"></i>
-		</label>
-
-		<label for="tolerance">Relative Tolerance:
-			<input type="number" name="tolerance" placeholder="Default is 1e-4" id="tolerance" step=".0001" value="{{ session['kmeanoption']['tolerance'] }}" />
-			<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Decimal, relative tolerance with respect to inertia to declare convergence." style="font-size:12px;"></i>
-		</label>
-    </div>
-</fieldset>
-
-<fieldset>
-	<legend class="has-chevron">Silhouette Score Options <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="A silhouette score is a measure of fit for your clusters. It gives a general indication of how well individual objects lie within their cluster. A score of 1 indicates tight, distinct clusters. Values near 0 indicate overlapping clusters. Negative values generally indicate that a sample has been assigned to the wrong cluster, as a different cluster is more similar." style="padding-left:4px;"></i> <span id="kmeansSilhouetteChev" class="fa fa-chevron-right rotate {{ 'showing' if session['kmeanoption']['KMeans_metric'] != '' }}" data-target="#silhouetteScoreOpts" aria-expanded="false" aria-controls="silhouetteScoreOpts"></span>
-	</legend>
-	<div class="collapse" id="silhouetteScoreOpts">
-		<div class="silhouette-options expansion" id="silhouetteOptions" style="display: {{'block' if session['kmeanoption']['KMeans_metric'] != ''}};">
-			<label for="KMeans_metric">Distance Metric:
-				<select name="KMeans_metric" id="KMeans_metric">
-					<option value="euclidean" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'euclidean' }}>Euclidean</option>
-					<option value="minkowski" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'minkowski' }}>Minkowski</option>
-					<option value="cityblock" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'cityblock' }}>Manhattan</option>
-					<option value="seuclidean" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'seuclidean' }}>Standardized Euclidean</option>
-					<option value="sqeuclidean" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'sqeuclidean' }}>Squared Euclidean</option>
-					<option value="cosine" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'cosine' }}>Cosine</option>
-					<option value="correlation" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'correlation' }}>Correlation</option>
-					<option value="hamming" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'hamming' }}>Hamming</option>
-					<option value="chebyshev" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'chebyshev' }}>Chebyshev</option>
-					<option value="jaccard" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'jaccard' }}>Jaccard</option>
-					<option value="canberra" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'canberra' }}>Canberra</option>
-					<option value="braycurtis" {{ 'selected' if session['kmeanoption']['KMeans_metric'] == 'braycurtis' }}>Braycurtis</option>
-				</select>
-				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Different methods for measuring the distance/difference between documents." style="font-size:12px;"></i>
-			</label>
-		</div>
-	</div>
-</fieldset>
-
-<div class="row" style="margin:20px auto;">
-	<div class="col-md-12">
-		<input class="bttn bttn-action kmeans" id="getkmeans" name="getkmeans" type="submit" value="Get K-Means"/>
-	</div>
-</div>
-{% endblock %}
-
-{% block silhouetteResults %}
-<legend>Silhouette Score: {{silhouettescore}}</legend>
+            <label for="tolerance">Relative Tolerance:
+                <input type="number" name="tolerance"
+                       placeholder="Default is 1e-4" id="tolerance"
+                       step=".0001"
+                       value="{{ session['kmeanoption']['tolerance'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px"
+                   title="Decimal, relative tolerance with respect to inertia
+                          to declare convergence."></i>
+            </label>
+        </div>
+    </fieldset>
 {% endblock %}
 
 {% block results %}
-{% if kmeansdatagenerated %}
-<a name="graph-anchor" id="graph-anchor"></a>
-<div id="kmeansresultscheck">{{ kmeansdatagenerated }}</div>
+    <div class="row col-lg-12 col-md-12" style="padding-top: 10px">
+        <input type="button" class="btn btn-success"
+               id="get-k-means-result" name="get-k-means-result"
+               value="Get KMeans Result"/>
+    </div>
 
-<style>
-/* Duplicates css in stylesheet because
-   Chrome ignores the stylesheet for
-   some reason. */
-.kmeansresultsLeft{
-  border:1px solid #BBB;border-radius:6px;
-  border-spacing:10px;max-height:600px;float:left;
-  overflow:auto;width:73%;margin-top:10px;padding: 10px 4px 4px 4px;}
-.kmeansresultsRight {/*margin-left:27%;*/height:500px;overflow:hidden;}
-.imageLinkBtn{width:27%;margin:-20px auto 10px auto;}
-#kmeansimage {max-width:100%;max-height:100%;margin-top:-30px;}
-#basicTable {border:none;width:100%;margin:0 auto 4px auto;
-font-size:13px;}
-#basicTable tr.white-header{backgroundColor: white;}
-#basicTable th{padding:9px;text-align:center;vertical-align:top;}
-#basicTable td{padding:8px;}
-</style>
+    <div id="KMeans-result" class="row col-lg-12 col-md-12"
+         style="padding-top: 10px">
+        <fieldset class="row col-lg-12 col-md-12">
+            <legend>
+                K-Means Result
+            </legend>
+        </fieldset>
+        <div id="KMeans-table" class="row col-lg-3 col-md-3"></div>
+        <div id="KMeans-plot" class="col-lg-9 col-md-9"></div>
+    </div>
+{% endblock %}
 
-<div>
-	<div id="kmeansresults">
-		<legend>K-Means</legend>
-		{% if request.form['viz']=='Voronoi' %}
-		<div class="row">
-			<div class="col-md-12">
-				<p>Mouseover points or rows in the table to see document labels.</p>
-			</div>
-		</div>
-		{% endif %}
-		<div class="row">
-			<div class="col-md-5">
-				<div class="kmeansresultsLeft">
-					<table id="basicTable">
-						<thead>
-							<tr class="white-header">
-								<th>Cluster Number</th>
-								<th>Document Name</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-				</div>
- 			</div>
-			<div class="col-md-7">
-<!-- 			<div class="kmeansresultsRight">
- -->			{% if request.form['viz']=='PCA' %}
-			<!--<img id="kmeansimage" src="{{url_for('k_means_image')}}?{{ range(10000)|random }}"/>
-
-                <div class="imageLinkBtn">
-				<a href="#" class="imageLink" target="_blank"></a>
-			</div>-->
-			<div class="PCAImage" name="{{ degenerated }}">{{ degenerated }}
-                {% set small_plotly = url_for('small_pca')~"?"~range(10000)|random -%}
-                {% set big_plotly = url_for('big_pca')~"?"~range(10000)|random -%}
-
-                    <input id="plotlyID" type="hidden" value="{{ small_plotly }}">
-                    <iframe class="imageLink" id="plotlyFrame" src="{{ small_plotly }}" style="min-height:470px;min-width:520px;border:1px solid #000;border-radius:3px;margin:0 auto;"></iframe>
-
-                    <div id="You_Can_Append_an_Image_to_This_Div"></div>
-            </div>
-                <div class="imageLinkBtn">
-				<a href="{{ big_plotly }}" class="imageLink" target="_blank"></a>
-			</div>
-			{% elif request.form['viz']=='Voronoi' %}
-
-			<!-- Likely a better place for this, but it works for now -->
-
-			<style>
-			#centroids {
-			    display: none;
-			    pointer-events: none;
-			}
-            #text {
-                cursor:default;
-            }
-			</style>
-
-			<div id="voronoiResults" style="height:430px;width:573.333px;float:right;padding-top:12px !important;">
-			<script>
-			//1. Draw svg using as much room as needed
-			//		a)Plot centroids and call D3 Voronoi, hide those points, and plot all the points on top of it
-			//2. Scale the svg
-
-            //max x-coordinate of the points
-            var max = {{ maxX }};
-			//This width and height is the size of the canvas before scaling
-			var width = Math.ceil(max);
-			//Arbitrarily set to 2600.  Will be scaled to 3/4 or 1 the width
-			var height = 2600;
-			//Want a height to width ratio of 4 to 3
-			var ratio = 4/3;
-            var textSize = 0;
-
-            // red dots radius
-            var radius = 1.5;
-            console.log(max);
-			//Set width, text size, radius, and ratio based on max(x-coordinate)
-			if (max <=250){
-			    width = 300;
-			    textSize = "3px";
-                radius = 3;
-			}
-			else if (max >250 && max <=375){
-			    width = 400;
-			    textSize = "6px";
-                radius = 3;
-			}
-			else if (max >375 && max <=523.333){
-			    width = 573.333;
-			    textSize = "8px";
-                radius = 5;
-			}
-            else if(max > 523.333 && max <= 1500){
-                width = 4000;
-                textSize = "80px";
-                radius = 40;
-            }
-            else if(max > 1500 && max <= 3000){
-                ratio = 1;
-                width = 6000;
-                textSize = "100px";
-                radius = 50;
-            }
-            else if(max > 3000 && max <= 10000){
-                ratio = 1;
-                var temp = max - 3000;
-                var x = Math.ceil(temp/3000) + 1;
-                width = 6000 + x*1000;
-                textSize = 150 + x*10;
-                radius = 50 + x*10;
-            }
-            else{
-                ratio = 1;
-                var percent = max/100;
-                textSize = 2*percent;
-                radius = percent;
-            }
-
-            //if height * ratio != width
-            //scale height to 3/4 or 1 the width
-			if(Math.abs((height*ratio)-width)>.000001){
-			    height=width/ratio;
-			}
-			else{
-			    width=height*ratio;
-			}
-
-			//Starts with a dummy point set off the screen to get rid of yellow mouse tracking action
-			var vertices = {{ finalCentroidsList|default(0) }};
-
-			var otherPoints= {{ finalPointsList|default(0) }};
-
-			//ColorsString is essentially a list but delimited with #. Done cause of how jinja jandles list of strings
-			var colorsString="{{ colorChartStr }}";
-			var colors = colorsString.split('#');
-
-
-			//The following block of code turns the screwy list of dicts jinja returns into a proper list of dicts
-			var tempTextData= "{{ textData|safe }}" //Cast as a string to do a replace on the html coded '
-			var textDataOneList= eval("[" + tempTextData + "]"); //Cast as a list
-			var textData = [];
-			textData = textData.concat.apply(textData, textDataOneList);//Flatten from list of list of lists length 1 to a list of lists
-			//End converting to proper list of dicts
-
-			//Find the points that are also centroids
-			var copyIndexes=[];
-			var copy;
-			for (var j=1;j<vertices.length;j++){
-			    for (var k=0;k<otherPoints.length;k++){
-			        if (vertices[j][0]== otherPoints[k][0] && vertices[j][1]== otherPoints[k][1]){
-			          copyIndexes.push(j);
-			        }
-			    }
-			 }
-
-			//Split here because it is behaving weird when done in selectAll
-			var splitOtherPoints= otherPoints.splice(0,otherPoints.length);
-
-			//Set viewbox to scale up to /down to 573.33 by 430 and start at (75,75)
-			var viewboxStr="75 75 ";
-			var space= ' ';
-			var viewboxWidth= (width).toString();
-			var viewboxLength= ((height/500)*height).toString();
-
-			viewboxStr=viewboxStr.concat(viewboxWidth,space,viewboxLength);
-
-			//Set clip extent start at 75,75 as the lowest possible coord is 100,100
-			var voronoi = d3.geom.voronoi()
-			    .clipExtent([[75, 75], [width, height]]);
-
-			var svg = d3.select("#voronoiResults").append("svg")
-			    .attr("width", "100%")
-			    .attr("height", height)
-			    .attr("viewBox", viewboxStr)
-                    .attr("preserveAspectRatio","xMinYMin")
-                .attr("id","voronoi");
-
-			var path = svg.append("g").selectAll("path");
-
-            function mouseoverPoint(d){
-                var id = this.id;
-                id = id.replace("point","");
-                var point = document.getElementById("point"+id);
-                var text = document.getElementById("text"+id);
-                point.style.fill = 'yellow';
-                point.parentNode.appendChild(point); //re-plot point so it is on top of all points and texts
-                text.parentNode.appendChild(text); //re-plot text so it is on top of all points and texts
-            }
-            function mouseoutPoint(d){
-                var id = this.id;
-                id = id.replace("point","");
-                var point = document.getElementById("point"+id);
-                var text = document.getElementById("text"+id);
-                point.style.fill = 'red';
-            }
-            var tablelabels2 = [];
-            for(var i = 0;i < tablelabels.length;i++){
-                tablelabels2[i] = tablelabels[i].replace(/\./g, '');
-            }
-			//Add points
-            var i = 0;
-            var x = -1;
-			svg.selectAll("circle")
-			    .data(splitOtherPoints,function(d){return d;})
-			    .enter().append("circle")
-			        .attr("transform", function(d) { return "translate(" + d + ")"; })
-			        .attr("r", radius)
-			        .attr("class", "my-circle")
-                    .on("mouseover", mouseoverPoint)
-                    .on("mouseout", mouseoutPoint)
-			        .attr("id", function(d) {i +=1; return "point" + i;})
-                    .attr("class", function(d) {x +=1; return "P"+tablelabels2[x]});
-
-            //Add centroids
-			svg.selectAll("circle")
-			    .data(vertices.slice(1))
-			    .enter().append("circle")
-			        .attr("transform", function(d) { return "translate(" + d + ")"; })
-			        .attr("r", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? radius: 3.0);})
-			        .attr("class", "my-circle")
-                    .on("mouseover", mouseoverPoint)
-                    .on("mouseout", mouseoutPoint)
-                    //If the centroid is the only point in the cell make it the same size as a point
-			        .attr("id", function(d,i){return ((copyIndexes.indexOf(i+1)!=-1) ? 'point':'centroids');})
-                    .attr("class", function(d) {x +=1; return "P"+tablelabels2[x]});
-
-            for(var x = 1;x <= i;x++){
-                var point = document.getElementById("point"+x);
-                point.style.fill = 'red';
-                // Add title attribute for Bootstrap tooltips
-                $("#point"+x).attr("title", decodeURIComponent(escape(textData[x-1]["title"])));
-            }
-
-            var i = 0;
-            var x = -1;
-			svg.selectAll("text")
-			    .data(textData)
-			    .enter().append("text")
-			        .attr("x", function(d) { return d.x; })
-			        .attr("y", function(d) { return d.y; })
-			        .text(function (d) { return d.title; })
-			        .attr("font-family", "sans-serif")
-                    .attr("id", function(d) {i +=1; return "text" + i})
-                    .attr("class", function(d) {x +=1; return "T"+tablelabels2[x]})
-			        .attr("font-size", function(){return textSize;});
-			for(x = 1;x <= i;x++){
-                point = document.getElementById("text"+x);
-                point.style.fill = '#383838';
-                point.style.display = 'none';
-            }
-
-			redraw();
-
-			function redraw() {
-			    path = path.data(voronoi(vertices), polygon);
-
-			    path.exit().remove();
-
-			    path.enter().append("path")
-			        .style("fill",function(d,i){return colors[i-1]}) //i-1 because i starts at 1 here
-			        .style("opacity",0.8)
-			        .attr("d", polygon);
-
-			    path.order();
-			}
-
-			function polygon(d) {
-			    return "M" + d.join("L") + "Z";
-			}
-
-			</script>
-			</div> <!-- End Voronoi results -->
-			{% endif %}
-<!-- 			</div> KMeans Results Right
- -->		</div> <!-- End columns -->
-	</div> <!-- End row -->
-	<div class="row">
-		<div class="col-md-12">
-			<a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
-		</div>
-	</div>
-</div></div>
-{% endif %}
+{% block submit %}
 {% endblock %}
