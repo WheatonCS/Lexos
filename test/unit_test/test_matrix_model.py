@@ -101,12 +101,50 @@ class CullingTest:
     )
 
 
+class TfTest:
+    _test_option = MatrixTestOptions(
+        file_id_content_map={
+            0: "ha ha ha ha la ta ha",
+            2: "la la ta ta da da ha",
+            3: "ta da ha"
+        },
+
+        front_end_option=MatrixFrontEndOption(
+            token_option=TokenOption(n_gram_size=1, token_type="word"),
+            norm_option=NormOption(use_freq=True, use_tf_idf=True,
+                                   tf_idf_norm_option='l1'),
+            culling_option=CullingOption(cull_least_seg=None,
+                                         mfw_lowest_rank=None),
+            id_temp_label_map={
+                0: "test_label_1",
+                2: "test_label_2",
+                3: "test_label_3"
+            }
+        )
+    )
+
+    model = MatrixModel(test_options=_test_option)
+
+    expected_final_dtm = pd.DataFrame(
+        [
+            [0.000000, 0.675177, 0.189788, 0.135035],
+            [0.326024, 0.115984, 0.326024, 0.231968],
+            [0.412709, 0.293646, 0.000000, 0.293646]
+        ],
+        index=[0, 2, 3],
+        columns=['da', 'ha', 'la', 'ta']
+    )
+
+
 def test_temp_label():
     assert BasicTest.model.get_temp_label() == Counter([
         "test_label_1", "test_label_2", "test_label_3"
     ])
     assert CullingTest.model.get_temp_label() == Counter([
         "label_1", "test_2", "la_la_la_3"
+    ])
+    assert TfTest.model.get_temp_label() == Counter([
+        "test_label_1", "test_label_2", "test_label_3"
     ])
 
 
@@ -120,6 +158,11 @@ def test_temp_label_id_map():
         1: "label_1",
         2: "test_2",
         3: "la_la_la_3"
+    }
+    assert TfTest.model.get_id_temp_label_map() == {
+        0: "test_label_1",
+        2: "test_label_2",
+        3: "test_label_3"
     }
 
 
@@ -164,4 +207,9 @@ def test_get_matrix():
     pd.testing.assert_frame_equal(
         CullingTest.model.get_matrix(),
         CullingTest.expected_final_dtm
+    )
+
+    pd.testing.assert_frame_equal(
+        TfTest.model.get_matrix(),
+        TfTest.expected_final_dtm
     )
