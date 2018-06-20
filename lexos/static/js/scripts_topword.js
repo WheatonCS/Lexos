@@ -72,7 +72,7 @@ function sendAjaxRequest (url, form) {
 function format (result) {
   return `<div class="topword-result col-lg-6 col-md-6">
               <fieldset class="row col-lg-12 col-md-12">
-                  <legend style="font-size: 16px">${result['title']}</legend>
+                  <legend id= "home" style="font-size: 16px">${result['title']}</legend>
               </fieldset>
               <div class="row col-lg-12 col-md-12">
                   ${result['result']}
