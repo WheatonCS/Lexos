@@ -108,6 +108,8 @@ function UploadAndParseFile (file, fileSize) {
   } else {
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT.value}   ${MAX_FILE_SIZE_UNITS.title} B`)
+    // Without this, it puts a blue background on the progress bar.
+    $("#progress").css('background','transparent')
   }
 }
 
@@ -154,8 +156,7 @@ function sendAjaxRequest (file, filename) {
    * @param {object} e - event
    */
   function FileSelectHandler (e) {
-    /* 'let': increases by 1 when a correct file is added.
-     This is being changed under the for loop below. */
+    /* takes the value of the input tag so that it gets the number of active files*/
     let numberOfFileDone = parseInt($("#counter").val())
     // cancel event and hover styling
     fileDragHover(e)
@@ -205,9 +206,9 @@ function sendAjaxRequest (file, filename) {
       }
     }
     showProgress()
-    let valueOF = numberOfFileDone.toString()
-    $('input[type=text]#counter').val(valueOF);
-
+    // Convert the integer back to string and put it as a value in the input tag.
+    let numActiveFile = numberOfFileDone.toString()
+    $('#counter').attr('value', numActiveFile);
   }
   function showProgress(){
     $("#progress").html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
