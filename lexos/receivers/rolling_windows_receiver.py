@@ -5,23 +5,26 @@ from lexos.receivers.base_receiver import BaseReceiver
 
 
 class RWATokenType(Enum):
-    # This type specify what kind of token (or term) to find in a window
+    """This type specify what kind of token (or term) to find in a window."""
+
     string = "string"
     regex = "regex"
     word = "word"
 
 
 class WindowUnitType(Enum):
-    # this type specify what is the unit of each window.
-    # say it is letter
-    # then each window consist of `window_size` number of letter
+    """This type specify what is the unit of each window.
+
+    Say it is letter, each window consist of `window_size` number of letters.
+    """
+
     letter = "letter"
     word = "word"
     line = "line"
 
 
 class RWAWindowOptions(NamedTuple):
-    # the options related to window creation
+    """The options related to window creation."""
 
     # the size of the window
     window_size: int
@@ -30,7 +33,7 @@ class RWAWindowOptions(NamedTuple):
 
 
 class RWARatioTokenOptions(NamedTuple):
-    # the option if you choose to count by ratio
+    """The option if you choose to count by ratio."""
 
     # the type of the token, see RWATokenType for more detail
     token_type: RWATokenType
@@ -43,7 +46,7 @@ class RWARatioTokenOptions(NamedTuple):
 
 
 class RWAAverageTokenOptions(NamedTuple):
-    # the options if you choose to count by average
+    """The options if you choose to count by average."""
 
     # the type of the token, see RWATokenType for more detail
     token_type: RWATokenType
@@ -51,8 +54,15 @@ class RWAAverageTokenOptions(NamedTuple):
     tokens: List[str]
 
 
+class RWAPlotOptions(NamedTuple):
+    """The option for adjusting plotly result."""
+
+    individual_points: bool
+    black_white: bool
+
+
 class RWAFrontEndOptions(NamedTuple):
-    # all the options to get from the front end
+    """All the options to get from the front end."""
 
     # the options if you choose ratio count,
     # it will be None if you did not choose ratio
