@@ -39,8 +39,8 @@ $(function () {
  * @returns {void} - returns nothing
  */
 function downloadScrubbing () { // eslint-disable-line no-unused-vars
-  // Unfortunately, you can't trigger a download with an ajax request; calling a
-  // Flask route seems to be the easiest method.
+                                // Unfortunately, you can't trigger a download with an ajax request; calling a
+                                // Flask route seems to be the easiest method.
   window.location = '/downloadScrubbing'
 }
 
