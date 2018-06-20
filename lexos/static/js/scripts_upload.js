@@ -156,7 +156,7 @@ function sendAjaxRequest (file, filename) {
   function FileSelectHandler (e) {
     /* 'let': increases by 1 when a correct file is added.
      This is being changed under the for loop below. */
-    let numberOfFileDone = parseInt($('.fa-folder-open-o')[0].id)
+    let numberOfFileDone = 0 //parseInt($('.fa-folder-open-o')[0].id)
     // cancel event and hover styling
     fileDragHover(e)
     // fetch FileList object
