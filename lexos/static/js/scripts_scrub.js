@@ -38,7 +38,7 @@ $(function () {
  * Download the scrubbing results
  * @returns {void} - returns nothing
  */
-function downloadScrubbing () {
+function downloadScrubbing () { // eslint-disable-line no-unused-vars
   // Unfortunately, you can't trigger a download with an ajax request; calling a
   // Flask route seems to be the easiest method.
   window.location = '/downloadScrubbing'
@@ -49,7 +49,7 @@ function downloadScrubbing () {
  * @param {string} action - preview or apply
  * @returns {void} - returns nothing
  */
-function sendScrubbing (action) {
+function sendScrubbing (action) { // eslint-disable-line no-unused-vars
   if ($('#num_active_files').val() === '0') {
     const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
     $('#error-modal-message').html(msg)
