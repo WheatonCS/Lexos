@@ -2110,15 +2110,19 @@ select#orientation {
     max-width: 100%;
     width: 100%;
 }
+/* Make the long table title names scrollable*/
 #topwordTableTitle{
   overflow-x: hidden;
   overflow-y:auto;
   height:50px;
 }
+/* Scroll bar for Chrome. chnages the width of the scroll bar for ONLY those
+   that have the text overflow. */
 #topwordTableTitle::-webkit-scrollbar {
     width: 3px;
     background-color:#ffe6e6;
 }
+/* Scroll bar for chrome. ONLY for text title with overflow*/
 #topwordTableTitle::-webkit-scrollbar-thumb {
     width: 3px;
     background-color:gray;
