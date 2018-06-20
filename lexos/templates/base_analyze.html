@@ -3,18 +3,10 @@
 {% block section_head %}
     <script type="text/javascript"
             src="{{ url_for('static', filename='js/scripts_analyze.js') }}?ver={{ version }}"></script>
-    <script>
-      // Hack because Jinja refuses to do it in the template
-      $(document).ready(function () {
-        sessionCullNumber = "{{ session['analyoption']['cullnumber'] }}"
-        if (sessionCullNumber != '') {
-          $('#cullnumber').val(sessionCullNumber)
-        }
-      })
-    </script>
     <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
     <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
     <meta id="num-active-files" data-number="{{ labels|len }}">
+    <meta id="session-cull-number" data-number="{{ session['analyoption']['cullnumber'] }}">
 {% endblock %}
 
 {% block content %}

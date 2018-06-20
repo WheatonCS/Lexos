@@ -12,8 +12,7 @@ function updateNorm () {
 }
 
 /**
- * Change CSS to make room for most frequent words number input when most
- * frequent words is checked
+ * Change CSS to make room for most frequent words number input when most frequent words is checked
  * @returns {void}
  */
 function updateMfwInput () {
@@ -44,8 +43,7 @@ function updateMfwInput () {
 }
 
 /**
- * Change CSS to make room for must be in x documents number input when culling
- * is checked
+ * Change CSS to make room for must be in x documents number input when culling is checked
  * @returns {void}
  */
 function updateCullInput () {
@@ -76,8 +74,7 @@ function updateCullInput () {
 }
 
 /**
- * Toggle chevron class in order to handle chevron drop down button rotate
- * animation
+ * Toggle chevron class in order to handle chevron drop down button rotate animation.
  * @returns {void}
  */
 function rotateChevron () {
@@ -86,11 +83,23 @@ function rotateChevron () {
   $(this).next().collapse('toggle')
 }
 
+/**
+ * Update cull number in the session.
+ * @returns {void}
+ */
+function updateCullNumber () {
+  const sessionCullNumber = $('#session-cull-number').data().number
+  if (sessionCullNumber !== 0) {
+    $('#cullnumber').val(sessionCullNumber)
+  }
+}
+
 $(function () {
   // Update div/span height when the page first finish loading.
   updateNorm()
   updateMfwInput()
   updateCullInput()
+  updateCullNumber()
 
   // Clock function has to stay in document ready function.
   $('.has-chevron').click(rotateChevron)
