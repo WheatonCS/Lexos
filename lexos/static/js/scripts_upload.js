@@ -156,7 +156,7 @@ function sendAjaxRequest (file, filename) {
   function FileSelectHandler (e) {
     /* 'let': increases by 1 when a correct file is added.
      This is being changed under the for loop below. */
-    let numberOfFileDone = 0 //parseInt($('.fa-folder-open-o')[0].id)
+    let numberOfFileDone = parseInt($("#counter").val())
     // cancel event and hover styling
     fileDragHover(e)
     // fetch FileList object
@@ -205,10 +205,12 @@ function sendAjaxRequest (file, filename) {
       }
     }
     showProgress()
+    let valueOF = numberOfFileDone.toString()
+    $('input[type=text]#counter').val(valueOF);
 
   }
   function showProgress(){
-    progress.html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
+    $("#progress").html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
     $id('fileselect').value = ''
     // this allows the event to fire on "change" in chrome. the value property changing is the
     // normal trigger, for some reason firefox overwrote this with their own behavior.
