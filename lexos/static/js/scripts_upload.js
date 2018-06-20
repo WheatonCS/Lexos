@@ -109,7 +109,7 @@ function UploadAndParseFile (file, fileSize) {
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT.value}   ${MAX_FILE_SIZE_UNITS.title} B`)
     // Without this, it puts a blue background on the progress bar.
-    $("#progress").css('background','transparent')
+    $('#progress').css('background', 'transparent')
   }
 }
 
@@ -129,93 +129,99 @@ function sendAjaxRequest (file, filename) {
     headers: {'X-FILENAME': encodeURIComponent(filename)}
   })
 }
+
 /**
  * Drag and drop of files.
  * @return {void}
  * */
-  function Init () {
-    const fileselect = $id('fileselect')
-    const filedrag = $id('dragndrop')
+function Init () {
+  const fileselect = $id('fileselect')
+  const filedrag = $id('dragndrop')
 
-    // File select
-    fileselect.addEventListener('change', FileSelectHandler, false)
+  // File select
+  fileselect.addEventListener('change', FileSelectHandler, false)
 
-    // Is XHR2 available?
-    let xhr = new XMLHttpRequest()
-    if (xhr.upload) {
-      // file drop
-      filedrag.addEventListener('dragover', fileDragHover, false)
-      filedrag.addEventListener('dragleave', fileDragHover, false)
-      filedrag.addEventListener('drop', FileSelectHandler, false)
+  // Is XHR2 available?
+  let xhr = new XMLHttpRequest()
+  if (xhr.upload) {
+    // file drop
+    filedrag.addEventListener('dragover', fileDragHover, false)
+    filedrag.addEventListener('dragleave', fileDragHover, false)
+    filedrag.addEventListener('drop', FileSelectHandler, false)
+  }
+}
+
+/**
+ * file selection
+ * @return {void}
+ * @param {object} e - event
+ */
+function FileSelectHandler (e) {
+  /* takes the value of the input tag so that it gets the number of active files */
+  let numberOfFileDone = parseInt($('#counter').val())
+  // cancel event and hover styling
+  fileDragHover(e)
+  // fetch FileList object
+  let files = e.target.files || e.dataTransfer.files
+  // Total number of files uploaded.
+  let totalFiles = files.length
+  // Resets the progress bar to defualt message after a file upload.
+  resetProgressBar()
+
+  const progress = $('#progress')
+  const progressBar = $('#progress-bar')
+
+  // Process all File objects
+  for (let f of files) {
+    let added = 0
+
+    if (f.size < $id('MAX_FILE_SIZE').value) {
+      numberOfFileDone += 1
+      added = 1
+    }
+    let fileSize = $id('MAX_FILE_SIZE').value
+    UploadAndParseFile(f, fileSize)
+    // Loading progress bar.
+    if (f.type === '') {
+      progress.html('Loading Workspace')
+    } else {
+      let calculatedWidth = String(180 * numberOfFileDone / totalFiles) + 'px'
+      progress.html(numberOfFileDone + 'of' + totalFiles).css('color', '#3498DB')
+
+      progressBar.css({'width': calculatedWidth})
+      if (numberOfFileDone / totalFiles > 0.5) {
+        progress.css('color', '#FFF')
+      }
+      if (added === 1) {
+        progressBar.html('Complete!').css({
+          'color': '#FFF',
+          'text-align': 'center',
+          'width': '175px',
+          'height': '20px'
+        }).fadeOut(2000)
+        const faFolderOpen = $('.fa-folder-open-o')
+        faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
+        faFolderOpen.fadeIn(200)
+        $('#status').hide()
+      }
     }
   }
+  showProgress()
+  // Convert the integer back to string and put it as a value in the input tag.
+  let numActiveFile = numberOfFileDone.toString()
+  $('#counter').attr('value', numActiveFile)
+}
 
-  /**
-   * file selection
-   * @return {void}
-   * @param {object} e - event
-   */
-  function FileSelectHandler (e) {
-    /* takes the value of the input tag so that it gets the number of active files*/
-    let numberOfFileDone = parseInt($("#counter").val())
-    // cancel event and hover styling
-    fileDragHover(e)
-    // fetch FileList object
-    let files = e.target.files || e.dataTransfer.files
-    // Total number of files uploaded.
-    let totalFiles = files.length
-    // Resets the progress bar to defualt message after a file upload.
-    resetProgressBar()
-
-    const progress = $('#progress')
-    const progressBar = $('#progress-bar')
-
-    // Process all File objects
-    for (let f of files) {
-      let added = 0
-
-      if (f.size < $id('MAX_FILE_SIZE').value) {
-        numberOfFileDone += 1
-        added = 1
-      }
-      let fileSize = $id('MAX_FILE_SIZE').value
-      UploadAndParseFile(f, fileSize)
-      // Loading progress bar.
-      if (f.type === '') {
-        progress.html('Loading Workspace')
-      } else {
-        let calculatedWidth = String(180 * numberOfFileDone / totalFiles) + 'px'
-        progress.html(numberOfFileDone+ 'of'+ totalFiles).css('color', '#3498DB')
-
-        progressBar.css({'width': calculatedWidth})
-        if (numberOfFileDone / totalFiles > 0.5) {
-          progress.css('color', '#FFF')
-        }
-        if (added === 1) {
-          progressBar.html('Complete!').css({
-            'color': '#FFF',
-            'text-align': 'center',
-            'width': '175px',
-            'height': '20px'
-          }).fadeOut(2000)
-          const faFolderOpen = $('.fa-folder-open-o')
-          faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
-          faFolderOpen.fadeIn(200)
-          $('#status').hide()
-        }
-      }
-    }
-    showProgress()
-    // Convert the integer back to string and put it as a value in the input tag.
-    let numActiveFile = numberOfFileDone.toString()
-    $('#counter').attr('value', numActiveFile);
-  }
-  function showProgress(){
-    $("#progress").html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
-    $id('fileselect').value = ''
-    // this allows the event to fire on "change" in chrome. the value property changing is the
-    // normal trigger, for some reason firefox overwrote this with their own behavior.
-  }
+/**
+ * Displays the message on the 'progress' bar
+ * @return { void }
+ */
+function showProgress () {
+  $('#progress').html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
+  $id('fileselect').value = ''
+  // this allows the event to fire on "change" in chrome. the value property changing is the
+  // normal trigger, for some reason firefox overwrote this with their own behavior.
+}
 
 $(function () {
   /* Message for when you hover on the open folder icon on the top right. */
