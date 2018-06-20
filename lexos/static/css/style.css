@@ -2116,12 +2116,13 @@ select#orientation {
   height:50px;
 }
 #topwordTableTitle::-webkit-scrollbar {
-    width: 6px;
-    background-color:#337ab7;
+    width: 3px;
+    background-color:#ffe6e6;
 }
-#topwordTableTitle::-webkit-scrollbar {
-    width: 6px;
-    background-color:#337ab7;
+#topwordTableTitle::-webkit-scrollbar-thumb {
+    width: 3px;
+    background-color:gray;
+    border-radius:15px;
 }
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
