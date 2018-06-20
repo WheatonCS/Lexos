@@ -148,35 +148,4 @@ $(function () {
   $('#radioaverage').click(function () {
     $('.rollingsearchwordoptdiv').addClass('hidden')
   })
-
-  // Transfers the value when the input field is checkd
-  $('#radioinputletter').click(function () {
-    var oldVal = $('.rollinginput').val()
-    $('.rollinginput').val(oldVal)
-  })
-
-  // Keyboard navigation
-  $('.rollinginput').keyup(function (evt) {
-    var theEvent = evt || window.event
-    var key = theEvent.keyCode || theEvent.which
-    if (key !== 8) { // 8 is backspace
-      if ($(this).val().length > 1 && $('#inputletter').prop('checked')) {
-        $(this).val($(this).val().slice(0, 1))
-      }
-    }
-  })
-
-  // Keyboard navigation
-  $('#rollingwindowsize').keypress(function (evt) {
-    var theEvent = evt || window.event
-    var key = theEvent.keyCode || theEvent.which
-    if (key !== 8) { // 8 is backspace
-      key = String.fromCharCode(key)
-      var regex = /[0-9]|\./
-      if (!regex.test(key)) {
-        theEvent.returnValue = false
-        if (theEvent.preventDefault) theEvent.preventDefault()
-      }
-    }
-  })
 })
