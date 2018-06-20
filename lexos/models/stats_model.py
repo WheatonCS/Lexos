@@ -85,7 +85,7 @@ class StatsModel(BaseModel):
     @property
     def _active_doc_term_matrix(self) -> pd.DataFrame:
         """:return: A dtm that contains only user selected files."""
-        return self._doc_term_matrix.iloc[self._stats_option.active_file_ids]
+        return self._doc_term_matrix.loc[self._stats_option.active_file_ids]
 
     @property
     def _token_type_str(self) -> str:

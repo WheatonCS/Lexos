@@ -1903,73 +1903,8 @@ select#orientation {
 
 
 /* ================== K MEANS STYLING ==================== */
-
-.silhouette-options,
-.kmeans-options {
-  float: left;
-}
-
-.silhouette-options,
-.kmeans-options label{
-  clear: both;
-  float: left;
-  line-height: 34px;
-}
-
-#kmeanscreateoptions {
-  margin-bottom: 20px;
-  width: 400px;
-}
-
-#kmeansresultsLeft {
-  border: 1px solid #BBB;
-  border-radius: 6px;
-  border-spacing: 10px;
-  max-height:600px;
-  float:left;
-  overflow:auto;
-  width: 27%;
-  margin-top: 10px;
-  padding: 10px 4px 4px 4px;
-}
-
-#kmeansresultsRight {
-  margin-left: 27%;
-  height: 500px;
-  overflow: hidden;
-}
-
-.imageLinkBtn {
-  width: 27%;
-  margin: -20px auto 10px auto;
-}
-
-#basicTable {
-  border: none;
-  width: 100%;
-  margin: 0 auto 4px auto;
-  font-size: 13px;
-}
-
-#basicTable tr.white-header {
-  background-color: white;
-}
-
-#basicTable th {
-  padding: 9px;
-  text-align: center;
-  vertical-align: top;
-}
-
-#basicTable td {
-  padding: 8px;
-  text-align: center;
-}
-
-#kmeansimage {
-  max-width: 100%;
-  max-height:100%;
-  margin-top:-30px;
+#KMeans-plot .plot {
+  opacity: 1 !important;
 }
 
 #nclusters {
@@ -1988,27 +1923,27 @@ select#orientation {
   width: 110px;
 }
 
+#n_init {
+  width: 110px;
+}
+
+#tolerance {
+  width: 110px;
+}
+
+.k-means-result-download-button {
+  margin-top: 10px;
+}
+
 .icon-help#kValueTooltip,
 #KMeans-maxIter-tooltip,
 #KMeans-initailize-tip,
 #KMeans-n_init-tooltip,
 #KMeans-viz-tip,
 #KMeans-tolerance-tooltip {
-  position: relative;
   float: right;
+  position: relative;
   padding-left: 5px;
-}
-
-#advancedKMeansOptions {
-  margin-bottom: 30px;
-}
-
-#n_init {
-  width: 110px;
-}
-
-#tolerance {
-  width: 120px;
 }
 
 /* ================== SIMILARITY QUERY STYLING ==================== */
