@@ -159,25 +159,28 @@
             <div class="row">
                 <!-- Analyze-Advanced Left Column -->
                 <div class="col-md-5">
-                    <!-- Fieldset - Culling-Options -->
+                    <!-- Fieldsets - Culling-Options -->
                     <fieldset class="analyze-advanced-options"
                               id="culling-options">
-                        <legend class="has-chevron" id="culling-title">Culling
-                            Options
+                        <legend class="has-chevron" id="culling-title"
+                                style="width:220px;">
+                            Culling Options
                             <i class="fa fa-question-circle lexos-tooltip-trigger"
                                data-toggle="tooltip" data-html="true"
                                data-placement="right" data-container="body"
-                               title="Culling options allow the user to place statistical bounds on the terms included in the DTM."
-                               style=""></i>
+                               title="Culling options allow the user to place statistical
+                                      bounds on the terms included in the DTM.">
+                            </i>
                             <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True }}"
                                   id="cullingOptsChev"
                                   data-target="#cullingOptsPanel"
                                   aria-expanded="false"
-                                  aria-controls="cullingOptsPanel"></span>
+                                  aria-controls="cullingOptsPanel">
+                            </span>
                         </legend>
                         <div class="collapse" id="cullingoptsdiv">
-                            <div style="" aria-expanded="true"
-                                 class="collapse in" id="cullingOptsPanel"
+                            <div aria-expanded="true" class="collapse in"
+                                 id="cullingOptsPanel"
                                  style="display: {{ 'block' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True }}">
                                 <label>Most Frequent Words<i
                                         class="fa fa-question-circle lexos-tooltip-trigger"
@@ -191,36 +194,37 @@
                                 </label>
 
                                 <span id="mfwnumber-input">
-							<label>Use top <input type="number"
-                                                  name="mfwnumber"
-                                                  id="mfwnumber"
-                                                  style="width:60px;" min="1"
-                                                  step="1"
-                                                  value="{{ session['analyoption']['mfwnumber'] }}"/> terms</label>
-							</span>
+                                    <label>Use top
+                                        <input type="number" name="mfwnumber"
+                                               id="mfwnumber" min="1"
+                                               style="width:60px;" step="1"
+                                               value="{{ session['analyoption']['mfwnumber'] }}"/>
+                                        terms
+                                    </label>
+                                </span>
 
-                                <label>Culling<i
-                                        class="fa fa-question-circle lexos-tooltip-trigger"
-                                        data-toggle="tooltip" data-html="true"
-                                        data-placement="right"
-                                        data-container="body"
-                                        title="Set the minimum number of documents in which terms must occur to be included in the DTM."
-                                        style="padding-left:4px;"></i>
+                                <label>Culling
+                                    <i class="fa fa-question-circle lexos-tooltip-trigger"
+                                       data-toggle="tooltip" data-html="true"
+                                       data-placement="right"
+                                       data-container="body"
+                                       title="Set the minimum number of documents in
+                                              which terms must occur to be included in the DTM."
+                                       style="padding-left:4px;"></i>
                                     <input type="checkbox" id="culling"
                                            name="cullcheckbox" {{ 'checked' if session['analyoption']['cullcheckbox'] }}/>
                                 </label>
 
                                 <span id="cullnumber-input">
-							<label>Must be in <input type="number"
-                                                     name="cullnumber"
-                                                     id="cullnumber"
-                                                     style="width:60px;"
-                                                     min="1"
-                                                     max="{{ numActiveDocs }}"
-                                                     step="1"
-                                                     value="{{ numActiveDocs }}"/> documents</label>
-							</span>
-                                </label>
+                                    <label>Must be in
+                                        <input type="number" name="cullnumber"
+                                               id="cullnumber" step="1"
+                                               style="width:60px;" min="1"
+                                               max="{{ numActiveDocs }}"
+                                               value="{{ numActiveDocs }}"/>
+                                        documents
+                                    </label>
+                                </span>
                             </div>
                         </div>
                     </fieldset>
@@ -228,8 +232,7 @@
 
                 <!-- Analyze-Advanced Left Column -->
                 <div class="col-md-7">
-
-                    <!-- Fieldset - Temp-Label-Div -->
+                    <!-- Fieldsets - Temp-Label-Div -->
                     <fieldset class="analyze-advanced-options"
                               id="temp-label-div">
                         <legend id="assign-title" class="has-chevron">Assign
@@ -237,7 +240,9 @@
                             <i class="fa fa-question-circle lexos-tooltip-trigger"
                                data-toggle="tooltip" data-html="true"
                                data-placement="right" data-container="body"
-                               title="Assign temporary names to documents for use in tables and graphs produced by the Lexos tools that use the Tokenize, Normalize, and Culling options."
+                               title="Assign temporary names to documents for use
+                                      in tables and graphs produced by the Lexos
+                                      tools that use the Tokenize, Normalize, and Culling options."
                                style=""></i>
                             <span class="fa fa-chevron-right rotate"
                                   id="assignLabelsChev"
@@ -249,55 +254,39 @@
                              style="overflow:auto;width:100%;">
                             <div style="" aria-expanded="true"
                                  class="collapse in" id="tempLabelPanel">
-                                <table style="width:100%;border:none;">
-                                    {% set i = 1 %}
-                                    {% for fileID, label in labels.items() %}
-                                        <tr>
-                                            <td style="width:40px;">{{ i }}</td>
-                                            <td><input type="text"
-                                                       class="filenames"
-                                                       name="file_{{ fileID }}"
-                                                       id="{{ fileID }}"
-                                                       value="{{ request.form['file_'+(fileID|str)] or label }}"
-                                                       style="min-width:240px;">
-                                            </td>
-                                        </tr>
-                                        {% set i = i+1 %}
-                                    {%- endfor %}
-                                </table>
                                 {% if labels|len == 0 %}
                                     <span id="no-labels">No Documents are Selected</span>
-                                {%- endif %}
+                                {% else %}
+                                    <table style="width:100%;border:none;">
+                                        {% for fileID, label in labels.items() %}
+                                            <tr>
+                                                <td style="width:30px;">{{ loop.index }}</td>
+                                                <td>
+                                                    <label for="{{ fileID }}"></label>
+                                                    <input type="text"
+                                                           class="filenames"
+                                                           name="file_{{ fileID }}"
+                                                           id="{{ fileID }}"
+                                                           value="{{ request.form['file_'+(fileID|str)] or label }}"
+                                                           style="min-width:240px;">
+                                                </td>
+                                            </tr>
+                                        {%- endfor %}
+                                    </table>
+                                {% endif %}
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <!-- End Analyze-Advanced Row 2 -->
         </div>
         <!-- End Right Column - Analyze-Advanced -->
     </div>
     <!-- End Top Row -->
 
     <!-- Analyze-Results Row -->
-    <div id="analyze-results" class="row">
-        <div class="col-md-12">
-            <!-- For hierarchy and kmeans, add a row for the silhouette score results -->
-            {% if request.path == "/hierarchy" or request.path == "/kmeans" %}
-                <div id="silhouetteResults" class="row" style="display:none;">
-                    <div class="col-md-12">
-                        {% block silhouetteResults %}{% endblock %}
-                    </div>
-                </div>
-            {% endif %}
-
-            <!-- Results Row -->
-            <div class="row">
-                <div class="col-md-12">
-                    {% block results %}{% endblock %}
-                </div>
-            </div>
-        </div>
+    <div id="analyze-results" class="row col-md-12 col-lg-12">
+        {% block results %}{% endblock %}
     </div>
     <!-- End Analyze-Results Row -->
 
