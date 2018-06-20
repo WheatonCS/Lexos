@@ -34,6 +34,14 @@ function checkAllowClassComparison () {
   const enableClassComparison = $('#num-active-classes').data().number < 2
   $('#classToPara').attr('disabled', enableClassComparison)
   $('#classToClass').attr('disabled', enableClassComparison)
+  /* Displays the class message if there is less than 2 classes assigned*/
+  if (enableClassComparison){
+    $("#classInfo").show()
+  } else{
+    $("#classInfo").hide()
+  }
+
+
 }
 
 /**
