@@ -111,19 +111,19 @@ function displayAdditionalOptions () {
   advancedOptions.siblings('.expansion').slideToggle(0)
 
   $('#swfileselect').change(function (ev) {
-    truncateFileName(ev)
+    truncateFileName(ev, '#swfileselectbttnlabel')
   })
 
   $('#lemfileselect').change(function (ev) {
-    truncateFileName(ev)
+    truncateFileName(ev, '#lemfileselectbttnlabel')
   })
 
   $('#consfileselect').change(function (ev) {
-    truncateFileName(ev)
+    truncateFileName(ev, '#consfileselectbttnlabel')
   })
 
   $('#scfileselect').change(function (ev) {
-    truncateFileName(ev)
+    truncateFileName(ev, '#scfileselectbttnlabel')
   })
 }
 
@@ -132,10 +132,10 @@ function displayAdditionalOptions () {
  * @param {jQuery.Event} ev - jQuery event object
  * @returns {void} - returns nothing
  */
-function truncateFileName (ev) {
+function truncateFileName (ev, container) {
   let fileName = ev.target.files[0].name
   if (fileName.length > 25) { fileName = fileName.substring(0, 24) + '...' }
-  $(ev.currentTarget).html(fileName)
+  $(container).html(fileName)
 }
 
 /**
