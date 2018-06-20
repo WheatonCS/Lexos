@@ -2110,6 +2110,11 @@ select#orientation {
     max-width: 100%;
     width: 100%;
 }
+#home{
+  overflow-x: hidden;
+  overflow-y:auto;
+  height:50px;
+}
 
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
