@@ -1,0 +1,7 @@
+Terms,four,one,three,two,Total,Average
+four,1,0,0,0,1,0.25
+one,0,1,0,0,1,0.25
+three,0,0,1,0,1,0.25
+two,0,0,0,1,1,0.25
+Total,1,1,1,1,4,1
+Average,0.25,0.25,0.25,0.25,1,
