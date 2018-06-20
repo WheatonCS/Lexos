@@ -152,8 +152,8 @@ function buttonFileLabelsFunction (bttnFileLabels) {
     // $(this).siblings('.scrub-upload').attr('value', '');
     // Next two lines clear the file input; it's hard to find a cross-browser solution
     $(`#${fileType}`).val('')
-    $('#' + fileType).replaceWith($(`#${fileType}`).clone(true))
-    $(`#${fileType}`).attr('disabled', 'disabled')
+    $(`#${fileType}`).replaceWith($(`#${fileType}`).clone(true))
+    $(`#usecache${fileType}`).attr('disabled', 'disabled')
     $(bttnFileLabels).text('')
   }
 }
