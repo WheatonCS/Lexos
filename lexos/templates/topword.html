@@ -82,11 +82,14 @@
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-trigger="hover" data-html="true" data-toggle="tooltip"
                    data-placement="right" data-container="body"
-                   title="This indicates assigned classes and the documents contained
-                      in each class. Please assign at least two classes to enable
-                      comparisons between documents to classes and comparison
-                      between classes."></i>
+                   title="This indicates assigned classes and the documents
+                          contained in each class."></i>
             </legend>
+            <p id="classInfo">No classes have been assigned or all active documents belong to
+                a single class. If you wish to compare documents of different
+                classes, you must first assign them class labels on the
+                <a href={{ url_for('manage.manage') }}>manage screen</a>
+            </p>
         </fieldset>
         <!-- The class divisions. -->
         {% for class_name in classDivisionMap.index %}
