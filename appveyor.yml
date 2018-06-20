@@ -45,6 +45,7 @@ test_script:
   - .\node_modules\.bin\eslint .\js\scripts_similarity.js
   - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
   - .\node_modules\.bin/eslint .\js\scripts_kmeans.js
+  - .\node_modules\.bin/eslint .\js\scripts_analyze.js
   - .\node_modules\.bin/eslint .\js\utility.js
   - cd ../..
 

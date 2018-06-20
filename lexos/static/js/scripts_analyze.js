@@ -1,6 +1,6 @@
 /**
  * Show the options for weighted counts normalization if selected and hide
- * these options when another normalization technique is selected
+ * these options when another normalization technique is selected.
  * @returns {void}
  */
 function updateNorm () {
@@ -12,7 +12,7 @@ function updateNorm () {
 }
 
 /**
- * Change CSS to make room for most frequent words number input when most frequent words is checked
+ * Change CSS to make room for most frequent words number input when most frequent words is checked.
  * @returns {void}
  */
 function updateMfwInput () {
@@ -43,7 +43,7 @@ function updateMfwInput () {
 }
 
 /**
- * Change CSS to make room for must be in x documents number input when culling is checked
+ * Change CSS to make room for must be in x documents number input when culling is checked.
  * @returns {void}
  */
 function updateCullInput () {
@@ -107,4 +107,3 @@ $(function () {
   $('input[type=checkbox][name=mfwcheckbox]').click(updateMfwInput)
   $('input[type=checkbox][name=cullcheckbox]').click(updateCullInput)
 })
-
