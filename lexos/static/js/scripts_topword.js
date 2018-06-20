@@ -1,7 +1,7 @@
 /**
- * the function to run the error modal
- * @param {string} htmlMsg - the message to display, you can put html in it
- * @returns {void}.
+ * The function to run the error modal.
+ * @param {string} htmlMsg: the message to display.
+ * @returns {void}
  */
 function runModal (htmlMsg) {
   $('#error-modal-message').html(htmlMsg)
@@ -9,8 +9,8 @@ function runModal (htmlMsg) {
 }
 
 /**
- * check all the easy error with js, in this case, you need more than 2 documents
- * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null
+ * Check if at least 2 documents are uploaded.
+ * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null.
  */
 function submissionError () {
   const manageUrl = $('#manage-url').data().url
@@ -28,18 +28,17 @@ function submissionError () {
 
 /**
  * Check if allow comparison among classes or classes to corpus.
- * @returns {void}.
+ * @returns {void}
  */
 function checkAllowClassComparison () {
   const enableClassComparison = $('#num-active-classes').data().number < 2
   $('#classToPara').attr('disabled', enableClassComparison)
   $('#classToClass').attr('disabled', enableClassComparison)
-
 }
 
 /**
- * the function to convert the from into json
- * @returns {{string: string}} - the from converted to json
+ * The function to convert the from into json.
+ * @returns {{string: string}}: the from converted to json
  */
 function jsonifyForm () {
   const form = {}
@@ -50,10 +49,10 @@ function jsonifyForm () {
 }
 
 /**
- * send the ajax request
- * @param {string} url: the url to post
- * @param {object.<string, string>} form: the form data packed into an object
- * @returns {jQuery.Ajax}: an jQuery Ajax object
+ * Send the ajax request.
+ * @param {string} url: the url to post.
+ * @param {object.<string, string>} form: the form data packed into an object.
+ * @returns {jQuery.Ajax}: an jQuery Ajax object.
  */
 function sendAjaxRequest (url, form) {
   return $.ajax({
@@ -81,7 +80,7 @@ function format (result) {
 }
 
 /**
- * display the result of the top words on web page
+ * Display the result of the top words on web page.
  * @returns {void}
  */
 function generateTopWordResult () {
@@ -105,15 +104,14 @@ function generateTopWordResult () {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        runModal('error encountered while generating the similarity query result.')
+        console.log(`textStatus: ${textStatus}`)
+        console.log(`errorThrown: ${errorThrown}`)
+        runModal('Error encountered while generating the topword result.')
       })
     .always(
       function () {
         $('#status-analyze').css({'visibility': 'hidden'})
       })
-
 }
 
 $(function () {
@@ -124,7 +122,7 @@ $(function () {
   // Check if comparison among classes should be enabled.
   checkAllowClassComparison()
   /**
-   * The event handler for generate similarity clicked
+   * The event handler for generate top word clicked
    */
   $('#get-topwords').click(function () {
     const error = submissionError() // the error happens during submission
@@ -134,6 +132,4 @@ $(function () {
       runModal(error)
     }
   })
-
 })
-
