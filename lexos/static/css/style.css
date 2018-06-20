@@ -1971,11 +1971,11 @@ select#orientation {
 }
 
 /* ================== TOPWORD STYLING ==================== */
-/*increased the width of the table rows to adjust for the scroll bar on the right*/
+/* Increased the width of the table rows to adjust for the scroll bar on the right*/
 .result-table>tbody> tr{
   width:103.5%;
 }
-/*the table containing all the document names*/
+/* The table containing all the document names*/
 .class-division-table tbody {
   display: block;
   overflow-y: auto;
@@ -1984,21 +1984,21 @@ select#orientation {
 }
 
 .td-top {
-  /*we set the 1000px so that it takes all the space. */
+  /* We set the 1000px so that it takes all the space. */
   width: 1000px !important;
 }
 
-/*this is to remove the middle border of the table*/
+/* This is to remove the middle border of the table*/
 .result-table>tbody>tr>td:nth-of-type(odd){
   border-right:0;
 }
 
-/*this is to remove the middle border of the table*/
+/* This is to remove the middle border of the table*/
 .result-table>tbody>tr>td:nth-of-type(even){
   border-left:0;
 }
 
-/*table for the generated result*/
+/* Table for the generated result*/
 .result-table tbody {
   display: table-header-group;
   overflow:auto;
@@ -2007,11 +2007,11 @@ select#orientation {
   overflow-x:hidden;
 }
 
-/*The header column covers the full length of the table*/
+/* The header column covers the full length of the table*/
 .header-fixed {
     width: 100%
 }
-/*the display is set as block so that the header position can be fixed*/
+/* The display is set as block so that the header position can be fixed*/
 .header-fixed > thead,
 .header-fixed > tbody,
 .header-fixed > thead > tr,
