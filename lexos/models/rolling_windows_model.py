@@ -429,10 +429,3 @@ class RollingWindowsModel(BaseModel):
             raise ValueError("unhandled count type")
 
         return plot(result_plot, include_plotlyjs=False, output_type='div')
-
-    def _get_rwa_graph(self) -> str:
-
-        return plot(
-            self._get_rwa_plotly(), include_plotlyjs=False, output_type='div',
-            validate=False
-        )
