@@ -2044,7 +2044,7 @@ select#orientation {
 .class-division-table tbody {
   display: block;
   overflow-y: auto;
-  height: 150px;
+  height: 150px; /* Shows exactly 5 rows of the table*/
 
 }
 
