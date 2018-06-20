@@ -2110,12 +2110,19 @@ select#orientation {
     max-width: 100%;
     width: 100%;
 }
-#home{
+#topwordTableTitle{
   overflow-x: hidden;
   overflow-y:auto;
   height:50px;
 }
-
+#topwordTableTitle::-webkit-scrollbar {
+    width: 6px;
+    background-color:#337ab7;
+}
+#topwordTableTitle::-webkit-scrollbar {
+    width: 6px;
+    background-color:#337ab7;
+}
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {
