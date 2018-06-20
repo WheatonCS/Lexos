@@ -216,19 +216,25 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         # <[whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
         # as applied across newlines, (re.MULTILINE), on re.UNICODE,
         # and .* includes newlines (re.DOTALL)
+        processed_text = re.sub('<.*?>', " ", orig_text)
+        '''
         pattern = re.compile(
             "<\s*" + re.escape(tag) + "( .+?>|>).+?</\s*" + re.escape(tag) +
             ">", re.MULTILINE | re.DOTALL | re.UNICODE)
 
         processed_text = re.sub(pattern, " ", orig_text)
+        '''
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
     elif action == "replace-element":
+        '''
         pattern = re.compile(
             "<\s*" + re.escape(tag) + ".*?>.+?</\s*" + re.escape(tag) + ".*?>",
             re.MULTILINE | re.DOTALL | re.UNICODE)
 
         processed_text = re.sub(pattern, attribute, orig_text)
+        '''
+        processed_text = re.sub('^<.*?=+>$', " ", orig_text)
 
     else:
         processed_text = orig_text    # Leave Tag Alone
