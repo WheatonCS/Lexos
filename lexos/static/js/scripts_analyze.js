@@ -1,35 +1,3 @@
-$(function () {
-  $('.has-chevron').on('click', rotateChevron)
-
-  $('input[type=radio][name=tokenType]').click(updateTokenizeCheckbox)
-
-  updateTokenizeCheckbox()
-
-  $('input[type=radio][name=normalizeType]').click(updateNorm)
-
-  updateNorm()
-
-  $('input[type=checkbox][name=mfwcheckbox]').click(updateMfwInput)
-
-  updateMfwInput()
-
-  $('input[type=checkbox][name=cullcheckbox]').click(updateCullInput)
-
-  updateCullInput()
-})
-
-/**
- * Update tokenize checkbox for selecting documents
- * @returns {void}
- */
-function updateTokenizeCheckbox () {
-  if ($('#tokenByWords').is(':checked')) {
-    $('#inWordsOnly').hide()
-  } else {
-    $('#inWordsOnly').show()
-  }
-}
-
 /**
  * Show the options for weighted counts normalization if selected and hide
  * these options when another normalization technique is selected
@@ -56,19 +24,19 @@ function updateMfwInput () {
     // If culling is checked
     if ($('#culling').is(':checked')) {
       // Change CSS to make room
-      $('#temp-label-div').css('max-height', '221px')
-      $('#modifylabels').css('max-height', '160px')
+      $('#temp-label-div').css('max-height', '210px')
+      $('#modifylabels').css('max-height', '150px')
     } else {
-      $('#temp-label-div').css('max-height', '191px')
-      $('#modifylabels').css('max-height', '130px')
+      $('#temp-label-div').css('max-height', '180px')
+      $('#modifylabels').css('max-height', '120px')
     }
   } else {
     if ($('#culling').is(':checked')) {
-      $('#temp-label-div').css('max-height', '191px')
-      $('#modifylabels').css('max-height', '130px')
+      $('#temp-label-div').css('max-height', '180px')
+      $('#modifylabels').css('max-height', '120px')
     } else {
-      $('#temp-label-div').css('max-height', '161px')
-      $('#modifylabels').css('max-height', '100px')
+      $('#temp-label-div').css('max-height', '150px')
+      $('#modifylabels').css('max-height', '90px')
     }
     // Hide most frequent words input if MFW is not checked
     $('span[id=mfwnumber-input]').hide()
@@ -88,19 +56,19 @@ function updateCullInput () {
     // If most frequent words is checked
     if ($('#MFW').is(':checked')) {
       // Change CSS to make room
-      $('#temp-label-div').css('max-height', '221px')
-      $('#modifylabels').css('max-height', '160px')
+      $('#temp-label-div').css('max-height', '210px')
+      $('#modifylabels').css('max-height', '150px')
     } else {
-      $('#temp-label-div').css('max-height', '191px')
-      $('#modifylabels').css('max-height', '130px')
+      $('#temp-label-div').css('max-height', '180px')
+      $('#modifylabels').css('max-height', '120px')
     }
   } else {
     if ($('#MFW').is(':checked')) {
-      $('#temp-label-div').css('max-height', '191px')
-      $('#modifylabels').css('max-height', '130px')
+      $('#temp-label-div').css('max-height', '180px')
+      $('#modifylabels').css('max-height', '120px')
     } else {
-      $('#temp-label-div').css('max-height', '161px')
-      $('#modifylabels').css('max-height', '100px')
+      $('#temp-label-div').css('max-height', '150px')
+      $('#modifylabels').css('max-height', '90px')
     }
     // Hide culling input if culling is not checked
     $('span[id=cullnumber-input]').hide()
@@ -117,3 +85,17 @@ function rotateChevron () {
 
   $(this).next().collapse('toggle')
 }
+
+$(function () {
+  // Update div/span height when the page first finish loading.
+  updateNorm()
+  updateMfwInput()
+  updateCullInput()
+
+  // Clock function has to stay in document ready function.
+  $('.has-chevron').click(rotateChevron)
+  $('input[type=radio][name=normalizeType]').click(updateNorm)
+  $('input[type=checkbox][name=mfwcheckbox]').click(updateMfwInput)
+  $('input[type=checkbox][name=cullcheckbox]').click(updateCullInput)
+})
+
