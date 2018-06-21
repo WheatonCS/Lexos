@@ -1,6 +1,6 @@
-# Hierarchical Clustering
+# K-Means Clustering
 
-This function clusters the texts together using a distance metric to show 
+This function clusters the texts together using K-Means to show 
 similarity between texts
 
 *Test Files:* HenryWP_ThePirate.txt, Irving_ripVanWrinkle.txt, 
@@ -8,8 +8,8 @@ Lippard_BelOfPrairieEden.txt, Melville_MobyDick.txt,
 Poe_FallOfHouseUsher_1839.txt
 
 *Result Files:* results_defaults.png, results_byCharacters.png, 
-results_braycurtis.png, results_leftOrientation.png, results_culling.png,
-results_rawCounts.png
+results_numberOfClusters.png, results_2D_Scatter.png, results_3D_Scatter.png,
+results_rawCounts.png, results_culling.png
 
 
 
@@ -22,7 +22,7 @@ results_rawCounts.png
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. Hierarchical Clustering 
+1. K-Means Clustering 
 	- Change **NO** settings  
 	
 Results:
@@ -38,7 +38,7 @@ Results:
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. Hierarchical Clustering 
+1. K-Means Clustering 
 	- Change Tokenize to "by Characters"
 	- Keep all other settings as default
 	
@@ -46,7 +46,7 @@ Results:
 - results_byCharacters.png
 
 
-## Test different Distance Metric
+## Test Number pf Clusters
 
 0. UPLOAD ALL TEST FILES:
     - HenryWP_ThePirate.txt
@@ -55,15 +55,15 @@ Results:
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. Hierarchical Clustering 
-	- Change Distance Metric to Braycurtis 
+1. K-Means Clustering 
+	- Change Number of Clusters (K-Value) to 5
 	- Keep all other settings as default
 	
 Results:
-- results_braycurtis.png
+- results_numberOfClusters.png
 
 
-## Test different Leaves Orientation
+## Test Method of Visualization, 2D scatter
 
 0. UPLOAD ALL TEST FILES:
     - HenryWP_ThePirate.txt
@@ -72,12 +72,29 @@ Results:
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. Hierarchical Clustering 
-	- Change Dendrogram Leaves Orientation to Left
+1. K-Means Clustering 
+	- Change Method of Visualization to 2D-Scatter
 	- Keep all other settings as default
 	
 Results:
-- results_leftOrientation.png
+- results_2D_Scatter.png
+
+
+## Test Method of Visualization, 3D scatter
+
+0. UPLOAD ALL TEST FILES:
+    - HenryWP_ThePirate.txt
+    - Irving_ripVanWrinkle.txt, 
+    - Lippard_BelOfPrairieEden.txt
+    - Melville_MobyDick.txt, 
+    - Poe_FallOfHouseUsher_1839.txt
+
+1. K-Means Clustering 
+	- Change Method of Visualization to 3D-Scatter
+	- Keep all other settings as default
+	
+Results:
+- results_3D_Scatter.png
 
 
 ## Test Culling Options, Culling
