@@ -1,3 +1,5 @@
+import * as utility from './utility.js'
+
 /**
  * Show the milestone input when the milestone check box is checked.
  */
@@ -7,71 +9,6 @@ function updateMSopt () {
   } else {
     $('#rollingmilestoneopt').hide()
   }
-}
-
-/**
- * the function to convert the from into json
- * @returns {{string: string}} - the from converted to json
- */
-function jsonifyForm () {
-  const form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
-}
-
-/**
- * the function to run the error modal
- * @param htmlMsg {string} - the message to display, you can put html in it
- */
-function runModal (htmlMsg) {
-  $('#error-modal-message').html(htmlMsg)
-  $('#error-modal').modal()
-}
-
-/**
- * The function to create the ajax object
- * @param form {object.<string, string>} the form converted into a json
- * @returns {jquery.Ajax} - the jquery ajax object (a deferred object)
- */
-function sendAjaxRequest (form) {
-
-  return $.ajax({
-    type: 'POST',
-    url: '/rollingWindowGraph',
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
-
-}
-
-/**
- * the function to submit form via ajax in dendrogram
- */
-function submitForm () {
-  // show loading icon
-  $('#status-visualize').css({'visibility': 'visible'})
-
-  // convert form into an object map string to string
-  const form = jsonifyForm()
-
-  // send the ajax request
-  sendAjaxRequest(form)
-    .done(
-      function (response) {
-        $('#rwa-result-graph').html(response)
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        runModal('error encountered while plotting the rolling window analysis.')
-      })
-    .always(
-      function () {
-        $('#status-visualize').css({'visibility': 'hidden'})
-      })
 }
 
 function getSubmissionError () {
@@ -93,9 +30,74 @@ function getSubmissionError () {
     return null
 }
 
+/**
+ * the function to submit form via ajax in dendrogram
+ */
+function generateRollingWindow () {
+  // show loading icon
+  $('#status-visualize').css({'visibility': 'visible'})
+
+  // convert form into an object map string to string
+  const form = utility.jsonifyForm()
+
+  // send the ajax request
+  utility.sendAjaxRequest('/rollingWindowGraph', form)
+    .done(
+      function (response) {
+        $('#rwa-result-graph').html(response)
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        utility.runModal('Error encountered while plotting the rolling window analysis.')
+      })
+    .always(
+      function () {
+        $('#status-visualize').css({'visibility': 'hidden'})
+      })
+}
+
+/**
+ * the function to submit form via ajax in dendrogram
+ */
+function displayMileStone () {
+  // show loading icon
+  $('#status-visualize').css({'visibility': 'visible'})
+
+  // convert form into an object map string to string
+  const form = utility.jsonifyForm()
+
+  // send the ajax request
+  utility.sendAjaxRequest('/rollingWindowMileStone', form)
+    .done(
+      function (response) {
+        if (response !== "") {
+          const mile_stones = response.map(function (mile_stone) {
+            return `<div class="col-sm-1 col-md-1 col-lg-1">
+                        <p style="color: ${mile_stone['color']}; font-size: 20px">${mile_stone['mile_stone']}</p>
+                    </div>`
+          })
+          $('#mile-stones').html(mile_stones)
+          $('#mile-stone-field').css('display', 'block')
+        } else {
+          $('#mile-stone-field').css('display', 'none')
+        }
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        utility.runModal('Error encountered while plotting the rolling window analysis.')
+      })
+    .always(
+      function () {
+        $('#status-visualize').css({'visibility': 'hidden'})
+      })
+}
+
 /* document.ready() Functions */
 $(function () {
-
   // Call update milestone on page load
   updateMSopt()
   // Bind the function to the checkbox
@@ -104,25 +106,26 @@ $(function () {
   $('#getgraph').click(function () {
     /* Validation */
     const errorString = getSubmissionError()
-    if (errorString === null)  // no error found
-      submitForm()
+    if (errorString === null) {
+      displayMileStone()
+      generateRollingWindow()
+    }
+
     else
-      runModal(errorString)
+      utility.runModal(errorString)
   })
 
   /* On-Click Validation */
   $('#radiowindowletter').click(function () {
     if ($('#inputword').prop('checked')) {
       $('#windowword').click()
-      const msg = 'You cannot use a window of characters when analyzing a token.' +
-        ' The setting has been changed to a window of tokens.'
-      $('#error-modal-message').html(msg)
-      $('#error-modal').modal()
+      const msg = `You cannot use a window of characters when analyzing a token. 
+                   The setting has been changed to a window of tokens.`
+      utility.runModal(msg)
     }
   })
 
   /* Other UI functionality */
-
   // Fixes bug where you cannot click second text box in firefox
   $('#rollingsearchwordopt, #rollingsearchword').hover(function () {
     $(this).focus()
