@@ -243,7 +243,7 @@ function setTagsButtonAjax () {
         $('#allTags option[value=\'' + selection + '\']').prop('selected', true)
       },
       error: function (jqXHR, textStatus, errorThrown) {
-        console.log('Error: ' + errorThrown)
+        console.log(`Error: ${errorThrown}`)
       }
     })
   }
