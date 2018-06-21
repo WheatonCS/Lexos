@@ -13,22 +13,16 @@
     <!-- Latest compiled and minimized plotly JS -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <!-- Natural language JS -->
-    <script type="text/javascript" charset="utf8"
-            src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
-
     <!-- Lexos Scripts -->
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{ version }}"></script>
 {% endblock %}
 
-{% block title %}statistics{% endblock %}
+{% block title %}Statistics{% endblock %}
 
 {% block options %}
     <div class="row">
         <div class="col-md-12">
-            <!-- Hidden input to store number of active files. -->
-            <input type="hidden" id="num_active_files"/>
             <!-- Hidden input to store active file ids. -->
             <input type="hidden" id="active_file_ids" name="active_file_ids"/>
             <legend style="width: 420px;">Select Document(s)</legend>
@@ -66,7 +60,7 @@
 {% block results %}
     <!-- Button to get the result. -->
     <div class="row col-lg-12 col-md-12">
-        <input type="button" class="bttn bttn-action" id="get-stats"
+        <input type="button" class="btn btn-success" id="get-stats"
                name="gen-stats" value="Generate Statistics"/>
     </div>
 

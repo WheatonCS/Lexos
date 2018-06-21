@@ -1,70 +1,88 @@
-$(function () {
-  // define error message
-  const msg = 'You do not have enough active documents. Please activate at \
-  least two documents using the <a href="./manage">Manage</a> tool or \
-  <a href="./upload">upload</a> a new document.'
-  // When get topwords button is clicked
-  $('#gettopword').click(function () {
-      // Check number of active files
-      if ($('#num_active_files').val() <  2) {
-          //change button type to button so no request is made
-          $("input[name='gen-topword']").prop("type", "button");
-          // display error
-          $('#error-modal .modal-body').html(msg)
-          $('#error-modal').modal()
-      }
+import * as utility from './utility.js'
 
-  })
-
-  //when download results is clicked
-  $('#topworddownload').click(function () {
-      // Check number of active files
-      if ($('#num_active_files').val() <  2) {
-          //change button type to button so no request is made
-          $("input[name='gen-topword']").prop("type", "button");
-          // display error
-          $('#error-modal .modal-body').html(msg)
-          $('#error-modal').modal()
-      }
-
-  })
-
-  // Hide unnecessary div for DTM
-  $('#normalize-options').css({ 'visibility': 'hidden' })
-  // set the normalize option to raw count
-  $("#normalizeTypeRaw").attr("checked", true)
-
-  $('#temp-label-div').css('position', 'relative').css('left', '-6px').css('top', '0px')
-
-
-  // display/hide expandable divs (Define Groups div) here
-  function updateGroupOptionDiv() {
-    $choice = $('.show-options div').siblings('input')
-    $.each($choice, function () {
-      if ($(this).is(':checked')) {
-        $(this).siblings('div').show()
-      } else { $(this).siblings('div').hide() }
-    })
+/**
+ * Check if allow comparison among classes or classes to corpus.
+ * @returns {void}
+ */
+function checkAllowClassComparison () {
+  const enableClassComparison = $('#num-active-classes').data().number < 2
+  $('#classToPara').attr('disabled', enableClassComparison)
+  $('#classToClass').attr('disabled', enableClassComparison)
+  /* Displays the class message if there is less than 2 classes assigned*/
+  if (enableClassComparison) {
+    $('#classInfo').show()
+  } else {
+    $('#classInfo').hide()
   }
+}
 
-  updateGroupOptionDiv()
-  $('.groupOption-div').click(function () {
-    updateGroupOptionDiv()
-  })
+/**
+ * Format json result into a more readable HTML format.
+ * @param {object.<string, string>} result: contains result title and contents.
+ * @returns {string}: A HTML formatted DIV contains result title and contents.
+ */
+function format (result) {
+  return `<div class="topword-result col-lg-6 col-md-6">
+              <fieldset class="row col-lg-12 col-md-12">
+                  <legend id= "topwordTableTitle" style="font-size: 16px">${result['title']}</legend>
+              </fieldset>
+              <div class="row col-lg-12 col-md-12">
+                  ${result['result']}
+              </div>
+          </div>`
+}
 
-  // Dynamically change the upper and lower bounds based on user inputs (Proportional Counts)
-  $('#upperboundPC').click(function () {
-    $(this).context.min = $('#lowerboundPC').val()
-    $('#upperboundRC, #lowerboundRC').val(0)
-  })
+/**
+ * Display the result of the top words on web page.
+ * @returns {void}
+ */
+function generateTopWordResult () {
+  // show loading icon
+  $('#status-analyze').css({'visibility': 'visible'})
 
-  $('#lowerboundPC').click(function () {
-    $(this).context.max = $('#upperboundPC').val()
-    $('#upperboundRC, #lowerboundRC').val(0)
-  })
+  // convert form into an object map string to string
+  const form = utility.jsonifyForm()
 
-  // Reset proportional counts input fields while raw counts is chosed
-  $('#upperboundRC, #lowerboundRC').click(function () {
-    $('#upperboundPC, #lowerboundPC').val(0)
+  // send the ajax request
+  utility.sendAjaxRequest('/topwordResult', form)
+    .done(
+      function (response) {
+        const topWordHeader = $('#topword-title')
+        const topWordResult = $('#topword-result')
+        // Put the header in response to the legend.
+        topWordHeader.html(response['header'])
+        // Format each table and put them in the result div.
+        topWordResult.html(response['results'].map(
+          function (result) { return format(result) }))
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log(`textStatus: ${textStatus}`)
+        console.log(`errorThrown: ${errorThrown}`)
+        utility.runModal('Error encountered while generating the topword result.')
+      })
+    .always(
+      function () {
+        $('#status-analyze').css({'visibility': 'hidden'})
+      })
+}
+
+$(function () {
+  // Hide unnecessary div for DTM.
+  $('#normalize-options').css({'visibility': 'hidden'})
+  // set the normalize option to raw count.
+  $('#normalizeTypeRaw').attr('checked', true)
+  // Check if comparison among classes should be enabled.
+  checkAllowClassComparison()
+  /**
+   * The event handler for generate top word clicked
+   */
+  $('#get-topwords').click(function () {
+    const error = utility.submissionError(2) // The error happens during submission
+    if (error === null) { // if there is no error
+      generateTopWordResult()
+    } else {
+      utility.runModal(error)
+    }
   })
 })
