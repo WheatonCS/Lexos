@@ -13,7 +13,6 @@ import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
-import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 

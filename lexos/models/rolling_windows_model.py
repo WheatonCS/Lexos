@@ -315,8 +315,8 @@ class RollingWindowsModel(BaseModel):
                     for window in windows
                 ],
                 # the name of the series
-                name=f"{numerator_token} / {numerator_token} + "
-                     f"{denominator_token}"
+                name=f"{numerator_token} / ({numerator_token} + "
+                     f"{denominator_token})"
             )
 
         elif token_type is RWATokenType.word:
@@ -329,8 +329,8 @@ class RollingWindowsModel(BaseModel):
                     for window in windows
                 ],
                 # the name of the series
-                name=f"{numerator_token} / {numerator_token} + "
-                     f"{denominator_token}"
+                name=f"{numerator_token} / ({numerator_token} + "
+                     f"{denominator_token})"
             )
 
         elif token_type is RWATokenType.regex:
@@ -343,8 +343,8 @@ class RollingWindowsModel(BaseModel):
                     for window in windows
                 ],
                 # the name of the series
-                name=f"{numerator_token} / {numerator_token} + "
-                     f"{denominator_token}"
+                name=f"{numerator_token} / ({numerator_token} + "
+                     f"{denominator_token})"
             )
 
         else:
@@ -547,11 +547,17 @@ class RollingWindowsModel(BaseModel):
                     include_plotlyjs=False)
 
     def get_mile_stone_color(self) -> Union[jsonify, str]:
+        """Get milestone plot colors if mile stone exists.
+
+        :return: An empty string if no milestone exists. Otherwise a json
+            object contains all milestones and their corresponding colors.
+        """
         # Get all mile stones.
         mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
             windows=self._get_windows()
         )
 
+        # If milestones exists, find color.
         if mile_stones is not None:
             mile_stone_color_list = [
                 dict(
@@ -561,6 +567,6 @@ class RollingWindowsModel(BaseModel):
             ]
 
             return jsonify(mile_stone_color_list)
-
+        # Otherwise return empty string.
         else:
             return ""
