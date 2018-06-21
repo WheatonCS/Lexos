@@ -375,6 +375,13 @@ class RollingWindowsModel(BaseModel):
                 for milestone_str in list_milestone_str
             }
 
+    def _get_scatter_color(self, index: int) -> str:
+        return cl.scales['8']['qual']['Set1'][index % 8] \
+            if not self._options.plot_options.black_white \
+            else cl.scales['9']['seq']['Greys'][index % 6 + 3]
+
+    def _get_mile_stone_color(self, index: int):
+
     def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
 
@@ -400,7 +407,6 @@ class RollingWindowsModel(BaseModel):
             if self._options.plot_options.individual_points \
             else "lines"
 
-        # TODO: support black and white color scheme
         # Construct the graph object
         return [
             go.Scattergl(
@@ -409,8 +415,11 @@ class RollingWindowsModel(BaseModel):
                 # the y coordinates is the token ratios
                 y=token_ratio_series,
                 mode=plot_mode,
-                name=token_ratio_series.name
-            ) for token_ratio_series in token_ratio_series_list
+                name=token_ratio_series.name,
+                line=dict(color=self._get_scatter_color(index=index)),
+                marker=dict(color=self._get_scatter_color(index=index))
+            )
+            for index, token_ratio_series in enumerate(token_ratio_series_list)
         ]
 
     def _get_token_average_graph(self) -> List[go.Scattergl]:
@@ -428,15 +437,18 @@ class RollingWindowsModel(BaseModel):
             if self._options.plot_options.individual_points \
             else "lines"
 
-        # TODO: support black and white color scheme
         # Construct the graph object.
         return [
             go.Scattergl(
                 x=np.arange(len(row)),
                 y=row,
                 name=token,
-                mode=plot_mode
-            ) for token, row in token_average_data_frame.iterrows()
+                mode=plot_mode,
+                line=dict(color=self._get_scatter_color(index=index)),
+                marker=dict(color=self._get_scatter_color(index=index))
+            )
+            for index, (token, row) in
+            enumerate(token_average_data_frame.iterrows())
         ]
 
     def _add_milestone(self, result_plot: List[go.Scattergl]) -> go.Figure:
@@ -451,7 +463,7 @@ class RollingWindowsModel(BaseModel):
         )
 
         # Get desired color for the plot.
-        color = cl.scales["9"]["qual"]["Set1"]
+        color = cl.scales['8']['qual']['Set2']
 
         # Find maximum y value in the result plot.
         y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
@@ -511,6 +523,7 @@ class RollingWindowsModel(BaseModel):
         :return: A formatted HTML string that represents the plotly graph.
         """
         return plot(self._generate_rwa_graph(),
+                    filename="show-legend",
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
