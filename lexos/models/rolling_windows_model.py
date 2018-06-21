@@ -7,7 +7,7 @@ import colorlover as cl
 import plotly.graph_objs as go
 from flask import jsonify
 from plotly.offline import plot
-from typing import NamedTuple, Optional, List, Iterator, Callable, Dict
+from typing import NamedTuple, Optional, List, Iterator, Callable, Dict, Union
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import FileIDContentMap
 from lexos.models.filemanager_model import FileManagerModel
@@ -487,6 +487,7 @@ class RollingWindowsModel(BaseModel):
 
         # Plot straight lines for all indexes for each mile stone.
         layout = go.Layout(
+            showlegend=True,
             shapes=[
                 dict(
                     type="line",
@@ -496,7 +497,7 @@ class RollingWindowsModel(BaseModel):
                     y1=y_max,
                     line=dict(
                         color=self._get_mile_stone_color(index=index),
-                        width=2
+                        width=1
                     )
                 )
                 for index, key in enumerate(mile_stones)
@@ -528,7 +529,8 @@ class RollingWindowsModel(BaseModel):
         # Check if mile stones was empty.
         # If not exist return the result plot.
         if self._options.milestone is None:
-            return go.Figure(data=result_plot)
+            return go.Figure(data=result_plot,
+                             layout=go.Layout(showlegend=True))
         # If exists, add mile stone to the result plot and return it.
         else:
             return self._add_milestone(result_plot=result_plot)
@@ -544,17 +546,21 @@ class RollingWindowsModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def get_mile_stone_color(self) -> jsonify:
+    def get_mile_stone_color(self) -> Union[jsonify, str]:
         # Get all mile stones.
         mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
             windows=self._get_windows()
         )
 
-        mile_stone_color_list = [
-            dict(
-                mile_stone=mile_stone,
-                color=self._get_mile_stone_color(index=index)
-            ) for index, mile_stone in enumerate(mile_stones)
-        ]
+        if mile_stones is not None:
+            mile_stone_color_list = [
+                dict(
+                    mile_stone=mile_stone,
+                    color=self._get_mile_stone_color(index=index)
+                ) for index, mile_stone in enumerate(mile_stones)
+            ]
 
-        return jsonify(mile_stone_color_list)
+            return jsonify(mile_stone_color_list)
+
+        else:
+            return ""

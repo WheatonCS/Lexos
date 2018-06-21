@@ -80,6 +80,8 @@ function displayMileStone () {
           })
           $('#mile-stones').html(mile_stones)
           $('#mile-stone-field').css('display', 'block')
+        } else {
+          $('#mile-stone-field').css('display', 'none')
         }
       })
     .fail(
