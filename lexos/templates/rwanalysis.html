@@ -99,55 +99,41 @@
             <!-- Search Token -->
             <fieldset id="rolling-analysis-inputs">
                 <legend>3. Enter Search Terms</legend>
-                <div class="row">
-                    <label for="rollingsearchword" class="col-sm-10">
-                        <strong>Search Pattern(s):</strong>
-                        <i class="fa fa-question-circle lexos-tooltip-trigger"
-                           data-toggle="tooltip" data-html="true"
-                           data-placement="bottom" data-container="body"
-                           title="Please divide inputs by commas. For rolling
-                                  ratios, input the numerator and denominator.">
-                        </i>
-                        <input type="text" name="rollingsearchword"
-                               class="rollinginput" id="rollingsearchword"
-                               value="{{ session['rwoption']['rollingsearchword'] }}">
-                    </label>
-                </div>
                 <div>
-                    <hr class="col-sm-10">
-                </div>
-
-                    <label for="rollingsearchwordopt"></label>
-                    <input type="text" name="rollingsearchwordopt"
-                           class="rollinginput" id="rollingsearchwordopt"
-                           value="{{ session['rwoption']['rollingsearchwordopt'] }}">
-
-                <div class="row">
-
-                </div>
-                <label id="rollinginputlabel">
                     <table style="border:none;width:100%;">
                         <tr>
-                            <td style="width:140px;">Search Pattern(s):</td>
+                            <td style="width:115px;">Search Pattern(s):</td>
                             <td>
-
+                                <input type="text" name="rollingsearchword"
+                                       class="rollinginput"
+                                       id="rollingsearchword"
+                                       value="{{ session['rwoption']['rollingsearchword'] }}">
                             </td>
                             <td style="width:20px;">
-
+                                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                                   data-toggle="tooltip" data-container="body"
+                                   data-placement="bottom" data-html="true"
+                                   title="Please divide inputs by commas. For rolling
+                                          ratios, input the numerator and denominator."
+                                   style="padding-left:4px;"></i>
                             </td>
                         </tr>
                         <tr>
                             <td>&nbsp;</td>
                             <td>
-							<span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}">
-							<hr style="color:#34495E;border:0;height:2px;background:#34495E;margin:2px;padding:0;">
-
-							</span>
+                                <span class="rollingsearchwordoptdiv {{ 'hidden' if session['rwoption']['counttype'] != 'ratio' }}">
+                                <hr style="color:#34495E;border:0;height:2px;background:#34495E;margin:2px;padding:0;">
+                                <input type="text" name="rollingsearchwordopt"
+                                       class="rollinginput"
+                                       id="rollingsearchwordopt"
+                                       value="{{ session['rwoption']['rollingsearchwordopt'] }}">
+                                </span>
                             </td>
                             <td>&nbsp;</td>
                         </tr>
                     </table>
-                </label>
+                </div>
+
                 <!-- Search Patterns -->
                 <p><strong>Search pattern(s) as:</strong></p>
                 <label class="radio" for="inputstring" id="radioinputletter"
@@ -157,7 +143,8 @@
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
-                       title="A string can be of any length." style=""></i>
+                       title="A string can be of any length.">
+                    </i>
                 </label>
                 <label class="radio" for="inputword" id="radioinputword"
                        style="margin-left:10px;">
@@ -167,8 +154,9 @@
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
-                       title="A token is typically a word, but Lexos will use whatever unit you have chosen in Tokenize."
-                       style=""></i>
+                       title="A token is typically a word, but Lexos will
+                              use whatever unit you have chosen in Tokenize.">
+                    </i>
                 </label>
                 <label class="radio" for="inputregex" id="radioinputregex"
                        style="margin-left:10px;">
@@ -178,8 +166,8 @@
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
-                       title="Regular Expressions (RegEx) can be used as the input."
-                       style=""></i>
+                       title="Regular Expressions (RegEx) can be used as the input.">
+                    </i>
                 </label>
             </fieldset>
         </div>
