@@ -539,6 +539,11 @@ class FileManager:
         for file in active_files:
             class_division_map[file.id][file.class_label] = True
 
+        # Set file with no class to Untitled.
+        class_division_map.index = \
+            ["Untitled" if class_label == "" else class_label
+             for class_label in class_division_map.index]
+
         return class_division_map
 
     def get_previews_of_all(self) -> List[dict]:
