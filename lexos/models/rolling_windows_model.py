@@ -378,9 +378,12 @@ class RollingWindowsModel(BaseModel):
     def _get_scatter_color(self, index: int) -> str:
         return cl.scales['8']['qual']['Set1'][index % 8] \
             if not self._options.plot_options.black_white \
-            else cl.scales['9']['seq']['Greys'][index % 6 + 3]
+            else cl.scales['7']['seq']['Greys'][index % 5 + 2]
 
-    def _get_mile_stone_color(self, index: int):
+    def _get_mile_stone_color(self, index: int) -> str:
+        return cl.scales['8']['qual']['Set2'][index % 8] \
+            if not self._options.plot_options.black_white \
+            else cl.scales['7']['seq']['Greys'][index % 5 + 2]
 
     def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
@@ -462,9 +465,6 @@ class RollingWindowsModel(BaseModel):
             windows=self._get_windows()
         )
 
-        # Get desired color for the plot.
-        color = cl.scales['8']['qual']['Set2']
-
         # Find maximum y value in the result plot.
         y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
         y_max = max(y_max_in_each_plot) * 1.1
@@ -479,7 +479,7 @@ class RollingWindowsModel(BaseModel):
                     y0=0,
                     y1=y_max,
                     line=dict(
-                        color=color[index],
+                        color=self._get_mile_stone_color(index=index),
                         width=2
                     )
                 )
