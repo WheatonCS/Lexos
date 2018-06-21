@@ -50,7 +50,7 @@ class RollingWindowsModel(BaseModel):
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
-                self._test_front_end_options is not None:
+            self._test_front_end_options is not None:
             file_id = self._test_front_end_options.passage_file_id
             file_id_content_map = self._test_file_id_content_map
 
@@ -198,7 +198,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled window type: {window_unit}")
 
     def _find_tokens_average_in_windows(
-            self, windows: Iterator[str]) -> pd.DataFrame:
+        self, windows: Iterator[str]) -> pd.DataFrame:
         """Find the token average in the given windows.
 
         A token average is calculated by the number of times the token
@@ -218,7 +218,7 @@ class RollingWindowsModel(BaseModel):
 
         def _average_matrix_helper(
             window_term_count_func: Callable[[str, str], int]) \
-                -> pd.DataFrame:
+            -> pd.DataFrame:
             """Get the average matrix.
 
             :param window_term_count_func:
@@ -350,7 +350,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-            self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
+        self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
         """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
@@ -378,7 +378,7 @@ class RollingWindowsModel(BaseModel):
     def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
 
-        :return: plotly graph object.
+        :return: a list of plotly graph object.
         """
         # Get the windows and token ratio series.
         windows = self._get_windows()
@@ -402,18 +402,16 @@ class RollingWindowsModel(BaseModel):
 
         # TODO: support black and white color scheme
         # Construct the graph object
-        return \
-            [
-                go.Scattergl(
-                    # the x coordinates are the index of the window
-                    x=np.arange(len(token_ratio_series)),
-                    # the y coordinates is the token ratios
-                    y=token_ratio_series,
-                    mode=plot_mode,
-                    name=token_ratio_series.name
-                )
-                for token_ratio_series in token_ratio_series_list
-            ]
+        return [
+            go.Scattergl(
+                # the x coordinates are the index of the window
+                x=np.arange(len(token_ratio_series)),
+                # the y coordinates is the token ratios
+                y=token_ratio_series,
+                mode=plot_mode,
+                name=token_ratio_series.name
+            ) for token_ratio_series in token_ratio_series_list
+        ]
 
     def _get_token_average_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for token average without milestone.
@@ -441,18 +439,25 @@ class RollingWindowsModel(BaseModel):
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
-    def _add_milestone(self, result_plot) -> go.Figure:
+    def _add_milestone(self, result_plot: List[go.Scattergl]) -> go.Figure:
+        """Add milestone to the existing plot.
+
+        :param result_plot: List of existing scatter rolling window plot.
+        :return: A plotly figure object.
+        """
         # Get all mile stones.
         mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
             windows=self._get_windows()
         )
 
+        # Get desired color for the plot.
         color = cl.scales["9"]["qual"]["Set1"]
 
         # Find maximum y value in the result plot.
         y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
         y_max = max(y_max_in_each_plot) * 1.1
 
+        # Plot straight lines for all indexes for each mile stone.
         layout = go.Layout(
             shapes=[
                 dict(
@@ -473,9 +478,9 @@ class RollingWindowsModel(BaseModel):
         return go.Figure(data=result_plot, layout=layout)
 
     def _generate_rwa_graph(self) -> go.Figure:
-        """Get the rolling window graph
+        """Get the rolling window graph.
 
-        :return: a plotly scatter object or a list of plotly scatter objects.
+        :return: A plotly figure object.
         """
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
@@ -493,12 +498,18 @@ class RollingWindowsModel(BaseModel):
             raise ValueError("unhandled count type")
 
         # Check if mile stones was empty.
+        # If not exist return the result plot.
         if self._options.milestone is None:
             return go.Figure(data=result_plot)
+        # If exists, add mile stone to the result plot and return it.
         else:
             return self._add_milestone(result_plot=result_plot)
 
     def get_rwa_graph(self) -> str:
+        """Get the displayable rolling window graph.
+
+        :return: A formatted HTML string that represents the plotly graph.
+        """
         return plot(self._generate_rwa_graph(),
                     show_link=False,
                     output_type="div",
