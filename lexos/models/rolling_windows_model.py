@@ -50,7 +50,7 @@ class RollingWindowsModel(BaseModel):
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
-            self._test_front_end_options is not None:
+                self._test_front_end_options is not None:
             file_id = self._test_front_end_options.passage_file_id
             file_id_content_map = self._test_file_id_content_map
 
@@ -198,7 +198,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled window type: {window_unit}")
 
     def _find_tokens_average_in_windows(
-        self, windows: Iterator[str]) -> pd.DataFrame:
+            self, windows: Iterator[str]) -> pd.DataFrame:
         """Find the token average in the given windows.
 
         A token average is calculated by the number of times the token
@@ -218,7 +218,7 @@ class RollingWindowsModel(BaseModel):
 
         def _average_matrix_helper(
             window_term_count_func: Callable[[str, str], int]) \
-            -> pd.DataFrame:
+                -> pd.DataFrame:
             """Get the average matrix.
 
             :param window_term_count_func:
@@ -350,7 +350,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-        self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
+            self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
         """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
@@ -364,26 +364,41 @@ class RollingWindowsModel(BaseModel):
 
         # If the list of milestone string exists
         else:
-            # Get index for all milestone strings.
+            # Get index for all mile stone strings.
             list_milestone_str = self._options.milestone
-
             return {
-                milestone_str
-                : [index for index, window in enumerate(windows)
-                   if window.startswith(milestone_str)]
+                milestone_str:
+                    [index for index, window in enumerate(windows)
+                     if window.startswith(milestone_str)]
 
                 for milestone_str in list_milestone_str
             }
 
     def _get_scatter_color(self, index: int) -> str:
+        """Get color for scatter plot.
+
+        The color set will first get selected based on if user desired black
+        white only feature. Then a color will be picked based on the index
+        of the plot.
+        :param index: The index to get the desired RGB color.
+        :return: A string that contains the desired RGB color.
+        """
         return cl.scales['8']['qual']['Set1'][index % 8] \
             if not self._options.plot_options.black_white \
-            else cl.scales['7']['seq']['Greys'][index % 5 + 2]
+            else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
     def _get_mile_stone_color(self, index: int) -> str:
+        """Get color for mile stone.
+
+        The color set will first get selected based on if user desired black
+        white only feature. Then a color will be picked based on the index
+        of the mile stone.
+        :param index: The index to get the desired RGB color.
+        :return: A string that contains the desired RGB color.
+        """
         return cl.scales['8']['qual']['Set2'][index % 8] \
             if not self._options.plot_options.black_white \
-            else cl.scales['7']['seq']['Greys'][index % 5 + 2]
+            else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
     def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
