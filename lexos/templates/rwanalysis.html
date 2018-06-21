@@ -3,7 +3,7 @@
 
 {% block head %}
     <!-- Javascript that formats options and graph -->
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{ version }}"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
@@ -213,8 +213,7 @@
                            class="milestoneCheckbox"
                            name="rollinghasmilestone"
                            id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone'] }}
-                           style="text-align: left;"
-                           onclick="updateMSopt()">
+                           style="text-align: left;">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
@@ -223,7 +222,7 @@
                 </label>
                 <br>
                 <label for="rollingmilestonetype" id="rollingmilestoneopt">
-                    <strong>Milestone Delimeter:</strong>
+                    <strong>Milestone Delimiter:</strong>
                     <input type="text" name="rollingmilestonetype"
                            id="rollingmilestonetype"
                            value="{{ session['rwoption']['rollingmilestonetype'] }}"
@@ -260,11 +259,21 @@
 {% endblock %}
 
 {% block results %}
-    <div id="rwa-result-graph">
+    <div id="rwa-result">
         <!-- Loading Icon -->
+        <fieldset id="mile-stone-field" style="display: none">
+            <legend>
+                Milestone Delimiter color
+            </legend>
+            <div class="row" id="mile-stones">
+
+            </div>
+        </fieldset>
         <div id="status-analyze">
             <img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{ version }}"
                  alt="Loading...">
+        </div>
+        <div id="rwa-result-graph">
         </div>
     </div>
 {% endblock %}
