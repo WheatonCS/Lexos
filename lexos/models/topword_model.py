@@ -1,22 +1,22 @@
 """This is a model to find the topwords."""
 
-import itertools
-import math
 import os
+import math
+import itertools
+import pandas as pd
+from flask import jsonify
 from collections import OrderedDict
 from typing import List, Optional, NamedTuple
-
-import pandas as pd
-
-from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
-from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
-    NOT_ENOUGH_CLASSES_MESSAGE
 from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.models.filemanager_model import FileManagerModel
+from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.receivers.topword_receiver import TopwordReceiver, \
     TopwordAnalysisType
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
+    NOT_ENOUGH_CLASSES_MESSAGE, EMPTY_DTM_MESSAGE
 
 # Type hinting for the analysis result each function returns.
 AnalysisResult = List[pd.Series]
@@ -25,6 +25,7 @@ AnalysisResult = List[pd.Series]
 class TopwordTestOptions(NamedTuple):
     """A typed tuple to hold topword test options."""
 
+    division_map: pd.DataFrame
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
@@ -51,10 +52,12 @@ class TopwordModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
             self._test_id_temp_label_map = test_options.id_temp_label_map
+            self._test_class_division_map = test_options.division_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
             self._test_id_temp_label_map = None
+            self._test_class_division_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
@@ -75,6 +78,13 @@ class TopwordModel(BaseModel):
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else TopwordReceiver().options_from_front_end()
+
+    @property
+    def _class_division_map(self) -> pd.DataFrame:
+        """:return: a pandas data frame that holds the class division map."""
+        return self._test_class_division_map \
+            if self._test_class_division_map is not None else \
+            FileManagerModel().load_file_manager().get_class_division_map()
 
     @staticmethod
     def _z_test(p1: float, p2: float, n1: int, n2: int) -> float:
@@ -108,7 +118,6 @@ class TopwordModel(BaseModel):
         standard_error = math.sqrt(p_hat * (1 - p_hat) * ((1 / n1) + (1 / n2)))
 
         # Trap possible division by 0 error.
-        # TODO: Do we may need more complicate check here?
         if math.isclose(standard_error, 0):
             return 0.0
         # If not division by 0, return the calculated z-score.
@@ -176,7 +185,7 @@ class TopwordModel(BaseModel):
         # Convert the sorted result to a panda series.
         result_series = pd.Series(sorted_dict)
         # Set the result series name.
-        result_series.name = f"{word_count_series_one.name} compared to " \
+        result_series.name = f"{word_count_series_one.name} compares to " \
                              f"{word_count_series_two.name}"
 
         return result_series
@@ -193,7 +202,7 @@ class TopwordModel(BaseModel):
             - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
-        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
@@ -216,31 +225,29 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_file_to_class(self, class_division_map: pd.DataFrame) -> \
-            AnalysisResult:
+    def _analyze_file_to_class(self) -> AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
         in a particular segment to the occurrence of the same word in other
         class of segments.
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
+
         :return: a list of pandas series, where each series formed by:
             - the data, which is the sorted z-scores.
             - the index, which the corresponding words.
             - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
-        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        # Check if more than one class exists.
+        assert self._class_division_map.shape[0] > 1, \
+            NOT_ENOUGH_CLASSES_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
 
         # Get all class labels.
-        class_labels = class_division_map.index
+        class_labels = self._class_division_map.index
 
         # Get all combinations of file ids and class labels, if the file is not
         # in the class.
@@ -248,11 +255,11 @@ class TopwordModel(BaseModel):
             [(file_id, class_label)
              for file_id in self._doc_term_matrix.index.values
              for class_label in class_labels
-             if not class_division_map[file_id][class_label]]
+             if not self._class_division_map[file_id][class_label]]
 
         # Split DTM into groups and find word count sums of each group.
         group_word_sums = [self._doc_term_matrix[group_index].sum()
-                           for group_index in class_division_map.values]
+                           for group_index in self._class_division_map.values]
 
         # Put groups word count sums into a data frame, where data is the word
         # sums of each class of segments, index is the class labels and columns
@@ -276,31 +283,29 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _analyze_class_to_class(self, class_division_map: pd.DataFrame) -> \
-            AnalysisResult:
+    def _analyze_class_to_class(self) -> AnalysisResult:
         """Detect if a given word is an anomaly.
 
         While doing so, this method compares the occurrence of a given word
         in a class of segments to the occurrence of the same word in other
         class of segments.
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
+
         :return: a list of pandas series, where each series formed by:
             - the data, which is the sorted z-scores.
             - the index, which the corresponding words.
             - the name, which a readable header for analysis result.
         """
         # Trap possible empty input error.
-        assert not self._doc_term_matrix.empty, SEG_NON_POSITIVE_MESSAGE
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        # Check if more than one class exists.
+        assert self._class_division_map.shape[0] > 1, \
+            NOT_ENOUGH_CLASSES_MESSAGE
 
         # Initialize, get all words that appear at least once in whole corpus.
         words = self._doc_term_matrix.columns
 
         # Get all class labels.
-        class_labels = class_division_map.index
+        class_labels = self._class_division_map.index
 
         # Get all unique combinations of every two labels, so we can compare
         # one class against other class(es).
@@ -308,7 +313,7 @@ class TopwordModel(BaseModel):
 
         # Split DTM into groups and find word count sums of each group.
         group_word_sums = [self._doc_term_matrix[group_index].sum()
-                           for group_index in class_division_map.values]
+                           for group_index in self._class_division_map.values]
 
         # Put groups word count sums into a data frame, where data is the word
         # sums of each class of segments, index is the class labels and columns
@@ -332,14 +337,9 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _get_result(self, class_division_map: pd.DataFrame) -> TopwordResult:
+    def _get_result(self) -> TopwordResult:
         """Call the right method corresponding to user's selection.
 
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
         :return: a namedtuple that holds the topword result, which contains a
                  header and a list of pandas series.
         """
@@ -353,84 +353,77 @@ class TopwordModel(BaseModel):
             return TopwordResult(header=header, results=results)
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_PARA:
-            # Check if more than one class exists.
-            assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
-
             # Get header and result.
             header = "Compare Each Document to Other Class(es)."
-            results = self._analyze_file_to_class(
-                class_division_map=class_division_map)
+            results = self._analyze_file_to_class()
 
             return TopwordResult(header=header, results=results)
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_CLASS:
-            # Check if more than one class exists.
-            assert class_division_map.shape[0] > 1, NOT_ENOUGH_CLASSES_MESSAGE
-
             # Get header and result.
             header = "Compare a Class to Each Other Class(es)."
-            results = self._analyze_class_to_class(
-                class_division_map=class_division_map)
+            results = self._analyze_class_to_class()
 
             return TopwordResult(header=header, results=results)
 
         else:
             raise ValueError("Invalid topword analysis option.")
 
-    def get_readable_result(self, class_division_map: pd.DataFrame) -> \
-            TopwordResult:
+    def get_displayable_result(self) -> jsonify:
         """Get the readable result to display on the web page.
 
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
-        :return: a namedtuple that holds the topword result, which contains a
-                 header and a list of pandas series. However it will check the
-                 length of each pandas series and only return the first 20 rows
-                 if the pandas series has length that is longer than 20.
+        :return: a json object that holds the topword result, which contains a
+                 header and a list of HTML tables.
         """
-        topword_result = \
-            self._get_result(class_division_map=class_division_map)
-        readable_result = [result[:20] for result in topword_result.results]
+        topword_result = self._get_result()
 
-        return TopwordResult(header=topword_result.header,
-                             results=readable_result)
+        def helper_series_to_table(series: pd.Series) -> str:
+            # Only take the most significant 30 data.
+            series = series[: 30]
+            frame = pd.DataFrame(data={
+                "Terms/Characters": series.index,
+                "Z-Score": series.data
+            })
 
-    def get_topword_csv_path(self, class_division_map: pd.DataFrame) -> str:
+            return frame.to_html(
+                index=False,
+                classes="result-table table table-striped table-bordered"
+                        " header-fixed")
+
+        readable_result = [{"title": result.name,
+                            "result": helper_series_to_table(series=result)}
+                           for result in topword_result.results]
+
+        return jsonify(header=topword_result.header,
+                       results=readable_result)
+
+    def get_download_path(self) -> str:
         """Write the generated top word results to an output CSV file.
 
-        :param class_division_map: a pandas data frame where:
-            - the data is the division map with boolean values that indicate
-              which class each file belongs to.
-            - the index is the class labels.
-            - the column is the file id.
         :return: path of the generated CSV file.
         """
-        # Make the path.
+        # Get topword result.
+        topword_result = self._get_result()
+
+        # Get the default saving directory of topword result.
         result_folder_path = os.path.join(
             session_manager.session_folder(), RESULTS_FOLDER)
 
-        # Attempt to make the save path directory.
-        try:
+        # Attempt to make the directory.
+        if not os.path.isdir(result_folder_path):
             os.makedirs(result_folder_path)
-        except OSError:
-            pass
 
-        # Get the path to save file.
+        # Get the complete saving path of topword result.
         save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
 
-        # Get topword result.
-        topword_result = \
-            self._get_result(class_division_map=class_division_map)
-
-        with open(save_path, 'w', encoding='utf-8') as f:
+        # Write to the file.
+        with open(save_path, 'w', encoding='utf-8') as file:
             # Write header to the file.
-            f.write(topword_result.header + '\n')
+            file.write(topword_result.header + '\n')
             # Write results to the file.
             # Since we want indexes and data in rows, we get the transpose.
             for result in topword_result.results:
-                f.write(pd.DataFrame(result).transpose().to_csv(header=True))
+                file.write(
+                    pd.DataFrame(result).transpose().to_csv(header=True))
 
         return save_path
