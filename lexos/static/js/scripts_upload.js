@@ -108,8 +108,8 @@ function UploadAndParseFile (file, fileSize) {
     // This is to hide the loading icon.
     $('#status').hide()
   } else {
-    const MAX_FILE_SIZE_INT= $("#MAX_FILE_SIZE_INT").val()
-    const MAX_FILE_SIZE_UNITS = $("#MAX_FILE_SIZE_UNITS").val()
+    const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
+    const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}B`)
     // This is to hide the loading icon.
