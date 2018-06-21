@@ -1,51 +1,4 @@
-/**
- * The function to run the error modal.
- * @param {string} htmlMsg: the message to display.
- * @returns {void}.
- */
-function runModal (htmlMsg) {
-  $('#error-modal-message').html(htmlMsg)
-  $('#error-modal').modal()
-}
-
-/**
- * At least one document is required to run the stats.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
- */
-function submissionError () {
-  if ($('#num_active_files').val() < 1) {
-    return 'You must have at least 1 active documents to proceed!'
-  } else {
-    return null
-  }
-}
-
-/**
- * The function to convert the form into json.
- * @returns {{string: string}}: the form converted to json.
- */
-function jsonifyForm () {
-  const form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
-}
-
-/**
- * Send the ajax request.
- * @param {string} url: the url to post.
- * @param {{string: string}} form: the form data packed into an object.
- * @returns {jQuery.Ajax}: an jQuery Ajax object.
- */
-function sendAjaxRequest (url, form) {
-  return $.ajax({
-    type: 'POST',
-    url: url,
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
-}
+import * as utility from './utility.js'
 
 /**
  * Format the ajax call response to HTML format string.
@@ -98,10 +51,10 @@ function formatFileReportResponse (response) {
 function generateStatsFileReport () {
   $('#status-analyze').css({'visibility': 'visible'})
   // convert form into an object map string to string
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/corpusStatsReport', form)
+  utility.sendAjaxRequest('/corpusStatsReport', form)
     .done(
       function (response) {
         const formattedResult = formatFileReportResponse(response)
@@ -117,7 +70,7 @@ function generateStatsFileReport () {
         $('#status-analyze').css({'visibility': 'hidden'})
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the corpus statistics.')
+        utility.runModal('Error encountered while generating the corpus statistics.')
       })
 }
 
@@ -128,10 +81,10 @@ function generateStatsFileReport () {
 function generateStatsBoxPlot () {
   $('#status-analyze').css({'visibility': 'visible'})
   // convert form into an object map string to string
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/corpusBoxPlot', form)
+  utility.sendAjaxRequest('/corpusBoxPlot', form)
     .done(
       function (response) {
         $('#box-plot').html(response)
@@ -140,7 +93,7 @@ function generateStatsBoxPlot () {
       function (jqXHR, textStatus, errorThrown) {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the box plot.')
+        utility.runModal('Error encountered while generating the box plot.')
       })
 }
 
@@ -151,7 +104,7 @@ function generateStatsBoxPlot () {
 function generateStatsFileTable () {
   $('#status-analyze').css({'visibility': 'visible'})
   // convert form into an object map string to string
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
 
   // the configuration for creating data table
   const dataTableConfig = {
@@ -173,7 +126,7 @@ function generateStatsFileTable () {
   }
 
   // send the ajax request
-  sendAjaxRequest('/fileStatsTable', form)
+  utility.sendAjaxRequest('/fileStatsTable', form)
     .done(
       function (response) {
         const outerTableDivSelector = $('#file-stats-table')
@@ -189,7 +142,7 @@ function generateStatsFileTable () {
         $('#status-analyze').css({'visibility': 'hidden'})
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the file statistics.')
+        utility.runModal('Error encountered while generating the file statistics.')
       })
     .always(
       function () {
@@ -238,7 +191,7 @@ $(function () {
     $('#num_active_files').val(checkedFiles.length)
 
     // Get the possible error during the submission.
-    const error = submissionError()
+    const error = utility.submissionError(1)
 
     if (error === null) {
       // Get the file stats table.
@@ -258,7 +211,7 @@ $(function () {
         $('#corpus-stats-result').css({'display': 'none'})
       }
     } else {
-      runModal(error)
+      utility.runModal(error)
     }
   })
 })
