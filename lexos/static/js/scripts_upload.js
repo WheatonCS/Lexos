@@ -105,11 +105,15 @@ function UploadAndParseFile (file, fileSize) {
     }
   } else if (!AllowedFileType(file.name)) {
     alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
+    // This is to hide the loading icon.
+    $('#status').hide()
   } else {
     const MAX_FILE_SIZE_INT= $("#MAX_FILE_SIZE_INT").val()
     const MAX_FILE_SIZE_UNITS = $("#MAX_FILE_SIZE_UNITS").title
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}`)
+    // This is to hide the loading icon.
+    $('#status').hide()
     // Without this, it puts a blue background on the progress bar.
     $('#progress').css('background', 'transparent')
   }
