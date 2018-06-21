@@ -482,7 +482,9 @@ class RollingWindowsModel(BaseModel):
         )
 
         # Find maximum y value in the result plot.
-        y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
+        y_max_in_each_plot = \
+            [max(each_plot['y'][~np.isnan(each_plot['y'])])
+             for each_plot in result_plot]
         y_max = max(y_max_in_each_plot) * 1.1
 
         # Plot straight lines for all indexes for each mile stone.
