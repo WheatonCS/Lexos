@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
+from flask import jsonify
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Iterator, Callable, Dict
 from lexos.models.base_model import BaseModel
@@ -542,3 +543,18 @@ class RollingWindowsModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
+
+    def get_mile_stone_color(self) -> jsonify:
+        # Get all mile stones.
+        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
+            windows=self._get_windows()
+        )
+
+        mile_stone_color_list = [
+            dict(
+                mile_stone=mile_stone,
+                color=self._get_mile_stone_color(index=index)
+            ) for index, mile_stone in enumerate(mile_stones)
+        ]
+
+        return jsonify(mile_stone_color_list)
