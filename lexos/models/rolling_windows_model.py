@@ -3,9 +3,10 @@
 import re
 import numpy as np
 import pandas as pd
+import colorlover as cl
 import plotly.graph_objs as go
 from plotly.offline import plot
-from typing import NamedTuple, Optional, List, Iterator, Callable, Union, Dict
+from typing import NamedTuple, Optional, List, Iterator, Callable, Dict
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import FileIDContentMap
 from lexos.models.filemanager_model import FileManagerModel
@@ -257,6 +258,8 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_token_ratio_in_windows(self,
+                                     numerator_token: str,
+                                     denominator_token: str,
                                      windows: Iterator[str]) -> pd.Series:
         """Find the token ratios in all the windows
 
@@ -269,8 +272,6 @@ class RollingWindowsModel(BaseModel):
         assert self._options.ratio_token_options is not None
 
         token_type = self._options.ratio_token_options.token_type
-        numerator_token = self._options.ratio_token_options.numerator_token
-        denominator_token = self._options.ratio_token_options.denominator_token
 
         def _get_ratio_helper(
             window: str,
@@ -295,10 +296,10 @@ class RollingWindowsModel(BaseModel):
             denominator = window_term_count_func(window, denominator_token)
 
             # handle division by 0
-            if denominator == 0:
+            if denominator + numerator == 0:
                 return np.nan
             else:
-                return numerator / denominator
+                return numerator / (denominator + numerator)
 
         if token_type is RWATokenType.string:
             return pd.Series(
@@ -376,7 +377,17 @@ class RollingWindowsModel(BaseModel):
         """
         # Get the windows and token ratio series.
         windows = self._get_windows()
-        token_ratio_series = self._find_token_ratio_in_windows(windows)
+
+        token_ratio_series_list = \
+            [
+                self._find_token_ratio_in_windows(
+                    windows=windows,
+                    numerator_token=row["numerator"],
+                    denominator_token=row["denominator"]
+                )
+                for _, row in
+                self._options.ratio_token_options.token_frame.iterrows()
+            ]
 
         # Find the proper plotting mode.
         plot_mode = "lines+markers" \
@@ -385,14 +396,49 @@ class RollingWindowsModel(BaseModel):
 
         # TODO: support black and white color scheme
         # Construct the graph object
-        return [go.Scattergl(
-            # the x coordinates are the index of the window, starting from 0
-            x=np.arange(len(token_ratio_series)),
-            # the y coordinates is the token ratios
-            y=token_ratio_series,
-            mode=plot_mode,
-            name=token_ratio_series.name
-        )]
+        return \
+            [
+                go.Scattergl(
+                    # the x coordinates are the index of the window
+                    x=np.arange(len(token_ratio_series)),
+                    # the y coordinates is the token ratios
+                    y=token_ratio_series,
+                    mode=plot_mode,
+                    name=token_ratio_series.name
+                )
+                for token_ratio_series in token_ratio_series_list
+            ]
+
+    def _add_milestone(self, result_plot) -> go.Figure:
+        # Get all mile stones.
+        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
+            windows=self._get_windows()
+        )
+
+        color = cl.scales["9"]["qual"]["Set1"]
+
+        # Find maximum y value in the result plot.
+        y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
+        y_max = max(y_max_in_each_plot) * 1.1
+
+        layout = go.Layout(
+            shapes=[
+                dict(
+                    type="line",
+                    x0=mile_stone,
+                    x1=mile_stone,
+                    y0=0,
+                    y1=y_max,
+                    line=dict(
+                        color=color[index],
+                        width=2
+                    )
+                )
+                for index, key in enumerate(mile_stones)
+                for mile_stone in mile_stones[key]]
+        )
+
+        return go.Figure(data=result_plot, layout=layout)
 
     def _get_token_average_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for token average without milestone.
@@ -420,16 +466,11 @@ class RollingWindowsModel(BaseModel):
             ) for token, row in token_average_data_frame.iterrows()
         ]
 
-    def get_rwa_graph(self) -> Union[List[go.Scattergl], go.Scattergl]:
+    def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph
 
         :return: a plotly scatter object or a list of plotly scatter objects.
         """
-
-        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
-            windows=self._get_windows()
-        )
-
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
 
@@ -445,26 +486,14 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled count type")
 
-        y_max_in_each_plot = [max(each_plot['y']) for each_plot in result_plot]
-        y_max = max(y_max_in_each_plot) * 1.1
+        # Check if mile stones was empty.
+        if self._options.milestone is None:
+            return go.Figure(data=result_plot)
+        else:
+            return self._add_milestone(result_plot=result_plot)
 
-        # layout = go.Layout(
-        #     shapes=[
-        #         dict(
-        #             type="line",
-        #             x0=mile_stone,
-        #             x1=mile_stone,
-        #             y0=0,
-        #             y1=y_max,
-        #             line=dict(
-        #                 color="rgb(50, 171, 96)",
-        #                 width=3
-        #             )
-        #         )
-        #         for mile_stone in mile_stones]
-        # )
-
-        return plot(go.Figure(data=result_plot),
+    def get_rwa_graph(self) -> str:
+        return plot(self._generate_rwa_graph(),
                     show_link=False,
-                    include_plotlyjs=False,
-                    output_type='div')
+                    output_type="div",
+                    include_plotlyjs=False)

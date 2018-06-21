@@ -1,5 +1,6 @@
 """This is the receiver for rolling windows analysis model."""
 
+import pandas as pd
 from enum import Enum
 from typing import NamedTuple, Optional, List
 from lexos.receivers.base_receiver import BaseReceiver
@@ -39,11 +40,9 @@ class RWARatioTokenOptions(NamedTuple):
     # The type of the token, see RWATokenType for more detail.
     token_type: RWATokenType
 
-    # The token to count as numerator of the ratio.
-    numerator_token: str
-
-    # The token to count as the denominator of the ratio.
-    denominator_token: str
+    # The frame saves token count as list of numerator and token count as list
+    # of denominator.
+    token_frame: pd.DataFrame
 
 
 class RWAAverageTokenOptions(NamedTuple):
@@ -112,9 +111,13 @@ class RollingWindowsReceiver(BaseReceiver):
         else:
             raise ValueError("invalid token type from front end")
 
+        token_frame = pd.DataFrame(data={
+            "numerator": numerator_token.replace(" ", "").split(","),
+            "denominator": denominator_token.replace(" ", "").split(",")
+        })
+
         return RWARatioTokenOptions(token_type=token_type,
-                                    numerator_token=numerator_token,
-                                    denominator_token=denominator_token)
+                                    token_frame=token_frame)
 
     def _get_average_token_options(self) -> RWAAverageTokenOptions:
         """Get all the options to generate average count."""
@@ -155,7 +158,7 @@ class RollingWindowsReceiver(BaseReceiver):
                                 window_unit=window_unit)
 
     def _get_milestone(self) -> Optional[List[str]]:
-        """Get the milestone from front end."""
+        """Get the milestone string from front end and split it into words."""
         if 'rollinghasmilestone' not in self._front_end_data:
             return None
         else:
