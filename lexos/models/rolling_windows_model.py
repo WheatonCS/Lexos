@@ -44,13 +44,13 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _passage(self) -> str:
-        """The passage to run rolling windows on.
+        """Get the passage to run rolling windows on.
 
         :return: the content of the passage as a string.
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
-            self._test_front_end_options is not None:
+                self._test_front_end_options is not None:
             file_id = self._test_front_end_options.passage_file_id
             file_id_content_map = self._test_file_id_content_map
 
@@ -65,7 +65,7 @@ class RollingWindowsModel(BaseModel):
 
     @property
     def _options(self) -> RWAFrontEndOptions:
-        """The front end option packed into one named tuple.
+        """Get the front end option packed as one named tuple.
 
         :return: a RWAFrontEndOption packs all the frontend option.
         """
@@ -76,21 +76,20 @@ class RollingWindowsModel(BaseModel):
     @staticmethod
     def _get_rolling_window_from_list(input_list: List[str],
                                       window_size: int) -> np.ndarray:
-        """A helper function to get the rolling window from the list of terms.
+        """Get the rolling window from the list of terms.
 
         :param input_list: A list of terms (word, char or line),
             depends on the window type (word and line are with endings).
         :param window_size: The size of the window (number of terms in window).
         :return: An array of strings, each element is a window.
         """
-
-        # number of items in the input list
+        # Number of items in the input list.
         num_item = len(input_list)
 
-        # get the total number of windows
+        # Get the total number of windows.
         num_window = num_item - window_size + 1
 
-        # get the rolling list, should be a array of str
+        # Get the rolling list, should be a array of str.
         return np.array([
             "".join(input_list[start: start + window_size])
             for start in range(num_window)
@@ -101,9 +100,9 @@ class RollingWindowsModel(BaseModel):
         """Get the windows of letters with specific window size.
 
         :param passage: the whole text to generate the windows
-            (the text to run rolling window analysis on)
-        :param windows_size: number of terms (letters) in a single window
-        :return: an array of windows
+            (the text to run rolling window analysis on).
+        :param windows_size: number of terms (letters) in a single window.
+        :return: an array of windows.
         """
         return RollingWindowsModel._get_rolling_window_from_list(
             input_list=list(passage), window_size=windows_size
@@ -111,14 +110,13 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _get_word_windows(passage: str, window_size: int) -> np.ndarray:
-        """Get the window of words with specific window size
+        """Get the window of words with specific window size.
 
         :param passage: the whole text to generate the windows
-            (the text to run rolling window analysis on)
-        :param window_size: number of terms (words) in a single window
-        :return: an array of windows
+            (the text to run rolling window analysis on).
+        :param window_size: number of terms (words) in a single window.
+        :return: an array of windows.
         """
-
         words = get_words_with_right_boundary(passage)
 
         return RollingWindowsModel._get_rolling_window_from_list(
@@ -127,15 +125,14 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _get_line_windows(passage: str, window_size: int) -> np.ndarray:
-        """Get the window of lines with specific size
+        """Get the window of lines with specific size.
 
         :param passage: the whole text ot generate the windows
-            (the text to run rolling window analysis on)
-        :param window_size: the number of terms (lines) in a window
-        :return: an array of windows
+            (the text to run rolling window analysis on).
+        :param window_size: the number of terms (lines) in a window.
+        :return: an array of windows.
         """
-
-        # get all the lines
+        # Get all the lines.
         lines = passage.splitlines(keepends=True)
 
         return RollingWindowsModel._get_rolling_window_from_list(
@@ -144,42 +141,42 @@ class RollingWindowsModel(BaseModel):
 
     @staticmethod
     def _find_regex_in_window(window: str, regex: str) -> int:
-        """find the number of times the regex appear in window
+        """Find the number of times the regex appear in window.
 
         current method only finds non-overlapping regex.
-        :param window: find regex in this window
-        :param regex: the regex to find
-        :return: the number of times the regex appear in the window
+        :param window: find regex in this window.
+        :param regex: the regex to find.
+        :return: the number of times the regex appear in the window.
         """
         return len(re.findall(pattern=regex, string=window,
                               flags=rwa_regex_flags))
 
     @staticmethod
     def _find_word_in_window(window: str, word: str) -> int:
-        """find the number of times a particular word appear in the window
+        """Find the number of times a particular word appear in the window.
 
-        :param window: find the word in this window
-        :param word: the word to find
-        :return: the number of times the word appear int the window
+        :param window: find the word in this window.
+        :param word: the word to find.
+        :return: the number of times the word appear int the window.
         """
         return get_single_word_count_in_text(text=window, word=word)
 
     @staticmethod
     def _find_string_in_window(window: str, string: str) -> int:
-        """find the number of times the string appear in the window
+        """Find the number of times the string appear in the window.
 
-        :param window: find the string in this window
-        :param string: the string to find
-        :return: the number of times the string appear int the window
+        :param window: find the string in this window.
+        :param string: the string to find.
+        :return: the number of times the string appear int the window.
         """
         string_regex = re.compile(re.escape(string), flags=rwa_regex_flags)
 
         return len(re.findall(pattern=string_regex, string=window))
 
     def _get_windows(self) -> np.ndarray:
-        """get the array of window with the option in classes
+        """Get the array of window with the option in classes.
 
-        :return: an array of windows to run analysis on
+        :return: an array of windows to run analysis on.
         """
         window_unit = self._options.window_options.window_unit
         window_size = self._options.window_options.window_size
@@ -201,12 +198,12 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled window type: {window_unit}")
 
     def _find_tokens_average_in_windows(
-        self, windows: Iterator[str]) -> pd.DataFrame:
-        """find the token average in the given windows
+            self, windows: Iterator[str]) -> pd.DataFrame:
+        """Find the token average in the given windows.
 
-        a token average is calculated by the number of times the token
-        (or term) appear in the window divided by the window size
-        :param windows: an array of windows to calculate
+        A token average is calculated by the number of times the token
+        (or term) appear in the window divided by the window size.
+        :param windows: an array of windows to calculate.
         :return: a panda data frame where:
             - the index header is the tokens
             - the column header corresponds to the windows but there is
@@ -221,8 +218,8 @@ class RollingWindowsModel(BaseModel):
 
         def _average_matrix_helper(
             window_term_count_func: Callable[[str, str], int]) \
-            -> pd.DataFrame:
-            """The helper to get the average matrix
+                -> pd.DataFrame:
+            """Get the average matrix.
 
             :param window_term_count_func:
                 the function to get count of term in the window
@@ -240,8 +237,12 @@ class RollingWindowsModel(BaseModel):
             #  - the type hinting does not support keyword parameter
             #       (on Python 3.6.1)
             #  - the function that sent in has different keywords
-            list_matrix = [[window_term_count_func(window, token) / window_size
-                            for token in tokens] for window in windows]
+            list_matrix = \
+                [
+                    [window_term_count_func(window, token) / window_size
+                     for token in tokens]
+                    for window in windows
+                ]
 
             return pd.DataFrame(list_matrix, columns=tokens).transpose()
 
@@ -261,22 +262,24 @@ class RollingWindowsModel(BaseModel):
                                      numerator_token: str,
                                      denominator_token: str,
                                      windows: Iterator[str]) -> pd.Series:
-        """Find the token ratios in all the windows
+        """Find the token ratios in all the windows.
 
         get the ratio of the count of the numerator token and denominator token
         if the count of denominator token for that window is 0,
         that window's data will be np.nan
-        :param windows: all the windows to get the ratio
-        :return: a series of ratio, the index correspond to the windows
+        :param numerator_token: the numerator token got from front end.
+        :param denominator_token: the denominator token got from front end.
+        :param windows: all the windows to get the ratio.
+        :return: a series of ratio, the index correspond to the windows.
         """
         assert self._options.ratio_token_options is not None
 
         token_type = self._options.ratio_token_options.token_type
 
-        def _get_ratio_helper(
-            window: str,
-            window_term_count_func: Callable[[str, str], int]) -> float:
-            """the helper method to find a ratio for a single window
+        def _get_ratio_helper(window: str,
+                              window_term_count_func:
+                              Callable[[str, str], int]) -> float:
+            """Find a ratio for a single window.
 
             :param window: the window to find ratio in
             :param window_term_count_func:
@@ -311,7 +314,8 @@ class RollingWindowsModel(BaseModel):
                     for window in windows
                 ],
                 # the name of the series
-                name=f"{numerator_token} / {denominator_token}"
+                name=f"{numerator_token} / {numerator_token} + "
+                     f"{denominator_token}"
             )
 
         elif token_type is RWATokenType.word:
@@ -324,7 +328,8 @@ class RollingWindowsModel(BaseModel):
                     for window in windows
                 ],
                 # the name of the series
-                name=f"{numerator_token} / {denominator_token}"
+                name=f"{numerator_token} / {numerator_token} + "
+                     f"{denominator_token}"
             )
 
         elif token_type is RWATokenType.regex:
@@ -337,29 +342,29 @@ class RollingWindowsModel(BaseModel):
                     for window in windows
                 ],
                 # the name of the series
-                name=f"{numerator_token} / {denominator_token}"
+                name=f"{numerator_token} / {numerator_token} + "
+                     f"{denominator_token}"
             )
 
         else:
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-        self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
-        """Get a indexes of the mile stone windows
+            self, windows: Iterator[str]) -> Optional[Dict[str, List[int]]]:
+        """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
         the milestone string.
-        :param windows: a iterator of windows
-        :return: a list of indexes of the mile stone windows
+        :param windows: a iterator of windows.
+        :return: a list of indexes of the mile stone windows.
         """
-
-        # get an empty graph if the milestone is empty
+        # Return None if no mile stone exists.
         if self._options.milestone is None:
             return None
 
-        # if the milestone string exists
+        # If the list of milestone string exists
         else:
-            # get the mile stone str
+            # Get index for all milestone strings.
             list_milestone_str = self._options.milestone
 
             return {
@@ -373,11 +378,12 @@ class RollingWindowsModel(BaseModel):
     def _get_token_ratio_graph(self) -> List[go.Scattergl]:
         """Get the plotly graph for the token ratio without milestone.
 
-        :return: plotly graph object
+        :return: plotly graph object.
         """
         # Get the windows and token ratio series.
         windows = self._get_windows()
 
+        # Get list of token ratio series.
         token_ratio_series_list = \
             [
                 self._find_token_ratio_in_windows(
@@ -409,6 +415,32 @@ class RollingWindowsModel(BaseModel):
                 for token_ratio_series in token_ratio_series_list
             ]
 
+    def _get_token_average_graph(self) -> List[go.Scattergl]:
+        """Get the plotly graph for token average without milestone.
+
+        :return: a list of plotly graph object
+        """
+        # Get the windows and toke average data frame.
+        windows = self._get_windows()
+        token_average_data_frame = self._find_tokens_average_in_windows(
+            windows=windows)
+
+        # Find the proper plotting mode.
+        plot_mode = "lines+markers" \
+            if self._options.plot_options.individual_points \
+            else "lines"
+
+        # TODO: support black and white color scheme
+        # Construct the graph object.
+        return [
+            go.Scattergl(
+                x=np.arange(len(row)),
+                y=row,
+                name=token,
+                mode=plot_mode
+            ) for token, row in token_average_data_frame.iterrows()
+        ]
+
     def _add_milestone(self, result_plot) -> go.Figure:
         # Get all mile stones.
         mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
@@ -439,32 +471,6 @@ class RollingWindowsModel(BaseModel):
         )
 
         return go.Figure(data=result_plot, layout=layout)
-
-    def _get_token_average_graph(self) -> List[go.Scattergl]:
-        """Get the plotly graph for token average without milestone.
-
-        :return: a list of plotly graph object
-        """
-        # Get the windows and toke average data frame.
-        windows = self._get_windows()
-        token_average_data_frame = self._find_tokens_average_in_windows(
-            windows=windows)
-
-        # Find the proper plotting mode.
-        plot_mode = "lines+markers" \
-            if self._options.plot_options.individual_points \
-            else "lines"
-
-        # TODO: support black and white color scheme
-        # Construct the graph object.
-        return [
-            go.Scattergl(
-                x=np.arange(len(row)),
-                y=row,
-                name=token,
-                mode=plot_mode
-            ) for token, row in token_average_data_frame.iterrows()
-        ]
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph

@@ -92,29 +92,35 @@ class RollingWindowsReceiver(BaseReceiver):
 
     def _get_ratio_token_options(self) -> RWARatioTokenOptions:
         """Get all the options to generate ratio count."""
+        raw_numerator = self._front_end_data['rollingsearchword']
+        raw_denominator = self._front_end_data['rollingsearchwordopt']
         if self._front_end_data['inputtype'] == 'string':
             token_type = RWATokenType.string
-            numerator_token = self._front_end_data['rollingsearchword']
-            denominator_token = self._front_end_data['rollingsearchwordopt']
+            numerator_token = raw_numerator.split(",")
+            denominator_token = raw_denominator.split(",")
 
         elif self._front_end_data['inputtype'] == 'regex':
             token_type = RWATokenType.regex
-            numerator_token = self._front_end_data['rollingsearchword']
-            denominator_token = self._front_end_data['rollingsearchwordopt']
+            numerator_token = raw_numerator.split(",")
+            denominator_token = raw_denominator.split(",")
 
         elif self._front_end_data['inputtype'] == 'word':
             token_type = RWATokenType.word
-            numerator_token = self._front_end_data['rollingsearchword'].strip()
-            denominator_token = \
-                self._front_end_data['rollingsearchwordopt'].strip()
+            numerator_token = [token.strip()
+                               for token in raw_numerator.split(",")]
+            denominator_token = [token.strip()
+                                 for token in raw_denominator.split(",")]
 
         else:
             raise ValueError("invalid token type from front end")
 
-        token_frame = pd.DataFrame(data={
-            "numerator": numerator_token.replace(" ", "").split(","),
-            "denominator": denominator_token.replace(" ", "").split(",")
-        })
+        # Pack data in a data frame.
+        token_frame = pd.DataFrame(
+            data={
+                "numerator": numerator_token,
+                "denominator": denominator_token,
+            }
+        )
 
         return RWARatioTokenOptions(token_type=token_type,
                                     token_frame=token_frame)
@@ -162,8 +168,9 @@ class RollingWindowsReceiver(BaseReceiver):
         if 'rollinghasmilestone' not in self._front_end_data:
             return None
         else:
-            return self._front_end_data['rollingmilestonetype']. \
-                replace(" ", "").split(',')
+            raw_mile_stones = self._front_end_data['rollingmilestonetype']
+            return [mile_stone.strip()
+                    for mile_stone in raw_mile_stones.split(",")]
 
     def _get_passage_file_id(self) -> int:
         """Get the file id for the passage to run rolling window."""
