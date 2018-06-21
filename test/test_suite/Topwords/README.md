@@ -32,3 +32,17 @@ Results:
 	
 Results:
 - results_topOutliers.csv
+
+
+## Test Non-Outliers Only
+
+0. UPLOAD ALL TEST FILES:
+    - Melville_MobyDick.txt, 
+    - Pride_and_Prejudice.txt
+
+1. Topwords
+	- Select Built-In Options, Non-Outliers Only
+	- Keep all other options as default
+	
+Results:
+- results_nonOutliers.csv
