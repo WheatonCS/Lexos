@@ -355,7 +355,7 @@ input[type="file"] {
 }*/
 
 .label {
-  font: helvetica;
+  font-family: helvetica;
   font-weight: bold;
   font-size: 14px;
 }
@@ -1971,67 +1971,47 @@ select#orientation {
 }
 
 /* ================== TOPWORD STYLING ==================== */
-
-#words-options {
+/* Increased the width of the table rows to adjust for the scroll bar on the right*/
+.result-table>tbody> tr{
+  width:103.5%;
 }
-
-#test-input-options {
-}
-
-.topwordTableDiv {
-  float: left;
-  margin-left: 2.5%;
-  margin-right: 2.5%;
-  text-align: center;
-  width: 45%;
-  margin-top: 10px;
-}
-
-.topwordResultDiv {
-  float: left;
-  min-width: 100%;
-  position: relative;
-  margin-bottom: 5%;
-}
-
-.topwordFile {
-  line-height: 70%;
-}
-
-.topwordResultTableTitle {
-  border-bottom: 1px solid #bbb;
-  font-size: 1.2em;
-  margin-bottom: 2%;
-  margin-top: 1%;
-}
-
-.topwordFileTable {
-  height: 81px;
+/* The table containing all the document names*/
+.class-division-table tbody {
+  display: block;
   overflow-y: auto;
+  height: 150px; /* Shows exactly 5 rows of the table*/
+
 }
 
-.topwordResultTable {
-  margin-left: auto;
-  margin-right: auto;
+.td-top {
+  /* We set the 1000px so that it takes all the space. */
+  width: 1000px !important;
 }
 
-.topwordResultTableBody {
+/* This is to remove the middle border of the table*/
+.result-table>tbody>tr>td:nth-of-type(odd){
+  border-right:0;
+}
+
+/* This is to remove the middle border of the table*/
+.result-table>tbody>tr>td:nth-of-type(even){
+  border-left:0;
+}
+
+/* Table for the generated result*/
+.result-table tbody {
+  display: table-header-group;
+  overflow:auto;
+  max-height: 200px;
   height: 200px;
+  overflow-x:hidden;
 }
 
-.topwordResultTableHead {
-  text-align: center;
-}
-
-.topwordResultLegend {
-  margin-top: 40px;
-}
-
-/*====================== bootstrap table =========================*/
+/* The header column covers the full length of the table*/
 .header-fixed {
     width: 100%
 }
-
+/* The display is set as block so that the header position can be fixed*/
 .header-fixed > thead,
 .header-fixed > tbody,
 .header-fixed > thead > tr,
@@ -2048,10 +2028,9 @@ select#orientation {
     visibility: hidden;
     clear: both;
 }
-
 .header-fixed > tbody {
     overflow-y: auto;
-    height: 150px;
+    height: 190px;
 }
 
 .header-fixed > tbody > tr > td,
@@ -2066,34 +2045,24 @@ select#orientation {
     max-width: 100%;
     width: 100%;
 }
-
-table {
-    background-color: transparent;
+/* Make the long table title names scrollable*/
+#topwordTableTitle{
+  overflow-x: hidden;
+  overflow-y:auto;
+  height:50px;
 }
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
+/* Scroll bar for Chrome. chnages the width of the scroll bar for ONLY those
+   that have the text overflow. */
+#topwordTableTitle::-webkit-scrollbar {
+    width: 3px;
+    background-color:#ffe6e6;
 }
-
-.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
-    border-top: 0 none;
+/* Scroll bar for chrome. ONLY for text title with overflow*/
+#topwordTableTitle::-webkit-scrollbar-thumb {
+    width: 3px;
+    background-color:gray;
+    border-radius:15px;
 }
-.table > thead > tr > th {
-    border-bottom: 2px solid #ddd;
-    vertical-align: bottom;
-}
-.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
-    border-top: 1px solid #ddd;
-    line-height: 1.42857;
-    padding: 8px;
-    vertical-align: top;
-}
-
-.table-striped > tbody > tr:nth-of-type(2n+1) {
-    background-color: #f9f9f9;
-}
-
 /* ================== EXTERNAL TOOLS STYLING ================ */
 
 .extooldiv {
@@ -2172,14 +2141,14 @@ table {
   border: none;
   visibility: hidden;
   transition: 0.25s;
-  z-index: 10000px;
+  z-index: 10000;
   background:rgba( 255, 255, 255, .4 )
               50% 50% ;
 }
 #status-prepare img, #status-analyze img, #status-visualize img {
   width: 64px;
   height: 64px;
-  z-index: 10000px;
+  z-index: 10000;
 }
 .dendroImage {
   width: auto;
