@@ -2,6 +2,7 @@ import * as utility from './utility.js'
 
 /**
  * Show the milestone input when the milestone check box is checked.
+ * @returns {void}.
  */
 function updateMSopt () {
   if ($('#rollinghasmilestone').is(':checked')) {
@@ -11,27 +12,39 @@ function updateMSopt () {
   }
 }
 
+/**
+ * Check possible errors existing in front end inputs.
+ * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
+ */
 function getSubmissionError () {
-  // get the number of active document
-  const numActiveDoc = Number($('#num_active_files').val())
+  // Select the two input pattern.
+  const searchPatternNumerator = $('#rollingsearchword')
+  const searchPatternDenominator = $('#rollingsearchwordopt')
+  // Get number of terms in both input pattern inputs.
+  const numeratorLen = searchPatternNumerator.val().split(',').length
+  const denominatorLen = searchPatternDenominator.val().split(',').length
+  // Check if enough files were uploaded.
+  const notEnoughFile = utility.submissionError(1)
 
-  // if there is no active document
-  if (numActiveDoc === 0)
-    return 'Please select a document to analyze.'
-  // no search pattern and window size
-  else if ($('#rollingwindowsize').val() === '' || $('#rollingsearchword').val() === '')
-    return 'Please fill out the \'Search Pattern(s)\' and \'Size of Rolling Window\' fields.'
-  // cannot search term using window of chars
-  else if ($('#inputword').prop('checked') && $('#windowletter').prop('checked'))
-    return 'You cannot use tokens for search terms when analyzing a window of characters. ' +
-      'The window setting has been changed to a window of tokens.'
-  // no error found
-  else
+  // Check all other possible errors.
+  if (notEnoughFile !== null) {
+    return notEnoughFile
+  } else if ($('#rollingwindowsize').val() === '' || searchPatternNumerator.val() === '') {
+    return `Please fill out both "Search Pattern(s)" and "Size of Rolling Window" fields.`
+  } else if ($('#inputword').prop('checked') && $('#windowletter').prop('checked')) {
+    return `You cannot use tokens for search terms when analyzing a window of characters. 
+            The window setting has been changed to a window of tokens.`
+  } else if ($('#rollingratio').prop('checked') && numeratorLen === denominatorLen) {
+    return `You have to put equal number of terms in both "Search Pattern(s)" numerator and 
+            denominator. Separate terms by comma.`
+  } else {
     return null
+  }
 }
 
 /**
- * the function to submit form via ajax in dendrogram
+ * The function to submit form via ajax in dendrogram.
+ * @returns {void}.
  */
 function generateRollingWindow () {
   // show loading icon
@@ -59,7 +72,8 @@ function generateRollingWindow () {
 }
 
 /**
- * the function to submit form via ajax in dendrogram
+ * The function to submit form via ajax in dendrogram.
+ * @returns {void}.
  */
 function displayMileStone () {
   // show loading icon
@@ -72,13 +86,13 @@ function displayMileStone () {
   utility.sendAjaxRequest('/rollingWindowMileStone', form)
     .done(
       function (response) {
-        if (response !== "") {
-          const mile_stones = response.map(function (mile_stone) {
+        if (response !== '') {
+          const mileStones = response.map(function (mileStone) {
             return `<div class="col-sm-1 col-md-1 col-lg-1">
-                        <p style="color: ${mile_stone['color']}; font-size: 20px">${mile_stone['mile_stone']}</p>
+                        <p style="color: ${mileStone['color']}; font-size: 20px">${mileStone['mile_stone']}</p>
                     </div>`
           })
-          $('#mile-stones').html(mile_stones)
+          $('#mile-stones').html(mileStones)
           $('#mile-stone-field').css('display', 'block')
         } else {
           $('#mile-stone-field').css('display', 'none')
@@ -104,36 +118,14 @@ $(function () {
   $('#rollinghasmilestone').click(updateMSopt)
 
   $('#getgraph').click(function () {
-    /* Validation */
+    /* Get the possible validations. */
     const errorString = getSubmissionError()
     if (errorString === null) {
       displayMileStone()
       generateRollingWindow()
-    }
-
-    else
+    } else {
       utility.runModal(errorString)
-  })
-
-  /* On-Click Validation */
-  $('#radiowindowletter').click(function () {
-    if ($('#inputword').prop('checked')) {
-      $('#windowword').click()
-      const msg = `You cannot use a window of characters when analyzing a token. 
-                   The setting has been changed to a window of tokens.`
-      utility.runModal(msg)
     }
-  })
-
-  /* Other UI functionality */
-  // Fixes bug where you cannot click second text box in firefox
-  $('#rollingsearchwordopt, #rollingsearchword').hover(function () {
-    $(this).focus()
-  })
-
-  // Sets the value of the hidden input
-  $('.minifilepreview').click(function () {
-    $('#filetorollinganalyze').val($(this).prop('id'))
   })
 
   // Shows the second textbox when rolling ratio gets clicked

@@ -6,13 +6,14 @@
     <script type="module"
             src="{{ url_for('static', filename='js/scripts_rwanalysis.js') }}?ver={{ version }}"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
+    <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
+    <meta id="num-active-files" data-number="{{ labels|len }}">
 {% endblock %}
 
 {% block title %}Rolling Window{% endblock %}
 
 {% block options %}
-    <input type="hidden" id="num_active_files" value="{{ numActiveDocs }}"/>
-
     <!-- Title -->
     <div class="row">
         <div class="col-md-12">
