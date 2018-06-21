@@ -44,6 +44,7 @@ test_script:
   - .\node_modules\.bin\eslint .\js\scripts_statistics.js
   - .\node_modules\.bin\eslint .\js\scripts_similarity.js
   - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
+  - .\node_modules\.bin\eslint .\js\scripts_upload.js
   - .\node_modules\.bin/eslint .\js\scripts_kmeans.js
   - .\node_modules\.bin\eslint .\js\scripts_cut.js
   - cd ../..
