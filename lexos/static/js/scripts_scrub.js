@@ -178,8 +178,6 @@ function changeWhitespaceBoxClass (whiteSpaceBox) {
  * @returns {void} - returns nothing
  */
 function changeTagBoxClass (tagBox) {
-  console.log('hello')
-  console.log(typeof tagBox)
   if ($(tagBox).is(':checked')) {
     $('#tag').removeClass('hidden')
   } else {
