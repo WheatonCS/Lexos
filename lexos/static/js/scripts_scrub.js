@@ -291,7 +291,7 @@ function xmlModalAjax () {
       <option value="leave-alone,allTags">Leave Tag Alone</option>
       </select>
       <button id="set-tags-button" type="button" class="btn btn-primary"">Set All</button>`
-      $('#tagTable').append('<thead><tr><th>Element</th><th>Action</th><th>' + select + '</th></tr></thead>')
+      $('#tagTable').append(`<thead><tr><th>Element</th><th>Action</th><th> + ${select} + </th></tr></thead>`)
       $('#tagTable').append('<tbody></tbody>')
       $('#tagTable tbody').append(j['menu'])
       $('#xmlModalStatus').remove()
@@ -300,7 +300,7 @@ function xmlModalAjax () {
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      console.log('Error: ' + errorThrown)
+      console.log(`Error: ${errorThrown}`)
     }
   })
 }
