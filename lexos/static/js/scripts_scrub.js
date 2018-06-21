@@ -298,7 +298,7 @@ function xmlModalAjax () {
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      console.log('Error: ' + errorThrown)
+      console.log(`Error: ${errorThrown}`)
     }
   })
 }
