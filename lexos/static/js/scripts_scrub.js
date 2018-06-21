@@ -190,7 +190,6 @@ function changeTagBoxClass (tagBox) {
  * @returns {void} - returns nothing
  */
 function entityRulesChangeFunction () {
-  console.log($('#entityrules')[0].value)
   if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules')[0].value === 'MUFI-4') {
     $('#MUFI-warning').style.display = 'inline-block'
     $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
