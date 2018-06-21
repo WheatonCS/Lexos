@@ -12,6 +12,7 @@ from flask import request
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
+import lexos.processors.prepare.scrubber as scrubber
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
@@ -797,21 +798,27 @@ def generate_csv_matrix_from_ajax(data: Dict[str, object],
 def xml_handling_options(data: dict = {}):
     file_manager = load_file_manager()
     from lexos.managers import session_manager
-    from lxml import etree
+    import xml.etree.ElementTree as ET
     tags = []
-    # etree.lxml to get all the tags
+
     for file in file_manager.get_active_files():
         try:
-            root = etree.fromstring(file.load_contents())
+            root = ET.fromstring(file.load_contents())
+            iter = root.getiterator()
+
             # Remove processing instructions --
             # not necessary to get a list of tags
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
             # Get the list of the tags
+            for element in iter:
+                tags.append(element.tag)
+            '''    
             for e in root.iter():
                 # Add to tags list, stripping all namespaces
                 tags.append(e.tag.split('}', 1)[1])
-        except etree.XMLSyntaxError:
+            '''
+        except ET.ParseError:
             import bs4
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(file.load_contents(), 'html.parser')
