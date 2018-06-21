@@ -34,7 +34,7 @@ function getSubmissionError () {
   } else if ($('#inputword').prop('checked') && $('#windowletter').prop('checked')) {
     return `You cannot use tokens for search terms when analyzing a window of characters. 
             The window setting has been changed to a window of tokens.`
-  } else if ($('#rollingratio').prop('checked') && numeratorLen === denominatorLen) {
+  } else if ($('#rollingratio').prop('checked') && numeratorLen !== denominatorLen) {
     return `You have to put equal number of terms in both "Search Pattern(s)" numerator and 
             denominator. Separate terms by comma.`
   } else {
@@ -102,7 +102,7 @@ function displayMileStone () {
       function (jqXHR, textStatus, errorThrown) {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        utility.runModal('Error encountered while plotting the rolling window analysis.')
+        utility.runModal('Error encountered while generating the milestone delimiter color.')
       })
     .always(
       function () {
