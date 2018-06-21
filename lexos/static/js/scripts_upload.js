@@ -106,8 +106,10 @@ function UploadAndParseFile (file, fileSize) {
   } else if (!AllowedFileType(file.name)) {
     alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
   } else {
+    const MAX_FILE_SIZE_INT= $("#MAX_FILE_SIZE_INT").val()
+    const MAX_FILE_SIZE_UNITS = $("#MAX_FILE_SIZE_UNITS").title
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
-     ${MAX_FILE_SIZE_INT.value}   ${MAX_FILE_SIZE_UNITS.title} B`)
+     ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}`)
     // Without this, it puts a blue background on the progress bar.
     $('#progress').css('background', 'transparent')
   }
