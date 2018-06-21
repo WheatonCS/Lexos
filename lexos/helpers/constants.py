@@ -171,17 +171,7 @@ SIMINPUT = ('uploadname',)
 SIMBOX = ('simsuniquetokens',)
 
 # for topword
-TOPWORDINPUT = (
-    'testInput',
-    'groupOptionType',
-    'outlierMethodType',
-    "outlierTypeStd",
-    "outlierTypeIQR",
-    'lowerboundPC',
-    'upperboundPC',
-    'lowerboundRC',
-    'upperboundRC',
-    'useFreq')
+TOPWORDINPUT = ['testInput']
 
 '''the request form default value'''
 DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
@@ -273,17 +263,7 @@ DEFAULT_KMEAN_OPTIONS = {
 
 DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
 
-DEFAULT_TOPWORD_OPTIONS = {
-    'testInput': 'classToPara',
-    'groupOptionType': 'all',
-    'outlierMethodType': 'stdErr',
-    "outlierTypeStd": 'top',
-    "outlierTypeIQR": 'top',
-    'lowerboundPC': '0',
-    'upperboundPC': '1',
-    'lowerboundRC': '0',
-    'upperboundRC': '0',
-    'useFreq': 'PC'}
+DEFAULT_TOPWORD_OPTIONS = {'testInput': 'allToPara'}
 
 DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 
