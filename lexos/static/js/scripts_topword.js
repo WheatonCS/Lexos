@@ -1,30 +1,4 @@
-/**
- * The function to run the error modal.
- * @param {string} htmlMsg: the message to display.
- * @returns {void}
- */
-function runModal (htmlMsg) {
-  $('#error-modal-message').html(htmlMsg)
-  $('#error-modal').modal()
-}
-
-/**
- * Check if at least 2 documents are uploaded.
- * @returns {string | null} the errors that is checked by JS, if there is no error the result will be null.
- */
-function submissionError () {
-  const manageUrl = $('#manage-url').data().url
-  const uploadUrl = $('#upload-url').data().url
-  const activeFileNumTooFewErr = `You do not have enough active documents. 
-                                  Please activate at least two documents using 
-                                  the <a href=${manageUrl}>Manage</a> tool or 
-                                  <a href=${uploadUrl}>Upload</a> a new document.`
-  if ($('#num-active-files').data().number < 2) {
-    return activeFileNumTooFewErr
-  } else {
-    return null
-  }
-}
+import * as utility from './utility.js'
 
 /**
  * Check if allow comparison among classes or classes to corpus.
@@ -35,40 +9,11 @@ function checkAllowClassComparison () {
   $('#classToPara').attr('disabled', enableClassComparison)
   $('#classToClass').attr('disabled', enableClassComparison)
   /* Displays the class message if there is less than 2 classes assigned*/
-  if (enableClassComparison){
-    $("#classInfo").show()
-  } else{
-    $("#classInfo").hide()
+  if (enableClassComparison) {
+    $('#classInfo').show()
+  } else {
+    $('#classInfo').hide()
   }
-
-
-}
-
-/**
- * The function to convert the from into json.
- * @returns {{string: string}}: the from converted to json
- */
-function jsonifyForm () {
-  const form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
-}
-
-/**
- * Send the ajax request.
- * @param {string} url: the url to post.
- * @param {object.<string, string>} form: the form data packed into an object.
- * @returns {jQuery.Ajax}: an jQuery Ajax object.
- */
-function sendAjaxRequest (url, form) {
-  return $.ajax({
-    type: 'POST',
-    url: url,
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
 }
 
 /**
@@ -96,10 +41,10 @@ function generateTopWordResult () {
   $('#status-analyze').css({'visibility': 'visible'})
 
   // convert form into an object map string to string
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/topwordResult', form)
+  utility.sendAjaxRequest('/topwordResult', form)
     .done(
       function (response) {
         const topWordHeader = $('#topword-title')
@@ -114,7 +59,7 @@ function generateTopWordResult () {
       function (jqXHR, textStatus, errorThrown) {
         console.log(`textStatus: ${textStatus}`)
         console.log(`errorThrown: ${errorThrown}`)
-        runModal('Error encountered while generating the topword result.')
+        utility.runModal('Error encountered while generating the topword result.')
       })
     .always(
       function () {
@@ -133,11 +78,11 @@ $(function () {
    * The event handler for generate top word clicked
    */
   $('#get-topwords').click(function () {
-    const error = submissionError() // the error happens during submission
+    const error = utility.submissionError(2) // The error happens during submission
     if (error === null) { // if there is no error
       generateTopWordResult()
     } else {
-      runModal(error)
+      utility.runModal(error)
     }
   })
 })
