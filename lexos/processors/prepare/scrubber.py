@@ -201,6 +201,7 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
     # in GUI:  Remove Tag Only
     if action == "remove-tag":
         # searching for variants this specific tag:  <tag> ...
+
         pattern = re.compile(
             '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
             '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
@@ -214,6 +215,7 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         # <[whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
         # as applied across newlines, (re.MULTILINE), on re.UNICODE,
         # and .* includes newlines (re.DOTALL)
+
         pattern = re.compile(
             "<\s*" + re.escape(tag) + "( .+?>|>).+?</\s*" + re.escape(tag) +
             ">", re.MULTILINE | re.DOTALL | re.UNICODE)
@@ -222,6 +224,7 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
     elif action == "replace-element":
+
         pattern = re.compile(
             "<\s*" + re.escape(tag) + ".*?>.+?</\s*" + re.escape(tag) + ".*?>",
             re.MULTILINE | re.DOTALL | re.UNICODE)

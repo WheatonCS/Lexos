@@ -3,9 +3,10 @@ XML
 
 #### Test Remove XML Tags
 
-*Test files:* book.xml, george.xml, small.xml
+*Test files:* book.xml, george.xml, small.xml, test.xml
 
-*Result files:* 
+*Result files:* bookRemoveTags.txt, georgeAttributes.txt, smallContents.txt,
+testLeaveTags.txt
 
 1. UPLOAD FILES
 
@@ -20,4 +21,8 @@ XML
         * Leave Tag Alone
 
 3. RESULTS:
-    - 
+    - bookRemoveTags.txt remove tags only
+    - georgeAttributes.txt replace element's contents with attribute value
+    - smallContents.txt remove element and all its contents
+    - testLeaveTags.txt leave tags alone
+     
