@@ -62,8 +62,9 @@ class TestRatioCount:
             check_names=False)
 
     def test_generate_rwa_graph(self):
-        assert rw_ratio_model_one._generate_rwa_graph()['data'][0]['type'] == \
-               'scattergl'
+        assert \
+            rw_ratio_model_one._generate_rwa_graph()['data'][0][
+                'type'] == 'scattergl'
         np.testing.assert_array_equal(
             rw_ratio_model_one._generate_rwa_graph()['data'][0]['x'],
             [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
@@ -135,23 +136,28 @@ class TestAverageCount:
         )
 
     def test_generate_rwa_graph(self):
-        assert rw_average_count_model_one._generate_rwa_graph()['data'][0][
-                   'type'] == 'scattergl'
+        assert \
+            rw_average_count_model_one._generate_rwa_graph()['data'][0][
+                'type'] == 'scattergl'
+
         np.testing.assert_array_equal(
             rw_average_count_model_one._generate_rwa_graph()['data'][0]['x'],
             [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
         )
-        assert rw_average_count_model_one._generate_rwa_graph()['data'][1][
-                   'mode'] == 'lines'
-        assert rw_average_count_model_one._generate_rwa_graph()['data'][1][
-                   'name'] == 'ha'
-        assert rw_average_count_model_one._generate_rwa_graph()['data'][1][
-                   'line'] == {'color': 'rgb(55,126,184)'}
+        assert \
+            rw_average_count_model_one._generate_rwa_graph()['data'][1][
+                'mode'] == 'lines'
+        assert \
+            rw_average_count_model_one._generate_rwa_graph()['data'][1][
+                'name'] == 'ha'
+        assert \
+            rw_average_count_model_one._generate_rwa_graph()['data'][1][
+                'line'] == {'color': 'rgb(55,126,184)'}
 
     def test_find_milestone(self):
         assert \
-            rw_average_count_model_one.\
-            _find_mile_stone_windows_indexes_in_all_windows(
+            rw_average_count_model_one. \
+                _find_mile_stone_windows_indexes_in_all_windows(
                 rw_average_windows) == {'t': [15],
                                         'a': [1, 4, 7, 10, 13, 16]}
 
