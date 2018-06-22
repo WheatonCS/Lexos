@@ -157,7 +157,7 @@ class TestAverageCount:
     def test_find_milestone(self):
         assert \
             rw_average_count_model_one. \
-                _find_mile_stone_windows_indexes_in_all_windows(
+            _find_mile_stone_windows_indexes_in_all_windows(
                 rw_average_windows) == {'t': [15],
                                         'a': [1, 4, 7, 10, 13, 16]}
 
