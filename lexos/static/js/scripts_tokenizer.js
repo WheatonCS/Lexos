@@ -15,10 +15,10 @@ function getDataTableConfig () {
     // Do not sort headers.
     bSortCellsTop: true,
     // specify where the button is
-    dom: `<'row'<'col-sm-12 text-right'l>>
-          <'row'<'col-sm-6'B><'col-sm-6 text-right'f>>
-          <'row'<'col-sm-12'tr>>
-          <'row'<'col-sm-6'i><'col-sm-7'p>>`,
+    dom: `<'row'<'col-md-12 text-right'l>>
+          <'row'<'col-md-6'B><'col-md-6 text-right'f>>
+          <'row'<'col-md-12'tr>>
+          <'row'<'col-md-5'i><'col-md-7'p>>`,
 
     // specify all the button that is put on to the page
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
