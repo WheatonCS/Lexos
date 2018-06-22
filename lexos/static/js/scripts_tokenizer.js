@@ -1,51 +1,4 @@
-/**
- * The function to run the error modal.
- * @param {string} htmlMsg: the message to display.
- * @returns {void}.
- */
-function runModal (htmlMsg) {
-  $('#error-modal-message').html(htmlMsg)
-  $('#error-modal').modal()
-}
-
-/**
- * At least one document is required to run the stats.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
- */
-function submissionError () {
-  if ($('#num_active_files').val() < 1) {
-    return 'You must have at least one active document to proceed!'
-  } else {
-    return null
-  }
-}
-
-/**
- * The function to convert the form into json.
- * @returns {{string: string}}: the form converted to json.
- */
-function jsonifyForm () {
-  const form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
-}
-
-/**
- * Send the ajax request.
- * @param {string} url: the url to post.
- * @param {{string: string}} form: the form data packed into an object.
- * @returns {jQuery.Ajax}: an jQuery Ajax object.
- */
-function sendAjaxRequest (url, form) {
-  return $.ajax({
-    type: 'POST',
-    url: url,
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
-}
+import * as utility from './utility.js'
 
 /**
  * Get the data table configuration based on selected orientation.
@@ -63,7 +16,7 @@ function getDataTableConfig () {
     bSortCellsTop: true,
     // specify where the button is
     dom: `<'row'<'col-sm-6'B><'col-sm-6 text-right'l>>
-          <'row'<'col-sm-12'tr>><'row'<'col-sm-4'i><'col-sm-8'p>>`,
+          <'row'<'col-sm-12'tr>><'row'<'col-sm-8 text-left'p><'col-sm-4'i>>`,
 
     // specify all the button that is put on to the page
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
@@ -89,9 +42,9 @@ function getDataTableConfig () {
  */
 function checkTokenizerSize () {
   // convert form into an object map string to string.
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
   // Send the ajax request to get the tokenizer matrix size.
-  sendAjaxRequest('/tokenizerSize', form)
+  utility.sendAjaxRequest('/tokenizerSize', form)
     .done(
       function (response) {
         // Cast the response to an integer.
@@ -107,7 +60,7 @@ function checkTokenizerSize () {
       function (jqXHR, textStatus, errorThrown) {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while calculating the size of the tokenizer result.')
+        utility.runModal('Error encountered while calculating the size of the tokenizer result.')
       }
     )
 }
@@ -121,10 +74,10 @@ function generateTokenizerResult () {
   $('#status-analyze').css({'visibility': 'visible'})
 
   // convert form into an object map string to string
-  const form = jsonifyForm()
+  const form = utility.jsonifyForm()
 
   // send the ajax request
-  sendAjaxRequest('/tokenizerMatrix', form)
+  utility.sendAjaxRequest('/tokenizerMatrix', form)
     .done(
       function (response) {
         const outerTableDivSelector = $('#tokenizerMatrix')
@@ -139,7 +92,7 @@ function generateTokenizerResult () {
       function (jqXHR, textStatus, errorThrown) {
         console.log('textStatus: ' + textStatus)
         console.log('errorThrown: ' + errorThrown)
-        runModal('Error encountered while generating the tokenize table result.')
+        utility.runModal('Error encountered while generating the tokenize table result.')
       })
     .always(
       function () {
@@ -160,10 +113,10 @@ $(function () {
   // The event handler for download tokenize clicked.
   $('#download-tokenizer').click(function (download) {
     // On check possible submission error on click.
-    const error = submissionError()
+    const error = utility.submissionError(1)
     // If error found, run modal to display message and prevent the submission from happening.
     if (error !== null) {
-      runModal(error)
+      utility.runModal(error)
       download.preventDefault()
     }
   })
@@ -171,12 +124,12 @@ $(function () {
   // The event handler for generate tokenize clicked.
   $('#get-tokenizer').click(function () {
     // Get the possible error happened during submission the ajax call.
-    const error = submissionError()
+    const error = utility.submissionError(1)
 
     if (error === null) { // If there is no error, do the ajax call.
       checkTokenizerSize()
     } else { // If error found, do modal.
-      runModal(error)
+      utility.runModal(error)
     }
   })
 })

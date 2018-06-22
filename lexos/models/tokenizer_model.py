@@ -9,10 +9,10 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.managers.session_manager import session_folder
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
     TokenizerReceiver
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 
 
 class TokenizerTestOption(NamedTuple):

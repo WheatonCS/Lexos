@@ -5,7 +5,7 @@
     <script type="text/javascript" charset="utf8"
             src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
 
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_tokenizer.js') }}?ver={{ version }}"></script>
 
     <!-- Latest compiled and minimized DataTables CSS -->
@@ -23,7 +23,6 @@
 
 {% block options %}
     <div class="row col-md-12 col-lg-12">
-        <input type="hidden" id="num_active_files" value="{{ labels|len }}"/>
         <fieldset class="tokenizeOption" id="tokenizeDiv">
             <legend>Data Orientation:</legend>
             <label>
