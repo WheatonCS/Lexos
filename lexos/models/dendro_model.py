@@ -85,15 +85,26 @@ class DendrogramModel(BaseModel):
     def get_dendrogram_div(self) -> str:
         """Generate the dendrogram div to send to the front end.
 
-        :return: a div
+        :return: a HTML string that represents the plotly dendrogram graph.
         """
+        # Get the plotly figure that contains the dendrogram.
         figure = self._get_dendrogram_fig()
-
-        # update the style of the image
-        figure['layout'].update({'width': 800, 'height': 1000,
-                                 'hovermode': 'x'})
-
-        div = plot(figure, show_link=False, output_type="div",
-                   include_plotlyjs=False)
-
-        return div
+        # Find the maximum x-axis value in order to extend the x-axis range.
+        x_max = max(figure["layout"]["xaxis"]["tickvals"])
+        # Set figure layout details.
+        figure["layout"].update(
+            dict(
+                width=1000,
+                height=700,
+                hovermode="x",
+                xaxis=dict(
+                    # Extend the x-axis range by 5.
+                    range=[0, x_max + 5]
+                )
+            )
+        )
+        # Return the plotly object as a HTML div.
+        return plot(figure,
+                    show_link=False,
+                    output_type="div",
+                    include_plotlyjs=False)
