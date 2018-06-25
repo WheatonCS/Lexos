@@ -13,7 +13,7 @@ $(function () {
     let tagDict = {}
     const serializedForm = $(this).closest('form').serializeArray()
     $.each(serializedForm, function () {
-      //name and value
+      // name and value
       if (tagDict[this.name] !== undefined) {
         if (!tagDict[this.name].push) {
           tagDict[this.name] = [tagDict[this.name]]
@@ -49,12 +49,16 @@ $(function () {
   // display additional options on load
   displayAdditionalOptions()
 
+  /**
+ * Clone file labels and do ajax request
+ * @returns {void} - returns nothing
+ */
   $('.bttnfilelabels').click(function () {
     // swfileselect, lemfileselect, consfileselect, scfileselect
     const filetype = $(this).attr('id').replace('bttnlabel', '')
-    const usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
+    const usingCache = $('#usecache' + filetype).attr('disabled') !== 'disabled'
 
-    if ((usingCache) || ($(this).attr('id') != '')) {
+    if ((usingCache) || ($(this).attr('id') !== '')) {
       // $(this).siblings('.scrub-upload').attr('value', '');
       // Next two lines clear the file input; it's hard to find a cross-browser solution
       $('#' + filetype).val('')
@@ -82,6 +86,10 @@ $(function () {
     })
   })
 
+  /**
+ * Change white space box class when checked or unchecked
+ * @returns {void} - returns nothing
+ */
   $('#whitespacebox').click(function () {
     if ($(this).is(':checked')) {
       $('#whitespace').removeClass('hidden')
@@ -89,6 +97,11 @@ $(function () {
       $('#whitespace').addClass('hidden')
     }
   })
+
+  /**
+ * Use special character options
+ * @returns {void} - returns nothing
+ */
   $('#entityrules').change(function () {
     console.log($('#entityrules').value)
     if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules').value === 'MUFI-4') {
@@ -101,6 +114,11 @@ $(function () {
     }
   })
 
+  /**
+ * Change tag box class when checked or unchecked
+ * @param {object} tagBox - scrub tags checkbox DOM element
+ * @returns {void} - returns nothing
+ */
   $('#tagbox').click(function () {
     if ($(this).is(':checked')) {
       $('#tag').removeClass('hidden')
@@ -123,8 +141,8 @@ $(function () {
  * @returns {void} - returns nothing
  */
 function downloadScrubbing () { // eslint-disable-line no-unused-vars
-                                // Unfortunately, you can't trigger a download with an ajax request; calling a
-                                // Flask route seems to be the easiest method.
+  // Unfortunately, you can't trigger a download with an ajax request; calling a
+  // Flask route seems to be the easiest method.
   window.location = '/downloadScrubbing'
 }
 
@@ -221,67 +239,6 @@ function truncateFileName (ev, container) {
   let fileName = ev.target.files[0].name
   if (fileName.length > 25) { fileName = fileName.substring(0, 24) + '...' }
   $(container).html(fileName)
-}
-
-/**
- * Clone file labels and do ajax request
- * @param {string} bttnFileLabels - File labels DOM elements
- * @returns {void} - returns nothing
- */
-function buttonFileLabelsFunction (bttnFileLabels) {
-  // swfileselect, lemfileselect, consfileselect, scfileselect
-  const fileType = $(bttnFileLabels).attr('id').replace('bttnlabel', '')
-  const usingCache = $(`#usecache${fileType}`).attr('disabled') !== 'disabled'
-
-  if ((usingCache) || ($(bttnFileLabels).attr('id') !== '')) {
-    // $(this).siblings('.scrub-upload').attr('value', '');
-    // Next two lines clear the file input; it's hard to find a cross-browser solution
-    $(`#${fileType}`).val('')
-    $(`#${fileType}`).replaceWith($(`#${fileType}`).clone(true))
-    $(`#usecache${fileType}`).attr('disabled', 'disabled')
-    $(bttnFileLabels).text('')
-  }
-}
-
-/**
- * Change white space box class when checked or unchecked
- * @param {object} whiteSpaceBox - white space box DOM element
- * @returns {void} - returns nothing
- */
-function changeWhitespaceBoxClass (whiteSpaceBox) {
-  if ($(whiteSpaceBox).is(':checked')) {
-    $('#whitespace').removeClass('hidden')
-  } else {
-    $('#whitespace').addClass('hidden')
-  }
-}
-
-/**
- * Change tag box class when checked or unchecked
- * @param {object} tagBox - scrub tags checkbox DOM element
- * @returns {void} - returns nothing
- */
-function changeTagBoxClass (tagBox) {
-  if ($(tagBox).is(':checked')) {
-    $('#tag').removeClass('hidden')
-  } else {
-    $('#tag').addClass('hidden')
-  }
-}
-
-/**
- * Use special character options
- * @returns {void} - returns nothing
- */
-function entityRulesChangeFunction () {
-  if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules')[0].value === 'MUFI-4') {
-    $('#MUFI-warning').style.display = 'inline-block'
-    $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
-    $('.filecontents').addClass('Junicode')
-  } else {
-    $('.filecontents').removeClass('Junicode')
-    $('#MUFI-warning').style.display = 'none'
-  }
 }
 
 /**
