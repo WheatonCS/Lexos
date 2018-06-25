@@ -77,7 +77,7 @@ function generateKMeansResult () {
  * Scrolls to the graph once its generated.
  * @returns {void}
  */
-function toKMeanGraph () {
+function scrollToGraph () {
   $('html, body').animate({
     scrollTop: $('#get-k-means-result').offset().top
   }, 1000)
@@ -96,7 +96,7 @@ $(function () {
       // If there is no error, get the result.
       $('#KMeans-result').css({'display': 'block'})
       generateKMeansResult()
-      toKMeanGraph()
+      scrollToGraph()
     } else {
       utility.runModal(error)
     }
