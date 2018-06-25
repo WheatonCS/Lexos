@@ -228,7 +228,7 @@ function FileSelectHandler (e) {
  * Displays the message on the 'progress' bar
  * @return { void }
  */
-function showProgress (){
+function showProgress () {
   $('#progress').html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
   $id('fileselect').value = ''
   // this allows the event to fire on "change" in chrome. the value property changing is the
