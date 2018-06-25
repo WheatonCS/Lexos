@@ -29,6 +29,12 @@ function generateDendrogram () {
       })
 }
 
+function scrollToDendro () {
+  $('html, body').animate({
+    scrollTop: $('#dendrogram-result').offset().top
+  }, 1000)
+}
+
 /**
  * When the HTML documents finish loading
  */
@@ -41,6 +47,7 @@ $(function () {
 
     if (error === null) { // if there is no error
       generateDendrogram()
+      scrollToDendro()
     } else {
       utility.runModal(error)
     }
