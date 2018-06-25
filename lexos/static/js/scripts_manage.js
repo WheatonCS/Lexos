@@ -105,7 +105,7 @@ function tableAction () {
 
   // Trigger selection buttons
   $('#selectAllDocs').click(function () { selectAll() })
-  $('#disableAllDocs').click(function () { deselectAll() })
+  $('#deselectAllDocs').click(function () { deselectAll() })
   $('#deleteSelectedDocs').click(function () {
     let selected_rows = table.rows({selected: true}).nodes().to$()
     deleteAllSelected(selected_rows)
@@ -866,11 +866,11 @@ function prepareContextMenu () {
 function handleSelectButtons (numRows, numRowsSelected) {
   if (table.rows('.selected').data().length === 0) {
     $('#selectAllDocs').prop('disabled', false)
-    $('#disableAllDocs').prop('disabled', true)
+    $('#deselectAllDocs').prop('disabled', true)
     $('#deleteSelectedDocs').prop('disabled', true)
-  } else if (table.rows('.selected').data().length === numRows) {
-      $('#selectAllDocs').prop('disabled', true)
-      $('#disableAllDocs').prop('disabled', false)
+  } else{
+      $('#selectAllDocs').prop('disabled', false)
+      $('#deselectAllDocs').prop('disabled', false)
       $('#deleteSelectedDocs').prop('disabled', false)
   }
 }
