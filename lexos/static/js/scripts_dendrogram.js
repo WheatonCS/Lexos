@@ -31,6 +31,7 @@ function generateDendrogram () {
 
 /**
  * Scrolls to dendrogram results after they are generated.
+ * @returns {void}
  */
 function scrollToDendro () {
   $('html, body').animate({
