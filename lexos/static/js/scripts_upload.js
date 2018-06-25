@@ -55,10 +55,13 @@ function resetProgressBar () {
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
+  // Make the loading icon circle visible
+   $('#status-analyze').css({'visibility': 'visible'})
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
       alert(`Cannot process blank file -- ${file.name}`)
+      $('#status-analyze').css({'visibility': 'hidden'})
     } else {
       sendAjaxRequest(file, filename)
         .done(function () {
@@ -101,21 +104,29 @@ function UploadAndParseFile (file, fileSize) {
 
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert(`${textStatus} : ${errorThrown}`)
+          $('#status-analyze').css({'visibility': 'hidden'})
+        })
+        .always(function (){
+           $('#status-analyze').css({'visibility': 'hidden'})
         })
     }
+
   } else if (!AllowedFileType(file.name)) {
     alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
-    // This is to hide the loading icon.
-    $('#status').hide()
+    // These are to hide the loading icon.
+    $('#status').css({'visibility': 'hidden'})
+    $('#status-analyze').css({'visibility': 'hidden'})
   } else {
+    // This is to hide the loading icon.
+    $('#status-analyze').css({'visibility': 'hidden'})
+    $('#status').css({'visibility': 'hidden'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
     const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}B`)
-    // This is to hide the loading icon.
-    $('#status').hide()
     // Without this, it puts a blue background on the progress bar.
     $('#progress').css('background', 'transparent')
+    console.log('right here')
   }
 }
 
