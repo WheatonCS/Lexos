@@ -99,16 +99,16 @@ function tableAction () {
   })
   // Call Delete function on click.
   $('#delete').click(function () {
-    let selected_rows = table.rows({selected: true}).nodes().to$()
-    deleteAllSelected(selected_rows)
+    let selectedRows = table.rows({selected: true}).nodes().to$()
+    deleteAllSelected(selectedRows)
   })
 
   // Trigger selection buttons
   $('#selectAllDocs').click(function () { selectAll() })
   $('#deselectAllDocs').click(function () { deselectAll() })
   $('#deleteSelectedDocs').click(function () {
-    let selected_rows = table.rows({selected: true}).nodes().to$()
-    deleteAllSelected(selected_rows)
+    let selectedRows = table.rows({selected: true}).nodes().to$()
+    deleteAllSelected(selectedRows)
   })
   // Remove the footer from alert modals when hidden
   $('#alert-modal').on('hidden.bs.modal', function (e) {
@@ -173,9 +173,9 @@ function registerSelectEvents () {
   table
     .on('select', function (e, dt, type, indexes) {
       // Get selected rows as a jQuery object
-      const selected_rows = table.rows(indexes).nodes().to$()
+      const selectedRows = table.rows(indexes).nodes().to$()
       // Call the ajax function
-      enableRows(selected_rows)
+      enableRows(selectedRows)
       handleSelectButtons()
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // add the correct counter text to the p
@@ -200,7 +200,7 @@ function registerSelectEvents () {
 /* Right click options on the documents */
 function tableDocumentActions () {
   handleSelectButtons()
-  let selected_rows
+  let selectedRows
   $('#demo').contextmenu({
     target: '#context-menu',
     scopes: 'td',
@@ -233,16 +233,16 @@ function tableDocumentActions () {
           deselectAll()
           break
         case 'merge_selected':
-          selected_rows = table.rows({selected: true}).nodes().to$()
-          mergeSelected(cell, selected_rows)
+          selectedRows = table.rows({selected: true}).nodes().to$()
+          mergeSelected(cell, selectedRows)
           break
         case 'apply_class_selected':
-          selected_rows = table.rows({selected: true}).nodes().to$()
-          applyClassSelected(cell, selected_rows)
+          selectedRows = table.rows({selected: true}).nodes().to$()
+          applyClassSelected(cell, selectedRows)
           break
         case 'delete_all_selected':
-          selected_rows = table.rows({selected: true}).nodes().to$()
-          deleteAllSelected(selected_rows)
+          selectedRows = table.rows({selected: true}).nodes().to$()
+          deleteAllSelected(selectedRows)
           break
       }
     }
@@ -258,24 +258,27 @@ function tableDocumentActions () {
 /* 'save' button for the right click options on the document. */
 function saveFunction () {
   const merge = $('#merge').val()
-  let row_id = $('#tmp-row').val()
+  let rowId = $('#tmp-row').val()
   const column = $('#tmp-column').val()
   const value = $('#tmp').val()
-  if (row_id.match(/,/)) {
-    row_ids = row_id.split(',')
-    source = $('#' + row_id).children().eq(3).text()
+  let rowIds
+  let source
+  let milestone
+  if (rowId.match(/,/)) {
+    rowIds = rowId.split(',')
+    source = $('#' + rowId).children().eq(3).text()
     if (merge === 'true') {
       if ($('#addMilestone').prop('checked') === true) {
         milestone = $('#milestone').val()
       } else {
         milestone = ''
       }
-      mergeDocuments(row_ids, column, source, value, milestone)
+      mergeDocuments(rowIds, column, source, value, milestone)
     } else {
-      saveMultiple(row_ids, column, value)
+      saveMultiple(rowIds, column, value)
     }
   } else {
-    saveOne(row_id, column, value)
+    saveOne(rowId, column, value)
   }
 }
 
@@ -358,9 +361,9 @@ function sendAjaxRequestDeselect (url) {
 /* #### enableRows() #### */
 
 // Enables selected rows in the File Manager and sets UI to selected.
-function enableRows (selected_rows) {
+function enableRows (selectedRows) {
   let file_ids = []
-  selected_rows.each(function (index) {
+  selectedRows.each(function (index) {
     file_ids.push($(this).attr('id'))
   })
   // Ensure file_ids contains unique entries
@@ -429,8 +432,8 @@ function sendAjaxRequestDisableRow (url, data) {
 /* #### showPreviewText() #### */
 
 //* Opens modal containing the document preview text.
-function showPreviewText (row_id) {
-  sendAjaxRequestPreview('/getPreview', row_id)
+function showPreviewText (rowId) {
+  sendAjaxRequestPreview('/getPreview', rowId)
     .done(
       function (response) {
         response = JSON.parse(response)
@@ -450,21 +453,21 @@ function showPreviewText (row_id) {
     })
 }
 
-function sendAjaxRequestPreview (url, row_id) {
+function sendAjaxRequestPreview (url, rowId) {
   return $.ajax({
     type: 'POST',
     url: url,
-    data: row_id,
+    data: rowId,
     contentType: 'charset=UTF-8'
   })
 }
 
 /* #### editName() #### */
-function editName (row_id) {
+function editName (rowId) {
   $('#edit-form').remove()
-  cell_name = $('#' + row_id).find('td:eq(1)').text()
+  cell_name = $('#' + rowId).find('td:eq(1)').text()
   let form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cell_name + '">'
-  form += '<input id="tmp-row" type="hidden" value="' + row_id + '"></div>'
+  form += '<input id="tmp-row" type="hidden" value="' + rowId + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="1"></div>'
   $('#edit_title').html('Edit Name of <b>' + cell_name + '</b>')
   $('#modal-body').html(form)
@@ -472,34 +475,34 @@ function editName (row_id) {
 }
 
 /* #### editClass() #### */
-function editClass (row_id) {
+function editClass (rowId) {
   $('#edit-form').remove()
-  let doc_name = $('#' + row_id).find('td:eq(1)').text()
-  let cell_value = $('#' + row_id).find('td:eq(2)').text()
+  let docName = $('#' + rowId).find('td:eq(1)').text()
+  let cell_value = $('#' + rowId).find('td:eq(2)').text()
   let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
-  form += '<input id="tmp-row" type="hidden" value="' + row_id + '"></div>'
+  form += '<input id="tmp-row" type="hidden" value="' + rowId + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
-  $('#edit_title').html('Edit <b>' + doc_name + '</b> Class')
+  $('#edit_title').html('Edit <b>' + docName + '</b> Class')
   $('#modal-body').html(form)
   $('#edit-modal').modal()
 }
 
 /* #### mergeSelected() #### */
-function mergeSelected (cell, selected_rows) {
-  let row_ids = []
-  selected_rows.each(function () {
+function mergeSelected (cell, selectedRows) {
+  let rowIds = []
+  selectedRows.each(function () {
     let id = $(this).attr('id')
-    row_ids.push(id)
+    rowIds.push(id)
   })
   $('#edit-form').remove()
-  cell_value = 'merge-' + $('#' + row_ids[0]).find('td:eq(1)').text()
+  cell_value = 'merge-' + $('#' + rowIds[0]).find('td:eq(1)').text()
   let form = '<div id="edit-form">New Document Name '
   form += '<input id="tmp" type="text" value="' + cell_value + '"><br>'
   form += '<input id="addMilestone" type="checkbox"> Add milestone at end of documents'
   form += '<span id="milestoneField" style="display:none;">'
   form += '<br>Milestone <input id="milestone" type="text" value="#EOF#"></span>'
   form += '<input id="merge" type="hidden" value="true">'
-  form += '<input id="tmp-row" type="hidden" value="' + row_ids + '"></div>'
+  form += '<input id="tmp-row" type="hidden" value="' + rowIds + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
   $('#edit_title').html('Merge Selected Documents')
   $('#modal-body').html(form)
@@ -507,16 +510,16 @@ function mergeSelected (cell, selected_rows) {
 }
 
 /* #### applyClassSelected() #### */
-function applyClassSelected (cell, selected_rows) {
-  row_ids = []
-  selected_rows.each(function () {
+function applyClassSelected (cell, selectedRows) {
+  rowIds = []
+  selectedRows.each(function () {
     let id = $(this).attr('id')
-    row_ids.push(id)
+    rowIds.push(id)
   })
   $('#edit-form').remove()
   cell_value = cell.text()
   let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
-  form += '<input id="tmp-row" type="hidden" value="' + row_ids + '"></div>'
+  form += '<input id="tmp-row" type="hidden" value="' + rowIds + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
   $('#edit_title').html('Apply <b>' + cell_value + '</b> Class to Selected Documents')
   $('#modal-body').html(form)
@@ -526,12 +529,12 @@ function applyClassSelected (cell, selected_rows) {
 /* #### mergeDocuments() #### */
 
 // Helper function saves value in edit dialog and updates table with a new document
-function mergeDocuments (row_ids, column, source, value, milestone) {
+function mergeDocuments (rowIds, column, source, value, milestone) {
   // Validation - make sure the document name is not left blank
 
   // Prepare data and request
   let url = '/mergeDocuments'
-  let data = JSON.stringify([row_ids, value, source, milestone])
+  let data = JSON.stringify([rowIds, value, source, milestone])
 
   // Do Ajax
   sendAjaxRequestMergedocuments(url, data)
@@ -540,7 +543,7 @@ function mergeDocuments (row_ids, column, source, value, milestone) {
         const table = $('#demo').DataTable()
         response = JSON.parse(response)
         let newIndex = response[0]
-        // let newIndex = parseInt(row_ids.slice(-1)[0])+1;
+        // let newIndex = parseInt(rowIds.slice(-1)[0])+1;
         table.rows().deselect()
         let text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
         let rowNode = table.row
@@ -580,19 +583,19 @@ function sendAjaxRequestMergedocuments (url, data) {
 /* #### saveMultiple() #### */
 
 // Helper function saves value in edit dialog and updates table for multiple rows
-function saveMultiple (row_ids, column, value) {
+function saveMultiple (rowIds, column, value) {
   // Prepare data and request
   url = '/setClassSelected'
-  data = JSON.stringify([row_ids, value])
+  data = JSON.stringify([rowIds, value])
   // Do Ajax
   sendAjaxRequestSaveMultiple(url, data)
     .done(
       function (response) {
-        row_ids = JSON.parse(response)
+        rowIds = JSON.parse(response)
         // Update the UI
         let reloadPage = false
-        $.each(row_ids, function (i) {
-          id = '#' + row_ids[i]
+        $.each(rowIds, function (i) {
+          id = '#' + rowIds[i]
           $(id).find('td:eq(2)').text(value)
           if ($(id).length == 0) {
             reloadPage = true
@@ -630,19 +633,19 @@ function sendAjaxRequestSaveMultiple (url, data) {
 /* #### saveOne() #### */
 
 // Helper function saves value in edit dialog and updates table
-function saveOne (row_id, column, value) {
+function saveOne (rowId, column, value) {
   // Validation - make sure the document name is not left blank
   if (column == 1 && value == '') {
     msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
     msg += '<p>Make sure you don\'t leave the field blank.</p>'
     $('#alert-modal .modal-body').html(msg)
     $('#alert-modal').modal()
-    revert = $('#' + row_id).find('td:eq(1)').text()
+    revert = $('#' + rowId).find('td:eq(1)').text()
     $('#tmp').val(revert)
     return false
   }
   // Prepare data and request
-  data = JSON.stringify([row_id, value])
+  data = JSON.stringify([rowId, value])
   url = ''
   switch (column) {
     case '1':
@@ -659,7 +662,7 @@ function saveOne (row_id, column, value) {
       function (response) {
         // Update the UI
         cell = 'td:eq(' + column + ')'
-        $('#' + row_id).find(cell).text(value)
+        $('#' + rowId).find(cell).text(value)
         $('#edit-modal').modal('hide')
         $('#edit-form').remove()
         table.draw()
@@ -685,18 +688,20 @@ function sendAjaxRequestSaveOne (url, data) {
   })
 }
 
-/* #### deleteOne() #### */
 
-// Helper function deletes selected row and updates table
-function deleteOne (row_id) {
-  // alert("Delete: " + row_id);
-  url = '/deleteOne'
+/***
+ * Helper function deletes selected row and updates table
+ * @param {object} rowId -  value attribute of the selected elements.
+ */
+function deleteOne (rowId) {
+  // alert("Delete: " + rowId);
+  const url = '/deleteOne'
 
-  sendAjaxRequestDeleteOne(url, row_id)
+  sendAjaxRequestDeleteOne(url, rowId)
     .done(
       function (response) {
         // Update the UI
-        let id = '#' + row_id
+        let id = '#' + rowId
         table.row(id).remove()
         handleSelectButtons()
         toggleActiveDocsIcon()
@@ -710,11 +715,17 @@ function deleteOne (row_id) {
     })
 }
 
-function sendAjaxRequestDeleteOne (url, row_id) {
+/**
+ * @param {string} url - url of thepage
+ * @param rowId
+ * @return {object} ajax - data from ajax call
+ */
+
+function sendAjaxRequestDeleteOne (url, rowId) {
   return $.ajax({
     type: 'POST',
     url: url,
-    data: row_id,
+    data: rowId,
     contentType: 'charset=UTF-8',
     cache: false
   })
@@ -724,10 +735,10 @@ function sendAjaxRequestDeleteOne (url, row_id) {
 
 // deletes the selected document or the document where the user right clicks
 function deleteDoc (rowId) {
-  doc_name = $('#' + rowId).find('td:eq(1)').text()
-  html = '<p>Are you sure you wish to delete <b>' + doc_name + '</b>?</p>'
+  let docName = $('#' + rowId).find('td:eq(1)').text()
+  let html = '<p>Are you sure you wish to delete <b>' + docName + '</b>?</p>'
   html += '<span id="deleteId" style="display:none;">' + rowId + '</span>'
-  footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
+  let footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
   $('#delete-modal .modal-body').html(html)
   $('#delete-modal .modal-body').append(footer)
   $('#delete-modal').modal()
@@ -751,7 +762,7 @@ function deleteSelected (rowIds) {
       function (response) {
         // Update the UI
         rowIds = JSON.parse(response)
-        // row_ids = row_ids.split(",");
+        // rowIds = rowIds.split(",");
         $.each(rowIds, function (i) {
           let id = '#' + rowIds[i]
           table.row(id).remove()
@@ -784,28 +795,27 @@ function sendajaxRequestDeleteSelected (url, rowIds) {
   })
 }
 
-
 /**
  * deletes all the selected rows.
  * @return {void}
- * @param {array} selected rows - array of rows that have been selected*/
-function deleteAllSelected (selected_rows) {
+ * @param {array} selectedRows - array of rows that have been selected */
+function deleteAllSelected (selectedRows) {
   const deleteDiv = $('#delete-modal')
   const deleteModal = deleteDiv.find('.modal-body')
-  let row_ids = []
-  selected_rows.each(function () {
-    id = $(this).attr('id')
-    row_ids.push(id)
+  let rowIds = []
+  selectedRows.each(function () {
+    let id = $(this).attr('id')
+    rowIds.push(id)
   })
-  html = '<p>Are you sure you wish to delete the selected documents?</p>'
-  html += '<span id="deleteIds" style="display:none;">' + row_ids.toString() + '</span>'
-  footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
+  let html = '<p>Are you sure you wish to delete the selected documents?</p>'
+  html += '<span id="deleteIds" style="display:none;">' + rowIds.toString() + '</span>'
+  let footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
   deleteModal.html(html)
   deleteModal.append(footer)
   deleteDiv.modal()
     .one('click', '#confirm-delete-bttn', function () {
-      const row_ids = $('#deleteIds').text()
-      deleteSelected(row_ids)
+      const rowIds = $('#deleteIds').text()
+      deleteSelected(rowIds)
     })
 }
 
