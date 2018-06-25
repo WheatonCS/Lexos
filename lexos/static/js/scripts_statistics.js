@@ -220,7 +220,7 @@ $(function () {
           scrollTop: $('#get-stats').offset().top
         }, 1000)
       } else { // Else hide the corpus stats result div.
-        $('#file-stats-result').css({'display': 'none'})
+        $('#corpus-stats-result').css({'display': 'none'})
       }
       scrollyToStats()
     } else {
