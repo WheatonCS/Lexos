@@ -40,9 +40,9 @@ def multi_cloud():
                 constants.DEFAULT_MULTICLOUD_OPTIONS
         return render_template(
             'multicloud.html',
+            itm="multicloud",
             jsonStr="",
             labels=labels,
-            itm="multicloud",
             numActiveDocs=num_active_docs)
     if request.method == "POST":
         # This is legacy code.
@@ -68,9 +68,9 @@ def multi_cloud():
         session_manager.cache_multi_cloud_options()
         return render_template(
             'multicloud.html',
+            itm="multicloud",
             JSONObj=json_obj,
             labels=labels,
-            itm="multicloud",
             numActiveDocs=num_active_docs)
 
 
