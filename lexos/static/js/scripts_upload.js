@@ -233,7 +233,7 @@ function showProgress () {
 }
 /**
  * Changes the message on the progress bar according to the file.
- * if valid: "Complete!" else: "Invalid File!"
+ * if file valid: "Complete!" else: "Invalid File!"
  * @return {void}
  * @param {string} f - name of the file
  * @param {int} added - 1 id file is added
