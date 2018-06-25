@@ -26,6 +26,7 @@ def tokenizer():
     session['tokenizerOption'] = constants.DEFAULT_TOKENIZER_OPTIONS
     # Return rendered template wih desired information.
     return render_template('tokenizer.html',
+                           itm="tokenize",
                            labels=id_label_map,
                            numActiveDocs=num_active_docs)
 
