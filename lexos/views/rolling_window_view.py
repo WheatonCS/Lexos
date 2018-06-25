@@ -37,6 +37,7 @@ def rolling_window():
 
     # Return the rendered template.
     return render_template('rwanalysis.html',
+                           itm="rolling-windows",
                            labels=labels,
                            numActiveDocs=num_active_docs)
 
