@@ -8,7 +8,7 @@ function sidebarPopover () {
     $('#toggler').popover({
       'html': 'true',
       'title': 'In the Margins!',
-      'content': 'View instructions for any screen in Lexos by clicking the In the Margins Tab!\n<div class="text-center"><button type="button" id="gotit" class="btn btn-primary" style="background-color: #0068AF; margin-top: 5px">Got it!</button></div>'
+      'content':'View instructions for any screen in Lexos by clicking the <i>In the Margins</i> tab!<br></div> <div class="text-center"><button type="button" id="gotit" class="btn btn-primary" style="background-color: #0068AF; margin-top: 5px">Got it!</button></div>'
     }).popover('show').data('bs.popover').tip().css({
       'width': '170px',
       'text-align': 'center'
