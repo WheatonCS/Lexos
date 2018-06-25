@@ -1,12 +1,15 @@
-/* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
+/**
+ * Initialize the data Table
+ * @return {void}
+ */
 $(function () {
-  initTable() //call the function to initiate the main table
+  initTable() // function to initialize the table.
   tableAction()
 })
 /**
  * @return {object} table - initialize the table
+ * Change the element name and test whether the table variable persists
  * */
-//* Change the element name and test whether the table variable persists
 function initTable () {
   return (table = $('#demo').DataTable({
     paging: true,
@@ -39,7 +42,6 @@ function initTable () {
     columnDefs: [
       {width: '15', sortable: false, class: 'index', targets: 0},
       {width: '150', type: 'natural', targets: [1, 2, 3]}
-      //				{width: "150", type: 'natural', targets: "_all"},
     ],
     order: [[1, 'asc']]
   }))
@@ -56,11 +58,10 @@ function tableAction () {
   /* Add all rows with .selected to the DataTables activeRows array
    It does not appear that this array needs to be maintained after
    initialisation, but the code to do so is commented out for de-bugging. */
-  activeRows = []
-  //$('tbody tr').each(function (index)
+  let activeRows = []
   $(table).find('tbody tr').each(function (index) {
     if ($(this).hasClass('selected')) {
-      i = ':eq(' + index + ')'
+      let i = ':eq(' + index + ')'
       table.rows(i).select()
       activeRows.push($(this).attr('id'))
     }
@@ -166,6 +167,9 @@ function registerColumn () {
 /* #### SELECT EVENTS #### */
 
 // Handle select events
+/**
+ * @return {void}
+ * */
 function registerSelectEvents () {
   table
     .on('select', function (e, dt, type, indexes) {
@@ -197,7 +201,7 @@ function registerSelectEvents () {
 /*Right click options on the documents*/
 function tableDocumentActions () {
   // Get the number of rows, selected or unselected, for context menu
-  const num_rows = table.rows().ids().length
+  const numRows = table.rows().ids().length
   const num_rows_selected = table.rows({selected: true}).ids().length
   handleSelectButtons(num_rows, num_rows_selected)
   let  selected_rows
@@ -859,13 +863,13 @@ function prepareContextMenu () {
 /* #### handleSelectButtons() #### */
 
 // Helper function to change state of selection buttons on events
-function handleSelectButtons (num_rows, num_rows_selected) {
+function handleSelectButtons (numRows, num_rows_selected) {
   if (table.rows('.selected').data().length === 0) {
     $('#selectAllDocs').prop('disabled', false)
     // $("#disableAllDocs").prop("disabled", true);
     $('#deleteSelectedDocs').prop('disabled', true)
   } else {
-    if (table.rows('.selected').data().length === num_rows) {
+    if (table.rows('.selected').data().length === numRows) {
       $('#selectAllDocs').prop('disabled', true)
       $('#disableAllDocs').prop('disabled', false)
       $('#deleteSelectedDocs').prop('disabled', false)
