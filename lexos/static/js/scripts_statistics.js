@@ -198,7 +198,9 @@ $(function () {
       generateStatsFileTable()
       // Display the file result table.
       $('#file-stats-result').css({'display': 'block'})
-
+      $('html, body').animate({
+        scrollTop: $('#get-stats').offset().top
+      }, 1000)
       // Only get corpus info when there are more than one file.
       if (checkedFiles.length > 1) {
         // Get the corpus result.
@@ -213,8 +215,5 @@ $(function () {
     } else {
       utility.runModal(error)
     }
-    $('html, body').animate({
-      scrollTop: $('#stats-result').offset().top
-    }, 1000)
   })
 })
