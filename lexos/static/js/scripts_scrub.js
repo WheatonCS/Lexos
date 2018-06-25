@@ -1,5 +1,5 @@
 $(function () {
-  if ($("input[name='haveGutenberg']")) {
+  if ($('input[name=\'haveGutenberg\']')) {
     $('#gutenberg-modal').modal()
   }
   $('#actions').addClass('actions-scrub')
@@ -8,9 +8,46 @@ $(function () {
     rotateChevron(ev.currentTarget)
   })
 
+  $('#save-button').on('click', function (e) {
+    e.preventDefault()
+    var tagDict = {}
+    var a = $(this).closest('form').serializeArray()
+    $.each(a, function () {
+      //name and value
+      if (tagDict[this.name] !== undefined) {
+        if (!tagDict[this.name].push) {
+          tagDict[this.name] = [tagDict[this.name]]
+        }
+        tagDict[this.name].push(this.value || '')
+      } else {
+        tagDict[this.name] = this.value || ''
+      }
+    })
+    tagDict = JSON.stringify(tagDict)
+    console.log(tagDict)
+    $.ajax({
+      type: 'POST',
+      url: '/xml',
+      data: tagDict,
+      contentType: 'application/json;charset=UTF-8',
+      cache: false,
+      beforeSend: function () {
+        $('#xml-modal-status').show()
+      },
+      success: function (response) {
+        $('#xml-modal-status').hide()
+        $('.modal.in').modal('hide')
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $('#error-modal .modal-body').html('Lexos could not perform the requested function.')
+        $('#error-modal').modal()
+        console.log('bad: ' + textStatus + ': ' + errorThrown)
+      }
+    })
+  })
+
   // display additional options on load
   displayAdditionalOptions()
-
 
   $('.bttnfilelabels').click(function () {
     // swfileselect, lemfileselect, consfileselect, scfileselect
@@ -86,8 +123,8 @@ $(function () {
  * @returns {void} - returns nothing
  */
 function downloadScrubbing () { // eslint-disable-line no-unused-vars
-  // Unfortunately, you can't trigger a download with an ajax request; calling a
-  // Flask route seems to be the easiest method.
+                                // Unfortunately, you can't trigger a download with an ajax request; calling a
+                                // Flask route seems to be the easiest method.
   window.location = '/downloadScrubbing'
 }
 
