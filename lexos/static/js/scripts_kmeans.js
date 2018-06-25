@@ -73,6 +73,12 @@ function generateKMeansResult () {
       })
 }
 
+function toKMeanGraph () {
+  $('html, body').animate({
+    scrollTop: $('#get-k-means-result').offset().top
+  }, 1000)
+}
+
 $(function () {
   // Hide the K-Means result div when first get to the page.
   $('#KMeans-result').css({'display': 'none'})
@@ -86,6 +92,7 @@ $(function () {
       // If there is no error, get the result.
       $('#KMeans-result').css({'display': 'block'})
       generateKMeansResult()
+      toKMeanGraph()
     } else {
       utility.runModal(error)
     }
