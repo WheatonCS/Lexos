@@ -3,8 +3,9 @@ $(function () {
   initTable() //call the function to initiate the main table
   tableAction()
 })
-/* INITIATE MAIN DATATABLE */
-
+/**
+ * @return {object} table - initialize the table
+ * */
 //* Change the element name and test whether the table variable persists
 function initTable () {
   return (table = $('#demo').DataTable({
@@ -44,6 +45,9 @@ function initTable () {
   }))
 }
 
+/**
+ * This function calls on different function upon clicking by users.
+ * @return {void}*/
 function tableAction () {
   registerColumn() // Draw the table column and make it searchable.
 
@@ -192,7 +196,7 @@ function tableDocumentActions () {
   const num_rows = table.rows().ids().length
   const num_rows_selected = table.rows({selected: true}).ids().length
   handleSelectButtons(num_rows, num_rows_selected)
-
+  let  selected_rows
   $('#demo').contextmenu({
     target: '#context-menu',
     scopes: 'td',
@@ -200,7 +204,7 @@ function tableDocumentActions () {
       prepareContextMenu()
     },
     onItem: function (cell, e) {
-      var target = cell.parent().attr('id')
+      let target = cell.parent().attr('id')
       action = $(e.target).attr('data-context')
       switch (action) {
         case 'preview':
@@ -351,7 +355,7 @@ function sendAjaxRequestDeselect (url) {
 
 // Enables selected rows in the File Manager and sets UI to selected.
 function enableRows (selected_rows) {
-  var file_ids = []
+  let file_ids = []
   selected_rows.each(function (index) {
     file_ids.push($(this).attr('id'))
   })
@@ -365,7 +369,7 @@ function enableRows (selected_rows) {
       handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
       toggleActiveDocsIcon()
     })
-    .fail(function (jqXHR, textStatus, errorThrown) {
+    .fail(function (textStatus, errorThrown) {
       $('#error-modal .modal-body').html('Lexos could not select the requested documents.')
       $('#error-modal').modal()
       console.log('bad: ' + textStatus + ': ' + errorThrown)
@@ -386,7 +390,7 @@ function sendAjaxRequestEnableRows (url, data) {
 
 // Disables selected rows in the File Manager and sets UI to deselected.
 function disableRows (deselected_rows) {
-  var file_ids = []
+  let file_ids = []
   deselected_rows.each(function (index) {
     file_ids.push($(this).attr('id'))
   })
@@ -428,7 +432,7 @@ function showPreviewText (row_id) {
       function (response) {
         response = JSON.parse(response)
         const title = 'Preview of <b>' + response['label'] + '</b>'
-        var text = response['previewText']
+        let text = response['previewText']
         // Encode tags as HTML entities
         text = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
         //* To Do: Convert tagged texts to strings
@@ -456,7 +460,7 @@ function sendAjaxRequestPreview (url, row_id) {
 function editName (row_id) {
   $('#edit-form').remove()
   cell_name = $('#' + row_id).find('td:eq(1)').text()
-  var form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cell_name + '">'
+  let form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cell_name + '">'
   form += '<input id="tmp-row" type="hidden" value="' + row_id + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="1"></div>'
   $('#edit_title').html('Edit Name of <b>' + cell_name + '</b>')
@@ -467,9 +471,9 @@ function editName (row_id) {
 /* #### editClass() #### */
 function editClass (row_id) {
   $('#edit-form').remove()
-  doc_name = $('#' + row_id).find('td:eq(1)').text()
-  cell_value = $('#' + row_id).find('td:eq(2)').text()
-  var form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
+  let doc_name = $('#' + row_id).find('td:eq(1)').text()
+  let cell_value = $('#' + row_id).find('td:eq(2)').text()
+  let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
   form += '<input id="tmp-row" type="hidden" value="' + row_id + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
   $('#edit_title').html('Edit <b>' + doc_name + '</b> Class')
@@ -479,14 +483,14 @@ function editClass (row_id) {
 
 /* #### mergeSelected() #### */
 function mergeSelected (cell, selected_rows) {
-  row_ids = []
+  let row_ids = []
   selected_rows.each(function () {
-    id = $(this).attr('id')
+    let id = $(this).attr('id')
     row_ids.push(id)
   })
   $('#edit-form').remove()
   cell_value = 'merge-' + $('#' + row_ids[0]).find('td:eq(1)').text()
-  var form = '<div id="edit-form">New Document Name '
+  let form = '<div id="edit-form">New Document Name '
   form += '<input id="tmp" type="text" value="' + cell_value + '"><br>'
   form += '<input id="addMilestone" type="checkbox"> Add milestone at end of documents'
   form += '<span id="milestoneField" style="display:none;">'
@@ -503,12 +507,12 @@ function mergeSelected (cell, selected_rows) {
 function applyClassSelected (cell, selected_rows) {
   row_ids = []
   selected_rows.each(function () {
-    id = $(this).attr('id')
+    let id = $(this).attr('id')
     row_ids.push(id)
   })
   $('#edit-form').remove()
   cell_value = cell.text()
-  var form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
+  let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
   form += '<input id="tmp-row" type="hidden" value="' + row_ids + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
   $('#edit_title').html('Apply <b>' + cell_value + '</b> Class to Selected Documents')
@@ -521,50 +525,45 @@ function applyClassSelected (cell, selected_rows) {
 // Helper function saves value in edit dialog and updates table with a new document
 function mergeDocuments (row_ids, column, source, value, milestone) {
   // Validation - make sure the document name is not left blank
-  if (value == '') {
-    msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
-    msg += '<p>Make sure you don\'t leave the New Document Name field blank.</p>'
-    $('#alert-modal .modal-body').html(msg)
-    $('#alert-modal').modal()
-    return false
-  }
 
-  // Prepare data and request
-  url = '/mergeDocuments'
-  data = JSON.stringify([row_ids, value, source, milestone])
 
-  // Do Ajax
-  sendAjaxRequestMergedocuments(url, data)
-    .done(
-      function (response) {
-        var table = $('#demo').DataTable()
-        response = JSON.parse(response)
-        var newIndex = response[0]
-        // var newIndex = parseInt(row_ids.slice(-1)[0])+1;
-        table.rows().deselect()
-        text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-        var rowNode = table.row
-          .add([newIndex, value, '', source, text])
-          .draw(false)
-          .node()
-        table.rows(newIndex).select() // This automatically calls enableRows()
-        $(rowNode)
-          .attr('id', newIndex)
-          .addClass('selected')
-        $(rowNode).children().first().css('text-align', 'right')
-        handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
-        $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
-        // toggleActiveDocsIcon();
-        $('#edit-modal').modal('hide')
-        $('#edit-form').remove()
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not merge the requested documents or could not save the merged document.')
-        $('#error-modal').modal()
-        $('#edit-modal').modal('hide')
-        console.log('bad: ' + textStatus + ': ' + errorThrown)
-      })
+    // Prepare data and request
+    let url = '/mergeDocuments'
+    let data = JSON.stringify([row_ids, value, source, milestone])
+
+    // Do Ajax
+    sendAjaxRequestMergedocuments(url, data)
+      .done(
+        function (response) {
+          const table = $('#demo').DataTable()
+          response = JSON.parse(response)
+          let newIndex = response[0]
+          // let newIndex = parseInt(row_ids.slice(-1)[0])+1;
+          table.rows().deselect()
+          let text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+          let rowNode = table.row
+            .add([newIndex, value, '', source, text])
+            .draw(false)
+            .node()
+          table.rows(newIndex).select() // This automatically calls enableRows()
+          $(rowNode)
+            .attr('id', newIndex)
+            .addClass('selected')
+          $(rowNode).children().first().css('text-align', 'right')
+          handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+          $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
+          // toggleActiveDocsIcon();
+          $('#edit-modal').modal('hide')
+          $('#edit-form').remove()
+        })
+      .fail(
+        function (jqXHR, textStatus, errorThrown) {
+          $('#error-modal .modal-body').html('Lexos could not merge the requested documents or could not save the merged document.')
+          $('#error-modal').modal()
+          $('#edit-modal').modal('hide')
+          console.log('bad: ' + textStatus + ': ' + errorThrown)
+        })
+
 }
 
 function sendAjaxRequestMergedocuments (url, data) {
@@ -590,7 +589,7 @@ function saveMultiple (row_ids, column, value) {
       function (response) {
         row_ids = JSON.parse(response)
         // Update the UI
-        var reloadPage = false
+        let reloadPage = false
         $.each(row_ids, function (i) {
           id = '#' + row_ids[i]
           $(id).find('td:eq(2)').text(value)
@@ -697,7 +696,7 @@ function deleteOne (row_id) {
     .done(
       function (response) {
         // Update the UI
-        id = '#' + row_id
+        let id = '#' + row_id
         table.row(id).remove()
         handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
         toggleActiveDocsIcon()
@@ -743,7 +742,7 @@ function deleteDoc (row_id) {
 
 // Helper function deletes selected rows and updates table
 function deleteSelected (row_ids) {
-  url = '/deleteSelected'
+  const url = '/deleteSelected'
 
   // Do Ajax
   sendajaxRequestDeleteSelected(url, row_ids)
@@ -753,7 +752,7 @@ function deleteSelected (row_ids) {
         row_ids = JSON.parse(response)
         // row_ids = row_ids.split(",");
         $.each(row_ids, function (i) {
-          id = '#' + row_ids[i]
+          let id = '#' + row_ids[i]
           table.row(id).remove()
         })
         handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
@@ -817,9 +816,9 @@ function prepareContextMenu () {
   $('#context-menu').find('li').find('a').removeProp('disabled')
 
   // Comparison values
-  num_rows = table.rows().ids().length
-  num_rows_selected = table.rows({selected: true}).ids().length
-
+  let num_rows = table.rows().ids().length
+  let num_rows_selected = table.rows({selected: true}).ids().length
+  console.log(num_rows_selected)
   // Set config options -- Numbers refer to li elements, including dividers
   // The numbers below corresponds to the different options in right lick
   // on the document.
