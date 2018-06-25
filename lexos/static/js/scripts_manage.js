@@ -202,8 +202,8 @@ function registerSelectEvents () {
 function tableDocumentActions () {
   // Get the number of rows, selected or unselected, for context menu
   const numRows = table.rows().ids().length
-  const num_rows_selected = table.rows({selected: true}).ids().length
-  handleSelectButtons(num_rows, num_rows_selected)
+  const numRowsSelected = table.rows({selected: true}).ids().length
+  handleSelectButtons(numRows, numRowsSelected)
   let  selected_rows
   $('#demo').contextmenu({
     target: '#context-menu',
@@ -824,9 +824,9 @@ function prepareContextMenu () {
   $('#context-menu').find('li').find('a').removeProp('disabled')
 
   // Comparison values
-  let num_rows = table.rows().ids().length
-  let num_rows_selected = table.rows({selected: true}).ids().length
-  console.log(num_rows_selected)
+  let numRows = table.rows().ids().length
+  let numRowsSelected = table.rows({selected: true}).ids().length
+  console.log(numRowsSelected)
   // Set config options -- Numbers refer to li elements, including dividers
   // The numbers below corresponds to the different options in right lick
   // on the document.
@@ -837,16 +837,16 @@ function prepareContextMenu () {
         9: 'Apply Class to Selected Documents'
         10: 'Delete Selected Documents'
     */
-    case num_rows_selected === 0: // No rows selected
+    case numRowsSelected === 0: // No rows selected
       opts = [6, 8, 9, 10]
       break
-    case num_rows_selected === 1: // 1 row selected
+    case numRowsSelected === 1: // 1 row selected
       opts = [8, 9]
       break
-    case num_rows_selected > 1 && num_rows_selected < num_rows: // More than 1 row selected
+    case numRowsSelected > 1 && numRowsSelected < numRows: // More than 1 row selected
       opts = []
       break
-    case num_rows_selected === num_rows: // All rows selected
+    case numRowsSelected === numRows: // All rows selected
       opts = [5]
       break
     default: // Just in case
@@ -863,20 +863,14 @@ function prepareContextMenu () {
 /* #### handleSelectButtons() #### */
 
 // Helper function to change state of selection buttons on events
-function handleSelectButtons (numRows, num_rows_selected) {
+function handleSelectButtons (numRows, numRowsSelected) {
   if (table.rows('.selected').data().length === 0) {
     $('#selectAllDocs').prop('disabled', false)
-    // $("#disableAllDocs").prop("disabled", true);
+    $('#disableAllDocs').prop('disabled', true)
     $('#deleteSelectedDocs').prop('disabled', true)
-  } else {
-    if (table.rows('.selected').data().length === numRows) {
+  } else if (table.rows('.selected').data().length === numRows) {
       $('#selectAllDocs').prop('disabled', true)
       $('#disableAllDocs').prop('disabled', false)
       $('#deleteSelectedDocs').prop('disabled', false)
-    } else {
-      $('#selectAllDocs').prop('disabled', false)
-      $('#disableAllDocs').prop('disabled', false)
-      $('#deleteSelectedDocs').prop('disabled', false)
-    }
   }
 }
