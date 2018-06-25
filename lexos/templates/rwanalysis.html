@@ -92,13 +92,14 @@ $(document).ready( function () {
 			<label class="radio" for="rollingaverage" id="radioaverage">
 				<input type="radio" checked name="counttype" value="average" id="rollingaverage" data-toggle="radio" />
 				<span>Rolling Average</span>
-				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Measures the number of times the input appears in the window, divided by the overall size of the window." style=""></i>
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Measure the number of times the input appears in the window, divided by the overall size of the window." style=""></i>
 			</label>
 			<label class="radio" for="rollingratio" id="radioratio">
 				<input type="radio" {{ "checked" if session['rwoption']["counttype"] == "ratio" }} name="counttype" value="ratio" id="rollingratio" data-toggle="radio"/>
 				<span>Rolling Ratio</span>
-				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Measures the value of the first input divided by the sum of the first and second inputs." style=""></i>
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Measure the value of the first input divided by the sum of the first and second inputs." style=""></i>
 			</label>
+		</fieldset>
 		</fieldset>
 	</div>
 
@@ -169,7 +170,7 @@ $(document).ready( function () {
 			</label>
 			<label class="milestoneCheckbox">
 				Document has Milestones<input type="checkbox" class="milestoneCheckbox" name="rollinghasmilestone" id="rollinghasmilestone" {{ "checked" if session['rwoption']['rollinghasmilestone']}} style="text-align: left;" onclick="updateMSopt()">
-				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Search the file for all instances of a specified string and plot a vertical dividing line at those location." style=""></i>
+				<i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="Search the file for all instances of a specified string and plot a vertical dividing line at those locations." style=""></i>
 			</label>
 			<br/>
 			<span class="rollingmilestoneopt" id="rollingmilestoneopt" name="rollingmilestoneopt" ><strong>Milestone Delimeter:</strong>
