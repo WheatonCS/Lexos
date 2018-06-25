@@ -73,6 +73,10 @@ function generateKMeansResult () {
       })
 }
 
+/**
+ * Scrolls to the graph once its generated.
+ * @returns {void}
+ */
 function toKMeanGraph () {
   $('html, body').animate({
     scrollTop: $('#get-k-means-result').offset().top
