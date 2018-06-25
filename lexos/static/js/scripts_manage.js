@@ -723,35 +723,37 @@ function sendAjaxRequestDeleteOne (url, row_id) {
 /* #### deleteDoc() #### */
 
 // deletes the selected document or the document where the user right clicks
-function deleteDoc (row_id) {
-  doc_name = $('#' + row_id).find('td:eq(1)').text()
+function deleteDoc (rowId) {
+  doc_name = $('#' + rowId).find('td:eq(1)').text()
   html = '<p>Are you sure you wish to delete <b>' + doc_name + '</b>?</p>'
-  html += '<span id="deleteId" style="display:none;">' + row_id + '</span>'
+  html += '<span id="deleteId" style="display:none;">' + rowId + '</span>'
   footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
   $('#delete-modal .modal-body').html(html)
   $('#delete-modal .modal-body').append(footer)
   $('#delete-modal').modal()
     .one('click', '#confirm-delete-bttn', function () {
-      row_id = $('#deleteId').text()
-      deleteOne(row_id)
+      rowId = $('#deleteId').text()
+      deleteOne(rowId)
     })
 }
 
-/* #### deleteSelected() #### */
-
-// Helper function deletes selected rows and updates table
-function deleteSelected (row_ids) {
+/**
+ * Helper function deletes selected rows and updates table
+ * @return {void}
+ * @param {data} rowIds - ids of the row
+ */
+function deleteSelected (rowIds) {
   const url = '/deleteSelected'
 
   // Do Ajax
-  sendajaxRequestDeleteSelected(url, row_ids)
+  sendajaxRequestDeleteSelected(url, rowIds)
     .done(
       function (response) {
         // Update the UI
-        row_ids = JSON.parse(response)
+        rowIds = JSON.parse(response)
         // row_ids = row_ids.split(",");
-        $.each(row_ids, function (i) {
-          let id = '#' + row_ids[i]
+        $.each(rowIds, function (i) {
+          let id = '#' + rowIds[i]
           table.row(id).remove()
         })
         handleSelectButtons()
@@ -767,13 +769,16 @@ function deleteSelected (row_ids) {
       })
 }
 /**
+ * Ajax call to delete the selected documents.
  * @return {object} ajax- ajax information
- * @param*/
-function sendajaxRequestDeleteSelected (url, row_ids) {
+ * @param {string} url - url of the page
+ * @param {data} rowIds - id of the rows
+ */
+function sendajaxRequestDeleteSelected (url, rowIds) {
   return $.ajax({
     type: 'POST',
     url: url,
-    data: row_ids,
+    data: rowIds,
     contentType: 'charset=UTF-8',
     cache: false
   })
