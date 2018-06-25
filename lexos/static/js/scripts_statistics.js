@@ -156,7 +156,7 @@ function generateStatsFileTable () {
  * Scrolls page to results after they are generated.
  * @returns {void}
  */
-function scrollyToStats () {
+function scrollToStats () {
   $('html, body').animate({
     scrollTop: $('#get-stats').offset().top
   }, 1000)
@@ -216,13 +216,11 @@ $(function () {
         generateStatsBoxPlot()
         // Display the result.
         $('#corpus-stats-result').css({'display': 'block'})
-        $('html, body').animate({
-          scrollTop: $('#get-stats').offset().top
-        }, 1000)
+        scrollToStats()
       } else { // Else hide the corpus stats result div.
         $('#corpus-stats-result').css({'display': 'none'})
       }
-      scrollyToStats()
+      scrollToStats()
     } else {
       utility.runModal(error)
     }
