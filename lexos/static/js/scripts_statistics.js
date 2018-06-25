@@ -152,6 +152,10 @@ function generateStatsFileTable () {
     )
 }
 
+/**
+ * Scrolls page to results after they are generated.
+ * @returns {void}
+ */
 function scrollyToStats () {
   $('html, body').animate({
     scrollTop: $('#get-stats').offset().top
