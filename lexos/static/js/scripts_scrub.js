@@ -11,18 +11,65 @@ $(function () {
   // display additional options on load
   displayAdditionalOptions()
 
-  $('.bttnfilelabels').click(function (ev) {
-    buttonFileLabelsFunction(ev.currentTarget)
+
+  $('.bttnfilelabels').click(function () {
+    // swfileselect, lemfileselect, consfileselect, scfileselect
+    const filetype = $(this).attr('id').replace('bttnlabel', '')
+    const usingCache = $('#usecache' + filetype).attr('disabled') != 'disabled'
+
+    if ((usingCache) || ($(this).attr('id') != '')) {
+      // $(this).siblings('.scrub-upload').attr('value', '');
+      // Next two lines clear the file input; it's hard to find a cross-browser solution
+      $('#' + filetype).val('')
+      $('#' + filetype).replaceWith($('#' + filetype).clone(true))
+      $('#usecache' + filetype).attr('disabled', 'disabled')
+      $(this).text('')
+    }
+
+    // Do Ajax
+    $.ajax({
+      type: 'POST',
+      url: '/removeUploadLabels',
+      data: $(this).text().toString(),
+      contentType: 'text/plain',
+      headers: {'option': filetype + '[]'},
+      beforeSend: function () {
+        // alert('Sending...');
+      },
+      success: function (response) {
+        // console.log(response);
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log('Error: ' + errorThrown)
+      }
+    })
   })
 
-  $('#whitespacebox').click(function (ev) {
-    changeWhitespaceBoxClass(ev.currentTarget)
+  $('#whitespacebox').click(function () {
+    if ($(this).is(':checked')) {
+      $('#whitespace').removeClass('hidden')
+    } else {
+      $('#whitespace').addClass('hidden')
+    }
+  })
+  $('#entityrules').change(function () {
+    console.log($('#entityrules')[0].value)
+    if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
+      document.getElementById('MUFI-warning').style.display = 'inline-block'
+      $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
+      $('.filecontents').addClass('Junicode')
+    } else {
+      $('.filecontents').removeClass('Junicode')
+      document.getElementById('MUFI-warning').style.display = 'none'
+    }
   })
 
-  $('#entityrules').change(entityRulesChangeFunction())
-
-  $('#tagbox').click(function (ev) {
-    changeTagBoxClass(ev.currentTarget)
+  $('#tagbox').click(function () {
+    if ($(this).is(':checked')) {
+      $('#tag').removeClass('hidden')
+    } else {
+      $('#tag').addClass('hidden')
+    }
   })
 
   $('#set-tags-button').click(setTagsButtonAjax())
