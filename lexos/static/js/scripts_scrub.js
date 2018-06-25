@@ -90,8 +90,8 @@ $(function () {
     }
   })
   $('#entityrules').change(function () {
-    console.log($('#entityrules')[0].value)
-    if ($('#entityrules')[0].value == 'MUFI-3' || $('#entityrules')[0].value == 'MUFI-4') {
+    console.log($('#entityrules').value)
+    if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules').value === 'MUFI-4') {
       document.getElementById('MUFI-warning').style.display = 'inline-block'
       $('head').append('<link href=\'../static/lib/junicode/Junicode.woff\' rel=\'stylesheet\' type=\'text/css\'>')
       $('.filecontents').addClass('Junicode')
