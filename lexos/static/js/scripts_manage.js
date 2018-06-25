@@ -630,9 +630,13 @@ function sendAjaxRequestSaveMultiple (url, data) {
   })
 }
 
-/* #### saveOne() #### */
-
-// Helper function saves value in edit dialog and updates table
+/***
+ * Helper function saves value in edit dialog and updates table
+ * @param {object} rowId - value attribute of the selected elements.
+ * @param {object} column - value attribute of the selected elements.
+ * @param {object} value - value attribute of the selected elements.
+ * @return {boolean} - return false if the name of the document is empty
+ */
 function saveOne (rowId, column, value) {
   // Validation - make sure the document name is not left blank
   if (column == 1 && value == '') {
@@ -645,8 +649,8 @@ function saveOne (rowId, column, value) {
     return false
   }
   // Prepare data and request
-  data = JSON.stringify([rowId, value])
-  url = ''
+  let data = JSON.stringify([rowId, value])
+  let url = ''
   switch (column) {
     case '1':
       url = '/setLabel'
@@ -678,6 +682,11 @@ function saveOne (rowId, column, value) {
       })
 }
 
+/***
+ * @param {string} url - empty string
+ * @param {JSON} data - json data
+ * @return {*}
+ */
 function sendAjaxRequestSaveOne (url, data) {
   return $.ajax({
     type: 'POST',
@@ -688,9 +697,9 @@ function sendAjaxRequestSaveOne (url, data) {
   })
 }
 
-
 /***
  * Helper function deletes selected row and updates table
+ * return {void}
  * @param {object} rowId -  value attribute of the selected elements.
  */
 function deleteOne (rowId) {
