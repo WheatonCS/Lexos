@@ -65,7 +65,7 @@ function tableAction () {
       table.rows(i).select()
       activeRows.push($(this).attr('id'))
     }
-     // Show the download button if there is at least 1 active file.
+    // Show the download button if there is at least 1 active file.
     if (activeRows.length !== 0) {
       $('#bttn-downloadSelectedDocs').show()
     }
@@ -116,7 +116,6 @@ function tableAction () {
   })
 }
 
-
 /**
  * Enable search and ordering in the table within the document.
  * @return{void}
@@ -127,9 +126,9 @@ function registerColumn () {
     table
     // 0 corresponds to the index column
       .column(0, {
-          search: 'applied',
-          order: 'applied'
-        }
+        search: 'applied',
+        order: 'applied'
+      }
       )
       .nodes()
       .each(function (cell, i) {
@@ -143,21 +142,21 @@ function registerColumn () {
     table
     // 1 corresponds to the 'Document Name' column
       .column(1, {
-          search: 'applied',
-          order: 'applied'
-        }
+        search: 'applied',
+        order: 'applied'
+      }
       )
       // 2 corresponds to the 'Original Source' column
       .column(2, {
-          search: 'applied',
-          order: 'applied'
-        }
+        search: 'applied',
+        order: 'applied'
+      }
       )
       // 3 corresponds to the 'Excerpt' column
       .column(3, {
-          search: 'applied',
-          order: 'applied'
-        }
+        search: 'applied',
+        order: 'applied'
+      }
       )
   })
     .nodes()
@@ -198,11 +197,10 @@ function registerSelectEvents () {
 
 /* #### DEFINE CONTEXT MENU #### */
 
-/*Right click options on the documents*/
+/* Right click options on the documents */
 function tableDocumentActions () {
-
   handleSelectButtons()
-  let  selected_rows
+  let selected_rows
   $('#demo').contextmenu({
     target: '#context-menu',
     scopes: 'td',
@@ -257,7 +255,7 @@ function tableDocumentActions () {
 
 /* #### SAVE BUTTON #### */
 
-/*'save' button for the right click options on the document.*/
+/* 'save' button for the right click options on the document. */
 function saveFunction () {
   const merge = $('#merge').val()
   let row_id = $('#tmp-row').val()
@@ -286,9 +284,9 @@ $(document).on('change', $('#addMilestone'), function () {
   $('#milestoneField').toggle()
 })
 
-/*------------------------*/
+/* ------------------------ */
 /*  SUPPORTING FUNCTIONS */
-/*------------------------*/
+/* ------------------------ */
 
 /*  toggleActiveDocsIcon() */
 
@@ -426,7 +424,6 @@ function sendAjaxRequestDisableRow (url, data) {
     contentType: 'application/json;charset=UTF-8',
     cache: false
   })
-
 }
 
 /* #### showPreviewText() #### */
@@ -532,44 +529,42 @@ function applyClassSelected (cell, selected_rows) {
 function mergeDocuments (row_ids, column, source, value, milestone) {
   // Validation - make sure the document name is not left blank
 
+  // Prepare data and request
+  let url = '/mergeDocuments'
+  let data = JSON.stringify([row_ids, value, source, milestone])
 
-    // Prepare data and request
-    let url = '/mergeDocuments'
-    let data = JSON.stringify([row_ids, value, source, milestone])
-
-    // Do Ajax
-    sendAjaxRequestMergedocuments(url, data)
-      .done(
-        function (response) {
-          const table = $('#demo').DataTable()
-          response = JSON.parse(response)
-          let newIndex = response[0]
-          // let newIndex = parseInt(row_ids.slice(-1)[0])+1;
-          table.rows().deselect()
-          let text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-          let rowNode = table.row
-            .add([newIndex, value, '', source, text])
-            .draw(false)
-            .node()
-          table.rows(newIndex).select() // This automatically calls enableRows()
-          $(rowNode)
-            .attr('id', newIndex)
-            .addClass('selected')
-          $(rowNode).children().first().css('text-align', 'right')
-          handleSelectButtons()
-          $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
-          // toggleActiveDocsIcon();
-          $('#edit-modal').modal('hide')
-          $('#edit-form').remove()
-        })
-      .fail(
-        function (jqXHR, textStatus, errorThrown) {
-          $('#error-modal .modal-body').html('Lexos could not merge the requested documents or could not save the merged document.')
-          $('#error-modal').modal()
-          $('#edit-modal').modal('hide')
-          console.log('bad: ' + textStatus + ': ' + errorThrown)
-        })
-
+  // Do Ajax
+  sendAjaxRequestMergedocuments(url, data)
+    .done(
+      function (response) {
+        const table = $('#demo').DataTable()
+        response = JSON.parse(response)
+        let newIndex = response[0]
+        // let newIndex = parseInt(row_ids.slice(-1)[0])+1;
+        table.rows().deselect()
+        let text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+        let rowNode = table.row
+          .add([newIndex, value, '', source, text])
+          .draw(false)
+          .node()
+        table.rows(newIndex).select() // This automatically calls enableRows()
+        $(rowNode)
+          .attr('id', newIndex)
+          .addClass('selected')
+        $(rowNode).children().first().css('text-align', 'right')
+        handleSelectButtons()
+        $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
+        // toggleActiveDocsIcon();
+        $('#edit-modal').modal('hide')
+        $('#edit-form').remove()
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        $('#error-modal .modal-body').html('Lexos could not merge the requested documents or could not save the merged document.')
+        $('#error-modal').modal()
+        $('#edit-modal').modal('hide')
+        console.log('bad: ' + textStatus + ': ' + errorThrown)
+      })
 }
 
 function sendAjaxRequestMergedocuments (url, data) {
@@ -620,7 +615,6 @@ function saveMultiple (row_ids, column, value) {
         $('#delete-modal').modal('hide')
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
-
 }
 
 function sendAjaxRequestSaveMultiple (url, data) {
@@ -724,7 +718,6 @@ function sendAjaxRequestDeleteOne (url, row_id) {
     contentType: 'charset=UTF-8',
     cache: false
   })
-
 }
 
 /* #### deleteDoc() #### */
@@ -773,7 +766,9 @@ function deleteSelected (row_ids) {
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
 }
-
+/**
+ * @return {object} ajax- ajax information
+ * @param*/
 function sendajaxRequestDeleteSelected (url, row_ids) {
   return $.ajax({
     type: 'POST',
@@ -784,9 +779,15 @@ function sendajaxRequestDeleteSelected (url, row_ids) {
   })
 }
 
-/* #### deleteAllSelected() #### */
+
+/**
+ * deletes all the selected rows.
+ * @return {void}
+ * @param {array} selected rows - array of rows that have been selected*/
 function deleteAllSelected (selected_rows) {
-  row_ids = []
+  const deleteDiv = $('#delete-modal')
+  const deleteModal = deleteDiv.find('.modal-body')
+  let row_ids = []
   selected_rows.each(function () {
     id = $(this).attr('id')
     row_ids.push(id)
@@ -794,32 +795,36 @@ function deleteAllSelected (selected_rows) {
   html = '<p>Are you sure you wish to delete the selected documents?</p>'
   html += '<span id="deleteIds" style="display:none;">' + row_ids.toString() + '</span>'
   footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
-  $('#delete-modal .modal-body').html(html)
-  $('#delete-modal .modal-body').append(footer)
-  $('#delete-modal').modal()
+  deleteModal.html(html)
+  deleteModal.append(footer)
+  deleteDiv.modal()
     .one('click', '#confirm-delete-bttn', function () {
-      row_ids = $('#deleteIds').text()
+      const row_ids = $('#deleteIds').text()
       deleteSelected(row_ids)
     })
 }
 
-/* #### unique() #### */
-
-// Helper function ensures id lists have no duplicates
-function unique (array) {
-  return $.grep(array, function (el, index) {
-    return index === $.inArray(el, array)
+/**
+ * Helper function ensures id lists have no duplicates
+ * @return {array} fileIds - indexes
+ * @param {array} fileIds - array of file ids
+ */
+function unique (fileIds) {
+  return $.grep(fileIds, function (el, index) {
+    return index === $.inArray(el, fileIds)
   })
 }
 
-/* #### prepareContextMenu() #### */
-// Helper function to change configure the context menu based on
-// the number of rows currently selected
-
+/**
+ * Helper function to change configure the context menu based on
+ * the number of rows currently selected
+ * @return {void}
+ */
 function prepareContextMenu () {
+  const contextMenu = $('#context-menu')
   // Refresh all options
-  $('#context-menu').find('li').removeClass('disabled')
-  $('#context-menu').find('li').find('a').removeProp('disabled')
+  contextMenu.find('li').removeClass('disabled')
+  contextMenu.find('li').find('a').removeProp('disabled')
 
   // Comparison values
   let numRows = table.rows().ids().length
@@ -828,6 +833,7 @@ function prepareContextMenu () {
   // Set config options -- Numbers refer to li elements, including dividers
   // The numbers below corresponds to the different options in right lick
   // on the document.
+  let opts
   switch (true) {
     /*  5: 'Select All Documents'
         6: 'Deselect All Documents
@@ -853,8 +859,8 @@ function prepareContextMenu () {
 
   // Disable configured options
   $.each(opts, function (k, opt) {
-    $('#context-menu').find('li').eq(opt).attr('class', 'disabled')
-    $('#context-menu').find('li').eq(opt).find('a').prop('disabled', true)
+    contextMenu.find('li').eq(opt).attr('class', 'disabled')
+    contextMenu.find('li').eq(opt).find('a').prop('disabled', true)
   })
 }
 
@@ -867,9 +873,9 @@ function handleSelectButtons () {
     $('#selectAllDocs').prop('disabled', false)
     $('#deselectAllDocs').prop('disabled', true)
     $('#deleteSelectedDocs').prop('disabled', true)
-  } else{
-      $('#selectAllDocs').prop('disabled', false)
-      $('#deselectAllDocs').prop('disabled', false)
-      $('#deleteSelectedDocs').prop('disabled', false)
+  } else {
+    $('#selectAllDocs').prop('disabled', false)
+    $('#deselectAllDocs').prop('disabled', false)
+    $('#deleteSelectedDocs').prop('disabled', false)
   }
 }
