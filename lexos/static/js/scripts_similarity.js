@@ -53,6 +53,16 @@ function generateSimResult () {
       })
 }
 
+/**
+ * Scrolls to results after they are generated.
+ * @returns {void}
+ */
+function toSimResults () {
+  $('html, body').animate({
+    scrollTop: $('#get-sims').offset().top
+  }, 1000)
+}
+
 $(function () {
   // hide the similarity
   $('#similaritiesResults').css({'display': 'none'})
@@ -64,9 +74,7 @@ $(function () {
 
     if (error === null) { // if there is no error
       generateSimResult()
-      $('html, body').animate({
-        scrollTop: $('#get-sims').offset().top
-      }, 1000)
+      toSimResults()
     } else {
       utility.runModal(error)
     }
