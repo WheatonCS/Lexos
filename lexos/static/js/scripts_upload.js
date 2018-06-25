@@ -208,20 +208,13 @@ function FileSelectHandler (e) {
       if (numberOfFileDone / totalFiles > 0.5) {
         progress.css('color', '#FFF')
       }
-      if (added === 1) {
-        progressBar.html('Complete!').css({
-          'color': '#FFF',
-          'text-align': 'center',
-          'width': '175px',
-          'height': '20px'
-        }).fadeOut(2000)
+      progressBarStatus(f,added)
         const faFolderOpen = $('.fa-folder-open-o')
         faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
         faFolderOpen.fadeIn(200)
         $('#status').hide()
       }
     }
-  }
   showProgress()
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
@@ -237,6 +230,27 @@ function showProgress () {
   $id('fileselect').value = ''
   // this allows the event to fire on "change" in chrome. the value property changing is the
   // normal trigger, for some reason firefox overwrote this with their own behavior.
+}
+/**
+ * Changes the message on the progress bar according to the file.
+ * if valid: "Complete!" else: "Invalid File!"*/
+function progressBarStatus (f,added) {
+  if (added === 1 && f.size < $id('MAX_FILE_SIZE').value && f.size !== 0 && AllowedFileType(f.name)) {
+    $('#progress-bar').html('Complete!').css({
+      'color': '#FFF',
+      'text-align': 'center',
+      'width': '175px',
+      'height': '20px'
+    }).fadeOut(2000)
+  }
+  else{
+    $('#progress-bar').html('Invalid File!').css({
+      'color': '#FFF',
+      'text-align': 'center',
+      'width': '175px',
+      'height': '20px'
+    }).fadeOut(2000)
+  }
 }
 
 $(function () {
