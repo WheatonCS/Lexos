@@ -115,11 +115,9 @@ function tableAction () {
   })
 }
 
-/* #### ENABLE SEARCH AND ORDERING IN THE TABLE */
-// allows the user to order the text in ascending or descending and search
-// within the document.
+
 /**
- * enable search and ordering in the table.
+ * Enable search and ordering in the table within the document.
  * @return{void}
  */
 function registerColumn () {
