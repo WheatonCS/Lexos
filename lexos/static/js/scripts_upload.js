@@ -117,7 +117,7 @@ function UploadAndParseFile (file, fileSize) {
     $('#status').css({'visibility': 'hidden'})
     $('#status-analyze').css({'visibility': 'hidden'})
   } else {
-    // These are to hide the loading icon.
+    // These are to hide the loading icon
     $('#status-analyze').css({'visibility': 'hidden'})
     $('#status').css({'visibility': 'hidden'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
