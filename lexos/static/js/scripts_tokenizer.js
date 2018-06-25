@@ -1,7 +1,7 @@
 $(function () {
   // Toggle the additional DTM contents option
   function updateCSVcontentOption() {
-    if ($('#greyword').is(':checked') || $('#culling').is(':checked') || $('#MFW').is(':checked')) {
+    if ($('#culling').is(':checked') || $('#MFW').is(':checked')) {
       $('#csvcontdiv').show()
     } else {
       $('#csvcontdiv').hide()

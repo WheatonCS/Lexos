@@ -1,7 +1,7 @@
 import re
 from typing import List
 
-from lexos.helpers.error_messages import NON_POSITIVE_SEGMENT_MESSAGE, \
+from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NEG_OVERLAP_LAST_PROP_MESSAGE, LARGER_SEG_SIZE_MESSAGE, \
     EMPTY_MILESTONE_MESSAGE, INVALID_CUTTING_TYPE_MESSAGE
 
@@ -91,7 +91,7 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
     """
 
     # pre-condition assertion
-    assert seg_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
+    assert seg_size > 0, SEG_NON_POSITIVE_MESSAGE
     assert overlap >= 0 and last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
@@ -125,7 +125,7 @@ def cut_by_words(text: str, seg_size: int, overlap: int,
     """
 
     # pre-condition assertion
-    assert seg_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
+    assert seg_size > 0, SEG_NON_POSITIVE_MESSAGE
     assert overlap >= 0 and last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
@@ -159,7 +159,7 @@ def cut_by_lines(text: str, seg_size: int, overlap: int,
     """
 
     # pre-condition assertion
-    assert seg_size > 0, NON_POSITIVE_SEGMENT_MESSAGE
+    assert seg_size > 0, SEG_NON_POSITIVE_MESSAGE
     assert overlap >= 0 and last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
@@ -189,7 +189,7 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     """
 
     # pre-condition assertion
-    assert num_segment > 0, NON_POSITIVE_SEGMENT_MESSAGE
+    assert num_segment > 0, SEG_NON_POSITIVE_MESSAGE
 
     # split text by words while stripping all the whitespace
     words_list = re.findall("\S+\s*", text)

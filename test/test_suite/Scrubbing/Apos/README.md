@@ -1,17 +1,24 @@
-Apostrophe
-==========
+Apostrophes
+===========
 
-# Summary
-This folder has files with multiple cases of where apostrophes could be in the text.
+#### Test Keep Word-Internal Apostrophes
 
-## apos.txt
-This file contains a sentence with apostrophes in different places.
+*Test files:* apos.txt, apos2.txt, apos2_pinyin.txt, apos3.txt  
 
-## apos2.txt
-This file contains a sentence with obsticals for testing apostrophies.
+*Result files:* aposResults.txt, apos2Results.txt, apos2_pinyinResults.txt,
+                apos3Results.txt
+            
 
-## apos2_pinyin.txt
-This file contains text for testing apostrophies.
+1. UPLOAD FILES
 
-## apos3.txt
-This file contains text to see what happens when there are two apostrophes next to eachother in the middle, end, or beginning of a word. This also has the case of when there is a double quote and an apostrophe next to eachother.
+2. SCRUB: 
+    - Remove All Punctuation
+    - Make Lowercase
+    - Remove Digits
+    - Keep Word-Internal Apostrophes
+    
+3. RESULTS
+    - Four files containing
+        * lowercase letters
+        * no digits
+        * no punctuation except for word-internal apostrophes

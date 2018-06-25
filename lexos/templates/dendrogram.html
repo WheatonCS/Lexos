@@ -2,31 +2,18 @@
 {% set active_page = 'cluster' %}
 
 {% block head %}
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        // Handle the return to top links
-        $('.to-top').click(function () {
-          $('html, body').animate({scrollTop: 0}, 800)
-          return false
-        })
-      })
-    </script>
-    <style type="text/css"></style>
 {% endblock %}
 
 {% block title %}Hierarchical Clustering{% endblock %}
 
 
 {% block options %}
-    <input type="hidden" id="num_active_files" value="{{ numActiveDocs }}"/>
-
     <fieldset>
         <legend>Dendrogram Options</legend>
         <div class="dendrogram-options cf" id="dendrocreateoptions">
-
             <label for="metric">Distance Metric:
                 <select name="metric" id="metric">
                     <option value="euclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'euclidean' }}>
@@ -111,7 +98,6 @@
                     </option>
                 </select>
             </label>
-
         </div>
     </fieldset>
 {% endblock %}

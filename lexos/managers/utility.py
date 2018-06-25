@@ -12,7 +12,6 @@ from flask import request
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
 import lexos.managers.session_manager as session_manager
-import lexos.processors.analyze.KMeans as KMeans
 import lexos.processors.visualize.multicloud_topic as multicloud_topic
 import lexos.processors.visualize.rw_analyzer as rw_analyzer
 from lexos.managers.file_manager import FileManager
@@ -228,178 +227,6 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     out_file.close()
 
     return out_file_path, extension
-
-
-def generate_k_means_pca(file_manager: FileManager):
-    """
-    Generates a table of cluster_number and file name from the active files.
-
-    Args:
-        None
-
-    Returns:
-        kmeans_index: a list of index of the closest center of the file
-        siltt_score: a float of silhouette score based on KMeans algorithm
-        file_name_str: a string of file names, separated by '#'
-        k_value: an int of the number of K from input
-    """
-
-    ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=ngram_size,
-        use_freq=False,
-        grey_word=grey_word,
-        show_grey_word=show_grey_word,
-        mfw=mfw,
-        cull=culling)
-
-    del count_matrix[0]
-    for row in count_matrix:
-        del row[0]
-
-    matrix = np.array(count_matrix)
-
-    # Gets options from request.form and uses options to generate the K-mean
-    # results
-    k_value = len(file_manager.get_active_files()) / 2  # default K value
-    max_iter = 300  # default number of iterations
-    init_method = request.form['init']
-    n_init = 300
-    tolerance = 1e-4
-
-    if (request.form['nclusters'] != '') and (
-            int(request.form['nclusters']) != k_value):
-        k_value = int(request.form['nclusters'])
-    if (request.form['max_iter'] != '') and (
-            int(request.form['max_iter']) != max_iter):
-        max_iter = int(request.form['max_iter'])
-    if request.form['n_init'] != '':
-        n_init = int(request.form['n_init'])
-    if request.form['tolerance'] != '':
-        tolerance = float(request.form['tolerance'])
-
-    metric_dist = request.form['KMeans_metric']
-
-    file_name_list = []
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                file_name_list.append(l_file.label)
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                file_name_list.append(new_label)
-
-    file_name_str = file_name_list[0]
-
-    for i in range(1, len(file_name_list)):
-        file_name_str += "#" + file_name_list[i]
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    kmeans_index, siltt_score, color_chart = KMeans.get_k_means_pca(
-        matrix, k_value, max_iter, init_method, n_init, tolerance, metric_dist,
-        file_name_list, folder_path)
-
-    return kmeans_index, siltt_score, file_name_str, k_value, color_chart
-
-
-# Gets called from kmeans() in lexos_core.py
-
-
-def generate_k_means_voronoi(file_manager: FileManager):
-    """
-    Generates a table of cluster_number and file name from the active files.
-
-    Args:
-        None
-
-    Returns:
-        kmeans_index: a list of index of the closest center of the file
-        siltt_score: a float of silhouette score based on KMeans algorithm
-        file_name_str: a string of file names, separated by '#'
-        k_value: an int of the number of K from input
-    """
-
-    ngram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word, \
-        show_grey_word, only_char_grams_within_words, mfw, culling = \
-        file_manager.get_matrix_options_deprec()
-
-    count_matrix = file_manager.get_matrix_deprec(
-        use_word_tokens=use_word_tokens,
-        use_tfidf=False,
-        norm_option=norm_option,
-        only_char_grams_within_words=only_char_grams_within_words,
-        n_gram_size=ngram_size,
-        use_freq=False,
-        grey_word=grey_word,
-        show_grey_word=show_grey_word,
-        mfw=mfw,
-        cull=culling)
-
-    del count_matrix[0]
-    for row in count_matrix:
-        del row[0]
-
-    matrix = np.array(count_matrix)
-
-    # Gets options from request.form and uses options to generate the K-mean
-    # results
-    k_value = len(file_manager.get_active_files()) / 2  # default K value
-    max_iter = 300  # default number of iterations
-    init_method = request.form['init']
-    n_init = 300
-    tolerance = 1e-4
-
-    if (request.form['nclusters'] != '') and (
-            int(request.form['nclusters']) != k_value):
-        k_value = int(request.form['nclusters'])
-    if (request.form['max_iter'] != '') and (
-            int(request.form['max_iter']) != max_iter):
-        max_iter = int(request.form['max_iter'])
-    if request.form['n_init'] != '':
-        n_init = int(request.form['n_init'])
-    if request.form['tolerance'] != '':
-        tolerance = float(request.form['tolerance'])
-
-    metric_dist = request.form['KMeans_metric']
-
-    file_name_list = []
-    for l_file in list(file_manager.files.values()):
-        if l_file.active:
-            if request.form["file_" + str(l_file.id)] == l_file.label:
-                file_name_list.append(l_file.label)
-            else:
-                new_label = request.form["file_" + str(l_file.id)]
-                file_name_list.append(new_label)
-    file_name_str = file_name_list[0]
-
-    for i in range(1, len(file_name_list)):
-        file_name_str += "#" + file_name_list[i]
-
-    folder_path = path_join(
-        session_manager.session_folder(),
-        constants.RESULTS_FOLDER)
-    if not os.path.isdir(folder_path):
-        makedirs(folder_path)
-
-    kmeans_index, siltt_score, color_chart, final_points_list, \
-        final_centroids_list, text_data, max_x = KMeans.get_k_means_voronoi(
-            matrix, k_value, max_iter, init_method, n_init, tolerance,
-            metric_dist, file_name_list)
-
-    return kmeans_index, siltt_score, file_name_str, k_value, color_chart, \
-        final_points_list, final_centroids_list, text_data, max_x
 
 
 def generate_rwa(file_manager: FileManager):
@@ -970,21 +797,24 @@ def generate_csv_matrix_from_ajax(data: Dict[str, object],
 def xml_handling_options(data: dict = {}):
     file_manager = load_file_manager()
     from lexos.managers import session_manager
-    from lxml import etree
+    import xml.etree.ElementTree as ET
     tags = []
-    # etree.lxml to get all the tags
+
     for file in file_manager.get_active_files():
         try:
-            root = etree.fromstring(file.load_contents())
+            root = ET.fromstring(file.load_contents())
+            iterate = root.getiterator()
+
             # Remove processing instructions --
             # not necessary to get a list of tags
             # for pi in root.xpath("//processing-instruction()"):
             #     etree.strip_tags(pi.getparent(), pi.tag)
             # Get the list of the tags
-            for e in root.iter():
-                # Add to tags list, stripping all namespaces
-                tags.append(e.tag.split('}', 1)[1])
-        except etree.XMLSyntaxError:
+
+            for element in iterate:
+                tags.append(element.tag)
+
+        except ET.ParseError:
             import bs4
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(file.load_contents(), 'html.parser')
