@@ -60,7 +60,8 @@ function UploadAndParseFile (file, fileSize) {
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
-      alert(`Cannot process blank file -- ${file.name}`)
+      $('#error-modal-message').html(`Cannot process blank file -- ${file.name}`)
+      $('#error-modal').modal()
       $('#status-analyze').css({'visibility': 'hidden'})
     } else {
       sendAjaxRequest(file, filename)
