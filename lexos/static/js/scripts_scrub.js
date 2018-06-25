@@ -11,7 +11,7 @@ $(function () {
   $('#save-button').on('click', function (e) {
     e.preventDefault()
     let tagDict = {}
-    var serializedForm = $(this).closest('form').serializeArray()
+    const serializedForm = $(this).closest('form').serializeArray()
     $.each(serializedForm, function () {
       //name and value
       if (tagDict[this.name] !== undefined) {
@@ -290,7 +290,7 @@ function entityRulesChangeFunction () {
  */
 function setTagsButtonAjax () {
   if ($('#allTags')) {
-    let allTags = ($('#allTags')[0].value)
+    let allTags = ($('#allTags').value)
     allTags = JSON.stringify(allTags)
     $.ajax({
       type: 'POST',
