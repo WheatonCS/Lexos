@@ -217,9 +217,6 @@ $(function () {
         }, 1000)
       } else { // Else hide the corpus stats result div.
         $('#file-stats-result').css({'display': 'none'})
-        $('html, body').animate({
-          scrollTop: $('#get-stats').offset().top
-        }, 1000)
       }
       scrollyBoy()
     } else {
