@@ -29,6 +29,9 @@ function generateDendrogram () {
       })
 }
 
+/**
+ * Scrolls to dendrogram results after they are generated.
+ */
 function scrollToDendro () {
   $('html, body').animate({
     scrollTop: $('#dendrogram-result').offset().top
