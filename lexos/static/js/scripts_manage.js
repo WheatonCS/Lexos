@@ -89,16 +89,16 @@ function tableAction () {
       }
     })
 
-  // perform the different right click options on the document.
+  // Perform the different right click options on the document.
   tableDocumentActions()
 
-  // When the save button is clicked, call the save function
+  // Call Save function on click.
   $('#save').click(function () {
     saveFunction()
   })
-  // When the Delete Selected button is clicked, call the deletion function
+  // Call Delete function on click.
   $('#delete').click(function () {
-    selected_rows = table.rows({selected: true}).nodes().to$()
+    let selected_rows = table.rows({selected: true}).nodes().to$()
     deleteAllSelected(selected_rows)
   })
 
@@ -106,7 +106,7 @@ function tableAction () {
   $('#selectAllDocs').click(function () { selectAll() })
   $('#disableAllDocs').click(function () { deselectAll() })
   $('#deleteSelectedDocs').click(function () {
-    selected_rows = table.rows({selected: true}).nodes().to$()
+    let selected_rows = table.rows({selected: true}).nodes().to$()
     deleteAllSelected(selected_rows)
   })
   // Remove the footer from alert modals when hidden
@@ -118,6 +118,10 @@ function tableAction () {
 /* #### ENABLE SEARCH AND ORDERING IN THE TABLE */
 // allows the user to order the text in ascending or descending and search
 // within the document.
+/**
+ * enable search and ordering in the table.
+ * @return{void}
+ */
 function registerColumn () {
   // Draw the index column
   table.on('order.dt search.dt', function () {
