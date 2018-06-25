@@ -208,10 +208,13 @@ $(function () {
         // Display the result.
         $('#corpus-stats-result').css({'display': 'block'})
       } else { // Else hide the corpus stats result div.
-        $('#corpus-stats-result').css({'display': 'none'})
+        $('#file-stats-result').css({'display': 'none'})
       }
     } else {
       utility.runModal(error)
     }
+    $('html, body').animate({
+      scrollTop: $('#stats-result').offset().top
+    }, 1000)
   })
 })
