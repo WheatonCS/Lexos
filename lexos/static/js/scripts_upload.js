@@ -56,7 +56,7 @@ function resetProgressBar () {
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
   // Make the loading icon circle visible
-   $('#status-analyze').css({'visibility': 'visible'})
+  $('#status-analyze').css({'visibility': 'visible'})
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
@@ -106,11 +106,10 @@ function UploadAndParseFile (file, fileSize) {
           alert(`${textStatus} : ${errorThrown}`)
           $('#status-analyze').css({'visibility': 'hidden'})
         })
-        .always(function (){
-           $('#status-analyze').css({'visibility': 'hidden'})
+        .always(function () {
+          $('#status-analyze').css({'visibility': 'hidden'})
         })
     }
-
   } else if (!AllowedFileType(file.name)) {
     alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
     // These are to hide the loading icon.
@@ -173,8 +172,8 @@ function Init () {
  * @param {object} e - event
  */
 function FileSelectHandler (e) {
-  const counter = $("#counter")
-  /* takes the value of the input tag so that it gets the number of active files */
+  const counter = $('#counter')
+  // Value of the input tag so that it gets the number of active files
   let numberOfFileDone = parseInt(counter.val())
   // cancel event and hover styling
   fileDragHover(e)
