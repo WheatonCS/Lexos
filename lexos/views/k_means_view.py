@@ -38,6 +38,7 @@ def k_means():
     return render_template(
         'kmeans.html',
         labels=labels,
+        itm='kmeans',
         numActiveDocs=num_active_docs)
 
 
