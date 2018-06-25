@@ -10,7 +10,7 @@ function formatFileReportResponse (response) {
   const unit = response['unit']
   const mean = `Average document size is ${response['mean']} ${unit}.`
   const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
-  const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
+  const IQR = `Interquartile range of documents is ${response['inter_quartile_range']} ${unit}.`
 
   // Find if anomaly detected by standard error analysis.
   const noAnomalySe = response['anomaly_se_small'].length === 0 && response['anomaly_se_large'].length === 0
@@ -27,8 +27,8 @@ function formatFileReportResponse (response) {
   const noAnomalyIqr = response['anomaly_iqr_small'].length === 0 && response['anomaly_iqr_large'].length === 0
   // Pick appropriate result for standard error analysis.
   const anomalyIqrResult =
-    noAnomalyIqr ? '<b>No</b> anomaly detected by inter quartile range test.'
-      : 'Anomaly <b>detected</b> by inter quartile range test.' +
+    noAnomalyIqr ? '<b>No</b> anomaly detected by interquartile range test.'
+      : 'Anomaly <b>detected</b> by interquartile range test.' +
       response['anomaly_iqr_small'].map(
         function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }) +
       response['anomaly_iqr_large'].map(
