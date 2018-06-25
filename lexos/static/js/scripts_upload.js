@@ -111,7 +111,8 @@ function UploadAndParseFile (file, fileSize) {
         })
     }
   } else if (!AllowedFileType(file.name)) {
-    alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
+    $('#error-modal-message').html(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
+    $('#error-modal').modal()
     // These are to hide the loading icon.
     $('#status').css({'visibility': 'hidden'})
     $('#status-analyze').css({'visibility': 'hidden'})
@@ -208,7 +209,7 @@ function FileSelectHandler (e) {
       if (numberOfFileDone / totalFiles > 0.5) {
         progress.css('color', '#FFF')
       }
-      progressBarStatus(f,added)
+        progressBarStatus(f,added)
         const faFolderOpen = $('.fa-folder-open-o')
         faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
         faFolderOpen.fadeIn(200)
