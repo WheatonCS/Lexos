@@ -37,8 +37,8 @@ def k_means():
     session['kmeanoption']['nclusters'] = default_k
     return render_template(
         'kmeans.html',
-        labels=labels,
         itm='kmeans',
+        labels=labels,
         numActiveDocs=num_active_docs)
 
 
