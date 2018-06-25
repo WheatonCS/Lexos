@@ -64,6 +64,9 @@ $(function () {
 
     if (error === null) { // if there is no error
       generateSimResult()
+      $('html, body').animate({
+        scrollTop: $('#get-sims').offset().top
+      }, 1000)
     } else {
       utility.runModal(error)
     }
