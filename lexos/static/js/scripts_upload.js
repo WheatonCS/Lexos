@@ -126,7 +126,6 @@ function UploadAndParseFile (file, fileSize) {
      ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}B`)
     // Without this, it puts a blue background on the progress bar.
     $('#progress').css('background', 'transparent')
-    console.log('right here')
   }
 }
 
@@ -174,8 +173,9 @@ function Init () {
  * @param {object} e - event
  */
 function FileSelectHandler (e) {
+  const counter = $("#counter")
   /* takes the value of the input tag so that it gets the number of active files */
-  let numberOfFileDone = parseInt($('#counter').val())
+  let numberOfFileDone = parseInt(counter.val())
   // cancel event and hover styling
   fileDragHover(e)
   // fetch FileList object
@@ -226,7 +226,7 @@ function FileSelectHandler (e) {
   showProgress()
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
-  $('#counter').attr('value', numActiveFile)
+  counter.attr('value', numActiveFile)
 }
 
 /**
