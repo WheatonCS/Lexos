@@ -39,6 +39,7 @@ def top_words():
         'topword.html',
         labels=labels,
         numActiveDocs=num_active_docs,
+        itm='topwords',
         classDivisionMap=class_division_map)
 
 
