@@ -2,7 +2,7 @@
 {% set active_page = 'topword' %}
 
 {% block head %}
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
     <meta id="num-active-classes" data-number="{{ classDivisionMap.shape[0] }}">
 {% endblock %}
