@@ -2,11 +2,8 @@
 {% set active_page = 'topword' %}
 
 {% block head %}
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
-    <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
-    <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
-    <meta id="num-active-files" data-number="{{ labels|len }}">
     <meta id="num-active-classes" data-number="{{ classDivisionMap.shape[0] }}">
 {% endblock %}
 

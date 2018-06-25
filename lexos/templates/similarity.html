@@ -2,25 +2,21 @@
 {% set active_page = 'similarity' %}
 
 {% block head %}
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_similarity.js') }}?ver={{ version }}"></script>
 
-    <!-- Latest compiled and minified DataTables CSS -->
+    <!-- Latest compiled and minimized DataTables CSS -->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
 
-    <!-- Latest compiled and minified DataTables JS -->
+    <!-- Latest compiled and minimized DataTables JS -->
     <script type="text/javascript"
             src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
-    <meta id="manage-url" data-url="{{ url_for('manage.manage') }}">
-    <meta id="upload-url" data-url="{{ url_for('upload.upload') }}">
 {% endblock %}
 
 {% block title %}Similarity Query{% endblock %}
 
 {% block options %}
-    <input type="hidden" id="num_active_files" value="{{ labels|len }}"
-           style="visibility: hidden;"/>
     <input type="hidden" id="uploadname"
            value="{{ request.form['uploadname'] }}"/>
 
