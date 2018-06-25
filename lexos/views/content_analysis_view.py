@@ -57,6 +57,7 @@ def content_analysis():
                                dictionary_labels=dict_labels,
                                active_dictionaries=active_dicts,
                                toggle_all_value=toggle_all_value,
+                               itm= 'content-analysis',
                                formula=formula)
     else:
         num_active_docs = detect_active_docs()
