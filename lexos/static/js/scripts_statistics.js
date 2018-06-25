@@ -152,7 +152,7 @@ function generateStatsFileTable () {
     )
 }
 
-function scrollyBoy () {
+function scrollyToStats () {
   $('html, body').animate({
     scrollTop: $('#get-stats').offset().top
   }, 1000)
@@ -218,7 +218,7 @@ $(function () {
       } else { // Else hide the corpus stats result div.
         $('#file-stats-result').css({'display': 'none'})
       }
-      scrollyBoy()
+      scrollyToStats()
     } else {
       utility.runModal(error)
     }
