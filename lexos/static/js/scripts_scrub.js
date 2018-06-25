@@ -10,9 +10,9 @@ $(function () {
 
   $('#save-button').on('click', function (e) {
     e.preventDefault()
-    var tagDict = {}
-    var a = $(this).closest('form').serializeArray()
-    $.each(a, function () {
+    let tagDict = {}
+    var serializedForm = $(this).closest('form').serializeArray()
+    $.each(serializedForm, function () {
       //name and value
       if (tagDict[this.name] !== undefined) {
         if (!tagDict[this.name].push) {
