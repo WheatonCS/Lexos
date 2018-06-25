@@ -177,7 +177,7 @@ function registerSelectEvents () {
       const selected_rows = table.rows(indexes).nodes().to$()
       // Call the ajax function
       enableRows(selected_rows)
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons()
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // add the correct counter text to the p
       $('#bttn-downloadSelectedDocs').show()
@@ -187,7 +187,7 @@ function registerSelectEvents () {
       const deselected_rows = table.rows(indexes).nodes().to$()
       // Call the ajax function
       disableRows(deselected_rows)
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons()
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // same as the other one
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
       if (table.rows('.selected').data().length === 0) {
@@ -200,10 +200,8 @@ function registerSelectEvents () {
 
 /*Right click options on the documents*/
 function tableDocumentActions () {
-  // Get the number of rows, selected or unselected, for context menu
-  const numRows = table.rows().ids().length
-  const numRowsSelected = table.rows({selected: true}).ids().length
-  handleSelectButtons(numRows, numRowsSelected)
+
+  handleSelectButtons()
   let  selected_rows
   $('#demo').contextmenu({
     target: '#context-menu',
@@ -314,7 +312,7 @@ function selectAll () {
       function (response) {
         // Select All Rows in the UI
         table.rows().select()
-        handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+        handleSelectButtons()
         toggleActiveDocsIcon()
       })
     .fail(
@@ -341,7 +339,7 @@ function deselectAll () {
       function (response) {
         // Deselect All Rows in the UI
         table.rows().deselect()
-        handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+        handleSelectButtons()
         toggleActiveDocsIcon()
       })
     .fail(
@@ -374,7 +372,7 @@ function enableRows (selected_rows) {
 
   sendAjaxRequestEnableRows('enableRows', data)
     .done(function (response) {
-      handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+      handleSelectButtons()
       toggleActiveDocsIcon()
     })
     .fail(function (textStatus, errorThrown) {
@@ -409,7 +407,7 @@ function disableRows (deselected_rows) {
   sendAjaxRequestDisableRow('/disableRows', data)
     .done(
       function (response) {
-        handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+        handleSelectButtons()
         toggleActiveDocsIcon()
       })
     .fail(
@@ -558,7 +556,7 @@ function mergeDocuments (row_ids, column, source, value, milestone) {
             .attr('id', newIndex)
             .addClass('selected')
           $(rowNode).children().first().css('text-align', 'right')
-          handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+          handleSelectButtons()
           $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
           // toggleActiveDocsIcon();
           $('#edit-modal').modal('hide')
@@ -706,7 +704,7 @@ function deleteOne (row_id) {
         // Update the UI
         let id = '#' + row_id
         table.row(id).remove()
-        handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+        handleSelectButtons()
         toggleActiveDocsIcon()
         table.draw()
       })
@@ -763,7 +761,7 @@ function deleteSelected (row_ids) {
           let id = '#' + row_ids[i]
           table.row(id).remove()
         })
-        handleSelectButtons(table.rows().ids().length, table.rows({selected: true}).ids().length)
+        handleSelectButtons()
         toggleActiveDocsIcon()
         table.draw()
       })
@@ -860,10 +858,11 @@ function prepareContextMenu () {
   })
 }
 
-/* #### handleSelectButtons() #### */
-
-// Helper function to change state of selection buttons on events
-function handleSelectButtons (numRows, numRowsSelected) {
+/**
+ * Helper function to change state of selection buttons on events
+ * @return {void}
+ */
+function handleSelectButtons () {
   if (table.rows('.selected').data().length === 0) {
     $('#selectAllDocs').prop('disabled', false)
     $('#deselectAllDocs').prop('disabled', true)
