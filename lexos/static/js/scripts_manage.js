@@ -46,8 +46,10 @@ function initTable () {
 }
 
 /**
- * This function calls on different function upon clicking by users.
- * @return {void}*/
+ * This function calls upon different functions when the user clicks the three
+ * button on top-right of the table. buttons: "Select All", "Deselect All" and "Delete Selected"
+ * @return {void}
+ */
 function tableAction () {
   registerColumn() // Draw the table column and make it searchable.
 
@@ -62,14 +64,14 @@ function tableAction () {
       table.rows(i).select()
       activeRows.push($(this).attr('id'))
     }
+     // Show the download button if there is at least 1 active file.
     if (activeRows.length !== 0) {
-      //download option appears on the top righ of the table
       $('#bttn-downloadSelectedDocs').show()
     }
   })
 
   $('.col-sm-5').append('<p style=\'display:inline; float:left; width:200px !important;\' id=\'name\'></p>')
-  // Data tables active documents counter wasn't working.
+  // LEGACY CODE: Data tables active documents counter wasn't working.
   // I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
   // NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
 
