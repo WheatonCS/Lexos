@@ -6,6 +6,7 @@ $(function () {
   const table = initTable() // function to initialize the table.
   tableAction(table)
 })
+
 /**
  * @return {object} table - initialize the table
  * Change the element name and test whether the table variable persists
@@ -280,9 +281,8 @@ $(document).on('change', $('#addMilestone'), function () {
   $('#milestoneField').toggle()
 })
 
-/* ------------------------ */
-/*  SUPPORTING FUNCTIONS */
-/* ------------------------ */
+
+/* S U P P O R T I N G    F U N C T I O N S */
 
 /***
  * Shows or hides the Active Documents icon in response to the table state
@@ -361,7 +361,6 @@ function deselectAll (table) {
 }
 
 /***
- *
  * @param {string} url - url to the page
  * @return {object} ajax - XMLHttpRequest object
  */
