@@ -35,9 +35,10 @@ def similarity():
         session['similarities'] = constants.DEFAULT_SIM_OPTIONS
     return render_template(
         'similarity.html',
+        itm="similarity-query",
         labels=id_label_map,
         numActiveDocs=num_active_docs,
-        itm="similarity-query"
+
     )
 
 

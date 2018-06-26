@@ -180,13 +180,13 @@ def tokenizer():
         return render_template(
             'tokenizer.html',
             draw=1,
+            itm="tokenize",
             labels=labels,
             headers=header_labels,
             columns=cols,
             rows=rows,
             numRows=records_total,
             orientation=csv_orientation,
-            itm="tokenize",
             numActiveDocs=num_active_docs)
     if request.method == "POST":
         end_t = timer()
