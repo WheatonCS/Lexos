@@ -847,8 +847,8 @@ function deleteDoc (rowId, table) {
   let html = '<p>Are you sure you wish to delete <b>' + docName + '</b>?</p>'
   html += '<span id="deleteId" style="display:none;">' + rowId + '</span>'
   let footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
-  $('#delete-modal .modal-body').html(html)
-  $('#delete-modal .modal-body').append(footer)
+  $('#delete-modal').find('.modal-body').html(html)
+  $('#delete-modal').find('.modal-body').append(footer)
   $('#delete-modal').modal()
     .one('click', '#confirm-delete-bttn', function () {
       rowId = $('#deleteId').text()
