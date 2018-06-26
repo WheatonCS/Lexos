@@ -112,8 +112,7 @@ def scrape():
     :return: json object with a string that indicates that is has succeeded
     """
     # Detect the number of active documents.
-    ##-### detect_active_docs, utility, session manager
-    from lexos.managers import session_manager, utility
+    from lexos.managers import utility
     from lexos.views.base_view import detect_active_docs
     num_active_docs = detect_active_docs()
     if request.method == "GET":
@@ -137,6 +136,7 @@ def scrape():
 @app.route("/updatesettings", methods=["GET", "POST"])
 def updatesettings():
     if request.method == "POST":
+        from lexos.managers import session_manager
         session_manager.cache_general_settings()
         return json.dumps("Settings successfully cached.")
 
