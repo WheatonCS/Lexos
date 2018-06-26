@@ -312,7 +312,8 @@ function toggleActiveDocsIcon () {
  * @return {void}
  */
 function selectAll () {
-  sendAjaxRequestSelectAll('/selectAll')
+  const url = "/selectAll"
+  sendAjaxRequestSelectAll(url)
     .done(
       function (response) {
         // Select All Rows in the UI
@@ -344,7 +345,8 @@ function sendAjaxRequestSelectAll (url) {
  * @return {void}
  */
 function deselectAll () {
-  sendAjaxRequestDeselect('/deselectAll')
+  const url = "/deselectAll"
+  sendAjaxRequestDeselect(url)
     .done(
       function (response) {
         // Deselect All Rows in the UI
@@ -390,7 +392,7 @@ function enableRows (selectedRows) {
   file_ids = unique(file_ids)
   // Convert the file_ids list to a json string for sending
   const data = JSON.stringify(file_ids)
-  const url = "enableRows"
+  const url = '/enableRows'
   sendAjaxRequestEnableRows(url, data)
     .done(function (response) {
       handleSelectButtons()
@@ -412,7 +414,7 @@ function enableRows (selectedRows) {
 function sendAjaxRequestEnableRows (url, data) {
   return $.ajax({
     type: 'POST',
-    url: '/enableRows',
+    url: url,
     data: data,
     contentType: 'application/json;charset=UTF-8',
     cache: false
@@ -432,8 +434,9 @@ function disableRows (deselected_rows) {
   // Ensure file_ids contains unique entries
   file_ids = unique(file_ids)
   // Convert the file_ids list to a json string for sending
-  const data = JSON.stringify(file_ids)
-  sendAjaxRequestDisableRow('/disableRows', data)
+  const url = "/disableRows"
+  let data = JSON.stringify(file_ids)
+  sendAjaxRequestDisableRow(url, data)
     .done(
       function (response) {
         handleSelectButtons()
@@ -462,11 +465,15 @@ function sendAjaxRequestDisableRow (url, data) {
   })
 }
 
-/* #### showPreviewText() #### */
 
-//* Opens modal containing the document preview text.
+/***
+ * right click option for context menu
+ * @param {object} rowId -  value attribute of the selected elements.
+ * @return {void}
+ */
 function showPreviewText (rowId) {
-  sendAjaxRequestPreview('/getPreview', rowId)
+  const url = "/getPreview"
+  sendAjaxRequestPreview(url, rowId)
     .done(
       function (response) {
         response = JSON.parse(response)
@@ -486,6 +493,11 @@ function showPreviewText (rowId) {
     })
 }
 
+/***
+ * @param {string} url
+ * @param {object} rowId -  value attribute of the selected elements.
+ * @return {object} ajax - XMLHttpRequest object
+ */
 function sendAjaxRequestPreview (url, rowId) {
   return $.ajax({
     type: 'POST',
@@ -495,7 +507,10 @@ function sendAjaxRequestPreview (url, rowId) {
   })
 }
 
-/* #### editName() #### */
+/***
+ * Edit the name of the document.
+ * @param {object} rowId -  value attribute of the selected elements.
+ */
 function editName (rowId) {
   $('#edit-form').remove()
   cell_name = $('#' + rowId).find('td:eq(1)').text()
@@ -507,7 +522,10 @@ function editName (rowId) {
   $('#edit-modal').modal()
 }
 
-/* #### editClass() #### */
+/***
+ * Edit the Class name.
+ * @param {object} rowId -  value attribute of the selected elements.
+ */
 function editClass (rowId) {
   $('#edit-form').remove()
   let docName = $('#' + rowId).find('td:eq(1)').text()
@@ -521,6 +539,11 @@ function editClass (rowId) {
 }
 
 /* #### mergeSelected() #### */
+/***
+ * Merges the selected documents.
+ * @param cell
+ * @param selectedRows
+ */
 function mergeSelected (cell, selectedRows) {
   let rowIds = []
   selectedRows.each(function () {
@@ -563,10 +586,7 @@ function applyClassSelected (cell, selectedRows) {
 
 // Helper function saves value in edit dialog and updates table with a new document
 function mergeDocuments (rowIds, column, source, value, milestone) {
-  // Validation - make sure the document name is not left blank
-
-  // Prepare data and request
-  let url = '/mergeDocuments'
+  const url = '/mergeDocuments'
   let data = JSON.stringify([rowIds, value, source, milestone])
 
   // Do Ajax
@@ -618,8 +638,8 @@ function sendAjaxRequestMergedocuments (url, data) {
 // Helper function saves value in edit dialog and updates table for multiple rows
 function saveMultiple (rowIds, column, value) {
   // Prepare data and request
-  url = '/setClassSelected'
-  data = JSON.stringify([rowIds, value])
+  const url = '/setClassSelected'
+  let data = JSON.stringify([rowIds, value])
   // Do Ajax
   sendAjaxRequestSaveMultiple(url, data)
     .done(
@@ -732,13 +752,11 @@ function sendAjaxRequestSaveOne (url, data) {
 
 /***
  * Helper function deletes selected row and updates table
- * return {void}
  * @param {object} rowId -  value attribute of the selected elements.
+ * @return {void}
  */
 function deleteOne (rowId) {
-  // alert("Delete: " + rowId);
   const url = '/deleteOne'
-
   sendAjaxRequestDeleteOne(url, rowId)
     .done(
       function (response) {
@@ -759,7 +777,7 @@ function deleteOne (rowId) {
 
 /**
  * @param {string} url - url of thepage
- * @param rowId
+ * @param {object} rowId -  value attribute of the selected elements.
  * @return {object} ajax - XMLHttpRequest object
  */
 function sendAjaxRequestDeleteOne (url, rowId) {
@@ -772,12 +790,10 @@ function sendAjaxRequestDeleteOne (url, rowId) {
   })
 }
 
-/* #### deleteDoc() #### */
-
-// deletes the selected document or the document where the user right clicks
 /***
  * Delete the selected document.
- * @param rowId
+ * @param {object} rowId -  value attribute of the selected elements.
+ * @return {void}
  */
 function deleteDoc (rowId) {
   let docName = $('#' + rowId).find('td:eq(1)').text()
@@ -796,12 +812,10 @@ function deleteDoc (rowId) {
 /**
  * Helper function deletes selected rows and updates table
  * @return {void}
- * @param {data} rowIds - ids of the row
+ * @param {object} rowIds -  value attribute of the selected elements.
  */
 function deleteSelected (rowIds) {
-  const url = '/deleteSelected'
-
-  // Do Ajax
+  const url = "/deleteSelected"
   sendajaxRequestDeleteSelected(url, rowIds)
     .done(
       function (response) {
@@ -828,7 +842,7 @@ function deleteSelected (rowIds) {
  * Ajax call to delete the selected documents.
  * @return {object} ajax- XMLHttpRequest object
  * @param {string} url - url of the page
- * @param {data} rowIds - id of the rows
+ * @param {object} rowIds -  value attribute of the selected elements.
  */
 function sendajaxRequestDeleteSelected (url, rowIds) {
   return $.ajax({
@@ -843,7 +857,8 @@ function sendajaxRequestDeleteSelected (url, rowIds) {
 /**
  * deletes all the selected rows.
  * @return {void}
- * @param {array} selectedRows - array of rows that have been selected */
+ * @param {array} selectedRows - array of rows that have been selected
+ */
 function deleteAllSelected (selectedRows) {
   const deleteDiv = $('#delete-modal')
   const deleteModal = deleteDiv.find('.modal-body')
