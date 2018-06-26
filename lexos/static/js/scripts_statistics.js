@@ -152,6 +152,16 @@ function generateStatsFileTable () {
     )
 }
 
+/**
+ * Scrolls page to results after they are generated.
+ * @returns {void}
+ */
+function scrollToStats () {
+  $('html, body').animate({
+    scrollTop: $('#get-stats').offset().top
+  }, 1000)
+}
+
 $(function () {
   // Hide the stats result div.
   $('#file-stats-result').css({'display': 'none'})
@@ -198,7 +208,6 @@ $(function () {
       generateStatsFileTable()
       // Display the file result table.
       $('#file-stats-result').css({'display': 'block'})
-
       // Only get corpus info when there are more than one file.
       if (checkedFiles.length > 1) {
         // Get the corpus result.
@@ -207,9 +216,11 @@ $(function () {
         generateStatsBoxPlot()
         // Display the result.
         $('#corpus-stats-result').css({'display': 'block'})
+        scrollToStats()
       } else { // Else hide the corpus stats result div.
         $('#corpus-stats-result').css({'display': 'none'})
       }
+      scrollToStats()
     } else {
       utility.runModal(error)
     }
