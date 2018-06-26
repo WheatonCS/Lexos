@@ -551,7 +551,6 @@ function editClass (rowId) {
  */
 function mergeSelected (cell, selectedRows) {
   let rowIds = []
-  console.log(cell)
   selectedRows.each(function () {
     let id = $(this).attr('id')
     rowIds.push(id)
@@ -607,7 +606,6 @@ function applyClassSelected (cell, selectedRows) {
  * @return{void}
  */
 function mergeDocuments (rowIds, column, source, value, milestone, table) {
-  console.log(rowIds, column, source, value, milestone)
   const url = '/mergeDocuments'
   let data = JSON.stringify([rowIds, value, source, milestone])
 
@@ -885,7 +883,7 @@ function deleteSelected (rowIds, table) {
         errorModal.find('.modal-body').html('Lexos could not delete the requested documents.')
         errorModal.modal()
         $('#delete-modal').modal('hide')
-        console.log('bad: ' + textStatus + ': ' + errorThrown)
+        console.log('bad: ' + textStatus + ' : ' + errorThrown)
       })
 }
 
