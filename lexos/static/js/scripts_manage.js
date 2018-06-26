@@ -3,15 +3,15 @@
  * @return {void}
  */
 $(function () {
-  initTable() // function to initialize the table.
-  tableAction()
+  const table = initTable() // function to initialize the table.
+  tableAction(table)
 })
 /**
  * @return {object} table - initialize the table
  * Change the element name and test whether the table variable persists
  * */
 function initTable () {
-  return (table = $('#demo').DataTable({
+  return $('#demo').DataTable({
     paging: true,
     scrollY: 400,
     autoWidth: false,
@@ -44,7 +44,7 @@ function initTable () {
       {width: '150', type: 'natural', targets: [1, 2, 3]}
     ],
     order: [[1, 'asc']]
-  }))
+  })
 }
 
 /**
@@ -52,8 +52,8 @@ function initTable () {
  * button on top-right of the table. buttons: "Select All", "Deselect All" and "Delete Selected"
  * @return {void}
  */
-function tableAction () {
-  registerColumn() // Draw the table column and make it searchable.
+function tableAction (table) {
+  registerColumn(table) // Draw the table column and make it searchable.
 
   /* Add all rows with .selected to the DataTables activeRows array
    It does not appear that this array needs to be maintained after
@@ -76,51 +76,39 @@ function tableAction () {
   // I wrote a new way to do this. First, append an inline p tag to where the default counter used to be before I took it out
   // NOTE the p is cleared when going to a new page of the table. To fix this, datatables.js must be made local and changed.
 
-  registerSelectEvents()
-  // Area Select events callback
-  $('#demo').DataTable()
-    .on('select', function (e, dt, type, indexes) {
-      if (type === 'row') {
-        let data = $('#demo').DataTable().rows(indexes).data()[0]
-      }
-    })
-    .on('deselect', function (e, dt, type, indexes) {
-      if (type === 'row') {
-        let data = $('#demo').DataTable().rows(indexes).data()
-      }
-    })
-
+  registerSelectEvents(table)
   // Perform the different right click options on the document.
-  tableDocumentActions()
+  tableDocumentActions(table)
 
   // Call Save function on click.
   $('#save').click(function () {
-    saveFunction()
+    saveFunction(table)
   })
   // Call Delete function on click.
   $('#delete').click(function () {
     let selectedRows = table.rows({selected: true}).nodes().to$()
-    deleteAllSelected(selectedRows)
+    deleteAllSelected(selectedRows, table)
   })
 
   // Trigger selection buttons
-  $('#selectAllDocs').click(function () { selectAll() })
-  $('#deselectAllDocs').click(function () { deselectAll() })
+  $('#selectAllDocs').click(function () { selectAll(table) })
+  $('#deselectAllDocs').click(function () { deselectAll(table) })
   $('#deleteSelectedDocs').click(function () {
     let selectedRows = table.rows({selected: true}).nodes().to$()
-    deleteAllSelected(selectedRows)
+    deleteAllSelected(selectedRows, table)
   })
   // Remove the footer from alert modals when hidden
-  $('#alert-modal').on('hidden.bs.modal', function (e) {
+  $('#alert-modal').on('hidden.bs.modal', function () {
     $('#alert-modal .modal-footer').remove()
   })
 }
 
 /**
  * Enable search and ordering in the table within the document.
+ * @param {object} table - table object
  * @return{void}
  */
-function registerColumn () {
+function registerColumn (table) {
   // Draw the index column
   table.on('order.dt search.dt', function () {
     table
@@ -167,24 +155,24 @@ function registerColumn () {
  * selection and deselection of the table rows.
  * @return {void}
  * */
-function registerSelectEvents () {
+function registerSelectEvents (table) {
   table
     .on('select', function (e, dt, type, indexes) {
       // Get selected rows as a jQuery object
       const selectedRows = table.rows(indexes).nodes().to$()
       // Call the ajax function
-      enableRows(selectedRows)
-      handleSelectButtons()
+      enableRows(selectedRows,table)
+      handleSelectButtons(table)
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // add the correct counter text to the p
       $('#bttn-downloadSelectedDocs').show()
     })
     .on('deselect', function (e, dt, type, indexes) {
       // Get deselected rows as a jQuery object
-      const deselected_rows = table.rows(indexes).nodes().to$()
+      const deselectedRows = table.rows(indexes).nodes().to$()
       // Call the ajax function
-      disableRows(deselected_rows)
-      handleSelectButtons()
+      disableRows(deselectedRows,table)
+      handleSelectButtons(table)
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // same as the other one
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
       if (table.rows('.selected').data().length === 0) {
@@ -197,18 +185,18 @@ function registerSelectEvents () {
  * Right click options on the documents
  * @return {void}
  */
-function tableDocumentActions () {
-  handleSelectButtons()
+function tableDocumentActions (table) {
+  handleSelectButtons(table)
   let selectedRows
   $('#demo').contextmenu({
     target: '#context-menu',
     scopes: 'td',
     before: function () {
-      prepareContextMenu()
+      prepareContextMenu(table)
     },
     onItem: function (cell, e) {
       let target = cell.parent().attr('id')
-      action = $(e.target).attr('data-context')
+      let action = $(e.target).attr('data-context')
       switch (action) {
         case 'preview':
           showPreviewText(target)
@@ -223,10 +211,10 @@ function tableDocumentActions () {
           // clone(target);
           break
         case 'delete_doc':
-          deleteDoc(target)
+          deleteDoc(target, table)
           break
         case 'select_all':
-          selectAll()
+          selectAll(table)
           break
         case 'deselect_all':
           deselectAll()
@@ -241,14 +229,14 @@ function tableDocumentActions () {
           break
         case 'delete_all_selected':
           selectedRows = table.rows({selected: true}).nodes().to$()
-          deleteAllSelected(selectedRows)
+          deleteAllSelected(selectedRows, table)
           break
       }
     }
   })
   // Refresh context menu on show
   $('#context-menu').on('show.bs.context', function () {
-    prepareContextMenu()
+    prepareContextMenu(table)
   })
 }
 
@@ -257,7 +245,7 @@ function tableDocumentActions () {
  * Save button in pop-up modal.
  * @return {void}
  */
-function saveFunction () {
+function saveFunction (table) {
   const merge = $('#merge').val()
   let rowId = $('#tmp-row').val()
   const column = $('#tmp-column').val()
@@ -274,12 +262,12 @@ function saveFunction () {
       } else {
         milestone = ''
       }
-      mergeDocuments(rowIds, column, source, value, milestone)
+      mergeDocuments(rowIds, column, source, value, milestone,table)
     } else {
-      saveMultiple(rowIds, column, value)
+      saveMultiple(rowIds, column, value, table)
     }
   } else {
-    saveOne(rowId, column, value)
+    saveOne(rowId, column, value, table)
   }
 }
 
@@ -297,7 +285,7 @@ $(document).on('change', $('#addMilestone'), function () {
  * Folder icon on the top right of the navigation bar.
  * @return {void}
  */
-function toggleActiveDocsIcon () {
+function toggleActiveDocsIcon (table) {
   // Hide the active docs icon if there are no docs selected
   if (table.rows({selected: true}).ids().length < 1) {
     $('.fa-folder-open-o').fadeOut(200)
@@ -311,15 +299,15 @@ function toggleActiveDocsIcon () {
  * Sets the status of all the documents in File manager as 'selected'
  * @return {void}
  */
-function selectAll () {
+function selectAll (table) {
   const url = '/selectAll'
   sendAjaxRequestSelectAll(url)
     .done(
       function (response) {
         // Select All Rows in the UI
         table.rows().select()
-        handleSelectButtons()
-        toggleActiveDocsIcon()
+        handleSelectButtons(table)
+        toggleActiveDocsIcon(table)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -344,15 +332,15 @@ function sendAjaxRequestSelectAll (url) {
  * deselects all the document in file manager.
  * @return {void}
  */
-function deselectAll () {
+function deselectAll (table) {
   const url = '/deselectAll'
   sendAjaxRequestDeselect(url)
     .done(
       function (response) {
         // Deselect All Rows in the UI
         table.rows().deselect()
-        handleSelectButtons()
-        toggleActiveDocsIcon()
+        handleSelectButtons(table)
+        toggleActiveDocsIcon(table)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -383,20 +371,20 @@ function sendAjaxRequestDeselect (url) {
  * @param {array} selectedRows - rows matched by the selector
  * @return {void}
  */
-function enableRows (selectedRows) {
-  let file_ids = []
+function enableRows (selectedRows,table) {
+  let fileIds = []
   selectedRows.each(function (index) {
-    file_ids.push($(this).attr('id'))
+    fileIds.push($(this).attr('id'))
   })
-  // Ensure file_ids contains unique entries
-  file_ids = unique(file_ids)
-  // Convert the file_ids list to a json string for sending
-  const data = JSON.stringify(file_ids)
+  // Ensure fileIds contains unique entries
+  fileIds = unique(fileIds)
+  // Convert the fileIds list to a json string for sending
+  const data = JSON.stringify(fileIds)
   const url = '/enableRows'
   sendAjaxRequestEnableRows(url, data)
     .done(function (response) {
-      handleSelectButtons()
-      toggleActiveDocsIcon()
+      handleSelectButtons(table)
+      toggleActiveDocsIcon(table)
     })
     .fail(function (textStatus, errorThrown) {
       $('#error-modal .modal-body').html('Lexos could not select the requested documents.')
@@ -423,24 +411,24 @@ function sendAjaxRequestEnableRows (url, data) {
 
 /***
  * Deselects the row.
- * @param {array} deselected_rows - rows matched by the selector.
+ * @param {array} deselectedRows - rows matched by the selector.
  * @return {void}
  */
-function disableRows (deselected_rows) {
-  let file_ids = []
-  deselected_rows.each(function (index) {
-    file_ids.push($(this).attr('id'))
+function disableRows (deselectedRows,table) {
+  let fileIds = []
+  deselectedRows.each(function (index) {
+    fileIds.push($(this).attr('id'))
   })
-  // Ensure file_ids contains unique entries
-  file_ids = unique(file_ids)
-  // Convert the file_ids list to a json string for sending
+  // Ensure fileIds contains unique entries
+  fileIds = unique(fileIds)
+  // Convert the fileIds list to a json string for sending
   const url = '/disableRows'
-  let data = JSON.stringify(file_ids)
+  let data = JSON.stringify(fileIds)
   sendAjaxRequestDisableRow(url, data)
     .done(
       function (response) {
-        handleSelectButtons()
-        toggleActiveDocsIcon()
+        handleSelectButtons(table)
+        toggleActiveDocsIcon(table)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -493,7 +481,7 @@ function showPreviewText (rowId) {
 }
 
 /***
- * @param {string} url
+ * @param {string} url - url for the page
  * @param {string} rowId -  value attribute of the selected elements.
  * @return {object} ajax - XMLHttpRequest object
  */
@@ -509,6 +497,7 @@ function sendAjaxRequestPreview (url, rowId) {
 /***
  * Edit the name of the document.
  * @param {string} rowId -  value attribute of the selected elements.
+ * @return {void}
  */
 function editName (rowId) {
   $('#edit-form').remove()
@@ -524,12 +513,13 @@ function editName (rowId) {
 /***
  * Edit the Class name.
  * @param {string} rowId -  value attribute of the selected elements.
+ * @return {void}
  */
 function editClass (rowId) {
   $('#edit-form').remove()
   let docName = $('#' + rowId).find('td:eq(1)').text()
-  let cell_value = $('#' + rowId).find('td:eq(2)').text()
-  let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
+  let cellValue = $('#' + rowId).find('td:eq(2)').text()
+  let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cellValue + '">'
   form += '<input id="tmp-row" type="hidden" value="' + rowId + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
   $('#edit_title').html('Edit <b>' + docName + '</b> Class')
@@ -542,6 +532,7 @@ function editClass (rowId) {
  * Merges the selected documents.
  * @param {array} cell - contains the columns and rows index
  * @param {array} selectedRows - rows matched by the selector
+ * @return {void}
  */
 function mergeSelected (cell, selectedRows) {
   let rowIds = []
@@ -569,19 +560,20 @@ function mergeSelected (cell, selectedRows) {
  *
  * @param {array} cell - contains the columns and rows index
  * @param {array} selectedRows - rows matched by the selector
+ * @return {void}
  */
 function applyClassSelected (cell, selectedRows) {
-  rowIds = []
+  let rowIds = []
   selectedRows.each(function () {
     let id = $(this).attr('id')
     rowIds.push(id)
   })
   $('#edit-form').remove()
-  cell_value = cell.text()
-  let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cell_value + '">'
+  const cellValue = cell.text()
+  let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cellValue + '">'
   form += '<input id="tmp-row" type="hidden" value="' + rowIds + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
-  $('#edit_title').html('Apply <b>' + cell_value + '</b> Class to Selected Documents')
+  $('#edit_title').html('Apply <b>' + cellValue + '</b> Class to Selected Documents')
   $('#modal-body').html(form)
   $('#edit-modal').modal()
 }
@@ -596,9 +588,10 @@ function applyClassSelected (cell, selectedRows) {
  * @param {string} source - name of the document.
  * @param {string} value - name of the merged document.
  * @param {string} milestone - name of the milestone.
+ * @return{void}
  */
-function mergeDocuments (rowIds, column, source, value, milestone) {
-  console.log(rowIds, column,source,value,milestone)
+function mergeDocuments (rowIds, column, source, value, milestone,table) {
+  console.log(rowIds, column, source, value, milestone)
   const url = '/mergeDocuments'
   let data = JSON.stringify([rowIds, value, source, milestone])
 
@@ -616,12 +609,12 @@ function mergeDocuments (rowIds, column, source, value, milestone) {
           .add([newIndex, value, '', source, text])
           .draw(false)
           .node()
-        table.rows(newIndex).select() // This automatically calls enableRows()
+        table.rows(newIndex).select(table) // This automatically calls enableRows()
         $(rowNode)
           .attr('id', newIndex)
           .addClass('selected')
         $(rowNode).children().first().css('text-align', 'right')
-        handleSelectButtons()
+        handleSelectButtons(table)
         $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have 1 active document(s)'
         // toggleActiveDocsIcon();
         $('#edit-modal').modal('hide')
@@ -657,8 +650,9 @@ function sendAjaxRequestMergedocuments (url, data) {
  * @param {array} rowIds - value attribute of the selected elements.
  * @param {string} column - not sure
  * @param {string} value - name that the user inputs.
+ * @return {void}
  */
-function saveMultiple (rowIds, column, value) {
+function saveMultiple (rowIds, column, value, table) {
   // Prepare data and request
   const url = '/setClassSelected'
   let data = JSON.stringify([rowIds, value])
@@ -682,7 +676,7 @@ function saveMultiple (rowIds, column, value) {
         if (reloadPage == true) {
           window.location.reload()
         } else {
-          toggleActiveDocsIcon()
+          toggleActiveDocsIcon(table)
           table.draw()
         }
       })
@@ -717,7 +711,7 @@ function sendAjaxRequestSaveMultiple (url, data) {
  * @param {object} value - value attribute of the selected elements.
  * @return {boolean} - return false if the name of the document is empty
  */
-function saveOne (rowId, column, value) {
+function saveOne (rowId, column, value, table) {
   // Validation - make sure the document name is not left blank
   if (column == 1 && value == '') {
     msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
@@ -750,7 +744,7 @@ function saveOne (rowId, column, value) {
         $('#edit-modal').modal('hide')
         $('#edit-form').remove()
         table.draw()
-        toggleActiveDocsIcon()
+        toggleActiveDocsIcon(table)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -782,7 +776,7 @@ function sendAjaxRequestSaveOne (url, data) {
  * @param {string} rowId -  value attribute of the selected elements.
  * @return {void}
  */
-function deleteOne (rowId) {
+function deleteOne (rowId, table) {
   const url = '/deleteOne'
   sendAjaxRequestDeleteOne(url, rowId)
     .done(
@@ -790,8 +784,8 @@ function deleteOne (rowId) {
         // Update the UI
         let id = '#' + rowId
         table.row(id).remove()
-        handleSelectButtons()
-        toggleActiveDocsIcon()
+        handleSelectButtons(table)
+        toggleActiveDocsIcon(table)
         table.draw()
       })
     .fail(function (jqXHR, textStatus, errorThrown) {
@@ -822,7 +816,7 @@ function sendAjaxRequestDeleteOne (url, rowId) {
  * @param {string} rowId -  value attribute of the selected elements.
  * @return {void}
  */
-function deleteDoc (rowId) {
+function deleteDoc (rowId, table) {
   let docName = $('#' + rowId).find('td:eq(1)').text()
   let html = '<p>Are you sure you wish to delete <b>' + docName + '</b>?</p>'
   html += '<span id="deleteId" style="display:none;">' + rowId + '</span>'
@@ -832,7 +826,7 @@ function deleteDoc (rowId) {
   $('#delete-modal').modal()
     .one('click', '#confirm-delete-bttn', function () {
       rowId = $('#deleteId').text()
-      deleteOne(rowId)
+      deleteOne(rowId, table)
     })
 }
 
@@ -841,7 +835,7 @@ function deleteDoc (rowId) {
  * @return {void}
  * @param {object} rowIds -  value attribute of the selected elements.
  */
-function deleteSelected (rowIds) {
+function deleteSelected (rowIds,table) {
   const url = '/deleteSelected'
   sendajaxRequestDeleteSelected(url, rowIds)
     .done(
@@ -853,8 +847,8 @@ function deleteSelected (rowIds) {
           let id = '#' + rowIds[i]
           table.row(id).remove()
         })
-        handleSelectButtons()
-        toggleActiveDocsIcon()
+        handleSelectButtons(table)
+        toggleActiveDocsIcon(table)
         table.draw()
       })
     .fail(
@@ -886,7 +880,7 @@ function sendajaxRequestDeleteSelected (url, rowIds) {
  * @return {void}
  * @param {array} selectedRows - array of rows that have been selected
  */
-function deleteAllSelected (selectedRows) {
+function deleteAllSelected (selectedRows, table) {
   const deleteDiv = $('#delete-modal')
   const deleteModal = deleteDiv.find('.modal-body')
   let rowIds = []
@@ -902,7 +896,7 @@ function deleteAllSelected (selectedRows) {
   deleteDiv.modal()
     .one('click', '#confirm-delete-bttn', function () {
       const rowIds = $('#deleteIds').text()
-      deleteSelected(rowIds)
+      deleteSelected(rowIds, table)
     })
 }
 
@@ -922,7 +916,7 @@ function unique (fileIds) {
  * the number of rows currently selected
  * @return {void}
  */
-function prepareContextMenu () {
+function prepareContextMenu (table) {
   const contextMenu = $('#context-menu')
   // Refresh all options
   contextMenu.find('li').removeClass('disabled')
@@ -931,18 +925,18 @@ function prepareContextMenu () {
   // Comparison values
   let numRows = table.rows().ids().length
   let numRowsSelected = table.rows('.selected').data().length
-  console.log(numRowsSelected)
   // Set config options -- Numbers refer to li elements, including dividers
   // The numbers below corresponds to the different options in right lick
   // on the document.
   let opts
   switch (true) {
-    /*  5: 'Select All Documents'
-        6: 'Deselect All Documents
-        8: 'Merge Selected Documents'
-        9: 'Apply Class to Selected Documents'
-        10: 'Delete Selected Documents'
-    */
+    /*
+    5: 'Select All Documents'
+    6: 'Deselect All Documents
+    8: 'Merge Selected Documents'
+    9: 'Apply Class to Selected Documents'
+    10: 'Delete Selected Documents' */
+
     case numRowsSelected === 0: // No rows selected
       opts = [6, 8, 9, 10]
       break
@@ -970,7 +964,7 @@ function prepareContextMenu () {
  * Helper function to change state of selection buttons on events
  * @return {void}
  */
-function handleSelectButtons () {
+function handleSelectButtons(table) {
   if (table.rows('.selected').data().length === 0) {
     $('#selectAllDocs').prop('disabled', false)
     $('#deselectAllDocs').prop('disabled', true)
