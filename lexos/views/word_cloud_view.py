@@ -37,8 +37,8 @@ def word_cloud():
         # there is no wordcloud option so we don't initialize that
         return render_template(
             'wordcloud.html',
-            labels=labels,
             itm="word-cloud",
+            labels=labels,
             numActiveDocs=num_active_docs)
     if request.method == "POST":
         # "POST" request occur when html form is submitted
