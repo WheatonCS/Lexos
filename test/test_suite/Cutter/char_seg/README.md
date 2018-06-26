@@ -21,7 +21,7 @@ ResultFiles_3_numbered_large, ResultFiles_4_randomCharacters
 	- Keep Last Segment Size Threshold (%) at 50
 
 Results:
-- After the cut you should have 13 different segments containing 10 characters 
+- After the cut you should have 9 different segments containing 10 characters 
 each with an overlap of 3 characters. 
 
 
@@ -37,7 +37,7 @@ each with an overlap of 3 characters.
 	- Keep Last Segment Size Threshold (%) at 50
 
 Results:
-- After the cut you should have 16 different segments containing 2-3 characters each. 
+- After the cut you should have 13 different segments containing 3 characters each. 
 
 
 ## Test file: 3_numbered_large.txt
@@ -69,5 +69,5 @@ except for the last one which is shorter
 
 Results:
 - After the cut you should have 20 different segments containing 5 characters 
-except for the last one which is shorter, overlapping by 2
+except for the last one which is shorter(3 characters), overlapping by 2
 
