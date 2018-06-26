@@ -371,9 +371,6 @@ function sendAjaxRequestDeselect (url) {
   })
 }
 
-/* #### enableRows() #### */
-
-// Enables selected rows in the File Manager and sets UI to selected.
 /***
  * Enables selected rows in the File Manager by setting the status of the
  * rows as  selected.
