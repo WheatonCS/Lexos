@@ -37,10 +37,10 @@ def rolling_window():
         legend_labels = [""]
         return render_template(
             'rwanalysis.html',
+            itm="rolling-windows",
             labels=labels,
             legendLabels=legend_labels,
             rwadatagenerated=False,
-            itm="rolling-windows",
             numActiveDocs=num_active_docs)
     if request.method == "POST":
         # "POST" request occurs when user hits submit (Get Graph) button
@@ -67,6 +67,7 @@ def rolling_window():
         if session['rwoption']['rollingwindowsize'] != '':
             return render_template(
                 'rwanalysis.html',
+                itm="rolling-windows",
                 labels=labels,
                 data=data_points,
                 graphTitle=graph_title,
@@ -74,11 +75,11 @@ def rolling_window():
                 yAxisLabel=y_axis_label,
                 legendLabels=legend_labels,
                 rwadatagenerated=True,
-                itm="rolling-windows",
                 numActiveDocs=num_active_docs)
         else:
             return render_template(
                 'rwanalysis.html',
+                itm="rolling-windows",
                 labels=labels,
                 data=data_points,
                 graphTitle=graph_title,
@@ -86,5 +87,4 @@ def rolling_window():
                 yAxisLabel=y_axis_label,
                 legendLabels=legend_labels,
                 rwadatagenerated=False,
-                itm="rolling-windows",
                 numActiveDocs=num_active_docs)
