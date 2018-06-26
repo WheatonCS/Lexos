@@ -312,7 +312,7 @@ function toggleActiveDocsIcon () {
  * @return {void}
  */
 function selectAll () {
-  const url = "/selectAll"
+  const url = '/selectAll'
   sendAjaxRequestSelectAll(url)
     .done(
       function (response) {
@@ -345,7 +345,7 @@ function sendAjaxRequestSelectAll (url) {
  * @return {void}
  */
 function deselectAll () {
-  const url = "/deselectAll"
+  const url = '/deselectAll'
   sendAjaxRequestDeselect(url)
     .done(
       function (response) {
@@ -434,7 +434,7 @@ function disableRows (deselected_rows) {
   // Ensure file_ids contains unique entries
   file_ids = unique(file_ids)
   // Convert the file_ids list to a json string for sending
-  const url = "/disableRows"
+  const url = '/disableRows'
   let data = JSON.stringify(file_ids)
   sendAjaxRequestDisableRow(url, data)
     .done(
@@ -465,14 +465,13 @@ function sendAjaxRequestDisableRow (url, data) {
   })
 }
 
-
 /***
  * right click option for context menu
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  * @return {void}
  */
 function showPreviewText (rowId) {
-  const url = "/getPreview"
+  const url = '/getPreview'
   sendAjaxRequestPreview(url, rowId)
     .done(
       function (response) {
@@ -495,7 +494,7 @@ function showPreviewText (rowId) {
 
 /***
  * @param {string} url
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  * @return {object} ajax - XMLHttpRequest object
  */
 function sendAjaxRequestPreview (url, rowId) {
@@ -509,22 +508,22 @@ function sendAjaxRequestPreview (url, rowId) {
 
 /***
  * Edit the name of the document.
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  */
 function editName (rowId) {
   $('#edit-form').remove()
-  cell_name = $('#' + rowId).find('td:eq(1)').text()
-  let form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cell_name + '">'
+  let cellName = $('#' + rowId).find('td:eq(1)').text()
+  let form = '<div id="edit-form">Document Name <input id="tmp" type="text" value="' + cellName + '">'
   form += '<input id="tmp-row" type="hidden" value="' + rowId + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="1"></div>'
-  $('#edit_title').html('Edit Name of <b>' + cell_name + '</b>')
+  $('#edit_title').html('Edit Name of <b>' + cellName + '</b>')
   $('#modal-body').html(form)
   $('#edit-modal').modal()
 }
 
 /***
  * Edit the Class name.
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  */
 function editClass (rowId) {
   $('#edit-form').remove()
@@ -541,19 +540,20 @@ function editClass (rowId) {
 /* #### mergeSelected() #### */
 /***
  * Merges the selected documents.
- * @param cell
- * @param selectedRows
+ * @param {array} cell - contains the columns and rows index
+ * @param {array} selectedRows - rows matched by the selector
  */
 function mergeSelected (cell, selectedRows) {
   let rowIds = []
+  console.log(cell)
   selectedRows.each(function () {
     let id = $(this).attr('id')
     rowIds.push(id)
   })
   $('#edit-form').remove()
-  cell_value = 'merge-' + $('#' + rowIds[0]).find('td:eq(1)').text()
+  let cellValue = 'merge-' + $('#' + rowIds[0]).find('td:eq(1)').text()
   let form = '<div id="edit-form">New Document Name '
-  form += '<input id="tmp" type="text" value="' + cell_value + '"><br>'
+  form += '<input id="tmp" type="text" value="' + cellValue + '"><br>'
   form += '<input id="addMilestone" type="checkbox"> Add milestone at end of documents'
   form += '<span id="milestoneField" style="display:none;">'
   form += '<br>Milestone <input id="milestone" type="text" value="#EOF#"></span>'
@@ -565,7 +565,11 @@ function mergeSelected (cell, selectedRows) {
   $('#edit-modal').modal()
 }
 
-/* #### applyClassSelected() #### */
+/***
+ *
+ * @param {array} cell - contains the columns and rows index
+ * @param {array} selectedRows - rows matched by the selector
+ */
 function applyClassSelected (cell, selectedRows) {
   rowIds = []
   selectedRows.each(function () {
@@ -585,7 +589,16 @@ function applyClassSelected (cell, selectedRows) {
 /* #### mergeDocuments() #### */
 
 // Helper function saves value in edit dialog and updates table with a new document
+/***
+ * Merges the document and updates the table with a new document.
+ * @param {array} rowIds - value attribute of the selected elements.
+ * @param {string} column - not sure what this is exactly for.
+ * @param {string} source - name of the document.
+ * @param {string} value - name of the merged document.
+ * @param {string} milestone - name of the milestone.
+ */
 function mergeDocuments (rowIds, column, source, value, milestone) {
+  console.log(rowIds, column,source,value,milestone)
   const url = '/mergeDocuments'
   let data = JSON.stringify([rowIds, value, source, milestone])
 
@@ -623,6 +636,12 @@ function mergeDocuments (rowIds, column, source, value, milestone) {
       })
 }
 
+/***
+ *
+ * @param {string} url - url for the page.
+ * @param {string}  data - file ids
+ * @return {object} ajax - XMLHttpRequest object
+ */
 function sendAjaxRequestMergedocuments (url, data) {
   return $.ajax({
     type: 'POST',
@@ -633,9 +652,12 @@ function sendAjaxRequestMergedocuments (url, data) {
   })
 }
 
-/* #### saveMultiple() #### */
-
-// Helper function saves value in edit dialog and updates table for multiple rows
+/***
+ * Helper function saves value in edit dialog and updates table for multiple rows
+ * @param {array} rowIds - value attribute of the selected elements.
+ * @param {string} column - not sure
+ * @param {string} value - name that the user inputs.
+ */
 function saveMultiple (rowIds, column, value) {
   // Prepare data and request
   const url = '/setClassSelected'
@@ -673,6 +695,11 @@ function saveMultiple (rowIds, column, value) {
       })
 }
 
+/***
+ * @param {string} url - url for the page.
+ * @param {string} data - row id and name the user types in.
+ * @return {object} ajax - XMLHttpRequest Object.
+ */
 function sendAjaxRequestSaveMultiple (url, data) {
   return $.ajax({
     type: 'POST',
@@ -685,7 +712,7 @@ function sendAjaxRequestSaveMultiple (url, data) {
 
 /***
  * Helper function saves value in edit dialog and updates table
- * @param {object} rowId - value attribute of the selected elements.
+ * @param {string} rowId - value attribute of the selected elements.
  * @param {object} column - value attribute of the selected elements.
  * @param {object} value - value attribute of the selected elements.
  * @return {boolean} - return false if the name of the document is empty
@@ -752,7 +779,7 @@ function sendAjaxRequestSaveOne (url, data) {
 
 /***
  * Helper function deletes selected row and updates table
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  * @return {void}
  */
 function deleteOne (rowId) {
@@ -777,7 +804,7 @@ function deleteOne (rowId) {
 
 /**
  * @param {string} url - url of thepage
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  * @return {object} ajax - XMLHttpRequest object
  */
 function sendAjaxRequestDeleteOne (url, rowId) {
@@ -792,7 +819,7 @@ function sendAjaxRequestDeleteOne (url, rowId) {
 
 /***
  * Delete the selected document.
- * @param {object} rowId -  value attribute of the selected elements.
+ * @param {string} rowId -  value attribute of the selected elements.
  * @return {void}
  */
 function deleteDoc (rowId) {
@@ -815,7 +842,7 @@ function deleteDoc (rowId) {
  * @param {object} rowIds -  value attribute of the selected elements.
  */
 function deleteSelected (rowIds) {
-  const url = "/deleteSelected"
+  const url = '/deleteSelected'
   sendajaxRequestDeleteSelected(url, rowIds)
     .done(
       function (response) {
