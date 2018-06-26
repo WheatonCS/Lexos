@@ -50,6 +50,7 @@ function initTable () {
 /**
  * This function calls upon different functions when the user clicks the three
  * button on top-right of the table. buttons: "Select All", "Deselect All" and "Delete Selected"
+ * @param {object} table - table object
  * @return {void}
  */
 function tableAction (table) {
@@ -99,7 +100,7 @@ function tableAction (table) {
   })
   // Remove the footer from alert modals when hidden
   $('#alert-modal').on('hidden.bs.modal', function () {
-    $('#alert-modal .modal-footer').remove()
+    $('#alert-modal').find('.modal-footer').remove()
   })
 }
 
@@ -153,6 +154,7 @@ function registerColumn (table) {
 
 /**
  * selection and deselection of the table rows.
+ * @param {object} table - table object
  * @return {void}
  * */
 function registerSelectEvents (table) {
@@ -161,7 +163,7 @@ function registerSelectEvents (table) {
       // Get selected rows as a jQuery object
       const selectedRows = table.rows(indexes).nodes().to$()
       // Call the ajax function
-      enableRows(selectedRows,table)
+      enableRows(selectedRows, table)
       handleSelectButtons(table)
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // add the correct counter text to the p
@@ -171,7 +173,7 @@ function registerSelectEvents (table) {
       // Get deselected rows as a jQuery object
       const deselectedRows = table.rows(indexes).nodes().to$()
       // Call the ajax function
-      disableRows(deselectedRows,table)
+      disableRows(deselectedRows, table)
       handleSelectButtons(table)
       document.getElementById('name').innerHTML = table.rows('.selected').data().length + ' active documents' // same as the other one
       $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
@@ -183,6 +185,7 @@ function registerSelectEvents (table) {
 
 /***
  * Right click options on the documents
+ * @param {object} table - table object
  * @return {void}
  */
 function tableDocumentActions (table) {
@@ -243,6 +246,7 @@ function tableDocumentActions (table) {
 /***
  * "Save" button for the right click options on the document.
  * Save button in pop-up modal.
+ * @param {object} table - table object
  * @return {void}
  */
 function saveFunction (table) {
@@ -262,7 +266,7 @@ function saveFunction (table) {
       } else {
         milestone = ''
       }
-      mergeDocuments(rowIds, column, source, value, milestone,table)
+      mergeDocuments(rowIds, column, source, value, milestone, table)
     } else {
       saveMultiple(rowIds, column, value, table)
     }
@@ -283,27 +287,30 @@ $(document).on('change', $('#addMilestone'), function () {
 /***
  * Shows or hides the Active Documents icon in response to the table state
  * Folder icon on the top right of the navigation bar.
+ * @param {object} table - table object
  * @return {void}
  */
 function toggleActiveDocsIcon (table) {
   // Hide the active docs icon if there are no docs selected
+  const openFolder = $('.fa-folder-open-o')
   if (table.rows({selected: true}).ids().length < 1) {
-    $('.fa-folder-open-o').fadeOut(200)
+    openFolder.fadeOut(200)
   } else {
-    $('.fa-folder-open-o')[0].dataset.originalTitle = 'You have ' + table.rows({selected: true}).ids().length + ' active document(s)'
-    $('.fa-folder-open-o').fadeIn(200)
+    openFolder[0].dataset.originalTitle = 'You have ' + table.rows({selected: true}).ids().length + ' active document(s)'
+    openFolder.fadeIn(200)
   }
 }
 
 /***
  * Sets the status of all the documents in File manager as 'selected'
+ * @param {object} table - table object
  * @return {void}
  */
 function selectAll (table) {
   const url = '/selectAll'
   sendAjaxRequestSelectAll(url)
     .done(
-      function (response) {
+      function () {
         // Select All Rows in the UI
         table.rows().select()
         handleSelectButtons(table)
@@ -311,8 +318,9 @@ function selectAll (table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not select all the documents.')
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html('Lexos could not select all the documents.')
+        errorModal.modal()
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
 }
@@ -330,13 +338,14 @@ function sendAjaxRequestSelectAll (url) {
 
 /***
  * deselects all the document in file manager.
+ * @param {object} table - table object
  * @return {void}
  */
 function deselectAll (table) {
   const url = '/deselectAll'
   sendAjaxRequestDeselect(url)
     .done(
-      function (response) {
+      function () {
         // Deselect All Rows in the UI
         table.rows().deselect()
         handleSelectButtons(table)
@@ -344,7 +353,8 @@ function deselectAll (table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not deselect all the documents.')
+        const errorModal =
+        $('#error-modal').find('.modal-body').html('Lexos could not deselect all the documents.')
         $('#error-modal').modal()
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
@@ -369,9 +379,10 @@ function sendAjaxRequestDeselect (url) {
  * Enables selected rows in the File Manager by setting the status of the
  * rows as  selected.
  * @param {array} selectedRows - rows matched by the selector
+ * @param {object} table - table object
  * @return {void}
  */
-function enableRows (selectedRows,table) {
+function enableRows (selectedRows, table) {
   let fileIds = []
   selectedRows.each(function (index) {
     fileIds.push($(this).attr('id'))
@@ -412,9 +423,10 @@ function sendAjaxRequestEnableRows (url, data) {
 /***
  * Deselects the row.
  * @param {array} deselectedRows - rows matched by the selector.
+ * @param {object} table - table object
  * @return {void}
  */
-function disableRows (deselectedRows,table) {
+function disableRows (deselectedRows, table) {
   let fileIds = []
   deselectedRows.each(function (index) {
     fileIds.push($(this).attr('id'))
@@ -588,9 +600,10 @@ function applyClassSelected (cell, selectedRows) {
  * @param {string} source - name of the document.
  * @param {string} value - name of the merged document.
  * @param {string} milestone - name of the milestone.
+ * @param {object} table - table object
  * @return{void}
  */
-function mergeDocuments (rowIds, column, source, value, milestone,table) {
+function mergeDocuments (rowIds, column, source, value, milestone, table) {
   console.log(rowIds, column, source, value, milestone)
   const url = '/mergeDocuments'
   let data = JSON.stringify([rowIds, value, source, milestone])
@@ -650,6 +663,7 @@ function sendAjaxRequestMergedocuments (url, data) {
  * @param {array} rowIds - value attribute of the selected elements.
  * @param {string} column - not sure
  * @param {string} value - name that the user inputs.
+ * @param {object} table - table object
  * @return {void}
  */
 function saveMultiple (rowIds, column, value, table) {
@@ -664,16 +678,16 @@ function saveMultiple (rowIds, column, value, table) {
         // Update the UI
         let reloadPage = false
         $.each(rowIds, function (i) {
-          id = '#' + rowIds[i]
+          let id = '#' + rowIds[i]
           $(id).find('td:eq(2)').text(value)
-          if ($(id).length == 0) {
+          if ($(id).length === 0) {
             reloadPage = true
           }
         })
         $('#edit-modal').modal('hide')
         $('#edit-form').remove()
         // Ugly hack to make sure rows are updated across table pages
-        if (reloadPage == true) {
+        if (reloadPage === true) {
           window.location.reload()
         } else {
           toggleActiveDocsIcon(table)
@@ -709,37 +723,39 @@ function sendAjaxRequestSaveMultiple (url, data) {
  * @param {string} rowId - value attribute of the selected elements.
  * @param {object} column - value attribute of the selected elements.
  * @param {object} value - value attribute of the selected elements.
+ * @param {object} table - table object
  * @return {boolean} - return false if the name of the document is empty
  */
 function saveOne (rowId, column, value, table) {
   // Validation - make sure the document name is not left blank
-  if (column == 1 && value == '') {
-    msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
+  if (column === 1 && value === '') {
+    let msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
     msg += '<p>Make sure you don\'t leave the field blank.</p>'
     $('#alert-modal .modal-body').html(msg)
     $('#alert-modal').modal()
-    revert = $('#' + rowId).find('td:eq(1)').text()
+    let revert = $('#' + rowId).find('td:eq(1)').text()
     $('#tmp').val(revert)
     return false
   }
   // Prepare data and request
   let data = JSON.stringify([rowId, value])
   let url = ''
+  let errorMsg
   switch (column) {
     case '1':
       url = '/setLabel'
-      err_msg = 'Lexos could not update the document name.'
+      errorMsg = 'Lexos could not update the document name.'
       break
     case '2':
       url = '/setClass'
-      err_msg = 'Lexos could not update the document class.'
+      errorMsg = 'Lexos could not update the document class.'
       break
   }
   sendAjaxRequestSaveOne(url, data)
     .done(
       function (response) {
         // Update the UI
-        cell = 'td:eq(' + column + ')'
+        let cell = 'td:eq(' + column + ')'
         $('#' + rowId).find(cell).text(value)
         $('#edit-modal').modal('hide')
         $('#edit-form').remove()
@@ -748,7 +764,7 @@ function saveOne (rowId, column, value, table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html(err_msg)
+        $('#error-modal .modal-body').html(errorMsg)
         $('#error-modal').modal()
         $('#edit-form').remove()
         $('#edit-modal').modal('hide')
@@ -774,6 +790,7 @@ function sendAjaxRequestSaveOne (url, data) {
 /***
  * Helper function deletes selected row and updates table
  * @param {string} rowId -  value attribute of the selected elements.
+ * @param {object} table - table object
  * @return {void}
  */
 function deleteOne (rowId, table) {
@@ -814,6 +831,7 @@ function sendAjaxRequestDeleteOne (url, rowId) {
 /***
  * Delete the selected document.
  * @param {string} rowId -  value attribute of the selected elements.
+ * @param {object} table - table object
  * @return {void}
  */
 function deleteDoc (rowId, table) {
@@ -832,10 +850,11 @@ function deleteDoc (rowId, table) {
 
 /**
  * Helper function deletes selected rows and updates table
- * @return {void}
  * @param {object} rowIds -  value attribute of the selected elements.
+ * @param {object} table - table object
+ * @return {void}
  */
-function deleteSelected (rowIds,table) {
+function deleteSelected (rowIds, table) {
   const url = '/deleteSelected'
   sendajaxRequestDeleteSelected(url, rowIds)
     .done(
@@ -877,8 +896,9 @@ function sendajaxRequestDeleteSelected (url, rowIds) {
 
 /**
  * deletes all the selected rows.
- * @return {void}
  * @param {array} selectedRows - array of rows that have been selected
+ * @param {object} table - table object
+ * @return {void}
  */
 function deleteAllSelected (selectedRows, table) {
   const deleteDiv = $('#delete-modal')
@@ -914,6 +934,7 @@ function unique (fileIds) {
 /**
  * Helper function to change configure the context menu based on
  * the number of rows currently selected
+ * @param {object} table - table object
  * @return {void}
  */
 function prepareContextMenu (table) {
@@ -962,9 +983,10 @@ function prepareContextMenu (table) {
 
 /**
  * Helper function to change state of selection buttons on events
+ * @param {object} table - table object
  * @return {void}
  */
-function handleSelectButtons(table) {
+function handleSelectButtons (table) {
   if (table.rows('.selected').data().length === 0) {
     $('#selectAllDocs').prop('disabled', false)
     $('#deselectAllDocs').prop('disabled', true)
