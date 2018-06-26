@@ -847,9 +847,10 @@ function deleteDoc (rowId, table) {
   let html = '<p>Are you sure you wish to delete <b>' + docName + '</b>?</p>'
   html += '<span id="deleteId" style="display:none;">' + rowId + '</span>'
   let footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
-  $('#delete-modal').find('.modal-body').html(html)
-  $('#delete-modal').find('.modal-body').append(footer)
-  $('#delete-modal').modal()
+  const deleteModal = $('#delete-modal')
+  deleteModal.find(".modal-body").html(html)
+  deleteModal.find(".modal-body").append(footer)
+  deleteModal.modal()
     .one('click', '#confirm-delete-bttn', function () {
       rowId = $('#deleteId').text()
       deleteOne(rowId, table)
@@ -880,12 +881,14 @@ function deleteSelected (rowIds, table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not delete the requested documents.')
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html('Lexos could not delete the requested documents.')
+        errorModal.modal()
         $('#delete-modal').modal('hide')
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
 }
+
 /**
  * Ajax call to delete the selected documents.
  * @return {object} ajax- XMLHttpRequest object
