@@ -61,3 +61,14 @@ export function submissionError (numFileRequired) {
     return null
   }
 }
+
+/**
+ * Scrolls the page to a given div.
+ * @param {Object} div: The jquery selector of the div.
+ * @returns {void}.
+ */
+export function scrollToDiv (div) {
+  $('html, body').animate({
+    scrollTop: div.offset().top
+  }, 1000)
+}
