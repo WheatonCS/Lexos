@@ -538,7 +538,6 @@ function editClass (rowId) {
   $('#edit-modal').modal()
 }
 
-/* #### mergeSelected() #### */
 /***
  * Merges the selected documents.
  * @param {array} cell - contains the columns and rows index
@@ -567,7 +566,6 @@ function mergeSelected (cell, selectedRows) {
 }
 
 /***
- *
  * @param {array} cell - contains the columns and rows index
  * @param {array} selectedRows - rows matched by the selector
  * @return {void}
@@ -588,9 +586,6 @@ function applyClassSelected (cell, selectedRows) {
   $('#edit-modal').modal()
 }
 
-/* #### mergeDocuments() #### */
-
-// Helper function saves value in edit dialog and updates table with a new document
 /***
  * Merges the document and updates the table with a new document.
  * @param {array} rowIds - value attribute of the selected elements.
@@ -641,7 +636,6 @@ function mergeDocuments (rowIds, column, source, value, milestone, table) {
 }
 
 /***
- *
  * @param {string} url - url for the page.
  * @param {string}  data - file ids
  * @return {object} ajax - XMLHttpRequest object
