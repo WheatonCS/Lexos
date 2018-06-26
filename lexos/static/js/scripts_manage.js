@@ -163,11 +163,8 @@ function registerColumn () {
     .draw()
 }
 
-/* #### SELECT EVENTS #### */
-
-// Handle select events
 /**
- * selection and deselection of the table rows
+ * selection and deselection of the table rows.
  * @return {void}
  * */
 function registerSelectEvents () {
@@ -196,9 +193,10 @@ function registerSelectEvents () {
     })
 }
 
-/* #### DEFINE CONTEXT MENU #### */
-
-/* Right click options on the documents */
+/***
+ * Right click options on the documents
+ * @return {void}
+ */
 function tableDocumentActions () {
   handleSelectButtons()
   let selectedRows
@@ -254,9 +252,11 @@ function tableDocumentActions () {
   })
 }
 
-/* #### SAVE BUTTON #### */
-
-/* 'save' button for the right click options on the document. */
+/***
+ * "Save" button for the right click options on the document.
+ * Save button in pop-up modal.
+ * @return {void}
+ */
 function saveFunction () {
   const merge = $('#merge').val()
   let rowId = $('#tmp-row').val()
@@ -292,9 +292,11 @@ $(document).on('change', $('#addMilestone'), function () {
 /*  SUPPORTING FUNCTIONS */
 /* ------------------------ */
 
-/*  toggleActiveDocsIcon() */
-
-// Shows or hides the Active Documents icon in response to the table state
+/***
+ * Shows or hides the Active Documents icon in response to the table state
+ * Folder icon on the top right of the navigation bar.
+ * @return {void}
+ */
 function toggleActiveDocsIcon () {
   // Hide the active docs icon if there are no docs selected
   if (table.rows({selected: true}).ids().length < 1) {
@@ -305,9 +307,10 @@ function toggleActiveDocsIcon () {
   }
 }
 
-/* #### selectAll() #### */
-
-// Sets the selected status of all documents in the File Manager and UI to selected.
+/***
+ * Sets the status of all the documents in File manager as 'selected'
+ * @return {void}
+ */
 function selectAll () {
   sendAjaxRequestSelectAll('/selectAll')
     .done(
@@ -325,6 +328,10 @@ function selectAll () {
       })
 }
 
+/***
+ * @param {string} url - url to the page.
+ * @return {object} ajax - XMLHttpRequest object
+ */
 function sendAjaxRequestSelectAll (url) {
   return $.ajax({
     type: 'POST',
@@ -332,9 +339,10 @@ function sendAjaxRequestSelectAll (url) {
   })
 }
 
-/* #### deselectAll() #### */
-
-// Sets the selected status of all documents in the File Manager and UI to deselected.
+/***
+ * deselects all the document in file manager.
+ * @return {void}
+ */
 function deselectAll () {
   sendAjaxRequestDeselect('/deselectAll')
     .done(
@@ -352,6 +360,11 @@ function deselectAll () {
       })
 }
 
+/***
+ *
+ * @param {string} url - url to the page
+ * @return {object} ajax - XMLHttpRequest object
+ */
 function sendAjaxRequestDeselect (url) {
   return $.ajax({
     type: 'POST',
@@ -362,6 +375,12 @@ function sendAjaxRequestDeselect (url) {
 /* #### enableRows() #### */
 
 // Enables selected rows in the File Manager and sets UI to selected.
+/***
+ * Enables selected rows in the File Manager by setting the status of the
+ * rows as  selected.
+ * @param {array} selectedRows - rows matched by the selector
+ * @return {void}
+ */
 function enableRows (selectedRows) {
   let file_ids = []
   selectedRows.each(function (index) {
@@ -371,8 +390,8 @@ function enableRows (selectedRows) {
   file_ids = unique(file_ids)
   // Convert the file_ids list to a json string for sending
   const data = JSON.stringify(file_ids)
-
-  sendAjaxRequestEnableRows('enableRows', data)
+  const url = "enableRows"
+  sendAjaxRequestEnableRows(url, data)
     .done(function (response) {
       handleSelectButtons()
       toggleActiveDocsIcon()
@@ -384,6 +403,12 @@ function enableRows (selectedRows) {
     })
 }
 
+/***
+ *
+ * @param {string} url - url for the page.
+ * @param {string} data - file ids
+ * @return {object} ajax - XMLHttpRequest object
+ */
 function sendAjaxRequestEnableRows (url, data) {
   return $.ajax({
     type: 'POST',
@@ -394,9 +419,11 @@ function sendAjaxRequestEnableRows (url, data) {
   })
 }
 
-/* #### disableRows() #### */
-
-// Disables selected rows in the File Manager and sets UI to deselected.
+/***
+ * Deselects the row.
+ * @param {array} deselected_rows - rows matched by the selector.
+ * @return {void}
+ */
 function disableRows (deselected_rows) {
   let file_ids = []
   deselected_rows.each(function (index) {
@@ -420,6 +447,11 @@ function disableRows (deselected_rows) {
       })
 }
 
+/***
+ * @param {string}  url  - url for the page
+ * @param {string}  data - file ids
+ * @return {object} ajax - XMLHttpRequest Object
+ */
 function sendAjaxRequestDisableRow (url, data) {
   return $.ajax({
     type: 'POST',
@@ -686,7 +718,7 @@ function saveOne (rowId, column, value) {
 /***
  * @param {string} url - empty string
  * @param {JSON} data - json data
- * @return {data} ajax- data from the ajax call.
+ * @return {object} ajax- XMLHttpRequest object
  */
 function sendAjaxRequestSaveOne (url, data) {
   return $.ajax({
@@ -728,9 +760,8 @@ function deleteOne (rowId) {
 /**
  * @param {string} url - url of thepage
  * @param rowId
- * @return {object} ajax - data from ajax call
+ * @return {object} ajax - XMLHttpRequest object
  */
-
 function sendAjaxRequestDeleteOne (url, rowId) {
   return $.ajax({
     type: 'POST',
@@ -795,7 +826,7 @@ function deleteSelected (rowIds) {
 }
 /**
  * Ajax call to delete the selected documents.
- * @return {object} ajax- ajax information
+ * @return {object} ajax- XMLHttpRequest object
  * @param {string} url - url of the page
  * @param {data} rowIds - id of the rows
  */
