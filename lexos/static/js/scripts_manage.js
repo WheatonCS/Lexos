@@ -281,7 +281,6 @@ $(document).on('change', $('#addMilestone'), function () {
   $('#milestoneField').toggle()
 })
 
-
 /* S U P P O R T I N G    F U N C T I O N S */
 
 /***
@@ -527,8 +526,9 @@ function editName (rowId) {
  */
 function editClass (rowId) {
   $('#edit-form').remove()
-  let docName = $('#' + rowId).find('td:eq(1)').text()
-  let cellValue = $('#' + rowId).find('td:eq(2)').text()
+  const idRow = $('#' + rowId)
+  let docName = idRow.find('td:eq(1)').text()
+  let cellValue = idRow.find('td:eq(2)').text()
   let form = '<div id="edit-form">Class Label <input id="tmp" type="text" value="' + cellValue + '">'
   form += '<input id="tmp-row" type="hidden" value="' + rowId + '"></div>'
   form += '<input id="tmp-column" type="hidden" value="2"></div>'
@@ -835,8 +835,8 @@ function deleteDoc (rowId, table) {
   html += '<span id="deleteId" style="display:none;">' + rowId + '</span>'
   let footer = '<div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary" id="confirm-delete-bttn" style="margin-left:2px;margin-right:2px;">Delete</button><button type="button" data-dismiss="modal" class="btn" style="margin-left:2px;margin-right:2px;">Cancel</button></div>'
   const deleteModal = $('#delete-modal')
-  deleteModal.find(".modal-body").html(html)
-  deleteModal.find(".modal-body").append(footer)
+  deleteModal.find('.modal-body').html(html)
+  deleteModal.find('.modal-body').append(footer)
   deleteModal.modal()
     .one('click', '#confirm-delete-bttn', function () {
       rowId = $('#deleteId').text()
