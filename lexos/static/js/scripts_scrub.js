@@ -129,7 +129,9 @@ $(function () {
 
   $('#set-tags-button').click(setTagsButtonAjax())
 
-  $('#punctbox').mousedown(punctBoxFade())
+  $('#punctbox').change(function (ev) {
+    showPunctOptions(ev)
+  })
 
   $('#xml-modal').on('show.bs.modal', xmlModalAjax())
 
@@ -288,16 +290,16 @@ function setTagsButtonAjax () {
 }
 
 /**
- * Fade in/out animation
+ * Display additional punctuation options when appropriate
+ * @param {jQuery.Event} ev - change event to trigger function
  * @returns {void} - returns nothing
  */
-function punctBoxFade () {
-  const timeToToggle = 300
-
-  if ($('#aposhyph')[0].style.cssText === 'display: none;') {
-    $('#aposhyph').fadeIn(timeToToggle)
-  } else {
-    $('#aposhyph').fadeOut(timeToToggle)
+function showPunctOptions (ev) {
+  if($(ev.currentTarget).hasClass('checked')){
+    $('#aposhyph').css({visibility: 'visible'})
+  }
+  else{
+    $('#aposhyph').css({visibility: 'hidden'})
   }
 }
 
