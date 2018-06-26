@@ -762,7 +762,7 @@ function saveOne (rowId, column, value, table) {
         errorModal.modal()
         $('#edit-form').remove()
         $('#edit-modal').modal('hide')
-        console.log('bad: ' + textStatus + ': ' + errorThrown)
+        console.log('badaaaed: ' + textStatus + ': ' + errorThrown)
       })
 }
 
