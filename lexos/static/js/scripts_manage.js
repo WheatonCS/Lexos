@@ -852,7 +852,7 @@ function prepareContextMenu () {
 
   // Comparison values
   let numRows = table.rows().ids().length
-  let numRowsSelected = table.rows({selected: true}).ids().length
+  let numRowsSelected = table.rows('.selected').data().length
   console.log(numRowsSelected)
   // Set config options -- Numbers refer to li elements, including dividers
   // The numbers below corresponds to the different options in right lick
