@@ -1,4 +1,4 @@
-/**
+/***
  * Initialize the data Table
  * @return {void}
  */
@@ -7,7 +7,7 @@ $(function () {
   tableAction(table)
 })
 
-/**
+/***
  * @return {object} table - initialize the table
  * Change the element name and test whether the table variable persists
  * */
@@ -48,7 +48,7 @@ function initTable () {
   })
 }
 
-/**
+/***
  * This function calls upon different functions when the user clicks the three
  * button on top-right of the table. buttons: "Select All", "Deselect All" and "Delete Selected"
  * @param {object} table - table object
@@ -105,7 +105,7 @@ function tableAction (table) {
   })
 }
 
-/**
+/***
  * Enable search and ordering in the table within the document.
  * @param {object} table - table object
  * @return{void}
@@ -153,11 +153,11 @@ function registerColumn (table) {
     .draw()
 }
 
-/**
+/***
  * selection and deselection of the table rows.
  * @param {object} table - table object
  * @return {void}
- * */
+ */
 function registerSelectEvents (table) {
   table
     .on('select', function (e, dt, type, indexes) {
@@ -402,7 +402,6 @@ function enableRows (selectedRows, table) {
 }
 
 /***
- *
  * @param {string} url - url for the page.
  * @param {string} data - file ids
  * @return {object} ajax - XMLHttpRequest object
