@@ -20,12 +20,11 @@
 {% block content %}
 <div class="row">
     <div class="col-md-3">
-        <legend id="Dictionaries" class="has-chevron">
+        <legend id="Dictionaries">
             Dictionaries
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
-            <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
         </legend>
-        <div class="collapse" >
+        <div class="collapse in" aria-expanded="true" >
             <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 320px; min-height: 2em;">
                 <div class="forAllCheckBox" id="forAllCheckBox" align="left">
                     {% if dictionary_labels|length > 0 %}
@@ -53,12 +52,11 @@
         </div>
     </div>
     <div class="col-md-5">
-        <legend id="Dictionaries" class="has-chevron">
+        <legend id="Dictionaries">
             Formula
             <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
-            <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
         </legend>
-        <div class="collapse" id="lemmasPanel">
+        <div class="collapse in" id="lemmasPanel" aria-expanded="true">
             <div class="optuploadbuttondiv">
                 <div id="big_wrapper">
                     <div id="calculator_wrapper">
