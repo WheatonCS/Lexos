@@ -30,16 +30,6 @@ function generateDendrogram () {
 }
 
 /**
- * Scrolls to dendrogram results after they are generated.
- * @returns {void}
- */
-function scrollToDendro () {
-  $('html, body').animate({
-    scrollTop: $('#dendrogram-result').offset().top
-  }, 1000)
-}
-
-/**
  * When the HTML documents finish loading
  */
 $(function () {
@@ -51,7 +41,7 @@ $(function () {
 
     if (error === null) { // if there is no error
       generateDendrogram()
-      scrollToDendro()
+      utility.scrollToDiv($('#dendrogram-result'))
     } else {
       utility.runModal(error)
     }
