@@ -1,7 +1,5 @@
 
 # Tells Flask to load this function when someone is at '/upload'
-import json
-import re
 from urllib.parse import unquote
 
 from flask import request, session, render_template, Blueprint
