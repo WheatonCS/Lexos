@@ -220,7 +220,7 @@ function tableDocumentActions (table) {
           selectAll(table)
           break
         case 'deselect_all':
-          deselectAll()
+          deselectAll(table)
           break
         case 'merge_selected':
           selectedRows = table.rows({selected: true}).nodes().to$()
@@ -347,15 +347,15 @@ function deselectAll (table) {
     .done(
       function () {
         // Deselect All Rows in the UI
-        table.rows().deselect()
+        table.rows().deselect(table)
         handleSelectButtons(table)
         toggleActiveDocsIcon(table)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        const errorModal =
-        $('#error-modal').find('.modal-body').html('Lexos could not deselect all the documents.')
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html('Lexos could not deselect all the documents.')
+        errorModal.modal()
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
 }
@@ -384,7 +384,7 @@ function sendAjaxRequestDeselect (url) {
  */
 function enableRows (selectedRows, table) {
   let fileIds = []
-  selectedRows.each(function (index) {
+  selectedRows.each(function () {
     fileIds.push($(this).attr('id'))
   })
   // Ensure fileIds contains unique entries
@@ -616,7 +616,7 @@ function mergeDocuments (rowIds, column, source, value, milestone, table) {
         response = JSON.parse(response)
         let newIndex = response[0]
         // let newIndex = parseInt(rowIds.slice(-1)[0])+1;
-        table.rows().deselect()
+        table.rows().deselect(table)
         let text = response[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
         let rowNode = table.row
           .add([newIndex, value, '', source, text])
