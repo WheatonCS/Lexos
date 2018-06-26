@@ -292,10 +292,10 @@ $(document).on('change', $('#addMilestone'), function () {
 function toggleActiveDocsIcon (table) {
   // Hide the active docs icon if there are no docs selected
   const openFolder = $('.fa-folder-open-o')
-  if (table.rows({selected: true}).ids().length < 1) {
+  if (table.rows('.selected').data().length < 1) {
     openFolder.fadeOut(200)
   } else {
-    openFolder[0].dataset.originalTitle = 'You have ' + table.rows({selected: true}).ids().length + ' active document(s)'
+    openFolder[0].dataset.originalTitle = 'You have ' + table.rows('.selected').data().length + ' active document(s)'
     openFolder.fadeIn(200)
   }
 }
