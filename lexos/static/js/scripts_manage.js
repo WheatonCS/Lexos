@@ -167,6 +167,7 @@ function registerColumn () {
 
 // Handle select events
 /**
+ * selection and deselection of the table rows
  * @return {void}
  * */
 function registerSelectEvents () {
@@ -685,7 +686,7 @@ function saveOne (rowId, column, value) {
 /***
  * @param {string} url - empty string
  * @param {JSON} data - json data
- * @return {*}
+ * @return {data} ajax- data from the ajax call.
  */
 function sendAjaxRequestSaveOne (url, data) {
   return $.ajax({
@@ -743,6 +744,10 @@ function sendAjaxRequestDeleteOne (url, rowId) {
 /* #### deleteDoc() #### */
 
 // deletes the selected document or the document where the user right clicks
+/***
+ * Delete the selected document.
+ * @param rowId
+ */
 function deleteDoc (rowId) {
   let docName = $('#' + rowId).find('td:eq(1)').text()
   let html = '<p>Are you sure you wish to delete <b>' + docName + '</b>?</p>'
