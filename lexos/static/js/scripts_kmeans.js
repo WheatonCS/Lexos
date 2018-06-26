@@ -73,16 +73,6 @@ function generateKMeansResult () {
       })
 }
 
-/**
- * Scrolls to the graph once its generated.
- * @returns {void}
- */
-function scrollToGraph () {
-  $('html, body').animate({
-    scrollTop: $('#get-k-means-result').offset().top
-  }, 1000)
-}
-
 $(function () {
   // Hide the K-Means result div when first get to the page.
   $('#KMeans-result').css({'display': 'none'})
@@ -91,12 +81,15 @@ $(function () {
   $('#get-k-means-result').click(function () {
     // Catch the possible error during submission.
     const error = utility.submissionError(2)
+    // Get K-Means result selector.
+    const KMeansResult = $('#KMeans-result')
 
     if (error === null) {
       // If there is no error, get the result.
-      $('#KMeans-result').css({'display': 'block'})
+      KMeansResult.css({'display': 'block'})
       generateKMeansResult()
-      scrollToGraph()
+      // Scroll to the result.
+      utility.scrollToDiv(KMeansResult)
     } else {
       utility.runModal(error)
     }
