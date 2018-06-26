@@ -393,13 +393,14 @@ function enableRows (selectedRows, table) {
   const data = JSON.stringify(fileIds)
   const url = '/enableRows'
   sendAjaxRequestEnableRows(url, data)
-    .done(function (response) {
+    .done(function () {
       handleSelectButtons(table)
       toggleActiveDocsIcon(table)
     })
     .fail(function (textStatus, errorThrown) {
-      $('#error-modal .modal-body').html('Lexos could not select the requested documents.')
-      $('#error-modal').modal()
+      const errorModal = $('#error-modal')
+      errorModal.find('.modal-body').html('Lexos could not select the requested documents.')
+      errorModal.modal()
       console.log('bad: ' + textStatus + ': ' + errorThrown)
     })
 }
@@ -428,7 +429,7 @@ function sendAjaxRequestEnableRows (url, data) {
  */
 function disableRows (deselectedRows, table) {
   let fileIds = []
-  deselectedRows.each(function (index) {
+  deselectedRows.each(function () {
     fileIds.push($(this).attr('id'))
   })
   // Ensure fileIds contains unique entries
@@ -438,14 +439,15 @@ function disableRows (deselectedRows, table) {
   let data = JSON.stringify(fileIds)
   sendAjaxRequestDisableRow(url, data)
     .done(
-      function (response) {
+      function () {
         handleSelectButtons(table)
         toggleActiveDocsIcon(table)
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not deselect the requested documents.')
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html('Lexos could not deselect the requested documents.')
+        errorModal.modal()
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
 }
@@ -486,8 +488,9 @@ function showPreviewText (rowId) {
         $('#preview').modal()
       })
     .fail(function (jqXHR, textStatus, errorThrown) {
-      $('#error-modal .modal-body').html('Lexos could not retrieve the file preview.')
-      $('#error-modal').modal()
+      const errorModal = $('#error-modal')
+      errorModal.find('.modal-body').html('Lexos could not retrieve the file preview.')
+      errorModal.modal()
       console.log('bad: ' + textStatus + ': ' + errorThrown)
     })
 }
@@ -635,8 +638,9 @@ function mergeDocuments (rowIds, column, source, value, milestone, table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not merge the requested documents or could not save the merged document.')
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html('Lexos could not merge the requested documents or could not save the merged document.')
+        errorModal.modal()
         $('#edit-modal').modal('hide')
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
@@ -696,8 +700,9 @@ function saveMultiple (rowIds, column, value, table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html('Lexos could not update the class of the requested documents.')
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html('Lexos could not update the class of the requested documents.')
+        errorModal.modal()
         $('#delete-modal').modal('hide')
         console.log('bad: ' + textStatus + ': ' + errorThrown)
       })
@@ -731,8 +736,9 @@ function saveOne (rowId, column, value, table) {
   if (column === 1 && value === '') {
     let msg = '<p>A document without a name is like coffee without caffeine!</p><br>'
     msg += '<p>Make sure you don\'t leave the field blank.</p>'
-    $('#alert-modal .modal-body').html(msg)
-    $('#alert-modal').modal()
+    const alertModal = $('#alert-modal')
+    alertModal.find('.modal-body').html(msg)
+    alertModal.modal()
     let revert = $('#' + rowId).find('td:eq(1)').text()
     $('#tmp').val(revert)
     return false
@@ -753,7 +759,7 @@ function saveOne (rowId, column, value, table) {
   }
   sendAjaxRequestSaveOne(url, data)
     .done(
-      function (response) {
+      function () {
         // Update the UI
         let cell = 'td:eq(' + column + ')'
         $('#' + rowId).find(cell).text(value)
@@ -764,8 +770,9 @@ function saveOne (rowId, column, value, table) {
       })
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        $('#error-modal .modal-body').html(errorMsg)
-        $('#error-modal').modal()
+        const errorModal = $('#error-modal')
+        errorModal.find('.modal-body').html(errorMsg)
+        errorModal.modal()
         $('#edit-form').remove()
         $('#edit-modal').modal('hide')
         console.log('bad: ' + textStatus + ': ' + errorThrown)
@@ -774,7 +781,7 @@ function saveOne (rowId, column, value, table) {
 
 /***
  * @param {string} url - empty string
- * @param {JSON} data - json data
+ * @param {string} data - json string data
  * @return {object} ajax- XMLHttpRequest object
  */
 function sendAjaxRequestSaveOne (url, data) {
@@ -797,7 +804,7 @@ function deleteOne (rowId, table) {
   const url = '/deleteOne'
   sendAjaxRequestDeleteOne(url, rowId)
     .done(
-      function (response) {
+      function () {
         // Update the UI
         let id = '#' + rowId
         table.row(id).remove()
