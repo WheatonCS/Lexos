@@ -813,7 +813,7 @@ function deleteOne (rowId, table) {
         table.draw()
       })
     .fail(function (jqXHR, textStatus, errorThrown) {
-      $('#error-modal .modal-body').html('Lexos could not delete the requested document.')
+      $('#error-modal').find('.modal-body').html('Lexos could not delete the requested document.')
       $('#error-modal').modal()
       $('#delete-modal').modal('hide')
       console.log('bad: ' + textStatus + ': ' + errorThrown)
