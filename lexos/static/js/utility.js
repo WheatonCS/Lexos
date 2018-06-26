@@ -34,10 +34,7 @@ export function sendAjaxRequest (url, form) {
     data: JSON.stringify(form)
   })
 }
-/**
- * At least one document is required to run the stats.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
- */
+
 /**
  * Check if the number of document uploaded meets the minimum number of file required to run the tool.
  * @param {number} numFileRequired: the minimum number of file required to run the tool.
