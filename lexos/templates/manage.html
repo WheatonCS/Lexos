@@ -2,40 +2,56 @@
 {% set active_page = 'manage' %}
 
 {% block head %}
-  <!-- Latest compiled and minified DataTables CSS and JS -->
-  {% if config['LOCAL_MODE'] == True %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{version}}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-select-bs/css/select.bootstrap.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.js') }}?ver={{version}}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-select/js/dataTables.select.js') }}?ver={{version}}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
-  {% else %}
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
-  {% endif %}
+    <!-- Latest compiled and minified DataTables CSS and JS -->
+    {% if config['LOCAL_MODE'] == True %}
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{ version }}"/>
+        <link rel="stylesheet" type="text/css"
+              href="{{ url_for('static', filename='node_modules/datatables.net-select-bs/css/select.bootstrap.css') }}?ver={{ version }}"/>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.js') }}?ver={{ version }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='node_modules/datatables.net-select/js/dataTables.select.js') }}?ver={{ version }}"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{ version }}"></script>
+    {% else %}
+        <link rel="stylesheet" type="text/css"
+              href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+        <script type="text/javascript"
+                src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{ version }}"></script>
+    {% endif %}
 
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" charset="utf8"
+            src="{{ url_for('static', filename='js/natural.js') }}?ver={{ version }}"></script>
 
-<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/jquery.dataTables.areaselect.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" charset="utf8"
+            src="{{ url_for('static', filename='js/jquery.dataTables.areaselect.js') }}?ver={{ version }}"></script>
 
-<script type="text/javascript" src="{{ url_for('static', filename='node_modules/bootstrap-contextmenu/bootstrap-contextmenu.js') }}?ver={{version}}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='node_modules/bootstrap-contextmenu/bootstrap-contextmenu.js') }}?ver={{ version }}"></script>
 
-<!-- Lexos Scripts -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_manage.js') }}?ver={{version}}"></script>
+    <!-- Lexos Scripts -->
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/scripts_manage.js') }}?ver={{ version }}"></script>
 
-<!-- Page-Specific Styles -->
-<style type="text/css">
-</style>
+    <!-- Page-Specific Styles -->
+    <style type="text/css">
+    </style>
 {% endblock %}
 
 {% block title %}Manage{% endblock %}
 
 {% block options %}
-<div class="row container">
+    <div class="row container">
     <div class="col-md-12">
         <legend>Select Documents to Alter/Analyze
-            <i class="fa fa-question-circle lexos-tooltip-trigger" style="margin-left:8px;cursor:pointer;font-size:18px;" data-trigger="hover" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="" data-original-title="Click rows to select and deselect documents. Shift-click to select row ranges. Control- or command-click to select and deselect individual rows in ranges. Right-click to see additional options."></i>
+            <i class="fa fa-question-circle lexos-tooltip-trigger"
+               style="margin-left:8px;cursor:pointer;font-size:18px;"
+               data-trigger="hover" data-html="true" data-toggle="tooltip"
+               data-placement="right" data-container="body" title=""
+               data-original-title="Click rows to select and deselect documents. Shift-click to select row ranges. Control-click or command-click to select and deselect individual rows in ranges. Right-click to see additional options."></i>
         </legend>
     </div>
 <div class="row container">
@@ -51,10 +67,36 @@
          </div>
     </div>
 
-    <div class="col-md-12">
-        <div class="dataTableContainer">
-            <table id="demo" class="display table table-bordered table-striped table-condensed">
-                <thead>
+    <div class="row container">
+        <!--     <div class="col-md-6">
+                <div id="downloadSelectedDocs" class="pull-left" style="display:block;margin-top:0;margin-bottom:8px;">
+
+                </div>
+            </div> -->
+        <div class="col-md-12">
+            <div class="pull-right" style="margin-top:0;margin-bottom:8px;">
+                <input type="button" class="btn btn-success" id="selectAllDocs"
+                       value="Select All">
+                <input type="button" class="btn btn-default"
+                       id="disableAllDocs" value="Deselect All">
+                <input type="button" class="btn btn-delete-selected"
+                       id="deleteSelectedDocs" value="Delete Selected">
+                <a class="btn btn-success" id="bttn-downloadSelectedDocs"
+                   href="/downloadDocuments"
+                   title="Download Selected Documents" data-trigger="hover"
+                   data-toggle="tooltip" data-placement="top"
+                   data-container="body" style="display:none;">
+                    <i class="fa fa-download fa-lg"></i>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="dataTableContainer">
+                <table id="demo"
+                       class="display table table-bordered table-striped table-condensed">
+                    <thead>
                     <tr>
                         <th style="text-align:right;"></th>
                         <th>Document Name</th>
@@ -62,119 +104,160 @@
                         <th>Original Source</th>
                         <th>Excerpt</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for row in rows %}
-                    <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
-                        <td style="text-align:right;"></td>
-                        <td class="context" style="word-wrap: break-word;"><span id="doc-name" style="word-wrap: break-word;">{{ row["label"]|truncate(36,True,'...') }}</span></td>
-                        <td class="context" style="word-wrap: break-word;">{{ row["class"] }}</td>
-                        <td class="context" style="word-wrap: break-word;">{{ row["source"]|truncate(40,True,'...') }}</td>
-                        <td class="context">{{ row["preview"]|truncate(155,True,'...') }}</td>
-                    </tr>
+                        <tr id="{{ row['id'] }}" class="{{ row['state'] }}">
+                            <td style="text-align:right;"></td>
+                            <td class="context" style="word-wrap: break-word;">
+                                <span id="doc-name"
+                                      style="word-wrap: break-word;">{{ row["label"]|truncate(36,True,'...') }}</span>
+                            </td>
+                            <td class="context"
+                                style="word-wrap: break-word;">{{ row["class"] }}</td>
+                            <td class="context"
+                                style="word-wrap: break-word;">{{ row["source"]|truncate(40,True,'...') }}</td>
+                            <td class="context">{{ row["preview"]|truncate(155,True,'...') }}</td>
+                        </tr>
                     {% endfor %}
-                </tbody>
+                    </tbody>
                 </table>
+            </div>
         </div>
     </div>
-</div>
-<!-- Additional material can be added inside <legend> -->
-<div id="delete-confirm-wrapper">
-    <div id="delete-explanation">Are you sure you want to delete the selected documents?</div>
-    <div id="confirmation-bttn-wrapper">
-        <button type="button" class="bttn bttn-minor confirmation-bttn" id="confirm-delete-bttn">Confirm</button>
-        <button type="button" class="bttn bttn-minor confirmation-bttn" id="cancel-bttn">Cancel</button>
+    <!-- Additional material can be added inside <legend> -->
+    <div id="delete-confirm-wrapper">
+        <div id="delete-explanation">Are you sure you want to delete the
+            selected documents?
+        </div>
+        <div id="confirmation-bttn-wrapper">
+            <button type="button" class="bttn bttn-minor confirmation-bttn"
+                    id="confirm-delete-bttn">Confirm
+            </button>
+            <button type="button" class="bttn bttn-minor confirmation-bttn"
+                    id="cancel-bttn">Cancel
+            </button>
+        </div>
     </div>
-</div>
 
-<!-- Preview Modal -->
-<div id="preview" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content panel-info">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
-      </div>
-      <div class="modal-body">
-        <p><span id="preview_text"></span></p>
-      </div>
+    <!-- Preview Modal -->
+    <div id="preview" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content panel-info">
+                <div class="modal-header panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p><span id="preview_text"></span></p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Edit Modal -->
-<div id="edit-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content panel-primary">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"><span id="edit_title"></span></h4>
-      </div>
-      <div id="modal-body" class="modal-body"></div>
-      <div class="modal-footer">
-        <button id="save" type="button" class="btn btn-default">Save</button>
-      </div>
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content panel-primary">
+                <div class="modal-header panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title"><span id="edit_title"></span></h4>
+                </div>
+                <div id="modal-body" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="save" type="button" class="btn btn-default">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Alert Modal -->
-<div id="alert-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content panel-warning">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Warning!</h4>
-      </div>
-      <div class="modal-body"></div>
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content panel-warning">
+                <div class="modal-header panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Warning!</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Delete Modal -->
-<div id="delete-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content panel-danger">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Warning!</h4>
-      </div>
-      <div class="modal-body"></div>
+    <!-- Delete Modal -->
+    <div id="delete-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content panel-danger">
+                <div class="modal-header panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Warning!</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Error Modal -->
-<div id="error-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-sm">
-    <!-- Modal content-->
-    <div class="modal-content panel-danger">
-      <div class="modal-header panel-heading">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Error!</h4>
-      </div>
-      <div class="modal-body"><p id="error-message"></p></div>
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content panel-danger">
+                <div class="modal-header panel-heading">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Error!</h4>
+                </div>
+                <div class="modal-body"><p id="error-message"></p></div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Context Menu -->
-<div id="context-menu">
-    <ul style="" class="dropdown-menu" role="menu">
-      <li><a data-context="preview" tabindex="-1"><i class="fa fa-search context-glyph"></i> Preview Document</a></li>
-      <li><a data-context="edit_doc_name" tabindex="-1"><i class="fa fa-pencil context-glyph"></i> Edit Document Name</a></li>
-      <li><a data-context="edit_doc_class" tabindex="-1"><i class="fa fa-tag context-glyph"></i> Edit Document Class</a></li>
-      <li><a data-context="delete_doc" tabindex="-1"><i class="fa fa-trash context-glyph"></i> Delete Document</a></li>
-      <li class="divider"></li>
-      <li><a data-context="select_all" tabindex="-1"><i class="fa fa-check context-glyph"></i> Select All Documents</a></li>
-      <li><a data-context="deselect_all" tabindex="-1"><i class="fa fa-ban context-glyph"></i> Deselect All Documents</a></li>
-      <li class="divider"></li>
-      <li><a data-context="merge_selected" tabindex="-1"><i class="fa fa-link context-glyph"></i> Merge Selected Documents</a></li>
-      <li><a data-context="apply_class_selected" tabindex="-1"><i class="fa fa-tag context-glyph"></i> Apply Class to Selected Documents</a></li>
-      <li><a data-context="delete_all_selected" tabindex="-1"><i class="fa fa-trash context-glyph"></i> Delete Selected Documents</a></li>
-      <li class="divider"></li>
-  </ul>
-</div>
+    <!-- Context Menu -->
+    <div id="context-menu">
+        <ul style="" class="dropdown-menu" role="menu">
+            <li><a data-context="preview" tabindex="-1"><i
+                    class="fa fa-search context-glyph"></i> Preview
+                Document</a></li>
+            <li><a data-context="edit_doc_name" tabindex="-1"><i
+                    class="fa fa-pencil context-glyph"></i> Edit Document Name</a>
+            </li>
+            <li><a data-context="edit_doc_class" tabindex="-1"><i
+                    class="fa fa-tag context-glyph"></i> Edit Document
+                Class</a></li>
+            <li><a data-context="delete_doc" tabindex="-1"><i
+                    class="fa fa-trash context-glyph"></i> Delete Document</a>
+            </li>
+            <li class="divider"></li>
+            <li><a data-context="select_all" tabindex="-1"><i
+                    class="fa fa-check context-glyph"></i> Select All Documents</a>
+            </li>
+            <li><a data-context="deselect_all" tabindex="-1"><i
+                    class="fa fa-ban context-glyph"></i> Deselect All Documents</a>
+            </li>
+            <li class="divider"></li>
+            <li><a data-context="merge_selected" tabindex="-1"><i
+                    class="fa fa-link context-glyph"></i> Merge Selected
+                Documents</a></li>
+            <li><a data-context="apply_class_selected" tabindex="-1"><i
+                    class="fa fa-tag context-glyph"></i> Apply Class to
+                Selected Documents</a></li>
+            <li><a data-context="delete_all_selected" tabindex="-1"><i
+                    class="fa fa-trash context-glyph"></i> Delete Selected
+                Documents</a></li>
+            <li class="divider"></li>
+        </ul>
+    </div>
 
 {% endblock %}
 

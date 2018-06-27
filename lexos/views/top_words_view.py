@@ -37,8 +37,10 @@ def top_words():
 
     return render_template(
         'topword.html',
+        itm='topwords',
         labels=labels,
         numActiveDocs=num_active_docs,
+
         classDivisionMap=class_division_map)
 
 

@@ -193,12 +193,15 @@ $(function () {
     // Get the possible error during the submission.
     const error = utility.submissionError(1)
 
+    // Get the result div selector.
+    const corpusResult = $('#corpus-stats-result')
+    const fileResult = $('#file-stats-result')
+
     if (error === null) {
       // Get the file stats table.
       generateStatsFileTable()
       // Display the file result table.
-      $('#file-stats-result').css({'display': 'block'})
-
+      fileResult.css({'display': 'block'})
       // Only get corpus info when there are more than one file.
       if (checkedFiles.length > 1) {
         // Get the corpus result.
@@ -206,9 +209,13 @@ $(function () {
         // Get the box plot.
         generateStatsBoxPlot()
         // Display the result.
-        $('#corpus-stats-result').css({'display': 'block'})
+        corpusResult.css({'display': 'block'})
+        // Scroll to the corpus result div.
+        utility.scrollToDiv(corpusResult)
       } else { // Else hide the corpus stats result div.
-        $('#corpus-stats-result').css({'display': 'none'})
+        corpusResult.css({'display': 'none'})
+        // Scroll to the file result div.
+        utility.scrollToDiv(fileResult)
       }
     } else {
       utility.runModal(error)
