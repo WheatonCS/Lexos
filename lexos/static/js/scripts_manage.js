@@ -66,7 +66,7 @@ function tableAction (table) {
       let i = ':eq(' + index + ')'
       table.rows(i).select()
       activeRows.push($(this).attr('id'))
-      console.log("here" + activeRows)
+      console.log('here' + activeRows)
     }
     // Show the download button if there is at least 1 active file.
     if (activeRows.length !== 0) {
