@@ -139,16 +139,6 @@ $(function () {
 })
 
 /**
- * Download the scrubbing results
- * @returns {void} - returns nothing
- */
-function downloadScrubbing () { // eslint-disable-line no-unused-vars
-  // Unfortunately, you can't trigger a download with an ajax request; calling a
-  // Flask route seems to be the easiest method.
-  window.location = '/downloadScrubbing'
-}
-
-/**
  * Send ajax request to do scrubbing
  * @param {string} action - preview or apply
  * @returns {void} - returns nothing
