@@ -107,7 +107,8 @@
                         <i class="fa fa-question-circle lexos-tooltip-trigger"
                            data-toggle="tooltip" data-html="true"
                            data-placement="right" data-container="body"
-                           title="The value the last segment has to reach relative to the others in order to be considered a separate segment."
+                           title="The size of the last segment must be at least as large as the given percentage (threshold) of other segment sizes.
+                            If the length of the last segment is found to be too small, it will be attached to the previous segment."
                            style=""></i>
                     </label>
                 </div>
@@ -123,7 +124,7 @@
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
-                       title="Splits the document into segments at each appearance of the provided string. Child segments will not contain the Milestone delimiter."
+                       title="Split the document into segments at each appearance of the provided string. Child segments will not contain the Milestone delimiter."
                        style="padding-left:4px;margin-right:0;"></i>
                 </label>
             </div>
