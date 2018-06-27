@@ -295,10 +295,9 @@ function setTagsButtonAjax () {
  * @returns {void} - returns nothing
  */
 function showPunctOptions (ev) {
-  if($(ev.currentTarget).hasClass('checked')){
+  if ($(ev.currentTarget).hasClass('checked')) {
     $('#aposhyph').css({visibility: 'visible'})
-  }
-  else{
+  } else {
     $('#aposhyph').css({visibility: 'hidden'})
   }
 }
