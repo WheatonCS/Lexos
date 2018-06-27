@@ -104,43 +104,6 @@ def nl2br(eval_ctx, value):
     return result
 
 
-# ==== update app settings for beta functions ====
-@app.route("/scrape", methods=["GET", "POST"])
-def scrape():
-    """scraps the urls an generates text file from each url.
-
-    :return: json object with a string that indicates that is has succeeded
-    """
-    # Detect the number of active documents.
-    ##-### detect_active_docs, utility, session manager
-    from lexos.managers import session_manager, utility
-    from lexos.views.base_view import detect_active_docs
-    num_active_docs = detect_active_docs()
-    if request.method == "GET":
-        return render_template('scrape.html', numActiveDocs=num_active_docs)
-    if request.method == "POST":
-        import requests
-        urls = request.json["urls"]
-        urls = urls.strip()
-        urls = urls.replace(",", "\n")  # Replace commas with line breaks
-        urls = re.sub("\s+", "\n", urls)  # Get rid of extra white space
-        urls = urls.split("\n")
-        file_manager = utility.load_file_manager()
-        for i, url in enumerate(urls):
-            r = requests.get(url)
-            file_manager.add_upload_file(r.text, "url" + str(i) + ".txt")
-        utility.save_file_manager(file_manager)
-        response = "success"
-        return json.dumps(response)
-
-
-@app.route("/updatesettings", methods=["GET", "POST"])
-def updatesettings():
-    if request.method == "POST":
-        session_manager.cache_general_settings()
-        return json.dumps("Settings successfully cached.")
-
-
 # ==== add error handlers ====
 @app.errorhandler(404)
 def page_not_found(_):
