@@ -16,7 +16,7 @@
 			<i class="fa fa-question-circle lexos-tooltip-trigger" style="margin-left:8px;cursor:pointer;font-size:18px;" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title="" data-original-title="Upload times may vary, depending on internet speeds. If the upload seems to hang, try uploading smaller files. If you are uploading many files, try uploading them in small batches."></i>
 			</p>
 			{% if session['generalsettings']['beta_onbox'] %}
-				<p class="file-spec">Or use <a href="{{ url_for("scrape") }}">web scraper</a> (beta test) instead.</p>
+				<p class="file-spec">Or use <a href="{{ url_for("upload.scrape") }}">web scraper</a> (beta test) instead.</p>
 			{% endif %}
 		</legend>
 	</div>
