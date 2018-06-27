@@ -64,6 +64,7 @@ $(function () {
 
     if (error === null) { // if there is no error
       generateSimResult()
+      utility.scrollToDiv($('#similaritiesResults'))
     } else {
       utility.runModal(error)
     }
