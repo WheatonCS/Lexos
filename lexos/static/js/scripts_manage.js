@@ -61,11 +61,12 @@ function tableAction (table) {
    It does not appear that this array needs to be maintained after
    initialisation, but the code to do so is commented out for de-bugging. */
   let activeRows = []
-  $(table).find('tbody tr').each(function (index) {
+  $('.dataTables_scroll').find('tbody tr').each(function (index) {
     if ($(this).hasClass('selected')) {
       let i = ':eq(' + index + ')'
       table.rows(i).select()
       activeRows.push($(this).attr('id'))
+      console.log("here" + activeRows)
     }
     // Show the download button if there is at least 1 active file.
     if (activeRows.length !== 0) {
