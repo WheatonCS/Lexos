@@ -1,7 +1,5 @@
-import json
-
 from flask import session, redirect, url_for, render_template, send_file, \
-    request, Blueprint
+    Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
@@ -91,10 +89,3 @@ def reset():
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
     return redirect(url_for('upload.upload'))
-
-
-@base_blueprint.route("/updatesettings", methods=["GET", "POST"])
-def update_settings():
-    if request.method == "POST":
-        session_manager.cache_general_settings()
-        return json.dumps("Settings successfully cached.")
