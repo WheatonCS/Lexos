@@ -2,7 +2,7 @@
 {% set active_page = 'topword' %}
 
 {% block head %}
-    <script type="text/javascript"
+    <script type="module"
             src="{{ url_for('static', filename='js/scripts_topword.js') }}?ver={{ version }}"></script>
     <meta id="num-active-classes" data-number="{{ classDivisionMap.shape[0] }}">
 {% endblock %}
@@ -32,7 +32,7 @@
             <i class="fa fa-question-circle lexos-tooltip-trigger"
                data-trigger="hover" data-html="true" data-toggle="tooltip"
                data-placement="right" data-container="body"
-               title="Compares the proportion of each term in individual documents
+               title="Compare the proportion of each term in individual documents
                       to their proportions in the whole collection. Example: Find
                       topwords for one chapter compared to the entire book."></i>
         </label>
@@ -43,8 +43,8 @@
             <i class="fa fa-question-circle lexos-tooltip-trigger"
                data-trigger="hover" data-html="true" data-toggle="tooltip"
                data-placement="right" data-container="body"
-               title="Comparing the proportion of each term in a document in
-                      one class to that in another class as a whole. Example:
+               title="Compare the proportion of each term in a document within
+                      one class to their proportions in another class as a whole. Example:
                       With two books (two classes), find topwords in any
                       chapter (document) from one of the books compared to the
                       entire other book (class)."></i>
@@ -56,8 +56,8 @@
             <i class="fa fa-question-circle lexos-tooltip-trigger"
                data-trigger="hover" data-html="true" data-toggle="tooltip"
                data-placement="right" data-container="body"
-               title="Comparing the proportion of each term in one class to
-                      that in another class. Example: Find topwords between two
+               title="Compare the proportion of each term in one class to
+                      their proportions in another class. Example: Find topwords between two
                       books (classes)."></i>
         </label>
     </div>
