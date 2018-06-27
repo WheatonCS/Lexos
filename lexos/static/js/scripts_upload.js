@@ -40,15 +40,15 @@ function fileDragHover (e) {
  * */
 function resetProgressBar () {
   const progressBar = $('#progress-bar')
-  const status = $('#status')
+  const status = $('#status-analyze')
   progressBar.html('').css({'width': '0px'})
   progressBar.show()
   status.css('z-index', 50000)
   status.show()
 }
 
-// Upload and display file contents
 /**
+ * Upload and display file contents
  * @return {void}
  * @param {object} file - file object
  * @param {int} fileSize - size of the File uploaded
@@ -100,7 +100,7 @@ function UploadAndParseFile (file, fileSize) {
           }
           reader.readAsText(file)
           $('#activeDocIcon').css('display', 'block')
-          $('#status').hide()
+          $('#status-analyze').hide()
         })
 
         .fail(function (jqXHR, textStatus, errorThrown) {
@@ -115,12 +115,10 @@ function UploadAndParseFile (file, fileSize) {
     $('#error-modal-message').html(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
     $('#error-modal').modal()
     // These are to hide the loading icon.
-    $('#status').css({'visibility': 'hidden'})
     $('#status-analyze').css({'visibility': 'hidden'})
   } else {
     // These are to hide the loading icon.
     $('#status-analyze').css({'visibility': 'hidden'})
-    $('#status').css({'visibility': 'hidden'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
     const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
     $('#error-modal-message').html(`Upload for ${filename}  failed.\n\nFile bigger than
@@ -215,7 +213,7 @@ function FileSelectHandler (e) {
         const faFolderOpen = $('.fa-folder-open-o')
         faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
         faFolderOpen.fadeIn(200)
-        $('#status').hide()
+        $('#status-analyze').hide()
       }
     }
   showProgress()

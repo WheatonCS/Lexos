@@ -1705,7 +1705,7 @@ a.active {
   left: 320px;
   padding: 6px;
   border: 1px solid red;
-  background: #FFFFFF;
+  background: transparent;
   transition: 0.25s;
   z-index: 50000;
 }
