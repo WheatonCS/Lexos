@@ -1,4 +1,3 @@
-
 # Tells Flask to load this function when someone is at '/upload'
 import json
 import re
@@ -92,3 +91,9 @@ def scrape():
         utility.save_file_manager(file_manager)
         response = "success"
         return json.dumps(response)
+
+
+@upload_blueprint.route("/updatesettings", methods=["POST"])
+def update_settings():
+    session_manager.cache_general_settings()
+    return json.dumps("Settings successfully cached.")
