@@ -41,6 +41,7 @@ $(function () {
 
     if (error === null) { // if there is no error
       generateDendrogram()
+      utility.scrollToDiv($('#dendrogram-result'))
     } else {
       utility.runModal(error)
     }
