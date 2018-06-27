@@ -38,8 +38,8 @@
                             <i class="fa fa-question-circle lexos-tooltip-trigger"
                                data-toggle="tooltip" data-html="true"
                                data-placement="right" data-container="body"
-                               title="This feature divides the text into n-grams of
-                                      the user's desired length, by tokens or characters.">
+                               title="Divide the text into n-grams (by tokens or characters) of
+                                      the desired length.">
                             </i>
                         </legend>
                         <div class="row" id="tokenize-input">
@@ -87,10 +87,8 @@
                             <i class="fa fa-question-circle lexos-tooltip-trigger"
                                data-toggle="tooltip" data-html="true"
                                data-placement="right" data-container="body"
-                               title="This feature allows the user to perform analysis
-                                      based on the term raw counts in their DTM or to
-                                      attempt to account for document length by using
-                                      proportional or TF-IDF weighted counts.">
+                               title="Alter how terms are counted, by raw (absolute) counts,
+                                      by proportional frequencies (to account for document length), or by TF-IDF weighted counts.">
                             </i>
                         </legend>
 
@@ -160,8 +158,8 @@
                             <i class="fa fa-question-circle lexos-tooltip-trigger"
                                data-toggle="tooltip" data-html="true"
                                data-placement="right" data-container="body"
-                               title="Culling options allow the user to place statistical
-                                      bounds on the terms included in the DTM.">
+                               title="Place statistical
+                                      bounds on the terms included in the DTM using Culling Options.">
                             </i>
                             <span class="fa fa-chevron-right rotate {{ 'showing' if session['analyoption']['mfwcheckbox'] == True or session['analyoption']['cullcheckbox'] == True }}"
                                   id="cullingOptsChev"
