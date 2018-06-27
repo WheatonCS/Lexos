@@ -34,6 +34,35 @@ Result: byTokensandPropCounts.csv
  
 Result: byTokensandRawCounts.csv
 
+
+
+##### Tokenize using Bi-Grams
+
+1. UPLOAD all files
+
+2. Tokenize
+ - Default Data Orientation: Documents as Columns, Terms as Rows
+ - Tokenize by 2-gram tokens 
+ - Normalize by Proportional Counts
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: usingBiGrams.csv
+
+
+##### Tokenize by Weighted Counts (TF-IDF)
+
+1. UPLOAD all files
+
+2. Tokenize
+ - Default Data Orientation: Documents as Columns, Terms as Rows
+ - Tokenize by 1-gram tokens 
+ - Normalize by Weighted Counts (TF-IDF), Euclidean Distance
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: byWeightedCounts.csv
+
+
+
 ### Tokenize by Characters
 ##### Tokenize by Raw Counts
 
