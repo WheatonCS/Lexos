@@ -379,6 +379,7 @@ function sendAjaxRequestDeselect (url) {
  */
 function enableRows (selectedRows, table) {
   let fileIds = []
+  console.log(selectedRows)
   selectedRows.each(function () {
     fileIds.push($(this).attr('id'))
   })
@@ -613,7 +614,6 @@ function mergeDocuments (rowIds, column, source, value, milestone, table) {
           .add([newIndex, value, '', source, text])
           .draw(false)
           .node()
-        table.rows(newIndex).select(table) // This automatically calls enableRows()
         $(rowNode)
           .attr('id', newIndex)
           .addClass('selected')
