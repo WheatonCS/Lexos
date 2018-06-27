@@ -14,7 +14,7 @@ from lexos.views.base_view import detect_active_docs
 cutter_blueprint = Blueprint('cutter', __name__)
 
 
-@cutter_blueprint.route("/cut", methods=["GET", "POST"])
+@cutter_blueprint.route("/cut", methods=["GET"])
 def cut():
     """ Handles the functionality of the cut page.
 
@@ -43,34 +43,27 @@ def cut():
         max_word = 0
         max_line = 0
         active_file_ids = []
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'cuttingoptions' not in session:
-            session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
-        previews = file_manager.get_previews_of_active()
-        return render_template(
-            'cut.html',
-            previews=previews,
-            num_active_files=len(previews),
-            numChar=num_char,
-            numWord=num_word,
-            numLine=num_line,
-            maxChar=max_char,
-            maxWord=max_word,
-            maxLine=max_line,
-            activeFileIDs=active_file_ids,
-            itm="cut",
-            numActiveDocs=num_active_docs)
+    # "GET" request occurs when the page is first loaded.
+    if 'cuttingoptions' not in session:
+        session['cuttingoptions'] = constants.DEFAULT_CUT_OPTIONS
+    previews = file_manager.get_previews_of_active()
+    return render_template(
+        'cut.html',
+        previews=previews,
+        num_active_files=len(previews),
+        numChar=num_char,
+        numWord=num_word,
+        numLine=num_line,
+        maxChar=max_char,
+        maxWord=max_word,
+        maxLine=max_line,
+        activeFileIDs=active_file_ids,
+        itm="cut",
+        numActiveDocs=num_active_docs)
 
 
-@cutter_blueprint.route("/downloadCutting", methods=["GET", "POST"])
-def download_cutting():
-    """downloads cut files.
-
-    :return: a .zip with all the cut files
-    """
-    # The 'Download Segmented Files' button is clicked on cut.html
-    # sends zipped files to downloads folder
+@cutter_blueprint.route("/cut", methods=["POST"])
+def download_cut():
     file_manager = utility.load_file_manager()
     return file_manager.zip_active_files('cut_files.zip')
 
