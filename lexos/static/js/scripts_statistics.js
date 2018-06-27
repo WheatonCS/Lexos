@@ -10,7 +10,7 @@ function formatFileReportResponse (response) {
   const unit = response['unit']
   const mean = `Average document size is ${response['mean']} ${unit}.`
   const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
-  const IQR = `Inter quartile range of documents is ${response['inter_quartile_range']} ${unit}.`
+  const IQR = `Interquartile range of documents is ${response['inter_quartile_range']} ${unit}.`
 
   // Find if anomaly detected by standard error analysis.
   const noAnomalySe = response['anomaly_se_small'].length === 0 && response['anomaly_se_large'].length === 0
@@ -27,8 +27,8 @@ function formatFileReportResponse (response) {
   const noAnomalyIqr = response['anomaly_iqr_small'].length === 0 && response['anomaly_iqr_large'].length === 0
   // Pick appropriate result for standard error analysis.
   const anomalyIqrResult =
-    noAnomalyIqr ? '<b>No</b> anomaly detected by inter quartile range test.'
-      : 'Anomaly <b>detected</b> by inter quartile range test.' +
+    noAnomalyIqr ? '<b>No</b> anomaly detected by interquartile range test.'
+      : 'Anomaly <b>detected</b> by interquartile range test.' +
       response['anomaly_iqr_small'].map(
         function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }) +
       response['anomaly_iqr_large'].map(
@@ -193,12 +193,15 @@ $(function () {
     // Get the possible error during the submission.
     const error = utility.submissionError(1)
 
+    // Get the result div selector.
+    const corpusResult = $('#corpus-stats-result')
+    const fileResult = $('#file-stats-result')
+
     if (error === null) {
       // Get the file stats table.
       generateStatsFileTable()
       // Display the file result table.
-      $('#file-stats-result').css({'display': 'block'})
-
+      fileResult.css({'display': 'block'})
       // Only get corpus info when there are more than one file.
       if (checkedFiles.length > 1) {
         // Get the corpus result.
@@ -206,9 +209,13 @@ $(function () {
         // Get the box plot.
         generateStatsBoxPlot()
         // Display the result.
-        $('#corpus-stats-result').css({'display': 'block'})
+        corpusResult.css({'display': 'block'})
+        // Scroll to the corpus result div.
+        utility.scrollToDiv(corpusResult)
       } else { // Else hide the corpus stats result div.
-        $('#corpus-stats-result').css({'display': 'none'})
+        corpusResult.css({'display': 'none'})
+        // Scroll to the file result div.
+        utility.scrollToDiv(fileResult)
       }
     } else {
       utility.runModal(error)

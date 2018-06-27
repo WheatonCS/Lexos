@@ -78,9 +78,12 @@ $(function () {
    * The event handler for generate top word clicked
    */
   $('#get-topwords').click(function () {
-    const error = utility.submissionError(2) // The error happens during submission
+    // Catch the possible error during submission
+    const error = utility.submissionError(2)
     if (error === null) { // if there is no error
       generateTopWordResult()
+      // Scroll to the result.
+      utility.scrollToDiv($('#topword-title'))
     } else {
       utility.runModal(error)
     }

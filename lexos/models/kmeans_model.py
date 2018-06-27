@@ -228,7 +228,7 @@ class KMeansModel(BaseModel):
                 hoverinfo="text",
                 marker=dict(
                     size=12,
-                    color=color[group_number],
+                    color=color[group_number % 10],
                     line=dict(width=1)
                 )
             )
@@ -260,7 +260,7 @@ class KMeansModel(BaseModel):
                 marker=dict(
                     size=14,
                     line=dict(width=1),
-                    color=color[group_number],
+                    color=color[group_number % 10],
                     symbol="cross",
                     opacity=0.8
                 )
