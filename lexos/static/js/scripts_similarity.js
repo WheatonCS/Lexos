@@ -54,6 +54,8 @@ function generateSimResult () {
 }
 
 $(function () {
+  // hide the normalize options.
+  $('#normalize-options').css({'visibility': 'hidden'})
   // hide the similarity
   $('#similaritiesResults').css({'display': 'none'})
   /**
