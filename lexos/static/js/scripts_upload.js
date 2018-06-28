@@ -226,7 +226,7 @@ function FileSelectHandler (e) {
         const faFolderOpen = $('.fa-folder-open-o')
         faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
         faFolderOpen.fadeIn(200)
-        $('#status').hide()
+        //$('#status').hide()
       }
     }
   }
@@ -234,6 +234,7 @@ function FileSelectHandler (e) {
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
   counter.attr('value', numActiveFile)
+  $('#status').delay(1200).hide(0)
 }
 
 /**
@@ -241,6 +242,7 @@ function FileSelectHandler (e) {
  * @return { void }
  */
 function showProgress () {
+  $('#status').css('z-index', 50000).show()
   $('#progress').html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
   $id('fileselect').value = ''
   // this allows the event to fire on "change" in chrome. the value property changing is the
