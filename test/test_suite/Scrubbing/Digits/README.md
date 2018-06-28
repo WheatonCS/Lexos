@@ -19,4 +19,5 @@ Digits
     - Make Lowercase (optional)
     - Remove Digits
 
-Results
+3. RESULTS: 
+    - all digits have been removed from test files
