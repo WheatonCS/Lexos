@@ -31,17 +31,7 @@ $.fn.center = function () {
 $('form').attr('method', 'post')
 
 $(function () {
-   $(window).scroll(function(){
-        if ($(this).scrollTop() > 100) {
-          $('#scroll').fadeIn()
-        } else {
-          $('#scroll').fadeOut()
-        }
-      })
-      $('#scroll').click(function(){
-        $('html, body').animate({ scrollTop: 0 }, 600)
-        return false
-      })
+  scrollTop ()
   $('#getviz').click(function (e) {
     if (numActiveDocs < 1) {
       const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
@@ -204,4 +194,22 @@ function getFormValues () {
     response = JSON.parse(response)
     return response
   })
+}
+
+/***
+ * Button that enables the window to go to the top of the page on a click.
+ * @return {void}
+ */
+function scrollTop(){
+  $(window).scroll(function(){
+        if ($(this).scrollTop() > 100) {
+          $('#scroll').fadeIn()
+        } else {
+          $('#scroll').fadeOut()
+        }
+      })
+      $('#scroll').click(function(){
+        $('html, body').animate({ scrollTop: 0 }, 600)
+        return false
+      })
 }
