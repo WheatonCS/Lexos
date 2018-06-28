@@ -55,10 +55,15 @@ function resetProgressBar () {
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
+  // Make the loading icon circle visible
+  $('#status-analyze').css({'visibility': 'visible'})
+  $('#status-analyze').css({'opacity': '1'})
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
       alert(`Cannot process blank file -- ${file.name}`)
+      $('#status-analyze').css({'visibility': 'hidden'})
+      $('#status-analyze').css({'opacity': '0'})
     } else {
       sendAjaxRequest(file, filename)
         .done(function () {
@@ -101,19 +106,31 @@ function UploadAndParseFile (file, fileSize) {
 
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert(`${textStatus} : ${errorThrown}`)
+          $('#status-analyze').css({'visibility': 'hidden'})
+          $('#status-analyze').css({'opacity': '0'})
+        })
+        .always(function () {
+          $('#status-analyze').css({'visibility': 'hidden'})
+          $('#status-analyze').css({'opacity': '0'})
         })
     }
   } else if (!AllowedFileType(file.name)) {
     alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
-    // This is to hide the loading icon.
-    $('#status').hide()
+    // These are to hide the loading icon.
+    $('#status').css({'visibility': 'hidden'})
+    $('#status').css({'opacity': '0'})
+    $('#status-analyze').css({'visibility': 'hidden'})
+    $('#status-analyze').css({'opacity': '0'})
   } else {
+    // These are to hide the loading icon.
+    $('#status-analyze').css({'visibility': 'hidden'})
+    $('#status-analyze').css({'opacity': '0'})
+    $('#status').css({'visibility': 'hidden'})
+    $('#status').css({'opacity': '0'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
     const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
     alert(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}B`)
-    // This is to hide the loading icon.
-    $('#status').hide()
     // Without this, it puts a blue background on the progress bar.
     $('#progress').css('background', 'transparent')
   }
@@ -163,8 +180,9 @@ function Init () {
  * @param {object} e - event
  */
 function FileSelectHandler (e) {
-  /* takes the value of the input tag so that it gets the number of active files */
-  let numberOfFileDone = parseInt($('#counter').val())
+  const counter = $('#counter')
+  // Value of the input tag so that it gets the number of active files
+  let numberOfFileDone = parseInt(counter.val())
   // cancel event and hover styling
   fileDragHover(e)
   // fetch FileList object
@@ -215,7 +233,7 @@ function FileSelectHandler (e) {
   showProgress()
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
-  $('#counter').attr('value', numActiveFile)
+  counter.attr('value', numActiveFile)
 }
 
 /**
