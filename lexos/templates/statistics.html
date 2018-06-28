@@ -12,7 +12,7 @@
 
     <!-- Latest compiled and minimized plotly JS -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+     <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
     <!-- Lexos Scripts -->
     <script type="module"
             src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{ version }}"></script>
@@ -21,6 +21,9 @@
 {% block title %}Statistics{% endblock %}
 
 {% block options %}
+    <a href="javascript:void(0);" id="scroll" title="Scroll to Top" style="display: block;">Top<span><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></span>
+
+</span></a>
     <div class="row">
         <div class="col-md-12">
             <!-- Hidden input to store active file ids. -->
