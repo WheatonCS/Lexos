@@ -55,8 +55,9 @@ function resetProgressBar () {
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
+  const status = $('#status')
   // Make the loading icon circle visible
-  $('#status').css({'visibility': 'visible'})
+  status.css({'visibility': 'visible'})
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
@@ -100,27 +101,27 @@ function UploadAndParseFile (file, fileSize) {
           }
           reader.readAsText(file)
           $('#activeDocIcon').css('display', 'block')
-          $('#status').hide()
+          status.hide()
         })
 
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert(`${textStatus} : ${errorThrown}`)
-          $('#status').css({'visibility': 'hidden'})
+          status.css({'visibility': 'hidden'})
         })
         .always(function () {
-          $('#status').css({'visibility': 'hidden'})
+          status.css({'visibility': 'hidden'})
         })
     }
   } else if (!AllowedFileType(file.name)) {
     $('#error-modal-message').html(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
     $('#error-modal').modal()
     // These are to hide the loading icon.
-    $('#status').css({'visibility': 'hidden'})
-    $('#status').css({'opacity': '0'})
+    status.css({'visibility': 'hidden'})
+    status.css({'opacity': '0'})
   } else {
     // These are to hide the loading icon.
-    $('#status').css({'visibility': 'hidden'})
-    $('#status').css({'opacity': '0'})
+    status.css({'visibility': 'hidden'})
+    status.css({'opacity': '0'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
     const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
     $('#error-modal-message').html(`Upload for ${filename}  failed.\n\nFile bigger than
