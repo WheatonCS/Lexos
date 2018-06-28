@@ -21,6 +21,7 @@ rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
 
 # Set the readable alias for type hinting.
 window_str = List[str]
+milestone_count_dict = Dict[str, List[int]]
 
 
 class RWATestOptions(NamedTuple):
@@ -355,7 +356,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-            self, windows: window_str) -> Dict[str, List[int]]:
+            self, windows: window_str) -> milestone_count_dict:
         """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
@@ -363,21 +364,15 @@ class RollingWindowsModel(BaseModel):
         :param windows: a iterator of windows.
         :return: a list of indexes of the mile stone windows.
         """
-        # Return None if no mile stone exists.
-        if self._options.milestone is None:
-            return {}
+        # Get index for all mile stone strings.
+        list_milestone_str = self._options.milestone
+        return {
+            milestone_str:
+                [index for index, window in enumerate(windows)
+                 if window.startswith(milestone_str)]
 
-        # If the list of milestone string exists
-        else:
-            # Get index for all mile stone strings.
-            list_milestone_str = self._options.milestone
-            return {
-                milestone_str:
-                    [index for index, window in enumerate(windows)
-                     if window.startswith(milestone_str)]
-
-                for milestone_str in list_milestone_str
-            }
+            for milestone_str in list_milestone_str
+        }
 
     def _get_scatter_color(self, index: int) -> str:
         """Get color for scatter plot.
@@ -404,6 +399,86 @@ class RollingWindowsModel(BaseModel):
         return cl.scales['8']['qual']['Set2'][index % 8] \
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
+
+    def _add_milestone(self,
+                       windows: window_str,
+                       result_plot: List[go.Scattergl]) -> go.Figure:
+        """Add milestone to the existing plot.
+
+        :param windows: an array of windows to calculate.
+        :param result_plot: List of existing scatter rolling window plot.
+        :return: A plotly figure object.
+        """
+        # Get all mile stones.
+        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
+            windows=windows
+        )
+        # Check if passed in mile stones exist in the file.
+        if mile_stones is not {}:
+            # Find max and min y value in the result plot.
+            y_max_in_each_plot = \
+                [max(each_plot['y'][~np.isnan(each_plot['y'])])
+                 for each_plot in result_plot]
+            y_max = max(y_max_in_each_plot) * 1.1
+
+            y_min_in_each_plot = \
+                [min(each_plot['y'][~np.isnan(each_plot['y'])])
+                 for each_plot in result_plot]
+            y_min = min(y_min_in_each_plot) * 0.9
+
+            # Plot straight lines for all indexes for each mile stone.
+            layout = go.Layout(
+                showlegend=True,
+                shapes=[
+                    dict(
+                        type="line",
+                        x0=mile_stone,
+                        x1=mile_stone,
+                        y0=y_min,
+                        y1=y_max,
+                        line=dict(
+                            color=self._get_mile_stone_color(index=index),
+                            width=1
+                        )
+                    )
+                    for index, key in enumerate(mile_stones)
+                    for mile_stone in mile_stones[key]]
+            )
+
+            legend_helper = [
+                go.Scatter(
+                    x=[0, 0, 0],
+                    y=[0, 0, 0],
+                    name="milestones",
+                    hoverinfo="none",
+                    mode="markers",
+                    marker=dict(
+                        color="rgb(255, 255, 255)"
+                    )
+                )
+            ]
+
+            interactive_helper = [
+                go.Scattergl(
+                    x=mile_stones[key],
+                    y=[y_max for _ in range(len(mile_stones[key]))],
+                    mode="markers",
+                    hoverinfo="x+name",
+                    name=key,
+                    marker=dict(
+                        color=self._get_mile_stone_color(index=index)
+                    )
+                )
+                for index, key in enumerate(mile_stones)
+            ]
+
+            # Return the plot with milestones as layout.
+            return go.Figure(data=result_plot + legend_helper + interactive_helper,
+                             layout=layout)
+
+        else:
+            # Return just the plot.
+            return go.Figure(data=result_plot)
 
     def _get_token_ratio_graph(self) -> go.Figure:
         """Get the plotly graph for the token ratio without milestone.
@@ -445,13 +520,13 @@ class RollingWindowsModel(BaseModel):
             for index, token_ratio_series in enumerate(token_ratio_series_list)
         ]
 
-        if self._options.milestone is None:
+        if self._options.milestone is not None:
             return self._add_milestone(windows=windows,
                                        result_plot=result_plot)
         else:
             return go.Figure(data=result_plot)
 
-    def _get_token_average_graph(self) -> List[go.Scattergl]:
+    def _get_token_average_graph(self) ->go.Figure:
         """Get the plotly graph for token average without milestone.
 
         :return: a list of plotly graph object
@@ -467,7 +542,7 @@ class RollingWindowsModel(BaseModel):
             else "lines"
 
         # Construct the graph object.
-        return [
+        result_plot = [
             go.Scattergl(
                 x=np.arange(len(row)),
                 y=row,
@@ -480,46 +555,11 @@ class RollingWindowsModel(BaseModel):
             enumerate(token_average_data_frame.iterrows())
         ]
 
-    def _add_milestone(self,
-                       windows: window_str,
-                       result_plot: List[go.Scattergl]) -> go.Figure:
-        """Add milestone to the existing plot.
-
-        :param windows: an array of windows to calculate.
-        :param result_plot: List of existing scatter rolling window plot.
-        :return: A plotly figure object.
-        """
-        # Get all mile stones.
-        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
-            windows=windows
-        )
-
-        # Find maximum y value in the result plot.
-        y_max_in_each_plot = \
-            [max(each_plot['y'][~np.isnan(each_plot['y'])])
-             for each_plot in result_plot]
-        y_max = max(y_max_in_each_plot) * 1.1
-
-        # Plot straight lines for all indexes for each mile stone.
-        layout = go.Layout(
-            showlegend=True,
-            shapes=[
-                dict(
-                    type="line",
-                    x0=mile_stone,
-                    x1=mile_stone,
-                    y0=0,
-                    y1=y_max,
-                    line=dict(
-                        color=self._get_mile_stone_color(index=index),
-                        width=1
-                    )
-                )
-                for index, key in enumerate(mile_stones)
-                for mile_stone in mile_stones[key]]
-        )
-
-        return go.Figure(data=result_plot, layout=layout)
+        if self._options.milestone is not None:
+            return self._add_milestone(windows=windows,
+                                       result_plot=result_plot)
+        else:
+            return go.Figure(data=result_plot)
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph.
@@ -535,20 +575,11 @@ class RollingWindowsModel(BaseModel):
         assert count_average ^ count_ratio
 
         if count_average:
-            result_plot = self._get_token_average_graph()
+            return self._get_token_average_graph()
         elif count_ratio:
-            result_plot = self._get_token_ratio_graph()
+            return self._get_token_ratio_graph()
         else:
             raise ValueError("unhandled count type")
-
-        # Check if mile stones was empty.
-        # If not exist return the result plot.
-        if self._options.milestone is None:
-            return go.Figure(data=result_plot,
-                             layout=go.Layout(showlegend=True))
-        # If exists, add mile stone to the result plot and return it.
-        else:
-            return self._add_milestone(result_plot=result_plot)
 
     def get_rwa_graph(self) -> str:
         """Get the displayable rolling window graph.
@@ -567,21 +598,25 @@ class RollingWindowsModel(BaseModel):
         :return: An empty string if no milestone exists. Otherwise a json
             object contains all milestones and their corresponding colors.
         """
-        # Get all mile stones.
-        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
-            windows=self._get_windows()
-        )
+        if self._options.milestone is not None:
+            # Get all mile stones.
+            mile_stones_dict = \
+                self._find_mile_stone_windows_indexes_in_all_windows(
+                    windows=self._get_windows()
+                )
 
-        # If milestones exists, find color.
-        if mile_stones is not None:
-            mile_stone_color_list = [
-                dict(
-                    mile_stone=mile_stone,
-                    color=self._get_mile_stone_color(index=index)
-                ) for index, mile_stone in enumerate(mile_stones)
-            ]
+            # If milestones exists, find color.
+            if mile_stones_dict is not {}:
+                mile_stone_color_list = [
+                    dict(
+                        mile_stone=mile_stone,
+                        color=self._get_mile_stone_color(index=index)
+                    ) for index, mile_stone in enumerate(mile_stones_dict)
+                ]
 
-            return jsonify(mile_stone_color_list)
-        # Otherwise return empty string.
+                return jsonify(mile_stone_color_list)
+            # Otherwise return empty string.
+            else:
+                return ""
         else:
             return ""
