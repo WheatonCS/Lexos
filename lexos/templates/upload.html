@@ -18,7 +18,7 @@
                try uploading them in small batches."></i>
 			</p>
 			{% if session['generalsettings']['beta_onbox'] %}
-				<p class="file-spec">Or use <a href="{{ url_for("scrape") }}">web scraper</a> (beta test) instead.</p>
+				<p class="file-spec">Or use <a href="{{ url_for("upload.scrape") }}">web scraper</a> (beta test) instead.</p>
 			{% endif %}
 		</legend>
 	</div>
