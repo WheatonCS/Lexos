@@ -40,7 +40,7 @@ function fileDragHover (e) {
  * */
 function resetProgressBar () {
   const progressBar = $('#progress-bar')
-  const status = $('#status-analyze')
+  const status = $('#status')
   progressBar.html('').css({'width': '0px'})
   progressBar.show()
   status.css('z-index', 50000)
@@ -56,13 +56,13 @@ function resetProgressBar () {
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
   // Make the loading icon circle visible
-  $('#status-analyze').css({'visibility': 'visible'})
+  $('#status').css({'visibility': 'visible'})
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
       $('#error-modal-message').html(`Cannot process blank file -- ${file.name}`)
       $('#error-modal').modal()
-      $('#status-analyze').css({'visibility': 'hidden'})
+      $('#status').css({'visibility': 'hidden'})
     } else {
       sendAjaxRequest(file, filename)
         .done(function () {
@@ -100,25 +100,27 @@ function UploadAndParseFile (file, fileSize) {
           }
           reader.readAsText(file)
           $('#activeDocIcon').css('display', 'block')
-          $('#status-analyze').hide()
+          $('#status').hide()
         })
 
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert(`${textStatus} : ${errorThrown}`)
-          $('#status-analyze').css({'visibility': 'hidden'})
+          $('#status').css({'visibility': 'hidden'})
         })
         .always(function () {
-          $('#status-analyze').css({'visibility': 'hidden'})
+          $('#status').css({'visibility': 'hidden'})
         })
     }
   } else if (!AllowedFileType(file.name)) {
     $('#error-modal-message').html(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
     $('#error-modal').modal()
     // These are to hide the loading icon.
-    $('#status-analyze').css({'visibility': 'hidden'})
+    $('#status').css({'visibility': 'hidden'})
+    $('#status').css({'opacity': '0'})
   } else {
     // These are to hide the loading icon.
-    $('#status-analyze').css({'visibility': 'hidden'})
+    $('#status').css({'visibility': 'hidden'})
+    $('#status').css({'opacity': '0'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
     const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
     $('#error-modal-message').html(`Upload for ${filename}  failed.\n\nFile bigger than
@@ -213,13 +215,14 @@ function FileSelectHandler (e) {
         const faFolderOpen = $('.fa-folder-open-o')
         faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
         faFolderOpen.fadeIn(200)
-        $('#status-analyze').hide()
+        // $('#status').hide()
       }
     }
   showProgress()
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
   counter.attr('value', numActiveFile)
+  $('#status').delay(1200).hide(0)
 }
 
 /**
@@ -227,6 +230,7 @@ function FileSelectHandler (e) {
  * @return { void }
  */
 function showProgress () {
+  $('#status').css('z-index', 50000).show()
   $('#progress').html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
   $id('fileselect').value = ''
   // this allows the event to fire on "change" in chrome. the value property changing is the
