@@ -214,11 +214,19 @@ input[type="file"] {
 }
 
 .transparent {
+
     opacity: 0;
 }
 
 .dataTables_info {
     width: 400px !important;
+
+  opacity: 0;
+}
+
+.dataTables_info{
+  width:400px !important;
+
 }
 
 /* Clearfix hack - remember to apply this class to parents of any floated elements */
