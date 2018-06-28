@@ -27,7 +27,7 @@ def dendrogram():
         'dendrogram.html',
         labels=labels,
         numActiveDocs=num_active_docs,
-        itm="hierarchical")
+        itm="hierarchical-clustering")
 
 
 @dendrogram_blueprint.route("/dendrogramDiv", methods=['POST'])
