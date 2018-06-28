@@ -54,4 +54,5 @@ script:
   - ./node_modules/.bin/eslint ./js/scripts_kmeans.js
   - ./node_modules/.bin/eslint ./js/scripts_cut.js
   - ./node_modules/.bin/eslint ./js/scripts_manage.js
+  - ./node_modules/.bin/eslint ./js/scripts_base.js
   - cd ../..
