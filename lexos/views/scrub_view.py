@@ -16,7 +16,7 @@ scrubber_blueprint = Blueprint('scrubber', __name__)
 
 
 # Tells Flask to load this function when someone is at '/scrub'
-@scrubber_blueprint.route("/scrub", methods=["GET", "POST"])
+@scrubber_blueprint.route("/scrub", methods=["GET"])
 def scrub():
     # Are you looking for scrubber.py?
     """Handles the functionality of the scrub page.
@@ -29,25 +29,32 @@ def scrub():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     file_manager = utility.load_file_manager()
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'scrubbingoptions' not in session:
-            session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
-        if 'xmlhandlingoptions' not in session:
-            session['xmlhandlingoptions'] = {
-                "myselect": {"action": '', "attribute": ""}}
-        utility.xml_handling_options()
-        previews = file_manager.get_previews_of_active()
-        tags_present, doe_present, gutenberg_present = \
-            file_manager.check_actives_tags()
-        return render_template(
-            'scrub.html',
-            previews=previews,
-            itm="scrubber",
-            haveTags=tags_present,
-            haveDOE=doe_present,
-            haveGutenberg=gutenberg_present,
-            numActiveDocs=num_active_docs)
+
+    # "GET" request occurs when the page is first loaded.
+    if 'scrubbingoptions' not in session:
+        session['scrubbingoptions'] = constants.DEFAULT_SCRUB_OPTIONS
+    if 'xmlhandlingoptions' not in session:
+        session['xmlhandlingoptions'] = {
+            "myselect": {"action": '', "attribute": ""}}
+    utility.xml_handling_options()
+    previews = file_manager.get_previews_of_active()
+    tags_present, doe_present, gutenberg_present = \
+        file_manager.check_actives_tags()
+    return render_template(
+        'scrub.html',
+        previews=previews,
+        itm="scrubber",
+        haveTags=tags_present,
+        haveDOE=doe_present,
+        haveGutenberg=gutenberg_present,
+        numActiveDocs=num_active_docs)
+
+
+@scrubber_blueprint.route("/scrub", methods=["POST"])
+def download_scrub():
+    """:return: the zip files needs to be downloaded."""
+    file_manager = utility.load_file_manager()
+    return file_manager.zip_active_files('scrubbed.zip')
 
 
 # Tells Flask to load this function when someone is at '/doScrubbing'
@@ -74,19 +81,6 @@ def do_scrubbing():
     data = {"data": previews}
     data = json.dumps(data)
     return data
-
-
-# Tells Flask to load this function when someone is at '/downloadScrubbing'
-@scrubber_blueprint.route("/downloadScrubbing", methods=["GET", "POST"])
-def download_scrubbing():
-    """downloads scrubbed files.
-
-    :return: a .zip with all the scrubbed files
-    """
-    # The 'Download Scrubbed Files' button is clicked on scrub.html.
-    # Sends zipped files to downloads folder.
-    file_manager = utility.load_file_manager()
-    return file_manager.zip_active_files('scrubbed.zip')
 
 
 @scrubber_blueprint.route("/getTagsTable", methods=["GET", "POST"])
