@@ -613,6 +613,8 @@ footer {
 }
 
 /* ================== SCROLL TOP ==============================*/
+/* This is for the arrow up at the bottom right of every page. It enables the
+   scrolling up at the top of the page  */
 #scroll {
     position: fixed;
     right: 10px;
@@ -626,8 +628,7 @@ footer {
     -moz-border-radius: 60px;
     border-radius: 60px
 }
-
-/* ================== COLLAPSABLE DIV STYLING ==================== */
+/* ================== COLLAPSIBLE DIV STYLING ==================== */
 
 .has-chevron {
     cursor: pointer;
