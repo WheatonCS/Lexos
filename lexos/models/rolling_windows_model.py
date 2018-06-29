@@ -445,19 +445,22 @@ class RollingWindowsModel(BaseModel):
                     for mile_stone in mile_stones[key]]
             )
 
+            # Add a transparent dot in order to add the milestone legend.
             legend_helper = [
-                go.Scatter(
-                    x=[0, 0, 0],
-                    y=[0, 0, 0],
-                    name="milestones",
+                go.Scattergl(
+                    x=[self._options.window_options.window_size / 2],
+                    y=[(y_max + y_min) / 2],
+                    name="---milestones---",
                     hoverinfo="none",
                     mode="markers",
                     marker=dict(
+                        opacity=0,
                         color="rgb(255, 255, 255)"
                     )
                 )
             ]
 
+            # Add scatter at the end of mile stones to enable interactive.
             interactive_helper = [
                 go.Scattergl(
                     x=mile_stones[key],
@@ -472,8 +475,11 @@ class RollingWindowsModel(BaseModel):
                 for index, key in enumerate(mile_stones)
             ]
 
+            # Pack the data together.
+            data = result_plot + legend_helper + interactive_helper
+
             # Return the plot with milestones as layout.
-            return go.Figure(data=result_plot + legend_helper + interactive_helper,
+            return go.Figure(data=data,
                              layout=layout)
 
         else:
@@ -591,32 +597,3 @@ class RollingWindowsModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
-
-    def get_mile_stone_color(self) -> Union[jsonify, str]:
-        """Get milestone plot colors if mile stone exists.
-
-        :return: An empty string if no milestone exists. Otherwise a json
-            object contains all milestones and their corresponding colors.
-        """
-        if self._options.milestone is not None:
-            # Get all mile stones.
-            mile_stones_dict = \
-                self._find_mile_stone_windows_indexes_in_all_windows(
-                    windows=self._get_windows()
-                )
-
-            # If milestones exists, find color.
-            if mile_stones_dict is not {}:
-                mile_stone_color_list = [
-                    dict(
-                        mile_stone=mile_stone,
-                        color=self._get_mile_stone_color(index=index)
-                    ) for index, mile_stone in enumerate(mile_stones_dict)
-                ]
-
-                return jsonify(mile_stone_color_list)
-            # Otherwise return empty string.
-            else:
-                return ""
-        else:
-            return ""
