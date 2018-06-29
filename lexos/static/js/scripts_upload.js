@@ -241,7 +241,7 @@ function showProgress () {
  * if file valid: "Complete!" else: "Invalid File!"
  * @return {void}
  * @param {string} f - name of the file
- * @param {int} added - 1 id file is added
+ * @param {int} added - 1 id file is added.
  */
 function progressBarStatus (f, added) {
   if (added === 1 && f.size < $id('MAX_FILE_SIZE').value && f.size !== 0 && AllowedFileType(f.name)) {
