@@ -244,7 +244,7 @@ class StatsModel(BaseModel):
         # Hide information on x-axis as we do not really need any of those.
         # Set the title of the graph.
         layout = go.Layout(
-            title="Statistics of the Given Corpus",
+            title="Document Size Statistics of the Given Corpus",
             xaxis=dict(
                 autorange=True,
                 showgrid=False,

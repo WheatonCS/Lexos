@@ -19,9 +19,9 @@ function formatFileReportResponse (response) {
     noAnomalySe ? '<b>No</b> anomaly detected by standard error test.'
       : 'Anomaly <b>detected</b> by standard error test.' +
       response['anomaly_se_small'].map(
-        function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }) +
+        function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }).join('') +
       response['anomaly_se_large'].map(
-        function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` })
+        function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` }).join('')
 
   // Find if anomaly detected by standard error analysis.
   const noAnomalyIqr = response['anomaly_iqr_small'].length === 0 && response['anomaly_iqr_large'].length === 0
@@ -30,9 +30,9 @@ function formatFileReportResponse (response) {
     noAnomalyIqr ? '<b>No</b> anomaly detected by interquartile range test.'
       : 'Anomaly <b>detected</b> by interquartile range test.' +
       response['anomaly_iqr_small'].map(
-        function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }) +
+        function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }).join('') +
       response['anomaly_iqr_large'].map(
-        function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` })
+        function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` }).join('')
 
   // Return the retracted information.
   return {
