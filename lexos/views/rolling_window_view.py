@@ -48,11 +48,3 @@ def rwa_plot():
     session_manager.cache_rw_analysis_option()
     # Return plotly graph.
     return RollingWindowsModel().get_rwa_graph()
-
-
-@rwa_blueprint.route("/rollingWindowMileStone", methods=["POST"])
-def rwa_mile_stone():
-    # Cache RWA option.
-    session_manager.cache_rw_analysis_option()
-    # Return plotly graph.
-    return RollingWindowsModel().get_mile_stone_color()
