@@ -216,7 +216,7 @@ function FileSelectHandler (e) {
       const faFolderOpen = $('.fa-folder-open-o')
       faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
       faFolderOpen.fadeIn(200)
-        // $('#status').hide()
+
       }
     }
   showProgress()
