@@ -50,8 +50,8 @@ function resetProgressBar () {
 /**
  * Upload and display file contents
  * @return {void}
- * @param {object} file - file object
- * @param {int} fileSize - size of the File uploaded
+ * @param {object} file - file object.
+ * @param {int} fileSize - size of the File uploaded.
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
