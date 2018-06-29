@@ -2,7 +2,7 @@
  * Alias function
  * @return {object} element id object
  * @param {string} id - id of an html element
- * */
+ */
 function $id (id) {
   return document.getElementById(id)
 }
