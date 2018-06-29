@@ -193,7 +193,8 @@ class TestStatsPlotly:
         assert basic_fig['data'][1]['marker']['color'] == 'rgb(10, 140, 200)'
 
     def test_get_stats_layout(self):
-        assert basic_fig['layout']['title'] == 'Statistics of the Given Corpus'
+        assert basic_fig['layout']['title'] == \
+            'Document Size Statistics of the Given Corpus'
 
         assert basic_fig['layout']['xaxis']['autorange'] is True
 

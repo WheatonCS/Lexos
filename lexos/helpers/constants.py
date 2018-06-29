@@ -121,7 +121,7 @@ ANALYZEINPUTS = (
 # for rolling window
 # if there is no comma in the end, python recognize this var as a string
 # instead of a tuple
-RWBOXES = ('rollinghasmilestone', 'hideDots', 'BWoutput')
+RWBOXES = ('rollinghasmilestone', 'showDots', 'BWoutput')
 RWINPUTS = (
     'filetorollinganalyze',
     'counttype',
@@ -210,7 +210,7 @@ DEFAULT_CSV_OPTIONS = {
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {
     'rollinghasmilestone': False,
-    'hideDots': False,
+    'showDots': False,
     'BWoutput': False,
     'filetorollinganalyze': '',
     'counttype': 'average',

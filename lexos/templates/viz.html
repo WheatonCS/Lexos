@@ -16,10 +16,6 @@ $(function() {
   // If there is data scroll down to the graph on page load
   document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
   // Handle the return to top links
-  $('.to-top').click(function(){
-      $("html, body").animate({ scrollTop: 0 }, 800);
-      return false;
-  });
 });
 </script>
 <style type="text/css">
@@ -80,9 +76,6 @@ $(function() {
 <a name="graph-anchor" id="graph-anchor"></a>
 <div id="viz"></div>
 <div class="row">
-<div class="col-md-12">
-  <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
-</div>
 </div>
 
 <!-- Canvg Used for Save to PNG -->

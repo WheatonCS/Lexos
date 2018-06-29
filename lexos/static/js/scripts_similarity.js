@@ -26,7 +26,10 @@ function generateSimResult () {
     // Center all the data in the table.
     columnDefs: [
       {'className': 'text-center', 'targets': '_all'}
-    ]
+    ],
+
+    // Sort the data table by similarity scores.
+    order: [[1, 'asc']]
   }
 
   // send the ajax request
@@ -54,6 +57,8 @@ function generateSimResult () {
 }
 
 $(function () {
+  // hide the normalize options.
+  $('#normalize-options').css({'visibility': 'hidden'})
   // hide the similarity
   $('#similaritiesResults').css({'display': 'none'})
   /**

@@ -91,9 +91,13 @@
 	<header class="container">
 	<input type="hidden" name="current_id" value="{{ session['id'] }}"/>
 	<input type="hidden" name="current_version" value="{{ version }}"/>
+
 	<!-- Loading icon -->
     <div id="status"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
-
+    <!-- BackToTop Button -->
+        <a id="scroll">
+            <i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right"></i>
+        </a>
     <div id="banner" class="container">
 	    <div class="row">
 		    <div class="pull-left">
@@ -196,8 +200,7 @@
 	<footer class="container">
 		<span id="aboutus">
 
-			<a href="http://lexos.wheatoncollege.edu/" target="_blank">Lexos v{{version}}</a>
-			© 2018
+			Lexos v{{version}} © 2018
 
 			<a href="http://lexomics.wheatoncollege.edu" target="_blank">Lexomics Research Group</a>
 			 ·
