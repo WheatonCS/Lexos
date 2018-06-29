@@ -133,9 +133,9 @@ function UploadAndParseFile (file, fileSize) {
 }
 
 /**
- * @return {ajax} ajax data
- * @param {object} file - file object
- * @param {string} filename - name of the file
+ * @return {ajax} ajax data.
+ * @param {object} file - file object.
+ * @param {string} filename - name of the file.
  */
 function sendAjaxRequest (file, filename) {
   return $.ajax({
