@@ -33,10 +33,6 @@ $(document).ready( function () {
   // If there is data scroll down to the graph on page load
   document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
   // Handle the return to top links
-  $('.to-top').click(function(){
-      $("html, body").animate({ scrollTop: 0 }, 800);
-      return false;
-  });
 });
 </script>
 {% endblock %}
@@ -145,7 +141,6 @@ $(document).ready(function() {
 <div id="rule">
   <div class="row">
     <div class="col-md-6">
-      <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
       <label>To modify the word cloud, click on it after changing the options below.</label>
     </div>
     <div class="col-md-6">
