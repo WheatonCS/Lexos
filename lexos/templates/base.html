@@ -390,9 +390,11 @@
                             {# "checked" if session['general_settings']['beta_on'] #}>
                     Use Beta functions
                 </label>
-                <div id="dialog-status"><img
-                        src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{ version }}"
-                        alt="Loading..."></div>
+                <div id="dialog-status">
+                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+                       style="color: #0068AF;"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
@@ -479,9 +481,11 @@
                 <div id="itm-header" style="padding:2px 20px;"><h3>In the
                     Margins</h3></div>
                 <div id="itm-content" style="padding:2px 20px;"></div>
-                <div id="panel-status"><img
-                        src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{ version }}"
-                        alt="Loading..."></div>
+                <div id="panel-status">
+                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+                       style="color: #0068AF;"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </div>
     </div>
