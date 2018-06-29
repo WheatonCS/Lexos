@@ -171,9 +171,9 @@ function Init () {
 }
 
 /**
- * file selection
+ * file selection.
  * @return {void}
- * @param {object} e - event
+ * @param {object} e - event.
  */
 function FileSelectHandler (e) {
   const counter = $('#counter')
