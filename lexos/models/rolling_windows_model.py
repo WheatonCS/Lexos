@@ -436,8 +436,8 @@ class RollingWindowsModel(BaseModel):
                 shapes=[
                     dict(
                         type="line",
-                        x0=milestone_x_coord,
-                        x1=milestone_x_coord,
+                        x0=mile_stone,
+                        x1=mile_stone,
                         y0=y_min,
                         y1=y_max,
                         line=dict(
@@ -445,8 +445,10 @@ class RollingWindowsModel(BaseModel):
                             width=1
                         )
                     )
-                    for index, (_, milestone_x_coord) in
+
+                    for index, (_, milestones_list) in
                     enumerate(milestones_dict.items())
+                    for mile_stone in milestones_list
                 ]
             )
 
