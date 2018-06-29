@@ -55,7 +55,7 @@ function resetProgressBar () {
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
-  const status = $('#status-analyze')
+  const status = $('#status-analyze ')
   // Make the loading icon circle visible
   status.css({'visibility': 'visible'})
 
