@@ -12,7 +12,7 @@ function $id (id) {
  * @return {boolean} bool - true if file type is valid.
  * @param {string}  filename - name of the file.
  */
-function AllowedFileType (filename) {
+function AllowedFileType (filename)  {
   const allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos']
   // Get the file file extension
   let fileType = filename.split('.')[filename.split('.').length - 1]
