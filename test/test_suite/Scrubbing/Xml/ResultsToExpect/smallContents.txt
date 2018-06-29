@@ -1,0 +1,1 @@
+ <!ENTITY caret "&#x2227;"> <TEI xml:id="myID" xmlns="http://www.tei-c.org/ns/1.0"> <TEIHEADER><p>blankety</p></TEIHEADER> <myFacsimile><p>blank</p></myFacsimile> <text><p>blank</p></text> </TEI>

@@ -251,8 +251,7 @@ function progressBarStatus (f, added) {
       'width': '175px',
       'height': '20px'
     }).fadeOut(2000)
-  }
-  else{
+  } else {
     $('#progress-bar').html('Invalid File!').css({
       'color': '#FFF',
       'text-align': 'center',
