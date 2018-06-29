@@ -228,7 +228,7 @@ function FileSelectHandler (e) {
 
 /**
  * Displays the message on the 'progress' bar
- * @return { void }
+ * @return {void}
  */
 function showProgress () {
   $('#status').css('z-index', 50000).show()
