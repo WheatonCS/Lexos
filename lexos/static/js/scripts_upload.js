@@ -223,7 +223,7 @@ function FileSelectHandler (e) {
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
   counter.attr('value', numActiveFile)
-  $('#status').delay(1200).hide(0)
+  $('#status').delay(1200 ).hide(0)
 }
 
 /**
