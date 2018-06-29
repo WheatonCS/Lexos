@@ -40,7 +40,7 @@ function fileDragHover (e) {
  */
 function resetProgressBar () {
   const progressBar = $('#progress-bar')
-  const status = $('#status-analyze')
+  const status = $('#status')
   progressBar.html('').css({'width': '0px'})
   progressBar.show()
   status.css('z-index', 50000)
