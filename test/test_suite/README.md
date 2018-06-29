@@ -1,7 +1,8 @@
-# LexosTestSuite
-==============
-This collection of tests are to facilitate testing of the Lexos, as well as to provide a set of example Experiments for new users to try.
+# Lexos Test Suite
 
-See additional explanations inside each directories.
+This collection of tests are to facilitate testing of the Lexos, as well as to 
+provide a set of example experiments for new users to try.
+
+See additional explanations inside each directory.
 
 

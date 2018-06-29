@@ -1,20 +1,77 @@
-Tokenizer
-==========
+# Tokenizer
 
 #### Test Tokenizer
 
-*Test files:* fourTest.txt, NTest.txt, oneTest.txt, threeTest.txt, twoTest.txt
+*Test files:* four.txt, one.txt, three.txt, two.txt
 
-*Result files:* resultsColumns.txt, resultsRows.txt
+*Result files:* byTokensandPropCounts.csv, byTokensandRawCounts.csv,
+byCharactersandRawCounts.csv
 
-1. UPLOAD ALL TEST FILES
+### Tokenize by Tokens
+##### Tokenize by Proportional Counts
 
-2. TOKENIZE: 
-    - Toggle to _Documents as Columns, Terms as Rows_
-    - Toggle to _Documents as Rows, Terms as Columns_
+1. UPLOAD all files
 
-3. RESULTS
-    - a file (resultsColumns.txt) containing
-        * a formatted csv table with Terms as Rows and Documents as Columns
-    - a file (resultsRows.txt) containing 
-        * a formatted csv table with Terms as Columns and Documents as Rows
+2. Tokenize
+ - Default Data Orientation: Documents as Columns, Terms as Rows
+ - Tokenize by 1-gram tokens 
+ - Normalize by Proportional Counts
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: byTokensandPropCounts.csv
+
+
+
+##### Tokenize by Raw Counts
+
+1. UPLOAD all files
+
+2. Tokenize
+ - Default Data Orientation: Documents as Columns, Terms as Rows
+ - Tokenize by 1-gram tokens 
+ - Normalize by Raw Counts
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: byTokensandRawCounts.csv
+
+
+
+##### Tokenize using Bi-Grams
+
+1. UPLOAD all files
+
+2. Tokenize
+ - Default Data Orientation: Documents as Columns, Terms as Rows
+ - Tokenize by 2-gram tokens 
+ - Normalize by Proportional Counts
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: usingBiGrams.csv
+
+
+##### Tokenize by Weighted Counts (TF-IDF)
+
+1. UPLOAD all files
+
+2. Tokenize
+ - Default Data Orientation: Documents as Columns, Terms as Rows
+ - Tokenize by 1-gram tokens 
+ - Normalize by Weighted Counts (TF-IDF), Euclidean Distance
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: byWeightedCounts.csv
+
+
+
+### Tokenize by Characters
+##### Tokenize by Raw Counts
+
+1. UPLOAD all files
+
+2. Tokenize
+ - Default Data Orientation: Documents as Rows, Terms as Columns
+ - Tokenize by 1-gram characters 
+ - Normalize by Raw Counts
+ - OPTIONAL: Culling Options and Assign Temporary Labels
+ 
+Result: byCharactersandRawCounts.csv
