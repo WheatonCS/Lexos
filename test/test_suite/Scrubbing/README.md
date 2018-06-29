@@ -1,9 +1,10 @@
 # SCRUBBING
-======================================================================================
+
 
 A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
 
 Order Of Implementations:
+
     1. lower
     2. special characters
     3. tags
@@ -16,11 +17,11 @@ Order Of Implementations:
 ### Function Descriptions
 
 Ampersands:
-- 
+- If this option is selected any ampersands are preserved. 
 
-Apos: AKA apostrophe. 
+Apostrophes: 
 - Only accessible once remove punctuation is selected
-- If this option is selected any word internal apostrophies are preserved. 
+- If this option is selected any word internal apostrophes are preserved. 
 
 Consolidations:
 - Scrubber function should convert the first character under consolidations.txt to the second character. 
@@ -46,7 +47,7 @@ Special Characters:
 
 StopWords & KeepWords:
 - Scrubber should remove all the stopwords under the stopwords.txt file
-- After srubbing, all the words under stopwords.txt will be removed. 
+- After scrubbing, all the words under stopwords.txt will be removed. 
 
 Tags:
 - Tags will be removed if we click "Remove Tags" option. 
