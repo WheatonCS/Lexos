@@ -264,7 +264,7 @@ function progressBarStatus (f,added) {
 }
 
 $(function () {
-  /* Message for when you hover on the open folder icon on the top right.
+  // Message for when you hover on the open folder icon on the top right.
   $('[data-toggle="tooltip"]').tooltip()
   $('#uploadbrowse').click(function () {
     $('#fileselect').click()
