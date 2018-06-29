@@ -40,7 +40,7 @@ function fileDragHover (e) {
  */
 function resetProgressBar () {
   const progressBar = $('#progress-bar')
-  const status = $('#status')
+  const status = $('#status-analyze')
   progressBar.html('').css({'width': '0px'})
   progressBar.show()
   status.css('z-index', 50000)
@@ -55,7 +55,7 @@ function resetProgressBar () {
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
-  const status = $('#status')
+  const status = $('#status-analyze')
   // Make the loading icon circle visible
   status.css({'visibility': 'visible'})
 
