@@ -73,16 +73,22 @@ function generateRollingWindow () {
 
 /* document.ready() Functions */
 $(function () {
+  // Get the rolling window result div.
+  const resultDiv = $('#rwa-result')
+  resultDiv.css({'visibility': 'hidden'})
   // Call update milestone on page load
   updateMSopt()
   // Bind the function to the checkbox
   $('#rollinghasmilestone').click(updateMSopt)
 
   $('#getgraph').click(function () {
+    resultDiv.css({'visibility': 'hidden'})
     /* Get the possible validations. */
     const errorString = getSubmissionError()
     if (errorString === null) {
       generateRollingWindow()
+      resultDiv.css({'visibility': 'visible'})
+      utility.scrollToDiv(resultDiv)
     } else {
       utility.runModal(errorString)
     }
