@@ -48,7 +48,7 @@ function resetProgressBar () {
 }
 
 /**
- * Upload and display file contents
+ * Upload and display file contents.
  * @return {void}
  * @param {object} file - file object.
  * @param {int} fileSize - size of the File uploaded.
