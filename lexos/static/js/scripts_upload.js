@@ -22,9 +22,9 @@ function AllowedFileType (filename) {
 }
 
 /**
- * File Drag Hover
+ * File Drag Hover.
  * @return {void}
- * @param {object} e - event
+ * @param {object} e - event.
  */
 function fileDragHover (e) {
   e.stopPropagation()
