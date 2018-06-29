@@ -25,7 +25,7 @@ function AllowedFileType (filename) {
  * File Drag Hover
  * @return {void}
  * @param {object} e - event
- * */
+ */
 function fileDragHover (e) {
   e.stopPropagation()
   e.preventDefault()
@@ -33,11 +33,11 @@ function fileDragHover (e) {
 }
 
 /**
- *@return {void}
- *@description { Set progress bar back to default.
+ * @return {void}
+ * @description { Set progress bar back to default.
   when a file is uploaded: bar changes to 'Complete'
   After the upload it set the bar back to 'Ready for Files to Upload'}
- * */
+ */
 function resetProgressBar () {
   const progressBar = $('#progress-bar')
   const status = $('#status')
