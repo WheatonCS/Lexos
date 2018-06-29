@@ -35,7 +35,7 @@ function fileDragHover (e) {
 /**
  * @return {void}
  * @description { Set progress bar back to default.
-  when a file is uploaded: bar changes to 'Complete'
+  when a file is uploaded: bar changes to 'Complete'.
   After the upload it set the bar back to 'Ready for Files to Upload'.
  */
 function resetProgressBar () {
