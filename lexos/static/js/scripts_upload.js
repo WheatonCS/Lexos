@@ -9,8 +9,8 @@ function $id (id) {
 
 /**
  * Checks if the file type is valid.
- * @return {boolean} bool - true if file type is valid
- * @param {string}  filename - name of the file
+ * @return {boolean} bool - true if file type is valid.
+ * @param {string}  filename - name of the file.
  */
 function AllowedFileType (filename) {
   const allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos']
