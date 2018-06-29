@@ -29,7 +29,7 @@ function generateSimResult () {
     ],
 
     // Sort the data table by similarity scores.
-    order: [[1, "asc"]]
+    order: [[1, 'asc']]
   }
 
   // send the ajax request
