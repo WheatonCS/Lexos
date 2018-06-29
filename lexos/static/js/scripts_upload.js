@@ -212,7 +212,7 @@ function FileSelectHandler (e) {
       if (numberOfFileDone / totalFiles > 0.5) {
         progress.css('color', '#FFF')
       }
-      progressBarStatus(f,added)
+      progressBarStatus(f, added)
       const faFolderOpen = $('.fa-folder-open-o')
       faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
       faFolderOpen.fadeIn(200)
