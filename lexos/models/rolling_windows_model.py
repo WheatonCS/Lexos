@@ -252,13 +252,16 @@ class RollingWindowsModel(BaseModel):
             return pd.DataFrame(list_matrix, columns=tokens).transpose()
 
         if token_type is RWATokenType.string:
-            return _average_matrix_helper(self._find_string_in_window)
+            return _average_matrix_helper(
+                window_term_count_func=self._find_string_in_window)
 
         elif token_type is RWATokenType.word:
-            return _average_matrix_helper(self._find_word_in_window)
+            return _average_matrix_helper(
+                window_term_count_func=self._find_word_in_window)
 
         elif token_type is RWATokenType.regex:
-            return _average_matrix_helper(self._find_regex_in_window)
+            return _average_matrix_helper(
+                window_term_count_func=self._find_regex_in_window)
 
         else:
             raise ValueError(f"unhandled token type: {token_type}")
@@ -409,11 +412,13 @@ class RollingWindowsModel(BaseModel):
         :return: A plotly figure object.
         """
         # Get all mile stones.
-        mile_stones = self._find_mile_stone_windows_indexes_in_all_windows(
-            windows=windows
-        )
+        milestones_dict = \
+            self._find_mile_stone_windows_indexes_in_all_windows(
+                windows=windows
+            )
+
         # Check if passed in mile stones exist in the file.
-        if mile_stones is not {}:
+        if milestones_dict is not {}:
             # Find max and min y value in the result plot.
             y_max_in_each_plot = \
                 [max(each_plot['y'][~np.isnan(each_plot['y'])])
@@ -431,8 +436,8 @@ class RollingWindowsModel(BaseModel):
                 shapes=[
                     dict(
                         type="line",
-                        x0=mile_stone,
-                        x1=mile_stone,
+                        x0=milestone_x_coord,
+                        x1=milestone_x_coord,
                         y0=y_min,
                         y1=y_max,
                         line=dict(
@@ -440,8 +445,9 @@ class RollingWindowsModel(BaseModel):
                             width=1
                         )
                     )
-                    for index, key in enumerate(mile_stones)
-                    for mile_stone in mile_stones[key]]
+                    for index, (_, milestone_x_coord) in
+                    enumerate(milestones_dict.items())
+                ]
             )
 
             # Add a transparent dot in order to add the milestone legend.
@@ -462,8 +468,8 @@ class RollingWindowsModel(BaseModel):
             # Add scatter at the end of mile stones to enable interactive.
             interactive_helper = [
                 go.Scattergl(
-                    x=mile_stones[key],
-                    y=[y_max for _ in range(len(mile_stones[key]))],
+                    x=milestones_dict[key],
+                    y=[y_max for _ in range(len(milestones_dict[key]))],
                     mode="markers",
                     hoverinfo="x+name",
                     name=key,
@@ -471,7 +477,7 @@ class RollingWindowsModel(BaseModel):
                         color=self._get_mile_stone_color(index=index)
                     )
                 )
-                for index, key in enumerate(mile_stones)
+                for index, key in enumerate(milestones_dict)
             ]
 
             # Pack the data together.
