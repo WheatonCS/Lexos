@@ -226,7 +226,7 @@ function FileSelectHandler (e) {
 }
 
 /**
- * Displays the message on the 'progress' bar
+ * Displays the message on the 'progress' bar.
  * @return {void}
  */
 function showProgress () {
