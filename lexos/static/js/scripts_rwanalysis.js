@@ -71,45 +71,6 @@ function generateRollingWindow () {
       })
 }
 
-/**
- * The function to submit form via ajax in dendrogram.
- * @returns {void}.
- */
-function displayMileStone () {
-  // show loading icon
-  $('#status-visualize').css({'visibility': 'visible'})
-
-  // convert form into an object map string to string
-  const form = utility.jsonifyForm()
-
-  // send the ajax request
-  utility.sendAjaxRequest('/rollingWindowMileStone', form)
-    .done(
-      function (response) {
-        if (response !== '') {
-          const mileStones = response.map(function (mileStone) {
-            return `<div class="col-sm-1 col-md-1 col-lg-1">
-                        <p style="color: ${mileStone['color']}; font-size: 20px">${mileStone['mile_stone']}</p>
-                    </div>`
-          })
-          $('#mile-stones').html(mileStones)
-          $('#mile-stone-field').css('display', 'block')
-        } else {
-          $('#mile-stone-field').css('display', 'none')
-        }
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        utility.runModal('Error encountered while generating the milestone delimiter color.')
-      })
-    .always(
-      function () {
-        $('#status-visualize').css({'visibility': 'hidden'})
-      })
-}
-
 /* document.ready() Functions */
 $(function () {
   // Call update milestone on page load
@@ -121,7 +82,6 @@ $(function () {
     /* Get the possible validations. */
     const errorString = getSubmissionError()
     if (errorString === null) {
-      displayMileStone()
       generateRollingWindow()
     } else {
       utility.runModal(errorString)
