@@ -184,13 +184,14 @@
             <fieldset class="rwanalysisradiosdiv">
                 <legend>4. Define Window</legend>
                 <label for="rollingwindowsize">Size of Rolling Window:
-                    <input type="number" min="1" name="rollingwindowsize"
-                           id="rollingwindowsize"
+                    <input type="number"  name="rollingwindowsize"
+                           id="rollingwindowsize" step="1" max="1000" min="1"
                            value="{{ session['rwoption']['rollingwindowsize'] }}">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
-                       title="The number of characters, tokens, or lines to increment for each window.">
+                       title="The number of characters, tokens, or lines to increment
+                              for each window. The maximum is 1000.">
                     </i>
                 </label>
                 <label class="radio" for="windowletter" id="radiowindowletter">
