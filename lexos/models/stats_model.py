@@ -249,7 +249,6 @@ class StatsModel(BaseModel):
                 autorange=True,
                 showgrid=False,
                 zeroline=False,
-                autotick=False,
                 showline=False,
                 showticklabels=False
             ),
