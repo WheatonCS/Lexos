@@ -624,6 +624,7 @@ class RollingWindowsModel(BaseModel):
             windows=self._get_windows()
         )
 
-        data_frame.to_csv(path_or_buf=save_path)
+        data_frame.transpose().to_csv(path_or_buf=save_path,
+                                      index_label="# Window")
 
         return save_path
