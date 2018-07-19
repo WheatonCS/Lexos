@@ -1,13 +1,16 @@
 """This is the model that generates rolling window results."""
 
 import re
+import os
 import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
+from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
+from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.models.matrix_model import FileIDContentMap
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
@@ -606,32 +609,21 @@ class RollingWindowsModel(BaseModel):
                     include_plotlyjs=False)
 
     def download_rwa(self) -> str:
-        count_average = self._options.average_token_options is not None
-        count_ratio = self._options.ratio_token_options is not None
+        # Get the default saving directory of rolling window result.
+        result_folder_path = os.path.join(
+            session_manager.session_folder(), RESULTS_FOLDER)
 
-        # precondition
-        # ^ is the exclusive or operator,
-        # means we can either use average count or ratio count
-        assert count_average ^ count_ratio
+        # Attempt to make the directory.
+        if not os.path.isdir(result_folder_path):
+            os.makedirs(result_folder_path)
 
-        if count_average:
-            data_frame = self._find_tokens_average_in_windows(
-                windows=self._get_windows()
-            )
+        # Get the complete saving path of rolling window result.
+        save_path = os.path.join(result_folder_path, "rolling_window.csv")
 
-        elif count_ratio:
-            frame_list = \
-                [
-                    self._find_token_ratio_in_windows(
-                        windows=self._get_windows(),
-                        numerator_token=row["numerator"],
-                        denominator_token=row["denominator"]
-                    )
-                    for _, row in
-                    self._options.ratio_token_options.token_frame.iterrows()
-                ]
+        data_frame = self._find_tokens_average_in_windows(
+            windows=self._get_windows()
+        )
 
+        data_frame.to_csv(path_or_buf=save_path)
 
-
-        else:
-            raise ValueError("Unhandled count type")
+        return save_path
