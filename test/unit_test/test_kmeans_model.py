@@ -93,7 +93,6 @@ class TestVoronoiPlot:
     def test_heat_map(self):
         assert plot.data[0]["type"] == "heatmap"
         assert plot.data[0]["hoverinfo"] == "skip"
-        assert plot.data[0]["colorscale"] == "YlGnBu"
 
     def test_centroid(self):
         assert plot.data[1]["type"] == "scatter"
@@ -162,10 +161,6 @@ class Test2DScatter:
         assert twoD_scatter.layout["title"] == \
             "K-Means Two Dimensional Scatter Plot Result"
         assert twoD_scatter.layout["hovermode"] == "closest"
-        assert twoD_scatter.layout["xaxis"] == dict(
-            {'title': 'x-axis', 'showline': False})
-        assert twoD_scatter.layout['yaxis'] == dict(
-            {'title': 'y-axis', 'showline': False})
 
     def test_scatter(self):
         assert twoD_scatter.data[0]["type"] == "scatter"
