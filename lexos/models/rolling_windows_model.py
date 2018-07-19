@@ -54,7 +54,7 @@ class RollingWindowsModel(BaseModel):
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
-                self._test_front_end_options is not None:
+            self._test_front_end_options is not None:
             file_id = self._test_front_end_options.passage_file_id
             file_id_content_map = self._test_file_id_content_map
 
@@ -223,7 +223,7 @@ class RollingWindowsModel(BaseModel):
 
         def _average_matrix_helper(
             window_term_count_func: Callable[[str, str], int]) \
-                -> pd.DataFrame:
+            -> pd.DataFrame:
             """Get the average matrix.
 
             :param window_term_count_func:
@@ -358,7 +358,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-            self, windows: window_str) -> milestone_count_dict:
+        self, windows: window_str) -> milestone_count_dict:
         """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
@@ -539,7 +539,7 @@ class RollingWindowsModel(BaseModel):
         else:
             return go.Figure(data=result_plot)
 
-    def _get_token_average_graph(self) ->go.Figure:
+    def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
 
         :return: a list of plotly graph object
@@ -604,3 +604,34 @@ class RollingWindowsModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
+
+    def download_rwa(self) -> str:
+        count_average = self._options.average_token_options is not None
+        count_ratio = self._options.ratio_token_options is not None
+
+        # precondition
+        # ^ is the exclusive or operator,
+        # means we can either use average count or ratio count
+        assert count_average ^ count_ratio
+
+        if count_average:
+            data_frame = self._find_tokens_average_in_windows(
+                windows=self._get_windows()
+            )
+
+        elif count_ratio:
+            frame_list = \
+                [
+                    self._find_token_ratio_in_windows(
+                        windows=self._get_windows(),
+                        numerator_token=row["numerator"],
+                        denominator_token=row["denominator"]
+                    )
+                    for _, row in
+                    self._options.ratio_token_options.token_frame.iterrows()
+                ]
+
+
+
+        else:
+            raise ValueError("Unhandled count type")
