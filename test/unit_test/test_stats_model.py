@@ -177,7 +177,7 @@ class TestStatsPlotly:
 
         assert basic_fig['data'][0]['mode'] == 'markers'
 
-        assert basic_fig['data'][0]['text'] == ['F1.txt', 'F2.txt']
+        assert basic_fig['data'][0]['text'] == ('F1.txt', 'F2.txt')
 
     def test_get_stats_box_plot(self):
         assert basic_fig['data'][1]['type'] == 'box'
@@ -201,8 +201,6 @@ class TestStatsPlotly:
         assert basic_fig['layout']['xaxis']['showgrid'] is False
 
         assert basic_fig['layout']['xaxis']['zeroline'] is False
-
-        assert basic_fig['layout']['xaxis']['autotick'] is False
 
         assert basic_fig['layout']['xaxis']['showline'] is False
 
