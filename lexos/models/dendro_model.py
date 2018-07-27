@@ -4,7 +4,7 @@ from typing import NamedTuple, Optional
 
 import pandas as pd
 import plotly.figure_factory as ff
-from plotly.graph_objs.graph_objs import Figure
+from plotly.graph_objs.graph_objs import Figure, Scatter
 from plotly.offline import plot
 from scipy.cluster.hierarchy import linkage
 from scipy.spatial.distance import pdist
@@ -82,16 +82,49 @@ class DendrogramModel(BaseModel):
             labels=labels
         )
 
+    def extend_fig_margin(self, figure: Figure) -> Figure:
+
+        # Get the length of longest label.
+        max_label_len = \
+            max([len(self._id_temp_label_map[file_id])
+                 for file_id in self._doc_term_matrix.index.values])
+
+        # Adjust style base on selected orientation.
+        if self._dendro_option.orientation in ["top", "bottom"]:
+            return figure
+        else:
+            figure['layout'].update({'margin': {'l': max_label_len * 7}})
+            return figure
+
     def get_dendrogram_div(self) -> str:
         """Generate the dendrogram div to send to the front end.
 
         :return: a div
         """
+        # Get the desired figure.
         figure = self._get_dendrogram_fig()
 
-        # update the style of the image
-        figure['layout'].update({'width': 800, 'height': 1000,
-                                 'hovermode': 'x'})
+        # Update the size of the image.
+        figure['layout'].update(
+            {
+                'width': 1100,
+                'height': 800,
+                'hovermode': 'x'
+            }
+        )
+
+        dummy_scatter = Scatter(
+            x=[max(figure['layout']['xaxis']['tickvals']) + 3],
+            y=[0],
+            opacity=0,
+            mode="markers",
+            hoverinfo="skip"
+        )
+
+        figure['data'] += [dummy_scatter]
+
+        # Adjust figure style based on the selected orientation.
+        figure = self.extend_fig_margin(figure=figure)
 
         div = plot(figure, show_link=False, output_type="div",
                    include_plotlyjs=False)
