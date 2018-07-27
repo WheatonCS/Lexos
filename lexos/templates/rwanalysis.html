@@ -173,7 +173,7 @@
             <fieldset class="rwanalysisradiosdiv">
                 <legend>4. Define Window</legend>
                 <label for="rollingwindowsize">Size of Rolling Window:
-                    <input type="number"  name="rollingwindowsize"
+                    <input type="number" name="rollingwindowsize"
                            id="rollingwindowsize" step="1" max="1000" min="1"
                            value="{{ session['rwoption']['rollingwindowsize'] }}">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
@@ -255,8 +255,9 @@
 {% block results %}
     <!-- Loading Icon -->
     <div id="status-analyze">
-        <img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{ version }}"
-             alt="Loading...">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+           style="color: #0068AF;"></i>
+        <span class="sr-only">Loading...</span>
     </div>
     <div id="rwa-result">
         <fieldset>

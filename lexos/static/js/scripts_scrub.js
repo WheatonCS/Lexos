@@ -50,9 +50,9 @@ $(function () {
   displayAdditionalOptions()
 
   /**
- * Clone file labels and do ajax request
- * @returns {void} - returns nothing
- */
+   * Clone file labels and do ajax request
+   * @returns {void} - returns nothing
+   */
   $('.bttnfilelabels').click(function () {
     // swfileselect, lemfileselect, consfileselect, scfileselect
     const filetype = $(this).attr('id').replace('bttnlabel', '')
@@ -87,9 +87,9 @@ $(function () {
   })
 
   /**
- * Change white space box class when checked or unchecked
- * @returns {void} - returns nothing
- */
+   * Change white space box class when checked or unchecked
+   * @returns {void} - returns nothing
+   */
   $('#whitespacebox').click(function () {
     if ($(this).is(':checked')) {
       $('#whitespace').removeClass('hidden')
@@ -99,9 +99,9 @@ $(function () {
   })
 
   /**
- * Use special character options
- * @returns {void} - returns nothing
- */
+   * Use special character options
+   * @returns {void} - returns nothing
+   */
   $('#entityrules').change(function () {
     console.log($('#entityrules').value)
     if ($('#entityrules')[0].value === 'MUFI-3' || $('#entityrules').value === 'MUFI-4') {
@@ -115,10 +115,10 @@ $(function () {
   })
 
   /**
- * Change tag box class when checked or unchecked
- * @param {object} tagBox - scrub tags checkbox DOM element
- * @returns {void} - returns nothing
- */
+   * Change tag box class when checked or unchecked
+   * @param {object} tagBox - scrub tags checkbox DOM element
+   * @returns {void} - returns nothing
+   */
   $('#tagbox').click(function () {
     if ($(this).is(':checked')) {
       $('#tag').removeClass('hidden')
@@ -252,7 +252,7 @@ function setTagsButtonAjax () {
           id: 'xmlModalStatus',
           style: 'width:100px;margin:50px auto;z-index:1000;'
         }).appendTo('#xmlModalBody')
-        $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
+        $('#xmlModalStatus').append('<div id="status-prepare"><i class="fa fa-spinner fa-spin fa-2x fa-fw"\n style="color: #0068AF;"></i><span class="sr-only">Loading...</span></div>')
       },
       success: function (response) {
         const selection = $('#allTags option:selected').val()
@@ -307,7 +307,7 @@ function xmlModalAjax () {
         style: 'width:100px;margin:50px auto;z-index:1000;'
       }).appendTo('#xmlModalBody')
 
-      $('#xmlModalStatus').append('<img src="/static/images/loading_icon.svg?ver=2.5" alt="Loading..."/>')
+      $('#xmlModalStatus').append('<div id="status-prepare"><i class="fa fa-spinner fa-spin fa-2x fa-fw"\n style="color: #0068AF;"></i><span class="sr-only">Loading...</span></div>')
     },
     success: function (response) {
       const j = JSON.parse(response)

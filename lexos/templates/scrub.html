@@ -84,10 +84,11 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <img id="xml-modal-status"
-                         src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver=3.2"
-                         alt="Loading..."
-                         style="position: fixed; left: 50%; top: 50%; display: none;">
+                    <div id="xml-modal-status" style="position: fixed; left: 50%; top: 50%; display: none;">
+                        <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+                           style="color: #0068AF;"></i>
+                        <span class="sr-only">Loading...</span>
+                    </div>
                     <button id="save-button" type="button"
                             class="btn btn-primary">Save Changes
                     </button>
@@ -99,8 +100,14 @@
         </div>
     </div>
 
-<fieldset id="normalscrubbingoptions">
-    <legend>Scrubbing Options <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=J4cRuuQY6cY&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=2" target="_blank" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
+    <fieldset id="normalscrubbingoptions">
+        <legend>Scrubbing Options <a class="btn bttn bttn-video"
+                                     href="https://www.youtube.com/watch?v=J4cRuuQY6cY&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=2"
+                                     target="_blank" data-toggle="tooltip"
+                                     data-trigger="hover"
+                                     data-placement="right" title="Show video"
+                                     style="margin: -10px 5px;"><i
+                class="fa fa-video-camera fa-lg "></i></a></legend>
 
         <input type="hidden" id="usecacheswfileselect"
                name="usecacheswfileselect"
@@ -229,8 +236,14 @@
 
     </fieldset>
 
-<fieldset id="additionalscrubbingoptions">
-    <legend id="advanced-title" class="has-expansion">Additional Options <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=9Pf6t1C15AE&index=3&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD" target="_blank" data-toggle="tooltip" data-html="true" data-placement="right" data-trigger="hover" data-container="body" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
+    <fieldset id="additionalscrubbingoptions">
+    <legend id="advanced-title" class="has-expansion">Additional Options <a
+            class="btn bttn bttn-video"
+            href="https://www.youtube.com/watch?v=9Pf6t1C15AE&index=3&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD"
+            target="_blank" data-toggle="tooltip" data-html="true"
+            data-placement="right" data-trigger="hover" data-container="body"
+            title="Show video" style="margin: -10px 5px;"><i
+            class="fa fa-video-camera fa-lg "></i></a></legend>
 
     <div class="advanced-options">
         <!-- Stop Words/Keep Words-->
