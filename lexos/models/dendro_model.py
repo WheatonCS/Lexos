@@ -91,10 +91,31 @@ class DendrogramModel(BaseModel):
 
         # Adjust style base on selected orientation.
         if self._dendro_option.orientation in ["top", "bottom"]:
+            figure['layout'].update({'margin': {'b': max_label_len * 3.5}})
             return figure
         else:
             figure['layout'].update({'margin': {'l': max_label_len * 7}})
             return figure
+
+    def extend_fig_boundary(self, figure: Figure) -> Figure:
+
+        if self._dendro_option.orientation == "top":
+            x_value = [max([max(data['x']) for data in figure['data']]) + 3]
+            figure["layout"]["xaxis"].update({"rangemode": "normal"})
+        else:
+            x_value = [max([max(data['x']) for data in figure['data']]) + 3]
+
+        dummy_scatter = Scatter(
+            x=x_value,
+            y=[0],
+            opacity=0,
+            mode="markers",
+            hoverinfo="skip"
+        )
+
+        figure['data'] += [dummy_scatter]
+
+        return figure
 
     def get_dendrogram_div(self) -> str:
         """Generate the dendrogram div to send to the front end.
@@ -113,20 +134,13 @@ class DendrogramModel(BaseModel):
             }
         )
 
-        dummy_scatter = Scatter(
-            x=[max(figure['layout']['xaxis']['tickvals']) + 3],
-            y=[0],
-            opacity=0,
-            mode="markers",
-            hoverinfo="skip"
-        )
-
-        figure['data'] += [dummy_scatter]
-
         # Adjust figure style based on the selected orientation.
         figure = self.extend_fig_margin(figure=figure)
+        figure = self.extend_fig_boundary(figure=figure)
 
-        div = plot(figure, show_link=False, output_type="div",
-                   include_plotlyjs=False)
-
-        return div
+        return plot(
+            figure_or_data=figure,
+            show_link=False,
+            output_type="div",
+            include_plotlyjs=False
+        )
