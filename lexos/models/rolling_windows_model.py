@@ -2,12 +2,11 @@
 
 import re
 import os
-from collections import deque
-
 import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
+from collections import deque
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.managers import session_manager
