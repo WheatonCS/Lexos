@@ -82,10 +82,12 @@ class DendrogramModel(BaseModel):
         )
 
     def extend_figure(self, figure: Figure) -> Figure:
-        """This function
+        """Extends the figure margins.
 
-        :param figure:
-        :return:
+        Use this function to extend figure margins so that long label will not
+        get cut off and the edging leafs will not touch the border of the plot.
+        :param figure: The dendrogram result that need to be changed.
+        :return: The formatted, extended figure.
         """
         if self._dendro_option.orientation == "top":
             return self.extend_top_figure(figure=figure)
@@ -96,10 +98,11 @@ class DendrogramModel(BaseModel):
 
     @staticmethod
     def get_dummy_scatter(x_value: int) -> Scatter:
-        """
+        """Creates a invisible scatter point at (x_value, 0)
 
-        :param x_value:
-        :return:
+        Use this function to help extend the margin of the dendrogram plot.
+        :param x_value: The desired x value we want to extend the margin to.
+        :return: An invisible scatter point at (x_value, 0)
         """
         return Scatter(
             x=[x_value],
@@ -110,7 +113,7 @@ class DendrogramModel(BaseModel):
         )
 
     def extend_top_figure(self, figure: Figure) -> Figure:
-        """
+        """Extend top orientation figure.
 
         :param figure:
         :return:
@@ -125,7 +128,7 @@ class DendrogramModel(BaseModel):
         return figure
 
     def extend_left_figure(self, figure: Figure) -> Figure:
-        """
+        """Extend left orientation figure.
 
         :param figure:
         :return:
