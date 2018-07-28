@@ -124,9 +124,9 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
-        figure['layout'].update({'margin': {'b': max_label_len * 3.3}})
+        figure['layout'].update({'margin': {'b': max_label_len * 3.5}})
         # Calculate the space right most label needs.
-        right_margin = max_label_len * 4.7 if max_label_len * 4.7 > 80 else 80
+        right_margin = max_label_len * 5 if max_label_len * 5 > 80 else 80
         # Update right margin as well.
         figure['layout'].update({'margin': {'r': right_margin}})
 
@@ -157,13 +157,13 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the left margin to fit all labels.
-        figure['layout'].update({'margin': {'l': max_label_len * 6.2}})
+        figure['layout'].update({'margin': {'l': max_label_len * 6.7}})
 
         # Find the max x value in the plot.
         max_x = max([max(data['x']) for data in figure['data']])
 
         # Calculate proper x coordinate the figure should extend to.
-        x_value = math.ceil(max_x * 10) / 10
+        x_value = math.ceil(max_x * 100) / 100
 
         # Get the dummy scatter plot.
         dummy_scatter = self.get_dummy_scatter(x_value=x_value)
