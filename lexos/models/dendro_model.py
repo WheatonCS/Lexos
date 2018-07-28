@@ -1,14 +1,13 @@
 """This is a model to produce dendrograms of the dtms."""
 
-from typing import NamedTuple, Optional
-
+import math
 import pandas as pd
 import plotly.figure_factory as ff
-from plotly.graph_objs.graph_objs import Figure, Scatter
-from plotly.offline import plot
-from scipy.cluster.hierarchy import linkage
+from typing import NamedTuple, Optional
 from scipy.spatial.distance import pdist
-
+from scipy.cluster.hierarchy import linkage
+from plotly.offline import plot
+from plotly.graph_objs.graph_objs import Figure, Scatter
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
@@ -95,7 +94,27 @@ class DendrogramModel(BaseModel):
         else:
             raise ValueError("Invalid orientation.")
 
+    @staticmethod
+    def get_dummy_scatter(x_value: int) -> Scatter:
+        """
+
+        :param x_value:
+        :return:
+        """
+        return Scatter(
+            x=[x_value],
+            y=[0],
+            mode="markers",
+            opacity=0,
+            hoverinfo="skip"
+        )
+
     def extend_top_figure(self, figure: Figure) -> Figure:
+        """
+
+        :param figure:
+        :return:
+        """
         # Get the length of longest label.
         max_label_len = \
             max([len(self._id_temp_label_map[file_id])
@@ -106,6 +125,11 @@ class DendrogramModel(BaseModel):
         return figure
 
     def extend_left_figure(self, figure: Figure) -> Figure:
+        """
+
+        :param figure:
+        :return:
+        """
         # Get the length of longest label.
         max_label_len = \
             max([len(self._id_temp_label_map[file_id])
@@ -113,25 +137,21 @@ class DendrogramModel(BaseModel):
 
         # Extend the left margin to fit all labels.
         figure['layout'].update({'margin': {'l': max_label_len * 7}})
+
+        # Find the max x value in the plot.
+        max_x = max([max(data['x']) for data in figure['data']])
+
+        # Find the max_x round up to the nearest tenth digit.
+
         return figure
 
     def extend_fig_boundary(self, figure: Figure) -> Figure:
 
         if self._dendro_option.orientation == "top":
-            x_value = [max([max(data['x']) for data in figure['data']]) + 3]
+
             figure["layout"]["xaxis"].update({"rangemode": "normal"})
         else:
             x_value = [max([max(data['x']) for data in figure['data']]) + 3]
-
-        dummy_scatter = Scatter(
-            x=x_value,
-            y=[0],
-            opacity=0,
-            mode="markers",
-            hoverinfo="skip"
-        )
-
-        figure['data'] += [dummy_scatter]
 
         return figure
 
@@ -153,9 +173,9 @@ class DendrogramModel(BaseModel):
         )
 
         # Adjust figure style based on the selected orientation.
-        figure = self.extend_fig_margin(figure=figure)
-        figure = self.extend_fig_boundary(figure=figure)
+        figure = self.extend_figure(figure=figure)
 
+        # Return the figure as div.
         return plot(
             figure_or_data=figure,
             show_link=False,
