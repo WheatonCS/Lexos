@@ -190,6 +190,8 @@ class DendrogramModel(BaseModel):
             }
         )
 
+        # Note that the extend figure method is a hack.
+        # TODO: Once plotly has better solutions available, remove this method.
         # Adjust figure style based on the selected orientation.
         figure = self.extend_figure(figure=figure)
 
