@@ -82,20 +82,38 @@ class DendrogramModel(BaseModel):
             labels=labels
         )
 
-    def extend_fig_margin(self, figure: Figure) -> Figure:
+    def extend_figure(self, figure: Figure) -> Figure:
+        """This function
 
+        :param figure:
+        :return:
+        """
+        if self._dendro_option.orientation == "top":
+            return self.extend_top_figure(figure=figure)
+        elif self._dendro_option.orientation == "left":
+            return self.extend_left_figure(figure=figure)
+        else:
+            raise ValueError("Invalid orientation.")
+
+    def extend_top_figure(self, figure: Figure) -> Figure:
         # Get the length of longest label.
         max_label_len = \
             max([len(self._id_temp_label_map[file_id])
                  for file_id in self._doc_term_matrix.index.values])
 
-        # Adjust style base on selected orientation.
-        if self._dendro_option.orientation in ["top", "bottom"]:
-            figure['layout'].update({'margin': {'b': max_label_len * 3.5}})
-            return figure
-        else:
-            figure['layout'].update({'margin': {'l': max_label_len * 7}})
-            return figure
+        # Extend the bottom margin to fit all labels.
+        figure['layout'].update({'margin': {'b': max_label_len * 3.5}})
+        return figure
+
+    def extend_left_figure(self, figure: Figure) -> Figure:
+        # Get the length of longest label.
+        max_label_len = \
+            max([len(self._id_temp_label_map[file_id])
+                 for file_id in self._doc_term_matrix.index.values])
+
+        # Extend the left margin to fit all labels.
+        figure['layout'].update({'margin': {'l': max_label_len * 7}})
+        return figure
 
     def extend_fig_boundary(self, figure: Figure) -> Figure:
 
