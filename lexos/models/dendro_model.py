@@ -115,8 +115,8 @@ class DendrogramModel(BaseModel):
     def extend_top_figure(self, figure: Figure) -> Figure:
         """Extend top orientation figure.
 
-        :param figure:
-        :return:
+        :param figure: The dendrogram result that need to be changed.
+        :return: The formatted, extended figure.
         """
         # Get the length of longest label.
         max_label_len = \
@@ -130,8 +130,8 @@ class DendrogramModel(BaseModel):
     def extend_left_figure(self, figure: Figure) -> Figure:
         """Extend left orientation figure.
 
-        :param figure:
-        :return:
+        :param figure: The dendrogram result that need to be changed.
+        :return: The formatted, extended figure.
         """
         # Get the length of longest label.
         max_label_len = \
