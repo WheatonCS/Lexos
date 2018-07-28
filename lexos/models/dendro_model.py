@@ -1,4 +1,4 @@
-"""This is a model to produce dendrograms of the dtms."""
+"""This is a model to produce dendrograms of the dtm."""
 
 import math
 import pandas as pd
@@ -89,15 +89,15 @@ class DendrogramModel(BaseModel):
         :param figure: The dendrogram result that need to be changed.
         :return: The formatted, extended figure.
         """
-        if self._dendro_option.orientation == "top":
-            return self.extend_top_figure(figure=figure)
+        if self._dendro_option.orientation == "bottom":
+            return self.extend_bottom_figure(figure=figure)
         elif self._dendro_option.orientation == "left":
             return self.extend_left_figure(figure=figure)
         else:
             raise ValueError("Invalid orientation.")
 
     @staticmethod
-    def get_dummy_scatter(x_value: int) -> Scatter:
+    def get_dummy_scatter(x_value: float) -> Scatter:
         """Creates a invisible scatter point at (x_value, 0)
 
         Use this function to help extend the margin of the dendrogram plot.
@@ -112,8 +112,8 @@ class DendrogramModel(BaseModel):
             hoverinfo="skip"
         )
 
-    def extend_top_figure(self, figure: Figure) -> Figure:
-        """Extend top orientation figure.
+    def extend_bottom_figure(self, figure: Figure) -> Figure:
+        """Extend bottom orientation figure.
 
         :param figure: The dendrogram result that need to be changed.
         :return: The formatted, extended figure.
@@ -124,7 +124,25 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
-        figure['layout'].update({'margin': {'b': max_label_len * 3.5}})
+        figure['layout'].update({'margin': {'b': max_label_len * 3.3}})
+        # Calculate the space right most label needs.
+        right_margin = max_label_len * 4.7 if max_label_len * 4.7 > 80 else 80
+        # Update right margin as well.
+        figure['layout'].update({'margin': {'r': right_margin}})
+
+        # Find the max x value in the plot.
+        max_x = max([max(data['x']) for data in figure['data']])
+
+        # Calculate proper x coordinate the figure should extend to.
+        x_value = max_x + 3
+
+        # Get the dummy scatter plot.
+        dummy_scatter = self.get_dummy_scatter(x_value=x_value)
+
+        # Add dummy scatter to the figure. (Figure["data"] is a list)
+        figure["data"] += [dummy_scatter]
+
+        # Return the formatted figure.
         return figure
 
     def extend_left_figure(self, figure: Figure) -> Figure:
@@ -144,17 +162,14 @@ class DendrogramModel(BaseModel):
         # Find the max x value in the plot.
         max_x = max([max(data['x']) for data in figure['data']])
 
-        # Find the max_x round up to the nearest tenth digit.
+        # Calculate proper x coordinate the figure should extend to.
+        x_value = math.ceil(max_x * 10) / 10
 
-        return figure
+        # Get the dummy scatter plot.
+        dummy_scatter = self.get_dummy_scatter(x_value=x_value)
 
-    def extend_fig_boundary(self, figure: Figure) -> Figure:
-
-        if self._dendro_option.orientation == "top":
-
-            figure["layout"]["xaxis"].update({"rangemode": "normal"})
-        else:
-            x_value = [max([max(data['x']) for data in figure['data']]) + 3]
+        # Add dummy scatter to the figure. (Figure["data"] is a list)
+        figure["data"] += [dummy_scatter]
 
         return figure
 
