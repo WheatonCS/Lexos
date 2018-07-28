@@ -82,7 +82,7 @@ class DendrogramModel(BaseModel):
         )
 
     def extend_figure(self, figure: Figure) -> Figure:
-        """Extends the figure margins.
+        """Extend the figure margins.
 
         Use this function to extend figure margins so that long label will not
         get cut off and the edging leafs will not touch the border of the plot.
@@ -98,11 +98,11 @@ class DendrogramModel(BaseModel):
 
     @staticmethod
     def get_dummy_scatter(x_value: float) -> Scatter:
-        """Creates a invisible scatter point at (x_value, 0)
+        """Create a invisible scatter point at (x_value, 0).
 
         Use this function to help extend the margin of the dendrogram plot.
         :param x_value: The desired x value we want to extend the margin to.
-        :return: An invisible scatter point at (x_value, 0)
+        :return: An invisible scatter point at (x_value, 0).
         """
         return Scatter(
             x=[x_value],
