@@ -201,7 +201,6 @@ class DendrogramModel(BaseModel):
 
         :return: A HTML formatted div for plotly.
         """
-
         # Return the figure as div.
         return plot(
             figure_or_data=self._get_processed_dendrogram_figure(),
