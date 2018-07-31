@@ -139,8 +139,8 @@ class DendrogramModel(BaseModel):
         # Get the dummy scatter plot.
         dummy_scatter = self.get_dummy_scatter(x_value=x_value)
 
-        # Add dummy scatter to the figure. (Figure["data"] is a list)
-        figure["data"] += [dummy_scatter]
+        # Add dummy scatter to the figure.
+        figure.add_trace(trace=dummy_scatter)
 
         # Return the formatted figure.
         return figure
@@ -168,17 +168,18 @@ class DendrogramModel(BaseModel):
         # Get the dummy scatter plot.
         dummy_scatter = self.get_dummy_scatter(x_value=x_value)
 
-        # Add dummy scatter to the figure. (Figure["data"] is a list)
-        figure["data"] += [dummy_scatter]
+        # Add dummy scatter to the figure.
+        figure.add_trace(trace=dummy_scatter)
 
+        # Return the formatted figure.
         return figure
 
-    def get_dendrogram_div(self) -> str:
-        """Generate the dendrogram div to send to the front end.
+    def _get_processed_dendrogram_figure(self) -> Figure:
+        """Get dendrogram figure and extend its boundary.
 
-        :return: a div
+        :return: The extended dendrogram figure.
         """
-        # Get the desired figure.
+        # Get the desired, unprocessed figure.
         figure = self._get_dendrogram_fig()
 
         # Update the size of the image.
@@ -192,12 +193,18 @@ class DendrogramModel(BaseModel):
 
         # Note that the extend figure method is a hack.
         # TODO: Once plotly has better solutions available, remove this method.
-        # Adjust figure style based on the selected orientation.
-        figure = self.extend_figure(figure=figure)
+        # Adjust figure style based on the selected orientation and return it.
+        return self.extend_figure(figure=figure)
+
+    def get_dendrogram_div(self) -> str:
+        """Generate the processed dendrogram figure.
+
+        :return: A HTML formatted div for plotly.
+        """
 
         # Return the figure as div.
         return plot(
-            figure_or_data=figure,
+            figure_or_data=self._get_processed_dendrogram_figure(),
             show_link=False,
             output_type="div",
             include_plotlyjs=False
