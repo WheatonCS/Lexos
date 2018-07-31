@@ -12,7 +12,14 @@
 
 {% block options %}
     <fieldset>
-        <legend>Dendrogram Options <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=Lir0ck691yM&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=7" target="_blank" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
+        <legend>Dendrogram Options
+            <a class="btn bttn bttn-video" title="Show video"
+               href="https://www.youtube.com/watch?v=Lir0ck691yM&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=7"
+               data-toggle="tooltip" data-trigger="hover"
+               data-placement="right" style="margin: -10px 5px;">
+                <i class="fa fa-video-camera fa-lg "></i>
+            </a>
+        </legend>
         <div class="dendrogram-options cf" id="dendrocreateoptions">
             <label for="metric">Distance Metric:
                 <select name="metric" id="metric">
@@ -71,7 +78,6 @@
                     <option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>
                         Complete
                     </option>
-                    <!-- <option value="ward" {{ 'selected' if session['hierarchyoption']['linkage'] == 'ward' }}>Ward</option> -->
                     <option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>
                         Weighted
                     </option>
@@ -84,18 +90,16 @@
             </label>
             <label for="orientation">Dendrogram Leaves Orientation:
                 <select name="orientation" id="orientation">
-                    <option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>
-                        Top
+                    <option value="bottom" {{ 'selected' if session['hierarchyoption']['orientation'] == 'bottom' }}>
+                        Bottom
                     </option>
                     <option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>
                         Left
                     </option>
-                    <option value="right" {{ 'selected' if session['hierarchyoption']['orientation'] == 'right' }}>
-                        Right
-                    </option>
-                    <option value="bottom" {{ 'selected' if session['hierarchyoption']['orientation'] == 'bottom' }}>
-                        Bottom
-                    </option>
+                    {# We comment these two options out since we don't think our users need them. #}
+                    {# But if we decide to add them back in the future, simply uncomment them. #}
+                    {# <option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>Top</option> #}
+                    {# <option value="right" {{ 'selected' if session['hierarchyoption']['orientation'] == 'right' }}>Right</option> #}
                 </select>
             </label>
         </div>
@@ -106,15 +110,11 @@
 {% block results %}
     <div class="row submit-button-row">
         <div class="col-md-12">
-            <input class="bttn bttn-action" id="getdendro" name="getdendro"
+            <input class="btn btn-success" id="getdendro" name="getdendro"
                    type="button" value="Get Dendrogram" style=""/>
         </div>
     </div>
-
-    <div id="dendrogram-result" class="row">
-
-    </div>
-
+    <div id="dendrogram-result" class="row"></div>
 {% endblock %}
 
 {% block submit %}

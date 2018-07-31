@@ -150,9 +150,6 @@ class TestAverageCount:
         assert \
             rw_average_count_model_one._generate_rwa_graph()['data'][1][
                 'name'] == 'ha'
-        assert \
-            rw_average_count_model_one._generate_rwa_graph()['data'][1][
-                'line'] == {'color': 'rgb(55,126,184)'}
 
     def test_find_milestone(self):
         assert \
