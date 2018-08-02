@@ -95,9 +95,10 @@ class RollingWindowsModel(BaseModel):
 
             Remove the first item in current window and append the upcoming
             next item to roll the window.
-            :param window:
-            :param last_str:
-            :param next_str:
+            :param window: The current window.
+            :param last_str: The first item at the front of the window.
+            :param next_str: The next item the window will include.
+            :return: The next window.
             """
             # Remove the last word and append next word at the end.
             return "".join([window.replace(last_str, "", 1), next_str])
