@@ -100,7 +100,7 @@ class RollingWindowsModel(BaseModel):
             :param next_str:
             """
             # Remove the last word and append next word at the end.
-            return "".join([window.replace(last_str, ""), next_str])
+            return "".join([window.replace(last_str, "", 1), next_str])
 
         # Get the first window.
         roll_window = "".join(input_list[: window_size])
