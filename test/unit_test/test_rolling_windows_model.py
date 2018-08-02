@@ -41,6 +41,7 @@ class TestRatioCountOne:
     rw_ratio_model = RollingWindowsModel(test_option=test_ratio_count)
     rw_ratio_windows = rw_ratio_model._get_windows()
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
+    rw_ratio_csv_frame = rw_ratio_model._get_rwa_csv_frame()
     rw_ratio_milestone = \
         rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows(
             windows=rw_ratio_windows
@@ -82,6 +83,19 @@ class TestRatioCountOne:
     def test_find_milestone(self):
         assert self.rw_ratio_milestone == {'t': [15],
                                            'a': [1, 4, 7, 10, 13, 16]}
+
+    def test_csv_frame(self):
+        pd.testing.assert_frame_equal(
+            self.rw_ratio_csv_frame,
+            pd.DataFrame(
+                index=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                       10, 11, 12, 13, 14, 15, 16, 17],
+                columns=["t / (t + a)"],
+                data=[[0.], [0.], [0.], [0.], [0.], [0.], [0.], [0.], [0.],
+                      [0.], [0.], [0.], [0.], [0.5], [0.5], [0.5], [0.], [0.]]
+            )
+
+        )
 
 
 # -----------------------------------------------------------------------------
@@ -176,6 +190,7 @@ class TestAverageCount:
     rw_average_model = RollingWindowsModel(test_option=test_average_count)
     rw_average_windows = rw_average_model._get_windows()
     rw_average_graph = rw_average_model._generate_rwa_graph()
+    rw_average_csv_frame = rw_average_model._get_rwa_csv_frame()
 
     def test_get_windows(self):
         np.testing.assert_array_equal(
@@ -199,6 +214,17 @@ class TestAverageCount:
 
         assert self.rw_average_graph['data'][1]['mode'] == 'lines'
         assert self.rw_average_graph['data'][1]['name'] == 'ha'
+
+    def test_csv_frame(self):
+        pd.testing.assert_frame_equal(
+            self.rw_average_csv_frame,
+            pd.DataFrame(
+                index=[0, 1, 2, 3, 4],
+                columns=["ta", "ha"],
+                data=[[0., 2.], [0.5, 1.], [0.5, 0.5], [1., 0.5], [1., 0.]]
+            )
+
+        )
 
 
 # -----------------------------------------------------------------------------
