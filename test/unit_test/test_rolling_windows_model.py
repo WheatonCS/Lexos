@@ -152,7 +152,7 @@ class TestRatioCountTwo:
 # -------------------------- test by average count ----------------------------
 # noinspection PyProtectedMember
 class TestAverageCount:
-    test_average_count_one = RWATestOptions(
+    test_average_count = RWATestOptions(
         file_id_content_map={
             0: "ha ha \n ha ha \n la ta \n ha \n ta ta \n la la"},
         rolling_windows_options=RWAFrontEndOptions(
@@ -172,53 +172,33 @@ class TestAverageCount:
             milestone=None
         )
     )
-    rw_average_count_model_one = RollingWindowsModel(
-        test_option=test_average_count_one)
-    # noinspection PyProtectedMember
-    rw_average_windows = rw_average_count_model_one._get_windows()
+    # Get the rolling window model and other testing components.
+    rw_average_model = RollingWindowsModel(test_option=test_average_count)
+    rw_average_windows = rw_average_model._get_windows()
+    rw_average_graph = rw_average_model._generate_rwa_graph()
 
     def test_get_windows(self):
         np.testing.assert_array_equal(
-            rw_average_count_model_one._get_windows(),
-            ['ha ', 'a h', ' ha', 'ha ', 'a h', ' ha', 'ha ', 'a h', ' ha',
-             'ha ', 'a l', ' la', 'la ', 'a t', ' ta', 'ta ', 'a h', ' ha']
-        )
-
-    def test_token_average_windows(self):
-        np.testing.assert_array_equal(
-            rw_average_count_model_one._find_tokens_average_in_windows(
-                rw_average_windows).loc['ta', 0:17],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 / 3, 1 / 3, 0, 0]
-        )
-        np.testing.assert_array_equal(
-            rw_average_count_model_one._find_tokens_average_in_windows(
-                rw_average_windows).loc['ha', 0:17],
-            [1 / 3, 0, 1 / 3, 1 / 3, 0, 1 / 3, 1 / 3, 0, 1 / 3, 1 / 3, 0.0, 0,
-             0, 0, 0, 0, 0, 1 / 3]
+            self.rw_average_windows,
+            ['ha ha \n ha ha \n', ' ha ha \n la ta \n', ' la ta \n ha \n',
+             ' ha \n ta ta \n', ' ta ta \n la la']
         )
 
     def test_generate_rwa_graph(self):
-        assert \
-            rw_average_count_model_one._generate_rwa_graph()['data'][0][
-                'type'] == 'scattergl'
+        assert self.rw_average_graph['data'][0]['type'] == 'scattergl'
 
         np.testing.assert_array_equal(
-            rw_average_count_model_one._generate_rwa_graph()['data'][0]['x'],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+            self.rw_average_graph['data'][0]['x'],
+            [0., 1., 2., 3., 4.]
         )
-        assert \
-            rw_average_count_model_one._generate_rwa_graph()['data'][1][
-                'mode'] == 'lines'
-        assert \
-            rw_average_count_model_one._generate_rwa_graph()['data'][1][
-                'name'] == 'ha'
 
-    def test_find_milestone(self):
-        assert \
-            rw_average_count_model_one. \
-                _find_mile_stone_windows_indexes_in_all_windows(
-                rw_average_windows) == {'t': [15],
-                                        'a': [1, 4, 7, 10, 13, 16]}
+        np.testing.assert_array_equal(
+            self.rw_average_graph['data'][0]['yx'],
+            [0., 0.5, 0.5, 1., 1.]
+        )
+
+        assert self.rw_average_graph['data'][1]['mode'] == 'lines'
+        assert self.rw_average_graph['data'][1]['name'] == 'ha'
 
 
 # -----------------------------------------------------------------------------
