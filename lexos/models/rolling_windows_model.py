@@ -600,14 +600,15 @@ class RollingWindowsModel(BaseModel):
 
         :return: A plotly figure object.
         """
+        # Get possible options.
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
 
-        # precondition
-        # ^ is the exclusive or operator,
-        # means we can either use average count or ratio count
+        # Check precondition: ^ is the exclusive or operator, means we can
+        # either use average count or ratio count
         assert count_average ^ count_ratio
 
+        #
         if count_average:
             return self._get_token_average_graph()
         elif count_ratio:
@@ -626,7 +627,7 @@ class RollingWindowsModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def download_rwa(self) -> str:
+    def _download_average_csv(self) -> str:
         # Get the default saving directory of rolling window result.
         result_folder_path = os.path.join(
             session_manager.session_folder(), RESULTS_FOLDER)
@@ -646,3 +647,45 @@ class RollingWindowsModel(BaseModel):
                                       index_label="# Window")
 
         return save_path
+
+    def _download_ratio_csv(self) -> str:
+        # Get the default saving directory of rolling window result.
+        result_folder_path = os.path.join(
+            session_manager.session_folder(), RESULTS_FOLDER)
+
+        # Attempt to make the directory.
+        if not os.path.isdir(result_folder_path):
+            os.makedirs(result_folder_path)
+
+        # Get the complete saving path of rolling window result.
+        save_path = os.path.join(result_folder_path, "rolling_window.csv")
+
+        data_frame = self._find_tokens_average_in_windows(
+            windows=self._get_windows()
+        )
+
+        data_frame.transpose().to_csv(path_or_buf=save_path,
+                                      index_label="# Window")
+
+        return save_path
+
+    def download_rwa(self) -> str:
+        """Download rolling window analysis result as CSV file.
+
+        :return: The directory of the saved CSV file.
+        """
+        # Get possible options.
+        count_average = self._options.average_token_options is not None
+        count_ratio = self._options.ratio_token_options is not None
+
+        # Check precondition: ^ is the exclusive or operator, means we can
+        # either use average count or ratio count
+        assert count_average ^ count_ratio
+
+        # Get corresponding CSV based on user selected option.
+        if count_average:
+            return self._download_average_csv()
+        elif count_ratio:
+            return self._download_ratio_csv()
+        else:
+            raise ValueError("unhandled count type")
