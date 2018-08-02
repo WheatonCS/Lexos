@@ -608,13 +608,13 @@ class RollingWindowsModel(BaseModel):
         # either use average count or ratio count
         assert count_average ^ count_ratio
 
-        #
+        # Get corresponding plotly graph.
         if count_average:
             return self._get_token_average_graph()
         elif count_ratio:
             return self._get_token_ratio_graph()
         else:
-            raise ValueError("unhandled count type")
+            raise ValueError("Unhandled count type")
 
     def get_rwa_graph(self) -> str:
         """Get the displayable rolling window graph.
@@ -628,9 +628,14 @@ class RollingWindowsModel(BaseModel):
                     include_plotlyjs=False)
 
     def _download_average_csv(self) -> str:
+        """Download the CSV file for average token RWA.
+
+        :return: The directory of the saved CSV file.
+        """
         # Get the default saving directory of rolling window result.
         result_folder_path = os.path.join(
-            session_manager.session_folder(), RESULTS_FOLDER)
+            session_manager.session_folder(), RESULTS_FOLDER
+        )
 
         # Attempt to make the directory.
         if not os.path.isdir(result_folder_path):
@@ -639,13 +644,16 @@ class RollingWindowsModel(BaseModel):
         # Get the complete saving path of rolling window result.
         save_path = os.path.join(result_folder_path, "rolling_window.csv")
 
+        # Get the average data frame.
         data_frame = self._find_tokens_average_in_windows(
             windows=self._get_windows()
         )
 
+        # Transpose the frame, then convert it to csv and save it to the path.
         data_frame.transpose().to_csv(path_or_buf=save_path,
                                       index_label="# Window")
 
+        # Return the saving path so flask knows what file to send.
         return save_path
 
     def _download_ratio_csv(self) -> str:
