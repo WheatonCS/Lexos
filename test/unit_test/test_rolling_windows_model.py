@@ -193,7 +193,7 @@ class TestAverageCount:
         )
 
         np.testing.assert_array_equal(
-            self.rw_average_graph['data'][0]['yx'],
+            self.rw_average_graph['data'][0]['y'],
             [0., 0.5, 0.5, 1., 1.]
         )
 
