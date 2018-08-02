@@ -627,38 +627,59 @@ class RollingWindowsModel(BaseModel):
                     output_type="div",
                     include_plotlyjs=False)
 
-    def _download_average_csv(self) -> str:
-        """Download the CSV file for average token RWA.
+    def _get_average_csv_frame(self) -> pd.DataFrame:
+        """Get the average token frame that is ready to be converted to CSV.
 
-        :return: The directory of the saved CSV file.
+        :return: The data frame that needs to be converted to CSV.
         """
-        # Get the default saving directory of rolling window result.
-        result_folder_path = os.path.join(
-            session_manager.session_folder(), RESULTS_FOLDER
-        )
-
-        # Attempt to make the directory.
-        if not os.path.isdir(result_folder_path):
-            os.makedirs(result_folder_path)
-
-        # Get the complete saving path of rolling window result.
-        save_path = os.path.join(result_folder_path, "rolling_window.csv")
-
-        # Get the average data frame.
-        data_frame = self._find_tokens_average_in_windows(
+        # Get the average data frame, transpose it and return it.
+        return self._find_tokens_average_in_windows(
             windows=self._get_windows()
-        )
+        ).transpose()
 
-        # Transpose the frame, then convert it to csv and save it to the path.
-        data_frame.transpose().to_csv(path_or_buf=save_path,
-                                      index_label="# Window",
-                                      na_rep="NA")
+    def _get_ratio_csv_frame(self) -> pd.DataFrame:
+        """Get the ratio token frame that is ready to be converted to CSV.
 
-        # Return the saving path so flask knows what file to send.
-        return save_path
+        :return: The data frame that needs to be converted to CSV.
+        """
+        # Get list of token ratio series.
+        token_ratio_series_list = \
+            [
+                self._find_token_ratio_in_windows(
+                    windows=self._get_windows(),
+                    numerator_token=row["numerator"],
+                    denominator_token=row["denominator"]
+                ).to_frame()
+                for _, row in
+                self._options.ratio_token_options.token_frame.iterrows()
+            ]
 
-    def _download_ratio_csv(self) -> str:
-        """Download the CSV file for ratio token RWA.
+        # Concatenate all data frame together to be one and return it.
+        return pd.concat(token_ratio_series_list)
+
+    def _get_rwa_csv_frame(self) -> pd.DataFrame:
+        """Get the correct data frame based on users selection.
+
+        :return: The correct data frame that needs to be converted to CSV.
+        """
+        # Get possible options.
+        count_average = self._options.average_token_options is not None
+        count_ratio = self._options.ratio_token_options is not None
+
+        # Check precondition: ^ is the exclusive or operator, means we can
+        # either use average count or ratio count
+        assert count_average ^ count_ratio
+
+        # Get corresponding CSV based on user selected option.
+        if count_average:
+            return self._get_average_csv_frame()
+        elif count_ratio:
+            return self._get_ratio_csv_frame()
+        else:
+            raise ValueError("unhandled count type")
+
+    def download_rwa(self) -> str:
+        """Download rolling window analysis result as CSV file.
 
         :return: The directory of the saved CSV file.
         """
@@ -673,46 +694,8 @@ class RollingWindowsModel(BaseModel):
         # Get the complete saving path of rolling window result.
         save_path = os.path.join(result_folder_path, "rolling_window.csv")
 
-        # Get list of token ratio series.
-        token_ratio_series_list = \
-            [
-                self._find_token_ratio_in_windows(
-                    windows=self._get_windows(),
-                    numerator_token=row["numerator"],
-                    denominator_token=row["denominator"]
-                ).to_frame()
-                for _, row in
-                self._options.ratio_token_options.token_frame.iterrows()
-            ]
+        self._get_rwa_csv_frame().to_csv(path_or_buf=save_path,
+                                         index_label="# Window",
+                                         na_rep="NA")
 
-        # Concatenate all data frame together to be one.
-        data_frame = pd.concat(token_ratio_series_list)
-
-        # Save the data frame as CSV to the path.
-        data_frame.to_csv(path_or_buf=save_path,
-                          index_label="# Window",
-                          na_rep="NA")
-
-        # Return the saving path so flask knows what file to send.
         return save_path
-
-    def download_rwa(self) -> str:
-        """Download rolling window analysis result as CSV file.
-
-        :return: The directory of the saved CSV file.
-        """
-        # Get possible options.
-        count_average = self._options.average_token_options is not None
-        count_ratio = self._options.ratio_token_options is not None
-
-        # Check precondition: ^ is the exclusive or operator, means we can
-        # either use average count or ratio count
-        assert count_average ^ count_ratio
-
-        # Get corresponding CSV based on user selected option.
-        if count_average:
-            return self._download_average_csv()
-        elif count_ratio:
-            return self._download_ratio_csv()
-        else:
-            raise ValueError("unhandled count type")
