@@ -102,17 +102,23 @@ class RollingWindowsModel(BaseModel):
             # Remove the last word and append next word at the end.
             return "".join([window.replace(last_str, ""), next_str])
 
-        # Number of items in the input list.
-        num_item = len(input_list)
+        # Get the first window.
+        roll_window = "".join(input_list[: window_size])
 
-        # Get the total number of windows.
-        num_window = num_item - window_size + 1
+        # Create a list and hold the first window.
+        window_list = [roll_window]
+
+        # Roll over all possible windows and append it to the list.
+        for index, next_item in enumerate(input_list[window_size:]):
+            # Get next window.
+            roll_window = _get_next_window(window=roll_window,
+                                           last_str=input_list[index],
+                                           next_str=next_item)
+            # Append to the list.
+            window_list.append(roll_window)
 
         # Get the rolling list, should be a array of str.
-        return [
-            "".join(input_list[start: start + window_size])
-            for start in range(num_window)
-        ]
+        return window_list
 
     @staticmethod
     def _get_letters_windows(passage: str, windows_size: int) -> window_str:
