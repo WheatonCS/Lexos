@@ -658,6 +658,10 @@ class RollingWindowsModel(BaseModel):
         return save_path
 
     def _download_ratio_csv(self) -> str:
+        """Download the CSV file for ratio token RWA.
+
+        :return: The directory of the saved CSV file.
+        """
         # Get the default saving directory of rolling window result.
         result_folder_path = os.path.join(
             session_manager.session_folder(), RESULTS_FOLDER)
