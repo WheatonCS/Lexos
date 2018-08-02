@@ -37,10 +37,8 @@ class TestRatioCountOne:
         )
     )
 
-    # Get the rolling window model.
+    # Get the rolling window model and other test components
     rw_ratio_model = RollingWindowsModel(test_option=test_ratio_count)
-
-    # noinspection PyProtectedMember
     rw_ratio_windows = rw_ratio_model._get_windows()
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
     rw_ratio_milestone = \
@@ -116,10 +114,8 @@ class TestRatioCountTwo:
         )
     )
 
-    # Get the rolling window model.
+    # Get the rolling window model and other testing components.
     rw_ratio_model = RollingWindowsModel(test_option=test_ratio_count)
-
-    # noinspection PyProtectedMember
     rw_ratio_windows = rw_ratio_model._get_windows()
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
     rw_ratio_milestone = \
@@ -225,7 +221,9 @@ class TestAverageCount:
                                         'a': [1, 4, 7, 10, 13, 16]}
 
 
-# --------------------test static methods-------------------------------
+# -----------------------------------------------------------------------------
+
+# -------------------------- test static method -------------------------------
 # noinspection PyProtectedMember
 rw_test_letters = RollingWindowsModel._get_letters_windows(
     passage="hello good", windows_size=2)
@@ -246,9 +244,6 @@ rw_test_find_word = RollingWindowsModel._find_word_in_window(
 # noinspection PyProtectedMember
 rw_test_find_string = RollingWindowsModel._find_string_in_window(
     window="hello this the test the test", string="the test")
-
-
-# ---------------------------------------------------------------------------
 
 
 class TestStaticMethods:
