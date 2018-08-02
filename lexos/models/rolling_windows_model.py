@@ -651,7 +651,8 @@ class RollingWindowsModel(BaseModel):
 
         # Transpose the frame, then convert it to csv and save it to the path.
         data_frame.transpose().to_csv(path_or_buf=save_path,
-                                      index_label="# Window")
+                                      index_label="# Window",
+                                      na_rep="NA")
 
         # Return the saving path so flask knows what file to send.
         return save_path
@@ -668,13 +669,27 @@ class RollingWindowsModel(BaseModel):
         # Get the complete saving path of rolling window result.
         save_path = os.path.join(result_folder_path, "rolling_window.csv")
 
-        data_frame = self._find_tokens_average_in_windows(
-            windows=self._get_windows()
-        )
+        # Get list of token ratio series.
+        token_ratio_series_list = \
+            [
+                self._find_token_ratio_in_windows(
+                    windows=self._get_windows(),
+                    numerator_token=row["numerator"],
+                    denominator_token=row["denominator"]
+                ).to_frame()
+                for _, row in
+                self._options.ratio_token_options.token_frame.iterrows()
+            ]
 
-        data_frame.transpose().to_csv(path_or_buf=save_path,
-                                      index_label="# Window")
+        # Concatenate all data frame together to be one.
+        data_frame = pd.concat(token_ratio_series_list)
 
+        # Save the data frame as CSV to the path.
+        data_frame.to_csv(path_or_buf=save_path,
+                          index_label="# Window",
+                          na_rep="NA")
+
+        # Return the saving path so flask knows what file to send.
         return save_path
 
     def download_rwa(self) -> str:
