@@ -182,13 +182,13 @@
                 <legend>4. Define Window</legend>
                 <label for="rollingwindowsize">Size of Rolling Window:
                     <input type="number" name="rollingwindowsize"
-                           id="rollingwindowsize" step="1" max="1000" min="1"
+                           id="rollingwindowsize" step="1" max="10000" min="1"
                            value="{{ session['rwoption']['rollingwindowsize'] }}">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
                        title="The number of characters, tokens, or lines to increment
-                              for each window. The maximum is 1000.">
+                              for each window. The maximum is 10000.">
                     </i>
                 </label>
                 <label class="radio" for="windowletter" id="radiowindowletter">
@@ -253,9 +253,9 @@
         <div class="col-sm-4">
             <fieldset class="rwanalysisradiosdiv">
                 <legend>6. Get Graph</legend>
-                <input type="button" id="getgraph" value="Get Graph"
+                <input type="button" id="get-graph" value="Get Graph"
                        class="btn btn-success col-sm-5" name="rollinganalyze"/>
-                <input type="submit" id="download" value="Download Result"
+                <input type="submit" id="download-csv" value="Download Result"
                        class="btn btn-primary col-sm-offset-1 col-sm-5"/>
             </fieldset>
         </div>
