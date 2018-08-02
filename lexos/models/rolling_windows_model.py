@@ -2,8 +2,6 @@
 
 import re
 import os
-from collections import deque
-
 import numpy as np
 import pandas as pd
 import colorlover as cl
@@ -92,6 +90,18 @@ class RollingWindowsModel(BaseModel):
         :param window_size: The size of the window (number of terms in window).
         :return: An array of strings, each element is a window.
         """
+        def _get_next_window(window: str, last_str: str, next_str: str) -> str:
+            """Roll the window to the next.
+
+            Remove the first item in current window and append the upcoming
+            next item to roll the window.
+            :param window:
+            :param last_str:
+            :param next_str:
+            """
+            # Remove the last word and append next word at the end.
+            return "".join([window.replace(last_str, ""), next_str])
+
         # Number of items in the input list.
         num_item = len(input_list)
 
