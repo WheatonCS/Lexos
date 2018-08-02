@@ -2,6 +2,8 @@
 
 import re
 import os
+from collections import deque
+
 import numpy as np
 import pandas as pd
 import colorlover as cl
@@ -57,7 +59,7 @@ class RollingWindowsModel(BaseModel):
         """
         # if test option is specified
         if self._test_file_id_content_map is not None and \
-            self._test_front_end_options is not None:
+                self._test_front_end_options is not None:
             file_id = self._test_front_end_options.passage_file_id
             file_id_content_map = self._test_file_id_content_map
 
@@ -103,35 +105,48 @@ class RollingWindowsModel(BaseModel):
         ]
 
     @staticmethod
-    def _get_letters_windows(passage: str) -> window_str:
+    def _get_letters_windows(passage: str, windows_size: int) -> window_str:
         """Get the windows of letters with specific window size.
 
         :param passage: the whole text to generate the windows
             (the text to run rolling window analysis on).
+        :param windows_size: number of terms (letters) in a single window.
         :return: an array of windows.
         """
-        return list(passage)
+        return RollingWindowsModel._get_rolling_window_from_list(
+            input_list=list(passage), window_size=windows_size
+        )
 
     @staticmethod
-    def _get_word_windows(passage: str) -> window_str:
+    def _get_word_windows(passage: str, window_size: int) -> window_str:
         """Get the window of words with specific window size.
 
         :param passage: the whole text to generate the windows
             (the text to run rolling window analysis on).
+        :param window_size: number of terms (words) in a single window.
         :return: an array of windows.
         """
-        return get_words_with_right_boundary(passage)
+        words = get_words_with_right_boundary(passage)
+
+        return RollingWindowsModel._get_rolling_window_from_list(
+            input_list=words, window_size=window_size
+        )
 
     @staticmethod
-    def _get_line_windows(passage: str) -> window_str:
+    def _get_line_windows(passage: str, window_size: int) -> window_str:
         """Get the window of lines with specific size.
 
         :param passage: the whole text ot generate the windows
             (the text to run rolling window analysis on).
+        :param window_size: the number of terms (lines) in a window.
         :return: an array of windows.
         """
         # Get all the lines.
-        return passage.splitlines(keepends=True)
+        lines = passage.splitlines(keepends=True)
+
+        return RollingWindowsModel._get_rolling_window_from_list(
+            input_list=lines, window_size=window_size
+        )
 
     @staticmethod
     def _find_regex_in_window(window: str, regex: str) -> int:
@@ -174,21 +189,26 @@ class RollingWindowsModel(BaseModel):
         :return: an array of windows to run analysis on.
         """
         window_unit = self._options.window_options.window_unit
+        window_size = self._options.window_options.window_size
         passage = self._passage
 
         if window_unit is WindowUnitType.line:
-            return self._get_line_windows(passage=passage)
+            return self._get_line_windows(passage=passage,
+                                          window_size=window_size)
 
         elif window_unit is WindowUnitType.word:
-            return self._get_word_windows(passage=passage)
+            return self._get_word_windows(passage=passage,
+                                          window_size=window_size)
 
         elif window_unit is WindowUnitType.letter:
-            return self._get_letters_windows(passage=passage)
+            return self._get_letters_windows(passage=passage,
+                                             windows_size=window_size)
 
         else:
             raise ValueError(f"unhandled window type: {window_unit}")
 
-    def _find_tokens_average_in_windows(self) -> pd.DataFrame:
+    def _find_tokens_average_in_windows(self,
+                                        windows: window_str) -> pd.DataFrame:
         """Find the token average in the given windows.
 
         A token average is calculated by the number of times the token
@@ -201,24 +221,13 @@ class RollingWindowsModel(BaseModel):
         """
         assert self._options.average_token_options is not None
 
-        tokens = self._options.average_token_options.tokens
         token_type = self._options.average_token_options.token_type
-
-        # Get the window size.
+        tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
-
-        # Get the input list.
-        input_list = self._get_windows()
-
-        # Number of items in the input list.
-        num_item = len(input_list)
-
-        # Get the total number of windows.
-        num_window = num_item - window_size + 1
 
         def _average_matrix_helper(
             window_term_count_func: Callable[[str, str], int]) \
-            -> pd.DataFrame:
+                -> pd.DataFrame:
             """Get the average matrix.
 
             :param window_term_count_func:
@@ -239,11 +248,9 @@ class RollingWindowsModel(BaseModel):
             #  - the function that sent in has different keywords
             list_matrix = \
                 [
-                    [window_term_count_func(
-                        "".join(input_list[start: start + window_size]),
-                        token) / window_size
+                    [window_term_count_func(window, token) / window_size
                      for token in tokens]
-                    for start in range(num_window)
+                    for window in windows
                 ]
 
             return pd.DataFrame(list_matrix, columns=tokens).transpose()
@@ -355,7 +362,7 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-        self, windows: window_str) -> milestone_count_dict:
+            self, windows: window_str) -> milestone_count_dict:
         """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
@@ -543,7 +550,8 @@ class RollingWindowsModel(BaseModel):
         """
         # Get the windows and toke average data frame.
         windows = self._get_windows()
-        token_average_data_frame = self._find_tokens_average_in_windows()
+        token_average_data_frame = self._find_tokens_average_in_windows(
+            windows=windows)
 
         # Find the proper plotting mode.
         plot_mode = "lines+markers" \
