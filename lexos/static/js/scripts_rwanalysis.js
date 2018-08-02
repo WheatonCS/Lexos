@@ -81,7 +81,7 @@ $(function () {
   // Bind the function to the checkbox
   $('#rollinghasmilestone').click(updateMSopt)
 
-  $('#getgraph').click(function () {
+  $('#get-graph').click(function () {
     resultDiv.css({'visibility': 'hidden'})
     /* Get the possible validations. */
     const errorString = getSubmissionError()
@@ -90,6 +90,15 @@ $(function () {
       resultDiv.css({'visibility': 'visible'})
       utility.scrollToDiv(resultDiv)
     } else {
+      utility.runModal(errorString)
+    }
+  })
+
+  $('#download-csv').click(function (event) {
+    /* Get the possible validations. */
+    const errorString = getSubmissionError()
+    if (errorString !== null) {
+      event.preventDefault()
       utility.runModal(errorString)
     }
   })
