@@ -432,7 +432,7 @@ class RollingWindowsModel(BaseModel):
         :param result_plot: List of existing scatter rolling window plot.
         :return: A plotly figure object.
         """
-        # Get all mile stones.
+        # Get all mile stone locations.
         milestones_dict = \
             self._find_mile_stone_windows_indexes_in_all_windows(
                 windows=windows
@@ -444,43 +444,39 @@ class RollingWindowsModel(BaseModel):
             y_max_in_each_plot = \
                 [max(each_plot['y'][~np.isnan(each_plot['y'])])
                  for each_plot in result_plot]
-            y_max = max(y_max_in_each_plot) * 1.1
+            y_max = max(y_max_in_each_plot) * 1.05
 
             y_min_in_each_plot = \
                 [min(each_plot['y'][~np.isnan(each_plot['y'])])
                  for each_plot in result_plot]
-            y_min = min(y_min_in_each_plot) * 0.9
+            y_min = min(y_min_in_each_plot) * 0.95
 
-            # Plot straight lines for all indexes for each mile stone.
-            layout = go.Layout(
-                showlegend=True,
-                shapes=[
-                    dict(
-                        type="line",
-                        x0=mile_stone,
-                        x1=mile_stone,
-                        y0=y_min,
-                        y1=y_max,
-                        line=dict(
-                            color=self._get_mile_stone_color(index=index),
-                            width=1
-                        )
+            mile_stone_data = [
+                go.Scattergl(
+                    x=[mile_stone, mile_stone],
+                    y=[y_min, y_max],
+                    name=ms,
+                    mode="lines",
+                    hoverinfo="x+name",
+                    showlegend=False if mile_stone != ms_list[0] else True,
+                    legendgroup=ms,
+                    line=dict(
+                        color=self._get_mile_stone_color(index=index),
+                        width=2
                     )
-
-                    for index, (_, milestones_list) in
-                    enumerate(milestones_dict.items())
-                    for mile_stone in milestones_list
-                ]
-            )
+                )
+                for index, (ms, ms_list) in enumerate(milestones_dict.items())
+                for mile_stone in ms_list
+            ]
 
             # Add a transparent dot in order to add the milestone legend.
             legend_helper = [
                 go.Scattergl(
-                    x=[self._options.window_options.window_size / 2],
+                    x=[0],
                     y=[(y_max + y_min) / 2],
                     name="---milestones---",
                     hoverinfo="none",
-                    mode="markers",
+                    mode="lines",
                     marker=dict(
                         opacity=0,
                         color="rgb(255, 255, 255)"
@@ -488,27 +484,11 @@ class RollingWindowsModel(BaseModel):
                 )
             ]
 
-            # Add scatter at the end of mile stones to enable interactive.
-            interactive_helper = [
-                go.Scattergl(
-                    x=milestones_dict[key],
-                    y=[y_max for _ in range(len(milestones_dict[key]))],
-                    mode="markers",
-                    hoverinfo="x+name",
-                    name=key,
-                    marker=dict(
-                        color=self._get_mile_stone_color(index=index)
-                    )
-                )
-                for index, key in enumerate(milestones_dict)
-            ]
-
             # Pack the data together.
-            data = result_plot + legend_helper + interactive_helper
+            data = result_plot + legend_helper + mile_stone_data
 
             # Return the plot with milestones as layout.
-            return go.Figure(data=data,
-                             layout=layout)
+            return go.Figure(data=data)
 
         else:
             # Return just the plot.
