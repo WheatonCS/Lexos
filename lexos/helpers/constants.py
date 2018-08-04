@@ -156,6 +156,14 @@ HIERARCHICALINPUT = (
     'pruning',
     'criterion')
 
+# for BCT analysis
+BCTINPUT = (
+    'metric',
+    'linkage',
+    'consensus',
+    'iterations'
+)
+
 # for kmeans Clustering
 KMEANINPUT = (
     'viz',
