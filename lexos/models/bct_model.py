@@ -1,5 +1,6 @@
 """This is a model to produce bootstrap consensus tree of the dtm."""
 
+import os
 import numpy as np
 import pandas as pd
 from Bio import Phylo
@@ -9,7 +10,9 @@ from ete3 import TreeStyle, Tree
 from Bio.Phylo.Consensus import *
 from scipy.cluster.hierarchy import linkage
 from typing import NamedTuple, Optional, List
+from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
+from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
 
@@ -123,7 +126,7 @@ class BCTModel(BaseModel):
             for _ in range(self._bct_option.iterations)
         ]
 
-    def _get_bootstrap_consensus_tree(self) -> str:
+    def _get_bootstrap_consensus_tree(self) -> Tree:
         """Get the consensus tree.
 
         :return: The consensus tree of the list of newick trees.
@@ -154,7 +157,7 @@ class BCTModel(BaseModel):
         else:
             raise ValueError("Invalid bootstrap consensus method.")
 
-        return consensus_tree_holder.getvalue()
+        return Tree(consensus_tree_holder.getvalue(), quoted_node_names=True)
 
     @staticmethod
     def _get_ete_tree_style() -> TreeStyle:
@@ -173,20 +176,31 @@ class BCTModel(BaseModel):
         tree_style.branch_vertical_margin = 10
         return tree_style
 
-    def get_bootstrap_consensus_result(self):
+    def get_bootstrap_consensus_result(self) -> str:
         """Draw the bootstrap consensus tree result.
 
         :return:
         """
-        # Get the newick formatted consensus tree.
+        # Get the default saving directory of BCT result.
+        result_folder_path = os.path.join(
+            session_manager.session_folder(), RESULTS_FOLDER)
+
+        # Attempt to make the directory, if the directory isn't already there.
+        if not os.path.isdir(result_folder_path):
+            os.makedirs(result_folder_path)
+
+        # Get the complete saving path of BCT result.
+        save_path = "static/images/bct_result.png"
+
+        # Get the ete formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
 
-        # Read in the newick consensus tree as ete tree object.
-        ete_tree = Tree(consensus_tree)
+        consensus_tree.render(
+            tree_style=self._get_ete_tree_style(),
+            file_name="result.png",
+            units="px",
+            h=700,
+            w=700
+        )
 
-        # Get the ete tree drawing style.
-        tree_style = self._get_ete_tree_style()
-
-        ete_tree.render(tree_style=tree_style)
-
-        return "A"
+        return save_path
