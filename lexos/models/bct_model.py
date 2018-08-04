@@ -5,8 +5,9 @@ import pandas as pd
 from io import StringIO
 from Bio import Phylo
 from skbio import TreeNode
-from typing import NamedTuple, Optional, List
+from Bio.Phylo.Consensus import *
 from scipy.cluster.hierarchy import linkage
+from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
@@ -120,7 +121,38 @@ class BCTModel(BaseModel):
             for _ in range(self._bct_option.iterations)
         ]
 
-    def get_bootstrap_consensus_tree(self) -> str:
-        A = self._get_bootstrap_trees()
+    def _get_bootstrap_consensus_tree(self) -> str:
+        # Create the StringIO newick tree holder.
+        consensus_tree_holder = StringIO()
 
-        return "works"
+        # Check users selection and return the correct consensus tree.
+        if self._bct_option.consensus_method == "strict":
+            Phylo.write(
+                trees=strict_consensus(trees=self._get_bootstrap_trees()),
+                file=consensus_tree_holder,
+                format="newick"
+            )
+        elif self._bct_option.consensus_method == "majority":
+            Phylo.write(
+                trees=majority_consensus(trees=self._get_bootstrap_trees()),
+                file=consensus_tree_holder,
+                format="newick"
+            )
+            return majority_consensus(trees=self._get_bootstrap_trees())
+        elif self._bct_option.consensus_method == "adam":
+            Phylo.write(
+                trees=adam_consensus(trees=self._get_bootstrap_trees()),
+                file=consensus_tree_holder,
+                format="newick"
+            )
+        else:
+            raise ValueError("Invalid bootstrap consensus method.")
+
+        return consensus_tree_holder.getvalue()
+
+    def get_bootstrap_consensus_result(self):
+        # Get the newick formatted consensus tree.
+        consensus_tree = self._get_bootstrap_consensus_tree()
+
+
+        return "A"
