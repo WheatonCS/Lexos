@@ -124,7 +124,9 @@
                    type="button" value="Get Bootstrap Consensus Tree"/>
         </div>
     </div>
-    <div id="bct-result" class="row"></div>
+    <div id="bct-result" class="row">
+        <img src="{{ url_for('static', filename='images/result.png') }}">
+    </div>
 {% endblock %}
 
 {% block submit %}

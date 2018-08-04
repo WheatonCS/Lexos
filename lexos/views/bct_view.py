@@ -1,4 +1,6 @@
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, send_from_directory, \
+    send_file
+import io
 from lexos.helpers import constants
 from lexos.managers import session_manager
 from lexos.models.bct_model import BCTModel
@@ -44,7 +46,7 @@ def bct_analysis():
 def get_bct_result():
     """Send the BCT result to frontend
 
-    :return: I don't know yet.
+    :return: Send file from directory to the ajax call.
     """
     # Cache all the options.
     session_manager.cache_bct_option()
