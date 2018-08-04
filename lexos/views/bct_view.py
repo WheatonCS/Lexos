@@ -8,10 +8,10 @@ from lexos.models.filemanager_model import FileManagerModel
 # see here for more detail:
 # http://exploreflask.com/en/latest/blueprints.html
 # http://flask.pocoo.org/docs/0.12/blueprints/
-dendrogram_blueprint = Blueprint('bct_analysis', __name__)
+bct_analysis_blueprint = Blueprint('bct_analysis', __name__)
 
 
-@dendrogram_blueprint.route("/bct_analysis", methods=['GET'])
+@bct_analysis_blueprint.route("/bct_analysis", methods=['GET'])
 def bct_analysis():
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
