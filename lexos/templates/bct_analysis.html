@@ -3,7 +3,7 @@
 
 {% block head %}
     <script type="module"
-            src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
+            src="{{ url_for('static', filename='js/bct_analysis.js') }}?ver={{ version }}"></script>
 {% endblock %}
 
 {% block title %}Bootstrap Consensus Tree{% endblock %}
@@ -93,8 +93,8 @@
                    style="padding-left:4px;font-size:18px;"></i>
             </label>
 
-            <label for="consensus-method">Bootstrap Consensus Method:
-                <select name="consensus-method" id="consensus-method">
+            <label for="consensus">Bootstrap Consensus Method:
+                <select name="consensus" id="consensus">
                     <option value="strict" {{ 'selected' if session['bctoption']['consensus'] == 'strict' }}>
                         Strict
                     </option>
