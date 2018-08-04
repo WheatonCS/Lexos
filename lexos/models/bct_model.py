@@ -102,3 +102,8 @@ class BCTModel(BaseModel):
             for _ in range(self._bct_option.iterations)
         ]
 
+    def get_bootstrap_consensus_tree(self) -> str:
+        A = self._get_bootstrap_trees()
+        B = self._get_newick_tree()
+
+        return "works"
