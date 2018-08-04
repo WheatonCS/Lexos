@@ -15,41 +15,50 @@
         <div id="bct-options">
             <label for="metric">Distance Metric:
                 <select name="metric" id="metric">
-                    <option value="euclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'euclidean' }}>
+                    <option value="euclidean" {{ 'selected' if session['bctoption']['metric'] == 'euclidean' }}>
                         Euclidean
                     </option>
-                    <option value="minkowski" {{ 'selected' if session['hierarchyoption']['metric'] == 'minkowski' }}>
+                    <option value="minkowski" {{ 'selected' if session['bctoption']['metric'] == 'minkowski' }}>
                         Minkowski
                     </option>
-                    <option value="cityblock" {{ 'selected' if session['hierarchyoption']['metric'] == 'cityblock' }}>
+                    <option value="cityblock" {{ 'selected' if session['bctoption']['metric'] == 'cityblock' }}>
                         Manhattan
                     </option>
-                    <option value="seuclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'seuclidean' }}>
+                    <option value="seuclidean" {{ 'selected' if session['bctoption']['metric'] == 'seuclidean' }}>
                         Standardized Euclidean
                     </option>
-                    <option value="sqeuclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'sqeuclidean' }}>
+                    <option value="sqeuclidean" {{ 'selected' if session['bctoption']['metric'] == 'sqeuclidean' }}>
                         Squared Euclidean
                     </option>
-                    <option value="cosine" {{ 'selected' if session['hierarchyoption']['metric'] == 'cosine' }}>
+                    <option value="cosine" {{ 'selected' if session['bctoption']['metric'] == 'cosine' }}>
                         Cosine
                     </option>
-                    <option value="correlation" {{ 'selected' if session['hierarchyoption']['metric'] == 'correlation' }}>
+                    <option value="correlation" {{ 'selected' if session['bctoption']['metric'] == 'correlation' }}>
                         Correlation
                     </option>
-                    <option value="hamming" {{ 'selected' if session['hierarchyoption']['metric'] == 'hamming' }}>
+                    <option value="hamming" {{ 'selected' if session['bctoption']['metric'] == 'hamming' }}>
                         Hamming
                     </option>
-                    <option value="chebyshev" {{ 'selected' if session['hierarchyoption']['metric'] == 'chebyshev' }}>
+                    <option value="chebyshev" {{ 'selected' if session['bctoption']['metric'] == 'chebyshev' }}>
                         Chebyshev
                     </option>
-                    <option value="jaccard" {{ 'selected' if session['hierarchyoption']['metric'] == 'jaccard' }}>
+                    <option value="jaccard" {{ 'selected' if session['bctoption']['metric'] == 'jaccard' }}>
                         Jaccard
                     </option>
-                    <option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>
+                    <option value="canberra" {{ 'selected' if session['bctoption']['metric'] == 'canberra' }}>
                         Canberra
                     </option>
-                    <option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>
+                    <option value="braycurtis" {{ 'selected' if session['bctoption']['metric'] == 'braycurtis' }}>
                         Braycurtis
+                    </option>
+                    <option value="yule" {{ 'selected' if session['bctoption']['metric'] == 'yule' }}>
+                        Yule
+                    </option>
+                    <option value="matching" {{ 'selected' if session['bctoption']['metric'] == 'matching' }}>
+                        Matching
+                    </option>
+                    <option value="dice" {{ 'selected' if session['bctoption']['metric'] == 'dice' }}>
+                        Dice
                     </option>
                 </select>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
@@ -61,20 +70,20 @@
 
             <label for="linkage">Linkage Method:
                 <select name="linkage" id="linkage">
-                    <option value="average" {{ 'selected' if session['hierarchyoption']['linkage'] == 'average' }}>
+                    <option value="average" {{ 'selected' if session['bctoption']['linkage'] == 'average' }}>
                         Average
                     </option>
-                    <option value="single" {{ 'selected' if session['hierarchyoption']['linkage'] == 'single' }}>
+                    <option value="single" {{ 'selected' if session['bctoption']['linkage'] == 'single' }}>
                         Single
                     </option>
-                    <option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>
+                    <option value="complete" {{ 'selected' if session['bctoption']['linkage'] == 'complete' }}>
                         Complete
                     </option>
-                    <option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>
+                    <option value="weighted" {{ 'selected' if session['bctoption']['linkage'] == 'weighted' }}>
                         Weighted
                     </option>
-                    <option value="centroid" {{ 'selected' if session['hierarchyoption']['linkage'] == 'centroid' }}>
-                        centroid
+                    <option value="centroid" {{ 'selected' if session['bctoption']['linkage'] == 'centroid' }}>
+                        Centroid
                     </option>
                 </select>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
@@ -83,13 +92,17 @@
                    title="Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters."
                    style="padding-left:4px;font-size:18px;"></i>
             </label>
+
             <label for="consensus-method">Bootstrap Consensus Method:
                 <select name="consensus-method" id="consensus-method">
-                    <option value="bottom" {{ 'selected' if session['hierarchyoption']['orientation'] == 'bottom' }}>
-                        Bottom
+                    <option value="strict" {{ 'selected' if session['bctoption']['consensus'] == 'strict' }}>
+                        Strict
                     </option>
-                    <option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>
-                        Left
+                    <option value="majority" {{ 'selected' if session['bctoption']['consensus'] == 'majority' }}>
+                        Majority
+                    </option>
+                    <option value="adam" {{ 'selected' if session['bctoption']['consensus'] == 'adam' }}>
+                        Adam
                     </option>
                 </select>
             </label>
