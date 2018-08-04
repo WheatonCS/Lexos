@@ -239,10 +239,8 @@ def cache_cloud_option():
 
     See constant.CLOUDLIST for more.
     """
-
-    # list
-    for list in const.CLOUDLIST:
-        session['cloudoption'][list] = request.form.getlist(list)
+    for item in const.CLOUDLIST:
+        session['cloudoption'][item] = request.form.getlist(item)
 
 
 def cache_multi_cloud_options():
@@ -275,17 +273,6 @@ def cache_bubble_viz_option():
         session['bubblevisoption'][request_input] = (
             request.form[request_input] if input in request.form
             else const.DEFAULT_BUBBLEVIZ_OPTIONS[request_input])
-
-
-def cache_statistic_option():
-    """Stores statistics options from request.form in session cookie object.
-
-    See constant.STATISTIC_LIST for more.
-    """
-
-    # list
-    for list in const.STATISTIC_LIST:
-        session['statisticoption'][list] = request.form.getlist(list)
 
 
 def cache_hierarchy_option():
