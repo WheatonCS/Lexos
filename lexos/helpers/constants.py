@@ -256,7 +256,8 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
 DEFAULT_BCT_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
-    'consensus': 'strict'
+    'consensus': 'strict',
+    'iterations': 100
 }
 
 DEFAULT_KMEAN_OPTIONS = {
