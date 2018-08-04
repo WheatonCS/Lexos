@@ -59,13 +59,22 @@ class BCTModel(BaseModel):
             if self._test_front_end_option is not None \
             else BCTReceiver().options_from_front_end()
 
-    def _get_newick_tree(self, sample_dtm: pd.DataFrame) -> str:
+    def _get_newick_tree(self,
+                         labels: List[str],
+                         sample_dtm: pd.DataFrame) -> str:
+        """
+
+        :param labels:
+        :param sample_dtm:
+        :return:
+        """
         # Create the StringIO newick tree holder.
         newick_tree = StringIO()
 
+        # noinspection PyTypeChecker
         # Get the linkage matrix for the sample doc term matrix.
         linkage_matrix = linkage(
-            sample_dtm.data,
+            sample_dtm.values,
             metric=self._bct_option.dist_metric,
             method=self._bct_option.linkage_method
         )
@@ -73,7 +82,7 @@ class BCTModel(BaseModel):
         # Convert linkage matrix to a tree node
         tree = TreeNode.from_linkage_matrix(
             linkage_matrix=linkage_matrix,
-            id_list=sample_dtm.index
+            id_list=labels
         )
 
         # noinspection PyUnresolvedReferences
@@ -83,8 +92,6 @@ class BCTModel(BaseModel):
         # Get the string in side StringIO object.
         newick_tree_string = newick_tree.getvalue()
 
-        A = Phylo.read(StringIO(newick_tree_string), format="newick")
-
         # Return it as a bio python object.
         return Phylo.read(
             StringIO(newick_tree_string),
@@ -92,18 +99,28 @@ class BCTModel(BaseModel):
         )
 
     def _get_bootstrap_trees(self) -> List[str]:
+        """
+
+        :return:
+        """
+        # Get file names, since tree nodes need labels.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # The bootstrap process to get all the trees.
         return [
             self._get_newick_tree(
                 sample_dtm=self._doc_term_matrix.sample(
+                    axis=1,
                     frac=0.8,
-                    random_state=np.random.RandomState
-                )
+                    random_state=np.random.RandomState()
+                ),
+                labels=labels,
             )
             for _ in range(self._bct_option.iterations)
         ]
 
     def get_bootstrap_consensus_tree(self) -> str:
         A = self._get_bootstrap_trees()
-        B = self._get_newick_tree()
 
         return "works"
