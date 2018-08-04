@@ -2,8 +2,8 @@
 
 import numpy as np
 import pandas as pd
-from io import StringIO
 from Bio import Phylo
+from io import StringIO
 from skbio import TreeNode
 from Bio.Phylo.Consensus import *
 from scipy.cluster.hierarchy import linkage
@@ -63,11 +63,11 @@ class BCTModel(BaseModel):
     def _get_newick_tree(self,
                          labels: List[str],
                          sample_dtm: pd.DataFrame) -> str:
-        """
+        """Get newick tree based on a subset of the DTM.
 
-        :param labels:
-        :param sample_dtm:
-        :return:
+        :param labels: All file names from the DTM.
+        :param sample_dtm: A 80% subset of the complete DTM.
+        :return: A newick formatted tree representing the DTM subset.
         """
         # Create the StringIO newick tree holder.
         newick_tree = StringIO()
@@ -100,9 +100,10 @@ class BCTModel(BaseModel):
         )
 
     def _get_bootstrap_trees(self) -> List[str]:
-        """
+        """Do bootstrap on the DTM to get a list of newick trees.
 
-        :return:
+        :return: A list of newick formatted tree where each tree was based on
+                 a 80% subset of the complete DTM.
         """
         # Get file names, since tree nodes need labels.
         labels = [self._id_temp_label_map[file_id]
@@ -122,6 +123,10 @@ class BCTModel(BaseModel):
         ]
 
     def _get_bootstrap_consensus_tree(self) -> str:
+        """Get the consensus tree.
+
+        :return: The consensus tree of the list of newick trees.
+        """
         # Create the StringIO newick tree holder.
         consensus_tree_holder = StringIO()
 
@@ -151,8 +156,11 @@ class BCTModel(BaseModel):
         return consensus_tree_holder.getvalue()
 
     def get_bootstrap_consensus_result(self):
+        """Draw the bootstrap consensus tree result.
+
+        :return:
+        """
         # Get the newick formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
-
 
         return "A"
