@@ -32,3 +32,7 @@ def bct_analysis():
         labels=id_label_map,
         numActiveDocs=num_active_docs
     )
+
+
+@bct_analysis_blueprint.route("/bct_analysis", methods=['POST'])
+def get_bct_result():
