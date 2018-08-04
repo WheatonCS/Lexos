@@ -299,7 +299,7 @@ def cache_bct_option():
     for request_input in const.BCTINPUT:
         session['bctoption'][request_input] = (
             request.form[request_input] if input in request.form
-            else const.DEFAULT_KMEAN_OPTIONS[request_input]
+            else const.DEFAULT_BCT_OPTIONS[request_input]
         )
 
 
