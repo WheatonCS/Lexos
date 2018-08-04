@@ -17,10 +17,13 @@ class BCTOption(NamedTuple):
     # "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html"
     dist_metric: str
 
-    # the linkage method to send to scipy.cluster.hierarchy.linkage
+    # The linkage method to send to scipy.cluster.hierarchy.linkage
     # See:
     # "https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.cluster.hierarchy.linkage.html"
     linkage_method: str
+
+    # Number of bootstrap iterations.
+    iterations: int
 
 
 class BCTReceiver(BaseReceiver):
@@ -38,9 +41,11 @@ class BCTReceiver(BaseReceiver):
         consensus_method = self._front_end_data['consensus']
         linkage_method = self._front_end_data['linkage']
         dist_metric = self._front_end_data['metric']
+        iterations = int(self._front_end_data['iteration'])
 
         return BCTOption(
             consensus_method=consensus_method,
             linkage_method=linkage_method,
-            dist_metric=dist_metric
+            dist_metric=dist_metric,
+            iterations=iterations
         )
