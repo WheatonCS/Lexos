@@ -104,6 +104,11 @@
                     <option value="adam" {{ 'selected' if session['bctoption']['consensus'] == 'adam' }}>
                         Adam
                     </option>
+                    <label for="num-iteration">Number of bootstrap iterations:
+                        <input type="number" name="num-iteration"
+                               id="num-iteration" step="1" min="20" max="200"
+                               value="{{ session['bctoption']['iterations'] }}">
+                    </label>>
                 </select>
             </label>
         </div>
