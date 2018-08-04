@@ -39,6 +39,8 @@ class BCTReceiver(BaseReceiver):
         linkage_method = self._front_end_data['linkage']
         dist_metric = self._front_end_data['metric']
 
-        return BCTOption(orientation=consensus_method,
-                         linkage_method=linkage_method,
-                         dist_metric=dist_metric)
+        return BCTOption(
+            consensus_method=consensus_method,
+            linkage_method=linkage_method,
+            dist_metric=dist_metric
+        )
