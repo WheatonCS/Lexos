@@ -190,7 +190,7 @@ class BCTModel(BaseModel):
             os.makedirs(result_folder_path)
 
         # Get the complete saving path of BCT result.
-        save_path = "static/images/bct_result.png"
+        save_path = os.path.join(result_folder_path, "bct_result.png")
 
         # Get the ete formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
