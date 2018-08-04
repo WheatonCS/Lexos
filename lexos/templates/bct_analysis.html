@@ -64,7 +64,8 @@
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="popover" data-html="true"
                    data-placement="right" data-container="body"
-                   data-content="Different methods for measuring the distance (differences) between documents. See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric</a>."
+                   data-content="Different methods for measuring the distance (differences) between documents.
+                   See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric.</a>"
                    style="padding-left:4px;font-size:18px;"></i>
             </label>
 
@@ -104,12 +105,13 @@
                     <option value="adam" {{ 'selected' if session['bctoption']['consensus'] == 'adam' }}>
                         Adam
                     </option>
-                    <label for="num-iteration">Number of bootstrap iterations:
-                        <input type="number" name="num-iteration"
-                               id="num-iteration" step="1" min="20" max="200"
-                               value="{{ session['bctoption']['iterations'] }}">
-                    </label>>
                 </select>
+            </label>
+
+            <label for="iterations">Number of bootstrap iterations:
+                <input type="number" name="iterations" id="iterations"
+                       step="1" min="20" max="200"
+                       value="{{ session['bctoption']['iterations'] }}">
             </label>
         </div>
     </fieldset>
