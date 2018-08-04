@@ -1,5 +1,7 @@
 from flask import session, render_template, Blueprint
 from lexos.helpers import constants
+from lexos.managers import session_manager
+from lexos.models.bct_model import BCTModel
 from lexos.views.base_view import detect_active_docs
 from lexos.models.filemanager_model import FileManagerModel
 
@@ -13,6 +15,10 @@ bct_analysis_blueprint = Blueprint('bct_analysis', __name__)
 
 @bct_analysis_blueprint.route("/bct_analysis", methods=['GET'])
 def bct_analysis():
+    """Display the web page when first got to bootstrap consensus analysis.
+
+    :return: The rendered template.
+    """
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     # Get labels with their ids.
@@ -22,7 +28,7 @@ def bct_analysis():
     # Fill in default options.
     if 'analyoption' not in session:
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    if 'hierarchyoption' not in session:
+    if 'bctoption' not in session:
         session['bctoption'] = constants.DEFAULT_BCT_OPTIONS
 
     # Render the HTML template.
@@ -34,5 +40,14 @@ def bct_analysis():
     )
 
 
-@bct_analysis_blueprint.route("/bct_analysis", methods=['POST'])
+@bct_analysis_blueprint.route("/bct_analysis_result", methods=['POST'])
 def get_bct_result():
+    """Send the BCT result to frontend
+
+    :return: I don't know yet.
+    """
+    # Cache all the options.
+    session_manager.cache_bct_option()
+    session_manager.cache_analysis_option()
+    # Get the bootstrap consensus tree result.
+    return BCTModel().get_bootstrap_consensus_tree()
