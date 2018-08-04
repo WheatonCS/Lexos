@@ -49,7 +49,7 @@ class BCTModel(BaseModel):
 
     @property
     def _bct_option(self) -> BCTOption:
-
+        """:return: the front end option of bootstrap consensus tree."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else BCTReceiver().options_from_front_end()
