@@ -23,22 +23,22 @@ class BCTOption(NamedTuple):
     linkage_method: str
 
 
-class DendroReceiver(BaseReceiver):
-    """This is the class to receive dendro options."""
+class BCTReceiver(BaseReceiver):
+    """This is the class to receive bootstrap consensus tree options."""
 
     def __init__(self):
-        """Get all the dendrogram options using the receiver."""
+        """Get all the bootstrap consensus tree options using the receiver."""
         super().__init__()
 
-    def options_from_front_end(self) -> DendroOption:
-        """Get the dendrogram option from front end.
+    def options_from_front_end(self) -> BCTOption:
+        """Get the bootstrap consensus tree option from front end.
 
-        :return: a DendroOption object to hold all the options.
+        :return: A BCTOption object to hold all the options.
         """
-        orientation = self._front_end_data['orientation']
+        consensus_method = self._front_end_data['consensus']
         linkage_method = self._front_end_data['linkage']
-        metric = self._front_end_data['metric']
+        dist_metric = self._front_end_data['metric']
 
-        return DendroOption(orientation=orientation,
-                            linkage_method=linkage_method,
-                            dist_metric=metric)
+        return BCTOption(orientation=consensus_method,
+                         linkage_method=linkage_method,
+                         dist_metric=dist_metric)
