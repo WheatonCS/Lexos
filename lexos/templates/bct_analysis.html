@@ -83,18 +83,14 @@
                    title="Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters."
                    style="padding-left:4px;font-size:18px;"></i>
             </label>
-            <label for="orientation">Dendrogram Leaves Orientation:
-                <select name="orientation" id="orientation">
+            <label for="consensus-method">Bootstrap Consensus Method:
+                <select name="consensus-method" id="consensus-method">
                     <option value="bottom" {{ 'selected' if session['hierarchyoption']['orientation'] == 'bottom' }}>
                         Bottom
                     </option>
                     <option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>
                         Left
                     </option>
-                    {# We comment these two options out since we don't think our users need them. #}
-                    {# But if we decide to add them back in the future, simply uncomment them. #}
-                    {# <option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>Top</option> #}
-                    {# <option value="right" {{ 'selected' if session['hierarchyoption']['orientation'] == 'right' }}>Right</option> #}
                 </select>
             </label>
         </div>
@@ -104,12 +100,12 @@
 
 {% block results %}
     <div class="row submit-button-row">
-        <div class="col-md-12">
-            <input class="btn btn-success" id="getdendro" name="getdendro"
-                   type="button" value="Get Dendrogram" style=""/>
+        <div class="col-md-12 col-lg-12">
+            <input class="btn btn-success" id="get-bct" name="get-bct"
+                   type="button" value="Get Bootstrap Consensus Tree"/>
         </div>
     </div>
-    <div id="dendrogram-result" class="row"></div>
+    <div id="bct-result" class="row"></div>
 {% endblock %}
 
 {% block submit %}
