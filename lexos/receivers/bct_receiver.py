@@ -41,7 +41,7 @@ class BCTReceiver(BaseReceiver):
         consensus_method = self._front_end_data['consensus']
         linkage_method = self._front_end_data['linkage']
         dist_metric = self._front_end_data['metric']
-        iterations = int(self._front_end_data['iteration'])
+        iterations = int(self._front_end_data['iterations'])
 
         return BCTOption(
             consensus_method=consensus_method,
