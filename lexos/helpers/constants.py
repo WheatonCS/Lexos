@@ -253,6 +253,12 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'dendroLegends': False,
     'degenerated': False}
 
+DEFAULT_BCT_OPTIONS = {
+    'metric': 'euclidean',
+    'linkage': 'average',
+    'consensus': 'strict'
+}
+
 DEFAULT_KMEAN_OPTIONS = {
     'nclusters': '',  # This value has to be decided by number of files.
     'viz': 'Voronoi',
