@@ -5,6 +5,7 @@ import pandas as pd
 from Bio import Phylo
 from io import StringIO
 from skbio import TreeNode
+from ete3 import TreeStyle, Tree
 from Bio.Phylo.Consensus import *
 from scipy.cluster.hierarchy import linkage
 from typing import NamedTuple, Optional, List
@@ -155,6 +156,23 @@ class BCTModel(BaseModel):
 
         return consensus_tree_holder.getvalue()
 
+    @staticmethod
+    def _get_ete_tree_style() -> TreeStyle:
+        """
+
+        :return:
+        """
+        tree_style = TreeStyle()
+        tree_style.mode = "c"
+        tree_style.scale = None
+        tree_style.arc_span = 360
+        tree_style.arc_start = 0
+        tree_style.show_scale = False
+        tree_style.show_leaf_name = True
+        tree_style.show_branch_length = True
+        tree_style.branch_vertical_margin = 10
+        return tree_style
+
     def get_bootstrap_consensus_result(self):
         """Draw the bootstrap consensus tree result.
 
@@ -162,5 +180,13 @@ class BCTModel(BaseModel):
         """
         # Get the newick formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
+
+        # Read in the newick consensus tree as ete tree object.
+        ete_tree = Tree(consensus_tree)
+
+        # Get the ete tree drawing style.
+        tree_style = self._get_ete_tree_style()
+
+        ete_tree.render(tree_style=tree_style)
 
         return "A"
