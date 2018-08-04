@@ -5,23 +5,21 @@ import * as utility from './utility.js'
  * @returns {void} - nothing is returned from this function.
  */
 function generateBCT () {
-  // show loading icon
+  // Show loading icon.
   $('#status-analyze').css({'visibility': 'visible'})
 
-  // convert form into an object map string to string
+  // Convert form into an object map string to string
   const form = utility.jsonifyForm()
 
-  // send the ajax request
-  utility.sendAjaxRequest('/dendrogramDiv', form)
+  // Send the ajax request
+  utility.sendAjaxRequest('/bct_analysis_result', form)
     .done(
       function (response) {
         $('#bct-result').html(response)
       })
     .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        utility.runModal('error encountered while plotting the dendrogram.')
+      function () {
+        utility.runModal('Error encountered while generating the bootstrap consensus result.')
       })
     .always(
       function () {
