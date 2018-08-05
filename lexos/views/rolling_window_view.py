@@ -1,6 +1,6 @@
 from natsort import natsorted
 from collections import OrderedDict
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, send_file
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
 from lexos.managers import session_manager as session_manager
@@ -40,6 +40,16 @@ def rolling_window():
                            itm="rolling-windows",
                            labels=labels,
                            numActiveDocs=num_active_docs)
+
+
+@rwa_blueprint.route("/rollingwindow", methods=["POST"])
+def download_rolling_window():
+    # Cache RWA option.
+    session_manager.cache_rw_analysis_option()
+    # Return the path to download.
+    return send_file(RollingWindowsModel().download_rwa(),
+                     as_attachment=True,
+                     attachment_filename="rolling_window_results.csv")
 
 
 @rwa_blueprint.route("/rollingWindowGraph", methods=["POST"])

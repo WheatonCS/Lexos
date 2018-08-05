@@ -1,13 +1,16 @@
 """This is the model that generates rolling window results."""
 
 import re
+import os
 import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
+from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
+from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.models.matrix_model import FileIDContentMap
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
@@ -87,17 +90,36 @@ class RollingWindowsModel(BaseModel):
         :param window_size: The size of the window (number of terms in window).
         :return: An array of strings, each element is a window.
         """
-        # Number of items in the input list.
-        num_item = len(input_list)
+        def _get_next_window(window: str, last_str: str, next_str: str) -> str:
+            """Roll the window to the next.
 
-        # Get the total number of windows.
-        num_window = num_item - window_size + 1
+            Remove the first item in current window and append the upcoming
+            next item to roll the window.
+            :param window: The current window.
+            :param last_str: The first item at the front of the window.
+            :param next_str: The next item the window will include.
+            :return: The next window.
+            """
+            # Remove the last word and append next word at the end.
+            return "".join([window.replace(last_str, "", 1), next_str])
+
+        # Get the first window.
+        roll_window = "".join(input_list[: window_size])
+
+        # Create a list and hold the first window.
+        window_list = [roll_window]
+
+        # Roll over all possible windows and append it to the list.
+        for index, next_item in enumerate(input_list[window_size:]):
+            # Get next window.
+            roll_window = _get_next_window(window=roll_window,
+                                           last_str=input_list[index],
+                                           next_str=next_item)
+            # Append to the list.
+            window_list.append(roll_window)
 
         # Get the rolling list, should be a array of str.
-        return [
-            "".join(input_list[start: start + window_size])
-            for start in range(num_window)
-        ]
+        return window_list
 
     @staticmethod
     def _get_letters_windows(passage: str, windows_size: int) -> window_str:
@@ -208,7 +230,6 @@ class RollingWindowsModel(BaseModel):
 
         A token average is calculated by the number of times the token
         (or term) appear in the window divided by the window size.
-        :param windows: an array of windows to calculate.
         :return: a panda data frame where:
             - the index header is the tokens
             - the column header corresponds to the windows but there is
@@ -411,7 +432,7 @@ class RollingWindowsModel(BaseModel):
         :param result_plot: List of existing scatter rolling window plot.
         :return: A plotly figure object.
         """
-        # Get all mile stones.
+        # Get all mile stone locations.
         milestones_dict = \
             self._find_mile_stone_windows_indexes_in_all_windows(
                 windows=windows
@@ -423,43 +444,39 @@ class RollingWindowsModel(BaseModel):
             y_max_in_each_plot = \
                 [max(each_plot['y'][~np.isnan(each_plot['y'])])
                  for each_plot in result_plot]
-            y_max = max(y_max_in_each_plot) * 1.1
+            y_max = max(y_max_in_each_plot) * 1.05
 
             y_min_in_each_plot = \
                 [min(each_plot['y'][~np.isnan(each_plot['y'])])
                  for each_plot in result_plot]
-            y_min = min(y_min_in_each_plot) * 0.9
+            y_min = min(y_min_in_each_plot) * 0.95
 
-            # Plot straight lines for all indexes for each mile stone.
-            layout = go.Layout(
-                showlegend=True,
-                shapes=[
-                    dict(
-                        type="line",
-                        x0=mile_stone,
-                        x1=mile_stone,
-                        y0=y_min,
-                        y1=y_max,
-                        line=dict(
-                            color=self._get_mile_stone_color(index=index),
-                            width=1
-                        )
+            mile_stone_data = [
+                go.Scattergl(
+                    x=[mile_stone, mile_stone],
+                    y=[y_min, y_max],
+                    name=ms,
+                    mode="lines",
+                    hoverinfo="x+name",
+                    showlegend=False if mile_stone != ms_list[0] else True,
+                    legendgroup=ms,
+                    line=dict(
+                        color=self._get_mile_stone_color(index=index),
+                        width=2
                     )
-
-                    for index, (_, milestones_list) in
-                    enumerate(milestones_dict.items())
-                    for mile_stone in milestones_list
-                ]
-            )
+                )
+                for index, (ms, ms_list) in enumerate(milestones_dict.items())
+                for mile_stone in ms_list
+            ]
 
             # Add a transparent dot in order to add the milestone legend.
             legend_helper = [
                 go.Scattergl(
-                    x=[self._options.window_options.window_size / 2],
+                    x=[0],
                     y=[(y_max + y_min) / 2],
                     name="---milestones---",
                     hoverinfo="none",
-                    mode="markers",
+                    mode="lines",
                     marker=dict(
                         opacity=0,
                         color="rgb(255, 255, 255)"
@@ -467,27 +484,11 @@ class RollingWindowsModel(BaseModel):
                 )
             ]
 
-            # Add scatter at the end of mile stones to enable interactive.
-            interactive_helper = [
-                go.Scattergl(
-                    x=milestones_dict[key],
-                    y=[y_max for _ in range(len(milestones_dict[key]))],
-                    mode="markers",
-                    hoverinfo="x+name",
-                    name=key,
-                    marker=dict(
-                        color=self._get_mile_stone_color(index=index)
-                    )
-                )
-                for index, key in enumerate(milestones_dict)
-            ]
-
             # Pack the data together.
-            data = result_plot + legend_helper + interactive_helper
+            data = result_plot + legend_helper + mile_stone_data
 
             # Return the plot with milestones as layout.
-            return go.Figure(data=data,
-                             layout=layout)
+            return go.Figure(data=data)
 
         else:
             # Return just the plot.
@@ -539,7 +540,7 @@ class RollingWindowsModel(BaseModel):
         else:
             return go.Figure(data=result_plot)
 
-    def _get_token_average_graph(self) ->go.Figure:
+    def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
 
         :return: a list of plotly graph object
@@ -579,20 +580,21 @@ class RollingWindowsModel(BaseModel):
 
         :return: A plotly figure object.
         """
+        # Get possible options.
         count_average = self._options.average_token_options is not None
         count_ratio = self._options.ratio_token_options is not None
 
-        # precondition
-        # ^ is the exclusive or operator,
-        # means we can either use average count or ratio count
+        # Check precondition: ^ is the exclusive or operator, means we can
+        # either use average count or ratio count
         assert count_average ^ count_ratio
 
+        # Get corresponding plotly graph.
         if count_average:
             return self._get_token_average_graph()
         elif count_ratio:
             return self._get_token_ratio_graph()
         else:
-            raise ValueError("unhandled count type")
+            raise ValueError("Unhandled count type")
 
     def get_rwa_graph(self) -> str:
         """Get the displayable rolling window graph.
@@ -604,3 +606,76 @@ class RollingWindowsModel(BaseModel):
                     show_link=False,
                     output_type="div",
                     include_plotlyjs=False)
+
+    def _get_average_csv_frame(self) -> pd.DataFrame:
+        """Get the average token frame that is ready to be converted to CSV.
+
+        :return: The data frame that needs to be converted to CSV.
+        """
+        # Get the average data frame, transpose it and return it.
+        return self._find_tokens_average_in_windows(
+            windows=self._get_windows()
+        ).transpose()
+
+    def _get_ratio_csv_frame(self) -> pd.DataFrame:
+        """Get the ratio token frame that is ready to be converted to CSV.
+
+        :return: The data frame that needs to be converted to CSV.
+        """
+        # Get list of token ratio series.
+        token_ratio_series_list = \
+            [
+                self._find_token_ratio_in_windows(
+                    windows=self._get_windows(),
+                    numerator_token=row["numerator"],
+                    denominator_token=row["denominator"]
+                ).to_frame()
+                for _, row in
+                self._options.ratio_token_options.token_frame.iterrows()
+            ]
+
+        # Concatenate all data frame together to be one and return it.
+        return pd.concat(token_ratio_series_list)
+
+    def _get_rwa_csv_frame(self) -> pd.DataFrame:
+        """Get the correct data frame based on users selection.
+
+        :return: The correct data frame that needs to be converted to CSV.
+        """
+        # Get possible options.
+        count_average = self._options.average_token_options is not None
+        count_ratio = self._options.ratio_token_options is not None
+
+        # Check precondition: ^ is the exclusive or operator, means we can
+        # either use average count or ratio count
+        assert count_average ^ count_ratio
+
+        # Get corresponding CSV based on user selected option.
+        if count_average:
+            return self._get_average_csv_frame()
+        elif count_ratio:
+            return self._get_ratio_csv_frame()
+        else:
+            raise ValueError("unhandled count type")
+
+    def download_rwa(self) -> str:
+        """Download rolling window analysis result as CSV file.
+
+        :return: The directory of the saved CSV file.
+        """
+        # Get the default saving directory of rolling window result.
+        result_folder_path = os.path.join(
+            session_manager.session_folder(), RESULTS_FOLDER)
+
+        # Attempt to make the directory.
+        if not os.path.isdir(result_folder_path):
+            os.makedirs(result_folder_path)
+
+        # Get the complete saving path of rolling window result.
+        save_path = os.path.join(result_folder_path, "rolling_window.csv")
+
+        self._get_rwa_csv_frame().to_csv(path_or_buf=save_path,
+                                         index_label="# Window",
+                                         na_rep="NA")
+
+        return save_path

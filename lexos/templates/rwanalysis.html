@@ -18,7 +18,15 @@
     <div class="row">
         <div class="col-md-12">
             <fieldset>
-                <legend>Rolling Window Options <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=X0hGwj3-5go&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=6" target="_blank" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
+                <legend>Rolling Window Options <a class="btn bttn bttn-video"
+                                                  href="https://www.youtube.com/watch?v=X0hGwj3-5go&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=6"
+                                                  target="_blank"
+                                                  data-toggle="tooltip"
+                                                  data-trigger="hover"
+                                                  data-placement="right"
+                                                  title="Show video"
+                                                  style="margin: -10px 5px;"><i
+                        class="fa fa-video-camera fa-lg "></i></a></legend>
             </fieldset>
         </div>
     </div>
@@ -126,19 +134,6 @@
 
                 <!-- Search Patterns -->
                 <p><strong>Search pattern(s) as:</strong></p>
-                <label class="radio" for="inputstring" id="radioinputletter"
-                       style="margin-left:10px;">
-                    <input type="radio" checked name="inputtype" value="string"
-                           id="inputstring" data-toggle="radio"/>String(s)
-                    <i class="fa fa-question-circle lexos-tooltip-trigger"
-                       data-toggle="tooltip" data-html="true"
-                       data-placement="right" data-container="body"
-                       title="A string can be of any length. When searching for
-                              multiple stings, separate each string by only a comma
-                              with no whitespace. Any entered whitespace will
-                              be included in the search.">
-                    </i>
-                </label>
                 <label class="radio" for="inputword" id="radioinputword"
                        style="margin-left:10px;">
                     <input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }}
@@ -149,6 +144,20 @@
                        data-placement="right" data-container="body"
                        title="A token is typically a word, but Lexos will
                               use whatever unit you have chosen in Tokenize.">
+                    </i>
+                </label>
+                <label class="radio" for="inputstring" id="radioinputletter"
+                       style="margin-left:10px;">
+                    <input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "string" }}
+                           name="inputtype" value="string" id="inputstring"
+                           data-toggle="radio"/>String(s)
+                    <i class="fa fa-question-circle lexos-tooltip-trigger"
+                       data-toggle="tooltip" data-html="true"
+                       data-placement="right" data-container="body"
+                       title="A string can be of any length. When searching for
+                              multiple stings, separate each string by only a comma
+                              with no whitespace. Any entered whitespace will
+                              be included in the search.">
                     </i>
                 </label>
                 <label class="radio" for="inputregex" id="radioinputregex"
@@ -174,26 +183,26 @@
                 <legend>4. Define Window</legend>
                 <label for="rollingwindowsize">Size of Rolling Window:
                     <input type="number" name="rollingwindowsize"
-                           id="rollingwindowsize" step="1" max="1000" min="1"
+                           id="rollingwindowsize" step="1" min="50"
                            value="{{ session['rwoption']['rollingwindowsize'] }}">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
                        data-placement="right" data-container="body"
                        title="The number of characters, tokens, or lines to increment
-                              for each window. The maximum is 1000.">
+                              for each window. The maximum is 10000.">
                     </i>
-                </label>
-                <label class="radio" for="windowletter" id="radiowindowletter">
-                    <input type="radio" checked name="windowtype"
-                           value="letter" id="windowletter"
-                           data-toggle="radio">
-                    Count by characters
                 </label>
                 <label class="radio" for="windowword" id="radiowindowword">
                     <input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }}
                            name="windowtype" value="word" id="windowword"
                            data-toggle="radio"/>
                     Count by words (tokens)
+                </label>
+                <label class="radio" for="windowletter" id="radiowindowletter">
+                    <input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "letter" }}
+                           name="windowtype" value="letter" id="windowletter"
+                           data-toggle="radio">
+                    Count by characters
                 </label>
                 <label class="radio" for="windowline" id="radiowindowline">
                     <input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "line" }}
@@ -245,8 +254,10 @@
         <div class="col-sm-4">
             <fieldset class="rwanalysisradiosdiv">
                 <legend>6. Get Graph</legend>
-                <input type="button" id="getgraph" value="Get Graph"
-                       class="btn btn-success col-sm-6" name="rollinganalyze"/>
+                <input type="button" id="get-graph" value="Get Graph"
+                       class="btn btn-success col-sm-5" name="rollinganalyze"/>
+                <input type="submit" id="download-csv" value="Download Result"
+                       class="btn btn-primary col-sm-offset-1 col-sm-5"/>
             </fieldset>
         </div>
     </div>
