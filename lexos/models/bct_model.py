@@ -10,6 +10,9 @@ from ete3 import TreeStyle, Tree
 from Bio.Phylo.Consensus import *
 from scipy.cluster.hierarchy import linkage
 from typing import NamedTuple, Optional, List
+
+from skbio.tree import majority_rule
+
 from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
 from lexos.helpers.constants import RESULTS_FOLDER
@@ -66,7 +69,7 @@ class BCTModel(BaseModel):
 
     def _get_newick_tree(self,
                          labels: List[str],
-                         sample_dtm: pd.DataFrame) -> str:
+                         sample_dtm: pd.DataFrame) -> TreeNode:
         """Get newick tree based on a subset of the DTM.
 
         :param labels: All file names from the DTM.
@@ -90,20 +93,22 @@ class BCTModel(BaseModel):
             id_list=labels
         )
 
-        # noinspection PyUnresolvedReferences
-        # Write the tree to newick format to the stringIO holder.
-        tree.write(newick_tree)
+        return tree
 
-        # Get the string in side StringIO object.
-        newick_tree_string = newick_tree.getvalue()
+        # # noinspection PyUnresolvedReferences
+        # # Write the tree to newick format to the stringIO holder.
+        # tree.write(newick_tree)
+        #
+        # # Get the string in side StringIO object.
+        # newick_tree_string = newick_tree.getvalue()
+        #
+        # # Return it as a bio python object.
+        # return Phylo.read(
+        #     StringIO(newick_tree_string),
+        #     format="newick"
+        # )
 
-        # Return it as a bio python object.
-        return Phylo.read(
-            StringIO(newick_tree_string),
-            format="newick"
-        )
-
-    def _get_bootstrap_trees(self) -> List[str]:
+    def _get_bootstrap_trees(self) -> List[TreeNode]:
         """Do bootstrap on the DTM to get a list of newick trees.
 
         :return: A list of newick formatted tree where each tree was based on
@@ -126,38 +131,43 @@ class BCTModel(BaseModel):
             for _ in range(self._bct_option.iterations)
         ]
 
-    def _get_bootstrap_consensus_tree(self) -> Tree:
+    def _get_bootstrap_consensus_tree(self):
         """Get the consensus tree.
 
         :return: The consensus tree of the list of newick trees.
         """
-        # Create the StringIO newick tree holder.
         consensus_tree_holder = StringIO()
-
-        # Check users selection and return the correct consensus tree.
-        if self._bct_option.consensus_method == "strict":
-            Phylo.write(
-                trees=strict_consensus(trees=self._get_bootstrap_trees()),
-                file=consensus_tree_holder,
-                format="newick"
-            )
-        elif self._bct_option.consensus_method == "majority":
-            Phylo.write(
-                trees=majority_consensus(trees=self._get_bootstrap_trees()),
-                file=consensus_tree_holder,
-                format="newick"
-            )
-            return majority_consensus(trees=self._get_bootstrap_trees())
-        elif self._bct_option.consensus_method == "adam":
-            Phylo.write(
-                trees=adam_consensus(trees=self._get_bootstrap_trees()),
-                file=consensus_tree_holder,
-                format="newick"
-            )
-        else:
-            raise ValueError("Invalid bootstrap consensus method.")
-
+        consensus_tree = majority_rule(trees=self._get_bootstrap_trees(),
+                                       cutoff=0.5)
+        consensus_tree[0].write(consensus_tree_holder)
         return Tree(consensus_tree_holder.getvalue(), quoted_node_names=True)
+        # # Create the StringIO newick tree holder.
+        # consensus_tree_holder = StringIO()
+        #
+        # # Check users selection and return the correct consensus tree.
+        # if self._bct_option.consensus_method == "strict":
+        #     Phylo.write(
+        #         trees=strict_consensus(trees=self._get_bootstrap_trees()),
+        #         file=consensus_tree_holder,
+        #         format="newick"
+        #     )
+        # elif self._bct_option.consensus_method == "majority":
+        #     Phylo.write(
+        #         trees=majority_consensus(trees=self._get_bootstrap_trees()),
+        #         file=consensus_tree_holder,
+        #         format="newick"
+        #     )
+        #     return majority_consensus(trees=self._get_bootstrap_trees())
+        # elif self._bct_option.consensus_method == "adam":
+        #     Phylo.write(
+        #         trees=adam_consensus(trees=self._get_bootstrap_trees()),
+        #         file=consensus_tree_holder,
+        #         format="newick"
+        #     )
+        # else:
+        #     raise ValueError("Invalid bootstrap consensus method.")
+        #
+        # return Tree(consensus_tree_holder.getvalue(), quoted_node_names=True)
 
     @staticmethod
     def _get_ete_tree_style() -> TreeStyle:
@@ -199,8 +209,8 @@ class BCTModel(BaseModel):
             tree_style=self._get_ete_tree_style(),
             file_name="result.png",
             units="px",
-            h=700,
-            w=700
+            h=1200,
+            w=1200
         )
 
         return save_path
