@@ -165,7 +165,7 @@ class TestRatioCountTwo:
 
 # -------------------------- test by average count ----------------------------
 # noinspection PyProtectedMember
-class TestAverageCount:
+class TestAverageCountOne:
     test_average_count = RWATestOptions(
         file_id_content_map={
             0: "ha ha \n ha ha \n la ta \n ha \n ta ta \n la la"},
@@ -222,6 +222,71 @@ class TestAverageCount:
                 index=[0, 1, 2, 3, 4],
                 columns=["ta", "ha"],
                 data=[[0., 2.], [0.5, 1.], [0.5, 0.5], [1., 0.5], [1., 0.]]
+            )
+
+        )
+
+
+# noinspection PyProtectedMember
+class TestAverageCountTwo:
+    test_average_count = RWATestOptions(
+        file_id_content_map={
+            0: "ha ha \n ha ha \n la ta \n ha \n ta ta \n la la"},
+        rolling_windows_options=RWAFrontEndOptions(
+            ratio_token_options=None,
+            average_token_options=RWAAverageTokenOptions(
+                token_type=RWATokenType.word,
+                tokens=["ta", "ha"]),
+            passage_file_id=0,
+            window_options=RWAWindowOptions(
+                window_size=2,
+                window_unit=WindowUnitType.word
+            ),
+            plot_options=RWAPlotOptions(
+                individual_points=False,
+                black_white=False
+            ),
+            milestone=None
+        )
+    )
+    # Get the rolling window model and other testing components.
+    rw_average_model = RollingWindowsModel(test_option=test_average_count)
+    rw_average_windows = rw_average_model._get_windows()
+    rw_average_graph = rw_average_model._generate_rwa_graph()
+    rw_average_csv_frame = rw_average_model._get_rwa_csv_frame()
+
+    def test_get_windows(self):
+        np.testing.assert_array_equal(
+            self.rw_average_windows,
+            ['ha ha \n ', 'ha \n ha ', 'ha ha \n ', 'ha \n la ', 'la ta \n ',
+             'ta \n ha \n ', 'ha \n ta ', 'ta ta \n ', 'ta \n la ', 'la la']
+        )
+
+    def test_generate_rwa_graph(self):
+        assert self.rw_average_graph['data'][0]['type'] == 'scattergl'
+
+        np.testing.assert_array_equal(
+            self.rw_average_graph['data'][0]['x'],
+            [0., 1., 2., 3., 4., 5., 6., 7., 8., 9.]
+        )
+
+        np.testing.assert_array_equal(
+            self.rw_average_graph['data'][0]['y'],
+            [0., 0., 0., 0., 0.5, 0.5, 0.5, 1., 0.5, 0.]
+        )
+
+        assert self.rw_average_graph['data'][1]['mode'] == 'lines'
+        assert self.rw_average_graph['data'][1]['name'] == 'ha'
+
+    def test_csv_frame(self):
+        pd.testing.assert_frame_equal(
+            self.rw_average_csv_frame,
+            pd.DataFrame(
+                index=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                columns=["ta", "ha"],
+                data=[[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [0.0, 0.5],
+                      [0.5, 0.0], [0.5, 0.5], [0.5, 0.5], [1.0, 0.0],
+                      [0.5, 0.0], [0.0, 0.0]]
             )
 
         )
