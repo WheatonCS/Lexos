@@ -4,6 +4,7 @@
 {% block head %}
     <script type="module"
             src="{{ url_for('static', filename='js/bct_analysis.js') }}?ver={{ version }}"></script>
+    <meta id="static-url" data-url="{{ url_for('static', filename='images') }}">
 {% endblock %}
 
 {% block title %}Bootstrap Consensus Tree{% endblock %}
@@ -116,9 +117,7 @@
                    type="button" value="Get Bootstrap Consensus Tree"/>
         </div>
     </div>
-    <div id="bct-result" class="row">
-        <img src="{{ url_for('static', filename='images/neh_logo_horizontal_rgb.jpg') }}">
-    </div>
+    <div id="bct-result" class="row" style="text-align: center"></div>
 {% endblock %}
 
 {% block submit %}
