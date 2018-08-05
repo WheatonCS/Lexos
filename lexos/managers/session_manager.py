@@ -300,13 +300,10 @@ def cache_hierarchy_option():
         opts = request.json
     else:
         opts = request.form
-    for box in const.HIERARCHICALBOX:
-        session['hierarchyoption'][box] = (box in opts)
     for request_input in const.HIERARCHICALINPUT:
         session['hierarchyoption'][request_input] = (
             opts[request_input] if input in opts
             else const.DEFAULT_HIERARCHICAL_OPTIONS[request_input])
-    session['degenerated'] = True
 
 
 def cache_k_mean_option():
