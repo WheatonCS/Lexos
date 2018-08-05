@@ -1,6 +1,4 @@
-from flask import session, render_template, Blueprint, send_from_directory, \
-    send_file
-import io
+from flask import session, render_template, Blueprint
 from lexos.helpers import constants
 from lexos.managers import session_manager
 from lexos.models.bct_model import BCTModel
