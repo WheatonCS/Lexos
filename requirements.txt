@@ -1,3 +1,6 @@
+scipy
+ete3
+scikit-bio
 colorlover
 gensim
 beautifulsoup4

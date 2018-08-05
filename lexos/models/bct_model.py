@@ -3,16 +3,12 @@
 import os
 import numpy as np
 import pandas as pd
-from Bio import Phylo
 from io import StringIO
 from skbio import TreeNode
+from skbio.tree import majority_rule
 from ete3 import TreeStyle, Tree
-from Bio.Phylo.Consensus import *
 from scipy.cluster.hierarchy import linkage
 from typing import NamedTuple, Optional, List
-
-from skbio.tree import majority_rule
-
 from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
 from lexos.helpers.constants import RESULTS_FOLDER
