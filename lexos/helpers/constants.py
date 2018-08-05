@@ -21,13 +21,9 @@ RESOURCE_DIR = "resources/"
 '''file name'''
 FILEMANAGER_FILENAME = 'filemanager.p'
 SESSION_FILENAME = 'session.p'
-DENDROGRAM_NEWICK_FILENAME = 'newNewickStr.txt'
 FILE_INFORMATION_FIGNAME = 'statistic.svg'
 CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
 WORKSPACE_FILENAME = 'workspace.lexos'
-PCA_SMALL_GRAPH_FILENAME = 'small_PCA.html'
-PCA_BIG_GRAPH_FILENAME = 'big_PCA.html'
-KMEANS_GRAPH_FILENAME = 'kmeans.svg'
 MALLET_INPUT_FILE_NAME = 'topicfile'
 MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
 TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
@@ -53,13 +49,6 @@ MIN_ENCODING_DETECT = 10000
 MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 ROUND_DIGIT = 4
-DENDRO_TITLE_FONT_SIZE = 15
-DENDRO_LEGEND_FONT_SIZE = 10
-DENDRO_LEGEND_X = 0
-DENDRO_LEGEND_Y = 1.05
-DENDRO_CHARACTERS_PER_LINE_IN_TITLE = 80
-DENDRO_MAX_LINES_PER_PAGE = 80
-DENDRO_MAX_LABELS_LENGTH = 15
 
 '''secret key <not functional for now>'''
 FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
@@ -147,14 +136,11 @@ BUBBLEVIZBOX = ('vizmaxwords',)
 BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
 
 # for hierarchical Clustering
-HIERARCHICALBOX = ('augmented', 'dendroLegends')
 HIERARCHICALINPUT = (
     'metric',
     'linkage',
-    'title',
-    'orientation',
-    'pruning',
-    'criterion')
+    'orientation'
+)
 
 # for BCT analysis
 BCTINPUT = (
@@ -222,8 +208,8 @@ DEFAULT_ROLLINGWINDOW_OPTIONS = {
     'BWoutput': False,
     'filetorollinganalyze': '',
     'counttype': 'average',
-    'windowtype': 'letter',
-    'inputtype': 'string',
+    'windowtype': 'word',
+    'inputtype': 'word',
     'rollingsearchword': '',
     'rollingsearchwordopt': '',
     'rollingwindowsize': '',
@@ -252,14 +238,8 @@ DEFAULT_BUBBLEVIZ_OPTIONS = {
 DEFAULT_HIERARCHICAL_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
-    'title': '',
-    'orientation': 'bottom',
-    'pruning': '',
-    'augmented': True,
-    'criterion': 'maxclust',
-    'threshold': '',
-    'dendroLegends': False,
-    'degenerated': False}
+    'orientation': 'bottom'
+}
 
 DEFAULT_BCT_OPTIONS = {
     'metric': 'euclidean',
