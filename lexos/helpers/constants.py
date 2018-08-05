@@ -160,7 +160,7 @@ HIERARCHICALINPUT = (
 BCTINPUT = (
     'metric',
     'linkage',
-    'consensus',
+    'cutoff',
     'iterations'
 )
 
@@ -264,7 +264,7 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
 DEFAULT_BCT_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
-    'consensus': 'strict',
+    'cutoff': 0.5,
     'iterations': 100
 }
 
