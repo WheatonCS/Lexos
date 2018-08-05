@@ -249,7 +249,7 @@ def cache_multi_cloud_options():
     for request_input in const.MULTICLOUDINPUTS:
         session['multicloudoptions'][request_input] = \
             request.form[request_input] if input in request.form \
-                else const.DEFAULT_MULTICLOUD_OPTIONS[request_input]
+            else const.DEFAULT_MULTICLOUD_OPTIONS[request_input]
 
     for file in const.MULTICLOUDFILES:
 
