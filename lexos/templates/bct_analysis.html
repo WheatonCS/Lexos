@@ -107,6 +107,12 @@
                 </select>
             </label>
 
+            <label for="cutoff">Majority rule consensus cutoff:
+                <input type="number" name="cutoff" id="cutoff"
+                       step="0.01" min="0" max="1"
+                       value="{{ session['bctoption']['cutoff'] }}">
+            </label>
+
             <label for="iterations">Number of bootstrap iterations:
                 <input type="number" name="iterations" id="iterations"
                        step="1" min="20" max="200"
