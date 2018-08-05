@@ -39,6 +39,7 @@ test_script:
 
   # test for javascript code style
   - cd ./lexos/static
+
   # following line is commented out, because frontend refactor is not yet completed
   # - .\node_modules\.bin\eslint ./js/script_*.js
   - .\node_modules\.bin\eslint .\js\scripts_statistics.js
@@ -46,9 +47,11 @@ test_script:
   - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
   - .\node_modules\.bin/eslint .\js\scripts_rwanalysis.js
   - .\node_modules\.bin\eslint .\js\scripts_upload.js
+  - .\node_modules\.bin\eslint .\js\scripts_manage.js
   - .\node_modules\.bin/eslint .\js\scripts_kmeans.js
   - .\node_modules\.bin/eslint .\js\scripts_scrub.js
   - .\node_modules\.bin\eslint .\js\scripts_cut.js
+  - .\node_modules\.bin\eslint .\js\scripts_bct.js
   - cd ../..
 
 build: off
