@@ -132,11 +132,11 @@ class BCTModel(BaseModel):
 
     @staticmethod
     def _get_ete_tree_style() -> TreeStyle:
-        """
+        """Get the ete tree drawing style.
 
-        :return:
+        :return: A ete TreeStyle object that contains desired tree styles.
         """
-        # Set up a ete tree style object.
+        # Set up a ete tree style object and fill in the desired parameters.
         tree_style = TreeStyle()
         tree_style.mode = "c"
         tree_style.scale = None
@@ -149,9 +149,9 @@ class BCTModel(BaseModel):
         return tree_style
 
     def get_bootstrap_consensus_result(self) -> str:
-        """Draw the bootstrap consensus tree result.
+        """Render the bootstrap consensus tree result and save it to images.
 
-        :return:
+        :return: The rendered BCT result file name.
         """
         # TODO: this method is hack.. Seeking for better solution.
         # Get the current time to help distinguish pictures.
@@ -161,6 +161,7 @@ class BCTModel(BaseModel):
         # Get the ete formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
 
+        # Render and save the consensus tree.
         consensus_tree.render(
             tree_style=self._get_ete_tree_style(),
             file_name=f"lexos/static/images/{result_file_name}",
@@ -170,4 +171,5 @@ class BCTModel(BaseModel):
             w=1000
         )
 
+        # Return the saved file name.
         return result_file_name
