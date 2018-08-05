@@ -7,23 +7,21 @@ from lexos.receivers.base_receiver import BaseReceiver
 class BCTOption(NamedTuple):
     """The typed tuple to implement BCT options."""
 
-    # The method to find consensus among bootstrap trees.
-    # Available options are: 'top', 'right', 'bottom', or 'left', see:
-    # "http://biopython.org/DIST/docs/api/Bio.Phylo.Consensus-module.html"
-    consensus_method: str
+    # The linkage method to send to scipy.cluster.hierarchy.linkage
+    # See:
+    # "https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.cluster.hierarchy.linkage.html"
+    linkage_method: str
 
     # The distance metric to send to pdist
     # See:
     # "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html"
     dist_metric: str
 
-    # The linkage method to send to scipy.cluster.hierarchy.linkage
-    # See:
-    # "https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.cluster.hierarchy.linkage.html"
-    linkage_method: str
-
     # Number of bootstrap iterations.
     iterations: int
+
+    # The cut off of the majority consensus.
+    cutoff: float
 
 
 class BCTReceiver(BaseReceiver):
@@ -38,14 +36,14 @@ class BCTReceiver(BaseReceiver):
 
         :return: A BCTOption object to hold all the options.
         """
-        consensus_method = self._front_end_data['consensus']
         linkage_method = self._front_end_data['linkage']
         dist_metric = self._front_end_data['metric']
         iterations = int(self._front_end_data['iterations'])
+        cutoff = float(self._front_end_data['cutoff'])
 
         return BCTOption(
-            consensus_method=consensus_method,
             linkage_method=linkage_method,
             dist_metric=dist_metric,
-            iterations=iterations
+            iterations=iterations,
+            cutoff=cutoff
         )
