@@ -93,20 +93,6 @@
                    style="padding-left:4px;font-size:18px;"></i>
             </label>
 
-            <label for="consensus">Bootstrap Consensus Method:
-                <select name="consensus" id="consensus">
-                    <option value="strict" {{ 'selected' if session['bctoption']['consensus'] == 'strict' }}>
-                        Strict
-                    </option>
-                    <option value="majority" {{ 'selected' if session['bctoption']['consensus'] == 'majority' }}>
-                        Majority
-                    </option>
-                    <option value="adam" {{ 'selected' if session['bctoption']['consensus'] == 'adam' }}>
-                        Adam
-                    </option>
-                </select>
-            </label>
-
             <label for="cutoff">Majority rule consensus cutoff:
                 <input type="number" name="cutoff" id="cutoff"
                        step="0.01" min="0" max="1"
@@ -131,7 +117,7 @@
         </div>
     </div>
     <div id="bct-result" class="row">
-        <img src="{{ url_for('static', filename='images/result.png') }}">
+        <img src="{{ url_for('static', filename='images/neh_logo_horizontal_rgb.jpg') }}">
     </div>
 {% endblock %}
 
