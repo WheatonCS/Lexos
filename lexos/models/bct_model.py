@@ -1,6 +1,6 @@
 """This is a model to produce bootstrap consensus tree of the dtm."""
 
-import os
+import datetime
 import numpy as np
 import pandas as pd
 from io import StringIO
@@ -9,9 +9,7 @@ from skbio.tree import majority_rule
 from ete3 import TreeStyle, Tree
 from scipy.cluster.hierarchy import linkage
 from typing import NamedTuple, Optional, List
-from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
-from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
 
@@ -72,9 +70,6 @@ class BCTModel(BaseModel):
         :param sample_dtm: A 80% subset of the complete DTM.
         :return: A newick formatted tree representing the DTM subset.
         """
-        # Create the StringIO newick tree holder.
-        newick_tree = StringIO()
-
         # noinspection PyTypeChecker
         # Get the linkage matrix for the sample doc term matrix.
         linkage_matrix = linkage(
@@ -83,26 +78,11 @@ class BCTModel(BaseModel):
             method=self._bct_option.linkage_method
         )
 
-        # Convert linkage matrix to a tree node
-        tree = TreeNode.from_linkage_matrix(
+        # Convert linkage matrix to a tree node and return it.
+        return TreeNode.from_linkage_matrix(
             linkage_matrix=linkage_matrix,
             id_list=labels
         )
-
-        return tree
-
-        # # noinspection PyUnresolvedReferences
-        # # Write the tree to newick format to the stringIO holder.
-        # tree.write(newick_tree)
-        #
-        # # Get the string in side StringIO object.
-        # newick_tree_string = newick_tree.getvalue()
-        #
-        # # Return it as a bio python object.
-        # return Phylo.read(
-        #     StringIO(newick_tree_string),
-        #     format="newick"
-        # )
 
     def _get_bootstrap_trees(self) -> List[TreeNode]:
         """Do bootstrap on the DTM to get a list of newick trees.
@@ -132,38 +112,23 @@ class BCTModel(BaseModel):
 
         :return: The consensus tree of the list of newick trees.
         """
-        consensus_tree_holder = StringIO()
-        consensus_tree = majority_rule(trees=self._get_bootstrap_trees(),
-                                       cutoff=0.5)
-        consensus_tree[0].write(consensus_tree_holder)
-        return Tree(consensus_tree_holder.getvalue(), quoted_node_names=True)
-        # # Create the StringIO newick tree holder.
-        # consensus_tree_holder = StringIO()
-        #
-        # # Check users selection and return the correct consensus tree.
-        # if self._bct_option.consensus_method == "strict":
-        #     Phylo.write(
-        #         trees=strict_consensus(trees=self._get_bootstrap_trees()),
-        #         file=consensus_tree_holder,
-        #         format="newick"
-        #     )
-        # elif self._bct_option.consensus_method == "majority":
-        #     Phylo.write(
-        #         trees=majority_consensus(trees=self._get_bootstrap_trees()),
-        #         file=consensus_tree_holder,
-        #         format="newick"
-        #     )
-        #     return majority_consensus(trees=self._get_bootstrap_trees())
-        # elif self._bct_option.consensus_method == "adam":
-        #     Phylo.write(
-        #         trees=adam_consensus(trees=self._get_bootstrap_trees()),
-        #         file=consensus_tree_holder,
-        #         format="newick"
-        #     )
-        # else:
-        #     raise ValueError("Invalid bootstrap consensus method.")
-        #
-        # return Tree(consensus_tree_holder.getvalue(), quoted_node_names=True)
+        # Create the StringIO newick tree holder.
+        newick_tree = StringIO()
+
+        # Find the consensus tree among all trees.
+        consensus_tree = majority_rule(
+            trees=self._get_bootstrap_trees(),
+            cutoff=self._bct_option.cutoff
+        )
+
+        # Grab the tree from the returned list and convert it to newick format.
+        consensus_tree[0].write(newick_tree)
+
+        # Return consensus tree as a ETE tree object.
+        return Tree(
+            newick_tree.getvalue(),
+            quoted_node_names=True
+        )
 
     @staticmethod
     def _get_ete_tree_style() -> TreeStyle:
@@ -171,6 +136,7 @@ class BCTModel(BaseModel):
 
         :return:
         """
+        # Set up a ete tree style object.
         tree_style = TreeStyle()
         tree_style.mode = "c"
         tree_style.scale = None
@@ -187,26 +153,21 @@ class BCTModel(BaseModel):
 
         :return:
         """
-        # Get the default saving directory of BCT result.
-        result_folder_path = os.path.join(
-            session_manager.session_folder(), RESULTS_FOLDER)
-
-        # Attempt to make the directory, if the directory isn't already there.
-        if not os.path.isdir(result_folder_path):
-            os.makedirs(result_folder_path)
-
-        # Get the complete saving path of BCT result.
-        save_path = os.path.join(result_folder_path, "bct_result.png")
+        # TODO: this method is hack.. Seeking for better solution.
+        # Get the current time to help distinguish pictures.
+        current_time = datetime.datetime.now().isoformat()
+        result_file_name = f"bct_result{current_time}.png"
 
         # Get the ete formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
 
         consensus_tree.render(
             tree_style=self._get_ete_tree_style(),
-            file_name="result.png",
+            file_name=f"lexos/static/images/{result_file_name}",
             units="px",
-            h=1200,
-            w=1200
+            dpi=300,
+            h=1000,
+            w=1000
         )
 
-        return save_path
+        return result_file_name
