@@ -134,19 +134,6 @@
 
                 <!-- Search Patterns -->
                 <p><strong>Search pattern(s) as:</strong></p>
-                <label class="radio" for="inputstring" id="radioinputletter"
-                       style="margin-left:10px;">
-                    <input type="radio" checked name="inputtype" value="string"
-                           id="inputstring" data-toggle="radio"/>String(s)
-                    <i class="fa fa-question-circle lexos-tooltip-trigger"
-                       data-toggle="tooltip" data-html="true"
-                       data-placement="right" data-container="body"
-                       title="A string can be of any length. When searching for
-                              multiple stings, separate each string by only a comma
-                              with no whitespace. Any entered whitespace will
-                              be included in the search.">
-                    </i>
-                </label>
                 <label class="radio" for="inputword" id="radioinputword"
                        style="margin-left:10px;">
                     <input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "word" }}
@@ -157,6 +144,20 @@
                        data-placement="right" data-container="body"
                        title="A token is typically a word, but Lexos will
                               use whatever unit you have chosen in Tokenize.">
+                    </i>
+                </label>
+                <label class="radio" for="inputstring" id="radioinputletter"
+                       style="margin-left:10px;">
+                    <input type="radio" {{ "checked" if session['rwoption']["inputtype"] == "string" }}
+                           name="inputtype" value="string" id="inputstring"
+                           data-toggle="radio"/>String(s)
+                    <i class="fa fa-question-circle lexos-tooltip-trigger"
+                       data-toggle="tooltip" data-html="true"
+                       data-placement="right" data-container="body"
+                       title="A string can be of any length. When searching for
+                              multiple stings, separate each string by only a comma
+                              with no whitespace. Any entered whitespace will
+                              be included in the search.">
                     </i>
                 </label>
                 <label class="radio" for="inputregex" id="radioinputregex"
@@ -182,7 +183,7 @@
                 <legend>4. Define Window</legend>
                 <label for="rollingwindowsize">Size of Rolling Window:
                     <input type="number" name="rollingwindowsize"
-                           id="rollingwindowsize" step="1" max="10000" min="1"
+                           id="rollingwindowsize" step="1" min="50"
                            value="{{ session['rwoption']['rollingwindowsize'] }}">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
@@ -191,17 +192,17 @@
                               for each window. The maximum is 10000.">
                     </i>
                 </label>
-                <label class="radio" for="windowletter" id="radiowindowletter">
-                    <input type="radio" checked name="windowtype"
-                           value="letter" id="windowletter"
-                           data-toggle="radio">
-                    Count by characters
-                </label>
                 <label class="radio" for="windowword" id="radiowindowword">
                     <input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "word" }}
                            name="windowtype" value="word" id="windowword"
                            data-toggle="radio"/>
                     Count by words (tokens)
+                </label>
+                <label class="radio" for="windowletter" id="radiowindowletter">
+                    <input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "letter" }}
+                           name="windowtype" value="letter" id="windowletter"
+                           data-toggle="radio">
+                    Count by characters
                 </label>
                 <label class="radio" for="windowline" id="radiowindowline">
                     <input type="radio" {{ "checked" if session['rwoption']["windowtype"] == "line" }}
