@@ -140,7 +140,7 @@ class DendrogramModel(BaseModel):
         dummy_scatter = self.get_dummy_scatter(x_value=x_value)
 
         # Add dummy scatter to the figure.
-        figure.add_trace(trace=dummy_scatter)
+        figure.data.append(dummy_scatter)
 
         # Return the formatted figure.
         return figure
