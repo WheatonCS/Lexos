@@ -194,6 +194,8 @@ class DendrogramModel(BaseModel):
 
         # Note that the extend figure method is a hack.
         # TODO: Once plotly has better solutions available, remove this method.
+        # TODO: Also the magic numbers within this method are based some tests.
+        # TODO: Thus they may not be very reliable and should be replaced ASAP.
         # Adjust figure style based on the selected orientation and return it.
         return self.extend_figure(figure=figure)
 
