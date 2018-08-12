@@ -1,6 +1,7 @@
 # Lexos
 [![Build status](https://ci.appveyor.com/api/projects/status/vqyfuqr15gfqj544/branch/master?svg=true)](https://ci.appveyor.com/project/chantisnake/lexos/branch/master)
 [![Build Status](https://travis-ci.com/WheatonCS/Lexos.svg?branch=master)](https://travis-ci.com/WheatonCS/Lexos)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 # Summary
 Lexos is a suite of tools designed to facilitate the computational analysis of literary and historical texts. It offers an integrated workflow in which the pre-processing ("scrubbing"), analysis, and visualization steps can be accomplished in a single, web-based environment. Scrubbing features include handling punctuation, stop words, markup tags, and character consolidations, as well as document segmentation, culling, and n-gram tokenization. Analytical tools include basic document statistics, hierarchical and k-means cluster analysis, cosine similarity ranking, and z-score analysis. Visualizations include word and bubble clouds, comparative "multiclouds" (which can be used to analyze data from [MALLET](http://mallet.cs.umass.edu/)-produced topic models) and rolling window analysis. Analytical tools produce line, PCA, Voronoi cell, and dendrogram graphs. Each of the tools has export functionality.
