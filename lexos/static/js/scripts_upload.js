@@ -1,16 +1,16 @@
 /**
- * Alias function
- * @return {object} element id object
- * @param {string} id - id of an html element
- * */
+ * Alias function.
+ * @return {object} element id object.
+ * @param {string} id - id of an html element.
+ */
 function $id (id) {
   return document.getElementById(id)
 }
 
 /**
  * Checks if the file type is valid.
- * @return {boolean} bool - true if file type is valid
- * @param {string}  filename - name of the file
+ * @return {boolean} bool - true if file type is valid.
+ * @param {string}  filename - name of the file.
  */
 function AllowedFileType (filename) {
   const allowedFileTypes = ['txt', 'xml', 'html', 'sgml', 'lexos']
@@ -22,10 +22,10 @@ function AllowedFileType (filename) {
 }
 
 /**
- * File Drag Hover
+ * File Drag Hover.
  * @return {void}
- * @param {object} e - event
- * */
+ * @param {object} e - event.
+ */
 function fileDragHover (e) {
   e.stopPropagation()
   e.preventDefault()
@@ -33,11 +33,11 @@ function fileDragHover (e) {
 }
 
 /**
- *@return {void}
- *@description { Set progress bar back to default.
-  when a file is uploaded: bar changes to 'Complete'
-  After the upload it set the bar back to 'Ready for Files to Upload'}
- * */
+ * @return {void}
+ * @description { Set progress bar back to default.
+  when a file is uploaded: bar changes to 'Complete'.
+  After the upload it set the bar back to 'Ready for Files to Upload'.
+ */
 function resetProgressBar () {
   const progressBar = $('#progress-bar')
   const status = $('#status')
@@ -47,23 +47,23 @@ function resetProgressBar () {
   status.show()
 }
 
-// Upload and display file contents
 /**
+ * Upload and display file contents.
  * @return {void}
- * @param {object} file - file object
- * @param {int} fileSize - size of the File uploaded
+ * @param {object} file - file object.
+ * @param {int} fileSize - size of the File uploaded.
  */
 function UploadAndParseFile (file, fileSize) {
   let filename = file.name.replace(/ /g, '_')
+  const status = $('#status-analyze')
   // Make the loading icon circle visible
-  $('#status-analyze').css({'visibility': 'visible'})
-  $('#status-analyze').css({'opacity': '1'})
+  status.css({'visibility': 'visible'})
 
   if (AllowedFileType(file.name) && file.size <= fileSize) {
     if (file.size === 0) {
-      alert(`Cannot process blank file -- ${file.name}`)
-      $('#status-analyze').css({'visibility': 'hidden'})
-      $('#status-analyze').css({'opacity': '0'})
+      $('#error-modal-message').html(`Cannot process blank file -- ${file.name}`)
+      $('#error-modal').modal()
+      status.css({'visibility': 'hidden'})
     } else {
       sendAjaxRequest(file, filename)
         .done(function () {
@@ -101,45 +101,41 @@ function UploadAndParseFile (file, fileSize) {
           }
           reader.readAsText(file)
           $('#activeDocIcon').css('display', 'block')
-          $('#status').hide()
+          status.hide()
         })
 
         .fail(function (jqXHR, textStatus, errorThrown) {
           alert(`${textStatus} : ${errorThrown}`)
-          $('#status-analyze').css({'visibility': 'hidden'})
-          $('#status-analyze').css({'opacity': '0'})
+          status.css({'visibility': 'hidden'})
         })
         .always(function () {
-          $('#status-analyze').css({'visibility': 'hidden'})
-          $('#status-analyze').css({'opacity': '0'})
+          status.css({'visibility': 'hidden'})
         })
     }
   } else if (!AllowedFileType(file.name)) {
-    alert(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
+    $('#error-modal-message').html(`Upload for  ${filename}  failed.\n\nInvalid file type.`)
+    $('#error-modal').modal()
     // These are to hide the loading icon.
-    $('#status').css({'visibility': 'hidden'})
-    $('#status').css({'opacity': '0'})
-    $('#status-analyze').css({'visibility': 'hidden'})
-    $('#status-analyze').css({'opacity': '0'})
+    status.css({'visibility': 'hidden'})
+    status.css({'opacity': '0'})
   } else {
     // These are to hide the loading icon.
-    $('#status-analyze').css({'visibility': 'hidden'})
-    $('#status-analyze').css({'opacity': '0'})
-    $('#status').css({'visibility': 'hidden'})
-    $('#status').css({'opacity': '0'})
+    status.css({'visibility': 'hidden'})
+    status.css({'opacity': '0'})
     const MAX_FILE_SIZE_INT = $('#MAX_FILE_SIZE_INT').val()
     const MAX_FILE_SIZE_UNITS = $('#MAX_FILE_SIZE_UNITS').val()
-    alert(`Upload for ${filename}  failed.\n\nFile bigger than
+    $('#error-modal-message').html(`Upload for ${filename}  failed.\n\nFile bigger than
      ${MAX_FILE_SIZE_INT} ${MAX_FILE_SIZE_UNITS}B`)
+    $('#error-modal').modal()
     // Without this, it puts a blue background on the progress bar.
     $('#progress').css('background', 'transparent')
   }
 }
 
 /**
- * @return {ajax} ajax data
- * @param {object} file - file object
- * @param {string} filename - name of the file
+ * @return {ajax} ajax data.
+ * @param {object} file - file object.
+ * @param {string} filename - name of the file.
  */
 function sendAjaxRequest (file, filename) {
   return $.ajax({
@@ -175,9 +171,9 @@ function Init () {
 }
 
 /**
- * file selection
+ * file selection.
  * @return {void}
- * @param {object} e - event
+ * @param {object} e - event.
  */
 function FileSelectHandler (e) {
   const counter = $('#counter')
@@ -216,39 +212,57 @@ function FileSelectHandler (e) {
       if (numberOfFileDone / totalFiles > 0.5) {
         progress.css('color', '#FFF')
       }
-      if (added === 1) {
-        progressBar.html('Complete!').css({
-          'color': '#FFF',
-          'text-align': 'center',
-          'width': '175px',
-          'height': '20px'
-        }).fadeOut(2000)
-        const faFolderOpen = $('.fa-folder-open-o')
-        faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
-        faFolderOpen.fadeIn(200)
-        $('#status').hide()
-      }
+      progressBarStatus(f, added)
+      const faFolderOpen = $('.fa-folder-open-o')
+      faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
+      faFolderOpen.fadeIn(200)
     }
   }
   showProgress()
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
   counter.attr('value', numActiveFile)
+  $('#status').delay(1200).hide(0)
 }
 
 /**
- * Displays the message on the 'progress' bar
- * @return { void }
+ * Displays the message on the 'progress' bar.
+ * @return {void}
  */
 function showProgress () {
+  $('#status').css('z-index', 50000).show()
   $('#progress').html('Ready For Files To Upload').css('color', '#074178').delay(3000).show()
   $id('fileselect').value = ''
   // this allows the event to fire on "change" in chrome. the value property changing is the
   // normal trigger, for some reason firefox overwrote this with their own behavior.
 }
+/**
+ * Changes the message on the progress bar according to the file.
+ * if file valid: "Complete!" else: "Invalid File!"
+ * @return {void}
+ * @param {string} f - name of the file.
+ * @param {int} added - 1 id file is added.
+ */
+function progressBarStatus (f, added) {
+  if (added === 1 && f.size < $id('MAX_FILE_SIZE').value && f.size !== 0 && AllowedFileType(f.name)) {
+    $('#progress-bar').html('Complete!').css({
+      'color': '#FFF',
+      'text-align': 'center',
+      'width': '175px',
+      'height': '20px'
+    }).fadeOut(2000)
+  } else {
+    $('#progress-bar').html('Invalid File!').css({
+      'color': '#FFF',
+      'text-align': 'center',
+      'width': '175px',
+      'height': '20px'
+    }).fadeOut(2000)
+  }
+}
 
 $(function () {
-  /* Message for when you hover on the open folder icon on the top right. */
+  // Message for when you hover on the open folder icon on the top right.
   $('[data-toggle="tooltip"]').tooltip()
   $('#uploadbrowse').click(function () {
     $('#fileselect').click()

@@ -27,7 +27,11 @@ $(function() {
 {% block title %}BubbleViz{% endblock %}
 
 {% block options %}
-<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+    <div id="status-prepare">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+           style="color: #0068AF;"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
 
 <legend>BubbleViz Options</legend>
 <div class="col-md-6">

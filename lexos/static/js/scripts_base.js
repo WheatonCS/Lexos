@@ -34,13 +34,13 @@ $(function () {
   scrollTop()
   $('#getviz').click(function (e) {
     if (numActiveDocs < 1) {
-      const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+      const msg = `You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.`
       $('#error-modal-message').html(msg)
       $('#error-modal').modal()
       e.preventDefault()
       return false
     } else if ($('input[name=\'segmentlist\']:checked').length < 1) {
-      const msg = 'You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.'
+      const msg = `You have no active documents. Please activate at least one document using the <a href="./manage">Manage</a> tool or <a href="./upload">upload</a> a new document.`
       $('#error-modal-message').html(msg)
       $('#error-modal').modal()
       e.preventDefault()
@@ -56,10 +56,11 @@ $(function () {
     html: true,
     placement: 'right',
     template:
-      '<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide();});">\
-      <div class="arrow"></div>\
-      <h3 class="popover-title"></h3>\
-      <div class="popover-content"><p></p></div>\\ </div>'
+       `<div class="popover" onmouseover="$(this).mouseleave(function() {$(this).hide();});">
+            <div class="arrow"></div>
+            <h3 class="popover-title"></h3>
+            <div class="popover-content"><p></p></div>
+        </div>`
   }).click(function (e) {
     e.preventDefault()
   }).mouseenter(function () {
