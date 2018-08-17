@@ -3,10 +3,14 @@
 import datetime
 import numpy as np
 import pandas as pd
+import plotly.tools as tls
+from plotly.offline import plot
+import matplotlib.pyplot as plt
+
+from Bio import Phylo
 from io import StringIO
 from skbio import TreeNode
 from skbio.tree import majority_rule
-from ete3 import TreeStyle, Tree
 from scipy.cluster.hierarchy import linkage
 from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
@@ -107,7 +111,7 @@ class BCTModel(BaseModel):
             for _ in range(self._bct_option.iterations)
         ]
 
-    def _get_bootstrap_consensus_tree(self):
+    def _get_bootstrap_consensus_tree(self) -> Phylo:
         """Get the consensus tree.
 
         :return: The consensus tree of the list of newick trees.
@@ -123,30 +127,13 @@ class BCTModel(BaseModel):
 
         # Grab the tree from the returned list and convert it to newick format.
         consensus_tree[0].write(newick_tree)
+        consensus_tree_str = newick_tree.getvalue()
 
         # Return consensus tree as a ETE tree object.
-        return Tree(
-            newick_tree.getvalue(),
-            quoted_node_names=True
+        return Phylo.read(
+            StringIO(consensus_tree_str),
+            format="newick"
         )
-
-    @staticmethod
-    def _get_ete_tree_style() -> TreeStyle:
-        """Get the ete tree drawing style.
-
-        :return: A ete TreeStyle object that contains desired tree styles.
-        """
-        # Set up a ete tree style object and fill in the desired parameters.
-        tree_style = TreeStyle()
-        tree_style.mode = "c"
-        tree_style.scale = None
-        tree_style.arc_span = 360
-        tree_style.arc_start = 0
-        tree_style.show_scale = False
-        tree_style.show_leaf_name = True
-        tree_style.show_branch_length = True
-        tree_style.branch_vertical_margin = 10
-        return tree_style
 
     def get_bootstrap_consensus_result(self) -> str:
         """Render the bootstrap consensus tree result and save it to images.
@@ -158,18 +145,23 @@ class BCTModel(BaseModel):
         current_time = datetime.datetime.now().isoformat()
         result_file_name = f"bct_result{current_time}.png"
 
-        # Get the ete formatted consensus tree.
+        # Get the formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
 
-        # Render and save the consensus tree.
-        consensus_tree.render(
-            tree_style=self._get_ete_tree_style(),
-            file_name=f"lexos/static/images/{result_file_name}",
-            units="px",
-            dpi=300,
-            h=1000,
-            w=1000
+        # Draw the consensus tree as a plt object.
+        Phylo.draw(
+            consensus_tree,
+            do_show=False,
+            show_confidence=True
         )
+
+
+        plt.gca().spines["top"].set_visible(False)
+        plt.gca().spines["right"].set_visible(False)
+        plt.title("Bootstrap Consensus Tree Result")
+
+        # Save the plot figure.
+        plt.savefig(f"lexos/static/images/{result_file_name}")
 
         # Return the saved file name.
         return result_file_name
