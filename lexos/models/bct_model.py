@@ -3,10 +3,7 @@
 import datetime
 import numpy as np
 import pandas as pd
-import plotly.tools as tls
-from plotly.offline import plot
 import matplotlib.pyplot as plt
-
 from Bio import Phylo
 from io import StringIO
 from skbio import TreeNode
@@ -156,12 +153,12 @@ class BCTModel(BaseModel):
             figure=(8, 4)
         )
 
+        # Adjust the layout of the figure and add a title for it.
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
         plt.title("Bootstrap Consensus Tree Result")
 
         # Save the plot figure.
-
         plt.savefig(f"lexos/static/images/{result_file_name}")
 
         # Return the saved file name.
