@@ -152,15 +152,16 @@ class BCTModel(BaseModel):
         Phylo.draw(
             consensus_tree,
             do_show=False,
-            show_confidence=True
+            show_confidence=True,
+            figure=(8, 4)
         )
-
 
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
         plt.title("Bootstrap Consensus Tree Result")
 
         # Save the plot figure.
+
         plt.savefig(f"lexos/static/images/{result_file_name}")
 
         # Return the saved file name.
