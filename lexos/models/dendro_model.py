@@ -124,14 +124,15 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
-        figure['layout'].update({'margin': {'b': max_label_len * 3.5}})
+        figure.layout.update({'margin': {'b': max_label_len * 3.8}})
         # Calculate the space right most label needs.
-        right_margin = max_label_len * 5 if max_label_len * 5 > 80 else 80
+        right_margin = len(figure.layout.xaxis.ticktext[-1]) * 4 \
+            if len(figure.layout.xaxis.ticktext[-1]) * 4 > 100 else 100
         # Update right margin as well.
-        figure['layout'].update({'margin': {'r': right_margin}})
+        figure.layout.update({'margin': {'r': right_margin}})
 
         # Find the max x value in the plot.
-        max_x = max([max(data['x']) for data in figure['data']])
+        max_x = max([max(data['x']) for data in figure.data])
 
         # Calculate proper x coordinate the figure should extend to.
         x_value = max_x + 3
@@ -157,7 +158,7 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the left margin to fit all labels.
-        figure['layout'].update({'margin': {'l': max_label_len * 6.7}})
+        figure.layout.update({'margin': {'l': max_label_len * 6.7}})
 
         # Find the max x value in the plot.
         max_x = max([max(data['x']) for data in figure['data']])
@@ -183,7 +184,7 @@ class DendrogramModel(BaseModel):
         figure = self._get_dendrogram_fig()
 
         # Update the size of the image.
-        figure['layout'].update(
+        figure.layout.update(
             {
                 'width': 1100,
                 'height': 800,
@@ -193,6 +194,8 @@ class DendrogramModel(BaseModel):
 
         # Note that the extend figure method is a hack.
         # TODO: Once plotly has better solutions available, remove this method.
+        # TODO: Also the magic numbers within this method are based some tests.
+        # TODO: Thus they may not be very reliable and should be replaced ASAP.
         # Adjust figure style based on the selected orientation and return it.
         return self.extend_figure(figure=figure)
 
