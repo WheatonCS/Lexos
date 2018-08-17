@@ -149,8 +149,7 @@ class BCTModel(BaseModel):
         Phylo.draw(
             consensus_tree,
             do_show=False,
-            show_confidence=True,
-            figure=(8, 4)
+            show_confidence=True
         )
 
         # Adjust the layout of the figure and add a title for it.
