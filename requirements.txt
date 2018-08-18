@@ -1,10 +1,10 @@
 scipy
-ete3
-scikit-bio
-colorlover
+plotly
 gensim
-beautifulsoup4
 chardet
 natsort
 requests
-plotly
+biopython
+scikit-bio
+colorlover
+beautifulsoup4
