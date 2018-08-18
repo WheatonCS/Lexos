@@ -15,7 +15,6 @@ function generateBCT () {
   utility.sendAjaxRequest('/bct_analysis_result', form)
     .done(
       function (response) {
-        const staticUrl = $('#static-url').data().url
         $('#bct-result').html(`<img src="data:image/png;base64,${response}">`)
       })
     .fail(
