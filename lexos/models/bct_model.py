@@ -1,11 +1,10 @@
 """This is a model to produce bootstrap consensus tree of the dtm."""
-
-import datetime
+import base64
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from Bio import Phylo
-from io import StringIO
+from io import StringIO, BytesIO
 from skbio import TreeNode
 from skbio.tree import majority_rule
 from scipy.cluster.hierarchy import linkage
@@ -13,6 +12,8 @@ from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
+
+plt.switch_backend("agg")
 
 
 class BCTTestOptions(NamedTuple):
@@ -132,15 +133,36 @@ class BCTModel(BaseModel):
             format="newick"
         )
 
-    def get_bootstrap_consensus_result(self) -> str:
+    def get_bootstrap_consensus_result(self) -> BytesIO:
         """Render the bootstrap consensus tree result and save it to images.
 
         :return: The rendered BCT result file name.
         """
-        # TODO: this method is hack.. Seeking for better solution.
-        # Get the current time to help distinguish pictures.
-        current_time = datetime.datetime.now().isoformat()
-        result_file_name = f"bct_result{current_time}.png"
+        # # TODO: this method is hack.. Seeking for better solution.
+        # # Get the current time to help distinguish pictures.
+        # current_time = datetime.datetime.now().isoformat()
+        # result_file_name = f"bct_result{current_time}.png"
+        #
+        # # Get the formatted consensus tree.
+        # consensus_tree = self._get_bootstrap_consensus_tree()
+        #
+        # # Draw the consensus tree as a plt object.
+        # Phylo.draw(
+        #     consensus_tree,
+        #     do_show=False,
+        #     show_confidence=True
+        # )
+        #
+        # # Adjust the layout of the figure and add a title for it.
+        # plt.gca().spines["top"].set_visible(False)
+        # plt.gca().spines["right"].set_visible(False)
+        # plt.title("Bootstrap Consensus Tree Result")
+        #
+        # # Save the plot figure.
+        # plt.savefig(f"lexos/static/images/{result_file_name}")
+        #
+        # # Return the saved file name.
+        # return result_file_name
 
         # Get the formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
@@ -152,13 +174,10 @@ class BCTModel(BaseModel):
             show_confidence=True
         )
 
-        # Adjust the layout of the figure and add a title for it.
-        plt.gca().spines["top"].set_visible(False)
-        plt.gca().spines["right"].set_visible(False)
-        plt.title("Bootstrap Consensus Tree Result")
+        image_holder = BytesIO()
+        plt.savefig(image_holder)
+        image_holder.seek(0)
+        image = base64.b64encode(b''.join(image_holder))
 
-        # Save the plot figure.
-        plt.savefig(f"lexos/static/images/{result_file_name}")
+        return image.decode('utf-8')
 
-        # Return the saved file name.
-        return result_file_name
