@@ -13,6 +13,7 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
 
+# Set matplotlib backend to be agg in order to make it work with flask.
 plt.switch_backend("agg")
 
 
@@ -133,37 +134,11 @@ class BCTModel(BaseModel):
             format="newick"
         )
 
-    def get_bootstrap_consensus_result(self) -> BytesIO:
+    def get_bootstrap_consensus_result(self) -> str:
         """Render the bootstrap consensus tree result and save it to images.
 
         :return: The rendered BCT result file name.
         """
-        # # TODO: this method is hack.. Seeking for better solution.
-        # # Get the current time to help distinguish pictures.
-        # current_time = datetime.datetime.now().isoformat()
-        # result_file_name = f"bct_result{current_time}.png"
-        #
-        # # Get the formatted consensus tree.
-        # consensus_tree = self._get_bootstrap_consensus_tree()
-        #
-        # # Draw the consensus tree as a plt object.
-        # Phylo.draw(
-        #     consensus_tree,
-        #     do_show=False,
-        #     show_confidence=True
-        # )
-        #
-        # # Adjust the layout of the figure and add a title for it.
-        # plt.gca().spines["top"].set_visible(False)
-        # plt.gca().spines["right"].set_visible(False)
-        # plt.title("Bootstrap Consensus Tree Result")
-        #
-        # # Save the plot figure.
-        # plt.savefig(f"lexos/static/images/{result_file_name}")
-        #
-        # # Return the saved file name.
-        # return result_file_name
-
         # Get the formatted consensus tree.
         consensus_tree = self._get_bootstrap_consensus_tree()
 
@@ -174,10 +149,18 @@ class BCTModel(BaseModel):
             show_confidence=True
         )
 
+        # Adjust the layout of the figure and add a title for it.
+        plt.gca().spines["top"].set_visible(False)
+        plt.gca().spines["right"].set_visible(False)
+        plt.title("Bootstrap Consensus Tree Result")
+
+        # Create a bytes image holder and save figure to it.
         image_holder = BytesIO()
         plt.savefig(image_holder)
         image_holder.seek(0)
+
+        # Encode the image.
         image = base64.b64encode(b''.join(image_holder))
 
+        # Decode image to utf-8 string.
         return image.decode('utf-8')
-
