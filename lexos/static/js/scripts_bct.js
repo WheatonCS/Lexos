@@ -16,7 +16,7 @@ function generateBCT () {
     .done(
       function (response) {
         const staticUrl = $('#static-url').data().url
-        $('#bct-result').html(`<img src="${staticUrl}/${response}">`)
+        $('#bct-result').html(`<img src="data:image/png;base64,${response}">`)
       })
     .fail(
       function () {
