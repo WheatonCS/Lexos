@@ -1,7 +1,7 @@
 import * as utility from './utility.js'
 
 /**
- * the function to submit form via ajax in dendrogram
+ * The function to generate bootstrap consensus result.
  * @returns {void} - nothing is returned from this function.
  */
 function generateBCT () {
@@ -28,17 +28,17 @@ function generateBCT () {
 }
 
 /**
- * When the HTML documents finish loading
+ * When the HTML documents finish loading.
  */
 $(function () {
   /**
-   * the events after dendrogram is clicked
+   * The events after generate BCT is clicked.
    */
   $('#get-bct').on('click', function () {
     // Catch the possible error happens during submission.
     const error = utility.submissionError(2)
 
-    if (error === null) { // If there is no error
+    if (error === null) { // If there is no error.
       generateBCT()
       utility.scrollToDiv($('#bct-result'))
     } else {
