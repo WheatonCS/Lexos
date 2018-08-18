@@ -139,12 +139,9 @@ class BCTModel(BaseModel):
 
         :return: The rendered BCT result file name.
         """
-        # Get the formatted consensus tree.
-        consensus_tree = self._get_bootstrap_consensus_tree()
-
         # Draw the consensus tree as a plt object.
         Phylo.draw(
-            consensus_tree,
+            self._get_bootstrap_consensus_tree(),
             do_show=False,
             show_confidence=True
         )
@@ -152,7 +149,7 @@ class BCTModel(BaseModel):
         # Adjust the layout of the figure and add a title for it.
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
-        plt.gcf().set_size_inches(w=10, h=6)
+        plt.gcf().set_size_inches(w=10, h=(len(self._id_temp_label_map) * 0.5))
         plt.gcf().subplots_adjust(right=0.8)
         plt.title("Bootstrap Consensus Tree Result")
 
