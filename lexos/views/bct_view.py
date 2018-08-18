@@ -1,4 +1,4 @@
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, send_file
 from lexos.helpers import constants
 from lexos.managers import session_manager
 from lexos.models.bct_model import BCTModel
@@ -51,3 +51,5 @@ def get_bct_result():
     session_manager.cache_analysis_option()
     # Get the bootstrap consensus tree result.
     return BCTModel().get_bootstrap_consensus_result()
+
+
