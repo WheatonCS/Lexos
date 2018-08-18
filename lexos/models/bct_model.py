@@ -152,6 +152,8 @@ class BCTModel(BaseModel):
         # Adjust the layout of the figure and add a title for it.
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
+        plt.gcf().set_size_inches(w=10, h=6)
+        plt.gcf().subplots_adjust(right=0.8)
         plt.title("Bootstrap Consensus Tree Result")
 
         # Create a bytes image holder and save figure to it.
