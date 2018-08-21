@@ -1,4 +1,5 @@
 """This is a model to produce bootstrap consensus tree of the dtm."""
+
 import base64
 import numpy as np
 import pandas as pd
@@ -143,7 +144,9 @@ class BCTModel(BaseModel):
         Phylo.draw(
             self._get_bootstrap_consensus_tree(),
             do_show=False,
-            show_confidence=True
+            show_confidence=True,
+            branch_labels=lambda clade: "{0:.4f}".format(clade.branch_length)
+            if clade.branch_length is not None else ""
         )
 
         # Adjust the layout of the figure and add a title for it.
@@ -158,8 +161,5 @@ class BCTModel(BaseModel):
         plt.savefig(image_holder)
         image_holder.seek(0)
 
-        # Encode the image.
-        image = base64.b64encode(b''.join(image_holder))
-
         # Decode image to utf-8 string.
-        return image.decode('utf-8')
+        return base64.b64encode(b''.join(image_holder)).decode('utf-8')
