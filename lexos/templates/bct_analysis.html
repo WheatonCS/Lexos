@@ -11,7 +11,15 @@
 
 {% block options %}
     <fieldset>
-        <legend>BCT Options</legend>
+        <legend>
+            BCT Options
+            <i class="fa fa-question-circle lexos-tooltip-trigger"
+               data-toggle="tooltip" data-html="true"
+               data-placement="right" data-container="body"
+               title="This is the beta version of this tool. Thank you for being our first testers!"
+               style="padding-left:4px; font-size:18px; color:orangered">
+            </i>
+        </legend>
         <div id="bct-options">
             <label for="metric">Distance Metric:
                 <select name="metric" id="metric">
@@ -97,12 +105,42 @@
                 <input type="number" name="cutoff" id="cutoff"
                        step="0.01" min="0" max="1"
                        value="{{ session['bctoption']['cutoff'] }}">
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true"
+                   data-placement="right" data-container="body"
+                   title="0.5 means that if two file want to stay in the same cluster in the result, they have to stick together in the same cluster more than 50% times of all iterations."
+                   style="padding-left:4px; font-size:18px">
+                </i>
             </label>
 
             <label for="iterations">Number of bootstrap iterations:
                 <input type="number" name="iterations" id="iterations"
                        step="1" min="20" max="200"
                        value="{{ session['bctoption']['iterations'] }}">
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true"
+                   data-placement="right" data-container="body"
+                   title="100 means that the Doc-Term Matrix will be iterated 100 times, and each time 80% data within it will be picked with/without replacement."
+                   style="padding-left:4px; font-size:18px">
+                </i>
+            </label>
+
+            <label for="linkage">Sample each iteration
+                <select name="linkage" id="linkage" style="width: 75px">
+                    <option value="with" {{ 'selected' if session['bctoption']['linkage'] == 'average' }}>
+                        with
+                    </option>
+                    <option value="without" {{ 'selected' if session['bctoption']['linkage'] == 'single' }}>
+                        without
+                    </option>
+                </select>
+                replacement.
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true"
+                   data-placement="right" data-container="body"
+                   title="Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters."
+                   style="padding-left:4px;font-size:18px;">
+                </i>
             </label>
         </div>
     </fieldset>
