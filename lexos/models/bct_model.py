@@ -104,6 +104,7 @@ class BCTModel(BaseModel):
                 sample_dtm=self._doc_term_matrix.sample(
                     axis=1,
                     frac=0.8,
+                    replace=self._bct_option.replace,
                     random_state=np.random.RandomState()
                 ),
                 labels=labels,
