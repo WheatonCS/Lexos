@@ -145,15 +145,17 @@ class BCTModel(BaseModel):
             self._get_bootstrap_consensus_tree(),
             do_show=False,
             show_confidence=True,
-            branch_labels=lambda clade: "{0:.4f}".format(clade.branch_length)
+            branch_labels=lambda clade: "{0:.4f}\n".format(clade.branch_length)
             if clade.branch_length is not None else ""
         )
 
         # Adjust the layout of the figure and add a title for it.
+        plt.xlabel("Branch Length")
+        plt.ylabel("Texts")
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
-        plt.gcf().set_size_inches(w=10, h=(len(self._id_temp_label_map) * 0.5))
-        plt.gcf().subplots_adjust(right=0.8)
+        plt.gcf().set_size_inches(w=10, h=(len(self._id_temp_label_map) * 0.6))
+        plt.gcf().subplots_adjust(right=0.8, bottom=0.2)
         plt.title("Bootstrap Consensus Tree Result")
 
         # Create a bytes image holder and save figure to it.
