@@ -129,10 +129,10 @@
 
             <label for="linkage">Sample each iteration
                 <select name="linkage" id="linkage" style="width: 75px">
-                    <option value="with" {{ 'selected' if session['bctoption']['sampling'] == 'with' }}>
+                    <option value="with" {{ 'selected' if session['bctoption']['replace'] == 'with' }}>
                         with
                     </option>
-                    <option value="without" {{ 'selected' if session['bctoption']['sampling'] == 'without' }}>
+                    <option value="without" {{ 'selected' if session['bctoption']['replace'] == 'without' }}>
                         without
                     </option>
                 </select>

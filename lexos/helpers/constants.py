@@ -147,7 +147,8 @@ BCTINPUT = (
     'metric',
     'linkage',
     'cutoff',
-    'iterations'
+    'iterations',
+    'replace'
 )
 
 # for kmeans Clustering
@@ -245,7 +246,8 @@ DEFAULT_BCT_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
     'cutoff': 0.5,
-    'iterations': 100
+    'iterations': 100,
+    'replace': 'without'
 }
 
 DEFAULT_KMEAN_OPTIONS = {
