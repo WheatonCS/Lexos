@@ -22,7 +22,8 @@ class TestBCTModel:
             linkage_method="average",
             dist_metric="euclidean",
             iterations=20,
-            cutoff=0.5
+            cutoff=0.5,
+            replace=False
         )
     )
 
