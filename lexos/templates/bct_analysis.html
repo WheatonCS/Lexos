@@ -129,10 +129,10 @@
 
             <label for="linkage">Sample each iteration
                 <select name="linkage" id="linkage" style="width: 75px">
-                    <option value="with" {{ 'selected' if session['bctoption']['linkage'] == 'average' }}>
+                    <option value="with" {{ 'selected' if session['bctoption']['sampling'] == 'with' }}>
                         with
                     </option>
-                    <option value="without" {{ 'selected' if session['bctoption']['linkage'] == 'single' }}>
+                    <option value="without" {{ 'selected' if session['bctoption']['sampling'] == 'without' }}>
                         without
                     </option>
                 </select>
@@ -140,7 +140,7 @@
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="popover" data-html="true"
                    data-placement="right" data-container="body"
-                   data-content="Different methods for measuring the distance (differences) between documents. See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric.</a>"
+                   data-content="Different methods for sampling the Doc-Term Matrix. See <a href='https://www.ma.utexas.edu/users/parker/sampling/repl.htm' target='_blank'>Sampling With/Without Replacement.</a> for more details."
                    style="padding-left:4px;font-size:18px;">
                 </i>
             </label>
