@@ -14,8 +14,8 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
 
-# Set matplotlib backend to be agg in order to make it work with flask.
-plt.switch_backend("agg")
+# Make plt to use a non-interactive backend to generate PNG instead of window.
+plt.switch_backend("Agg")
 
 
 class BCTTestOptions(NamedTuple):
