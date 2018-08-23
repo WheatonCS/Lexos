@@ -39,17 +39,12 @@ class BCTReceiver(BaseReceiver):
 
         :return: A BCTOption object to hold all the options.
         """
-        linkage_method = self._front_end_data['linkage']
-        dist_metric = self._front_end_data['metric']
-        iterations = int(self._front_end_data['iterations'])
-        cutoff = float(self._front_end_data['cutoff'])
-        replace = \
-            False if self._front_end_data['replace'] == 'without' else True
+        replace = False if self._front_end_data['replace'] == 'without' else True
 
         return BCTOption(
-            linkage_method=linkage_method,
-            dist_metric=dist_metric,
-            iterations=iterations,
-            cutoff=cutoff,
+            linkage_method=self._front_end_data['linkage'],
+            dist_metric=self._front_end_data['metric'],
+            iterations=int(self._front_end_data['iterations']),
+            cutoff=float(self._front_end_data['cutoff']),
             replace=replace
         )
