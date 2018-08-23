@@ -161,7 +161,7 @@ class BCTModel(BaseModel):
         # Set graph size, title and tight layout.
         plt.gcf().set_size_inches(
             w=9.5,
-            h=(len(self._id_temp_label_map) * 0.5)
+            h=(len(self._id_temp_label_map) * 0.4)
         )
         plt.title("Bootstrap Consensus Tree Result")
         plt.gcf().tight_layout()
