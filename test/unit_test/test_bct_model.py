@@ -32,9 +32,23 @@ class TestBCTModel:
     consensus_tree_holder = StringIO()
     consensus_tree = BCT_model._get_bootstrap_consensus_tree()
     Phylo.write(consensus_tree, consensus_tree_holder, format="newick")
+    consensus_tree_plot = BCT_model._get_bootstrap_consensus_tree_plot()
+    consensus_tree_plot_axis = consensus_tree_plot.gca()
 
     def test_consensus_tree(self):
         assert self.consensus_tree_holder.getvalue() in [
             "(F2.txt:0.00000,F1.txt:0.00000):0.00000;\n",
             "(F1.txt:0.00000,F2.txt:0.00000):0.00000;\n"
         ]
+
+    def test_consensus_tree_plot_content(self):
+        assert self.consensus_tree_plot_axis.texts[0].get_text() in [
+            " F1.txt", " F2.txt"
+        ]
+
+    def test_consensus_tree_plot_title(self):
+        assert self.consensus_tree_plot_axis.title.get_text() == \
+            "Bootstrap Consensus Tree Result"
+
+    def test_consensus_tree_plot_size(self):
+        assert self.consensus_tree_plot_axis.figure.bbox.x1 == 950.0
