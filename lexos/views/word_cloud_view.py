@@ -84,7 +84,8 @@ def word_cloud():
             reverse=True)
         column_values = []
         for term in terms:
-            rows = [term["name"].encode('utf-8'), term["size"]]
+            # rows = [term["name"].encode('utf-8'), term["size"]]
+            rows = [term["name"], term["size"]]
             column_values.append(rows)
         # Turn the JSON object into a JSON string for the front end
         json_obj = json.dumps(json_obj)
