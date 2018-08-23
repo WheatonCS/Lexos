@@ -150,14 +150,26 @@ class BCTModel(BaseModel):
             if clade.branch_length is not None else ""
         )
 
-        # Adjust the layout of the figure and add a title for it.
+        # Set labels for the plot.
         plt.xlabel("Branch Length")
         plt.ylabel("Texts")
+
+        # Hide the two unused border.
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
-        plt.gcf().set_size_inches(w=10, h=(len(self._id_temp_label_map) * 0.6))
-        plt.gcf().subplots_adjust(right=0.8, bottom=0.2)
+
+        # Extend x-axis to the right to fit longer labels.
+        x_left, x_right, y_low, y_high = plt.axis()
+        plt.axis((x_left, x_right * 1.2, y_low, y_high))
+
+        # Set graph size, title and tight layout.
+        plt.gcf().set_size_inches(w=10, h=(len(self._id_temp_label_map) * 0.5))
         plt.title("Bootstrap Consensus Tree Result")
+        plt.gcf().tight_layout()
+
+        # Move all node a bit up.
+        plt.gca().texts = \
+            [text.set_linespacing(spacing=0.2) for text in plt.gca().texts]
 
         # Create a bytes image holder and save figure to it.
         image_holder = BytesIO()
