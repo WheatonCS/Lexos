@@ -160,16 +160,19 @@ class BCTModel(BaseModel):
 
         # Extend x-axis to the right to fit longer labels.
         x_left, x_right, y_low, y_high = plt.axis()
-        plt.axis((x_left, x_right * 1.2, y_low, y_high))
+        plt.axis((x_left, x_right * 1.25, y_low, y_high))
 
         # Set graph size, title and tight layout.
-        plt.gcf().set_size_inches(w=10, h=(len(self._id_temp_label_map) * 0.5))
+        plt.gcf().set_size_inches(
+            w=9.5,
+            h=(len(self._id_temp_label_map) * 0.5)
+        )
         plt.title("Bootstrap Consensus Tree Result")
         plt.gcf().tight_layout()
 
-        # Move all node a bit up.
-        plt.gca().texts = \
-            [text.set_linespacing(spacing=0.2) for text in plt.gca().texts]
+        # Change line spacing
+        for text in plt.gca().texts:
+            text.set_linespacing(spacing=0.1)
 
         # Create a bytes image holder and save figure to it.
         image_holder = BytesIO()
