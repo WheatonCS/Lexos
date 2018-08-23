@@ -136,12 +136,8 @@ class BCTModel(BaseModel):
             format="newick"
         )
 
-    def get_bootstrap_consensus_result(self) -> str:
-        """Render the bootstrap consensus tree result and save it to images.
-
-        :return: The rendered BCT result file name.
-        """
-        # Draw the consensus tree as a plt object.
+    def _get_bootstrap_consensus_tree_plot(self) -> plt:
+        # Draw the consensus tree as a matplotlib object.
         Phylo.draw(
             self._get_bootstrap_consensus_tree(),
             do_show=False,
@@ -174,9 +170,19 @@ class BCTModel(BaseModel):
         for text in plt.gca().texts:
             text.set_linespacing(spacing=0.1)
 
-        # Create a bytes image holder and save figure to it.
+        return plt
+
+    def get_bootstrap_consensus_tree_plot_decoded(self) -> str:
+        """Render the bootstrap consensus tree result and save it to images.
+
+        :return: The rendered BCT result file name.
+        """
+        # Get the matplotlib plot for bootstrap consensus tree result.
+        bct_plot = self._get_bootstrap_consensus_tree_plot()
+
+        # Create a bytes IO image holder and save figure to it.
         image_holder = BytesIO()
-        plt.savefig(image_holder)
+        bct_plot.savefig(image_holder)
         image_holder.seek(0)
 
         # Decode image to utf-8 string.
