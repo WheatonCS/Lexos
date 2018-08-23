@@ -309,8 +309,8 @@ class KMeansModel(BaseModel):
         # Set the layout of the plot.
         layout = go.Layout(
             title="K-Means Voronoi Result",
-            xaxis=go.XAxis(title='x-axis', showline=False),
-            yaxis=go.YAxis(title='y-axis', showline=False),
+            xaxis=go.layout.XAxis(title='x-axis', showline=False),
+            yaxis=go.layout.YAxis(title='y-axis', showline=False),
             hovermode="closest")
 
         # noinspection PyTypeChecker
@@ -364,8 +364,8 @@ class KMeansModel(BaseModel):
         # Set the layout of the plot.
         layout = go.Layout(
             title="K-Means Two Dimensional Scatter Plot Result",
-            xaxis=go.XAxis(title='x-axis', showline=False),
-            yaxis=go.YAxis(title='y-axis', showline=False),
+            xaxis=go.layout.XAxis(title='x-axis', showline=False),
+            yaxis=go.layout.YAxis(title='y-axis', showline=False),
             hovermode="closest")
 
         # Return the plotly figure and table.
