@@ -137,7 +137,6 @@ def cache_alteration_files():
     for uploadFile in request.files:
         file_name = request.files[uploadFile].filename
         if file_name != '':
-
             session['scrubbingoptions']['optuploadnames'][uploadFile] = \
                 file_name
 
@@ -240,17 +239,14 @@ def cache_cloud_option():
 
     See constant.CLOUDLIST for more.
     """
-
-    # list
-    for list in const.CLOUDLIST:
-        session['cloudoption'][list] = request.form.getlist(list)
+    for item in const.CLOUDLIST:
+        session['cloudoption'][item] = request.form.getlist(item)
 
 
 def cache_multi_cloud_options():
     """Stores filename if uploading topic file to use for multicloud."""
 
     for request_input in const.MULTICLOUDINPUTS:
-
         session['multicloudoptions'][request_input] = \
             request.form[request_input] if input in request.form \
             else const.DEFAULT_MULTICLOUD_OPTIONS[request_input]
@@ -278,17 +274,6 @@ def cache_bubble_viz_option():
             else const.DEFAULT_BUBBLEVIZ_OPTIONS[request_input])
 
 
-def cache_statistic_option():
-    """Stores statistics options from request.form in session cookie object.
-
-    See constant.STATISTIC_LIST for more.
-    """
-
-    # list
-    for list in const.STATISTIC_LIST:
-        session['statisticoption'][list] = request.form.getlist(list)
-
-
 def cache_hierarchy_option():
     """Stores all Hierarchy Clustering options in the session cookie object.
 
@@ -303,6 +288,15 @@ def cache_hierarchy_option():
         session['hierarchyoption'][request_input] = (
             opts[request_input] if input in opts
             else const.DEFAULT_HIERARCHICAL_OPTIONS[request_input])
+
+
+def cache_bct_option():
+    """Stores BCT options from request.form in the session cookie object."""
+    for request_input in const.BCTINPUT:
+        session['bctoption'][request_input] = (
+            request.form[request_input] if input in request.form
+            else const.DEFAULT_BCT_OPTIONS[request_input]
+        )
 
 
 def cache_k_mean_option():

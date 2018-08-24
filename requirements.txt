@@ -1,7 +1,10 @@
-colorlover
+scipy
+plotly
 gensim
-beautifulsoup4
 chardet
 natsort
 requests
-plotly
+biopython
+scikit-bio
+colorlover
+beautifulsoup4

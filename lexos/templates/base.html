@@ -214,9 +214,19 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="{{ url_for('dendrogram.dendrogram') }}">Hierarchical
-                                        Clustering</a></li>
-                                <li><a href="{{ url_for('k_means.k_means') }}">K-Means
-                                    Clustering</a></li>
+                                        Clustering
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('k_means.k_means') }}">
+                                        K-Means Clustering
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('bct_analysis.bct_analysis') }}">
+                                        Bootstrap Consensus Tree (Beta)
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li><a href="{{ url_for('sim_query.similarity') }}">Similarity
@@ -225,7 +235,7 @@
                         </li>
                         <li>
                             <a href="{{ url_for('content_analysis.content_analysis') }}">Content
-                                Analysis</a></li>
+                                Analysis (Beta)</a></li>
                     </ul>
                 </li>
             </ul>
