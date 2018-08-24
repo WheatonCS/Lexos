@@ -75,7 +75,7 @@ Terms & Conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation Information
 
-Kleinman, S., LeBlanc, M.D., Drout, M., Zhang, C., and Feng, W. (2018). _Lexos_. v3.2. [https://github.com/WheatonCS/Lexos/](https://github.com/WheatonCS/Lexos/). doi:10.5281/zenodo.1215821.
+Kleinman, S., LeBlanc, M.D., Drout, M., and Feng, W. (2018). _Lexos_. v3.2. [https://github.com/WheatonCS/Lexos/](https://github.com/WheatonCS/Lexos/). doi:10.5281/zenodo.1215821.
 
 [//]: # "[Lexos Release 3.2](http://dx.doi.org/10.5281/zenodo.1215821)"
 [//]: # "[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1215821.svg)](https://doi.org/10.5281/zenodo.1215821)"
