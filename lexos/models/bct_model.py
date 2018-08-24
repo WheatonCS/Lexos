@@ -148,7 +148,7 @@ class BCTModel(BaseModel):
 
         # Set labels for the plot.
         plt.xlabel("Branch Length")
-        plt.ylabel("Texts")
+        plt.ylabel("Documents")
 
         # Hide the two unused border.
         plt.gca().spines["top"].set_visible(False)
