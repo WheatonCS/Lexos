@@ -16,16 +16,26 @@ Lexos is produced by the [Lexomics Research Group](http://lexomics.wheatoncolleg
 
 This repo reflects ongoing development since our Summer 2018: Lexos v3.2.
 
-### New Beta Features
+### New Features in v3.2
 
-1. Bootstrap Consensus Trees provides a measure of the stability of cluster analyses, as discussed by M. Eder,  "Computational stylistics and biblical translation: how reliable can a dendrogram be?"  In T. Piotrowski and Ł. Grabowski, editors, _The Translator and the Computer_, pages 155–170. WSF Press, Wrocław, 2012.
-2. Content Analysis provides a method of comparing the presenence of terms in documents according to user defined criteria. The tool can be used for applications as divers as opinion mining, determining organizational hardiness in stock broker reports, and sentiment analysis.
+- Lexos now uses Plotly on many pages for better interaction in graphs.
+- Bootstrap modals are now used consistently for all error messages, and error messages have been improved for greater clarity.
+- New video introductions have been embedded for the Analyze tools.
+- The Statistics page layout has been re-designed with a new Plotly box plot graph.
+- The Hierarchical Clustering tool now uses Plotly for plotting dendrograms.
+- The K-Means Clustering tool now uses Plotly for Voronoi cell and 2D scatter plots. A new 3D scatter plot has been added.
+- The Topword tool has an improved interface for showing the user the existing document classes.
+- The Rolling Window Analysis tool now uses Plotly graphs. Users now can add multiple milestones. Also the download result button is fixed.
 
-### Disabled Features
+### New Beta Tools in v3.2
 
-1. The Multicloud "topic cloud" feature, which can be used to analyze data from [MALLET](http://mallet.cs.umass.edu/)-produced topic models, has been temporarily removed. We hope to bring it back in the next release.
+- Bootstrap Consensus Trees provides a measure of the stability of cluster analyses, as discussed by M. Eder, "Computational stylistics and biblical translation: how reliable can a dendrogram be?" In T. Piotrowski and Ł. Grabowski, editors, The Translator and the Computer, pages 155–170. WSF Press, Wrocław, 2012.
+- Content Analysis provides a method of comparing the presenence of terms in documents according to user defined criteria. The tool can be used for applications as divers as opinion mining, determining organizational hardiness in stock broker reports, and sentiment analysis.
 
-Earlier versions of Lexos are available at [https://github.com/WheatonCS/Lexos/releases](https://github.com/WheatonCS/Lexos/releases).
+### Removed Features in v3.2
+
+- The Grey word feature has been removed.
+- The "topic clouds" feature in the Multicloud tool, which can be used to analyze data from MALLET-produced topic models, has been temporarily removed. We hope to re-introduce it in the next release.
 
 ## Installation
 
@@ -65,7 +75,7 @@ Terms & Conditions for usage and a DISCLAIMER OF ALL WARRANTIES.
 
 ## Citation Information
 
-Kleinman, S., LeBlanc, M.D., Drout, M. and Zhang, C. (2016). _Lexos_. v3.1.1. [https://github.com/WheatonCS/Lexos/](https://github.com/WheatonCS/Lexos/). doi:10.5281/zenodo.1215821.
+Kleinman, S., LeBlanc, M.D., Drout, M., Zhang, C., and Feng, W. (2018). _Lexos_. v3.2. [https://github.com/WheatonCS/Lexos/](https://github.com/WheatonCS/Lexos/). doi:10.5281/zenodo.1215821.
 
-[//]: # "[Lexos Release 3.1.1](http://dx.doi.org/10.5281/zenodo.1215821)"
+[//]: # "[Lexos Release 3.2](http://dx.doi.org/10.5281/zenodo.1215821)"
 [//]: # "[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1215821.svg)](https://doi.org/10.5281/zenodo.1215821)"
