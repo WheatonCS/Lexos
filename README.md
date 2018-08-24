@@ -51,7 +51,7 @@ Lexos v3.2 is written in Python 3.6 (as distributed in [Anaconda](https://www.co
 [Flask](http://flask.pocoo.org/) microframework, based on Werkzeug and Jinja2.
 
 The front end is designed using [jQuery](https://jquery.com/) and the [Bootstrap 3](http://getbootstrap.com/) framework, with a few functions derived from [jQuery UI](https://jqueryui.com/) and [DataTables](https://datatables.net/). We increasingly incorporate the wiz from
-[D3.js](http://d3js.org/) in our visualizations and the power in the
+[D3.js](http://d3js.org/) and the [Plotly](https://plot.ly/python/) Python graphing library in our visualizations and the power in the
 [scikit-learn](http://scikit-learn.org/stable/) modules for text and statistical processing.
 
 The directions for setting up the development environment for testing (using `localhost:5000`) on your local machine are stored in the `0_InstallGuides` directory.
