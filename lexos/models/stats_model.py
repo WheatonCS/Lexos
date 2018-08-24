@@ -1,6 +1,5 @@
 """This is the Stats model which gets basic statistics."""
 
-import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from plotly import tools
@@ -250,14 +249,14 @@ class StatsModel(BaseModel):
         figure.layout.update(
             title="Document Size Statistics of the Given Corpus",
             xaxis=dict(
-                title="Texts Scatter Plot",
+                title="Scatter plot of Text Size",
                 showgrid=False,
                 zeroline=False,
                 showline=False,
                 showticklabels=False
             ),
             xaxis2=dict(
-                title="Counts Box Plot",
+                title="Box Plot of Counts",
                 showgrid=False,
                 zeroline=False,
                 showline=False,
