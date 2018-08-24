@@ -97,7 +97,7 @@ class StatsModel(BaseModel):
             dtm_options = MatrixReceiver().options_from_front_end()
             # Get the correct current type.
             token_type = dtm_options.token_option.token_type
-            return "terms" if token_type == "word" else "characters"
+            return "terms" if token_type == "word" else "character n-grams"
 
     def get_corpus_stats(self) -> CorpusStats:
         """Convert word lists completely to statistic.
