@@ -196,8 +196,6 @@ class TestStatsPlotly:
         assert basic_fig['layout']['title'] == \
             'Document Size Statistics of the Given Corpus'
 
-        assert basic_fig['layout']['xaxis']['autorange'] is True
-
         assert basic_fig['layout']['xaxis']['showgrid'] is False
 
         assert basic_fig['layout']['xaxis']['zeroline'] is False
