@@ -98,10 +98,13 @@ class BCTModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
+        # Save the DTM to avoid multiple calls.
+        doc_term_matrix = self._doc_term_matrix
+
         # The bootstrap process to get all the trees.
         return [
             self._get_newick_tree(
-                sample_dtm=self._doc_term_matrix.sample(
+                sample_dtm=doc_term_matrix.sample(
                     axis=1,
                     frac=0.8,
                     replace=self._bct_option.replace,
@@ -161,7 +164,7 @@ class BCTModel(BaseModel):
         # Set graph size, title and tight layout.
         plt.gcf().set_size_inches(
             w=9.5,
-            h=(len(self._id_temp_label_map) * 0.5)
+            h=(len(self._id_temp_label_map) * 0.3 + 1)
         )
         plt.title("Bootstrap Consensus Tree Result")
         plt.gcf().tight_layout()

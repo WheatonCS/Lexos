@@ -259,9 +259,8 @@ def cache_multi_cloud_options():
 
         topic_string = str(file_pointer)
         topic_string = re.search(r"'(.*?)'", topic_string)
-        filename = topic_string.group(1)
-        if filename != '':
-            session['multicloudoptions'][file] = filename
+        if topic_string is not None:
+            session['multicloudoptions'][file] = topic_string.group(1)
 
 
 def cache_bubble_viz_option():
