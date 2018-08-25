@@ -43,10 +43,14 @@
 .delete:hover {
     color: red;
 }
-a:hover {
+main a:hover {
     text-decoration: none;
     color: white;
     opacity: 0.7;
+}
+a.beta:hover {
+    text-decoration: underline !important;
+    color: #23527c !important;
 }
 #analyze_button {
     width: 100px;

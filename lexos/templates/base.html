@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Lexos</title>
 
-    {%- set version = 3.2 %}
+    {%- set version = "3.2.0" %}
 
     <meta http-equiv="cache-control" content="max-age=0"/>
     <meta http-equiv="expires" content="0"/>
@@ -114,6 +114,11 @@
 <body>
 <a name="page-top"></a>
 
+<!-- BackToTop Button -->
+<a id="scroll">
+    <i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right"></i>
+</a>
+
 <header class="container">
     <input type="hidden" name="current_id" value="{{ session['id'] }}"/>
     <input type="hidden" name="current_version" value="{{ version }}"/>
@@ -214,9 +219,19 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="{{ url_for('dendrogram.dendrogram') }}">Hierarchical
-                                        Clustering</a></li>
-                                <li><a href="{{ url_for('k_means.k_means') }}">K-Means
-                                    Clustering</a></li>
+                                        Clustering
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('k_means.k_means') }}">
+                                        K-Means Clustering
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('bct_analysis.bct_analysis') }}">
+                                        Bootstrap Consensus Tree (Beta)
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li><a href="{{ url_for('sim_query.similarity') }}">Similarity
@@ -225,7 +240,7 @@
                         </li>
                         <li>
                             <a href="{{ url_for('content_analysis.content_analysis') }}">Content
-                                Analysis</a></li>
+                                Analysis (Beta)</a></li>
                     </ul>
                 </li>
             </ul>

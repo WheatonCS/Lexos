@@ -142,6 +142,15 @@ HIERARCHICALINPUT = (
     'orientation'
 )
 
+# for BCT analysis
+BCTINPUT = (
+    'metric',
+    'linkage',
+    'cutoff',
+    'iterations',
+    'replace'
+)
+
 # for kmeans Clustering
 KMEANINPUT = (
     'viz',
@@ -231,6 +240,14 @@ DEFAULT_HIERARCHICAL_OPTIONS = {
     'metric': 'euclidean',
     'linkage': 'average',
     'orientation': 'bottom'
+}
+
+DEFAULT_BCT_OPTIONS = {
+    'metric': 'euclidean',
+    'linkage': 'average',
+    'cutoff': 0.5,
+    'iterations': 100,
+    'replace': 'without'
 }
 
 DEFAULT_KMEAN_OPTIONS = {
