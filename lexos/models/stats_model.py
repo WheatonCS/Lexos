@@ -1,8 +1,8 @@
 """This is the Stats model which gets basic statistics."""
 
-import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
+from plotly import tools
 from plotly.offline import plot
 from typing import Optional, NamedTuple, List
 from lexos.models.base_model import BaseModel
@@ -97,7 +97,7 @@ class StatsModel(BaseModel):
             dtm_options = MatrixReceiver().options_from_front_end()
             # Get the correct current type.
             token_type = dtm_options.token_option.token_type
-            return "terms" if token_type == "word" else "characters"
+            return "terms" if token_type == "word" else "character n-grams"
 
     def get_corpus_stats(self) -> CorpusStats:
         """Convert word lists completely to statistic.
@@ -221,32 +221,42 @@ class StatsModel(BaseModel):
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._active_doc_term_matrix.index.values]
 
-        # Set up the box plot.
-        box_plot = go.Box(x0=0.5,  # Initial position of the box plot
-                          y=self._active_doc_term_matrix.sum(1).values,
-                          name="Corpus Box Plot",
-                          hoverinfo="y",
-                          marker=dict(color='rgb(10, 140, 200)'))
-
         # Set up the points.
         scatter_plot = go.Scatter(
-            # Get random x values with the range.
-            x=[np.random.uniform(-0.3, 0) for _ in labels],
+            x=[0 for _ in labels],
             y=self._active_doc_term_matrix.sum(1).values,
             name="Corpus Scatter Plot",
             hoverinfo="text",
             mode="markers",
-            text=labels)
+            text=labels
+        )
 
-        # Set up the plot data set.
-        data = [scatter_plot, box_plot]
+        # Set up the box plot.
+        box_plot = go.Box(
+            x0=0,  # Initial position of the box plot
+            y=self._active_doc_term_matrix.sum(1).values,
+            name="Corpus Box Plot",
+            hoverinfo="y",
+            marker=dict(color='rgb(10, 140, 200)')
+        )
 
-        # Hide information on x-axis as we do not really need any of those.
-        # Set the title of the graph.
-        layout = go.Layout(
+        # Create a figure with two subplots and fill the figure.
+        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=True)
+        figure.append_trace(trace=scatter_plot, row=1, col=1)
+        figure.append_trace(trace=box_plot, row=1, col=2)
+
+        # Hide useless information on x-axis and set up title.
+        figure.layout.update(
             title="Document Size Statistics of the Given Corpus",
             xaxis=dict(
-                autorange=True,
+                title="Scatter plot of Text Size",
+                showgrid=False,
+                zeroline=False,
+                showline=False,
+                showticklabels=False
+            ),
+            xaxis2=dict(
+                title="Box Plot of Counts",
                 showgrid=False,
                 zeroline=False,
                 showline=False,
@@ -255,8 +265,8 @@ class StatsModel(BaseModel):
             hovermode="closest"
         )
 
-        # Return a plotly figure.
-        return go.Figure(data=data, layout=layout)
+        # Return the plotly figure.
+        return figure
 
     def get_box_plot(self) -> str:
         """Return a HTML string that is ready to be displayed on the web.
