@@ -40,11 +40,11 @@ $(document).ready( function () {
 {% block title %}Word Cloud{% endblock %}
 
 {% block options %}
-<div class="row">
-  <div class="col-md-12">
-    <legend>Word Cloud Options</legend>
-  </div>
-</div>
+{#<div class="row">#}
+{#  <div class="col-md-12">#}
+{#    <legend>Word Cloud Options</legend>#}
+{#  </div>#}
+{#</div>#}
 {% if JSONObj %}
 <script>
 $(document).ready(function() {
@@ -143,9 +143,9 @@ $(document).ready(function() {
     <div class="col-md-6">
       <label>To modify the word cloud, click on it after changing the options below.</label>
     </div>
-    <div class="col-md-6">
-      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>
-    </div>
+{#    <div class="col-md-6">#}
+{#      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>#}
+{#    </div>#}
   </div>
   <hr>
 </div>
@@ -209,8 +209,9 @@ Modified slightly to use Lexos data.</p>
 {% endblock %}
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
-{% if JSONObj %}
-<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>
-{% endif %}
+    <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+    {# Remove this for now since this button does not function well. #}
+    {#{% if JSONObj %}#}
+        {#<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>#}
+    {#{% endif %}#}
 {% endblock %}
