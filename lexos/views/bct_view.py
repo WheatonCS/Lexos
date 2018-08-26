@@ -32,6 +32,8 @@ def bct_analysis():
 
     try:
         from lexos.models.bct_model import BCTModel
+        # Use a black hole variable to hold the model to get rid of warning.
+        _ = BCTModel()
         # Render the HTML template.
         return render_template(
             'bct_analysis.html',
