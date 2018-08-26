@@ -1,7 +1,6 @@
 from flask import session, render_template, Blueprint
 from lexos.helpers import constants
 from lexos.managers import session_manager
-from lexos.models.bct_model import BCTModel
 from lexos.views.base_view import detect_active_docs
 from lexos.models.filemanager_model import FileManagerModel
 
@@ -31,13 +30,20 @@ def bct_analysis():
     if 'bctoption' not in session:
         session['bctoption'] = constants.DEFAULT_BCT_OPTIONS
 
-    # Render the HTML template.
-    return render_template(
-        'bct_analysis.html',
-        itm="bct-analysis",
-        labels=id_label_map,
-        numActiveDocs=num_active_docs
-    )
+    try:
+        import skbio
+        # Render the HTML template.
+        return render_template(
+            'bct_analysis.html',
+            itm="bct-analysis",
+            labels=id_label_map,
+            numActiveDocs=num_active_docs
+        )
+    except ImportError:
+        return render_template(
+            'bct_analysis_import_error.html',
+            itm="bct-analysis"
+        )
 
 
 @bct_analysis_blueprint.route("/bct_analysis_result", methods=['POST'])
@@ -46,6 +52,8 @@ def get_bct_result():
 
     :return: Send file from directory to the ajax call.
     """
+    # Import the model module.
+    from lexos.models.bct_model import BCTModel
     # Cache all the options.
     session_manager.cache_bct_option()
     session_manager.cache_analysis_option()
