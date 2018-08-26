@@ -31,7 +31,7 @@ def bct_analysis():
         session['bctoption'] = constants.DEFAULT_BCT_OPTIONS
 
     try:
-        import skbio
+        from lexos.models.bct_model import BCTModel
         # Render the HTML template.
         return render_template(
             'bct_analysis.html',
