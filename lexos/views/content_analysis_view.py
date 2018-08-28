@@ -57,6 +57,7 @@ def content_analysis():
                                dictionary_labels=dict_labels,
                                active_dictionaries=active_dicts,
                                toggle_all_value=toggle_all_value,
+                               itm="content-analysis",
                                formula=formula)
     else:
         num_active_docs = detect_active_docs()
@@ -96,12 +97,15 @@ def content_analysis():
                 analysis.add_dictionary(file_name=dict_name,
                                         label=dict_label,
                                         content=content)
-        result_table, formula_errors = analysis.analyze()
+        result_table, corpus_raw_counts_table, files_raw_counts_tables,\
+            formula_errors = analysis.analyze()
         if len(formula_errors) != 0 or result_table is None:
             return error(formula_errors)
         data = {"result_table": result_table,
                 "dictionary_labels": dict_labels,
                 "active_dictionaries": active_dicts,
+                "corpus_raw_counts_table": corpus_raw_counts_table,
+                "files_raw_counts_tables": files_raw_counts_tables,
                 "error": False}
         return json.dumps(data)
 

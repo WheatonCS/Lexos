@@ -1,66 +1,224 @@
-/* #### INITIATE SCRIPTS ON $(DOCUMENT).READY() #### */
-$(document).ready(function () {
+import * as utility from './utility.js'
 
-  // hide the normalize options
-  $("#normalize-options").css({"visibility":"hidden"});
+/**
+ * Format the ajax call response to HTML format string.
+ * @param {object} response: a json format string.
+ * @return {object}: a json formatted file report.
+ */
+function formatFileReportResponse (response) {
+  // Extract constant result from response and put the result into a reasonable report sentence.
+  const unit = response['unit']
+  const mean = `Average document size is ${response['mean']} ${unit}.`
+  const stdDeviation = `Standard deviation of documents is ${response['std_deviation']} ${unit}.`
+  const IQR = `Interquartile range of documents is ${response['inter_quartile_range']} ${unit}.`
 
-  // set the normalize option to raw count
-  $("#normalizeTypeRaw").attr("checked", true)
+  // Find if anomaly detected by standard error analysis.
+  const noAnomalySe = response['anomaly_se_small'].length === 0 && response['anomaly_se_large'].length === 0
+  // Pick appropriate result for standard error analysis.
+  const anomalySeResult =
+    noAnomalySe ? '<b>No</b> anomaly detected by standard error test.'
+      : 'Anomaly <b>detected</b> by standard error test.' +
+      response['anomaly_se_small'].map(
+        function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }).join('') +
+      response['anomaly_se_large'].map(
+        function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` }).join('')
 
+  // Find if anomaly detected by standard error analysis.
+  const noAnomalyIqr = response['anomaly_iqr_small'].length === 0 && response['anomaly_iqr_large'].length === 0
+  // Pick appropriate result for standard error analysis.
+  const anomalyIqrResult =
+    noAnomalyIqr ? '<b>No</b> anomaly detected by interquartile range test.'
+      : 'Anomaly <b>detected</b> by interquartile range test.' +
+      response['anomaly_iqr_small'].map(
+        function (file) { return `<p style="padding-left: 20px"><b>Small:</b> ${file}</p>` }).join('') +
+      response['anomaly_iqr_large'].map(
+        function (file) { return `<p style="padding-left: 20px"><b>Large:</b> ${file}</p>` }).join('')
 
-  // Reset the maximum number of documents when a checkbox is clicked
-  $('.minifilepreview').click(function () {
-    $('#cullnumber').attr('max', $('.minifilepreview:checked').length)
-  })
+  // Return the retracted information.
+  return {
+    'IQR': IQR,
+    'mean': mean,
+    'stdDeviation': stdDeviation,
+    'anomalySeResult': anomalySeResult,
+    'anomalyIqrResult': anomalyIqrResult
+  }
+}
+
+/**
+ * Display the result of the corpus statistics report on web.
+ * @return {string}: formatted file report.
+ */
+function generateStatsFileReport () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = utility.jsonifyForm()
+
+  // send the ajax request
+  utility.sendAjaxRequest('/corpusStatsReport', form)
+    .done(
+      function (response) {
+        const formattedResult = formatFileReportResponse(response)
+        $('#file-report-mean').html(formattedResult.mean)
+        $('#file-report-std-deviation').html(formattedResult.stdDeviation)
+        $('#file-report-IQR').html(formattedResult.IQR)
+        $('#file-report-anomaly-se-result').html(formattedResult.anomalySeResult)
+        $('#file-report-anomaly-iqr-result').html(formattedResult.anomalyIqrResult)
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        // If fail hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        utility.runModal('Error encountered while generating the corpus statistics.')
+      })
+}
+
+/**
+ * Display the result of the box plot on web page.
+ * @return {string}: formatted file report.
+ */
+function generateStatsBoxPlot () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = utility.jsonifyForm()
+
+  // send the ajax request
+  utility.sendAjaxRequest('/corpusBoxPlot', form)
+    .done(
+      function (response) {
+        $('#box-plot').html(response)
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        utility.runModal('Error encountered while generating the box plot.')
+      })
+}
+
+/**
+ * Display the result of the file statistics on web.
+ * @return {string}: formatted file report.
+ */
+function generateStatsFileTable () {
+  $('#status-analyze').css({'visibility': 'visible'})
+  // convert form into an object map string to string
+  const form = utility.jsonifyForm()
+
+  // the configuration for creating data table
+  const dataTableConfig = {
+    // Set the initial page length.
+    pageLength: 10,
+
+    // Replace entries to documents.
+    language: {
+      'lengthMenu': 'Display _MENU_ documents',
+      'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
+    },
+
+    // Specify where the button is.
+    dom: `<'row'<'col-sm-6'l><'col-sm-6 text-right'B>>
+          <'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>`,
+
+    // Specify all the download buttons that are displayed on the page.
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5']
+  }
+
+  // send the ajax request
+  utility.sendAjaxRequest('/fileStatsTable', form)
+    .done(
+      function (response) {
+        const outerTableDivSelector = $('#file-stats-table')
+        // put the response onto the web page
+        outerTableDivSelector.html(response)
+        // initialize the data table
+        outerTableDivSelector.children().DataTable(dataTableConfig)
+        // display the corpus statistics result
+      })
+    .fail(
+      function (jqXHR, textStatus, errorThrown) {
+        // If fail hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+        console.log('textStatus: ' + textStatus)
+        console.log('errorThrown: ' + errorThrown)
+        utility.runModal('Error encountered while generating the file statistics.')
+      })
+    .always(
+      function () {
+        // Always hide the loading icon.
+        $('#status-analyze').css({'visibility': 'hidden'})
+      }
+    )
+}
+
+$(function () {
+  // Hide the stats result div.
+  $('#file-stats-result').css({'display': 'none'})
+  $('#corpus-stats-result').css({'display': 'none'})
+
+  // Hide the normalize options and set it to raw count.
+  $('#normalizeTypeRaw').attr('checked', true)
+  $('#normalize-options').css({'visibility': 'hidden'})
 
   // Toggle file selection & reset the maximum number of documents when 'Toggle All' is clicked
-  $('#allCheckBoxSelector').click(function () {
+  $('#allCheckBoxSelector').on('click', function () {
     if (this.checked) {
-      $('.minifilepreview:not(:checked)').trigger('click')
-      $('#cullnumber').attr('max', $('.minifilepreview:checked').length)
+      $('.file-selector:not(:checked)').trigger('click')
+      $('#cullnumber').attr('max', $('.file-selector:checked').length)
     } else {
-      $('.minifilepreview:checked').trigger('click')
+      $('.file-selector:checked').trigger('click')
       $('#cullnumber').attr('max', '0')
     }
   })
 
-  /* #### INITIATE MAIN DATATABLE #### */
-  //* Change the element name and test whether the table variable persists
-  table = $('#statstable').DataTable({
-    'scrollY': '370px', // Table max-height
-    'scrollCollapse': true, // Collapse shorter
-    // Change DataTable default language
-    'language': {
-      'lengthMenu': 'Display _MENU_ documents',
-      'info': 'Showing _START_ to _END_ of _TOTAL_ documents'
-    },
-    // Main column definitions
-    //* May need to make the index sortable.
-    //* Need to modify natural sorting to be case insensitive.
-    'columnDefs': [
-      { sortable: true, targets: '_all' },
-      { type: 'natural', targets: '_all' }
-    ],
-    'ordering': true,
-    'searching': true,
-    'paging': true,
-    'pagingType': 'full_numbers',
-    'pageLength': 10,
-    'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, 'All']],
-    'dom': "<'row'<'col-sm-6'l><'col-sm-6 to-right'B>>" +
-    "<'row'<'col-sm-12'tr>>" +
-    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-    'buttons': [
-      'copyHtml5',
-      'excelHtml5',
-      'csvHtml5',
-      {
-        extend: 'csvHtml5',
-        text: 'TSV',
-        fieldSeparator: '\t',
-        extension: '.tsv'
-      },
-      'pdfHtml5'
-    ]
+  /**
+   * The event handler for generate statistics clicked. Before generate
+   * stats result, get number of active files and id of active files.
+   */
+  $('#get-stats').click(function () {
+    // Get all the checked files.
+    const checkedFiles = $('.eachFileCheck :checked')
+    // Set a variable to store checked file ids.
+    let activeFileIds = ''
+    // Store checked file ids by putting a blank between each id.
+    checkedFiles.each(function () {
+      activeFileIds += `${$(this).val()} `
+    })
+    // Store the variable to input field.
+    $('#active_file_ids').val(activeFileIds)
+    // Store the number of active files.
+    $('#num_active_files').val(checkedFiles.length)
+
+    // Get the possible error during the submission.
+    const error = utility.submissionError(1)
+
+    // Get the result div selector.
+    const corpusResult = $('#corpus-stats-result')
+    const fileResult = $('#file-stats-result')
+
+    if (error === null) {
+      // Get the file stats table.
+      generateStatsFileTable()
+      // Display the file result table.
+      fileResult.css({'display': 'block'})
+      // Only get corpus info when there are more than one file.
+      if (checkedFiles.length > 1) {
+        // Get the corpus result.
+        generateStatsFileReport()
+        // Get the box plot.
+        generateStatsBoxPlot()
+        // Display the result.
+        corpusResult.css({'display': 'block'})
+        // Scroll to the corpus result div.
+        utility.scrollToDiv(corpusResult)
+      } else { // Else hide the corpus stats result div.
+        corpusResult.css({'display': 'none'})
+        // Scroll to the file result div.
+        utility.scrollToDiv(fileResult)
+      }
+    } else {
+      utility.runModal(error)
+    }
   })
 })

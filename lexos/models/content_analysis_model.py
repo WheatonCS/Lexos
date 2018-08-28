@@ -1,5 +1,7 @@
+"""This is the content analysis model which determines tone of texts."""
 from copy import deepcopy
 from typing import Optional
+import random
 
 import pandas as pd
 
@@ -9,8 +11,10 @@ from lexos.receivers.contentanalysis_receiver import \
 
 
 class ContentAnalysisModel(object):
+    """The class for the ContentAnalysisModel."""
+
     def __init__(self, test_options: Optional[ContentAnalysisOption] = None):
-        """A model to manage the content analysis tool.
+        """Manage the content analysis tool (using a model).
 
         :param test_options:
             the input used in testing to override the dynamically loaded option
@@ -34,7 +38,7 @@ class ContentAnalysisModel(object):
         self._toggle_all = True
 
     def add_file(self, file_name: str, label: str, content: str):
-        """Adds a file to the corpus.
+        """Add a file to the corpus.
 
         :param content: file content
         :param file_name: file name
@@ -47,7 +51,7 @@ class ContentAnalysisModel(object):
                                  total_word_counts=total_word_counts))
 
     def add_dictionary(self, file_name: str, label: str, content: str):
-        """Adds a dictionary.
+        """Add a dictionary.
 
         :param file_name: name of the file
         :param label: label of the file
@@ -60,23 +64,85 @@ class ContentAnalysisModel(object):
                                              label=label))
 
     def get_active_dicts(self) -> list:
-        """Gets a list containing all active dictionaries.
+        """Get a list containing all active dictionaries.
 
         :return: a list containing all active dictionaries
         """
         return [dictionary for dictionary in self.dictionaries
                 if dictionary.active]
 
-    def count(self):
-        """Counts all dictionaries for all active files in the corpus."""
+    def count(self) -> list:
+        """Count all dictionaries for all active files in the corpus.
+
+        :return: a list of phrase objects
+        """
         self._counters = []
         dictionaries = self.join_active_dicts()
         for file in deepcopy(self._corpus):
             dictionaries = count_phrases(dictionaries, file)
             self.get_dictionary_counts(dictionaries)
+        return dictionaries
 
-    def get_dictionary_counts(self, dictionaries):
-        """Gets the counts for each dictionary.
+    def generate_corpus_counts_table(self, dictionaries: list, colors) -> str:
+        """Generate a html table.
+
+         Each row has a phrase, its count in the entire corpus, and the
+         dictionary it belongs to.
+
+        :param colors: dict with a hex color for each dictionary
+        :param dictionaries: list of Phrase objects
+        :return: str containing the html table
+        """
+        # Set table headers
+        corpus_counts_html = "<table class='corpus dataframe " \
+                             "table table-striped table-bordered'><thead>" \
+                             "<tr><th>Dictionary</th>" \
+                             "<th>Phrase</th><th>Count</th></tr></thead>" \
+                             "<tbody>"
+        # Add a row for each phrase found in the corpus
+        for phrase in dictionaries:
+            count = 0
+            for i in phrase.file_counts:
+                count += phrase.file_counts[i]
+            corpus_counts_html += "<tr style='color:#" + \
+                                  colors[phrase.dict_label] + ";'>" + \
+                                  "<td>" + phrase.dict_label + "</td>" + \
+                                  "<td>" + phrase.content + "</td>" \
+                                  "<td >" + str(count) + "</td></tr>"
+        corpus_counts_html += "</tbody></table>"
+        return corpus_counts_html
+
+    def generate_files_raw_counts_tables(self, dictionaries: list,
+                                         colors: dict) -> list:
+        """Generate a html table for each file in the corpus.
+
+        Each row has a phrase, its count, and the dictionary it belongs to.
+
+        :param colors: dict with a hex color for each dictionary
+        :param dictionaries: list of Phrase objects
+        :return: list of str containing the html tables
+        """
+        tables = []
+        for file in self._corpus:
+            # Set table headers
+            html_table = "<table class='file dataframe table " \
+                         "table-striped table-bordered'><caption>" +\
+                         file.label + \
+                         "</caption><thead><tr><th>Dictionary</th>" \
+                         "<th>Phrase</th><th>Count</th></tr></thead><tbody>"
+            for phrase in dictionaries:
+                html_table += "<tr style='color:#" + \
+                              colors[phrase.dict_label] + ";'>" + \
+                              "<td>" + phrase.dict_label + "</td>" + \
+                              "<td>" + phrase.content + "</td>" \
+                              "<td >" + str(phrase.file_counts[file.label]) +\
+                              "</td></tr>"
+            html_table += "</tbody></table>"
+            tables.append(html_table)
+        return tables
+
+    def get_dictionary_counts(self, dictionaries: list):
+        """Get the counts for each dictionary.
 
         :param dictionaries: list of Phrase object
         """
@@ -119,7 +185,7 @@ class ContentAnalysisModel(object):
             self._formulas.append(result)
 
     def generate_averages(self):
-        """Calculates the averages of every row in the table."""
+        """Calculate the averages of every row in the table."""
         self._averages = []
         scores_sum = 0
         total_word_counts_sum = 0
@@ -160,7 +226,7 @@ class ContentAnalysisModel(object):
         self._averages.append(scores_avg)
 
     def join_active_dicts(self) -> list:
-        """Joins all active dicts into on list of Phrase objects.
+        """Join all active dicts into on list of Phrase objects.
 
         :return: list of phrases contained in the active dictionaries
         """
@@ -172,17 +238,17 @@ class ContentAnalysisModel(object):
         return dictionaries
 
     def to_html(self) -> str:
-        """Generates an html table from dataframe.
+        """Generate an html table from dataframe.
 
         :return: dataframe table in html
         """
         df = self.to_data_frame()
-        html = df.to_html(classes="table table-striped table-bordered",
+        html = df.to_html(classes="result table table-striped table-bordered",
                           index=False)
         return html
 
     def to_data_frame(self) -> pd.DataFrame:
-        """Generates a dataframe containing all values stored in this class.
+        """Generate a dataframe containing all values stored in this class.
 
         :return: a data frame containing all values stored in this class
         members
@@ -203,7 +269,7 @@ class ContentAnalysisModel(object):
         return df
 
     def is_secure(self) -> bool:
-        """Checks if the formula is secure.
+        """Check if the formula is secure.
 
         The formula is secure if only contains names of uploaded dictionaries
         and approved math symbols.
@@ -223,7 +289,7 @@ class ContentAnalysisModel(object):
         return False
 
     def save_formula(self):
-        """Saves formula from front-end in the class member _formula."""
+        """Save formula from front-end in the class member _formula."""
         if self._test_options is not None:
             formula = self._test_options.formula
         else:
@@ -236,7 +302,7 @@ class ContentAnalysisModel(object):
         return self.check_formula()
 
     def check_formula(self) -> str:
-        """Checks if there are any errors in the formula.
+        """Check if there are any errors in the formula.
 
         :return: error message if there is an empty str or None if there is
                  no errors
@@ -263,27 +329,35 @@ class ContentAnalysisModel(object):
         return ""
 
     def analyze(self) -> (Optional[str], Optional[str]):
-        """Generates html table containing counts, averages, & formula.
+        """Generate html table containing counts, averages, & formula.
 
         :return: formula_errors: str with error message if there is no
                  errors.
                  result_table: str containing result html table or None if
                  there are any errors in the formula
         """
-        self.count()
+        dictionaries = self.count()
         if self.is_secure():
             formula_errors = self.save_formula()
             self.generate_scores()
             self.generate_averages()
             result_table = self.to_html()
+            colors = self.dictionary_colors
+            individual_counts_table = self.generate_corpus_counts_table(
+                dictionaries, colors)
+            files_raw_counts_tables = self.generate_files_raw_counts_tables(
+                dictionaries, colors)
         else:
             formula_errors = "Formula error: Invalid input"
             result_table = ""
-        return result_table, formula_errors
+            individual_counts_table = ""
+            files_raw_counts_tables = ""
+        return result_table, individual_counts_table, \
+            files_raw_counts_tables, formula_errors
 
     @property
     def dictionaries(self) -> list:
-        """:return: dictionaries"""
+        """:return: dictionaries."""
         return self._dictionaries
 
     @dictionaries.setter
@@ -293,27 +367,39 @@ class ContentAnalysisModel(object):
 
     @property
     def corpus(self) -> list:
-        """:return: corpus"""
+        """:return: corpus."""
         return self._corpus
 
     @property
     def counters(self) -> list:
-        """:return: counters"""
+        """:return: counters."""
         return self._counters
 
     @property
     def scores(self) -> list:
-        """Sets scores."""
+        """Set scores."""
         return self._scores
 
     @property
     def averages(self) -> list:
-        """:return: averages"""
+        """:return: averages."""
         return self._averages
 
     @property
+    def dictionary_colors(self) -> dict:
+        """Generate a random color for each dictionary.
+
+        :return: dict with a color for each dictionary
+        """
+        colors = {}
+        for dictionary in self._dictionaries:
+            colors[dictionary.label] = ''.join(
+                [random.choice('0123456789ABCD') for x in range(6)])
+        return colors
+
+    @property
     def content_analysis_option(self) -> ContentAnalysisOption:
-        """Gets front-end options from ContentAnalysisReceiver.
+        """Get front-end options from ContentAnalysisReceiver.
 
         :return: front-end or test options
         """
@@ -325,17 +411,17 @@ class ContentAnalysisModel(object):
 
     @property
     def test_option(self):
-        """:return: test options"""
+        """:return: test options."""
         return self._test_options
 
     @test_option.setter
     def test_option(self, options):
-        """Sets test options."""
+        """Set test options."""
         self._test_options = options
 
 
 def count_phrases(dictionary: list, file: object):
-    """Counts each phrase in the dictionary in the given file.
+    """Count each phrase in the dictionary in the given file.
 
     If a has with more than 1 word is found in a file, it is deleted
     from the file to prevent double count.
@@ -353,14 +439,18 @@ def count_phrases(dictionary: list, file: object):
     for phrase in dictionary:
         phrase.count = count_phrase_in_text(phrase=phrase.content,
                                             text=file.content)
+        phrase.file_counts[file.label] = count_phrase_in_text(
+            phrase=phrase.content, text=file.content)
         if ' ' in phrase.content:
             file.content = file.content.replace(phrase.content, ' ')
     return dictionary
 
 
 class Document(object):
+    """This is a class which treats the Document as an object."""
+
     def __init__(self):
-        """An object of this class represents a document.
+        """Represent a document through the object parameter.
 
         _active: Boolean that indicates if the document is active
         _label: file label
@@ -373,36 +463,38 @@ class Document(object):
 
     @property
     def active(self) -> bool:
-        """:return: document active"""
+        """:return: document active."""
         return self._active
 
     @active.setter
     def active(self, active: bool):
-        """Sets document active"""
+        """Set document active."""
         self._active = active
 
     @property
     def label(self) -> str:
-        """:return: document label"""
+        """:return: document label."""
         return self._label
 
     @label.setter
     def label(self, label: str):
-        """Sets document name."""
+        """Set document name."""
         self._label = label
 
     @property
     def name(self) -> str:
-        """:return: document name"""
+        """:return: document name."""
         return self._name
 
 
 class Dictionary(Document):
+    """This is a class which treats the Document as a Dictionary."""
+
     def __init__(self, content: list, file_name: str, label: str,
                  active: bool = True):
-        """An object of this class represents a dictionary.
+        """Represent a dictionary using an object from this class.
 
-        :param content: list of word/phrses separated by commas
+        :param content: list of word/phrases separated by commas
         :param file_name: original filename
         :param label: file label
         :param active: Boolean that indicates if the document is active
@@ -414,19 +506,21 @@ class Dictionary(Document):
 
     @property
     def content(self) -> list:
-        """:return: dictionary content"""
+        """:return: dictionary content."""
         return self._content
 
     @content.setter
     def content(self, content: list):
-        """Sets the dictionary content."""
+        """Set the dictionary content."""
         self._content = content
 
 
 class File(Document):
+    """This is a class taking the object Document as a parameter."""
+
     def __init__(self, content: str, file_name: str, label: str,
                  total_word_counts: int, active: bool = True):
-        """An object of this class represents a file.
+        """Represent a file using an object from this class.
 
         :param content: file content
         :param file_name: original filename
@@ -442,33 +536,36 @@ class File(Document):
 
     @property
     def content(self) -> str:
-        """:return: file content"""
+        """:return: file content."""
         return self._content
 
     @content.setter
     def content(self, content: str):
-        """Sets file content."""
+        """Set file content."""
         self._content = content
 
     @property
     def total_word_count(self) -> int:
-        """:return: total_word_count"""
+        """:return: total_word_count."""
         return self._total_word_counts
 
     @total_word_count.setter
     def total_word_count(self, total_word_counts: int):
-        """Sets the file's word count."""
+        """Set the file's word count."""
         self._total_word_counts = total_word_counts
 
 
 class Phrase(object):
+    """This is a class that treats an object as a phrase."""
+
     def __init__(self, content: str, dict_label: str, count: int = 0):
-        """An object of this class represents a Phrase.
+        """Represent a Phrase using an object from this class.
 
         :param content: the phrase or word
         :param dict_label: label of dictionary it belongs to
-        :param count: how many times it apears in a file
+        :param count: how many times it appears in a file
         """
         self.content = content
         self.dict_label = dict_label
         self.count = count
+        self.file_counts = {}

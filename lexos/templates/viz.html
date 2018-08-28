@@ -16,10 +16,6 @@ $(function() {
   // If there is data scroll down to the graph on page load
   document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
   // Handle the return to top links
-  $('.to-top').click(function(){
-      $("html, body").animate({ scrollTop: 0 }, 800);
-      return false;
-  });
 });
 </script>
 <style type="text/css">
@@ -28,10 +24,14 @@ $(function() {
 </style>
 {% endblock %}
 
-{% block title %}visualizer{% endblock %}
+{% block title %}BubbleViz{% endblock %}
 
 {% block options %}
-<div id="status-prepare"><img src="{{ url_for('static', filename='images/loading_icon.svg') }}?ver={{version}}" alt="Loading..."></div>
+    <div id="status-prepare">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+           style="color: #0068AF;"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
 
 <legend>BubbleViz Options</legend>
 <div class="col-md-6">
@@ -44,7 +44,7 @@ $(function() {
 			<!-- Need to empty the segmentlist value if Toggle All is checked -->
 			{% for fileID, label in labels.items() %}
 			<div class="forCheckBox">
-				<label>{{label}} 
+				<label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
 					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
 				</label>
 			</div>
@@ -55,7 +55,7 @@ $(function() {
 		</div>
 	</div>
 </div>
-<div class="col-md-6">	
+<div class="col-md-6">
 	<legend>Filtering Options</legend>
 		<label>Graph Size:
 			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize']}}"/>
@@ -80,13 +80,10 @@ $(function() {
 <a name="graph-anchor" id="graph-anchor"></a>
 <div id="viz"></div>
 <div class="row">
-<div class="col-md-12">
-  <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
-</div>
 </div>
 
 <!-- Canvg Used for Save to PNG -->
-<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script> 
+<script type="text/javascript" src="http://gabelerner.github.io/canvg/rgbcolor.js"></script>
 <script type="text/javascript" src="http://gabelerner.github.io/canvg/StackBlur.js"></script>
 <script type="text/javascript" src="http://gabelerner.github.io/canvg/canvg.js"></script>
 <canvas id="svg-canvas" style="display:none;"></canvas>

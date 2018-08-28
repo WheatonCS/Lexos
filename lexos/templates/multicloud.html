@@ -144,19 +144,20 @@ $(document).ready( function () {
 </script>
 {% endblock %}
 
-{% block title %}visualizer{% endblock %}
+{% block title %}Multicloud{% endblock %}
 
 {% block options %}
-<div class="row">
-	<div class="col-md-12">
-		<legend style="min-width:200px;">Multicloud Options</legend>
-	</div>
-</div>
+{#<div class="row">#}
+{#	<div class="col-md-12">#}
+{#		<legend style="min-width:200px;">Multicloud Options</legend>#}
+{#	</div>#}
+{#</div>#}
 
 <div class="row">
 	<div class="col-md-6">
 		<div>
 		<input id="analysisType" type="hidden" name="analysistype" value="{{"userfiles" if session['multicloudoptions']['analysistype'] == 'userfiles' }}"/>
+		<!--
 		<input type="checkbox" name="options-toggle" data-size="large" data-on-color="success" data-off-color="primary"
 			   data-on-text="Document Clouds" data-off-text="Topic Clouds" data-handle-width="150" data-label-width="10"
 			   class="bootstrap-switch-large" {{"checked" if session['multicloudoptions']['analysistype'] == 'userfiles' }}/>
@@ -166,6 +167,7 @@ $(document).ready( function () {
 			   Topic clouds are word clouds generated from the <code>.txt</code> output from
 			   <a href='http://mallet.cs.umass.edu/' target='_blank'>MALLET</a>. Mallet output files should be uploaded from this page by switching to Topic Clouds mode, rather than from the Lexos Upload tool."
 			   style="margin-left:8px;cursor:pointer;font-size:18px;"></i>
+		-->
 		</div>
 		<fieldset class="multicloud-options" id="multicloud-selection" class="cf">
 			<legend>Select Document(s)</legend>
@@ -176,7 +178,7 @@ $(document).ready( function () {
 			<div id="vizcreateoptions" style="padding-left:15px;">
 				{% for fileID, label in labels.items() %}
 					<div class="forCheckBox">
-					<label>{{label}}
+					<label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
 						<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
 					</label>
 				</div>
@@ -224,7 +226,7 @@ $(document).ready( function () {
 
 
 {% block submit %}
-<br>
+
 <input class="bttn bttn-action" id="getmultiviz" type="button" value="Get Graphs"/>
 
 <p class="viz-tips" id="tips"></p>

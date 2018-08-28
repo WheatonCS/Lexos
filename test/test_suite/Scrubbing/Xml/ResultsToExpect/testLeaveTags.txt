@@ -1,0 +1,1 @@
+<stage type="setting"> scene <view>morningroom in algernons flat in halfmoon street</view></stage> 

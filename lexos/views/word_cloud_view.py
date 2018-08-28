@@ -37,8 +37,8 @@ def word_cloud():
         # there is no wordcloud option so we don't initialize that
         return render_template(
             'wordcloud.html',
-            labels=labels,
             itm="word-cloud",
+            labels=labels,
             numActiveDocs=num_active_docs)
     if request.method == "POST":
         # "POST" request occur when html form is submitted
@@ -84,7 +84,8 @@ def word_cloud():
             reverse=True)
         column_values = []
         for term in terms:
-            rows = [term["name"].encode('utf-8'), term["size"]]
+            # rows = [term["name"].encode('utf-8'), term["size"]]
+            rows = [term["name"], term["size"]]
             column_values.append(rows)
         # Turn the JSON object into a JSON string for the front end
         json_obj = json.dumps(json_obj)

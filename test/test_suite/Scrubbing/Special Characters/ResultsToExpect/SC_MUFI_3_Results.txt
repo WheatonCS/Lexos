@@ -1,0 +1,6 @@
+small letter ae æ
+capital letter AE Æ
+small letter sharp s ß
+capital letter sharp s ẞ
+small letter f with a curl 
+capital letter insular F with dot below 

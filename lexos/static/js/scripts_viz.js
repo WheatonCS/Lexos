@@ -56,7 +56,7 @@ $(document).ready(function () {
         var currnet = $(ui.selecting.tagName, e.target).index(ui.selecting);   //gets index of current taget label
         if (e.shiftKey && prev > -1) {      //if you were holding the shift key and there was a box previously clicked
           //take the slice of labels from index prev to index curr and give them the 'ui-selected' class
-          $(ui.selecting.tagName,e.target).slice(Math.min(prev,currnet)+1, Math.max(prev,currnet)+1).addClass('ui-selected');
+          $(ui.selecting.tagName,e.target).slice(Math.min(prev,current)+1, Math.max(prev,current)+1).addClass('ui-selected');
           prev = -1;  //reset prev index
         }else{
           prev = currnet;  //set prev to current if not shift click
@@ -184,7 +184,14 @@ $(window).on('load', function () {
     var w = window.open()
     var img = $('#svg-img').clone().css('display', 'block')
     var html = $('<div/>')
-    html.append("<h3>Use your browser's Save as function to save the image</h3>")
+    html.append('<h2 style=\'margin-left: 30px\'>Instructions for Saving Image</h2>')
+    html.append('<h3 style=\'font-size: 16px; margin-left: 30px\'><strong>For Mozilla Firefox:</strong></h3><ol>')
+    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PNG: Right click on the image and choose "Save Image As...".</li>')
+    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PDF: Right click and view image, then select your browser\'s print operation and choose print to PDF.</li></ol>')
+    html.append('<h3 style=\'font-size: 16px; margin-left: 30px\'><strong>For Chrome:</strong></h3>')
+    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>Right click on the image and choose to "Open image in new tab".</li>')
+    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PNG: Right click on the image and choose to "Save image as...".</li>')
+    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PDF: Select your browser\'s print operation and choose print to PDF.</li></ol>')
     html.append(img)
     $(w.document.body).html(html)
     // End Save

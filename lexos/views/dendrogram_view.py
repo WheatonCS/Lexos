@@ -22,12 +22,12 @@ def dendrogram():
         session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
     if 'hierarchyoption' not in session:
         session['hierarchyoption'] = constants.DEFAULT_HIERARCHICAL_OPTIONS
-    labels = FileManagerModel().load_file_manager().get_active_labels()
+    labels = FileManagerModel().load_file_manager().get_active_labels_with_id()
     return render_template(
         'dendrogram.html',
         labels=labels,
         numActiveDocs=num_active_docs,
-        itm="hierarchical")
+        itm="hierarchical-clustering")
 
 
 @dendrogram_blueprint.route("/dendrogramDiv", methods=['POST'])

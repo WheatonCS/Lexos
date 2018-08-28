@@ -33,22 +33,18 @@ $(document).ready( function () {
   // If there is data scroll down to the graph on page load
   document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
   // Handle the return to top links
-  $('.to-top').click(function(){
-      $("html, body").animate({ scrollTop: 0 }, 800);
-      return false;
-  });
 });
 </script>
 {% endblock %}
 
-{% block title %}visualizer{% endblock %}
+{% block title %}Word Cloud{% endblock %}
 
 {% block options %}
-<div class="row">
-  <div class="col-md-12">
-    <legend>Word Cloud Options</legend>
-  </div>
-</div>
+{#<div class="row">#}
+{#  <div class="col-md-12">#}
+{#    <legend>Word Cloud Options</legend>#}
+{#  </div>#}
+{#</div>#}
 {% if JSONObj %}
 <script>
 $(document).ready(function() {
@@ -59,7 +55,7 @@ $(document).ready(function() {
   }
   var config = {
     columns: [{ title: "Term" }, { title: "Count" }],
-    data: data    
+    data: data
   }
   $('#termcounts').DataTable(config);
 });
@@ -100,7 +96,7 @@ $(document).ready(function() {
   </div>
 <!--   <div class="col-md-1">
     {% if JSONObj %}
-    <div id="statsBtn"> 
+    <div id="statsBtn">
       <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
     </div>
     {% endif %}
@@ -117,7 +113,7 @@ $(document).ready(function() {
       <div id="vizcreateoptions" style="padding-left:15px;">
         {% for fileID, label in labels.items() %}
           <div class="forCheckBox">
-            <label>{{label}} 
+            <label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
               <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
             </label>
           </div>
@@ -145,12 +141,11 @@ $(document).ready(function() {
 <div id="rule">
   <div class="row">
     <div class="col-md-6">
-      <a class="to-top" style="margin-right:10px;"><i class="to-top fa fa-arrow-circle-up fa-2x" data-toggle="tooltip" data-container="body" data-trigger="hover focus" data-html="true" data-placement="right" title="Back to Top"></i></a>
       <label>To modify the word cloud, click on it after changing the options below.</label>
     </div>
-    <div class="col-md-6">
-      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>
-    </div>
+{#    <div class="col-md-6">#}
+{#      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>#}
+{#    </div>#}
   </div>
   <hr>
 </div>
@@ -159,7 +154,7 @@ $(document).ready(function() {
   <p><label for="maxwords">Number of words:</label> <input type="number" value="250" min="1" id="maxwords">
   <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
   <p><label>Download:</label>
-    <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a> 
+    <a id="download-svg" href="#" target="_blank" class="btn btn-primary" role="button">SVG</a>
     <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
   </p>
 </div>
@@ -188,7 +183,7 @@ $(document).ready(function() {
 <hr>
 
 <p id="wordcloudcopyright"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
-<p>Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
+<p id="copyright_tag">Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
 Modified slightly to use Lexos data.</p>
 </form>
 
@@ -214,8 +209,9 @@ Modified slightly to use Lexos data.</p>
 {% endblock %}
 
 {% block submit %}
-<input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
-{% if JSONObj %}
-<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>
-{% endif %}
+    <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+    {# Remove this for now since this button does not function well. #}
+    {#{% if JSONObj %}#}
+        {#<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>#}
+    {#{% endif %}#}
 {% endblock %}

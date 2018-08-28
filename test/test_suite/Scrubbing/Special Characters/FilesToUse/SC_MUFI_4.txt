@@ -1,0 +1,7 @@
+small letter: ae &aelig;
+capital letter AE: &AElig;
+small letter sharp s: &szlig;
+capital letter sharp s: &SZlig;
+small letter f with a curl: &fcurl;
+capital letter insular F with dot below: &Finsdotbl;
+turned small f: &fturn;

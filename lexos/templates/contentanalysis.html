@@ -15,17 +15,23 @@
   {% endif %}
     <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_content_analysis.js') }}?ver={{version}}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/content_analysis.css') }}?ver={{version}}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_scrub.js') }}?ver={{version}}"></script> -->
 {% endblock %}
 {% block content %}
 <div class="row">
+    <div class="col-md-12">
+        <p style="color:orangered;">This feature is still in Beta. If you have problems, please <a class="beta" href="https://github.com/WheatonCS/Lexos/issues/new" target="_blank">open an issue</a> on our GitHub site.</p>
+    </div>
+</div>
+    <div class="row">
     <div class="col-md-3">
-        <legend id="Dictionaries" class="has-chevron">
+        <legend id="Dictionaries">
             Dictionaries
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
-            <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
+            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body"
+               title="Upload a text file containing a comma separated list of key words and phrases associated with the characteristic to test.
+               (e.g. If one is analyzing sentiment, a positive file might include <em>happy, very happy, great, good</em>.)" style="padding-left:4px;font-size:18px;"></i>
         </legend>
-        <div class="collapse" >
+        <div class="collapse in" aria-expanded="true" >
             <div class="col-md-12" id="statsFileSelectcontainer" name="segmentlistdiv" style="overflow:auto; float: left; max-height: 320px; min-height: 2em;">
                 <div class="forAllCheckBox" id="forAllCheckBox" align="left">
                     {% if dictionary_labels|length > 0 %}
@@ -53,12 +59,15 @@
         </div>
     </div>
     <div class="col-md-5">
-        <legend id="Dictionaries" class="has-chevron">
+        <legend id="Dictionaries">
             Formula
-            <i class="fa fa-question-circle lexos-tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="" style="padding-left:4px;font-size:18px;"></i>
-            <span class="fa fa-chevron-right rotate {{ 'showing' if lem_showing }}" data-target="#lemmasPanel" aria-expanded="false" aria-controls="lemmasPanel"></span>
+            <i class="fa fa-question-circle lexos-tooltip-trigger"
+               data-toggle="tooltip" data-html="true"
+               data-placement="right" data-container="body"
+               title="Create a formula that uses the dictionary buttons to compute a final score (e.g. [happy] – [sad] )." style="padding-left:4px;font-size:18px;">
+            </i>
         </legend>
-        <div class="collapse" id="lemmasPanel">
+        <div class="collapse in" id="lemmasPanel" aria-expanded="true">
             <div class="optuploadbuttondiv">
                 <div id="big_wrapper">
                     <div id="calculator_wrapper">
@@ -107,13 +116,23 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row" style="margin-top: 20px;">
-    <div class="col-md-1">
-        <input class="bttn bttn-action" id="analyze_button" value="Analyze" type="button" onclick="analyze()">
+    <div class="col-md-2">
+            <div class="col-md-1">
+                <input class="bttn bttn-action" id="analyze_button" value="Analyze" type="button" onclick="analyze()">
+            </div>
     </div>
 </div>
+
 <div class="row" style="margin-top: 20px;">
     <div id="table"></div>
+</div>
+<div class="row" id="search" style="display: none">
+    Search all tables <input type='search' id='Search_All'/><br>
+</div>
+<div class="row" style="margin-top: 20px;">
+    <div id="corpus_counts"></div>
+</div>
+<div class="row" style="margin-top: 20px;">
+    <div id="files_raw_counts_tables"></div>
 </div>
 {% endblock %}
