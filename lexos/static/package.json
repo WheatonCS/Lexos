@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.0",
     "bootstrap-contextmenu": "1.0.0",
     "bootstrap-switch": "^3.3.4",
     "canvg": "github:canvg/canvg#v1.4",
