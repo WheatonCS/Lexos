@@ -127,7 +127,9 @@ $(function () {
     }
   })
 
-  $('#set-tags-button').click(setTagsButtonAjax())
+  $(document).on('click', '#set-tags-button', function () {
+    setTagsButtonAjax()
+  })
 
   $('#punctbox').change(function (ev) {
     showPunctOptions(ev)
@@ -239,7 +241,7 @@ function truncateFileName (ev, container) {
  */
 function setTagsButtonAjax () {
   if ($('#allTags')) {
-    let allTags = ($('#allTags').value)
+    let allTags = $('#allTags').val()
     allTags = JSON.stringify(allTags)
     $.ajax({
       type: 'POST',
@@ -271,6 +273,9 @@ function setTagsButtonAjax () {
         $('#tagTable tbody').append(response)
         $('#xmlModalStatus').remove()
         $('#allTags option[value=\'' + selection + '\']').prop('selected', true)
+        $('#tagTable select').each(function () {
+          $(this).find('option[value="' + selection + '"]').prop('selected', true)
+        })
       },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log(`Error: ${errorThrown}`)

@@ -560,7 +560,8 @@ def xml_handling_options(data: dict = {}):
             # Get the list of the tags
 
             for element in iterate:
-                tags.append(element.tag)
+                tag = re.sub('{.+}', '', element.tag)
+                tags.append(tag)
 
         except ET.ParseError:
             import bs4
