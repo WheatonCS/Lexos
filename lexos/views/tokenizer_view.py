@@ -420,8 +420,7 @@ def get_tokenizer_csv():
 
     return send_file(
         save_path,
-        attachment_filename="frequency_matrix" +
-                            file_extension,
+        attachment_filename="frequency_matrix" + file_extension,
         as_attachment=True)
 
 
