@@ -91,22 +91,22 @@ def do_multicloud():
     ]
     active_docs = []
     if chosen_doc_ids:
-        for ID in chosen_doc_ids:
-            active_docs.append(ID)
+        for file_id in chosen_doc_ids:
+            active_docs.append(file_id)
     else:
         for lFile in file_manager.files.values():
             if lFile.active:
                 active_docs.append(lFile.id)
     # Get a sorted list of the labels for each selected doc
     labels = []
-    for ID in active_docs:
-        labels.append(file_manager.files[ID].label)
+    for file_id in active_docs:
+        labels.append(file_manager.files[file_id].label)
     labels = sorted(labels)
     # Get the contents of all selected/active docs
     all_contents = []
-    for ID in active_docs:
-        if file_manager.files[ID].active:
-            content = file_manager.files[ID].load_contents()
+    for file_id in active_docs:
+        if file_manager.files[file_id].active:
+            content = file_manager.files[file_id].load_contents()
             all_contents.append(content)
     # Generate a DTM
     dtm, vocab = utility.simple_vectorizer(all_contents,
@@ -131,8 +131,8 @@ def do_multicloud():
         children = []
         # Convert simple json values to full json values: {u'a': 1} >
         # {'text': u'a', 'size': 1}
-        for simpleValues in doc[1]:
-            for val in simpleValues.items():
+        for simple_values in doc[1]:
+            for val in simple_values.items():
                 values = {"text": val[0], "size": str(val[1])}
                 # Append the new values to the children list
                 children.append(values)

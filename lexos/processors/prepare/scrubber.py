@@ -202,9 +202,9 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
     if action == "remove-tag":
         # searching for variants this specific tag:  <tag> ...
         pattern = re.compile(
-            '<(?:' + tag + '(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
-            '(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
-            '\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
+            r'<(?:' + tag + r'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
+            r'(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag
+            + r'\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
 
         # substitute all matching patterns with one space
         processed_text = re.sub(pattern, " ", orig_text)
@@ -215,16 +215,16 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         # as applied across newlines, (re.MULTILINE), on re.UNICODE,
         # and .* includes newlines (re.DOTALL)
         pattern = re.compile(
-            "<\s*" + re.escape(tag) + "( .+?>|>).+?</\s*" + re.escape(tag) +
-            ">", re.MULTILINE | re.DOTALL | re.UNICODE)
+            r"<\s*" + re.escape(tag) + r"( .+?>|>).+?</\s*" + re.escape(tag)
+            + ">", re.MULTILINE | re.DOTALL | re.UNICODE)
 
         processed_text = re.sub(pattern, " ", orig_text)
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
     elif action == "replace-element":
         pattern = re.compile(
-            "<\s*" + re.escape(tag) + ".*?>.+?</\s*" + re.escape(tag) + ".*?>",
-            re.MULTILINE | re.DOTALL | re.UNICODE)
+            r"<\s*" + re.escape(tag) + r".*?>.+?</\s*" + re.escape(tag)
+            + ".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
 
         processed_text = re.sub(pattern, attribute, orig_text)
 
@@ -558,7 +558,7 @@ def keep_words(text: str, non_removal_string: str) -> str:
     # punctuation if those scrubbing options were not selected beforehand.
     word_list = [word
                  for line in split_lines
-                 for word in re.split('\s', line, re.UNICODE)
+                 for word in re.split(r'\s', line, re.UNICODE)
                  if word != '']
 
     # remove_list is a copy of word_list without the keepwords
@@ -1008,6 +1008,6 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
                                       stop_keep_words_function,
                                       total_removal_function])
 
-    finished_text = re.sub("[\s]+", " ", text, re.UNICODE | re.MULTILINE)
+    finished_text = re.sub(r"[\s]+", " ", text, re.UNICODE | re.MULTILINE)
 
     return finished_text

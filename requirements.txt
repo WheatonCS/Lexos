@@ -1,3 +1,4 @@
+werkzeug
 scikit-learn
 flask
 numpy
