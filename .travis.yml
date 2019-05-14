@@ -3,7 +3,7 @@ matrix:
   include:
     # Check for python 3.6.
     - language: python
-      python: "3.6"
+      python: "3.7"
       install:
         # Use newest pip and install check tools.
         - python -m pip install --upgrade pip

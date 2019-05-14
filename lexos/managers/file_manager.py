@@ -99,9 +99,9 @@ class FileManager:
 
         active_files = []
 
-        for lFile in list(self.files.values()):
-            if lFile.active:
-                active_files.append(lFile)
+        for l_file in list(self.files.values()):
+            if l_file.active:
+                active_files.append(l_file)
 
         return active_files
 
@@ -357,11 +357,11 @@ class FileManager:
             l_file.save_cut_options(parent_id=None)
 
             if saving_changes:
-                for i, fileString in enumerate(children_file_contents):
+                for i, file_string in enumerate(children_file_contents):
                     original_filename = l_file.name
                     doc_label = l_file.label + '_' + str(i + 1)
                     file_id = self.add_file(
-                        original_filename, doc_label + '.txt', fileString)
+                        original_filename, doc_label + '.txt', file_string)
 
                     self.files[file_id].set_scrub_options_from(parent=l_file)
                     self.files[file_id].save_cut_options(parent_id=l_file.id)
@@ -371,10 +371,10 @@ class FileManager:
 
             else:
                 cut_preview = []
-                for i, fileString in enumerate(children_file_contents):
+                for i, file_string in enumerate(children_file_contents):
                     cut_preview.append(
                         ('Segment ' + str(i + 1),
-                         general_functions.make_preview_from(fileString)))
+                         general_functions.make_preview_from(file_string)))
 
                 previews.append(
                     (l_file.id, l_file.label, l_file.class_label, cut_preview))
@@ -572,8 +572,8 @@ class FileManager:
             total_word_count = sum(count_matrix[i])
             # calculate the boundary of each file
             boundary = round(
-                sqrt(log(total_word_count * log(max_word_count + 1) /
-                         log(total_word_count + 1) ** 2 + exp(1))))
+                sqrt(log(total_word_count * log(max_word_count + 1)
+                         / log(total_word_count + 1) ** 2 + exp(1))))
             boundaries.append(boundary)
 
         # find low frequency word
@@ -654,8 +654,9 @@ class FileManager:
                                     for j in range(len(count_matrix))]))
         sorted_word_counts = sorted(word_counts)
 
-        lower_bound = sorted_word_counts[len(count_matrix[0]) -
-                                         lower_rank_bound]
+        lower_bound = sorted_word_counts[
+            len(count_matrix[0]) - lower_rank_bound
+        ]
 
         for i in range(len(count_matrix[0])):
             if word_counts[i] < lower_bound:
@@ -737,7 +738,7 @@ class FileManager:
                            norm_option: str,
                            only_char_grams_within_words: bool,
                            n_gram_size: int, use_freq: bool, mfw: bool,
-                           cull: bool, round_decimal: bool=False) \
+                           cull: bool, round_decimal: bool = False) \
             -> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files
 
@@ -1020,7 +1021,7 @@ class FileManager:
                           norm_option: str, only_char_grams_within_words: bool,
                           n_gram_size: int, use_freq: bool, grey_word: bool,
                           mfw: bool, cull: bool,
-                          round_decimal: bool=False) -> List[list]:
+                          round_decimal: bool = False) -> List[list]:
         """Gets a matrix properly formatted for output to a CSV file.
 
         This CSV file will include labels along the top and side for the words
