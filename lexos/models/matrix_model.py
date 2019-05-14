@@ -62,7 +62,8 @@ class MatrixModel(BaseModel):
 
     def get_temp_label(self) -> Counter[str]:
         """Get an unordered list (counter) of all the temp labels."""
-        return Counter[self._opts.id_temp_label_map.values()]
+        # noinspection PyTypeHints
+        return Counter(self._opts.id_temp_label_map.values())
 
     def get_id_temp_label_map(self) -> IdTempLabelMap:
         """Get the dict where id maps to temp labels."""
