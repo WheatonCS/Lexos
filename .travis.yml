@@ -5,7 +5,7 @@ sudo: required
 # Set up matrix for multiple languages check.
 matrix:
   include:
-    # Check for python 3.6.
+    # Check for python 3.7
     - language: python
       python: "3.7"
       install:
