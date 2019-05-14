@@ -93,7 +93,7 @@ def handle_special_characters(text: str) -> str:
 
 
 def replacement_handler(
-        text: str, replacer_string: str, is_lemma: bool) -> str:
+    text: str, replacer_string: str, is_lemma: bool) -> str:
     """Handles replacement lines found in the scrub-alteration-upload files.
 
     :param text: A unicode string with the whole text to be altered.
@@ -137,7 +137,7 @@ def replacement_handler(
         # Lemmas are words surrounded by whitespace, while other
         # replacements are chars
         if is_lemma:
-            edge1 = r'(^|\s)('    # Beginning of the string or whitespace
+            edge1 = r'(^|\s)('  # Beginning of the string or whitespace
             edge2 = r')(?=\s|$)'  # Whitespace or end of the string
         else:
             edge1 = r'()('
@@ -203,8 +203,8 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         # searching for variants this specific tag:  <tag> ...
         pattern = re.compile(
             r'<(?:' + tag + r'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
-            r'(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag
-            + r'\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
+                            r'(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
+            r'\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
 
         # substitute all matching patterns with one space
         processed_text = re.sub(pattern, " ", orig_text)
@@ -215,21 +215,21 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         # as applied across newlines, (re.MULTILINE), on re.UNICODE,
         # and .* includes newlines (re.DOTALL)
         pattern = re.compile(
-            r"<\s*" + re.escape(tag) + r"( .+?>|>).+?</\s*" + re.escape(tag)
-            + ">", re.MULTILINE | re.DOTALL | re.UNICODE)
+            r"<\s*" + re.escape(tag) + r"( .+?>|>).+?</\s*" + re.escape(tag) +
+            ">", re.MULTILINE | re.DOTALL | re.UNICODE)
 
         processed_text = re.sub(pattern, " ", orig_text)
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
     elif action == "replace-element":
         pattern = re.compile(
-            r"<\s*" + re.escape(tag) + r".*?>.+?</\s*" + re.escape(tag)
-            + ".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
+            r"<\s*" + re.escape(tag) + r".*?>.+?</\s*" + re.escape(tag) +
+            ".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
 
         processed_text = re.sub(pattern, attribute, orig_text)
 
     else:
-        processed_text = orig_text    # Leave Tag Alone
+        processed_text = orig_text  # Leave Tag Alone
 
     return processed_text
 
@@ -246,12 +246,12 @@ def handle_tags(text: str) -> str:
     """
 
     text = re.sub('[\t ]+', " ", text, re.UNICODE)  # Remove extra white space
-    text = re.sub(r"(<\?.*?>)", "", text)    # Remove xml declarations
-    text = re.sub(r"(<!--.*?-->)", "", text)    # Remove comments
+    text = re.sub(r"(<\?.*?>)", "", text)  # Remove xml declarations
+    text = re.sub(r"(<!--.*?-->)", "", text)  # Remove comments
 
     # This matches the DOCTYPE and all internal entity declarations
     doctype = re.compile(r"<!DOCTYPE.*?>", re.DOTALL)
-    text = re.sub(doctype, "", text)    # Remove DOCTYPE declarations
+    text = re.sub(doctype, "", text)  # Remove DOCTYPE declarations
 
     if 'xmlhandlingoptions' in session:  # Should always be true
 
@@ -277,8 +277,8 @@ def get_all_punctuation_map() -> Dict[int, type(None)]:
 
     punctuation_map = dict.fromkeys(
         [i for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('P') or
-         unicodedata.category(chr(i)).startswith('S')])
+         if unicodedata.category(chr(i)).startswith('P')
+         or unicodedata.category(chr(i)).startswith('S')])
 
     return punctuation_map
 
@@ -328,8 +328,8 @@ def consolidate_hyphens(text: str) -> str:
 
     hyphen_values = dict.fromkeys(
         [chr(i) for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('Pd') and  # All hyphens/
-         chr(i) != chosen_hyphen_value])                       # dashes
+         if unicodedata.category(chr(i)).startswith('Pd')
+         and chr(i) != chosen_hyphen_value])
 
     # convert all those types of hyphens into the ascii minus
     for value in hyphen_values:
@@ -350,12 +350,13 @@ def consolidate_ampers(text: str) -> str:
     amper_values = dict.fromkeys(
         [chr(i) for i in range(sys.maxunicode)
          # Avoid unnamed control chars throwing ValueErrors
-         if (unicodedata.category(chr(i)).startswith('P') or
-             unicodedata.category(chr(i)).startswith('S')) and
-         re.search(
+         if (unicodedata.category(chr(i)).startswith('P')
+             or unicodedata.category(chr(i)).startswith('S'))
+         and re.search(
             r" ampersand|ampersand ", unicodedata.name(chr(i)),
-            re.IGNORECASE) is not None and
-         chr(i) != chosen_amper_value])
+            re.IGNORECASE) is not None
+         and chr(i) != chosen_amper_value]
+    )
 
     # Change all ampersands to one type of ampersand
     for value in amper_values:
@@ -365,8 +366,8 @@ def consolidate_ampers(text: str) -> str:
 
 
 def get_remove_punctuation_map(
-        text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
-        ) -> (str, Dict[int, type(None)]):
+    text: str, apos: bool, hyphen: bool, amper: bool, previewing: bool
+) -> (str, Dict[int, type(None)]):
     """Gets the punctuation removal map.
 
     :param text: A unicode string representing the whole text that is being
@@ -399,7 +400,7 @@ def get_remove_punctuation_map(
     # If Remove All Punctuation and Keep Word-Internal Apostrophes are ticked
     if apos:
         text = scrub_select_apos(text)
-        del remove_punctuation_map[39]    # No further apos will be scrubbed
+        del remove_punctuation_map[39]  # No further apos will be scrubbed
 
     # If Remove All Punctuation and Keep Hyphens are ticked
     if hyphen:
@@ -412,10 +413,10 @@ def get_remove_punctuation_map(
     # If Remove All Punctuation and Keep Ampersands are ticked
     if amper:
         text = consolidate_ampers(text)
-        del remove_punctuation_map[38]    # Delete chosen amper from map
+        del remove_punctuation_map[38]  # Delete chosen amper from map
 
     if previewing:
-        del remove_punctuation_map[8230]    # ord(…)
+        del remove_punctuation_map[8230]  # ord(…)
 
     # This function has the side-effect of altering the text, thus the
     # updated text must be returned
@@ -569,7 +570,7 @@ def keep_words(text: str, non_removal_string: str) -> str:
 
 
 def get_remove_whitespace_map(
-        spaces: bool, tabs: bool, new_lines: bool) -> Dict[int, type(None)]:
+    spaces: bool, tabs: bool, new_lines: bool) -> Dict[int, type(None)]:
     """Get the white space removal map.
 
     :param spaces: A boolean indicating whether spaces should be removed.

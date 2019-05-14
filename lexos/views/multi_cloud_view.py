@@ -94,9 +94,9 @@ def do_multicloud():
         for file_id in chosen_doc_ids:
             active_docs.append(file_id)
     else:
-        for lFile in file_manager.files.values():
-            if lFile.active:
-                active_docs.append(lFile.id)
+        for l_file in file_manager.files.values():
+            if l_file.active:
+                active_docs.append(l_file.id)
     # Get a sorted list of the labels for each selected doc
     labels = []
     for file_id in active_docs:

@@ -572,8 +572,8 @@ class FileManager:
             total_word_count = sum(count_matrix[i])
             # calculate the boundary of each file
             boundary = round(
-                sqrt(log(total_word_count * log(max_word_count + 1)
-                         / log(total_word_count + 1) ** 2 + exp(1))))
+                sqrt(log(total_word_count * log(max_word_count + 1) /
+                     log(total_word_count + 1) ** 2 + exp(1))))
             boundaries.append(boundary)
 
         # find low frequency word
