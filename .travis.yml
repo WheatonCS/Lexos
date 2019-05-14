@@ -1,3 +1,7 @@
+# Adjust environment
+dist: xenial
+sudo: required
+
 # Set up matrix for multiple languages check.
 matrix:
   include:
