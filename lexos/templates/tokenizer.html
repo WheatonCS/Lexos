@@ -62,7 +62,7 @@ $(document).ready(function() {
        return false;
     });
 
-    //Decode a URL-encoded HTML string
+    // Decode a URL-encoded HTML string
     function decode_html_string(encoded_html_string) {
         let temporary = document.createElement('textarea');
         temporary.innerHTML = encoded_html_string;
@@ -70,23 +70,25 @@ $(document).ready(function() {
     }
 
     // Convert the form data into a JSON object
-	function form_to_json() {
-		let form = {};
+    function form_to_json() {
+        let form = {};
         $.each($("form").serializeArray(), function (i, field) {
             form[field.name] = field.value || "";
         });
         return form;
-	}
+    }
 
     // Variables
     let numActiveDocs = {{ numActiveDocs }};
     let orientation = "{{ orientation }}";
     let firstCell = (orientation == "filecolumn") ? "Terms" : "Documents";
     let searchDelay = null;
-    let dtm_table_html = decode_html_string("{{ dtm_table_html }}");
+    let base_dtm_table_html = decode_html_string("{{ base_dtm_table_html }}");
 
     // Redraw the table on "Regenerate Table" button clicks
-    $("#regenerateTable").click(function(){});
+    $("#regenerateTable").click(function(){
+        $("#dtm-table .dataframe").DataTable().draw();
+    });
 
     // DTM Table configuration options
     let dtm_table_configuration = {
@@ -145,14 +147,19 @@ $(document).ready(function() {
         "ajax": {
             "type": "POST",
             "url": "/tokenizer/update-datatable",
+            "contentType": "application/json; charset=utf-8",
+            // Send existing form data along with the DataTable request data
             "data": function (arguments) {
-                return {"datatable-request": JSON.stringify(arguments)};
+                let form = form_to_json();
+                $.extend(form, {"datatable-json":
+                    JSON.stringify(arguments)});
+                return JSON.stringify(form);
             }
         }
     }
 
     // Draw the initial DTM table
-    $("#dtm-table").html(dtm_table_html);
+    $("#dtm-table").html(base_dtm_table_html);
     let dtm_table = $("#dtm-table .dataframe");
     dtm_table.addClass("display table table-bordered table-striped "+
       "table-condensed table-hover");

@@ -11,6 +11,7 @@ from timeit import default_timer as timer
 import pandas as pd
 from typing import Dict, List
 from lexos.managers.file_manager import FileManager
+from lexos.helpers import constants as const
 
 # This is a flask blueprint. It helps us to manage groups of views. See here
 # for more detail:
@@ -78,7 +79,7 @@ def tokenizer():
 
         csv_orientation = session['csvoptions']['csvorientation']
 
-        # If there are active documents, generate the DTM DataTable
+        # If there are active documents, generate the base DTM DataTable
         if num_active_docs > 0:
 
             # Get the DTM as a list of tuples
@@ -101,7 +102,7 @@ def tokenizer():
 
             # Convert the DataFrame to HTML
             start_time = timer()
-            dtm_table_html = dtm_dataframe.to_html().replace('\n', '')
+            base_dtm_table_html = dtm_dataframe.to_html().replace('\n', '')
             print("PANDAS to HTML table conversion delta:", timer()-start_time)
 
             # Get the number of rows in the DTM
@@ -109,7 +110,7 @@ def tokenizer():
 
         # If there is no active document, set default values
         else:
-            dtm_table_html = ""
+            base_dtm_table_html = ""
             row_count = 0
 
         # Render the page
@@ -119,7 +120,7 @@ def tokenizer():
             itm="tokenize",
             labels=labels,
             headers=header_labels,
-            dtm_table_html=dtm_table_html,
+            base_dtm_table_html=base_dtm_table_html,
             numRows=row_count,
             orientation=csv_orientation,
             numActiveDocs=num_active_docs)
@@ -147,24 +148,30 @@ def update_datatable():
     """
 
     print("Received a DataTable request.")
+
+    # Cache the set options
+    session_manager.cache_analysis_option()
+    session_manager.cache_csv_options()
+
     file_manager = utility.load_file_manager()
 
     # Get the data sent from the DataTable. This data describes what
     # selection of the DTM should be sent back to the DataTable
-    sent_data = json.loads(request.values.get("datatable-request"))
-    starting_index = sent_data.get("start")+1  # Add one to exclude row labels
-    maximum_selection_size = sent_data.get("length")
-    search_term = sent_data.get("search")["value"]
+    sent_data = json.loads(request.json["datatable-json"])
+    starting_index = sent_data["start"]
+    maximum_selection_size = sent_data["length"]
+    search_term = sent_data["search"]["value"]
 
-    # Get the DTM
-    dtm = get_dtm_matrix(get_session_dtm_options(), file_manager)
-    dtm_unfiltered_size = len(dtm)
+    # Get the DTM, excluding the column labels
+    print("DTM Options:", get_session_dtm_options())
+    unfiltered_dtm = get_dtm_matrix(
+        get_session_dtm_options(), file_manager)[1:]
+    unfiltered_dtm_size = len(unfiltered_dtm)
 
     # Apply the search term if there is one
     if search_term:
         print("Applying search term: ", search_term)
-    dtm = [r for r in dtm if search_term in r[0]]
-
+    dtm = [r for r in unfiltered_dtm if search_term in r[0]]
     dtm_size = len(dtm)
 
     # Get the selection size
@@ -179,7 +186,8 @@ def update_datatable():
     # Send the selection data back to the DataTable
     return json.dumps({
         "draw": int(sent_data.get("draw"))+1,  # DataTable wants 1 added
-        "recordsTotal": dtm_size,
+        "recordsTotal": unfiltered_dtm_size,
         "recordsFiltered": dtm_size,
         "data": selection
     })
+
