@@ -82,7 +82,7 @@ def scrape():
         urls = request.json["urls"]
         urls = urls.strip()
         urls = urls.replace(",", "\n")  # Replace commas with line breaks
-        urls = re.sub("\s+", "\n", urls)  # Get rid of extra white space
+        urls = re.sub(r"\s+", "\n", urls)  # Get rid of extra white space
         urls = urls.split("\n")
         file_manager = utility.load_file_manager()
         for i, url in enumerate(urls):
