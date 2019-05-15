@@ -136,6 +136,7 @@ class TfTest:
     )
 
 
+# noinspection PyTypeHints
 def test_temp_label():
     assert BasicTest.model.get_temp_label() == Counter([
         "test_label_1", "test_label_2", "test_label_3"

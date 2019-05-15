@@ -39,8 +39,8 @@ def tokenizer():
         # Get the active labels and sort them
         labels = file_manager.get_active_labels_with_id()
         header_labels = []
-        for fileID in labels:
-            header_labels.append(file_manager.files[int(fileID)].label)
+        for file_id in labels:
+            header_labels.append(file_manager.files[int(file_id)].label)
         header_labels = natsorted(header_labels)
         # Get the starting options from the session
         if 'analyoption' not in session:
@@ -201,15 +201,14 @@ def tokenizer():
             utility.save_file_manager(file_manager)
             return send_file(
                 save_path,
-                attachment_filename="frequency_matrix" +
-                                    file_extension,
+                attachment_filename="frequency_matrix" + file_extension,
                 as_attachment=True)
         else:
             # Get the active labels and sort them
             labels = file_manager.get_active_labels_with_id()
             header_labels = []
-            for fileID in labels:
-                header_labels.append(file_manager.files[int(fileID)].label)
+            for file_id in labels:
+                header_labels.append(file_manager.files[int(file_id)].label)
             # Get the Tokenizer options from the request json object
             length = int(request.json["length"])
             # Increment for the ajax response
@@ -421,8 +420,7 @@ def get_tokenizer_csv():
 
     return send_file(
         save_path,
-        attachment_filename="frequency_matrix" +
-                            file_extension,
+        attachment_filename="frequency_matrix" + file_extension,
         as_attachment=True)
 
 
@@ -438,8 +436,8 @@ def get_ten_rows():
     # Get the active labels and sort them
     labels = file_manager.get_active_labels_with_id()
     header_labels = []
-    for fileID in labels:
-        header_labels.append(file_manager.files[int(fileID)].label)
+    for file_id in labels:
+        header_labels.append(file_manager.files[int(file_id)].label)
     header_labels = natsorted(header_labels)
 
     # Get the orientation from the request json object
