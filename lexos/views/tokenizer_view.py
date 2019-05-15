@@ -34,11 +34,11 @@ def get_session_dtm_options():
 
 def get_dtm_matrix(dtm_options: Dict[str, object],
                    file_manager: FileManager) -> List[list]:
-    """Gets the DTM matrix
+    """Gets the DTM matrix.
 
-    :param dtm_options: The options to use in generating the DTM
-    :param file_manager: The file manager to use
-    :return: The DTM matrix
+    :param dtm_options: The options to use in generating the DTM.
+    :param file_manager: The file manager to use.
+    :return: The DTM matrix.
     """
 
     start_time = timer()
@@ -150,22 +150,36 @@ def update_datatable():
     file_manager = utility.load_file_manager()
 
     # Get the data sent from the DataTable. This data describes what
-    # portion of the DTM should be sent back to the DataTable
+    # selection of the DTM should be sent back to the DataTable
     sent_data = json.loads(request.values.get("datatable-request"))
+    starting_index = sent_data.get("start")+1  # Add one to exclude row labels
+    maximum_selection_size = sent_data.get("length")
+    search_term = sent_data.get("search")["value"]
 
     # Get the DTM
     dtm = get_dtm_matrix(get_session_dtm_options(), file_manager)
+    dtm_unfiltered_size = len(dtm)
+
+    # Apply the search term if there is one
+    if search_term:
+        print("Applying search term: ", search_term)
+    dtm = [r for r in dtm if search_term in r[0]]
+
+    dtm_size = len(dtm)
+
+    # Get the selection size
+    selection_size = dtm_size-starting_index
+    selection_size = maximum_selection_size if selection_size > \
+        maximum_selection_size else selection_size
 
     # Get the appropriate selection
-    dtm_row_count = len(dtm)
-    dtm_selection_row_count = 10 if dtm_row_count > 10 else dtm_row_count
+    selection = [dtm[i] for i in range(
+        starting_index, starting_index+selection_size)]
 
-    dtm_selection = [dtm[i] for i in range(1, dtm_selection_row_count)]
-
-    # Send the appropriate data back to the DataTable
+    # Send the selection data back to the DataTable
     return json.dumps({
-        "draw": int(sent_data.get("draw")) + 1,  # DataTable wants 1 added
-        "recordsTotal": dtm_row_count,
-        "recordsFiltered": dtm_row_count,
-        "data": dtm_selection
+        "draw": int(sent_data.get("draw"))+1,  # DataTable wants 1 added
+        "recordsTotal": dtm_size,
+        "recordsFiltered": dtm_size,
+        "data": selection
     })
