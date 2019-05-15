@@ -92,8 +92,9 @@ def handle_special_characters(text: str) -> str:
     return updated_text
 
 
-def replacement_handler(
-    text: str, replacer_string: str, is_lemma: bool) -> str:
+def replacement_handler(text: str,
+                        replacer_string: str,
+                        is_lemma: bool) -> str:
     """Handles replacement lines found in the scrub-alteration-upload files.
 
     :param text: A unicode string with the whole text to be altered.
@@ -202,9 +203,9 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
     if action == "remove-tag":
         # searching for variants this specific tag:  <tag> ...
         pattern = re.compile(
-            r'<(?:' + tag + r'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?'
-                            r'(?<=\s)\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?' + tag +
-            r'\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
+            r'<(?:' + tag + r'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)'
+                            r'\s*=)(?!\s*/?>)\s+(?:".*?"|\'.*?\'|[^>]*?)+|/?'
+            + tag + r'\s*/?)>', re.MULTILINE | re.DOTALL | re.UNICODE)
 
         # substitute all matching patterns with one space
         processed_text = re.sub(pattern, " ", orig_text)
@@ -569,8 +570,9 @@ def keep_words(text: str, non_removal_string: str) -> str:
     return scrubbed_text
 
 
-def get_remove_whitespace_map(
-    spaces: bool, tabs: bool, new_lines: bool) -> Dict[int, type(None)]:
+def get_remove_whitespace_map(spaces: bool,
+                              tabs: bool,
+                              new_lines: bool) -> Dict[int, type(None)]:
     """Get the white space removal map.
 
     :param spaces: A boolean indicating whether spaces should be removed.
