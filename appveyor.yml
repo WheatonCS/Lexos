@@ -12,8 +12,7 @@ environment:
 
 # Set python path.
 init:
-- set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
-
+  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
 
 # Installations.
 install:
@@ -34,31 +33,28 @@ branches:
     - master
 
 test_script:
-  # test for python static analysis
-  # including code style, doc style, and basic code analysis
-  # ignore F841 because it includes backhoe variable: "_"
-  # ignore E123 because https://github.com/PyCQA/pycodestyle/issues/103
-  - flake8 --ignore F841,E123 --count .
-  # unit testing
+  # Test for python static analysis.
+  - flake8
+  # Unit testing.
   - pytest --cov=.\lexos
   - codecov
-  # doc style, at the moment only test files under models and receivers.
+  # Doc style, at the moment only test files under models and receivers.
   - pydocstyle lexos\models\
   - pydocstyle lexos\receivers\
 
-  # test for javascript code style
+  # Test for javascript code style
   - cd .\lexos\static
 
-  # following line is commented out, because frontend refactor is not yet completed
-  # - .\node_modules\.bin\eslint ./js/script_*.js
+  # Following line is commented out, frontend refactor is not completed
+  # - ./node_modules/.bin/eslint ./js/script_*.js
   - .\node_modules\.bin\eslint .\js\scripts_statistics.js
   - .\node_modules\.bin\eslint .\js\scripts_similarity.js
   - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
-  - .\node_modules\.bin/eslint .\js\scripts_rwanalysis.js
+  - .\node_modules\.bin\eslint .\js\scripts_rwanalysis.js
   - .\node_modules\.bin\eslint .\js\scripts_upload.js
   - .\node_modules\.bin\eslint .\js\scripts_manage.js
-  - .\node_modules\.bin/eslint .\js\scripts_kmeans.js
-  - .\node_modules\.bin/eslint .\js\scripts_scrub.js
+  - .\node_modules\.bin\eslint .\js\scripts_kmeans.js
+  - .\node_modules\.bin\eslint .\js\scripts_scrub.js
   - .\node_modules\.bin\eslint .\js\scripts_cut.js
   - .\node_modules\.bin\eslint .\js\scripts_bct.js
   - cd ../..

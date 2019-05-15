@@ -14,16 +14,12 @@ matrix:
         - pip install -r requirements.txt
         - pip install -r dev_requirements.txt
       script:
-        # Check styles.
-        # test for python static analysis
-        # including code style, doc style, and basic code analysis
-        # ignore F841 because it includes backhoe variable: "_"
-        # ignore E123 because https://github.com/PyCQA/pycodestyle/issues/103
+        # Test for python static analysis.
         - flake8
-        # unit testing
+        # Unit testing
         - pytest --cov=./lexos
         - codecov
-        # doc style, at the moment only test files under models and receivers.
+        # Doc style, at the moment only test files under models and receivers.
         - pydocstyle lexos/models/
         - pydocstyle lexos/receivers/
 
