@@ -62,6 +62,7 @@ class MatrixModel(BaseModel):
 
     def get_temp_label(self) -> Counter[str]:
         """Get an unordered list (counter) of all the temp labels."""
+        # noinspection PyTypeHints
         return Counter(self._opts.id_temp_label_map.values())
 
     def get_id_temp_label_map(self) -> IdTempLabelMap:
@@ -237,7 +238,7 @@ class MatrixModel(BaseModel):
 
         return dtm_after_freq
 
-    def get_matrix(self)-> pd.DataFrame:
+    def get_matrix(self) -> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files.
 
         :return:
