@@ -1,58 +1,63 @@
+# Set up environment.
+environment:
+  # Run for both architecture for python 3.7.x
+  matrix:
+    - PYTHON: "C:\\Python37"
+      PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python37-x64"
+      PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "64"
+
+# Set python path.
+init:
+  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+
+# Installations.
 install:
-  # install anaconda
-  - choco install anaconda3
-
-  # add anaconda to path
-  - SET PATH=C:\\tools\\Anaconda3\\scripts\\;C:\\tools\\Anaconda3\\;%PATH%
-
-  # log debug info
-  - conda info -a
-
-  # install dependency
-  - pip install -r ./requirements.txt
-  - pip install -r ./dev_requirements.txt
-
-  # install npm
+  # Upgrade pip to the latest version.
+  - python -m pip install --upgrade pip
+  - pip install numpy
+  - pip install -r requirements.txt
+  - pip install -r dev_requirements.txt
+  # Set up node js checks.
   - choco install nodejs
-
-  # use npm to install all the dependencies (including dev)
-  - cd ./lexos/static
+  # use npm to install all the dependencies.
+  - cd .\lexos\static
   - npm install
-  - cd ../..
+  - cd ..\..
 
+# Set only master branch.
 branches:
   only:
     - master
 
 test_script:
-  # test for python static analysis
-  # including code style, doc style, and basic code analysis
-  # ignore F841 because it includes blackhole variable: "_"
-  # ignore E123 because https://github.com/PyCQA/pycodestyle/issues/103
-  - flake8 --ignore F841,E123 --count .
-  # unit testing
-  - pytest --cov=./lexos
+  # Test for python static analysis.
+  - flake8
+  # Unit testing.
+  - pytest --cov=.\lexos
   - codecov
-  # doc style, at the moment only test files under models and receivers.
-  - pydocstyle lexos/models/
-  - pydocstyle lexos/receivers/
+  # Doc style, at the moment only test files under models and receivers.
+  - pydocstyle lexos\models\
+  - pydocstyle lexos\receivers\
 
-  # test for javascript code style
-  - cd ./lexos/static
+  # Test for javascript code style
+  - cd .\lexos\static
 
-  # following line is commented out, because frontend refactor is not yet completed
-  # - .\node_modules\.bin\eslint ./js/script_*.js
+  # Following line is commented out, frontend refactor is not completed
+  # - ./node_modules/.bin/eslint ./js/script_*.js
   - .\node_modules\.bin\eslint .\js\scripts_statistics.js
   - .\node_modules\.bin\eslint .\js\scripts_similarity.js
   - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
-  - .\node_modules\.bin/eslint .\js\scripts_rwanalysis.js
+  - .\node_modules\.bin\eslint .\js\scripts_rwanalysis.js
   - .\node_modules\.bin\eslint .\js\scripts_upload.js
   - .\node_modules\.bin\eslint .\js\scripts_manage.js
-  - .\node_modules\.bin/eslint .\js\scripts_kmeans.js
-  - .\node_modules\.bin/eslint .\js\scripts_scrub.js
+  - .\node_modules\.bin\eslint .\js\scripts_kmeans.js
+  - .\node_modules\.bin\eslint .\js\scripts_scrub.js
   - .\node_modules\.bin\eslint .\js\scripts_cut.js
   - .\node_modules\.bin\eslint .\js\scripts_bct.js
   - cd ../..
 
 build: off
-

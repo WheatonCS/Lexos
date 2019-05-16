@@ -44,14 +44,13 @@ def init():
     while not folder_created:  # Continue to try to make
         try:
             session['id'] = ''.join(
-                random.choice(
-                    string.ascii_uppercase +
-                    string.digits) for _ in range(30))
+                random.choice(string.ascii_uppercase + string.digits)
+                for _ in range(30)
+            )
 
             print('Attempting new id of', session['id'], '...', end=' ')
             os.makedirs(session_folder())
             folder_created = True
-            print('Good.')
 
         # This except block will be hit if and only if
         # the os.makedirs line throws an exception
@@ -134,10 +133,10 @@ def cache_alteration_files():
     All alteration files (uploaded on the scrub page) are from request.form.
     """
 
-    for uploadFile in request.files:
-        file_name = request.files[uploadFile].filename
+    for upload_file in request.files:
+        file_name = request.files[upload_file].filename
         if file_name != '':
-            session['scrubbingoptions']['optuploadnames'][uploadFile] = \
+            session['scrubbingoptions']['optuploadnames'][upload_file] = \
                 file_name
 
 

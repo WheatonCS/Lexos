@@ -144,7 +144,7 @@ def generate_mc_json_obj(file_manager: FileManager):
                 # Create a list of type:topic combinations
                 for line in f:
                     # Make sure the number of columns is correct
-                    line = re.sub('\s+', ' ', line)
+                    line = re.sub(r'\s+', ' ', line)
                     try:
                         doc, source, pos, type_index, doc_type, topic = \
                             line.rstrip().split(' ')
@@ -243,12 +243,12 @@ def load_file_manager() -> FileManager:
 def xml_handling_options(data: dict = {}):
     file_manager = load_file_manager()
     from lexos.managers import session_manager
-    import xml.etree.ElementTree as ET
+    from xml.etree import ElementTree
     tags = []
 
     for file in file_manager.get_active_files():
         try:
-            root = ET.fromstring(file.load_contents())
+            root = ElementTree.fromstring(file.load_contents())
             iterate = root.getiterator()
 
             # Remove processing instructions --
@@ -258,9 +258,10 @@ def xml_handling_options(data: dict = {}):
             # Get the list of the tags
 
             for element in iterate:
-                tags.append(element.tag)
+                tag = re.sub('{.+}', '', element.tag)
+                tags.append(tag)
 
-        except ET.ParseError:
+        except ElementTree.ParseError:
             import bs4
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(file.load_contents(), 'html.parser')

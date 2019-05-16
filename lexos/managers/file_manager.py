@@ -97,9 +97,9 @@ class FileManager:
 
         active_files = []
 
-        for lFile in list(self.files.values()):
-            if lFile.active:
-                active_files.append(lFile)
+        for l_file in list(self.files.values()):
+            if l_file.active:
+                active_files.append(l_file)
 
         return active_files
 
@@ -355,11 +355,11 @@ class FileManager:
             l_file.save_cut_options(parent_id=None)
 
             if saving_changes:
-                for i, fileString in enumerate(children_file_contents):
+                for i, file_string in enumerate(children_file_contents):
                     original_filename = l_file.name
                     doc_label = l_file.label + '_' + str(i + 1)
                     file_id = self.add_file(
-                        original_filename, doc_label + '.txt', fileString)
+                        original_filename, doc_label + '.txt', file_string)
 
                     self.files[file_id].set_scrub_options_from(parent=l_file)
                     self.files[file_id].save_cut_options(parent_id=l_file.id)
@@ -369,10 +369,10 @@ class FileManager:
 
             else:
                 cut_preview = []
-                for i, fileString in enumerate(children_file_contents):
+                for i, file_string in enumerate(children_file_contents):
                     cut_preview.append(
                         ('Segment ' + str(i + 1),
-                         general_functions.make_preview_from(fileString)))
+                         general_functions.make_preview_from(file_string)))
 
                 previews.append(
                     (l_file.id, l_file.label, l_file.class_label, cut_preview))

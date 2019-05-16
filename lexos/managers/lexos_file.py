@@ -128,7 +128,7 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        if re.search("\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+        if re.search(r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
                      file_contents):
             return True
         else:
@@ -144,7 +144,7 @@ class LexosFile:
         :return: a string containing a preview of the larger string.
         """
 
-        if text_string is "":
+        if text_string == "":
             return general_functions.make_preview_from(self.load_contents())
         else:
             return general_functions.make_preview_from(text_string)
@@ -315,8 +315,8 @@ class LexosFile:
 
         return text_strings
 
-    def get_cutting_options(self, override_id: int=None) -> Tuple[str, str,
-                                                                  str, str]:
+    def get_cutting_options(self, override_id: int = None) -> Tuple[str, str,
+                                                                    str, str]:
         """Gets the cutting options for a specific file.
 
         If cutting options not defined, then grabs the overall options, from
