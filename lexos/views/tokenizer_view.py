@@ -11,7 +11,6 @@ from timeit import default_timer as timer
 import pandas as pd
 from typing import Dict, List
 from lexos.managers.file_manager import FileManager
-from lexos.helpers import constants as const
 
 # This is a flask blueprint. It helps us to manage groups of views. See here
 # for more detail:
@@ -75,8 +74,8 @@ def tokenizer():
         # Get the active labels and sort them
         labels = file_manager.get_active_labels_with_id()
         header_labels = []
-        for fileID in labels:
-            header_labels.append(file_manager.files[int(fileID)].label)
+        for file_id in labels:
+            header_labels.append(file_manager.files[int(file_id)].label)
         header_labels = natsorted(header_labels)
 
         # Set the default session options
