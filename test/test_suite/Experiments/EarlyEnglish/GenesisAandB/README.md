@@ -5,7 +5,7 @@ Corpus:  Anglo Saxon (Dictionary of Old English)
 Finding divisions within a poem is a problem at
 least related to the one we had addressed in the Daniel/Azarias analyses.
 Here we analyze the Anglo-Saxon poem Genesis to see
-if our lexomic methods distinguish the sections of the (one) Genesis poem
+if our lexomics methods distinguish the sections of the (one) Genesis poem
 where the two sections are known as Genesis A and Genesis B.
 
 Using the tools from:   http://lexos.wheatoncollege.edu
@@ -19,7 +19,6 @@ Of Dendrogrammatology: Lexomic Methods for Analyzing the Relationships
 Among Old English Poems. Journal of English and Germanic Philology, 
 July 2011, 301-336.
 
-HERE
 
 Steps:
 =====================================================================
