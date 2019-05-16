@@ -1,11 +1,11 @@
 # Classical Chinese - 红楼梦HongLouMeng_(Dream_of_the_Red_Chamber)
 
-The lexomics tool can be used to confirm the controversial authorship of one of
+The Lexos tool can be used to confirm the controversial authorship of one of
 China's Four Great Classical Novels. Written in the middle of the 18th century
 during the Qing Dynasty, "Dream of the Red Chamber" is considered a masterpiece
 of Chinese literature. The author, Cao Xueqin(曹雪芹), passed away before finishing 
 the novel. It is commonly accepted that the first eighty chapters were written
-by him, while the remaining fourty chapters were written by Gao E(高鶚). Meanwhile,
+by him, while the remaining forty chapters were written by Gao E(高鶚). Meanwhile,
 some scholars claimed that Chapter 64 and 67, two chapters missing from the oldest
 edition, could also have been written by someone other than Cao Xueqin. (Tu and
 Hsiang, 2013)
@@ -15,7 +15,7 @@ the other one with the remaining 40 chapters. After cutting them into pieces eac
 with 10 chapters, it is shown from the dendrogram that the late 40 chapters show
 up seperately from the first 80 chapters.
 
-Though the K-Means clustering method with 12 clustsers, lexomics tool also groups
+Though the K-Means clustering method with 12 clustsers, the Lexos tool also groups
 each cluster with different stories of the main characters, and with the late 40
 chapters almost grouped together in one cluster.
 
@@ -61,8 +61,9 @@ Steps:
     (b) Give a Title
     (c) Choose Tokenize - 2 - gram, by Characters
     (d) Choose normalize - Proportional Counts (default)
-    (e) Get Dendrogram
-    (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
+    
+    Get Dendrogram
+    Compare your result with the .pdf found in the ResultsToExpect/ directory.
 
 ####(IF TESTING INDIVIDUAL CHAPTERS)
 (4) ANALYZE - K-Means Clustering

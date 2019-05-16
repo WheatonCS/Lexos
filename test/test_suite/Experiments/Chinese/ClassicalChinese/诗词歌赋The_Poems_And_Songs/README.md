@@ -8,17 +8,19 @@ Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu
 cluster analysis (dendrogram) identifies the similarities between the texts.
 
 These test files are:
-                            Era(Dynasty)          Genre             Author
-*九歌JiuGe.txt             Zhanguo (475 BC)        Chuci            Qu Yuan
-*离骚LiSao.txt             Zhanguo (475 BC)        Chuci            Qu Yuan
-*孔子世家KongZiShiJia.txt   Han (104-91 BC)   Historical Biography  Sima Qian
-*项羽本纪XiangYuBenJi.txt   Han (104-91 BC)   Historical Biography  Sima Qian
-*长恨歌ChangHenGe.txt       Tang (807 AD)          Tangshi           Bai Juyi
-*琵琶行PiPaXing.txt         Tang (816 AD)          Tangshi           Bai Juyi
-*赤壁赋ChiBiFu.txt          Song (1082 AD)         Songci            Su Shi
-*后赤壁赋HouChiBiFu.txt     Song (1082 AD)         Songci             Su Shi
-*窦娥冤DouEYuan.txt         Yuan (1271-1368 AD)    Yuanqu         Guan Hanqing  
-*西厢记XiXiangJi.txt        Yuan (1271-1368 AD)    Yuanqu          Wang Shifu
+
+File|Era(Dynasty)|Genre|Author
+-------------------------|--------------------|------------------|---------------                            
+*九歌JiuGe.txt|Zhanguo (475 BC)|Chuci|Qu Yuan
+*离骚LiSao.txt|Zhanguo (475 BC)|Chuci|Qu Yuan
+*孔子世家KongZiShiJia.txt|Han (104-91 BC)|Historical Biography|Sima Qian
+*项羽本纪XiangYuBenJi.txt|Han (104-91 BC)|Historical Biography|Sima Qian
+*长恨歌ChangHenGe.txt|Tang (807 AD)|Tangshi|Bai Juyi
+*琵琶行PiPaXing.txt|Tang (816 AD)|Tangshi|Bai Juyi
+*赤壁赋ChiBiFu.txt|Song (1082 AD)|Songci|Su Shi
+*后赤壁赋HouChiBiFu.txt|Song (1082 AD)|Songci|Su Shi
+*窦娥冤DouEYuan.txt|Yuan (1271-1368 AD)|Yuanqu|Guan Hanqing  
+*西厢记XiXiangJi.txt|Yuan (1271-1368 AD)|Yuanqu|Wang Shifu
 
 Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/ directory, you should
