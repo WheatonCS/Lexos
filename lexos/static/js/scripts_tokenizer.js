@@ -78,28 +78,14 @@ function generateTokenizerResult () {
   // convert form into an object map string to string
   const form = utility.jsonifyForm()
 
-  // send the ajax request
-  utility.sendAjaxRequest('/tokenizerMatrix', form)
-    .done(
-      function (response) {
-        const outerTableDivSelector = $('#tokenizerMatrix')
-        // put the response onto the web page
-        outerTableDivSelector.html(response)
-        // initialize the data table
-        outerTableDivSelector.children().DataTable(getDataTableConfig())
-        // display everything in the tokenize div.
-        $('#tokenizerResult').css({'display': 'block'})
-      })
-    .fail(
-      function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
-        utility.runModal('Error encountered while generating the tokenize table result.')
-      })
-    .always(
-      function () {
-        $('#status-analyze').css({'visibility': 'hidden'})
-      })
+  $('#matrix').DataTable({
+    "processing": true,
+    "serverSide": true,
+    "type": "POST",
+    "ajax": "/tokenizerMatrix",
+    "contentType": "application/json",
+    "data": form
+  })
 }
 
 $(function () {
@@ -129,7 +115,7 @@ $(function () {
     const error = utility.submissionError(1)
 
     if (error === null) { // If there is no error, do the ajax call.
-      checkTokenizerSize()
+      generateTokenizerResult()
     } else { // If error found, do modal.
       utility.runModal(error)
     }

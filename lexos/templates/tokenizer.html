@@ -64,7 +64,8 @@
                     <h2 class="modal-title">Continue?</h2>
                 </div>
                 <div class="modal-body">
-                    The Document-Term Matrix has more than 50,000 items of data.
+                    The Document-Term Matrix has more than 50,000 items of
+                    data.
                     It will take a while for your browser to render it and
                     possibly the browser will freeze. We recommend that you
                     download this matrix and view it with a local application,
@@ -87,6 +88,17 @@
 
 {% block results %}
     <div id="tokenizerResult" style="margin-top:50px;">
-        <div id="tokenizerMatrix"></div>
+        <table id="matrix">
+            <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Start date</th>
+                <th>Salary</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 {% endblock %}
