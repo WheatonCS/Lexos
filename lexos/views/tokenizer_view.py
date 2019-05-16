@@ -1,4 +1,4 @@
-from flask import session, Blueprint, render_template, send_file, request
+from flask import session, Blueprint, render_template, send_file
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
@@ -44,113 +44,16 @@ def tokenizer_download():
                      attachment_filename="tokenizer_result.csv")
 
 
-@tokenizer_blueprint.route("/tokenizerMatrix", methods=["POST"])
+@tokenizer_blueprint.route("/tokenizerMatrix", methods=["GET", "POST"])
 def tokenizer_matrix():
-    # Cache the front options for matrix model and tokenizer model.
-    # session_manager.cache_analysis_option()
-    # session_manager.cache_tokenizer_option()
-    # Return the generated DTM to ajax call.
-    options = request.json
-    options_one = request.args
-    options_two = request.form
-
-    print("DONE")
-
-    from flask import jsonify
-
-    return jsonify({
-        "draw": 1,
-        "recordsTotal": 57,
-        "recordsFiltered": 57,
-        "data": [
-            [
-                "Airi",
-                "Satou",
-                "Accountant",
-                "Tokyo",
-                "28th Nov 08",
-                "$162,700"
-            ],
-            [
-                "Angelica",
-                "Ramos",
-                "Chief Executive Officer (CEO)",
-                "London",
-                "9th Oct 09",
-                "$1,200,000"
-            ],
-            [
-                "Ashton",
-                "Cox",
-                "Junior Technical Author",
-                "San Francisco",
-                "12th Jan 09",
-                "$86,000"
-            ],
-            [
-                "Bradley",
-                "Greer",
-                "Software Engineer",
-                "London",
-                "13th Oct 12",
-                "$132,000"
-            ],
-            [
-                "Brenden",
-                "Wagner",
-                "Software Engineer",
-                "San Francisco",
-                "7th Jun 11",
-                "$206,850"
-            ],
-            [
-                "Brielle",
-                "Williamson",
-                "Integration Specialist",
-                "New York",
-                "2nd Dec 12",
-                "$372,000"
-            ],
-            [
-                "Bruno",
-                "Nash",
-                "Software Engineer",
-                "London",
-                "3rd May 11",
-                "$163,500"
-            ],
-            [
-                "Caesar",
-                "Vance",
-                "Pre-Sales Support",
-                "New York",
-                "12th Dec 11",
-                "$106,450"
-            ],
-            [
-                "Cara",
-                "Stevens",
-                "Sales Assistant",
-                "New York",
-                "6th Dec 11",
-                "$145,600"
-            ],
-            [
-                "Cedric",
-                "Kelly",
-                "Senior Javascript Developer",
-                "Edinburgh",
-                "29th Mar 12",
-                "$433,060"
-            ]
-        ]
-    })
-
-
-@tokenizer_blueprint.route("/tokenizerSize", methods=["POST"])
-def tokenizer_size():
     # Cache the front options for matrix model and tokenizer model.
     session_manager.cache_analysis_option()
     session_manager.cache_tokenizer_option()
+    # Return the generated DTM to ajax call.
+    return TokenizerModel().get_dtm()
+
+
+@tokenizer_blueprint.route("/tokenizerHeader", methods=["POST"])
+def tokenizer_header():
     # Return the size of the DTM to ajax call.
-    return TokenizerModel().get_dtm_size()
+    return TokenizerModel().get_dtm_header()

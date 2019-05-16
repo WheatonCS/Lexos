@@ -1,9 +1,8 @@
 """This is the tokenizer model which gets the tokenizer table."""
 
 import os
-import numpy as np
 import pandas as pd
-from bs4 import BeautifulSoup
+from flask import jsonify
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -11,7 +10,7 @@ from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.managers.session_manager import session_folder
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
-from lexos.receivers.tokenizer_receiver import TokenizerTableOrientation, \
+from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
 
 
@@ -20,7 +19,7 @@ class TokenizerTestOption(NamedTuple):
 
     token_type_str: str
     doc_term_matrix: pd.DataFrame
-    front_end_option: TokenizerTableOrientation
+    front_end_option: TokenizerOption
     id_temp_label_map: IdTempLabelMap
 
 
@@ -62,7 +61,7 @@ class TokenizerModel(BaseModel):
             else MatrixModel().get_id_temp_label_map()
 
     @property
-    def _front_end_option(self) -> TokenizerTableOrientation:
+    def _front_end_option(self) -> TokenizerOption:
         """:return: A typed tuple that holds the orientation option."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
@@ -98,7 +97,6 @@ class TokenizerModel(BaseModel):
 
         # Change matrix column names to file labels.
         file_col_dtm.columns = labels
-        file_col_dtm.columns.name = self._token_type_str
 
         # Find total and average of each row's data.
         file_col_dtm.insert(loc=0,
@@ -109,24 +107,6 @@ class TokenizerModel(BaseModel):
                             column="Average",
                             value=file_col_dtm["Total"] / len(labels))
         return file_col_dtm
-
-    def _get_file_col_dtm_table(self) -> str:
-        """Get DTM with documents as columns and terms/characters as rows.
-
-        :return: An HTML formatted string that contains the desired DTM.
-        """
-        # Convert the HTML to beautiful soup object.
-        file_col_dtm_soup = BeautifulSoup(
-            self._get_file_col_dtm().round(3).to_html(
-                classes="table text-center table-bordered table-striped "
-                        "display no-wrap"),
-            "html.parser")
-
-        # Set the table style to 100% so it always takes up the space.
-        file_col_dtm_soup.find('table')['style'] = 'width: 100%'
-
-        # Return the beautiful soup object as a string.
-        return file_col_dtm_soup.prettify()
 
     def _get_file_row_dtm(self) -> pd.DataFrame:
         """Get DTM with documents as rows and terms/characters as columns.
@@ -144,74 +124,74 @@ class TokenizerModel(BaseModel):
         # Get the main dtm, set proper column names and use labels as index.
         file_row_dtm = self._doc_term_matrix
         file_row_dtm.index = labels
-        file_row_dtm.columns.name = "Documents / Stats"
 
         return file_row_dtm
 
-    def _get_file_row_dtm_table(self) -> str:
-        """Get DTM with documents as rows and terms/characters as columns.
+    def get_dtm_header(self) -> str:
+        """Return the table headers for tokenizer matrix in JSON format."""
+        if self._front_end_option.orientation == "file_as_column":
+            # Get the proper header.
+            header = self._get_file_col_dtm().columns
+            # Insert the header name.
+            header.insert(0, self._token_type_str)
+            header_html = "".join([f"<th>{item}</th>" for item in header])
+            complete_header = f"<tr>{header_html}</tr>"
 
-        :return: An HTML formatted string that contains the desired DTM.
-        """
-        # Get the file_row_dtm.
-        file_row_dtm = self._get_file_row_dtm()
+        else:
+            dtm = self._get_file_col_dtm()
+            # Get the proper headers since we want all those to stay.
+            header = dtm.index
+            total = dtm["Total"].data
+            average = dtm["Average"].data
 
-        # Convert the main dtm to beautiful soup object.
-        file_row_dtm_soup = BeautifulSoup(
-            file_row_dtm.to_html(
-                classes="table text-center table-bordered table-striped "
-                        "display no-wrap"),
-            "html.parser")
+            # Insert the header names.
+            header.insert(0, "Documents / Stats")
+            total.insert(0, "Total")
+            average.insert(0, "Average")
 
-        # Find the table head of the main dtm in order to insert stats info.
-        dtm_head = file_row_dtm_soup.find("thead")
+            header_html = "".join([f"<th>{item}</th>" for item in header])
+            total_html = "".join([f"<th>{item}</th>" for item in total])
+            average_html = "".join([f"<th>{item}</th>" for item in average])
+            complete_header = f"<tr>{header_html}</tr>" \
+                              f"<tr>{total_html}</tr>" \
+                              f"<tr>{average_html}</tr>"
 
-        # Form the total frame and set column name.
-        total_fame = pd.DataFrame(
-            columns=np.round(file_row_dtm.sum(axis=0), 3))
-        total_fame.columns.name = "Total"
+        temp = complete_header
 
-        # Convert the total frame to beautiful soup object.
-        total_soup = BeautifulSoup(total_fame.to_html(classes="table"),
-                                   "html.parser")
+        print("DONE")
 
-        # Insert the total into the table head, since we want to fix total
-        # at the top of the table.
-        dtm_head.contents.append(total_soup.find("thead").contents[1])
 
-        # Form the average frame and set column name.
-        average_frame = pd.DataFrame(
-            columns=np.around(total_fame.columns / file_row_dtm.index.size, 3))
-        average_frame.columns.name = "Average"
+        return f"<thead>{complete_header}</thead>"
 
-        # Convert the average total frame to beautiful soup object.
-        average_soup = BeautifulSoup(
-            average_frame.round(3).to_html(classes="table"),
-            "html.parser"
-        )
-
-        # Insert the average into the table head, since we want to fix average
-        # at the top of the table.
-        dtm_head.contents.append(average_soup.find("thead").contents[1])
-
-        # Set the table style to 100% so it always takes up the space.
-        file_row_dtm_soup.find('table')['style'] = 'width: 100%'
-
-        # Return the beautiful soup object as a string.
-        return file_row_dtm_soup.prettify()
-
-    def get_dtm(self) -> str:
+    def get_dtm(self):
         """Get the DTM based on front end required table orientation option.
 
         :return: The DTM corresponding to user's choice.
         """
         # Check front end option, if no valid option get, raise an error.
-        if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
-            return self._get_file_col_dtm_table()
-        elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
-            return self._get_file_row_dtm_table()
-        else:
-            raise ValueError("Invalid tokenizer orientation from front end.")
+        dtm = self._get_file_col_dtm() \
+            if self._front_end_option.orientation == "file_as_column" \
+            else self._get_file_row_dtm()
+
+        print("DONE")
+
+        # Sort the dtm.
+        dtm_sorted = dtm.sort_values(
+            by=[dtm.columns[self._front_end_option.sort_column]],
+            ascending=self._front_end_option.sort_method
+        )
+
+        # Slice the dtm.
+        data_start = self._front_end_option.start
+        data_length = self._front_end_option.length
+        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
+
+        return jsonify(
+            draw=self._front_end_option.draw,
+            recordsTotal=dtm.shape[0],
+            recordsFiltered=dtm.shape[0],
+            data=required_dtm.values.tolist()
+        )
 
     def download_dtm(self) -> str:
         """Download the desired DTM as a CSV file.
@@ -219,12 +199,9 @@ class TokenizerModel(BaseModel):
         :return: The file path that saves the CSV file.
         """
         # Select proper DTM based on users choice.
-        if self._front_end_option == TokenizerTableOrientation.FILE_COLUMN:
-            required_dtm = self._get_file_col_dtm()
-        elif self._front_end_option == TokenizerTableOrientation.FILE_ROW:
-            required_dtm = self._get_file_row_dtm()
-        else:
-            raise ValueError("Invalid tokenizer orientation from front end.")
+        required_dtm = self._get_file_col_dtm() \
+            if self._front_end_option.orientation == "file_as_column" \
+            else self._get_file_row_dtm()
 
         # Get the default folder path, if it does not exist, create one.
         folder_path = os.path.join(session_folder(), RESULTS_FOLDER)
@@ -239,14 +216,3 @@ class TokenizerModel(BaseModel):
 
         # Return where the file is.
         return file_path
-
-    def get_dtm_size(self) -> str:
-        """Return the size of the dtm.
-
-        :return: An integer which represents the number of data contained in
-                 the generated dtm.
-        """
-        row_size, col_size = self._doc_term_matrix.shape
-        # Add two more rows since total and average will be calculated.
-        # Concat the result into a string in order to pass it by ajax.
-        return str((row_size + 2) * col_size)

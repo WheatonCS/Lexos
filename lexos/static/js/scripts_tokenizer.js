@@ -1,62 +1,15 @@
 import * as utility from './utility.js'
 
 /**
- * Get the data table configuration based on selected orientation.
- * @returns {{scrollX: boolean, bSortCellsTop: boolean, dom: string, buttons: string[], fixedColumns: {leftColumns: number}, columnDefs: *[]}}
- * The desired data table configuration.
- */
-function getDataTableConfig () {
-  // Declare the variable that holds the number of fixed left columns.
-  const numFixedColumns = $('#table-orientation-column').is(':checked') ? 3 : 1
-
-  return {
-    // Allow scroll horizontally.
-    scrollX: true,
-    // Do not sort headers.
-    bSortCellsTop: true,
-    // specify where the button is
-    dom: `<'row'<'col-md-12 text-right'l>>
-          <'row'<'col-md-6'B><'col-md-6 text-right'f>>
-          <'row'<'col-md-12'tr>>
-          <'row'<'col-md-5'i><'col-md-7'p>>`,
-
-    // specify all the button that is put on to the page
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
-
-    // Set number of fixed columns on left of the data table.
-    fixedColumns: {
-      leftColumns: numFixedColumns
-    },
-
-    // Truncate the long words in most left column.
-    columnDefs: [
-      {
-        targets: 0,
-        render: $.fn.dataTable.render.ellipsis(15, true)
-      }
-    ]
-  }
-}
-
-/**
- * Check if the table is too large, if too large, give user the option to choose.
+ * Display the result of the tokenizer matrix on web page.
  * @returns {void}.
  */
-function checkTokenizerSize () {
-  // convert form into an object map string to string.
+function generateTokenizerResult () {
   const form = utility.jsonifyForm()
   // Send the ajax request to get the tokenizer matrix size.
-  utility.sendAjaxRequest('/tokenizerSize', form)
+  utility.sendAjaxRequest('/tokenizerHeader', form)
     .done(
-      function (response) {
-        // Cast the response to an integer.
-        const size = Number(response)
-        if (size < 50000) { // If less than 50000 data, render the table.
-          generateTokenizerResult()
-        } else { // Else give user the option to download or keep waiting.
-          $('#decision-button').click()
-        }
-      }
+      function (response) { $('#matrix').html(response) }
     )
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -65,26 +18,47 @@ function checkTokenizerSize () {
         utility.runModal('Error encountered while calculating the size of the tokenizer result.')
       }
     )
-}
 
-/**
- * Display the result of the tokenizer matrix on web page.
- * @returns {void}.
- */
-function generateTokenizerResult () {
-  // show loading icon
-  $('#status-analyze').css({'visibility': 'visible'})
-
+  const numFixedColumns = $('#table-orientation-column').is(':checked') ? 3 : 1
   // convert form into an object map string to string
-  const form = utility.jsonifyForm()
-
   $('#matrix').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "type": "POST",
-    "ajax": "/tokenizerMatrix",
-    "contentType": "application/json",
-    "data": form
+    // Below are appearance related settings.
+    // Allow scroll horizontally.
+    scrollX: true,
+    // Do not sort headers.
+    bSortCellsTop: true,
+    // // specify where the button is
+    // dom: `<'row'<'col-md-12 text-right'l>>
+    //       <'row'<'col-md-6'B><'col-md-6 text-right'f>>
+    //       <'row'<'col-md-12'tr>>
+    //       <'row'<'col-md-5'i><'col-md-7'p>>`,
+
+    // // specify all the button that is put on to the page
+    // buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
+
+    // Set number of fixed columns on left of the data table.
+    fixedColumns: {leftColumns: numFixedColumns},
+
+    // Truncate the long words in most left column.
+    columnDefs: [
+      {
+        targets: 0,
+        render: $.fn.dataTable.render.ellipsis(15, true)
+      }
+    ],
+    // Below are server processing related settings.
+    processing: true,
+    serverSide: true,
+    ajax: {
+      type: 'POST',
+      url: '/tokenizerMatrix',
+      contentType: 'application/json',
+      data: function (data) {
+        return JSON.stringify(
+          Object.assign({}, data, utility.jsonifyForm())
+        )
+      }
+    }
   })
 }
 
