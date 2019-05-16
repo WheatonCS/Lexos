@@ -17,7 +17,7 @@
 
 <script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
 
-<!-- This fixes the fixed column overlap issue. It should eventually be removed in favour of an updated FixedColumn extension -->
+<!-- This fixes a fixed-column overlap issue. It should eventually be removed in favor of an updated FixedColumn extension -->
 <script type="text/javascript" src="https://nightly.datatables.net/fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
 
 <style type="text/css">
@@ -31,14 +31,15 @@
 </style>
 
 <script>
-$(document).ready(function() {
+$(document).ready(function(){
 
     // Handle the column visibility menu actions
-    $(document).on('click', 'a.toggle-vis', function(e) {
+    $(document).on('click', 'a.toggle-vis', function(e){
         e.preventDefault();
 
-        // Get the column API object
-        let column = $("#example").DataTable().column($(this).attr('data-column'));
+        // Get the column
+        let column = $("#DataTables_Table_0").DataTable().
+            column($(this).attr('data-column'));
 
         // Toggle the visibility
         column.visible(!column.visible());
@@ -46,31 +47,33 @@ $(document).ready(function() {
 
     // Handle the column visibility menu checkboxes
     let options = [];
-    $(document).on('click', '#visibility-menu > li > a', function(event) {
-       let $target = $(event.currentTarget),
-           val = $target.attr('data-value'),
-           $inp = $target.find('input'),
-           idx;
-       if ((idx = options.indexOf(val)) > -1) {
-          options.splice(idx, 1);
-          setTimeout(function() {$inp.prop('checked', true)}, 0);
+    $(document).on('click', '#visibility-menu > li > a', function(event){
+       let target = $(event.currentTarget);
+       let value = target.attr('data-value');
+       let input = target.find('input');
+       let index;
+
+       if((index = options.indexOf(value)) > -1){
+          options.splice(index, 1);
+          setTimeout(function() {input.prop('checked', true)}, 0);
        } else {
-          options.push(val);
-          setTimeout(function() {$inp.prop('checked', false)}, 0);
+          options.push(value);
+          setTimeout(function() {input.prop('checked', false)}, 0);
        }
+
        $(event.target).blur();
        return false;
     });
 
-    // Decode a URL-encoded HTML string
-    function decode_html_string(encoded_html_string) {
+    // Decode the given URL-encoded HTML string
+    function decode_html_string(encoded_html_string){
         let temporary = document.createElement('textarea');
         temporary.innerHTML = encoded_html_string;
         return temporary.value;
     }
 
     // Convert the form data into a JSON object
-    function form_to_json() {
+    function form_to_json(){
         let form = {};
         $.each($("form").serializeArray(), function (i, field) {
             form[field.name] = field.value || "";
@@ -107,8 +110,9 @@ $(document).ready(function() {
         "paging": true,
         "pagingType": "full_numbers",
         "pageLength": 10,
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "lengthMenu": [[10, 50, 100, 500], [10, 50, 100, 500]],
         "language": {
+
             //Processing indicator
             "processing": '<span class="fa fa-spinner fa-3x fa-spin" style="color:#00b2ff;"></span>',
                 lengthMenu: "Display _MENU_ terms per page",
@@ -120,6 +124,7 @@ $(document).ready(function() {
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         "buttons": [
+
             //"Download CSV" button
             {
                 extend: 'csvHtml5',
@@ -148,13 +153,21 @@ $(document).ready(function() {
             "type": "POST",
             "url": "/tokenizer/update-datatable",
             "contentType": "application/json; charset=utf-8",
+
             // Send existing form data along with the DataTable request data
-            "data": function (arguments) {
+            "data": function(data){
                 let form = form_to_json();
                 $.extend(form, {"datatable-json":
-                    JSON.stringify(arguments)});
+                    JSON.stringify(data)});
                 return JSON.stringify(form);
             }
+        },
+
+        // Make the table visible when loading is complete
+        "initComplete": function(){
+          $.each($(".dataframe.display.table"), function(){
+            $(this).css({visibility: "visible"});
+          });
         }
     }
 
@@ -163,8 +176,20 @@ $(document).ready(function() {
     let dtm_table = $("#dtm-table .dataframe");
     dtm_table.addClass("display table table-bordered table-striped "+
       "table-condensed table-hover");
-    dtm_table.css({width: "100%"});
-    dtm_table.DataTable(dtm_table_configuration);
+    dtm_table.css({width: "100%", visibility: "hidden"});
+    let data_table = dtm_table.DataTable(dtm_table_configuration);
+
+    // Populate the column visibility toggle dropdown
+    let i = 0;
+    data_table.columns().every(function(){
+        let header = this.header();
+        let column_label = $(header).html();
+        let menu_item = '<li><a href="#" data-column="'+i+'" class='+
+            '"toggle-vis active" data-value="option'+i+'" tabIndex="-1">'+
+            '<input type="checkbox" checked/> '+column_label+'</a></li>';
+        $("#visibility-menu").append(menu_item);
+        ++i;
+    });
 
 }); //End document.ready()
 </script>
@@ -183,7 +208,7 @@ $(document).ready(function() {
 <div class="row">
     <div class="col-md-11">
         <fieldset class="csvoptions" id="csvorientdiv">
-            <legend>Data Orientation:</legend>
+            <legend>Data Orientation (Applied On Download):</legend>
             <label class="radio label-csvorientation" for="csvorientation-filecolumn">
                 <input class="pivot" type="radio" name="csvorientation" id="csvorientation-filecolumn" value="filecolumn" {{ "checked" if session['csvoptions']['csvorientation'] == "filecolumn" }} />
                 Documents as Columns, Terms as Rows
