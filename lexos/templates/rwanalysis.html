@@ -105,6 +105,7 @@
                                 <input type="text" name="rollingsearchword"
                                        class="rollinginput"
                                        id="rollingsearchword"
+                                       style="height:32px;"
                                        value="{{ session['rwoption']['rollingsearchword'] }}">
                             </td>
                             <td style="width:20px;">
@@ -182,8 +183,12 @@
             <fieldset class="rwanalysisradiosdiv">
                 <legend>4. Define Window</legend>
                 <label for="rollingwindowsize">Size of Rolling Window:
-                    <input type="number" name="rollingwindowsize"
-                           id="rollingwindowsize" step="1" min="50"
+                    <input type="number"
+                           name="rollingwindowsize"
+                           id="rollingwindowsize"
+                           step="1"
+                           min="50"
+                           style="width:85px;height:32px;"
                            value="{{ session['rwoption']['rollingwindowsize'] }}">
                     <i class="fa fa-question-circle lexos-tooltip-trigger"
                        data-toggle="tooltip" data-html="true"
