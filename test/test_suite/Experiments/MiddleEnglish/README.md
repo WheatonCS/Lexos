@@ -55,7 +55,7 @@ Steps:
     (a) Remove punctuation
     (b) Make Lowercase
     (c) Remove Digits
-    (d) Click "Consolidations". Enter "ð,þ" (without the quotation marks)
+    (d) Click "Consolidations". Enter "ð:þ" (without the quotation marks)
 
     Apply Scrubbing
 (2) CUT all texts into 700 word chunks.
