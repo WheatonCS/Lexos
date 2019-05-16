@@ -1,8 +1,3 @@
-/*@import url("https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300&subset=latin,latin-ext");
-*/
-/*/
-  Lato font.
-*/
 /* Lato (normal, regular) */
 @font-face {
     font-family: Lato;
@@ -95,12 +90,6 @@ ul, ol {
     padding: 0;
     list-style: none;
 
-}
-
-h1 {
-    margin: 10px 0;
-    font-size: 32px;
-    font-weight: 900;
 }
 
 h1 small {
@@ -2243,4 +2232,77 @@ select#orientation {
     margin: auto;
     max-width: 100%;
     max-height: 100%;
+}
+
+
+
+/*New CSS*/
+
+/*Fonts*/
+h1 {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 300;
+    font-size: 4rem;
+    margin: 0;
+}
+
+h3, a {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    margin: 0;
+    display: inline;
+}
+
+/*Main Elements*/
+body {
+    position: relative;
+    min-width: 90rem;
+}
+
+a {
+    color: #000000;
+}
+
+a:hover {
+    color: #FF0000;
+    text-decoration: none;
+    cursor: pointer; /*Temporary*/
+}
+
+.selectable:hover {
+    color: #FF0000;
+}
+
+/*Navbar*/
+#navbar {
+    position: absolute;
+    width: 100%;
+    overflow: auto;
+    height: 7rem;
+    border-bottom: 1px solid #000000;
+    user-select: none;
+}
+
+#navbar-spacer {
+    height: 9rem;
+}
+
+#navbar-left {
+    position: absolute;
+    display: inline-block;
+    top: 1rem;
+    left: 1.5rem;
+}
+
+#navbar-right {
+    position: absolute;
+    display: inline-block;
+    top: 2.5rem;
+    right: 2rem;
+}
+
+#navbar-right > a, h3 {
+    margin: 1rem;
+    cursor: default;
 }
