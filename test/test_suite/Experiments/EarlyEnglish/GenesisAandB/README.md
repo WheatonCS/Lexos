@@ -22,34 +22,41 @@ July 2011, 301-336.
 
 Steps:
 =====================================================================
-(0) UPLOAD A1.1_GenAB_T00010.txt
+(0) UPLOAD:
 
-(1) SCRUB both:
+    A1.1_GenAB_T00010.txt
 
-    (a) Remove punctuation
+(1) SCRUB:
+
+    (a) Remove Punctuation
     (b) Make Lowercase
     (c) Remove Digits
-    (d) Scrub Tags and then (tag options):
-    - Set all tags to:   Remove Tag Only
+    (d) Scrub Tags and then Tag Options:
+        (the gear for Tag Options will appear after selecting Scrub Tags)
+    - Set all tags to:   Remove Tag Only (default)
     - Set teiheader tag to:  Remove Element and All Its Contents
     - Save Changes and then Close
-    (e) Set Special Characters to Dictionary of Old English (sgml)
+    (e) Set Special Characters - Pre-Defined Rule Sets:
+        Dictionary of Old English SGML
 
     Apply Scrubbing
-(2) CUT A1.1_GenAB_T00010.txt into 1500 word chunks.
+(2) CUT:
 
     (a) Tokens/Segment with a Segment Size of 1500
     (b) leave other options with their default option values
 
     Apply Cuts
-(3) ANALYZE - Clustering - Hierarchical
+(3) ANALYZE - Clustering - Hierarchical Clustering:
 
     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
-    (b) Give a Title
-    (c) Edit Labels (optional, but recommended)
-    (d) default tokenization (token 1-grams) and normalization (Proportional)
-    (e) Get Dendrogram
-    (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
+    (b) Assign Temporary Labels (optional, but recommended)
+        Note that each segment ends in an underscore followed by a number
+        That number is the order of the sections, removing it is not recommended
+    (c) Choose the default Tokenization (token 1-grams)
+    (d) Choose the default Normalization (Proportional)
+    
+    Get Dendrogram
+    Compare your result with the .png found in the ResultsToExpect/ directory.
 
 
 mdl - June 28, 2016
