@@ -22,34 +22,44 @@ July 2011, 301-336.
 
 Steps:
 =====================================================================
-(0) UPLOAD A1.3_Dan_T00030.txt and A3.3_Az_T00130.txt
+(0) UPLOAD:
 
-(1) SCRUB both:
+    (1) A1.3_Dan_T00030.txt
+    (2) A3.3_Az_T00130.txt
+
+(1) SCRUB:
 
 	(a) Remove punctuation
 	(b) Make Lowercase
 	(c) Remove Digits
-	(d) Scrub Tags (the default is to keep text within but remove <corr> and <foreign> tags)
-	(e) Load the DAZ_lemma.txt file for Lemmas
-	(f) Load the DAZ_consolidation.txt file for Consolidations
-	(g) Set Special Characters to Dictionary of Old English (sgml)
+	(d) Scrub Tags - keep default options
+	    (the default is to keep text within but remove <corr> and <foreign> tags)
+	(e) Lemmas: upload the DAZ_lemma.txt file
+	(f) Consolidations: upload the DAZ_consolidation.txt file
+	(g) Set Special Characters - Pre-Defined Rule Set to Dictionary of Old English SGML
 
     Apply Scrubbing
 (2) CUT:
-    (a) On the main (left) Default Cutting Options, select Segments/Document and Number of
-    Segments as 1 (for Azarias)
-    (b) For Daniel, select the Individual Options button (on right for Daniel) and a Segment Size: 450 word chunks, 
-    zero Overlap, 50% Last Proportion;
-    (this will lead to ten chunks of Daniel)
+
+    (a) Choose Default Cutting Options, select Segments/Document and Number of
+        Segments as 1 (we don't want to cut Azarias)
+    (b) For Daniel, select the Individual Options button (by its title in the Preview
+        window) and select Segments/Document: Segment Size: 450 word chunks,
+        zero Overlap, 50% Last Proportion
+    This will lead to ten segments of Daniel
 
 	Apply Cuts
 (4) ANALYZE - Dendrogram
 
-	(a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
-	(b) Give a Title
-	(c) Edit Labels - name the Azarias chunk as "AZ" and the Daniel chunks as "Dan1", "Dan2", etc.
-	(d) Get Dendrogram
-	(e) compare your result with the .pdf found in the ResultsToExpect/ directory.
+	(a) Use the default metrics:
+	    Distance Method: Euclidean
+	    Linkage Method: Average
+	(b) Assign Temporary Labels: (recommended, but not required)
+	    Name the Azarias chunk as "AZ"
+	    Name the Daniel chunks as "Dan1", "Dan2", etc.
+	
+	Get Dendrogram
+	Compare your result with the .png found in the ResultsToExpect/ directory.
 
 mdl - July 19, 2016
 mdl - June 24, 2013
