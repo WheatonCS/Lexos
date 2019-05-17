@@ -173,12 +173,6 @@ class TestStatsPlotly:
 
         assert basic_fig['data'][0]['name'] == 'Corpus Scatter Plot'
 
-        assert basic_fig['data'][0]['hoverinfo'] == 'text'
-
-        assert basic_fig['data'][0]['mode'] == 'markers'
-
-        assert basic_fig['data'][0]['text'] == ('F1.txt', 'F2.txt')
-
     def test_get_stats_box_plot(self):
         assert basic_fig['data'][1]['type'] == 'box'
 
@@ -188,18 +182,9 @@ class TestStatsPlotly:
 
         assert basic_fig['data'][1]['name'] == 'Corpus Box Plot'
 
-        assert basic_fig['data'][1]['hoverinfo'] == 'y'
-
-        assert basic_fig['data'][1]['marker']['color'] == 'rgb(10, 140, 200)'
-
     def test_get_stats_layout(self):
-        assert basic_fig['layout']['title'] == \
-            'Document Size Statistics of the Given Corpus'
-
         assert basic_fig['layout']['xaxis']['showgrid'] is False
 
         assert basic_fig['layout']['xaxis']['zeroline'] is False
 
         assert basic_fig['layout']['xaxis']['showline'] is False
-
-        assert basic_fig['layout']['xaxis']['showticklabels'] is False
