@@ -1,0 +1,58 @@
+/*Navbar*/
+#navbar-upload {
+    color: #FF0000;
+}
+
+/*Form*/
+form {
+    width: calc(100% - 4rem);
+    max-width: 100%;
+}
+
+/*Upload information*/
+#upload-information {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    margin-bottom: 1rem;
+}
+
+#upload-requirements {
+    justify-self: right;
+}
+
+/*Browse button and drag and drop section*/
+#browse-button,
+#drag-and-drop-section {
+    display: inline-grid;
+    justify-items: center;
+    align-items: center;
+    margin: 0;
+    height: 30rem;
+}
+
+/*Browse button*/
+#browse-button {
+    width: 30%;
+    border: 1px solid #000000;
+    margin-right: 2rem;
+}
+
+#browse-button:hover
+{
+    color: #FF0000;
+    border-color: #FF0000;
+}
+
+/*Drag and drop section*/
+#drag-and-drop-section {
+    width: calc(69.5% - 2rem);
+    border: 1px dashed #000000;
+}
+
+/*Upload list*/
+#upload-list-container {
+    overflow: hidden;
+    overflow-wrap: break-spaces;
+    margin-top: 1rem;
+    max-width: 100%;
+}

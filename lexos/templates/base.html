@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<!-- Head -->
 <head>
     <meta charset="UTF-8"/>
     <title>Lexos</title>
 
     {%- set version = "3.2.0" %}
 
-    <meta http-equiv="cache-control" content="max-age=0"/>
-    <meta http-equiv="expires" content="0"/>
-    <meta http-equiv="pragma" content="no-cache"/>
-
-    <!-- === jQuery Core === -->
+    <!-- jQuery Core -->
     {% if config['LOCAL_MODE'] == True %}
         <script type="text/javascript"
                 src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}?ver={{ version }}"></script>
@@ -18,7 +16,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     {% endif %}
 
-    <!-- === Load jQuery UI only for selected pages === -->
+    <!-- jQuery UI -->
     {% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
     {% if active_page in needs_jQuery_ui %}
         {% if config['LOCAL_MODE'] == True %}
@@ -33,7 +31,7 @@
         {% endif %}
     {% endif %}
 
-    <!-- === Load d3.js only for selected pages === -->
+    <!-- d3.js -->
     {% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans', 'rollingwindow'] -%}
     {% if active_page in needs_d3 %}
         {% if config['LOCAL_MODE'] == True %}
@@ -45,12 +43,10 @@
         {% endif %}
     {% endif %}
 
-    <!-- === Bootstrap === -->
+    <!-- Bootstrap -->
     {% if config['LOCAL_MODE'] == True %}
-        <link rel="stylesheet"
-              href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}?ver={{ version }}">
-        <script type="text/javascript"
-                src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.min.js') }}?ver={{ version }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}?ver={{ version }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.min.js') }}?ver={{ version }}"</script>
     {% else %}
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -61,24 +57,13 @@
                 crossorigin="anonymous"></script>
     {% endif %}
 
-    <!-- === SmartMenus jQuery plugin CSS === -->
+    <!-- jQuery SmartMenus -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css') }}?ver={{ version }}"/>
     <script type="text/javascript"
             src="{{ url_for('static', filename='node_modules/smartmenus/dist/jquery.smartmenus.min.js') }}?ver={{ version }}"></script>
-
-    <!-- SmartMenus jQuery Bootstrap Addon -->
     <script type="text/javascript"
             src="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js') }}?ver={{ version }}"></script>
-
-    <!-- === Font Awesome === -->
-    {% if config['LOCAL_MODE'] == True %}
-        <link rel="stylesheet"
-              href="{{ url_for('static', filename='node_modules/font-awesome/css/font-awesome.min.css') }}?ver={{ version }}">
-    {% else %}
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    {% endif %}
 
     <!-- Lexos Scripts -->
     <script type="text/javascript"
@@ -89,16 +74,11 @@
             src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{ version }}"></script>
 
     <!-- Lexos CSS -->
-    <link rel="stylesheet" type="text/css" media="all"
-          href="{{ url_for('static', filename='css/style.css') }}?ver={{ version }}"/>
-    <link rel="stylesheet" type="text/css" media="all"
-          href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{ version }}"/>
-    <link rel="stylesheet" type="text/css" media="all"
-          href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{ version }}"/>
-    <link rel="stylesheet" type="text/css" media="all"
-          href="{{ url_for('static', filename='css/bootstrap-override.css') }}?ver={{ version }}"/>
-    <link rel="shortcut icon"
-          href="{{ url_for('static', filename='favicon.png') }}?ver={{ version }}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{ version }}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{ version }}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{ version }}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap-override.css') }}?ver={{ version }}"/>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}?ver={{ version }}"/>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400" rel="stylesheet">
@@ -108,7 +88,9 @@
     {% block head %}{% endblock %}
 </head>
 
+<!-- Body -->
 <body>
+<!-- Header -->
 <header>
     <!-- Session ID and current version -->
     <input type="hidden" name="current_id" value="{{ session['id'] }}"/>
@@ -119,43 +101,63 @@
     </div>
 
     <!-- Navbar -->
-    <div id="navbar">
+    <nav>
         <div id="navbar-left">
             <h1>{L}exos</h1>
         </div>
         <div id="navbar-right">
-            <a href="/upload">Upload</a>
-            <a href="/manage">Manage</a>
-            <h3 class="selectable">Prepare</h3>
-            <h3 class="selectable">Visualize</h3>
-            <h3 class="selectable">Analyze</h3>
+            <a id="navbar-upload" href="/upload">Upload</a>
+            <a id="navbar-manage" href="/manage">Manage</a>
+            <h3 id="navbar-prepare" class="selectable">Prepare</h3>
+            <h3 id="navbar-visualize" class="selectable">Visualize</h3>
+            <h3 id="navbar-analyze" class="selectable">Analyze</h3>
             <h3>|</h3>
             <a href="/downloadworkspace">Save</a>
             <a href="/reset">Reset</a>
             <h3>|</h3>
-            <h3 class="selectable">Options</h3>
+            <h3 id="navbar-options" class="selectable">Options</h3>
         </div>
-    </div>
+    </nav>
 
     <!-- Navbar Spacer -->
     <div id="navbar-spacer"></div>
 </header>
 
-<!-- Main Content -->
-<main class="container">
+<!-- Main content -->
+<main>
     <form method="POST" enctype="multipart/form-data">
-        {% block content %}
-            <!-- Default content -->
-        {% endblock %}
+        {% block content %}{% endblock %}
     </form>
 </main>
 
 <!-- Footer -->
-<footer class="container">
+<footer>
+    <!-- Left footer -->
+    <h3 id="footer-left">
+        Lexos 3.2.0 | Wheaton College (Norton, MA)
+    </h3>
 
+    <!-- Right footer -->
+    <div id="footer-right">
+        <!-- Active document count -->
+        <h3>Active Documents: </h3>
+        <h3 id="active-document-count">0</h3>
+
+        <h3>| </h3>
+
+        <!-- "Feedback and Support" link -->
+        <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.go
+            ogle.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtN
+            pBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_c
+            PTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25
+            Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8v
+            QIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=">
+            Feedback and Support
+        </a>
+    </div>
 </footer>
 
-<!-- Settings Dialog -->
+<!-- Settings dialog -->
 <div class="modal fade" id="settings-modal" tabindex="-1" role="dialog"
      aria-labelledby="settings-modalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -220,7 +222,7 @@
     </div>
 </div>
 
-<!-- In the Margins Dialog -->
+<!-- "In the Margins" dialog -->
 <div class="modal fade" id="ITM-modal" tabindex="-1" role="dialog"
      aria-labelledby="ITM-modalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -255,7 +257,7 @@
     </div>
 </div>
 
-<!-- Error Modal -->
+<!-- Error modal -->
 <div id="error-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm">
         <!-- Modal content-->
@@ -277,7 +279,7 @@
     </div>
 </div>
 
-<!-- Warning Modal -->
+<!-- Warning modal -->
 <div id="warning-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <!-- Modal content-->
@@ -300,11 +302,10 @@
     </div>
 </div>
 
-<!-- Error Message -->
+<!-- Error message -->
 <span id="error-message"></span>
 
-<!-- End Container -->
-
+<!-- End container -->
 <script type="text/javascript">
   var _gaq = _gaq || []
   _gaq.push(['_setAccount', 'UA-42990457-1'])
@@ -319,7 +320,8 @@
     s.parentNode.insertBefore(ga, s)
   })()
 </script>
-<!-- In the Margins Panel -->
+
+<!-- "In the Margins" panel -->
 <div id="ITMPanel" class="container sidebar sidebar-left"
      style="width:500px;position:absolute;left:-500px;">
     <div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel"
@@ -343,7 +345,5 @@
         <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
     </div>
 </div>
-<!--/In the Margins Panel  -->
-
 </body>
 </html>
