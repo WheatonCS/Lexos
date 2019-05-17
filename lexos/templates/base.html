@@ -20,13 +20,10 @@
     {% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
     {% if active_page in needs_jQuery_ui %}
         {% if config['LOCAL_MODE'] == True %}
-            <link rel="stylesheet"
-                  href="{{ url_for('static', filename='node_modules/jquery-ui/themes/base/jquery-ui.min.css') }}?ver={{ version }}">
-            <script type="text/javascript"
-                    src="{{ url_for('static', filename='node_modules/jquery-ui/jquery-ui.min.js') }}?ver={{ version }}"></script>
+            <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/jquery-ui/themes/base/jquery-ui.min.css') }}?ver={{ version }}">
+            <script type="text/javascript" src="{{ url_for('static', filename='node_modules/jquery-ui/jquery-ui.min.js') }}?ver={{ version }}"></script>
         {% else %}
-            <link rel="stylesheet"
-                  href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
             <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         {% endif %}
     {% endif %}
@@ -35,11 +32,9 @@
     {% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans', 'rollingwindow'] -%}
     {% if active_page in needs_d3 %}
         {% if config['LOCAL_MODE'] == True %}
-            <script type="text/javascript"
-                    src="{{ url_for('static', filename='node_modules/d3/d3.min.js') }}?ver={{ version }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename='node_modules/d3/d3.min.js') }}?ver={{ version }}"></script>
         {% else %}
-            <script type="text/javascript"
-                    src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
         {% endif %}
     {% endif %}
 
@@ -58,26 +53,21 @@
     {% endif %}
 
     <!-- jQuery SmartMenus -->
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css') }}?ver={{ version }}"/>
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='node_modules/smartmenus/dist/jquery.smartmenus.min.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js') }}?ver={{ version }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css') }}?ver={{ version }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/smartmenus/dist/jquery.smartmenus.min.js') }}?ver={{ version }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js') }}?ver={{ version }}"></script>
 
     <!-- Lexos Scripts -->
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_base.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript"
-            src="{{ url_for('static', filename='js/scripts_ITM.js') }}?ver={{ version }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}?ver={{ version }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{ version }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/help.js') }}?ver={{ version }}"></script>
 
     <!-- Lexos CSS -->
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/style.css') }}?ver={{ version }}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/base.css') }}?ver={{ version }}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{ version }}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/ITMtabStyles.css') }}?ver={{ version }}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap-override.css') }}?ver={{ version }}"/>
+
+    <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}?ver={{ version }}"/>
 
     <!-- Fonts -->
@@ -90,15 +80,12 @@
 
 <!-- Body -->
 <body>
+
 <!-- Header -->
 <header>
     <!-- Session ID and current version -->
     <input type="hidden" name="current_id" value="{{ session['id'] }}"/>
     <input type="hidden" name="current_version" value="{{ version }}"/>
-
-    <!-- Loading indicator -->
-    <div id="loading-indicator">
-    </div>
 
     <!-- Navbar -->
     <nav>
@@ -106,16 +93,16 @@
             <h1>{L}exos</h1>
         </div>
         <div id="navbar-right">
-            <a id="navbar-upload" href="/upload">Upload</a>
-            <a id="navbar-manage" href="/manage">Manage</a>
-            <h3 id="navbar-prepare" class="selectable">Prepare</h3>
-            <h3 id="navbar-visualize" class="selectable">Visualize</h3>
-            <h3 id="navbar-analyze" class="selectable">Analyze</h3>
+            <a href="/upload">Upload</a>
+            <a href="/manage">Manage</a>
+
+            <h3 id="prepare-button" class="navbar-button selectable">Prepare</h3>
+            <h3 id="visualize-button" class="navbar-button selectable">Visualize</h3>
+            <h3 id="analyze-button" class="navbar-button selectable">Analyze</h3>
+
             <h3>|</h3>
             <a href="/downloadworkspace">Save</a>
             <a href="/reset">Reset</a>
-            <h3>|</h3>
-            <h3 id="navbar-options" class="selectable">Options</h3>
         </div>
     </nav>
 
@@ -142,170 +129,32 @@
         <!-- Active document count -->
         <h3>Active Documents: </h3>
         <h3 id="active-document-count">0</h3>
+        <h3>|</h3>
 
-        <h3>| </h3>
+        <!-- Help button -->
+        <h3 id="help-button" class="selectable">Show Help</h3>
+        <h3>|</h3>
 
-        <!-- "Feedback and Support" link -->
+        <!-- Scroll to top button -->
+        <h3 id="scroll-to-top-button" class="selectable">Top</h3>
+        <h3>|</h3>
+
+        <!-- Feedback link -->
         <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.go
             ogle.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtN
             pBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_c
             PTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25
             Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8v
             QIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=">
-            Feedback and Support
+            Feedback
         </a>
     </div>
 </footer>
 
-<!-- Settings dialog -->
-<div class="modal fade" id="settings-modal" tabindex="-1" role="dialog"
-     aria-labelledby="settings-modalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content panel-primary">
-            <div class="modal-header panel-heading">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="settings-modalLabel">About
-                    Lexos</h4>
-            </div>
-            <div class="modal-body"
-                 style="max-height: calc(100vh - 210px); overflow-y: auto;">
-                <p>Lexos is a web-based tool designed for transforming,
-                    analyzing, and visualizing texts. Lexos is designed for use
-                    primarily with small to medium-sized text collections, and
-                    especially for use with ancient languages and languages
-                    that do not employ the Latin alphabet. Lexos was created as
-                    an entry-level platform for Humanities scholars and
-                    students new to computational techniques while providing
-                    tools and techniques sophisticated enough for advanced
-                    research. <a href="http://scalar.usc.edu/works/lexos"
-                                 target="_blank">Read more...</a></p>
-                <p>The Lexos Manual can be found in its <a
-                        href="http://scalar.usc.edu/works/lexos"
-                        target="_blank"><em>In the Margins</em></a> component,
-                    which can be accessed by clicking the side panel icon on
-                    the left edge of the screen. The <em>In the Margins</em>
-                    panel can be accessed anywhere in the Lexos interface, or
-                    it can be opened by clicking <a id="cog-toggler" href="#">this
-                        link</a>. You can also read <a
-                            href="http://scalar.usc.edu/works/lexos"
-                            target="_blank"><em>In the Margins</em></a> as a
-                    separate "book" on the <a
-                            href="http://scalar.usc.edu/scalar/"
-                            target="_blank">Scalar</a> web platform. In
-                    addition to the "how to" manual, it contains more in-depth
-                    discussion and bibliography on issues and best practices in
-                    computational stylistics.</p>
-                <h4>Settings</h4>
-                <p>Beta functions are new features in Lexos which are not yet
-                    fully tested. If you enable them, the functions will become
-                    visible in the Lexos interface. But please use them with
-                    caution.</p>
-                <form id="settingsform">
-                    <label id="beta_on" for="beta_onbox">
-                        <input type="checkbox" name="beta_onbox"
-                               id="beta_onbox" {{ "checked" if session['generalsettings']['beta_onbox'] }}>
-                        Use Beta functions
-                    </label>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="savesettings" class="btn btn-default"
-                        data-dismiss="modal">Save Settings
-                </button>
-                <button type="button" id="closesettings"
-                        class="btn btn-default" data-dismiss="modal">Close
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Help -->
+<div id="help-container"></div>
 
-<!-- "In the Margins" dialog -->
-<div class="modal fade" id="ITM-modal" tabindex="-1" role="dialog"
-     aria-labelledby="ITM-modalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="ITM-modalLabel"><em>In the
-                    Margins</em></h4>
-            </div>
-            <div class="modal-body"
-                 style="max-height: calc(100vh - 210px); overflow-y: auto;">
-                <label id="beta_on" for="beta_onbox">
-                    <input type="checkbox" name="beta_onbox" id="beta_onbox"
-                            {# "checked" if session['general_settings']['beta_on'] #}>
-                    Use Beta functions
-                </label>
-                <div id="dialog-status">
-                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"
-                       style="color: #0068AF;"></i>
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close
-                </button>
-                <!-- <button id="show-video" type="button" class="btn btn-primary">Show Video</button> -->
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Error modal -->
-<div id="error-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <!-- Modal content-->
-        <div class="modal-content panel-danger">
-            <div class="modal-header panel-heading">
-                <button type="button" class="close" data-dismiss="modal">
-                    &times;
-                </button>
-                <h4 class="modal-title">Error!</h4>
-            </div>
-            <div class="modal-body">
-                <p id="error-modal-message">You have no active documents.
-                    Please activate at least one document using the <a
-                            href="{{ url_for("manage.manage") }}">Manage</a>
-                    tool or <a href="{{ url_for("upload.upload") }}">upload</a>
-                    a new document.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Warning modal -->
-<div id="warning-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- Modal content-->
-        <div class="modal-content panel-warning">
-            <div class="modal-header panel-heading">
-                <button type="button" class="close" data-dismiss="modal">
-                    &times;
-                </button>
-                <h4 class="warning-modal-title">Warning!</h4>
-            </div>
-            <div id="warning-modal-body" class="modal-body">
-                <p id="warning-modal-message"></p>
-            </div>
-            <div id="warning-modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Error message -->
-<span id="error-message"></span>
-
-<!-- End container -->
+<!-- Google Analytics -->
 <script type="text/javascript">
   var _gaq = _gaq || []
   _gaq.push(['_setAccount', 'UA-42990457-1'])
@@ -320,30 +169,5 @@
     s.parentNode.insertBefore(ga, s)
   })()
 </script>
-
-<!-- "In the Margins" panel -->
-<div id="ITMPanel" class="container sidebar sidebar-left"
-     style="width:500px;position:absolute;left:-500px;">
-    <div id="ITMPanel-itm-content" data-slug="{{ itm }}" data-type="panel"
-         data-status="closed" style="max-height:99%;overflow-y:auto;">
-        <div class="row" style="padding: 0 !important;margin: 0 !important;">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg1-12" data-side=""
-                 style="padding: 0 !important;margin: 0 !important;">
-                <div id="itm-header" style="padding:2px 20px;"><h3>In the
-                    Margins</h3></div>
-                <div id="itm-content" style="padding:2px 20px;"></div>
-                <div id="panel-status">
-                    <i class="fa fa-spinner fa-spin fa-2x fa-fw"
-                       style="color: #0068AF;"></i>
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="toggler" class="toggler">
-        <span class="glyphicon glyphicon-chevron-right" style="display:block;">&nbsp;</span>
-        <span class="glyphicon glyphicon-chevron-left" style="display:none;">&nbsp;</span>
-    </div>
-</div>
 </body>
 </html>

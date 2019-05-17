@@ -14,6 +14,12 @@ h3, a {
     display: inline;
 }
 
+b {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
 /*Main Elements*/
 * {
     user-select: none;
@@ -27,6 +33,7 @@ body {
     position: relative;
     height: 100%;
     min-width: 90rem;
+    min-height: 60rem;
 }
 
 main {
@@ -44,13 +51,19 @@ main {
     cursor: pointer;
 }
 
+.red {
+    color: #FF0000;
+}
+
 /*Navbar*/
 nav {
+    z-index: 3;
     position: absolute;
     width: 100%;
-    overflow: auto;
+    overflow: visible;
     height: 7rem;
     border-bottom: 1px solid #000000;
+    background-color: #FFFFFF;
 }
 
 #navbar-spacer {
@@ -67,7 +80,7 @@ nav {
 #navbar-right {
     position: absolute;
     display: inline-block;
-    top: 2.5rem;
+    top: 2.3rem;
     right: 2rem;
 }
 
@@ -76,14 +89,29 @@ nav {
     margin: 1rem;
 }
 
+/*Navbar dropdown menus*/
+.navbar-menu {
+    z-index: 1;
+    position: absolute;
+    top: 4.55rem;
+    display: inline-grid;
+    padding: 1rem;
+    border: 1px #000000 solid;
+    border-top: none;
+    background-color: #FFFFFF;
+}
+
 /*Links*/
 a {
     color: #000000;
 }
 
+a, a:hover, a:focus {
+    text-decoration: none;
+}
+
 a:hover {
     color: #FF0000;
-    text-decoration: none;
 }
 
 /*Footer*/
@@ -106,4 +134,15 @@ footer {
 #footer-right {
     margin-top: .7rem;
     right: 2rem;
+}
+
+/*Help section*/
+#help-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40rem;
+    height: 100%;
+    padding: 2rem;
+    overflow-y: scroll;
 }
