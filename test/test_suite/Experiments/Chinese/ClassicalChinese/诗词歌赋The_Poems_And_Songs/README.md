@@ -44,12 +44,12 @@ Steps:
 
 (1) SCRUB:
 
-    (a) Remove punctuation
+    (a) Remove Punctuation
     (b) Remove Digits
 
     Apply Scrubbing
     
-(2) ANALYZE - Clustering - Hierarchical Clustering
+(2) ANALYZE - Clustering - Hierarchical Clustering:
 
      (a) Use the default metrics:
         Distance Method: Euclidean

@@ -20,7 +20,7 @@ Steps:
 
 (1) SCRUB:
 
-    (a) Remove punctuation
+    (a) Remove Punctuation
     (b) Remove Digits
     (c) Consolidations
         Upload the Chinese_consolidations.txt file

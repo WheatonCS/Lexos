@@ -1,10 +1,10 @@
 # Modern Chinese
 
-1. Sample Test
+Sample Test
 ---------------------------------------------------------------------
 In order to test if Lexos can analyze Modern Chinese literature, we 
 chose the "Turbulent Stream" trilogy and the "Love" trilogy written 
-by Ba jin, and two novels written by Jia Pingwa. Here we show how 
+by Ba Jin, along with two novels written by Jia Pingwa. Here we show how 
 cluster analysis can be used to identify authorship, and to 
 show how a certain writer's writing style changes over the years.
 
@@ -12,7 +12,7 @@ Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/SampleTest/ directory, you 
 should be able to produce a dendrogram as shown in ResultsToExpect/.
 
-###Sample Files:
+####Sample Files:
 Ba Jin's Turbulent Stream Trilogy
 
 * (1) BaJin_TheFamily_1933.txt
@@ -33,23 +33,33 @@ Jia Pingwa's Novels
 
 Steps:
 =====================================================================
-(0) UPLOAD 8 sample files
-    
-(1) CUT 
+(0) UPLOAD:
 
-    (a) Cut all the files into 2 segments
-        (this will lead to 16 segments in total)
-    (b) Apply Cuts
-    
-(3) ANALYZE - Dendrogram
+    The above 8 sample files.
 
-    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
-    (b) Give a Title (optional)
-    (c) Tokenize: 2-gram by Characters
-    (d) Normalize: Weighted Counts (TF/IDF) 
-    (e) Get Dendrogram
-    (f) Compare your result with the .pdf found in the 
-        ResultsToExpect/ directory.
+(1) SCRUB:
+
+    (a) Remove Punctuation
+    (b) Remove Digits
+    
+    Apply Scrubbing
+(2) CUT: 
+
+    (a) Cut all the files by Segments - 2 per document
+        (16 segments total)
+    
+    Apply Cuts
+    
+(3) ANALYZE - Clustering - Hierarchical Clustering:
+
+    (a) Use the default metrics:
+        Distance Method: Euclidean
+        Linkage Method: Average
+    (b) Choose Tokenize: 2-gram by Characters
+    (c) Choose Normalize: Weighted Counts (TF/IDF) - Euclidean Distance
+    
+    Get Dendrogram
+    Compare your result with the .png found in the ResultsToExpect/ directory.
 
 
 

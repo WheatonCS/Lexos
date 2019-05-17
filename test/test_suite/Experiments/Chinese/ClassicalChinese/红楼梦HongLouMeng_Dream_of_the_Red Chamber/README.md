@@ -43,7 +43,7 @@ Steps:
 
 (1) SCRUB:
 
-    (a) Remove punctuation
+    (a) Remove Punctuation
     (b) Remove Digits
 
     Apply Scrubbing
