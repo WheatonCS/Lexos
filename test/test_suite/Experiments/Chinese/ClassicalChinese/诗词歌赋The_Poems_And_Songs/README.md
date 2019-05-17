@@ -1,13 +1,14 @@
 # Classical Chinese - 诗词歌赋The_Poems_And_Songs
 
-The lexomics tool can be used to detect the authorship, contents, era and 
+The Lexos tool can be used to help detect the authorship, contents, era and 
 genre in classical Chinese texts. Here we analyze several different texts written
-in different dynasties and authors, which include genres of Chuci (verses of Chu),
-Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu 
+in different dynasties and authors, which includes the genres of Chuci (verses
+of Chu), Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu 
 (opera from Yuan Dynasty), and historical biographies from Han Dynasty. Here our
-cluster analysis (dendrogram) identifies the similarities between the texts.
+hierarchical cluster analysis (dendrogram) identifies the similarities between
+the texts.
 
-These test files are:
+The test files are:
 
 File|Era(Dynasty)|Genre|Author
 -------------------------|--------------------|------------------|---------------                            
@@ -28,7 +29,7 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 
 Steps:
 =====================================================================
-(0) UPLOAD 
+(0) UPLOAD:
 
     (1) 九歌JiuGe(Zhanguo).txt 
     (2) 后赤壁赋HouChiBiFu(Song).txt
@@ -41,20 +42,22 @@ Steps:
     (9) 项羽本纪XiangYuBenJi(Han).txt
     (10)长恨歌ChangHenGe(Tang).txt 
 
-(1) SCRUB both:
+(1) SCRUB:
 
     (a) Remove punctuation
     (b) Remove Digits
 
     Apply Scrubbing
     
-(2) ANALYZE - Dendrogram
+(2) ANALYZE - Clustering - Hierarchical Clustering
 
-     (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
-     (b) Give a Title
-     (c) Choose Tokenize - 1 - gram, by Characters
-     (d) Choose normalize - Proportional Counts
-     (e) Get Dendrogram
-     (f) compare your result with the .pdf found in the ResultsToExpect/ directory.
+     (a) Use the default metrics:
+        Distance Method: Euclidean
+        Linkage Method: Average
+     (b) Choose Tokenize - 1 - gram, by Characters
+     (c) Choose Normalize - Proportional Counts
+     
+     Get Dendrogram
+     Compare your result with the .png found in the ResultsToExpect/ directory.
 
 jg - June 10, 2014

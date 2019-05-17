@@ -33,7 +33,7 @@ produce a dendrogram and a K-Means cluster as shown in ResultsToExpect/.
 
 Steps:
 =====================================================================
-(0) UPLOAD 
+(0) UPLOAD:
 
     (a) First80Chapters.txt
     (b) Last40Chapters.txt
@@ -55,7 +55,7 @@ Steps:
         Late40Chapters - Segments/Documents - Number of Segments: 4
 
     Apply Cuts
-(3) ANALYZE - Clustering - Hierarchical Clustering
+(3) ANALYZE - Clustering - Hierarchical Clustering:
 
     (a) Use the default metrics:
         Distance Method: Euclidean
@@ -70,7 +70,7 @@ Steps:
 
 Do not forget to SCRUB the individual chapter files (see above)
 
-(4) ANALYZE - Clustering - K-Means Clustering
+(4) ANALYZE - Clustering - K-Means Clustering:
 
      (a) K Value: 12
      (b) Advanced K-Means Options:
