@@ -88,12 +88,12 @@ function upload_success_callback(file_name)
 function send_ajax_request(file, file_name){
   return $.ajax({
     type: "POST",
-    url: document.URL,
+    url: "upload/add-document",
     data: file,
     processData: false,
     async: false, /*Async results in errors*/
     contentType: file.type,
-    headers: {"X-FILENAME": encodeURIComponent(file_name)}
+    headers: {"file-name": encodeURIComponent(file_name)}
   });
 }
 
@@ -154,18 +154,21 @@ $(function(){
     drag_and_drop_section.on("dragenter", function(){
         ++drag_counter;
         $("#drag-and-drop-section").css({
-            "color": "#FF0000", "border-color": "#FF0000"});
+            "color": "#FFFFFF", "background-color": "#FF6000"});
     });
 
     drag_and_drop_section.on("dragleave", function(){
-        if(--drag_counter) return;
-        $("#drag-and-drop-section").css({
-            "color": "#000000", "border-color": "#000000"});
+        if(--drag_counter === 0) set_default_drop_section_colors();
     });
 
     drag_and_drop_section.on("drop", function(){
         drag_counter = 0;
-        $("#drag-and-drop-section").css({
-            "color": "#000000", "border-color": "#000000"});
+        set_default_drop_section_colors();
     });
 })
+
+
+function set_default_drop_section_colors(){
+    $("#drag-and-drop-section").css({
+        "color": "#505050", "background-color": "#FFFFFF"});
+}

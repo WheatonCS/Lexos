@@ -1,247 +1,196 @@
 import json
 import re
-
 from flask import request, render_template, Blueprint
-
 from lexos.managers import utility
-from lexos.views.base_view import detect_active_docs
 
-# this is a flask blue print
-# it helps us to manage groups of views
-# see here for more detail:
-# http://exploreflask.com/en/latest/blueprints.html
-# http://flask.pocoo.org/docs/0.12/blueprints/
-manage_blueprint = Blueprint('manage', __name__)
+manage_blueprint = Blueprint("manage", __name__)
 
 
-# Tells Flask to load this function when someone is at '/select'
-@manage_blueprint.route("/manage", methods=["GET", "POST"])
-def manage():
-    """Handles the functionality of the select page.
+@manage_blueprint.route("/manage", methods=["GET"])
+def manage() -> str:
+    """ Loads the manage page.
 
-    Its primary role is to activate/deactivate specific files depending on the
-    user's input.
-    :return: a response object (often a render_template call) to flask
-    and eventually to the browser.
+    :return: The HTML of the manage page.
     """
-    # Detect the number of active documents.
-    num_active_docs = detect_active_docs()
-    # Usual loading of the FileManager
-    file_manager = utility.load_file_manager()
-    if request.method == "GET":
-        rows = file_manager.get_previews_of_all()
-        for row in rows:
-            if row["state"]:
-                row["state"] = "selected"
-            else:
-                row["state"] = ""
-        return render_template(
-            'manage.html',
-            rows=rows,
-            itm="manage",
-            numActiveDocs=num_active_docs)
-    if 'previewTest' in request.headers:
-        file_id = int(request.data)
-        file_label = file_manager.files[file_id].label
-        file_preview = file_manager.files[file_id].get_preview()
-        preview_vals = {
-            "id": file_id,
-            "label": file_label,
-            "previewText": file_preview}
-        return json.dumps(preview_vals)
-    if 'toggleFile' in request.headers:
-        # Catch-all for any POST request.
-        # On the select page, POSTs come from JavaScript AJAX XHRequests.
-        file_id = int(request.data)
-        # Toggle the file from active to inactive or vice versa
-        file_manager.toggle_file(file_id)
-    elif 'toggliFy' in request.headers:
-        file_ids = request.data
-        file_ids = file_ids.split(",")
-        file_manager.disable_all()
-        # Toggle the file from active to inactive or vice versa
-        file_manager.enable_files(file_ids)
 
-    elif 'setLabel' in request.headers:
-        new_name = (request.headers['setLabel'])
-        file_id = int(request.data)
-        file_manager.files[file_id].set_name(new_name)
-        file_manager.files[file_id].label = new_name
-    elif 'setClass' in request.headers:
-        new_class_label = (request.headers['setClass'])
-        file_id = int(request.data)
-        file_manager.files[file_id].set_class_label(new_class_label)
-    elif 'disableAll' in request.headers:
-        file_manager.disable_all()
-    elif 'selectAll' in request.headers:
-        file_manager.enable_all()
-    elif 'applyClassLabel' in request.headers:
-        file_manager.classify_active_files()
-    elif 'deleteActive' in request.headers:
-        file_manager.delete_active_files()
-    elif 'deleteRow' in request.headers:
-        # delete the file in request.form
-        file_manager.delete_files(list(request.form.keys()))
-    utility.save_file_manager(file_manager)
-    return ''  # Return an empty string because you have to return something
+    return render_template("manage.html")
 
 
-@manage_blueprint.route("/selectAll", methods=["GET", "POST"])
-def select_all():
-    """selects all files.
+@manage_blueprint.route("/manage/documents", methods=["GET"])
+def get_documents() -> str:
+    """ Returns a list of the uploaded documents.
 
-    :return: string indicating that it has succeeded
+    :return: The JSON of a list of uploaded documents.
     """
-    file_manager = utility.load_file_manager()
-    file_manager.enable_all()
-    utility.save_file_manager(file_manager)
-    return 'success'
+
+    return json.dumps(utility.load_file_manager().get_previews_of_all())
 
 
-@manage_blueprint.route("/deselectAll", methods=["GET", "POST"])
-def deselect_all():
-    """deletes all files.
+@manage_blueprint.route("/manage/download", methods=["GET"])
+def download() -> str:
+    """ Downloads the active files.
 
-    :return: string indicating that it has succeeded
+    :return: A .zip containing the active files.
     """
+
     file_manager = utility.load_file_manager()
-    file_manager.disable_all()
-    utility.save_file_manager(file_manager)
-    return 'success'
+    return file_manager.zip_active_files("selected_documents.zip")
 
 
-@manage_blueprint.route("/downloadDocuments", methods=["GET", "POST"])
-def download_documents():
-    """downloads all selected files.
+@manage_blueprint.route("/manage/preview", methods=["POST"])
+def get_previews() -> str:
+    """ Returns a preview of the desired file.
 
-    :return: a .zip file congaing all selected files
+    :return: A preview of the desired file.
     """
-    # The 'Download Selected Documents' button is clicked in manage.html.
-    # Sends zipped files to downloads folder.
+
     file_manager = utility.load_file_manager()
-    return file_manager.zip_active_files('selected_documents.zip')
+    file_id = int(request.json)
 
-
-@manage_blueprint.route("/enableRows", methods=["GET", "POST"])
-def enable_rows():
-    """:return: string indicating that it has succeeded
-    """
-    file_manager = utility.load_file_manager()
-    for file_id in request.json:
-        file_manager.enable_files([file_id, ])
-    utility.save_file_manager(file_manager)
-    return 'success'
-
-
-@manage_blueprint.route("/disableRows", methods=["GET", "POST"])
-def disable_rows():
-    """:return: string indicating that it has succeeded
-    """
-    file_manager = utility.load_file_manager()
-    for file_id in request.json:
-        file_manager.disable_files([file_id, ])
-    utility.save_file_manager(file_manager)
-    return 'success'
-
-
-@manage_blueprint.route("/getPreview", methods=["GET", "POST"])
-def get_previews():
-    """:return: a json object with the id, label, and preview text for all
-    text files
-    """
-    file_manager = utility.load_file_manager()
-    file_id = int(request.data)
-    file_label = file_manager.files[file_id].label
-    file_preview = file_manager.files[file_id].load_contents()
     preview_vals = {
         "id": file_id,
-        "label": file_label,
-        "previewText": file_preview}
+        "label": file_manager.files[file_id].label,
+        "previewText": file_manager.files[file_id].load_contents()}
+
     return json.dumps(preview_vals)
 
 
-@manage_blueprint.route("/setLabel", methods=["GET", "POST"])
-def set_label():
-    """sets the label of a file.
+@manage_blueprint.route("/manage/activate", methods=["POST"])
+def enable_rows() -> str:
+    """ Activates the files with the given IDs.
 
-    :return: string indicating that it has succeeded
+    :return: None.
     """
+
+    file_manager = utility.load_file_manager()
+
+    for file_id in request.json:
+        file_manager.enable_files([file_id, ])
+
+    utility.save_file_manager(file_manager)
+    return ""
+
+
+@manage_blueprint.route("/manage/deactivate", methods=["POST"])
+def deactivate() -> str:
+    """ Deactivates the files with the given IDs.
+
+    :return: None.
+    """
+
+    file_manager = utility.load_file_manager()
+
+    for file_id in request.json:
+        file_manager.disable_files([file_id, ])
+
+    utility.save_file_manager(file_manager)
+    return ""
+
+
+@manage_blueprint.route("/manage/edit-name", methods=["POST"])
+def edit_name() -> str:
+    """ Sets the name of the file with the given ID.
+
+    :return: None.
+    """
+
     file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
     new_name = request.json[1]
+
     file_manager.files[file_id].set_name(new_name)
     file_manager.files[file_id].label = new_name
+
     utility.save_file_manager(file_manager)
-    return 'success'
+    return ""
 
 
-@manage_blueprint.route("/setClass", methods=["GET", "POST"])
-def set_class():
-    """sets a class.
+@manage_blueprint.route("/manage/set-class", methods=["POST"])
+def set_class() -> str:
+    """ Sets the class of the file with the given ID.
 
-    :return: string indicating that it has succeeded
+    :return: None.
     """
+
     file_manager = utility.load_file_manager()
-    file_id = int(request.json[0])
+    file_id = request.json[0]
     new_class_label = request.json[1]
-    file_manager.files[file_id].set_class_label(new_class_label)
+
+    file_manager.files[int(file_id)].set_class_label(new_class_label)
+
     utility.save_file_manager(file_manager)
-    return 'success'
+    return ""
 
 
-@manage_blueprint.route("/deleteOne", methods=["GET", "POST"])
-def delete_one():
-    """:return: string indicating that it has succeeded
+@manage_blueprint.route("/manage/delete", methods=["POST"])
+def delete() -> str:
+    """ Deletes the selected files.
+
+    :return: None.
     """
+
     file_manager = utility.load_file_manager()
-    file_manager.delete_files([int(request.data)])
+    file_manager.delete_files([int(request.json)])
     utility.save_file_manager(file_manager)
-    return "success"
+    return ""
 
 
-@manage_blueprint.route("/deleteSelected", methods=["GET", "POST"])
-def delete_selected():
-    """:returns json object with the ids of the files to delete
+@manage_blueprint.route("/manage/merge-selected", methods=["POST"])
+def merge_selected() -> str:
+    """ Merges the active files.
+
+    :return: None.
     """
-    file_manager = utility.load_file_manager()
-    file_ids = file_manager.delete_active_files()
-    utility.save_file_manager(file_manager)
-    return json.dumps(file_ids)
 
-
-@manage_blueprint.route("/setClassSelected", methods=["GET", "POST"])
-def set_class_selected():
-    file_manager = utility.load_file_manager()
-    rows = request.json[0]
-    new_class_label = request.json[1]
-    for file_id in list(rows):
-        file_manager.files[int(file_id)].set_class_label(new_class_label)
-    utility.save_file_manager(file_manager)
-    return json.dumps(rows)
-
-
-@manage_blueprint.route("/mergeDocuments", methods=["GET", "POST"])
-def merge_documents():
-    """:return: json object with the new file's id and preview
-    """
-    print("Merging...")
     file_manager = utility.load_file_manager()
     file_manager.disable_all()
     file_ids = request.json[0]
     new_name = request.json[1]
     source_file = request.json[2]
     milestone = request.json[3]
-    end_milestone = re.compile(milestone + '$')
+    end_milestone = re.compile(milestone+'$')
     new_file = ""
+
     for file_id in file_ids:
         new_file += file_manager.files[int(file_id)].load_contents()
         new_file += request.json[3]  # Add the milestone string
     new_file = re.sub(end_milestone, '', new_file)  # Strip the last milestone
-    # The routine below is ugly, but it works
+
     file_id = file_manager.add_file(source_file, new_name, new_file)
     file_manager.files[file_id].name = new_name
     file_manager.files[file_id].label = new_name
     file_manager.files[file_id].active = True
+
     utility.save_file_manager(file_manager)
-    # Returns a new fileID and some preview text
-    return json.dumps([file_id, new_file[0:152] + '...'])
+    return ""
+
+
+@manage_blueprint.route("/manage/edit-selected-classes", methods=["POST"])
+def edit_selected_classes() -> str:
+    """ Edits the classes of the selected files.
+
+    :return: None.
+    """
+
+    file_manager = utility.load_file_manager()
+    rows = request.json[0]
+    new_class_label = request.json[1]
+
+    for file_id in list(rows):
+        file_manager.files[int(file_id)].set_class_label(new_class_label)
+
+    utility.save_file_manager(file_manager)
+    return ""
+
+
+@manage_blueprint.route("/manage/delete-selected", methods=["POST"])
+def delete_selected() -> str:
+    """ Deletes the selected files.
+
+    :return: None.
+    """
+
+    file_manager = utility.load_file_manager()
+    file_manager.delete_active_files()
+    utility.save_file_manager(file_manager)
+    return ""

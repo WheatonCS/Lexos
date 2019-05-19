@@ -1,15 +1,10 @@
-/*Navbar*/
+/* Navbar */
 #navbar-upload {
     color: #FF0000;
 }
 
-/*Form*/
-form {
-    width: calc(100% - 4rem);
-    max-width: 100%;
-}
 
-/*Upload information*/
+/* Upload information */
 #upload-information {
     display: grid;
     grid-template-columns: 25% 75%;
@@ -20,7 +15,8 @@ form {
     justify-self: right;
 }
 
-/*Browse button and drag and drop section*/
+
+/* Browse button and drag and drop section */
 #browse-button,
 #drag-and-drop-section {
     display: inline-grid;
@@ -28,28 +24,40 @@ form {
     align-items: center;
     margin: 0;
     height: 30rem;
+    background-color: #FFFFFF;
 }
 
-/*Browse button*/
+
+/* Upload section */
+#upload-section {
+    display: grid;
+    grid-template-columns: 30% auto;
+    column-gap: 2rem;
+}
+
 #browse-button {
-    width: 30%;
-    border: 1px solid #000000;
-    margin-right: 2rem;
+    transition: background-color .2s;
 }
 
-#browse-button:hover
-{
-    color: #FF0000;
-    border-color: #FF0000;
+#browse-button:hover {
+    color: #FFFFFF;
+    background-color: #FF6000;
 }
 
-/*Drag and drop section*/
+#browse-button > h3 {
+    color: inherit;
+}
+
 #drag-and-drop-section {
-    width: calc(69.5% - 2rem);
-    border: 1px dashed #000000;
+    transition: background-color .2s;
 }
 
-/*Upload list*/
+#drag-and-drop-section > h3 {
+    color: inherit;
+}
+
+
+/* Upload list */
 #upload-list-container {
     overflow: hidden;
     overflow-wrap: break-spaces;

@@ -3,7 +3,7 @@
 
 <!-- Head -->
 {% block head %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_upload.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/upload.js') }}?ver={{version}}"></script>
     <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/upload.css') }}?ver={{ version }}"/>
 {% endblock %}
 
@@ -26,11 +26,6 @@
         </h3>
     </div>
 
-    <!-- Web scraper text -->
-    {% if session['generalsettings']['beta_onbox'] %}
-        <h3>Or use the <a href="{{ url_for("upload.scrape") }}">web scraper</a> (beta) instead.</h3>
-    {% endif %}
-
     <!-- Upload section -->
     <div id="upload-section">
         <!-- Browse button -->
@@ -49,10 +44,7 @@
         <h3>Uploads: </h3><h3 id="upload-list">None</h3><h3>.</h3>
     </div>
 
-    <!-- Hidden elements -->
+    <!-- Hidden file input -->
     <input type="file" id="file-select-input" style="display:none" multiple/>
-    <input type="hidden" id="MAX_FILE_SIZE_INT" name="MAX_FILE_SIZE_INT" value={{MAX_FILE_SIZE_INT}} />
-    <input type="hidden"  id="MAX_FILE_SIZE_UNITS" name="MAX_FILE_SIZE_UNITS" value={{MAX_FILE_SIZE_UNITS}} />
-    <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
 
 {% endblock %}

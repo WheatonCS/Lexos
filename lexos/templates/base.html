@@ -6,89 +6,61 @@
     <meta charset="UTF-8"/>
     <title>Lexos</title>
 
-    {%- set version = "3.2.0" %}
-
     <!-- jQuery Core -->
-    {% if config['LOCAL_MODE'] == True %}
-        <script type="text/javascript"
-                src="{{ url_for('static', filename='node_modules/jquery/dist/jquery.min.js') }}?ver={{ version }}"></script>
-    {% else %}
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    {% endif %}
+    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
 
     <!-- jQuery UI -->
-    {% set needs_jQuery_ui = ['wordcloud', 'multicloud'] -%}
-    {% if active_page in needs_jQuery_ui %}
-        {% if config['LOCAL_MODE'] == True %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/jquery-ui/themes/base/jquery-ui.min.css') }}?ver={{ version }}">
-            <script type="text/javascript" src="{{ url_for('static', filename='node_modules/jquery-ui/jquery-ui.min.js') }}?ver={{ version }}"></script>
-        {% else %}
-            <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-            <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        {% endif %}
+    {% set needs_jquery_ui = ["wordcloud", "multicloud"] -%}
+    {% if active_page in needs_jquery_ui %}
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     {% endif %}
 
     <!-- d3.js -->
-    {% set needs_d3 = ['wordcloud', 'multicloud', 'viz', 'kmeans', 'rollingwindow'] -%}
+    {% set needs_d3 = ["wordcloud", "multicloud", "viz", "kmeans", "rollingwindow"] -%}
     {% if active_page in needs_d3 %}
-        {% if config['LOCAL_MODE'] == True %}
-            <script type="text/javascript" src="{{ url_for('static', filename='node_modules/d3/d3.min.js') }}?ver={{ version }}"></script>
-        {% else %}
-            <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-        {% endif %}
+        <script type="text/javascript" src="static/node_modules/d3/d3.min.js"></script>
     {% endif %}
 
     <!-- Bootstrap -->
-    {% if config['LOCAL_MODE'] == True %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}?ver={{ version }}">
-        <script type="text/javascript" src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.min.js') }}?ver={{ version }}"</script>
-    {% else %}
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-              crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-                crossorigin="anonymous"></script>
-    {% endif %}
+    <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jQuery SmartMenus -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css') }}?ver={{ version }}"/>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/smartmenus/dist/jquery.smartmenus.min.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js') }}?ver={{ version }}"></script>
+    <link rel="stylesheet" href="static/node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css"/>
+    <script type="text/javascript" src="static/node_modules/smartmenus/dist/jquery.smartmenus.min.js"></script>
+    <script type="text/javascript" src="static/node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js"></script>
 
-    <!-- Lexos Scripts -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts_icons.js') }}?ver={{ version }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/help.js') }}?ver={{ version }}"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="static/node_modules/font-awesome/css/font-awesome.min.css">
+
+    <!-- Lexos JS -->
+    <script type="text/javascript" src="static/js/base.js"></script>
+    <script type="text/javascript" src="static/js/scripts_icons.js"></script>
 
     <!-- Lexos CSS -->
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/base.css') }}?ver={{ version }}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/iconfonts.css') }}?ver={{ version }}"/>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/bootstrap-override.css') }}?ver={{ version }}"/>
+    <link rel="stylesheet" type="text/css" href="static/css/iconfonts.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap-override.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/old.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}?ver={{ version }}"/>
+    <link rel="shortcut icon" href="static/favicon.png"/>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,700" rel="stylesheet">
 
-    {% block section_head %}{% endblock %}
     {% block head %}{% endblock %}
 </head>
 
 <!-- Body -->
 <body>
-
-<!-- Header -->
-<header>
-    <!-- Session ID and current version -->
+    <!-- Session ID -->
     <input type="hidden" name="current_id" value="{{ session['id'] }}"/>
-    <input type="hidden" name="current_version" value="{{ version }}"/>
 
     <!-- Navbar -->
-    <nav>
+    <div id="navbar">
         <div id="navbar-left">
             <h1>{L}exos</h1>
         </div>
@@ -101,73 +73,76 @@
             <h3 id="analyze-button" class="navbar-button selectable">Analyze</h3>
 
             <h3>|</h3>
-            <a href="/downloadworkspace">Save</a>
+            <a href="/download-workspace">Save</a>
             <a href="/reset">Reset</a>
         </div>
-    </nav>
-
-    <!-- Navbar Spacer -->
-    <div id="navbar-spacer"></div>
-</header>
-
-<!-- Main content -->
-<main>
-    <form method="POST" enctype="multipart/form-data">
-        {% block content %}{% endblock %}
-    </form>
-</main>
-
-<!-- Footer -->
-<footer>
-    <!-- Left footer -->
-    <h3 id="footer-left">
-        Lexos 3.2.0 | Wheaton College (Norton, MA)
-    </h3>
-
-    <!-- Right footer -->
-    <div id="footer-right">
-        <!-- Active document count -->
-        <h3>Active Documents: </h3>
-        <h3 id="active-document-count">0</h3>
-        <h3>|</h3>
-
-        <!-- Help button -->
-        <h3 id="help-button" class="selectable">Show Help</h3>
-        <h3>|</h3>
-
-        <!-- Scroll to top button -->
-        <h3 id="scroll-to-top-button" class="selectable">Top</h3>
-        <h3>|</h3>
-
-        <!-- Feedback link -->
-        <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.go
-            ogle.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtN
-            pBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_c
-            PTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25
-            Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8v
-            QIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=">
-            Feedback
-        </a>
     </div>
-</footer>
 
-<!-- Help -->
-<div id="help-container"></div>
+    <!-- Main grid -->
+    <div id="main-grid">
+        <!-- Main section -->
+        <div id="main-section">
+            <!-- Main content -->
+            <main class="centerer">
+                <form method="POST" enctype="multipart/form-data">
+                    {% block content %}{% endblock %}
+                </form>
+            </main>
 
-<!-- Google Analytics -->
-<script type="text/javascript">
-  var _gaq = _gaq || []
-  _gaq.push(['_setAccount', 'UA-42990457-1'])
-  _gaq.push(['_trackPageview']);
+            <!-- Help -->
+            <div id="help-container"></div>
 
-  (function () {
-    var ga = document.createElement('script')
-    ga.type = 'text/javascript'
-    ga.async = true
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'
-    var s = document.getElementsByTagName('script')[0]
-    s.parentNode.insertBefore(ga, s)
-  })()
-</script>
+            <!-- Google Analytics -->
+            <script type="text/javascript">
+              var _gaq = _gaq||[]
+              _gaq.push(["_setAccount", "UA-42990457-1"])
+              _gaq.push(["_trackPageview"]);
+
+              (function(){
+                let ga = document.createElement("script")
+                ga.type = "text/javascript"
+                ga.async = true
+                ga.src = ("https:" === document.location.protocol ?
+                    "https://ssl" : "http://www")+".google-analytics.com/ga.js"
+                let s = document.getElementsByTagName("script")[0]
+                s.parentNode.insertBefore(ga, s)
+              })()
+            </script>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+            <!-- Left footer -->
+            <h3 id="footer-left">
+                Lexos 3.2.0 | Wheaton College (Norton, MA)
+            </h3>
+
+            <!-- Right footer -->
+            <div id="footer-right">
+                <!-- Active document count -->
+                <h3>Active Documents: </h3>
+                <h3 id="active-document-count">0</h3>
+                <h3>|</h3>
+
+                <!-- Help button -->
+                <h3 id="help-button" class="selectable">Show Help</h3>
+                <h3>|</h3>
+
+                <!-- Scroll to top button -->
+                <h3 id="scroll-to-top-button" class="selectable">Top</h3>
+                <h3>|</h3>
+
+                <!-- Feedback link -->
+                <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.go
+                    ogle.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtN
+                    pBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_c
+                    PTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25
+                    Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8v
+                    QIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=">
+                    Feedback
+                </a>
+            </div>
+    </footer>
 </body>
 </html>

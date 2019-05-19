@@ -1,0 +1,80 @@
+/* Form */
+form {
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+
+/* Top section */
+#top-section {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    margin-bottom: 2rem;
+}
+
+#download-button {
+    justify-self: right;
+}
+
+
+/* Table */
+#manage-table {
+    background-color: #FFFFFF;
+}
+
+#manage-table-head,
+#manage-table-body {
+    display: grid;
+    width: 100%;
+}
+
+#manage-table-head {
+    grid-template-columns: 20% 20% 20% 40%;
+    height: 5rem;
+}
+
+.manage-table-head-cell {
+    display: grid;
+    align-content: center;
+    padding: 1rem;
+}
+
+.manage-table-row {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 40%;
+    width: 100%;
+    height: 10rem;
+    transition: background-color .2s;
+}
+
+.manage-table-cell {
+    height: 10rem;
+    padding: 1rem;
+    word-wrap: break-word;
+    overflow: hidden;
+    color: inherit;
+}
+
+
+/* Context Menu */
+#context-menu {
+    z-index: 1;
+    position: absolute;
+    display: grid;
+    row-gap: 1rem;
+    top: 0;
+    left: 0;
+    width: 18rem;
+    padding: 1rem;
+    background-color: #F0FAF1;
+    opacity: 0;
+    transition: opacity .2s;
+}
+
+
+/* Selection box */
+#selection-box {
+    position: absolute;
+    pointer-events: none;
+    transition: opacity .2s;
+}
