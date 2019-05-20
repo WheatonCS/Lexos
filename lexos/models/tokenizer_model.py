@@ -27,7 +27,7 @@ class TokenizerModel(BaseModel):
     """This is the class to generate statistics of the input file.
 
     :param test_options: The input used in testing to override the
-                         dynamically loaded option
+                         dynamically loaded option.
     """
 
     def __init__(self, test_options: Optional[TokenizerTestOption] = None):
@@ -108,11 +108,56 @@ class TokenizerModel(BaseModel):
                             value=file_col_dtm["Total"] / len(labels))
         return file_col_dtm
 
+    def _get_file_col_table_header(self) -> str:
+        """Get the HTML header with documents as columns."""
+        # Get the proper header.
+        header = self._get_file_col_dtm().columns.values.tolist()
+
+        # Insert the header name.
+        header.insert(0, self._token_type_str)
+
+        # Join the column names in HTML format.
+        header_html = "".join([f"<th>{item}</th>" for item in header])
+
+        # Return the HTML header.
+        return f"<thead><tr>{header_html}</tr></thead>"
+
+    def _select_file_col_dtm(self) -> jsonify:
+        """Select required portion of dtm corresponding to the ajax call."""
+        # Grab the file col dtm.
+        dtm = self._get_file_col_dtm()
+
+        # Sort the dtm; if the sort column is 0, sort by index.
+        dtm_sorted = dtm.sort_values(
+            by=[dtm.columns[self._front_end_option.sort_column - 1]],
+            ascending=self._front_end_option.sort_method
+        ) if self._front_end_option.sort_column != 0 \
+            else dtm.sort_index(ascending=self._front_end_option.sort_method)
+
+        # Slice the desired portion of the dtm.
+        data_start = self._front_end_option.start
+        data_length = self._front_end_option.length
+        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
+
+        # Convert the data to a list of lists.
+        data = required_dtm.values.tolist()
+
+        # Insert the index (terms/characters) in front of the count.
+        for index, value in enumerate(required_dtm.index):
+            data[index].insert(0, value)
+
+        # Return the sliced DTM and total count as a JSON object.
+        return jsonify(
+            draw=self._front_end_option.draw,
+            recordsFiltered=dtm.shape[0],
+            recordsTotal=dtm.shape[0],
+            data=data
+        )
+
     def _get_file_row_dtm(self) -> pd.DataFrame:
         """Get DTM with documents as rows and terms/characters as columns.
 
-        :return: A pandas data frame that contains the DTM where each document
-                 is a row with total and average added to the original DTM.
+        :return: DataFrame that contains DTM where each document is a row.
         """
         # Check if empty DTM is received.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
@@ -127,73 +172,45 @@ class TokenizerModel(BaseModel):
 
         return file_row_dtm
 
-    def get_dtm_header(self) -> str:
-        """Return the table headers for tokenizer matrix in JSON format."""
-        if self._front_end_option.orientation == "file_as_column":
-            # Get the proper header.
-            header = self._get_file_col_dtm().columns.values.tolist()
-            # Insert the header name.
-            header.insert(0, self._token_type_str)
-            header_html = "".join([f"<th>{item}</th>" for item in header])
-            complete_header = f"<tr>{header_html}</tr>"
+    def _get_file_row_table_header(self) -> str:
+        """Get the HTML header with documents as rows.
 
-        else:
-            dtm = self._get_file_col_dtm()
-            # Get the proper headers since we want all those to stay.
-            header = dtm.index
-            total = dtm["Total"].data
-            average = dtm["Average"].data
-
-            # Insert the header names.
-            header.insert(0, "Documents / Stats")
-            total.insert(0, "Total")
-            average.insert(0, "Average")
-
-            header_html = "".join([f"<th>{item}</th>" for item in header])
-            total_html = "".join([f"<th>{item}</th>" for item in total])
-            average_html = "".join([f"<th>{item}</th>" for item in average])
-            complete_header = f"<tr>{header_html}</tr>" \
-                              f"<tr>{total_html}</tr>" \
-                              f"<tr>{average_html}</tr>"
-
-        print("DONE")
-
-        return f"<thead>{complete_header}</thead>"
-
-    def get_dtm(self):
-        """Get the DTM based on front end required table orientation option.
-
-        :return: The DTM corresponding to user's choice.
+        Attach the average/total as rows in header because we want them to stay
+        there even when the page is changed.
         """
-        # Check front end option, if no valid option get, raise an error.
-        dtm = self._get_file_col_dtm() \
+        # Still grab the file col dtm and extracts useful information.
+        dtm = self._get_file_col_dtm()
+
+        # Get the proper headers since we want all those to stay.
+        head, total, ave = dtm.index, dtm["Total"].data, dtm["Average"].data
+
+        # Insert the header names.
+        head.insert(0, "Documents / Stats")
+        total.insert(0, "Total")
+        ave.insert(0, "Average")
+
+        # Join the column names in HTML format.
+        header_html = "".join([f"<th>{item}</th>" for item in head])
+        total_html = "".join([f"<th>{item}</th>" for item in total])
+        average_html = "".join([f"<th>{item}</th>" for item in ave])
+
+        # Return the complete table header.
+        return f"<thead>" \
+            f"<tr>{header_html}</tr>" \
+            f"<tr>{total_html}</tr>" \
+            f"<tr>{average_html}</tr></thead>"
+
+    def get_table_header(self) -> str:
+        """Get the table header based on required table orientation."""
+        return self._get_file_col_table_header() \
             if self._front_end_option.orientation == "file_as_column" \
-            else self._get_file_row_dtm()
+            else self._get_file_row_table_header()
 
-        # Sort the dtm.
-        dtm_sorted = dtm.sort_values(
-            by=[dtm.columns[self._front_end_option.sort_column]],
-            ascending=self._front_end_option.sort_method
-        )
-
-        # Slice the dtm.
-        data_start = self._front_end_option.start
-        data_length = self._front_end_option.length
-        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
-
-        data = required_dtm.values.tolist()
-
-        for index, value in enumerate(required_dtm.index):
-            data[index].insert(0, value)
-
-        print("DONE")
-
-        return jsonify(
-            draw=self._front_end_option.draw,
-            recordsTotal=dtm.shape[0],
-            recordsFiltered=dtm.shape[0],
-            data=data
-        )
+    def get_dtm(self) -> jsonify:
+        """Select portion of dtm based on required table orientation."""
+        return self._select_file_col_dtm() \
+            if self._front_end_option.orientation == "file_as_column" \
+            else self._select_file_col_dtm()
 
     def download_dtm(self) -> str:
         """Download the desired DTM as a CSV file.

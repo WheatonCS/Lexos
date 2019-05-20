@@ -56,4 +56,4 @@ def tokenizer_matrix():
 @tokenizer_blueprint.route("/tokenizerHeader", methods=["POST"])
 def tokenizer_header():
     # Return the size of the DTM to ajax call.
-    return TokenizerModel().get_dtm_header()
+    return TokenizerModel().get_table_header()
