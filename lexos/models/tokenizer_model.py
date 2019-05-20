@@ -106,41 +106,6 @@ class TokenizerModel(BaseModel):
                             value=file_col_dtm["Total"] / len(labels))
         return file_col_dtm.round(4)
 
-    def _select_file_col_dtm(self) -> jsonify:
-        """Select required portion of file col dtm respond to the ajax call."""
-        # Grab the file col dtm.
-        dtm = self._get_file_col_dtm()
-
-        # Apply the search first before anything happens.
-        dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]
-
-        # Sort the dtm; if the sort column is 0, sort by index.
-        dtm_sorted = dtm.sort_values(
-            by=[dtm.columns[self._front_end_option.sort_column - 1]],
-            ascending=self._front_end_option.sort_method
-        ) if self._front_end_option.sort_column != 0 \
-            else dtm.sort_index(ascending=self._front_end_option.sort_method)
-
-        # Slice the desired portion of the dtm.
-        data_start = self._front_end_option.start
-        data_length = self._front_end_option.length
-        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
-
-        # Convert the data to a list of lists.
-        data = required_dtm.values.tolist()
-
-        # Insert the index (terms/characters) in front of the count.
-        for index, value in enumerate(required_dtm.index):
-            data[index].insert(0, value)
-
-        # Return the sliced DTM and total count as a JSON object.
-        return jsonify(
-            draw=self._front_end_option.draw,
-            recordsFiltered=dtm.shape[0],
-            recordsTotal=dtm.shape[0],
-            data=data
-        )
-
     def _get_file_col_table_header(self) -> str:
         """Get the HTML header with documents as columns."""
         # Get the proper header.
@@ -172,45 +137,6 @@ class TokenizerModel(BaseModel):
         file_row_dtm.index = labels
 
         return file_row_dtm.round(4)
-
-    def _select_file_row_dtm(self) -> jsonify:
-        """Select required portion of file row dtm respond to the ajax call."""
-        # Grab the file col dtm.
-        dtm = self._get_file_row_dtm()
-
-        columns = dtm.columns[
-            dtm.columns.str.contains(self._front_end_option.search)
-        ]
-
-        # Apply the search first before anything happens.
-        dtm = dtm[columns]
-
-        # Sort the dtm; if the sort column is 0, sort by index.
-        dtm_sorted = dtm.sort_values(
-            by=[dtm.columns[self._front_end_option.sort_column - 1]],
-            ascending=self._front_end_option.sort_method
-        ) if self._front_end_option.sort_column != 0 \
-            else dtm.sort_index(ascending=self._front_end_option.sort_method)
-
-        # Slice the desired portion of the dtm.
-        data_start = self._front_end_option.start
-        data_length = self._front_end_option.length
-        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
-
-        # Convert the data to a list of lists.
-        data = required_dtm.values.tolist()
-
-        # Insert the index (terms/characters) in front of the count.
-        for index, value in enumerate(required_dtm.index):
-            data[index].insert(0, value)
-
-        # Return the sliced DTM and total count as a JSON object.
-        return jsonify(
-            draw=self._front_end_option.draw,
-            recordsFiltered=dtm.shape[0],
-            recordsTotal=dtm.shape[0],
-            data=data
-        )
 
     def _get_file_row_table_header(self) -> str:
         """Get the HTML header with documents as rows.
@@ -247,11 +173,47 @@ class TokenizerModel(BaseModel):
             if self._front_end_option.orientation == "file_as_column" \
             else self._get_file_row_table_header()
 
+    def _select_dtm(self, dtm: pd.DataFrame) -> jsonify:
+        """Select required portion of the dtm respond to the ajax call.
+
+        :param dtm: The correct doc term matrix user requires.
+        :return: A Json object contains values the datatable ajax call needs.
+        """
+        # Apply the search first before anything happens.
+        dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]
+
+        # Sort the dtm; if the sort column is 0, sort by index.
+        dtm_sorted = dtm.sort_values(
+            by=[dtm.columns[self._front_end_option.sort_column - 1]],
+            ascending=self._front_end_option.sort_method
+        ) if self._front_end_option.sort_column != 0 \
+            else dtm.sort_index(ascending=self._front_end_option.sort_method)
+
+        # Slice the desired portion of the dtm.
+        data_start = self._front_end_option.start
+        data_length = self._front_end_option.length
+        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
+
+        # Convert the data to a list of lists.
+        data = required_dtm.values.tolist()
+
+        # Insert the index (terms/characters) in front of the count.
+        for index, value in enumerate(required_dtm.index):
+            data[index].insert(0, value)
+
+        # Return the sliced DTM and total count as a JSON object.
+        return jsonify(
+            draw=self._front_end_option.draw,
+            recordsFiltered=dtm.shape[0],
+            recordsTotal=dtm.shape[0],
+            data=data
+        )
+
     def get_dtm(self) -> jsonify:
         """Select portion of dtm based on required table orientation."""
-        return self._select_file_col_dtm() \
+        return self._select_dtm(dtm=self._get_file_col_dtm()) \
             if self._front_end_option.orientation == "file_as_column" \
-            else self._select_file_row_dtm()
+            else self._select_dtm(dtm=self._get_file_row_dtm())
 
     def download_dtm(self) -> str:
         """Download the desired DTM as a CSV file.

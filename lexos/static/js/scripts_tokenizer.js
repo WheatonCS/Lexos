@@ -5,16 +5,26 @@ import * as utility from './utility.js'
  * @returns {void}.
  */
 function generateTokenizerResult () {
+  // Select the matrix table id.
+  const matrix = $('#matrix')
+  // Clear all the content.
+  if ($.fn.DataTable.isDataTable(matrix)) matrix.DataTable().clear().destroy()
+
   // Get the form in HTML as a JSON object.
   const form = utility.jsonifyForm()
+
+  // Get the table orientation.
+  const tableOrientation = $('#table-orientation-column')
+  // Get the proper default ordering based on the table orientation.
+  const order = tableOrientation.is(':checked') ? [2, 'desc'] : [0, 'asc']
+
   // Get the number of fixed columns based on the table orientation.
-  const numFixedColumns = $('#table-orientation-column').is(':checked') ? 3 : 1
+  const numFixedColumns = tableOrientation.is(':checked') ? 3 : 1
 
   // Send the ajax request to get the tokenizer result.
   utility.sendAjaxRequest('/tokenizerHeader', form)
     .done( // If the ajax call succeeded.
       function (response) {
-        const matrix = $('#matrix')
         // Insert the table header in to the table.
         matrix.html(response)
 
@@ -34,7 +44,7 @@ function generateTokenizerResult () {
           <'row'<'col-md-4'l><'col-md-8 text-right'p>>`,
 
           // Set the default ordering.
-          order: [[2, "desc"]],
+          order: [order],
 
           // Set number of fixed columns on left of the data table.
           fixedColumns: {leftColumns: numFixedColumns},
@@ -66,8 +76,8 @@ function generateTokenizerResult () {
     )
     .fail(
       function (jqXHR, textStatus, errorThrown) {
-        console.log('textStatus: ' + textStatus)
-        console.log('errorThrown: ' + errorThrown)
+        console.log(`textStatus: ${textStatus}`)
+        console.log(`errorThrown: ${errorThrown}`)
         utility.runModal('Error encountered while generating the tokenizer result.')
       }
     )
