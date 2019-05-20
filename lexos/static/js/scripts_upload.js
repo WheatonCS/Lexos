@@ -213,12 +213,14 @@ function FileSelectHandler (e) {
         progress.css('color', '#FFF')
       }
       progressBarStatus(f, added)
-      const faFolderOpen = $('.fa-folder-open-o')
-      faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
-      faFolderOpen.fadeIn(200)
     }
   }
   showProgress()
+  if(numberOfFileDone > 0) {
+    const faFolderOpen = $('.fa-folder-open-o')
+    faFolderOpen[0].dataset.originalTitle = `You have ${numberOfFileDone} active document(s)`
+    faFolderOpen.fadeIn(200)
+  }
   // Convert the integer back to string and put it as a value in the input tag.
   let numActiveFile = numberOfFileDone.toString()
   counter.attr('value', numActiveFile)
