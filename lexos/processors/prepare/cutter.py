@@ -77,7 +77,7 @@ def join_sublist_element(input_list: List[List[str]]) -> List[str]:
 
 
 def cut_by_characters(text: str, seg_size: int, overlap: int,
-                      last_prop: float) ->List[str]:
+                      last_prop: float) -> List[str]:
     """Cut the input text into segments by number of chars in each segment.
 
     Where the segment size is measured by counts of characters, with an option
@@ -96,7 +96,7 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
     # split all the chars while keeping all the whitespace
-    seg_list = re.findall("\S", text)
+    seg_list = re.findall(r"\S", text)
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
@@ -130,7 +130,7 @@ def cut_by_words(text: str, seg_size: int, overlap: int,
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
     # split text by words while keeping all the whitespace
-    seg_list = re.findall("\S+\s*", text)
+    seg_list = re.findall(r"\S+\s*", text)
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
@@ -192,7 +192,7 @@ def cut_by_number(text: str, num_segment: int) -> List[str]:
     assert num_segment > 0, SEG_NON_POSITIVE_MESSAGE
 
     # split text by words while stripping all the whitespace
-    words_list = re.findall("\S+\s*", text)
+    words_list = re.findall(r"\S+\s*", text)
     total_num_words = len(words_list)
 
     # the length of normal chunk
