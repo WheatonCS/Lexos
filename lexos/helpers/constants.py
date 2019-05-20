@@ -13,7 +13,7 @@ RESULTS_FOLDER = 'analysis_results/'
 WORKSPACE_DIR = 'workspace/'
 # handle the temp dir in windows
 TMP_FOLDER = os.path.expanduser(
-    '~\AppData\Local\Temp') if os.name == 'nt' else '/tmp/'
+    '~\\AppData\\Local\\Temp') if os.name == 'nt' else '/tmp/'
 UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
 CACHE_FOLDER = os.path.join(UPLOAD_FOLDER, 'cache/')
 RESOURCE_DIR = "resources/"
@@ -57,7 +57,7 @@ FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
 '''session caching option'''
 # for general settings
-GENERALSETTINGS = ('beta_onbox')
+GENERALSETTINGS = 'beta_onbox'
 
 # for scrub
 SCRUBBOXES = (

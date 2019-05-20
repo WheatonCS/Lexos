@@ -262,9 +262,9 @@ class ContentAnalysisModel(object):
         for index, (file, formula, score, counters) in enumerate(
             zip(self._corpus, self._formulas,
                 self._scores, self._counters)):
-            column = pd.Series([file.label] + counters + [formula] +
-                               [file.total_word_count] + [score],
-                               index=columns)
+            column = pd.Series(
+                [file.label] + counters + [formula] + [file.total_word_count]
+                + [score], index=columns)
             df = df.append(column, ignore_index=True)
         return df
 

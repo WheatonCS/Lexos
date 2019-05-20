@@ -17,8 +17,8 @@ from lexos.managers.file_manager import FileManager
 from lexos.managers.session_manager import session_folder
 
 
-def generate_csv_matrix(file_manager: FileManager, round_decimal: bool=False) \
-        -> List[list]:
+def generate_csv_matrix(file_manager: FileManager,
+                        round_decimal: bool = False) -> List[list]:
     """
     Gets a matrix properly formatted for output to a CSV file and also a table
     displaying on the Tokenizer page, with labels along the top and side
@@ -187,12 +187,14 @@ def generate_csv(file_manager: FileManager) -> Tuple[str, str]:
     # add quotes to escape the tab and comma in csv and tsv
     if transpose:
         # escape all the file name
-        count_matrix[0] = ['"' + file_name +
-                           '"' for file_name in count_matrix[0]]
+        count_matrix[0] = [
+            '"' + file_name + '"' for file_name in count_matrix[0]
+        ]
     else:
         # escape all the file name
-        count_matrix[0] = ['"' + file_name +
-                           '"' for file_name in count_matrix[0]]
+        count_matrix[0] = [
+            '"' + file_name + '"' for file_name in count_matrix[0]
+        ]
     count_matrix = list(zip(*count_matrix))  # transpose the matrix
     # escape all the comma and tab in the word, and makes the leading item
     # empty string.
@@ -358,7 +360,7 @@ def generate_mc_json_obj(file_manager: FileManager):
                 # Create a list of type:topic combinations
                 for line in f:
                     # Make sure the number of columns is correct
-                    line = re.sub('\s+', ' ', line)
+                    line = re.sub(r'\s+', ' ', line)
                     try:
                         doc, source, pos, type_index, doc_type, topic = \
                             line.rstrip().split(' ')
@@ -459,7 +461,7 @@ def load_file_manager() -> FileManager:
 
 def generate_csv_matrix_from_ajax(data: Dict[str, object],
                                   file_manager: FileManager,
-                                  round_decimal: bool =True) -> List[list]:
+                                  round_decimal: bool = True) -> List[list]:
 
     n_gram_size, use_word_tokens, use_freq, use_tfidf, norm_option, grey_word,\
         show_deleted, only_char_grams_within_words, mfw, culling = \
@@ -545,12 +547,12 @@ def generate_csv_matrix_from_ajax(data: Dict[str, object],
 def xml_handling_options(data: dict = {}):
     file_manager = load_file_manager()
     from lexos.managers import session_manager
-    import xml.etree.ElementTree as ET
+    from xml.etree import ElementTree
     tags = []
 
     for file in file_manager.get_active_files():
         try:
-            root = ET.fromstring(file.load_contents())
+            root = ElementTree.fromstring(file.load_contents())
             iterate = root.getiterator()
 
             # Remove processing instructions --
@@ -563,7 +565,7 @@ def xml_handling_options(data: dict = {}):
                 tag = re.sub('{.+}', '', element.tag)
                 tags.append(tag)
 
-        except ET.ParseError:
+        except ElementTree.ParseError:
             import bs4
             from bs4 import BeautifulSoup
             soup = BeautifulSoup(file.load_contents(), 'html.parser')
