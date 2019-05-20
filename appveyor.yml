@@ -59,6 +59,6 @@ test_script:
   - .\node_modules\.bin\eslint .\js\scripts_scrub.js
   - .\node_modules\.bin\eslint .\js\scripts_cut.js
   - .\node_modules\.bin\eslint .\js\scripts_bct.js
-  - cd ../..
+  - cd ..\..
 
 build: off
