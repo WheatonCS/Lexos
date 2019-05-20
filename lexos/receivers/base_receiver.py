@@ -1,9 +1,9 @@
 """This is the base receiver for the base model."""
 
 from flask import request
-from typing import Optional, Dict, Union, List
+from typing import Optional, Union, Dict, List
 
-RequestData = Dict[str, Union[str, List[dict]]]
+RequestData = Dict[str, Union[str, dict, List[dict]]]
 
 
 class BaseReceiver:

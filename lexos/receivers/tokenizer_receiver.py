@@ -28,14 +28,17 @@ class TokenizerReceiver(BaseReceiver):
 
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
+        # This orientation option must always exist.
         orientation = "file_as_row" \
             if self._front_end_data["tableOrientation"] == "fileRow" \
             else "file_as_column"
 
+        # This exception is here because when header is requested, values
+        # above related to data table drawing are not passed in.
         try:
             draw = int(self._front_end_data["draw"])
             start = int(self._front_end_data["start"])
-            search = self._front_end_data["search"]
+            search = self._front_end_data["search"]["value"]
             length = int(self._front_end_data["length"])
             sort_dict = self._front_end_data["order"][0]
             sort_method = True if sort_dict["dir"] == "asc" else False
@@ -50,6 +53,7 @@ class TokenizerReceiver(BaseReceiver):
             sort_method = None
             sort_column = None
 
+        # Pack everything and returns it as a NamedTuple.
         return TokenizerOption(
             draw=draw,
             start=start,
