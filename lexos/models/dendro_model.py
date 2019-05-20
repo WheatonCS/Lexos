@@ -67,8 +67,7 @@ class DendrogramModel(BaseModel):
         """
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
-
-        return ff.create_dendrogram(
+        graph = ff.create_dendrogram(
             self._doc_term_matrix,
             orientation=self._dendro_option.orientation,
 
@@ -80,6 +79,15 @@ class DendrogramModel(BaseModel):
 
             labels=labels
         )
+        ticktext = graph.layout['xaxis']['ticktext']
+        tickvals = graph.layout['xaxis']['tickvals']
+        for i in graph.data:
+            for j in range(0, len(i['x'])):
+                print(i['x'][j], i['y'][j])
+        print(ticktext)
+        print(tickvals)
+        # print(graph.data)
+        return graph
 
     def extend_figure(self, figure: Figure) -> Figure:
         """Extend the figure margins.
@@ -124,7 +132,7 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
-        figure.layout.update({'margin': {'b': max_label_len * 4.5}})
+        figure.layout.update({'margin': {'b': max_label_len * 5}})
         # Calculate the space right most label needs.
         right_margin = len(figure.layout.xaxis.ticktext[-1]) * 4 \
             if len(figure.layout.xaxis.ticktext[-1]) * 4 > 100 else 100
