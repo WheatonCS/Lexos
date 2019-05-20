@@ -68,7 +68,5 @@ export function submissionError (numFileRequired) {
  * @returns {void}.
  */
 export function scrollToDiv (div) {
-  $('html, body').animate({
-    scrollTop: div.offset().top
-  }, 1000)
+  $('html, body').animate({scrollTop: div.offset().top}, 1000)
 }

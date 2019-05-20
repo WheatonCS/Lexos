@@ -140,7 +140,7 @@ class TokenizerModel(BaseModel):
         required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
 
         # Convert the data to a list of lists.
-        data = required_dtm.values.tolist()
+        data = required_dtm.round(3).values.tolist()
 
         # Insert the index (terms/characters) in front of the count.
         for index, value in enumerate(required_dtm.index):
