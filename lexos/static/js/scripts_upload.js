@@ -195,7 +195,7 @@ function FileSelectHandler (e) {
   for (let f of files) {
     let added = 0
 
-    if (f.size < $id('MAX_FILE_SIZE').value) {
+    if (f.size < $id('MAX_FILE_SIZE').value && AllowedFileType(f.name)) {
       numberOfFileDone += 1
       added = 1
     }
