@@ -9,7 +9,48 @@ function generateTokenizerResult () {
   // Send the ajax request to get the tokenizer matrix size.
   utility.sendAjaxRequest('/tokenizerHeader', form)
     .done(
-      function (response) { $('#matrix').html(response) }
+      function (response) {
+        const matrix = $('#matrix')
+        matrix.html(response)
+        matrix.DataTable({
+          // Below are appearance related settings.
+          // Allow scroll horizontally.
+          scrollX: true,
+          // Do not sort headers.
+          bSortCellsTop: true,
+          // specify where the button is
+          dom:
+            `<'row'<'col-md-6'B><'col-md-6 text-right'f>>
+          <'row'<'col-md-12't>>
+          <'row'<'col-md-4'l><'col-md-8 text-right'p>>`,
+
+          // specify all the button that is put on to the page
+          buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
+
+          // Set number of fixed columns on left of the data table.
+          fixedColumns: {leftColumns: numFixedColumns},
+
+          // Truncate the long words in most left column.
+          columnDefs: [
+            {
+              targets: 0,
+              render: $.fn.dataTable.render.ellipsis(15, true)
+            }
+          ],
+          processing: true,
+          serverSide: true,
+          ajax: {
+            type: 'POST',
+            url: '/tokenizerMatrix',
+            contentType: 'application/json',
+            data: function (data) {
+              return JSON.stringify(
+                Object.assign({}, data, utility.jsonifyForm())
+              )
+            }
+          }
+        })
+      }
     )
     .fail(
       function (jqXHR, textStatus, errorThrown) {
@@ -20,46 +61,6 @@ function generateTokenizerResult () {
     )
 
   const numFixedColumns = $('#table-orientation-column').is(':checked') ? 3 : 1
-  // convert form into an object map string to string
-  $('#matrix').DataTable({
-    // Below are appearance related settings.
-    // Allow scroll horizontally.
-    scrollX: true,
-    // Do not sort headers.
-    bSortCellsTop: true,
-    // // specify where the button is
-    // dom: `<'row'<'col-md-12 text-right'l>>
-    //       <'row'<'col-md-6'B><'col-md-6 text-right'f>>
-    //       <'row'<'col-md-12'tr>>
-    //       <'row'<'col-md-5'i><'col-md-7'p>>`,
-
-    // // specify all the button that is put on to the page
-    // buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
-
-    // Set number of fixed columns on left of the data table.
-    fixedColumns: {leftColumns: numFixedColumns},
-
-    // Truncate the long words in most left column.
-    columnDefs: [
-      {
-        targets: 0,
-        render: $.fn.dataTable.render.ellipsis(15, true)
-      }
-    ],
-    // Below are server processing related settings.
-    processing: true,
-    serverSide: true,
-    ajax: {
-      type: 'POST',
-      url: '/tokenizerMatrix',
-      contentType: 'application/json',
-      data: function (data) {
-        return JSON.stringify(
-          Object.assign({}, data, utility.jsonifyForm())
-        )
-      }
-    }
-  })
 }
 
 $(function () {

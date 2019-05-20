@@ -131,7 +131,7 @@ class TokenizerModel(BaseModel):
         """Return the table headers for tokenizer matrix in JSON format."""
         if self._front_end_option.orientation == "file_as_column":
             # Get the proper header.
-            header = self._get_file_col_dtm().columns
+            header = self._get_file_col_dtm().columns.values.tolist()
             # Insert the header name.
             header.insert(0, self._token_type_str)
             header_html = "".join([f"<th>{item}</th>" for item in header])
@@ -156,10 +156,7 @@ class TokenizerModel(BaseModel):
                               f"<tr>{total_html}</tr>" \
                               f"<tr>{average_html}</tr>"
 
-        temp = complete_header
-
         print("DONE")
-
 
         return f"<thead>{complete_header}</thead>"
 
@@ -173,8 +170,6 @@ class TokenizerModel(BaseModel):
             if self._front_end_option.orientation == "file_as_column" \
             else self._get_file_row_dtm()
 
-        print("DONE")
-
         # Sort the dtm.
         dtm_sorted = dtm.sort_values(
             by=[dtm.columns[self._front_end_option.sort_column]],
@@ -186,11 +181,18 @@ class TokenizerModel(BaseModel):
         data_length = self._front_end_option.length
         required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
 
+        data = required_dtm.values.tolist()
+
+        for index, value in enumerate(required_dtm.index):
+            data[index].insert(0, value)
+
+        print("DONE")
+
         return jsonify(
             draw=self._front_end_option.draw,
             recordsTotal=dtm.shape[0],
             recordsFiltered=dtm.shape[0],
-            data=required_dtm.values.tolist()
+            data=data
         )
 
     def download_dtm(self) -> str:
