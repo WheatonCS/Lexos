@@ -131,14 +131,16 @@ $(document).ready( function () {
 	    var warning = "<p>Rendering multiclouds takes a long time and will likely cause your browser to freeze temporarily. Please be patient.</p><p>Do you want to continue?</p>";
 	    footerButtons = '<button type="button" class="btn btn-default" id="continue">Yes</button>';
 	    footerButtons += '<button type="button" class="btn btn-default" data-dismiss="modal">No</button>';
-	    $("#warning-modal").children().first().removeClass("modal-lg").addClass("modal-sm");
-	    $("#warning-modal-footer").html(footerButtons);
-	    $('#warning-modal-message').html(warning);
-	    $('#warning-modal').modal();
-	    $('#warning-modal').on('hide.bs.modal', function (e) {
-	    	 $("#status-visualize").css("visibility", "hidden");
-		});
 
+	    // Do not show the modal warning about calculation time, just do the operation
+	    // $("#warning-modal").children().first().removeClass("modal-lg").addClass("modal-sm");
+	    // $("#warning-modal-footer").html(footerButtons);
+	    // $('#warning-modal-message').html(warning);
+	    // $('#warning-modal').modal();
+	    // $('#warning-modal').on('hide.bs.modal', function (e) {
+	    //	 $("#status-visualize").css("visibility", "hidden");
+		// });
+        doAjax();
 	}
 });
 </script>
