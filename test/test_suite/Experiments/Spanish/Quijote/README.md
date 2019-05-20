@@ -38,3 +38,6 @@ Steps
 	(c) Edit Labels (optional)
 	Get Dendrogram
 	Compare your result with the .png found in the ResultsToExpect/ directory.
+
+
+mjl - May 20, 2019

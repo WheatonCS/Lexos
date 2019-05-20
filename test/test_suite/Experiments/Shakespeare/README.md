@@ -83,3 +83,5 @@ Steps
     
     Get K-Means Result
     Compare your results with the .png in the ResultsToExpect/ directory.
+
+mjl - May 20, 2019

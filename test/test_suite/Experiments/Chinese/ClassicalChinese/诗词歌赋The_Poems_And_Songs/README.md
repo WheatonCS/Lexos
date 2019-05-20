@@ -60,4 +60,5 @@ Steps:
      Get Dendrogram
      Compare your result with the .png found in the ResultsToExpect/ directory.
 
+mjl - May 20, 2019
 jg - June 10, 2014

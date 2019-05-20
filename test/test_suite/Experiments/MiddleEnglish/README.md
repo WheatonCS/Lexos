@@ -97,4 +97,5 @@ Steps:
     result with the screenshot in the ResultsToExpect/ directory.
 
 
+mjl - May 20, 2019
 sk - July 1, 2013

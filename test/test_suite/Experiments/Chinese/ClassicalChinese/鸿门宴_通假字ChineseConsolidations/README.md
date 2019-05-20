@@ -39,4 +39,5 @@ OR
     Get Similarity Rankings: the two files should be identical, and should have a
     similarity score of 0.
 
+mjl - May 20, 2019
 jg - June 10, 2014

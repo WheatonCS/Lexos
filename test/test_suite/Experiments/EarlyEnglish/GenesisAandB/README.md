@@ -59,6 +59,7 @@ Steps:
     Compare your result with the .png found in the ResultsToExpect/ directory.
 
 
+mjl - May 20, 2019
 mdl - June 28, 2016
 
 
