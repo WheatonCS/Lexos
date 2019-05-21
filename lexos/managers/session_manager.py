@@ -117,7 +117,6 @@ def load():
 
 def deep_copy_session() -> dict:
     """Creates a deep copy of the current session.
-
     :return: the copy of the session.
     """
 

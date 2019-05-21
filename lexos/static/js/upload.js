@@ -1,5 +1,41 @@
 let total_files = 0;
 let upload_count = 0;
+$("document").ready(function(){
+
+    // Check for prerequisites
+    if(!window.File || !window.FileList ||
+        !window.FileReader || !new XMLHttpRequest()) return;
+
+    // "Browse.." button input redirect
+    $("#browse-button").click(function(){ $("#file-select-input").click(); });
+
+    // File select input callback
+    $("#file-select-input").change(file_selection_handler);
+
+    // File drop section
+    const drag_and_drop_section = $("#drag-and-drop-section");
+    $("body").on("dragenter drop", drag_and_drop_intercept);
+    drag_and_drop_section.on("dragover dragenter", drag_and_drop_intercept);
+    drag_and_drop_section.on("drop", file_selection_handler);
+
+    //File drop section highlighting
+    let drag_counter = 0;
+    drag_and_drop_section.on("dragenter", function(){
+        ++drag_counter;
+        $("#drag-and-drop-section").css({
+            "color": "#FF6000", "border-color": "#FF6000"});
+    });
+
+    drag_and_drop_section.on("dragleave", function(){
+        if(--drag_counter === 0) set_default_drop_section_colors();
+    });
+
+    drag_and_drop_section.on("drop", function(){
+        drag_counter = 0;
+        set_default_drop_section_colors();
+    });
+})
+
 
 /**
  * Checks if the file type is valid.
@@ -109,7 +145,7 @@ function file_selection_handler(event){
     upload_count = 0;
 
     if(!files.length) return;
-    $("#upload-status").text("0 of "+total_files);
+    $("#upload-status").text("0 of "+total_files+" uploaded");
 
     for(let file of files) upload_file(file);
 }
@@ -123,52 +159,10 @@ function file_selection_handler(event){
 function drag_and_drop_intercept(event){
   event.stopPropagation();
   event.preventDefault();
-  event.target.className = (event.type === "dragover" ? "hover" : '');
 }
-
-
-/**
- * Initializes callbacks.
- * @return {void}
- */
-$(function(){
-
-    // Check for prerequisites
-    if(!window.File || !window.FileList ||
-        !window.FileReader || !new XMLHttpRequest()) return;
-
-    // "Browse.." button input redirect
-    $("#browse-button").click(function(){ $("#file-select-input").click(); });
-
-    // File select input callback
-    $("#file-select-input").change(file_selection_handler);
-
-    // File drop section
-    const drag_and_drop_section = $("#drag-and-drop-section");
-    $("body").on("dragenter drop", drag_and_drop_intercept);
-    drag_and_drop_section.on("dragover dragenter", drag_and_drop_intercept);
-    drag_and_drop_section.on("drop", file_selection_handler);
-
-    //File drop section highlighting
-    let drag_counter = 0;
-    drag_and_drop_section.on("dragenter", function(){
-        ++drag_counter;
-        $("#drag-and-drop-section").css({
-            "color": "#FFFFFF", "background-color": "#FF6000"});
-    });
-
-    drag_and_drop_section.on("dragleave", function(){
-        if(--drag_counter === 0) set_default_drop_section_colors();
-    });
-
-    drag_and_drop_section.on("drop", function(){
-        drag_counter = 0;
-        set_default_drop_section_colors();
-    });
-})
 
 
 function set_default_drop_section_colors(){
     $("#drag-and-drop-section").css({
-        "color": "#505050", "background-color": "#FFFFFF"});
+        "color": "#505050", "border-color": "#505050"});
 }
