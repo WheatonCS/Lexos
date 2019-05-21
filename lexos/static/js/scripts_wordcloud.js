@@ -136,6 +136,7 @@ $(function () {
     }
 
     function generate() {
+      console.log("called generate()")
       layout
         .font(d3.select('#font').property('value'))
         .spiral(d3.select('input[name=spiral]:checked').property('value'))
@@ -152,6 +153,7 @@ $(function () {
     }
 
     function draw(data, bounds) {
+      console.log("called draw()")
       // console.log(data); // At this stage the text is missing government.
       var tooltip = d3.select('body').select('div.d3tooltip')
       statusText.style('display', 'none')
@@ -433,6 +435,7 @@ $(function () {
       }
 
       function update() {
+        console.log("called update()")
         scale.domain([0, count - 1]).range([from, to])
         var step = (to - from) / count
 
