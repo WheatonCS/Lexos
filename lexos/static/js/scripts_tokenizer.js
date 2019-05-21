@@ -50,7 +50,7 @@ function generateTokenizerResult () {
           fixedColumns: {leftColumns: numFixedColumns},
 
           // specify all the button that is put on to the page
-          buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
+          buttons: ['excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
 
           // Truncate the long words in most left column.
           columnDefs: [{
