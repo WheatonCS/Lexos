@@ -25,7 +25,7 @@ function initTable () {
       $('#demo').AreaSelect()
     },
     lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
-    pageLength: 5,
+    pageLength: -1,
     scrollCollapse: true,
     dom: '<\'row\'<\'col-sm-6\'l><\'col-sm-6 pull-right\'f>>' +
     '<\'row\'<\'col-sm-12\'rt>>' +

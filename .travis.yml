@@ -1,61 +1,45 @@
-language: python
+# Adjust environment
+dist: xenial
+sudo: required
 
-# command to install dependencies
-install:
-  # update the apt-get database
-  - sudo apt-get update
+# Set up matrix for multiple languages check.
+matrix:
+  include:
+    # Check for python 3.7
+    - language: python
+      python: "3.7"
+      install:
+        # Use newest pip and install check tools.
+        - python -m pip install --upgrade pip
+        - pip install -r requirements.txt
+        - pip install -r dev_requirements.txt
+      script:
+        # Test for python static analysis.
+        - flake8
+        # Unit testing
+        - pytest --cov=./lexos
+        - codecov
+        # Doc style, at the moment only test files under models and receivers.
+        - pydocstyle lexos/models/
+        - pydocstyle lexos/receivers/
 
-  # Install latest version of Mini conda 3
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  # Useful for debugging any issues with conda
-  - conda info -a
-
-  # installing anaconda
-  - conda install anaconda
-
-  # install project dependency
-  - pip install -r requirements.txt
-  - pip install -r dev_requirements.txt
-
-  # install nodejs 10. Remember to change this when nodejs updated!
-  - curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-  - sudo apt-get install -y nodejs
-
-  # use npm to install all the dependencies (including dev)
-  - cd ./lexos/static
-  - npm install
-  - cd ../..
-
-script:
-  # test for python static analysis
-  # including code style, doc style, and basic code analysis
-  # ignore F841 because it includes blackhole variable: "_"
-  # ignore E123 because https://github.com/PyCQA/pycodestyle/issues/103
-  - flake8 --ignore F841,E123 --count .
-  # unit testing
-  - pytest --cov=./lexos
-  - codecov
-  # doc style, at the moment only test files under models and receivers.
-  - pydocstyle lexos/models/
-  - pydocstyle lexos/receivers/
-
-  # test for javascript code style
-  - cd ./lexos/static
-  # following line is commented out, because frontend refactor is not yet completed
-  # - .\node_modules\.bin\eslint ./js/script_*.js
-  - ./node_modules/.bin/eslint ./js/scripts_statistics.js
-  - ./node_modules/.bin/eslint ./js/scripts_similarity.js
-  - ./node_modules/.bin/eslint ./js/scripts_dendrogram.js
-  - ./node_modules/.bin/eslint ./js/scripts_rwanalysis.js
-  - ./node_modules/.bin/eslint ./js/scripts_upload.js
-  - ./node_modules/.bin/eslint ./js/scripts_manage.js
-  - ./node_modules/.bin/eslint ./js/scripts_kmeans.js
-  - ./node_modules/.bin/eslint ./js/scripts_scrub.js
-  - ./node_modules/.bin/eslint ./js/scripts_cut.js
-  - ./node_modules/.bin/eslint ./js/scripts_bct.js
-
-  - cd ../..
+    # Check for node_js 10.x.
+    - language: node_js
+      node_js: "10"
+      # Install dependencies.
+      install:
+        - cd ./lexos/static
+        - npm install
+      script:
+        # Following line is commented out, frontend refactor is not completed
+        # - ./node_modules/.bin/eslint ./js/script_*.js
+        - ./node_modules/.bin/eslint ./js/scripts_statistics.js
+        - ./node_modules/.bin/eslint ./js/scripts_similarity.js
+        - ./node_modules/.bin/eslint ./js/scripts_dendrogram.js
+        - ./node_modules/.bin/eslint ./js/scripts_rwanalysis.js
+        - ./node_modules/.bin/eslint ./js/scripts_upload.js
+        - ./node_modules/.bin/eslint ./js/scripts_manage.js
+        - ./node_modules/.bin/eslint ./js/scripts_kmeans.js
+        - ./node_modules/.bin/eslint ./js/scripts_scrub.js
+        - ./node_modules/.bin/eslint ./js/scripts_cut.js
+        - ./node_modules/.bin/eslint ./js/scripts_bct.js
