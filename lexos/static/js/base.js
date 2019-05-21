@@ -2,6 +2,7 @@
  * Initializes the page after it has loaded.
  */
 $("document").ready(function(){
+    highlight_navbar_button();
     initialize_dropdown_menus();
     initialize_help_section();
     update_active_document_count();
@@ -11,10 +12,48 @@ $("document").ready(function(){
         $("#main-section").animate({scrollTop: 0}, "fast");
     });
 
-
     // Fade the page content in
     $("main").css("opacity", "1");
 });
+
+
+/**
+ * Highlight the appropriate navbar button for the current page.
+ */
+function highlight_navbar_button(){
+
+    switch(window.location.pathname.substring(1)){
+
+        // Upload
+        case "upload": highlight_element($("#upload-button")); break;
+
+        // Manage
+        case "manage": highlight_element($("#manage-button")); break;
+
+        // Prepare
+        case "scrub": case "cut": case "tokenizer":
+            highlight_element($("#prepare-button")); break;
+
+        // Visualize
+        case "wordcloud": case "multicloud": case "viz": case "rollingwindow":
+            highlight_element($("#visualize-button")); break;
+
+        // Analyze
+        case "statistics": case "dendrogram": case "kmeans": case "bct_analysis":
+        case "similarity": case "topword": case "contentanalysis":
+            highlight_element($("#analyze-button"));
+    }
+}
+
+
+/**
+ * Highlights the given element.
+ *
+ * @param {jQuery} element: The element to highlight.
+ */
+function highlight_element(element){
+    element.css("color", "#FF6000");
+}
 
 
 /**
@@ -72,7 +111,7 @@ function add_dropdown_menu_callback(element_name, items){
         //If any dropdown menus exist, remove them
         remove_dropdown_menus();
 
-        //If the menu did not exist, create it
+        //If the menu does not exist, create it
         if(create){
 
             // Create the dropdown menu grid
@@ -200,14 +239,14 @@ function close_popup(){
 
 
 /**
- * Creates a dismissable popup element with a text input and "OK" button.
+ * Creates a dismissible popup element with a text input and "OK" button.
  *
  * @returns {jQuery}: The popup element.
  */
 function create_text_input_popup(){
     let popup = create_popup();
 
-    $(`<input id="popup-input" type="text">`+
+    $(`<input id="popup-input" type="text" spellcheck="false" autocomplete="off">`+
         `<h3 id="popup-ok-button" class="selectable">OK</h3>`
     ).appendTo("#popup-content");
 

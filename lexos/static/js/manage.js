@@ -55,7 +55,7 @@ function update_table(){
             let form = $("form");
             for(const d of documents)
                 append_row(d.id, d.state, d.label, d.class, d.source, d.preview);
-            form.css("opacity", "1");
+            form.css("opacity", "1");  // Show the page
         }
     });
 }
@@ -81,6 +81,7 @@ function append_row(id, state, label, class_name, source, preview){
     // Append the row
     let row = $(
         `<div id="${id}" class="manage-table-row">`+
+            `<div class="circle"></div>`+
             `<h3 class="manage-table-cell">${label}</h3>`+
             `<h3 class="manage-table-cell">${class_name}</h3>`+
             `<h3 class="manage-table-cell">${source}</h3>`+
@@ -88,7 +89,7 @@ function append_row(id, state, label, class_name, source, preview){
         `</div>`
     ).appendTo("#manage-table-body");
 
-    if(state) row.addClass("highlight");
+    if(state) row.addClass("selected-row");
 
     row.on("contextmenu", context_menu_show_callback);
 }
@@ -216,7 +217,7 @@ function select_all_callback(){
     let id_list = [];
     $(".manage-table-row").each(function(){
         id_list.push($(this).attr("id"));
-        $(this).addClass("highlight");
+        $(this).addClass("selected-row");
     });
 
     send_request("activate", id_list);
@@ -230,7 +231,7 @@ function deselect_all_callback(){
     let id_list = [];
     $(".manage-table-row").each(function(){
         id_list.push($(this).attr("id"));
-        $(this).removeClass("highlight");
+        $(this).removeClass("selected-row");
     });
 
     send_request("deactivate", id_list);
@@ -333,12 +334,12 @@ function selection_end_callback(event){
             window_scroll_offset.y+bounding_box.bottom > selection_minimum.y){
 
             // Select or deselect the document
-            if(d_held && $(this).hasClass("highlight")){
-                $(this).removeClass("highlight");
+            if(d_held && $(this).hasClass("selected-row")){
+                $(this).removeClass("selected-row");
                 modified_id_list.push($(this).attr("id"));
             }
-            else if(!d_held && !$(this).hasClass("highlight")){
-                $(this).addClass("highlight");
+            else if(!d_held && !$(this).hasClass("selected-row")){
+                $(this).addClass("selected-row");
                 modified_id_list.push($(this).attr("id"));
             }
         }
@@ -417,7 +418,7 @@ function send_request(url, payload = ""){
 function get_selected_document_ids(){
     let id_list = [];
     $(".manage-table-row").each(function(){
-        if($(this).hasClass("highlight"))
+        if($(this).hasClass("selected-row"))
             id_list.push(parseInt($(this).attr("id")));
     });
 

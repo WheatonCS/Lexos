@@ -9,38 +9,14 @@
     <!-- jQuery Core -->
     <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
 
-    <!-- jQuery UI -->
-    {% set needs_jquery_ui = ["wordcloud", "multicloud"] -%}
-    {% if active_page in needs_jquery_ui %}
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    {% endif %}
-
-    <!-- d3.js -->
-    {% set needs_d3 = ["wordcloud", "multicloud", "viz", "kmeans", "rollingwindow"] -%}
-    {% if active_page in needs_d3 %}
-        <script type="text/javascript" src="static/node_modules/d3/d3.min.js"></script>
-    {% endif %}
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script type="text/javascript" src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- jQuery SmartMenus -->
-    <link rel="stylesheet" href="static/node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css"/>
-    <script type="text/javascript" src="static/node_modules/smartmenus/dist/jquery.smartmenus.min.js"></script>
-    <script type="text/javascript" src="static/node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js"></script>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="static/node_modules/font-awesome/css/font-awesome.min.css">
-
     <!-- Lexos JS -->
     <script type="text/javascript" src="static/js/base.js"></script>
-    <script type="text/javascript" src="static/js/scripts_icons.js"></script>
 
     <!-- Lexos CSS -->
-    <link rel="stylesheet" type="text/css" href="static/css/iconfonts.css"/>
-    <link rel="stylesheet" type="text/css" href="static/css/bootstrap-override.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/old.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
 
@@ -65,8 +41,8 @@
             <h1>{L}exos</h1>
         </div>
         <div id="navbar-right">
-            <a href="/upload">Upload</a>
-            <a href="/manage">Manage</a>
+            <a id="upload-button" href="/upload">Upload</a>
+            <a id="manage-button" href="/manage">Manage</a>
 
             <h3 id="prepare-button" class="navbar-button selectable">Prepare</h3>
             <h3 id="visualize-button" class="navbar-button selectable">Visualize</h3>
@@ -91,23 +67,6 @@
 
             <!-- Help -->
             <div id="help-container"></div>
-
-            <!-- Google Analytics -->
-            <script type="text/javascript">
-              var _gaq = _gaq||[]
-              _gaq.push(["_setAccount", "UA-42990457-1"])
-              _gaq.push(["_trackPageview"]);
-
-              (function(){
-                let ga = document.createElement("script")
-                ga.type = "text/javascript"
-                ga.async = true
-                ga.src = ("https:" === document.location.protocol ?
-                    "https://ssl" : "http://www")+".google-analytics.com/ga.js"
-                let s = document.getElementsByTagName("script")[0]
-                s.parentNode.insertBefore(ga, s)
-              })()
-            </script>
         </div>
     </div>
 

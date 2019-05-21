@@ -1,9 +1,3 @@
-/* Navbar */
-#navbar-upload {
-    color: #FF0000;
-}
-
-
 /* Upload information */
 #upload-information {
     display: grid;
@@ -24,9 +18,12 @@
     align-items: center;
     margin: 0;
     height: 30rem;
-    background-color: #FFFFFF;
 }
 
+#browse-button > h3,
+#drag-and-drop-section  > h3 {
+    color: inherit;
+}
 
 /* Upload section */
 #upload-section {
@@ -36,24 +33,20 @@
 }
 
 #browse-button {
-    transition: background-color .2s;
+    background-color: #FFFFFF;
+    transition: border-color .2s;
+    border: 2px solid rgba(255, 96, 0, 0);
 }
 
 #browse-button:hover {
-    color: #FFFFFF;
-    background-color: #FF6000;
-}
-
-#browse-button > h3 {
-    color: inherit;
+    color: #FF6000;
+    border: 2px solid #FF6000;
 }
 
 #drag-and-drop-section {
-    transition: background-color .2s;
-}
-
-#drag-and-drop-section > h3 {
-    color: inherit;
+    transition: background-color .2s, border-color .2s;
+    border: 2px dashed #505050;
+    background-color: #F3F3F3;
 }
 
 

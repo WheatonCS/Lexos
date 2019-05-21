@@ -7,7 +7,7 @@ h1 {
     color: #505050;
 }
 
-h3, a, ul {
+h3, a, ul, textarea, input[type="text"], span {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
     font-size: 1.6rem;
@@ -32,6 +32,11 @@ b {
     -moz-user-select: none;
 }
 
+::selection {
+    color: #FFFFFF;
+    background-color: #FF6000;
+}
+
 html {
     height: 99.9%;
 }
@@ -40,7 +45,7 @@ body {
     display: grid;
     height: 100%;
     position: relative;
-    background-color: #F0FAF1;
+    background-color: #E3E3E3;
 }
 
 #main-grid {
@@ -57,7 +62,7 @@ body {
 main {
     min-height: 100%;
     padding: 2rem;
-    background-color: #F0FAF1;
+    background-color: #E3E3E3;
     opacity: 0;
     transition: opacity .5s;
 }
@@ -69,13 +74,12 @@ form {
 
 /* Template classes */
 .selectable:hover {
-    color: #FF0000;
+    color: #FF6000;
     cursor: pointer;
 }
 
 .highlight {
-    color: #FFFFFF;
-    background-color: #FF6000;
+    color: #FF6000;
 }
 
 .centerer {
@@ -171,7 +175,7 @@ footer {
     display: block;
     margin-top: 2rem;
     padding: 2rem;
-    color: #FF0000;
+    color: #FF6000;
     background-color: #FFFFFF;
 }
 
@@ -243,18 +247,64 @@ footer {
 }
 
 
-/* Input*/
+/* Options */
+.options-section {
+    display: inline-block;
+}
+
+
+/* Text input */
 input[type="text"] {
-    font-family: "Open Sans", sans-serif;
-    font-weight: 400;
-    font-size: 1.6rem;
     border: none;
-    box-shadow: 0 0 1px 1px #000000;
     border-radius: 3rem;
     width: calc(100% - 6rem);
     height: 3rem;
     padding-left: 1.3rem;
     padding-right: 1.3rem;
+    background-color: #E3E3E3;
+}
+
+
+/* Circle */
+.circle {
+    background-color: #E3E3E3;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    transition: background-color .2s;
+}
+
+
+/* Checkbox input */
+label {
+    display: inline-block;
+    margin: 1rem;
+}
+
+.circle-label > span:before {
+    content: '';
+    position: relative;
+    top: .3rem;
+    display: inline-block;
+    background-color: #E3E3E3;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin-right: 1rem;
+    transition: background-color .2s;
+}
+
+input[type=checkbox],
+input[type=radio] {
+    display: none;
+}
+
+.circle-label :checked + span {
+    color: #FF6000;
+}
+
+.circle-label :checked + span:before {
+    background-color: #FF6000;
 }
 
 
@@ -278,3 +328,11 @@ ul {
     list-style: inside;
 }
 
+textarea {
+    padding: 1rem;
+    text-indent: 0;
+}
+
+label {
+    display: inline-block;
+}
