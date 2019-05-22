@@ -223,6 +223,7 @@ $(function () {
 
     // Converts a given word cloud to image/png.
     function downloadPNG() {
+      console.log("top function")
       var canvas = document.createElement('canvas'),
         c = canvas.getContext('2d')
       canvas.width = w
@@ -244,6 +245,7 @@ $(function () {
 
     // Save to PNG
     $('#download-png').on('click', function () {
+      console.log("bottom function")
       var $container = $('#vis'),
         // Canvg requires trimmed content
         content = $container.html().trim(),
