@@ -153,7 +153,6 @@ $(function () {
     }
 
     function draw(data, bounds) {
-      console.log("called draw()")
       // console.log(data); // At this stage the text is missing government.
       var tooltip = d3.select('body').select('div.d3tooltip')
       statusText.style('display', 'none')
@@ -477,8 +476,8 @@ $(function () {
                 else if (delta < 0) to = from
               }
               update()
-            })
-            .on('dragend', generate))
+            }))
+            //.on('dragend', generate))
         drag.attr('transform', function (d) { return 'rotate(' + (d + 90) + ')translate(-' + r + ')' })
         layout.rotate(function () {
           return scale(~~(Math.random() * count))
