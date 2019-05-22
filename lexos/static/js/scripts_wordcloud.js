@@ -136,7 +136,6 @@ $(function () {
     }
 
     function generate() {
-      console.log("called generate()")
       layout
         .font(d3.select('#font').property('value'))
         .spiral(d3.select('input[name=spiral]:checked').property('value'))
@@ -434,7 +433,6 @@ $(function () {
       }
 
       function update() {
-        console.log("called update()")
         scale.domain([0, count - 1]).range([from, to])
         var step = (to - from) / count
 
