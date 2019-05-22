@@ -167,10 +167,10 @@ $(window).on('load', function () {
   }
 
   // Save to PNG
-  $('#save').on('click', function () {
-    var $container = $('#viz'),
+  $('#png-save').on('click', function () {
+    var $container = $('#vis')
       // Canvg requires trimmed content
-      content = $container.html().trim(),
+      content = $container.html().trim()
       canvas = document.getElementById('svg-canvas')
 
     // Draw svg on canvas
@@ -178,22 +178,18 @@ $(window).on('load', function () {
 
     // Change img from SVG representation
     var theImage = canvas.toDataURL('image/png')
-    $('#svg-img').attr('src', theImage)
 
-    // Open a new window with the image
-    var w = window.open()
-    var img = $('#svg-img').clone().css('display', 'block')
-    var html = $('<div/>')
-    html.append('<h2 style=\'margin-left: 30px\'>Instructions for Saving Image</h2>')
-    html.append('<h3 style=\'font-size: 16px; margin-left: 30px\'><strong>For Mozilla Firefox:</strong></h3><ol>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PNG: Right click on the image and choose "Save Image As...".</li>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PDF: Right click and view image, then select your browser\'s print operation and choose print to PDF.</li></ol>')
-    html.append('<h3 style=\'font-size: 16px; margin-left: 30px\'><strong>For Chrome:</strong></h3>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>Right click on the image and choose to "Open image in new tab".</li>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PNG: Right click on the image and choose to "Save image as...".</li>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PDF: Select your browser\'s print operation and choose print to PDF.</li></ol>')
-    html.append(img)
-    $(w.document.body).html(html)
-    // End Save
+    d3.select(this).attr('download', 'image.png')
+    d3.select(this).attr('href', theImage)
+  })
+
+  // Save to SVG
+  $('#svg-save').on('click', function () {
+    console.log("made it here!")
+    d3.select(this).attr('download', 'image.svg')
+    d3.select(this).attr('href', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(
+      svg.attr('version', '1.1')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+        .node().parentNode.innerHTML))))
   })
 })
