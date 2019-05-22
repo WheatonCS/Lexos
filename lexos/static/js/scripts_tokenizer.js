@@ -7,7 +7,7 @@ import * as utility from './utility.js'
 function generateTokenizerResult () {
   // Select the matrix table id.
   const matrix = $('#matrix')
-  // Clear all the content.
+  // Clear the data table content if the table exists.
   if ($.fn.DataTable.isDataTable(matrix)) matrix.DataTable().clear().destroy()
 
   // Get the form in HTML as a JSON object.
@@ -39,9 +39,7 @@ function generateTokenizerResult () {
           bSortCellsTop: true,
 
           // specify where the button is
-          dom: `<'row'<'col-md-6'B><'col-md-6 text-right'f>>
-          <'row'<'col-md-12'tr>>
-          <'row'<'col-md-4'l><'col-md-8 text-right'p>>`,
+          dom: 'Bftriip',
 
           // Set the default ordering.
           order: [order],
@@ -50,7 +48,12 @@ function generateTokenizerResult () {
           fixedColumns: {leftColumns: numFixedColumns},
 
           // specify all the button that is put on to the page
-          buttons: ['excelHtml5', 'csvHtml5', 'pdfHtml5', 'colvis'],
+          buttons: [
+            {extend: 'excelHtml5', title: 'Tokenizer Result'},
+            {extend: 'csvHtml5', title: 'Tokenizer Result'},
+            {extend: 'pdfHtml5', title: 'Tokenizer Result'},
+            'colvis'
+          ],
 
           // Truncate the long words in most left column.
           columnDefs: [{
