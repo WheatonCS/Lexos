@@ -180,10 +180,10 @@ def cache_tokenizer_option():
     """Stores csv options from request.form in session cookie object."""
     if request.json:
         session['tokenizerOption'] = {
-            'tableOrientation': request.json['tableOrientation']}
+            'orientation': request.json['orientation']}
     else:
         session['tokenizerOption'] = {
-            'tableOrientation': request.form['tableOrientation']}
+            'orientation': request.form['orientation']}
 
 
 def cache_analysis_option():
