@@ -168,9 +168,9 @@ $(window).on('load', function () {
 
   // Save to PNG
   $('#png-save').on('click', function () {
-    var $container = $('#vis')
+    var $container = $('#vis'),
       // Canvg requires trimmed content
-      content = $container.html().trim()
+      content = $container.html().trim(),
       canvas = document.getElementById('svg-canvas')
 
     // Draw svg on canvas
