@@ -1,6 +1,4 @@
 import pandas as pd
-from flask import jsonify
-
 from lexos.receivers.tokenizer_receiver import TokenizerOption
 from lexos.models.tokenizer_model import TokenizerModel, TokenizerTestOption
 
