@@ -13,14 +13,6 @@ function generateTokenizerResult () {
   // Get the form in HTML as a JSON object.
   const form = utility.jsonifyForm()
 
-  // Get the table orientation.
-  const tableOrientation = $('#table-orientation-column')
-  // Get the proper default ordering based on the table orientation.
-  const order = tableOrientation.is(':checked') ? [2, 'desc'] : [0, 'asc']
-
-  // Get the number of fixed columns based on the table orientation.
-  const numFixedColumns = tableOrientation.is(':checked') ? 3 : 1
-
   // Send the ajax request to get the tokenizer result.
   utility.sendAjaxRequest('/tokenizerHeader', form)
     .done( // If the ajax call succeeded.
@@ -42,10 +34,10 @@ function generateTokenizerResult () {
           dom: 'Bftrip',
 
           // Set the default ordering.
-          order: [order],
+          order: [[2, 'desc']],
 
           // Set number of fixed columns on left of the data table.
-          fixedColumns: {leftColumns: numFixedColumns},
+          fixedColumns: {leftColumns: 3},
 
           // specify all the button that is put on to the page
           buttons: [
@@ -89,8 +81,8 @@ function generateTokenizerResult () {
 }
 
 $(function () {
-  // The event handler for download tokenize clicked.
-  $('#download-tokenizer').click(function (download) {
+  // The event handler for downloading file col tokenize clicked.
+  $('#download_file_col').click(function (download) {
     // On check possible submission error on click.
     const error = utility.submissionError(1)
 
@@ -98,11 +90,29 @@ $(function () {
     if (error != null) {
       utility.runModal(error)
       download.preventDefault()
+    } else {
+      $('#orientation').val('file_col')
+      $('#trigger_download').click()
+    }
+  })
+
+    // The event handler for downloading file row tokenize clicked.
+  $('#download_file_row').click(function (download) {
+    // On check possible submission error on click.
+    const error = utility.submissionError(1)
+
+    // If error found, run modal to display message and prevent the submission from happening.
+    if (error != null) {
+      utility.runModal(error)
+      download.preventDefault()
+    } else {
+      $('#orientation').val('file_row')
+      $('#trigger_download').click()
     }
   })
 
   // The event handler for generate tokenize clicked.
-  $('#get-tokenizer').click(function () {
+  $('#get_tokenizer').click(function () {
     // Get the possible error happened during submission the ajax call.
     const error = utility.submissionError(1)
 
