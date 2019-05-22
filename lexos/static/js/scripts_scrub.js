@@ -165,6 +165,7 @@ function sendScrubbing (action) { // eslint-disable-line no-unused-vars
     contentType: false, // important
     data: formData,
     error: function (jqXHR, textStatus, errorThrown) {
+      $('#status-prepare').css({'visibility': 'hidden'})
       $('#error-modal-message').html('Lexos could not apply the scrubbing actions.')
       $('#error-modal').modal()
       console.log(`bad: ${textStatus}: ${errorThrown}`)
