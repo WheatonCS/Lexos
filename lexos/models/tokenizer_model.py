@@ -106,7 +106,7 @@ class TokenizerModel(BaseModel):
                             value=file_col_dtm["Total"] / len(labels))
         return file_col_dtm.round(4)
 
-    def _get_file_col_table_header(self) -> str:
+    def get_file_col_table_header(self) -> str:
         """Get the HTML header with documents as columns."""
         # Get the proper header.
         header = self._get_file_col_dtm().columns.values.tolist()
@@ -120,65 +120,14 @@ class TokenizerModel(BaseModel):
         # Return the HTML header.
         return f"<thead><tr>{header_html}</tr></thead>"
 
-    def _get_file_row_dtm(self) -> pd.DataFrame:
-        """Get DTM with documents as rows and terms/characters as columns.
+    def select_file_col_dtm(self) -> jsonify:
+        """Select required portion of the file col dtm respond to ajax call.
 
-        :return: DataFrame that contains DTM where each document is a row.
-        """
-        # Check if empty DTM is received.
-        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
-
-        # Get temp file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Get the main dtm, set proper column names and use labels as index.
-        file_row_dtm = self._doc_term_matrix
-        file_row_dtm.index = labels
-
-        return file_row_dtm.round(4)
-
-    def _get_file_row_table_header(self) -> str:
-        """Get the HTML header with documents as rows.
-
-        Attach the average/total as rows in header because we want them to stay
-        there even when the page is changed.
-        """
-        # Still grab the file col dtm and extracts useful information.
-        dtm = self._get_file_col_dtm()
-
-        # Get the proper headers since we want all those to stay.
-        head, total, ave = dtm.index.tolist(), dtm["Total"].tolist(), dtm[
-            "Average"].tolist()
-
-        # Insert the header names.
-        head.insert(0, "Documents / Stats")
-        total.insert(0, "Total")
-        ave.insert(0, "Average")
-
-        # Join the column names in HTML format.
-        header_html = "".join([f"<th>{item}</th>" for item in head])
-        total_html = "".join([f"<th>{item}</th>" for item in total])
-        average_html = "".join([f"<th>{item}</th>" for item in ave])
-
-        # Return the complete table header.
-        return f"<thead>" \
-            f"<tr>{header_html}</tr>" \
-            f"<tr>{total_html}</tr>" \
-            f"<tr>{average_html}</tr></thead>"
-
-    def get_table_header(self) -> str:
-        """Get the table header based on required table orientation."""
-        return self._get_file_col_table_header() \
-            if self._front_end_option.orientation == "file_as_column" \
-            else self._get_file_row_table_header()
-
-    def _select_dtm(self, dtm: pd.DataFrame) -> jsonify:
-        """Select required portion of the dtm respond to the ajax call.
-
-        :param dtm: The correct doc term matrix user requires.
         :return: A Json object contains values the datatable ajax call needs.
         """
+        # Get the file column dtm.
+        dtm = self._get_file_col_dtm()
+
         # Apply the search first before anything happens.
         dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]
 
@@ -209,11 +158,23 @@ class TokenizerModel(BaseModel):
             data=data
         )
 
-    def get_dtm(self) -> jsonify:
-        """Select portion of dtm based on required table orientation."""
-        return self._select_dtm(dtm=self._get_file_col_dtm()) \
-            if self._front_end_option.orientation == "file_as_column" \
-            else self._select_dtm(dtm=self._get_file_row_dtm())
+    def _get_file_row_dtm(self) -> pd.DataFrame:
+        """Get DTM with documents as rows and terms/characters as columns.
+
+        :return: DataFrame that contains DTM where each document is a row.
+        """
+        # Check if empty DTM is received.
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
+        # Get temp file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Get the main dtm, set proper column names and use labels as index.
+        file_row_dtm = self._doc_term_matrix
+        file_row_dtm.index = labels
+
+        return file_row_dtm.round(4)
 
     def download_dtm(self) -> str:
         """Download the desired DTM as a CSV file.
@@ -222,7 +183,7 @@ class TokenizerModel(BaseModel):
         """
         # Select proper DTM based on users choice.
         required_dtm = self._get_file_col_dtm() \
-            if self._front_end_option.orientation == "file_as_column" \
+            if self._front_end_option.orientation == "file_col" \
             else self._get_file_row_dtm()
 
         # Get the default folder path, if it does not exist, create one.
