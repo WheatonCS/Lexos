@@ -221,26 +221,6 @@ $(function () {
         .attr('transform', 'translate(' + [w >> 1, h >> 1] + ')scale(' + scale + ')')
     }
 
-    // Converts a given word cloud to image/png.
-    // function downloadPNG() {
-    //   var canvas = document.createElement('canvas'),
-    //     c = canvas.getContext('2d')
-    //   canvas.width = w
-    //   canvas.height = h
-    //   c.translate(w >> 1, h >> 1)
-    //   c.scale(scale, scale)
-    //   words.forEach(function (word, i) {
-    //     c.save()
-    //     c.translate(word.x, word.y)
-    //     c.rotate(word.rotate * Math.PI / 180)
-    //     c.textAlign = 'center'
-    //     c.fillStyle = fill(word.name.toLowerCase())
-    //     c.font = word.size + 'px ' + word.font
-    //     c.fillText(word.name, 0, 0)
-    //     c.restore()
-    //   })
-    //   d3.select(this).attr('href', canvas.toDataURL('image/png'))
-    // }
 
     // Save to PNG
     $('#download-png').on('click', function () {
@@ -254,26 +234,12 @@ $(function () {
 
       // Change img from SVG representation
       var theImage = canvas.toDataURL('image/png')
-      $('#svg-img').attr('src', theImage)
 
-      // Open a new window with the image
-      var w = window.open()
-      var img = $('#svg-img').clone().css('display', 'block')
-      var html = $('<div/>')
-      html.append("<h2 style='margin-left: 30px'>Instructions for Saving Image</h2>")
-      html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Mozilla Firefox:</strong></h3><ol>")
-      html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose \"Save Image As...\".</li>")
-      html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Right click and view image, then select your browser's print operation and choose print to PDF.</li></ol>")
-      html.append("<h3 style='font-size: 16px; margin-left: 30px'><strong>For Chrome:</strong></h3>")
-      html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>Right click on the image and choose to \"Open image in new tab\".</li>")
-      html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PNG: Right click on the image and choose to \"Save image as...\".</li>")
-      html.append("<h3 style='font-size: 14px; margin-left: 30px'><li>PDF: Select your browser's print operation and choose print to PDF.</li></ol>")
-      html.append(img)
-
-      $(w.document.body).html(html)
-      // End Save
+      d3.select(this).attr('download', 'image.png')
+      d3.select(this).attr('href', theImage)
     })
 
+    // Save to SVG
     $('#download-svg').on('click', function () {
       d3.select(this).attr('download', 'image.svg')
       d3.select(this).attr('href', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(
@@ -281,13 +247,6 @@ $(function () {
         .attr('xmlns', 'http://www.w3.org/2000/svg')
         .node().parentNode.innerHTML))))
     })
-
-    // function downloadSVG() {
-    //   d3.select(this).attr('href', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(
-    //     svg.attr('version', '1.1')
-    //       .attr('xmlns', 'http://www.w3.org/2000/svg')
-    //       .node().parentNode.innerHTML))))
-    // }
 
     function hashchange() {
       var h = location.hash
@@ -332,9 +291,6 @@ $(function () {
     var background = svg.append('g'),
       vis = svg.append('g')
         .attr('transform', 'translate(' + [w >> 1, h >> 1] + ')')
-
-    //d3.select('#download-svg').on('click', downloadSVG)
-    //d3.select('#download-png').on('click', downloadPNG)
 
     var tabs = d3.select('#presets').selectAll('a')
       .data([
