@@ -8,6 +8,7 @@ from lexos.managers.session_manager import session
 from lexos.managers.utility import load_file_manager
 from lexos.models.content_analysis_model import \
     ContentAnalysisModel
+from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.contentanalysis_receiver import \
     ContentAnalysisReceiver
 from lexos.views.base_view import detect_active_docs
@@ -28,6 +29,11 @@ def content_analysis():
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
+    # Detect the number of active documents.
+    num_active_docs = detect_active_docs()
+    id_label_map = \
+        FileManagerModel().load_file_manager().get_active_labels_with_id()
+
     analysis = ContentAnalysisModel()
     path = os.path.join(constants.TMP_FOLDER,
                         constants.UPLOAD_FOLDER,
@@ -58,9 +64,11 @@ def content_analysis():
                                active_dictionaries=active_dicts,
                                toggle_all_value=toggle_all_value,
                                itm="content-analysis",
-                               formula=formula)
+                               formula=formula,
+                               labels = id_label_map,
+                               numActiveDocs = num_active_docs,
+        )
     else:
-        num_active_docs = detect_active_docs()
         active_dicts = ContentAnalysisReceiver().options_from_front_end(
         ).active_dicts
         dict_labels = ContentAnalysisReceiver().options_from_front_end(
