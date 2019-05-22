@@ -77,7 +77,6 @@ function generateTokenizerResult () {
         utility.runModal('Error encountered while generating the tokenizer result.')
       }
     )
-
 }
 
 $(function () {
