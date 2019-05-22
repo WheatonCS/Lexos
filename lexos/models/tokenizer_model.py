@@ -163,18 +163,7 @@ class TokenizerModel(BaseModel):
 
         :return: DataFrame that contains DTM where each document is a row.
         """
-        # Check if empty DTM is received.
-        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
-
-        # Get temp file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
-        # Get the main dtm, set proper column names and use labels as index.
-        file_row_dtm = self._doc_term_matrix
-        file_row_dtm.index = labels
-
-        return file_row_dtm.round(4)
+        return self._get_file_col_dtm().transpose()
 
     def download_dtm(self) -> str:
         """Download the desired DTM as a CSV file.

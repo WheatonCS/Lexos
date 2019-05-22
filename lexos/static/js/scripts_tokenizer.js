@@ -96,7 +96,7 @@ $(function () {
     }
   })
 
-    // The event handler for downloading file row tokenize clicked.
+  // The event handler for downloading file row tokenize clicked.
   $('#download_file_row').click(function (download) {
     // On check possible submission error on click.
     const error = utility.submissionError(1)
