@@ -35,7 +35,6 @@ def tokenizer():
 def tokenizer_download():
     # First cache the useful options.
     session_manager.cache_analysis_option()
-    session_manager.cache_tokenizer_option()
     # Generate file and get the file path.
     file_path = TokenizerModel().download_dtm()
     # Return the file by sending the file path.
@@ -48,12 +47,11 @@ def tokenizer_download():
 def tokenizer_matrix():
     # Cache the front options for matrix model and tokenizer model.
     session_manager.cache_analysis_option()
-    session_manager.cache_tokenizer_option()
     # Return the generated DTM to ajax call.
-    return TokenizerModel().get_dtm()
+    return TokenizerModel().select_file_col_dtm()
 
 
 @tokenizer_blueprint.route("/tokenizerHeader", methods=["POST"])
 def tokenizer_header():
     # Return the size of the DTM to ajax call.
-    return TokenizerModel().get_table_header()
+    return TokenizerModel().get_file_col_table_header()
