@@ -1,7 +1,8 @@
 import json
 
-from flask import request, session, render_template, Blueprint
+from flask import request, session, render_template, Blueprint, jsonify
 
+from lexos.helpers.exceptions import LexosException
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
@@ -70,7 +71,10 @@ def do_scrubbing():
     # saves changes only if 'Apply Scrubbing' button is clicked
     saving_changes = True if request.form["formAction"] == "apply" else False
     # preview_info is a tuple of (id, file_name(label), class_label, preview)
-    previews = file_manager.scrub_files(saving_changes=saving_changes)
+    try:
+        previews = file_manager.scrub_files(saving_changes=saving_changes)
+    except LexosException:
+        return jsonify('formatting error'), 400
     # escape the html elements, only transforms preview[3], because that is
     # the text:
     previews = [
