@@ -29,9 +29,7 @@ class TokenizerReceiver(BaseReceiver):
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
         # This orientation option must always exist.
-        orientation = "file_as_row" \
-            if self._front_end_data["tableOrientation"] == "fileRow" \
-            else "file_as_column"
+        orientation = self._front_end_data["orientation"]
 
         # This exception is here because when header is requested, values
         # above related to data table drawing are not passed in.
