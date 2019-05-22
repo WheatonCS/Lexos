@@ -74,6 +74,7 @@ def do_scrubbing():
     try:
         previews = file_manager.scrub_files(saving_changes=saving_changes)
     except LexosException:
+        # this sends a server error back to the javascript
         return jsonify('formatting error'), 400
     # escape the html elements, only transforms preview[3], because that is
     # the text:
