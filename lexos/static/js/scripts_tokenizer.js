@@ -5,7 +5,7 @@ import * as utility from './utility.js'
  * @returns {void}.
  */
 function generateTokenizerResult () {
-  // Select the matrix table id.
+  // Select the matrix table.
   const matrix = $('#matrix')
   // Clear the data table content if the table exists.
   if ($.fn.DataTable.isDataTable(matrix)) matrix.DataTable().clear().destroy()
@@ -39,7 +39,7 @@ function generateTokenizerResult () {
           bSortCellsTop: true,
 
           // specify where the button is
-          dom: 'Bftriip',
+          dom: 'Bftrip',
 
           // Set the default ordering.
           order: [order],
@@ -70,6 +70,7 @@ function generateTokenizerResult () {
             contentType: 'application/json',
             data: function (data) {
               return JSON.stringify(
+                // Combine the two json objects.
                 Object.assign({}, data, utility.jsonifyForm())
               )
             }
@@ -94,7 +95,7 @@ $(function () {
     const error = utility.submissionError(1)
 
     // If error found, run modal to display message and prevent the submission from happening.
-    if (error !== null) {
+    if (error != null) {
       utility.runModal(error)
       download.preventDefault()
     }
@@ -105,7 +106,7 @@ $(function () {
     // Get the possible error happened during submission the ajax call.
     const error = utility.submissionError(1)
 
-    if (error === null) { // If there is no error, do the ajax call.
+    if (error == null) { // If there is no error, do the ajax call.
       generateTokenizerResult()
     } else { // If error found, do modal.
       utility.runModal(error)

@@ -38,7 +38,7 @@ export function sendAjaxRequest (url, form) {
 /**
  * Check if the number of document uploaded meets the minimum number of file required to run the tool.
  * @param {number} numFileRequired: the minimum number of file required to run the tool.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
+ * @returns {string|null} the errors that is checked by JS, if no error the result will be null.
  */
 export function submissionError (numFileRequired) {
   // Get the url for upload and manage page.
@@ -46,10 +46,10 @@ export function submissionError (numFileRequired) {
   const manageUrl = $('#manage-url').data().url
 
   // Set the error message
-  const activeFileNumTooFewErr = `You do not have enough active documents. Please 
-                                  activate at least ${numFileRequired} documents 
-                                  using the <a href=${manageUrl}>Manage</a> tool 
-                                  or <a href=${uploadUrl}>Upload</a> a new document.`
+  const activeFileNumTooFewErr =
+    `You do not have enough active documents. Please activate at least 
+     ${numFileRequired} documents using the <a href=${manageUrl}>Manage</a> 
+     tool or <a href=${uploadUrl}>Upload</a> a new document.`
 
   // Get the number of active files.
   const activeFiles = $('#num-active-files').data().number
