@@ -106,8 +106,8 @@ def content_analysis():
                 analysis.add_dictionary(file_name=dict_name,
                                         label=dict_label,
                                         content=content)
-        result_table, corpus_raw_counts_table, files_raw_counts_tables, \
-        formula_errors = analysis.analyze()
+        result_table, corpus_raw_counts_table, files_raw_counts_tables,\
+            formula_errors = analysis.analyze()
         if len(formula_errors) != 0 or result_table is None:
             return error(formula_errors)
         data = {"result_table": result_table,
