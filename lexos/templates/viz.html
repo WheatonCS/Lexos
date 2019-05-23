@@ -77,6 +77,9 @@ $(function() {
 <h4 id="nosegments">Please select the document(s) for the graph.</h4>
 
 {% else %}
+<a id="svg-save" target="_blank" class="btn bttn bttn-action" role="button">Save as SVG</a>
+<a id="png-save" target="_blank" class="btn bttn bttn-action" role="button">Save as PNG</a>
+
 <a name="graph-anchor" id="graph-anchor"></a>
 <div id="viz"></div>
 <div class="row"></div>
@@ -88,12 +91,9 @@ $(function() {
 <canvas id="svg-canvas" style="display:none;"></canvas>
 <img id="svg-img" style="display:none;"/>
 <!-- -->
-
 {% endif %}
 {% endblock %}
 
 {% block submit %}
 <input type="submit" class="bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;" value="Get Graph"/>
-    <a id="svg-save" target="_blank" class="btn bttn bttn-action" role="button">SVG</a>
-    <a id="png-save" target="_blank" class="btn bttn bttn-action" role="button">PNG</a>
 {% endblock %}
