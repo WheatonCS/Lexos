@@ -92,3 +92,15 @@ test_option = TokenizerTestOption(
     id_temp_label_map=test_id_temp_label_map
 )
 test_tokenizer_ajax = TokenizerModel(test_options=test_option)
+
+
+class TestTokenizerAjax:
+    def test_tokenizer_ajax(self):
+        result = test_tokenizer_ajax.select_file_col_dtm()
+        assert result["draw"] == 1
+        assert result["size"] == 7
+        assert result["data"] == [
+            ['A', 6.0, 3.0, 0.0, 6.0], ['B', 6.0, 3.0, 1.0, 5.0],
+            ['C', 6.0, 3.0, 2.0, 4.0], ['D', 6.0, 3.0, 3.0, 3.0],
+            ['E', 6.0, 3.0, 4.0, 2.0]
+        ]
