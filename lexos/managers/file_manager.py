@@ -416,8 +416,11 @@ class FileManager:
             as_attachment=True)
 
     def zip_active_files_with_leading_zeros(self, zip_file_name: str):
-        """Sends a zip file of files containing contents of the active files.
+        """Sends a zip file of active files with leading 0s added to numbering.
 
+        This function is a modification of the one above intended to go with
+        the "Download Cut Files" button--the downloaded files will be more
+        easily sortable as a result.
         :param zip_file_name: Name to assign to the zipped file.
         :return: zipped archive to send to the user, created with Flask's
                      send_file.
