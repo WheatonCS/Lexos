@@ -2,6 +2,7 @@
 
 import math
 import pandas as pd
+import newick
 import plotly.figure_factory as ff
 from typing import NamedTuple, Optional
 from scipy.spatial.distance import pdist
@@ -79,14 +80,43 @@ class DendrogramModel(BaseModel):
 
             labels=labels
         )
-        ticktext = graph.layout['xaxis']['ticktext']
-        tickvals = graph.layout['xaxis']['tickvals']
+
+        xy = {}
         for i in graph.data:
             for j in range(0, len(i['x'])):
-                print(i['x'][j], i['y'][j])
-        print(ticktext)
-        print(tickvals)
-        # print(graph.data)
+                xy[i['x'][j]] = i['y'][j]
+        xname = {}
+        ticktext = graph.layout['xaxis']['ticktext']
+        tickvals = list(graph.layout['xaxis']['tickvals'])
+        for i in range(0, len(tickvals)):
+            xname[str(tickvals[i])] = ticktext[i]
+        xy = [(k, v) for k, v in xy.items()]
+
+        xname_list = [(k, v) for k, v in xname.items()]
+        result = {}
+        for i in range(0, len(xy)):
+            for j in range(0, len(xname)):
+                if str(xy[i][0].item()) == xname_list[j][0]:
+                    result[xname_list[j][1]] = xy[i]
+        '''print(ticktext)
+        print(tickvals, type(tickvals))
+        print('xy', xy)
+        print('xname:', xname)
+        print('res', result)'''
+
+        for i in result:
+            print(i, result[i])
+        result = [(k, v) for k, v in result.items()]
+        dt_points = []
+        for i in range(len(result)):
+            data_pt = list(result[i])
+            pt = list(data_pt[1])
+            data_pt[1] = pt
+            if data_pt[1][1] == 0.0:
+                data_pt[1][1] = result[i-1][1][1]
+            dt_points.append(data_pt)
+        for i in dt_points:
+            print(i)
         return graph
 
     def extend_figure(self, figure: Figure) -> Figure:
