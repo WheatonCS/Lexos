@@ -133,7 +133,7 @@ def replacement_handler(text: str,
                 REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
 
         # Removal input rather than replacement -- "a:"
-        if replace_to =="":
+        if replace_to == "":
             raise LexosException(
                 REPLACEMENT_NO_RIGHT_HAND_MESSAGE + replacement_line)
 
