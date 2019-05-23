@@ -59,14 +59,15 @@ def content_analysis():
             formula = session['formula']
         else:
             formula = ""
-        return render_template('contentanalysis.html',
-                               dictionary_labels=dict_labels,
-                               active_dictionaries=active_dicts,
-                               toggle_all_value=toggle_all_value,
-                               itm="content-analysis",
-                               formula=formula,
-                               labels = id_label_map,
-                               numActiveDocs = num_active_docs,
+        return render_template(
+            'contentanalysis.html',
+            dictionary_labels=dict_labels,
+            active_dictionaries=active_dicts,
+            toggle_all_value=toggle_all_value,
+            itm="content-analysis",
+            formula=formula,
+            labels=id_label_map,
+            numActiveDocs=num_active_docs
         )
     else:
         active_dicts = ContentAnalysisReceiver().options_from_front_end(
@@ -105,8 +106,8 @@ def content_analysis():
                 analysis.add_dictionary(file_name=dict_name,
                                         label=dict_label,
                                         content=content)
-        result_table, corpus_raw_counts_table, files_raw_counts_tables,\
-            formula_errors = analysis.analyze()
+        result_table, corpus_raw_counts_table, files_raw_counts_tables, \
+        formula_errors = analysis.analyze()
         if len(formula_errors) != 0 or result_table is None:
             return error(formula_errors)
         data = {"result_table": result_table,
