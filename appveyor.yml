@@ -34,7 +34,6 @@ test_script:
   - flake8
   # Unit testing.
   - pytest --cov=.\lexos
-  - codecov
   # Doc style, at the moment only test files under models and receivers.
   - pydocstyle lexos\models\
   - pydocstyle lexos\receivers\
