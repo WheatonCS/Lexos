@@ -14,7 +14,7 @@ from lexos.views.base_view import detect_active_docs
 cutter_blueprint = Blueprint('cutter', __name__)
 
 
-@cutter_blueprint.route("/cut", methods=["GET", "POST"])
+@cutter_blueprint.route("/cut", methods=["GET"])
 def cut():
     """ Handles the functionality of the cut page.
 
@@ -63,7 +63,7 @@ def cut():
             numActiveDocs=num_active_docs)
 
 
-@cutter_blueprint.route("/downloadCutting", methods=["GET", "POST"])
+@cutter_blueprint.route("/cut", methods=["POST"])
 def download_cutting():
     """downloads cut files.
 
@@ -72,7 +72,7 @@ def download_cutting():
     # The 'Download Segmented Files' button is clicked on cut.html
     # sends zipped files to downloads folder
     file_manager = utility.load_file_manager()
-    return file_manager.zip_active_files('cut_files.zip')
+    return file_manager.zip_active_files_with_leading_zeros('cut_files.zip')
 
 
 @cutter_blueprint.route("/doCutting", methods=["GET", "POST"])

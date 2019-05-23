@@ -355,14 +355,12 @@ class FileManager:
             l_file.active = False
 
             children_file_contents = l_file.cut_contents()
-            num_cut_files = len(children_file_contents)
             l_file.save_cut_options(parent_id=None)
 
             if saving_changes:
                 for i, file_string in enumerate(children_file_contents):
                     original_filename = l_file.name
-                    zeros = floor(log10(num_cut_files)) - floor(log10(i+1))
-                    doc_label = l_file.label + '_' + ('0' * zeros) + str(i + 1)
+                    doc_label = l_file.label + '_' + str(i + 1)
                     file_id = self.add_file(
                         original_filename, doc_label + '.txt', file_string)
 
@@ -409,6 +407,43 @@ class FileManager:
                     l_file.save_path,
                     arcname=l_file_name,
                     compress_type=zipfile.ZIP_STORED)
+        zip_file.close()
+        zip_stream.seek(0)
+
+        return send_file(
+            zip_stream,
+            attachment_filename=zip_file_name,
+            as_attachment=True)
+
+    def zip_active_files_with_leading_zeros(self, zip_file_name: str):
+        """Sends a zip file of files containing contents of the active files.
+
+        :param zip_file_name: Name to assign to the zipped file.
+        :return: zipped archive to send to the user, created with Flask's
+                     send_file.
+        """
+
+        zip_stream = io.BytesIO()
+        zip_file = zipfile.ZipFile(file=zip_stream, mode='w')
+
+        active_count = 0
+        active_files = []
+        for l_file in list(self.files.values()):
+            if l_file.active:
+                active_count += 1
+                active_files.append(l_file)
+
+        for l_file in active_files:
+            # Make sure the filename has an extension
+            name_split = l_file.name.rsplit('_', 1)
+            zeros = floor(log10(active_count)) - floor(log10(int(name_split[1])))
+            l_file_name = name_split[0] + '_' + ('0' * zeros) + name_split[1]
+            if not l_file_name.endswith('.txt'):
+                l_file_name = l_file_name + '.txt'
+            zip_file.write(
+                l_file.save_path,
+                arcname=l_file_name,
+                compress_type=zipfile.ZIP_STORED)
         zip_file.close()
         zip_stream.seek(0)
 
