@@ -1,6 +1,6 @@
 import json
 
-from flask import request, session, render_template, Blueprint, jsonify
+from flask import request, session, render_template, Blueprint
 
 from lexos.helpers.exceptions import LexosException
 from lexos.helpers import constants as constants, \
@@ -74,8 +74,8 @@ def do_scrubbing():
     try:
         previews = file_manager.scrub_files(saving_changes=saving_changes)
     except LexosException:
-        # this sends a server error back to the javascript
-        return jsonify('formatting error'), 400
+        # this returns a server error to the ajax request
+        return 400
     # escape the html elements, only transforms preview[3], because that is
     # the text:
     previews = [
