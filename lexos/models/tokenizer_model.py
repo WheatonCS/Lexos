@@ -2,7 +2,6 @@
 
 import os
 import pandas as pd
-from flask import jsonify
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -24,7 +23,7 @@ class TokenizerTestOption(NamedTuple):
 
 
 class TokenizerModel(BaseModel):
-    """This is the class to generate statistics of the input file.
+    """This is the class to generate tokenizer table of the input file.
 
     :param test_options: The input used in testing to override the
                          dynamically loaded option.
@@ -120,7 +119,7 @@ class TokenizerModel(BaseModel):
         # Return the HTML header.
         return f"<thead><tr>{header_html}</tr></thead>"
 
-    def select_file_col_dtm(self) -> jsonify:
+    def select_file_col_dtm(self) -> dict:
         """Select required portion of the file col dtm respond to ajax call.
 
         :return: A Json object contains values the datatable ajax call needs.
@@ -151,12 +150,11 @@ class TokenizerModel(BaseModel):
             data[index].insert(0, value)
 
         # Return the sliced DTM and total count as a JSON object.
-        return jsonify(
-            draw=self._front_end_option.draw,
-            recordsFiltered=dtm.shape[0],
-            recordsTotal=dtm.shape[0],
-            data=data
-        )
+        return {
+            "draw": self._front_end_option.draw,
+            "size": dtm.shape[0],
+            "data": data
+        }
 
     def _get_file_row_dtm(self) -> pd.DataFrame:
         """Get DTM with documents as rows and terms/characters as columns.

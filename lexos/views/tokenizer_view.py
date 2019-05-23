@@ -1,4 +1,4 @@
-from flask import session, Blueprint, render_template, send_file
+from flask import session, Blueprint, render_template, send_file, jsonify
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
 from lexos.views.base_view import detect_active_docs
@@ -23,7 +23,7 @@ def tokenizer():
 
     # When first get to this page, fill session with default options.
     session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-    session['tokenizerOption'] = constants.DEFAULT_TOKENIZER_OPTIONS
+
     # Return rendered template wih desired information.
     return render_template('tokenizer.html',
                            itm="tokenize",
@@ -45,10 +45,16 @@ def tokenizer_download():
 
 @tokenizer_blueprint.route("/tokenizerMatrix", methods=["GET", "POST"])
 def tokenizer_matrix():
-    # Cache the front options for matrix model and tokenizer model.
+    # Cache the front options for matrix model.
     session_manager.cache_analysis_option()
     # Return the generated DTM to ajax call.
-    return TokenizerModel().select_file_col_dtm()
+    result = TokenizerModel().select_file_col_dtm()
+    return jsonify(
+        recordsFiltered=result["size"],
+        recordsTotal=result["size"],
+        draw=result["draw"],
+        data=result["data"]
+    )
 
 
 @tokenizer_blueprint.route("/tokenizerHeader", methods=["POST"])
