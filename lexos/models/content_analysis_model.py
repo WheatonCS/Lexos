@@ -1,7 +1,7 @@
 """This is the content analysis model which determines tone of texts."""
+import random
 from copy import deepcopy
 from typing import Optional
-import random
 
 import pandas as pd
 
@@ -44,6 +44,7 @@ class ContentAnalysisModel(object):
         :param file_name: file name
         :param label: file label
         """
+        content = content.strip()
         total_word_counts = len(str(content).split(" "))
         self._corpus.append(File(content=content,
                                  file_name=file_name,
