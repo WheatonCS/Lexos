@@ -3,6 +3,7 @@ import os
 import shutil
 import zipfile
 from cmath import sqrt, log, exp
+from math import floor, log10
 from os import makedirs
 from os.path import join as pathjoin
 from typing import List, Tuple, Dict
@@ -354,12 +355,14 @@ class FileManager:
             l_file.active = False
 
             children_file_contents = l_file.cut_contents()
+            num_cut_files = len(children_file_contents)
             l_file.save_cut_options(parent_id=None)
 
             if saving_changes:
                 for i, file_string in enumerate(children_file_contents):
                     original_filename = l_file.name
-                    doc_label = l_file.label + '_' + str(i + 1)
+                    zeros = floor(log10(num_cut_files)) - floor(log10(i+1))
+                    doc_label = l_file.label + '_' + ('0' * zeros) + str(i + 1)
                     file_id = self.add_file(
                         original_filename, doc_label + '.txt', file_string)
 
