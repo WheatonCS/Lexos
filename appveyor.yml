@@ -2,10 +2,6 @@
 environment:
   # Run for both architecture for python 3.7.x
   matrix:
-    - PYTHON: "C:\\Python37"
-      PYTHON_VERSION: "3.7"
-      PYTHON_ARCH: "32"
-
     - PYTHON: "C:\\Python37-x64"
       PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
@@ -38,7 +34,6 @@ test_script:
   - flake8
   # Unit testing.
   - pytest --cov=.\lexos
-  - codecov
   # Doc style, at the moment only test files under models and receivers.
   - pydocstyle lexos\models\
   - pydocstyle lexos\receivers\
