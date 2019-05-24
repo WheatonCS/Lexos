@@ -2,8 +2,11 @@ import json
 
 from flask import request, session, render_template, Blueprint
 
-from lexos.helpers import general_functions as general_functions
+from lexos.helpers import constants as constants, \
+    general_functions as general_functions
 from lexos.managers import utility, session_manager as session_manager
+
+from natsort import humansorted
 
 scrubber_blueprint = Blueprint("scrubber", __name__)
 
@@ -13,6 +16,13 @@ def scrub() -> str:
     """Gets the scrub page.
     :return: The scrub page.
     """
+
+    if "scrubbingoptions" not in session:
+        session["scrubbingoptions"] = constants.DEFAULT_SCRUB_OPTIONS
+    if "xmlhandlingoptions" not in session:
+        session["xmlhandlingoptions"] = {
+            "myselect": {"action": "", "attribute": ""}}
+    utility.xml_handling_options()
 
     return render_template("scrub.html")
 
@@ -39,66 +49,53 @@ def download() -> str:
 
 @scrubber_blueprint.route("/scrub/do-scrubbing", methods=["POST"])
 def do_scrubbing() -> str:
-    """Performs the scrubbing.
-    :return: a json object with a scrubbed preview
+    """Scrubs the active documents.
+    :return: A JSON object with previews of the scrubbed documents.
     """
 
     file_manager = utility.load_file_manager()
+
     session_manager.cache_alteration_files()
     session_manager.cache_scrub_options()
 
-    # saves changes only if 'Apply Scrubbing' button is clicked
-    saving_changes = True if request.form["formAction"] == "apply" else False
+    # Save changes only if the "Apply Scrubbing" button is clicked
+    saving_changes = request.form["formAction"] == "apply"
 
-    # preview_info is a tuple of (id, file_name(label), class_label, preview)
+    # Scrub
     previews = file_manager.scrub_files(saving_changes=saving_changes)
 
-    # escape the html elements, only transforms preview[3], because that is
-    # the text:
-    previews = [
-        [preview[0], preview[1], preview[2],
-         general_functions.html_escape(preview[3])] for preview in previews]
+    # HTML escape the previews
+    previews = [[preview[1], general_functions.html_escape(preview[3])]
+                for preview in previews]
 
+    # Save the changes if requested
     if saving_changes:
         utility.save_file_manager(file_manager)
 
-    data = {"data": previews}
-    data = json.dumps(data)
-
-    return data
+    return json.dumps(previews)
 
 
-@scrubber_blueprint.route("/scrub/get-tags", methods=["GET"])
+@scrubber_blueprint.route("/scrub/get-tag-options", methods=["GET"])
 def get_tags_table() -> str:
-    """ :return: an html table of the xml handling options
+    """Gets the tags in the active documents.
+    :return: The tags in the active documents.
     """
-    from natsort import humansorted
+
     utility.xml_handling_options()
-    s = ''
-    keys = list(session["xmlhandlingoptions"].keys())
-    keys = humansorted(keys)
+    tags = humansorted(list(session["xmlhandlingoptions"].keys()))
 
-    response = {"menu": s, "selected-options": "multiple"}
-
-    # Count the number of actions and change selected-options to
-    # the selected option if they are all the same.
-    num_actions = []
-
-    for item in session["xmlhandlingoptions"].items():
-        num_actions.append(item[1]["action"])
-
-    num_actions = list(set(num_actions))
-    if len(num_actions) == 1:
-        response["selected-options"] = num_actions[0] + ",allTags"
+    response = []
+    for tag in tags:
+        response.append([tag, session["xmlhandlingoptions"][tag]["action"],
+                         session["xmlhandlingoptions"][tag]["attribute"]])
 
     return json.dumps(response)
 
 
-@scrubber_blueprint.route("/scrub/xml", methods=["GET"])
+@scrubber_blueprint.route("/scrub/save-tag-options", methods=["POST"])
 def xml() -> str:
-    """Handle XML tags.
-
-    :return: None
+    """Sets the tag options.
+    :return: None.
     """
 
     data = request.json
@@ -106,13 +103,12 @@ def xml() -> str:
     return ""
 
 
-@scrubber_blueprint.route("/scrub/remove-upload-labels", methods=["POST"])
-def remove_upload_labels() -> str:
-    """Removes Scrub upload files from the session when the labels are clicked.
-
-    :return: string indicating that it has succeeded
+@scrubber_blueprint.route("/scrub/remove-upload", methods=["POST"])
+def remove_upload() -> str:
+    """Removes a file that was uploaded on the scrubber page.
+    :return: None.
     """
 
     option = request.headers["option"]
     session["scrubbingoptions"]["optuploadnames"][option] = ''
-    return "success"
+    return ""

@@ -8,8 +8,7 @@ form {
 /* Top section */
 #top-section {
     display: grid;
-    grid-template-columns: 80% 20%;
-    margin-bottom: 2rem;
+    grid-template-columns: 75% 25%;
 }
 
 #download-button {
@@ -23,47 +22,57 @@ form {
     display: grid;
     row-gap: 1rem;
     width: 100%;
+    background-color: #FFFFFF;
 }
 
 #manage-table-head {
-    grid-template-columns: 7% 20% 13% 20% 40%;
+    z-index: 1;
+    position: sticky;
+    top: 0;
+    grid-template-columns: 7% 7% 16% 14% 16% 40%;
     height: 5rem;
-    margin-bottom: 1rem;
-    background-color: #FFFFFF;
+    padding-top: 2rem;
+    background-color: #E3E3E3;
+}
+
+#manage-table-body {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 .manage-table-head-cell {
     display: grid;
     align-content: center;
     padding: 1rem;
-    color: #FF6000;
+    color: #47BCFF;
+    background-color: #FFFFFF;
 }
 
 .manage-table-row {
     display: grid;
-    grid-template-columns: 7% 20% 13% 20% 40%;
+    grid-template-columns: 7% 7% 16% 14% 16% 40%;
     width: 100%;
-    height: 10rem;
     background-color: #F3F3F3;
     transition: border-color .2s;
 }
 
 .manage-table-cell {
-    height: 10rem;
     padding: 1rem;
     word-wrap: break-word;
     overflow: hidden;
     color: #505050;
 }
 
-.circle {
+.checkbox {
+    margin-top: 1.1rem;
     margin-left: 1rem;
-    align-self: center;
 }
 
-.selected-row > .circle {
-    background-color: #FF6000;
+.selected-row > .checkbox {
+    border: 2px solid #47BCFF;
+    background-color: #C7EBFF;
 }
+
 
 /* Context Menu */
 #context-menu {
@@ -75,7 +84,7 @@ form {
     left: 0;
     width: 18rem;
     padding: 1rem;
-    background-color: #E3E3E3;
+    background-color: #FFFFFF;
     opacity: 0;
     transition: opacity .2s;
     pointer-events: none;

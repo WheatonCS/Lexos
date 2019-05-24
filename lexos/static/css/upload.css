@@ -1,23 +1,38 @@
-/* Upload information */
-#upload-information {
-    display: grid;
-    grid-template-columns: 25% 75%;
+/* Title */
+.title {
     margin-bottom: 1rem;
 }
 
-#upload-requirements {
-    justify-self: right;
+
+/* About section */
+.about-section {
+    display: block;
+    margin-bottom: 2rem;
+    background-color: white;
+    padding: 1rem;
 }
 
 
-/* Browse button and drag and drop section */
+/* Upload section */
+#upload-section {
+    background-color: #FFFFFF;
+    padding-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+#upload-section > h3 {
+    display: block;
+    position: relative;
+    left: 1rem;
+    width: calc(100% - 2rem);
+}
+
 #browse-button,
 #drag-and-drop-section {
-    display: inline-grid;
+    display: grid;
     justify-items: center;
     align-items: center;
-    margin: 0;
-    height: 30rem;
+    color: #505050;
 }
 
 #browse-button > h3,
@@ -25,35 +40,59 @@
     color: inherit;
 }
 
-/* Upload section */
-#upload-section {
-    display: grid;
-    grid-template-columns: 30% auto;
-    column-gap: 2rem;
-}
-
 #browse-button {
-    background-color: #FFFFFF;
+    background-color: #F3F3F3;
     transition: border-color .2s;
-    border: 2px solid rgba(255, 96, 0, 0);
+    border: 2px solid #F3F3F3;
+    width: 20rem;
+    height: 6rem;
+    border-radius: 3rem;
+    margin: 1rem;
 }
 
 #browse-button:hover {
-    color: #FF6000;
-    border: 2px solid #FF6000;
+    color: #47BCFF;
+    background-color: #C7EBFF;
+    border: 2px solid #47BCFF;
 }
 
 #drag-and-drop-section {
     transition: background-color .2s, border-color .2s;
-    border: 2px dashed #505050;
+    border: 2px dashed #F3F3F3;
     background-color: #F3F3F3;
+    width: 100%;
+    height: 30rem;
 }
 
 
 /* Upload list */
-#upload-list-container {
-    overflow: hidden;
-    overflow-wrap: break-spaces;
-    margin-top: 1rem;
-    max-width: 100%;
+#upload-list {
+    display: none;
+    min-height: 10rem;
+    background-color: #FFFFFF;
+    padding: 1rem;
+}
+
+#upload-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    grid-gap: 1rem;
+    width: 100%;
+}
+
+.upload-preview {
+    display: inline-grid;
+    align-content: center;
+    justify-content: center;
+    width: 100%;
+    height: 7rem;
+    background-color: #F3F3F3;
+    min-width: 0;
+}
+
+.upload-preview > h3 {
+    margin: 1rem;
+    min-width: 0;
+    display: inline-block;
+    overflow-wrap: break-word;
 }

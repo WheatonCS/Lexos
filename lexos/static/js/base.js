@@ -52,7 +52,7 @@ function highlight_navbar_button(){
  * @param {jQuery} element: The element to highlight.
  */
 function highlight_element(element){
-    element.css("color", "#FF6000");
+    element.css("color", "#47BCFF");
 }
 
 

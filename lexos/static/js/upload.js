@@ -1,6 +1,6 @@
 let total_files = 0;
 let upload_count = 0;
-$("document").ready(function(){
+$(function(){
 
     // Check for prerequisites
     if(!window.File || !window.FileList ||
@@ -22,8 +22,8 @@ $("document").ready(function(){
     let drag_counter = 0;
     drag_and_drop_section.on("dragenter", function(){
         ++drag_counter;
-        $("#drag-and-drop-section").css({
-            "color": "#FF6000", "border-color": "#FF6000"});
+        $("#drag-and-drop-section").css({"color": "#47BCFF",
+            "border-color": "#47BCFF", "background-color": "#C7EBFF"});
     });
 
     drag_and_drop_section.on("dragleave", function(){
@@ -67,24 +67,13 @@ function upload_file(file){
     let file_name = file.name.replace(/ /g, '_');
 
     // Check if the file is of an invalid type
-    if(!is_file_type_valid(file.name)){
-        $("#error-modal-message").html(`The file `+
-            `"${file_name}" is of an invalid type.`);
-        $("#error-modal").modal();
-        return;
-    }
+    if(!is_file_type_valid(file.name)) return;
 
     // Check if the file is empty
-    if(file.size === 0){
-        $("#error-modal-message").html(`The file "${file_name}" is blank.`);
-        $("#error-modal").modal();
-        return;
-    }
+    if(file.size === 0) return;
 
     // Upload the file
     send_ajax_request(file, file_name)
-        .fail(function(jq_XHR, status, error)
-            { alert(`${status}: ${error}`); })
         .done(function(){ upload_success_callback(file_name); });
 }
 
@@ -102,17 +91,22 @@ function upload_success_callback(file_name)
     let active_documents = parseInt(active_documents_element.text())+1;
     active_documents_element.text(active_documents.toString());
 
-    const status_element = $("#upload-status");
-    status_element.text(`${upload_count} of ${total_files} uploaded`);
+    let upload_previews_element = $("#upload-previews");
+
+    $(`
+        <div class="upload-preview">
+            <h3>${file_name}</h3>
+        </div>
+    `).appendTo(upload_previews_element);
+
+    $("#upload-list").css("display", "grid");
 
     // Update the uploaded documents list
     uploaded_file_names.push(file_name);
 
     let string = "";
     for(const file_name of uploaded_file_names) string += file_name+", ";
-    string = string.substring(0, string.length-2);
-
-    $("#upload-list").text(string);
+    string = string.substring(0, string.length-2)
 }
 
 
@@ -127,7 +121,7 @@ function send_ajax_request(file, file_name){
     url: "upload/add-document",
     data: file,
     processData: false,
-    async: false, /*Async results in errors*/
+    async: false,  // Async results in errors
     contentType: file.type,
     headers: {"file-name": encodeURIComponent(file_name)}
   });
@@ -145,8 +139,6 @@ function file_selection_handler(event){
     upload_count = 0;
 
     if(!files.length) return;
-    $("#upload-status").text("0 of "+total_files+" uploaded");
-
     for(let file of files) upload_file(file);
 }
 
@@ -163,6 +155,6 @@ function drag_and_drop_intercept(event){
 
 
 function set_default_drop_section_colors(){
-    $("#drag-and-drop-section").css({
-        "color": "#505050", "border-color": "#505050"});
+    $("#drag-and-drop-section").css({"color": "#505050",
+        "border-color": "#F3F3F3", "background-color": "#F3F3F3"});
 }

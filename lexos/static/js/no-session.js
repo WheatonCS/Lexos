@@ -1,6 +1,6 @@
 /**
  * Redirects to the upload page after 5 seconds.
  */
-$("document").ready(function(){
+$(function(){
    setTimeout(function(){ window.location.href = "upload"; }, 5000);
 });

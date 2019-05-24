@@ -1,18 +1,21 @@
 /* Main section */
 #main-section {
-    min-width: 135rem;
+    min-width: 140rem;
 }
+
 
 /* Form */
 form {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 2rem;
-    height: 100%;
+    height: calc(100vh - 15rem);
+    min-height: 60rem;
+    overflow: hidden;
 }
 
 
-/* Main columns */
+/* Columns */
 #left-column,
 #middle-column {
     display: grid;
@@ -20,11 +23,11 @@ form {
 }
 
 #left-column {
-    grid-template-rows: repeat(3, auto);
+    grid-template-rows: 20rem auto auto;
 }
 
 #middle-column {
-    grid-template-rows: repeat(2, auto);
+    grid-template-rows: auto auto;
 }
 
 
@@ -37,15 +40,27 @@ form {
     display: block;
     padding: 1rem;
     height: 4rem;
-    color: #FF6000;
+    color: #47BCFF;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-content: start;
+    margin-left: 1rem;
+}
+
+.textarea-label {
+    width: 100%;
+    height: calc(100% - 4rem);
 }
 
 textarea {
     display: inline-block;
     width: 100%;
-    height: calc(100% - 4rem);
+    height: 100%;
     min-width: 40rem;
-    min-height: 20rem;
+    min-height: 10rem;
     background-color: #F3F3F3;
     border-radius: 0;
     resize: none;
@@ -54,60 +69,53 @@ textarea {
 
 
 /* Scrubbing options */
-#scrubbing-options {
-    min-width: 45rem;
-}
-
-#scrubbing-options > .options-grid {
+#scrubbing-options-section > .options-grid {
     height: calc(100% - 4rem);
 }
 
-.options-grid {
-    display: grid;
-    align-items: center;
-    grid-template-columns: auto auto;
-}
-
-#scrubbing-options-right-options-section {
-    position: relative;
-    left: 0;
+#scrubbing-options-section .checkbox-label {
+    padding-bottom: .5rem;
 }
 
 
 /* Stop words and keep words */
-#stop-words-and-keep-words > .options-section {
-    height: 5rem;
+#stop-words-section > .options-section {
+    height: 4rem;
+    margin-left: 1rem;
 }
 
-#stop-words-and-keep-words-text-area {
-    height: calc(100% - 9rem);
+#stop-words-section .circle-label {
+    margin-right: 3rem;
+}
+
+#stop-words-section > .textarea-label {
+    height: calc(100% - 8rem);
 }
 
 
 /* Special characters */
-#special-characters > fieldset > .options-grid {
+#special-characters-section > fieldset > .options-grid {
     height: 14rem;
 }
 
-#special-characters-text-area {
-    height: calc(100% - 18rem);
+#special-characters-section .circle-label {
+    margin-bottom: .5rem;
 }
 
-#special-characters-right-options-section {
-    align-self: start;
+#special-characters-section > fieldset {
+    height: 10rem;
 }
 
 
 /* Document previews */
-#document-previews {
+#document-previews-section {
     min-height: 50rem;
     min-width: 45rem;
 }
 
-#document-previews > h3 {
+#document-previews-section > h3 {
     position: relative;
     display: inline-block;
-    right: 0;
 }
 
 #document-previews-top {
@@ -121,27 +129,89 @@ textarea {
     margin-right: 1rem;
 }
 
-#document-previews-buttons > h3 {
+#document-previews-buttons > h3,
+#document-previews-buttons > a {
     margin-top: 1rem;
-    margin-left: 1rem;
+    margin-left: 1.5rem;
 }
 
 #previews {
-    height: calc(100vh - 19rem);
+    height: calc(100% - 4rem);
     overflow: scroll;
 }
 
+#previews .centerer {
+    height: 100%;
+}
+
 .preview {
+    overflow-wrap: break-word;
     background-color: #F3F3F3;
     margin-bottom: 1rem;
     padding: 1rem;
 }
 
+.preview:last-child {
+    margin-bottom: 0;
+}
+
 .preview-name {
     display: block;
-    color: #FF6000;
+    color: #47BCFF;
     margin-bottom: 1rem;
 }
 
-.preview-text {
+
+/* Tags popup */
+#popup-container {
+    min-width: 140rem;
+}
+
+#popup {
+    min-width: 120rem;
+    grid-template-rows: 2rem 4rem auto 3rem;
+    row-gap: 0;
+}
+
+#tag-table-head {
+    display: grid;
+    grid-template-columns: 15% 55% 30%;
+    padding: 1rem;
+    background-color: #FFFFFF;
+}
+
+#tag-table-head h3 {
+    color: #47BCFF;
+}
+
+.tag-table-row {
+    display: grid;
+    grid-template-columns: 15% 55% 30%;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #F3F3F3;
+}
+
+.tag-table-row label {
+    margin-right: 3rem;
+}
+
+.tag-table-row label:last-child {
+    margin-right: 0;
+}
+
+.tag-table-row > input {
+    justify-self: center;
+}
+
+#popup-save-button {
+    width: 4rem;
+    justify-self: right;
+    margin-top: 1rem;
+}
+
+#no-tags-text {
+    margin-bottom: 3rem;
 }

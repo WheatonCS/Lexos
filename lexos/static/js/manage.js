@@ -2,7 +2,7 @@
  * Initializes the manage page after it has loaded.
  */
 let d_held = false;
-$("document").ready(function(){
+$(function(){
 
     // Table
     update_table();
@@ -53,8 +53,11 @@ function update_table(){
         // Otherwise, create the table
         else {
             let form = $("form");
-            for(const d of documents)
-                append_row(d.id, d.state, d.label, d.class, d.source, d.preview);
+            for(let i = 0; i < documents.length; ++i){
+                const d = documents[i];
+                append_row(d.id, i+1, d.state, d.label, d.class, d.source, d.preview);
+            }
+
             form.css("opacity", "1");  // Show the page
         }
     });
@@ -62,16 +65,17 @@ function update_table(){
 
 
 /**
- * Appends a row to the table.
+ * Appends a row to the document table.
  *
  * @param {String} id: The ID of the document.
+ * @param {number} row_number: The number of the row.
  * @param {String} state: Whether the document is selected ("true" or "false").
  * @param {String} label: The name of the document.
  * @param {String} class_name: The class name of the document.
  * @param {String} source: The source name of the document.
  * @param {String} preview: A preview of the document.
  */
-function append_row(id, state, label, class_name, source, preview){
+function append_row(id, row_number, state, label, class_name, source, preview){
 
     // Truncate
     label = label.substring(0, 30);
@@ -81,16 +85,17 @@ function append_row(id, state, label, class_name, source, preview){
     // Append the row
     let row = $(
         `<div id="${id}" class="manage-table-row">`+
-            `<div class="circle"></div>`+
+            `<div class="checkbox"></div>`+
+            `<h3 class="manage-table-cell">${row_number}</h3>`+
             `<h3 class="manage-table-cell">${label}</h3>`+
             `<h3 class="manage-table-cell">${class_name}</h3>`+
             `<h3 class="manage-table-cell">${source}</h3>`+
-            `<h3 class="manage-table-cell">${preview}</h3>`+
+            `<h3 class="manage-table-cell"></h3>`+
         `</div>`
     ).appendTo("#manage-table-body");
 
+    $(row).find(".manage-table-cell").last().text(preview);
     if(state) row.addClass("selected-row");
-
     row.on("contextmenu", context_menu_show_callback);
 }
 
@@ -129,8 +134,8 @@ function preview_callback(){
     send_request("preview", context_menu_document_id)
     .done(function(response){
         create_popup();
-        $(`<h3>${JSON.parse(response).previewText}</h3>`)
-            .appendTo("#popup-content");
+        let preview = $(`<h3></h3>`).appendTo("#popup-content");
+        preview.text(JSON.parse(response).previewText);
     });
 }
 
@@ -267,7 +272,7 @@ function initialize_selection_box(){
  */
 function set_selection_box_color(){
     if(d_held) $("#selection-box").css({"background-color": "#000000"});
-    else $("#selection-box").css({"background-color": "#FF6000"});
+    else $("#selection-box").css({"background-color": "#47BCFF"});
 }
 
 

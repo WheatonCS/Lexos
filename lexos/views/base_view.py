@@ -69,7 +69,7 @@ def download_workspace() -> str:
         as_attachment=True)
 
 
-@base_blueprint.route("/reset", methods=["POST"])
+@base_blueprint.route("/reset", methods=["GET", "POST"])
 def reset() -> str:
     """ Resets the session and initializes a new one.
 
