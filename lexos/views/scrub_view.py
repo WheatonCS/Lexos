@@ -27,16 +27,6 @@ def scrub() -> str:
     return render_template("scrub.html")
 
 
-@scrubber_blueprint.route("/scrub/get-document-previews", methods=["GET"])
-def get_document_previews() -> str:
-    """Returns previews of the active documents.
-    :return: Previews of the active documents.
-    """
-
-    file_manager = utility.load_file_manager()
-    return json.dumps(file_manager.get_previews_of_active())
-
-
 @scrubber_blueprint.route("/scrub/download", methods=["GET"])
 def download() -> str:
     """Returns a download of the active files.
@@ -47,8 +37,8 @@ def download() -> str:
     return file_manager.zip_active_files("scrubbed-documents.zip")
 
 
-@scrubber_blueprint.route("/scrub/do-scrubbing", methods=["POST"])
-def do_scrubbing() -> str:
+@scrubber_blueprint.route("/scrub/execute", methods=["POST"])
+def execute() -> str:
     """Scrubs the active documents.
     :return: A JSON object with previews of the scrubbed documents.
     """
@@ -59,7 +49,7 @@ def do_scrubbing() -> str:
     session_manager.cache_scrub_options()
 
     # Save changes only if the "Apply Scrubbing" button is clicked
-    saving_changes = request.form["formAction"] == "apply"
+    saving_changes = request.form["action"] == "apply"
 
     # Scrub
     previews = file_manager.scrub_files(saving_changes=saving_changes)
@@ -100,15 +90,4 @@ def xml() -> str:
 
     data = request.json
     utility.xml_handling_options(data)
-    return ""
-
-
-@scrubber_blueprint.route("/scrub/remove-upload", methods=["POST"])
-def remove_upload() -> str:
-    """Removes a file that was uploaded on the scrubber page.
-    :return: None.
-    """
-
-    option = request.headers["option"]
-    session["scrubbingoptions"]["optuploadnames"][option] = ''
     return ""

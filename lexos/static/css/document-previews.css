@@ -1,0 +1,50 @@
+#document-previews-section {
+    min-height: 50rem;
+    min-width: 45rem;
+}
+
+#document-previews-section > h3 {
+    position: relative;
+    display: inline-block;
+}
+
+#document-previews-top {
+    display: grid;
+    grid-template-columns: 42% 58%;
+}
+
+#document-previews-buttons {
+    justify-self: right;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+#document-previews-buttons > h3 {
+    margin-right: 2rem;
+}
+
+#previews {
+    height: calc(100% - 4rem);
+    overflow: scroll;
+}
+
+#previews .centerer {
+    height: 100%;
+}
+
+.preview {
+    overflow-wrap: break-word;
+    background-color: #F3F3F3;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.preview:last-child {
+    margin-bottom: 0;
+}
+
+.preview-name {
+    display: block;
+    color: #47BCFF;
+    margin-bottom: 1rem;
+}

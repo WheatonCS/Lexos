@@ -5,27 +5,22 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Lexos</title>
+    <link rel="shortcut icon" href="static/favicon.png"/>
 
-    <!-- jQuery Core -->
+    <!-- jQuery -->
     <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script type="text/javascript" src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- Lexos JS -->
-    <script type="text/javascript" src="static/js/base.js"></script>
-
-    <!-- Lexos CSS -->
-    <link rel="stylesheet" type="text/css" href="static/css/old.css"/>
-    <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
-
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="static/favicon.png"/>
-
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,700" rel="stylesheet">
+
+    <!-- Lexos JS and CSS -->
+    <script type="text/javascript" src="static/js/base.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
 
     {% block head %}{% endblock %}
 </head>
@@ -73,32 +68,17 @@
     <!-- Footer -->
     <footer>
             <!-- Left footer -->
-            <h3 id="footer-left">Lexos 3.2.0</h3>
+            <h3 id="left-footer">Lexos 3.2.0</h3>
 
             <!-- Right footer -->
-            <div id="footer-right">
-                <!-- Active document count -->
-                <h3>Active Documents: </h3>
-                <h3 id="active-document-count">0</h3>
+            <div id="right-footer">
+                <div><h3>Active Documents: </h3><h3 id="active-document-count">0</h3></div>
                 <h3>|</h3>
-
-                <!-- Help button -->
                 <h3 id="help-button" class="selectable">Show Help</h3>
                 <h3>|</h3>
-
-                <!-- Scroll to top button -->
                 <h3 id="scroll-to-top-button" class="selectable">Top</h3>
                 <h3>|</h3>
-
-                <!-- Feedback link -->
-                <a href="https://urldefense.proofpoint.com/v2/url?u=https-3A__docs.go
-                    ogle.com_a_wheatoncollege.edu_forms_d_e_1FAIpQLSddEsRE2PcserYwcjtN
-                    pBAMF-2DYRKVrL4H4LtWDxHeNKoVVxcA_viewform&d=CwMCaQ&c=Oo8bPJf7k7r_c
-                    PTz1JF7vEiFxvFRfQtp-j14fFwh71U&r=fkkkcAta9tNbJT0GbA-b8fBT5Vx0day25
-                    Z1KcBOKxKQ&m=pvw58nUgCb4t3z5cj9Zj2XFIXgBppHEM8aQoOb5vqpA&s=ZxoSL8v
-                    QIBP526hKabavc3SaECtb_M8nMnjGHo6MiSk&e=" target="_blank">
-                    Feedback
-                </a>
+                <a href="" target="_blank">Feedback</a>
             </div>
     </footer>
 </body>

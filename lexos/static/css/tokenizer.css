@@ -1,0 +1,139 @@
+/* Main section */
+#main-section {
+    min-width: 120rem;
+}
+
+
+/* Form */
+form {
+    display: grid;
+    grid-template-rows: 15rem minmax(60rem, auto);
+    grid-gap: 2rem;
+    height: calc(100vh - 15rem);
+}
+
+
+/* General */
+input[type=text]{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 6rem;
+}
+
+.title {
+    margin-bottom: 1rem;
+}
+
+.section {
+    background-color: #FFFFFF;
+    padding: 1rem;
+}
+
+
+/* Options section */
+#options-section {
+    display: grid;
+    grid-template-columns: 1.9fr .9fr 1fr 1.5fr;
+    grid-gap: 2rem;
+}
+
+
+/* Table top */
+#table-top {
+    display: grid;
+    grid-template-columns: 1fr 3fr 3fr 1fr;
+    height: 5rem;
+    padding: 1rem;
+}
+
+#table-top h3,
+#table-top a {
+    margin-top: .25rem;
+}
+
+#rows-per-page-option > h3,
+#rows-per-page-option > label {
+    margin-right: 1rem;
+}
+
+#rows-per-page-option,
+#search-option {
+    justify-self: center;
+}
+
+#table-top input[type=text] {
+    width: 20rem;
+}
+
+#download-button {
+    justify-self: right;
+}
+
+
+/* Table */
+#table {
+    background-color: #FFFFFF;
+}
+
+#table #no-data-text-container {
+    margin-top: 4rem;
+    height: calc(100% - 4rem);
+}
+
+#table-data {
+    height: calc(100% - 10rem);
+}
+
+
+/* Table head */
+#table-head,
+.tokenizer-row {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+}
+
+#table-head {
+    display: grid;
+    grid-template-rows: 1fr;
+    width: 100%;
+}
+
+#table-head .tokenizer-cell {
+    color: #47BCFF;
+    background-color: #FFFFFF;
+}
+
+
+/* Table body */
+#table-body {
+    height: calc(100% - 4rem);
+    overflow: scroll;
+}
+
+.tokenizer-row {
+    display: grid;
+}
+
+.tokenizer-cell {
+    padding: 1rem;
+    background-color: #F3F3F3;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+
+/* Table bottom */
+#table-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 5rem;
+    padding: 1rem;
+}
+
+#navigation-buttons {
+    align-self: center;
+    justify-self: right;
+}
+
+#navigation-buttons > h3 {
+    margin-right: 2rem;
+}

@@ -1,33 +1,21 @@
 let punctuation_options_visible = true;
-
 $(function(){
 
     // Create a preview for each active document
-    $.ajax({
-        type: "GET",
-        url: "/scrub/get-document-previews",
-    })
+    $.ajax({type: "GET", url: "document-previews"})
     .done(initialize_document_previews);
 
     // Register punctuation button callback
     $("#punctuation-button").click(function(){
         punctuation_options_visible = !punctuation_options_visible;
-        console.log(punctuation_options_visible);
         let element = $("#punctuation-options");
         if(punctuation_options_visible) element.removeClass("disabled");
         else element.addClass("disabled");
     });
 
     // Register the "preview" and "apply" button callbacks
-    $("#preview-button").click(function(){
-        $("#form-action").val("preview");
-        scrub();
-    });
-
-    $("#apply-button").click(function(){
-        $("#form-action").val("apply");
-        scrub();
-    });
+    $("#preview-button").click(function(){ scrub("preview"); });
+    $("#apply-button").click(function(){ scrub("apply"); });
 
     // Add the scrub tags "options" button callback
     $("#scrub-tags-settings-button").click(function(){
@@ -136,65 +124,43 @@ function tag_options_save_callback(){
 
 
 /**
- * Creates a preview for each active document.
- *
- * @param {string} response: The response from the
- *     get-document-previews request.
- */
-function initialize_document_previews(response){
-
-    let previews = JSON.parse(response);
-
-    // If there are no previews, display "No Previews" text
-    if(!previews.length) display_no_previews_text();
-
-    // Otherwise, create a preview for each active document
-    for(const preview of previews) create_document_preview(preview[2], preview[3]);
-}
-
-
-/**
- * Creates a document preview with the given name and text.
- *
- * @param {string} preview_name: The name of the document.
- * @param {string} preview_text: The preview text.
- */
-function create_document_preview(preview_name, preview_text) {
-    $(`
-        <div class="preview">
-            <h3 class="preview-name">${preview_name}</h3>
-            <h3 class="preview-text">${preview_text}</h3>
-        </div>
-    `).appendTo("#previews");
-}
-
-
-/**
  * Performs scrubbing on the active documents.
  *
- * @returns {jqXHR}: The response of the request.
+ * @param {string} action: The action for the scrub operation (preview or apply).
  */
-function scrub(){
-    return $.ajax({
+function scrub(action){
+
+    // Set the action
+    let form_data = new FormData($("form")[0]);
+    form_data.append("action", action);
+
+    // Send the request
+    $.ajax({
         type: "POST",
-        url: "scrub/do-scrubbing",
+        url: "scrub/execute",
         processData: false,
         contentType: false,
-        data: new FormData($("form")[0])
+        data: form_data
     })
-    .done(function(response){
-        let previews = JSON.parse(response);
-        $("#previews").empty();  // Remove any existing previews
-        if(!previews.length) display_no_previews_text();
-        else for(const preview of previews)
-            create_document_preview(preview[0], preview[1]);
-    });
+    .done(update_document_previews);
 }
 
-function display_no_previews_text(){
-    $(
-        `<div class="centerer">`+
-            `<h3>No Previews</h3>`+
-        `</div>`
-    ).appendTo("#previews");
+
+/**
+ * Updates the document previews.
+ *
+ * @param {string} response: The response containing the new previews.
+ */
+function update_document_previews(response){
+    let previews = JSON.parse(response);
+
+    // Remove any existing previews
+    $("#previews").empty();
+
+    // If there are no previews, display "no previews" text
+    if(!previews.length) display_no_previews_text();
+
+    // Otherwise, create the previews
+    else for(const preview of previews)
+        create_document_preview(preview[0], preview[1]);
 }

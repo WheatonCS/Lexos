@@ -3,8 +3,9 @@
 
 <!-- Head -->
 {% block head %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/upload.js') }}?ver={{version}}"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="{{ url_for('static', filename='css/upload.css') }}?ver={{ version }}"/>
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/upload.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/upload.css"/>
 {% endblock %}
 
 <!-- Title -->

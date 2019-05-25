@@ -1,0 +1,77 @@
+/* Form */
+form {
+    display: grid;
+    grid-template-rows: min-content auto;
+    grid-gap: 2rem;
+    height: calc(100vh - 15rem);
+    min-height: 60rem;
+}
+
+
+/* Sections */
+#options-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+}
+
+#cut-mode-section,
+#cut-settings-section,
+#document-previews-section {
+    background-color: #FFFFFF;
+}
+
+#cut-mode-section,
+#cut-settings-section {
+    padding: 1rem;
+}
+
+
+/* Title */
+.title {
+    padding-bottom: 1rem;
+}
+
+.circle-label {
+    margin-bottom: 1rem;
+}
+
+
+/* Cut mode */
+#cut-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    column-gap: 3rem;
+    align-items: center;
+    height: calc(100% - 3rem);
+}
+
+
+/* Cut settings */
+#cut-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    row-gap: 1rem;
+}
+
+input[type=text]{
+    margin-left: 1rem;
+    width: 10rem;
+}
+
+
+/* Document previews */
+#document-previews-section .title {
+    padding: 1rem;
+}
+
+#document-previews-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#document-previews-buttons {
+    justify-self: right;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}

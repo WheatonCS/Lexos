@@ -1,3 +1,5 @@
+import json
+
 from flask import session, redirect, url_for, render_template, send_file, \
     Blueprint
 
@@ -10,8 +12,6 @@ base_blueprint = Blueprint("base", __name__)
 @base_blueprint.route("/", methods=["GET"])
 def base() -> str:
     """Handles redirection to other pages.
-
-    Note that this function page behavior for the base url ("/") of the site.
 
     :return: A redirect to the upload page.
     """
@@ -28,15 +28,26 @@ def get_active_documents() -> str:
 
     if session:
         file_manager = utility.load_file_manager()
-        active = file_manager.get_active_files()
+        active_files = file_manager.get_active_files()
 
-        if active:
-            return str(len(active))
+        if active_files:
+            return str(len(active_files))
         else:
             return "0"
     else:
         redirect("no-session")
         return "0"
+
+
+@base_blueprint.route("/document-previews", methods=["GET"])
+def get_document_previews() -> str:
+    """Returns previews of the active documents.
+
+    :return: Previews of the active documents.
+    """
+
+    file_manager = utility.load_file_manager()
+    return json.dumps(file_manager.get_previews_of_active())
 
 
 @base_blueprint.route("/no-session", methods=["GET"])

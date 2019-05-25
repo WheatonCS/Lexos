@@ -4,6 +4,8 @@
 <!-- Head -->
 {% block head %}
     <!-- Page JS and CSS -->
+    <script type="text/javascript" src="/static/js/document-previews.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/document-previews.css"/>
     <script type="text/javascript" src="/static/js/scrub.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/scrub.css"/>
 {% endblock %}
@@ -58,31 +60,29 @@
 
         <!-- Stop words and keep words -->
         <div id="stop-words-section" class="section">
-            <h3 class="title">Stop Words & Keep Words</h3>
-            <fieldset class="options-section">
+            <h3 class="title">Stop Words and Keep Words</h3>
+            <div class="options-section">
                 <label class="circle-label"><input type="radio" name="sw_option" value="off" checked><span>None</span></label>
                 <label class="circle-label"><input type="radio" name="sw_option" value="stop"><span>Stop</span></label>
                 <label class="circle-label"><input type="radio" name="sw_option" value="keep"><span>Keep</span></label>
-            </fieldset>
+            </div>
             <label class="textarea-label"><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
         </div>
 
         <!-- Special characters -->
         <div id="special-characters-section" class="section">
             <h3 class="title">Special Characters</h3>
-            <fieldset>
-                <div class="options-grid">
-                    <div class="options-section">
-                        <label class="circle-label"><input type="radio" name="entityrules" value="default" checked><span>None</span></label><br>
-                        <label class="circle-label"><input type="radio" name="entityrules" value="early-english-html"><span>Early English HTML</span></label><br>
-                        <label class="circle-label"><input type="radio" name="entityrules" value="doe-sgml"><span>Old English SGML</span></label>
-                    </div>
-                    <div class="options-section">
-                        <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-3"><span>MUFI 3</span></label><br>
-                        <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-4"><span>MUFI 4</span></label>
-                    </div>
+            <div class="options-grid">
+                <div class="options-section">
+                    <label class="circle-label"><input type="radio" name="entityrules" value="default" checked><span>None</span></label><br>
+                    <label class="circle-label"><input type="radio" name="entityrules" value="early-english-html"><span>Early English HTML</span></label><br>
+                    <label class="circle-label"><input type="radio" name="entityrules" value="doe-sgml"><span>Old English SGML</span></label>
                 </div>
-            </fieldset>
+                <div class="options-section">
+                    <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-3"><span>MUFI 3</span></label><br>
+                    <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-4"><span>MUFI 4</span></label>
+                </div>
+            </div>
             <label class="textarea-label"><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
         </div>
     </div>
@@ -100,14 +100,8 @@
         <div id="previews"></div>
     </div>
 
-
     <!-- Hidden elements -->
-    <input type="hidden" name="haveGutenburg" value="False">
-    <input type="hidden" name="whitespacebox" value="on">
-    <input id="form-action" name="formAction" type="hidden">
+    <input name="haveGutenburg" value="False" type="hidden">
+    <input name="whitespacebox" value="on" type="hidden">
 
-    <input type="file" id="stop-words-and-keep-words-upload" name="swfileselect[]">
-    <input type="file" id="lemmas-upload" name="lemfileselect[]">
-    <input type="file" id="consolidations-upload" name="consfileselect[]">
-    <input type="file" id="special-characters-upload" name="scfileselect[]">
 {% endblock %}

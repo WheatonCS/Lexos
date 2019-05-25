@@ -14,6 +14,7 @@ h3, a, ul, textarea, input[type="text"], span {
     margin: 0;
     display: inline;
     line-height: 2.2rem;
+    outline: none;
     color: #505050;
     transition: color .2s;
 }
@@ -159,19 +160,24 @@ footer {
     height: 4rem;
 }
 
-#footer-left,
-#footer-right
+#left-footer,
+#right-footer
 {
     position: absolute;
     margin-top: 1rem;
 }
 
-#footer-left {
+#left-footer {
     left: 2rem;
 }
 
-#footer-right {
+#right-footer {
     right: 2rem;
+}
+
+#right-footer > * {
+    margin-left: 2rem;
+    display: inline;
 }
 
 
@@ -276,13 +282,22 @@ footer {
 
 /* Text input */
 input[type="text"] {
-    width: calc(100% - 6rem);
     height: 3rem;
     padding-left: 1.3rem;
     padding-right: 1.3rem;
     border: none;
     border-radius: 3rem;
-    background-color: #E3E3E3;
+    outline: none;
+    background-color: #F3F3F3;
+}
+
+
+/* Textarea */
+textarea {
+    padding: 1rem;
+    background-color: #F3F3F3;
+    resize: none;
+    border: none;
 }
 
 
@@ -320,8 +335,8 @@ label {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
-    background-color: #E3E3E3;
-    border: 2px solid #E3E3E3;
+    background-color: #F3F3F3;
+    border: 2px solid #F3F3F3;
     transition: background-color .2s, border-color .2s;
 }
 
@@ -343,35 +358,4 @@ input[type=radio] {
 
 .circle-label > span:before {
     border-radius: 50%;
-}
-
-
-/* Temporary old.css overrides */
-a:visited {
-    color: #505050;
-}
-
-a:visited:hover {
-    color: #47BCFF;
-}
-
-footer {
-    padding: 0;
-    color: #000000;
-    border-top: none;
-}
-
-ul {
-    padding: auto;
-    list-style: inside;
-}
-
-textarea {
-    padding: 1rem;
-    text-indent: 0;
-}
-
-label {
-    display: inline-block;
-    margin: 0;
 }
