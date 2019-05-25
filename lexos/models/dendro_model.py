@@ -2,7 +2,7 @@
 
 import math
 import pandas as pd
-import newick
+# import newick
 import plotly.figure_factory as ff
 from typing import NamedTuple, Optional
 from scipy.spatial.distance import pdist
@@ -90,33 +90,54 @@ class DendrogramModel(BaseModel):
         tickvals = list(graph.layout['xaxis']['tickvals'])
         for i in range(0, len(tickvals)):
             xname[str(tickvals[i])] = ticktext[i]
-        xy = [(k, v) for k, v in xy.items()]
 
+        xy = [(k, v) for k, v in xy.items()]
         xname_list = [(k, v) for k, v in xname.items()]
-        result = {}
+        # fix ----------------------------------------------
+        namexy = {}
         for i in range(0, len(xy)):
             for j in range(0, len(xname)):
                 if str(xy[i][0].item()) == xname_list[j][0]:
-                    result[xname_list[j][1]] = xy[i]
-        '''print(ticktext)
-        print(tickvals, type(tickvals))
-        print('xy', xy)
-        print('xname:', xname)
-        print('res', result)'''
+                    namexy[xname_list[j][1]] = xy[i]
 
-        for i in result:
-            print(i, result[i])
-        result = [(k, v) for k, v in result.items()]
+        # for i in namexy:
+        #    print(i, namexy[i])
+
+        namexy = [[k, v] for k, v in namexy.items()]
         dt_points = []
-        for i in range(len(result)):
-            data_pt = list(result[i])
-            pt = list(data_pt[1])
-            data_pt[1] = pt
-            if data_pt[1][1] == 0.0:
-                data_pt[1][1] = result[i-1][1][1]
-            dt_points.append(data_pt)
-        for i in dt_points:
+        # convert tuples to lists
+        for i in range(len(namexy)):
+            pt = list(namexy[i][1])
+            namexy[i][1] = pt
+            if namexy[i][1][1] == 0.0:
+                namexy[i][1][1] = namexy[i - 1][1][1]
+            dt_points.append(namexy[i])
+        # ----------------------------------------------------------
+        # get rid of the x values
+        yname = []
+        for i in dt_points[:-1]:
+            yname.append([i[0], i[1][1]])
+        for i in yname:
             print(i)
+        # # ----------------------------------------------------------
+        # get distances
+
+        for i in range(1, len(yname)):
+            print(yname[i][1] - yname[i-1][1])
+        # ---------------------------------------------------------
+        nodes = []
+        for i in range(len(yname) - 1):
+            if yname[i][1] == yname[i + 1][1]:
+                nodes.append('(' + str(yname[i][0]) + ':' + str(yname[i][1]) +
+                             ',' + str(yname[i + 1][0]) + ':' +
+                             str(yname[i][1]) + ')')
+
+            elif yname[i][1] != yname[i - 1][1]:
+                nodes.append(str(yname[i][0]) + ':' + str(yname[i][1]))
+        if yname[-1][0] not in nodes[-1]:
+            nodes.append(str(yname[-1][0]) + ':' + str(yname[-1][1]))
+        for node in nodes:
+            print(node)
         return graph
 
     def extend_figure(self, figure: Figure) -> Figure:
