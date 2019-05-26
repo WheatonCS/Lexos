@@ -1,11 +1,8 @@
-form {
-    height: 100%;
-}
-
 #bubbleviz {
     display: grid;
     align-content: center;
     justify-content: center;
+    height: calc(100vh - 15rem);
     opacity: 0;
     transition: opacity .2s;
 }

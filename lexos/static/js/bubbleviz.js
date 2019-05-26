@@ -12,8 +12,9 @@ function create_bubbleviz(response){
 
     // Get the width and height
     let bubbleviz_element = $("#bubbleviz");
-    let width = bubbleviz_element.width();
-    let height = bubbleviz_element.height();
+    let diameter = Math.min(bubbleviz_element.width(),
+        bubbleviz_element.height());
+    let base_font_size = 5;
 
     // Create the color map
     let color = d3.scaleLinear()
@@ -22,13 +23,13 @@ function create_bubbleviz(response){
 
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
-        .size([width, height])
+        .size([diameter, diameter])
         .padding(3);
 
     let svg = d3.select("#bubbleviz")
         .append("svg")
-            .style("width", width)
-            .style("height", height)
+            .style("width", diameter)
+            .style("height", diameter)
             .attr("class", "bubble");
 
     let nodes = d3.hierarchy(dataset)
@@ -50,10 +51,11 @@ function create_bubbleviz(response){
         .attr("dy", ".2em")
         .style("text-anchor", "middle")
         .text(function(d){ return d.data.name; })
-        .attr("font-size", function(d){ return d.r/5; })
+        .attr("font-family", "Open Sans")
+        .attr("font-size", function(d){ return d.r/3+base_font_size; })
         .attr("fill", "#E3E3E3");
 
     // Show the bubbleviz
-    d3.select(self.frameElement).style("height", height+"px");
+    d3.select(self.frameElement).style("height", diameter+"px");
     bubbleviz_element.css("opacity", "1");
 }

@@ -1,74 +1,101 @@
 /**
- * The function to run the error modal with input string.
- * @param {string} htmlMsg: the message to display.
- * @returns {void}.
+ * Gets the sum of two point-like objects.
+ *
+ * @param {{x, y}} a: The first addend.
+ * @param {{x, y}} b: The second addend.
+ * @returns {{x: number, y: number}}: The product of a and b.
  */
-export function runModal (htmlMsg) {
-  $('#error-modal-message').html(htmlMsg)
-  $('#error-modal').modal()
+function point_add(a, b){
+    return {x: a.x+b.x, y: a.y+b.y};
 }
 
+
 /**
- * The function to convert the form into json.
- * @returns {{string: string}}: the form converted to json.
+ * Gets the difference of two point-like objects.
+ *
+ * @param {{x, y}} a: The minuend.
+ * @param {{x, y}} b: The subtrahend.
+ * @returns {{x: number, y: number}}: The difference of a and b.
  */
-export function jsonifyForm () {
-  const form = {}
-  $.each($('form').serializeArray(), function (i, field) {
-    form[field.name] = field.value || ''
-  })
-  return form
+function point_subtract(a, b){
+    return {x: a.x-b.x, y: a.y-b.y};
 }
 
+
 /**
- * Send the ajax request.
- * @param {string} url: the url to post.
- * @param {{string: string}} form: the form data packed into an object.
- * @returns {jQuery.Ajax}: an jQuery Ajax object.
+ * Gets the minimum of two point-like objects.
+ *
+ * @param {{x, y}} a: The first point.
+ * @param {{x, y}} b: The second point.
+ * @returns {{x: number, y: number}}: The minimum of a and b.
  */
-export function sendAjaxRequest (url, form) {
-  return $.ajax({
-    type: 'POST',
-    url: url,
-    contentType: 'application/json; charset=utf-8',
-    data: JSON.stringify(form)
-  })
+function point_minimum(a, b){
+    return {x: Math.min(a.x, b.x), y: Math.min(a.y, b.y)};
 }
 
+
 /**
- * Check if the number of document uploaded meets the minimum number of file required to run the tool.
- * @param {number} numFileRequired: the minimum number of file required to run the tool.
- * @returns {string | null}: the errors that is checked by JS, if no error the result will be null.
+ * Gets the maximum of two point-like objects.
+ *
+ * @param {{x, y}} a: The first point.
+ * @param {{x, y}} b: The second point.
+ * @returns {{x: number, y: number}}: The maximum of a and b.
  */
-export function submissionError (numFileRequired) {
-  // Get the url for upload and manage page.
-  const uploadUrl = $('#upload-url').data().url
-  const manageUrl = $('#manage-url').data().url
-
-  // Set the error message
-  const activeFileNumTooFewErr = `You do not have enough active documents. Please 
-                                  activate at least ${numFileRequired} documents 
-                                  using the <a href=${manageUrl}>Manage</a> tool 
-                                  or <a href=${uploadUrl}>Upload</a> a new document.`
-
-  // Get the number of active files.
-  const activeFiles = $('#num-active-files').data().number
-
-  // Check if minimum number of required files exists.
-  if (activeFiles < numFileRequired) {
-    return activeFileNumTooFewErr
-  } else {
-    return null
-  }
+function point_maximum(a, b){
+    return {x: Math.max(a.x, b.x), y: Math.max(a.y, b.y)};
 }
 
+
 /**
- * Scrolls the page to a given div.
- * @param {Object} div: The jquery selector of the div.
- * @returns {void}.
+ * Gets the scroll offset of the main section.
+ *
+ * @returns {{x, y}}: The scroll offset.
  */
-export function scrollToDiv (div) {
-  $('html, body').animate({
-    scrollTop: div.offset().top
-  }, 1000)
+function get_main_section_scroll_offset(){
+    let main_section = $("#main-section");
+    return {x: main_section.scrollLeft(), y: main_section.scrollTop()};
+}
+
+
+/**
+ * Gets the scroll offset of the window.
+ *
+ * @returns {{x, y}}: The scroll offset.
+ */
+function get_window_scroll_offset(){
+    let window_element = $(window);
+    return {x: window_element.scrollLeft(), y: window_element.scrollTop()};
+}
+
+
+/**
+ * Gets the mouse position relative to the main section.
+ *
+ * @returns {{x, y}}: The mouse position.
+ */
+function get_relative_mouse_position(event){
+    let main_section = $("#main-section");
+    return {x: event.pageX+main_section.scrollLeft(),
+        y: event.pageY+main_section.scrollTop()};
+}
+
+
+/**
+ * Gets the mouse position relative to the window.
+ *
+ * @returns {{x, y}}: The mouse position.
+ */
+function get_mouse_position(event){
+    return {x: event.pageX, y: event.pageY};
+}
+
+
+/**
+ * Gets the size of the window in pixels.
+ *
+ * @returns {{x, y}}: The size of the window.
+ */
+function get_window_size(){
+    let window_element = $(window);
+    return {x: window_element.width(), y: window_element.height()};
 }

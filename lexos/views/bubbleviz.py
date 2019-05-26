@@ -6,10 +6,10 @@ from flask import session, render_template, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 
-viz_blueprint = Blueprint("viz", __name__)
+bubbleviz_blueprint = Blueprint("bubbleviz", __name__)
 
 
-@viz_blueprint.route("/bubbleviz", methods=["GET"])
+@bubbleviz_blueprint.route("/bubbleviz", methods=["GET"])
 def viz():
     """Gets the bubbleviz page.
 
@@ -24,7 +24,7 @@ def viz():
     return render_template("bubbleviz.html")
 
 
-@viz_blueprint.route("/bubbleviz/get-word-counts", methods=["GET"])
+@bubbleviz_blueprint.route("/bubbleviz/get-word-counts", methods=["GET"])
 def get_word_counts() -> str:
     """ Gets the top 100 word counts across all active files.
 

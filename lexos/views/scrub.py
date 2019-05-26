@@ -8,10 +8,10 @@ from lexos.managers import utility, session_manager as session_manager
 
 from natsort import humansorted
 
-scrubber_blueprint = Blueprint("scrubber", __name__)
+scrub_blueprint = Blueprint("scrub", __name__)
 
 
-@scrubber_blueprint.route("/scrub", methods=["GET"])
+@scrub_blueprint.route("/scrub", methods=["GET"])
 def scrub() -> str:
     """Gets the scrub page.
     :return: The scrub page.
@@ -27,7 +27,7 @@ def scrub() -> str:
     return render_template("scrub.html")
 
 
-@scrubber_blueprint.route("/scrub/download", methods=["GET"])
+@scrub_blueprint.route("/scrub/download", methods=["GET"])
 def download() -> str:
     """Returns a download of the active files.
     :return: the zip files needs to be downloaded.
@@ -37,7 +37,7 @@ def download() -> str:
     return file_manager.zip_active_files("scrubbed-documents.zip")
 
 
-@scrubber_blueprint.route("/scrub/execute", methods=["POST"])
+@scrub_blueprint.route("/scrub/execute", methods=["POST"])
 def execute() -> str:
     """Scrubs the active documents.
     :return: A JSON object with previews of the scrubbed documents.
@@ -65,7 +65,7 @@ def execute() -> str:
     return json.dumps(previews)
 
 
-@scrubber_blueprint.route("/scrub/get-tag-options", methods=["GET"])
+@scrub_blueprint.route("/scrub/get-tag-options", methods=["GET"])
 def get_tags_table() -> str:
     """Gets the tags in the active documents.
     :return: The tags in the active documents.
@@ -82,7 +82,7 @@ def get_tags_table() -> str:
     return json.dumps(response)
 
 
-@scrubber_blueprint.route("/scrub/save-tag-options", methods=["POST"])
+@scrub_blueprint.route("/scrub/save-tag-options", methods=["POST"])
 def xml() -> str:
     """Sets the tag options.
     :return: None.

@@ -7,7 +7,7 @@ from flask import request, session, render_template, Blueprint
 
 from lexos.helpers import constants
 from lexos.managers import session_manager, utility
-from lexos.views.base_view import detect_active_docs
+from lexos.views.base import detect_active_docs
 
 upload_blueprint = Blueprint("upload", __name__)
 

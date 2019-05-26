@@ -6,10 +6,10 @@ from flask import session, render_template, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 
-multi_cloud_blueprint = Blueprint("multi_clouds", __name__)
+multicloud_blueprint = Blueprint("multicloud", __name__)
 
 
-@multi_cloud_blueprint.route("/multicloud", methods=["GET"])
+@multicloud_blueprint.route("/multicloud", methods=["GET"])
 def multicloud() -> str:
     """Gets the multicloud page.
     :return: The multicloud page.
@@ -25,7 +25,7 @@ def multicloud() -> str:
     return render_template("multicloud.html")
 
 
-@multi_cloud_blueprint.route("/multicloud/get-word-counts", methods=["GET"])
+@multicloud_blueprint.route("/multicloud/get-word-counts", methods=["GET"])
 def get_word_counts() -> str:
     """ Gets the top 100 word counts for each active file.
 

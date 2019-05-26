@@ -5,10 +5,10 @@ from flask import request, session, render_template, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 
-cutter_blueprint = Blueprint("cutter", __name__)
+cut_blueprint = Blueprint("cut", __name__)
 
 
-@cutter_blueprint.route("/cut", methods=["GET"])
+@cut_blueprint.route("/cut", methods=["GET"])
 def cut():
     """Gets the cut page.
     :return: The cut page.
@@ -21,7 +21,7 @@ def cut():
     return render_template("cut.html")
 
 
-@cutter_blueprint.route("/cut/download", methods=["GET"])
+@cut_blueprint.route("/cut/download", methods=["GET"])
 def download():
     """Downloads the cut files.
 
@@ -32,7 +32,7 @@ def download():
     return file_manager.zip_active_files("cut-files.zip")
 
 
-@cutter_blueprint.route("/cut/execute", methods=["POST"])
+@cut_blueprint.route("/cut/execute", methods=["POST"])
 def execute():
     """Cuts the files.
 

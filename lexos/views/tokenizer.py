@@ -1,14 +1,11 @@
 import json
 
 from flask import request, session, render_template, send_file, Blueprint
-from natsort import natsorted
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.views.base_view import detect_active_docs
 
 from timeit import default_timer as timer
-import pandas as pd
 from typing import Dict, List
 from lexos.managers.file_manager import FileManager
 
