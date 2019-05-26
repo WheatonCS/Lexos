@@ -52,7 +52,7 @@ def get_dtm_matrix(dtm_options: Dict[str, object],
     return dtm
 
 
-@tokenizer_blueprint.route("/tokenizer", methods=["GET"])
+@tokenizer_blueprint.route("/tokenize", methods=["GET"])
 def tokenizer():
     """Handles the functionality on the tokenizer page.
     :return: A response to the request.
@@ -65,10 +65,10 @@ def tokenizer():
         session["csvoptions"] = constants.DEFAULT_CSV_OPTIONS
 
     # Render the page
-    return render_template("tokenizer.html")
+    return render_template("tokenize.html")
 
 
-@tokenizer_blueprint.route("/tokenizer/get-table", methods=["POST"])
+@tokenizer_blueprint.route("/tokenize/get-table", methods=["POST"])
 def get_table():
     """Gets the requested table data.
     :return: The requested table data.
@@ -126,7 +126,7 @@ def get_table():
     return json.dumps({"pages": pages, "head": head, "data": selection})
 
 
-@tokenizer_blueprint.route("/tokenizer/download", methods=["GET"])
+@tokenizer_blueprint.route("/tokenize/download", methods=["GET"])
 def download():
     """Sends the DTM to the user.
     :return: The DTM download.
@@ -138,6 +138,6 @@ def download():
 
     return send_file(
         save_path,
-        attachment_filename="Lexos-DTM"+file_extension,
+        attachment_filename="lexos-dtm"+file_extension,
         as_attachment=True)
 

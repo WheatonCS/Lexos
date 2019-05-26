@@ -1,99 +1,57 @@
 import json
 
-from flask import request, session, render_template, Blueprint
-from natsort import natsorted
+import pandas as pd
+from flask import session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.views.base_view import detect_active_docs
 
-# this is a flask blue print
-# it helps us to manage groups of views
-# see here for more detail:
-# http://exploreflask.com/en/latest/blueprints.html
-# http://flask.pocoo.org/docs/0.12/blueprints/
-word_cloud_blueprint = Blueprint('word_cloud', __name__)
+word_cloud_blueprint = Blueprint("word_cloud", __name__)
 
 
-# Tells Flask to load this function when someone is at '/wordcloud'
-@word_cloud_blueprint.route("/wordcloud", methods=["GET", "POST"])
-def word_cloud():
-    """Handles the functionality on the visualisation page.
+@word_cloud_blueprint.route("/word-cloud", methods=["GET"])
+def word_cloud() -> str:
+    """ Gets the word cloud page.
 
-    a prototype for displaying single word cloud graphs.
-    :return: a response object (often a render_template call) to flask and
-    eventually to the browser.
+    :return: The word cloud page.
     """
-    # Detect the number of active documents.
-    num_active_docs = detect_active_docs()
+
+    # Set the cloud options to their defaults if they do not exist
+    if "cloudoption" not in session:
+        session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
+
+    return render_template("word-cloud.html")
+
+
+@word_cloud_blueprint.route("/word-cloud/get-word-counts", methods=["GET"])
+def get_word_counts() -> str:
+    """ Gets the top 100 word counts across all active files.
+
+    :return: The top 100 word counts across all active files.
+    """
+
     file_manager = utility.load_file_manager()
-    labels = file_manager.get_active_labels_with_id()
-    from collections import OrderedDict
-    labels = OrderedDict(natsorted(list(labels.items()), key=lambda x: x[1]))
-    if request.method == "GET":
-        # "GET" request occurs when the page is first loaded.
-        if 'cloudoption' not in session:
-            session['cloudoption'] = constants.DEFAULT_CLOUD_OPTIONS
-        # there is no wordcloud option so we don't initialize that
-        return render_template(
-            'wordcloud.html',
-            itm="word-cloud",
-            labels=labels,
-            numActiveDocs=num_active_docs)
-    if request.method == "POST":
-        # "POST" request occur when html form is submitted
-        # (i.e. 'Get Dendrogram', 'Download...')
-        # Get the file manager, sorted labels, and tokenization options
-        file_manager = utility.load_file_manager()
-        if 'analyoption' not in session:
-            session['analyoption'] = constants.DEFAULT_ANALYZE_OPTIONS
-        token_type = session['analyoption']['tokenType']
-        token_size = int(session['analyoption']['tokenSize'])
-        # Limit docs to those selected or to active docs
-        chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
-        active_docs = []
-        if chosen_doc_ids:
-            for file_id in chosen_doc_ids:
-                active_docs.append(file_id)
-        else:
-            for l_file in file_manager.files.values():
-                if l_file.active:
-                    active_docs.append(l_file.id)
-        # Get the contents of all selected/active docs
-        all_contents = []
-        for file_id in active_docs:
-            if file_manager.files[file_id].active:
-                content = file_manager.files[file_id].load_contents()
-                all_contents.append(content)
-        # Generate a DTM
-        dtm, vocab = utility.simple_vectorizer(
-            all_contents, token_type, token_size)
-        # Convert the DTM to a pandas dataframe and save the sums
-        import pandas as pd
-        df = pd.DataFrame(dtm)
-        df = df.sum(axis=0)
-        # Build the JSON object for d3.js
-        json_obj = {"name": "tokens", "children": []}
-        for k, v in enumerate(vocab):
-            json_obj["children"].append({"name": v, "size": str(df[k])})
-        # Create a list of column values for the word count table
-        from operator import itemgetter
-        terms = natsorted(
-            json_obj["children"],
-            key=itemgetter('size'),
-            reverse=True)
-        column_values = []
-        for term in terms:
-            # rows = [term["name"].encode('utf-8'), term["size"]]
-            rows = [term["name"], term["size"]]
-            column_values.append(rows)
-        # Turn the JSON object into a JSON string for the front end
-        json_obj = json.dumps(json_obj)
-        session_manager.cache_cloud_option()
-        return render_template(
-            'wordcloud.html',
-            labels=labels,
-            JSONObj=json_obj,
-            columnValues=column_values,
-            itm="word-cloud",
-            numActiveDocs=num_active_docs)
+    session_manager.cache_cloud_option()
+
+    # Get the contents of the active documents
+    contents = ""
+    for file in file_manager.files.values():
+        if file.active:
+            contents += file.load_contents()
+
+    # If there are no active documents or contents, return an empty array
+    if not contents:
+        return "[]"
+
+    # Get a sorted dataframe of word counts
+    dtm, words = utility.simple_vectorizer([contents], "word", 1)
+    dataframe = pd.DataFrame({"word": words, "count": dtm[0]})
+    dataframe = dataframe.sort_values(by="count", ascending=False)
+
+    # Create a list of the top 100 words and their normalized counts
+    response = []
+    maximum = dataframe.iloc[0]["count"]
+    dataframe = dataframe[:100]
+    for i in range(100):
+        response.append([dataframe.iloc[i]["word"], dataframe.iloc[i]["count"]/maximum])
+    return json.dumps(response)

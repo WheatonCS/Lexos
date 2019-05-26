@@ -1,10 +1,7 @@
 /* Form */
 form {
     display: grid;
-    grid-template-rows: min-content auto;
     grid-gap: 2rem;
-    height: calc(100vh - 15rem);
-    min-height: 60rem;
 }
 
 
@@ -61,6 +58,10 @@ input[type=text]{
 
 
 /* Document previews */
+#document-previews-section {
+    min-height: 16rem;
+}
+
 #document-previews-section .title {
     padding: 1rem;
 }
@@ -74,4 +75,13 @@ input[type=text]{
     justify-self: right;
     margin-top: 1rem;
     margin-right: 1rem;
+}
+
+#previews {
+    max-height: calc(100vh - 34rem);
+    overflow: scroll;
+}
+
+#previews .centerer {
+    height: 9rem;
 }

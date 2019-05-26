@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% set active_page = "bubbleviz" %}
+{% block title %}BubbleViz{% endblock %}
+
+<!-- Head -->
+{% block head %}
+     <!-- d3.v4.js -->
+    <script type="text/javascript" src="//d3js.org/d3.v4.min.js"></script>
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/bubbleviz.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/bubbleviz.css"/>
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+
+    <!-- BubbleViz -->
+    <div id="bubbleviz"></div>
+{% endblock %}

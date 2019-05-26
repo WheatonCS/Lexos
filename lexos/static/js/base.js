@@ -18,7 +18,7 @@ $("document").ready(function(){
 
 
 /**
- * Highlight the appropriate navbar button for the current page.
+ * Highlights the appropriate navbar button for the current page.
  */
 function highlight_navbar_button(){
 
@@ -65,26 +65,26 @@ function initialize_dropdown_menus(){
     add_dropdown_menu_callback("prepare", [
         ["Scrub", "scrub"],
         ["Cut", "cut"],
-        ["Tokenizer", "tokenizer"]
+        ["Tokenize", "tokenize"]
     ]);
 
     // Visualize
     add_dropdown_menu_callback("visualize", [
-        ["Word Cloud", "wordcloud"],
+        ["Word Cloud", "word-cloud"],
         ["Multicloud", "multicloud"],
-        ["BubbleViz", "viz"],
-        ["Rolling Window", "rollingwindow"]
+        ["BubbleViz", "bubbleviz"],
+        ["Rolling Window", "rolling-window"]
     ]);
 
     // Analyze
     add_dropdown_menu_callback("analyze", [
         ["Statistics", "statistics"],
-        ["Hierarchical Clustering", "dendrogram"],
-        ["K-Means Clustering", "kmeans"],
-        ["Consensus Tree", "bct_analysis"],
-        ["Similarity Query", "similarity"],
-        ["Top Words", "topword"],
-        ["Content Analysis", "contentanalysis"]
+        ["Dendrogram", "dendrogram"],
+        ["K-Means Clustering", "k-means-clustering"],
+        ["Consensus Tree", "consensus-tree"],
+        ["Similarity Query", "similarity-query"],
+        ["Top Words", "top-words"],
+        ["Content Analysis", "content-analysis"]
     ]);
 
     // Remove menus if an outside element was clicked

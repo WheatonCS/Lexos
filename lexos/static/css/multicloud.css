@@ -1,0 +1,31 @@
+form {
+    display: grid;
+    height: 100%;
+}
+
+#multicloud {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 50rem);
+    grid-gap: 2rem;
+    align-content: center;
+    justify-content: center;
+}
+
+.word-cloud-wrapper {
+    width: 50rem;
+    height: 50rem;
+    background-color: #F3F3F3;
+    overflow: hidden;
+}
+
+.word-cloud-wrapper .title {
+    height: 4rem;
+    padding: 1rem;
+    background-color: #FFFFFF;
+}
+
+.word-cloud {
+    height: calc(100% - 4rem);
+    opacity: 0;
+    transition: opacity .2s;
+}

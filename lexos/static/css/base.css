@@ -156,23 +156,20 @@ a:hover {
 
 /* Footer */
 footer {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    align-content: center;
     background-color: #FFFFFF;
     height: 4rem;
 }
 
-#left-footer,
-#right-footer
-{
-    position: absolute;
-    margin-top: 1rem;
-}
-
 #left-footer {
-    left: 2rem;
+    margin-left: 2rem;
 }
 
 #right-footer {
-    right: 2rem;
+    margin-right: 2rem;
+    justify-self: right;
 }
 
 #right-footer > * {

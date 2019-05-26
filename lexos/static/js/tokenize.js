@@ -12,6 +12,12 @@ $(function(){
  */
 function create_table(){
 
+    // Clear the table and hide the table data
+    $("#table-head").empty();
+    $("#table-body").empty();
+    $("#table-data").css(
+        {"opacity": "0", "transition": "none"});
+
     // Clamp the page number
     let page_number_element = $("#page-number");
     let page_number = parseInt(page_number_element.val());
@@ -27,7 +33,7 @@ function create_table(){
     // Send the request
     $.ajax({
         type: "POST",
-        url: "tokenizer/get-table",
+        url: "tokenize/get-table",
         processData: false,
         contentType: false,
         data: new FormData($("form")[0])
@@ -38,14 +44,11 @@ function create_table(){
 /**
  * Creates the table.
  *
- * @param {string} response: The response from the "tokenizer/get-table" request.
+ * @param {string} response: The response from the "tokenize/get-table" request.
  */
 function get_table_callback(response){
     response = JSON.parse(response);
-
-    // Clear the table
-    let table_head = $("#table-head").empty();
-    let table_body = $("#table-body").empty();
+    let table_body = $("#table-body");
 
     // Set the page count
     page_count = parseInt(response.pages);
@@ -53,30 +56,39 @@ function get_table_callback(response){
 
     // If there are no rows, display "no data" text
     if(response.data.length === 0){
+
+        // Create the "no data" text
         $(`
             <div id="no-data-text-container" class="centerer">
                 <h3 id="no-data-text">No Data</h3>
             </div>
         `).appendTo(table_body);
+
+        // Fade in the table data
+        $("#table-data").css({"transition": "opacity .2s", "opacity": "1"});
+
         return;
     }
 
     // Otherwise, create the table head
     response.head[0] = "Terms";
     for(cell of response.head){
-        let element = $(`<h3 class="tokenizer-cell"></h3>`).appendTo(table_head);
+        let element = $(`<h3 class="tokenize-cell"></h3>`).appendTo("#table-head");
         element.text(cell);
     }
 
     // Create the table body
     for(row of response.data){
-        let row_element = $(`<div class="tokenizer-row"></div>`).appendTo(table_body);
+        let row_element = $(`<div class="tokenize-row"></div>`).appendTo(table_body);
 
         for(cell of row){
-            let element = $(`<h3 class="tokenizer-cell"></h3>`).appendTo(row_element);
+            let element = $(`<h3 class="tokenize-cell"></h3>`).appendTo(row_element);
             element.text(cell);
         }
     }
+
+    // Fade in the table data
+    $("#table-data").css({"transition": "opacity .2s", "opacity": "1"});
 }
 
 

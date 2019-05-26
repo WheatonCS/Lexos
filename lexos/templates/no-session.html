@@ -1,17 +1,14 @@
 {% extends "base.html" %}
 {% set active_page = "no-session" %}
+{% block title %}No Session{% endblock %}
 
+<!-- Head -->
 {% block head %}
-
-    <!-- Page JS -->
     <script type="text/javascript" src="/static/js/no-session.js"></script>
 {% endblock %}
 
-{% block title %}No Session{% endblock %}
-
+<!-- Content -->
 {% block content %}
-
-    <!-- Redirect message -->
     <div class="centerer">
         <h3>This page requires an active session. You will be redirected to the upload page.</h3>
         <h3>If you are not redirected in 5 seconds, click <a href="/upload">here</a>.</h3>
