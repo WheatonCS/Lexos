@@ -1,3 +1,9 @@
+/* Main section */
+#main-section {
+    min-width: 115rem;
+}
+
+
 /* Form */
 form {
     display: grid;
@@ -5,41 +11,19 @@ form {
 }
 
 
-/* Sections */
+/* Options */
 #options-section {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.3fr;
     grid-gap: 2rem;
-}
-
-#cut-mode-section,
-#cut-settings-section,
-#document-previews-section {
-    background-color: #FFFFFF;
-}
-
-#cut-mode-section,
-#cut-settings-section {
-    padding: 1rem;
-}
-
-
-/* Title */
-.title {
-    padding-bottom: 1rem;
-}
-
-.circle-label {
-    margin-bottom: 1rem;
 }
 
 
 /* Cut mode */
 #cut-mode-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    grid-template-columns: 1fr 1fr 1fr;
     column-gap: 3rem;
-    align-items: center;
     height: calc(100% - 3rem);
 }
 
@@ -47,13 +31,13 @@ form {
 /* Cut settings */
 #cut-settings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-    row-gap: 1rem;
+    grid-template-columns: 1fr .8fr 1fr;
+    height: 5rem;
+    align-content: center;
 }
 
-input[type=text]{
-    margin-left: 1rem;
-    width: 10rem;
+#milestone-input {
+    width: 20rem;
 }
 
 
@@ -62,23 +46,13 @@ input[type=text]{
     min-height: 16rem;
 }
 
-#document-previews-section .title {
-    padding: 1rem;
-}
-
 #document-previews-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-#document-previews-buttons {
-    justify-self: right;
-    margin-top: 1rem;
-    margin-right: 1rem;
-}
-
 #previews {
-    max-height: calc(100vh - 34rem);
+    max-height: calc(100vh - 33rem);
     overflow: scroll;
 }
 

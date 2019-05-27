@@ -1,0 +1,26 @@
+{% extends "analyze-template.html" %}
+
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/dendrogram.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/dendrogram.css"/>
+{% endblock %}
+
+
+<!-- Options -->
+{% block options %}
+
+    <!-- Dendrogram options -->
+    <div id="dendrogram-options-section" class="section">
+        <h3 class="title">Options</h3>
+    </div>
+{% endblock %}
+
+
+<!-- Results -->
+{% block results %}
+    <h3 class="title">Dendrogram</h3>
+{% endblock %}

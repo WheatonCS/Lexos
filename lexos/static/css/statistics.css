@@ -1,0 +1,29 @@
+/* Main section */
+#main-section {
+    min-width: 110rem;
+}
+
+
+/* Form */
+form {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-rows: 35rem auto;
+    height: 100%;
+}
+
+
+/* Top section */
+#top-section{
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 30rem auto;
+}
+
+
+/* Options */
+#options-section {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 2rem;
+}

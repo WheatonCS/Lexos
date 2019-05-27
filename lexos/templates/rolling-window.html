@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+<!-- Head -->
+{% block head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/rolling-window.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/rolling-window.css"/>
+{% endblock %}
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Settings -->
+    <div id="settings-section">
+
+        <!-- Calculation type -->
+        <div id="calculation-type-section" class="section">
+            <h3 class="title">Calculation Type</h3>
+            <label class="circle-label"><input name="counttype" value="average" type="radio" checked><span>Rolling Average</span></label><br>
+            <label class="circle-label"><input name="counttype" value="ratio" type="radio"><span>Rolling Ratio</span></label>
+        </div>
+
+        <!-- Search terms -->
+        <div id="search-terms-section" class="section">
+            <h3 class="title">Search Terms</h3>
+            <input name="" type="text" spellcheck="false" autocomplete="off"><br>
+            <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span>Words</span></label><br>
+            <label class="circle-label"><input name="inputtype" value="string" type="radio"><span>Strings</span></label><br>
+            <label class="circle-label"><input name="inputtype" value="regex" type="radio"><span>Regex</span></label>
+        </div>
+
+        <!-- Window -->
+        <div id="window-section" class="section">
+            <h3 class="title">Window</h3>
+            <input name="" type="text" spellcheck="false" autocomplete="off"><br>
+            <label class="circle-label"><input name="windowtype" value="word" type="radio" checked><span>Words</span></label><br>
+            <label class="circle-label"><input name="windowtype" value="letter" type="radio"><span>Characters</span></label><br>
+            <label class="circle-label"><input name="windowtype" value="line" type="radio"><span>Lines</span></label>
+        </div>
+
+        <!-- Display -->
+        <div id="display-section" class="section">
+            <h3 class="title">Display</h3>
+            <label class="checkbox-label"><input name="rollinghasmilestone" type="checkbox"><span>Milestone<input name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off"></span></label>
+            <label class="checkbox-label"><input name="showDots" type="checkbox"><span>Show Individual Points</span></label><br>
+            <label class="checkbox-label"><input name="BWoutput" type="checkbox"><span>Black and White</span></label>
+        </div>
+    </div>
+
+    <!-- Graph -->
+    <div id="graph-section" class="borderless-section">
+        <h3 class="selectable">Generate</h3>
+        <h3 class="selectable">Download</h3>
+        <div id="graph"></div>
+    </div>
+{% endblock %}

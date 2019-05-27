@@ -1,0 +1,27 @@
+{% extends "analyze-template.html" %}
+
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/similarity-query.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/similarity-query.css"/>
+{% endblock %}
+
+
+<!-- Options -->
+{% block options %}
+
+    <!-- Comparison document -->
+    <div id="comparison-document-section" class="section">
+        <h3 class="title">Comparison Document</h3>
+    </div>
+{% endblock %}
+
+
+<!-- Results -->
+{% block results %}
+    <h3 class="title">Similarity Query</h3>
+{% endblock %}
+

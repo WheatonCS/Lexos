@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set active_page = 'upload' %}
+
 
 <!-- Head -->
 {% block head %}
@@ -8,13 +8,11 @@
     <link rel="stylesheet" type="text/css" href="static/css/upload.css"/>
 {% endblock %}
 
-<!-- Title -->
-{% block title %}Loader{% endblock %}
 
 <!-- Main content -->
 {% block content %}
      <!-- About section -->
-    <div class="about-section">
+    <div id="about-section" class="section">
         <h3 class="title">About</h3>
         <h3>
             Lexos is developed by the
@@ -35,7 +33,7 @@
     </div>
 
     <!-- Upload section -->
-    <div id="upload-section">
+    <div id="upload-section" class="borderless-section">
 
         <!-- Title -->
         <h3 class="title">Upload</h3>
@@ -60,16 +58,15 @@
     </div>
 
     <!-- Upload list -->
-    <div id="upload-list">
+    <div id="upload-list" class="section">
 
         <!-- Title -->
         <h3 class="title">Upload List</h3>
 
         <!-- Uploads -->
-        <div id="upload-previews"></div>
+        <div id="upload-previews" class="borderless-section"></div>
     </div>
 
     <!-- Hidden file input -->
     <input type="file" id="file-select-input" style="display:none" multiple/>
-
 {% endblock %}

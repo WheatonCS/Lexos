@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+
+<!-- Head -->
+{% block head %}
+
+    <!-- Analyze Template CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/analyze-template.css"/>
+
+    {% block page_head %}
+    {% endblock %}
+{% endblock %}
+
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Options -->
+    <div id="options-section">
+
+        {% block options %}{% endblock %}
+
+        <!-- Tokenize -->
+        <div id="tokenize-section" class="section">
+            <h3 class="title">Tokenize</h3>
+            <label class="circle-label"><input name="tokenType" type="radio" checked><span>By Tokens</span></label><br>
+            <label class="circle-label"><input name="tokenType" type="radio"><span>By Characters</span></label><br>
+            <h3>Grams</h3><label><input name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+        </div>
+
+        <!-- Normalize -->
+        <div id="normalize-section" class="section">
+            <h3 class="title">Normalize</h3>
+            <label class="circle-label"><input name="normalizeType" value="freq" type="radio" checked><span>Proportional</span></label><br>
+            <label class="circle-label"><input name="normalizeType" value="raw" type="radio"><span>Raw</span></label><br>
+            <label class="circle-label"><input name="normalizeType" value="tfidf" type="radio"><span>TF-IDF</span></label>
+        </div>
+
+        <!-- Culling -->
+        <div id="cull-section" class="section">
+            <h3 class="title">Cull</h3>
+            <label class="checkbox-label"><input name="mfwcheckbox" type="checkbox"><span>Use the top<input name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span></label>
+            <label class="checkbox-label"><input name="cullcheckbox" type="checkbox"><span>Must be in<input name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span></label>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-section" class="borderless-section">
+        {% block results %}{% endblock %}
+    </div>
+{% endblock %}

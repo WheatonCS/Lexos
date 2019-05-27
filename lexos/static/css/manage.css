@@ -22,7 +22,6 @@ form {
     display: grid;
     row-gap: 1rem;
     width: 100%;
-    background-color: #FFFFFF;
 }
 
 #manage-table-head {
@@ -37,7 +36,6 @@ form {
 
 #manage-table-body {
     margin-top: 1rem;
-    margin-bottom: 2rem;
 }
 
 .manage-table-head-cell {

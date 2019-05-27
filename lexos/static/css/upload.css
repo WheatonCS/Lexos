@@ -1,30 +1,19 @@
-/* Title */
-.title {
-    margin-bottom: 1rem;
-}
-
-
 /* About section */
-.about-section {
+#about-section {
     display: block;
     margin-bottom: 2rem;
-    background-color: white;
-    padding: 1rem;
 }
 
 
 /* Upload section */
 #upload-section {
-    background-color: #FFFFFF;
-    padding-top: 1rem;
+    padding-top: .1rem;
     margin-bottom: 2rem;
 }
 
 #upload-section > h3 {
     display: block;
-    position: relative;
-    left: 1rem;
-    width: calc(100% - 2rem);
+    margin: 1rem;
 }
 
 #browse-button,
@@ -69,7 +58,6 @@
 #upload-list {
     display: none;
     min-height: 10rem;
-    background-color: #FFFFFF;
     padding: 1rem;
 }
 

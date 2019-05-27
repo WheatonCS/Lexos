@@ -1,0 +1,31 @@
+{% extends "analyze-template.html" %}
+
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/k-means.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/k-means.css"/>
+{% endblock %}
+
+
+<!-- Options -->
+{% block options %}
+
+    <!-- K-means options -->
+    <div id="k-means-options-section" class="section">
+        <h3 class="title">Options</h3>
+    </div>
+
+    <!-- Advanced k-means options -->
+    <div id="k-means-options-section" class="section">
+        <h3 class="title">Advanced</h3>
+    </div>
+{% endblock %}
+
+
+<!-- Results -->
+{% block results %}
+    <h3 class="title">K-Means</h3>
+{% endblock %}

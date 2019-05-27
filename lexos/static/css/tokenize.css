@@ -13,22 +13,6 @@ form {
 }
 
 
-/* General */
-input[type=text]{
-    margin-left: 1rem;
-    margin-right: 1rem;
-    width: 6rem;
-}
-
-.title {
-    margin-bottom: 1rem;
-}
-
-.section {
-    background-color: #FFFFFF;
-    padding: 1rem;
-}
-
 
 /* Options section */
 #options-section {
@@ -128,6 +112,7 @@ input[type=text]{
 
 .tokenize-cell {
     padding: 1rem;
+    min-height: 4rem;
     background-color: #F3F3F3;
     overflow: hidden;
     overflow-wrap: break-word;
@@ -148,5 +133,5 @@ input[type=text]{
 }
 
 #navigation-buttons > h3 {
-    margin-right: 2rem;
+    margin-left: 2rem;
 }

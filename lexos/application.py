@@ -10,13 +10,22 @@ from markupsafe import Markup, escape
 
 import lexos.helpers.constants
 from lexos.helpers.exceptions import LexosException
+
 from lexos.views.base import base_blueprint
 from lexos.views.bubbleviz import bubbleviz_blueprint
+from lexos.views.consensus_tree import consensus_tree_blueprint
+from lexos.views.content_analysis import content_analysis_blueprint
 from lexos.views.cut import cut_blueprint
+from lexos.views.dendrogram import dendrogram_blueprint
+from lexos.views.k_means import k_means_blueprint
 from lexos.views.manage import manage_blueprint
 from lexos.views.multicloud import multicloud_blueprint
+from lexos.views.rolling_window import rolling_window_blueprint
 from lexos.views.scrub import scrub_blueprint
+from lexos.views.similarity_query import similarity_query_blueprint
+from lexos.views.statistics import statistics_blueprint
 from lexos.views.tokenizer import tokenizer_blueprint
+from lexos.views.top_words import top_words_blueprint
 from lexos.views.upload import upload_blueprint
 from lexos.views.word_cloud import word_cloud_blueprint
 
@@ -59,12 +68,20 @@ app.jinja_env.filters["time"] = time.time()
 # Register the blueprints
 app.register_blueprint(base_blueprint)
 app.register_blueprint(bubbleviz_blueprint)
-app.register_blueprint(upload_blueprint)
+app.register_blueprint(consensus_tree_blueprint)
+app.register_blueprint(content_analysis_blueprint)
+app.register_blueprint(cut_blueprint)
+app.register_blueprint(dendrogram_blueprint)
+app.register_blueprint(k_means_blueprint)
 app.register_blueprint(manage_blueprint)
 app.register_blueprint(multicloud_blueprint)
-app.register_blueprint(cut_blueprint)
+app.register_blueprint(rolling_window_blueprint)
 app.register_blueprint(scrub_blueprint)
+app.register_blueprint(similarity_query_blueprint)
+app.register_blueprint(statistics_blueprint)
 app.register_blueprint(tokenizer_blueprint)
+app.register_blueprint(top_words_blueprint)
+app.register_blueprint(upload_blueprint)
 app.register_blueprint(word_cloud_blueprint)
 
 

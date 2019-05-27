@@ -1,15 +1,17 @@
 {% extends "base.html" %}
-{% set active_page = "manage" %}
+
 
 <!-- Head -->
 {% block head %}
 
     <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/point.js"></script>
+    <script type="text/javascript" src="static/js/utility.js"></script>
     <script type="text/javascript" src="static/js/manage.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/manage.css"/>
 {% endblock %}
 
+
+<!-- Content -->
 {% block content %}
 
     <!-- Top section -->
@@ -26,7 +28,8 @@
     </div>
 
     <!-- Table -->
-    <div id="manage-table">
+    <div id="manage-table" class="borderless-section">
+
         <!-- Table head -->
         <div id="manage-table-head">
             <h3 class="manage-table-head-cell">Active</h3>

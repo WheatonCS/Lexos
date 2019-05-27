@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+
+<!-- Head -->
+{% block head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/statistics.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/statistics.css"/>
+{% endblock %}
+
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Top section -->
+    <div id="top-section">
+
+        <!-- Options -->
+        <div id="options-section">
+
+            <!-- Tokenize -->
+            <div id="tokenize-section" class="section">
+                <h3 class="title">Tokenize</h3>
+                <label class="circle-label"><input name="tokenType" type="radio" checked><span>By Tokens</span></label><br>
+                <label class="circle-label"><input name="tokenType" type="radio"><span>By Characters</span></label><br>
+                <h3>Grams</h3><label><input name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+            </div>
+
+            <!-- Culling -->
+            <div id="culling-section" class="section">
+                <h3 class="title">Cut</h3>
+                <label class="checkbox-label"><input name="mfwcheckbox" type="checkbox"><span>Use the top<input name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span></label>
+                <label class="checkbox-label"><input name="cullcheckbox" type="checkbox"><span>Must be in<input name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span></label>
+            </div>
+        </div>
+
+        <!-- Corpus -->
+        <div id="corpus-section" class="borderless-section">
+            <h3 class="title">Corpus</h3>
+        </div>
+    </div>
+
+    <!-- Documents -->
+    <div id="documents-section" class="borderless-section">
+        <h3 class="title">Documents</h3>
+    </div>
+{% endblock %}

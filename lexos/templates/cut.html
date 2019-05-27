@@ -4,6 +4,7 @@
 
 <!-- Head -->
 {% block head %}
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="/static/js/document-previews.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/document-previews.css"/>
@@ -16,27 +17,32 @@
 
     <!-- Options -->
     <div id="options-section">
-        <div id="cut-mode-section">
 
-            <!-- Cut mode -->
+        <!-- Cut mode -->
+        <div id="cut-mode-section" class="section">
             <h3 class="title">Cut Mode</h3>
             <div id="cut-mode-grid">
-                <div><label class="circle-label"><input type="radio" name="cutType" value="words" checked><span>Tokens</span></label></div>
-                <div><label class="circle-label"><input type="radio" name="cutType" value="letters"><span>Characters</span></label></div>
-                <div><label class="circle-label"><input type="radio" name="cutType" value="lines"><span>Lines</span></label></div>
-                <div><label class="circle-label"><input type="radio" name="cutType" value="number"><span>Segments</span></label></div>
-                <div><label class="circle-label"><input type="radio" name="cutType" value="milestone"><span>Milestones</span></label></div>
+                <div>
+                    <label class="circle-label"><input type="radio" name="cutType" value="words" checked><span>Tokens</span></label><br>
+                    <label class="circle-label"><input type="radio" name="cutType" value="letters"><span>Characters</span></label>
+                </div>
+                <div>
+                    <label class="circle-label"><input type="radio" name="cutType" value="lines"><span>Lines</span></label><br>
+                    <label class="circle-label"><input type="radio" name="cutType" value="number"><span>Segments</span></label>
+                </div>
+                <label class="circle-label"><input type="radio" name="cutType" value="milestone"><span>Milestones</span></label>
             </div>
         </div>
 
         <!-- Cut settings -->
-        <div id="cut-settings-section">
+        <div id="cut-settings-section" class="section">
             <h3 class="title">Cut Settings</h3>
+            <div id="cut-settings-grid"></div>
         </div>
     </div>
 
     <!-- Document previews -->
-    <div id="document-previews-section" class="section">
+    <div id="document-previews-section" class="borderless-section">
         <div id="document-previews-top">
             <h3 class="title">Document Previews</h3>
             <div id="document-previews-buttons">
@@ -49,7 +55,7 @@
     </div>
 
     <!-- Hidden elements -->
-    <input name="MScutWord" type="hidden">
+    <input id="milestone-input" name="MScutWord" type="hidden">
     <input name="hasErrors" type="hidden" value="false">
     <input name="needsWarning" type="hidden" value="false">
 {% endblock %}

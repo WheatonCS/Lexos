@@ -94,6 +94,24 @@ form {
     pointer-events: none;
 }
 
+.section,
+.borderless-section {
+    background-color: #FFFFFF;
+}
+
+.section {
+    padding: 1rem;
+}
+
+.section .title {
+    padding-bottom: 1rem;
+}
+
+.borderless-section .title,
+.borderless-section .selectable {
+    margin: 1rem;
+}
+
 
 /* Navbar */
 #navbar {
@@ -280,8 +298,11 @@ footer {
 /* Text input */
 input[type="text"] {
     height: 3rem;
+    width: 6rem;
     padding-left: 1.3rem;
     padding-right: 1.3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     border: none;
     border-radius: 3rem;
     outline: none;

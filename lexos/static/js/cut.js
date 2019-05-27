@@ -12,6 +12,9 @@ $(function(){
     // Register the "preview" and "apply" button callbacks
     $("#preview-button").click(function(){ cut("preview"); });
     $("#apply-button").click(function(){ cut("apply"); });
+
+    // Register a "cut mode" change callback
+    $("#cut-mode-section input").change(load_cut_settings_section);
 });
 
 
@@ -19,22 +22,37 @@ $(function(){
  * Loads the "cut settings" section.
  */
 function load_cut_settings_section(){
+
+    console.log("r")
+
+    let cut_settings_grid_element = $("#cut-settings-grid");
     let cut_mode = $("#cut-mode-grid input:checked").val();
-    let element;
+    let settings_elements;
 
-    // Segments cut mode
-    if(cut_mode === "number") element = $(`<div></div>`);
+    // Remove any existing contents
+    cut_settings_grid_element.empty();
 
-    // Tokens, characters, or lines cut mode
-    else element = $(`
-        <div id="cut-settings-grid">
-            <div><h3>Segment Size</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
-            <div><h3>Overlap</h3><input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0"></div>
-            <div><h3>Merge Threshold</h3><input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50"></div>
-        </div>
+    // Segments mode
+    if(cut_mode === "number") settings_elements = $(`
+        <div><h3>Number of Segments</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
     `);
 
-    element.appendTo("#cut-settings-section");
+    // Milestones mode
+    else if(cut_mode === "milestone") settings_elements = $(`
+        <div><h3>Milestone</h3><input id="milestone-input" name="MScutWord" type="text" spellcheck="false" autocomplete="off"></div>
+    `);
+
+    // Tokens, characters, or lines mode
+    else settings_elements = $(`
+        <div><h3>Segment Size</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
+        <div><h3>Overlap</h3><input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0"></div>
+        <div><h3>Merge Threshold</h3><input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50"></div>
+    `);
+
+    // Set the legacy milestone input
+    $("#milestone-input").prop("checked", cut_mode === "milestone");
+
+    settings_elements.appendTo(cut_settings_grid_element);
 }
 
 

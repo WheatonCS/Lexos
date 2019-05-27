@@ -1,8 +1,4 @@
-form {
-    display: grid;
-    height: 100%;
-}
-
+/* Multicloud */
 #multicloud {
     display: grid;
     grid-template-columns: repeat(auto-fit, 50rem);
@@ -11,6 +7,8 @@ form {
     justify-content: center;
 }
 
+
+/* Word cloud */
 .word-cloud-wrapper {
     width: 50rem;
     height: 50rem;
@@ -21,6 +19,8 @@ form {
 .word-cloud-wrapper .title {
     height: 4rem;
     padding: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
     background-color: #FFFFFF;
 }
 

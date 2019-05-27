@@ -1,0 +1,21 @@
+/* Main section */
+#main-section {
+    min-width: 115rem;
+}
+
+
+/* Form */
+form {
+    display: grid;
+    grid-template-rows: 15rem auto;
+    grid-gap: 2rem;
+    height: 100%;
+}
+
+
+/* Options section */
+#options-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.3fr;
+    grid-gap: 2rem;
+}

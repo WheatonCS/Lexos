@@ -1,0 +1,10 @@
+/* Normalize */
+#normalize-section {
+    display: none;
+}
+
+
+/* Options section */
+#options-section {
+    grid-template-columns: 1fr 1fr 1fr;
+}

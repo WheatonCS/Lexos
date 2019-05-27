@@ -1,0 +1,52 @@
+/* Main section */
+#main-section {
+    min-width: 120rem;
+}
+
+
+/* Form */
+form {
+    display: grid;
+    grid-template-rows: 18rem auto;
+    grid-gap: 2rem;
+    height: 100%;
+}
+
+
+/* Settings */
+#settings-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 2rem;
+}
+
+.section input[type=text]{
+    margin-bottom: 1rem;
+}
+
+
+/* Text inputs */
+input[type=text] {
+    width: 11rem;
+}
+
+#window-section input[type=text],
+#search-terms-section input[type=text] {
+    margin-left: 0;
+}
+
+#search-terms-section input[type=text] {
+    width: 100%;
+}
+
+#display-section input[type=text] {
+    margin-bottom: 0;
+    margin-right: 0;
+    width: calc(100% - 12rem);
+}
+
+
+/* Graph */
+#graph-section {
+    padding-top: 1rem;
+}

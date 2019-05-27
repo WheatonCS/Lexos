@@ -1,0 +1,26 @@
+{% extends "analyze-template.html" %}
+
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/top-words.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/top-words.css"/>
+{% endblock %}
+
+
+<!-- Options -->
+{% block options %}
+
+    <!-- Comparison method -->
+    <div id="comparison-method-section" class="section">
+        <h3 class="title">Comparison Method</h3>
+    </div>
+{% endblock %}
+
+
+<!-- Results -->
+{% block results %}
+    <h3 class="title">Top Words</h3>
+{% endblock %}

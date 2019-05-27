@@ -80,7 +80,7 @@ function initialize_dropdown_menus(){
     add_dropdown_menu_callback("analyze", [
         ["Statistics", "statistics"],
         ["Dendrogram", "dendrogram"],
-        ["K-Means Clustering", "k-means-clustering"],
+        ["K-Means Clustering", "k-means"],
         ["Consensus Tree", "consensus-tree"],
         ["Similarity Query", "similarity-query"],
         ["Top Words", "top-words"],

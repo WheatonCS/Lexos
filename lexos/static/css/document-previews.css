@@ -1,3 +1,4 @@
+/* Document previews section */
 #document-previews-section {
     min-height: 50rem;
     min-width: 45rem;
@@ -23,6 +24,8 @@
     margin-right: 2rem;
 }
 
+
+/* Previews */
 #previews {
     height: calc(100% - 4rem);
     overflow: scroll;

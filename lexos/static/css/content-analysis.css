@@ -1,0 +1,15 @@
+/* Form */
+form {
+    display: grid;
+    grid-template-rows: 1fr 1.5fr;
+    grid-gap: 2rem;
+    height: 100%;
+}
+
+
+/* Settings */
+#settings-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+}
