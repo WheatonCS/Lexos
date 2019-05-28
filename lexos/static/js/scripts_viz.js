@@ -127,7 +127,7 @@ $(window).on('load', function () {
         tooltip.transition()
           .duration(200)
           .style('opacity', 1)
-        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.text) + ': ' + (d.value) + '</div>')
+        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.className) + ': ' + (d.value) + '</div>')
       })
       .on('mousemove', function (d) {
         return tooltip
@@ -151,7 +151,7 @@ $(window).on('load', function () {
         tooltip.transition()
           .duration(200)
           .style('opacity', 1)
-        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.text) + ': ' + (d.value) + '</div>')
+        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.className) + ': ' + (d.value) + '</div>')
       })
       .on('mousemove', function (d) {
         return tooltip
