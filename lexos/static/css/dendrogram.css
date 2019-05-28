@@ -1,0 +1,16 @@
+/* Popup */
+#popup-content div {
+    justify-self: left;
+}
+
+#popup-content h3 {
+    margin-top: 1rem;
+}
+
+
+/* Dendrogram */
+#dendrogram {
+    height: calc(100vh - 36rem);
+    display: grid;
+    justify-content: center;
+}

@@ -25,9 +25,6 @@ form {
 }
 
 #manage-table-head {
-    z-index: 1;
-    position: sticky;
-    top: 0;
     grid-template-columns: 7% 7% 16% 14% 16% 40%;
     height: 5rem;
     padding-top: 2rem;
@@ -36,6 +33,8 @@ form {
 
 #manage-table-body {
     margin-top: 1rem;
+    overflow: scroll;
+    height: calc(100vh - 25rem);
 }
 
 .manage-table-head-cell {

@@ -64,7 +64,7 @@ form {
 }
 
 #table-body {
-    height: calc(100% - 5rem);
+    height: calc(100% - 3rem);
     overflow: scroll;
 }
 

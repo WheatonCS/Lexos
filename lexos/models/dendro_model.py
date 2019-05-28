@@ -186,8 +186,8 @@ class DendrogramModel(BaseModel):
         # Update the size of the image.
         figure.layout.update(
             {
-                'width': 1100,
-                'height': 800,
+                'width': 1250,
+                'height': 610,
                 'hovermode': 'x'
             }
         )

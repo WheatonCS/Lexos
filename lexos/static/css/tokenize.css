@@ -20,7 +20,7 @@ form {
 /* Table top */
 #table-top {
     display: grid;
-    grid-template-columns: 1fr 3fr 3fr 1fr;
+    grid-template-columns: 35rem auto 10rem;
     height: 5rem;
     padding: 1rem;
 }
@@ -35,11 +35,6 @@ form {
     margin-right: 1rem;
 }
 
-#generate-button {
-    margin: 0;
-}
-
-#rows-per-page-option,
 #search-option {
     justify-self: center;
 }
@@ -125,6 +120,10 @@ form {
     grid-template-columns: 1fr 1fr;
     height: 5rem;
     padding: 1rem;
+}
+
+#table-bottom label {
+    margin-bottom: 0;
 }
 
 #navigation-buttons {

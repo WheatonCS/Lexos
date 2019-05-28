@@ -383,3 +383,9 @@ input[type=radio] {
 .circle-label > span:before {
     border-radius: 50%;
 }
+
+
+/* Dropdown selection */
+select {
+    border: none;
+}

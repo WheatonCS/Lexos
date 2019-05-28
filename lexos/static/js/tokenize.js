@@ -1,4 +1,6 @@
 let page_count = 1;
+let page_number;
+let previous_page_number = -1;
 let reset_page_number = false;
 
 $(function(){
@@ -6,29 +8,25 @@ $(function(){
     register_table_button_callbacks();
 })
 
-
 /**
  * Creates the table.
  */
 function create_table(){
 
-    // Clear the table and hide the table data
-    $("#table-head").empty();
-    $("#table-body").empty();
-    $("#table-data").css(
-        {"opacity": "0", "transition": "none"});
-
-    // Clamp the page number
-    let page_number_element = $("#page-number");
-    let page_number = parseInt(page_number_element.val());
-    page_number = Math.max(1, Math.min(page_count, page_number));
-
     // Reset the page number if necessary
     if(reset_page_number){
         page_number = 1;
         reset_page_number = false;
+        $("#page-number").val(page_number);
     }
-    page_number_element.val(page_number);
+
+    // Set the previous page number
+    previous_page_number = page_number;
+
+    // Clear the table and hide the table data
+    $("#table-head").empty();
+    $("#table-body").empty();
+    $("#table-data").css({"opacity": "0", "transition": "none"});
 
     // Send the request
     $.ajax({
@@ -100,18 +98,16 @@ function register_table_button_callbacks(){
     // Get the page number element
     let page_number_element = $("#page-number");
 
-    // Generate button
-    $("#generate-button").click(function(){
-        page_number_element.val(1);
-        create_table();
-    });
+    // Rows per page
+    $("input[type=radio][name=rows-per-page]").change(
+        function(){ create_table(true); });
 
     // Search bar
-    $("#search-input").on("input", function(){ reset_page_number = true; });
+    $("#search-input").on("input", function(){ create_table(true); });
 
-    // Rows per page
-    $("input[type=radio][name=rows-per-page]").change(function(){
-        reset_page_number = true;
+    // Page number input
+    $(page_number_element).on("input", function(){
+        if(parse_page_number()) create_table();
     });
 
     // Previous button
@@ -125,16 +121,30 @@ function register_table_button_callbacks(){
         page_number_element.val(parseInt(page_number_element.val())+1);
         create_table();
     });
+}
 
-    // First button
-    $("#first-button").click(function(){
-        page_number_element.val(1);
-        create_table();
-    });
+/**
+ * Parses the page number input.
+ * @returns {boolean}: Whether the page number was changed to a new valid value.
+ */
+function parse_page_number(){
 
-    // Last button
-    $("#last-button").click(function(){
-        page_number_element.val(page_count);
-        create_table();
-    });
+    // Parse the page number
+    let page_number_element = $("#page-number");
+    page_number = parseInt(page_number_element.val());
+
+    // Check that the input is valid
+    if(isNaN(page_number)){
+        page_number_element.val("");
+        return false;
+    }
+
+    // Clamp the page number
+    page_number = Math.max(1, Math.min(page_count, page_number));
+
+    // Synchronize the displayed value
+    page_number_element.val(page_number);
+
+    // Return whether the page number was updated
+    return page_number !== previous_page_number;
 }

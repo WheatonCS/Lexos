@@ -7,11 +7,6 @@ $("document").ready(function(){
     initialize_help_section();
     update_active_document_count();
 
-    // Add "scroll to top" button functionality
-    $("#scroll-to-top-button").click(function(){
-        $("#main-section").animate({scrollTop: 0}, "fast");
-    });
-
     // Fade the page content in
     $("main").css("opacity", "1");
 });

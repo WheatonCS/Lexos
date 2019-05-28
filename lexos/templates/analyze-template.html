@@ -4,7 +4,11 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Analyze Template CSS -->
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Analyze Template CSS and JS -->
+    <script type="text/javascript" src="static/js/analyze-template.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/analyze-template.css"/>
 
     {% block page_head %}
@@ -23,8 +27,8 @@
         <!-- Tokenize -->
         <div id="tokenize-section" class="section">
             <h3 class="title">Tokenize</h3>
-            <label class="circle-label"><input name="tokenType" type="radio" checked><span>By Tokens</span></label><br>
-            <label class="circle-label"><input name="tokenType" type="radio"><span>By Characters</span></label><br>
+            <label class="circle-label"><input name="tokenType" value="word" type="radio" checked><span>By Tokens</span></label><br>
+            <label class="circle-label"><input name="tokenType" value="char" type="radio"><span>By Characters</span></label><br>
             <h3>Grams</h3><label><input name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
         </div>
 
@@ -52,4 +56,6 @@
     <!-- Hidden elements -->
     <input name="csvdelimiter" value="comma" type="hidden">
     <input name="norm" value="l2" type="hidden">
+    <input id="active-file-ids" name="active_file_ids" type="hidden">
+    <div id="document-names-section"></div>
 {% endblock %}

@@ -1,4 +1,4 @@
-/* Main section */
+/* Main */
 #main-section {
     min-width: 115rem;
 }
@@ -13,9 +13,15 @@ form {
 }
 
 
-/* Options section */
+/* Options */
 #options-section {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1.3fr;
     grid-gap: 2rem;
+}
+
+
+/* Document names */
+#document-names-section {
+    display: none;
 }
