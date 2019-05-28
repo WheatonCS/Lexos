@@ -12,7 +12,7 @@ Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/SampleTest/ directory, you 
 should be able to produce a dendrogram as shown in ResultsToExpect/.
 
-####Sample Files:
+#### Sample Files:
 Ba Jin's Turbulent Stream Trilogy
 
 * (1) BaJin_TheFamily_1933.txt

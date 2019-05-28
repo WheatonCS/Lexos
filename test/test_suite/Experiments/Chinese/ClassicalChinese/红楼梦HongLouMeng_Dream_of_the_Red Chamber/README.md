@@ -66,7 +66,7 @@ Steps:
     Get Dendrogram
     Compare your result with the .png found in the ResultsToExpect/ directory.
 
-####(IF TESTING INDIVIDUAL CHAPTERS)
+#### (IF TESTING INDIVIDUAL CHAPTERS)
 
 Do not forget to SCRUB the individual chapter files (see above)
 
