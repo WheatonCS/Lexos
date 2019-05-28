@@ -1,8 +1,11 @@
+import d3 from './Lexos/lexos/static/node_modules/d3'
+
 $(function () {
   /**
    * updateMaxWordsOpt
+   * @returns {void}
    */
-  function updateMaxWordsOpt() {
+  function updateMaxWordsOpt () {
     if ($('#vizmaxwords').is(':checked')) {
       console.log('hi')
       $('#vizmaxwordsopt').show()
@@ -14,20 +17,36 @@ $(function () {
   $('#vizmaxwords').click(updateMaxWordsOpt)
 })
 
-function preprocess(dataset) { // Used to decode utf-8
-  wordData = dataset['children']
+/**
+ * preprocess
+ * @param {let} dataset is a dataset
+ * @returns {void}
+ */
+function preprocess (dataset) { // Used to decode utf-8
+  let wordData = dataset['children']
 
-  for (var i = 0; i < wordData.length; i++) {
+  for (let i = 0; i < wordData.length; i++) {
     // wordData[i].name = decodeURIComponent(escape(wordData[i].name));
     wordData[i].name = wordData[i].name
   }
 }
 
-// Return a flattened hierarchy containing all leaf nodes under the root.
-function classes(root) {
-  var classes = []
+// Return
+/**
+ * classes
+ * @param {let} root is the root node of the hierarchy
+ * @returns {{children: Array}} - a flattened hierarchy containing all leaf nodes under the root.
+ */
+function classes (root) {
+  let classes = []
 
-  function recurse(name, node) {
+  /**
+   * recurse
+   * @param {let} name is the name of the node
+   * @param {let} node is then node to recurse on
+   * @returns {void}
+   */
+  function recurse (name, node) {
     if (node.children) node.children.forEach(function (child) { recurse(node.name, child) })
     // Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
     else classes.push({ packageName: name, className: node.name, value: node.size })
@@ -39,7 +58,7 @@ function classes(root) {
 
 $(document).ready(function () {
   // Add tooltip to the DOM
-  var tooltip = d3.select('body').append('div')
+  d3.select('body').append('div')
     .attr('class', 'd3tooltip tooltip right')
     .style('opacity', 0)
   d3.select('.d3tooltip').attr('role', 'tooltip')
@@ -51,8 +70,7 @@ $(document).ready(function () {
       $('.minifilepreview:checked').trigger('click')
     }
   })
-
-  /*	var prev = -1; //initialize variable
+/* var prev = -1; //initialize variable
     $("#vizcreateoptions").selectable({
       filter: "label",  //Makes the label tags the elts that are selectable
       selecting: function(e , ui){
@@ -85,26 +103,26 @@ $(window).on('load', function () {
     $('#save').css('display', 'block')
 
     // Create the tooltip
-    var tooltip = d3.select('body').select('div.d3tooltip')
+    let tooltip = d3.select('body').select('div.d3tooltip')
 
     // Configure the graph
-    var diameter = $('#graphsize').val(),
-      format = d3.format(',d'),
-      color = d3.scale.category20c()
+    let diameter = $('#graphsize').val()
+    d3.format(',d')
+    let color = d3.scale.category20c()
 
-    var bubble = d3.layout.pack()
+    let bubble = d3.layout.pack()
       .sort(null)
       .size([diameter, diameter])
       .padding(4)
 
     // Append the SVG
-    var svg = d3.select('#viz').append('svg')
+    let svg = d3.select('#viz').append('svg')
       .attr('width', diameter)
       .attr('height', diameter)
       .attr('class', 'bubble')
 
     // Append the nodes
-    var node = svg.selectAll('.node')
+    let node = svg.selectAll('.node')
       .data(bubble.nodes(classes(dataset))
         .filter(function (d) { return !d.children }))
       .enter().append('g')
@@ -171,10 +189,10 @@ $(window).on('load', function () {
 
   // Save to PNG
   $('#png-save').on('click', function () {
-    var $container = $('#viz'),
-      // Canvg requires trimmed content
-      content = $container.html().trim(),
-      canvas = document.getElementById('svg-canvas')
+    let $container = $('#viz')
+    // Canvg requires trimmed content
+    let content = $container.html().trim()
+    let canvas = document.getElementById('svg-canvas')
 
     // Draw svg on canvas
     canvg(canvas, content)
@@ -188,7 +206,6 @@ $(window).on('load', function () {
 
   // Save to SVG
   $('#svg-save').on('click', function () {
-    console.log("made it here!")
     d3.select(this).attr('download', 'image.svg')
     d3.select(this).attr('href', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(
       svg.attr('version', '1.1')
