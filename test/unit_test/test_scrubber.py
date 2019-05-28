@@ -6,7 +6,8 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     handle_gutenberg, split_stop_keep_word_string, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
-    handle_file_and_manual_strings, remove_stopwords, keep_words
+    handle_file_and_manual_strings, remove_stopwords, keep_words, \
+    get_remove_digits_map, get_all_punctuation_map, get_remove_punctuation_map
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -580,12 +581,13 @@ class TestProcessTagReplaceOptions:
 
 
 # handle_tags
-#
-#
-# class TestGetAllPunctuationMap:
-#
-#     def test_get_all_punctuation_map(self):
-#         assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
+
+# If this test fails, check if special_chars_and_punct.py contains up-to-date
+# lists of unicode punctuation
+class TestGetAllPunctuationMap:
+
+    def test_get_all_punctuation_map(self):
+        assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
 
 
 class TestScrubSelectApos:
@@ -623,110 +625,112 @@ class TestConsolidateAmpers:
         assert consolidate_ampers(text="") == ""
 
 
-# class TestGetRemovePunctuationMap:
-#
-#     def test_get_remove_punct_map_no_store(self):
-#         no_punct_string = "Some text with no punctuation"
-#         apos_string = "There's \"a lot\" of words in this text here ye' " \
-#                       "isn''t 'ere a lot\"ve 'em?'!"
-#         hyphen_string = "-\u2E3B\u058AMany\u05BE\u2010 \uFE32 " \
-#                         "\u2E3Amany\u2E40 \uFE31many\u30A0\u3030 " \
-#                         "\u2011types\u2012 of\u2013 \u301C\u2014" \
-#                         " \u2015hyphens \uFE58\uFE63\uFF0D " \
-#                         "\u1400in\u1806\u2E17 here!\u2E1A!"
-#         amper_string = "We\uFF06 \u214B\u06FD have tons\uFE60 &\u0026 " \
-#                        "tons \U0001F675 of ampers here!\U0001F674!"
-#         mixed_string = "There's a lot o' punct. & \"chars\" \U0001F674 " \
-#                        "mixed-up things in here! How''s it go\u30A0\ning " \
-#                        "to go?"
-#
-#         map_no_apos = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#             if key != ord("'")
-#         }
-#         map_no_hyphen = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#             if key != ord("-")
-#         }
-#         map_no_amper = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#             if key != ord("&")
-#         }
-#         map_no_apos_hyphen = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("'") and key != ord("-")
-#         }
-#         map_no_apos_amper = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("'") and key != ord("&")
-#         }
-#         map_no_hyphen_amper = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("-") and key != ord("&")
-#         }
-#         map_no_all = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
-#             key != ord("'") and key != ord("-") and key != ord("&")
-#         }
-#         map_previewing = {
-#             key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
-#             if key != ord("…")
-#         }
-#
-#         assert get_remove_punctuation_map(
-#             no_punct_string, apos=False, hyphen=False, amper=False,
-#             previewing=False) == (no_punct_string,
-#                                   chars.ORD_PUNCT_SYMBOL_TO_NONE)
-#         assert get_remove_punctuation_map(
-#             apos_string, apos=True, hyphen=False, amper=False,
-#             previewing=False) == (
-#                    "There's \"a lot\" of words in this text "
-#                    "here ye isn''t ere a lot\"ve em?'!",
-#                    map_no_apos)
-#         assert get_remove_punctuation_map(
-#             hyphen_string, apos=False, hyphen=True, amper=False,
-#             previewing=False) == (
-#                    "---Many-- - -many- -many-- -types- of- -- "
-#                    "-hyphens --- -in-- here!-!", map_no_hyphen)
-#         assert get_remove_punctuation_map(
-#             amper_string, apos=False, hyphen=False, amper=True,
-#             previewing=False) == (
-#                    "We& && have tons& && tons & of ampers "
-#                    "here!&!", map_no_amper)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=True, hyphen=True, amper=False,
-#             previewing=False) == (
-#                    "There's a lot o punct. & \"chars\" "
-#                    "\U0001F674 mixed-up things in here! How''s "
-#                    "it go-\ning to go?", map_no_apos_hyphen)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=True, hyphen=False, amper=True,
-#             previewing=False) == (
-#                    "There's a lot o punct. & \"chars\" & "
-#                    "mixed-up things in here! How''s it "
-#                    "go\u30A0\ning to go?", map_no_apos_amper)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=False, hyphen=True, amper=True,
-#             previewing=False) == (
-#                    "There's a lot o' punct. & \"chars\" & "
-#                    "mixed-up things in here! How''s it "
-#                    "go-\ning to go?", map_no_hyphen_amper)
-#         assert get_remove_punctuation_map(
-#             mixed_string, apos=True, hyphen=True, amper=True,
-#             previewing=False) == (
-#                    "There's a lot o punct. & \"chars\" & "
-#                    "mixed-up things in here! How''s it "
-#                    "go-\ning to go?",
-#                    map_no_all)
-#         assert get_remove_punctuation_map(
-#             no_punct_string, apos=False, hyphen=False, amper=False,
-#             previewing=True) == (no_punct_string, map_previewing)
+class TestGetRemovePunctuationMap:
+
+    def test_get_remove_punct_map_no_store(self):
+        no_punct_string = "Some text with no punctuation"
+        apos_string = "There's \"a lot\" of words in this text here ye' " \
+                      "isn''t 'ere a lot\"ve 'em?'!"
+        hyphen_string = "-\u2E3B\u058AMany\u05BE\u2010 \uFE32 " \
+                        "\u2E3Amany\u2E40 \uFE31many\u30A0\u3030 " \
+                        "\u2011types\u2012 of\u2013 \u301C\u2014" \
+                        " \u2015hyphens \uFE58\uFE63\uFF0D " \
+                        "\u1400in\u1806\u2E17 here!\u2E1A!"
+        amper_string = "We\uFF06 \u214B\u06FD have tons\uFE60 &\u0026 " \
+                       "tons \U0001F675 of ampers here!\U0001F674!"
+        mixed_string = "There's a lot o' punct. & \"chars\" \U0001F674 " \
+                       "mixed-up things in here! How''s it go\u30A0\ning " \
+                       "to go?"
+
+        map_no_apos = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+            if key != ord("'")
+        }
+        map_no_hyphen = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+            if key != ord("-")
+        }
+        map_no_amper = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+            if key != ord("&")
+        }
+        map_no_apos_hyphen = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+            key != ord("'") and key != ord("-")
+        }
+        map_no_apos_amper = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+            key != ord("'") and key != ord("&")
+        }
+        map_no_hyphen_amper = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+            key != ord("-") and key != ord("&")
+        }
+        map_no_all = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE if
+            key != ord("'") and key != ord("-") and key != ord("&")
+        }
+        map_previewing = {
+            key: None for key in chars.ORD_PUNCT_SYMBOL_TO_NONE
+            if key != ord("…")
+        }
+
+        assert get_remove_punctuation_map(
+            no_punct_string, apos=False, hyphen=False, amper=False,
+            previewing=False) == (no_punct_string,
+                                  chars.ORD_PUNCT_SYMBOL_TO_NONE)
+        assert get_remove_punctuation_map(
+            apos_string, apos=True, hyphen=False, amper=False,
+            previewing=False) == (
+                   "There's \"a lot\" of words in this text "
+                   "here ye isn''t ere a lot\"ve em?'!",
+                   map_no_apos)
+        assert get_remove_punctuation_map(
+            hyphen_string, apos=False, hyphen=True, amper=False,
+            previewing=False) == (
+                   "---Many-- - -many- -many-- -types- of- -- "
+                   "-hyphens --- -in-- here!-!", map_no_hyphen)
+        assert get_remove_punctuation_map(
+            amper_string, apos=False, hyphen=False, amper=True,
+            previewing=False) == (
+                   "We& && have tons& && tons & of ampers "
+                   "here!&!", map_no_amper)
+        assert get_remove_punctuation_map(
+            mixed_string, apos=True, hyphen=True, amper=False,
+            previewing=False) == (
+                   "There's a lot o punct. & \"chars\" "
+                   "\U0001F674 mixed-up things in here! How''s "
+                   "it go-\ning to go?", map_no_apos_hyphen)
+        assert get_remove_punctuation_map(
+            mixed_string, apos=True, hyphen=False, amper=True,
+            previewing=False) == (
+                   "There's a lot o punct. & \"chars\" & "
+                   "mixed-up things in here! How''s it "
+                   "go\u30A0\ning to go?", map_no_apos_amper)
+        assert get_remove_punctuation_map(
+            mixed_string, apos=False, hyphen=True, amper=True,
+            previewing=False) == (
+                   "There's a lot o' punct. & \"chars\" & "
+                   "mixed-up things in here! How''s it "
+                   "go-\ning to go?", map_no_hyphen_amper)
+        assert get_remove_punctuation_map(
+            mixed_string, apos=True, hyphen=True, amper=True,
+            previewing=False) == (
+                   "There's a lot o punct. & \"chars\" & "
+                   "mixed-up things in here! How''s it "
+                   "go-\ning to go?",
+                   map_no_all)
+        assert get_remove_punctuation_map(
+            no_punct_string, apos=False, hyphen=False, amper=False,
+            previewing=True) == (no_punct_string, map_previewing)
 
 
-# class TestGetRemoveDigitsMap:
-#
-#     def test_get_remove_digits_no_store(self):
-#         assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
+# If this test fails, check if special_chars_and_punct.py contains up-to-date
+# lists of unicode digits
+class TestGetRemoveDigitsMap:
+
+    def test_get_remove_digits_no_store(self):
+        assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
 
 
 class TestHandleFileAndManualStrings:
