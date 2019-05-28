@@ -475,7 +475,6 @@ $(function () {
               }
               update()
             }))
-            //.on('dragend', generate))
         drag.attr('transform', function (d) { return 'rotate(' + (d + 90) + ')translate(-' + r + ')' })
         layout.rotate(function () {
           return scale(~~(Math.random() * count))
