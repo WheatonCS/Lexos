@@ -9,7 +9,6 @@ form {
     display: grid;
     grid-template-rows: 18rem auto;
     grid-gap: 2rem;
-    height: 100%;
 }
 
 
@@ -46,7 +45,38 @@ input[type=text] {
 }
 
 
-/* Graph */
-#graph-section {
-    padding-top: 1rem;
+/* Rolling window */
+#rolling-window-section {
+    height: calc(450px + 4rem);
+}
+
+#rolling-window-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 4rem;
+}
+
+#rolling-window-buttons {
+    justify-self: right;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+#generate-button {
+    margin-right: 2rem;
+}
+
+#rolling-window {
+    height: calc(100% - 4rem);
+    opacity: 1;
+}
+
+#rolling-window .centerer {
+    height: 100%;
+}
+
+
+/* Inputs */
+#download-input {
+    display: none;
 }

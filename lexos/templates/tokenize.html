@@ -1,51 +1,28 @@
-{% extends "base.html" %}
+{% extends "analyze-template.html" %}
 
 
 <!-- Head -->
-{% block head %}
+{% block page_head %}
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/tokenize.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/tokenize.css"/>
 {% endblock %}
 
 
-<!-- Content -->
-{% block content %}
+<!-- Options -->
+{% block options %}
 
-    <!-- Options -->
-    <div id="options-section">
-
-        <!-- Orientation -->
-        <div id="orientation-section" class="section">
-            <h3 class="title">Orientation (Applied On Download)</h3>
-            <label class="circle-label"><input name="csvorientation" type="radio" value="filecolumn" checked><span>Documents as Columns, Terms as Rows</span></label><br>
-            <label class="circle-label"><input name="csvorientation" type="radio" value="filerow"><span>Documents as Rows, Terms as Columns</span></label>
-        </div>
-
-        <!-- Tokenize -->
-        <div id="tokenize-section" class="section">
-            <h3 class="title">Tokenize</h3>
-            <label class="circle-label"><input name="tokenType" type="radio" checked><span>By Tokens</span></label><br>
-            <label class="circle-label"><input name="tokenType" type="radio"><span>By Characters</span></label><br>
-            <h3>Grams</h3><label><input name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
-        </div>
-
-        <!-- Normalize -->
-        <div id="normalize-section" class="section">
-            <h3 class="title">Normalize</h3>
-            <label class="circle-label"><input name="normalizeType" value="freq" type="radio" checked><span>Proportional</span></label><br>
-            <label class="circle-label"><input name="normalizeType" value="raw" type="radio"><span>Raw</span></label><br>
-            <label class="circle-label"><input name="normalizeType" value="tfidf" type="radio"><span>TF-IDF</span></label>
-        </div>
-
-        <!-- Cull -->
-        <div id="cull-section" class="section">
-            <h3 class="title">Cull</h3>
-            <label class="checkbox-label"><input name="mfwcheckbox" type="checkbox"><span>Use the top<input name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span></label>
-            <label class="checkbox-label"><input name="cullcheckbox" type="checkbox"><span>Must be in<input name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span></label>
-        </div>
+    <!-- Orientation -->
+    <div id="orientation-section" class="section">
+        <h3 class="title">Orientation (Applied On Download)</h3>
+        <label class="circle-label"><input name="csvorientation" type="radio" value="filecolumn" checked><span>Documents as Columns, Terms as Rows</span></label><br>
+        <label class="circle-label"><input name="csvorientation" type="radio" value="filerow"><span>Documents as Rows, Terms as Columns</span></label>
     </div>
+{% endblock %}
 
+
+<!-- Results -->
+{% block results %}
 
     <!-- Table -->
     <div id="table">
@@ -94,9 +71,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Hidden elements -->
-    <input name="csvdelimiter" value="comma" type="hidden">
-    <input name="norm" value="l2" type="hidden">
-
 {% endblock %}

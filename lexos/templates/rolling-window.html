@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 
+
 <!-- Head -->
 {% block head %}
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/rolling-window.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/rolling-window.css"/>
 {% endblock %}
+
 
 <!-- Content -->
 {% block content %}
@@ -24,7 +29,7 @@
         <!-- Search terms -->
         <div id="search-terms-section" class="section">
             <h3 class="title">Search Terms</h3>
-            <input name="" type="text" spellcheck="false" autocomplete="off"><br>
+            <input name="rollingsearchword" type="text" spellcheck="false" autocomplete="off"><br>
             <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span>Words</span></label><br>
             <label class="circle-label"><input name="inputtype" value="string" type="radio"><span>Strings</span></label><br>
             <label class="circle-label"><input name="inputtype" value="regex" type="radio"><span>Regex</span></label>
@@ -33,7 +38,7 @@
         <!-- Window -->
         <div id="window-section" class="section">
             <h3 class="title">Window</h3>
-            <input name="" type="text" spellcheck="false" autocomplete="off"><br>
+            <input name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off"><br>
             <label class="circle-label"><input name="windowtype" value="word" type="radio" checked><span>Words</span></label><br>
             <label class="circle-label"><input name="windowtype" value="letter" type="radio"><span>Characters</span></label><br>
             <label class="circle-label"><input name="windowtype" value="line" type="radio"><span>Lines</span></label>
@@ -48,10 +53,22 @@
         </div>
     </div>
 
-    <!-- Graph -->
-    <div id="graph-section" class="borderless-section">
-        <h3 class="selectable">Generate</h3>
-        <h3 class="selectable">Download</h3>
-        <div id="graph"></div>
+    <!-- Rolling Window -->
+    <div id="rolling-window-section" class="borderless-section">
+
+        <div id="rolling-window-top">
+            <h3 class="title">Rolling Window</h3>
+
+            <div id="rolling-window-buttons">
+                <h3 id="generate-button" class="selectable">Generate</h3>
+                <h3 id="download-button" class="selectable">Download</h3>
+            </div>
+        </div>
+
+        <div id="rolling-window"></div>
     </div>
+
+    <!-- Hidden elements -->
+    <input id="file-to-analyze" name="filetorollinganalyze" type="hidden">
+    <input id="download-input" type="submit">
 {% endblock %}

@@ -4,6 +4,9 @@
 <!-- Head -->
 {% block head %}
 
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/statistics.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/statistics.css"/>
@@ -22,27 +25,58 @@
             <!-- Tokenize -->
             <div id="tokenize-section" class="section">
                 <h3 class="title">Tokenize</h3>
-                <label class="circle-label"><input name="tokenType" type="radio" checked><span>By Tokens</span></label><br>
-                <label class="circle-label"><input name="tokenType" type="radio"><span>By Characters</span></label><br>
+                <label class="circle-label"><input name="tokenType" value="word" type="radio" checked><span>By Tokens</span></label><br>
+                <label class="circle-label"><input name="tokenType" value="char" type="radio"><span>By Characters</span></label><br>
                 <h3>Grams</h3><label><input name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
             </div>
 
-            <!-- Culling -->
-            <div id="culling-section" class="section">
-                <h3 class="title">Cut</h3>
+            <!-- Cull -->
+            <div id="cull-section" class="section">
+                <h3 class="title">Cull</h3>
                 <label class="checkbox-label"><input name="mfwcheckbox" type="checkbox"><span>Use the top<input name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span></label>
                 <label class="checkbox-label"><input name="cullcheckbox" type="checkbox"><span>Must be in<input name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span></label>
             </div>
         </div>
 
-        <!-- Corpus -->
-        <div id="corpus-section" class="borderless-section">
-            <h3 class="title">Corpus</h3>
+        <!-- Document sizes -->
+        <div id="document-sizes-section" class="borderless-section">
+            <h3 class="title">Document Sizes</h3>
+            <div id="box-plot"></div>
+        </div>
+
+        <!-- Corpus information section -->
+        <div id="right-column">
+
+            <!-- Corpus statistics -->
+            <div id="corpus-statistics-section" class="section">
+                <h3 class="title">Corpus Statistics</h3>
+                <div id="corpus-statistics"></div>
+            </div>
+
+            <!-- Standard error test -->
+            <div id="standard-error-test-section" class="section">
+                <h3 class="title">Standard Error Test</h3>
+                <div id="standard-error-test"></div>
+            </div>
+
+            <!-- Interquartile range test -->
+            <div id="interquartile-range-test-section" class="section">
+                <h3 class="title">Interquartile Range Test</h3>
+                <div id="interquartile-range-test"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Documents -->
+    <!-- Document statistics -->
     <div id="documents-section" class="borderless-section">
-        <h3 class="title">Documents</h3>
+        <h3 class="title">Document Statistics</h3>
+        <div id="table"></div>
     </div>
+
+    <!-- Hidden legacy elements -->
+    <input name="csvdelimiter" value="comma" type="hidden">
+    <input name="norm" value="l2" type="hidden">
+    <input name="normalizeType" value="raw" type="hidden">
+    <input id="active-file-ids" name="active_file_ids" type="hidden">
+    <div id="document-names-section"></div>
 {% endblock %}

@@ -24,7 +24,7 @@ from lexos.views.rolling_window import rolling_window_blueprint
 from lexos.views.scrub import scrub_blueprint
 from lexos.views.similarity_query import similarity_query_blueprint
 from lexos.views.statistics import statistics_blueprint
-from lexos.views.tokenizer import tokenizer_blueprint
+from lexos.views.tokenize import tokenize_blueprint
 from lexos.views.top_words import top_words_blueprint
 from lexos.views.upload import upload_blueprint
 from lexos.views.word_cloud import word_cloud_blueprint
@@ -36,7 +36,7 @@ def get_secret_key(file_name: str = "secret_key") -> bytes:
     :param: file_name: A string representing the secret key.
     :return: the bytes of the secret key
     """
-    
+
     file_full_name = os.path.join(app.static_folder, file_name)
 
     if os.path.isfile(file_full_name):
@@ -79,7 +79,7 @@ app.register_blueprint(rolling_window_blueprint)
 app.register_blueprint(scrub_blueprint)
 app.register_blueprint(similarity_query_blueprint)
 app.register_blueprint(statistics_blueprint)
-app.register_blueprint(tokenizer_blueprint)
+app.register_blueprint(tokenize_blueprint)
 app.register_blueprint(top_words_blueprint)
 app.register_blueprint(upload_blueprint)
 app.register_blueprint(word_cloud_blueprint)
@@ -94,7 +94,7 @@ def nl2br(eval_ctx, value):
     function temporarily disables Jinja2's autoescaping in the evaluation time
     context when it is returned to the template.
     """
-    
+
     _paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
     result = '\n\n'.join('<p>%s</p>' % p.replace('\n', Markup('<br/>\n'))
                          for p in _paragraph_re.split(escape(value)))
@@ -107,7 +107,7 @@ def nl2br(eval_ctx, value):
 @app.errorhandler(404)
 def page_not_found(_):
     """Custom 404 Page"""
-    
+
     app.logger.error("\nPage not found: {url}".format(url=request.path))
     return render_template("404.html")
 
@@ -119,7 +119,7 @@ def unhandled_exception(error):
     Send all the LexosException to the frontend.
     For all the other Exceptions, render the 500 error page.
     """
-    
+
     # If we want to send this backend error to the frontend
     if isinstance(error, LexosException):
         ret_data = {"lexosException": str(error)}

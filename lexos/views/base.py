@@ -5,6 +5,7 @@ from flask import session, redirect, url_for, render_template, send_file, \
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.models.filemanager_model import FileManagerModel
 
 base_blueprint = Blueprint("base", __name__)
 
@@ -37,6 +38,16 @@ def get_active_documents() -> str:
     else:
         redirect("no-session")
         return "0"
+
+
+@base_blueprint.route("/active-file-ids", methods=["GET"])
+def get_active_files() -> str:
+    """ Gets the active files.
+    :return: The active files.
+    """
+
+    file_manager = FileManagerModel().load_file_manager()
+    return json.dumps(file_manager.get_active_labels_with_id())
 
 
 @base_blueprint.route("/document-previews", methods=["GET"])

@@ -21,7 +21,7 @@ def multicloud() -> str:
         session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
     if "multicloudoptions" not in session:
         session["multicloudoptions"] = constants.DEFAULT_MULTICLOUD_OPTIONS
-        
+
     return render_template("multicloud.html")
 
 

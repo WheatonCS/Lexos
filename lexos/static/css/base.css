@@ -87,6 +87,8 @@ form {
     display: grid;
     justify-items: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .disabled {
@@ -97,6 +99,7 @@ form {
 .section,
 .borderless-section {
     background-color: #FFFFFF;
+    overflow: hidden;
 }
 
 .section {
@@ -144,12 +147,15 @@ form {
 /* Navbar dropdown menus */
 .navbar-menu {
     position: absolute;
-    top: 6.85rem;
+    top: 7rem;
+    transform: translate(-2rem, 0);
     display: inline-grid;
     row-gap: 1rem;
     padding: 1rem;
     white-space: nowrap;
     background-color: #FFFFFF;
+    border: 2rem solid #E3E3E3;
+    border-top: none;
 }
 
 

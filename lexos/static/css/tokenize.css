@@ -6,19 +6,14 @@
 
 /* Form */
 form {
-    display: grid;
     grid-template-rows: 15rem minmax(60rem, auto);
-    grid-gap: 2rem;
     height: calc(100vh - 15rem);
 }
 
 
-
 /* Options section */
 #options-section {
-    display: grid;
     grid-template-columns: 1.9fr .9fr 1fr 1.5fr;
-    grid-gap: 2rem;
 }
 
 
@@ -40,6 +35,10 @@ form {
     margin-right: 1rem;
 }
 
+#generate-button {
+    margin: 0;
+}
+
 #rows-per-page-option,
 #search-option {
     justify-self: center;
@@ -56,6 +55,7 @@ form {
 
 /* Table */
 #table {
+    height: calc(100vh - 32rem);
     background-color: #FFFFFF;
     min-width: 0;
 }

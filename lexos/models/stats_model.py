@@ -173,8 +173,9 @@ class StatsModel(BaseModel):
     def get_file_stats(self) -> str:
         """Get statistics of each file.
 
-        :return: A HTML table converted from a pandas data frame.
+        :return: A JSONified Pandas dataframe
         """
+
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -206,11 +207,8 @@ class StatsModel(BaseModel):
             file_stats[f"Total number of {self._token_type_str}"] / \
             file_stats[f"Distinct number of {self._token_type_str}"]
 
-        # Round all the values and return as a HTML string.
-        return file_stats.round(3).to_html(
-            index=False,
-            classes="table table-striped table-bordered"
-        )
+        # Round all the values and return as a JSON string.
+        return file_stats.round(3).to_json(orient="index")
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.
@@ -225,7 +223,6 @@ class StatsModel(BaseModel):
         scatter_plot = go.Scatter(
             x=[0 for _ in labels],
             y=self._active_doc_term_matrix.sum(1).values,
-            name="Corpus Scatter Plot",
             hoverinfo="text",
             mode="markers",
             text=labels
@@ -235,7 +232,6 @@ class StatsModel(BaseModel):
         box_plot = go.Box(
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
-            name="Corpus Box Plot",
             hoverinfo="y",
             marker=dict(color='rgb(10, 140, 200)')
         )
@@ -247,16 +243,23 @@ class StatsModel(BaseModel):
 
         # Hide useless information on x-axis and set up title.
         figure.layout.update(
-            title="Document Size Statistics of the Given Corpus",
+            autosize=True,
+            height=310,
+            showlegend=False,
+            margin=dict(
+                l=50,
+                r=50,
+                b=50,
+                t=50,
+                pad=4
+            ),
             xaxis=dict(
-                title="Scatter plot of Text Size",
                 showgrid=False,
                 zeroline=False,
                 showline=False,
                 showticklabels=False
             ),
             xaxis2=dict(
-                title="Box Plot of Counts",
                 showgrid=False,
                 zeroline=False,
                 showline=False,

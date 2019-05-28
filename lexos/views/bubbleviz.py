@@ -15,12 +15,12 @@ def viz():
 
     :return: The bubbleviz page.
     """
-    
+
     if "cloudoption" not in session:
         session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
     if "bubblevisoption" not in session:
         session["bubblevisoption"] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
-        
+
     return render_template("bubbleviz.html")
 
 

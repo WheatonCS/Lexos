@@ -31,16 +31,16 @@ function highlight_navbar_button(){
         case "manage": highlight_element($("#manage-button")); break;
 
         // Prepare
-        case "scrub": case "cut": case "tokenizer":
+        case "scrub": case "cut": case "tokenize":
             highlight_element($("#prepare-button")); break;
 
         // Visualize
-        case "wordcloud": case "multicloud": case "viz": case "rollingwindow":
+        case "word-cloud": case "multicloud": case "bubbleviz": case "rolling-window":
             highlight_element($("#visualize-button")); break;
 
         // Analyze
-        case "statistics": case "dendrogram": case "kmeans": case "bct_analysis":
-        case "similarity": case "topword": case "contentanalysis":
+        case "statistics": case "dendrogram": case "k-means": case "consensus-tree":
+        case "similarity": case "top-words": case "content-analysis":
             highlight_element($("#analyze-button"));
     }
 }

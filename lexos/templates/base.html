@@ -20,6 +20,7 @@
 
     <!-- Lexos JS and CSS -->
     <script type="text/javascript" src="static/js/base.js"></script>
+    <script type="text/javascript" src="static/js/utility.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
 
     {% block head %}{% endblock %}
@@ -68,12 +69,10 @@
     <!-- Footer -->
     <footer>
             <!-- Left footer -->
-            <h3 id="left-footer">Lexos 3.2.0</h3>
+            <div id="left-footer"><h3>Active Documents: </h3><h3 id="active-document-count">0</h3></div>
 
             <!-- Right footer -->
             <div id="right-footer">
-                <div><h3>Active Documents: </h3><h3 id="active-document-count">0</h3></div>
-                <h3>|</h3>
                 <h3 id="help-button" class="selectable">Show Help</h3>
                 <h3>|</h3>
                 <h3 id="scroll-to-top-button" class="selectable">Top</h3>

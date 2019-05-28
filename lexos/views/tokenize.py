@@ -10,7 +10,7 @@ from typing import Dict, List
 from lexos.managers.file_manager import FileManager
 
 
-tokenizer_blueprint = Blueprint("tokenizer", __name__)
+tokenize_blueprint = Blueprint("tokenize", __name__)
 
 
 def get_session_dtm_options(default_orientation: bool =
@@ -49,7 +49,7 @@ def get_dtm_matrix(dtm_options: Dict[str, object],
     return dtm
 
 
-@tokenizer_blueprint.route("/tokenize", methods=["GET"])
+@tokenize_blueprint.route("/tokenize", methods=["GET"])
 def tokenizer():
     """Handles the functionality on the tokenizer page.
     :return: A response to the request.
@@ -65,7 +65,7 @@ def tokenizer():
     return render_template("tokenize.html")
 
 
-@tokenizer_blueprint.route("/tokenize/get-table", methods=["POST"])
+@tokenize_blueprint.route("/tokenize/get-table", methods=["POST"])
 def get_table():
     """Gets the requested table data.
     :return: The requested table data.
@@ -94,11 +94,9 @@ def get_table():
     dtm = dtm[1:]
 
     # Apply the search term if there is one
-    print(search_term)
     if search_term:
         dtm = [r for r in dtm if search_term in r[0].lower()]
     dtm_size = len(dtm)
-    print(dtm)
 
     # Apply ordering
     dtm.sort(key=lambda t: t[column_to_order_by], reverse=descending_order)
@@ -123,7 +121,7 @@ def get_table():
     return json.dumps({"pages": pages, "head": head, "data": selection})
 
 
-@tokenizer_blueprint.route("/tokenize/download", methods=["GET"])
+@tokenize_blueprint.route("/tokenize/download", methods=["GET"])
 def download():
     """Sends the DTM to the user.
     :return: The DTM download.
@@ -137,4 +135,3 @@ def download():
         save_path,
         attachment_filename="lexos-dtm"+file_extension,
         as_attachment=True)
-
