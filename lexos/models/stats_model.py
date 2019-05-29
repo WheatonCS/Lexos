@@ -259,10 +259,10 @@ class StatsModel(BaseModel):
                 showline=True
             ),
             xaxis2=dict(
-                title="Box Plot of Counts",
+                title="Box Plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=False,
+                showline=True,
                 showticklabels=False
             ),
             yaxis2=dict(
