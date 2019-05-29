@@ -37,6 +37,7 @@ matrix:
         - ./node_modules/.bin/eslint ./js/scripts_similarity.js
         - ./node_modules/.bin/eslint ./js/scripts_dendrogram.js
         - ./node_modules/.bin/eslint ./js/scripts_rwanalysis.js
+        - ./node_modules/.bin/eslint ./js/scripts_tokenizer.js
         - ./node_modules/.bin/eslint ./js/scripts_upload.js
         - ./node_modules/.bin/eslint ./js/scripts_manage.js
         - ./node_modules/.bin/eslint ./js/scripts_kmeans.js
