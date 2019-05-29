@@ -175,53 +175,14 @@ class BCTModel(BaseModel):
             cutoff=self._bct_option.cutoff
         )
 
-    def _get_bootstrap_consensus_tree_plot(self) -> plt:
-        # Draw the consensus tree as a MatPlotLib object.
-        Phylo.draw(
-            self._get_bootstrap_consensus_tree(),
-            do_show=False,
-            branch_labels=lambda clade: "{0:.4f}\n".format(clade.branch_length)
-            if clade.branch_length is not None else ""
-        )
-
-        # Set labels for the plot.
-        plt.xlabel("Branch Length")
-        plt.ylabel("Documents")
-
-        # Hide the two unused border.
-        plt.gca().spines["top"].set_visible(False)
-        plt.gca().spines["right"].set_visible(False)
-
-        # Extend x-axis to the right to fit longer labels.
-        x_left, x_right, y_low, y_high = plt.axis()
-        plt.axis((x_left, x_right * 1.25, y_low, y_high))
-
-        # Set graph size, title and tight layout.
-        plt.gcf().set_size_inches(
-            w=9.5,
-            h=(len(self._id_temp_label_map) * 0.3 + 1)
-        )
-        plt.title("Bootstrap Consensus Tree Result")
-        plt.gcf().tight_layout()
-
-        # Change line spacing
-        for text in plt.gca().texts:
-            text.set_linespacing(spacing=0.1)
-
-        return plt
-
-    def get_bootstrap_consensus_tree_plot_decoded(self) -> str:
+    def get_newick_consensus_tree(self) -> str:
         """Render the bootstrap consensus tree result and save it to images.
 
         :return: The rendered BCT result file name.
         """
         # Get the matplotlib plot for bootstrap consensus tree result.
-        bct_plot = self._get_bootstrap_consensus_tree_plot()
+        consensus_tree_holder = StringIO()
+        consensus_tree = self._get_bootstrap_consensus_tree()
+        Phylo.write(consensus_tree, consensus_tree_holder, format="newick")
 
-        # Create a bytes IO image holder and save figure to it.
-        image_holder = BytesIO()
-        bct_plot.savefig(image_holder)
-        image_holder.seek(0)
-
-        # Decode image to utf-8 string.
-        return base64.b64encode(b''.join(image_holder)).decode('utf-8')
+        return consensus_tree_holder.getvalue()

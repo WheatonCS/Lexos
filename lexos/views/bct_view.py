@@ -60,4 +60,4 @@ def get_bct_result():
     session_manager.cache_bct_option()
     session_manager.cache_analysis_option()
     # Get the bootstrap consensus tree result.
-    return BCTModel().get_bootstrap_consensus_tree_plot_decoded()
+    return BCTModel().get_newick_consensus_tree()
