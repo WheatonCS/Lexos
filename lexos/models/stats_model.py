@@ -223,7 +223,7 @@ class StatsModel(BaseModel):
 
         # Set up the points.
         scatter_plot = go.Scatter(
-            x=[0 for _ in labels],
+            x=[_ for _ in labels],
             y=self._active_doc_term_matrix.sum(1).values,
             name="Corpus Scatter Plot",
             hoverinfo="text",
@@ -241,7 +241,7 @@ class StatsModel(BaseModel):
         )
 
         # Create a figure with two subplots and fill the figure.
-        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=True)
+        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=False)
         figure.append_trace(trace=scatter_plot, row=1, col=1)
         figure.append_trace(trace=box_plot, row=1, col=2)
 
@@ -252,8 +252,11 @@ class StatsModel(BaseModel):
                 title="Scatter plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=False,
+                showline=True,
                 showticklabels=False
+            ),
+            yaxis=dict(
+                showline=True
             ),
             xaxis2=dict(
                 title="Box Plot of Counts",
@@ -261,6 +264,9 @@ class StatsModel(BaseModel):
                 zeroline=False,
                 showline=False,
                 showticklabels=False
+            ),
+            yaxis2=dict(
+                showline=True
             ),
             hovermode="closest"
         )
