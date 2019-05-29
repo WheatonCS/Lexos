@@ -584,11 +584,17 @@ def get_remove_whitespace_map(spaces: bool,
 
     remove_whitespace_map = {}
     if spaces:
-        remove_whitespace_map.update({ord(' '): None})
+        remove_whitespace_map.update({32: None, 160: None, 5760: None,
+                                      8192: None, 8193: None, 8194: None,
+                                      8195: None, 8196: None, 8197: None,
+                                      8198: None, 8199: None, 8200: None,
+                                      8201: None, 8202: None, 8239: None,
+                                      8287: None, 12288: None})
     if tabs:
-        remove_whitespace_map.update({ord('\t'): None})
+        remove_whitespace_map.update({9: None})
     if new_lines:
-        remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
+        remove_whitespace_map.update({10: None, 11: None, 12: None, 13: None,
+                                      133: None, 8232: None, 8233: None})
 
     return remove_whitespace_map
 
