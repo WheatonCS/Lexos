@@ -275,11 +275,18 @@ def get_all_punctuation_map() -> Dict[int, type(None)]:
 
     :return: The dictionary, with the ord() of each char mapped to None.
     """
+    try:
+        punctuation_map = load_character_deletion_map(
+            constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
 
-    punctuation_map = dict.fromkeys(
-        [i for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('P')
-         or unicodedata.category(chr(i)).startswith('S')])
+    except FileNotFoundError:
+        punctuation_map = dict.fromkeys(
+            [i for i in range(sys.maxunicode)
+             if unicodedata.category(chr(i)).startswith('P')
+             or unicodedata.category(chr(i)).startswith('S')])
+        save_character_deletion_map(
+            punctuation_map, constants.CACHE_FOLDER,
+            constants.PUNCTUATION_MAP_FILENAME)
 
     return punctuation_map
 
@@ -327,10 +334,24 @@ def consolidate_hyphens(text: str) -> str:
     # Hex 002D is the minus symbol (-), which all hyphens will be converted to
     chosen_hyphen_value = '\u002D'
 
-    hyphen_values = dict.fromkeys(
-        [chr(i) for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('Pd')
-         and chr(i) != chosen_hyphen_value])
+    # hyphen_values = {'֊': None, '־': None, '᐀': None, '᠆': None,
+    #                  '‐': None, '‑': None, '‒': None, '–': None,
+    #                  '—': None, '―': None, '⸗': None, '⸚': None,
+    #                  '⸺': None, '⸻': None, '⹀': None, '〜':
+    #                      None, '〰': None, '゠': None, '︱': None,
+    #                  '︲': None, '﹘': None, '﹣': None, '－': None}
+    try:
+        hyphen_values = load_character_deletion_map(
+            constants.CACHE_FOLDER, constants.HYPHEN_FILENAME)
+
+    except FileNotFoundError:
+        hyphen_values = dict.fromkeys(
+            [chr(i) for i in range(sys.maxunicode)
+             if unicodedata.category(chr(i)).startswith('Pd')
+             and chr(i) != chosen_hyphen_value])
+        save_character_deletion_map(
+            hyphen_values, constants.CACHE_FOLDER,
+            constants.HYPHEN_FILENAME)
 
     # convert all those types of hyphens into the ascii minus
     for value in hyphen_values:
@@ -348,16 +369,25 @@ def consolidate_ampers(text: str) -> str:
 
     chosen_amper_value = "\u0026"
 
-    amper_values = dict.fromkeys(
-        [chr(i) for i in range(sys.maxunicode)
-         # Avoid unnamed control chars throwing ValueErrors
-         if (unicodedata.category(chr(i)).startswith('P')
-             or unicodedata.category(chr(i)).startswith('S'))
-         and re.search(
-            r" ampersand|ampersand ", unicodedata.name(chr(i)),
-            re.IGNORECASE) is not None
-         and chr(i) != chosen_amper_value]
-    )
+    # Map of digits to be removed
+    try:
+        amper_values = load_character_deletion_map(
+            constants.CACHE_FOLDER, constants.AMPERSAND_FILENAME)
+
+    except FileNotFoundError:
+        amper_values = dict.fromkeys(
+            [chr(i) for i in range(sys.maxunicode)
+             # Avoid unnamed control chars throwing ValueErrors
+             if (unicodedata.category(chr(i)).startswith('P')
+                 or unicodedata.category(chr(i)).startswith('S'))
+             and re.search(
+                r" ampersand|ampersand ", unicodedata.name(chr(i)),
+                re.IGNORECASE) is not None
+             and chr(i) != chosen_amper_value]
+        )
+        save_character_deletion_map(
+            amper_values, constants.CACHE_FOLDER,
+            constants.AMPERSAND_FILENAME)
 
     # Change all ampersands to one type of ampersand
     for value in amper_values:
