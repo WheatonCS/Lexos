@@ -214,8 +214,8 @@ def set_class_selected():
     file_manager = utility.load_file_manager()
     rows = request.json[0]
     new_class_label = request.json[1]
-    for fileID in list(rows):
-        file_manager.files[int(fileID)].set_class_label(new_class_label)
+    for file_id in list(rows):
+        file_manager.files[int(file_id)].set_class_label(new_class_label)
     utility.save_file_manager(file_manager)
     return json.dumps(rows)
 

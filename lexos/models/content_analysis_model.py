@@ -1,7 +1,7 @@
 """This is the content analysis model which determines tone of texts."""
+import random
 from copy import deepcopy
 from typing import Optional
-import random
 
 import pandas as pd
 
@@ -44,6 +44,7 @@ class ContentAnalysisModel(object):
         :param file_name: file name
         :param label: file label
         """
+        content = content.strip()
         total_word_counts = len(str(content).split(" "))
         self._corpus.append(File(content=content,
                                  file_name=file_name,
@@ -262,9 +263,9 @@ class ContentAnalysisModel(object):
         for index, (file, formula, score, counters) in enumerate(
             zip(self._corpus, self._formulas,
                 self._scores, self._counters)):
-            column = pd.Series([file.label] + counters + [formula] +
-                               [file.total_word_count] + [score],
-                               index=columns)
+            column = pd.Series(
+                [file.label] + counters + [formula] + [file.total_word_count]
+                + [score], index=columns)
             df = df.append(column, ignore_index=True)
         return df
 

@@ -53,17 +53,17 @@ def word_cloud():
         chosen_doc_ids = [int(x) for x in request.form.getlist('segmentlist')]
         active_docs = []
         if chosen_doc_ids:
-            for ID in chosen_doc_ids:
-                active_docs.append(ID)
+            for file_id in chosen_doc_ids:
+                active_docs.append(file_id)
         else:
-            for lFile in file_manager.files.values():
-                if lFile.active:
-                    active_docs.append(lFile.id)
+            for l_file in file_manager.files.values():
+                if l_file.active:
+                    active_docs.append(l_file.id)
         # Get the contents of all selected/active docs
         all_contents = []
-        for ID in active_docs:
-            if file_manager.files[ID].active:
-                content = file_manager.files[ID].load_contents()
+        for file_id in active_docs:
+            if file_manager.files[file_id].active:
+                content = file_manager.files[file_id].load_contents()
                 all_contents.append(content)
         # Generate a DTM
         dtm, vocab = utility.simple_vectorizer(

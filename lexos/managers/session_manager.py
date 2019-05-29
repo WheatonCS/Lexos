@@ -44,14 +44,13 @@ def init():
     while not folder_created:  # Continue to try to make
         try:
             session['id'] = ''.join(
-                random.choice(
-                    string.ascii_uppercase +
-                    string.digits) for _ in range(30))
+                random.choice(string.ascii_uppercase + string.digits)
+                for _ in range(30)
+            )
 
             print('Attempting new id of', session['id'], '...', end=' ')
             os.makedirs(session_folder())
             folder_created = True
-            print('Good.')
 
         # This except block will be hit if and only if
         # the os.makedirs line throws an exception
@@ -134,10 +133,10 @@ def cache_alteration_files():
     All alteration files (uploaded on the scrub page) are from request.form.
     """
 
-    for uploadFile in request.files:
-        file_name = request.files[uploadFile].filename
+    for upload_file in request.files:
+        file_name = request.files[upload_file].filename
         if file_name != '':
-            session['scrubbingoptions']['optuploadnames'][uploadFile] = \
+            session['scrubbingoptions']['optuploadnames'][upload_file] = \
                 file_name
 
 
@@ -175,27 +174,6 @@ def cache_cutting_options():
     if "cutByMS" in request.form:
         session['cuttingoptions']['cutType'] = "milestone"
         session['cuttingoptions']['cutValue'] = request.form['MScutWord']
-
-
-def cache_csv_options():
-    """Stores csv options from request.form in session cookie object."""
-
-    if request.json:
-        session['csvoptions'] = {
-            'csvorientation': request.json['csvorientation'],
-            'csvdelimiter': request.json['csvdelimiter']}
-
-        if 'onlygreyword' in request.json:
-            session['csvoptions'].update(
-                {'onlygreyword': request.json['onlygreyword']})
-    else:
-        session['csvoptions'] = {
-            'csvorientation': request.form['csvorientation'],
-            'csvdelimiter': request.form['csvdelimiter']}
-
-        if 'onlygreyword' in request.form:
-            session['csvoptions'].update(
-                {'onlygreyword': request.form['onlygreyword']})
 
 
 def cache_analysis_option():

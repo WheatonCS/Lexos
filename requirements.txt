@@ -1,10 +1,16 @@
+lxml
+flask
+numpy
 scipy
+pandas
 plotly
 gensim
+werkzeug
 chardet
 natsort
 requests
 biopython
-scikit-bio
 colorlover
+matplotlib
+scikit-learn
 beautifulsoup4
