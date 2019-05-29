@@ -587,7 +587,23 @@ class TestProcessTagReplaceOptions:
 class TestGetAllPunctuationMap:
 
     def test_get_all_punctuation_map(self):
-        assert get_all_punctuation_map() == chars.ORD_PUNCT_SYMBOL_TO_NONE
+        all_punct_map = get_all_punctuation_map()
+        for i in range(33, 48):
+            assert i in all_punct_map
+        for i in range(48, 58):
+            assert i not in all_punct_map
+        for i in range(58, 65):
+            assert i in all_punct_map
+        for i in range(65, 91):
+            assert i not in all_punct_map
+        assert 6639 in all_punct_map
+        assert 6656 not in all_punct_map
+        assert 8707 in all_punct_map
+        assert 10008 in all_punct_map
+        assert 13312 not in all_punct_map
+        assert 19904 in all_punct_map
+        assert 129075 in all_punct_map
+        assert 130000 not in all_punct_map
 
 
 class TestScrubSelectApos:
@@ -730,7 +746,21 @@ class TestGetRemovePunctuationMap:
 class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_store(self):
-        assert get_remove_digits_map() == chars.ORD_DIGIT_TO_NONE
+        remove_digits_map = get_remove_digits_map()
+        for i in range(0, 48):
+            assert i not in remove_digits_map
+        for i in range(48, 58):
+            assert i in remove_digits_map
+        for i in range(58, 123):
+            assert i not in remove_digits_map
+        assert 6995 in remove_digits_map
+        assert 7002 not in remove_digits_map
+        assert 43219 in remove_digits_map
+        assert 43230 not in remove_digits_map
+        assert 68088 in remove_digits_map
+        assert 68100 not in remove_digits_map
+        assert 119533 in remove_digits_map
+        assert 119600 not in remove_digits_map
 
 
 class TestHandleFileAndManualStrings:
