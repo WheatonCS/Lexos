@@ -199,10 +199,6 @@ DEFAULT_CUT_OPTIONS = {
     'cutType': 'words', 'cutValue': '', 'cutOverlap': '0', 'cutLastProp': '50'
 }
 
-DEFAULT_CSV_OPTIONS = {
-    'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
-}
-
 DEFAULT_ROLLINGWINDOW_OPTIONS = {
     'rollinghasmilestone': False,
     'showDots': False,
