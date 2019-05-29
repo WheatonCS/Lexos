@@ -44,12 +44,10 @@ class TestBCTModel:
             metric=self.test_options.front_end_option.dist_metric,
             method=self.test_options.front_end_option.linkage_method
         )
-        newick = self.BCT_model.linkage_to_newick(
+        assert self.BCT_model.linkage_to_newick(
             matrix=linkage_matrix,
             labels=["F1.txt", "F2.txt"]
-        )
-        print("DONE")
-
+        ) == "(F2.txt:0.0,F1.txt:0.0);"
 
     def test_consensus_tree(self):
         assert self.consensus_tree_holder.getvalue() in [

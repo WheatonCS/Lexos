@@ -80,7 +80,7 @@ class BCTModel(BaseModel):
                                newick: str,
                                parent_dist: float,
                                leaf_names: List[str]) -> str:
-            """
+            """Recursively build the newick tree.
 
             :param node: The tree node currently being converted to.
             :param newick: The current newick representation of the tree.
