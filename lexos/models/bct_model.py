@@ -4,11 +4,10 @@ import base64
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from Bio import Phylo
 from io import StringIO, BytesIO
-from skbio import TreeNode
-from skbio.tree import majority_rule
-from scipy.cluster.hierarchy import linkage
+from Bio import Phylo
+from Bio.Phylo.Consensus import majority_consensus
+from scipy.cluster.hierarchy import linkage, to_tree, ClusterNode
 from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
@@ -65,9 +64,59 @@ class BCTModel(BaseModel):
             if self._test_front_end_option is not None \
             else BCTReceiver().options_from_front_end()
 
+    @staticmethod
+    def linkage_to_newick(matrix: np.ndarray, labels: List[str]):
+        """Convert a linkage matrix to a newick formatted tree.
+
+        :param matrix: The linkage matrix.
+        :param labels: Names of the tree node.
+        :return: The newick representation of the linkage matrix.
+        """
+        # Convert the linkage matrix to a ClusterNode object.
+        tree = to_tree(matrix, False)
+
+        # Define the helper recursive function to build the newick tree.
+        def _build_newick_tree(node: ClusterNode,
+                               newick: str,
+                               parent_dist: float,
+                               leaf_names: List[str]) -> str:
+            """
+
+            :param node:
+            :param newick:
+            :param parent_dist:
+            :param leaf_names:
+            :return:
+            """
+            # If node is leaf, enclose.
+            if node.is_leaf():
+                return f"{leaf_names[node.id]}" \
+                    f":{(parent_dist - node.dist) / 2}{newick}"
+            else:
+                # Write the distance.
+                newick = f"):{(parent_dist - node.dist) / 2}{newick}" \
+                    if len(newick) > 0 else ");"
+                # Recursive call to expand the tree.
+                newick = _build_newick_tree(
+                    newick=newick,
+                    node=node.get_left(),
+                    parent_dist=node.dist,
+                    leaf_names=leaf_names)
+                newick = _build_newick_tree(
+                    newick=f",{newick}",
+                    node=node.get_right(),
+                    parent_dist=node.dist,
+                    leaf_names=leaf_names)
+                # Enclose the tree at the beginning.
+                return f"({newick}"
+
+        # Trigger the recursive function.
+        return _build_newick_tree(
+            node=tree, newick="", parent_dist=tree.dist, leaf_names=labels)
+
     def _get_newick_tree(self,
                          labels: List[str],
-                         sample_dtm: pd.DataFrame) -> TreeNode:
+                         sample_dtm: pd.DataFrame) -> str:
         """Get newick tree based on a subset of the DTM.
 
         :param labels: All file names from the DTM.
@@ -82,24 +131,23 @@ class BCTModel(BaseModel):
             method=self._bct_option.linkage_method
         )
 
-        # Convert linkage matrix to a tree node and return it.
-        return TreeNode.from_linkage_matrix(
-            linkage_matrix=linkage_matrix,
-            id_list=labels
-        )
+        newick = self.linkage_to_newick(matrix=linkage_matrix, labels=labels)
 
-    def _get_bootstrap_trees(self) -> List[TreeNode]:
+        # Convert linkage matrix to a tree node and return it.
+        return Phylo.read(StringIO(newick), format="newick")
+
+    def _get_bootstrap_trees(self) -> List[str]:
         """Do bootstrap on the DTM to get a list of newick trees.
 
         :return: A list of newick formatted tree where each tree was based on
                  a 80% subset of the complete DTM.
         """
+        # Save the DTM to avoid multiple calls.
+        doc_term_matrix = self._doc_term_matrix
+
         # Get file names, since tree nodes need labels.
         labels = [self._id_temp_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
-
-        # Save the DTM to avoid multiple calls.
-        doc_term_matrix = self._doc_term_matrix
 
         # The bootstrap process to get all the trees.
         return [
@@ -121,30 +169,21 @@ class BCTModel(BaseModel):
         :return: The consensus tree of the list of newick trees.
         """
         # Create the StringIO newick tree holder.
-        newick_tree = StringIO()
-
-        # Find the consensus tree among all trees.
-        consensus_tree = majority_rule(
+        return majority_consensus(
             trees=self._get_bootstrap_trees(),
             cutoff=self._bct_option.cutoff
         )
 
-        # Grab the tree from the returned list and convert it to newick format.
-        consensus_tree[0].write(newick_tree)
-        consensus_tree_str = newick_tree.getvalue()
-
-        # Return consensus tree as a ETE tree object.
-        return Phylo.read(
-            StringIO(consensus_tree_str),
-            format="newick"
-        )
-
     def _get_bootstrap_consensus_tree_plot(self) -> plt:
-        # Draw the consensus tree as a matplotlib object.
+        # Draw the consensus tree as a MatPlotLib object.
+        consensus_tree_holder = StringIO()
+        consensus_tree = self._get_bootstrap_consensus_tree()
+        Phylo.write(consensus_tree, consensus_tree_holder, format="newick")
+        print(consensus_tree_holder.getvalue())
+
         Phylo.draw(
             self._get_bootstrap_consensus_tree(),
             do_show=False,
-            show_confidence=True,
             branch_labels=lambda clade: "{0:.4f}\n".format(clade.branch_length)
             if clade.branch_length is not None else ""
         )
