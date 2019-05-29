@@ -18,7 +18,7 @@ plt.switch_backend("Agg")
 
 
 class BCTTestOptions(NamedTuple):
-    """A typed tuple to hold test options."""
+    """A named tuple to hold test options."""
 
     doc_term_matrix: pd.DataFrame
     front_end_option: BCTOption
@@ -82,10 +82,10 @@ class BCTModel(BaseModel):
                                leaf_names: List[str]) -> str:
             """
 
-            :param node:
-            :param newick:
-            :param parent_dist:
-            :param leaf_names:
+            :param node: The tree node currently being converted to.
+            :param newick: The current newick representation of the tree.
+            :param parent_dist: The distance to parent node.
+            :param leaf_names: Names of the tree node.
             :return:
             """
             # If node is leaf, enclose.
@@ -131,6 +131,7 @@ class BCTModel(BaseModel):
             method=self._bct_option.linkage_method
         )
 
+        # Get the newick representation of the tree.
         newick = self.linkage_to_newick(matrix=linkage_matrix, labels=labels)
 
         # Convert linkage matrix to a tree node and return it.
@@ -168,7 +169,7 @@ class BCTModel(BaseModel):
 
         :return: The consensus tree of the list of newick trees.
         """
-        # Create the StringIO newick tree holder.
+        # Find the consensus of all the newick trees.
         return majority_consensus(
             trees=self._get_bootstrap_trees(),
             cutoff=self._bct_option.cutoff
@@ -176,11 +177,6 @@ class BCTModel(BaseModel):
 
     def _get_bootstrap_consensus_tree_plot(self) -> plt:
         # Draw the consensus tree as a MatPlotLib object.
-        consensus_tree_holder = StringIO()
-        consensus_tree = self._get_bootstrap_consensus_tree()
-        Phylo.write(consensus_tree, consensus_tree_holder, format="newick")
-        print(consensus_tree_holder.getvalue())
-
         Phylo.draw(
             self._get_bootstrap_consensus_tree(),
             do_show=False,
