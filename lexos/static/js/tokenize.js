@@ -1,7 +1,6 @@
 let page_count = 1;
-let page_number;
+let page_number = 1;
 let previous_page_number = -1;
-let reset_page_number = false;
 
 $(function(){
     create_table();
@@ -9,26 +8,29 @@ $(function(){
 })
 
 /**
- * Creates the table.
+ * Sends the request for the table data and creates the table.
+ * @param {boolean} page_change: Whether the request is a page change.
  */
-function create_table(){
+function create_table(page_change = true){
 
-    // Reset the page number if necessary
-    if(reset_page_number){
-        page_number = 1;
-        reset_page_number = false;
-        $("#page-number").val(page_number);
-    }
+    // Reset the page number if the changed option was not the page number
+    if(!page_change) page_number = 1;
 
-    // Set the previous page number
+    // Clamp the page number between 1 and the last page
+    page_number = Math.max(1, Math.min(page_count, page_number));
+
+    // Update the page number element
+    $("#page-number").val(page_number);
+
+    // Return if the page number has not changed and the changed option
+    // was the page number
+    if(page_change && (page_number === previous_page_number)) return;
     previous_page_number = page_number;
 
-    // Clear the table and hide the table data
-    $("#table-head").empty();
-    $("#table-body").empty();
-    $("#table-data").css({"opacity": "0", "transition": "none"});
+    // Display the loading overlay
+    add_loading_overlay("#table-data");
 
-    // Send the request
+    // Send the request for the table data
     $.ajax({
         type: "POST",
         url: "tokenize/get-table",
@@ -41,34 +43,34 @@ function create_table(){
 
 /**
  * Creates the table.
- *
  * @param {string} response: The response from the "tokenize/get-table" request.
  */
 function get_table_callback(response){
     response = JSON.parse(response);
-    let table_body = $("#table-body");
 
     // Set the page count
     page_count = parseInt(response.pages);
     $("#page-count").text(page_count);
 
-    // If there are no rows, display "no data" text
+    // If there are no rows, display "No Data" text
     if(response.data.length === 0){
-
-        // Create the "no data" text
-        $(`
-            <div id="no-data-text-container" class="centerer">
-                <h3 id="no-data-text">No Data</h3>
-            </div>
-        `).appendTo(table_body);
-
-        // Fade in the table data
-        $("#table-data").css({"transition": "opacity .2s", "opacity": "1"});
-
+        add_text_overlay("#table-data", "No Data");
+        fade_in("#table-data");
         return;
     }
 
-    // Otherwise, create the table head
+    // Otherwise, clear any existing content in the table data element
+    let table_data_element = $("#table-data").empty();
+
+    // Otherwise, create the table layout
+    $(`
+        <div id="table-data-grid">
+            <div id="table-head"></div>
+            <div id="table-body"></div>
+        </div>
+    `).appendTo(table_data_element);
+
+    // Create the table head
     response.head[0] = "Terms";
     for(cell of response.head){
         let element = $(`<h3 class="tokenize-cell"></h3>`).appendTo("#table-head");
@@ -76,9 +78,9 @@ function get_table_callback(response){
     }
 
     // Create the table body
+    let table_body_element = $("#table-body");
     for(row of response.data){
-        let row_element = $(`<div class="tokenize-row"></div>`).appendTo(table_body);
-
+        let row_element = $(`<div class="tokenize-row"></div>`).appendTo(table_body_element);
         for(cell of row){
             let element = $(`<h3 class="tokenize-cell"></h3>`).appendTo(row_element);
             element.text(cell);
@@ -86,7 +88,7 @@ function get_table_callback(response){
     }
 
     // Fade in the table data
-    $("#table-data").css({"transition": "opacity .2s", "opacity": "1"});
+    fade_in("#table-data");
 }
 
 
@@ -100,51 +102,34 @@ function register_table_button_callbacks(){
 
     // Rows per page
     $("input[type=radio][name=rows-per-page]").change(
-        function(){ create_table(true); });
+        function(){ create_table(false); });
 
     // Search bar
-    $("#search-input").on("input", function(){ create_table(true); });
+    $("#search-input").on("input", function(){ create_table(false); });
 
     // Page number input
     $(page_number_element).on("input", function(){
-        if(parse_page_number()) create_table();
+
+        // Parse the page number
+        let page_number_element = $("#page-number");
+        page_number = parseInt(page_number_element.val());
+
+        // Check that the input is valid
+        if(isNaN(page_number)) page_number_element.val("");
+
+        // Create the table
+        create_table();
     });
 
     // Previous button
     $("#previous-button").click(function(){
-        page_number_element.val(parseInt(page_number_element.val())-1);
+        page_number = parseInt(page_number_element.val())-1;
         create_table();
     });
 
     // Next button
     $("#next-button").click(function(){
-        page_number_element.val(parseInt(page_number_element.val())+1);
+        page_number = parseInt(page_number_element.val())+1;
         create_table();
     });
-}
-
-/**
- * Parses the page number input.
- * @returns {boolean}: Whether the page number was changed to a new valid value.
- */
-function parse_page_number(){
-
-    // Parse the page number
-    let page_number_element = $("#page-number");
-    page_number = parseInt(page_number_element.val());
-
-    // Check that the input is valid
-    if(isNaN(page_number)){
-        page_number_element.val("");
-        return false;
-    }
-
-    // Clamp the page number
-    page_number = Math.max(1, Math.min(page_count, page_number));
-
-    // Synchronize the displayed value
-    page_number_element.val(page_number);
-
-    // Return whether the page number was updated
-    return page_number !== previous_page_number;
 }

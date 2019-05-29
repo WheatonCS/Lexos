@@ -11,12 +11,12 @@
 
 #document-previews-top {
     display: grid;
+    align-items: center;
     grid-template-columns: 42% 58%;
 }
 
 #document-previews-buttons {
     justify-self: right;
-    margin-top: 1rem;
     margin-right: 1rem;
 }
 

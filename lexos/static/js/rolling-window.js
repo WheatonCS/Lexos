@@ -1,29 +1,30 @@
 $(function(){
 
-    // Initialize
+    // Check that there is exactly one document active, initialize the legacy
+    // form input if applicable, and display the appropriate text on the
+    // "Rolling Window" section
     $.ajax({type: "GET", url: "/active-file-ids"})
-        .done(valid_selection_check);
+        .done(single_active_document_check);
 
-    // Create the generate button callback
+    // Create the "Generate" button callback
     $("#generate-button").click(create_rolling_window);
 
-    // Create the download button callback
+    // Create the "Download" button callback
     $("#download-button").click(function(){ $("#download-input").click(); });
 });
 
 
 /**
  * Checks that there is exactly one document active.
- * @param {String} response: The response from the get-active-files request.
+ * @param {string} response: The response from the "get-active-files" request.
  */
-function valid_selection_check(response){
+function single_active_document_check(response){
 
     // Get the active document IDs
     let documents = Object.entries($.parseJSON(response));
 
-    // If there is not exactly one active document, display
-    // "this tool requires a single active document" text and grey the
-    // generate and download buttons out
+    // If there is not exactly one active document, display warning text and
+    // disable the "Generate" and "Download" buttons
     let text;
     if(documents.length !== 1){
         text = "This Tool Requires a Single Active Document";
@@ -31,33 +32,37 @@ function valid_selection_check(response){
         $("#download-button").addClass("disabled");
     }
 
-    // Otherwise, set the active document element and display "no graph" text
+    // Otherwise, set the legacy form input for the file to analyze to the
+    // active document and display "No Graph" text
     else {
         text = "No Graph";
         $("#file-to-analyze").val(documents[0][0]);
     }
 
     // Display the text
-    $(`<div class="centerer"><h3>${text}</h3></div>`).appendTo("#rolling-window");
+    add_text_overlay("#rolling-window", text);
 }
 
 
 /**
- * Creates the rolling window data.
+ * Creates the Plotly rolling window graph.
  */
 function create_rolling_window(){
 
-    // Remove the existing contents
-    let rolling_window_element = $("#rolling-window");
-    rolling_window_element.empty();
-    rolling_window_element.css({"transition": "none", "opacity": "0"});
+    // Add the loading overlay
+    add_loading_overlay("#rolling-window");
 
-    // Send the get-graph request
+    // Send the request for the rolling window Plotly graph HTML
     send_ajax_form_request("/rolling-window/get-graph")
     .done(function(response){
+
+        // Remove any existing content in the rolling window element
+        let rolling_window = $("#rolling-window");
+        rolling_window.empty();
+
+        // Add the Plotly graph HTML and fade the element in
         $("#rolling-window").html(response);
-        setTimeout(function(){ $("#rolling-window").css(
-            {"transition": "opacity .2s", "opacity": "1"}); }, 100);
+        fade_in(rolling_window);
     });
 }
 

@@ -25,11 +25,6 @@ form {
     padding: 1rem;
 }
 
-#table-top h3,
-#table-top a {
-    margin-top: .25rem;
-}
-
 #rows-per-page-option > h3,
 #rows-per-page-option > label {
     margin-right: 1rem;
@@ -55,18 +50,16 @@ form {
     min-width: 0;
 }
 
-#table #no-data-text-container {
-    margin-top: 4rem;
-    height: calc(100% - 4rem);
-}
-
 #table-data {
     height: calc(100% - 10rem);
+}
+
+#table-data-grid {
+    height: 100%;
     display: grid;
     grid-template-rows: max-content auto;
     overflow-x: scroll;
     overflow-y: hidden;
-    opacity: 0;
 }
 
 

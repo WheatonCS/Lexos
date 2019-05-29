@@ -1,5 +1,8 @@
 $(function(){
 
+    // Display the loading overlay
+    add_loading_overlay("#bubbleviz");
+
     // Create the bubbleviz
     $.ajax({type: "GET", url: "bubbleviz/get-word-counts"})
         .done(create_bubbleviz);
@@ -7,10 +10,10 @@ $(function(){
 
 function create_bubbleviz(response){
 
-    // Parse the response
+    // Parse the response for the dataset of word counts
     let dataset = {children: $.parseJSON(response)};
 
-    // Get the width and height
+    // Get the width and height of the bubbleviz element
     let bubbleviz_element = $("#bubbleviz");
     let diameter = Math.min(bubbleviz_element.width(),
         bubbleviz_element.height());
@@ -20,6 +23,9 @@ function create_bubbleviz(response){
     let color = d3.scaleLinear()
         .domain([0, 1])
         .range(["#505050", "#47BCFF"]);
+
+    // Clear any existing content
+    bubbleviz_element.empty();
 
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
@@ -55,7 +61,7 @@ function create_bubbleviz(response){
         .attr("font-size", function(d){ return d.r/3+base_font_size; })
         .attr("fill", "#E3E3E3");
 
-    // Show the bubbleviz
+    // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");
-    bubbleviz_element.css("opacity", "1");
+    fade_in("#bubbleviz");
 }

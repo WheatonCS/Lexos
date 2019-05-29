@@ -406,9 +406,13 @@ class RollingWindowsModel(BaseModel):
         :param index: The index to get the desired RGB color.
         :return: A string that contains the desired RGB color.
         """
-        return cl.scales['8']['qual']['Set1'][index % 8] \
-            if not self._options.plot_options.black_white \
-            else cl.scales['7']['seq']['Greys'][6 - index % 6]
+
+        return "#505050" if self._options.plot_options.black_white \
+               else "#47BCFF"
+
+        # return cl.scales['8']['qual']['Set1'][index % 8] \
+        #     if not self._options.plot_options.black_white \
+        #     else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
     def _get_mile_stone_color(self, index: int) -> str:
         """Get color for mile stone.
@@ -538,7 +542,17 @@ class RollingWindowsModel(BaseModel):
             return self._add_milestone(windows=windows,
                                        result_plot=result_plot)
         else:
-            return go.Figure(data=result_plot)
+            return go.Figure(data=result_plot,
+                             layout=go.Layout(
+                                autosize=True,
+                                height=580,
+                                 margin=dict(
+                                     l=40,
+                                     r=0,
+                                     b=30,
+                                     t=0,
+                                     pad=4
+                                 )))
 
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
@@ -573,7 +587,17 @@ class RollingWindowsModel(BaseModel):
             return self._add_milestone(windows=windows,
                                        result_plot=result_plot)
         else:
-            return go.Figure(data=result_plot)
+            return go.Figure(data=result_plot,
+                             layout=go.Layout(
+                                autosize=True,
+                                height=580,
+                                margin=dict(
+                                    l=40,
+                                    r=0,
+                                    b=25,
+                                    t=0,
+                                    pad=4
+                                )))
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph.

@@ -225,6 +225,7 @@ class StatsModel(BaseModel):
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="text",
             mode="markers",
+            marker=dict(color="#47BCFF"),
             text=labels
         )
 
@@ -233,7 +234,7 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color='rgb(10, 140, 200)')
+            marker=dict(color="#47BCFF")
         )
 
         # Create a figure with two subplots and fill the figure.
@@ -244,13 +245,12 @@ class StatsModel(BaseModel):
         # Hide useless information on x-axis and set up title.
         figure.layout.update(
             autosize=True,
-            height=310,
+            height=350,
             showlegend=False,
             margin=dict(
-                l=50,
-                r=50,
-                b=50,
-                t=50,
+                r=0,
+                b=5,
+                t=0,
                 pad=4
             ),
             xaxis=dict(

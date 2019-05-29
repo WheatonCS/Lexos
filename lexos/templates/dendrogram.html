@@ -31,7 +31,14 @@
 
 <!-- Results -->
 {% block results %}
-    <h3 class="title">Dendrogram</h3>
+
+    <!-- Top -->
+    <div class="results-top">
+        <h3 class="title">Dendrogram</h3>
+        <h3 id="generate-button" class="results-top-right selectable">Generate</h3>
+    </div>
+
+    <!-- Dendrogram -->
     <div id="dendrogram"></div>
 
     <!-- Hidden inputs -->

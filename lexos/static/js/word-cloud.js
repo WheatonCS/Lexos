@@ -3,6 +3,9 @@ let color_map;
 
 $(function(){
 
+    // Display the loading overlay
+    add_loading_overlay("#word-cloud");
+
     // Create the color map
     color_map = d3.scale.linear()
         .domain([100, 0])
@@ -16,7 +19,6 @@ $(function(){
 
 /**
  * Creates the word cloud layout.
- *
  * @param {jqXHR} response: The response from the get-word-counts request.
  */
 function create_word_cloud_layout(response){
@@ -52,20 +54,22 @@ function create_word_cloud_layout(response){
         .rotate(function(){ return ~~(Math.random()*2)*90; })
         .font("Open Sans")
         .fontSize(function(d){ return d.size; })
-        .on("end", draw_word_cloud);
+        .on("end", create_word_cloud);
 
     // Start the render
     layout.start();
 }
 
 /**
- * Draws the word cloud.
- *
- * @param {List} words: The words in the layout.
+ * Creates the word cloud.
+ * @param {string[]} words: The words in the layout.
  */
-function draw_word_cloud(words){
+function create_word_cloud(words){
 
-    // Draw the word cloud
+    // Clear any existing content in the word cloud element
+    $("#word-cloud").empty();
+
+    // Create the word cloud
     d3.select("#word-cloud")
         .append("svg")
             .attr("width", layout.size()[0])
@@ -86,5 +90,5 @@ function draw_word_cloud(words){
             .text(function(d){ return d.text; });
 
     // Fade the word cloud in
-    $("#word-cloud").css("opacity", "1");
+    fade_in("#word-cloud");
 }

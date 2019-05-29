@@ -7,7 +7,7 @@
 /* Form */
 form {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr .9fr 1.1fr;
     grid-gap: 2rem;
     height: calc(100vh - 15rem);
     min-height: 60rem;

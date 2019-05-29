@@ -1,10 +1,42 @@
 /* Main section */
 #main-section {
-    min-width: 130rem;
+    min-width: 125rem;
+}
+
+
+/* Form */
+form {
+    grid-template-rows: 19rem auto;
 }
 
 
 /* Options section */
 #options-section {
-    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1.7fr;
+    grid-template-columns: 1fr 1.8fr 1fr 1fr 1.8fr;
+}
+
+#advanced-options-section > label {
+    margin-right: 2rem;
+}
+
+#advanced-options-section input {
+    margin-bottom: .5rem;
+    width: 10rem;
+}
+
+/* K-means */
+.results-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.results-top-right {
+    justify-self: right;
+}
+
+#k-means {
+    width: calc(100% - 2rem);
+    height: 56.9rem;
+    overflow: hidden;
+    margin: 0 1rem 1rem 1rem;
 }

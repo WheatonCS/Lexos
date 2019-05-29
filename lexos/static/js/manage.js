@@ -287,16 +287,61 @@ function selection_start_callback(event){
     if(event.which !== 1) return; // Only accept left clicks
 
     start_mouse_position = get_mouse_position(event);
-    start_scroll_offset = get_main_section_scroll_offset();
+    start_scroll_offset = get_scroll_offset("#manage-table-body");
 
-    $("#manage-table-body").on("mousemove", selection_drag_callback);
-    $("#main-section").on("scroll", selection_drag_callback);
+    $("#manage-table-body").on("mousemove scroll", selection_drag_callback);
 
     // Create the selection box
     let selection_box = $("#selection-box");
     set_selection_box_color();
     selection_box.css({"opacity": ".6", "width": "0", "height": "0",
         "transition": "opacity .2s, background-color .2s"});
+}
+
+
+/**
+ * Updates the selection box visualization.
+ * @param {Event} event: The event which triggered the callback.
+ */
+let previous_mouse_position;
+let scroll_start_position;
+function selection_drag_callback(event){
+
+    event.stopPropagation();
+
+    let scroll_offset = get_scroll_offset("#manage-table-body");
+
+    // If the event is a mouse move event, get the mouse position
+    let mouse_position;
+    if(event.type === "mousemove"){
+        mouse_position = get_mouse_position(event);
+        previous_mouse_position = mouse_position;
+        scroll_start_position = scroll_offset;
+    }
+
+    // Otherwise, the event is a scroll event, so use the previous mouse position
+    else mouse_position = previous_mouse_position;
+
+    // Get the scroll delta and selection start position
+    let scroll_delta = point_subtract(scroll_offset, start_scroll_offset);
+    let selection_start = point_subtract(start_mouse_position, scroll_delta);
+
+    // Clamp the selection start position to be within the table body
+    let table_body_bounding_box = $("#manage-table-body")[0].getBoundingClientRect();
+    let table_body_position = {x: table_body_bounding_box.left, y: table_body_bounding_box.top};
+    let table_body_size = {x: table_body_bounding_box.width, y: table_body_bounding_box.height};
+    selection_start = point_maximum(point_minimum(selection_start,
+        point_add(table_body_position, table_body_size)), table_body_position);
+
+    // Get the selection box visualization position and size
+    let position = point_minimum(selection_start, mouse_position);
+    let size = point_subtract(point_maximum(
+        selection_start, mouse_position), position);
+
+    // Update the selection box's CSS
+    let selection_box = $("#selection-box");
+    selection_box.css({"left": `${position.x}px`, "top": `${position.y}px`,
+        "width": `${size.x}px`, "height": `${size.y}px`});
 }
 
 
@@ -318,7 +363,7 @@ function selection_end_callback(event){
     // Select the appropriate documents
     let modified_id_list = [];
     let mouse_position = get_mouse_position(event);
-    let main_section_scroll_offset = get_main_section_scroll_offset();
+    let table_scroll_offset = get_scroll_offset("#manage-table-body");
     let window_scroll_offset = get_window_scroll_offset();
 
     $(".manage-table-row").each(function(){
@@ -326,7 +371,7 @@ function selection_end_callback(event){
 
         // Get the selection minimum and maximum
         let scroll_delta = point_subtract(
-            main_section_scroll_offset, start_scroll_offset);
+            get_scroll_offset("#manage-table-body"), start_scroll_offset);
         let selection_start = point_subtract(start_mouse_position, scroll_delta);
 
         let selection_minimum = point_minimum(selection_start, mouse_position);
@@ -360,47 +405,8 @@ function selection_end_callback(event){
 
 
 /**
- * Updates the selection box visualization.
- *
- * @param {Event} event: The event which triggered the callback.
- */
-let previous_mouse_position;
-let scroll_start_position;
-function selection_drag_callback(event){
-
-    event.stopPropagation();
-
-    let scroll_offset = get_main_section_scroll_offset();
-
-    // If the event is a mouse move event, get the mouse position
-    let mouse_position;
-    if(event.type === "mousemove"){
-        mouse_position = get_mouse_position(event);
-        previous_mouse_position = mouse_position;
-        scroll_start_position = scroll_offset;
-    }
-
-    // Otherwise the event is a scroll event, so use the previous mouse position
-    else mouse_position = previous_mouse_position;
-
-    // Get the position and size of the selection box
-    let scroll_delta = point_subtract(scroll_offset, start_scroll_offset);
-    let selection_start = point_subtract(start_mouse_position, scroll_delta);
-
-    let position = point_minimum(selection_start, mouse_position);
-    let size = point_subtract(point_maximum(
-        selection_start, mouse_position), position);
-
-    // Update the selection box's CSS
-    let selection_box = $("#selection-box");
-    selection_box.css({"left": `${position.x}px`, "top": `${position.y}px`,
-        "width": `${size.x}px`, "height": `${size.y}px`});
-}
-
-
-/**
- *
- * @param {String} url: The URL to send the request to.
+ * Sends a JSON POST request to the given URL.
+ * @param {string} url: The URL to send the request to.
  * @param {Object} payload: The JSON payload to send.
  * @returns {jqXHR}: The response of the request.
  */
@@ -417,8 +423,7 @@ function send_request(url, payload = ""){
 
 /**
  * Gets the IDs of the currently selected documents.
- *
- * @returns {Array}: The selected document IDs.
+ * @returns {Number[]}: The selected document IDs.
  */
 function get_selected_document_ids(){
     let id_list = [];

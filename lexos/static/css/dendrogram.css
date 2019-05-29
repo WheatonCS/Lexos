@@ -1,3 +1,9 @@
+/* Main */
+#main-section {
+    min-width: 120rem;
+}
+
+
 /* Popup */
 #popup-content div {
     justify-self: left;
@@ -9,8 +15,18 @@
 
 
 /* Dendrogram */
-#dendrogram {
-    height: calc(100vh - 36rem);
+.results-top {
     display: grid;
-    justify-content: center;
+    grid-template-columns: 1fr 1fr;
+}
+
+.results-top-right {
+    justify-self: right;
+}
+
+#dendrogram {
+    width: calc(100% - 2rem);
+    height: 60.9rem;
+    overflow: hidden;
+    margin: 0 1rem 1rem 1rem;
 }

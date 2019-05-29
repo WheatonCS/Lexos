@@ -4,65 +4,67 @@ let checked_options = {
     "orientation": "bottom"
 };
 
+
 $(function(){
-    // Register distance metric button callback
+
+    // Register the "Distance Metric" button callback
     $("#distance-metric-button").click(function(){
         create_options_popup("distance-metric", [
             ["euclidean", "Euclidean"],
             ["minkowski", "Minkowski"],
-            ["manhattan", "Manhattan"],
-            ["standardized euclidean", "Standardized Euclidean"],
-            ["squared euclidean", "Squared Euclidean"],
+            ["cityblock", "Manhattan"],
+            ["seuclidean", "Standardized Euclidean"],
+            ["sqeuclidean", "Squared Euclidean"],
             ["cosine", "Cosine"],
             ["correlation", "Correlation"],
             ["hamming", "Hamming"],
-            ["chebychev", "Chebychev"],
+            ["chebyshev", "Chebychev"],
             ["jaccard", "Jaccard"],
             ["canberra", "Canberra"],
-            ["braycurtis", "Braycurtis"],
-        ]);
+            ["braycurtis", "Braycurtis"]]);
     });
 
-    // Register linkage method button callback
+    // Register the "Linkage Method" button callback
     $("#linkage-method-button").click(function(){
         create_options_popup("linkage-method", [
             ["average", "Average"],
             ["single", "Single"],
             ["complete", "Complete"],
-            ["weighted", "Weighted"]
-        ]);
+            ["weighted", "Weighted"]]);
     });
 
-    // Register orientation button callback
+    // Register the "Orientation" button callback
     $("#orientation-button").click(function(){
-        create_options_popup("orientation-text", [
-            ["bottom", "Bottom"],
-            ["top", "Top"]
-        ]);
+        create_options_popup("orientation",
+            [["bottom", "Bottom"], ["left", "Left"]]);
     });
 
+    // Initialize legacy inputs and create the dendrogram
     $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
 });
 
 
+/**
+ * Initializes legacy form inputs and creates the dendrogram.
+ * @param {string} response: The response from the active-file-ids request.
+ */
 function initialize(response){
 
     // Initialize legacy inputs
     if(!initialize_legacy_inputs(response)) return;
 
     // Create the dendrogram
-    send_ajax_form_request("dendrogram/graph").done(function(response){
-        console.log(response);
-        $("#dendrogram").html(response);
-    });
+    create_dendrogram();
+
+    // Register the "Generate" button callback
+    $("#generate-button").click(function(){ create_dendrogram(); });
 }
 
 
 /**
- * Creates a popup of radio buttons.
- * @param name: The name of the options group.
- * @param checked_option: The value of the option to check.
- * @param options
+ * Creates a popup containing radio button options.
+ * @param {string} name: The name of the radio buttons.
+ * @param {string[][]} options: The value and text of each radio button.
  */
 function create_options_popup(name, options){
 
@@ -74,26 +76,51 @@ function create_options_popup(name, options){
         let element = $(`
             <div>
                 <label class="circle-label">
-                    <input type="radio" name="${name}-input" value="${option[0]}">
+                    <input type="radio" name="${name}" value="${option[0]}">
                     <span>${option[1]}</span>
                 </label>
             </div>
         `).appendTo(popup_content);
 
-        if(option[0] == checked_options[name]){
-            console.log(option[0], checked_options[name]);
-            element.find(`#${name}-input`).prop("checked", true);
+        //console.log(checked_options[name], formatted_option);
+        if(checked_options[name] === option[0]){
+            element.find("input").prop("checked", true);
         }
     }
 
     $(`<h3 id="ok-button" class="selectable">OK</h3>`).appendTo(popup_content);
 
-    // Create "OK" button callback
+    // Create the "OK" button callback
     $("#ok-button").click(function(){
         let selected_element = $(`input[name="${name}"]:checked`);
         $(`#${name}-input`).val(selected_element.val());
         $(`#${name}-text`).text(selected_element.closest("div").find("span").html());
         checked_options[name] = selected_element.val();
+        console.log(selected_element.val());
         close_popup();
+    });
+}
+
+
+/**
+ * Creates the dendrogram.
+ */
+function create_dendrogram(){
+
+    // Add the loading overlay to the dendrogram element
+    add_loading_overlay("#dendrogram");
+
+    // Send the request for the Plotly dendrogram HTML
+    send_ajax_form_request("dendrogram/graph").done(function(response){
+
+        // Delete any existing contents in the dendogram element
+        let dendrogram_element = $("#dendrogram");
+        dendrogram_element.empty();
+
+        // Add the Plotly HTML to the dendrogram element
+        dendrogram_element.html(response);
+
+        // Fade the dendrogram element in
+         fade_in("#dendrogram");
     });
 }

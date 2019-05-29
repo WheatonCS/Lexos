@@ -61,6 +61,10 @@ body {
 }
 
 main {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
     min-height: 100%;
     padding: 2rem;
     background-color: #E3E3E3;
@@ -92,7 +96,7 @@ form {
 }
 
 .disabled {
-    opacity: .5;
+    color: #C3C3C3;
     pointer-events: none;
 }
 
@@ -113,6 +117,29 @@ form {
 .borderless-section .title,
 .borderless-section .selectable {
     margin: 1rem;
+}
+
+.button {
+    display: inline-grid;
+    align-content: center;
+    justify-content: center;
+    width: max-content;
+    height: 3.5rem;
+    padding: 1rem;
+    border-radius: 3rem;
+    border: 2px solid #F3F3F3;
+    background-color: #F3F3F3;
+    transition: border-color .2s, background-color .2s;
+}
+
+.button:hover {
+    color: #47BCFF;
+    background-color: #EAF5FF;
+    border: 2px solid #47BCFF;
+}
+
+.button:hover > h3 {
+    color: inherit;
 }
 
 
@@ -181,7 +208,7 @@ a:hover {
 /* Footer */
 footer {
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 40% 60%;
     align-content: center;
     background-color: #FFFFFF;
     height: 4rem;
@@ -309,10 +336,21 @@ input[type="text"] {
     padding-right: 1.3rem;
     margin-left: 1rem;
     margin-right: 1rem;
-    border: none;
     border-radius: 3rem;
     outline: none;
-    background-color: #F3F3F3;
+    background-color: #FFFFFF;
+    border: 2px solid #E3E3E3;
+    transition: border-color .2s, background-color .2s;
+}
+
+input[type="text"]:focus {
+    color: #47BCFF;
+    background-color: #EAF5FF;
+    border: 2px solid #47BCFF;
+}
+
+span > input[type="text"] {
+    color: inherit;
 }
 
 
@@ -330,7 +368,8 @@ textarea {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
-    background-color: #E3E3E3;
+    background-color: #FFFFFF;
+    border: 2px solid #D3D3D3;
     transition: background-color .2s;
 }
 
@@ -339,8 +378,8 @@ textarea {
 .checkbox {
     width: 2rem;
     height: 2rem;
-    background-color: #E3E3E3;
-    border: 2px #E3E3E3;
+    background-color: #FFFFFF;
+    border: 2px solid #D3D3D3;
     transition: border-color .2s;
 }
 
@@ -359,8 +398,8 @@ label {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
-    background-color: #F3F3F3;
-    border: 2px solid #F3F3F3;
+    background-color: #FFFFFF;
+    border: 2px solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
 
@@ -376,7 +415,7 @@ input[type=radio] {
 
 .checkbox-label :checked + span:before,
 .circle-label :checked + span:before {
-    background-color: #C7EBFF;
+    background-color: #EAF5FF;
     border-color: #47BCFF;
 }
 
@@ -388,4 +427,10 @@ input[type=radio] {
 /* Dropdown selection */
 select {
     border: none;
+}
+
+
+/* Plotly */
+.plotly-notifier {
+    display: none;
 }

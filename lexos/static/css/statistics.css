@@ -36,11 +36,15 @@ form {
 
 
 /* Box plot */
+#document-sizes-section title {
+    height: 2rem;
+}
+
 #box-plot {
-    width: 100%;
-    height: 36rem;
+    width: calc(100% - 2rem);
+    height: 35rem;
     overflow: hidden;
-    padding: 1rem;
+    margin: 0 1rem 1rem 1rem;
 }
 
 

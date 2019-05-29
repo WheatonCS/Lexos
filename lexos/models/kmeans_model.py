@@ -308,9 +308,17 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
-            title="K-Means Voronoi Result",
-            xaxis=go.layout.XAxis(title='x-axis', showline=False),
-            yaxis=go.layout.YAxis(title='y-axis', showline=False),
+            autosize=True,
+            height=570,
+            margin=dict(
+                l=0,
+                r=0,
+                b=0,
+                t=30,
+                pad=4
+            ),
+            # xaxis=go.layout.XAxis(title='x-axis', showline=False),
+            # yaxis=go.layout.YAxis(title='y-axis', showline=False),
             hovermode="closest")
 
         # noinspection PyTypeChecker
@@ -363,7 +371,6 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
-            title="K-Means Two Dimensional Scatter Plot Result",
             xaxis=go.layout.XAxis(title='x-axis', showline=False),
             yaxis=go.layout.YAxis(title='y-axis', showline=False),
             hovermode="closest")
@@ -416,7 +423,6 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot, mainly set the background color to grey.
         layout = go.Layout(
-            title="K-Means Three Dimensional Scatter Plot Result",
             height=600,
             scene=dict(
                 xaxis=dict(showbackground=True,

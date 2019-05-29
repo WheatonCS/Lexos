@@ -43,12 +43,13 @@ function point_maximum(a, b){
 
 
 /**
- * Gets the scroll offset of the main section.
+ * Gets the scroll offset of the given element.
+ * @param {string} query: The element to query for.
  * @returns {{x, y}}: The scroll offset.
  */
-function get_main_section_scroll_offset(){
-    let main_section = $("#main-section");
-    return {x: main_section.scrollLeft(), y: main_section.scrollTop()};
+function get_scroll_offset(query){
+    let element = $(query);
+    return {x: element.scrollLeft(), y: element.scrollTop()};
 }
 
 
@@ -61,34 +62,12 @@ function get_window_scroll_offset(){
     return {x: window_element.scrollLeft(), y: window_element.scrollTop()};
 }
 
-
-/**
- * Gets the mouse position relative to the main section.
- * @returns {{x, y}}: The mouse position.
- */
-function get_relative_mouse_position(event){
-    let main_section = $("#main-section");
-    return {x: event.pageX+main_section.scrollLeft(),
-        y: event.pageY+main_section.scrollTop()};
-}
-
-
 /**
  * Gets the mouse position relative to the window.
  * @returns {{x, y}}: The mouse position.
  */
 function get_mouse_position(event){
     return {x: event.pageX, y: event.pageY};
-}
-
-
-/**
- * Gets the size of the window in pixels.
- * @returns {{x, y}}: The size of the window.
- */
-function get_window_size(){
-    let window_element = $(window);
-    return {x: window_element.width(), y: window_element.height()};
 }
 
 
@@ -104,7 +83,7 @@ function get_form_json(){
 
 /**
  * Sends an AJAX request with a JSONified form payload.
- * @param url: The URL to send the request to.
+ * @param {string} url: The URL to send the request to.
  * @returns {jqXHR}: The jQuery request object.
  */
 function send_ajax_form_request(url){
@@ -179,10 +158,10 @@ function batch_add_loading_overlay(element_queries, empty=true){
  */
 function fade_in(element_query){
     let element = $(element_query);
-    element.css("opacity", "0");
+    element.css({"transition": "none", "opacity": "0"});
     setTimeout(function(){
         element.css({"transition": "opacity .2s", "opacity": "1"});
-    }, 100);
+    }, 300);
 }
 
 

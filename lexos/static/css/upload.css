@@ -30,24 +30,25 @@
 }
 
 #browse-button {
-    background-color: #F3F3F3;
-    transition: border-color .2s;
-    border: 2px solid #F3F3F3;
     width: 20rem;
     height: 6rem;
     border-radius: 3rem;
     margin: 1rem;
+    background-color: #F3F3F3;
+    border: 2px solid #D3D3D3;
+    transition: border-color .2s;
+
 }
 
 #browse-button:hover {
     color: #47BCFF;
-    background-color: #C7EBFF;
+    background-color: #EAF5FF;
     border: 2px solid #47BCFF;
 }
 
 #drag-and-drop-section {
     transition: background-color .2s, border-color .2s;
-    border: 2px dashed #F3F3F3;
+    border: 2px dashed #D3D3D3;
     background-color: #F3F3F3;
     width: 100%;
     height: 30rem;

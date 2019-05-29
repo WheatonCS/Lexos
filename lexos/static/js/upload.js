@@ -23,7 +23,7 @@ $(function(){
     drag_and_drop_section.on("dragenter", function(){
         ++drag_counter;
         $("#drag-and-drop-section").css({"color": "#47BCFF",
-            "border-color": "#47BCFF", "background-color": "#C7EBFF"});
+            "border-color": "#47BCFF", "background-color": "#EAF5FF"});
     });
 
     drag_and_drop_section.on("dragleave", function(){
@@ -156,5 +156,5 @@ function drag_and_drop_intercept(event){
 
 function set_default_drop_section_colors(){
     $("#drag-and-drop-section").css({"color": "#505050",
-        "border-color": "#F3F3F3", "background-color": "#F3F3F3"});
+        "border-color": "#D3D3D3", "background-color": "#F3F3F3"});
 }

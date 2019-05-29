@@ -1,3 +1,9 @@
+/* Main section */
+#main-section {
+    min-width: 130rem;
+}
+
+
 /* Form */
 form {
     opacity: 0;
@@ -8,11 +14,13 @@ form {
 /* Top section */
 #top-section {
     display: grid;
-    grid-template-columns: 75% 25%;
+    align-items: center;
+    grid-template-columns: 85% 15%;
 }
 
 #download-button {
     justify-self: right;
+    margin-bottom: 0;
 }
 
 
@@ -34,7 +42,7 @@ form {
 #manage-table-body {
     margin-top: 1rem;
     overflow: scroll;
-    height: calc(100vh - 25rem);
+    height: calc(100vh - 24rem);
 }
 
 .manage-table-head-cell {
@@ -67,7 +75,7 @@ form {
 
 .selected-row > .checkbox {
     border: 2px solid #47BCFF;
-    background-color: #C7EBFF;
+    background-color: #EAF5FF;
 }
 
 
