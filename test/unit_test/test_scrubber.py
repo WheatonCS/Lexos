@@ -581,9 +581,6 @@ class TestProcessTagReplaceOptions:
 
 
 # handle_tags
-
-# If this test fails, check if special_chars_and_punct.py contains up-to-date
-# lists of unicode punctuation
 class TestGetAllPunctuationMap:
 
     def test_get_all_punctuation_map(self):
@@ -741,8 +738,6 @@ class TestGetRemovePunctuationMap:
             previewing=True) == (no_punct_string, map_previewing)
 
 
-# If this test fails, check if special_chars_and_punct.py contains up-to-date
-# lists of unicode digits
 class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_store(self):
