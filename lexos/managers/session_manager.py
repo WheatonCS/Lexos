@@ -247,10 +247,10 @@ def cache_bubble_viz_option():
     for box in const.BUBBLEVIZBOX:
         session['bubblevisoption'][box] = (box in request.form)
 
-    for box in const.BUBBLEVIZINPUT:
-        session['bubblevisoption'][box] = (
-            request.form[box] if box in request.form
-            else const.DEFAULT_BUBBLEVIZ_OPTIONS[box])
+    for request_input in const.BUBBLEVIZINPUT:
+        session['bubblevisoption'][request_input] = (
+            request.form[request_input] if input in request.form
+            else const.DEFAULT_BUBBLEVIZ_OPTIONS[request_input])
 
 
 def cache_hierarchy_option():
