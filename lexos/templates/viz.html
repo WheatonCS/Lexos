@@ -58,15 +58,31 @@ $(function() {
 <div class="col-md-6">
 	<legend>Filtering Options</legend>
 		<label>Graph Size:
-			<input type="number" min="100" max="3000" step="100" id="graphsize" name="graphsize" value="{{ session['bubblevisoption']['graphsize']}}"/>
+			<input type="number"
+                   min="100"
+                   max="3000"
+                   step="100"
+                   style="width:65px;height:32px;"
+                   id="graphsize"
+                   name="graphsize"
+                   value="{{ session['bubblevisoption']['graphsize']}}"/>
 		</label>
 		<br/>
 		<label>Maximum Number of Terms:
-			<input type="number" min="1" id="maxwords" name="maxwords" value="{{ session['bubblevisoption']['maxwords'] or '100' }}"/>
+			<input type="number"
+                   min="1" id="maxwords"
+                   name="maxwords"
+                   style="width:85px;height:32px;"
+                   value="{{ session['bubblevisoption']['maxwords'] or '100' }}"/>
 		</label>
 		<br/>
 		<label>Minimum Term Length:
-			<input type="number" min="0" id="minlength" name="minlength" value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
+			<input type="number"
+                   min="0"
+                   id="minlength"
+                   name="minlength"
+                   style="width:75px;height:32px;"
+                   value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
 		</label>
 </div>
 
