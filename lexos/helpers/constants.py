@@ -36,6 +36,8 @@ CONSOLIDATION_FILENAME = 'consolidations.p'
 SPECIAL_CHAR_FILENAME = 'specialchars.p'
 DIGIT_MAP_FILENAME = 'digitmap.p'
 PUNCTUATION_MAP_FILENAME = 'punctuationmap.p'
+AMPERSAND_FILENAME = 'ampersand.p'
+HYPHEN_FILENAME = 'hyphen.p'
 
 '''constant numbers'''
 MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
@@ -197,10 +199,6 @@ DEFAULT_SCRUB_OPTIONS = {
 
 DEFAULT_CUT_OPTIONS = {
     'cutType': 'words', 'cutValue': '', 'cutOverlap': '0', 'cutLastProp': '50'
-}
-
-DEFAULT_CSV_OPTIONS = {
-    'csvdata': 'count', 'csvorientation': 'filecolumn', 'csvdelimiter': 'comma'
 }
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {

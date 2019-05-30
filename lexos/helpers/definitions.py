@@ -26,7 +26,7 @@ _SINGLE_RIGHT_WORD_BOUNDARY_REGEX_STR = r'\s|$'
 WORD_REGEX = re.compile(_WORD_REGEX_STR, re.UNICODE)
 
 
-def count_phrase_in_text(phrase: str, text: str):
+def count_phrase_in_text(phrase: str, text: str) -> int:
     """Count how many times the phrase appears in the text
 
     :param phrase: string that may contain white spaces
