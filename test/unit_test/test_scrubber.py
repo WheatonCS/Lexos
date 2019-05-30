@@ -645,8 +645,8 @@ class TestGetRemovePunctuationMap:
 
     def test_get_remove_punct_map_no_store(self):
         no_punct_string = "Some text with no punctuation"
-        apos_string = "There's \"a lot\" of words in this text here ye' " \
-                      "isn''t 'ere a lot\"ve 'em?'!"
+        apos_string = "There's \"a lot\" of words in this text " \
+                      "here ye isn''t ere a lot\"ve em?'!"
         hyphen_string = "-\u2E3B\u058AMany\u05BE\u2010 \uFE32 " \
                         "\u2E3Amany\u2E40 \uFE31many\u30A0\u3030 " \
                         "\u2011types\u2012 of\u2013 \u301C\u2014" \
@@ -698,9 +698,8 @@ class TestGetRemovePunctuationMap:
         assert get_remove_punctuation_map(
             apos_string, apos=True, hyphen=False, amper=False,
             previewing=False) == (
-                   "There's \"a lot\" of words in this text "
-                   "here ye isn''t ere a lot\"ve em?'!",
-                   map_no_apos)
+                   "There\'s \"a lot\" of words in this text here ye "
+                   "isn\'\'t ere a lot\"ve em?!", map_no_apos)
         assert get_remove_punctuation_map(
             hyphen_string, apos=False, hyphen=True, amper=False,
             previewing=False) == (
