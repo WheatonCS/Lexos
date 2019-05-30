@@ -298,24 +298,33 @@ def scrub_select_apos(text: str) -> str:
     :return: The text string, now with only internal apostrophes.
     """
 
-    # If one or more apos. preceded by beginning of string or whitespace:
-    #     (?:^|(?<=\s))'+
-    # OR one or more apos. followed by whitespace or end of string:
-    #     |'+(?=\s|$)
+    # If one or more apos. preceded by beginning of string or whitespace or
+    # any unicode punctuation:
+    #     (?:^|(?<=\s| punctuation including unicode ))'+
+    # OR one or more apos. followed by whitespace or any unicode punctuation or
+    # end of string:
+    #     |'+(?=\s| punctuation including unicode |$)
 
     # Using " " to represent whitespace, "w" to represent a word
-    #     character, and "***" to represent any sequence of any characters,
+    #     character, "p" to represent any unicode punctuation,
+    #     and "***" to represent any sequence of any characters,
     #     this pattern will match:
     # 1) ***w' *** because the apostrophe is followed by whitespace
-    # 2) *** 'w*** because the apostrophe follows whitespace
+    # 2) *** 'w*** because the apos. follows whitespace
     # 3) *** ' *** because the apos. follows AND is followed by whitespace
+    # 4) ***p'w*** because the apos. is preceded by punctuation
+    # 5) ***w'p*** because the apos is followed by punctuation
 
-    # This will NOT remove apos. next to other punctuation, because they are
-    # not whitespace
     # Consecutive apostrophes are treated as one, to avoid odd behavior
     # (Ex. "test'' ''' ''test" => "test' ' 'test" is undesirable)
 
-    pattern = re.compile(r"(?:^|(?<=\s))'+|'+(?=\s|$)", re.UNICODE)
+    pattern = re.compile(r"(?:^|(?<=\s|"
+                         r"[\u2000-\u206F\u2E00-\u2E7F"
+                         r"\\'!\"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]))'+"
+                         r"|'+(?=\s|"
+                         r"[\u2000-\u206F\u2E00-\u2E7F"
+                         r"\\'!\"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]|$)",
+                         re.UNICODE)
 
     # apply the pattern to replace all external or floating apos with
     # empty strings
