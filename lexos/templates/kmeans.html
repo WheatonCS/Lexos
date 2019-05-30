@@ -25,8 +25,13 @@
         <legend>K-Means Options <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=B7_cJBeofn4&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=10" target="_blank" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
         <div>
             <label for="n_clusters">Number of Clusters (K-Value):
-                <input type="number" name="nclusters" id="nclusters" min="1"
-                       step="1" max="{{ numActiveDocs }}"
+                <input type="number"
+                       name="nclusters"
+                       id="nclusters"
+                       min="1"
+                       step="1"
+                       style="width:65px;height:32px;"
+                       max="{{ numActiveDocs }}"
                        value="{{ session['kmeanoption']['nclusters'] }}"/>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="tooltip" data-html="true" data-container="body"
@@ -68,8 +73,12 @@
 
         <div class="collapse" id="advancedkmeansOpts">
             <label for="max_iter">Maximum Number of Iterations:
-                <input type="number" name="max_iter" id="max_iter"
-                       min="1" step="1"
+                <input type="number"
+                       name="max_iter"
+                       id="max_iter"
+                       min="1"
+                       step="1"
+                       style="height:32px;"
                        value="{{ session['kmeanoption']['max_iter'] }}"/>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="tooltip" data-html="true" data-container="body"
@@ -97,7 +106,12 @@
             </label>
 
             <label for="n_init">Number of Iterations with Different Centroids:
-                <input type="number" name="n_init" id="n_init" min="1" step="1"
+                <input type="number"
+                       name="n_init"
+                       id="n_init"
+                       min="1"
+                       step="1"
+                       style="height:32px;"
                        value="{{ session['kmeanoption']['n_init'] }}"/>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="tooltip" data-html="true" data-container="body"
@@ -108,9 +122,12 @@
             </label>
 
             <label for="tolerance">Relative Tolerance:
-                <input type="number" name="tolerance"
-                       placeholder="Default is 1e-4" id="tolerance"
+                <input type="number"
+                       name="tolerance"
+                       placeholder="Default is 1e-4"
+                       id="tolerance"
                        step=".0001"
+                       style="width:75px;height:32px;"
                        value="{{ session['kmeanoption']['tolerance'] }}"/>
                 <i class="fa fa-question-circle lexos-tooltip-trigger"
                    data-toggle="tooltip" data-html="true" data-container="body"
