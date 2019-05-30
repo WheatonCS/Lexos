@@ -1,7 +1,7 @@
 """This is the content analysis model which determines tone of texts."""
+import random
 from copy import deepcopy
 from typing import Optional
-import random
 
 import pandas as pd
 
@@ -44,6 +44,7 @@ class ContentAnalysisModel(object):
         :param file_name: file name
         :param label: file label
         """
+        content = content.strip()
         total_word_counts = len(str(content).split(" "))
         self._corpus.append(File(content=content,
                                  file_name=file_name,
@@ -79,11 +80,13 @@ class ContentAnalysisModel(object):
         self._counters = []
         dictionaries = self.join_active_dicts()
         for file in deepcopy(self._corpus):
-            dictionaries = count_phrases(dictionaries, file)
+            dictionaries = count_phrases(dictionary=dictionaries,
+                                         file=file)
             self.get_dictionary_counts(dictionaries)
         return dictionaries
 
-    def generate_corpus_counts_table(self, dictionaries: list, colors) -> str:
+    def generate_corpus_counts_table(self, dictionaries: list, colors: dict)\
+            -> str:
         """Generate a html table.
 
          Each row has a phrase, its count in the entire corpus, and the
@@ -344,9 +347,9 @@ class ContentAnalysisModel(object):
             result_table = self.to_html()
             colors = self.dictionary_colors
             individual_counts_table = self.generate_corpus_counts_table(
-                dictionaries, colors)
+                dictionaries=dictionaries, colors=colors)
             files_raw_counts_tables = self.generate_files_raw_counts_tables(
-                dictionaries, colors)
+                dictionaries=dictionaries, colors=colors)
         else:
             formula_errors = "Formula error: Invalid input"
             result_table = ""
@@ -420,7 +423,7 @@ class ContentAnalysisModel(object):
         self._test_options = options
 
 
-def count_phrases(dictionary: list, file: object):
+def count_phrases(dictionary: list, file: object) -> list:
     """Count each phrase in the dictionary in the given file.
 
     If a has with more than 1 word is found in a file, it is deleted
