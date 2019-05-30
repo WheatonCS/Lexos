@@ -361,7 +361,7 @@ class FileManager:
             if saving_changes:
                 for i, file_string in enumerate(children_file_contents):
                     original_filename = l_file.name
-                    zeros = floor(log10(num_cut_files)) - floor(log10(i+1))
+                    zeros = len(str(num_cut_files)) - len(str(i + 1))
                     doc_label = l_file.label + '_' + ('0' * zeros) + str(i + 1)
                     file_id = self.add_file(
                         original_filename, doc_label + '.txt', file_string)
