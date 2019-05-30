@@ -1091,6 +1091,6 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
                                       stop_keep_words_function,
                                       total_removal_function])
 
-    finished_text = re.sub(r"[\s]+", " ", text, re.UNICODE | re.MULTILINE)
+    # finished_text = re.sub(r"[\s]+", " ", text, re.UNICODE | re.MULTILINE)
 
-    return finished_text
+    return text
