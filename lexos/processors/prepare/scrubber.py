@@ -390,12 +390,6 @@ def consolidate_hyphens(text: str) -> str:
     # Hex 002D is the minus symbol (-), which all hyphens will be converted to
     chosen_hyphen_value = '\u002D'
 
-    # hyphen_values = {'֊': None, '־': None, '᐀': None, '᠆': None,
-    #                  '‐': None, '‑': None, '‒': None, '–': None,
-    #                  '—': None, '―': None, '⸗': None, '⸚': None,
-    #                  '⸺': None, '⸻': None, '⹀': None, '〜':
-    #                      None, '〰': None, '゠': None, '︱': None,
-    #                  '︲': None, '﹘': None, '﹣': None, '－': None}
     try:
         hyphen_values = load_character_deletion_map(
             constants.CACHE_FOLDER, constants.HYPHEN_FILENAME)
