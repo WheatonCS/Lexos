@@ -1,1 +1,4 @@
-source httpenwikipediaorgwikipunctuation generic currency symbol currency symbols ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ƒ ​ ​ ​ ​ ​ ​ ℳ ​ ​ ​ ​ ​ ​ ​ ​ ​
+source httpenwikipediaorgwikipunctuation
+generic currency symbol
+currency symbols
+ ​  ​  ​ ​ ​ ​  ​ ​ ​  ​ ​ ƒ ​ ​  ​  ​  ​  ​ ℳ ​ ​  ​  ​ ​ ​ ​  ​ ​  ​  ​  ​ ​ ​  ​

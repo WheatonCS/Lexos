@@ -17,6 +17,4 @@ Stop Words & Keep Words
     - Stop Words/Keep Words: select either option and upload sw_kw_words.txt
     
 3. RESULTS:
-    - Download resulting file
-    - If you selected Stop Words, file should match sw_experimentResults.txt
-    - If you selected Keep Words, file should match kw_experimentResults.txt
+    - File should contain *only* the keep words, or *everything but* the stop words.
