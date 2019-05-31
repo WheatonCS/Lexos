@@ -93,8 +93,6 @@ $(document).ready(function () {
 
 $(window).on('load', function () {
   // $(function() {
-  //console.log($('#graphsize'))
-  //console.log(dataset)
   if (!$.isEmptyObject(dataset)) {
     preprocess(dataset)
     $('#status-prepare').css('visibility', 'hidden')
