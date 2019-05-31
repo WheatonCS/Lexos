@@ -1,8 +1,9 @@
 {% extends "base.html" %}
-{% set active_page = "scrub" %}
+
 
 <!-- Head -->
 {% block head %}
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="/static/js/document-previews.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/document-previews.css"/>
@@ -10,11 +11,10 @@
     <link rel="stylesheet" type="text/css" href="/static/css/scrub.css"/>
 {% endblock %}
 
-<!-- Title -->
-{% block title %}Scrubber{% endblock %}
 
 <!-- Content -->
 {% block content %}
+
     <!-- Left column -->
     <div id="left-column">
 
@@ -23,20 +23,20 @@
             <h3 class="title">Scrubbing Options</h3>
             <div class="options-grid">
                 <div>
-                    <label class="checkbox-label"><input type="checkbox" name="lowercasebox" checked><span>Make Lowercase</span></label><br>
-                    <label class="checkbox-label"><input type="checkbox" name="digitsbox" checked><span>Remove Digits</span></label><br>
-                    <label class="checkbox-label"><input type="checkbox" name="spacesbox"><span>Remove Spaces</span></label><br>
-                    <label class="checkbox-label"><input type="checkbox" name="tabsbox"><span>Remove Tabs</span></label><br>
-                    <label class="checkbox-label"><input type="checkbox" name="newlinesbox"><span>Remove Newlines</span></label>
+                    <label class="checkbox-label"><input name="lowercasebox" type="checkbox" checked><span>Make Lowercase</span></label><br>
+                    <label class="checkbox-label"><input name="digitsbox" type="checkbox" checked><span>Remove Digits</span></label><br>
+                    <label class="checkbox-label"><input name="spacesbox"type="checkbox"><span>Remove Spaces</span></label><br>
+                    <label class="checkbox-label"><input name="tabsbox" type="checkbox"><span>Remove Tabs</span></label><br>
+                    <label class="checkbox-label"><input name="newlinesbox" type="checkbox"><span>Remove Newlines</span></label>
                 </div>
                 <div>
-                    <label class="checkbox-label"><input type="checkbox" name="tagbox"><span>Scrub Tags</span></label>
+                    <label class="checkbox-label"><input name="tagbox" type="checkbox"><span>Scrub Tags</span></label>
                     <h3 id="scrub-tags-settings-button" class="selectable">[Options]</h3><br>
-                    <label class="checkbox-label"><input type="checkbox" id="punctuation-button" name="punctuationbox" checked><span>Remove Punctuation</span></label><br>
+                    <label class="checkbox-label"><input id="punctuation-checkbox" name="punctuationbox" type="checkbox" checked><span>Remove Punctuation</span></label><br>
                     <div id="punctuation-options">
-                        <label class="checkbox-label"><input type="checkbox" name="hyphensbox"><span>Keep Hyphens</span></label><br>
-                        <label class="checkbox-label"><input type="checkbox" name="aposbox"><span>Keep Apostrophes</span></label><br>
-                        <label class="checkbox-label"><input type="checkbox" name="ampersandbox"><span>Keep Ampersands</span></label>
+                        <label class="checkbox-label"><input name="hyphensbox" type="checkbox"><span>Keep Hyphens</span></label><br>
+                        <label class="checkbox-label"><input name="aposbox" type="checkbox"><span>Keep Apostrophes</span></label><br>
+                        <label class="checkbox-label"><input name="ampersandbox" type="checkbox"><span>Keep Ampersands</span></label>
                     </div>
                 </div>
             </div>
@@ -92,9 +92,9 @@
         <div id="document-previews-top">
             <h3 class="title">Document Previews</h3>
             <div id="document-previews-buttons">
-                <div id="preview-button" class="button"><h3>Preview</h3></div>
-                <div id="apply-button" class="button"><h3>Apply</h3></div>
-                <div id="download-button" class="button"><h3>Download</h3></div>
+                <h3 id="preview-button" class="button">Preview</h3>
+                <h3 id="apply-button" class="button">Apply</h3>
+                <a id="download-button" class="button" href="scrub/download">Download</a>
             </div>
         </div>
         <div id="previews"></div>

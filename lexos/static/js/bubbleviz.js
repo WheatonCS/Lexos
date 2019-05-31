@@ -1,31 +1,35 @@
 $(function(){
 
     // Display the loading overlay
-    add_loading_overlay("#bubbleviz");
+    start_loading("#bubbleviz");
 
     // Create the bubbleviz
     $.ajax({type: "GET", url: "bubbleviz/get-word-counts"})
         .done(create_bubbleviz);
 });
 
+/**
+ * Create the bubbleviz.
+ * @param {string} response: The response from the "bubbleviz/get-word-counts"
+ *      request.
+ */
 function create_bubbleviz(response){
 
     // Parse the response for the dataset of word counts
     let dataset = {children: $.parseJSON(response)};
 
-    // Get the width and height of the bubbleviz element
+    // Set the diameter of the bubbleviz graph as the minimum axis of the
+    // bubbleviz element
     let bubbleviz_element = $("#bubbleviz");
     let diameter = Math.min(bubbleviz_element.width(),
         bubbleviz_element.height());
+
     let base_font_size = 5;
 
     // Create the color map
     let color = d3.scaleLinear()
         .domain([0, 1])
         .range(["#505050", "#47BCFF"]);
-
-    // Clear any existing content
-    bubbleviz_element.empty();
 
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
@@ -63,5 +67,5 @@ function create_bubbleviz(response){
 
     // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");
-    fade_in("#bubbleviz");
+    finish_loading("#bubbleviz", "#bubbleviz");
 }

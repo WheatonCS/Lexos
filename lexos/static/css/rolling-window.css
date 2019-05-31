@@ -6,9 +6,7 @@
 
 /* Form */
 form {
-    display: grid;
-    grid-template-rows: 18rem auto;
-    grid-gap: 2rem;
+    grid-template-rows: min-content 1fr;
 }
 
 
@@ -25,12 +23,9 @@ form {
 
 
 /* Text inputs */
-input[type=text] {
-    width: 11rem;
-}
-
 #window-section input[type=text],
 #search-terms-section input[type=text] {
+    width: 11rem;
     margin-left: 0;
 }
 
@@ -42,34 +37,4 @@ input[type=text] {
     margin-bottom: 0;
     margin-right: 0;
     width: calc(100% - 12rem);
-}
-
-
-/* Rolling window */
-#rolling-window-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 4rem;
-}
-
-#rolling-window-buttons {
-    justify-self: right;
-    margin-top: 1rem;
-    margin-right: 1rem;
-}
-
-#generate-button {
-    margin-right: 2rem;
-}
-
-#rolling-window {
-    height: 58rem;
-    margin: 0 1rem 1rem 1rem;
-    opacity: 1;
-}
-
-
-/* Inputs */
-#download-input {
-    display: none;
 }

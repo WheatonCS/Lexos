@@ -8,6 +8,8 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/graph.css"/>
     <script type="text/javascript" src="static/js/rolling-window.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/rolling-window.css"/>
 {% endblock %}
@@ -54,21 +56,21 @@
     </div>
 
     <!-- Rolling Window -->
-    <div id="rolling-window-section" class="borderless-section">
+    <div id="graph-section" class="section">
 
-        <div id="rolling-window-top">
+        <div id="graph-section-top">
             <h3 class="title">Rolling Window</h3>
 
-            <div id="rolling-window-buttons">
-                <h3 id="generate-button" class="selectable">Generate</h3>
-                <h3 id="download-button" class="selectable">Download</h3>
+            <div id="graph-buttons">
+                <h3 id="generate-button" class="button">Generate</h3>
+                <h3 id="download-button" class="button">Download</h3>
             </div>
         </div>
 
-        <div id="rolling-window"></div>
+        <div id="graph-container"></div>
     </div>
 
     <!-- Hidden elements -->
     <input id="file-to-analyze" name="filetorollinganalyze" type="hidden">
-    <input id="download-input" type="submit">
+    <input id="download-input" class="hidden" type="submit">
 {% endblock %}

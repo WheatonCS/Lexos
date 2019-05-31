@@ -175,27 +175,6 @@ def cache_cutting_options():
         session['cuttingoptions']['cutValue'] = request.form['MScutWord']
 
 
-def cache_csv_options():
-    """Stores csv options from request.form in session cookie object."""
-
-    if request.json:
-        session['csvoptions'] = {
-            'csvorientation': request.json['csvorientation'],
-            'csvdelimiter': request.json['csvdelimiter']}
-
-        if 'onlygreyword' in request.json:
-            session['csvoptions'].update(
-                {'onlygreyword': request.json['onlygreyword']})
-    else:
-        session['csvoptions'] = {
-            'csvorientation': request.form['csvorientation'],
-            'csvdelimiter': request.form['csvdelimiter']}
-
-        if 'onlygreyword' in request.form:
-            session['csvoptions'].update(
-                {'onlygreyword': request.form['onlygreyword']})
-
-
 def cache_analysis_option():
     """Stores base_analyze options from request.form in sess cookie object."""
 

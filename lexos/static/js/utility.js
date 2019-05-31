@@ -97,79 +97,141 @@ function send_ajax_form_request(url){
 
 
 /**
- * Adds a text overlay to the given element.
- * @param {string} element_query: The element to query for.
+ * Adds a text overlay to the elements found in the query.
+ * @param {string} query: The element to query for.
  * @param {string} text: The text to show.
- * @param {boolean} empty: Whether to empty the element's contents.
  */
-function add_text_overlay(element_query, text, empty=true){
-    let element = $(element_query);
-    if(empty) element.empty();
-    $(`
-        <div class="centerer">
-            <h3>${text}</h3>
-        </div>
-    `).appendTo(element);
+function add_text_overlay(query, text){
+    $(query).each(function(){
+
+        let element = $(this);
+        element.empty();
+
+        let text_element = $(`
+            <div class="centerer" style="opacity: 0; transition: opacity .5s">
+                <h3>${text}</h3>
+            </div>
+        `).appendTo(element);
+
+        setTimeout(function(){ text_element.css("opacity", "1"); });
+    });
 }
 
 
 /**
- * Adds a text overlay to the given elements.
- * @param {string[]} element_queries: The elements to query for.
- * @param {string} text: The text to show.
- * @param {boolean} empty: Whether to empty the element's contents.
+ * Adds a loading overlay to the elements found in the query.
+ * @param {string} query: The query for elements to add the loading overlay to.
  */
-function batch_add_text_overlay(element_queries, text, empty=true){
-    for(const element_query of element_queries)
-        add_text_overlay(element_query, text, empty);
+function start_loading(query){
+    $(query).each(function(){
+
+        let element = $(this);
+        element.empty();
+
+        let loading_overlay_element = $(`
+            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity .5s">
+                <h3>Loading</h3>
+            </div>
+        `).appendTo(element);
+
+        setTimeout(function(){ loading_overlay_element.css("opacity", "1"); });
+    });
 }
 
 
 /**
- * Adds a loading overlay to the given element.
- * @param {string} element_query: The element to query for.
- * @param {boolean} empty: Whether to empty the element's contents.
+ * Removes the loading overlay and fades in the loaded elements.
+ * @param {string} loading_overlay_query: The query for the element containing
+ *      the loading overlay to remove.
+ * @param {string} hidden_element_query: The query for elements to show.
+ * @param {number} sequential_fade_in_delay: The delay between fading in
+ *      subsequent elements.
  */
-function add_loading_overlay(element_query, empty=true){
-    let element = $(element_query);
-    if(empty) element.empty();
-    $(`
-        <div class="centerer">
-            <h3>Loading</h3>
-        </div>
-    `).appendTo(element);
+function finish_loading(loading_overlay_query,
+       hidden_element_query, sequential_fade_in_delay = 0){
+
+    // Remove the loading overlay from each element
+    $(loading_overlay_query).each(function(){
+        $(this).find(".loading-overlay").remove();
+    });
+
+    // Fade in each element
+    let accumulated_fade_in_delay = 0;
+    $(hidden_element_query).each(function(){
+
+        let element = $(this);
+
+        // Set the element's opacity to 0
+        element.css({"transition": "none", "opacity": "0"});
+
+        // Show the element
+        element.removeClass("hidden");
+
+        // Fade the element after a delay
+        setTimeout(function(){
+            element.css({"transition": "opacity .5s", "opacity": "1"});
+        }, accumulated_fade_in_delay+30);
+
+        accumulated_fade_in_delay += sequential_fade_in_delay;
+    });
 }
 
 
 /**
- * Adds a loading overlay to the given elements.
- * @param {string[]} element_queries: The elements to query for.
- * @param {boolean} empty: Whether to empty the element's contents.
+ * Fades in the elements found in the query.
+ * @param {string} query: The query for elements to fade in.
  */
-function batch_add_loading_overlay(element_queries, empty=true){
-    for(const element_query of element_queries)
-        add_loading_overlay(element_query, empty);
+function fade_in(query){
+    $(query).each(function(){
+
+        let element = $(this);
+
+        // Set the opacity to 0
+        element.css({"transition": "none", "opacity": "0"});
+
+        // Fade the element in
+        setTimeout(function(){
+           element.css({"transition": "opacity .5s", "opacity": "1"});
+        });
+    });
 }
 
 
 /**
- * Fades in the given element.
- * @param {string} element_query: The element to query for.
+ * Converts rem to px.
+ * @param {number} rem: The number of rem.
+ * @returns {number}: The number of px.
  */
-function fade_in(element_query){
-    let element = $(element_query);
-    element.css({"transition": "none", "opacity": "0"});
-    setTimeout(function(){
-        element.css({"transition": "opacity .2s", "opacity": "1"});
-    }, 300);
-}
+let px_per_rem = parseInt(getComputedStyle(document.documentElement).fontSize);
+function rem_to_px(rem){ return rem*px_per_rem; }
 
 
 /**
- * Fades in the given elements.
- * @param {string[]} element_queries: The elements to query for.
+ * Registers a callback for a given key.
+ * @param {string} key: The uppercase name of the key.
+ * @param {function} callback: The function to call.
  */
-function batch_fade_in(element_queries){
-    for(const element_query of element_queries)
-        fade_in(element_query);
+function key_callback(key, callback){
+
+    // Register the key press callback
+    key_down_callback(key, callback);
+
+    // Register the key release callback
+    $(window).keyup(function(event){
+        if(event.key.toUpperCase() === key) callback(event, false);
+    });
+}
+
+/**
+ * Registers a callback for a given key press.
+ * @param {string} key: The uppercase name of the key.
+ * @param {function} callback: The function to call.
+ */
+function key_down_callback(key, callback){
+
+    // Register the key press callback
+    $(window).keydown(function(event){
+        if(event.key.toUpperCase() === key &&
+            !event.originalEvent.repeat) callback(event, true);
+    });
 }

@@ -1,10 +1,12 @@
 let layouts = [];
+let word_cloud_count;
+let rendered_count = 0;
 let color;
 
 $(function(){
 
     // Display the loading overlay
-    add_loading_overlay("#multicloud");
+    start_loading("#multicloud");
 
     // Create the color map
     color = d3.scale.linear()
@@ -26,19 +28,16 @@ function create_word_cloud_layouts(response){
     // Parse the JSON response
     response = $.parseJSON(response);
 
-    // Clear any existing content in the multicloud element
-    let multicloud_element = $("#multicloud");
-    multicloud_element.empty();
-
     // If there are no active documents, display "No Active Documents" text
     // and return
-    if(!response.length){
-        add_text_overlay("No Active Documents");
+    word_cloud_count = response.length;
+    if(!word_cloud_count){
+        add_text_overlay("#multicloud", "No Active Documents");
         return;
     }
 
     // Otherwise, create a word cloud for each document
-    for(let i = 0; i < response.length; ++i){
+    for(let i = 0; i < word_cloud_count; ++i){
 
         // Get the document's data
         let document = response[i];
@@ -49,14 +48,12 @@ function create_word_cloud_layouts(response){
                 <h3 class="title">${document.name}</h3>
                 <div id="word-cloud-${i}" class="word-cloud"></div>
             </div>
-        `).appendTo(multicloud_element).find(".word-cloud");
+        `).appendTo("#multicloud").find(".word-cloud");
 
         // Calculate the sizes
-        let width = word_cloud_element.width();
-        let height = word_cloud_element.height();
-        let minimum_axis = Math.min(width, height);
-        let base_size = minimum_axis/50;
-        let maximum_size = minimum_axis/3-base_size;
+        let diameter = rem_to_px(46);
+        let base_size = diameter/50;
+        let maximum_size = diameter/3-base_size;
 
         // Create the list of the words' text and sizes
         let words = []
@@ -65,7 +62,7 @@ function create_word_cloud_layouts(response){
                 word[1]*maximum_size+base_size});
 
         // Create the layout
-        create_word_cloud_layout(i, document.name, words, width, height);
+        create_word_cloud_layout(i, document.name, words, diameter);
     }
 }
 
@@ -73,24 +70,23 @@ function create_word_cloud_layouts(response){
 /**
  * Creates a word cloud layout.
  *
- * @param {Number} id: The ID of the layout.
- * @param {String} name: The name of the document.
- * @param {Array} words: The top words in the document.
- * @param {Number} width: The width of the word cloud.
- * @param {Number} height: The height of the word cloud.
+ * @param {number} id: The ID of the layout.
+ * @param {string} name: The name of the document.
+ * @param {array} words: The top words in the document.
+ * @param {number} diameter: The diameter of the word cloud.
  */
-function create_word_cloud_layout(id, name, words, width, height){
+function create_word_cloud_layout(id, name, words, diameter){
 
     // Create the word cloud layout
     layouts[id] = d3.layout.cloud()
-        .size([width, height])
+        .size([diameter, diameter])
         .words(words)
         .padding(5)
         .rotate(function(){ return ~~(Math.random()*2)*90; })
         .font("Open Sans")
         .fontSize(function(d){ return d.size; })
         .on("end", function(words){
-            create_word_cloud(id, name, words, width, height);
+            create_word_cloud(id, name, words);
         });
 
     // Start the render
@@ -101,13 +97,11 @@ function create_word_cloud_layout(id, name, words, width, height){
 /**
  * Creates a word cloud.
  *
- * @param {Number} id: The ID of the layout.
+ * @param {number} id: The ID of the layout.
  * @param {string} name: The name of the document.
- * @param {List} words: The words in the layout.
- * @param {Number} width: The width of the word cloud.
- * @param {Number} height: The height of the word cloud.
+ * @param {list} words: The words in the layout.
  */
-function create_word_cloud(id, name, words, width, height){
+function create_word_cloud(id, name, words){
 
     let layout = layouts[id];
 
@@ -132,6 +126,8 @@ function create_word_cloud(id, name, words, width, height){
             })
             .text(function(d){ return d.text; });
 
-    // Fade the word cloud wrapper element in
-    fade_in(`#word-cloud-wrapper-${id}`);
+    // Remove the loading overlay and fade in the word clouds if this is the
+    // last word cloud to render
+    if(++rendered_count === word_cloud_count)
+        finish_loading("#multicloud", ".word-cloud-wrapper");
 }

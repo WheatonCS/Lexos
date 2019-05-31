@@ -1,33 +1,40 @@
 $(function(){
 
-    // Check that there is exactly one document active, initialize the legacy
-    // form input if applicable, and display the appropriate text on the
-    // "Rolling Window" section
+    // Send a request to get the active files and their IDs
     $.ajax({type: "GET", url: "/active-file-ids"})
+
+        // If the request is successful, check that there is exactly one
+        // document active and display the appropriate text on the
+        // "Rolling Window" section
         .done(single_active_document_check);
 
-    // Create the "Generate" button callback
-    $("#generate-button").click(create_rolling_window);
+    // If the "Generate" button is clicked, create the rolling window graph
+    $("#generate-button").click(function(){
+        create_graph("/rolling-window/get-graph");
+    });
 
-    // Create the "Download" button callback
+    // If the "Download" button is clicked, for legacy compatibility, click
+    // the "download-input" button which sends a download request
     $("#download-button").click(function(){ $("#download-input").click(); });
 });
 
 
 /**
- * Checks that there is exactly one document active.
+ * Checks that there is exactly one document active and sets the appropriate
+ * text in the "Rolling Window" section.
  * @param {string} response: The response from the "get-active-files" request.
  */
 function single_active_document_check(response){
 
-    // Get the active document IDs
+    // Get the active documents
     let documents = Object.entries($.parseJSON(response));
 
     // If there is not exactly one active document, display warning text and
-    // disable the "Generate" and "Download" buttons
+    // disable the "Generate" and "Download" buttons in the "Rolling Window"
+    // section
     let text;
     if(documents.length !== 1){
-        text = "This Tool Requires a Single Active Document";
+        text = "This Tool Requires A Single Active Document";
         $("#generate-button").addClass("disabled");
         $("#download-button").addClass("disabled");
     }
@@ -39,30 +46,6 @@ function single_active_document_check(response){
         $("#file-to-analyze").val(documents[0][0]);
     }
 
-    // Display the text
-    add_text_overlay("#rolling-window", text);
+    // Display the text in the graph container
+    add_text_overlay("#graph-container", text);
 }
-
-
-/**
- * Creates the Plotly rolling window graph.
- */
-function create_rolling_window(){
-
-    // Add the loading overlay
-    add_loading_overlay("#rolling-window");
-
-    // Send the request for the rolling window Plotly graph HTML
-    send_ajax_form_request("/rolling-window/get-graph")
-    .done(function(response){
-
-        // Remove any existing content in the rolling window element
-        let rolling_window = $("#rolling-window");
-        rolling_window.empty();
-
-        // Add the Plotly graph HTML and fade the element in
-        $("#rolling-window").html(response);
-        fade_in(rolling_window);
-    });
-}
-

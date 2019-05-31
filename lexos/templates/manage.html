@@ -5,7 +5,7 @@
 {% block head %}
 
     <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/utility.js"></script>
+    <script type="text/javascript" src="static/js/selection-box.js"></script>
     <script type="text/javascript" src="static/js/manage.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/manage.css"/>
 {% endblock %}
@@ -28,20 +28,22 @@
     </div>
 
     <!-- Table -->
-    <div id="manage-table" class="borderless-section">
+    <div id="table" class="borderless-section">
 
         <!-- Table head -->
-        <div id="manage-table-head">
-            <h3 class="manage-table-head-cell">Active</h3>
-            <h3 class="manage-table-head-cell">#</h3>
-            <h3 class="manage-table-head-cell">Document</h3>
-            <h3 class="manage-table-head-cell">Class</h3>
-            <h3 class="manage-table-head-cell">Source</h3>
-            <h3 class="manage-table-head-cell">Excerpt</h3>
+        <div id="table-head">
+            <h3 class="table-cell">Active</h3>
+            <h3 class="table-cell">#</h3>
+            <h3 class="table-cell">Document</h3>
+            <h3 class="table-cell">Class</h3>
+            <h3 class="table-cell">Source</h3>
+            <h3 class="table-cell">Excerpt</h3>
         </div>
 
         <!-- Table body -->
-        <div id="manage-table-body"></div>
+        <div id="table-body">
+            <div id="table-content"></div>
+        </div>
     </div>
 
     <!-- Context menu -->

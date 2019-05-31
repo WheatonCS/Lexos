@@ -7,7 +7,9 @@
 /* Form */
 form {
     display: grid;
+    grid-template-rows: min-content auto;
     grid-gap: 2rem;
+    height: 100%;
 }
 
 
@@ -24,7 +26,6 @@ form {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 3rem;
-    height: calc(100% - 3rem);
 }
 
 
@@ -32,8 +33,8 @@ form {
 #cut-settings-grid {
     display: grid;
     grid-template-columns: 1fr .8fr 1fr;
-    height: 5rem;
     align-content: center;
+    height: 5rem;
 }
 
 #milestone-input {
@@ -42,20 +43,7 @@ form {
 
 
 /* Document previews */
-#document-previews-section {
-    min-height: 16rem;
-}
-
 #document-previews-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
-}
-
-#previews {
-    max-height: calc(100vh - 33rem);
-    overflow: scroll;
-}
-
-#previews .centerer {
-    height: 9rem;
 }

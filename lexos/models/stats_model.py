@@ -245,11 +245,11 @@ class StatsModel(BaseModel):
         # Hide useless information on x-axis and set up title.
         figure.layout.update(
             autosize=True,
-            height=350,
+            height=340,
             showlegend=False,
             margin=dict(
                 r=0,
-                b=5,
+                b=0,
                 t=0,
                 pad=4
             ),

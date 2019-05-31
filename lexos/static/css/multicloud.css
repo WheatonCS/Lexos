@@ -1,9 +1,15 @@
+/* Form */
+form {
+    min-height: 100%;
+    height: auto;
+}
+
+
 /* Multicloud */
 #multicloud {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 50rem);
+    grid-template-columns: repeat(auto-fit, 46rem);
     grid-gap: 2rem;
-    margin-bottom: 2rem;
     align-content: center;
     justify-content: center;
 }
@@ -11,7 +17,7 @@
 
 /* Word cloud */
 .word-cloud-wrapper {
-    width: 50rem;
+    width: 46rem;
     height: 50rem;
     background-color: #F3F3F3;
     overflow: hidden;

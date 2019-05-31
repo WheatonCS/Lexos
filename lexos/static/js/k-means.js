@@ -16,7 +16,7 @@ function initialize(response){
 
     // Set the default clusters value
     let document_count = Object.entries(JSON.parse(response)).length;
-    $("#clusters").val(Math.round(document_count/2));
+    $("#clusters").val(Math.floor(document_count/2)+1);
 
     // Create the k-means graph
     create_k_means_graph();

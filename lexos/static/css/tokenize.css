@@ -4,16 +4,19 @@
 }
 
 
-/* Form */
-form {
-    grid-template-rows: 15rem minmax(60rem, auto);
-    height: calc(100vh - 15rem);
-}
-
-
 /* Options section */
 #options-section {
     grid-template-columns: 1.9fr .9fr 1fr 1.5fr;
+}
+
+
+/* Table */
+#table {
+    height: 100%;
+}
+
+#table-data {
+    height: calc(100% - 10rem);
 }
 
 
@@ -21,8 +24,8 @@ form {
 #table-top {
     display: grid;
     grid-template-columns: 35rem auto 10rem;
-    height: 5rem;
-    padding: 1rem;
+    height: 3rem;
+    margin: 1rem;
 }
 
 #rows-per-page-option > h3,
@@ -34,7 +37,7 @@ form {
     justify-self: center;
 }
 
-#table-top input[type=text] {
+#search-option input {
     width: 20rem;
 }
 
@@ -43,29 +46,19 @@ form {
 }
 
 
-/* Table */
-#table {
-    height: calc(100vh - 32rem);
-    background-color: #FFFFFF;
-    min-width: 0;
-}
-
-#table-data {
-    height: calc(100% - 10rem);
-}
-
+/* Table data */
 #table-data-grid {
     height: 100%;
     display: grid;
     grid-template-rows: max-content auto;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 
 
 /* Table head */
 #table-head,
-.tokenize-row {
+.table-row {
     grid-auto-columns: minmax(20rem, 1fr);
     grid-auto-flow: column;
 }
@@ -75,7 +68,7 @@ form {
     grid-template-rows: 1fr;
 }
 
-#table-head .tokenize-cell {
+#table-head .table-cell {
     color: #47BCFF;
     background-color: #FFFFFF;
 }
@@ -83,27 +76,27 @@ form {
 
 /* Table body */
 #table-body {
-    direction: rtl;
     overflow-x: visible;
-    overflow-y: scroll;
+    overflow-y: auto;
+    direction: rtl;
 }
 
-.tokenize-row {
-    direction: ltr;
+.table-row {
     display: grid;
     margin-bottom: 1rem;
+    direction: ltr;
 }
 
-.tokenize-row:last-child {
+.table-row:last-child {
     margin-bottom: 0;
 }
 
-.tokenize-cell {
+.table-cell {
     padding: 1rem;
     min-height: 4rem;
-    background-color: #F3F3F3;
     overflow: hidden;
     overflow-wrap: break-word;
+    background-color: #F3F3F3;
 }
 
 
@@ -111,19 +104,14 @@ form {
 #table-bottom {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 5rem;
-    padding: 1rem;
-}
-
-#table-bottom label {
-    margin-bottom: 0;
+    height: 3rem;
+    margin: 1rem;
 }
 
 #navigation-buttons {
-    align-self: center;
     justify-self: right;
 }
 
 #navigation-buttons > h3 {
-    margin-left: 2rem;
+    margin-left: .5rem;
 }

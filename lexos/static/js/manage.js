@@ -1,138 +1,164 @@
-/**
- * Initializes the manage page after it has loaded.
- */
-let d_held = false;
 $(function(){
 
-    // Table
-    update_table();
+    // Create the table displaying the uploaded documents
+    create_table();
 
-    // Context menu
-    $(window).on("mousedown resize", context_menu_hide_callback);
-    $("#main-section").on("scroll", context_menu_hide_callback);
-
-    $("#preview-button").mousedown(preview_callback);
-    $("#edit-name-button").mousedown(edit_name_callback);
-    $("#edit-class-button").mousedown(edit_class_callback);
-    $("#delete-button").mousedown(delete_callback);
-
-    // $("#merge-selected-button").mousedown(merge_selected_callback);
-    $("#edit-selected-classes-button").mousedown(edit_selected_classes_callback);
-    $("#delete-selected-button").mousedown(delete_selected_callback);
-
-    $("#select-all-button").mousedown(select_all_callback);
-    $("#deselect-all-button").mousedown(deselect_all_callback);
-
-    // Selection
+    // Initialize the selection box
     initialize_selection_box();
-    let manage_table_body = $("#manage-table-body");
-    manage_table_body.mousedown(selection_start_callback);
-    manage_table_body.mouseup(selection_end_callback);
+
+    // Create the context menu hide callbacks
+    $(window).on("mousedown resize", hide_context_menu);
+    $("#main-section").on("scroll", hide_context_menu);
+
+    // Create the context menu button callbacks
+    $("#preview-button").mousedown(preview);
+    $("#edit-name-button").mousedown(edit_name);
+    $("#edit-class-button").mousedown(edit_class);
+    $("#delete-button").mousedown(delete_document);
+    // $("#merge-selected-button").mousedown(merge_selected_callback);
+    $("#edit-selected-classes-button").mousedown(edit_selected_classes);
+    $("#delete-selected-button").mousedown(delete_selected);
+    $("#select-all-button").mousedown(select_all);
+    $("#deselect-all-button").mousedown(deselect_all);
+
+    // Toggle selection when the "A" key is pressed
+    key_down_callback('A', toggle_selection);
 });
+
+/**
+ * Toggles between selecting and deselecting all documents.
+ * @param {event} event: The event that triggered the callback.
+ * @param {boolean} pressed: Whether the key was pressed or released.
+ */
+function toggle_selection(event, pressed){
+
+    // Check whether all documents are selected
+    let all_selected = true;
+    $(".table-row").each(function(){
+        if(!$(this).hasClass("selected-table-row")) all_selected = false;
+    });
+
+    // If all documents are selected, deselect all. Otherwise, select all
+    if(all_selected) deselect_all();
+    else select_all();
+}
 
 
 /**
- * Updates the table displaying the uploaded documents.
+ * Creates the table displaying the uploaded documents.
  */
 let documents = [];
-function update_table(){
-    let form = $("form").css("opacity", "0");  // Hide the page
-    $("#manage-table-body").empty();  // Delete the table if it exists
+function create_table(){
+
+    // Display the loading overlay on the table body
+    start_loading("#table-content");
 
     // Get the uploaded documents
     $.ajax({type: "GET", url: "manage/documents"}).done(function(json_response){
 
         documents = JSON.parse(json_response);
 
-        // If there are no documents, display "No Documents" text
+        // If there are no documents, display "No Documents" text and return
         if(documents.length === 0){
-            form.html(`<div class="centerer"><h3>No Documents</h3></div>`);
-            form.css("opacity", "1");  // Show the page
+            add_text_overlay("#table-content", "No Documents");
+            return;
         }
 
-        // Otherwise, create the table
-        else {
-            let form = $("form");
-            for(let i = 0; i < documents.length; ++i){
-                const d = documents[i];
-                append_row(d.id, i+1, d.state, d.label, d.class, d.source, d.preview);
-            }
-
-            form.css("opacity", "1");  // Show the page
+        // Otherwise, create the table content
+        for(let i = 0; i < documents.length; ++i){
+            const d = documents[i];
+            append_row(d.id, i+1, d.state, d.label, d.class, d.source, d.preview);
         }
+
+        // Remove the loading overlay and fade in the table content
+        finish_loading("#table-content", "#table-content");
     });
 }
 
 
 /**
- * Appends a row to the document table.
- *
- * @param {String} id: The ID of the document.
+ * Appends a row to the table.
+ * @param {string} id: The ID of the document.
  * @param {number} row_number: The number of the row.
- * @param {String} state: Whether the document is selected ("true" or "false").
- * @param {String} label: The name of the document.
- * @param {String} class_name: The class name of the document.
- * @param {String} source: The source name of the document.
- * @param {String} preview: A preview of the document.
+ * @param {string} active: Whether the document is active ("true" or "false").
+ * @param {string} label: The name of the document.
+ * @param {string} class_name: The class name of the document.
+ * @param {string} source: The source name of the document.
+ * @param {string} preview: The preview of the document.
  */
-function append_row(id, row_number, state, label, class_name, source, preview){
+function append_row(id, row_number, active, label, class_name, source, preview){
 
-    // Truncate
-    label = label.substring(0, 30);
-    source = source.substring(0, 30);
-    preview = preview.substring(0, 200);
-
-    // Append the row
+    // Create a new row and append it to the "table-content" element
     let row = $(
-        `<div id="${id}" class="manage-table-row">`+
+        `<div id="${id}" class="table-row">`+
             `<div class="checkbox"></div>`+
-            `<h3 class="manage-table-cell">${row_number}</h3>`+
-            `<h3 class="manage-table-cell">${label}</h3>`+
-            `<h3 class="manage-table-cell">${class_name}</h3>`+
-            `<h3 class="manage-table-cell">${source}</h3>`+
-            `<h3 class="manage-table-cell"></h3>`+
+            `<h3 class="table-cell">${row_number}</h3>`+
+            `<h3 class="table-cell"></h3>`+
+            `<h3 class="table-cell"></h3>`+
+            `<h3 class="table-cell"></h3>`+
+            `<h3 class="table-cell"></h3>`+
         `</div>`
-    ).appendTo("#manage-table-body");
+    ).appendTo("#table-content");
 
-    $(row).find(".manage-table-cell").last().text(preview);
-    if(state) row.addClass("selected-row");
-    row.on("contextmenu", context_menu_show_callback);
+    // HTML-escape the text and add it to the row
+    $(row.find(".table-cell")[1]).text(label);
+    $(row.find(".table-cell")[2]).text(class_name);
+    $(row.find(".table-cell")[3]).text(source);
+    $(row.find(".table-cell")[4]).text(preview.substring(0, 200));
+
+    // If the row is active, add the "selected-table-row" class
+    if(active) row.addClass("selected-table-row");
+
+    // Add the context menu callback to the row
+    row.on("contextmenu", show_context_menu);
 }
 
 
 /**
- * Shows the context menu.
- *
+ * Shows a custom context menu.
  * @param {Event} event: The event that triggered the callback.
  */
 let context_menu_document_id;
-function context_menu_show_callback(event){
+function show_context_menu(event){
+
+    // Prevent the default context menu from appearing
     event.preventDefault();
 
+    // Save the ID of the right-clicked document for use in other functions
     context_menu_document_id = JSON.stringify(parseInt($(this).attr("id")));
 
+    // Set the custom context menu's position to the right-click and make it
+    // visible and clickable
     let mouse_position = get_mouse_position(event);
-    $("#context-menu").css({"pointer-events": "auto", "opacity": "1",
+    let context_menu_element = $("#context-menu");
+    context_menu_element.css({"pointer-events": "auto", "opacity": "1",
         "left": `${mouse_position.x}px`, "top": `${mouse_position.y}px`});
 }
 
 
 /**
- * Hides the context menu.
- *
+ * Hides the custom context menu.
  * @param {Event} event: The event that triggered the callback.
  */
-function context_menu_hide_callback(event){
+function hide_context_menu(event){
+
+    // Hide the custom context menu and make it unclickable
     $("#context-menu").css({"pointer-events": "none", "opacity": "0"});
 }
 
 
 /**
- * Gives a preview popup of the document that was right-clicked.
+ * Creates a popup containing a preview of the document that was right-clicked.
  */
-function preview_callback(){
+function preview(){
+
+    // Send a request to get the preview of the document that was right-clicked
     send_request("preview", context_menu_document_id)
+
+    // If the request is successful...
     .done(function(response){
+
+        // Create a popup and append the HTML-escaped document preview to it
         create_popup();
         let preview = $(`<h3></h3>`).appendTo("#popup-content");
         preview.text(JSON.parse(response).previewText);
@@ -143,16 +169,22 @@ function preview_callback(){
 /**
  * Renames the document that was right-clicked.
  */
-function edit_name_callback(){
+function edit_name(){
+
+    // Create a popup containing a text input
     create_text_input_popup();
 
+    // If the popup's "OK" button is clicked
     $("#popup-ok-button").click(function(){
-         send_request("edit-name",
-             [context_menu_document_id, $("#popup-input").val()])
-        .done(function(){
-            close_popup();
-            update_table();
-        });
+
+        // Make a request to set the name of the document that was
+        // right-clicked to the content of the popup's text input field
+        send_request("edit-name",
+            [context_menu_document_id, $("#popup-input").val()])
+
+            // If the request is successful, close the popup and recreate the
+            // table
+            .done(function(){ close_popup();  create_table(); });
     });
 }
 
@@ -160,16 +192,22 @@ function edit_name_callback(){
 /**
  * Sets the class name of the document that was right-clicked.
  */
-function edit_class_callback(){
+function edit_class(){
+
+    // Create a popup containing a text input
     create_text_input_popup();
 
+    // When the popup's "OK" button is clicked
     $("#popup-ok-button").click(function(){
+
+        // Make a request to set the class of the document that was
+        // right-clicked to the content of the popup's text input field
         send_request("set-class",
             [context_menu_document_id, $("#popup-input").val()])
-        .done(function(){
-            close_popup();
-            update_table();
-        });
+
+            // If the request is successful, close the popup and recreate the
+            // table
+            .done(function(){ close_popup(); create_table(); });
     });
 }
 
@@ -177,15 +215,20 @@ function edit_class_callback(){
 /**
  * Deletes the document that was right-clicked.
  */
-function delete_callback(){
-    send_request("delete", context_menu_document_id).done(update_table);
+function delete_document(){
+
+    // Send a request to delete the document that was right-clicked
+    send_request("delete", context_menu_document_id)
+
+        // If the request is successful, recreate the table
+        .done(create_table);
 }
 
 
 /**
  * Merges the selected documents.
  */
-function merge_selected_callback(){
+function merge_selected(){
     // Not implemented
 }
 
@@ -193,16 +236,22 @@ function merge_selected_callback(){
 /**
  * Edits the class names of the selected documents.
  */
-function edit_selected_classes_callback(){
+function edit_selected_classes(){
+
+    // Create a popup containing a text input
     create_text_input_popup();
 
+    // If the popup's "OK" button is clicked...
     $("#popup-ok-button").click(function(){
+
+        // Send a request to set the class names of the selected documents
+        // to the value in the popup's text input
         send_request("edit-selected-classes",
             [get_selected_document_ids(), $("#popup-input").val()])
-        .done(function(){
-            close_popup();
-            update_table();
-        });
+
+            // If the request is successful, close the popup and recreate the
+            // table
+            .done(function(){ close_popup(); create_table(); });
     });
 }
 
@@ -210,21 +259,34 @@ function edit_selected_classes_callback(){
 /**
  * Deletes the selected documents.
  */
-function delete_selected_callback(){
-    send_request("delete-selected").done(update_table);
+function delete_selected(){
+
+    // Send a request to delete the selected documents
+    send_request("delete-selected")
+
+        // If the request is successful, recreate the table
+        .done(create_table);
 }
 
 
 /**
- * Selects all the documents.
+ * Selects all the documents in the table.
  */
-function select_all_callback(){
+function select_all(){
+
     let id_list = [];
-    $(".manage-table-row").each(function(){
+
+    // For each row in the table...
+    $(".table-row").each(function(){
+
+        // Add the document's ID to "id_list"
         id_list.push($(this).attr("id"));
-        $(this).addClass("selected-row");
+
+        // Give the row the class that indicates it is selected
+        $(this).addClass("selected-table-row");
     });
 
+    // Send a request to activate all the documents
     send_request("activate", id_list);
 }
 
@@ -232,175 +294,22 @@ function select_all_callback(){
 /**
  * Deselects all the documents.
  */
-function deselect_all_callback(){
+function deselect_all(){
+
     let id_list = [];
-    $(".manage-table-row").each(function(){
+
+    // For each row in the table...
+    $(".table-row").each(function(){
+
+        // Add the document's ID to "id_list"
         id_list.push($(this).attr("id"));
-        $(this).removeClass("selected-row");
+
+        // Remove the class that indicates the row is selected
+        $(this).removeClass("selected-table-row");
     });
 
+    // Send a request to deactivate all the documents
     send_request("deactivate", id_list);
-}
-
-
-/**
- * Initializes the selection box.
- */
-function initialize_selection_box(){
-
-    // Determine if the "D" key is held and change the selection box color
-    // depending on if it is
-    $(window).keydown(function(event){
-        if(event.which !== 68) return;  // Only accept the "D" key
-        d_held = true;
-        set_selection_box_color();
-    });
-
-    $(window).keyup(function(event){
-        if(event.which !== 68) return;  // Only accept the "D" key
-        d_held = false;
-        set_selection_box_color();
-    });
-
-    // Disable the selection box if it is outside of the table body
-    $(window).mousemove(function(){ $("#selection-box").css("opacity", "0"); });
-}
-
-
-/**
- * Sets the color of the selection box.
- */
-function set_selection_box_color(){
-    if(d_held) $("#selection-box").css({"background-color": "#000000"});
-    else $("#selection-box").css({"background-color": "#47BCFF"});
-}
-
-
-/**
- * Sets the selection box starting point.
- *
- * @param {Event} event: The event which triggered the callback.
- */
-let start_mouse_position;
-let start_scroll_offset;
-function selection_start_callback(event){
-    if(event.which !== 1) return; // Only accept left clicks
-
-    start_mouse_position = get_mouse_position(event);
-    start_scroll_offset = get_scroll_offset("#manage-table-body");
-
-    $("#manage-table-body").on("mousemove scroll", selection_drag_callback);
-
-    // Create the selection box
-    let selection_box = $("#selection-box");
-    set_selection_box_color();
-    selection_box.css({"opacity": ".6", "width": "0", "height": "0",
-        "transition": "opacity .2s, background-color .2s"});
-}
-
-
-/**
- * Updates the selection box visualization.
- * @param {Event} event: The event which triggered the callback.
- */
-let previous_mouse_position;
-let scroll_start_position;
-function selection_drag_callback(event){
-
-    event.stopPropagation();
-
-    let scroll_offset = get_scroll_offset("#manage-table-body");
-
-    // If the event is a mouse move event, get the mouse position
-    let mouse_position;
-    if(event.type === "mousemove"){
-        mouse_position = get_mouse_position(event);
-        previous_mouse_position = mouse_position;
-        scroll_start_position = scroll_offset;
-    }
-
-    // Otherwise, the event is a scroll event, so use the previous mouse position
-    else mouse_position = previous_mouse_position;
-
-    // Get the scroll delta and selection start position
-    let scroll_delta = point_subtract(scroll_offset, start_scroll_offset);
-    let selection_start = point_subtract(start_mouse_position, scroll_delta);
-
-    // Clamp the selection start position to be within the table body
-    let table_body_bounding_box = $("#manage-table-body")[0].getBoundingClientRect();
-    let table_body_position = {x: table_body_bounding_box.left, y: table_body_bounding_box.top};
-    let table_body_size = {x: table_body_bounding_box.width, y: table_body_bounding_box.height};
-    selection_start = point_maximum(point_minimum(selection_start,
-        point_add(table_body_position, table_body_size)), table_body_position);
-
-    // Get the selection box visualization position and size
-    let position = point_minimum(selection_start, mouse_position);
-    let size = point_subtract(point_maximum(
-        selection_start, mouse_position), position);
-
-    // Update the selection box's CSS
-    let selection_box = $("#selection-box");
-    selection_box.css({"left": `${position.x}px`, "top": `${position.y}px`,
-        "width": `${size.x}px`, "height": `${size.y}px`});
-}
-
-
-/**
- * Applies the selection
- *
- * @param {Event} event: The event which triggered the callback.
- */
-function selection_end_callback(event){
-    if(event.which !== 1) return;  // Only accept left clicks
-
-    // Check that there is a valid starting position
-    if(!start_mouse_position || start_mouse_position.x.isNaN) return;
-
-    $(window).unbind("mousemove", selection_drag_callback);
-    $("#manage-table-body").unbind("scroll", selection_drag_callback);
-    $("#selection-box").css("opacity", "0");  // Remove the selection box
-
-    // Select the appropriate documents
-    let modified_id_list = [];
-    let mouse_position = get_mouse_position(event);
-    let table_scroll_offset = get_scroll_offset("#manage-table-body");
-    let window_scroll_offset = get_window_scroll_offset();
-
-    $(".manage-table-row").each(function(){
-        let bounding_box = $(this)[0].getBoundingClientRect();
-
-        // Get the selection minimum and maximum
-        let scroll_delta = point_subtract(
-            get_scroll_offset("#manage-table-body"), start_scroll_offset);
-        let selection_start = point_subtract(start_mouse_position, scroll_delta);
-
-        let selection_minimum = point_minimum(selection_start, mouse_position);
-        let selection_maximum = point_maximum(selection_start, mouse_position);
-
-        // Check if the element is within the selection
-        if(window_scroll_offset.x+bounding_box.left < selection_maximum.x &&
-            window_scroll_offset.x+bounding_box.right > selection_minimum.x &&
-            window_scroll_offset.y+bounding_box.top < selection_maximum.y &&
-            window_scroll_offset.y+bounding_box.bottom > selection_minimum.y){
-
-            // Select or deselect the document
-            if(d_held && $(this).hasClass("selected-row")){
-                $(this).removeClass("selected-row");
-                modified_id_list.push($(this).attr("id"));
-            }
-            else if(!d_held && !$(this).hasClass("selected-row")){
-                $(this).addClass("selected-row");
-                modified_id_list.push($(this).attr("id"));
-            }
-        }
-    });
-
-    // Reset the starting position
-    start_mouse_position = {x: NaN, y: NaN};
-
-    // Apply the selection if one was made
-    if(modified_id_list.length)
-        send_request(d_held ? "deactivate" : "activate", modified_id_list);
 }
 
 
@@ -427,8 +336,8 @@ function send_request(url, payload = ""){
  */
 function get_selected_document_ids(){
     let id_list = [];
-    $(".manage-table-row").each(function(){
-        if($(this).hasClass("selected-row"))
+    $(".table-row").each(function(){
+        if($(this).hasClass("selected-table-row"))
             id_list.push(parseInt($(this).attr("id")));
     });
 

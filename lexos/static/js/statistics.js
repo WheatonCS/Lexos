@@ -1,49 +1,53 @@
 $(function(){
-    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+
+    // Send a request to get the active files and their IDs
+    $.ajax({type: "GET", url: "/active-file-ids"})
+
+    // If the request is successful, initialize the page
+        .done(initialize);
 });
 
-
+/**
+ * Initializes the statistics page.
+ * @param {string} response: The response from the "/active-file-ids" request.
+ */
 function initialize(response){
 
     // Initialize legacy inputs
     if(!initialize_legacy_inputs(response)) return;
 
-    // Start the loading overlays
-    batch_add_loading_overlay(["#box-plot", "#table", "#corpus-statistics",
-            "#standard-error-test", "#interquartile-range-test"]);
+    // Add a loading overlay to the various elements that are loading data
+    start_loading("#table, #corpus-statistics, "+
+        "#standard-error-test, #interquartile-range-test");
 
-    // Get the corpus statistics
+    // Send a request to get the corpus statistics
     send_ajax_form_request("/statistics/corpus")
+
+         // If the request is successful, create the corpus statistics
         .done(create_corpus_statistics);
 
-    // Get the document statistics
+    // Send a request to get the document statistics
     send_ajax_form_request("/statistics/documents")
+
+        // If the request is successful, create the document statistics
         .done(create_document_statistics);
 
-    // Get the box plot
-    send_ajax_form_request("/statistics/box-plot").done(function(response){
-       let box_plot_element = $("#box-plot");
-       box_plot_element.html(response);
-       fade_in("#box-plot");
-    });
+    // Create the box plot graph for the "Document Sizes" section
+    create_graph("/statistics/box-plot");
 }
 
 
 function create_corpus_statistics(response){
-    response = JSON.parse(response.replace(/\bNaN\b/g, "\"N/A\""));
 
-    // Empty the elements
-    let corpus_statistics_element = $("#corpus-statistics").empty();
-    $("#standard-error-test").empty();
-    $("#interquartile-range-test").empty();
-    console.log(response);
+    // Parse the JSON response, replacing any "NaN" values with "N/A"
+    response = JSON.parse(response.replace(/\bNaN\b/g, "\"N/A\""));
 
     // Set the corpus statistics section data
     $(`
         <h3>Average: ${response.average}</h3><br>
         <h3>Standard Deviation: ${response.standard_deviation}</h3><br>
         <h3>Interquartile Range: ${response.interquartile_range}</h3>
-    `).appendTo(corpus_statistics_element);
+    `).appendTo("#corpus-statistics");
 
     // Set the standard error test data
     set_anomalies("standard-error", response.standard_error_small,
@@ -53,9 +57,10 @@ function create_corpus_statistics(response){
     set_anomalies("interquartile-range", response.interquartile_range_small,
         response.interquartile_range_large);
 
-    // Fade in the elements
-    batch_fade_in(["#corpus-statistics", "#standard-error-test",
-        "#interquartile-range-test"]);
+    // Remove the loading overlays and fade the elements in
+    finish_loading("#corpus-statistics, #standard-error-test, "+
+        "#interquartile-range-test", "#corpus-statistics, "+
+        "#standard-error-test, #interquartile-range-test");
 }
 
 
@@ -78,20 +83,17 @@ function set_anomalies(name, small, large){
 
 function create_document_statistics(response){
 
-    // Empty the table element
-    let table_element = $("#table").empty();
-
     // Append the head and table body
     $(`
-        <div id="table-head">
+        <div id="table-head" class="hidden">
             <h3 class="table-head-cell">Name</h3>
             <h3 class="table-head-cell">Total Terms</h3>
             <h3 class="table-head-cell">Distinct Terms</h3>
             <h3 class="table-head-cell">Average Terms</h3>
             <h3 class="table-head-cell">Single-Occurrence Terms</h3>
         </div>
-        <div id="table-body"></div>
-    `).appendTo(table_element);
+        <div id="table-body" class="hidden"></div>
+    `).appendTo("#table");
 
     // Append the rows
     let rows = Object.entries(JSON.parse(response));
@@ -110,6 +112,6 @@ function create_document_statistics(response){
     }
 
     // Fade the table in
-    fade_in("#table");
+    finish_loading("#table", "#table-head, #table-body");
 }
 

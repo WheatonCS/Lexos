@@ -6,10 +6,8 @@
 
 /* Form */
 form {
-    display: grid;
-    grid-template-rows: 15rem auto;
-    grid-gap: 2rem;
-    height: 100%;
+    grid-template-rows: min-content 1fr;
+    min-height: 60rem;
 }
 
 
@@ -24,4 +22,17 @@ form {
 /* Document names */
 #document-names-section {
     display: none;
+}
+
+
+/* Results top */
+.results-top {
+    display: grid;
+    height: 3rem;
+    margin: 1rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+.results-top-right {
+    justify-self: right;
 }
