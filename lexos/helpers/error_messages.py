@@ -33,8 +33,6 @@ REPLACEMENT_RIGHT_OPERAND_MESSAGE = \
     "Too many values on right side of replacement string."
 REPLACEMENT_NO_LEFT_HAND_MESSAGE = \
     "Missing value on the left side of replacement string."
-REPLACEMENT_NO_RIGHT_HAND_MESSAGE = \
-    "Missing value on the right side of replacement string."
 # ----------------------------------------------------------------------------
 
 
