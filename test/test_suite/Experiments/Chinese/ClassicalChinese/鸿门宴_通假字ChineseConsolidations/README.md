@@ -10,20 +10,34 @@ Specific file used here:
 
 Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/ directory, you should
-be able to produce a dendrogram as shown in ResultsToExpect/.
+be able to reproduce the file shown in ResultsToExpect/.
 
 Steps:
 =====================================================================
-(0) UPLOAD 鸿门宴HongMenYan.txt
+(0) UPLOAD:
 
-(1) SCRUB both:
+    鸿门宴HongMenYan.txt
 
-    (a) Remove punctuation
-    (b) Make Lowercase
-    (c) Remove Digits
-    (d) Load the Chinese_consolidations.txt file for Consolidations
-    (e) Apply Scrubbing
+(1) SCRUB:
+
+    (a) Remove Punctuation
+    (b) Remove Digits
+    (c) Consolidations
+        Upload the Chinese_consolidations.txt file
     
-    Download Scrubbed Files
+    Apply Scrubbing
+To compare the two files, you can:
 
+    Download Scrubbed Files for a manual compare.
+OR
+
+    (a) Go back to Upload and upload the 鸿门宴HongMenYan_without_consolidations.txt
+        file found there
+    (b) Go to Analyze - Similarity Query
+    (c) Choose Tokenize 1-gram by Characters
+    
+    Get Similarity Rankings: the two files should be identical, and should have a
+    similarity score of 0.
+
+mjl - May 20, 2019
 jg - June 10, 2014

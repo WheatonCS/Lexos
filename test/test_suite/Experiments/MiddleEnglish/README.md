@@ -41,49 +41,61 @@ be able to produce a dendrogram as shown in ResultsToExpect/.
 
 Steps:
 ======================================================================
-(0) UPLOAD the texts below:
+(0) UPLOAD:
 
-+ AncreneWisse.txt
-+ HaliMeidhadB.txt
-+ Juliana.txt
-+ KentishSermons.txt
-+ LambethHom.txt
-+ SawlesWardeB.txt
+    (1) AncreneWisse.txt
+    (2) HaliMeidhadB.txt
+    (3) Juliana.txt
+    (4) KentishSermons.txt
+    (5) LambethHom.txt
+    (6) SawlesWardeB.txt
 
-(1) SCRUB both:
+(1) SCRUB:
 
-    (a) Remove punctuation
+    (a) Remove Punctuation
     (b) Make Lowercase
     (c) Remove Digits
-    (d) Click "Consolidations". Enter "ð,þ" (without the quotation marks)
+    (d) Under Consolidations:
+        Enter "ð:þ" (without the quotation marks)
 
     Apply Scrubbing
-(2) CUT all texts into 700 word chunks.
+(2) CUT:
+ 
+    (a) Tokens/Segment with a Segment Size of 700
+    (b) leave other options on their default values
 
     Apply Cuts
-(3) ANALYZE - Dendrogram
+(3) ANALYZE - Clustering - Hierarchical Clustering:
 
-    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
-    (b) Give a Title
-    (c) Edit Labels, if desired
-    (d) Get Dendrogram. Download Diagram.
-    (e) Enter "25" in the "Leaves to Display" field. Get and download the dendrogram again.
-    (f) Compare your result with the .pdf found in the ResultsToExpect/ directory.
-(4) VISUALIZE - Word Cloud
-
-    (a) Select segments 1, 88, and 90 of Ancrene Wisse and click Get Graph. Click the Download PNG
-    link to save the image. Select segments 2, 3, and 4 of Ancrene Wisse and click Get Graph.
-    Download the PNG.
-    (b) Compare your result with the .png files found in the ResultsToExpect/ directory.
-(5) VISUALIZE - BubbleViz
-
-    (a) Select all segments by clicking "Check All" in the dropdown menu. The graph will take about 
-    10 seconds to render.
-    (b) Mouse over the bubbles to view word counts. If a bubble is too small to display the word 
-    label, mousing over the bubble will also display the word it represents.
-    (c) BubbleViz does not currently have a download function, but you can compare your result with the
+    (a) Use the default metrics:
+        Distance Method: Euclidean
+        Linkage Method: Average
+    (b) Assign Temoporary Labels, if desired
+    (c) leave other options on their default values
     
- screenshot in the ResultsToExpect/ directory.
+    Get Dendrogram
+    Compare your result with the .png found in the ResultsToExpect/ directory.
+    This dendrogram will look quite cluttered, there are a lot of segments here.
+(4) VISUALIZE - Word Cloud:
+
+    (a) Select segments 1, 88, and 90 of Ancrene Wisse
+    
+    Get Graph
+    Compare your result with the .png file found in the ResultsToExpect/ directory.
+    
+    (b)Select segments 2, 3, and 4 of Ancrene Wisse
+    
+    Get Graph
+    Compare your result with the .png file found in the ResultsToExpect/ directory.
+(5) VISUALIZE - BubbleViz:
+
+    (a) Select all segments with Toggle All
+        The graph may take a bit to render.
+    (b) Mouse over the bubbles to view word counts
+    
+    BubbleViz does not currently have a download function, but you can compare your
+    result with the screenshot in the ResultsToExpect/ directory.
 
 
+mjl - May 20, 2019
 sk - July 1, 2013
