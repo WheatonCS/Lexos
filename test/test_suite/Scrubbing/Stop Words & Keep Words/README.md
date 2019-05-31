@@ -3,25 +3,20 @@ Stop Words & Keep Words
 
 #### Test Stop Words & Keep Words
 
-*Test files:* kw_for_experiment.txt, kw_text.txt, sw_for_experiment.txt,
-sw_kw_experiment.txt
+*Test files:* sw_kw_text.txt, sw_kw_words.txt
 
 *Result files:* kw_experimentResults.txt, sw_experimentResults.txt
 
-1. UPLOAD kw_text.txt and sw_kw_experiment.txt
+1. UPLOAD: 
+    - Upload sw_kw_text.txt
 
 2. SCRUB: 
-    - Remove All Punctuation
-    - Make Lowercase
-    - Remove Digits
-    - Stop Words/Keep Words
-        * Toggle to Stop Words and upload sw_for_experiment.txt
-        * Toggle to Keep Words and upload kw_for_experiment.txt
+    - Select Remove All Punctuation
+    - Select Make Lowercase
+    - Select Remove Digits
+    - Stop Words/Keep Words: select either option and upload sw_kw_words.txt
     
-3. RESULTS
-    - Two files containing
-        * lowercase letters
-        * no digits
-        * no punctuation
-    - sw_experimentResults.txt with the, dog, and ran removed
-    - kw_experimentResults.txt with no content
+3. RESULTS:
+    - Download resulting file
+    - If you selected Stop Words, file should match sw_experimentResults.txt
+    - If you selected Keep Words, file should match kw_experimentResults.txt
