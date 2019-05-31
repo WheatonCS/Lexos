@@ -4,6 +4,38 @@
 {% block head %}
     <script type="module"
             src="{{ url_for('static', filename='js/scripts_bct.js') }}?ver={{ version }}"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="phylotree.js"></script>
+    <link src="phylotree.css" rel="stylesheet">
+    <style>
+        .fa-rotate-45 {
+          -webkit-transform: rotate(45deg);
+          -moz-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          -o-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+        .fa-rotate-135 {
+          -webkit-transform: rotate(135deg);
+          -moz-transform: rotate(135deg);
+          -ms-transform: rotate(135deg);
+          -o-transform: rotate(135deg);
+          transform: rotate(135deg);
+        }
+
+        @media (max-width: 1075px) {
+          .container {
+            padding-top: 50px;
+          }
+        }
+   </style>
 {% endblock %}
 
 {% block title %}Bootstrap Consensus Tree{% endblock %}
@@ -156,7 +188,561 @@
                    type="button" value="Get Bootstrap Consensus Tree"/>
         </div>
     </div>
-    <div id="bct-result" class="row" style="text-align: center"></div>
+    <div id="bct-result" class="row" style="text-align: center">
+
+            <div class="container-fluid">
+                <li class="dropdown">
+                    <a href="#" data-toggle="modal" data-target="#newick_modal">Input Text</a>
+                </li>
+                <div class="navbar-btn navbar-right"></div>
+                <div class="form-group navbar-form navbar-left">
+                    <label for='branch_filter'></label>
+                    <input type="text" id = 'branch_filter' class="form-control" placeholder="Filter branches on">
+                </div>
+            </div>
+
+
+    <div class="modal" id = 'newick_modal'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Newick string to render</h4>
+          </div>
+          <div class="modal-body" id = 'newick_body'>
+              <label for='nwk_spec'></label><textarea id = 'nwk_spec' autofocus = true placeholder = "" style = 'width: 100%; height: 100%' rows = 20 selectionStart = 1 selectionEnd = 1000>(a : 0.1, (b : 0.11, (c : 0.12, d : 0.13) : 0.14) : 0.15)</textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id = 'validate_newick'>Display this tree</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class = 'container' id = "main_display">
+        <div class = 'row'>
+            <div class = 'col-md-12'>
+                <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-sm" data-direction = 'vertical' data-amount = '10' title = "Expand vertical spacing">
+                        <i class="fa fa-arrows-v" ></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" data-direction = 'vertical' data-amount = '-10' title = "Compress vertical spacing">
+                        <i class="fa  fa-compress fa-rotate-135" ></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" data-direction = 'horizontal' data-amount = '10' title = "Expand horizonal spacing">
+                        <i class="fa fa-arrows-h" ></i>
+                    </button>   <button type="button" class="btn btn-default btn-sm" data-direction = 'horizontal' data-amount = '-10' title = "Compress horizonal spacing">
+                        <i class="fa  fa-compress fa-rotate-45" ></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" id = "sort_ascending" title = "Sort deepest clades to the bototm">
+                        <i class="fa fa-sort-amount-asc" ></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" id = "sort_descending" title = "Sort deepsest clades to the top">
+                        <i class="fa fa-sort-amount-desc" ></i>
+                    </button>
+                        <button type="button" class="btn btn-default btn-sm" id = "sort_original" title = "Restore original order">
+                        <i class="fa fa-sort" ></i>
+                    </button>
+                </div>
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default active btn-sm">
+                <input type="radio" name="options" class = "phylotree-layout-mode" data-mode = "linear" autocomplete="off" checked title = "Layout left-to-right"> Linear
+              </label>
+              <label class="btn btn-default  btn-sm">
+                <input type="radio" name="options" class = "phylotree-layout-mode" data-mode = "radial" autocomplete="off" title = "Layout radially"> Radial
+              </label>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-sm active" id = "toggle_animation" title = "Toggle animation">
+                    Animation
+                </button>
+              </label>
+            </div>
+
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default active btn-sm">
+                <input type="radio" class = "phylotree-align-toggler" data-align = "left" name="options-align" autocomplete="off" checked title = "Align tips labels to branches">
+                    <i class="fa fa-align-left" ></i>
+                </input>
+
+              </label>
+              <label class="btn btn-default btn-sm">
+               <input type="radio" class = "phylotree-align-toggler" data-align = "right" name="options-align" autocomplete="off" title = "Align tips labels to the edge of the plot">
+                    <i class="fa fa-align-right" ></i>
+                </input>
+              </label>
+            </div>
+           </div>
+        </div>
+    </div>
+
+    <div class = 'row'>
+        <div class = 'col-md-12' style="background-color: red">
+            <div id = 'tree_container' class = 'tree-widget'>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+###############################################################################################################################
+-->
+
+<script>
+
+
+$("#display_tree").on ("click", function (e) {
+    tree.options ({'branches' : 'straight'}, true);
+});
+
+$("#mp_label").on ("click", function (e) {
+    tree.max_parsimony (true);
+});
+
+$ ("[data-direction]").on ("click", function (e) {
+    var which_function = $(this).data ("direction") == 'vertical' ? tree.spacing_x : tree.spacing_y;
+    which_function (which_function () + (+ $(this).data ("amount"))).update();
+});
+
+
+$(".phylotree-layout-mode").on ("change", function (e) {
+    if ($(this).is(':checked')) {
+        if (tree.radial () != ($(this).data ("mode") == "radial")) {
+            tree.radial (!tree.radial ()).placenodes().update ();
+        }
+    }
+});
+
+
+$("#toggle_animation").on ("click", function (e) {
+    var current_mode = $(this).hasClass('active');
+    $(this).toggleClass('active');
+    tree.options ({'transitions' : !current_mode} );
+});
+
+
+$(".phylotree-align-toggler").on ("change", function (e) {
+    if ($(this).is(':checked')) {
+        if (tree.align_tips ($(this).data ("align") == "right")) {
+            tree.placenodes().update ();
+        }
+    }
+});
+
+
+function sort_nodes (asc) {
+    tree.traverse_and_compute (function (n) {
+            var d = 1;
+            if (n.children && n.children.length) {
+                d += d3.max (n.children, function (d) { return d["count_depth"];});
+            }
+            n["count_depth"] = d;
+        });
+        tree.resort_children (function (a,b) {
+            return (a["count_depth"] - b["count_depth"]) * (asc ? 1 : -1);
+        });
+}
+
+$("#sort_original").on ("click", function (e) {
+    tree.resort_children (function (a,b) {
+        return a["original_child_order"] - b["original_child_order"];
+    });
+});
+
+$("#sort_ascending").on ("click", function (e) {
+    sort_nodes (true);
+});
+
+$("#sort_descending").on ("click", function (e) {
+    sort_nodes (false);
+});
+
+$("#and_label").on ("click", function (e) {
+    tree.internal_label (function (d) { return d.reduce (function (prev, curr) { return curr[current_selection_name] && prev; }, true)}, true);
+});
+
+$("#or_label").on ("click", function (e) {
+    tree.internal_label (function (d) { return d.reduce (function (prev, curr) { return curr[current_selection_name] || prev; }, false)}, true);
+});
+
+
+$("#filter_add").on ("click", function (e) {
+    tree.modify_selection (function (d) { return d.tag || d[current_selection_name];}, current_selection_name, false, true)
+        .modify_selection (function (d) { return false; }, "tag", false, false);
+});
+
+$("#filter_remove").on ("click", function (e) {
+    tree.modify_selection (function (d) { return !d.tag;});
+});
+
+$("#select_all").on ("click", function (e) {
+    tree.modify_selection (function (d) { return true;});
+});
+
+$("#select_all_internal").on ("click", function (e) {
+    tree.modify_selection (function (d) { return !d3.layout.phylotree.is_leafnode (d.target);});
+});
+
+$("#select_all_leaves").on ("click", function (e) {
+    tree.modify_selection (function (d) { return d3.layout.phylotree.is_leafnode (d.target);});
+});
+
+
+$("#select_none").on ("click", function (e) {
+    tree.modify_selection (function (d) { return false;});
+});
+
+$("#clear_internal").on ("click", function (e) {
+    tree.modify_selection (function (d) { return d3.layout.phylotree.is_leafnode (d.target) ? d.target[current_selection_name] : false;});
+});
+
+$("#clear_leaves").on ("click", function (e) {
+    tree.modify_selection (function (d) { return !d3.layout.phylotree.is_leafnode (d.target) ? d.target[current_selection_name] : false;});
+});
+
+
+$("#display_dengrogram").on ("click", function (e) {
+    tree.options ({'branches' : 'step'}, true);
+});
+
+//    phylotree.modify_selection = function (callback, attr, place, skip_refresh, mode) {
+
+
+$("#branch_filter").on ("input propertychange", function (e) {
+   var filter_value = $(this).val();
+
+   var rx = new RegExp (filter_value,"i");
+
+  tree.modify_selection (function (n) {
+    return filter_value.length && (tree.branch_name () (n.target).search (rx)) != -1;
+   },"tag");
+
+});
+
+$("#validate_newick").on ("click", function (e) {
+    var res = d3.layout.newick_parser ( $('textarea[id$="nwk_spec"]').val(), true);
+    if (res["error"] || ! res["json"]) {
+        var warning_div = d3.select ("#newick_body").selectAll ("div  .alert-danger").data ([res["error"]])
+        warning_div.enter ().append ("div");
+        warning_div.html (function (d) {return d;}).attr ("class", "alert-danger");
+
+    } else {
+        default_tree_settings ();
+         tree (res).svg (svg).layout();
+        $('#newick_modal').modal('hide');
+    }
+});
+
+function default_tree_settings () {
+    tree = d3.layout.phylotree();
+    tree.branch_length (null);
+    tree.branch_name (null);
+    tree.node_span ('equal');
+    tree.options ({'draw-size-bubbles' : false}, false);
+    //tree.radial (true);
+    tree.style_nodes (node_colorizer);
+    tree.style_edges (edge_colorizer);
+    tree.selection_label (current_selection_name);
+    tree.node_circle_size (undefined);
+    tree.radial (false);
+}
+
+
+function update_controls () {
+    $("[data-mode='" + (tree.radial()      ? 'radial' : 'linear') + "']").click();
+    $("[data-align='"  + (tree.align_tips () ? 'right' : 'left') + "']").click();
+}
+
+function node_colorizer (element, data) {
+try{
+   var count_class = 0;
+
+    selection_set.forEach (function (d,i) { if (data[d]) {count_class ++; element.style ("fill", color_scheme(i), i == current_selection_id ?  "important" : null);}});
+
+    if (count_class > 1) {
+
+    } else {
+        if (count_class == 0) {
+            element.style ("fill", null);
+       }
+    }
+}
+catch (e) {
+
+}
+
+}
+
+function edge_colorizer (element, data) {
+   //console.log (data[current_selection_name]);
+try {
+    var count_class = 0;
+
+    selection_set.forEach (function (d,i) { if (data[d]) {count_class ++; element.style ("stroke", color_scheme(i), i == current_selection_id ?  "important" : null);}});
+
+    if (count_class > 1) {
+        element.classed ("branch-multiple", true);
+    } else
+    if (count_class == 0) {
+             element.style ("stroke", null)
+                   .classed ("branch-multiple", false);
+    }
+}
+catch (e) {
+}
+
+}
+
+var valid_id = new RegExp ("^[\\w]+$");
+
+$("#selection_name_box").on ("input propertychange", function (e) {
+   var name = $(this).val();
+
+   var accept_name = (selection_set.indexOf (name) < 0) &&
+                     valid_id.exec (name) ;
+
+   d3.select ("#save_selection_button").classed ("disabled", accept_name ? null : true );
+});
+
+$("#selection_rename > a").on ("click", function (e) {
+
+    d3.select ("#save_selection_button")
+           .classed ("disabled",true)
+           .on ("click", function (e) { // save selection handler
+                var old_selection_name = current_selection_name;
+                selection_set[current_selection_id] = current_selection_name = $("#selection_name_box").val();
+
+                if (old_selection_name != current_selection_name) {
+                    tree.update_key_name (old_selection_name, current_selection_name);
+                    update_selection_names (current_selection_id);
+                }
+                send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                             {'detail' : ['save', this]}));
+           });
+
+    d3.select ("#cancel_selection_button")
+               .classed ("disabled",false)
+               .on ("click", function (e) { // save selection handler
+                    $("#selection_name_box").val(current_selection_name);
+                    send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['cancel', this]}));
+              });
+
+    send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['rename', this]}));
+    e.preventDefault    ();
+});
+
+$("#selection_delete > a").on ("click", function (e) {
+
+    tree.update_key_name (selection_set[current_selection_id], null)
+    selection_set.splice (current_selection_id, 1);
+
+    if (current_selection_id > 0) {
+        current_selection_id --;
+    }
+    current_selection_name = selection_set[current_selection_id];
+    update_selection_names (current_selection_id)
+    $("#selection_name_box").val(current_selection_name)
+
+
+    send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['save', this]}));
+    e.preventDefault    ();
+
+});
+
+$("#selection_new > a").on ("click", function (e) {
+
+    d3.select ("#save_selection_button")
+               .classed ("disabled",true)
+               .on ("click", function (e) { // save selection handler
+                    current_selection_name = $("#selection_name_box").val();
+                    current_selection_id = selection_set.length;
+                    selection_set.push (current_selection_name);
+                    update_selection_names (current_selection_id);
+                    send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['save', this]}));
+              });
+
+     d3.select ("#cancel_selection_button")
+               .classed ("disabled",false)
+               .on ("click", function (e) { // save selection handler
+                    $("#selection_name_box").val(current_selection_name);
+                    send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['cancel', this]}));
+              });
+
+    send_click_event_to_menu_objects (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['new', this]}));
+    e.preventDefault    ();
+
+});
+
+function send_click_event_to_menu_objects (e) {
+    $("#selection_new, #selection_delete, #selection_rename, #save_selection_name, #selection_name_box, #selection_name_dropdown").get().forEach (
+        function (d) {
+            d.dispatchEvent (e);
+        }
+    );
+}
+
+function update_selection_names (id, skip_rebuild) {
+
+    skip_rebuild = skip_rebuild || false;
+    id = id || 0;
+
+
+    current_selection_name = selection_set[id];
+    current_selection_id = id;
+
+    if (!skip_rebuild) {
+        d3.selectAll (".selection_set").remove();
+
+        d3.select ("#selection_name_dropdown")
+          .selectAll (".selection_set")
+          .data (selection_set)
+          .enter()
+          .append ("li")
+          .attr ("class", "selection_set")
+          .append ("a")
+          .attr ("href", "#")
+          .text (function (d) { return d;})
+          .style ("color", function (d,i) {return color_scheme(i);})
+          .on ("click", function (d,i) {update_selection_names (i,true);});
+
+    }
+
+
+    d3.select ("#selection_name_box")
+      .style ("color",  color_scheme(id))
+      .property ("value", current_selection_name);
+
+    tree.selection_label (selection_set[id]);
+}
+
+var width  = 800, //$(container_id).width(),
+    height = 600, //$(container_id).height()
+    selection_set = ['Foreground'],
+    current_selection_name = $("#selection_name_box").val(),
+    current_selection_id = 0,
+    max_selections       = 10;
+    color_scheme = d3.scale.category10(),
+    selection_menu_element_action = "phylotree_menu_element_action";
+
+var tree = d3.layout.phylotree("body")
+    .size([height, width])
+    .separation (function (a,b) {return 0;})
+    .count_handler (function (count) {
+            $("#selected_branch_counter").text (function (d) {return count[current_selection_name];});
+            $("#selected_filtered_counter").text (count.tag);
+        }
+    );
+var container_id = '#tree_container';
+var test_string = "(abc : 1, (b : 0.11, (c : 0.12, d : 0.13) : 0.14) : 0.15)";
+
+//window.setInterval (function () {});
+
+var svg = d3.select(container_id).append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+
+function selection_handler_name_box (e) {
+    var name_box = d3.select (this);
+     switch (e.detail[0]) {
+        case 'save':
+        case 'cancel':
+            name_box.property ("disabled", true)
+                    .style ("color",  color_scheme(current_selection_id));
+
+            break;
+        case 'new':
+            name_box.property ("disabled", false)
+                    .property ("value", "new_selection_name")
+                    .style ("color",  color_scheme(selection_set.length));
+            break;
+        case 'rename':
+           name_box.property ("disabled", false);
+           break;
+    }
+
+}
+
+function selection_handler_new (e) {
+    var element = d3.select (this);
+    $(this).data('tooltip', false);
+    switch (e.detail[0]) {
+        case 'save':
+        case 'cancel':
+            if (selection_set.length == max_selections) {
+                element.classed ("disabled", true);
+                    $(this).tooltip ({'title' : 'Up to ' + max_selections + ' are allowed', 'placement' : 'left'});
+            } else {
+                element.classed ("disabled", null);
+            }
+            break;
+        default:
+            element.classed ("disabled", true);
+            break;
+
+    }
+}
+
+function selection_handler_rename (e) {
+    var element = d3.select (this);
+    element.classed ("disabled", (e.detail[0] == "save" || e.detail[0] == "cancel") ? null : true);
+}
+
+function selection_handler_save_selection_name (e) {
+    var element = d3.select (this);
+    element.style ("display", (e.detail[0] == "save" || e.detail[0] == "cancel") ? "none" : null);
+}
+
+function selection_handler_name_dropdown (e) {
+    var element = d3.select (this).selectAll (".selection_set");
+    element.classed ("disabled", (e.detail[0] == "save" || e.detail[0] == "cancel") ? null : true);
+}
+
+function selection_handler_delete (e) {
+    var element = d3.select (this);
+    $(this).tooltip('destroy');
+    switch (e.detail[0]) {
+        case 'save':
+        case 'cancel':
+            if (selection_set.length == 1) {
+                element.classed ("disabled", true);
+                    $(this).tooltip ({'title' : 'At least one named selection set <br> is required;<br>it can be empty, however', 'placement' : 'bottom', 'html': true});
+            } else {
+                element.classed ("disabled", null);
+            }
+            break;
+        default:
+            element.classed ("disabled", true);
+            break;
+
+    }}
+
+
+$( document ).ready( function () {
+    default_tree_settings();
+    tree(test_string).svg (svg).layout();
+    $("#selection_new").get(0).addEventListener(selection_menu_element_action,selection_handler_new,false);
+    $("#selection_rename").get(0).addEventListener(selection_menu_element_action,selection_handler_rename,false);
+    $("#selection_delete").get(0).addEventListener(selection_menu_element_action,selection_handler_delete,false);
+    $("#selection_delete").get(0).dispatchEvent (new CustomEvent (selection_menu_element_action,
+                                 {'detail' : ['cancel', null]}));
+    $("#selection_name_box").get(0).addEventListener(selection_menu_element_action,selection_handler_name_box,false);
+    $("#save_selection_name").get(0).addEventListener(selection_menu_element_action,selection_handler_save_selection_name,false);
+    $("#selection_name_dropdown").get(0).addEventListener(selection_menu_element_action,selection_handler_name_dropdown,false);
+    update_selection_names();
+});
+
+</script>
+
+    </div>
 {% endblock %}
 
 {% block submit %}
