@@ -28,6 +28,9 @@ def content_analysis():
     :return: a response object (often a render_template call) to flask and
     eventually to the browser.
     """
+    # Detect the number of active documents.
+    num_active_docs = detect_active_docs()
+
     analysis = ContentAnalysisModel()
     path = os.path.join(constants.TMP_FOLDER,
                         constants.UPLOAD_FOLDER,
@@ -53,14 +56,16 @@ def content_analysis():
             formula = session['formula']
         else:
             formula = ""
-        return render_template('contentanalysis.html',
-                               dictionary_labels=dict_labels,
-                               active_dictionaries=active_dicts,
-                               toggle_all_value=toggle_all_value,
-                               itm="content-analysis",
-                               formula=formula)
+        return render_template(
+            'contentanalysis.html',
+            dictionary_labels=dict_labels,
+            active_dictionaries=active_dicts,
+            toggle_all_value=toggle_all_value,
+            itm="content-analysis",
+            formula=formula,
+            numActiveDocs=num_active_docs
+        )
     else:
-        num_active_docs = detect_active_docs()
         active_dicts = ContentAnalysisReceiver().options_from_front_end(
         ).active_dicts
         dict_labels = ContentAnalysisReceiver().options_from_front_end(
@@ -97,7 +102,7 @@ def content_analysis():
                 analysis.add_dictionary(file_name=dict_name,
                                         label=dict_label,
                                         content=content)
-        result_table, corpus_raw_counts_table, files_raw_counts_tables,\
+        result_table, corpus_raw_counts_table, files_raw_counts_tables, \
             formula_errors = analysis.analyze()
         if len(formula_errors) != 0 or result_table is None:
             return error(formula_errors)
