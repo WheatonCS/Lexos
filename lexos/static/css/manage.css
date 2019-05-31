@@ -6,74 +6,86 @@
 
 /* Form */
 form {
-    opacity: 0;
-    transition: opacity .5s;
+    grid-template-rows: min-content auto;
 }
 
 
 /* Top section */
 #top-section {
     display: grid;
-    align-items: center;
+    height: 3rem;
     grid-template-columns: 85% 15%;
 }
 
 #download-button {
     justify-self: right;
     margin-bottom: 0;
+    background-color: #FFFFFF;
+    box-shadow: inset #FFFFFF 0 0 0 2px;
+
+}
+
+#download-button:hover {
+    color: #47BCFF;
+    background-color: #EAF5FF;
+    box-shadow: inset #47BCFF 0 0 0 2px;
 }
 
 
 /* Table */
-#manage-table-head,
-#manage-table-body {
+#table-head,
+.table-row {
     display: grid;
-    row-gap: 1rem;
+    grid-template-columns: 7% 7% 16% 14% 16% 40%;
     width: 100%;
 }
 
-#manage-table-head {
-    grid-template-columns: 7% 7% 16% 14% 16% 40%;
-    height: 5rem;
-    padding-top: 2rem;
-    background-color: #E3E3E3;
-}
-
-#manage-table-body {
-    margin-top: 1rem;
-    overflow: scroll;
-    height: calc(100vh - 24rem);
-}
-
-.manage-table-head-cell {
-    display: grid;
-    align-content: center;
-    padding: 1rem;
-    color: #47BCFF;
+#table-head {
     background-color: #FFFFFF;
+    height: 4rem;
 }
 
-.manage-table-row {
+#table-body {
+    overflow-y: auto;
+    height: calc(100% - 4rem);
+}
+
+#table-content {
+    height: 100%;
+}
+
+.table-row {
     display: grid;
-    grid-template-columns: 7% 7% 16% 14% 16% 40%;
-    width: 100%;
     background-color: #F3F3F3;
-    transition: border-color .2s;
+    transition: background-color .2s;
+    margin-bottom: 1rem;
 }
 
-.manage-table-cell {
+.selected-table-row {
+    background-color: #EAF5FF;
+}
+
+.table-row:last-child {
+    margin-bottom: 0;
+}
+
+.table-cell {
+    display: grid;
     padding: 1rem;
     word-wrap: break-word;
     overflow: hidden;
     color: #505050;
 }
 
-.checkbox {
-    margin-top: 1.1rem;
-    margin-left: 1rem;
+#table-head .table-cell {
+    color: #47BCFF;
 }
 
-.selected-row > .checkbox {
+.checkbox {
+    margin: 1rem;
+}
+
+.selected-table-row > .checkbox {
     border: 2px solid #47BCFF;
     background-color: #EAF5FF;
 }

@@ -3,41 +3,49 @@ let page_number = 1;
 let previous_page_number = -1;
 
 $(function(){
-    create_table();
-    register_table_button_callbacks();
+
+    // Create the tokenizer table
+    send_table_data_request();
+
+    // Create callbacks for the buttons and inputs on the table
+    create_table_button_callbacks();
 })
 
 /**
- * Sends the request for the table data and creates the table.
+ * Sends a request for the table data and creates the table.
  * @param {boolean} page_change: Whether the request is a page change.
  */
-function create_table(page_change = true){
+function send_table_data_request(page_change = true){
 
-    // Reset the page number if the changed option was not the page number
+    // Reset the page number to 1 if the "Rows Per Page" or "Search" option
+    // was changed
     if(!page_change) page_number = 1;
 
     // Clamp the page number between 1 and the last page
     page_number = Math.max(1, Math.min(page_count, page_number));
 
-    // Update the page number element
+    // Update the page number input element
     $("#page-number").val(page_number);
 
-    // Return if the page number has not changed and the changed option
-    // was the page number
+    // Return if a page change was attempted but the page number remained the
+    // same due to clamping or input of the same number
     if(page_change && (page_number === previous_page_number)) return;
     previous_page_number = page_number;
 
-    // Display the loading overlay
-    add_loading_overlay("#table-data");
+    // Otherwise, display the loading overlay on the table
+    start_loading("#table-data");
 
-    // Send the request for the table data
+    // Send a request for the table data
     $.ajax({
         type: "POST",
         url: "tokenize/get-table",
         processData: false,
         contentType: false,
         data: new FormData($("form")[0])
-    }).done(get_table_callback);
+    })
+
+    // If the request was successful, recreate the table
+    .done(create_table);
 }
 
 
@@ -45,91 +53,102 @@ function create_table(page_change = true){
  * Creates the table.
  * @param {string} response: The response from the "tokenize/get-table" request.
  */
-function get_table_callback(response){
+function create_table(response){
+
+    // Parse the response
     response = JSON.parse(response);
 
     // Set the page count
     page_count = parseInt(response.pages);
     $("#page-count").text(page_count);
 
-    // If there are no rows, display "No Data" text
+    // If there is no data, display "No Data" text and return
     if(response.data.length === 0){
         add_text_overlay("#table-data", "No Data");
-        fade_in("#table-data");
         return;
     }
 
-    // Otherwise, clear any existing content in the table data element
-    let table_data_element = $("#table-data").empty();
-
     // Otherwise, create the table layout
     $(`
-        <div id="table-data-grid">
+        <div id="table-data-grid" class="hidden">
             <div id="table-head"></div>
             <div id="table-body"></div>
         </div>
-    `).appendTo(table_data_element);
+    `).appendTo("#table-data");
 
     // Create the table head
     response.head[0] = "Terms";
     for(cell of response.head){
-        let element = $(`<h3 class="tokenize-cell"></h3>`).appendTo("#table-head");
+        let element = $(`<h3 class="table-cell"></h3>`).appendTo("#table-head");
         element.text(cell);
     }
 
     // Create the table body
     let table_body_element = $("#table-body");
     for(row of response.data){
-        let row_element = $(`<div class="tokenize-row"></div>`).appendTo(table_body_element);
+
+        // Create a row
+        let row_element = $(`<div class="table-row"></div>`).appendTo(table_body_element);
+
+        // Populate the row with cells
         for(cell of row){
-            let element = $(`<h3 class="tokenize-cell"></h3>`).appendTo(row_element);
+            let element = $(`<h3 class="table-cell"></h3>`).appendTo(row_element);
             element.text(cell);
         }
     }
 
-    // Fade in the table data
-    fade_in("#table-data");
+    // Remove the loading overlay and show the table data
+    finish_loading("#table-data", "#table-data-grid");
 }
 
 
 /**
- * Registers callbacks for each of the table buttons.
+ * Creates callbacks for the buttons and inputs on the table
  */
-function register_table_button_callbacks(){
+function create_table_button_callbacks(){
 
     // Get the page number element
     let page_number_element = $("#page-number");
 
-    // Rows per page
-    $("input[type=radio][name=rows-per-page]").change(
-        function(){ create_table(false); });
+    // Recreate the table if the "Rows Per Page" option is changed
+    $("input[type=radio][name=rows-per-page]").change(function(){
+        send_table_data_request(false);
+    });
 
-    // Search bar
-    $("#search-input").on("input", function(){ create_table(false); });
+    // Recreate the table if the "Search" input is changed
+    $("#search-input").on("input", function(){
+        send_table_data_request(false);
+    });
 
-    // Page number input
+    // If the page number input is changed, parse the input and recreate the
+    // table if applicable
     $(page_number_element).on("input", function(){
 
         // Parse the page number
         let page_number_element = $("#page-number");
         page_number = parseInt(page_number_element.val());
 
-        // Check that the input is valid
-        if(isNaN(page_number)) page_number_element.val("");
+        // If there are no numbers in the input, clear the input and return
+        if(isNaN(page_number)){
+            page_number_element.val("");
+            return;
+        }
 
-        // Create the table
-        create_table();
+        // Otherwise, create the table
+        send_table_data_request();
     });
 
-    // Previous button
+    // If the "Previous" button is clicked, decrement the page number and
+    // recreate the table if applicable
     $("#previous-button").click(function(){
         page_number = parseInt(page_number_element.val())-1;
-        create_table();
+        send_table_data_request();
     });
 
-    // Next button
+    // If the "Next" button is clicked, increment the page number and recreate
+    // the table if applicable
     $("#next-button").click(function(){
         page_number = parseInt(page_number_element.val())+1;
-        create_table();
+        send_table_data_request();
     });
 }

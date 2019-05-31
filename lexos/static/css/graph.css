@@ -1,0 +1,18 @@
+/* Graph */
+#graph-section-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 1rem;
+}
+
+#graph-buttons {
+    justify-self: right;
+}
+
+#generate-button {
+    margin-right: .5rem;
+}
+
+#graph-container {
+    height: calc(100% - 4rem);
+}

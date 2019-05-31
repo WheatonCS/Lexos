@@ -590,7 +590,7 @@ class RollingWindowsModel(BaseModel):
             return go.Figure(data=result_plot,
                              layout=go.Layout(
                                 autosize=True,
-                                height=580,
+                                height=565,
                                 margin=dict(
                                     l=40,
                                     r=0,

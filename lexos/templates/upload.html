@@ -3,6 +3,7 @@
 
 <!-- Head -->
 {% block head %}
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/upload.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/upload.css"/>
@@ -11,24 +12,15 @@
 
 <!-- Main content -->
 {% block content %}
+
      <!-- About section -->
     <div id="about-section" class="section">
-        <h3 class="title">About</h3>
+        <h3 class="title">Welcome to Lexos!</h3>
         <h3>
-            Lexos is developed by the
-            <a class="underline" href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank">Lexomics Research Group</a>
-            at
-            <a class="underline" href="https://wheatoncollege.edu" target="_blank">Wheaton College</a>.
-            It is used for transforming, analyzing, and visualizing texts.
-            Lexos is designed for use primarily with small-to-medium-sized
-            text collections, including texts written in ancient languages
-            and languages that do not use the Latin alphabet. Lexos
-            was created as an entry-level platform for Humanities scholars and
-            students new to computational techniques, but is sophisticated
-            enough for advanced research. The Lexos help manual can be accessed
-            by clicking the "Show Help" button at the bottom left of the
-            window. The help panel can be accessed from any page and will
-            display information on how to use the page it was opened on.
+            Upload the files you want to work with. The maximum file size is
+            250 MB and the supported formats are: .txt, .html, .xml, .sgml,
+            and .lexos. Click the "Help" button on the top right for more
+            information.
         </h3>
     </div>
 
@@ -37,14 +29,6 @@
 
         <!-- Title -->
         <h3 class="title">Upload</h3>
-
-        <!-- Help -->
-        <h3>
-            Upload the files you want to work with by clicking the "Browse..."
-            button or by dragging files into the "Drag Files Here" section.
-            The maximum file size is 250 MB and the supported formats are:
-            .txt, .html, .xml, .sgml, and .lexos.
-        </h3>
 
         <!-- Browse button -->
         <div id="browse-button">
@@ -63,10 +47,12 @@
         <!-- Title -->
         <h3 class="title">Upload List</h3>
 
-        <!-- Uploads -->
-        <div id="upload-previews" class="borderless-section"></div>
+        <!-- Upload previews -->
+        <div id="upload-previews">
+            <div id="no-uploads-text" class="centerer"><h3>No Uploads</h3></div>
+        </div>
     </div>
 
-    <!-- Hidden file input -->
+    <!-- Hidden elements -->
     <input type="file" id="file-select-input" style="display:none" multiple/>
 {% endblock %}

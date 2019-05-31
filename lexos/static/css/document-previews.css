@@ -1,38 +1,23 @@
 /* Document previews section */
-#document-previews-section {
-    min-height: 50rem;
-    min-width: 45rem;
-}
-
-#document-previews-section > h3 {
-    position: relative;
-    display: inline-block;
-}
-
 #document-previews-top {
     display: grid;
-    align-items: center;
-    grid-template-columns: 42% 58%;
+    grid-template-columns: 35% 65%;
+    margin: 1rem;
 }
 
 #document-previews-buttons {
     justify-self: right;
-    margin-right: 1rem;
 }
 
-#document-previews-buttons > h3 {
-    margin-right: 2rem;
+#document-previews-buttons > .button {
+    margin-right: .5rem;
 }
 
 
 /* Previews */
 #previews {
-    height: calc(100% - 4rem);
-    overflow: scroll;
-}
-
-#previews .centerer {
-    height: 100%;
+    height: calc(100% - 5rem);
+    overflow-y: auto;
 }
 
 .preview {

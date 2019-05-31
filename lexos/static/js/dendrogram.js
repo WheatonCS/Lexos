@@ -7,13 +7,25 @@ let checked_options = {
 
 $(function(){
 
+    register_button_callbacks();
+
+    // Initialize legacy inputs and create the dendrogram
+    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+});
+
+
+/**
+ * Registers the option button popup creation callbacks.
+ */
+function register_button_callbacks(){
+
     // Register the "Distance Metric" button callback
     $("#distance-metric-button").click(function(){
         create_options_popup("distance-metric", [
             ["euclidean", "Euclidean"],
             ["minkowski", "Minkowski"],
             ["cityblock", "Manhattan"],
-            ["seuclidean", "Standardized Euclidean"],
+            ["seuclidean", "Standard Euclidean"],
             ["sqeuclidean", "Squared Euclidean"],
             ["cosine", "Cosine"],
             ["correlation", "Correlation"],
@@ -38,10 +50,7 @@ $(function(){
         create_options_popup("orientation",
             [["bottom", "Bottom"], ["left", "Left"]]);
     });
-
-    // Initialize legacy inputs and create the dendrogram
-    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
-});
+}
 
 
 /**
@@ -52,6 +61,14 @@ function initialize(response){
 
     // Initialize legacy inputs
     if(!initialize_legacy_inputs(response)) return;
+
+    // If there are fewer than two active files, display warning text and
+    // return
+    if(Object.entries(JSON.parse(response)).length < 2){
+        add_text_overlay("#dendrogram",
+            "This Tool Requires At Least Two Active Documents");
+        return;
+    }
 
     // Create the dendrogram
     create_dendrogram();
@@ -94,7 +111,7 @@ function create_options_popup(name, options){
     $("#ok-button").click(function(){
         let selected_element = $(`input[name="${name}"]:checked`);
         $(`#${name}-input`).val(selected_element.val());
-        $(`#${name}-text`).text(selected_element.closest("div").find("span").html());
+        $(`#${name}-button`).text(selected_element.closest("div").find("span").html());
         checked_options[name] = selected_element.val();
         console.log(selected_element.val());
         close_popup();

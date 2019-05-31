@@ -4,6 +4,16 @@
 }
 
 
+/* Options section */
+#options-section {
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+}
+
+#dendrogram-options-section .button {
+    margin-bottom: .4rem;
+}
+
+
 /* Popup */
 #popup-content div {
     justify-self: left;
@@ -15,18 +25,9 @@
 
 
 /* Dendrogram */
-.results-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.results-top-right {
-    justify-self: right;
-}
-
 #dendrogram {
     width: calc(100% - 2rem);
-    height: 60.9rem;
+    height: 60rem;
     overflow: hidden;
     margin: 0 1rem 1rem 1rem;
 }

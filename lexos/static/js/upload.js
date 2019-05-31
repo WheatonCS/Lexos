@@ -1,25 +1,135 @@
-let total_files = 0;
-let upload_count = 0;
 $(function(){
 
-    // Check for prerequisites
-    if(!window.File || !window.FileList ||
-        !window.FileReader || !new XMLHttpRequest()) return;
-
-    // "Browse.." button input redirect
+    // Redirect "Browse..." button clicks to the file selection input element
+    // which will open an OS file selection window
     $("#browse-button").click(function(){ $("#file-select-input").click(); });
 
-    // File select input callback
-    $("#file-select-input").change(file_selection_handler);
+    // When the user finishes selecting files using the OS file selection
+    // window, upload the selected files
+    $("#file-select-input").change(upload_files);
 
-    // File drop section
+    // Upload files dropped on the drag and drop section
     const drag_and_drop_section = $("#drag-and-drop-section");
+    drag_and_drop_section.on("drop", upload_files);
+
+    // Prevent the default drag and drop action of opening the file in the
+    // browser
     $("body").on("dragenter drop", drag_and_drop_intercept);
     drag_and_drop_section.on("dragover dragenter", drag_and_drop_intercept);
-    drag_and_drop_section.on("drop", file_selection_handler);
 
-    //File drop section highlighting
+    // Highlight the drag and drop section when files are dragged over it
+    initialize_drag_and_drop_section_highlighting();
+})
+
+
+/**
+ * Uploads the files selected via the OS file selection window or drag and
+ * drop.
+ * @param {event} event: The event that triggered the callback.
+ */
+function upload_files(event){
+
+    // Get the selected files from the event
+    let files = event.target.files || event.originalEvent.dataTransfer.files;
+
+    // Upload each file
+    for(let file of files) upload_file(file);
+}
+
+
+/**
+ * Uploads the given file.
+ * @param {object} file: The file to upload.
+ */
+function upload_file(file){
+
+    // Check that the file size is within limits
+    console.log(file.size);
+    if(file.size > 256000000) return; // 256 MB limit
+    if(file.size <= 0) return;
+
+    // Replace the file name's spaces with underscores
+    let file_name = file.name.replace(/ /g, '_');
+
+    // Check that the file is a supported type
+    if(!file_type_supported(file.name)) return;
+
+    // Send a request to upload the file
+    $.ajax({
+        type: "POST",
+        url: "upload/add-document",
+        data: file,
+        processData: false,
+        async: false,  // Async results in errors for file uploads
+        contentType: file.type,
+        headers: {"file-name": encodeURIComponent(file_name)}
+      })
+
+    // If the request is successful, call the "upload_success_callback()"
+    // function
+    .done(function(){ upload_success_callback(file_name); });
+}
+
+
+/**
+ * Checks if the file type is supported.
+ * @param {string} filename: The name of the file to check.
+ * @return {boolean} bool: Whether the file type is valid.
+ */
+function file_type_supported(filename){
+    const supported_file_types = ["txt", "xml", "html", "sgml", "lexos"];
+
+    // Get the file's extension
+    let fileType = filename.split('.')[filename.split('.').length - 1];
+
+    // Return false if the file format is not in the list of supported types
+    // and true if it is
+    return $.inArray(fileType, supported_file_types) > -1;
+}
+
+
+/**
+ * Called when a file has successfully uploaded.
+ */
+function upload_success_callback(file_name)
+{
+    // Remove the "No Uploads" text if it exists
+    $("#no-uploads-text").remove();
+
+    // Update the "Active Document Count" element
+    let active_documents_element = $("#active-document-count");
+    let active_documents = parseInt(active_documents_element.text())+1;
+    active_documents_element.text(active_documents.toString());
+
+    // Create an upload preview element
+    let upload_preview_element = $(`
+        <div class="upload-preview"><h3></h3></div>
+    `).appendTo("#upload-previews");
+
+    // Add the HTML-escaped file name to the upload preview element
+    upload_preview_element.find("h3").text(file_name);
+}
+
+
+/**
+ * Intercepts file drag and drop events, preventing the default action of
+ * opening the dropped file in the browser.
+ * @param {object} event: The event that triggered the callback.
+ */
+function drag_and_drop_intercept(event){
+  event.stopPropagation();
+  event.preventDefault();
+}
+
+
+/**
+ * Makes the drag and drop section highlighted when files are dragged over it.
+ */
+function initialize_drag_and_drop_section_highlighting(){
+
     let drag_counter = 0;
+    const drag_and_drop_section = $("#drag-and-drop-section");
+
     drag_and_drop_section.on("dragenter", function(){
         ++drag_counter;
         $("#drag-and-drop-section").css({"color": "#47BCFF",
@@ -34,126 +144,12 @@ $(function(){
         drag_counter = 0;
         set_default_drop_section_colors();
     });
-})
-
-
-/**
- * Checks if the file type is valid.
- * @return {boolean} bool - true if file type is valid.
- * @param {string} filename - The name of the file.
- */
-function is_file_type_valid(filename){
-    const allowed_file_types = ["txt", "xml", "html", "sgml", "lexos"];
-
-    // Get the file file extension
-    let fileType = filename.split('.')[filename.split('.').length - 1];
-
-    // Return false if the file format is not in the list of allowed types
-    return $.inArray(fileType, allowed_file_types) > -1;
 }
 
 
 /**
- * Uploads the given file.
- * @return {void}
- * @param {object} file - The file to upload.
+ * Returns the drag and drop section to its default colors.
  */
-function upload_file(file){
-
-    // Check if the file size is within limits
-    if(file.size < $("#MAX_FILE_SIZE").value) return;
-
-    // Replace the file name's spaces with underscores
-    let file_name = file.name.replace(/ /g, '_');
-
-    // Check if the file is of an invalid type
-    if(!is_file_type_valid(file.name)) return;
-
-    // Check if the file is empty
-    if(file.size === 0) return;
-
-    // Upload the file
-    send_ajax_request(file, file_name)
-        .done(function(){ upload_success_callback(file_name); });
-}
-
-/**
- * Called when a file has successfully uploaded.
- * @return {void}
- */
-let uploaded_file_names = [];
-function upload_success_callback(file_name)
-{
-    // Update the document count and status elements
-    ++upload_count;
-
-    let active_documents_element = $("#active-document-count");
-    let active_documents = parseInt(active_documents_element.text())+1;
-    active_documents_element.text(active_documents.toString());
-
-    let upload_previews_element = $("#upload-previews");
-
-    $(`
-        <div class="upload-preview">
-            <h3>${file_name}</h3>
-        </div>
-    `).appendTo(upload_previews_element);
-
-    $("#upload-list").css("display", "grid");
-
-    // Update the uploaded documents list
-    uploaded_file_names.push(file_name);
-
-    let string = "";
-    for(const file_name of uploaded_file_names) string += file_name+", ";
-    string = string.substring(0, string.length-2)
-}
-
-
-/**
- * @return {ajax} The AJAX data.
- * @param {object} file - The file object.
- * @param {string} file_name - The name of the file.
- */
-function send_ajax_request(file, file_name){
-  return $.ajax({
-    type: "POST",
-    url: "upload/add-document",
-    data: file,
-    processData: false,
-    async: false,  // Async results in errors
-    contentType: file.type,
-    headers: {"file-name": encodeURIComponent(file_name)}
-  });
-}
-
-
-/**
- * Uploads the selected files.
- * @return {void}
- * @param {object} event - The event.
- */
-function file_selection_handler(event){
-    let files = event.target.files || event.originalEvent.dataTransfer.files;
-    total_files = files.length;
-    upload_count = 0;
-
-    if(!files.length) return;
-    for(let file of files) upload_file(file);
-}
-
-
-/**
- * Intercepts the file drag and drop events.
- * @return {void}
- * @param {object} event - The event.
- */
-function drag_and_drop_intercept(event){
-  event.stopPropagation();
-  event.preventDefault();
-}
-
-
 function set_default_drop_section_colors(){
     $("#drag-and-drop-section").css({"color": "#505050",
         "border-color": "#D3D3D3", "background-color": "#F3F3F3"});

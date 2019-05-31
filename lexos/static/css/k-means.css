@@ -25,18 +25,9 @@ form {
 }
 
 /* K-means */
-.results-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.results-top-right {
-    justify-self: right;
-}
-
 #k-means {
     width: calc(100% - 2rem);
-    height: 56.9rem;
+    height: 56rem;
     overflow: hidden;
     margin: 0 1rem 1rem 1rem;
 }

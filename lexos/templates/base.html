@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <!-- Head -->
 <head>
     <meta charset="UTF-8"/>
@@ -26,10 +27,9 @@
     {% block head %}{% endblock %}
 </head>
 
+
 <!-- Body -->
 <body>
-    <!-- Session ID -->
-    <input type="hidden" name="current_id" value="{{ session["id"] }}"/>
 
     <!-- Navbar -->
     <div id="navbar">
@@ -47,19 +47,22 @@
             <h3>|</h3>
             <a href="/download-workspace">Save</a>
             <a href="/reset">Reset</a>
+
+            <h3>|</h3>
+            <h3 id="help-button" class="selectable">Help</h3>
         </div>
     </div>
 
     <!-- Main grid -->
     <div id="main-grid">
+
         <!-- Main section -->
         <div id="main-section">
-            <!-- Main content -->
-            <main>
+
+                <!-- Form -->
                 <form method="POST" enctype="multipart/form-data">
                     {% block content %}{% endblock %}
                 </form>
-            </main>
 
             <!-- Help -->
             <div id="help-container"></div>
@@ -68,20 +71,14 @@
 
     <!-- Footer -->
     <footer>
-            <!-- Left footer -->
-            <div id="left-footer">
-                <h3>Lexos v3.2.0 © 2019</h3>
-                <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/">Lexomics Research Group</a>
-            </div>
+        <!-- Left footer -->
+        <div id="left-footer">
+            <h3>Lexos v3.2.0 © 2019</h3>
+            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/">Lexomics Research Group</a>
+        </div>
 
-            <!-- Right footer -->
-            <div id="right-footer">
-                <div><h3>Active Documents: </h3><h3 id="active-document-count">0</h3></div>
-                <h3>|</h3>
-                <a href="" target="_blank">Feedback</a>
-                <h3>|</h3>
-                <h3 id="help-button" class="selectable">Show Help</h3>
-            </div>
+        <!-- Right footer -->
+        <div id="right-footer"><h3>Active Documents: </h3><h3 id="active-document-count">0</h3></div>
     </footer>
 </body>
 </html>

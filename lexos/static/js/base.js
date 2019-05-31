@@ -155,26 +155,28 @@ function initialize_help_section(){
 /**
  * Adds a click callback to show toggle the help menu.
  */
+let help_visible = false;
 function help_button_callback(){
     let main_grid = $("#main-grid");
     let help_button = $("#help-button");
-    let expanded = help_button.text() === "Hide Help";
 
-    // If the help section is expanded, close it
-    if(expanded){
+    // If the help section is visible, close it
+    if(help_visible){
         main_grid.css("grid-template-columns", "100%");
         $("#help-section").remove();
-        help_button.text("Show Help");
+        help_button.removeClass("highlight");
+        help_visible = false;
         return;
     }
 
     // Otherwise, show the help section
     main_grid.css("grid-template-columns", "40rem auto");
     let help_section = $(`<div id="help-section"></div>`).prependTo(main_grid);
-    help_button.text("Hide Help");
+    help_button.addClass("highlight");
 
     let url = "/static/help"+window.location.pathname+"-help.html";
     help_section.load(url);
+    help_visible = true;
 }
 
 
@@ -229,7 +231,7 @@ function create_popup(){
  */
 function close_popup(){
     let popup = $("#popup-container").css("opacity", "0");  // Fade out the popup
-    setTimeout(function(){ popup.remove(); }, 200);
+    setTimeout(function(){ popup.remove(); });
 }
 
 

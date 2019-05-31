@@ -158,7 +158,7 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the left margin to fit all labels.
-        # figure.layout.update({'margin': {'l': max_label_len * 7.5}})
+        figure.layout.update({'margin': {'l': max_label_len * 8}})
 
         # Find the max x value in the plot.
         max_x = max([max(data['x']) for data in figure['data']])
@@ -186,7 +186,7 @@ class DendrogramModel(BaseModel):
         # Update the size of the image.
         figure.layout.update(
             autosize=True,
-            height=610,
+            height=600,
             margin=dict(
                 l=40,
                 r=0,
