@@ -74,8 +74,8 @@ def do_scrubbing():
     try:
         previews = file_manager.scrub_files(saving_changes=saving_changes)
     except LexosException:
-        # this returns a server error to the ajax request
-        return 400
+        # This returns a server error to the ajax request
+        return constants.SERVER_ERROR_400
     # escape the html elements, only transforms preview[3], because that is
     # the text:
     previews = [

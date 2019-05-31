@@ -265,3 +265,6 @@ DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 '''do not cache options'''
 SESSION_DO_NOT_CACHE = {}
 WORKSPACE_DO_NOT_CACHE = {}
+
+# Error codes for front end
+SERVER_ERROR_400 = 400
