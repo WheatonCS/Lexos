@@ -44,76 +44,51 @@
 <!-- Options -->
 <h3 class="help-section-title">Options</h3>
 
-<!-- Activating, de-activating, and deleting documents -->
-<h3 class="help-section-title">
-    Activating, De-Activating, and Deleting Documents
-</h3>
-
+<ul class="help-section-list" style="list-style-type:none;">
+    <li><b>Activating and De-activating Documents</b></li>
 <h3 class="help-section-paragraph">
     By default, all documents are activated when they are uploaded. In subsequent
-    analyses, only active documents are used. (Note: return here to the Manage
-    page to ensure all desired documents are active. Rows containing active
-    documents are highlighted in green. The following methods can be used to
+    analyses, only active documents are used. Return here to ensure all desired documents are active.
+    <br><br>The following methods can be used to
     manage the active state of documents:
-</h3>
+    <br><br>
+    <ul class="help-section-list">
+        <li>
+            <b>Single-Click</b>: This will activate the document selected and toggle the state of the
+            row clicked. If you <b>hold "D"</b>, the document selected will be de-activated.
+        </li>
 
-<ul class="help-section-list">
-    <li>
-        Single Click: This will de-activate all documents and toggle the state of the
-        row clicked. If it is active, it will be de-activated. If it is not active, it
-        will be activated.
-    </li>
-    <li>
-        Control or Command Click: This will toggle the state of the row clicked
-        without affecting the state of any other rows.
-    </li>
-    <li>
-    Shift Click: This activate ranges of rows. Shift-clicking on a row will
-    activate documents in all rows between the row clicked and the first active
-    row above or below the row clicked.
-    </li>
-    <li>
-    Drag Click: Clicking on a row with the mouse button held down will activate
-    or de-activate all rows between the row clicked and the row the mouse cursor
-    is over when the mouse button is released.
-    </li>
-    <li>
-    Right Click: This will open the context menu. See Using the Context Menu
-    below.
-    </li>
-    <li>
-    The Select All and Deselect All Buttons: These are useful because they
-    activate and de-activate all the documents in your workspace, not just those
-    displayed on the page.
-    </li>
-</ul>
+        <li>
+            <b>Drag-Click</b>: Clicking on a row with the mouse button held down will activate
+            (or de-activate when "D" is held) all rows between the row clicked and the row the mouse cursor
+            is over when the mouse button is released.
+        </li>
 
-<h3 class="help-section-paragraph">
-    Documents may also be activated and de-activated using the Context Menu as
-    described below.
+        <li>
+            <b>Right-Click</b>: This will open the context menu. See <em><u>Using the Context Menu</u></em>
+            below.
+        </li>
+    </ul>
 </h3>
 
 <h3 class="help-section-paragraph">
     Certain tools such as Word Cloud allow you to select and de-select sub-sets of
     your active documents. These selections apply only within the given tool and
-    do not affect whether the documents are active or not throughout the Lexos
+    do not affect whether the documents are active throughout the Lexos
     suite. If you need to change the state of a document so that it is or is not
     accessible to all tools, you should do this using Manage.
 </h3>
 
-
-<!-- Deleting documents -->
-<h3 class="help-section-title">Deleting Documents</h3>
-
+    <li><b>Deleting Documents</b></li>
 <h3 class="help-section-paragraph">
     Deleting individual documents from the workspace is probably achieved most
-    easily achieved using the Context Menu as described below. However, you can
-    deselect all documents, activate only the document you wish to delete, and
-    then click the Delete Selected button. This button is probably more useful
-    when you have multiple active documents, as it will delete them all at once.
-    Make sure that you have de-activated any documents you do not wish to delete.
+    easily achieved using the Context Menu as described below. However, if you
+    wish to delete all your documents and re-start your workflow, use the
+    "Reset" button in the top right to delete all documents and begin
+    from the Upload page.
 </h3>
 
+</ul>
 
 <!-- Using the context menu -->
 <h3 class="help-section-title">Using the Context Menu</h3>
@@ -123,44 +98,57 @@
     following options:
 </h3>
 
-<ul class="help-section-list">
-    <li>
-    Preview Document: This will open a dialog containing the entire text of your
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Preview Document</b></li>
+<h3 class="help-section-paragraph">
+    This will open a dialog containing the entire text of your
     document (without formatting or white spaces). Note that longer documents can
     take a while to load, so please be patient.
-    </li>
-    <li>
-    Edit Document Name: This function allows you to create a new name for the
+</h3>
+
+    <li><b>Edit Name</b></li>
+<h3 class="help-section-paragraph">
+    This function allows you to create a new name for the
     document in the row you have clicked. To change the name, enter your new name
-    in the dialog form field and click Save.
-    </li>
-    <li>
-    Edit Document Class: This function allows you to create a class label for the
+    in the dialogue form field and click Save.
+</h3>
+
+    <li><b>Edit Class</b></li>
+<h3 class="help-section-paragraph">
+    This function allows you to create a class label for the
     single document in the row you have clicked. Enter the label you wish to
-    identify with the class in the dialog form field and click Save. See further
-    the section on document classes below.
-    </li>
-    <li>
-    Delete Document: This function will delete the individual document in the row
+    identify with the class in the dialogue form field and click "Ok".
+    See the section on <u><em>Classifying Documents</em></u> below.
+</h3>
+
+    <li><b>Delete</b></li>
+<h3 class="help-section-paragraph">
+    This function will delete the individual document in the row
     you have clicked.
-    </li>
-    <li>
-    Select All Documents and Deselect All Documents: These options have the same
-    function as the Select All and Deselect All buttons.
-    </li>
-    <li>
-    Apply Class to Selected Documents: If you have multiple active documents, this
-    option will allow you to apply a class label to all of them at once. Enter the
-    label you wish to identify with the class in the dialog form field and click
-    Save. For example, you might apply an AUTHOR name (class label) to all
-    documents from a particular author. See further the section on document
-    classes below.
-    </li>
-    <li>
-    Delete Selected Documents: If you have multiple active documents, this option
-    will allow you to delete them all at once. It has the same function as the
-    Delete Selected button.
-    </li>
+</h3>
+
+    <li><b>Edit Active Classes</b></li>
+<h3 class="help-section-paragraph">
+    If you have multiple active documents, this
+    option will allow you to apply a class label to all of them at once.
+    Enter the label you wish to identify with the class in the
+    dialogue form field and click "Ok". See the section on
+    <u><em>Classifying Documents</em></u> below.
+</h3>
+
+    <li><b>Delete Active</b></li>
+<h3 class="help-section-paragraph">
+    If you have multiple active documents, this option
+    will allow you to delete them all at once.
+</h3>
+
+    <li><b>Select All and Deselect All</b></li>
+<h3 class="help-section-paragraph">
+    Select All will activate all uploaded documents. Deselect all will
+    deactivate all uploaded documents.
+</h3>
+
 </ul>
 
 <!-- Classifying documents -->
@@ -171,9 +159,10 @@
     category defined by some human-assigned criterion. For instance, a collection
     of novels might be separated into two classes based on whether they were
     published in Britain or the United States. Gender, genre,  date of authorship,
-    and authorship might  be used to classify documents. Lexos' class labels allow
+    and authorship might be used to classify documents. Lexos' class labels allow
     you to assign classes to documents and sort by class in the Manage tool.
     At present, document classes are under-utilized elsewhere in the Lexos suite;
-    however,  they are an important part of the Topwords tool. In general, you
-    should assign class labels in Manage before using Topwords.
+    however,  they are an important part of the
+    <u><a href="http://lexos.wheatoncollege.edu/topword">Topwords</a></u> tool.
+    In general, you should assign class labels in Manage before using Topwords.
 </h3>
