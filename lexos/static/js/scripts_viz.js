@@ -1,5 +1,3 @@
-import d3 from './Lexos/lexos/static/node_modules/d3'
-
 $(function () {
   /**
    * updateMaxWordsOpt
@@ -95,8 +93,8 @@ $(document).ready(function () {
 
 $(window).on('load', function () {
   // $(function() {
-  console.log($('#graphsize'))
-  console.log(dataset)
+  //console.log($('#graphsize'))
+  //console.log(dataset)
   if (!$.isEmptyObject(dataset)) {
     preprocess(dataset)
     $('#status-prepare').css('visibility', 'hidden')
