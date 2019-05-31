@@ -139,9 +139,9 @@ def replacement_handler(text: str,
         # replacements are chars
         if is_lemma:
             # Beginning of the string or unicode punct or whitespace
-            edge1 = r'(^|,|\s)('
+            edge1 = r'(^|\s)('
             # Whitespace or unicode punct or end of the string
-            edge2 = r')(?=\s|,|$)'
+            edge2 = r')(?=\s|$)'
         else:
             edge1 = r'()('
             edge2 = r')()'
