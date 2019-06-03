@@ -268,7 +268,8 @@ class StatsModel(BaseModel):
             yaxis2=dict(
                 showline=True
             ),
-            hovermode="closest"
+            hovermode="closest",
+            showlegend=False
         )
 
         # Return the plotly figure.
