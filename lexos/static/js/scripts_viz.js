@@ -1,5 +1,9 @@
 $(function () {
-  function updateMaxWordsOpt() {
+  /**
+   * updateMaxWordsOpt
+   * @returns {void}
+   */
+  function updateMaxWordsOpt () {
     if ($('#vizmaxwords').is(':checked')) {
       console.log('hi')
       $('#vizmaxwordsopt').show()
@@ -11,20 +15,36 @@ $(function () {
   $('#vizmaxwords').click(updateMaxWordsOpt)
 })
 
-function preprocess(dataset) { // Used to decode utf-8
-  wordData = dataset['children']
+/**
+ * preprocess
+ * @param {let} dataset is a dataset
+ * @returns {void}
+ */
+function preprocess (dataset) { // Used to decode utf-8
+  let wordData = dataset['children']
 
-  for (var i = 0; i < wordData.length; i++) {
+  for (let i = 0; i < wordData.length; i++) {
     // wordData[i].name = decodeURIComponent(escape(wordData[i].name));
     wordData[i].name = wordData[i].name
   }
 }
 
-// Return a flattened hierarchy containing all leaf nodes under the root.
-function classes(root) {
-  var classes = []
+// Return
+/**
+ * classes
+ * @param {let} root is the root node of the hierarchy
+ * @returns {{children: Array}} - a flattened hierarchy containing all leaf nodes under the root.
+ */
+function classes (root) {
+  let classes = []
 
-  function recurse(name, node) {
+  /**
+   * recurse
+   * @param {let} name is the name of the node
+   * @param {let} node is then node to recurse on
+   * @returns {void}
+   */
+  function recurse (name, node) {
     if (node.children) node.children.forEach(function (child) { recurse(node.name, child) })
     // Note: decodeURIComponent(escape(node.name)) decodes the utf-8 from python/jinja/etc.
     else classes.push({ packageName: name, className: node.name, value: node.size })
@@ -36,7 +56,7 @@ function classes(root) {
 
 $(document).ready(function () {
   // Add tooltip to the DOM
-  var tooltip = d3.select('body').append('div')
+  d3.select('body').append('div')
     .attr('class', 'd3tooltip tooltip right')
     .style('opacity', 0)
   d3.select('.d3tooltip').attr('role', 'tooltip')
@@ -48,8 +68,7 @@ $(document).ready(function () {
       $('.minifilepreview:checked').trigger('click')
     }
   })
-
-  /*	var prev = -1; //initialize variable
+/* var prev = -1; //initialize variable
     $("#vizcreateoptions").selectable({
       filter: "label",  //Makes the label tags the elts that are selectable
       selecting: function(e , ui){
@@ -74,34 +93,32 @@ $(document).ready(function () {
 
 $(window).on('load', function () {
   // $(function() {
-  console.log($('#graphsize'))
-  console.log(dataset)
   if (!$.isEmptyObject(dataset)) {
     preprocess(dataset)
     $('#status-prepare').css('visibility', 'hidden')
     $('#save').css('display', 'block')
 
     // Create the tooltip
-    var tooltip = d3.select('body').select('div.d3tooltip')
+    let tooltip = d3.select('body').select('div.d3tooltip')
 
     // Configure the graph
-    var diameter = $('#graphsize').val(),
-      format = d3.format(',d'),
-      color = d3.scale.category20c()
+    let diameter = $('#graphsize').val()
+    d3.format(',d')
+    let color = d3.scale.category20c()
 
-    var bubble = d3.layout.pack()
+    let bubble = d3.layout.pack()
       .sort(null)
       .size([diameter, diameter])
       .padding(4)
 
     // Append the SVG
-    var svg = d3.select('#viz').append('svg')
+    let svg = d3.select('#viz').append('svg')
       .attr('width', diameter)
       .attr('height', diameter)
       .attr('class', 'bubble')
 
     // Append the nodes
-    var node = svg.selectAll('.node')
+    let node = svg.selectAll('.node')
       .data(bubble.nodes(classes(dataset))
         .filter(function (d) { return !d.children }))
       .enter().append('g')
@@ -124,7 +141,7 @@ $(window).on('load', function () {
         tooltip.transition()
           .duration(200)
           .style('opacity', 1)
-        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.value) + '</div>')
+        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.className) + ': ' + (d.value) + '</div>')
       })
       .on('mousemove', function (d) {
         return tooltip
@@ -148,7 +165,7 @@ $(window).on('load', function () {
         tooltip.transition()
           .duration(200)
           .style('opacity', 1)
-        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.value) + '</div>')
+        tooltip.html('<div class="tooltip-arrow"></div><div class="tooltip-inner">' + (d.className) + ': ' + (d.value) + '</div>')
       })
       .on('mousemove', function (d) {
         return tooltip
@@ -167,33 +184,28 @@ $(window).on('load', function () {
   }
 
   // Save to PNG
-  $('#save').on('click', function () {
-    var $container = $('#viz'),
-      // Canvg requires trimmed content
-      content = $container.html().trim(),
-      canvas = document.getElementById('svg-canvas')
+  $('#png-save').on('click', function () {
+    let $container = $('#viz')
+    // Canvg requires trimmed content
+    let content = $container.html().trim()
+    let canvas = document.getElementById('svg-canvas')
 
     // Draw svg on canvas
     canvg(canvas, content)
 
     // Change img from SVG representation
     var theImage = canvas.toDataURL('image/png')
-    $('#svg-img').attr('src', theImage)
 
-    // Open a new window with the image
-    var w = window.open()
-    var img = $('#svg-img').clone().css('display', 'block')
-    var html = $('<div/>')
-    html.append('<h2 style=\'margin-left: 30px\'>Instructions for Saving Image</h2>')
-    html.append('<h3 style=\'font-size: 16px; margin-left: 30px\'><strong>For Mozilla Firefox:</strong></h3><ol>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PNG: Right click on the image and choose "Save Image As...".</li>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PDF: Right click and view image, then select your browser\'s print operation and choose print to PDF.</li></ol>')
-    html.append('<h3 style=\'font-size: 16px; margin-left: 30px\'><strong>For Chrome:</strong></h3>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>Right click on the image and choose to "Open image in new tab".</li>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PNG: Right click on the image and choose to "Save image as...".</li>')
-    html.append('<h3 style=\'font-size: 14px; margin-left: 30px\'><li>PDF: Select your browser\'s print operation and choose print to PDF.</li></ol>')
-    html.append(img)
-    $(w.document.body).html(html)
-    // End Save
+    d3.select(this).attr('download', 'image.png')
+    d3.select(this).attr('href', theImage)
+  })
+
+  // Save to SVG
+  $('#svg-save').on('click', function () {
+    d3.select(this).attr('download', 'image.svg')
+    d3.select(this).attr('href', 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(
+      svg.attr('version', '1.1')
+        .attr('xmlns', 'http://www.w3.org/2000/svg')
+        .node().parentNode.innerHTML))))
   })
 })
