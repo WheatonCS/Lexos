@@ -229,6 +229,9 @@ def _try_decode_bytes_(raw_bytes: bytes) -> str:
         encoding_type = encoding_detect['encoding']
         decoded_string = raw_bytes.decode(encoding_type)
 
+    except TypeError:
+        decoded_string = raw_bytes.decode('UTF-8-SIG')
+
     return decoded_string
 
 
