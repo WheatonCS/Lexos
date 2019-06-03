@@ -86,6 +86,7 @@ OPTUPLOADNAMES = (
     'lemfileselect[]',
     'consfileselect[]',
     'scfileselect[]')
+# all unicode punctuation, excluding the apostrophe char
 UNICODE_PUNCT = "-=_!\"#%&*{},./:;?()[]@\\$^*+<>~`"\
                 "\u00a1\u00a7\u00b6\u00b7\u00bf\u037e\u0387\u055a-"\
                 "\u055f\u0589\u05c0\u05c3\u05c6\u05f3\u05f4\u0609"\
