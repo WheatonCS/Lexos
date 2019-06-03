@@ -5,6 +5,7 @@ import re
 import shutil
 from typing import Union, Any
 from zipfile import ZipFile
+from bs4 import UnicodeDammit
 
 import chardet
 
@@ -214,7 +215,6 @@ def _try_decode_bytes_(raw_bytes: bytes) -> str:
         raw_bytes[:constants.MIN_ENCODING_DETECT])
     # get the encoding
     encoding_type = encoding_detect['encoding']
-
     if encoding_type is None:
         encoding_detect = chardet.detect(raw_bytes)
         encoding_type = encoding_detect['encoding']
@@ -230,7 +230,9 @@ def _try_decode_bytes_(raw_bytes: bytes) -> str:
         decoded_string = raw_bytes.decode(encoding_type)
 
     except TypeError:
-        decoded_string = raw_bytes.decode('UTF-8-SIG')
+        dammit = UnicodeDammit(raw_bytes)
+        encoding_type = dammit.original_encoding
+        decoded_string = raw_bytes.decode(encoding_type)
 
     return decoded_string
 
