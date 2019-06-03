@@ -1,6 +1,7 @@
 """This is the Stats model which gets basic statistics."""
 
 import pandas as pd
+import numpy as np
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
@@ -99,6 +100,20 @@ class StatsModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "terms" if token_type == "word" else "character n-grams"
 
+    def __get_quartile__(self, index: float, arr: np.array) -> float:
+        if index % 1 == .5:
+            ind = int(index)
+            return arr[ind] * .5 + arr[ind + 1] * .5
+        elif index % 1 == .25:
+            ind = int(index)
+            return arr[ind] * .75 + arr[ind + 1] * .25
+        elif index % 1 == .75:
+            ind = int(index)
+            return arr[ind] * .25 + arr[ind + 1] * .75
+        else:
+            ind = int(index)
+            return arr[ind]
+
     def get_corpus_stats(self) -> CorpusStats:
         """Convert word lists completely to statistic.
 
@@ -118,9 +133,16 @@ class StatsModel(BaseModel):
         # Get the standard deviation of the file word counts.
         std_deviation = file_sizes.std(axis="index")
 
+        # Get quartile indexes
+        arr = np.array(file_sizes)
+        arr.sort()
+        length = len(arr)
+        q1_index = length * .25 + .5 - 1
+        q3_index = length * .75 + .5 - 1
+
         # Get the iqr of the file word counts.
-        first_quartile = file_sizes.quantile(0.25)
-        third_quartile = file_sizes.quantile(0.75)
+        first_quartile = self.__get_quartile__(index=q1_index, arr=arr)
+        third_quartile = self.__get_quartile__(index=q3_index, arr=arr)
         iqr = third_quartile - first_quartile
 
         # Standard error analysis: assume file sizes are normally distributed;
