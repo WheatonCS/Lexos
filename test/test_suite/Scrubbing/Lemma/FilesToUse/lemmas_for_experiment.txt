@@ -1,4 +1,4 @@
-a, the
-Mary, Margaret
-little, tiny
-lamb, sheep
+a:the
+Mary:Margaret
+little:tiny
+lamb:sheep
