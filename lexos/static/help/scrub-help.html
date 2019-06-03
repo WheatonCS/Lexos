@@ -63,7 +63,72 @@
         suggest you remove the boilerplate material using a text editor before
         uploading it to Lexos in order to prevent unwanted text from being
         included in subsequent analyses (e.g. including Project Gutenberg
-        licensure material in your word counts.) due to the inconsistency of the boilerplate format.
+        licensure material in your word counts) due to the inconsistency of the boilerplate format.
     </h3>
 
+    <li><b>Make Lowercase</b></li>
+    <h3 class="help-section-paragraph">
+        Converts all uppercase characters to lowercase characters so that the
+        tokens "The" and "the" will be considered as the same term. In addition,
+        all contents (whether in uploaded files or entered manually) for the
+        Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters
+        options will also have all uppercase characters changed to lowercase.
+        Lowercase is not applied inside any <code>HTML</code>, <code>XML</code>,
+        or <code>SGML</code> markup tags remaining in the text.
+    </h3>
+
+    <li><b>Remove Digits</b></li>
+    <h3 class="help-section-paragraph">
+        Removes all number characters from the text. Similar to the handling of
+        punctuation marks, any Unicode character in each of the active texts
+        with a “Number Character Property” is removed. For example, this option
+        will remove a Chinese three (㈢) and Eastern Arabic six (۶) from the tex
+        t. Note: at present, Lexos does not match Real numbers as a unit.
+        For example, for 3.14, Lexos will remove (only) the 3, 1, and 4 and the
+        decimal point will be removed only if the Remove All Punctuation option
+        is selected. Remove Digits is not applied inside any <code>HTML</code>,
+        <code>XML</code>, or <code>SGML</code> markup tags remaining in the text.
+    </h3>
+
+    <li><b>Remove Whitespace</b></li>
+    <h3 class="help-section-paragraph">
+        <ul class="help-section-list">
+            <li>Remove Spaces: each blank space will be removed.</li>
+            <li>Remove Tabs: each tab character <code>\t</code> wil be removed.</li>
+            <li>Remove Line Break: each newline character <code>\n</code> and carriage return
+            character <code>\r</code>  will be removed.</li>
+        </ul>
+        Remove Whitespace is not applied inside any <code>HTML</code>,
+        <code>XML</code>, or <code>SGML</code> markup tags remaining in the text.
+        <br><br>
+        Removing whitespace characters may be useful when you are working with
+        languages such as Chinese that do not use whitespace for word boundaries.
+        In addition, this option may be desired when tokenizing by character
+        n-grams if you do not want spaces to be part of your n-grams. See the
+        section on Tokenization for further discussion on tokenizing by character n-grams
+    </h3>
+
+    <li><b>Scrub Tags</b></li>
+    <h3 class="help-section-paragraph">
+        Handles markup tags in angular brackets, such as those used in
+        <code>HTML</code>, <code>XML</code>, or <code>SGML</code>. In markup
+        languages like these, start and end tags like
+        <code>&lt;p&gt;...&lt;/p&gt;</code> are used to designate an “element”.
+        Elements may be modified by “attributes” specified inside the start tag.
+        For instance, a text using the the Text Encoding Initiative (TEI)
+        specification for XML might contain the markup
+        <code>&lt;p rend=&quot;italic&quot;&gt;...&lt;/p&gt;</code>
+        for a paragraph in italics. <br><br>
+        When "Scrub Tags" is selected, you may click "[Options]" to open the
+        tag scrubbing dialog. This will allow you to choose one of four options
+        to handle each type of tag or to handle all the tags at once:
+        <ul class="help-section-list">
+            <li>Remove Tag: Removes the start and end tags but keeps the content in between.</li>
+            <li>Remove All: Removes the start and end tags and all the content in between.</li>
+            <li>Repalce: Replaces the start and end tags as well as all of the content between
+                with whatever you place in the "Replacement" text field. </li>
+            <li>None: This option will leave the specified element untouched in the text.
+                This is especially useful if you want to scrub other markup tags. </li>
+        </ul>
+    </h3>
 </ul>
