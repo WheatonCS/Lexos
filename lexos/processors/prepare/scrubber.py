@@ -138,8 +138,10 @@ def replacement_handler(text: str,
         # Lemmas are words surrounded by whitespace, while other
         # replacements are chars
         if is_lemma:
-            edge1 = r'(^|\s)('  # Beginning of the string or whitespace
-            edge2 = r')(?=\s|$)'  # Whitespace or end of the string
+            # Beginning of the string or unicode punct or whitespace
+            edge1 = r'(^|\s)('
+            # Whitespace or unicode punct or end of the string
+            edge2 = r')(?=\s|$)'
         else:
             edge1 = r'()('
             edge2 = r')()'
@@ -275,11 +277,18 @@ def get_all_punctuation_map() -> Dict[int, type(None)]:
 
     :return: The dictionary, with the ord() of each char mapped to None.
     """
+    try:
+        punctuation_map = load_character_deletion_map(
+            constants.CACHE_FOLDER, constants.PUNCTUATION_MAP_FILENAME)
 
-    punctuation_map = dict.fromkeys(
-        [i for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('P')
-         or unicodedata.category(chr(i)).startswith('S')])
+    except FileNotFoundError:
+        punctuation_map = dict.fromkeys(
+            [i for i in range(sys.maxunicode)
+             if unicodedata.category(chr(i)).startswith('P')
+             or unicodedata.category(chr(i)).startswith('S')])
+        save_character_deletion_map(
+            punctuation_map, constants.CACHE_FOLDER,
+            constants.PUNCTUATION_MAP_FILENAME)
 
     return punctuation_map
 
@@ -291,24 +300,35 @@ def scrub_select_apos(text: str) -> str:
     :return: The text string, now with only internal apostrophes.
     """
 
-    # If one or more apos. preceded by beginning of string or whitespace:
-    #     (?:^|(?<=\s))'+
-    # OR one or more apos. followed by whitespace or end of string:
-    #     |'+(?=\s|$)
+    # If one or more apos. preceded by beginning of string or whitespace or
+    # any unicode punctuation:
+    #     (?:^|(?<=\s|unicode_punct))'+
+    # OR one or more apos. followed by whitespace or any unicode punctuation or
+    # end of string:
+    #     |'+(?=\s|unicode_punct|$)
 
     # Using " " to represent whitespace, "w" to represent a word
-    #     character, and "***" to represent any sequence of any characters,
+    #     character, "p" to represent any unicode punctuation,
+    #     and "***" to represent any sequence of any characters,
     #     this pattern will match:
     # 1) ***w' *** because the apostrophe is followed by whitespace
-    # 2) *** 'w*** because the apostrophe follows whitespace
+    # 2) *** 'w*** because the apos. follows whitespace
     # 3) *** ' *** because the apos. follows AND is followed by whitespace
+    # 4) ***p'w*** because the apos. is preceded by punctuation
+    # 5) ***w'p*** because the apos is followed by punctuation
 
-    # This will NOT remove apos. next to other punctuation, because they are
-    # not whitespace
     # Consecutive apostrophes are treated as one, to avoid odd behavior
     # (Ex. "test'' ''' ''test" => "test' ' 'test" is undesirable)
 
-    pattern = re.compile(r"(?:^|(?<=\s))'+|'+(?=\s|$)", re.UNICODE)
+    # turns out you can input a string inside regex... just use re.escape(str)
+    # and concat it to your regex...
+
+    pattern = re.compile(r"(?:^|(?<=\s|"
+                         r"[" + re.escape(constants.UNICODE_PUNCT) + r"]))'+"
+                         r"|'+(?=\s|"
+                         r"[" + re.escape(constants.UNICODE_PUNCT) + r"]"
+                         r"|$)",
+                         re.UNICODE)
 
     # apply the pattern to replace all external or floating apos with
     # empty strings
@@ -327,10 +347,18 @@ def consolidate_hyphens(text: str) -> str:
     # Hex 002D is the minus symbol (-), which all hyphens will be converted to
     chosen_hyphen_value = '\u002D'
 
-    hyphen_values = dict.fromkeys(
-        [chr(i) for i in range(sys.maxunicode)
-         if unicodedata.category(chr(i)).startswith('Pd')
-         and chr(i) != chosen_hyphen_value])
+    try:
+        hyphen_values = load_character_deletion_map(
+            constants.CACHE_FOLDER, constants.HYPHEN_FILENAME)
+
+    except FileNotFoundError:
+        hyphen_values = dict.fromkeys(
+            [chr(i) for i in range(sys.maxunicode)
+             if unicodedata.category(chr(i)).startswith('Pd')
+             and chr(i) != chosen_hyphen_value])
+        save_character_deletion_map(
+            hyphen_values, constants.CACHE_FOLDER,
+            constants.HYPHEN_FILENAME)
 
     # convert all those types of hyphens into the ascii minus
     for value in hyphen_values:
@@ -348,16 +376,25 @@ def consolidate_ampers(text: str) -> str:
 
     chosen_amper_value = "\u0026"
 
-    amper_values = dict.fromkeys(
-        [chr(i) for i in range(sys.maxunicode)
-         # Avoid unnamed control chars throwing ValueErrors
-         if (unicodedata.category(chr(i)).startswith('P')
-             or unicodedata.category(chr(i)).startswith('S'))
-         and re.search(
-            r" ampersand|ampersand ", unicodedata.name(chr(i)),
-            re.IGNORECASE) is not None
-         and chr(i) != chosen_amper_value]
-    )
+    # Map of digits to be removed
+    try:
+        amper_values = load_character_deletion_map(
+            constants.CACHE_FOLDER, constants.AMPERSAND_FILENAME)
+
+    except FileNotFoundError:
+        amper_values = dict.fromkeys(
+            [chr(i) for i in range(sys.maxunicode)
+             # Avoid unnamed control chars throwing ValueErrors
+             if (unicodedata.category(chr(i)).startswith('P')
+                 or unicodedata.category(chr(i)).startswith('S'))
+             and re.search(
+                r" ampersand|ampersand ", unicodedata.name(chr(i)),
+                re.IGNORECASE) is not None
+             and chr(i) != chosen_amper_value]
+        )
+        save_character_deletion_map(
+            amper_values, constants.CACHE_FOLDER,
+            constants.AMPERSAND_FILENAME)
 
     # Change all ampersands to one type of ampersand
     for value in amper_values:
@@ -584,11 +621,17 @@ def get_remove_whitespace_map(spaces: bool,
 
     remove_whitespace_map = {}
     if spaces:
-        remove_whitespace_map.update({ord(' '): None})
+        remove_whitespace_map.update({32: None, 160: None, 5760: None,
+                                      8192: None, 8193: None, 8194: None,
+                                      8195: None, 8196: None, 8197: None,
+                                      8198: None, 8199: None, 8200: None,
+                                      8201: None, 8202: None, 8239: None,
+                                      8287: None, 12288: None})
     if tabs:
-        remove_whitespace_map.update({ord('\t'): None})
+        remove_whitespace_map.update({9: None})
     if new_lines:
-        remove_whitespace_map.update({ord('\n'): None, ord('\r'): None})
+        remove_whitespace_map.update({10: None, 11: None, 12: None, 13: None,
+                                      133: None, 8232: None, 8233: None})
 
     return remove_whitespace_map
 
@@ -1011,6 +1054,4 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
                                       stop_keep_words_function,
                                       total_removal_function])
 
-    finished_text = re.sub(r"[\s]+", " ", text, re.UNICODE | re.MULTILINE)
-
-    return finished_text
+    return text
