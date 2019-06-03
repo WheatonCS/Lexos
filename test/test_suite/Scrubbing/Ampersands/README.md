@@ -20,4 +20,3 @@ Ampersands
         * lowercase letters
         * no digits
         * no punctuation except for ampersands
-
