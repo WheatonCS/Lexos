@@ -1,0 +1,2 @@
+The dog ran A B C D E away.
+The cat sat F G H down.
