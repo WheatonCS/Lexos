@@ -7,7 +7,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
     handle_file_and_manual_strings, remove_stopwords, keep_words, \
-    get_remove_digits_map, get_all_punctuation_map, get_remove_punctuation_map
+    get_all_punctuation_map, get_remove_punctuation_map, get_remove_digits
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -740,21 +740,20 @@ class TestGetRemovePunctuationMap:
 class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_store(self):
-        remove_digits_map = get_remove_digits_map()
-        for i in range(0, 48):
-            assert i not in remove_digits_map
-        for i in range(48, 58):
-            assert i in remove_digits_map
-        for i in range(58, 123):
-            assert i not in remove_digits_map
-        assert 6995 in remove_digits_map
-        assert 7002 not in remove_digits_map
-        assert 43219 in remove_digits_map
-        assert 43230 not in remove_digits_map
-        assert 68088 in remove_digits_map
-        assert 68100 not in remove_digits_map
-        assert 119533 in remove_digits_map
-        assert 119600 not in remove_digits_map
+        string = "1 40 600 hey here's a number: 7000 hey here's a " \
+                 "decimal num: 3.14 31.41 cool! 314.15 3141.59265345678" \
+                 "99876534567897423456787653211346789097645322356 acc355 1. " \
+                 "t3st .1 numb3r .1. Europeans do decimals this way * rolls " \
+                 "eyes * 3, 14 31, 415926535879 314, 15 344734864856409675" \
+                 "23417389684532412748960608753141, 59 1..1 401 - 465 - 2140" \
+                 " 000 - 00 - 0000 1, 234, 567.89 1, 234, 567·89 1 '234' " \
+                 "567.89 1 '234' 567, 89 1.234 .567 '89 1˙234˙567, 89"
+
+        assert get_remove_digits(string) == (
+            "   hey here's a number:  hey here's a decimal num:   cool!   "
+            "acc . tst . numbr .. Europeans do decimals this way * rolls "
+            "eyes * ,  ,  ,  ,  ..  -  -   -  -  , ,  , ,   ''   '' ,   . "
+            "' , ")
 
 
 class TestHandleFileAndManualStrings:
