@@ -1,8 +1,14 @@
-{% extends "analyze-template.html" %}
+{% extends "helpers/analyze-template.html" %}
 
 
 <!-- Head -->
 {% block page_head %}
+
+    <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <script type="text/javascript" src="static/js/helpers/tree-options.js"></script>
 
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/dendrogram.js"></script>
@@ -15,19 +21,22 @@
 
     <!-- Dendrogram options -->
     <div id="dendrogram-options-section" class="section">
-        <h3 class="title">Options</h3>
+        <h3 class="section-top title">Options</h3>
 
-        <!-- Distance metric -->
-        <h3>Distance Metric: </h3>
-        <h3 id="distance-metric-button" class="button">Euclidean</h3><br>
+        <div class="section-body">
 
-        <!-- Linkage method -->
-        <h3>Linkage Method: </h3>
-        <h3 id="linkage-method-button" class="button">Average</h3><br>
+            <!-- Distance metric -->
+            <h3>Distance Metric: </h3>
+            <h3 id="distance-metric-button" class="button">Euclidean</h3><br>
 
-        <!-- Orientation -->
-        <h3>Orientation: </h3>
-        <h3 id="orientation-button" class="button">Bottom</h3><br>
+            <!-- Linkage method -->
+            <h3>Linkage Method: </h3>
+            <h3 id="linkage-method-button" class="button">Average</h3><br>
+
+            <!-- Orientation -->
+            <h3>Orientation: </h3>
+            <h3 id="orientation-button" class="button">Left</h3><br>
+        </div>
     </div>
 {% endblock %}
 
@@ -35,17 +44,21 @@
 <!-- Results -->
 {% block results %}
 
-    <!-- Top -->
-    <div class="results-top">
-        <h3 class="title">Dendrogram</h3>
-        <h3 id="generate-button" class="results-top-right button">Generate</h3>
-    </div>
-
     <!-- Dendrogram -->
-    <div id="dendrogram"></div>
+    <div class="section">
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Dendrogram</h3>
+            <h3 id="generate-button" class="right-justified disabled button">Generate</h3>
+        </div>
 
-    <!-- Hidden inputs -->
+        <div id="graph-container" class="section-body"></div>
+    </div>
+{% endblock %}
+
+
+<!-- Hidden elements -->
+{% block hidden_elements %}
     <input id="distance-metric-input" name="metric" value="euclidean" type="hidden">
     <input id="linkage-method-input" name="linkage" value="average" type="hidden">
-    <input id="orientation-input" name="orientation" value="bottom" type="hidden">
+    <input id="orientation-input" name="orientation" value="left" type="hidden">
 {% endblock %}

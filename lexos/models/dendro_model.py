@@ -124,12 +124,12 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
-        # figure.layout.update({'margin': {'b': max_label_len * 4.5}})
+        figure.layout.update({'margin': {'b': max_label_len * 4.5}})
         # Calculate the space right most label needs.
-        # right_margin = len(figure.layout.xaxis.ticktext[-1]) * 4 \
-        #    if len(figure.layout.xaxis.ticktext[-1]) * 4 > 100 else 100
+        right_margin = len(figure.layout.xaxis.ticktext[-1]) * 4 \
+            if len(figure.layout.xaxis.ticktext[-1]) * 4 > 100 else 100
         # Update right margin as well.
-        # figure.layout.update({'margin': {'r': right_margin}})
+        figure.layout.update({'margin': {'r': right_margin}})
 
         # Find the max x value in the plot.
         max_x = max([max(data['x']) for data in figure.data])
@@ -188,9 +188,9 @@ class DendrogramModel(BaseModel):
             autosize=True,
             height=600,
             margin=dict(
-                l=40,
+                l=0,
                 r=0,
-                b=30,
+                b=0,
                 t=0,
                 pad=4
             ),

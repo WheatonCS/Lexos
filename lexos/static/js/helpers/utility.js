@@ -1,48 +1,4 @@
 /**
- * Gets the sum of two point-like objects.
- * @param {{x, y}} a: The first addend.
- * @param {{x, y}} b: The second addend.
- * @returns {{x: number, y: number}}: The product of a and b.
- */
-function point_add(a, b){
-    return {x: a.x+b.x, y: a.y+b.y};
-}
-
-
-/**
- * Gets the difference of two point-like objects.
- * @param {{x, y}} a: The minuend.
- * @param {{x, y}} b: The subtrahend.
- * @returns {{x: number, y: number}}: The difference of a and b.
- */
-function point_subtract(a, b){
-    return {x: a.x-b.x, y: a.y-b.y};
-}
-
-
-/**
- * Gets the minimum of two point-like objects.
- * @param {{x, y}} a: The first point.
- * @param {{x, y}} b: The second point.
- * @returns {{x: number, y: number}}: The minimum of a and b.
- */
-function point_minimum(a, b){
-    return {x: Math.min(a.x, b.x), y: Math.min(a.y, b.y)};
-}
-
-
-/**
- * Gets the maximum of two point-like objects.
- * @param {{x, y}} a: The first point.
- * @param {{x, y}} b: The second point.
- * @returns {{x: number, y: number}}: The maximum of a and b.
- */
-function point_maximum(a, b){
-    return {x: Math.max(a.x, b.x), y: Math.max(a.y, b.y)};
-}
-
-
-/**
  * Gets the scroll offset of the given element.
  * @param {string} query: The element to query for.
  * @returns {{x, y}}: The scroll offset.
@@ -73,25 +29,38 @@ function get_mouse_position(event){
 
 /**
  * Gets the form as a JSON string.
+ * @param {object} additional_entries: Additional entries to append to the
+ *      form.
  * @returns {String}: The form as a JSON string.
  */
-function get_form_json(){
-    return JSON.stringify($("form").serializeArray()
-        .reduce(function(a, x){ a[x.name] = x.value; return a; }, {}))
+function get_form_json(additional_entries = {}){
+
+    // Serialize the form
+    let form = $("form").serializeArray()
+        .reduce(function(a, x){ a[x.name] = x.value; return a; }, {});
+
+    // Add the additional entries
+    for(const [key, value] of Object.entries(additional_entries))
+        form[key] = value;
+
+    // Return the form JSON
+    return JSON.stringify(form)
 }
 
 
 /**
  * Sends an AJAX request with a JSONified form payload.
  * @param {string} url: The URL to send the request to.
+ * @param {object} additional_entries: Additional entries to append to the
+ *      form.
  * @returns {jqXHR}: The jQuery request object.
  */
-function send_ajax_form_request(url){
+function send_ajax_form_request(url, additional_entries = {}){
     return $.ajax({
         type: "POST",
         url: url,
         contentType: "application/json; charset=utf-8",
-        data: get_form_json()
+        data: get_form_json(additional_entries)
     });
 }
 
@@ -119,10 +88,19 @@ function add_text_overlay(query, text){
 
 
 /**
- * Adds a loading overlay to the elements found in the query.
+ * Adds a loading overlay to the elements found in the query and disables the
+ *      specified elements.
  * @param {string} query: The query for elements to add the loading overlay to.
+ * @param {string} disable_query: The query for elements to disable.
  */
-function start_loading(query){
+function start_loading(query, disable_query = ""){
+
+    // Disable the specified elements
+    $(disable_query).each(function(){
+        $(this).addClass("disabled");
+    });
+
+    // Add a loading overlay to the specified elements
     $(query).each(function(){
 
         let element = $(this);
@@ -143,21 +121,25 @@ function start_loading(query){
  * Removes the loading overlay and fades in the loaded elements.
  * @param {string} loading_overlay_query: The query for the element containing
  *      the loading overlay to remove.
- * @param {string} hidden_element_query: The query for elements to show.
+ * @param {string} show_query: The query for elements to show.
+ * @param {string} enable_query: The query for elements to enable.
  * @param {number} sequential_fade_in_delay: The delay between fading in
  *      subsequent elements.
  */
-function finish_loading(loading_overlay_query,
-       hidden_element_query, sequential_fade_in_delay = 0){
+function finish_loading(loading_overlay_query, show_query,
+    enable_query = "", sequential_fade_in_delay = 0){
 
-    // Remove the loading overlay from each element
+    // Remove the loading overlay from each specified element
     $(loading_overlay_query).each(function(){
         $(this).find(".loading-overlay").remove();
     });
 
-    // Fade in each element
+    // Enable each specified element
+    enable(enable_query);
+
+    // Fade in each specified element
     let accumulated_fade_in_delay = 0;
-    $(hidden_element_query).each(function(){
+    $(show_query).each(function(){
 
         let element = $(this);
 
@@ -173,6 +155,16 @@ function finish_loading(loading_overlay_query,
         }, accumulated_fade_in_delay+30);
 
         accumulated_fade_in_delay += sequential_fade_in_delay;
+    });
+}
+
+/**
+ * Enables the specified elements.
+ * @param {string} enable_query: The query for elements to enable.
+ */
+function enable(enable_query){
+    $(enable_query).each(function(){
+        $(this).removeClass("disabled");
     });
 }
 

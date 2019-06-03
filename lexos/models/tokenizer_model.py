@@ -102,22 +102,10 @@ class TokenizerModel(BaseModel):
                             value=file_col_dtm.sum(axis=1))
 
         file_col_dtm.insert(loc=1, column="Average",
-                            value=file_col_dtm["Total"] / len(labels))
+                            value=file_col_dtm["Total"] /
+                            self._doc_term_matrix.shape[0])
+
         return file_col_dtm.round(4)
-
-    def get_file_col_table_header(self) -> str:
-        """Get the HTML header with documents as columns."""
-        # Get the proper header.
-        header = self._get_file_col_dtm().columns.values.tolist()
-
-        # Insert the header name.
-        header.insert(0, self._token_type_str)
-
-        # Join the column names in HTML format.
-        header_html = "".join([f"<th>{item}</th>" for item in header])
-
-        # Return the HTML header.
-        return f"<thead><tr>{header_html}</tr></thead>"
 
     def select_file_col_dtm(self) -> dict:
         """Select required portion of the file col dtm respond to ajax call.
@@ -149,10 +137,15 @@ class TokenizerModel(BaseModel):
         for index, value in enumerate(required_dtm.index):
             data[index].insert(0, value)
 
+        # Calculate the number of pages
+        pages = dtm.shape[0] // self._front_end_option.length
+        if dtm.shape[0] % self._front_end_option.length != 0 or pages == 0:
+            pages += 1
+
         # Return the sliced DTM and total count as a JSON object.
         return {
-            "draw": self._front_end_option.draw,
-            "size": dtm.shape[0],
+            "pages": pages,
+            "head": self._get_file_col_dtm().columns.values.tolist(),
             "data": data
         }
 

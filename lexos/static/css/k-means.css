@@ -15,7 +15,7 @@ form {
     grid-template-columns: 1fr 1.8fr 1fr 1fr 1.8fr;
 }
 
-#advanced-options-section > label {
+#advanced-options-section label {
     margin-right: 2rem;
 }
 
@@ -23,6 +23,7 @@ form {
     margin-bottom: .5rem;
     width: 10rem;
 }
+
 
 /* K-means */
 #k-means {

@@ -1,24 +1,17 @@
 let document_previews;
 $(function(){
 
-    // Load the appropriate content for the "Cut Settings" element
-    load_cut_settings_section();
-
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
+
+    // Load the appropriate content for the "Cut Settings" element
+    load_cut_settings_section();
 
     // Create a preview for each active document
     $.ajax({type: "GET", url: "document-previews"})
     .done(function(response){
-
-        // Parse the response
         document_previews = JSON.parse(response);
-
-        // Create the previews
         initialize_document_previews(response);
-
-        // Remove the loading overlay
-        finish_loading("#previews", ".preview");
     });
 
     // Perform the cutting if the "Preview" or "Apply" button is pressed
@@ -37,6 +30,7 @@ $(function(){
 function load_cut_settings_section(){
 
     let cut_settings_grid_element = $("#cut-settings-grid");
+    cut_settings_grid_element.css("opacity", "0");
     let cut_mode = $("#cut-mode-grid input:checked").val();
     let settings_elements;
 
@@ -45,7 +39,7 @@ function load_cut_settings_section(){
 
     // If the cut mode is set to "Segments"...
     if(cut_mode === "number") settings_elements = $(`
-        <div><h3>Number of Segments</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
+        <div><h3>Segments</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
     `);
 
     // Otherwise, if the cut mode is set to "Milestones"...
@@ -65,18 +59,21 @@ function load_cut_settings_section(){
 
     // Check the legacy "MScutWord" input if the cut mode is "milestone"
     $("#milestone-input").prop("checked", cut_mode === "milestone");
+
+    // Fade in the settings
+    fade_in(cut_settings_grid_element);
 }
 
 
 /**
  * Cuts the active documents.
- *
  * @param {string} action: The cut operation action ("preview" or "apply").
  */
 function cut(action){
 
-    // Display the loading overlay on the "Document Previews" section
-    start_loading("#previews");
+    // Display the loading overlay and disable the buttons on the document
+    // previews section
+    start_document_previews_loading();
 
     // Load the form data and add an entry for the cut action
     let form_data = new FormData($("form")[0]);
@@ -119,6 +116,7 @@ function create_document_previews(response){
         for(let i = 0; i < preview[3].length; ++i)
             create_document_preview(preview[1]+'_'+(i+1), preview[3][i][1]);
 
-    // Remove the loading overlay and fade in the previews section
-    finish_loading("#previews", ".preview");
+    // Remove the loading overlay, fade in the previews, and enable the
+    // buttons for the document previews section
+    finish_document_previews_loading();
 }

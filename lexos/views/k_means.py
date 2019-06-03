@@ -34,5 +34,4 @@ def graph():
     session_manager.cache_k_mean_option()
 
     # Get the graph
-    result = KMeansModel().get_result()
-    return jsonify(table=result.table, plot=result.plot)
+    return jsonify(KMeansModel().get_result())

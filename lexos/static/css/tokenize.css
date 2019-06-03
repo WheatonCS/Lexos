@@ -4,6 +4,12 @@
 }
 
 
+/* Form */
+form {
+    grid-template-rows: 15.5rem 1fr;
+}
+
+
 /* Options section */
 #options-section {
     grid-template-columns: 1.9fr .9fr 1fr 1.5fr;
@@ -11,10 +17,6 @@
 
 
 /* Table */
-#table {
-    height: 100%;
-}
-
 #table-data {
     height: calc(100% - 10rem);
 }
@@ -23,26 +25,30 @@
 /* Table top */
 #table-top {
     display: grid;
-    grid-template-columns: 35rem auto 10rem;
+    grid-template-columns: .9fr 1fr 1.1fr .8fr;
     height: 3rem;
     margin: 1rem;
 }
 
-#rows-per-page-option > h3,
-#rows-per-page-option > label {
-    margin-right: 1rem;
-}
-
-#search-option {
+.table-top-radio-option {
     justify-self: center;
 }
 
-#search-option input {
+.table-top-radio-option > h3,
+.table-top-radio-option > label {
+    margin-right: 1rem;
+}
+
+#search-input {
     width: 20rem;
 }
 
-#download-button {
+#table-top-buttons {
     justify-self: right;
+}
+
+#generate-button {
+    margin-right: .5rem;
 }
 
 
@@ -73,18 +79,20 @@
     background-color: #FFFFFF;
 }
 
+#table-head .table-cell.selected-cell {
+    background-color: #EAF5FF;
+}
+
 
 /* Table body */
 #table-body {
     overflow-x: visible;
-    overflow-y: auto;
-    direction: rtl;
+    overflow-y: overlay;
 }
 
 .table-row {
     display: grid;
     margin-bottom: 1rem;
-    direction: ltr;
 }
 
 .table-row:last-child {

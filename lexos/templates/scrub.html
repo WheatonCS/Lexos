@@ -1,12 +1,14 @@
-{% extends "base.html" %}
+{% extends "helpers/base.html" %}
 
 
 <!-- Head -->
 {% block head %}
 
-    <!-- Page JS and CSS -->
+    <!-- Document previews -->
     <script type="text/javascript" src="/static/js/document-previews.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/document-previews.css"/>
+
+    <!-- Page JS and CSS -->
     <script type="text/javascript" src="/static/js/scrub.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/scrub.css"/>
 {% endblock %}
@@ -20,8 +22,10 @@
 
         <!-- Scrubbing options -->
         <div id="scrubbing-options-section" class="section">
-            <h3 class="title">Scrubbing Options</h3>
-            <div class="options-grid">
+
+            <h3 class="section-top title">Scrubbing Options</h3>
+
+            <div class="section-body vertical-splitter">
                 <div>
                     <label class="checkbox-label"><input name="lowercasebox" type="checkbox" checked><span>Make Lowercase</span></label><br>
                     <label class="checkbox-label"><input name="digitsbox" type="checkbox" checked><span>Remove Digits</span></label><br>
@@ -43,15 +47,23 @@
         </div>
 
         <!-- Lemmas -->
-        <div id="lemmas-section" class="borderless-section">
-            <h3 class="title">Lemmas</h3>
-            <label class="textarea-label"><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
+        <div id="lemmas-section" class="section">
+
+            <h3 class="section-top title">Lemmas</h3>
+
+            <div class="borderless-section-body">
+                <label class="textarea-label"><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
+            </div>
         </div>
 
         <!-- Consolidations -->
-        <div id="consolidations-section" class="borderless-section">
-            <h3 class="title">Consolidations</h3>
-            <label class="textarea-label"><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
+        <div id="consolidations-section" class="section">
+
+            <h3 class="section-top title">Consolidations</h3>
+
+            <div class="borderless-section-body">
+                <label class="textarea-label"><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
+            </div>
         </div>
     </div>
 
@@ -59,49 +71,61 @@
     <div id="middle-column">
 
         <!-- Stop words and keep words -->
-        <div id="stop-words-section" class="borderless-section">
-            <h3 class="title">Stop Words and Keep Words</h3>
-            <div class="options-section">
-                <label class="circle-label"><input type="radio" name="sw_option" value="off" checked><span>None</span></label>
-                <label class="circle-label"><input type="radio" name="sw_option" value="stop"><span>Stop</span></label>
-                <label class="circle-label"><input type="radio" name="sw_option" value="keep"><span>Keep</span></label>
+        <div id="stop-words-section" class="section">
+
+            <h3 class="section-top title">Stop Words and Keep Words</h3>
+
+            <div class="borderless-section-body">
+
+                <div class="options-section">
+                    <label class="circle-label"><input type="radio" name="sw_option" value="off" checked><span>None</span></label>
+                    <label class="circle-label"><input type="radio" name="sw_option" value="stop"><span>Stop</span></label>
+                    <label class="circle-label"><input type="radio" name="sw_option" value="keep"><span>Keep</span></label>
+                </div>
+
+                <label class="textarea-label"><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
             </div>
-            <label class="textarea-label"><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
         </div>
 
         <!-- Special characters -->
-        <div id="special-characters-section" class="borderless-section">
-            <h3 class="title">Special Characters</h3>
-            <div class="options-grid">
-                <div class="options-section">
-                    <label class="circle-label"><input type="radio" name="entityrules" value="default" checked><span>None</span></label><br>
-                    <label class="circle-label"><input type="radio" name="entityrules" value="early-english-html"><span>Early English HTML</span></label><br>
-                    <label class="circle-label"><input type="radio" name="entityrules" value="doe-sgml"><span>Old English SGML</span></label>
+        <div id="special-characters-section" class="section">
+
+            <h3 class="section-top title">Special Characters</h3>
+
+            <div class="borderless-section-body">
+
+                <div class="vertical-splitter">
+                    <div class="options-section">
+                        <label class="circle-label"><input type="radio" name="entityrules" value="default" checked><span>None</span></label><br>
+                        <label class="circle-label"><input type="radio" name="entityrules" value="early-english-html"><span>Early English HTML</span></label><br>
+                        <label class="circle-label"><input type="radio" name="entityrules" value="doe-sgml"><span>Old English SGML</span></label>
+                    </div>
+                    <div class="options-section">
+                        <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-3"><span>MUFI 3</span></label><br>
+                        <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-4"><span>MUFI 4</span></label>
+                    </div>
                 </div>
-                <div class="options-section">
-                    <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-3"><span>MUFI 3</span></label><br>
-                    <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-4"><span>MUFI 4</span></label>
-                </div>
+
+                <label class="textarea-label"><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
             </div>
-            <label class="textarea-label"><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
         </div>
     </div>
 
     <!-- Document previews -->
-    <div id="document-previews-section" class="borderless-section">
-        <div id="document-previews-top">
+    <div id="document-previews-section" class="section">
+
+        <div class="section-top vertical-splitter">
+
             <h3 class="title">Document Previews</h3>
-            <div id="document-previews-buttons">
-                <h3 id="preview-button" class="button">Preview</h3>
-                <h3 id="apply-button" class="button">Apply</h3>
-                <a id="download-button" class="button" href="scrub/download">Download</a>
+
+            <div class="right-justified">
+                <h3 id="preview-button" class="disabled button">Preview</h3>
+                <h3 id="apply-button" class="disabled button">Apply</h3>
+                <a id="download-button" class="disabled button" href="scrub/download">Download</a>
             </div>
         </div>
+
         <div id="previews"></div>
     </div>
-
-    <!-- Hidden elements -->
-    <input name="haveGutenburg" value="False" type="hidden">
-    <input name="whitespacebox" value="on" type="hidden">
 
 {% endblock %}

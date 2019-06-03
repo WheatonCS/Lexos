@@ -3,11 +3,11 @@ let graph_id;
 /**
  * Creates a Plotly graph.
  * @param {string} url: The URL to send the request for the Plotly HTML to.
+ * @param {function} callback: The function to call when loading completes.
+ *      By default, the function re-enables the "Generate" button.
  */
-function create_graph(url){
-
-    // Add the loading overlay to the graph container
-    start_loading("#graph-container");
+function create_graph(url, callback =
+    function(){ enable("#generate-button"); }){
 
     // Send the request for the Plotly graph HTML
     send_ajax_form_request(url)
@@ -27,6 +27,9 @@ function create_graph(url){
 
         // Remove the loading overlay and show the graph
         finish_loading("#graph-container", "#graph");
+
+        // Call the callback
+        callback();
     });
 }
 

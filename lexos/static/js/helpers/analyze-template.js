@@ -3,13 +3,8 @@ function initialize_legacy_inputs(response){
     let documents = Object.entries($.parseJSON(response));
     let document_names_element = $("#document-names-section");
 
-    // If there are no active documents, display "no active documents" text
-    if(!documents.length){
-        let text = "No Active Documents";
-        batch_add_text_overlay(["#box-plot", "#table", "#corpus-statistics",
-            "#standard-error-test", "#interquartile-range-test"], text);
-        return false;
-    }
+    // If there are no active documents, return
+    if(!documents.length) return false;
 
      // Otherwise, initialize legacy file name and ID inputs
     let value = "";

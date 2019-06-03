@@ -93,14 +93,15 @@ class SimilarityModel(BaseModel):
                   for file_id in other_file_word_counts.index]
 
         # pack score and labels into a pandas data frame
-        return pd.DataFrame(index=["Documents", "Cosine Similarity Scores"],
+        return pd.DataFrame(index=["Documents", "Cosine Similarity"],
                             data=[labels, cos_scores])
 
     def generate_sims_html(self) -> str:
         """Generate the html for sim query.
 
         We also round all the data to 4 digits for better display
-        :return: the html table to put into the web page
+        :return: the table to put into the web page
         """
-        return self._gen_exact_similarity().transpose().round(4).to_html(
-            index=False, classes="table table-striped table-bordered")
+        return self._gen_exact_similarity().transpose() \
+            .sort_values("Cosine Similarity", ascending=False) \
+            .round(4).to_json(orient="values")

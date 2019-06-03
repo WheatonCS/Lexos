@@ -1,11 +1,41 @@
 $(function(){
 
+    // Create the loading overlays and disable the "Generate" button
+    prepare_for_loading();
+
     // Send a request to get the active files and their IDs
     $.ajax({type: "GET", url: "/active-file-ids"})
 
-    // If the request is successful, initialize the page
+        // If the request is successful, initialize the page
         .done(initialize);
+
+    // If the "Generate" button is pressed, recreate the statistics
+    $("#generate-button").click(function(){
+
+        // Create the loading overlays and disable the "Generate" button
+        prepare_for_loading();
+
+        // Recreate the statistics
+        create_statistics();
+    });
 });
+
+/**
+ * Adds a loading overlay to all the loadable elements and disables the
+ * "Generate" button.
+ */
+function prepare_for_loading(){
+
+    // Add a loading overlay to the "Document Sizes", "Corpus Statistics",
+    // "Standard Error Test", "Interquartile Range Test", and
+    // "Document Statistics" sections
+    start_loading("#graph-container, #table, #corpus-statistics, "+
+        "#standard-error-test, #interquartile-range-test");
+
+    // Disable the "Generate" button
+    $("#generate-button").addClass("disabled");
+}
+
 
 /**
  * Initializes the statistics page.
@@ -16,9 +46,15 @@ function initialize(response){
     // Initialize legacy inputs
     if(!initialize_legacy_inputs(response)) return;
 
-    // Add a loading overlay to the various elements that are loading data
-    start_loading("#table, #corpus-statistics, "+
-        "#standard-error-test, #interquartile-range-test");
+    // Create the statistics
+    create_statistics();
+}
+
+
+/**
+ * Generates the statistics.
+ */
+function create_statistics(){
 
     // Send a request to get the corpus statistics
     send_ajax_form_request("/statistics/corpus")
@@ -33,57 +69,85 @@ function initialize(response){
         .done(create_document_statistics);
 
     // Create the box plot graph for the "Document Sizes" section
-    create_graph("/statistics/box-plot");
+    // On completion, re-enable the "Generate" button if all elements have
+    // finished loading
+    create_graph("/statistics/box-plot",
+        function(){ loading_complete_check(); });
 }
 
 
+/**
+ * Create the statistics for the "Corpus Statistics", "Standard Error Test",
+ *      and "Interquartile Range Test" sections.
+ * @param response
+ */
 function create_corpus_statistics(response){
 
     // Parse the JSON response, replacing any "NaN" values with "N/A"
     response = JSON.parse(response.replace(/\bNaN\b/g, "\"N/A\""));
 
-    // Set the corpus statistics section data
+    // Populate the corpus statistics section with data
     $(`
         <h3>Average: ${response.average}</h3><br>
-        <h3>Standard Deviation: ${response.standard_deviation}</h3><br>
-        <h3>Interquartile Range: ${response.interquartile_range}</h3>
+        <h3>Standard Deviation: ${response["standard_deviation"]}</h3><br>
+        <h3>Interquartile Range: ${response["interquartile_range"]}</h3>
     `).appendTo("#corpus-statistics");
 
-    // Set the standard error test data
-    set_anomalies("standard-error", response.standard_error_small,
-        response.standard_error_large);
+    // Populate the "Standard Error Test" section with data
+    create_anomalies("#standard-error-test",
+        response["standard_error_small"],
+        response["standard_error_large"]);
 
-    // Set the interquartile range test data
-    set_anomalies("interquartile-range", response.interquartile_range_small,
-        response.interquartile_range_large);
+    // Populate the "Interquartile Range Test" section with data
+    create_anomalies("#interquartile-range-test",
+        response["interquartile_range_small"],
+        response["interquartile_range_large"]);
 
-    // Remove the loading overlays and fade the elements in
+    // Remove the loading overlays from the "Corpus Statistics", "Standard
+    // Error Test" and "Interquartile Range Test" sections and fade the data
+    // in
     finish_loading("#corpus-statistics, #standard-error-test, "+
         "#interquartile-range-test", "#corpus-statistics, "+
         "#standard-error-test, #interquartile-range-test");
+
+    // Enable the "Generate" button if all elements have finished loading
+    loading_complete_check(3);
 }
 
 
-function set_anomalies(name, small, large){
+/**
+ * Populates the "Standard Error Test" or "Interquartile Range Test" sections
+ *      with their data.
+ * @param {string} element_id: The id of the section element to populate
+ *      ("standard-error" or "interquartile-range").
+ * @param {string[]} small_anomalies: The small anomalies.
+ * @param {string[]} large_anomalies: The large anomalies.
+ */
+function create_anomalies(element_id, small_anomalies, large_anomalies){
 
     // Create a string stating the anomalies
     let text;
-    if(!small.length && !large.length) text = "No Anomalies";
+    if(!small_anomalies.length && !large_anomalies.length) text = "No Anomalies";
     else {
         text = "Anomalies: ";
-        for(const anomaly of small) text += anomaly+" (small), ";
-        for(const anomaly of large) text += anomaly+" (large), ";
+        for(const anomaly of small_anomalies) text += anomaly+" (small), ";
+        for(const anomaly of large_anomalies) text += anomaly+" (large), ";
         text = text.slice(0, -2);
     }
 
-    // Add the string to the appropriate element and fade it in
-    $(`<h3>${text}</h3>`).appendTo(`#${name}-test`);
+    // Add the string to the appropriate element
+    $(`<h3>${text}</h3>`).appendTo(element_id);
 }
 
 
+/**
+ * Create the table for the "Document Statistics" section.
+ * @param {string} response: The response from the "/statistics/documents"
+ *      request.
+ */
 function create_document_statistics(response){
 
-    // Append the head and table body
+    // Create the head and table body
     $(`
         <div id="table-head" class="hidden">
             <h3 class="table-head-cell">Name</h3>
@@ -92,10 +156,10 @@ function create_document_statistics(response){
             <h3 class="table-head-cell">Average Terms</h3>
             <h3 class="table-head-cell">Single-Occurrence Terms</h3>
         </div>
-        <div id="table-body" class="hidden"></div>
+        <div id="table-body" class="hidden hidden-scrollbar"></div>
     `).appendTo("#table");
 
-    // Append the rows
+    // Create the rows
     let rows = Object.entries(JSON.parse(response));
     for(row of rows){
         let data = Object.values(row[1]);
@@ -111,7 +175,30 @@ function create_document_statistics(response){
         `).appendTo("#table-body");
     }
 
-    // Fade the table in
+    // Remove the loading overlay and fade the table in
     finish_loading("#table", "#table-head, #table-body");
+
+    // Enable the "Generate" button if all elements have finished loading
+    loading_complete_check();
 }
 
+
+/**
+ * Re-enables the "Generate" button if all elements have finished loading.
+ * @param {number} number_loaded: The number of elements that were loaded by
+ *      the calling function.
+ */
+let elements_loaded = 0;
+function loading_complete_check(number_loaded = 1){
+
+    // Increment "elements_loaded" by the number of elements loaded by the
+    // calling function
+    elements_loaded += number_loaded;
+
+    // If all 5 elements have not finished loading, return
+    if(elements_loaded < 5) return;
+
+    // Otherwise, re-enable the "Generate" button and reset "elements_loaded"
+    $("#generate-button").removeClass("disabled");
+    elements_loaded = 0;
+}

@@ -1,27 +1,17 @@
 /* Form */
 form {
     grid-template-rows: min-content 1fr 1fr;
-    min-height: 80rem;
+    min-height: 75rem;
 }
 
 
 /* Upload section */
-#upload-section > h3 {
-    display: block;
-    margin: 1rem;
-}
-
 #browse-button,
 #drag-and-drop-section {
     display: grid;
     justify-items: center;
     align-items: center;
     color: #505050;
-}
-
-#browse-button > h3,
-#drag-and-drop-section  > h3 {
-    color: inherit;
 }
 
 #browse-button {
@@ -32,7 +22,6 @@ form {
     background-color: #F3F3F3;
     border: 2px solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
-
 }
 
 #browse-button:hover {
@@ -42,11 +31,15 @@ form {
 }
 
 #drag-and-drop-section {
-    width: 100%;
-    height: calc(100% - 12rem);
+    height: calc(100% - 7rem);
     background-color: #F3F3F3;
     border: 2px dashed #D3D3D3;
     transition: background-color .2s, border-color .2s;
+}
+
+#browse-button > h3,
+#drag-and-drop-section  > h3 {
+    color: inherit;
 }
 
 
@@ -56,7 +49,6 @@ form {
     grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
     grid-gap: 1rem;
     height: 100%;
-    max-height: calc(100% - 3rem);
     overflow-y: auto;
 }
 
@@ -64,7 +56,6 @@ form {
     display: grid;
     align-content: center;
     justify-content: center;
-    height: 100%;
     min-height: 8rem;
     padding: 1rem;
     background-color: #F3F3F3;
@@ -72,5 +63,5 @@ form {
 
 .upload-preview > h3 {
     min-width: 0;
-    overflow-wrap: break-word;
+    word-break: break-all;
 }

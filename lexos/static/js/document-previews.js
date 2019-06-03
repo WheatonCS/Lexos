@@ -17,6 +17,10 @@ function initialize_document_previews(response){
     // Create a preview for each active document
     for(const preview of previews)
         create_document_preview(preview[2], preview[3]);
+
+    // Remove the loading overlay, fade in the previews, and enable the
+    // buttons
+    finish_document_previews_loading();
 }
 
 
@@ -39,4 +43,26 @@ function create_document_preview(preview_name, preview_text){
     // HTML-escape the text and add it to the document preview
     preview.find(".preview-name").text(preview_name);
     preview.find(".preview-text").text(preview_text);
+}
+
+/**
+ * Displays the loading overlay and disables the buttons.
+ */
+function start_document_previews_loading(){
+    start_loading("#previews");
+    $("#preview-button, #apply-button, #download-button").addClass("disabled");
+}
+
+
+/**
+ * Removes the loading overlay, fades in the previews, and enables the buttons
+ */
+function finish_document_previews_loading(){
+
+    // Remove the loading overlay and fade in the previews
+    finish_loading("#previews", ".preview");
+
+    // Enable the buttons
+    $("#preview-button, #apply-button, #download-button")
+        .removeClass("disabled");
 }
