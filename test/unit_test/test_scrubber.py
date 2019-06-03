@@ -952,30 +952,47 @@ class TestGetRemoveWhitespaceMap:
             spaces=False, tabs=False, new_lines=False) == {}
         # 100
         assert get_remove_whitespace_map(
-            spaces=True, tabs=False, new_lines=False) == {ord(' '): None}
+            spaces=True, tabs=False, new_lines=False)\
+            == {32: None, 160: None, 5760: None, 8192: None, 8193: None,
+                8194: None, 8195: None, 8196: None, 8197: None, 8198: None,
+                8199: None, 8200: None, 8201: None, 8202: None, 8239: None,
+                8287: None, 12288: None}
         # 010
         assert get_remove_whitespace_map(
-            spaces=False, tabs=True, new_lines=False) == {ord('\t'): None}
+            spaces=False, tabs=True, new_lines=False) == {9: None}
         # 110
         assert get_remove_whitespace_map(
             spaces=True, tabs=True, new_lines=False) == \
-            {ord(' '): None, ord('\t'): None}
+            {32: None, 160: None, 5760: None, 8192: None, 8193: None,
+             8194: None, 8195: None, 8196: None, 8197: None, 8198: None,
+             8199: None, 8200: None, 8201: None, 8202: None, 8239: None,
+             8287: None, 12288: None, 9: None}
         # 001
         assert get_remove_whitespace_map(
             spaces=False, tabs=False, new_lines=True) == \
-            {ord('\n'): None, ord('\r'): None}
+            {10: None, 11: None, 12: None, 13: None, 133: None, 8232: None,
+             8233: None}
         # 101
         assert get_remove_whitespace_map(
             spaces=True, tabs=False, new_lines=True) == \
-            {ord(' '): None, ord('\n'): None, ord('\r'): None}
+            {32: None, 160: None, 5760: None, 8192: None, 8193: None,
+             8194: None, 8195: None, 8196: None, 8197: None, 8198: None,
+             8199: None, 8200: None, 8201: None, 8202: None, 8239: None,
+             8287: None, 12288: None, 10: None, 11: None, 12: None, 13: None,
+             133: None, 8232: None, 8233: None}
         # 011
         assert get_remove_whitespace_map(
             spaces=False, tabs=True, new_lines=True) == \
-            {ord('\t'): None, ord('\n'): None, ord('\r'): None}
+            {9: None, 10: None, 11: None, 12: None, 13: None, 133: None,
+             8232: None, 8233: None}
         # 111
         assert get_remove_whitespace_map(
             spaces=True, tabs=True, new_lines=True) == \
-            {ord(' '): None, ord('\t'): None, ord('\n'): None, ord('\r'): None}
+            {32: None, 160: None, 5760: None, 8192: None, 8193: None,
+             8194: None, 8195: None, 8196: None, 8197: None, 8198: None,
+             8199: None, 8200: None, 8201: None, 8202: None, 8239: None,
+             8287: None, 12288: None, 9: None, 10: None, 11: None, 12: None,
+             13: None, 133: None, 8232: None, 8233: None}
 
 
 # save_character_deletion_map
