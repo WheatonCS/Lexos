@@ -7,9 +7,8 @@
 /* Form */
 form {
     display: grid;
-    grid-template-rows: min-content auto;
+    grid-template-rows: min-content 1fr;
     grid-gap: 2rem;
-    height: 100%;
 }
 
 

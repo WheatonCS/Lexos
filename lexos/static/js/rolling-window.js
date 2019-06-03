@@ -1,5 +1,8 @@
 $(function(){
 
+    // Display the loading overlay
+    start_loading("#graph-container");
+
     // Send a request to get the active files and their IDs
     $.ajax({type: "GET", url: "/active-file-ids"})
 
@@ -10,7 +13,10 @@ $(function(){
 
     // If the "Generate" button is clicked, create the rolling window graph
     $("#generate-button").click(function(){
-        create_graph("/rolling-window/get-graph");
+        start_loading("#graph-container",
+            "#generate-button, #download-button");
+        create_graph("/rolling-window/get-graph",
+            function(){ enable("#generate-button, #download-button"); });
     });
 
     // If the "Download" button is clicked, for legacy compatibility, click
@@ -29,21 +35,19 @@ function single_active_document_check(response){
     // Get the active documents
     let documents = Object.entries($.parseJSON(response));
 
-    // If there is not exactly one active document, display warning text and
-    // disable the "Generate" and "Download" buttons in the "Rolling Window"
-    // section
+    // If there is not exactly one active document, display warning text on
+    // the "Rolling Window" section
     let text;
-    if(documents.length !== 1){
+    if(documents.length !== 1)
         text = "This Tool Requires A Single Active Document";
-        $("#generate-button").addClass("disabled");
-        $("#download-button").addClass("disabled");
-    }
 
     // Otherwise, set the legacy form input for the file to analyze to the
-    // active document and display "No Graph" text
+    // active document, display "No Graph" text on the "Rolling Window"
+    // section, and enable the generate button
     else {
         text = "No Graph";
         $("#file-to-analyze").val(documents[0][0]);
+        enable("#generate-button, #download-button");
     }
 
     // Display the text in the graph container

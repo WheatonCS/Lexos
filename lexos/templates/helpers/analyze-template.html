@@ -1,0 +1,65 @@
+{% extends "helpers/base.html" %}
+
+
+<!-- Head -->
+{% block head %}
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
+
+    {% block page_head %}
+    {% endblock %}
+{% endblock %}
+
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Options -->
+    <div id="options-section">
+
+        {% block options %}{% endblock %}
+
+        <!-- Tokenize -->
+        <div id="tokenize-section" class="section">
+            <h3 class="section-top title">Tokenize</h3>
+            <div class="section-body">
+                <label class="circle-label"><input name="tokenType" value="word" type="radio" checked><span>By Tokens</span></label><br>
+                <label class="circle-label"><input name="tokenType" value="char" type="radio"><span>By Characters</span></label><br>
+                <h3>Grams</h3><label><input name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+            </div>
+        </div>
+
+        <!-- Normalize -->
+        <div id="normalize-section" class="section">
+            <h3 class="section-top title">Normalize</h3>
+            <div class="section-body">
+                <label class="circle-label"><input name="normalizeType" value="freq" type="radio" checked><span>Proportional</span></label><br>
+                <label class="circle-label"><input name="normalizeType" value="raw" type="radio"><span>Raw</span></label><br>
+                <label class="circle-label"><input name="normalizeType" value="tfidf" type="radio"><span>TF-IDF</span></label>
+            </div>
+        </div>
+
+        <!-- Cull -->
+        <div id="cull-section" class="section">
+            <h3 class="section-top title">Cull</h3>
+            <div class="section-body">
+                <label class="checkbox-label"><input name="mfwcheckbox" type="checkbox"><span>Use the top<input name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span></label>
+                <label class="checkbox-label"><input name="cullcheckbox" type="checkbox"><span>Must be in<input name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span></label>
+            </div>
+        </div>
+    </div>
+
+    {% block results %}{% endblock %}
+
+    <!-- Hidden elements -->
+    <input name="csvdelimiter" value="comma" type="hidden">
+    <input name="norm" value="l2" type="hidden">
+    <input id="active-file-ids" name="active_file_ids" type="hidden">
+    <div id="document-names-section"></div>
+    {%  block hidden_elements %}{% endblock %}
+{% endblock %}

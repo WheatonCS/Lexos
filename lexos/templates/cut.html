@@ -1,12 +1,14 @@
-{% extends "base.html" %}
+{% extends "helpers/base.html" %}
 
 
 <!-- Head -->
 {% block head %}
 
-    <!-- Page JS and CSS -->
+    <!-- Document previews -->
     <script type="text/javascript" src="/static/js/document-previews.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/document-previews.css"/>
+
+    <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/cut.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/cut.css"/>
 {% endblock %}
@@ -20,8 +22,12 @@
 
         <!-- Cut mode -->
         <div id="cut-mode-section" class="section">
-            <h3 class="title">Cut Mode</h3>
-            <div id="cut-mode-grid">
+
+            <div class="section-top">
+                <h3 class="title">Cut Mode</h3>
+            </div>
+
+            <div id="cut-mode-grid" class="section-body">
                 <div>
                     <label class="circle-label"><input type="radio" name="cutType" value="words" checked><span>Tokens</span></label><br>
                     <label class="circle-label"><input type="radio" name="cutType" value="letters"><span>Characters</span></label>
@@ -36,19 +42,21 @@
 
         <!-- Cut settings -->
         <div id="cut-settings-section" class="section">
-            <h3 class="title">Cut Settings</h3>
-            <div id="cut-settings-grid"></div>
+            <h3 class="section-top title">Cut Settings</h3>
+
+            <div id="cut-settings-grid" class="section-body"></div>
         </div>
     </div>
 
     <!-- Document previews -->
-    <div id="document-previews-section" class="borderless-section">
-        <div id="document-previews-top">
+    <div id="document-previews-section" class="section">
+
+        <div class="section-top vertical-splitter">
             <h3 class="title">Document Previews</h3>
-            <div id="document-previews-buttons">
-                <h3 id="preview-button" class="button">Preview</h3>
-                <h3 id="apply-button" class="button">Apply</h3>
-                <a class="button" href="cut/download">Download</a>
+            <div class="right-justified">
+                <h3 id="preview-button" class="disabled button">Preview</h3>
+                <h3 id="apply-button" class="disabled button">Apply</h3>
+                <a id="download-button" class="disabled button" href="scrub/download">Download</a>
             </div>
         </div>
         <div id="previews"></div>

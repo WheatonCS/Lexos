@@ -1,8 +1,13 @@
-{% extends "analyze-template.html" %}
+{% extends "helpers/analyze-template.html" %}
 
 
 <!-- Head -->
 {% block page_head %}
+
+    <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+    <script type="text/javascript" src="static/js/helpers/tree-options.js"></script>
 
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/consensus-tree.js"></script>
@@ -13,14 +18,45 @@
 <!-- Options -->
 {% block options %}
 
-    <!-- Consensus tree options -->
-    <div id="consensus-tree-options-section" class="section">
-        <h3 class="title">Options</h3>
+    <!-- Options -->
+    <div class="section">
+        <h3 class="section-top title">Options</h3>
+        <div class="section-body vertical-splitter">
+
+            <!-- Left column -->
+            <div>
+                <label class="checkbox-label"><input name="replace" type="checkbox" checked><span>Sample with replacement</span></label><br>
+                <h3>Distance Metric </h3><h3 id="distance-metric-button" class="button">Euclidean</h3><br>
+                <h3>Linkage Method </h3><h3 id="linkage-method-button" class="button">Average</h3>
+            </div>
+
+            <!-- Right column -->
+            <div>
+                <h3>Cutoff</h3><input name="cutoff" value="0.5" type="text" spellcheck="false" autocomplete="off"><br>
+                <h3>Iterations</h3><input name="iterations" value="100" type="text" spellcheck="false" autocomplete="off">
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 
 <!-- Results -->
 {% block results %}
-    <h3 class="title">Consensus Tree</h3>
+
+    <!-- Consensus tree -->
+    <div class="section">
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Consensus Tree</h3>
+            <h3 id="generate-button" class="disabled right-justified button">Generate</h3>
+        </div>
+
+        <div id="consensus-tree-section-body" class="section-body centerer"></div>
+    </div>
+{% endblock %}
+
+
+<!-- Hidden elements -->
+{% block hidden_elements %}
+    <input id="distance-metric-input" name="metric" value="euclidean" type="hidden">
+    <input id="linkage-method-input" name="linkage" value="average" type="hidden">
 {% endblock %}

@@ -20,32 +20,22 @@ form {
 }
 
 #left-column {
-    grid-template-rows: 20rem auto auto;
+    grid-template-rows: 21rem 1fr 1fr;
 }
 
 #middle-column {
-    grid-template-rows: auto auto;
+    grid-template-rows: 1fr 1fr;
 }
 
-
-/* General */
-.options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
 
 /* Scrubbing options */
-#scrubbing-options-section > .options-grid {
-    height: calc(100% - 4rem);
-}
-
 #punctuation-options {
     transition: opacity .2s;
 }
 
 
 /* Stop words and keep words */
-#stop-words-section > .options-section {
+#stop-words-section .options-section {
     height: 4rem;
     margin-left: 1rem;
 }
@@ -54,31 +44,31 @@ form {
     margin-right: 3rem;
 }
 
-#stop-words-section > .textarea-label {
-    height: calc(100% - 8rem);
+#stop-words-section .textarea-label {
+    height: calc(100% - 4rem);
 }
 
 
 /* Special characters */
 #special-characters-section .options-section {
     margin-left: 1rem;
-}
-
-#special-characters-section .options-grid {
     height: 10rem;
 }
 
 #special-characters-section .textarea-label {
-    height: calc(100% - 14rem);
+    height: calc(100% - 10rem);
 }
 
 
 /* Tags popup */
+#popup {
+    max-width: 104rem;
+}
+
 #tag-table-head,
 .tag-table-row {
     display: grid;
-    grid-template-columns: 15% 55% 30%;
-    width: 100%;
+    grid-template-columns: 15% 59% 24%;
     padding: 1rem;
 }
 
@@ -93,7 +83,7 @@ form {
 #tag-table-body {
     width: 100rem;
     max-height: 100%;
-    overflow-y: auto;
+    overflow-y: overlay;
 }
 
 .tag-table-row {
@@ -116,10 +106,5 @@ form {
 
 .tag-table-row > input {
     width: 25rem;
-    justify-self: center;
     margin: 0;
-}
-
-#popup-save-button {
-    margin-top: 2rem;
 }

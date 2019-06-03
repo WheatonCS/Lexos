@@ -16,6 +16,7 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
+from plotly.graph_objs.graph_objs import Figure, Scatter
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
 
@@ -24,26 +25,12 @@ PlotlyHTMLPlot = str
 HTMLTable = str
 
 
-class KMeansResult(NamedTuple):
-    """A typed tuple to hold processed k-means results."""
-
-    plot: PlotlyHTMLPlot
-    table: HTMLTable
-
-
 class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
 
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: KMeansOption
-
-
-class KMeansUnprocessedResult(NamedTuple):
-    """A typed tuple to hold unprocessed k-means results."""
-
-    plot: go.Figure
-    table: pd.DataFrame
 
 
 class KMeansModel(BaseModel):
@@ -268,7 +255,7 @@ class KMeansModel(BaseModel):
             for group_number in np.unique(k_means_index)
         ]
 
-    def _get_voronoi_result(self) -> KMeansUnprocessedResult:
+    def _get_voronoi_result(self) -> go.Figure:
         """Generate voronoi formatted graph for K Means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -308,8 +295,6 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
-            autosize=True,
-            height=570,
             margin=dict(
                 l=0,
                 r=0,
@@ -317,8 +302,6 @@ class KMeansModel(BaseModel):
                 t=30,
                 pad=4
             ),
-            # xaxis=go.layout.XAxis(title='x-axis', showline=False),
-            # yaxis=go.layout.YAxis(title='y-axis', showline=False),
             hovermode="closest")
 
         # noinspection PyTypeChecker
@@ -329,12 +312,9 @@ class KMeansModel(BaseModel):
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return KMeansUnprocessedResult(
-            plot=go.Figure(data=data, layout=layout),
-            table=self._get_2d_frame(k_means_index=k_means_index)
-        )
+        return go.Figure(data=data, layout=layout)
 
-    def _get_2d_scatter_result(self) -> KMeansUnprocessedResult:
+    def _get_2d_scatter_result(self) -> go.Figure:
         """Generate a 2D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -371,20 +351,22 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
-            xaxis=go.layout.XAxis(title='x-axis', showline=False),
-            yaxis=go.layout.YAxis(title='y-axis', showline=False),
+            margin=dict(
+                l=0,
+                r=0,
+                b=0,
+                t=0,
+                pad=4
+            ),
             hovermode="closest")
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return KMeansUnprocessedResult(
-            plot=go.Figure(data=data, layout=layout),
-            table=self._get_2d_frame(k_means_index=k_means_index)
-        )
+        return go.Figure(data=data, layout=layout)
 
-    def _get_3d_scatter_result(self) -> KMeansUnprocessedResult:
+    def _get_3d_scatter_result(self) -> go.Figure:
         """Generate a 3D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -423,7 +405,13 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot, mainly set the background color to grey.
         layout = go.Layout(
-            height=600,
+            margin=dict(
+                l=0,
+                r=0,
+                b=0,
+                t=0,
+                pad=4
+            ),
             scene=dict(
                 xaxis=dict(showbackground=True,
                            backgroundcolor="rgb(230,230,230)"),
@@ -438,12 +426,9 @@ class KMeansModel(BaseModel):
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return KMeansUnprocessedResult(
-            plot=go.Figure(data=data, layout=layout),
-            table=self._get_3d_frame(k_means_index=k_means_index)
-        )
+        return go.Figure(data=data, layout=layout)
 
-    def get_result(self) -> KMeansResult:
+    def get_result(self) -> go.Figure:
         """Get the plotly graph based on users selection.
 
         :return: A HTML formatted plotly graph that is ready to be displayed.
@@ -468,15 +453,9 @@ class KMeansModel(BaseModel):
             raise ValueError("Invalid K-Means analysis option from front end.")
 
         # Process the result before return them.
-        return KMeansResult(
-            plot=plot(
-                k_means_unprocessed_result.plot,
+        return plot(
+                k_means_unprocessed_result,
                 show_link=False,
                 output_type="div",
                 include_plotlyjs=False
-            ),
-            table=k_means_unprocessed_result.table.to_html(
-                index=False,
-                classes="table table-striped table-bordered text-center"
             )
-        )

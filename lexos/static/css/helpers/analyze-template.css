@@ -23,16 +23,3 @@ form {
 #document-names-section {
     display: none;
 }
-
-
-/* Results top */
-.results-top {
-    display: grid;
-    height: 3rem;
-    margin: 1rem;
-    grid-template-columns: 1fr 1fr;
-}
-
-.results-top-right {
-    justify-self: right;
-}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Head -->
+<head>
+    <meta charset="UTF-8"/>
+    <title>Lexos</title>
+    <link rel="shortcut icon" href="static/favicon.png"/>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600,700" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Base Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/base.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
+    <script type="text/javascript" src="static/js/helpers/utility.js"></script>
+
+    {% block head %}{% endblock %}
+</head>
+
+
+<!-- Body -->
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar">
+        <div id="navbar-left">
+            <h1>{L}exos</h1>
+        </div>
+        <div id="navbar-right">
+            <a id="upload-button" href="/upload">Upload</a>
+            <a id="manage-button" href="/manage">Manage</a>
+
+            <h3 id="prepare-button" class="navbar-button selectable">Prepare</h3>
+            <h3 id="visualize-button" class="navbar-button selectable">Visualize</h3>
+            <h3 id="analyze-button" class="navbar-button selectable">Analyze</h3>
+
+            <h3>|</h3>
+            <a href="/download-workspace">Save</a>
+            <a href="/reset">Reset</a>
+
+            <h3>|</h3>
+            <h3 id="help-button" class="selectable">Help</h3>
+        </div>
+    </div>
+
+    <!-- Main grid -->
+    <div id="main-grid">
+
+        <!-- Main section -->
+        <div id="main-section">
+
+                <!-- Form -->
+                <form method="POST" enctype="multipart/form-data">
+                    {% block content %}{% endblock %}
+                </form>
+
+            <!-- Help -->
+            <div id="help-container"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Left footer -->
+        <div id="left-footer">
+            <h3>Lexos v3.2.0 © 2019</h3>
+            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/">Lexomics Research Group</a>
+        </div>
+
+        <!-- Right footer -->
+        <div id="right-footer"><h3>Active Documents: </h3><h3 id="active-document-count">0</h3></div>
+    </footer>
+</body>
+</html>

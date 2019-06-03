@@ -1,0 +1,10 @@
+/* Main */
+#main-section {
+    min-width: 125rem;
+}
+
+
+/* Options section */
+#options-section {
+    grid-template-columns: 1.5fr .6fr .6fr 1.1fr;
+}

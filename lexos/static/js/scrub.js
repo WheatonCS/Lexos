@@ -1,18 +1,12 @@
 $(function(){
 
-    // Display the loading overlay on the "Previews" section
-    start_loading("#previews");
+    // Display the loading overlay and disable the buttons on the document
+    // previews section
+    start_document_previews_loading();
 
     // Create a preview for each active document
     $.ajax({type: "GET", url: "document-previews"})
-    .done(function(response){
-
-        // Create the previews
-        initialize_document_previews(response);
-
-        // Remove the loading overlay and fade in the previews
-        finish_loading("#previews", ".preview");
-    });
+    .done(function(response){ initialize_document_previews(response); });
 
     // Disable the punctuation options when the "Remove Punctuation" checkbox
     // is unchecked
@@ -47,7 +41,7 @@ function create_tag_options_popup(response){
     let tags = JSON.parse(response);
 
     // Create the popup
-    create_popup();
+    create_ok_popup("Tag Options");
     let popup_content_element = $("#popup-content");
 
     // If there are no tags, display "No Tags" text and return
@@ -73,18 +67,18 @@ function create_tag_options_popup(response){
         let formatted_tag = tag[0].replace(/[^A-Za-z0-9 ]/, '-');
 
         // Create the row element
-        let row_element = $(
-            `<div class="tag-table-row">`+
-                `<h3></h3>`+
-                `<div>`+
-                    `<label class="circle-label"><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}-action" value="remove-tag"><span>Remove Tag</span></label>`+
-                    `<label class="circle-label"><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}-action" value="remove-element"><span>Remove All</span></label>`+
-                    `<label class="circle-label"><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span>Replace</span></label>`+
-                    `<label class="circle-label"><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span>None</span></label>`+
-                `</div>`+
-                `<input type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">`+
-            `</div>`
-        ).appendTo("#tag-table-body");
+        let row_element = $(`
+            <div class="tag-table-row">
+                <h3></h3>
+                <div>
+                    <label class="circle-label"><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}-action" value="remove-tag"><span>Remove Tag</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}-action" value="remove-element"><span>Remove All</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span>Replace</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span>None</span></label>
+                </div>
+                <input type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">
+            </div>
+        `).appendTo("#tag-table-body");
 
         // Add the HTML-escaped tag name to the row element
         row_element.find("h3").text(tag[0]);
@@ -93,15 +87,8 @@ function create_tag_options_popup(response){
         row_element.find(`#${formatted_tag}-${tag[1]}-button`).prop("checked", true);
     }
 
-    // Create the "Save" button
-    $(`
-        <div class="centerer">
-            <h3 id="popup-save-button" class="button">Save</h3>
-        </div>
-    `).appendTo(popup_content_element);
-
-    // Save the tag options when the "Save" button is pressed
-    $("#popup-save-button").click(save_tag_options);
+    // Save the tag options when the "OK" button is pressed
+    $("#popup-ok-button").click(save_tag_options);
 }
 
 
@@ -147,13 +134,13 @@ function save_tag_options(){
 
 /**
  * Performs scrubbing on the active documents.
- *
  * @param {string} action: The action for the scrub operation (preview or apply).
  */
 function scrub(action){
 
-    // Display the loading overlay
-    start_loading("#previews");
+    // Display the loading overlay and disable the buttons on the document
+    // previews section
+    start_document_previews_loading();
 
     // Set the action
     let form_data = new FormData($("form")[0]);
@@ -189,6 +176,7 @@ function update_document_previews(response){
     for(const preview of previews)
         create_document_preview(preview[0], preview[1]);
 
-    // Remove the loading overlay and show the previews
-    finish_loading("#previews", ".preview");
+    // Remove the loading overlay, fade in the previews, and enable the
+    // buttons for the document previews section
+    finish_document_previews_loading();
 }

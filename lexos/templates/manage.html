@@ -1,11 +1,16 @@
-{% extends "base.html" %}
+{% extends "helpers/base.html" %}
 
 
 <!-- Head -->
 {% block head %}
 
+    <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+    <script type="text/javascript" src="static/js/helpers/point.js"></script>
+    <script type="text/javascript" src="static/js/helpers/selection-box.js"></script>
+
     <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/selection-box.js"></script>
     <script type="text/javascript" src="static/js/manage.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/manage.css"/>
 {% endblock %}
@@ -17,20 +22,17 @@
     <!-- Top section -->
     <div id="top-section">
 
-        <!-- Information text -->
         <h3>
             Select the documents you want active. Click and drag to select
             multiple documents. Hold "D" to deselect. Right-click for more options.
         </h3>
 
-        <!-- Download button -->
         <a id="download-button" class="button" href="manage/download">Download Selected</a>
     </div>
 
     <!-- Table -->
-    <div id="table" class="borderless-section">
+    <div id="table" class="section">
 
-        <!-- Table head -->
         <div id="table-head">
             <h3 class="table-cell">Active</h3>
             <h3 class="table-cell">#</h3>
@@ -40,10 +42,7 @@
             <h3 class="table-cell">Excerpt</h3>
         </div>
 
-        <!-- Table body -->
-        <div id="table-body">
-            <div id="table-content"></div>
-        </div>
+        <div id="table-body" class="hidden-scrollbar"></div>
     </div>
 
     <!-- Context menu -->

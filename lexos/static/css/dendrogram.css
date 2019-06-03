@@ -8,26 +8,3 @@
 #options-section {
     grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
 }
-
-#dendrogram-options-section .button {
-    margin-bottom: .4rem;
-}
-
-
-/* Popup */
-#popup-content div {
-    justify-self: left;
-}
-
-#popup-content h3 {
-    margin-top: 1rem;
-}
-
-
-/* Dendrogram */
-#dendrogram {
-    width: calc(100% - 2rem);
-    height: 60rem;
-    overflow: hidden;
-    margin: 0 1rem 1rem 1rem;
-}

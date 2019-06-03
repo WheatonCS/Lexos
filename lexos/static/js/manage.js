@@ -32,6 +32,9 @@ $(function(){
  */
 function toggle_selection(event, pressed){
 
+    // If a popup is being displayed, return
+    if($("#popup").length) return;
+
     // Check whether all documents are selected
     let all_selected = true;
     $(".table-row").each(function(){
@@ -51,7 +54,7 @@ let documents = [];
 function create_table(){
 
     // Display the loading overlay on the table body
-    start_loading("#table-content");
+    start_loading("#table-body");
 
     // Get the uploaded documents
     $.ajax({type: "GET", url: "manage/documents"}).done(function(json_response){
@@ -60,7 +63,7 @@ function create_table(){
 
         // If there are no documents, display "No Documents" text and return
         if(documents.length === 0){
-            add_text_overlay("#table-content", "No Documents");
+            add_text_overlay("#table-body", "No Documents");
             return;
         }
 
@@ -71,7 +74,7 @@ function create_table(){
         }
 
         // Remove the loading overlay and fade in the table content
-        finish_loading("#table-content", "#table-content");
+        finish_loading("#table-body", "#table-body");
     });
 }
 
@@ -88,17 +91,17 @@ function create_table(){
  */
 function append_row(id, row_number, active, label, class_name, source, preview){
 
-    // Create a new row and append it to the "table-content" element
-    let row = $(
-        `<div id="${id}" class="table-row">`+
-            `<div class="checkbox"></div>`+
-            `<h3 class="table-cell">${row_number}</h3>`+
-            `<h3 class="table-cell"></h3>`+
-            `<h3 class="table-cell"></h3>`+
-            `<h3 class="table-cell"></h3>`+
-            `<h3 class="table-cell"></h3>`+
-        `</div>`
-    ).appendTo("#table-content");
+    // Create a new row and append it to the "table-body" element
+    let row = $(`
+        <div id="${id}" class="table-row">
+            <div class="checkbox"></div>
+            <h3 class="table-cell">${row_number}</h3>
+            <h3 class="table-cell"></h3>
+            <h3 class="table-cell"></h3>
+            <h3 class="table-cell"></h3>
+            <h3 class="table-cell"></h3>
+        </div>
+    `).appendTo("#table-body");
 
     // HTML-escape the text and add it to the row
     $(row.find(".table-cell")[1]).text(label);
@@ -159,7 +162,7 @@ function preview(){
     .done(function(response){
 
         // Create a popup and append the HTML-escaped document preview to it
-        create_popup();
+        create_popup("Preview");
         let preview = $(`<h3></h3>`).appendTo("#popup-content");
         preview.text(JSON.parse(response).previewText);
     });
@@ -172,7 +175,7 @@ function preview(){
 function edit_name(){
 
     // Create a popup containing a text input
-    create_text_input_popup();
+    create_text_input_popup("Document Name");
 
     // If the popup's "OK" button is clicked
     $("#popup-ok-button").click(function(){
@@ -195,7 +198,7 @@ function edit_name(){
 function edit_class(){
 
     // Create a popup containing a text input
-    create_text_input_popup();
+    create_text_input_popup("Document Class");
 
     // When the popup's "OK" button is clicked
     $("#popup-ok-button").click(function(){
@@ -239,7 +242,7 @@ function merge_selected(){
 function edit_selected_classes(){
 
     // Create a popup containing a text input
-    create_text_input_popup();
+    create_text_input_popup("Document Class");
 
     // If the popup's "OK" button is clicked...
     $("#popup-ok-button").click(function(){
@@ -343,3 +346,4 @@ function get_selected_document_ids(){
 
     return id_list;
 }
+

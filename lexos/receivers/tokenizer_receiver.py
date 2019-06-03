@@ -8,7 +8,6 @@ class TokenizerOption(NamedTuple):
     """The typed tuple to hold tokenizer front end option."""
 
     orientation: str
-    draw: Optional[int]
     start: Optional[int]
     length: Optional[int]
     search: Optional[str]
@@ -34,17 +33,14 @@ class TokenizerReceiver(BaseReceiver):
         # This exception is here because when header is requested, values
         # above related to data table drawing are not passed in.
         try:
-            draw = int(self._front_end_data["draw"])
             start = int(self._front_end_data["start"])
-            search = self._front_end_data["search"]["value"]
+            search = self._front_end_data["search-term"]
             length = int(self._front_end_data["length"])
-            sort_dict = self._front_end_data["order"][0]
-            sort_method = True if sort_dict["dir"] == "asc" else False
-            sort_column = int(sort_dict["column"]) \
-                if sort_dict["column"] is not None else None
+            sort_method = True if self._front_end_data["sort-ascending"] \
+                == "true" else False
+            sort_column = int(self._front_end_data["sort-column"])
 
         except KeyError:
-            draw = None
             start = None
             search = None
             length = None
@@ -53,7 +49,6 @@ class TokenizerReceiver(BaseReceiver):
 
         # Pack everything and returns it as a NamedTuple.
         return TokenizerOption(
-            draw=draw,
             start=start,
             length=length,
             search=search,

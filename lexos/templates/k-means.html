@@ -1,10 +1,11 @@
-{% extends "analyze-template.html" %}
+{% extends "helpers/analyze-template.html" %}
 
 
 <!-- Head -->
 {% block page_head %}
 
     <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
     <script type="text/javascript" src="static/js/k-means.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/k-means.css"/>
 {% endblock %}
@@ -15,21 +16,25 @@
 
     <!-- K-means options -->
     <div id="k-means-options-section" class="section">
-        <h3 class="title">Options</h3>
-        <h3>Clusters</h3><input id="clusters" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off"><br>
-        <label class="circle-label"><input name="viz" value="Voronoi" type="radio" checked><span>Voronoi</span></label><br>
-        <label class="circle-label"><input name="viz" value="2DScatter" type="radio"><span>2D-Scatter</span></label><br>
-        <label class="circle-label"><input name="viz" value="3DScatter" type="radio"><span>3D-Scatter</span></label>
+        <h3 class="section-top title">Options</h3>
+        <div class="section-body">
+            <h3>Clusters</h3><input id="clusters" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off"><br>
+            <label class="circle-label"><input name="viz" value="Voronoi" type="radio" checked><span>Voronoi</span></label><br>
+            <label class="circle-label"><input name="viz" value="2DScatter" type="radio"><span>2D-Scatter</span></label><br>
+            <label class="circle-label"><input name="viz" value="3DScatter" type="radio"><span>3D-Scatter</span></label>
+        </div>
     </div>
 
     <!-- Advanced k-means options -->
     <div id="advanced-options-section" class="section">
-        <h3 class="title">Advanced</h3>
-        <label class="circle-label"><input name="init" value="k-means++" type="radio" checked><span>K-Means++</span></label>
-        <label class="circle-label"><input name="init" value="random" type="radio"><span>Random</span></label><br>
-        <h3>Maximum Iterations</h3><input name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off"><br>
-        <h3>Different Centroids</h3><input name="n_init" value="10" type="text" spellcheck="false" autocomplete="off"><br>
-        <h3>Relative Tolerance</h3><input name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off"><br>
+        <h3 class="section-top title">Advanced</h3>
+        <div class="section-body">
+            <label class="circle-label"><input name="init" value="k-means++" type="radio" checked><span>K-Means++</span></label>
+            <label class="circle-label"><input name="init" value="random" type="radio"><span>Random</span></label><br>
+            <h3>Maximum Iterations</h3><input name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off"><br>
+            <h3>Different Centroids</h3><input name="n_init" value="10" type="text" spellcheck="false" autocomplete="off"><br>
+            <h3>Relative Tolerance</h3><input name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off"><br>
+        </div>
     </div>
 {% endblock %}
 
@@ -37,12 +42,12 @@
 <!-- Results -->
 {% block results %}
 
-    <!-- Top -->
-    <div class="results-top">
-        <h3 class="title">K-Means</h3>
-        <h3 id="generate-button" class="results-top-right button">Generate</h3>
-    </div>
-
     <!-- K-means graph -->
-    <div id="k-means"></div>
+    <div class="section">
+        <div class="vertical-splitter section-top">
+            <h3 class="title">K-Means</h3>
+            <h3 id="generate-button" class="disabled right-justified button">Generate</h3>
+        </div>
+        <div id="graph-container" class="section-body"></div>
+    </div>
 {% endblock %}

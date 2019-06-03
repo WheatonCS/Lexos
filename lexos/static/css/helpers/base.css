@@ -1,4 +1,22 @@
 /* Fonts */
+@font-face {
+    font-family: "Quicksand";
+    src: url("../../fonts/quicksand-regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url("../../fonts/open-sans-bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url("../../fonts/open-sans-bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
 h1 {
     font-family: "Quicksand", sans-serif;
     font-weight: 400;
@@ -44,7 +62,7 @@ html {
 
 body {
     display: grid;
-    grid-auto-rows: min-content calc((100vh - (100vh - 100%)) - 11rem) min-content;
+    grid-template-rows: min-content calc((100vh - (100vh - 100%)) - 11rem) min-content;
     height: 100%;
     position: relative;
     background-color: #E3E3E3;
@@ -63,9 +81,9 @@ body {
 form {
     display: grid;
     grid-gap: 2rem;
-    padding: 2rem;
-    width: 100%;
-    height: 100%;
+    margin: 2rem;
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
     min-height: 50rem;
 }
 
@@ -97,48 +115,22 @@ form {
     opacity: 0;
 }
 
-.section,
-.borderless-section {
-    background-color: #FFFFFF;
-    overflow: hidden;
+.right-justified {
+    justify-self: right;
 }
 
-.section {
-    padding: 1rem;
+.hidden-scrollbar {
+    scrollbar-width: none;  /* Disable the scrollbar in Firefox*/
 }
 
-.section .title {
-    margin-bottom: 1rem;
-    height: 3rem;
+.vertical-splitter {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
-.borderless-section > .title {
-    margin: 1rem;
-    height: 3rem;
-}
-
-.button {
-    display: inline-grid;
-    align-content: center;
-    justify-content: center;
-    width: max-content;
-    height: 3rem;
-    padding: 1rem 1.5rem 1rem 1.5rem;
-    border-radius: 3rem;
-    box-shadow: inset #F3F3F3 0 0 0 2px;
-    background-color: #F3F3F3;
-    cursor: pointer;
-    transition: color .2s, box-shadow .2s, background-color .2s;
-}
-
-.button:hover {
+.title {
+    display: block;
     color: #47BCFF;
-    background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 2px;
-}
-
-.button:hover > h3 {
-    color: inherit;
 }
 
 
@@ -194,12 +186,12 @@ a:hover {
     color: #47BCFF;
 }
 
-.underline {
+.underlined-link {
     box-shadow: inset 0 -2px 0 #505050;
     transition: box-shadow .2s, color .2s;
 }
 
-.underline:hover {
+.underlined-link:hover {
     box-shadow: inset 0 -2px 0 #47BCFF;
 }
 
@@ -223,11 +215,32 @@ footer {
 }
 
 
+/* Section */
+.section {
+    background-color: #FFFFFF;
+    overflow: hidden;
+}
+
+.section-top {
+    height: 3rem;
+    margin: 1rem;
+}
+
+.section-body {
+    width: calc(100% - 2rem);
+    height: calc(100% - 6rem);
+    margin: 1rem;
+}
+
+.borderless-section-body {
+    height: calc(100% - 5rem);
+}
+
+
 /* Help section */
 #help-section {
     display: block;
     width: 40rem;
-    height: calc(100vh - 11rem);
     padding-bottom: 2rem;
     overflow-y: auto;
 }
@@ -266,62 +279,6 @@ footer {
 }
 
 
-/* Popups */
-#popup-container {
-    z-index: 6;
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    min-width: 90rem;
-    background-color: rgba(0, 0, 0, .5);
-    opacity: 0;
-    transition: opacity .2s;
-}
-
-#popup {
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    grid-template-rows: 2rem 1fr;
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 1rem;
-    padding: 1.5rem 2rem 2rem 2rem;
-    margin: 2rem;
-    min-height: 15rem;
-    min-width: 40rem;
-    text-align: center;
-    word-wrap: break-word;
-    background-color: #FFFFFF;
-}
-
-#popup-close-button {
-    justify-self: right;
-}
-
-#popup-content {
-    max-height: calc(100vh - 11rem);
-    overflow-y: auto;
-}
-
-
-/* Title */
-.title {
-    display: block;
-    color: #47BCFF;
-}
-
-
-/* Options */
-.options-section {
-    display: inline-block;
-}
-
-
 /* Text input */
 input[type="text"] {
     height: 3rem;
@@ -347,6 +304,14 @@ span > input[type="text"] {
     color: inherit;
 }
 
+label input[type="text"] {
+    margin-bottom: 0;
+}
+
+#popup input[type="text"] {
+    margin: 0;
+}
+
 
 /* Textarea */
 textarea {
@@ -360,7 +325,8 @@ textarea {
 
 .textarea-label {
     width: 100%;
-    height: calc(100% - 4rem);
+    height: 100%;
+    margin: 0;
 }
 
 
@@ -387,7 +353,7 @@ textarea {
 }
 
 
-/* Label */
+/* Labels */
 label {
     display: inline-block;
     cursor: pointer;
@@ -429,9 +395,33 @@ input[type=radio] {
 }
 
 
-/* Dropdown selection */
-select {
-    border: none;
+/* Button */
+.button {
+    display: inline-grid;
+    align-content: center;
+    justify-content: center;
+    width: max-content;
+    height: 3rem;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    border-radius: 3rem;
+    box-shadow: inset #F3F3F3 0 0 0 2px;
+    background-color: #F3F3F3;
+    cursor: pointer;
+    transition: color .2s, box-shadow .2s, background-color .2s, opacity .5s;
+}
+
+.button:hover {
+    color: #47BCFF;
+    background-color: #EAF5FF;
+    box-shadow: inset #47BCFF 0 0 0 2px;
+}
+
+.button:hover > h3 {
+    color: inherit;
+}
+
+.section-body .button {
+    margin-bottom: .5rem;
 }
 
 
@@ -439,4 +429,3 @@ select {
 .plotly-notifier {
     display: none;
 }
-

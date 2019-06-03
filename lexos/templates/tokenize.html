@@ -1,8 +1,9 @@
-{% extends "analyze-template.html" %}
+{% extends "helpers/analyze-template.html" %}
 
 
 <!-- Head -->
 {% block page_head %}
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/tokenize.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/tokenize.css"/>
@@ -14,9 +15,12 @@
 
     <!-- Orientation -->
     <div id="orientation-section" class="section">
-        <h3 class="title">Orientation (Applied On Download)</h3>
-        <label class="circle-label"><input name="csvorientation" type="radio" value="filecolumn" checked><span>Documents as Columns, Terms as Rows</span></label><br>
-        <label class="circle-label"><input name="csvorientation" type="radio" value="filerow"><span>Documents as Rows, Terms as Columns</span></label>
+        <h3 class="section-top title">Orientation (Applied On Download)</h3>
+
+        <div class="section-body">
+            <label class="circle-label"><input name="orientation" type="radio" value="file_col" checked><span>Documents as Columns, Terms as Rows</span></label><br>
+            <label class="circle-label"><input name="orientation" type="radio" value="file_row"><span>Documents as Rows, Terms as Columns</span></label>
+        </div>
     </div>
 {% endblock %}
 
@@ -25,26 +29,36 @@
 {% block results %}
 
     <!-- Table -->
-    <div id="table">
+    <div id="table" class="section">
 
         <!-- Table top -->
         <div id="table-top">
 
-            <!-- Rows per page -->
-            <div id="rows-per-page-option">
-                <h3>Rows Per Page</h3>
-                <label class="circle-label"><input name="rows-per-page" value="50" type="radio" checked><span>50</span></label>
-                <label class="circle-label"><input name="rows-per-page" value="100" type="radio"><span>100</span></label>
-                <label class="circle-label"><input name="rows-per-page" value="300" type="radio"><span>300</span></label>
-            </div>
-
             <!-- Search -->
-            <div id="search-option">
+            <div id="#search-input">
                 <h3>Search</h3><label><input id="search-input" name="search-term" type="text" spellcheck="false" autocomplete="off"></label>
             </div>
 
+            <!-- Rows per page -->
+            <div class="table-top-radio-option">
+                <h3>Rows</h3>
+                <label class="circle-label"><input name="length" value="10" type="radio" checked><span>10</span></label>
+                <label class="circle-label"><input name="length" value="50" type="radio"><span>50</span></label>
+                <label class="circle-label"><input name="length" value="100" type="radio"><span>100</span></label>
+            </div>
+
+            <!-- Sort direction -->
+            <div class="table-top-radio-option">
+                <h3>Order</h3>
+                <label class="circle-label"><input name="sort-ascending" value="true" type="radio" checked><span>Ascending</span></label>
+                <label class="circle-label"><input name="sort-ascending" value="false" type="radio"><span>Descending</span></label>
+            </div>
+
             <!-- Download -->
-            <a id="download-button" class="button" href="tokenize/download">Download</a>
+            <div id="table-top-buttons">
+                <h3 id="generate-button" class="button">Generate</h3>
+                <h3 id="download-button" class="button">Download</h3>
+            </div>
         </div>
 
         <!-- Table data -->
@@ -53,7 +67,7 @@
         <!-- Table bottom -->
         <div id="table-bottom">
             <div>
-                <h3>Page</h3><label><input id="page-number" name="page-number" type="text" spellcheck="false" autocomplete="off" value="1"></label><h3>of</h3>
+                <h3>Page</h3><input id="page-number" name="page-number" type="text" spellcheck="false" autocomplete="off" value="1"></label><h3>of</h3>
                 <h3 id="page-count">1</h3>
             </div>
             <div id="navigation-buttons">
@@ -62,4 +76,10 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+
+<!-- Hidden elements -->
+{% block hidden_elements %}
+    <input id="trigger-download" type="submit" style="display: none">
 {% endblock %}
