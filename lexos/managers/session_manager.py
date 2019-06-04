@@ -245,6 +245,7 @@ def cache_bubble_viz_option():
 
     for box in const.BUBBLEVIZBOX:
         session['bubblevisoption'][box] = (box in request.form)
+
     for request_input in const.BUBBLEVIZINPUT:
         session['bubblevisoption'][request_input] = (
             request.form[request_input] if input in request.form
