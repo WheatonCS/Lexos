@@ -33,12 +33,16 @@ $(function(){
 function single_active_document_check(response){
 
     // Get the active documents
-    let documents = Object.entries($.parseJSON(response));
+    let documents = Object.entries(JSON.parse(response));
 
-    // If there is not exactly one active document, display warning text on
-    // the "Rolling Window" section
+    // If there are no active documents, display "No Active Documents" text
+    // on the "Rolling Window" section
     let text;
-    if(documents.length !== 1)
+    if(documents.length === 0) text= "No Active Documents";
+
+    // If there is more than one active document, display "This Tool Requires
+    // A Single Active Document" text on the "Rolling Window" section
+    else if(documents.length > 1)
         text = "This Tool Requires A Single Active Document";
 
     // Otherwise, set the legacy form input for the file to analyze to the

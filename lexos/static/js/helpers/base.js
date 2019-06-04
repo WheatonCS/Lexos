@@ -4,8 +4,10 @@
 $("document").ready(function(){
     highlight_navbar_button();
     initialize_dropdown_menus();
-    initialize_help_section();
     update_active_document_count();
+
+    // If the "Help" button is pressed, toggle the help section visibility
+    $("#help-button").click(toggle_help_section);
 
     // Fade the page content in
     $("main").css("opacity", "1");
@@ -20,33 +22,32 @@ function highlight_navbar_button(){
     switch(window.location.pathname.substring(1)){
 
         // Upload
-        case "upload": highlight_element($("#upload-button")); break;
+        case "upload": highlight($("#upload-button")); break;
 
         // Manage
-        case "manage": highlight_element($("#manage-button")); break;
+        case "manage": highlight($("#manage-button")); break;
 
         // Prepare
         case "scrub": case "cut": case "tokenize":
-            highlight_element($("#prepare-button")); break;
+            highlight($("#prepare-button")); break;
 
         // Visualize
         case "word-cloud": case "multicloud": case "bubbleviz": case "rolling-window":
-            highlight_element($("#visualize-button")); break;
+            highlight($("#visualize-button")); break;
 
         // Analyze
         case "statistics": case "dendrogram": case "k-means": case "consensus-tree":
         case "similarity": case "top-words": case "content-analysis":
-            highlight_element($("#analyze-button"));
+            highlight($("#analyze-button"));
     }
 }
 
 
 /**
  * Highlights the given element.
- *
  * @param {jQuery} element: The element to highlight.
  */
-function highlight_element(element){
+function highlight(element){
     element.css("color", "#47BCFF");
 }
 
@@ -94,9 +95,8 @@ function initialize_dropdown_menus(){
 
 /**
  * Adds a click callback to toggle the dropdown menu.
- *
- * @param {String} element_name: The name of the navbar elements.
- * @param {List} items: The names and links of the dropdown rows.
+ * @param {string} element_name: The name of the navbar elements.
+ * @param {list} items: The names and links of the dropdown rows.
  */
 function add_dropdown_menu_callback(element_name, items){
     $(`#${element_name}-button`).click(function(){
@@ -139,24 +139,10 @@ function remove_dropdown_menus(){
 
 
 /**
- * Initializes the help section.
- */
-function initialize_help_section(){
-    // Set the help button callback
-    $("#help-button").click(help_button_callback);
-
-    // Allow the help section to scroll horizontally with the page
-    $(window).scroll(function(){
-        $("#help").css("right", $(window).scrollLeft()+'px');
-    });
-}
-
-
-/**
- * Adds a click callback to show toggle the help menu.
+ * Toggles the visibility of the help section.
  */
 let help_visible = false;
-function help_button_callback(){
+function toggle_help_section(){
     let main_grid = $("#main-grid");
     let help_button = $("#help-button");
 
@@ -181,20 +167,14 @@ function help_button_callback(){
 
 
 /**
- * Updates the active document count element.
+ * Update the number of active documents displayed after the "Active
+ * Documents" text in the footer
  */
 function update_active_document_count(){
-    request_active_document_count().done(function(response){
+
+    $.ajax({type: "GET", url: "active-documents"}).done(function(response){
         $("#active-document-count").text(response);
-    });
-}
+    })
 
-
-/**
- * Request the number of active documents
- *
- * @returns {jqXHR}: The response.
- */
-function request_active_document_count(){
-    return $.ajax({type: "GET", url: "active-documents"});
+    .fail(function(){ error("Failed to update the active document count"); });
 }

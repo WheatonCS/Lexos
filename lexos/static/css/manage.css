@@ -21,14 +21,14 @@ form {
     justify-self: right;
     margin-bottom: 0;
     background-color: #FFFFFF;
-    box-shadow: inset #FFFFFF 0 0 0 2px;
+    box-shadow: inset #FFFFFF 0 0 0 .2rem;
 
 }
 
 #download-button:hover {
     color: #47BCFF;
     background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 2px;
+    box-shadow: inset #47BCFF 0 0 0 .2rem;
 }
 
 
@@ -79,7 +79,7 @@ form {
 }
 
 .selected-table-row > .checkbox {
-    border: 2px solid #47BCFF;
+    border: .2rem solid #47BCFF;
     background-color: #EAF5FF;
 }
 

@@ -6,7 +6,13 @@ $(function(){
 
     // Create a preview for each active document
     $.ajax({type: "GET", url: "document-previews"})
-    .done(function(response){ initialize_document_previews(response); });
+
+        // If the request was successful, initialize the document previews
+        .done(function(response){ initialize_document_previews(response); })
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to retrieve "+
+            "the document previews"); });
 
     // Disable the punctuation options when the "Remove Punctuation" checkbox
     // is unchecked
@@ -26,7 +32,12 @@ $(function(){
     // pressed
     $("#scrub-tags-settings-button").click(function(){
         $.ajax({type: "GET", url: "scrub/get-tag-options"})
-        .done(create_tag_options_popup);
+
+        // If the response was successful, create the tag options
+        .done(create_tag_options_popup)
+
+        // If the response failed, display an error
+        .fail(function(){ error("Failed to retrieve the document tags"); });
     });
 });
 
@@ -127,8 +138,11 @@ function save_tag_options(){
         contentType: "application/json; charset=utf-8"
     })
 
-    // If the request is successful, close the popup
-    .done(close_popup);
+        // If the request is successful, close the popup
+        .done(close_popup)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to save the tag options"); });
 }
 
 
@@ -154,13 +168,17 @@ function scrub(action){
         contentType: false,
         data: form_data
     })
-    .done(update_document_previews);
+
+        // If the request was successful, update the document previews
+        .done(update_document_previews)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to execcute the scrubbing"); });
 }
 
 
 /**
  * Updates the document previews.
- *
  * @param {string} response: The response containing the new previews.
  */
 function update_document_previews(response){

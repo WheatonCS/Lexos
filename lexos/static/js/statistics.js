@@ -1,7 +1,8 @@
 $(function(){
 
-    // Create the loading overlays and disable the "Generate" button
-    prepare_for_loading();
+    // Display the loading overlays
+    start_loading("#graph-container, #table, #corpus-statistics, "+
+        "#standard-error-test, #interquartile-range-test");
 
     // Send a request to get the active files and their IDs
     $.ajax({type: "GET", url: "/active-file-ids"})
@@ -11,30 +12,11 @@ $(function(){
 
     // If the "Generate" button is pressed, recreate the statistics
     $("#generate-button").click(function(){
-
-        // Create the loading overlays and disable the "Generate" button
-        prepare_for_loading();
-
-        // Recreate the statistics
-        create_statistics();
+        start_loading("#graph-container, #table, #corpus-statistics, "+
+        "#standard-error-test, #interquartile-range-test");
+        disable("#generate-button");
     });
 });
-
-/**
- * Adds a loading overlay to all the loadable elements and disables the
- * "Generate" button.
- */
-function prepare_for_loading(){
-
-    // Add a loading overlay to the "Document Sizes", "Corpus Statistics",
-    // "Standard Error Test", "Interquartile Range Test", and
-    // "Document Statistics" sections
-    start_loading("#graph-container, #table, #corpus-statistics, "+
-        "#standard-error-test, #interquartile-range-test");
-
-    // Disable the "Generate" button
-    $("#generate-button").addClass("disabled");
-}
 
 
 /**
@@ -43,8 +25,14 @@ function prepare_for_loading(){
  */
 function initialize(response){
 
-    // Initialize legacy inputs
-    if(!initialize_legacy_inputs(response)) return;
+    // Initialize the legacy form inputs. If there are no active documents,
+    // display "No Active Documents" text and return
+    if(!initialize_legacy_inputs(response)){
+        add_text_overlay("#graph-container, #table, #corpus-statistics, "+
+            "#standard-error-test, #interquartile-range-test",
+            "No Active Documents");
+        return;
+    }
 
     // Create the statistics
     create_statistics();

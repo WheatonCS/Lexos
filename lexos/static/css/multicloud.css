@@ -1,6 +1,6 @@
 /* Form */
 form {
-    min-height: 100%;
+    min-height: calc(100% - 4rem);
     height: auto;
 }
 

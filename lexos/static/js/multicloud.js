@@ -21,12 +21,12 @@ $(function(){
 
 /**
  * Creates the multicloud (a word cloud for each active document).
- * @param {jqXHR} response: The response from the get-word-counts request.
+ * @param {string} response: The response from the get-word-counts request.
  */
 function create_word_cloud_layouts(response){
 
     // Parse the JSON response
-    response = $.parseJSON(response);
+    response = JSON.parse(response);
 
     // If there are no active documents, display "No Active Documents" text
     // and return
@@ -69,7 +69,6 @@ function create_word_cloud_layouts(response){
 
 /**
  * Creates a word cloud layout.
- *
  * @param {number} id: The ID of the layout.
  * @param {string} name: The name of the document.
  * @param {array} words: The top words in the document.
@@ -96,7 +95,6 @@ function create_word_cloud_layout(id, name, words, diameter){
 
 /**
  * Creates a word cloud.
- *
  * @param {number} id: The ID of the layout.
  * @param {string} name: The name of the document.
  * @param {list} words: The words in the layout.

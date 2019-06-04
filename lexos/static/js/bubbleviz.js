@@ -15,8 +15,17 @@ $(function(){
  */
 function create_bubbleviz(response){
 
+    let word_counts = JSON.parse(response);
+
+    // If there are no word counts, display "No Active Documents" text and
+    // return
+    if(!word_counts.length){
+        add_text_overlay("form", "No Active Documents");
+        return;
+    }
+
     // Parse the response for the dataset of word counts
-    let dataset = {children: $.parseJSON(response)};
+    let dataset = {children: word_counts};
 
     // Set the diameter of the bubbleviz graph as the minimum axis of the
     // bubbleviz element

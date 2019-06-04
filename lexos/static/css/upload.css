@@ -20,20 +20,20 @@ form {
     margin: 1rem;
     border-radius: 3rem;
     background-color: #F3F3F3;
-    border: 2px solid #D3D3D3;
+    border: .2rem solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
 
 #browse-button:hover {
     color: #47BCFF;
     background-color: #EAF5FF;
-    border: 2px solid #47BCFF;
+    border: .2rem solid #47BCFF;
 }
 
 #drag-and-drop-section {
     height: calc(100% - 7rem);
     background-color: #F3F3F3;
-    border: 2px dashed #D3D3D3;
+    border: .2rem dashed #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
 

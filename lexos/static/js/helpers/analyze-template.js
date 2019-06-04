@@ -1,6 +1,6 @@
 function initialize_legacy_inputs(response){
 
-    let documents = Object.entries($.parseJSON(response));
+    let documents = Object.entries(JSON.parse(response));
     let document_names_element = $("#document-names-section");
 
     // If there are no active documents, return

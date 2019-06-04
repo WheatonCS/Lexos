@@ -31,7 +31,7 @@ function get_mouse_position(event){
  * Gets the form as a JSON string.
  * @param {object} additional_entries: Additional entries to append to the
  *      form.
- * @returns {String}: The form as a JSON string.
+ * @returns {string}: The form as a JSON string.
  */
 function get_form_json(additional_entries = {}){
 
@@ -82,7 +82,7 @@ function add_text_overlay(query, text){
             </div>
         `).appendTo(element);
 
-        setTimeout(function(){ text_element.css("opacity", "1"); });
+        setTimeout(function(){ text_element.css("opacity", "1"); }, 100);
     });
 }
 
@@ -96,9 +96,7 @@ function add_text_overlay(query, text){
 function start_loading(query, disable_query = ""){
 
     // Disable the specified elements
-    $(disable_query).each(function(){
-        $(this).addClass("disabled");
-    });
+    disable(disable_query);
 
     // Add a loading overlay to the specified elements
     $(query).each(function(){
@@ -138,8 +136,56 @@ function finish_loading(loading_overlay_query, show_query,
     enable(enable_query);
 
     // Fade in each specified element
+    fade_in(show_query, sequential_fade_in_delay);
+}
+
+
+/**
+ * Disables the specified elements.
+ * @param {string} query: The query for elements to disable.
+ */
+function disable(query){
+    $(query).each(function(){ $(this).addClass("disabled"); });
+}
+
+
+/**
+ * Enables the specified elements.
+ * @param {string} query: The query for elements to enable.
+ */
+function enable(query){
+    $(query).each(function(){ $(this).removeClass("disabled"); });
+}
+
+
+/**
+ * Shows the specified elements.
+ * @param {string} query: The query for elements to show.
+ */
+function show(query){
+    $(query).each(function(){ $(this).removeClass("hidden"); });
+}
+
+
+/**
+ * Hides the specified elements.
+ * @param {string} query: The query for elements to hide.
+ */
+function hide(query){
+    $(query).each(function(){ $(this).addClass("hidden"); });
+}
+
+
+/**
+ * Fades in the elements found in the query.
+ * @param {string} query: The query for elements to fade in.
+ * @param {number} sequential_fade_in_delay: The delay between fading in
+ *      subsequent elements.
+ */
+function fade_in(query, sequential_fade_in_delay = 0){
+
     let accumulated_fade_in_delay = 0;
-    $(show_query).each(function(){
+    $(query).each(function(){
 
         let element = $(this);
 
@@ -155,36 +201,6 @@ function finish_loading(loading_overlay_query, show_query,
         }, accumulated_fade_in_delay+30);
 
         accumulated_fade_in_delay += sequential_fade_in_delay;
-    });
-}
-
-/**
- * Enables the specified elements.
- * @param {string} enable_query: The query for elements to enable.
- */
-function enable(enable_query){
-    $(enable_query).each(function(){
-        $(this).removeClass("disabled");
-    });
-}
-
-
-/**
- * Fades in the elements found in the query.
- * @param {string} query: The query for elements to fade in.
- */
-function fade_in(query){
-    $(query).each(function(){
-
-        let element = $(this);
-
-        // Set the opacity to 0
-        element.css({"transition": "none", "opacity": "0"});
-
-        // Fade the element in
-        setTimeout(function(){
-           element.css({"transition": "opacity .5s", "opacity": "1"});
-        });
     });
 }
 
@@ -225,5 +241,40 @@ function key_down_callback(key, callback){
     $(window).keydown(function(event){
         if(event.key.toUpperCase() === key &&
             !event.originalEvent.repeat) callback(event, true);
+    });
+}
+
+
+/**
+ * Displays an error message.
+ * @param {string} message: The message to display.
+ */
+function error(message){
+
+    // Remove any existing error message
+    $("#error-section").remove();
+
+    // Hide the footer
+    hide("footer");
+
+    // Create the error message
+    $(`
+        <div id="error-section">
+            <h3 id="error-text">${message}</h3>
+            <h3 id="error-text-2">${message}</h3>
+            <div id="error-button-container">
+                <h3 id="error-close-button" class="right-justified button">Dismiss</h3>
+            </div>
+        </div>
+    `).appendTo("body");
+
+    // Fade in the error message
+    fade_in("#error-section");
+
+    // If the error message's "Dismiss" button is pressed, close the error
+    // message and fade in the footer
+    $("#error-close-button").click(function(){
+        $("#error-section").remove();
+        fade_in("footer");
     });
 }

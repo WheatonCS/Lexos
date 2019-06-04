@@ -34,11 +34,11 @@ function create_graph(url, callback =
 }
 
 /**
- * Updates the size of the graph to fit its container.
+ * Updates the size of the graph to fit its containing element.
  */
 function update_graph_size(){
 
-    // Get the graph container element
+    // Get the containing element
     let graph_container_element = $("#graph-container");
 
     // Resize the graph to fit the graph container

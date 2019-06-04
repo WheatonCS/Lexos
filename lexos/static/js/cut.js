@@ -27,38 +27,33 @@ $(function(){
 /**
  * Loads the appropriate content for the "Cut Settings" section.
  */
+let cut_mode;
 function load_cut_settings_section(){
 
     let cut_settings_grid_element = $("#cut-settings-grid");
     cut_settings_grid_element.css("opacity", "0");
-    let cut_mode = $("#cut-mode-grid input:checked").val();
-    let settings_elements;
-
-    // Remove any existing content in the "Cut Settings" section
-    cut_settings_grid_element.empty();
+    cut_mode = $("#cut-mode-grid input:checked").val();
 
     // If the cut mode is set to "Segments"...
-    if(cut_mode === "number") settings_elements = $(`
-        <div><h3>Segments</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
-    `);
+    if(cut_mode === "number"){
+        hide("#milestone-input, #overlap-input, #merge-threshold-input");
+        show("#segment-size-input");
+    }
 
     // Otherwise, if the cut mode is set to "Milestones"...
-    else if(cut_mode === "milestone") settings_elements = $(`
-        <div><h3>Milestone</h3><input id="milestone-input" name="MScutWord" type="text" spellcheck="false" autocomplete="off"></div>
-    `);
+    else if(cut_mode === "milestone"){
+        hide("#segment-size-input, #overlap-input, #merge-threshold-input");
+        show("#milestone-input");
+    }
 
     // Otherwise, if the cut mode is set to "Tokens", "Characters", or "Lines"...
-    else settings_elements = $(`
-        <div><h3>Segment Size</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
-        <div><h3>Overlap</h3><input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0"></div>
-        <div><h3>Merge Threshold</h3><input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50"></div>
-    `);
+    else {
+        hide("#milestone-input");
+        show("#segment-size-input, #overlap-input, #merge-threshold-input");
+    }
 
-    // Append the appropriate settings to the "Cut Settings" section
-    settings_elements.appendTo(cut_settings_grid_element);
-
-    // Check the legacy "MScutWord" input if the cut mode is "milestone"
-    $("#milestone-input").prop("checked", cut_mode === "milestone");
+    // Set the legacy "cutByMS" input if the cut mode is "milestone"
+    $("#cut-by-milestone-input").val(cut_mode === "milestone" ? "on" : "off")
 
     // Fade in the settings
     fade_in(cut_settings_grid_element);
@@ -71,6 +66,9 @@ function load_cut_settings_section(){
  */
 function cut(action){
 
+    // Validate the inputs. If the inputs are invalid, return
+    if(!validate_inputs()) return;
+
     // Display the loading overlay and disable the buttons on the document
     // previews section
     start_document_previews_loading();
@@ -81,7 +79,8 @@ function cut(action){
 
     // Create a copy of the cut settings for each document to satisfy legacy
     // requirements
-    let options = ["cutType", "cutValue", "cutOverlap", "cutLastProp"]
+    let options = ["cutType", "cutValue", "cutOverlap",
+        "cutLastProp", "MScutWord"]
     for(const document of document_previews)
         for(const option of options)
             form_data.append(option+'_'+document[0], form_data.get(option));
@@ -97,7 +96,60 @@ function cut(action){
 
     // If the request is successful, update the document previews with the
     // cut previews returned in the response
-    .done(create_document_previews);
+    .done(create_document_previews)
+
+
+    // If the request failed, display an error and remove the loading overlay
+    .fail(function(){
+        error("Failed to cut the documents");
+        add_text_overlay("#previews", "No Previews");
+        finish_document_previews_loading();
+    })
+}
+
+
+/**
+ * Validate the inputs.
+ * @returns {boolean}: Whether the inputs are valid.
+ */
+function validate_inputs(){
+
+
+
+    // Validate no settings for the "Milestone" cut mode
+    if(cut_mode === "milestone"){
+        let milestone = $("#milestone-input input").val();
+        if(milestone.length <= 0)
+        { error("A milestone must be provided"); return false; }
+        return true;
+    }
+
+    // Segment size
+    let segment_size = $("#segment-size-input input").val();
+    if(!segment_size || segment_size < 1 || isNaN(segment_size))
+    { error("Invalid segment size."); return false; }
+    segment_size = parseInt(segment_size);
+
+    // Only validate the segment size for the "Segments" cut mode
+    if(cut_mode === "number")  return true;
+
+    // Overlap
+    let overlap = $("#overlap-input input").val();
+    if(!overlap ||  overlap < 0 || isNaN(overlap))
+    { error("Invalid overlap size."); return false; }
+    overlap = parseInt(overlap);
+
+    if(overlap > segment_size){ error("The overlap cannot be "+
+        "greater than the segment size."); return false; }
+
+    // Merge threshold
+    let merge_threshold = $("#merge-threshold-input input").val();
+    if(!merge_threshold ||  merge_threshold < 0 ||
+        merge_threshold > 100 || isNaN(merge_threshold))
+    { error("Invalid merge threshold."); return false; }
+
+
+    return true;
 }
 
 
@@ -113,8 +165,7 @@ function create_document_previews(response){
 
     // Otherwise, create the previews
     else for(const preview of previews)
-        for(let i = 0; i < preview[3].length; ++i)
-            create_document_preview(preview[1]+'_'+(i+1), preview[3][i][1]);
+        create_document_preview(preview[2], preview[3]);
 
     // Remove the loading overlay, fade in the previews, and enable the
     // buttons for the document previews section

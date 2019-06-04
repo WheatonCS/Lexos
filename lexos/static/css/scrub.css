@@ -65,10 +65,14 @@ form {
     max-width: 104rem;
 }
 
+#popup-content {
+    overflow-y: hidden;
+}
+
 #tag-table-head,
 .tag-table-row {
     display: grid;
-    grid-template-columns: 15% 59% 24%;
+    grid-template-columns: 15% 58% 27%;
     padding: 1rem;
 }
 
@@ -82,7 +86,7 @@ form {
 
 #tag-table-body {
     width: 100rem;
-    max-height: 100%;
+    max-height: calc(100% - 3rem);
     overflow-y: overlay;
 }
 

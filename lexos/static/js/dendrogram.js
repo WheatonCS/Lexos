@@ -25,11 +25,15 @@ $(function(){
  */
 function initialize(response){
 
-    // Initialize legacy form inputs
-    if(!initialize_legacy_inputs(response)) return;
+    // Initialize the legacy form inputs. If there are no active documents,
+    // display "No Active Documents" text and return
+    if(!initialize_legacy_inputs(response)){
+        add_text_overlay("#graph-container", "No Active Documents");
+        return;
+    }
 
-    // If there are fewer than two active files, display warning text and
-    // return
+    // Otherwise, if there are fewer than two active files, display warning
+    // text and return
     if(Object.entries(JSON.parse(response)).length < 2){
         add_text_overlay("#graph-container",
             "This Tool Requires At Least Two Active Documents");
