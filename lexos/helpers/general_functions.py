@@ -223,13 +223,8 @@ def _try_decode_bytes_(raw_bytes: bytes) -> str:
         # try to decode the string using the encoding we get
         decoded_string = raw_bytes.decode(encoding_type)
 
-    except UnicodeDecodeError:
-        # if decoding failed, we use all the bytes to detect encoding
-        encoding_detect = chardet.detect(raw_bytes)
-        encoding_type = encoding_detect['encoding']
-        decoded_string = raw_bytes.decode(encoding_type)
-
-    except TypeError:
+    except (UnicodeDecodeError, TypeError):
+        # try unicode dammit if chardet didn't work
         dammit = UnicodeDammit(raw_bytes)
         encoding_type = dammit.original_encoding
         decoded_string = raw_bytes.decode(encoding_type)
