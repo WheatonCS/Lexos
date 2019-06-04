@@ -1,6 +1,66 @@
-<!-- The word cloud tool -->
+<!-- The Word Cloud Tool -->
 <h3 class="help-section-title">The Word Cloud Tool</h3>
 
 <h3 class="help-section-paragraph">
-    The help section for this tool has not been migrated yet.
+    Word clouds are a method of visualizing the Document-Term Matrix. They
+    present terms arranged at angles for compactness, with each term sized according
+    to its frequency within the text. Word clouds enable you to get a sense of
+    the content in your corpus, and they are very good for presentations. However,
+    they also have some well-known limitations. In some languages, individual
+    tokens may not correspond to words, which will limit the usefulness of this
+    method of visualization.
 </h3>
+
+<h3 class="help-section-paragraph">
+    The Lexos Word Cloud tool uses Jason Davies’ excellent
+    <a target="_blank" href="https://www.jasondavies.com/wordcloud/"><u>word cloud generator for d3.js</u></a>
+    — with a few modifications— to create beautiful, interactive word clouds.
+    This implementation scales the size to ensure all terms fit within the layout.
+    The color used for each does not convey meaning and is used only for aesthetic
+    purposes.
+</h3>
+
+<!-- Usage -->
+<h3 class="help-section-paragraph">
+    Lexos generates a word cloud using all your active documents. If you would
+    like a word cloud for each of your documents, use the <u>Multicloud</u> tool.
+    A word cloud will automatically be generated when you open the tool, but
+    there are changes you can make to modify the visualization. <em><b>Note:</b>
+    Large documents can take a while to generate so please be patient. </em>
+</h3>
+
+<!-- Options -->
+<h3 class="help-section-paragraph">
+    Davies’ word cloud generator offers some useful ways to modify the layout
+    using the controls below the graph. After modifying the settings, you can
+    re-generate the word cloud by clicking anywhere on the graph. Each of the
+    settings is described in detail below:
+</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Font</b></li>
+    <h3 class="help-section-paragraph">
+        You can change the appearance of your word cloud by setting the font
+        here. This feature should work with any font installed on your system.
+    </h3>
+
+    <li><b>Number of Words</b></li>
+    <h3 class="help-section-paragraph">
+        By default, Lexos includes the top 250 terms in your documents. Use
+        this setting to modify the number. Limiting the number of terms may help
+        you to include high frequency terms which are dropped by the layout algorithm.
+    </h3>
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        Word clouds are downloadable in either <code>.svg</code> or <code>.png</code>
+        format. SVG images are very useful because they scale well in web browsers.
+        If you click the SVG button, a new window will open with a copy of your
+        word cloud. Use your browser’s "Save as…" function to save the web page.
+        If you click the PNG button, the image will open in a new window.
+        The procedure for saving a PNG image is not standard in all browsers,
+        so follow the instructions you see on the screen.
+    </h3>
+
+</ul>
