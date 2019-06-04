@@ -438,8 +438,7 @@ $(function () {
                 else if (delta < 0) to = from
               }
               update()
-            })
-            .on('dragend', generate))
+            }))
         drag.attr('transform', function (d) { return 'rotate(' + (d + 90) + ')translate(-' + r + ')' })
         layout.rotate(function () {
           return scale(~~(Math.random() * count))

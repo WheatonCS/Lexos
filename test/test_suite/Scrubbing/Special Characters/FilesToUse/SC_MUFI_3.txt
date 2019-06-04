@@ -1,4 +1,4 @@
-small letter: ae &aelig;
+small letter ae: &aelig;
 capital letter AE: &AElig;
 small letter sharp s: &szlig;
 capital letter sharp s: &SZlig;
