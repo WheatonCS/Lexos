@@ -110,8 +110,8 @@ class TestCorpusInfo:
         assert test_corpus_result_two.std_deviation == 32.51
 
     def test_quartiles(self):
-        assert test_corpus_result_one.inter_quartile_range == 32.5
-        assert test_corpus_result_two.inter_quartile_range == 32.5
+        assert test_corpus_result_one.inter_quartile_range == 65
+        assert test_corpus_result_two.inter_quartile_range == 48.75
 
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr.small_items == []
@@ -187,4 +187,4 @@ class TestStatsPlotly:
 
         assert basic_fig['layout']['xaxis']['zeroline'] is False
 
-        assert basic_fig['layout']['xaxis']['showline'] is False
+        assert basic_fig['layout']['xaxis']['showline'] is True

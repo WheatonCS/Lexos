@@ -1,10 +1,11 @@
 # STATS COMPARE
 
-We want to check whether the counting on STATS page work for large files and whether the data come out are correct, thus we used other two tools to compare the result.
+We want to check whether the counting on STATS page work for large files and whether the data come out are correct, so we used two other tools to compare the result.
 
-The other two are: 
-- Voyant(search it and use it online;
-- Intelligent Archive(need download to use, try on mac since it was written in JAVA, need whatever operating systems that supports java)
+The two other tools are: 
+- Voyant-Tools - [Link](https://voyant-tools.org/)
+- Intelligent Archive - [Link](https://www.newcastle.edu.au/research-and-innovation/centre/education-arts/cllc/intelligent-archive)
+    - need download to use (if possible try it on a mac since it was written in JAVA, otherwise you would need whatever operating systems that supports java)
 
 Need to know:
 - Voyant does not do scrubbing stuff, it count the words as how it apperas in the original uploading files
