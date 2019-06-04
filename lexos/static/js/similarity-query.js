@@ -4,14 +4,25 @@ $(function(){
     // "Similarity Table" sections
     start_loading("#comparison-document-section-body, #table");
 
-    // Initialize legacy form inputs and create the similarity table
+    // Initialize the legacy form inputs and create the similarity table
     $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
 });
 
+/**
+ * Initialize the legacy form inputs and create the similarity table.
+ * @param {string} response: The response from the "/active-file-ids" request.
+ */
 function initialize(response){
 
-    // Initialize the legacy form inputs
-    if(!initialize_legacy_inputs(response)) return;
+    // Initialize the legacy form inputs. If there are no active documents,
+    // display "No Active Documents" text and return
+    if(!initialize_legacy_inputs(response)){
+        add_text_overlay("#comparison-document-section-body, #table",
+            "No Active Documents");
+        return;
+    }
+
+    // Otherwise, parse the response
     let documents = Object.entries(JSON.parse(response));
 
     // Enable the "Comparison Document" section's "Select" button
@@ -26,6 +37,8 @@ function initialize(response){
         .appendTo("#comparison-document-section-body")
         .text(first_document[1]);
 
+    // Remove the loading overlay from the "Comparison Document" section and
+    // fade in the comparison document name
     finish_loading("#comparison-document-section-body",
         "#comparison-document-text");
 

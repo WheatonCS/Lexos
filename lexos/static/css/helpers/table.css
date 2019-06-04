@@ -1,0 +1,34 @@
+.lexos-table {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    background-color: #FFFFFF;
+}
+
+.lexos-table-title {
+    display: block;
+    min-height: 3rem;
+    margin: 1rem;
+    word-break: break-word;
+    color: #47BCFF;
+}
+
+.lexos-table-body {
+    overflow-y: auto;
+}
+
+.lexos-table-row {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    margin-bottom: 1rem;
+    background-color: #F3F3F3;
+}
+
+.lexos-table-row:last-child {
+    margin-bottom: 0;
+}
+
+.lexos-table-cell {
+    padding: 1rem;
+    word-break: break-all;
+}

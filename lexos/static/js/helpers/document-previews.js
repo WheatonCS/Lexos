@@ -1,6 +1,5 @@
 /**
  * Creates a preview for each active document.
- *
  * @param {string} response: The response from the
  *     get-document-previews request.
  */
@@ -8,9 +7,9 @@ function initialize_document_previews(response){
 
     let previews = JSON.parse(response);
 
-    // If there are no previews, display "No Previews" text
+    // If there are no previews, display "No Active Documents" text
     if(!previews.length){
-        add_text_overlay("#previews", "No Previews");
+        add_text_overlay("#previews", "No Active Documents");
         return;
     }
 
@@ -26,7 +25,6 @@ function initialize_document_previews(response){
 
 /**
  * Creates a document preview with the given name and text.
- *
  * @param {string} preview_name: The name of the document.
  * @param {string} preview_text: The preview text.
  */
@@ -50,7 +48,7 @@ function create_document_preview(preview_name, preview_text){
  */
 function start_document_previews_loading(){
     start_loading("#previews");
-    $("#preview-button, #apply-button, #download-button").addClass("disabled");
+    disable("#preview-button, #apply-button, #download-button");
 }
 
 

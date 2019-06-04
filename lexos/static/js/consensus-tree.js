@@ -1,7 +1,7 @@
 $(function(){
 
-    // Create the loading overlay for the dendrogram graph
-    start_loading("#consensus-tree-section-body");
+    // Create the loading overlay for the "Consensus Tree" section
+    start_loading("#consensus-tree-body");
 
     // Register option popup creation callbacks for the "Distance Metric" and
     // "Linkage Method" buttons
@@ -18,15 +18,19 @@ $(function(){
  */
 function initialize(response){
 
-    // Initialize the legacy form inputs
-    if(!initialize_legacy_inputs(response)) return;
+    // Initialize the legacy form inputs. If there are no active documents,
+    // display "No Active Documents" text and return
+    if(!initialize_legacy_inputs(response)){
+        add_text_overlay("#consensus-tree-body", "No Active Documents");
+        return;
+    }
 
     // Create the consensus tree
     create_consensus_tree();
 
     // When the "Generate" button is pressed, recreate the consensus tree
     $("#generate-button").click(function(){
-        start_loading("#consensus-tree-section-body", "#generate-button");
+        start_loading("#consensus-tree-body", "#generate-button");
         create_consensus_tree();
     });
 }
@@ -44,11 +48,11 @@ function create_consensus_tree(){
                 <div id="consensus-tree" class="hidden">
                     <img src="data:image/png;base64,${response}">
                 </div>
-            `).appendTo("#consensus-tree-section-body");
+            `).appendTo("#consensus-tree-body");
 
             // Remove the loading overlay, fade in the consensus tree,
             // and enable the "Generate" button
-            finish_loading("#consensus-tree-section-body",
+            finish_loading("#consensus-tree-body",
                 "#consensus-tree", "#generate-button")
         });
 }

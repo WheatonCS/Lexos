@@ -22,12 +22,12 @@ $(function(){
 
 /**
  * Creates the word cloud layout.
- * @param {jqXHR} response: The response from the get-word-counts request.
+ * @param {string} response: The response from the get-word-counts request.
  */
 function create_word_cloud_layout(response){
 
     // Parse the JSON response
-    response = $.parseJSON(response);
+    response = JSON.parse(response);
 
     // If there are no active documents, display "No Active Documents" text
     // and return

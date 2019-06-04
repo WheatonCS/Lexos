@@ -368,14 +368,12 @@ class FileManager:
                         class_label=l_file.class_label)
 
             else:
-                cut_preview = []
                 for i, file_string in enumerate(children_file_contents):
-                    cut_preview.append(
-                        ('Segment ' + str(i + 1),
+                    previews.append(
+                        (l_file.id,
+                         l_file.name,
+                         l_file.label + '_' + str(i + 1),
                          general_functions.make_preview_from(file_string)))
-
-                previews.append(
-                    (l_file.id, l_file.label, l_file.class_label, cut_preview))
 
         if saving_changes:
             previews = self.get_previews_of_active()

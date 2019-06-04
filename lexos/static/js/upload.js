@@ -14,7 +14,7 @@ $(function(){
 
     // Prevent the default drag and drop action of opening the file in the
     // browser
-    $("body").on("dragenter drop", drag_and_drop_intercept);
+    $("body").on("dragover dragenter drop", drag_and_drop_intercept);
     drag_and_drop_section.on("dragover dragenter", drag_and_drop_intercept);
 
     // Highlight the drag and drop section when files are dragged over it
@@ -43,16 +43,28 @@ function upload_files(event){
  */
 function upload_file(file){
 
-    // Check that the file size is within limits
-    console.log(file.size);
-    if(file.size > 256000000) return; // 256 MB limit
-    if(file.size <= 0) return;
+    // If the file exceeds the 256 MB size limit, display an error message
+    // and return
+    if(file.size > 256000000){
+        error("One or more files exceeded the 256 MB size limit.");
+        return;
+    }
+
+    // If the file is empty, display an error message and return
+    if(file.size <= 0){
+        error("One or more uploaded files were empty.");
+        return;
+    }
 
     // Replace the file name's spaces with underscores
     let file_name = file.name.replace(/ /g, '_');
 
-    // Check that the file is a supported type
-    if(!file_type_supported(file.name)) return;
+    // If the file is not of a supported type, display an error message and
+    // return
+    if(!file_type_supported(file.name)){
+        error("One or more files were of an unsupported file type.");
+        return;
+    }
 
     // Send a request to upload the file
     $.ajax({
@@ -65,16 +77,20 @@ function upload_file(file){
         headers: {"file-name": encodeURIComponent(file_name)}
       })
 
-    // If the request is successful, call the "upload_success_callback()"
-    // function
-    .done(function(){ upload_success_callback(file_name); });
+        // If the request is successful, call the "upload_success_callback()"
+        // function
+        .done(function(){ upload_success_callback(file_name); })
+
+        // If the request failed, display an error
+        .fail(function(){ error("One or more files encountered errors "+
+            +"during upload."); });
 }
 
 
 /**
  * Checks if the file type is supported.
  * @param {string} filename: The name of the file to check.
- * @return {boolean} bool: Whether the file type is valid.
+ * @return {boolean} bool: Whether the file type is supported.
  */
 function file_type_supported(filename){
     const supported_file_types = ["txt", "xml", "html", "sgml", "lexos"];
@@ -82,8 +98,7 @@ function file_type_supported(filename){
     // Get the file's extension
     let fileType = filename.split('.')[filename.split('.').length - 1];
 
-    // Return false if the file format is not in the list of supported types
-    // and true if it is
+    // Return whether the file type is supported
     return $.inArray(fileType, supported_file_types) > -1;
 }
 

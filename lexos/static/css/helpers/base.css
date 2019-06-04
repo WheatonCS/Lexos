@@ -62,9 +62,10 @@ html {
 
 body {
     display: grid;
-    grid-template-rows: min-content calc((100vh - (100vh - 100%)) - 11rem) min-content;
+    grid-template-rows: 7rem calc((100vh - (100vh - 100%)) - 11rem) 4rem;
     height: 100%;
     position: relative;
+    overflow: hidden;
     background-color: #E3E3E3;
 }
 
@@ -187,12 +188,12 @@ a:hover {
 }
 
 .underlined-link {
-    box-shadow: inset 0 -2px 0 #505050;
+    box-shadow: inset 0 -.2rem 0 #505050;
     transition: box-shadow .2s, color .2s;
 }
 
 .underlined-link:hover {
-    box-shadow: inset 0 -2px 0 #47BCFF;
+    box-shadow: inset 0 -.2rem 0 #47BCFF;
 }
 
 
@@ -212,6 +213,63 @@ footer {
 #right-footer {
     margin-right: 2rem;
     justify-self: right;
+}
+
+
+/* Error */
+#error-section {
+    z-index: 10;
+    overflow: hidden;
+    background-color: #E62843;
+}
+
+#error-text,
+#error-text-2 {
+    position: absolute;
+    bottom: 1rem;
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 100%;
+    padding-right: 10rem;
+    animation: marquee 10s infinite linear;
+    animation-delay: -5s;
+    color: #FFFFFF;
+}
+
+#error-text-2 {
+    animation-delay: 0s;
+}
+
+#error-section:hover #error-text,
+#error-section:hover #error-text-2 {
+    animation-play-state: paused;
+}
+
+#error-button-container {
+    z-index: 11;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 4rem;
+    padding: .5rem 2rem 0 2rem;
+    pointer-events: none;
+    background-color: #E62843;
+}
+
+#error-close-button {
+    pointer-events: all;
+    color: #FFFFFF;
+    background-color: #CD2741;
+    box-shadow: none;
+}
+
+#error-close-button:hover {
+    background-color: #B4263C;
+}
+
+@keyframes marquee {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
 }
 
 
@@ -290,14 +348,14 @@ input[type="text"] {
     outline: none;
     background-color: #FFFFFF;
     border: none;
-    box-shadow: inset #E3E3E3 0 0 0 2px;
+    box-shadow: inset #E3E3E3 0 0 0 .2rem;
     transition: color .2s, box-shadow .2s, background-color .2s;
 }
 
 input[type="text"]:focus {
     color: #47BCFF;
     background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 2px;
+    box-shadow: inset #47BCFF 0 0 0 .2rem;
 }
 
 span > input[type="text"] {
@@ -336,7 +394,7 @@ textarea {
     height: 2rem;
     border-radius: 50%;
     background-color: #FFFFFF;
-    border: 2px solid #D3D3D3;
+    border: .2rem solid #D3D3D3;
     cursor: pointer;
     transition: background-color .2s;
 }
@@ -347,7 +405,7 @@ textarea {
     width: 2rem;
     height: 2rem;
     background-color: #FFFFFF;
-    border: 2px solid #D3D3D3;
+    border: .2rem solid #D3D3D3;
     cursor: pointer;
     transition: border-color .2s;
 }
@@ -370,7 +428,7 @@ label {
     height: 2rem;
     margin-right: 1rem;
     background-color: #FFFFFF;
-    border: 2px solid #D3D3D3;
+    border: .2rem solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
 
@@ -404,7 +462,7 @@ input[type=radio] {
     height: 3rem;
     padding: 1rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
-    box-shadow: inset #F3F3F3 0 0 0 2px;
+    box-shadow: inset #F3F3F3 0 0 0 .2rem;
     background-color: #F3F3F3;
     cursor: pointer;
     transition: color .2s, box-shadow .2s, background-color .2s, opacity .5s;
@@ -413,7 +471,7 @@ input[type=radio] {
 .button:hover {
     color: #47BCFF;
     background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 2px;
+    box-shadow: inset #47BCFF 0 0 0 .2rem;
 }
 
 .button:hover > h3 {

@@ -18,7 +18,16 @@ $(function(){
 function initialize(response){
 
     // Initialize the legacy inputs
-    initialize_legacy_inputs(response);
+    if(!initialize_legacy_inputs(response)){
+
+        // If there are no active documents, display "No Active Documents"
+        // text and return
+        add_text_overlay("#table-data", "No Active Documents");
+        return;
+    }
+
+    // Enable the "Generate" and "Download" buttons
+    enable("#generate-button, #download-button");
 
     // Create the table
     send_table_data_request();
@@ -160,7 +169,7 @@ function create_table(response){
     }
 
 
-    // Remove the loading overlay and show the table data
+    // Remove the loading overlay and fade in the table data
     finish_loading("#table-data", "#table-data-grid");
 }
 

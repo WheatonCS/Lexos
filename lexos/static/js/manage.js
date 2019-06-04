@@ -57,25 +57,36 @@ function create_table(){
     start_loading("#table-body");
 
     // Get the uploaded documents
-    $.ajax({type: "GET", url: "manage/documents"}).done(function(json_response){
+    $.ajax({type: "GET", url: "manage/documents"})
 
-        documents = JSON.parse(json_response);
+        // If the request is successful, create the table
+        .done(function(json_response){
 
-        // If there are no documents, display "No Documents" text and return
-        if(documents.length === 0){
-            add_text_overlay("#table-body", "No Documents");
-            return;
-        }
+            documents = JSON.parse(json_response);
 
-        // Otherwise, create the table content
-        for(let i = 0; i < documents.length; ++i){
-            const d = documents[i];
-            append_row(d.id, i+1, d.state, d.label, d.class, d.source, d.preview);
-        }
+            // If there are no documents, display "No Documents" text and
+            // return
+            if(documents.length === 0){
+                add_text_overlay("#table-body", "No Documents");
+                return;
+            }
 
-        // Remove the loading overlay and fade in the table content
-        finish_loading("#table-body", "#table-body");
-    });
+            // Otherwise, enable the "Download" button
+            enable("#download-button");
+
+            // Create the table content
+            for(let i = 0; i < documents.length; ++i){
+                const d = documents[i];
+                append_row(d.id, i+1, d.state, d.label,
+                    d.class, d.source, d.preview);
+            }
+
+            // Remove the loading overlay and fade in the table content
+            finish_loading("#table-body", "#table-body");
+        })
+
+        // Otherwise, display an error
+        .fail(function(){ error("Failed to fetch the documents"); });
 }
 
 
@@ -158,14 +169,17 @@ function preview(){
     // Send a request to get the preview of the document that was right-clicked
     send_request("preview", context_menu_document_id)
 
-    // If the request is successful...
-    .done(function(response){
+        // If the request is successful create a popup and append the
+        // HTML-escaped document preview to it
+        .done(function(response){
+            create_popup("Preview");
+            let preview = $(`<h3></h3>`).appendTo("#popup-content");
+            preview.text(JSON.parse(response).previewText);
+        })
 
-        // Create a popup and append the HTML-escaped document preview to it
-        create_popup("Preview");
-        let preview = $(`<h3></h3>`).appendTo("#popup-content");
-        preview.text(JSON.parse(response).previewText);
-    });
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to retrieve "+
+            "the document's preview"); });
 }
 
 
@@ -185,9 +199,12 @@ function edit_name(){
         send_request("edit-name",
             [context_menu_document_id, $("#popup-input").val()])
 
-            // If the request is successful, close the popup and recreate the
+            // If the request was successful, close the popup and recreate the
             // table
-            .done(function(){ close_popup();  create_table(); });
+            .done(function(){ close_popup();  create_table(); })
+
+            // If the request failed, display an error
+            .fail(function(){ error("Failed to edit the document's name"); });
     });
 }
 
@@ -208,9 +225,12 @@ function edit_class(){
         send_request("set-class",
             [context_menu_document_id, $("#popup-input").val()])
 
-            // If the request is successful, close the popup and recreate the
+            // If the request was successful, close the popup and recreate the
             // table
-            .done(function(){ close_popup(); create_table(); });
+            .done(function(){ close_popup(); create_table(); })
+
+            // If the request failed, display an error
+            .fail(function(){ error("Failed to set the document's class"); });
     });
 }
 
@@ -223,8 +243,11 @@ function delete_document(){
     // Send a request to delete the document that was right-clicked
     send_request("delete", context_menu_document_id)
 
-        // If the request is successful, recreate the table
-        .done(create_table);
+        // If the request was successful, recreate the table
+        .done(create_table)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to delete the document"); });
 }
 
 
@@ -252,9 +275,13 @@ function edit_selected_classes(){
         send_request("edit-selected-classes",
             [get_selected_document_ids(), $("#popup-input").val()])
 
-            // If the request is successful, close the popup and recreate the
+            // If the request was successful, close the popup and recreate the
             // table
-            .done(function(){ close_popup(); create_table(); });
+            .done(function(){ close_popup(); create_table(); })
+
+            // If the request failed, display an error
+            .fail(function(){ error("Failed to edit the "+
+                "active documents' classes"); });
     });
 }
 
@@ -267,8 +294,11 @@ function delete_selected(){
     // Send a request to delete the selected documents
     send_request("delete-selected")
 
-        // If the request is successful, recreate the table
-        .done(create_table);
+        // If the request was successful, recreate the table
+        .done(create_table)
+
+        // If the request failed, display an error
+        .fail("Failed to delete the active documents");
 }
 
 
@@ -290,7 +320,10 @@ function select_all(){
     });
 
     // Send a request to activate all the documents
-    send_request("activate", id_list);
+    send_request("activate", id_list)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to activate the documents"); });
 }
 
 
@@ -312,15 +345,18 @@ function deselect_all(){
     });
 
     // Send a request to deactivate all the documents
-    send_request("deactivate", id_list);
+    send_request("deactivate", id_list)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to deactivate the documents"); });
 }
 
 
 /**
  * Sends a JSON POST request to the given URL.
  * @param {string} url: The URL to send the request to.
- * @param {Object} payload: The JSON payload to send.
- * @returns {jqXHR}: The response of the request.
+ * @param {object} payload: The JSON payload to send.
+ * @returns {jqXHR}: The jQuery request object.
  */
 function send_request(url, payload = ""){
     return $.ajax({
@@ -329,6 +365,7 @@ function send_request(url, payload = ""){
         data: JSON.stringify(payload),
         contentType: "application/json; charset=utf-8"
     })
+
     .done(update_active_document_count);
 }
 

@@ -4,6 +4,10 @@
 <!-- Head -->
 {% block page_head %}
 
+    <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/top-words.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/top-words.css"/>
@@ -15,12 +19,35 @@
 
     <!-- Comparison method -->
     <div id="comparison-method-section" class="section">
-        <h3 class="title">Comparison Method</h3>
+        <h3 class="section-top title">Comparison Method</h3>
+        <div class="section-body">
+            <label class="circle-label"><input name="testInput" value="allToPara" type="radio" checked><span>Each document to the corpus</span></label><br>
+            <label class="circle-label"><input name="testInput" value="classToPara" type="radio"><span>Each document to other classes</span></label><br>
+            <label class="circle-label"><input name="testInput" value="classToClass" type="radio"><span>Each class to other classes</span></label>
+        </div>
     </div>
 {% endblock %}
 
 
 <!-- Results -->
 {% block results %}
-    <h3 class="title">Top Words</h3>
+    <div id="class-divisions-section" class="section">
+
+        <h3 class="section-top title">Class Divisions</h3>
+
+        <div id="class-divisions-body" class="section-body"></div>
+    </div>
+
+    <div id="top-words-section" class="section">
+
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Top Words</h3>
+            <div class="right-justified">
+                <h3 id="generate-button" class="disabled button">Generate</h3>
+                <h3 id="download-button" class="disabled button">Download</h3>
+            </div>
+        </div>
+
+        <div id="top-words-body" class="section-body"></div>
+    </div>
 {% endblock %}

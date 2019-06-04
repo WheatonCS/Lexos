@@ -14,8 +14,12 @@ $(function(){
  */
 function initialize(response){
 
-    // Initialize legacy inputs
-    if(!initialize_legacy_inputs(response)) return;
+    // Initialize the legacy form inputs. If there are no active documents,
+    // display "No Active Documents" text and return
+    if(!initialize_legacy_inputs(response)){
+        add_text_overlay("#graph-container", "No Active Documents");
+        return;
+    }
 
     // Set the default clusters value
     let document_count = Object.entries(JSON.parse(response)).length;

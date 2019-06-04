@@ -204,5 +204,6 @@ function apply_selection(event){
 
     // Send a request to apply the selection to the modified documents
     if(modified.length)
-        send_request(d_held ? "deactivate" : "activate", modified_ids);
+        send_request(d_held ? "deactivate" : "activate", modified_ids)
+            .fail("Failed to apply the document selection");
 }

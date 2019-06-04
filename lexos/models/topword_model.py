@@ -31,13 +31,6 @@ class TopwordTestOptions(NamedTuple):
     front_end_option: TopwordAnalysisType
 
 
-class TopwordResult(NamedTuple):
-    """A typed tuple to hold topword results."""
-
-    header: str
-    results: AnalysisResult
-
-
 class TopwordModel(BaseModel):
     """The TopwordModel inherits from the BaseModel."""
 
@@ -185,7 +178,7 @@ class TopwordModel(BaseModel):
         # Convert the sorted result to a panda series.
         result_series = pd.Series(sorted_dict)
         # Set the result series name.
-        result_series.name = f"{word_count_series_one.name} compares to " \
+        result_series.name = f"{word_count_series_one.name} Compared To " \
                              f"{word_count_series_two.name}"
 
         return result_series
@@ -220,7 +213,7 @@ class TopwordModel(BaseModel):
                 word_count_series_two=pd.Series(
                     data=word_count_sum,
                     index=words,
-                    name="the whole corpus"))
+                    name="The Corpus"))
             for file_id in self._doc_term_matrix.index.values]
 
         return readable_result
@@ -337,47 +330,33 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _get_result(self) -> TopwordResult:
+    def _get_result(self) -> List:
         """Call the right method corresponding to user's selection.
 
-        :return: a namedtuple that holds the topword result, which contains a
-                 header and a list of pandas series.
+        :return: The topword result.
         """
         topword_analysis_option = self._topword_front_end_option
 
         if topword_analysis_option == TopwordAnalysisType.ALL_TO_PARA:
-            # Get header and result.
-            header = "Compare Each Document to All the Documents As a Whole."
-            results = self._analyze_file_to_all()
-
-            return TopwordResult(header=header, results=results)
+            return self._analyze_file_to_all()
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_PARA:
-            # Get header and result.
-            header = "Compare Each Document to Other Class(es)."
-            results = self._analyze_file_to_class()
-
-            return TopwordResult(header=header, results=results)
+            return self._analyze_file_to_class()
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_CLASS:
-            # Get header and result.
-            header = "Compare a Class to Each Other Class(es)."
-            results = self._analyze_class_to_class()
-
-            return TopwordResult(header=header, results=results)
+            return self._analyze_class_to_class()
 
         else:
             raise ValueError("Invalid topword analysis option.")
 
     def get_displayable_result(self) -> jsonify:
-        """Get the readable result to display on the web page.
+        """Get the data to display on the web page.
 
-        :return: a json object that holds the topword result, which contains a
-                 header and a list of HTML tables.
+        :return: a json object that holds the topword results.
         """
         topword_result = self._get_result()
 
-        def helper_series_to_table(series: pd.Series) -> str:
+        def helper_series_to_table(series: pd.Series) -> pd.DataFrame:
             # Only take the most significant 30 data.
             series = series[: 30]
             frame = pd.DataFrame(data={
@@ -385,17 +364,13 @@ class TopwordModel(BaseModel):
                 "Z-Score": series.data
             })
 
-            return frame.to_html(
-                index=False,
-                classes="result-table table table-striped table-bordered"
-                        " header-fixed")
+            return frame.to_numpy().tolist()
 
         readable_result = [{"title": result.name,
                             "result": helper_series_to_table(series=result)}
-                           for result in topword_result.results]
+                           for result in topword_result]
 
-        return jsonify(header=topword_result.header,
-                       results=readable_result)
+        return jsonify(readable_result)
 
     def get_download_path(self) -> str:
         """Write the generated top word results to an output CSV file.
