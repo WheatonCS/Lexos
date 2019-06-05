@@ -24,6 +24,7 @@ form {
 }
 
 .word-cloud-wrapper .title {
+    display: block;
     height: 4rem;
     padding: 1rem;
     overflow: hidden;

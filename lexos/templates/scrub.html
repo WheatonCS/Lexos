@@ -25,11 +25,11 @@
         <!-- Scrubbing options -->
         <div id="scrubbing-options-section" class="section">
 
-            <div class="section-top">
-                <h3 class="title">Scrubbing Options</h3><h3 id="scrubbing-options-tooltip-button" class="lexos-tooltip-button">[?]</h3>
-            </div>
+            <h3 class="section-top title">Scrubbing Options</h3>
 
             <div class="section-body vertical-splitter">
+
+                <!-- Left section -->
                 <div>
                     <label class="checkbox-label"><input name="lowercasebox" type="checkbox" checked><span>Make Lowercase</span></label><br>
                     <label class="checkbox-label"><input name="digitsbox" type="checkbox" checked><span>Remove Digits</span></label><br>
@@ -37,14 +37,24 @@
                     <label class="checkbox-label"><input name="tabsbox" type="checkbox"><span>Remove Tabs</span></label><br>
                     <label class="checkbox-label"><input name="newlinesbox" type="checkbox"><span>Remove Newlines</span></label>
                 </div>
+
+                <!-- Right section -->
                 <div>
                     <label class="checkbox-label"><input name="tagbox" type="checkbox"><span>Scrub Tags</span></label>
-                    <h3 id="scrub-tags-settings-button" class="selectable">[Options]</h3><br>
+                    <h3 id="scrub-tags-settings-button" class="button">Options</h3>
+                    <h3 id="scrub-tags-tooltip-button" class="button">?</h3><br>
+
                     <label class="checkbox-label"><input id="punctuation-checkbox" name="punctuationbox" type="checkbox" checked><span>Remove Punctuation</span></label><br>
+
                     <div id="punctuation-options">
-                        <label class="checkbox-label"><input name="hyphensbox" type="checkbox"><span>Keep Hyphens</span></label><br>
-                        <label class="checkbox-label"><input name="aposbox" type="checkbox"><span>Keep Apostrophes</span></label><br>
+                        <label class="checkbox-label"><input name="hyphensbox" type="checkbox"><span>Keep Hyphens</span></label>
+                        <h3 id="keep-hyphens-tooltip-button" class="button">?</h3><br>
+
+                        <label class="checkbox-label"><input name="aposbox" type="checkbox"><span>Keep Apostrophes</span></label>
+                        <h3 id="keep-apostrophes-tooltip-button" class="button">?</h3><br>
+
                         <label class="checkbox-label"><input name="ampersandbox" type="checkbox"><span>Keep Ampersands</span></label>
+                        <h3 id="keep-ampersands-tooltip-button" class="button">?</h3>
                     </div>
                 </div>
             </div>
@@ -53,7 +63,10 @@
         <!-- Lemmas -->
         <div id="lemmas-section" class="section">
 
-            <h3 class="section-top title">Lemmas</h3>
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Lemmas</h3>
+                <h3 id="lemmas-tooltip-button" class="right-justified button">?</h3>
+            </div>
 
             <div class="borderless-section-body">
                 <label class="textarea-label"><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
@@ -63,7 +76,10 @@
         <!-- Consolidations -->
         <div id="consolidations-section" class="section">
 
-            <h3 class="section-top title">Consolidations</h3>
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Consolidations</h3>
+                <h3 id="consolidations-tooltip-button" class="right-justified button">?</h3>
+            </div>
 
             <div class="borderless-section-body">
                 <label class="textarea-label"><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
@@ -77,7 +93,10 @@
         <!-- Stop words and keep words -->
         <div id="stop-words-section" class="section">
 
-            <h3 class="section-top title">Stop Words and Keep Words</h3>
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Stop Words and Keep Words</h3>
+                <h3 id="stop-words-tooltip-button" class="right-justified button">?</h3>
+            </div>
 
             <div class="borderless-section-body">
 
@@ -94,7 +113,10 @@
         <!-- Special characters -->
         <div id="special-characters-section" class="section">
 
-            <h3 class="section-top title">Special Characters</h3>
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Special Characters</h3>
+                <h3 id="special-characters-tooltip-button" class="right-justified button">?</h3>
+            </div>
 
             <div class="borderless-section-body">
 

@@ -191,6 +191,9 @@ function edit_name(){
     // Create a popup containing a text input
     create_text_input_popup("Document Name");
 
+    // Set the popup's initial text input to the existing document name
+    $("#popup-input").val(documents[context_menu_document_id].label);
+
     // If the popup's "OK" button is clicked
     $("#popup-ok-button").click(function(){
 
@@ -216,6 +219,9 @@ function edit_class(){
 
     // Create a popup containing a text input
     create_text_input_popup("Document Class");
+
+    // Set the popup's initial text input to the existing document class
+    $("#popup-input").val(documents[context_menu_document_id].class);
 
     // When the popup's "OK" button is clicked
     $("#popup-ok-button").click(function(){

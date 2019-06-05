@@ -69,20 +69,26 @@ function send_ajax_form_request(url, additional_entries = {}){
  * Adds a text overlay to the elements found in the query.
  * @param {string} query: The element to query for.
  * @param {string} text: The text to show.
+ * @param {boolean} fade_in: Whether to fade in the text or not.
  */
-function add_text_overlay(query, text){
+function add_text_overlay(query, text, fade_in = false){
     $(query).each(function(){
 
-        let element = $(this);
-        element.empty();
+        // Remove any existing content
+        $(this).empty();
 
+        // Create the text
         let text_element = $(`
-            <div class="centerer" style="opacity: 0; transition: opacity .5s">
+            <div class="centerer">
                 <h3>${text}</h3>
             </div>
-        `).appendTo(element);
+        `).appendTo(this);
 
-        setTimeout(function(){ text_element.css("opacity", "1"); }, 100);
+        // Fade in the text
+        if(fade_in){
+            text_element.css({"opacity": "0", "transition": "opacity .5s"});
+            setTimeout(function(){ text_element.css("opacity", "1"); }, 100);
+        }
     });
 }
 
@@ -121,11 +127,10 @@ function start_loading(query, disable_query = ""){
  *      the loading overlay to remove.
  * @param {string} show_query: The query for elements to show.
  * @param {string} enable_query: The query for elements to enable.
- * @param {number} sequential_fade_in_delay: The delay between fading in
  *      subsequent elements.
  */
-function finish_loading(loading_overlay_query, show_query,
-    enable_query = "", sequential_fade_in_delay = 0){
+function finish_loading(loading_overlay_query,
+    show_query, enable_query = ""){
 
     // Remove the loading overlay from each specified element
     $(loading_overlay_query).each(function(){
@@ -136,7 +141,7 @@ function finish_loading(loading_overlay_query, show_query,
     enable(enable_query);
 
     // Fade in each specified element
-    fade_in(show_query, sequential_fade_in_delay);
+    fade_in(show_query, ".5s");
 }
 
 
@@ -179,10 +184,11 @@ function hide(query){
 /**
  * Fades in the elements found in the query.
  * @param {string} query: The query for elements to fade in.
- * @param {number} sequential_fade_in_delay: The delay between fading in
+ * @param {string} duration: The CSS duration of the fade in.
+ * @param {number} sequential_delay: The delay between fading in
  *      subsequent elements.
  */
-function fade_in(query, sequential_fade_in_delay = 0){
+function fade_in(query, duration = ".2s", sequential_delay = 0){
 
     let accumulated_fade_in_delay = 0;
     $(query).each(function(){
@@ -197,10 +203,11 @@ function fade_in(query, sequential_fade_in_delay = 0){
 
         // Fade the element after a delay
         setTimeout(function(){
-            element.css({"transition": "opacity .5s", "opacity": "1"});
+            element.css({"transition":
+                `opacity ${duration}`, "opacity": "1"});
         }, accumulated_fade_in_delay+30);
 
-        accumulated_fade_in_delay += sequential_fade_in_delay;
+        accumulated_fade_in_delay += sequential_delay;
     });
 }
 
@@ -310,43 +317,71 @@ function validate_number(number, minimum = null, maximum = null){
     return true;
 }
 
+
 /**
  * Creates a tooltip.
- * @param {string} id: The id of the element to append the tooltip to.
+ * @param {string} query: The query for the tooltip button element to append
+ *      the tooltip to.
  * @param {string} text: The text to display on the tooltip.
  */
-function create_tooltip(id, text){
+function create_tooltip(query, text){
 
-    $(`#${id}-tooltip-button`).click(function(event){
+    let uuid = get_uuid();
+    $(query).click(function(event){
 
         // Stop propagation so that the tooltip isn't removed undesirably
         event.stopPropagation();
 
-        // If the tooltip exists, remove it and return
-        let tooltip_element = $(`#${id}-tooltip`);
+        // If any tooltips exist, remove them and return if the clicked
+        // button's tooltip was one of the existing tooltips
+        let tooltip_element = $(".lexos-tooltip");
         if(tooltip_element.length){
-            tooltip_element.remove();
-            return;
+            let toggled = $(`#${uuid}-input`).length;
+            remove_tooltips();
+            if(toggled) return;
         }
 
-        // Create the tooltip
+        // Otherwise, create the tooltip
+        let position = $(this).offset();
+        $(this).addClass("button-active");
         tooltip_element = $(`
-            <div id="${id}-tooltip" class="lexos-tooltip">
+            <div id="${uuid}-input" class="hidden lexos-tooltip" style="top: ${position.top}px; left: ${position.left}px">
                 <h3>${text}</h3>
             </div>
         `).insertAfter(this);
 
+        // Fade in the tooltip
+        fade_in(".lexos-tooltip", ".2s");
+
         // Stop propagation so that the tooltip isn't removed undesirably
         tooltip_element.click(function(event){
-            console.log("z");
             event.stopPropagation();
             event.preventDefault();
         });
 
         // If there is a click outside the tooltip, remove the tooltip
-        $("body").click(function(){
-            console.log("s");
-            tooltip_element.remove();
-        });
+        $("body").click(remove_tooltips);
     });
+}
+
+
+/**
+ * Removes any existing tooltips.
+ */
+function remove_tooltips(){
+
+    $(".button-active").removeClass("button-active");
+    $(".lexos-tooltip").remove();
+}
+
+
+/**
+ * Generates a UUID.
+ * @param {number} length: The number of characters in the UUID.
+ * @returns {string}: The UUID.
+ */
+function get_uuid(length = 8){
+    let result = "";
+    for(let i = 0; i < length; ++i) result += Math.trunc(Math.random()*16);
+    return result;
 }
