@@ -24,11 +24,11 @@ The module used to produce this ranking employs Latent Semantic Analysis to
 generate unique vectors for each document. The cosine angle between your 
 comparison document's vector and the vector of each document of your corpus is 
 calculated and these values are then compared. Cosine similarity measures are
-between 0 and 1. The higher the value the closer the comparison document's 
+between 0 and 1. The lower the value the closer the comparison document's 
 vector is to that document's vector as opposed to the other documents' vectors.
 
-In the result ranking table Chapter 64 is the closest to Chapter 67. Also, 
-Chapter 67 is little bit closer to the late 40 Chapters, which is known to be 
-written by a different author than the author of the first 80 Chapters. Thus, 
-Chapter 67 and Chapter 64 might have been written by the same author as the 
-author of the late 40 Chapters. 
+The ordering, from least similar to most similar, is Chapter64, First80_without, 
+First80Chapters, and finally Late40Chapters
+
+### NOTE ### 
+    - The current PDF is not only WRONG but is also OUT OF DATE with the new UI
