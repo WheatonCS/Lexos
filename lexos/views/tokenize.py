@@ -1,11 +1,10 @@
 import json
 
-from flask import request, session, render_template, send_file, Blueprint
+from flask import session, render_template, send_file, Blueprint
 
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
 from lexos.models.tokenizer_model import TokenizerModel
-from lexos.models.filemanager_model import FileManagerModel
 
 tokenize_blueprint = Blueprint("tokenize", __name__)
 

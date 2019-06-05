@@ -16,7 +16,6 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from plotly.graph_objs.graph_objs import Figure, Scatter
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
 
