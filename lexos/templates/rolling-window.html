@@ -33,7 +33,7 @@
         <div id="search-terms-section" class="section">
             <h3 class="section-top title">Search Terms</h3>
             <div class="section-body">
-                <input name="rollingsearchword" type="text" spellcheck="false" autocomplete="off"><br>
+                <input id="search-terms-input" name="rollingsearchword" type="text" spellcheck="false" autocomplete="off"><br>
                 <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span>Words</span></label><br>
                 <label class="circle-label"><input name="inputtype" value="string" type="radio"><span>Strings</span></label><br>
                 <label class="circle-label"><input name="inputtype" value="regex" type="radio"><span>Regex</span></label>
@@ -44,7 +44,7 @@
         <div id="window-section" class="section">
             <h3 class="section-top title">Window</h3>
             <div class="section-body">
-                <input name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off"><br>
+                <input id="window-size-input" name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off"><br>
                 <label class="circle-label"><input name="windowtype" value="word" type="radio" checked><span>Words</span></label><br>
                 <label class="circle-label"><input name="windowtype" value="letter" type="radio"><span>Characters</span></label><br>
                 <label class="circle-label"><input name="windowtype" value="line" type="radio"><span>Lines</span></label>
@@ -55,7 +55,7 @@
         <div id="display-section" class="section">
             <h3 class="section-top title">Display</h3>
             <div class="section-body">
-                <label class="checkbox-label"><input name="rollinghasmilestone" type="checkbox"><span>Milestone<input name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off"></span></label>
+                <label class="checkbox-label"><input id="milestone-checkbox" name="rollinghasmilestone" type="checkbox"><span>Milestone<input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off"></span></label>
                 <label class="checkbox-label"><input name="showDots" type="checkbox"><span>Show Individual Points</span></label><br>
                 <label class="checkbox-label"><input name="BWoutput" type="checkbox"><span>Black and White</span></label>
             </div>

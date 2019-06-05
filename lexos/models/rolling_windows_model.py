@@ -546,12 +546,12 @@ class RollingWindowsModel(BaseModel):
                              layout=go.Layout(
                                 autosize=True,
                                 height=580,
-                                 margin=dict(
-                                     l=40,
-                                     r=0,
-                                     b=30,
-                                     t=0,
-                                     pad=4
+                                margin=dict(
+                                    l=40,
+                                    r=0,
+                                    b=30,
+                                    t=0,
+                                    pad=4
                                  )))
 
     def _get_token_average_graph(self) -> go.Figure:

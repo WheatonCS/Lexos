@@ -27,7 +27,7 @@ $(function(){
 function create_word_cloud_layout(response){
 
     // Parse the JSON response
-    response = JSON.parse(response);
+    response = parse_json(response);
 
     // If there are no active documents, display "No Active Documents" text
     // and return

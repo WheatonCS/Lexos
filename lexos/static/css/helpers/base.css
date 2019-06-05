@@ -65,7 +65,6 @@ body {
     grid-template-rows: 7rem calc((100vh - (100vh - 100%)) - 11rem) 4rem;
     height: 100%;
     position: relative;
-    overflow: hidden;
     background-color: #E3E3E3;
 }
 
@@ -130,7 +129,7 @@ form {
 }
 
 .title {
-    display: block;
+    display: inline-block;
     color: #47BCFF;
 }
 
@@ -231,8 +230,9 @@ footer {
     white-space: nowrap;
     padding-left: 100%;
     padding-right: 10rem;
-    animation: marquee 10s infinite linear;
-    animation-delay: -5s;
+    animation: marquee 20s infinite linear;
+    animation-delay: -10s;
+    font-weight: 700;
     color: #FFFFFF;
 }
 
@@ -259,6 +259,7 @@ footer {
 #error-close-button {
     pointer-events: all;
     color: #FFFFFF;
+    font-weight: 700;
     background-color: #CD2741;
     box-shadow: none;
 }
@@ -480,6 +481,29 @@ input[type=radio] {
 
 .section-body .button {
     margin-bottom: .5rem;
+}
+
+
+/* Tooltip */
+.lexos-tooltip-button {
+    margin: 0 1rem 0 1rem;
+}
+
+.lexos-tooltip-button:hover {
+    color: #47BCFF;
+}
+
+.lexos-tooltip {
+    z-index: 3;
+    position: absolute;
+    word-break: break-word;
+    width: 35rem;
+    height: 17rem;
+    padding: 1rem;
+    overflow-y: auto;
+    transform: translate(50%, -2rem);
+    background-color: #FFFFFF;
+    border: 2rem solid #EAF5FF;
 }
 
 

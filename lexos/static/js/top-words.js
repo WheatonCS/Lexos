@@ -21,7 +21,7 @@ $(function(){
  */
 function initialize(response){
 
-    documents = Object.values(JSON.parse(response));
+    documents = Object.values(parse_json(response));
 
     // Initialize the legacy form inputs. If there are no active documents,
     // display "No Active Documents" text and return
@@ -41,6 +41,7 @@ function initialize(response){
 
     // If the "Generate" button is pressed, recreate the "Top Words" section
     $("#generate-button").click(function(){
+        if(!validate_analyze_inputs()) return;
         start_loading("#top-words-body", "#generate-button, #download-button");
         send_ajax_form_request("top-words/tables")
             .done(create_top_words_tables);
@@ -54,7 +55,7 @@ function create_class_division_tables(response){
     let table_data = [];
 
     // For each class...
-    for(const entry of Object.entries(JSON.parse(response))){
+    for(const entry of Object.entries(parse_json(response))){
 
         // Push an object containing the class name and an empty array
         let class_name = entry[0];

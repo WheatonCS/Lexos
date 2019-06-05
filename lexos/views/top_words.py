@@ -1,5 +1,3 @@
-import json
-
 from flask import render_template, Blueprint, session
 
 from lexos.helpers import constants as constants

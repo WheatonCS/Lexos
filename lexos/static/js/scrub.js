@@ -12,7 +12,7 @@ $(function(){
 
         // If the request failed, display an error
         .fail(function(){ error("Failed to retrieve "+
-            "the document previews"); });
+            "the document previews."); });
 
     // Disable the punctuation options when the "Remove Punctuation" checkbox
     // is unchecked
@@ -37,8 +37,12 @@ $(function(){
         .done(create_tag_options_popup)
 
         // If the response failed, display an error
-        .fail(function(){ error("Failed to retrieve the document tags"); });
+        .fail(function(){ error("Failed to retrieve the document tags."); });
     });
+
+    // Create the tooltips
+    create_tooltip("scrubbing-options", "The quick brown fox jumped"+
+        " over the lazy dog. Lorem ipsum dolor sit amet.");
 });
 
 
@@ -49,7 +53,7 @@ $(function(){
 function create_tag_options_popup(response){
 
     // Parse the response
-    let tags = JSON.parse(response);
+    let tags = parse_json(response);
 
     // Create the popup
     create_ok_popup("Tag Options");
@@ -142,7 +146,7 @@ function save_tag_options(){
         .done(close_popup)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to save the tag options"); });
+        .fail(function(){ error("Failed to save the tag options."); });
 }
 
 
@@ -173,7 +177,7 @@ function scrub(action){
         .done(update_document_previews)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to execcute the scrubbing"); });
+        .fail(function(){ error("Failed to execcute the scrubbing."); });
 }
 
 
@@ -182,7 +186,7 @@ function scrub(action){
  * @param {string} response: The response containing the new previews.
  */
 function update_document_previews(response){
-    let previews = JSON.parse(response);
+    let previews = parse_json(response);
 
     // If there are no previews, display "No Previews" text and return
     if(!previews.length){
