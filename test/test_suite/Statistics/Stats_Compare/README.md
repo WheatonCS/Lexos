@@ -43,7 +43,7 @@ Test files:
 - War and Peace(no_punc&lowercase&no_digits): scrubbed
 
 Go to "STATS_Compare.ods" in folder ResultsToExpect for results.
-- The version of Intelligent Archive I used, the Segment by Character didn't work so that's why for the Mandarin documents the Intelligent Archive row is blank
+- In the version of Intelligent Archive I used, the Segment by Character didn't work so that's why for the Mandarin documents the Intelligent Archive row is blank
 
 
 
