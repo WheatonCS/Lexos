@@ -1,4 +1,5 @@
-<!-- The tokenizer tool -->
+<!-- The Tokenizer Tool -->
+<!--suppress ALL, HtmlUnknownTarget -->
 <h3 class="help-section-title">The Tokenizer Tool</h3>
 
 <h3 class="help-section-paragraph">
@@ -86,7 +87,7 @@
         by multiple words, you can increase the n-gram size.
     </h3>
     <h3 class="help-section-paragraph">
-        For example given the text: "the dog ran" tokenizeing by 1-gram tokens
+        For example given the text: "the dog ran" tokenizing by 1-gram tokens
         would produce tokens "the", "dog", "ran". Tokenizing by 2-grams would
         count the instances of bi-grams or pairs of words, thus producing tokens
         "the dog", "dog ran", and so on.
@@ -102,11 +103,11 @@
     <li><b>Normalize</b></li>
     <h3 class="help-section-paragraph">
         The default "Normalize" setting is "Proportional" which displays the
-        frequency of the occurance of terms in your documents as a proportion
+        frequency of the occurrence of terms in your documents as a proportion
         of the entire text.
     </h3>
     <h3 class="help-section-paragraph">
-        "Raw Counts" will dislpay in the table the actual number of occurrences
+        "Raw Counts" will display in the table the actual number of occurrences
         of each term in each document.
     </h3>
     <h3 class="help-section-paragraph">
@@ -123,12 +124,12 @@
     <h3 class="help-section-paragraph">
         "Culling" is a generic term we use for methods of decreasing the number
         of terms used to generate the DTM based on statistical criteria (as
-        opposed to something like applying a stopword list in Scrubber). Culling
+        opposed to something like applying a stop-word list in Scrubber). Culling
         is optional to use in Lexos. Lexos offers two different methods:
     </h3>
     <h3 class="help-section-paragraph">
         "Use the top ___ words": This method takes a slice of the DTM
-        containing only the top N most frequently occuring terms in the
+        containing only the top N most frequently occurring terms in the
         set of active documents. The default setting is 100, meaning
         Tokenizer will generate the DTM using only the top 100 most
         frequent terms.
