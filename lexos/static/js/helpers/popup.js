@@ -5,25 +5,19 @@
  */
 function create_popup(title){
     let popup_container_element = $(`
-
-        <!-- Popup -->
         <div id="popup-container">
             <div id="popup">
-                
-                <!-- Top -->
                 <div class="vertical-splitter">
                     <h3 class="title">${title}</h3>
                     <h3 id="popup-close-button" class="right-justified selectable">X</h3>
                 </div>
-            
-                <!-- Content -->
                 <div id="popup-content"></div>
             </div>
        </div>
     `).appendTo("body");
 
     // Fade in the popup
-    setTimeout(function(){ popup_container_element.css("opacity", "1"); });
+    fade_in("#popup-container");
 
     // Close the popup when the close button or the background is clicked
     $("#popup-close-button").click(close_popup);

@@ -40,9 +40,9 @@ $(function(){
         .fail(function(){ error("Failed to retrieve the document tags."); });
     });
 
+
     // Create the tooltips
-    create_tooltip("scrubbing-options", "The quick brown fox jumped"+
-        " over the lazy dog. Lorem ipsum dolor sit amet.");
+    create_tooltips();
 });
 
 
@@ -62,6 +62,7 @@ function create_tag_options_popup(response){
     // If there are no tags, display "No Tags" text and return
     if(!tags.length){
         add_text_overlay("#popup-content", "No Tags");
+        $("#popup-ok-button").click(close_popup);
         return;
     }
 
@@ -201,4 +202,51 @@ function update_document_previews(response){
     // Remove the loading overlay, fade in the previews, and enable the
     // buttons for the document previews section
     finish_document_previews_loading();
+}
+
+
+/**
+ * Creates the tooltips.
+ */
+function create_tooltips(){
+
+    // "Scrub Tags"
+    create_tooltip("#scrub-tags-tooltip-button", `Handle tags such as 
+        those used in XML, HTML, or SGML. Click the "Options" button 
+        to the left to control how each tag will be handled.`);
+
+    // "Keep Hyphens"
+    create_tooltip("#keep-hyphens-tooltip-button", `Change all variations of
+        Unicode hyphens to a single type of hyphen and leave the hyphens in
+        the text. Hyphenated words (e.g., computer-aided) will subsequently
+        be treated as one token.`);
+
+    // "Keep Apostrophes"
+    create_tooltip("#keep-apostrophes-tooltip-button", `Retain apostrophes
+        in contractions and possessives, but not those in plural possessives
+        or at the start of a word.`);
+
+    // "Keep Ampersands"
+    create_tooltip("#keep-ampersands-tooltip-button", `Leave all ampersands
+        in the text. Note that HTML. XML, or SGML entities such as
+        "&amp;aelig;" (æ) are handled separately. You can convert these
+        entities to standard Unicode characters using the Special Characters
+        option below.`);
+
+    // "Lemmas"
+    create_tooltip("#lemmas-tooltip-button", `Upload or input a list of
+        lemmas (word replacements).`);
+
+    // "Consolidations"
+    create_tooltip("#consolidations-tooltip-button", `Upload or input a list
+        of consolidations (character replacements).`);
+
+    // "Stop Words and Keep Words"
+    create_tooltip("#stop-words-tooltip-button", `Upload or input a list of
+        "stop words" (words to be removed) or "keep words" (words to keep).`);
+
+    // "Special Characters"
+    create_tooltip("#special-characters-tooltip-button", `Select a pre-defined
+        ruleset or upload or input a list of rules for handling certain
+        characters.`);
 }

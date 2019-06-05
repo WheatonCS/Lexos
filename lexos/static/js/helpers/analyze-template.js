@@ -54,7 +54,7 @@ function validate_analyze_inputs(){
     // "Cull" - "Must be in X documents"
     let minimum_documents = $("#minimum-occurrences-input").val();
     if($("#minimum-occurrences-checkbox").is(":checked") &&
-        !validate_number(minimum_documents, 1)){
+        !validate_number(minimum_documents, 1, active_document_count)){
         error("Invalid number of minimum occurrences.");
         return false;
     }
