@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en'>
+
 <head>
     <meta charset="utf-8">
     <script src="http://code.jquery.com/jquery.js"></script>
@@ -32,11 +32,11 @@
             transform: rotate(135deg);
         }
 
-        @media (max-width: 1075px) {
+        /*@media (max-width: 1075px) {
             .container {
                 padding-top: 50px;
             }
-        }
+        }*/
     </style>
 </head>
 
@@ -44,11 +44,11 @@
 ###############################################################################################################################
 -->
 
-<div class="navbar-btn navbar-right"></div>
 <div class="form-group navbar-form navbar-left">
-    <input type="text" id='branch_filter' class="form-control"
-           placeholder="Filter branches on">
-</div>
+    <label for='branch_filter'></label>
+    <input class="form-control" id='branch_filter'
+           placeholder="Filter branches on"
+           type="text">
 </div>
 
 <div class='row'>
@@ -94,14 +94,14 @@
                 <label class="btn btn-default active btn-sm">
                     <input type="radio" name="options"
                            class="phylotree-layout-mode" data-mode="linear"
-                           autocomplete="off" checked
+                           autocomplete="off"
                            title="Layout left-to-right"> Linear
                 </label>
                 <label class="btn btn-default  btn-sm">
                     <input type="radio" name="options"
                            class="phylotree-layout-mode" data-mode="radial"
-                           autocomplete="off" title="Layout radially">
-                    Radial
+                           autocomplete="off" checked
+                           title="Layout radially">Radial
                 </label>
             </div>
             <div class="btn-group">
@@ -109,7 +109,6 @@
                         id="toggle_animation" title="Toggle animation">
                     Animation
                 </button>
-                </label>
             </div>
 
             <div class="btn-group" data-toggle="buttons">
@@ -119,8 +118,6 @@
                            autocomplete="off" checked
                            title="Align tips labels to branches">
                     <i class="fa fa-align-left"></i>
-                    </input>
-
                 </label>
                 <label class="btn btn-default btn-sm">
                     <input type="radio" class="phylotree-align-toggler"
@@ -128,14 +125,12 @@
                            autocomplete="off"
                            title="Align tips labels to the edge of the plot">
                     <i class="fa fa-align-right"></i>
-                    </input>
                 </label>
             </div>
         </div>
     </div>
 </div>
-
-<div class='row' style="background-color: gray;" width="300" heigth="300">
+<div class='row'>
     <div class='col-md-12'>
         <div id='tree_container' class='tree-widget'>
         </div>
@@ -143,8 +138,6 @@
 </div>
 
 <script>
-
-
   $('#display_tree').on('click', function (e) {
     tree.options({'branches': 'straight'}, true)
   })
@@ -154,27 +147,27 @@
   })
 
   $('[data-direction]').on('click', function (e) {
-    var which_function = $(this).data('direction') == 'vertical' ? tree.spacing_x : tree.spacing_y
+    let which_function = $(this).data('direction') === 'vertical' ? tree.spacing_x : tree.spacing_y
     which_function(which_function() + (+$(this).data('amount'))).update()
   })
 
   $('.phylotree-layout-mode').on('change', function (e) {
     if ($(this).is(':checked')) {
-      if (tree.radial() != ($(this).data('mode') == 'radial')) {
+      if (tree.radial() !== ($(this).data('mode') === 'radial')) {
         tree.radial(!tree.radial()).placenodes().update()
       }
     }
   })
 
   $('#toggle_animation').on('click', function (e) {
-    var current_mode = $(this).hasClass('active')
+    let current_mode = $(this).hasClass('active')
     $(this).toggleClass('active')
     tree.options({'transitions': !current_mode})
   })
 
   $('.phylotree-align-toggler').on('change', function (e) {
     if ($(this).is(':checked')) {
-      if (tree.align_tips($(this).data('align') == 'right')) {
+      if (tree.align_tips($(this).data('align') === 'right')) {
         tree.placenodes().update()
       }
     }
@@ -182,7 +175,7 @@
 
   function sort_nodes (asc) {
     tree.traverse_and_compute(function (n) {
-      var d = 1
+      let d = 1
       if (n.children && n.children.length) {
         d += d3.max(n.children, function (d) { return d['count_depth']})
       }
@@ -208,15 +201,21 @@
   })
 
   $('#and_label').on('click', function (e) {
-    tree.internal_label(function (d) { return d.reduce(function (prev, curr) { return curr[current_selection_name] && prev }, true)}, true)
+    tree.internal_label(function (d) {
+      return d.reduce(function (prev, curr) {
+        return curr[current_selection_name] && prev }, true)}, true)
   })
 
   $('#or_label').on('click', function (e) {
-    tree.internal_label(function (d) { return d.reduce(function (prev, curr) { return curr[current_selection_name] || prev }, false)}, true)
+    tree.internal_label(function (d) {
+      return d.reduce(function (prev, curr) {
+        return curr[current_selection_name] || prev }, false)}, true)
   })
 
   $('#filter_add').on('click', function (e) {
-    tree.modify_selection(function (d) { return d.tag || d[current_selection_name]}, current_selection_name, false, true)
+    tree.modify_selection(function (d) {
+      return d.tag || d[current_selection_name]},
+      current_selection_name, false, true)
       .modify_selection(function (d) { return false }, 'tag', false, false)
   })
 
@@ -229,11 +228,13 @@
   })
 
   $('#select_all_internal').on('click', function (e) {
-    tree.modify_selection(function (d) { return !d3.layout.phylotree.is_leafnode(d.target)})
+    tree.modify_selection(function (d) {
+      return !d3.layout.phylotree.is_leafnode(d.target)})
   })
 
   $('#select_all_leaves').on('click', function (e) {
-    tree.modify_selection(function (d) { return d3.layout.phylotree.is_leafnode(d.target)})
+    tree.modify_selection(function (d) {
+      return d3.layout.phylotree.is_leafnode(d.target)})
   })
 
   $('#select_none').on('click', function (e) {
@@ -241,11 +242,16 @@
   })
 
   $('#clear_internal').on('click', function (e) {
-    tree.modify_selection(function (d) { return d3.layout.phylotree.is_leafnode(d.target) ? d.target[current_selection_name] : false})
+    tree.modify_selection(
+      function (d) {
+        return d3.layout.phylotree.is_leafnode(
+          d.target) ? d.target[current_selection_name] : false})
   })
 
   $('#clear_leaves').on('click', function (e) {
-    tree.modify_selection(function (d) { return !d3.layout.phylotree.is_leafnode(d.target) ? d.target[current_selection_name] : false})
+    tree.modify_selection(function (d) {
+      return !d3.layout.phylotree.is_leafnode(
+        d.target) ? d.target[current_selection_name] : false})
   })
 
   $('#display_dendrogram').on('click', function (e) {
@@ -253,20 +259,21 @@
   })
 
   $('#branch_filter').on('input propertychange', function (e) {
-    var filter_value = $(this).val()
+    let filter_value = $(this).val()
 
-    var rx = new RegExp(filter_value, 'i')
+    let rx = new RegExp(filter_value, 'i')
 
     tree.modify_selection(function (n) {
-      return filter_value.length && (tree.branch_name()(n.target).search(rx)) != -1
+      return filter_value.length &&
+        (tree.branch_name()(n.target).search(rx)) !== -1
     }, 'tag')
 
   })
 
   $('#validate_newick').on('click', function (e) {
-    var res = d3.layout.newick_parser($('textarea[id$="nwk_spec"]').val(), true)
+    let res = d3.layout.newick_parser($('textarea[id$="nwk_spec"]').val(), true)
     if (res['error'] || !res['json']) {
-      var warning_div = d3.select('#newick_body').selectAll('div  .alert-danger').data([res['error']])
+      let warning_div = d3.select('#newick_body').selectAll('div  .alert-danger').data([res['error']])
       warning_div.enter().append('div')
       warning_div.html(function (d) {return d}).attr('class', 'alert-danger')
 
@@ -282,7 +289,11 @@
     tree.branch_length(null)
     tree.branch_name(null)
     tree.node_span('equal')
-    tree.options({'draw-size-bubbles': false}, true)
+    tree.options({'draw-size-bubbles': false,
+                  'zoom': true,
+                  'align-tips': false,
+                  'left-offset': 0,
+                  'minimum-per-node-spacing': 2}, true)
     //tree.radial (true);
     tree.style_nodes(node_colorizer)
     tree.style_edges(edge_colorizer)
@@ -303,14 +314,15 @@
       selection_set.forEach(function (d, i) {
         if (data[d]) {
           count_class++
-          element.style('fill', color_scheme(i), i == current_selection_id ? 'important' : null)
+          element.style('fill',
+            color_scheme(i), i === current_selection_id ? 'important' : null)
         }
       })
 
       if (count_class > 1) {
 
       } else {
-        if (count_class == 0) {
+        if (count_class === 0) {
           element.style('fill', null)
         }
       }
@@ -328,7 +340,8 @@
       selection_set.forEach(function (d, i) {
         if (data[d]) {
           count_class++
-          element.style('stroke', color_scheme(i), i == current_selection_id ? 'important' : null)
+          element.style('stroke', color_scheme(i),
+            i === current_selection_id ? 'important' : null)
         }
       })
 
@@ -343,12 +356,12 @@
 
   }
 
-  var valid_id = new RegExp('^[\\w]+$')
+  let valid_id = new RegExp('^[\\w]+$')
 
   $('#selection_name_box').on('input propertychange', function (e) {
-    var name = $(this).val()
+    let name = $(this).val()
 
-    var accept_name = (selection_set.indexOf(name) < 0) &&
+    let accept_name = (selection_set.indexOf(name) < 0) &&
       valid_id.exec(name)
 
     d3.select('#save_selection_button').classed('disabled', accept_name ? null : true)
@@ -359,14 +372,16 @@
     d3.select('#save_selection_button')
       .classed('disabled', true)
       .on('click', function (e) { // save selection handler
-        var old_selection_name = current_selection_name
-        selection_set[current_selection_id] = current_selection_name = $('#selection_name_box').val()
+        let old_selection_name = current_selection_name
+        selection_set[current_selection_id] = current_selection_name =
+          $('#selection_name_box').val()
 
-        if (old_selection_name != current_selection_name) {
+        if (old_selection_name !== current_selection_name) {
           tree.update_key_name(old_selection_name, current_selection_name)
           update_selection_names(current_selection_id)
         }
-        send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
+        send_click_event_to_menu_objects(
+          new CustomEvent(selection_menu_element_action,
           {'detail': ['save', this]}))
       })
 
@@ -374,11 +389,13 @@
       .classed('disabled', false)
       .on('click', function (e) { // save selection handler
         $('#selection_name_box').val(current_selection_name)
-        send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
+        send_click_event_to_menu_objects(
+          new CustomEvent(selection_menu_element_action,
           {'detail': ['cancel', this]}))
       })
 
-    send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
+    send_click_event_to_menu_objects(
+      new CustomEvent(selection_menu_element_action,
       {'detail': ['rename', this]}))
     e.preventDefault()
   })
@@ -395,7 +412,8 @@
     update_selection_names(current_selection_id)
     $('#selection_name_box').val(current_selection_name)
 
-    send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
+    send_click_event_to_menu_objects(
+      new CustomEvent(selection_menu_element_action,
       {'detail': ['save', this]}))
     e.preventDefault()
 
@@ -410,7 +428,8 @@
         current_selection_id = selection_set.length
         selection_set.push(current_selection_name)
         update_selection_names(current_selection_id)
-        send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
+        send_click_event_to_menu_objects(
+          new CustomEvent(selection_menu_element_action,
           {'detail': ['save', this]}))
       })
 
@@ -418,18 +437,20 @@
       .classed('disabled', false)
       .on('click', function (e) { // save selection handler
         $('#selection_name_box').val(current_selection_name)
-        send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
+        send_click_event_to_menu_objects(
+          new CustomEvent(selection_menu_element_action,
           {'detail': ['cancel', this]}))
       })
 
-    send_click_event_to_menu_objects(new CustomEvent(selection_menu_element_action,
-      {'detail': ['new', this]}))
+    send_click_event_to_menu_objects(new CustomEvent(
+      selection_menu_element_action, {'detail': ['new', this]}))
     e.preventDefault()
-
   })
 
   function send_click_event_to_menu_objects (e) {
-    $('#selection_new, #selection_delete, #selection_rename, #save_selection_name, #selection_name_box, #selection_name_dropdown').get().forEach(
+    $('#selection_new, #selection_delete, #selection_rename,' +
+      '#save_selection_name, #selection_name_box, ' +
+      '#selection_name_dropdown').get().forEach(
       function (d) {
         d.dispatchEvent(e)
       }
@@ -468,27 +489,33 @@
     tree.selection_label(selection_set[id])
   }
 
-  var width = 800, //$(container_id).width(),
+  let width = 800, //$(container_id).width(),
     height = 600, //$(container_id).height()
     selection_set = ['Foreground'],
     current_selection_name = $('#selection_name_box').val(),
     current_selection_id = 0,
-    max_selections = 10
-  color_scheme = d3.scale.category10(),
+    max_selections = 10,
+    color_scheme = d3.scale.category10(),
     selection_menu_element_action = 'phylotree_menu_element_action'
 
   let tree = d3.layout.phylotree('body')
     .size([height, width])
     .separation(function (a, b) {return 0})
     .count_handler(function (count) {
-        $('#selected_branch_counter').text(function (d) {return count[current_selection_name]})
+        $('#selected_branch_counter').text(
+          function (d) {return count[current_selection_name]})
         $('#selected_filtered_counter').text(count.tag)
       }
     )
   let container_id = '#tree_container'
-  let test_string = '(abc : 0.1, (b : 0.11, (c : 0.12, d : 0.13) : 0.14) : 0.15)'
-
-  //window.setInterval (function () {});
+  let test_string = '(JP_Morgan2000:0.02024,((JP_Morgan2003:0.01437,' +
+    '(JP_Morgan2002:0.01369,JP_Morgan2001:0.01369)100.00:0.00126)' +
+    '89.00:0.00222,(JP_Morgan2004:0.01395,((JP_Morgan2006:0.01179,' +
+    'JP_Morgan2005:0.01179)83.00:0.00206,(JP_Morgan2007:0.00860,' +
+    '(JP_Morgan2009:0.00748,JP_Morgan2008:0.00748)56.00:0.00166)' +
+    '53.00:0.00467)65.00:0.00107)82.00:0.00316)93.00:0.00246):0.00000; '
+  //'(abc : 0.1, (b : 0.11, (c : 0.12, d : 0.13) : 0.14) : 0.15)'
+  $('#var').html(window.parent.$('#bct-result').text())
 
   var svg = d3.select(container_id).append('svg')
     .attr('width', width)
@@ -521,7 +548,7 @@
     switch (e.detail[0]) {
       case 'save':
       case 'cancel':
-        if (selection_set.length == max_selections) {
+        if (selection_set.length === max_selections) {
           element.classed('disabled', true)
           $(this).tooltip({
             'title': 'Up to ' + max_selections + ' are allowed',
@@ -539,18 +566,21 @@
   }
 
   function selection_handler_rename (e) {
-    var element = d3.select(this)
-    element.classed('disabled', (e.detail[0] == 'save' || e.detail[0] == 'cancel') ? null : true)
+    let element = d3.select(this)
+    element.classed('disabled', (
+      e.detail[0] === 'save' || e.detail[0] === 'cancel') ? null : true)
   }
 
   function selection_handler_save_selection_name (e) {
-    var element = d3.select(this)
-    element.style('display', (e.detail[0] == 'save' || e.detail[0] == 'cancel') ? 'none' : null)
+    let element = d3.select(this)
+    element.style('display', (
+      e.detail[0] === 'save' || e.detail[0] === 'cancel') ? 'none' : null)
   }
 
   function selection_handler_name_dropdown (e) {
-    var element = d3.select(this).selectAll('.selection_set')
-    element.classed('disabled', (e.detail[0] == 'save' || e.detail[0] == 'cancel') ? null : true)
+    let element = d3.select(this).selectAll('.selection_set')
+    element.classed('disabled', (
+      e.detail[0] === 'save' || e.detail[0] === 'cancel') ? null : true)
   }
 
   function selection_handler_delete (e) {
@@ -559,10 +589,11 @@
     switch (e.detail[0]) {
       case 'save':
       case 'cancel':
-        if (selection_set.length == 1) {
+        if (selection_set.length === 1) {
           element.classed('disabled', true)
           $(this).tooltip({
-            'title': 'At least one named selection set <br> is required;<br>it can be empty, however',
+            'title': 'At least one named selection set <br> is required;' +
+                     '<br>it can be empty, however',
             'placement': 'bottom',
             'html': true
           })
@@ -580,18 +611,8 @@
   $(document).ready(function () {
     default_tree_settings()
     tree(test_string).svg(svg).layout()
-    $('#selection_new').get(0).addEventListener(selection_menu_element_action, selection_handler_new, false)
-    $('#selection_rename').get(0).addEventListener(selection_menu_element_action, selection_handler_rename, false)
-    $('#selection_delete').get(0).addEventListener(selection_menu_element_action, selection_handler_delete, false)
-    $('#selection_delete').get(0).dispatchEvent(new CustomEvent(selection_menu_element_action,
-      {'detail': ['cancel', null]}))
-    $('#selection_name_box').get(0).addEventListener(selection_menu_element_action, selection_handler_name_box, false)
-    $('#save_selection_name').get(0).addEventListener(selection_menu_element_action, selection_handler_save_selection_name, false)
-    $('#selection_name_dropdown').get(0).addEventListener(selection_menu_element_action, selection_handler_name_dropdown, false)
-    update_selection_names()
   })
-
 </script>
 
 
-</html>
+

@@ -150,6 +150,8 @@
 
 
 {% block results %}
+    <div id="bct-result" class="row" style="text-align: center"></div>
+    <div id="var"></div>
     <div class="row submit-button-row">
         <div class="col-md-12 col-lg-12">
             <input class="btn btn-success" id="get-bct" name="get-bct"
@@ -159,7 +161,6 @@
             {% include 'phylotree.html' %}
         </div>
     </div>
-    <div id="bct-result" class="row" style="text-align: center"></div>
 {% endblock %}
 
 {% block submit %}
