@@ -23,7 +23,7 @@ function initialize(response){
     }
 
     // Otherwise, parse the response
-    let documents = Object.entries(JSON.parse(response));
+    let documents = Object.entries(parse_json(response));
 
     // Enable the "Comparison Document" section's "Select" button
     let select_button_element = $("#select-button");
@@ -57,12 +57,8 @@ function initialize(response){
 
     // If the "Generate" button is pressed, recreate the similarity table
     $("#generate-button").click(function(){
-
-        // Display the loading overlay on the table and disable the "Generate"
-        // button
+        if(!validate_analyze_inputs()) return;
         start_loading("#table", "#generate-button");
-
-        // Create the similarity table
         send_ajax_form_request("similarity-query/table")
             .done(create_similarity_table);
     });
@@ -71,7 +67,7 @@ function initialize(response){
 
 function create_similarity_table(response){
 
-    let table_data = JSON.parse(response);
+    let table_data = parse_json(response);
 
     // Create the layout
     $(`

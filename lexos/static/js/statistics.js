@@ -9,13 +9,6 @@ $(function(){
 
         // If the request is successful, initialize the page
         .done(initialize);
-
-    // If the "Generate" button is pressed, recreate the statistics
-    $("#generate-button").click(function(){
-        start_loading("#graph-container, #table, #corpus-statistics, "+
-        "#standard-error-test, #interquartile-range-test");
-        disable("#generate-button");
-    });
 });
 
 
@@ -36,6 +29,9 @@ function initialize(response){
 
     // Create the statistics
     create_statistics();
+
+    // If the "Generate" button is pressed, recreate the statistics
+    $("#generate-button").click(create_statistics);
 }
 
 
@@ -43,6 +39,14 @@ function initialize(response){
  * Generates the statistics.
  */
 function create_statistics(){
+
+    // If the "Tokenize" or "Cull" section inputs are invalid, return
+    if(!validate_analyze_inputs()) return;
+
+    // Display the loading overlays
+    start_loading("#graph-container, #table, #corpus-statistics, "+
+            "#standard-error-test, #interquartile-range-test");
+        disable("#generate-button");
 
     // Send a request to get the corpus statistics
     send_ajax_form_request("/statistics/corpus")
@@ -72,7 +76,7 @@ function create_statistics(){
 function create_corpus_statistics(response){
 
     // Parse the JSON response, replacing any "NaN" values with "N/A"
-    response = JSON.parse(response.replace(/\bNaN\b/g, "\"N/A\""));
+    response = parse_json(response);
 
     // Populate the corpus statistics section with data
     $(`
@@ -148,7 +152,7 @@ function create_document_statistics(response){
     `).appendTo("#table");
 
     // Create the rows
-    let rows = Object.entries(JSON.parse(response));
+    let rows = Object.entries(parse_json(response));
     for(row of rows){
         let data = Object.values(row[1]);
 
@@ -190,3 +194,4 @@ function loading_complete_check(number_loaded = 1){
     $("#generate-button").removeClass("disabled");
     elements_loaded = 0;
 }
+

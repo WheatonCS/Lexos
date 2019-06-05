@@ -278,3 +278,75 @@ function error(message){
         fade_in("footer");
     });
 }
+
+
+/**
+ * Parses the given JSON string and returns the parsed object.
+ * @param {string} json: The JSON string to parse.
+ * @returns {any}: The parsed object.
+ */
+function parse_json(json){
+    return JSON.parse(json.replace(/\bNaN\b/g, "\"N/A\""));
+}
+
+/**
+ * Validates an integer input.
+ * @param {string} number: The value to validate.
+ * @param {number} minimum: The minimum value the number can be.
+ * @param {number} maximum: The maximum the value can be.
+ * @returns {boolean}: Whether the value is valid.
+ */
+function validate_number(number, minimum = null, maximum = null){
+
+    // Check that the value is a number
+    let parsed_value = +number;
+    if(!number || isNaN(parsed_value)) return false;
+
+    // Check that the number is within bounds
+    if(minimum !== null && parsed_value < minimum) return false;
+    if(maximum !== null && parsed_value > maximum) return false;
+
+    // Return true as all validation checks have passed
+    return true;
+}
+
+/**
+ * Creates a tooltip.
+ * @param {string} id: The id of the element to append the tooltip to.
+ * @param {string} text: The text to display on the tooltip.
+ */
+function create_tooltip(id, text){
+
+    $(`#${id}-tooltip-button`).click(function(event){
+
+        // Stop propagation so that the tooltip isn't removed undesirably
+        event.stopPropagation();
+
+        // If the tooltip exists, remove it and return
+        let tooltip_element = $(`#${id}-tooltip`);
+        if(tooltip_element.length){
+            tooltip_element.remove();
+            return;
+        }
+
+        // Create the tooltip
+        tooltip_element = $(`
+            <div id="${id}-tooltip" class="lexos-tooltip">
+                <h3>${text}</h3>
+            </div>
+        `).insertAfter(this);
+
+        // Stop propagation so that the tooltip isn't removed undesirably
+        tooltip_element.click(function(event){
+            console.log("z");
+            event.stopPropagation();
+            event.preventDefault();
+        });
+
+        // If there is a click outside the tooltip, remove the tooltip
+        $("body").click(function(){
+            console.log("s");
+            tooltip_element.remove();
+        });
+    });
+}

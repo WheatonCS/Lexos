@@ -62,7 +62,7 @@ function create_table(){
         // If the request is successful, create the table
         .done(function(json_response){
 
-            documents = JSON.parse(json_response);
+            documents = parse_json(json_response);
 
             // If there are no documents, display "No Documents" text and
             // return
@@ -86,7 +86,7 @@ function create_table(){
         })
 
         // Otherwise, display an error
-        .fail(function(){ error("Failed to fetch the documents"); });
+        .fail(function(){ error("Failed to fetch the documents."); });
 }
 
 
@@ -174,12 +174,12 @@ function preview(){
         .done(function(response){
             create_popup("Preview");
             let preview = $(`<h3></h3>`).appendTo("#popup-content");
-            preview.text(JSON.parse(response).previewText);
+            preview.text(parse_json(response).previewText);
         })
 
         // If the request failed, display an error
         .fail(function(){ error("Failed to retrieve "+
-            "the document's preview"); });
+            "the document's preview."); });
 }
 
 
@@ -204,7 +204,7 @@ function edit_name(){
             .done(function(){ close_popup();  create_table(); })
 
             // If the request failed, display an error
-            .fail(function(){ error("Failed to edit the document's name"); });
+            .fail(function(){ error("Failed to edit the document's name."); });
     });
 }
 
@@ -230,7 +230,7 @@ function edit_class(){
             .done(function(){ close_popup(); create_table(); })
 
             // If the request failed, display an error
-            .fail(function(){ error("Failed to set the document's class"); });
+            .fail(function(){ error("Failed to set the document's class."); });
     });
 }
 
@@ -247,7 +247,7 @@ function delete_document(){
         .done(create_table)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to delete the document"); });
+        .fail(function(){ error("Failed to delete the document."); });
 }
 
 
@@ -281,7 +281,7 @@ function edit_selected_classes(){
 
             // If the request failed, display an error
             .fail(function(){ error("Failed to edit the "+
-                "active documents' classes"); });
+                "active documents' classes."); });
     });
 }
 
@@ -323,7 +323,7 @@ function select_all(){
     send_request("activate", id_list)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to activate the documents"); });
+        .fail(function(){ error("Failed to activate the documents."); });
 }
 
 
@@ -348,7 +348,7 @@ function deselect_all(){
     send_request("deactivate", id_list)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to deactivate the documents"); });
+        .fail(function(){ error("Failed to deactivate the documents."); });
 }
 
 

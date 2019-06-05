@@ -10,7 +10,7 @@ $(function(){
     // Create a preview for each active document
     $.ajax({type: "GET", url: "document-previews"})
     .done(function(response){
-        document_previews = JSON.parse(response);
+        document_previews = parse_json(response);
         initialize_document_previews(response);
     });
 
@@ -101,55 +101,10 @@ function cut(action){
 
     // If the request failed, display an error and remove the loading overlay
     .fail(function(){
-        error("Failed to cut the documents");
+        error("Failed to cut the documents.");
         add_text_overlay("#previews", "No Previews");
         finish_document_previews_loading();
     })
-}
-
-
-/**
- * Validate the inputs.
- * @returns {boolean}: Whether the inputs are valid.
- */
-function validate_inputs(){
-
-
-
-    // Validate no settings for the "Milestone" cut mode
-    if(cut_mode === "milestone"){
-        let milestone = $("#milestone-input input").val();
-        if(milestone.length <= 0)
-        { error("A milestone must be provided"); return false; }
-        return true;
-    }
-
-    // Segment size
-    let segment_size = $("#segment-size-input input").val();
-    if(!segment_size || segment_size < 1 || isNaN(segment_size))
-    { error("Invalid segment size."); return false; }
-    segment_size = parseInt(segment_size);
-
-    // Only validate the segment size for the "Segments" cut mode
-    if(cut_mode === "number")  return true;
-
-    // Overlap
-    let overlap = $("#overlap-input input").val();
-    if(!overlap ||  overlap < 0 || isNaN(overlap))
-    { error("Invalid overlap size."); return false; }
-    overlap = parseInt(overlap);
-
-    if(overlap > segment_size){ error("The overlap cannot be "+
-        "greater than the segment size."); return false; }
-
-    // Merge threshold
-    let merge_threshold = $("#merge-threshold-input input").val();
-    if(!merge_threshold ||  merge_threshold < 0 ||
-        merge_threshold > 100 || isNaN(merge_threshold))
-    { error("Invalid merge threshold."); return false; }
-
-
-    return true;
 }
 
 
@@ -158,7 +113,7 @@ function validate_inputs(){
  * @param {string} response: The response containing the new previews.
  */
 function create_document_previews(response){
-    let previews = JSON.parse(response);
+    let previews = parse_json(response);
 
     // If there are no previews, display "No Previews" text
     if(!previews.length) add_text_overlay("#previews", "No Previews");
@@ -170,4 +125,56 @@ function create_document_previews(response){
     // Remove the loading overlay, fade in the previews, and enable the
     // buttons for the document previews section
     finish_document_previews_loading();
+}
+
+
+/**
+ * Validate the inputs.
+ * @returns {boolean}: Whether the inputs are valid.
+ */
+function validate_inputs(){
+
+    // "Milestone"
+    if(cut_mode === "milestone"){
+        let milestone = $("#milestone-input input").val();
+        if(milestone.length <= 0){
+            error("A milestone must be provided.");
+            return false;
+        }
+        return true;
+    }
+
+    // "Segment size"
+    let segment_size = $("#segment-size-input input").val();
+    let int_segment_size = parseInt(segment_size);
+    if(!validate_number(segment_size, 1)){
+        error("Invalid segment size.");
+        return false;
+    }
+
+    // "Segments"
+    if(cut_mode === "number") return true;
+
+    // "Overlap"
+    let overlap = $("#overlap-input input").val();
+    let int_overlap = parseInt(overlap, 0);
+    if(!validate_number(overlap, 1)){
+        error("Invalid overlap size.");
+        return false;
+    }
+
+    if(int_overlap > int_segment_size){
+        error("The overlap cannot be "+
+        "greater than the segment size.");
+        return false;
+    }
+
+    // "Merge threshold"
+    let merge_threshold = $("#merge-threshold-input input").val();
+    if(!validate_number(merge_threshold, 0, 100)){
+        error("Invalid merge threshold.");
+        return false;
+    }
+
+    return true;
 }

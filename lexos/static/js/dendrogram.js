@@ -32,19 +32,20 @@ function initialize(response){
         return;
     }
 
-    // Otherwise, if there are fewer than two active files, display warning
+    // If there are fewer than two active files, display warning
     // text and return
-    if(Object.entries(JSON.parse(response)).length < 2){
+    if(Object.entries(parse_json(response)).length < 2){
         add_text_overlay("#graph-container",
             "This Tool Requires At Least Two Active Documents");
         return;
     }
 
-    // Otherwise, create the dendrogram
+    // Create the dendrogram
     create_graph("dendrogram/graph");
 
     // When the "Generate" button is pressed, recreate the dendrogram
     $("#generate-button").click(function(){
+        if(!validate_analyze_inputs()) return;
         start_loading("#graph-container", "#generate-button");
         create_graph("dendrogram/graph");
     });

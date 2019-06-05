@@ -30,6 +30,8 @@ function initialize(response){
 
     // When the "Generate" button is pressed, recreate the consensus tree
     $("#generate-button").click(function(){
+        if(!validate_consensus_tree_inputs() ||
+            !validate_analyze_inputs()) return;
         start_loading("#consensus-tree-body", "#generate-button");
         create_consensus_tree();
     });
@@ -55,4 +57,26 @@ function create_consensus_tree(){
             finish_loading("#consensus-tree-body",
                 "#consensus-tree", "#generate-button")
         });
+}
+
+
+/**
+ * Validate the consensus tree options inputs.
+ * @returns {boolean}: Whether the inputs are valid.
+ */
+function validate_consensus_tree_inputs(){
+
+    // "Cutoff"
+    if(!validate_number($("#cutoff-input").val(), 0, 1)){
+        error("Invalid cutoff.");
+        return false;
+    }
+
+    // "Iterations"
+    if(!validate_number($("#iterations-input").val(), 1)){
+        error("Invalid number of iterations.");
+        return false;
+    }
+
+    return true;
 }

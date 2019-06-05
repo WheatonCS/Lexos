@@ -15,7 +15,7 @@ $(function(){
  */
 function create_bubbleviz(response){
 
-    let word_counts = JSON.parse(response);
+    let word_counts = parse_json(response);
 
     // If there are no word counts, display "No Active Documents" text and
     // return

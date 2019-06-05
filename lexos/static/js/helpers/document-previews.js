@@ -5,7 +5,7 @@
  */
 function initialize_document_previews(response){
 
-    let previews = JSON.parse(response);
+    let previews = parse_json(response);
 
     // If there are no previews, display "No Active Documents" text
     if(!previews.length){

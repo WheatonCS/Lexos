@@ -6,8 +6,15 @@ let selected_column = 0;
 
 $(function(){
 
-    // Initialize the legacy inputs and create the table
-    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+    // Send the request for the active file IDs
+    $.ajax({type: "GET", url: "/active-file-ids"})
+
+        // If the request is successful, initialize the legacy inputs and create the table
+        .done(initialize)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to retrieve"+
+            "the active document IDs."); });
 })
 
 
@@ -67,12 +74,13 @@ function send_table_data_request(page_change = true, queued_request = false){
     let page_number_element = $("#page-number");
     if(!page_change) page_number_element.val("1");
 
-    // Return if the input page number is not parsable or a page change was
+    // Return if the input page number is not parsable, if a page change was
     // attempted but the page number remained the same due to clamping or
-    // input of the same number
+    // input of the same number, or if the "Tokenize" or "Cull" sections have
+    // an invalid input
     let page_number = page_number_element.val();
-    if(isNaN(page_number) || page_change &
-        (page_number === previous_page_number)){
+    if(isNaN(page_number) || page_change & (page_number ===
+        previous_page_number) || !validate_analyze_inputs()){
         loading = false;
         execute_queued_table_recreation();
         return;
@@ -89,7 +97,10 @@ function send_table_data_request(page_change = true, queued_request = false){
         { "sort-column": selected_column, start: start })
 
         // If the request was successful, recreate the table
-        .done(create_table);
+        .done(create_table)
+
+        // If the request failed, display an error
+        .fail(function(){ error("Failed to retrieve the table data."); });
 }
 
 
@@ -107,7 +118,7 @@ function create_table(response){
     }
 
     // Otherwise, parse the response
-    response = JSON.parse(response);
+    response = parse_json(response);
 
     // Set the page count
     page_count = parseInt(response["pages"]);

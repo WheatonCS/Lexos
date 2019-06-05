@@ -176,5 +176,5 @@ function update_active_document_count(){
         $("#active-document-count").text(response);
     })
 
-    .fail(function(){ error("Failed to update the active document count"); });
+    .fail(function(){ error("Failed to update the active document count."); });
 }
