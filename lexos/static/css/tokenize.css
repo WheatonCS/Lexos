@@ -6,7 +6,7 @@
 
 /* Form */
 form {
-    grid-template-rows: 15.5rem 1fr;
+    grid-template-rows: min-content 1fr;
 }
 
 

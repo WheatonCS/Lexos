@@ -7,8 +7,8 @@
 
 @font-face {
     font-family: "Open Sans";
-    src: url("../../fonts/open-sans-bold.ttf") format("truetype");
-    font-weight: 700;
+    src: url("../../fonts/open-sans-semibold.ttf") format("truetype");
+    font-weight: 600;
 }
 
 @font-face {
@@ -218,6 +218,7 @@ footer {
 /* Error */
 #error-section {
     z-index: 10;
+    position: relative;
     overflow: hidden;
     background-color: #E62843;
 }
@@ -288,7 +289,7 @@ footer {
 .section-body {
     width: calc(100% - 2rem);
     height: calc(100% - 6rem);
-    margin: 1rem;
+    margin: 0 1rem 1rem 1rem;
 }
 
 .borderless-section-body {
@@ -416,7 +417,11 @@ textarea {
 label {
     display: inline-block;
     cursor: pointer;
-    margin-bottom: .5rem;
+}
+
+.section-body label {
+    margin-top: .2rem;
+    margin-bottom: 1rem;
 }
 
 .checkbox-label > span:before,
@@ -469,39 +474,32 @@ input[type=radio] {
     transition: color .2s, box-shadow .2s, background-color .2s, opacity .5s;
 }
 
-.button:hover {
+.section-body .button {
+    margin-bottom: .5rem;
+}
+
+.button:hover,
+.button-active{
     color: #47BCFF;
     background-color: #EAF5FF;
     box-shadow: inset #47BCFF 0 0 0 .2rem;
 }
 
-.button:hover > h3 {
+.button:hover > h3,
+.button-active > h3{
     color: inherit;
-}
-
-.section-body .button {
-    margin-bottom: .5rem;
 }
 
 
 /* Tooltip */
-.lexos-tooltip-button {
-    margin: 0 1rem 0 1rem;
-}
-
-.lexos-tooltip-button:hover {
-    color: #47BCFF;
-}
-
 .lexos-tooltip {
     z-index: 3;
     position: absolute;
     word-break: break-word;
-    width: 35rem;
-    height: 17rem;
+    max-width: 35rem;
     padding: 1rem;
     overflow-y: auto;
-    transform: translate(50%, -2rem);
+    transform: translate(4rem, 0);
     background-color: #FFFFFF;
     border: 2rem solid #EAF5FF;
 }
@@ -510,4 +508,10 @@ input[type=radio] {
 /* Plotly */
 .plotly-notifier {
     display: none;
+}
+
+
+/* Temporary Bootstrap overrides */
+label {
+    margin-bottom: 0;
 }
