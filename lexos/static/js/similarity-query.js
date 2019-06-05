@@ -6,6 +6,8 @@ $(function(){
 
     // Initialize the legacy form inputs and create the similarity table
     $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+
+    create_tooltips();
 });
 
 /**
@@ -100,4 +102,12 @@ function create_similarity_table(response){
     // Remove the loading overlay, fade in the table, and enable the
     // "Generate" button
     finish_loading("#table", "#table-head, #table-body", "#generate-button");
+}
+
+function create_tooltips(){
+    create_tooltip("#similarity-query-tooltip-button", 'The rankings are determined by \'distance between documents\' ' +
+        'where small distances (near zero) represent documents that are \'similar\' and unlike documents have distances closer to one.');
+
+    create_tooltip("#comparison-document-tooltip-button", 'Select one document to be the external comparison. All other ' +
+        'documents will be used to make the model and will be ranked in order of most to least similar to the comparison document in your results.');
 }
