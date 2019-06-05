@@ -14,7 +14,7 @@ You should get:
 - Corpus Statistics that contains:
     - the average document size
     - the standard deviation of document sizes
-    - the Interquartile range of document sizes
+    - the interquartile range of document sizes
     - any anomaly detected by the standard error test
     - any anomaly detected by the interquartile range test
 
@@ -22,7 +22,7 @@ You should get:
 
 *Test file:* [catCaterpillar.txt](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/FilesToUse/catCaterpillar.txt)
 
-*Result files:* [catCaterpillarResults.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/catCaterpillarResults.pdf), [catCaterpillarResults.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/catCaterpillarResults.png)
+*Result files:* [catCaterpillar_Results_Table.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/catCaterpillar_Results_Table.pdf), [catCaterpillar_Results_Graph.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/catCaterpillar_Results_Graph.png)
 
 1. Upload catCaterpillar.txt
 
@@ -47,7 +47,7 @@ You should get:
 
 *Test file:* [Heart_of_Darkness.txt](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/FilesToUse/Heart_of_Darkness.txt)
 
-*Result files:* [HoD_Results.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HoD_Results.pdf), [HoD_Results.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HoD_Results.png)
+*Result files:* [HoD_Results_Table.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HoD_Results_Table.pdf), [HoD_Results_Graph.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HoD_Results_Graph.png)
 
 1. Upload Heart_of_Darkness.txt
 
@@ -73,7 +73,7 @@ You should get:
 
 *Test file:* [DreamCH1.txt](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/FilesToUse/DreamCH1.txt)
 
-*Result files:* [DreamCH1_Results.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/DreamCH1_Results.pdf), [DreamCH1_Results.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/DreamCH1_Results.png)
+*Result files:* [DreamCH1_Results_Table.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/DreamCH1_Results_Table.pdf), [DreamCH1_Results_Graph.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/DreamCH1_Results_Grapj.png)
 
 1. Upload DreamCH1.txt
 
@@ -81,7 +81,7 @@ You should get:
 	- Remove all Punctuation
 	- Make Lowercase
 	- Remove Digits
-	- Remove White Space
+	- Remove Whitespace
 	- Apply Scrubbing
 	
 3. Cut the file
@@ -99,7 +99,7 @@ You should get:
 
 *Test file:* [HenryWP_ThePirate.txt](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/FilesToUse/HenryWP_ThePirate.txt)
 
-*Result files:* [HenryWP_Results.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HenryWP_Results.pdf), [HenryWP_Results.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HenryWP_Results.png)
+*Result files:* [HenryWP_Results_Table.pdf](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HenryWP_Results_Table.pdf), [HenryWP_Results_Graph.png](https://github.com/WheatonCS/Lexos/blob/master/test/test_suite/Statistics/Stats_How_To_Use/ResultsToExpect/HenryWP_Results_Graph.png)
 
 1. Upload HenryWP_ThePirate.txt
 
@@ -113,9 +113,9 @@ You should get:
 	- Select 'Lines/Segment'
 	- Change the 'Segment Size' to 10 (keep 'Overlap' and 'Threshold' as default)
 	- Apply Cuts 
-	- You should now have 16 segments of the original corpus
+	- You should now have 17 segments of the original corpus
 	
 4. Generate statistics
 	- Go to Analyze->Statistics
-	- Change the Tokenize options to 'by Characters'
+	- Tokenize by Tokens 
 	- Generate Statistics
