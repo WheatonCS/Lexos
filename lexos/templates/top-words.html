@@ -20,10 +20,14 @@
     <!-- Comparison method -->
     <div id="comparison-method-section" class="section">
         <h3 class="section-top title">Comparison Method</h3>
+        <h3 id="comparison-method-tooltip-button" class="button">?</h3>
         <div class="section-body">
-            <label class="circle-label"><input name="testInput" value="allToPara" type="radio" checked><span>Each document to the corpus</span></label><br>
-            <label class="circle-label"><input name="testInput" value="classToPara" type="radio"><span>Each document to other classes</span></label><br>
+            <label class="circle-label"><input name="testInput" value="allToPara" type="radio" checked><span>Each document to the corpus</span></label>
+            <h3 id="document-corpus-tooltip-button" class="button">?</h3><br>
+            <label class="circle-label"><input name="testInput" value="classToPara" type="radio"><span>Each document to other classes</span></label>
+            <h3 id="document-class-tooltip-button" class="button">?</h3><br>
             <label class="circle-label"><input name="testInput" value="classToClass" type="radio"><span>Each class to other classes</span></label>
+            <h3 id="class-class-tooltip-button" class="button">?</h3>
         </div>
     </div>
 {% endblock %}
@@ -34,6 +38,7 @@
     <div id="class-divisions-section" class="section">
 
         <h3 class="section-top title">Class Divisions</h3>
+        <h3 id="class-division-tooltip-button" class="button">?</h3>
 
         <div id="class-divisions-body" class="section-body"></div>
     </div>
@@ -45,6 +50,7 @@
             <div class="right-justified">
                 <h3 id="generate-button" class="disabled button">Generate</h3>
                 <h3 id="download-button" class="disabled button">Download</h3>
+                <h3 id="download-tooltip-button" class="button">?</h3>
             </div>
         </div>
 

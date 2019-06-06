@@ -26,14 +26,22 @@
             <!-- Left column -->
             <div>
                 <label class="checkbox-label"><input name="replace" type="checkbox" checked><span>Sample with replacement</span></label><br>
-                <h3>Distance Metric </h3><h3 id="distance-metric-button" class="button">Euclidean</h3><br>
+                <h3>Distance Metric </h3><h3 id="distance-metric-button" class="button">Euclidean</h3>
+                <h3 id="distance-metric-tooltip-button" class="button">?</h3><br>
                 <h3>Linkage Method </h3><h3 id="linkage-method-button" class="button">Average</h3>
+                <h3 id="linkage-method-tooltip-button" class="button">?</h3>
             </div>
 
             <!-- Right column -->
             <div>
-                <h3>Cutoff</h3><input id="cutoff-input" name="cutoff" value="0.5" type="text" spellcheck="false" autocomplete="off"><br>
-                <h3>Iterations</h3><input id="iterations-input" name="iterations" value="100" type="text" spellcheck="false" autocomplete="off">
+                <div>
+                    <h3>Cutoff</h3><input id="cutoff-input" name="cutoff" value="0.5" type="text" spellcheck="false" autocomplete="off">
+                    <h3 id="cutoff-tooltip-button" class="button">?</h3><br>
+                </div>
+                <div>
+                    <h3>Iterations</h3><input id="iterations-input" name="iterations" value="100" type="text" spellcheck="false" autocomplete="off">
+                    <h3 id="iterations-tooltip-button" class="button">?</h3>
+                </div>
             </div>
         </div>
     </div>
