@@ -1,8 +1,8 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/visualize-template.html" %}
 
 
 <!-- Head -->
-{% block head %}
+{% block page_head %}
 
      <!-- d3.v4.js -->
     <script type="text/javascript" src="//d3js.org/d3.v4.min.js"></script>
@@ -13,9 +13,13 @@
 {% endblock %}
 
 
-<!-- Content -->
-{% block content %}
+<!-- Title -->
+{% block graph_title %}Bubbleviz{% endblock %}
 
-    <!-- BubbleViz -->
-    <div id="bubbleviz"></div>
+
+<!-- Graph -->
+{% block graph %}
+
+    <!-- Bubbleviz -->
+    <div id="bubbleviz" class="section-body"></div>
 {% endblock %}
