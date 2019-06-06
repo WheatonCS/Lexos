@@ -52,8 +52,46 @@
 
     <li><b>Linkage Method</b></li>
     <h3 class="help-section-paragraph">
-        Description here. Describe. Describe. Describe. Describe.
-        Describe. Describe.
+        At each stage of the clustering process, a choice must be made about
+        whether two clusters should be joined (and recall that a single document
+        itself forms a cluster at the lowest level of the hierarchy). "Average"
+        is the default, but you may choose other linkage methods.
+        <ul class="help-section-list">
+            <li>Average: Average linkage is a compromise between single and complete
+                linkage. It takes the average distance of all the points in each
+                cluster and uses the shortest average distance for deciding which
+                cluster should be joined to the current one. We have had good
+                success with average linkage.</li>
+
+            <li>Single: An intuitive means for doing this is to join the cluster
+                containing a point (e.g. a term frequency) closest to the current
+                cluster. This is known as single linkage, which joins clusters
+                based on only a single point. Single linkage does not take into
+                account the rest of the points in the cluster, and the resulting
+                dendrograms tend to have spread out clusters. This process is
+                called "chaining". </li>
+
+            <li>Complete: Complete linkage uses the opposite approach. It takes
+                the two points furthest apart between the current cluster and the
+                others. The cluster with the shortest distance to the current
+                cluster is joined to it. Complete linkage thus takes into account
+                all the points on the vector that come before the one with the
+                maximum distance. It tends to produce compact, evenly distributed
+                clusters in the resulting dendrograms.</li>
+
+            <li>Weighted: The weighted average linkage performs the average linkage
+                calculation but weights the distances based on the number of terms
+                in the cluster. It, therefore, may be a good option when there
+                is significant variation in the size of the documents under
+                examination.b</li>
+
+        </ul>
+    </h3>
+    <h3 class="help-section-paragraph">
+        Which linkage criterion you choose depends greatly on the variability
+        of your data and your expectations of its likely cluster structure. The
+        fact that it is very difficult to predict this in advance may explain
+        why the "compromise" of average linkage is the best default.
     </h3>
 
     <li><b>Orientation</b></li>
