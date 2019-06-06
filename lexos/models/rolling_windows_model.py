@@ -407,12 +407,9 @@ class RollingWindowsModel(BaseModel):
         :return: A string that contains the desired RGB color.
         """
 
-        return "#505050" if self._options.plot_options.black_white \
-               else "#47BCFF"
-
-        # return cl.scales['8']['qual']['Set1'][index % 8] \
-        #     if not self._options.plot_options.black_white \
-        #     else cl.scales['7']['seq']['Greys'][6 - index % 6]
+        return cl.scales['8']['qual']['Set1'][index % 8] \
+            if not self._options.plot_options.black_white \
+            else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
     def _get_mile_stone_color(self, index: int) -> str:
         """Get color for mile stone.

@@ -2,9 +2,3 @@
 #main-section {
     min-width: 120rem;
 }
-
-
-/* Options section */
-#options-section {
-    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
-}

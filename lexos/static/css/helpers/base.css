@@ -506,6 +506,10 @@ input[type=radio] {
     border: 2rem solid #EAF5FF;
 }
 
+.right-edge-tooltip {
+    transform: translate(-31rem, 3.5rem);
+}
+
 
 /* Plotly */
 .plotly-notifier {

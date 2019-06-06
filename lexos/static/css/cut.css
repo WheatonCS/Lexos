@@ -44,10 +44,6 @@ form {
     width: 20rem;
 }
 
-#merge-threshold-tooltip {
-    transform: translate(-31rem, 3.5rem);
-}
-
 
 /* Document previews */
 #document-previews-top {
