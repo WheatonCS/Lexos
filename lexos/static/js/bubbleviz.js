@@ -47,8 +47,8 @@ function create_bubbleviz(response){
 
     let svg = d3.select("#bubbleviz")
         .append("svg")
-            .style("width", diameter)
-            .style("height", diameter)
+            .style("width", diameter+"px")
+            .style("height", diameter+"px")
             .attr("class", "bubble");
 
     let nodes = d3.hierarchy(dataset)
