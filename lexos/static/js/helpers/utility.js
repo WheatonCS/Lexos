@@ -296,6 +296,7 @@ function parse_json(json){
     return JSON.parse(json.replace(/\bNaN\b/g, "\"N/A\""));
 }
 
+
 /**
  * Validates an integer input.
  * @param {string} number: The value to validate.
@@ -323,32 +324,36 @@ function validate_number(number, minimum = null, maximum = null){
  * @param {string} query: The query for the tooltip button element to append
  *      the tooltip to.
  * @param {string} text: The text to display on the tooltip.
+ * @param {string} id: The ID of the tooltip element.
  */
-function create_tooltip(query, text){
+function create_tooltip(query, text, id = null){
 
-    let uuid = get_uuid();
+    if(!id) id = get_uuid();
     $(query).click(function(event){
 
         // Stop propagation so that the tooltip isn't removed undesirably
         event.stopPropagation();
 
-        // If any tooltips exist, remove them and return if the clicked
-        // button's tooltip was one of the existing tooltips
+        // If any tooltips exist, remove them. If the clicked button's
+        // tooltip was removed, return
         let tooltip_element = $(".lexos-tooltip");
         if(tooltip_element.length){
-            let toggled = $(`#${uuid}-input`).length;
+            let toggled = $(`#${id}-input`).length;
             remove_tooltips();
             if(toggled) return;
         }
 
         // Otherwise, create the tooltip
-        let position = $(this).offset();
         $(this).addClass("button-active");
         tooltip_element = $(`
-            <div id="${uuid}-input" class="hidden lexos-tooltip" style="top: ${position.top}px; left: ${position.left}px">
+            <div id="${id}" class="hidden lexos-tooltip">
                 <h3>${text}</h3>
             </div>
         `).insertAfter(this);
+
+        // Set the tooltip position
+        let button_element = $(this);
+        reposition_tooltip(tooltip_element, button_element);
 
         // Fade in the tooltip
         fade_in(".lexos-tooltip", ".2s");
@@ -359,7 +364,12 @@ function create_tooltip(query, text){
             event.preventDefault();
         });
 
-        // If there is a click outside the tooltip, remove the tooltip
+        // If the window is resized, reposition the tooltip
+        $(window).resize(function(){
+            reposition_tooltip(tooltip_element, button_element);
+        });
+
+        // If there is a click outside of the tooltip, remove the tooltip
         $("body").click(remove_tooltips);
     });
 }
@@ -376,12 +386,25 @@ function remove_tooltips(){
 
 
 /**
+ * Repositions the tooltip.
+ * @param {jQuery} tooltip_element: The tooltip to reposition.
+ * @param {jQuery} button_element: The button element to position the tooltip
+ *      relative to.
+ */
+function reposition_tooltip(tooltip_element, button_element){
+    let position = button_element.offset();
+    tooltip_element.css({"top": `${position.top}px`,
+        "left": `${position.left}px`});
+}
+
+
+/**
  * Generates a UUID.
  * @param {number} length: The number of characters in the UUID.
  * @returns {string}: The UUID.
  */
-function get_uuid(length = 8){
+function get_uuid(length = 16){
     let result = "";
-    for(let i = 0; i < length; ++i) result += Math.trunc(Math.random()*16);
+    for(let i = 0; i < length; ++i) result += Math.trunc(Math.random()*9);
     return result;
 }

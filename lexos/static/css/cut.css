@@ -1,6 +1,6 @@
 /* Main section */
 #main-section {
-    min-width: 115rem;
+    min-width: 136rem;
 }
 
 
@@ -31,13 +31,21 @@ form {
 /* Cut settings */
 #cut-settings-grid {
     display: grid;
-    grid-template-columns: 1fr .8fr 1fr;
+    grid-template-columns: 1fr .85fr .7fr;
     align-content: center;
     height: 5rem;
 }
 
+#milestone-input {
+    grid-column: span 2;
+}
+
 #milestone-input input {
     width: 20rem;
+}
+
+#merge-threshold-tooltip {
+    transform: translate(-31rem, 3.5rem);
 }
 
 

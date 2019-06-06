@@ -61,27 +61,39 @@
         </div>
 
         <!-- Lemmas -->
-        <div id="lemmas-section" class="section">
+        <div id="lemmas-section" class="scrub-section">
 
-            <div class="vertical-splitter section-top">
+            <div class="vertical-splitter scrub-section-top">
                 <h3 class="title">Lemmas</h3>
-                <h3 id="lemmas-tooltip-button" class="right-justified button">?</h3>
+
+                <div class="right-justified">
+                    <h3 id="lemmas-upload-button" class="button">Upload</h3>
+                    <h3 id="lemmas-tooltip-button" class="button">?</h3>
+                </div>
+
+                <h3 id="lemmas-upload-text" class="hidden upload-text"></h3>
             </div>
 
-            <div class="borderless-section-body">
+            <div class="scrub-section-body">
                 <label class="textarea-label"><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
             </div>
         </div>
 
         <!-- Consolidations -->
-        <div id="consolidations-section" class="section">
+        <div id="consolidations-section" class="scrub-section">
 
-            <div class="vertical-splitter section-top">
+            <div class="vertical-splitter scrub-section-top">
                 <h3 class="title">Consolidations</h3>
-                <h3 id="consolidations-tooltip-button" class="right-justified button">?</h3>
+
+                <div class="right-justified">
+                    <h3 id="consolidations-upload-button" class="button">Upload</h3>
+                    <h3 id="consolidations-tooltip-button" class="button">?</h3>
+                </div>
+
+                <h3 id="consolidations-upload-text" class="hidden upload-text"></h3>
             </div>
 
-            <div class="borderless-section-body">
+            <div class="scrub-section-body">
                 <label class="textarea-label"><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
             </div>
         </div>
@@ -90,37 +102,46 @@
     <!-- Middle column -->
     <div id="middle-column">
 
-        <!-- Stop words and keep words -->
-        <div id="stop-words-section" class="section">
+        <!-- Stop and keep words -->
+        <div id="stop-words-section" class="scrub-section">
 
-            <div class="vertical-splitter section-top">
-                <h3 class="title">Stop Words and Keep Words</h3>
-                <h3 id="stop-words-tooltip-button" class="right-justified button">?</h3>
-            </div>
+            <div class="vertical-splitter scrub-section-top">
 
-            <div class="borderless-section-body">
+                <h3 class="title">Stop/Keep Words</h3>
 
-                <div class="options-section">
+                <div class="right-justified">
+                    <h3 id="stop-words-upload-button" class="button">Upload</h3>
+                    <h3 id="stop-words-tooltip-button" class="button">?</h3>
+                </div>
+
+                <h3 id="stop-words-upload-text" class="hidden upload-text"></h3>
+
+                <div id="stop-words-options" class="options-section">
                     <label class="circle-label"><input type="radio" name="sw_option" value="off" checked><span>None</span></label>
                     <label class="circle-label"><input type="radio" name="sw_option" value="stop"><span>Stop</span></label>
                     <label class="circle-label"><input type="radio" name="sw_option" value="keep"><span>Keep</span></label>
                 </div>
+            </div>
 
+            <div class="scrub-section-body">
                 <label class="textarea-label"><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
             </div>
         </div>
 
         <!-- Special characters -->
-        <div id="special-characters-section" class="section">
+        <div id="special-characters-section" class="scrub-section">
 
-            <div class="vertical-splitter section-top">
+            <div class="vertical-splitter scrub-section-top">
                 <h3 class="title">Special Characters</h3>
-                <h3 id="special-characters-tooltip-button" class="right-justified button">?</h3>
-            </div>
 
-            <div class="borderless-section-body">
+                <div class="right-justified">
+                    <h3 id="special-characters-upload-button" class="button">Upload</h3>
+                    <h3 id="special-characters-tooltip-button" class="button">?</h3>
+                </div>
 
-                <div class="vertical-splitter">
+                <h3 id="special-characters-upload-text" class="hidden upload-text"></h3>
+
+                <div id="special-characters-options" class="vertical-splitter">
                     <div class="options-section">
                         <label class="circle-label"><input type="radio" name="entityrules" value="default" checked><span>None</span></label><br>
                         <label class="circle-label"><input type="radio" name="entityrules" value="early-english-html"><span>Early English HTML</span></label><br>
@@ -131,7 +152,9 @@
                         <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-4"><span>MUFI 4</span></label>
                     </div>
                 </div>
+            </div>
 
+            <div class="scrub-section-body">
                 <label class="textarea-label"><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
             </div>
         </div>
@@ -153,5 +176,12 @@
 
         <div id="previews"></div>
     </div>
+
+    <!-- Hidden elements -->
+    <input id="stop-words-file-input" name="swfileselect[]" type="file" class="hidden">
+    <input id="lemmas-file-input" name="lemfileselect[]" type="file" class="hidden">
+    <input id="consolidations-file-input" name="consfileselect[]" type="file" class="hidden">
+    <input id="special-characters-file-input" name="scfileselect[]" type="file" class="hidden">
+
 
 {% endblock %}

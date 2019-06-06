@@ -1,6 +1,9 @@
 let document_previews;
 $(function(){
 
+    // Initialize the tooltips
+    initialize_tooltips();
+
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
 
@@ -165,7 +168,7 @@ function validate_inputs(){
 
     if(int_overlap > int_segment_size){
         error("The overlap cannot be "+
-        "greater than the segment size.");
+            "greater than the segment size.");
         return false;
     }
 
@@ -177,4 +180,37 @@ function validate_inputs(){
     }
 
     return true;
+}
+
+
+/**
+ * Initialize the tooltips.
+ */
+function initialize_tooltips(){
+
+    // "Cut Mode"
+    create_tooltip("#cut-mode-tooltip-button", `Lexos uses spaces between
+        tokens to determine where to cut documents into the specified number,
+        so this tool may not work if you used Scrubber to strip white spaces
+        from your documents.`);
+
+    // "Segment Size"
+    create_tooltip("#segment-size-tooltip-button", `A positive integer used to 
+        divide up the text. Either the number of letters, words, or lines 
+        per segment, or the number of segments per document.`);
+
+    // "Overlap"
+    create_tooltip("#overlap-tooltip-button", `The amount of overlapping
+        content at the start and end of segments. This number must be smaller
+        than the segment size.`);
+
+    // "Merge %"
+    create_tooltip("#merge-threshold-tooltip-button", `The size of the last
+        segment must be at least as large as the given percentage relative to
+        other segment sizes. If the length of the last segment is below this
+        threshold, it will be attached to the previous segment.`,
+        "merge-threshold-tooltip");
+
+    // "Milestone"
+    create_tooltip("#milestone-tooltip-button", ``);
 }
