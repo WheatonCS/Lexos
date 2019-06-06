@@ -3,7 +3,10 @@
 <h3 class="help-section-title">The K-Means Clustering Tool</h3>
 
 <h3 class="help-section-paragraph">
-    About section. Basic description of what the tool does.
+    K-Means clustering partitions a set of documents into a number of groups or
+    clusters in a way that minimizes the variation within clusters. The "K"
+    refers to the number of partitions, so for example, if you wish to see how
+    your documents might cluster into three (3) groups, you would set K=3.
 </h3>
 
 <!-- Options -->
@@ -13,28 +16,56 @@
 
     <li><b>Clusters</b></li>
     <h3 class="help-section-paragraph">
-        Description here. Describe. Describe. Describe. Describe.
-        Describe. Describe.
+        Lexos will automatically generate a k-means graph with a default number
+        of clusters, but you can also assign a K value for how many groups you
+        want to cluster your documents in to. There is no obvious way to choose
+        the number of clusters. It can be helpful to perform <a href="//dendrogram"><u>hierarchical clustering</u></a>
+        before performing K-Means clustering, as the resulting dendrogram may
+        suggest a certain number of clusters that is likely to produce meaningful
+        results. The K-means procedure is very sensitive to the position of the
+        initial seeds, although employing the K-means++ setting can help to
+        constrain this placement.
     </h3>
 
     <li><b>Visualization</b></li>
     <h3 class="help-section-paragraph">
-        Description here. Describe. Describe. Describe. Describe.
-        Describe. Describe. (Voroni, 2d, 3d)
+        Lexos provides three methods of visualizing the results of a K-means
+        cluster analysis. In each case, Lexos first applies PCA (Principal
+        Component Analysis) to reduce the dimensions of the data so it can be
+        viewed in a 2-D or 3-D graph.
+    </h3>
+    <h3 class="help-section-paragraph">
+        <ul class="help-section-list">
+            <li>Voronoi: This is the default method of visualization which
+                identifies a centroid (central point) in each cluster and draws
+                a trapezoidal polygon around it. This may be helpful in allowing
+                you to see which points fall into which cluster.</li>
+
+            <li>2D-Scatter: K-means viewed as a traditional 2-D scatter plot
+            with each cluster as a data point</li>
+
+            <li>2D-Scatter: K-means viewed as a traditional 3-D scatter plot
+            with each cluster as a data point</li>
+        </ul>
     </h3>
 
     <li><b>Advanced</b></li>
     <h3 class="help-section-paragraph">
         <ul class="help-section-list">
+            <li>Method of initialization: "K-Means++" selects initial cluster
+                centers using a weighted probability distribution to speed up
+                convergence. The "Random" option chooses K observations at random
+                from the data to serve as the initial centroids.</li>
 
-            <li>Method of initialization: K-means++ and random</li>
+            <li>Maximum iterations: Maximum number of iterations of the K-Means
+                algorithm for a single run. The default is 300.</li>
 
-            <li>Maximum iterations: Description</li>
+            <li>Different centroids: The number of times (N) the k-means algorithm
+                will be run with different centroid seeds. The final results will
+                be the best output of those N consecutive runs. (The default is 10.)</li>
 
-            <li>Different centroids: Description</li>
-
-            <li>Relative tolerance: Description</li>
-
+            <li>Relative tolerance: Decimal, relative tolerance with respect to
+                inertia to declare convergence.</li>
         </ul>
     </h3>
 
@@ -112,8 +143,27 @@
 
     <li><b>K-Means graph</b></li>
     <h3 class="help-section-paragraph">
-        Description here. Describe. Describe. Describe. Describe.
-        Describe. Describe.
+        When considering visualizations of K-means clusters, we recommend that
+        you think of each of your documents as represented by a single (x,y)
+        point on a two-dimensional coordinate plane. In this view, a cluster is
+        a collection of documents (points) that are close to one another and
+        together form a group. Assigning documents to a specific cluster amounts
+        to determining which cluster "center" is closest to your document.
+    </h3>
+
+    <li><b>The K-Means Algorithm</b></li>
+    <h3 class="help-section-paragraph">
+        The algorithm (general procedure or "recipe") for applying K-means to
+        your collection of documents is described next. Again, the overall goal
+        is to partition your documents into K non-empty subsets.
+    </h3>
+    <h3 class="help-section-paragraph">
+        <ol class="help-section-list">
+            <li>Decide on the number of clusters you wish to form.</li>
+            <li>The algorithm will compute a "center" or centroid for each cluster. The centroid is the center (mean point) of a cluster. The procedure for creating centroids at the very start can be varied and is discussed below.</li>
+            <li>Assign each of your documents to the cluster with the nearest centroid.</li>
+            <li>Repeat steps 2 and 3, thereby re-calculating the locations of centroids for the documents in each cluster and reassigning documents to the cluster with the closest center. The algorithm continues until no documents are reassigned to different clusters.</li>
+        </ol>
     </h3>
 
     <li><b>Plotly Menu</b></li>
@@ -147,6 +197,10 @@
             <li>Compare data on hover: If you hover over a data point, this
             option will show you the value of the data point and it's corresponding
             x-axis value.</li>
+
+            <li>When you enable the 3-D scatter plot, there are other options that
+            function essentially the same as for a 2-D graph that will allow you
+            to view the 3-D plot at different angles.</li>
 
         </ul>
 
