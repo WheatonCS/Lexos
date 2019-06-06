@@ -58,8 +58,8 @@ function create_word_cloud_layouts(response){
         // Create the list of the words' text and sizes
         let words = []
         for(const word of document.words)
-            words.push({"text": word[0], "size":
-                word[1]*maximum_size+base_size});
+            words.push({"text": word[0], "count": word[1],
+                "size": word[2]*maximum_size+base_size});
 
         // Create the layout
         create_word_cloud_layout(i, document.name, words, diameter);
@@ -105,15 +105,18 @@ function create_word_cloud(id, name, words){
 
     // Create the word cloud
     d3.select(`#word-cloud-${id}`)
+
         .append("svg")
             .attr("width", layout.size()[0])
             .attr("height", layout.size()[1])
+
         .append("g")
             .attr("transform", "translate("+
                 layout.size()[0]/2+","+layout.size()[1]/2+")")
             .selectAll("text")
             .data(words)
             .enter()
+
         .append("text")
             .style("font-size", function(d){ return d.size+"px"; })
             .style("fill", function(d, i){ return color(i); })
@@ -122,7 +125,10 @@ function create_word_cloud(id, name, words){
             .attr("transform", function(d){
                 return "translate("+[d.x, d.y]+")rotate("+d.rotate+")";
             })
-            .text(function(d){ return d.text; });
+            .text(function(d){ return d.text; })
+
+        .append("svg:title")
+            .text(function(d){ return `Word: ${d.text} \nCount: ${d.count}`; });
 
     // Remove the loading overlay and fade in the word clouds if this is the
     // last word cloud to render
