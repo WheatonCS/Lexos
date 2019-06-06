@@ -40,9 +40,12 @@ $(function(){
         .fail(function(){ error("Failed to retrieve the document tags."); });
     });
 
+    // Initialize the tooltips
+    initialize_tooltips();
 
-    // Create the tooltips
-    create_tooltips();
+    // Initialize the upload buttons
+    initialize_upload_buttons(["lemmas", "consolidations",
+        "stop-words", "special-characters"]);
 });
 
 
@@ -178,7 +181,7 @@ function scrub(action){
         .done(update_document_previews)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to execcute the scrubbing."); });
+        .fail(function(){ error("Failed to execute the scrubbing."); });
 }
 
 
@@ -206,9 +209,9 @@ function update_document_previews(response){
 
 
 /**
- * Creates the tooltips.
+ * Initializes the tooltips.
  */
-function create_tooltips(){
+function initialize_tooltips(){
 
     // "Scrub Tags"
     create_tooltip("#scrub-tags-tooltip-button", `Handle tags such as 
@@ -228,25 +231,80 @@ function create_tooltips(){
 
     // "Keep Ampersands"
     create_tooltip("#keep-ampersands-tooltip-button", `Leave all ampersands
-        in the text. Note that HTML. XML, or SGML entities such as
+        in the text. Note that HTML, XML, or SGML entities such as
         "&amp;aelig;" (æ) are handled separately. You can convert these
         entities to standard Unicode characters using the Special Characters
         option below.`);
 
     // "Lemmas"
     create_tooltip("#lemmas-tooltip-button", `Upload or input a list of
-        lemmas (word replacements).`);
+        lemmas (word replacements). Enter the words you want to replace
+        separated by comma. Then, add a colon and follow it with the
+        replacement word. Enter each set of replacements on a separate line.
+        For example, "cyng, kyng:king" will replace every occurrence of "cyng"
+        and "kyng" with "king".`);
 
     // "Consolidations"
     create_tooltip("#consolidations-tooltip-button", `Upload or input a list
-        of consolidations (character replacements).`);
+        of consolidations (character replacements). Enter the characters you
+        want to replace separated by comma. Then, add a colon and follow it
+        with the replacement character. Enter each replacement on a separate
+        line. For example, "a, b:c" will replace every occurrence of "a" and
+        "b" with "c".`);
 
-    // "Stop Words and Keep Words"
+    // "Stop and Keep Words"
     create_tooltip("#stop-words-tooltip-button", `Upload or input a list of
-        "stop words" (words to be removed) or "keep words" (words to keep).`);
+        "stop words" (words to be removed) or "keep words" (words to keep).
+        Separate the words by comma.`);
 
     // "Special Characters"
     create_tooltip("#special-characters-tooltip-button", `Select a pre-defined
-        ruleset or upload or input a list of rules for handling certain
-        characters.`);
+        ruleset or upload or input a list of rules for handling special
+        characters such as those in HTML, XML, and SGML. Enter the character
+        to replace followed by a comma and then its replacement. Enter each
+        replacement on a separate line. For example,"&amp;aelig;, æ" will
+        replace "&amp;aelig;" with "æ".`);
+}
+
+
+/**
+ * Initializes the upload buttons
+ * @param {string[]} names: The names of the sections to initialize.
+ */
+function initialize_upload_buttons(names){
+
+    // For each of the given sections...
+    for(const name of names) {
+
+        // If the "Upload"/"Remove Upload" button is clicked
+        let upload_button_element = $(`#${name}-upload-button`);
+        upload_button_element.click(function(){
+
+            let file_input_element = $(`#${name}-file-input`);
+            let upload_text_element = $(`#${name}-upload-text`)
+
+            // If there is an uploaded file, remove it from the input, remove
+            // the displayed file name, and change the "Remove Upload" button
+            // to say "Upload" again
+            if (file_input_element.val()) {
+                file_input_element.val("");
+                upload_text_element.addClass("hidden");
+                upload_button_element.text("Upload");
+                return;
+            }
+
+            // Otherwise, create a file selection window
+            file_input_element.click();
+
+            // When the file has been selected, display the name of the
+            // uploaded file and change the "Upload" button to say
+            // "Remove Upload"
+            file_input_element.change(function(event) {
+                let file = event.target.files[0];
+                upload_text_element.text(file.name);
+                upload_text_element.removeClass("hidden");
+                upload_button_element.text("Remove Upload");
+            });
+        });
+    }
 }
