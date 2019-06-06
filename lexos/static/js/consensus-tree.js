@@ -87,12 +87,16 @@ function validate_consensus_tree_inputs(){
 }
 
 function create_tooltips(){
+    //Distance Metric
     create_tooltip("#distance-metric-tooltip-button", 'Different methods for measuring the distance' +
         ' (difference) between documents.');
 
+    //Linkage Method
     create_tooltip("#linkage-method-tooltip-button", 'Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters.');
 
+    //Cotoff
     create_tooltip("#cutoff-tooltip-button", '0.5 means a document must appear in a clade in at least 50% of the iterations.');
 
+    //Iterations
     create_tooltip("#iterations-tooltip-button", 'For 100 iterations, 80% of the tokens will be chosen with or without replacement.');
 }
