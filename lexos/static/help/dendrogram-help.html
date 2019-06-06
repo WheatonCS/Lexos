@@ -3,7 +3,10 @@
 <h3 class="help-section-title">The Dendrogram Tool</h3>
 
 <h3 class="help-section-paragraph">
-    About section. Basic description of what the tool does.
+    Hierarchical cluster analysis is a good first choice when asking new questions
+    about texts. Our experience has shown that this approach is remarkably versatile
+    (REF). Perhaps more than any one individual method, the results from our
+    cluster analyses continue to generate new, interesting, and focused questions.
 </h3>
 
 <!-- Options -->
@@ -13,9 +16,39 @@
 
     <li><b>Distance Metric</b></li>
     <h3 class="help-section-paragraph">
-        Description here. Describe. Describe. Describe. Describe.
-        Describe. Describe.
+        One of the most important (and least well-documented) aspects of the
+        hierarchical clustering method is the distance metric. Since we are
+        representing texts as document vectors, it makes sense to define document
+        similarity by comparing the vectors. One way to do this is to measure
+        the distance between each pair of vectors. For example, if two vectors
+        are visualized as lines in a triangle, the hypotenuse between these lines
+        can be used as a measure of the distance between the two documents. This
+        method of measuring how far apart two documents are is known as Euclidean
+        distance. While Euclidean distance is the default used by Lexos, below are
+        suggestions that are more specialized.
     </h3>
+
+    <table>
+        <tr>
+            <th style="border-top: none; border-left: none"></th>
+            <th>Small Number of terms per segment</th>
+            <th>Large Number of terms per segment</th>
+        </tr>
+
+        <tr>
+            <th>Small Vocabulary</th>
+            <td>Bray-Curtis<br><br>Hamming<br><br>(e.g. character dialogue)</td>
+            <td>Euclidean<br><br>Chebyshev<br><br>Standardized Euclidean<br><br>(e.g. chapters of books)</td>
+        </tr>
+
+        <tr>
+            <th>Large Vocabulary</th>
+            <td>Correlation<br><br>Jaccard<br><br>Squared Euclidean<br><br>(e.g. non-epic poetry)</td>
+            <td>Cosine<br><br>Manhattan<br><br>Canberra<br><br>(e.g. comparing entire corpora)</td>
+        </tr>
+    </table>
+
+    <br><br>
 
     <li><b>Linkage Method</b></li>
     <h3 class="help-section-paragraph">
@@ -105,8 +138,17 @@
 
     <li><b>Dendrogram</b></li>
     <h3 class="help-section-paragraph">
-        Description here. Describe. Describe. Describe. Describe.
-        Describe. Describe
+        A dendrogram is a visual representation of the clusters and in Lexos is
+        built by agglomerative hierarchical clustering. This method of clustering
+        begins with every document as its own cluster and then proceeds to assign
+        these items to “super-clusters” based on the selected distance metric
+        and linkage criteria (see <em><u>Options</u></em> above).
+    </h3>
+    <h3 class="help-section-paragraph">
+        The clusters that result from hierarchical clustering are typically
+        visualized with a two-dimensional tree diagram called a dendrogram. For
+        more information about the construction and interpretation of dendrograms
+        in this method, see the video below:
     </h3>
 
     <iframe width="378" height="212.625" src="https://www.youtube.com/embed/MX6AUX1b1w0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
