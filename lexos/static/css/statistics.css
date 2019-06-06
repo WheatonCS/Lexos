@@ -31,6 +31,14 @@ form {
     grid-gap: 2rem;
 }
 
+#standard-error-test{
+    overflow-y: auto;
+}
+
+#interquartile-range-test{
+    overflow-y:auto;
+}
+
 #generate-button {
     margin: 1rem;
 }
