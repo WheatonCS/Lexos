@@ -143,7 +143,7 @@ form {
 #navbar {
     z-index: 3;
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 30% 80%;
     width: 100%;
     min-width: 90rem;
     height: 7rem;
