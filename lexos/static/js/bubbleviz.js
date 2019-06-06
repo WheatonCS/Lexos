@@ -35,10 +35,14 @@ function create_bubbleviz(response){
 
     let base_font_size = 5;
 
-    // Create the color map
-    let color = d3.scaleLinear()
-        .domain([0, 1])
-        .range(["#505050", "#47BCFF"]);
+    // // Create the color map
+    // let color = d3.scaleLinear()
+    //     .domain([0, 1])
+    //     .range(["#505050", "#47BCFF"]);
+
+    let color = d3.scaleSequential()
+        .domain([0,0.15,0.3])
+        .interpolator(d3.interpolateViridis);
 
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
@@ -64,15 +68,28 @@ function create_bubbleviz(response){
 
     node.append("circle")
         .attr("r", function(d){ return d.r; })
-        .style("fill", function(d, i){ return color(d.data.value); });
+        .style("fill", function(d){ return color(d.data.value); })
+        .style("filter", "brightness(90%)")
+        .on("mouseover", function () {
+            d3.select(this.parentNode.childNodes[0]).style('filter', "brightness(110%)")
+        })
+        .on("mouseout", function () {
+            d3.select(this.parentNode.childNodes[0]).style("filter", "brightness(90%)")
+        });
 
     node.append("text")
-        .attr("dy", ".2em")
+        .attr("dy", ".3em")
         .style("text-anchor", "middle")
         .text(function(d){ return d.data.word; })
         .attr("font-family", "Open Sans")
-        .attr("font-size", function(d){ return d.r/3+base_font_size; })
+        .attr("font-size", function(d){ return d.r/(d.data.word.length/2.5); })
         .attr("fill", "#E3E3E3")
+        .on("mouseover", function () {
+            d3.select(this.parentNode.childNodes[0]).style('filter', "brightness(110%)")
+        })
+        .on("mouseout", function () {
+            d3.select(this.parentNode.childNodes[0]).style("filter", "brightness(90%)")
+        });
 
     node.append("svg:title")
         .text(function(d){ return "Word: "+d.data.word+"\nCount: "+d.data.count; });
