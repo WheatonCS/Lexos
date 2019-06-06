@@ -131,6 +131,7 @@ form {
 .title {
     display: inline-block;
     color: #47BCFF;
+    height: 3rem;
 }
 
 
@@ -419,7 +420,8 @@ label {
     cursor: pointer;
 }
 
-.section-body label {
+.section-body label,
+.borderless-section-body label {
     margin-top: .2rem;
     margin-bottom: 1rem;
 }
@@ -496,7 +498,7 @@ input[type=radio] {
     z-index: 3;
     position: absolute;
     word-break: break-word;
-    max-width: 35rem;
+    width: 35rem;
     padding: 1rem;
     overflow-y: auto;
     transform: translate(4rem, 0);

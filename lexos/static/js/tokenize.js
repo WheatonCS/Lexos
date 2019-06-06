@@ -13,7 +13,7 @@ $(function(){
         .done(initialize)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to retrieve"+
+        .fail(function(){ error("Failed to retrieve "+
             "the active document IDs."); });
 })
 

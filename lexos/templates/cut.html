@@ -23,20 +23,46 @@
         <!-- Cut mode -->
         <div id="cut-mode-section" class="section">
 
-            <div class="section-top">
+            <div class="vertical-splitter section-top">
                 <h3 class="title">Cut Mode</h3>
+                <h3 id="cut-mode-tooltip-button" class="right-justified button">?</h3>
             </div>
 
             <div id="cut-mode-grid" class="section-body">
+
                 <div>
-                    <label class="circle-label"><input type="radio" name="cutType" value="words" checked><span>Tokens</span></label><br>
-                    <label class="circle-label"><input type="radio" name="cutType" value="letters"><span>Characters</span></label>
+                    <!-- Tokens -->
+                    <label class="circle-label">
+                        <input type="radio" name="cutType" value="words" checked>
+                        <span>Tokens</span>
+                    </label><br>
+
+                    <!-- Characters -->
+                    <label class="circle-label">
+                        <input type="radio" name="cutType" value="letters">
+                        <span>Characters</span>
+                    </label>
                 </div>
+
                 <div>
-                    <label class="circle-label"><input type="radio" name="cutType" value="lines"><span>Lines</span></label><br>
-                    <label class="circle-label"><input type="radio" name="cutType" value="number"><span>Segments</span></label>
+                    <!-- Lines -->
+                    <label class="circle-label">
+                        <input type="radio" name="cutType" value="lines">
+                        <span>Lines</span>
+                    </label><br>
+
+                    <!-- Segments -->
+                    <label class="circle-label">
+                        <input type="radio" name="cutType" value="number">
+                        <span>Segments</span>
+                    </label>
                 </div>
-                <label class="circle-label"><input type="radio" name="cutType" value="milestone"><span>Milestones</span></label>
+
+                <!-- Milestones -->
+                <label class="circle-label">
+                    <input type="radio" name="cutType" value="milestone">
+                    <span>Milestones</span>
+                </label>
             </div>
         </div>
 
@@ -45,10 +71,34 @@
             <h3 class="section-top title">Cut Settings</h3>
 
             <div id="cut-settings-grid" class="section-body">
-                <div id="segment-size-input" ><h3>Segment Size</h3><input name="cutValue" type="text" spellcheck="false" autocomplete="off"></div>
-                <div id="overlap-input" ><h3>Overlap</h3><input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0"></div>
-                <div id="merge-threshold-input" ><h3>Merge Threshold</h3><input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50"></div>
-                <div id="milestone-input" class="hidden" ><h3>Milestone</h3><input name="MScutWord" type="text" spellcheck="false" autocomplete="off"></div>
+
+                <!-- Segment size -->
+                <div id="segment-size-input" >
+                    <h3>Segment Size</h3>
+                    <input name="cutValue" type="text" spellcheck="false" autocomplete="off">
+                    <h3 id="segment-size-tooltip-button" class="button">?</h3>
+                </div>
+
+                <!-- Overlap -->
+                <div id="overlap-input" >
+                    <h3>Overlap</h3>
+                    <input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0">
+                    <h3 id="overlap-tooltip-button" class="button">?</h3>
+                </div>
+
+                <!-- Merge threshold -->
+                <div id="merge-threshold-input" >
+                    <h3>Merge %</h3>
+                    <input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50">
+                    <h3 id="merge-threshold-tooltip-button" class="button">?</h3>
+                </div>
+
+                <!-- Milestone -->
+                <div id="milestone-input" class="hidden" >
+                    <h3>Milestone</h3>
+                    <input name="MScutWord" type="text" spellcheck="false" autocomplete="off">
+                    <h3 id="milestone-tooltip-button" class="button">?</h3>
+                </div>
             </div>
         </div>
     </div>

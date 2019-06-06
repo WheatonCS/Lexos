@@ -1,7 +1,7 @@
 /* Main section */
 #main-section,
 #popup-container {
-    min-width: 137rem;
+    min-width: 140rem;
 }
 
 
@@ -34,29 +34,29 @@ form {
 }
 
 
-/* Stop words and keep words */
-#stop-words-section .options-section {
-    height: 4rem;
-    margin-left: 1rem;
+/* General */
+.scrub-section {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    background-color: #FFFFFF;
 }
 
+.scrub-section-top {
+    margin: 1rem;
+    grid-gap: 1rem;
+}
+
+.upload-text,
+#stop-words-options,
+#special-characters-options {
+    grid-column: span 2;
+    word-break: break-all;
+}
+
+
+/* Stop words and keep words */
 #stop-words-section .circle-label {
     margin-right: 3rem;
-}
-
-#stop-words-section .textarea-label {
-    height: calc(100% - 4rem);
-}
-
-
-/* Special characters */
-#special-characters-section .options-section {
-    margin-left: 1rem;
-    height: 11rem;
-}
-
-#special-characters-section .textarea-label {
-    height: calc(100% - 11rem);
 }
 
 
