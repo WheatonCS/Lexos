@@ -13,7 +13,7 @@ form {
 /* Settings */
 #settings-section {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: .7fr 1fr .6fr 1fr;
     grid-gap: 2rem;
 }
 
@@ -30,11 +30,17 @@ form {
 }
 
 #search-terms-section input[type=text] {
-    width: 100%;
+    width: calc(100% - 6rem);
 }
 
 #display-section input[type=text] {
     margin-bottom: 0;
     margin-right: 0;
     width: calc(100% - 12rem);
+}
+
+
+/* Display options */
+#display-section .section-body > .checkbox-label {
+    width: calc(100% - 6rem);
 }

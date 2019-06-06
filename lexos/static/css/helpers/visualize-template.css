@@ -1,0 +1,15 @@
+/* Main section */
+#main-section {
+    min-width: 125rem;
+}
+
+
+/* Graph section top */
+#font-input {
+    width: 15rem;
+}
+
+#graph-section-top {
+    display: grid;
+    grid-template-columns: .5fr 1fr 1fr 1fr 1fr;
+}

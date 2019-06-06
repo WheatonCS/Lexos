@@ -202,7 +202,7 @@ function initialize_tooltips(){
     // "Overlap"
     create_tooltip("#overlap-tooltip-button", `The amount of overlapping
         content at the start and end of segments. This number must be smaller
-        than the segment size.`);
+        than the segment size.`, true);
 
     // "Merge %"
     create_tooltip("#merge-threshold-tooltip-button", `The size of the last

@@ -69,10 +69,13 @@ function create_bubbleviz(response){
     node.append("text")
         .attr("dy", ".2em")
         .style("text-anchor", "middle")
-        .text(function(d){ return d.data.name; })
+        .text(function(d){ return d.data.word; })
         .attr("font-family", "Open Sans")
         .attr("font-size", function(d){ return d.r/3+base_font_size; })
-        .attr("fill", "#E3E3E3");
+        .attr("fill", "#E3E3E3")
+
+    node.append("svg:title")
+        .text(function(d){ return "Word: "+d.data.word+"\nCount: "+d.data.count; });
 
     // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");
