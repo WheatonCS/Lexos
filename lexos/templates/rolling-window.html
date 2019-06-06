@@ -24,8 +24,8 @@
         <div id="calculation-type-section" class="section">
             <h3 class="section-top title">Calculation Type</h3>
             <div class="section-body">
-                <label class="circle-label"><input name="counttype" value="average" type="radio" checked><span>Rolling Average</span></label><br>
-                <label class="circle-label"><input name="counttype" value="ratio" type="radio"><span>Rolling Ratio</span></label>
+                <label class="circle-label"><input id="rolling-average-button" name="counttype" value="average" type="radio" checked><span>Rolling Average</span></label><br>
+                <label class="circle-label"><input id="rolling-ratio-button" name="counttype" value="ratio" type="radio"><span>Rolling Ratio</span></label>
             </div>
         </div>
 
@@ -34,6 +34,7 @@
             <h3 class="section-top title">Search Terms</h3>
             <div class="section-body">
                 <input id="search-terms-input" name="rollingsearchword" type="text" spellcheck="false" autocomplete="off"><br>
+                <input class="invisible" id="ratio-search-terms-input" name="rollingsearchwordopt" type="text" spellcheck="false" autocomplete="off"><br>
                 <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span>Words</span></label><br>
                 <label class="circle-label"><input name="inputtype" value="string" type="radio"><span>Strings</span></label><br>
                 <label class="circle-label"><input name="inputtype" value="regex" type="radio"><span>Regex</span></label>

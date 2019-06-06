@@ -13,6 +13,16 @@ $(function(){
 
         // If the request failed, display an error
         .fail(function(){ error("Failed to retrieve the active files."); });
+
+    let rolling_average_element = $("#rolling-average-button");
+    let rolling_ratio_element = $("#rolling-ratio-button");
+    let ratio_search_terms = $("#ratio-search-terms-input");
+    rolling_average_element.click(function(){
+        ratio_search_terms.addClass("invisible");
+    });
+    rolling_ratio_element.click(function(){
+        fade_in(ratio_search_terms);
+    });
 });
 
 
