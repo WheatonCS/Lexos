@@ -54,5 +54,6 @@ def get_word_counts() -> str:
     dataframe = dataframe[:100]
     for i in range(len(dataframe)):
         response.append([dataframe.iloc[i]["word"],
+                         str(dataframe.iloc[i]["count"]),
                          dataframe.iloc[i]["count"]/maximum])
     return json.dumps(response)

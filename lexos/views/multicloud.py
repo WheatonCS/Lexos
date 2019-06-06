@@ -64,6 +64,7 @@ def get_word_counts_single_file(contents) -> list:
     dataframe = dataframe[:100]
     for i in range(len(dataframe)):
         top_words.append([dataframe.iloc[i]["word"],
+                          str(dataframe.iloc[i]["count"]),
                           dataframe.iloc[i]["count"]/maximum])
 
     return top_words
