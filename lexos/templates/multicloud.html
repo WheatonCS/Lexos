@@ -1,8 +1,8 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/visualize-template.html" %}
 
 
 <!-- Head -->
-{% block head %}
+{% block page_head %}
 
     <!-- d3.js -->
     <script type="text/javascript" src="static/node_modules/d3/d3.min.js"></script>
@@ -16,9 +16,13 @@
 {% endblock %}
 
 
-<!-- Content -->
-{% block content %}
+<!-- Title -->
+{% block graph_title %}Multicloud{% endblock %}
+
+
+<!-- Graph -->
+{% block graph %}
 
     <!-- Multicloud -->
-    <div id="multicloud"></div>
+    <div id="multicloud" class="section-body"></div>
 {% endblock %}
