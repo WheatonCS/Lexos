@@ -272,8 +272,8 @@ class StatsModel(BaseModel):
             showlegend=False,
             margin=dict(
                 r=0,
-                b=25,
-                t=0,
+                b=30,
+                t=25,
                 pad=4
             ),
             xaxis=dict(
@@ -284,7 +284,8 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis=dict(
-                showline=True
+                showline=True,
+                zeroline=False
             ),
             xaxis2=dict(
                 title="Box Plot of Text Size",
@@ -294,7 +295,8 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis2=dict(
-                showline=True
+                showline=True,
+                zeroline=False
             ),
             hovermode="closest"
         )

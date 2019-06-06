@@ -16,6 +16,7 @@ form {
     display: grid;
     grid-gap: 2rem;
     grid-template-columns: 30rem auto 30rem;
+    grid-template-rows: 45rem auto 45rem;
 }
 
 #left-column {
