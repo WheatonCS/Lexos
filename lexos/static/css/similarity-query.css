@@ -6,7 +6,7 @@
 
 /* Options section */
 #options-section {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1.5fr;
 }
 
 #comparison-document-text {

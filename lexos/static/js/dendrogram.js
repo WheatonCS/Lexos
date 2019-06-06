@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_analyze_tooltips();
+
     // Display the loading overlay on the "Dendrogram" section
     start_loading("#graph-container");
 

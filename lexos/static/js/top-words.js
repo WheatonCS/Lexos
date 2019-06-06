@@ -2,6 +2,9 @@ let documents;
 
 $(function(){
 
+    // Initialize analyze tooltips
+    initialize_analyze_tooltips();
+
     // Remove the "Normalize" section and set its input to "raw"
     $(`input[name="normalizeType"][value="raw"]`).prop("checked", true);
 

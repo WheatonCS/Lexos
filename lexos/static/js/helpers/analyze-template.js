@@ -1,4 +1,42 @@
 /**
+ *  Initialize the "Tokenize", "Normalize", and "Cull" tooltips.
+ */
+function initialize_analyze_tooltips(){
+
+    // "Tokenize"
+    create_tooltip("#tokenize-tooltip-button", `Divide the text into n-grams
+        (by tokens or characters) of the desired length.`);
+
+    // "Normalize"
+    create_tooltip("#normalize-tooltip-button", `Set how terms are counted.
+        Terms can be counted by raw (absolute) counts, by proportional
+        frequencies (to account for document length), or by TF-IDF weighted
+        counts.`);
+
+    // "TF-IDF"
+    create_tooltip("#tf-idf-tooltip-button", `Normalize the data for different
+        document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"
+        target="_blank">Term Frequency-Inverse Document Frequency</a>.
+        Selecting TF-IDF allows you to choose the distance metric according to
+        which each document vector is normalized. Lexos uses base e (natural
+        log) as the default.`);
+
+    // "Cull"
+    create_tooltip("#cull-tooltip-button", `Place statistical bounds on the
+        terms in the document-term matrix.`, true);
+
+    // "Use the top X Words"
+    create_tooltip("#most-frequent-words-tooltip-button", `Use only the most
+        frequently occurring terms in the document-term matrix.`, true)
+
+    // "Must be in X documents"
+    create_tooltip("#minimum-occurrences-tooltip-button", `Set the minimum
+        number of documents in which terms must occur to be included in the
+        document-term matrix.`, true);
+}
+
+
+/**
  * Initializes the legacy form inputs.
  * @param {string} response: The response from the "/get-active-documents"
  *      request.

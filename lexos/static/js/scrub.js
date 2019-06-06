@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize the tooltips
+    initialize_tooltips();
+
     // Display the loading overlay and disable the buttons on the document
     // previews section
     start_document_previews_loading();
@@ -39,9 +42,6 @@ $(function(){
         // If the response failed, display an error
         .fail(function(){ error("Failed to retrieve the document tags."); });
     });
-
-    // Initialize the tooltips
-    initialize_tooltips();
 
     // Initialize the upload buttons
     initialize_upload_buttons(["lemmas", "consolidations",

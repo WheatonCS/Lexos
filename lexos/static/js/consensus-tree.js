@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_analyze_tooltips();
+
     // Create the loading overlay for the "Consensus Tree" section
     start_loading("#consensus-tree-body");
 
