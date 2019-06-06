@@ -11,8 +11,7 @@
     <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
 
-    {% block page_head %}
-    {% endblock %}
+    {% block page_head %}{% endblock %}
 {% endblock %}
 
 
@@ -77,16 +76,19 @@
             </div>
 
             <div class="section-body">
+
                 <label class="checkbox-label">
                     <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
                     <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
                 </label>
+
                 <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
 
                 <label class="checkbox-label">
                     <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
-                        <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
+                    <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
                 </label>
+
                 <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
             </div>
         </div>
