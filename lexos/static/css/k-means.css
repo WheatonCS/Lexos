@@ -1,6 +1,6 @@
 /* Main section */
 #main-section {
-    min-width: 125rem;
+    min-width: 133rem;
 }
 
 
@@ -12,7 +12,7 @@ form {
 
 /* Options section */
 #options-section {
-    grid-template-columns: 1fr 1.8fr 1fr 1fr 1.8fr;
+    grid-template-columns: 1fr 1.8fr 1fr 1fr 1.9fr;
 }
 
 #advanced-options-section label {
