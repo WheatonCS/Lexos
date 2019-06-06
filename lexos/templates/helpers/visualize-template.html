@@ -1,0 +1,48 @@
+{% extends "helpers/base.html" %}
+
+
+<!-- Head -->
+{% block head %}
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/visualize-template.css"/>
+
+    {% block page_head %}{% endblock %}
+{% endblock %}
+
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Graph -->
+    <div class="section">
+        <div id="graph-section-top" class="section-top">
+
+            <h3 class="title">{% block graph_title %}{% endblock %}</h3>
+
+            <div class="center-justified">
+                <h3>Font:</h3>
+                <input id="font-input" name="mfwnumber" value="Open Sans" type="text" spellcheck="false" autocomplete="off">
+            </div>
+
+            <div class="center-justified">
+                <h3>Term Count:</h3>
+                <input id="term-count-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
+            </div>
+
+            <div class="center-justified">
+                <h3>Color: </h3>
+                <h3 class="button">Blue And Grey</h3>
+            </div>
+
+            <div class="right-justified">
+                <h3 class="button">PNG</h3>
+                <h3 class="button">SVG</h3>
+                <h3 class="button">Generate</h3>
+            </div>
+        </div>
+
+        {% block graph %}{% endblock %}
+    </div>
+
+{% endblock %}
