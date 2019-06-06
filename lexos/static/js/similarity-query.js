@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_analyze_tooltips();
+
     // Display the loading overlay for the "Comparison Document" and
     // "Similarity Table" sections
     start_loading("#comparison-document-section-body, #table");

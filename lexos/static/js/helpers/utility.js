@@ -324,11 +324,12 @@ function validate_number(number, minimum = null, maximum = null){
  * @param {string} query: The query for the tooltip button element to append
  *      the tooltip to.
  * @param {string} text: The text to display on the tooltip.
- * @param {string} id: The ID of the tooltip element.
+ * @param {boolean} on_right_edge: Whether the tooltip on on the right edge and
+ *      thus needs to be translated to the left.
  */
-function create_tooltip(query, text, id = null){
+function create_tooltip(query, text, on_right_edge = false){
 
-    if(!id) id = get_uuid();
+    let id = get_uuid();
     $(query).click(function(event){
 
         // Stop propagation so that the tooltip isn't removed undesirably
@@ -350,6 +351,10 @@ function create_tooltip(query, text, id = null){
                 <h3>${text}</h3>
             </div>
         `).insertAfter(this);
+
+        // If the tooltip is on the right edge, give it the corresponding
+        // class
+        if(on_right_edge) tooltip_element.addClass("right-edge-tooltip");
 
         // Set the tooltip position
         let button_element = $(this);

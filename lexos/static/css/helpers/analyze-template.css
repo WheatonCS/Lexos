@@ -14,7 +14,7 @@ form {
 /* Options */
 #options-section {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1.3fr;
+    grid-template-columns: 1.2fr 1fr 1fr 1.5fr;
     grid-gap: 2rem;
 }
 

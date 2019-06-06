@@ -6,6 +6,14 @@ let selected_column = 0;
 
 $(function(){
 
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_analyze_tooltips();
+
+    //Initialize the "Orientation" tooltip
+    create_tooltip("#orientation-tooltip-button", `This option will not be
+        represented in the table below, but will be applied to the file sent
+        when the "Download" button is clicked.`);
+
     // Send the request for the active file IDs
     $.ajax({type: "GET", url: "/active-file-ids"})
 

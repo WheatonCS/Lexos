@@ -1,7 +1,7 @@
 let document_previews;
 $(function(){
 
-    // Initialize the tooltips
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
     initialize_tooltips();
 
     // Display the loading overlay on the "Previews" section
@@ -160,8 +160,8 @@ function validate_inputs(){
 
     // "Overlap"
     let overlap = $("#overlap-input input").val();
-    let int_overlap = parseInt(overlap, 0);
-    if(!validate_number(overlap, 1)){
+    let int_overlap = parseInt(overlap);
+    if(!validate_number(overlap, 0)){
         error("Invalid overlap size.");
         return false;
     }
@@ -208,8 +208,7 @@ function initialize_tooltips(){
     create_tooltip("#merge-threshold-tooltip-button", `The size of the last
         segment must be at least as large as the given percentage relative to
         other segment sizes. If the length of the last segment is below this
-        threshold, it will be attached to the previous segment.`,
-        "merge-threshold-tooltip");
+        threshold, it will be attached to the previous segment.`, true);
 
     // "Milestone"
     create_tooltip("#milestone-tooltip-button", ``);
