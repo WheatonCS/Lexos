@@ -14,6 +14,8 @@ $(function(){
 
     // Initialize legacy form inputs and create the "Top Words" section
     $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+
+    create_tooltips();
 });
 
 
@@ -105,4 +107,28 @@ function create_top_words_tables(response){
     // tables, and enable the "Generate" and "Download" buttons
     finish_loading("#top-words-body", "#top-words-grid",
         "#generate-button, #download-button");
+}
+
+function create_tooltips(){
+    //Download Tooltip
+    create_tooltip("#download-tooltip-button", 'Get Topwords only displays the top 30 results. Download if you wish to see the full result.');
+
+    //Comparison Method
+    create_tooltip("#comparison-method-tooltip-button", 'By default, topwords compares individual documents to the entire set of active documents. ' +
+        'If you wish to compare individual documents to other classes, got to the Manage tool to edit class labels.');
+
+    //Document to Corpus
+    create_tooltip("#document-corpus-tooltip-button", 'Compare the proportion of each term in individual documents to their proportions in the whole collection.' +
+        'Example: Find topwords for one chapter compared to the entire book.');
+
+    //Document to Class
+    create_tooltip("#document-class-tooltip-button", 'Compare the proportion of each term in a document within one class to their proportions in another class as ' +
+        'a whole. Example: With two books (two classes), find topwords in any chapter (document) from one of the books compared to the entire other book (class).');
+
+    //Class to Class
+    create_tooltip("#class-class-tooltip-button", 'Compare the proportion of each term in one class to their proportions in another class. Example: ' +
+        'Find topwords between two books (classes).');
+
+    //Class Division
+    create_tooltip("#class-division-tooltip-button", 'This indicates assigned classes and the documents contained in each class.');
 }
