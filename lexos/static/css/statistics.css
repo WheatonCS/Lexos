@@ -73,7 +73,7 @@ form {
 
 #table-body {
     height: calc(100% - 3rem);
-    overflow-y: overlay;
+    overflow-y: auto;
 }
 
 .table-row {

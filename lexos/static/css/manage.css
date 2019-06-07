@@ -45,7 +45,7 @@ form {
 }
 
 #table-body {
-    overflow-y: overlay;
+    overflow-y: auto;
     height: calc(100% - 4rem);
 }
 
