@@ -8,12 +8,12 @@ def get_phylotree(nwk_tree):
         phylo_html = file.read()
     # Make content div visible
     phylo_html = phylo_html.replace(
-        '<div id="content" style="display: none">',
-        '<div id="content" style="display: inline">')
+        'style="display: none"',
+        'style="display: inline"')
     nwk_tree = nwk_tree.replace("\n", "")
     if ";" in nwk_tree:
         nwk_tree = nwk_tree.replace(";", "")
     # insert graph in newick format
-    return phylo_html.replace("let test_string = '()'",
-                              "let test_string ='" +
+    return phylo_html.replace("let nwk_string = '()'",
+                              "let nwk_string ='" +
                               nwk_tree[:-1] + "'")
