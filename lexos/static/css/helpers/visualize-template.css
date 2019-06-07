@@ -9,7 +9,11 @@
     width: 15rem;
 }
 
+#term-count-input {
+    width: 7rem;
+}
+
 #graph-section-top {
     display: grid;
-    grid-template-columns: .5fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: .5fr 1fr 1fr 1fr 1.2fr;
 }
