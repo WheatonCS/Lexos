@@ -1,3 +1,14 @@
+/* Options */
+#graph-section-top{
+    grid-template-columns: .6fr 1fr 1fr 1fr .7fr;
+}
+
+#png-button,
+#svg-button {
+    display: none;
+}
+
+
 /* Multicloud */
 #multicloud {
     display: grid;
@@ -18,13 +29,19 @@
 }
 
 .word-cloud-wrapper .title {
-    display: block;
-    height: 4rem;
-    padding: 1rem;
     overflow: hidden;
+    margin-right: 1rem;
     white-space: nowrap;
 }
 
 .word-cloud {
     height: calc(100% - 4rem);
+}
+
+.word-cloud-wrapper .button {
+    background-color: #FFFFFF;
+}
+
+.word-cloud-wrapper .button:hover {
+    background-color: #EAF5FF;
 }
