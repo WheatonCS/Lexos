@@ -159,8 +159,11 @@ function toggle_help_section(){
     $(`
         <div id="help-section">
             <div id="help-section-navbar" class="vertical-splitter">
-                <a href="/ToC" class="button">Table of Contents</a>
-                <h3 id="glossary-button" class="right-justified button">Glossary</h3>
+                <h3 id="help-button-header" class="align-left button">Help</h3>
+                <h3 id="about-button" class="right-justified button">About</h3>
+                <h3 id="glossary-button" class="button">Glossary</h3>
+                
+                
             </div>
             <div id="help-section-content"></div>
         </div>
@@ -174,6 +177,14 @@ function toggle_help_section(){
 
     $("#glossary-button").click(function(){
         help_content_element.load("/static/help/glossary-help.html");
+    });
+
+    $("#about-button").click(function(){
+        help_content_element.load("/static/help/about-help.html");
+    });
+
+    $("#help-button-header").click(function(){
+        help_content_element.load("/static/help"+window.location.pathname+"-help.html");
     });
 }
 
