@@ -5,7 +5,7 @@ let rendered_count;
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(get_multicloud_data);
 
     // Create the multicloud
     get_multicloud_data();

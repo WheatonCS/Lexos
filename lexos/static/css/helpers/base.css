@@ -310,6 +310,13 @@ footer {
     overflow-y: auto;
 }
 
+#help-section-navbar {
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #FFFFFF;
+    height: 7rem;
+}
+
 .help-section-title {
     display: block;
     margin-top: 2rem;

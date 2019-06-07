@@ -157,20 +157,26 @@ function toggle_help_section(){
 
     // Otherwise, show the help section
     main_grid.css("grid-template-columns", "40rem auto");
-    let help_section = $(`<div id="help-section"></div>`).prependTo(main_grid);
+
+    $(`
+        <div id="help-section">
+            <div id="help-section-navbar" class="vertical-splitter">
+                <a href="/ToC" class="button">Table of Contents</a>
+                <h3 id="glossary-button" class="right-justified button">Glossary</h3>
+            </div>
+            <div id="help-section-content"></div>
+        </div>
+    `).prependTo(main_grid);
+
     help_button.addClass("highlight");
 
-    let url = "/static/help"+window.location.pathname+"-help.html";
-    help_section.load(url);
     help_visible = true;
+    let help_content_element = $("#help-section-content");
+    help_content_element.load("/static/help"+window.location.pathname+"-help.html");
 
-    console.log($("#help-content"));
-    $("#help-content").load("/static/help"+window.location.pathname+"-help-default.html")
-    $("#glossary-button").click(load_glossary())
-}
-
-function load_glossary(){
-    $("#content").load("/static/help/glossary-help.html")
+    $("#glossary-button").click(function(){
+        help_content_element.load("/static/help/glossary-help.html");
+    });
 }
 
 /**

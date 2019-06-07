@@ -1,7 +1,7 @@
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(send_word_counts_request);
 
     // Create the bubbleviz
     send_word_counts_request();
