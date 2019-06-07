@@ -193,6 +193,7 @@ class StatsModel(BaseModel):
 
         # Save document names in the data frame.
         file_stats["Documents"] = labels
+        print("COOL LABELS:", file_stats["Documents"])
         # Find number of token that appears only once.
         file_stats[f"Number of {self._token_type_str} occurring once"] = \
             self._active_doc_term_matrix.eq(1).sum(axis=1).values

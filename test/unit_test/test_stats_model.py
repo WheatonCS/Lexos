@@ -23,7 +23,7 @@ test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_file_stats()
 # noinspection PyProtectedMember
 test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
-test_pandas_one = pd.read_html(test_file_result_one)[0]
+test_pandas_one = pd.read_json(test_file_result_one)[0]
 # ------------------------------------------------------------------
 
 # ------------------------ Second test suite -----------------------
@@ -46,7 +46,7 @@ test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
 test_file_result_two = test_stats_model_two.get_file_stats()
 test_box_plot_result_two = test_stats_model_two.get_box_plot()
-test_pandas_two = pd.read_html(test_file_result_two)[0]
+test_pandas_two = pd.read_json(test_file_result_two)[0]
 # ------------------------------------------------------------------
 
 # ------------------- test suite for anomaly test ------------------
@@ -69,12 +69,13 @@ test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
 test_file_result_anomaly = test_stats_model_anomaly.get_file_stats()
 test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
-test_pandas_anomaly = pd.read_html(test_file_result_anomaly)[0]
+test_pandas_anomaly = pd.read_json(test_file_result_anomaly)[0]
 
 
 # ------------------------------------------------------------------
 class TestFileResult:
     def test_basic_info(self):
+        # UNIT TEST ISSUE HERE
         assert test_pandas_one["Documents"][0] == "F1.txt"
         assert test_pandas_one["Documents"][1] == "F2.txt"
         assert test_pandas_two["Documents"][2] == "F3.txt"
@@ -171,16 +172,12 @@ class TestStatsPlotly:
 
         assert basic_fig['data'][0]['y'][1] == 15
 
-        assert basic_fig['data'][0]['name'] == 'Corpus Scatter Plot'
-
     def test_get_stats_box_plot(self):
         assert basic_fig['data'][1]['type'] == 'box'
 
         assert basic_fig['data'][1]['y'][0] == 80
 
         assert basic_fig['data'][1]['y'][1] == 15
-
-        assert basic_fig['data'][1]['name'] == 'Corpus Box Plot'
 
     def test_get_stats_layout(self):
         assert basic_fig['layout']['xaxis']['showgrid'] is False
