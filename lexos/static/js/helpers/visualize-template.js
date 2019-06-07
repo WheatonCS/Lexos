@@ -1,7 +1,9 @@
 /**
  * Initialize the "Color" button.
+ * @param {function} callback: The function to call when the popup's "Ok"
+ *      button is clicked.
  */
-function initialize_color_button(){
+function initialize_color_button(callback){
 
     // If the "Color" button is clicked, create a popup with the color options
     $("#color-button").click(function(){
@@ -16,6 +18,9 @@ function initialize_color_button(){
                 ["cherry-tree", "Cherry Tree"],
                 ["ocean", "Ocean"]
             ]);
+
+        // Call the callback when the "Ok" button is clicked
+        $("#ok-button").click(callback);
     });
 }
 

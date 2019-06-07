@@ -1,7 +1,7 @@
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(send_data_request);
 
     // Send the request for the word cloud data
     send_data_request();
@@ -36,8 +36,13 @@ function send_data_request(){
     // If the request is successful, create the word cloud
     .done(create_word_cloud_layout)
 
-    // If the request failed, display an error message
-    .fail(function(){ error("Failed to retrieve the word cloud data."); });
+    // If the request failed, display an error message, display
+    // "Loading Failed" text, and enable the "Generate" button
+    .fail(function(){
+        error("Failed to retrieve the word cloud data.");
+        add_text_overlay("#word-cloud-container", "Loading Failed", true);
+        enable("#generate-button");
+    });
 }
 
 
