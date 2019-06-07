@@ -1,6 +1,178 @@
-<!-- The statistics tool -->
+<!-- The Statistics Tool -->
+
 <h3 class="help-section-title">The Statistics Tool</h3>
 
 <h3 class="help-section-paragraph">
-    The help section for this tool has not been migrated yet.
+    The Lexos Statistics tool provides a basic overview of statistical content
+    in your collection as an addition to the specific term counts/proportions
+    available in the Document-Term Matrix (DTM) provided in
+    <a href="/tokenize"><u>Tokenizer</u></a>.
+</h3>
+
+<!-- Options -->
+<h3 class="help-section-title">Options</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Generate</b></li>
+    <h3 class="help-section-paragraph">
+        The Statistics tool generates data based on all active documents. If you
+        wish to only analyze specific documents, visit the <a href="/manage"><u>Manage</u></a>
+        page. If you make changes to any of the following options, be sure to click
+        the "Generate" button again to see your changes reflected in the results.
+    </h3>
+
+    <li><b>Tokenize</b></li>
+    <h3 class="help-section-paragraph">
+        By default Lexos tokenizes by tokens, meaning it splits strings of text
+        into tokens every time it encounters a space character. For Western languages,
+        this means that each token generally corresponds to a word. To tokenize
+        by multiple words, you can increase the n-gram size.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example given the text: "the dog ran" tokenizing by 1-gram tokens
+        would produce tokens "the", "dog", "ran". Tokenizing by 2-grams would
+        count the instances of bi-grams or pairs of words, thus producing tokens
+        "the dog", "dog ran", and so on.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you wish to tokenize by characters, Lexos will treat every character
+        (letters, whitespace, punctuation, etc.) as a separate token. Tokenizing
+        by 2-gram characters would produce tokens "th","he","e ", and so on.
+        Tokenizing by characters is best used for non-western languages that don't
+        have whitespace between tokens such as classical Chinese.
+    </h3>
+
+    <li><b>Cull</b></li>
+    <h3 class="help-section-paragraph">
+        "Culling" is a generic term we use for methods of decreasing the number
+        of terms used to generate the DTM based on statistical criteria (as
+        opposed to something like applying a stop-word list in Scrubber). Culling
+        is optional to use in Lexos. Lexos offers two different methods:
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Use the top ___ words": This method takes a slice of the DTM
+        containing only the top N most frequently occurring terms in the
+        set of active documents. The default setting is 100, meaning
+        Tokenizer will generate the DTM using only the top 100 most
+        frequent terms.
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Must be in ___ documents": This method build the DTM using only
+        terms that occur in at least N documents. The default setting is
+        1. If you have 10 active documents and you want to generate the
+        DTM using only terms that appear in all your active documents,
+        set the value to 10. <em><b>Note:</b> You can quickly determine
+        the number of active documents in your workspace as indicated by
+        the counter in the bottom right corner.</em>
+    </h3>
+
+</ul>
+
+<!-- Results -->
+<h3 class="help-section-title">Results</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Document Sizes</b></li>
+    <h3 class="help-section-paragraph">
+        Lexos first shows a box plot visualization that highlights potential
+        outliers of document size in the collection of active documents.
+    </h3>
+    <li><b>Plotly Menu</b></li>
+    <h3 class="help-section-paragraph">
+        If you pan over the box plot, you'll notice that a menu appears in the top
+        right corner.
+
+        <ul class="help-section-list">
+
+            <li>Camera icon: This option will download the graph as a <code>.png</code>
+            image.</li>
+
+            <li>Zoom: This option allows you to click and drag to zoom in to a
+            specific part of the graph.</li>
+
+            <li>Pan: This option will change the click and drag function to
+            panning across the graph.</li>
+
+            <li>Zoom in and Zoom out: These will automatically zoom to the center
+            of the graph.</li>
+
+            <li>Auto-scale and Reset Axis: These options will zoom all the way out
+            with the axis reset to fit the window</li>
+
+            <li>Toggle spike lines: This option allows you to hover your mouse
+            over data points and see where they are aligned on the x-axis and
+            y-axis</li>
+
+            <li>Show closest data on hover: If you hover over a data point,
+            this option will show you the value of the data point (the average
+            or ratio at that point in the window).</li>
+
+            <li>Compare data on hover: If you hover over a data point, this
+            option will show you the value of the data point and it's corresponding
+            x-axis value (the location of the term in the token sequence
+            (starting from 0), along with the average or ratio at that point in the window).</li>
+
+        </ul>
+
+    </h3>
+
+    <li><b>Document Statistics</b></li>
+    <h3 class="help-section-paragraph">
+        Statistics generates a table containing the file name, the total term count,
+        number of distinct terms, the average term frequency, and the number of
+        terms occurring once (hapax legomena) for each document (row). You may
+        generate statistics on all of your active files or you may select a subset
+        of your active documents by using the <a href="/manage"><u>Manage</u></a>
+        page.
+    </h3>
+
+    <li><b>Corpus Statistics</b></li>
+    <h3 class="help-section-paragraph">
+        Lexos calculates the average, median, standard deviation, and interquartile
+        range (IQR) of your documents' sizes (based on term counts). This
+        information is used to determine if any of the document sizes are anomalously
+        large or small, that is if any of your document sizes are outliers.
+    </h3>
+
+    <li><b>Standard Error Test</b></li>
+    <h3 class="help-section-paragraph">
+        If a value is a certain number of standard deviations away from the mean,
+        that data point is identified as an outlier. Thus using the standard
+        error test, Lexos provides a anomaly warning for any document
+        with a size that is particularly large or small compared to the rest of
+        your corpus.
+    </h3>
+
+    <li><b>Inquartile Range Test</b></li>
+    <h3 class="help-section-paragraph">
+        Using the calculated IQR, Lexos provides a anomaly warning for any document
+        with a size that is particularly large or small compared to the rest of
+        your corpus. Outliers are those document sizes that fall below Q1 - 1.5(IQR)
+        or above Q3 + 1.5(IQR).
+    </h3>
+
+</ul>
+
+<h3 class="help-section-paragraph">
+    You should consider removing outlier documents from subsequent
+    analyses and/or consider additional cutting of some documents to make
+    term counts more uniform.provides a anomaly warning for any document with
+    a size that is particularly large or small compared to the rest of your
+    corpus. You should consider removing outlier documents from subsequent
+    analyses and/or consider additional cutting of some documents to make
+    term counts more uniform.
+</h3>
+
+
+
+<!-- Examples -->
+<h3 class="help-section-title">Examples</h3>
+
+<h3 class="help-section-paragraph">
+    Visit our public repository on GitHub
+    <a target="_blank" href="https://github.com/WheatonCS/Lexos/tree/master/test/test_suite/Statistics"><u>here</u></a>
+    for a test suite of examples you can use to generate statistics results
+    before testing your own documents.
 </h3>
