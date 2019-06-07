@@ -279,11 +279,16 @@ function error(message){
     fade_in("#error-section");
 
     // If the error message's "Dismiss" button is pressed, close the error
-    // message and fade in the footer
-    $("#error-close-button").click(function(){
-        $("#error-section").remove();
-        fade_in("footer");
-    });
+    $("#error-close-button").click(remove_errors);
+}
+
+
+/**
+ * Removes any existing error messages.
+ */
+function remove_errors(){
+    $("#error-section").remove();
+    fade_in("footer");
 }
 
 
@@ -340,7 +345,6 @@ function create_tooltip(query, text, on_right_edge = false){
         let tooltip_element = $(".lexos-tooltip");
         if(tooltip_element.length){
             let toggled = $(`#${id}`).length;
-            console.log(toggled);
             remove_tooltips();
             if(toggled) return;
         }
@@ -412,4 +416,28 @@ function get_uuid(length = 16){
     let result = "";
     for(let i = 0; i < length; ++i) result += Math.trunc(Math.random()*9);
     return result;
+}
+
+/**
+ * Gets the IDs of the active files.
+ * @param {function} callback: The callback to call if the request is
+ *      successful.
+ * @param {string} loading_failed_query: The query for elements to display
+ *      "Loading Failed" text on if the request fails.
+ */
+function get_active_file_ids(callback, loading_failed_query){
+
+    // Send a request to get the active files and their IDs
+    $.ajax({type: "GET", url: "/active-file-ids"})
+
+        // If the request is successful, call the callback
+        .done(callback)
+
+        // If the request failed, display an error message and
+        // call the failure callback
+        .fail(function()
+        {
+            add_text_overlay(loading_failed_query, "Loading Failed", true);
+            error("Failed to retrieve the active file IDs.");
+        });
 }
