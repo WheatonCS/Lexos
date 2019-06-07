@@ -13,13 +13,13 @@ function initialize_color_button(){
                 ["cherry-tree", "Cherry Tree"],
                 ["sunset", "Sunset"],
                 ["spring", "Spring"],
-                ["emerald", "Emerald"],
                 ["ocean", "Ocean"],
                 ["blue-lilac", "Blue Lilac"],
                 ["plum", "Plum"],
                 ["iridescent", "Iridescent"],
-                ["galaxy", "Galaxy"],
-                ["rainbow", "Rainbow"]
+                ["nebula", "Nebula"],
+                ["rainbow", "Rainbow"],
+                ["splatter", "Splatter"]
             ]);
     });
 }
@@ -35,19 +35,18 @@ function get_visualize_color(x){
 
     switch(color_scheme){
         case "Lexos": return d3.scaleLinear()
-            .domain([0, 1]).range(["#F3F3F3", "#47BCFF"])(x);
-        case "Grey": return d3.interpolateGreys(x);
-        case "Emerald": return d3.interpolateBuGn(x);
-        case "Plum": return d3.interpolateBuPu(x);
-        //case "Ocean": return d3.interpolateGnBu(x);
-        case "Ocean": return d3.interpolateYlGnBu(x);
-        case "Blue Lilac": return d3.interpolatePuBu(x);
-        case "Cherry Tree": return d3.interpolatePuRd(x);
-        case "Sunset": return d3.interpolateYlOrRd(x);
-        case "Galaxy": return d3.interpolatePlasma(x);
-        case "Spring": return d3.interpolateYlGn(x);
-        case "Iridescent": return d3.interpolateViridis(x);
-        case "Rainbow": return d3.interpolateRainbow(x);
+            .domain([0, 1]).range(["#F3F3F3", "#47BCFF"])(x*2);
+        case "Grey": return d3.interpolateGreys(x*2);
+        case "Plum": return d3.interpolateBuPu(x*2);
+        case "Ocean": return d3.interpolateYlGnBu(x*2);
+        case "Blue Lilac": return d3.interpolatePuBu(x*2);
+        case "Cherry Tree": return d3.interpolatePuRd(x*2);
+        case "Sunset": return d3.interpolateYlOrRd(x*2);
+        case "Nebula": return d3.interpolatePlasma(x/1.8);
+        case "Spring": return d3.interpolateYlGn(x*2);
+        case "Iridescent": return d3.interpolateViridis(x/1.4);
+        case "Rainbow": return d3.interpolateRainbow(Math.log10(x));
+        case "Splatter": return d3.interpolateRainbow(Math.log(x));
     }
 }
 
