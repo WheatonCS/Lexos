@@ -100,11 +100,11 @@ function create_bubbleviz(response){
         });
 
     node.append("text")
-        .attr("dy", ".2em")
+        .attr("dy", ".3em")
         .style("text-anchor", "middle")
         .text(function(d){ return d.data.word; })
         .attr("font-family", $("#font-input").val())
-        .attr("font-size", function(d){ return d.r/3+base_font_size; })
+        .attr("font-size", function(d){ return d.r/(d.data.word.length/3); })
         .attr("fill", "#FFFFFF")
 
     node.append("svg:title")
