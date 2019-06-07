@@ -45,46 +45,10 @@ test_voronoi = KMeansModel(test_options=test_option_voronoi)
 voronoi_result = test_voronoi._get_voronoi_result()
 
 
-# ------------------------- Test voronoi table result -------------------------
-class TestVoronoiTable:
-    # Get the table result.
-    table = voronoi_result.table
-
-    def test_table_header(self):
-        np.testing.assert_array_equal(
-            self.table.columns,
-            np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
-        )
-
-    def test_file_names(self):
-        pd.testing.assert_series_equal(
-            self.table["Document"],
-            pd.Series(
-                index=[0, 1, 2, 3],
-                data=["F1.txt", "F2.txt", "F3.txt", "F4.txt"]
-            ),
-            check_names=False
-        )
-
-    def test_cluster(self):
-        np.testing.assert_array_equal(
-            np.unique(self.table["Cluster #"]),
-            np.array([1, 2])
-        )
-
-    def test_coordinate(self):
-        assert np.isclose(self.table.iloc[0]["X-Coordinate"], -128.5943)
-
-
 # ------------------------- Test voronoi plot result --------------------------
 class TestVoronoiPlot:
     # Get plot result.
-    plot = voronoi_result.plot
-
-    def test_layout(self):
-        assert self.plot.layout.title == go.layout.Title(
-            text="K-Means Voronoi Result"
-        )
+    plot = voronoi_result
 
     def test_heat_map(self):
         assert self.plot.data[0]["type"] == "heatmap"
@@ -100,20 +64,6 @@ class TestVoronoiPlot:
         assert self.plot.data[3]["mode"] == "markers"
         assert round(self.plot.data[3]["x"][0], 4) in [738.6971, -128.5943]
         assert round(self.plot.data[3]["y"][0], 4) in [411.5624, -115.1177]
-
-
-# ------------------------- Test voronoi processed result ---------------------
-class TestVoronoiProcessed:
-    def test_processed_table(self):
-        pd.testing.assert_series_equal(
-            pd.read_html(test_voronoi.get_result().table)[0]["X-Coordinate"],
-            voronoi_result.table["X-Coordinate"]
-        )
-
-        pd.testing.assert_series_equal(
-            pd.read_html(test_voronoi.get_result().table)[0]["Y-Coordinate"],
-            voronoi_result.table["Y-Coordinate"]
-        )
 
 
 # -----------------------------------------------------------------------------
@@ -153,7 +103,7 @@ two_d_result = test_two_d._get_2d_scatter_result()
 
 # ------------------------- Test 2D scatter result --------------------------
 class Test2DScatter:
-    plot = two_d_result.plot
+    plot = two_d_result
 
     def test_layout(self):
         assert self.plot.layout["hovermode"] == "closest"
@@ -169,64 +119,6 @@ class Test2DScatter:
         assert self.plot.data[1]["type"] == "scatter"
         assert round(self.plot.data[1]["x"][0], 4) in [738.6971, -128.5943]
         assert round(self.plot.data[1]["y"][0], 4) in [411.5624, -115.1177]
-
-
-# ------------------------- Test 2D table result -------------------------
-class Test2DTable:
-    table = two_d_result.table
-
-    def test_table_header(self):
-        np.testing.assert_array_equal(
-            self.table.columns,
-            np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate"])
-        )
-
-    def test_file_names(self):
-        pd.testing.assert_series_equal(
-            self.table["Document"],
-            pd.Series(
-                index=[0, 1, 2, 3],
-                data=["F1.txt", "F2.txt", "F3.txt", "F4.txt"]
-            ),
-            check_names=False
-        )
-
-    def test_cluster(self):
-        np.testing.assert_array_equal(
-            np.unique(self.table["Cluster #"]),
-            np.array([1, 2])
-        )
-        assert (self.table["Cluster #"] == 1).sum() in [1, 3]
-        assert (self.table["Cluster #"] == 2).sum() in [1, 3]
-
-    def test_coordinate(self):
-        pd.testing.assert_series_equal(
-            self.table.loc[1, ["X-Coordinate"]],
-            pd.Series(index=["X-Coordinate"], data=[-212.31992]),
-            check_names=False,
-            check_dtype=False
-        )
-
-        pd.testing.assert_series_equal(
-            self.table.loc[2, ["Y-Coordinate"]],
-            pd.Series(index=["Y-Coordinate"], data=[-115.11773]),
-            check_names=False,
-            check_dtype=False
-        )
-
-
-# ------------------------- Test 2D processed result ---------------------
-class Test2DProcessed:
-    def test_processed_table(self):
-        pd.testing.assert_series_equal(
-            pd.read_html(test_two_d.get_result().table)[0]["X-Coordinate"],
-            two_d_result.table["X-Coordinate"]
-        )
-
-        pd.testing.assert_series_equal(
-            pd.read_html(test_two_d.get_result().table)[0]["Y-Coordinate"],
-            two_d_result.table["Y-Coordinate"]
-        )
 
 
 # -----------------------------------------------------------------------------
@@ -266,10 +158,7 @@ three_d_result = test_three_d._get_3d_scatter_result()
 
 # ------------------------- 3D scatter test suite -----------------------------
 class Test3DScatter:
-    plot = three_d_result.plot
-
-    def test_layout(self):
-        assert self.plot.layout["height"] == 600
+    plot = three_d_result
 
     def test_scatter(self):
         assert self.plot.data[0]["type"] == "scatter3d"
@@ -283,76 +172,6 @@ class Test3DScatter:
         assert round(self.plot.data[1]["x"][0], 4) in [738.6971, -128.5943]
         assert round(self.plot.data[1]["y"][0], 4) in [411.5624, -115.1177]
         assert round(self.plot.data[1]["z"][0], 4) in [-2.3939, -94.6634]
-
-
-# -----------------------------------------------------------------------------
-# ------------------------- Test 3D table result -------------------------
-class Test3DTable:
-    table = three_d_result.table
-
-    def test_table_header(self):
-        np.testing.assert_array_equal(
-            self.table.columns,
-            np.array(["Cluster #", "Document", "X-Coordinate", "Y-Coordinate",
-                      "Z-Coordinate"])
-        )
-
-    def test_file_names(self):
-        pd.testing.assert_series_equal(
-            self.table["Document"],
-            pd.Series(index=[0, 1, 2, 3],
-                      data=["F1.txt", "F2.txt", "F3.txt", "F4.txt"]),
-            check_names=False
-        )
-
-    def test_cluster(self):
-        np.testing.assert_array_equal(
-            np.unique(self.table["Cluster #"]),
-            np.array([1, 2])
-        )
-        assert (self.table["Cluster #"] == 1).sum() in [1, 3]
-        assert (self.table["Cluster #"] == 2).sum() in [1, 3]
-
-    def test_coordinate(self):
-        pd.testing.assert_series_equal(
-            self.table.loc[2, ["X-Coordinate"]],
-            pd.Series(index=["X-Coordinate"], data=[738.69711]),
-            check_names=False,
-            check_dtype=False
-        )
-
-        pd.testing.assert_series_equal(
-            self.table.loc[3, ["Y-Coordinate"]],
-            pd.Series(index=["Y-Coordinate"], data=[-404.50449]),
-            check_names=False,
-            check_dtype=False
-        )
-
-        pd.testing.assert_series_equal(
-            self.table.loc[3, ["Z-Coordinate"]],
-            pd.Series(index=["Z-Coordinate"], data=[-55.01033]),
-            check_names=False,
-            check_dtype=False
-        )
-
-
-# ------------------------- Test 2D processed result ---------------------
-class Test3DProcessed:
-    def test_processed_table(self):
-        pd.testing.assert_series_equal(
-            pd.read_html(test_three_d.get_result().table)[0]["X-Coordinate"],
-            three_d_result.table["X-Coordinate"]
-        )
-
-        pd.testing.assert_series_equal(
-            pd.read_html(test_three_d.get_result().table)[0]["Y-Coordinate"],
-            three_d_result.table["Y-Coordinate"]
-        )
-
-        pd.testing.assert_series_equal(
-            pd.read_html(test_three_d.get_result().table)[0]["Z-Coordinate"],
-            three_d_result.table["Z-Coordinate"]
-        )
 
 
 # -----------------------------------------------------------------------------
