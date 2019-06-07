@@ -193,9 +193,6 @@ class StatsModel(BaseModel):
 
         # Save document names in the data frame.
         file_stats["Documents"] = labels
-        print(file_stats["Documents"])
-        print(file_stats["Documents"][0])
-
         # Find number of token that appears only once.
         file_stats[f"Number of {self._token_type_str} occurring once"] = \
             self._active_doc_term_matrix.eq(1).sum(axis=1).values
@@ -209,6 +206,7 @@ class StatsModel(BaseModel):
         file_stats[f"Average number of {self._token_type_str}"] = \
             file_stats[f"Total number of {self._token_type_str}"] / \
             file_stats[f"Distinct number of {self._token_type_str}"]
+
         # Round all the values and return as a JSON string.
         return file_stats.round(3).to_json(orient="index")
 
