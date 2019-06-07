@@ -199,7 +199,7 @@ function fade_in(query, duration = ".2s", sequential_delay = 0){
         element.css({"transition": "none", "opacity": "0"});
 
         // Show the element
-        element.removeClass("invisible");
+        element.removeClass("hidden");
 
         // Fade the element after a delay
         setTimeout(function(){

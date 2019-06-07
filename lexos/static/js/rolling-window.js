@@ -21,10 +21,10 @@ $(function(){
     let rolling_ratio_element = $("#rolling-ratio-button");
     let ratio_search_terms = $("#ratio-search-terms-input");
     rolling_average_element.click(function(){
-        ratio_search_terms.addClass("invisible");
+        ratio_search_terms.addClass("hidden");
     });
     rolling_ratio_element.click(function(){
-        fade_in(ratio_search_terms);
+        ratio_search_terms.removeClass("hidden")
     });
 });
 

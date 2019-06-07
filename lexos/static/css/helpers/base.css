@@ -115,6 +115,10 @@ form {
     opacity: 0;
 }
 
+.hidden {
+    display: none;
+}
+
 .center-justified {
     justify-self: center;
 }
