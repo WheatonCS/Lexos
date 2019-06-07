@@ -11,6 +11,8 @@ function create_graph(url, callback =
 
     // Send the request for the Plotly graph HTML
     send_ajax_form_request(url)
+
+    // If the request was successful...
     .done(function(response){
 
         // Add the Plotly graph HTML
@@ -29,6 +31,14 @@ function create_graph(url, callback =
         finish_loading("#graph-container", "#graph");
 
         // Call the callback
+        callback();
+    })
+
+    // If the request failed, display an error and "Loading Failed" text and
+    // call the callback
+    .fail(function(){
+        error("Failed to retrieve the Plotly data.");
+        add_text_overlay("#graph-container", "Loading Failed", true);
         callback();
     });
 }

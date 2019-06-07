@@ -1,15 +1,15 @@
 $(function(){
 
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_analyze_tooltips();
-
     // Display the loading overlay on the "K-Means" section
     start_loading("#graph-container");
 
-     // Initialize the legacy inputs and create the k-means graph
-     $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+    // Initialize the tooltips for the "Options", "Advanced", "Tokenize",
+    // "Normalize", and "Cull" sections
+    initialize_analyze_tooltips();
+    initialize_tooltips();
 
-     create_tooltips();
+     // Initialize the legacy inputs and create the k-means graph
+     get_active_file_ids(initialize, "#graph-container");
 });
 
 
@@ -38,6 +38,7 @@ function initialize(response){
     $("#generate-button").click(function(){
         if(!validate_k_means_inputs() || !validate_analyze_inputs()) return;
         start_loading("#graph-container", "#generate-button");
+        remove_errors();
         create_graph("k-means/graph");
     });
 }
@@ -76,26 +77,34 @@ function validate_k_means_inputs(){
     return true;
 }
 
-function create_tooltips(){
-    //Clusters
-    create_tooltip("#numclusters-tooltip-button", 'The number of clusters (or the number of centroids). ' +
-        'The K-value should always be fewer or equal to the number of active documents. By default, this value is set to half the number of active documents.');
+function initialize_tooltips(){
 
-    //Visualization
-    create_tooltip("#visualization-method-tooltip-button", '2D-Scatter plot and Voroni diagram will reduce the DTM to a two dimensional matrix, whereas ' +
-        '3D-Scatter plot will reduce the DTM to a three dimensional matrix. Compared to the scatter plots, Voroni displays the centroids and draws polygons for each document cluster.');
+    // "Clusters"
+    create_tooltip("#clusters-tooltip-button", `The number of clusters (or
+        the number of centroids). The number of clusters should always be 
+        fewer or equal to the number of active documents. By default, this
+        value is set to half the number of active documents.`);
 
-    //Initialization Method
-    create_tooltip("#initialization-method-tooltip-button", '\'kmeans++\' selects initial cluster centers using a weighted probability distribution to speed up convergence. The \'random\' option' +
-        'chooses k observations at random from the data to serve as the initial centroids.');
+    // Visualization
+    create_tooltip("#visualization-method-tooltip-button", `2D-Scatter plot
+        and Voroni diagram will reduce the DTM to a two dimensional matrix,
+        whereas 3D-Scatter plot will reduce the DTM to a three dimensional
+        matrix. Compared to the scatter plots, Voronoi displays the centroids
+        and draws polygons for each document cluster.`);
 
-    //Max Iterations
-    create_tooltip("#max-iterations-tooltip-button", 'Maximum number of iterations for the k-means algorithm for a single run. The default is 300.');
+    // Initialization method
+    create_tooltip("#initialization-method-tooltip-button", `"K-Means++
+        selects initial cluster centers using a weighted probability
+        distribution to speed up convergence. "Random" chooses k observations
+        at random from the data to serve as the initial centroids.`);
 
-    //Different Centroids
-    create_tooltip("#diff-centroids-tooltip-button", 'The number of times (N) the k-means algorithm will be run with different centroid seeds. The final' +
-        ' results will be the best output of those N consecutive runs. (The default is 10).');
+    // "Different Centroids"
+    create_tooltip("#different-centroids-tooltip-button", `The number of times
+        (n) the k-means algorithm will be run with different centroid seeds.
+        The final results will be the best output of those n consecutive
+        runs.`);
 
-    //Relative Tolerance
-    create_tooltip("#relative-tolerance-tooltip-button", 'Decimal, relative tolerance with respect to inertia to declare convergence.');
+    // "Relative Tolerance"
+    create_tooltip("#relative-tolerance-tooltip-button", `Decimal, relative
+        tolerance with respect to inertia to declare convergence.`);
 }

@@ -14,21 +14,14 @@ $(function(){
         represented in the table below, but will be applied to the file sent
         when the "Download" button is clicked.`);
 
-    // Send the request for the active file IDs
-    $.ajax({type: "GET", url: "/active-file-ids"})
-
-        // If the request is successful, initialize the legacy inputs and create the table
-        .done(initialize)
-
-        // If the request failed, display an error
-        .fail(function(){ error("Failed to retrieve "+
-            "the active document IDs."); });
+    // Initialize the legacy form inputs and create the token table
+    get_active_file_ids(initialize);
 })
 
 
 /**
- * Initializes the legacy inputs and creates the table.
- * @param {string} response: The response from the "/active-file-ids" request.
+ * Initializes the legacy inputs and creates the token table.
+ * @param {string} response: The response from the "active-file-ids" request.
  */
 function initialize(response){
 
@@ -44,22 +37,22 @@ function initialize(response){
     // Enable the "Generate" and "Download" buttons
     enable("#generate-button, #download-button");
 
-    // Create the table
-    send_table_data_request();
+    // Create the token table
+    send_token_table_data_request();
 
-    // Create callbacks for the buttons and inputs on the table
-    create_table_button_callbacks();
+    // Create callbacks for the buttons and inputs on the token table
+    create_token_table_button_callbacks();
 }
 
 
 /**
- * Validates the page number, sends a request for the table data and creates
- * the table.
+ * Validates the page number, sends a request for the token table data and
+ *      creates the table.
  * @param {boolean} page_change: Whether the action that triggered this table
  *      creation was a page change.
  * @param {boolean} queued_request: Whether this table creation was queued.
  */
-function send_table_data_request(page_change = true, queued_request = false){
+function send_token_table_data_request(page_change = true, queued_request = false){
 
     // Perform the immediate validation checks
     immediate_validation(page_change);
@@ -105,18 +98,20 @@ function send_table_data_request(page_change = true, queued_request = false){
         { "sort-column": selected_column, start: start })
 
         // If the request was successful, recreate the table
-        .done(create_table)
+        .done(create_token_table)
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to retrieve the table data."); });
+        .fail(function(){
+            error("Failed to retrieve the token table data.");
+        });
 }
 
 
 /**
- * Creates the table.
+ * Creates the token table.
  * @param {string} response: The response from the "tokenize/get-table" request.
  */
-function create_table(response){
+function create_token_table(response){
 
     // If there is a queued table recreation, execute it and return
     loading = false;
@@ -196,7 +191,7 @@ function create_table(response){
 /**
  * Creates callbacks for the buttons and inputs on the table
  */
-function create_table_button_callbacks(){
+function create_token_table_button_callbacks(){
 
     // Get the page number element
     let page_number_element = $("#page-number");

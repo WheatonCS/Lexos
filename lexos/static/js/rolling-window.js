@@ -6,16 +6,9 @@ $(function(){
     // Display the loading overlay
     start_loading("#graph-container");
 
-    // Send a request to get the active files and their IDs
-    $.ajax({type: "GET", url: "/active-file-ids"})
-
-        // If the request was successful, check that there is exactly one
-        // document active and display the appropriate text on the
-        // "Rolling Window" section
-        .done(single_active_document_check)
-
-        // If the request failed, display an error
-        .fail(function(){ error("Failed to retrieve the active files."); });
+    // Check that there is exactly one document active and display the
+    // appropriate text on the "Rolling Window" section
+    get_active_file_ids(single_active_document_check);
 });
 
 

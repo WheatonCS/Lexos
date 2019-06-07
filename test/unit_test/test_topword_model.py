@@ -72,16 +72,13 @@ test_topword_model_empty_all_to_para = TopwordModel(
 
 class TestParaToGroup:
     def test_normal_case_result(self):
-        assert test_results_all_to_para[1][0]['D'] == -2.1483
+        # UNIT TEST ISSUE HERE
+        assert test_results_all_to_para[0]['D'] == -2.1483
 
-        assert test_results_all_to_para.results[1].dtype == "float64"
+        assert test_results_all_to_para[1].dtype == "float64"
 
-        assert test_results_all_to_para.results[1].name == \
-            "Document \"F2\" compares to the whole corpus"
-
-    def test_normal_case_header(self):
-        assert test_results_all_to_para.header == \
-            "Compare Each Document to All the Documents As a Whole."
+        assert test_results_all_to_para[1].name == \
+            "Document \"F2\" Compared To The Corpus"
 
     def test_special_case(self):
         try:
@@ -138,16 +135,12 @@ test_topword_model_empty_one_class_to_para = \
 # Testing starts here
 class TestClassToAll:
     def test_normal_case_result(self):
-        assert test_results_class_to_para[1][0]['A'] == 7.2108
-        assert test_results_class_to_para[1][0]['B'] == 7.2108
-        assert test_results_class_to_para[1][0]['H'] == -6.3857
-        assert test_results_class_to_para.results[1].dtype == 'float64'
-        assert test_results_class_to_para.results[1].name == \
-            'Document "F2" compares to Class "C2"'
-
-    def test_normal_case_header(self):
-        assert test_results_class_to_para.header == \
-            "Compare Each Document to Other Class(es)."
+        assert test_results_class_to_para[0]['A'] == 7.2108
+        assert test_results_class_to_para[0]['B'] == 7.2108
+        assert test_results_class_to_para[0]['H'] == -6.3857
+        assert test_results_class_to_para[1].dtype == 'float64'
+        assert test_results_class_to_para[1].name == \
+            'Document "F2" Compared To Class "C2"'
 
     def test_special_case(self):
         try:
@@ -204,18 +197,14 @@ test_topword_model_empty_two_class_to_class = TopwordModel(
 
 class TestClassToClass:
     def test_normal_case_result(self):
-        assert test_results_class_to_class[1][0]['H'] == -7.7047
-        assert test_results_class_to_class[1][0]['A'] == 5.0983
-        assert test_results_class_to_class[1][0]['B'] == 5.0983
-        assert test_results_class_to_class[1][0]['C'] == 5.0983
-        assert test_results_class_to_class[1][0]['D'] == 5.0983
-        assert test_results_class_to_class.results[0].dtype == 'float64'
-        assert test_results_class_to_class.results[0].name == \
-            'Class "C1" compares to Class "C2"'
-
-    def test_normal_case_header(self):
-        assert test_results_class_to_class.header == \
-            'Compare a Class to Each Other Class(es).'
+        assert test_results_class_to_class[0]['H'] == -7.7047
+        assert test_results_class_to_class[0]['A'] == 5.0983
+        assert test_results_class_to_class[0]['B'] == 5.0983
+        assert test_results_class_to_class[0]['C'] == 5.0983
+        assert test_results_class_to_class[0]['D'] == 5.0983
+        assert test_results_class_to_class[0].dtype == 'float64'
+        assert test_results_class_to_class[0].name == \
+            'Class "C1" Compared To Class "C2"'
 
     def test_special_case(self):
         try:
