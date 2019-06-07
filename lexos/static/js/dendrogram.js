@@ -19,6 +19,8 @@ $(function(){
 
     // Initialize legacy form inputs and create the dendrogram
     $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+
+    create_tooltips();
 });
 
 
@@ -52,4 +54,12 @@ function initialize(response){
         start_loading("#graph-container", "#generate-button");
         create_graph("dendrogram/graph");
     });
+}
+
+function create_tooltips(){
+    //Distance Metric
+    create_tooltip("#distance-metric-tooltip-button", 'Different methods for measuring the distance (differences) between documents.');
+
+    //Linkage Method
+    create_tooltip("#linkage-method-tooltip-button", 'Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters.');
 }
