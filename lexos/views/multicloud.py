@@ -1,7 +1,7 @@
 import json
 
 import pandas as pd
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, request
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
@@ -25,7 +25,7 @@ def multicloud() -> str:
     return render_template("multicloud.html")
 
 
-@multicloud_blueprint.route("/multicloud/get-word-counts", methods=["GET"])
+@multicloud_blueprint.route("/multicloud/get-word-counts", methods=["POST"])
 def get_word_counts() -> str:
     """ Gets the top 100 word counts for each active file.
 
@@ -60,8 +60,10 @@ def get_word_counts_single_file(contents) -> list:
 
     # Create a list of the top 100 words and their normalized counts
     top_words = []
+    maximum_top_words = int(request.get_json()["maximum_top_words"])
     maximum = dataframe.iloc[0]["count"]
-    dataframe = dataframe[:100]
+    dataframe = dataframe[:maximum_top_words]
+
     for i in range(len(dataframe)):
         top_words.append([dataframe.iloc[i]["word"],
                           str(dataframe.iloc[i]["count"]),

@@ -342,7 +342,18 @@ footer {
 .help-section-list > li:last-child {
     padding-bottom: 0;
 }
+table {
+    font-size: 1.3rem;
+    border-collapse: collapse;
+    width: 100%;
+}
 
+td, th {
+    font-size: 1.3rem;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
 
 /* Text input */
 input[type="text"] {

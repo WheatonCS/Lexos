@@ -139,8 +139,7 @@ function validate_inputs(){
 
     // "Milestone"
     if(cut_mode === "milestone"){
-        let milestone = $("#milestone-input input").val();
-        if(milestone.length <= 0){
+        if($("#milestone-input input").val().length <= 0){
             error("A milestone must be provided.");
             return false;
         }
@@ -173,8 +172,7 @@ function validate_inputs(){
     }
 
     // "Merge threshold"
-    let merge_threshold = $("#merge-threshold-input input").val();
-    if(!validate_number(merge_threshold, 0, 100)){
+    if(!validate_number($("#merge-threshold-input input").val(), 0, 100)){
         error("Invalid merge threshold.");
         return false;
     }
