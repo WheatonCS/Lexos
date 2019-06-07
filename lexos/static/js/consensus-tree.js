@@ -1,19 +1,19 @@
 $(function(){
 
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_analyze_tooltips();
-
-    // Create the loading overlay for the "Consensus Tree" section
+    // Display the loading overlay
     start_loading("#consensus-tree-body");
+
+    // Initialize the tooltips for the "Options", "Tokenize", "Normalize",
+    // and "Cull" sections
+    initialize_analyze_tooltips();
+    initialize_tooltips();
 
     // Register option popup creation callbacks for the "Distance Metric" and
     // "Linkage Method" buttons
     initialize_tree_options();
 
-    // Initialize legacy form inputs and create the consensus tree
-    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
-
-    create_tooltips();
+    // Initialize the legacy form inputs and create the consensus tree
+    get_active_file_ids(initialize, "#consensus-tree-body");
 });
 
 
@@ -35,9 +35,8 @@ function initialize(response){
 
     // When the "Generate" button is pressed, recreate the consensus tree
     $("#generate-button").click(function(){
-        if(!validate_consensus_tree_inputs() ||
-            !validate_analyze_inputs()) return;
         start_loading("#consensus-tree-body", "#generate-button");
+        remove_errors();
         create_consensus_tree();
     });
 }
@@ -47,7 +46,14 @@ function initialize(response){
  * Creates the consensus tree.
  */
 function create_consensus_tree(){
+
+    // Validate the inputs
+    if(!validate_inputs() || !validate_analyze_inputs()) return;
+
+    // Send a request for the consensus tree data
     send_ajax_form_request("consensus-tree/graph")
+
+        // If the request was successful...
         .done(function(response){
 
             // Create the consensus tree
@@ -60,7 +66,15 @@ function create_consensus_tree(){
             // Remove the loading overlay, fade in the consensus tree,
             // and enable the "Generate" button
             finish_loading("#consensus-tree-body",
-                "#consensus-tree", "#generate-button")
+                "#consensus-tree", "#generate-button");
+        })
+
+        // If the request failed, display an error, and enable the "Generate"
+        // button
+        .fail(function(){
+            error("Failed to retrieve the consensus tree data.");
+            finish_loading("#consensus-tree-body",
+                "#consensus-tree", "#generate-button");
         });
 }
 
@@ -69,7 +83,7 @@ function create_consensus_tree(){
  * Validate the consensus tree options inputs.
  * @returns {boolean}: Whether the inputs are valid.
  */
-function validate_consensus_tree_inputs(){
+function validate_inputs(){
 
     // "Cutoff"
     if(!validate_number($("#cutoff-input").val(), 0, 1)){
@@ -86,17 +100,26 @@ function validate_consensus_tree_inputs(){
     return true;
 }
 
-function create_tooltips(){
-    //Distance Metric
-    create_tooltip("#distance-metric-tooltip-button", 'Different methods for measuring the distance' +
-        ' (difference) between documents.');
 
-    //Linkage Method
-    create_tooltip("#linkage-method-tooltip-button", 'Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters.');
+/**
+ * Initializes the tooltips for the "Options" section.
+ */
+function initialize_tooltips(){
 
-    //Cotoff
-    create_tooltip("#cutoff-tooltip-button", '0.5 means a document must appear in a clade in at least 50% of the iterations.');
+    // "Distance Metric"
+    create_tooltip("#distance-metric-tooltip-button", `Different methods for
+        measuring the distance (difference) between documents.`);
 
-    //Iterations
-    create_tooltip("#iterations-tooltip-button", 'For 100 iterations, 80% of the tokens will be chosen with or without replacement.');
+    // "Linkage Method"
+    create_tooltip("#linkage-method-tooltip-button", `The method used to
+        determine when documents and/or other sub-clusters should be joined
+        into new clusters.`);
+
+    // "Cutoff"
+    create_tooltip("#cutoff-tooltip-button", `0.5 means a document must
+        appear in a clade in at least 50% of the iterations.`);
+
+    // "Iterations"
+    create_tooltip("#iterations-tooltip-button", `For 100 iterations, 80% of
+        the tokens will be chosen with or without replacement.`);
 }

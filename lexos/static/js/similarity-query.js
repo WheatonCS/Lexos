@@ -1,17 +1,18 @@
 $(function(){
 
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_analyze_tooltips();
-
     // Display the loading overlay for the "Comparison Document" and
-    // "Similarity Table" sections
+    // "Similarity Query" sections
     start_loading("#comparison-document-section-body, #table");
 
-    // Initialize the legacy form inputs and create the similarity table
-    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
+    // Initialize the "Comparison Document", "Tokenize", "Cull", and
+    // "Similarity Query" sections
+    initialize_analyze_tooltips();
+    initialize_tooltips();
 
-    create_tooltips();
+    // Initialize the legacy form inputs and create the similarity table
+    get_active_file_ids(initialize, "#comparison-document-section-body, #table");
 });
+
 
 /**
  * Initialize the legacy form inputs and create the similarity table.
@@ -57,16 +58,32 @@ function initialize(response){
     });
 
     // Create the similarity table
-    send_ajax_form_request("similarity-query/table")
-        .done(create_similarity_table);
+    send_similarity_table_request();
 
     // If the "Generate" button is pressed, recreate the similarity table
     $("#generate-button").click(function(){
         if(!validate_analyze_inputs()) return;
-        start_loading("#table", "#generate-button");
-        send_ajax_form_request("similarity-query/table")
-            .done(create_similarity_table);
+        start_loading("#table", "#generate-button, #download-button");
+        remove_errors();
+        send_similarity_table_request();
     });
+}
+
+
+function send_similarity_table_request(){
+
+    // Send a request for the similarity query data
+    send_ajax_form_request("similarity-query/table")
+
+        // If the request was successful, create the similarity query table
+        .done(create_similarity_table)
+
+        // If the request failed, display an error
+        .fail(function(){
+            error("Failed to retrieve the similarity query data.");
+            add_text_overlay("#table", "Loading Failed", true);
+            enable("#generate-button, #download-button");
+        });
 }
 
 
@@ -103,16 +120,23 @@ function create_similarity_table(response){
     }
 
     // Remove the loading overlay, fade in the table, and enable the
-    // "Generate" button
-    finish_loading("#table", "#table-head, #table-body", "#generate-button");
+    // "Generate" and "Download" buttons
+    finish_loading("#table", "#table-head, #table-body",
+        "#generate-button, #download-button");
 }
 
-function create_tooltips(){
-    //Similarity Query
-    create_tooltip("#similarity-query-tooltip-button", 'The rankings are determined by \'distance between documents\' ' +
-        'where small distances (near zero) represent documents that are \'similar\' and unlike documents have distances closer to one.');
 
-    //Comparison Document
-    create_tooltip("#comparison-document-tooltip-button", 'Select one document to be the external comparison. All other ' +
-        'documents will be used to make the model and will be ranked in order of most to least similar to the comparison document in your results.');
+function initialize_tooltips(){
+
+    // "Similarity Query"
+    create_tooltip("#similarity-query-tooltip-button", `The rankings are
+        determined by the distance between documents. Small distances
+        (near zero) represent documents that are similar, and distances close
+        to one represent documents that are different.`);
+
+    // "Comparison Document"
+    create_tooltip("#comparison-document-tooltip-button", `Select one document
+        to be the external comparison. All other documents will be used to
+        make the model and will be ranked in order of most to least similar
+        to the comparison document in your results.`);
 }

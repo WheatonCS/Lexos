@@ -4,17 +4,18 @@ $(function(){
     start_loading("#graph-container, #table, #corpus-statistics, "+
         "#standard-error-test, #interquartile-range-test");
 
-    // Send a request to get the active files and their IDs
-    $.ajax({type: "GET", url: "/active-file-ids"})
+    // Initialize the tooltips
+    initialize_tooltips();
 
-        // If the request is successful, initialize the page
-        .done(initialize);
+    // Initialize the legacy form inputs and create the statistics
+    get_active_file_ids(initialize, "#graph-container, #table, "+
+        "#corpus-statistics, #standard-error-test, #interquartile-range-test");
 });
 
 
 /**
- * Initializes the statistics page.
- * @param {string} response: The response from the "/active-file-ids" request.
+ * Initializes the legacy form inputs and creates the statistics.
+ * @param {string} response: The response from the "active-file-ids" request.
  */
 function initialize(response){
 
@@ -31,40 +32,60 @@ function initialize(response){
     create_statistics();
 
     // If the "Generate" button is pressed, recreate the statistics
-    $("#generate-button").click(create_statistics);
+    $("#generate-button").click(function(){
+
+        // If an input is invalid, return
+        if(!validate_analyze_inputs()) return;
+
+        // Otherwise, display the loading overlays
+        start_loading("#graph-container, #table, #corpus-statistics, "+
+            "#standard-error-test, #interquartile-range-test",
+            "#generate-button");
+
+        // Create the statistics
+        create_statistics();
+    });
 }
 
 
 /**
- * Generates the statistics.
+ * Creates the statistics.
  */
 function create_statistics(){
 
-    // If the "Tokenize" or "Cull" section inputs are invalid, return
-    if(!validate_analyze_inputs()) return;
-
-    // Display the loading overlays
-    start_loading("#graph-container, #table, #corpus-statistics, "+
-            "#standard-error-test, #interquartile-range-test");
-        disable("#generate-button");
+    // Remove any existing error messages
+    remove_errors();
 
     // Send a request to get the corpus statistics
     send_ajax_form_request("/statistics/corpus")
 
-         // If the request is successful, create the corpus statistics
-        .done(create_corpus_statistics);
+         // If the request was successful, create the corpus statistics
+        .done(create_corpus_statistics)
+
+        // If the request failed, display an error and "Loading Failed" text
+        .fail(function(){
+            error("Failed to retrieve the corpus statistics.");
+            add_text_overlay("#corpus-statistics, #standard-error-test, "+
+                "#interquartile-range-test", "Loading Failed", true);
+            loading_complete_check(3);
+        });
 
     // Send a request to get the document statistics
     send_ajax_form_request("/statistics/documents")
 
-        // If the request is successful, create the document statistics
-        .done(create_document_statistics);
+        // If the request was successful, create the document statistics
+        .done(create_document_statistics)
 
-    // Create the box plot graph for the "Document Sizes" section
-    // On completion, re-enable the "Generate" button if all elements have
-    // finished loading
-    create_graph("/statistics/box-plot",
-        function(){ loading_complete_check(); });
+        // If the request failed, display an error and "Loading Failed" text
+        .fail(function(){
+            error("Failed to retrieve the document statistics.");
+            add_text_overlay("#table", "Loading Failed", true);
+            loading_complete_check();
+        });
+
+    // Create the box plot graph and enable the "Generate" button if all
+    // sections have finished loading
+    create_graph("/statistics/box-plot", loading_complete_check);
 }
 
 
@@ -75,7 +96,6 @@ function create_statistics(){
  */
 function create_corpus_statistics(response){
 
-    // Parse the JSON response, replacing any "NaN" values with "N/A"
     response = parse_json(response);
 
     // Populate the corpus statistics section with data
@@ -95,9 +115,7 @@ function create_corpus_statistics(response){
         response["interquartile_range_small"],
         response["interquartile_range_large"]);
 
-    // Remove the loading overlays from the "Corpus Statistics", "Standard
-    // Error Test" and "Interquartile Range Test" sections and fade the data
-    // in
+    // Remove the loading overlays sections and fade the data in
     finish_loading("#corpus-statistics, #standard-error-test, "+
         "#interquartile-range-test", "#corpus-statistics, "+
         "#standard-error-test, #interquartile-range-test");
@@ -195,3 +213,16 @@ function loading_complete_check(number_loaded = 1){
     elements_loaded = 0;
 }
 
+
+/**
+ * Initializes the tooltips for the "Tokenize" and "Cull" sections.
+ */
+function initialize_tooltips(){
+
+    // "Tokenize"
+    create_tooltip("#tokenize-tooltip-button", `Divide the text into n-grams
+        (by tokens or characters) of the desired length.`);
+
+    // "Cull"
+    initialize_cull_tooltips(false);
+}
