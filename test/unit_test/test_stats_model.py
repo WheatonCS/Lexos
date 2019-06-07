@@ -23,7 +23,7 @@ test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_file_stats()
 # noinspection PyProtectedMember
 test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
-test_pandas_one = pd.read_json(test_file_result_one)[0]
+test_pandas_one = pd.read_json(test_file_result_one)
 # ------------------------------------------------------------------
 
 # ------------------------ Second test suite -----------------------
@@ -46,7 +46,7 @@ test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
 test_file_result_two = test_stats_model_two.get_file_stats()
 test_box_plot_result_two = test_stats_model_two.get_box_plot()
-test_pandas_two = pd.read_json(test_file_result_two)[0]
+test_pandas_two = pd.read_json(test_file_result_two)
 # ------------------------------------------------------------------
 
 # ------------------- test suite for anomaly test ------------------
@@ -75,30 +75,30 @@ test_pandas_anomaly = pd.read_json(test_file_result_anomaly)[0]
 # ------------------------------------------------------------------
 class TestFileResult:
     def test_basic_info(self):
-        # UNIT TEST ISSUE HERE
-        assert test_pandas_one["Documents"][0] == "F1.txt"
-        assert test_pandas_one["Documents"][1] == "F2.txt"
-        assert test_pandas_two["Documents"][2] == "F3.txt"
+        print("!!!!", test_pandas_one)
+        assert test_pandas_one.iloc[2, 0] == "F1.txt"
+        assert test_pandas_one.iloc[2, 1] == "F2.txt"
+        assert test_pandas_two.iloc[2, 2] == "F3.txt"
 
     def test_distinct_words(self):
-        assert test_pandas_one["Distinct number of terms"][0] == 4
-        assert test_pandas_one["Distinct number of terms"][1] == 5
-        assert test_pandas_two["Distinct number of characters"][2] == 4
+        assert test_pandas_one.iloc[1, 0] == 4
+        assert test_pandas_one.iloc[1, 1] == 5
+        assert test_pandas_two.iloc[1, 2] == 4
 
     def test_total_words(self):
-        assert test_pandas_one["Total number of terms"][0] == 80
-        assert test_pandas_one["Total number of terms"][1] == 15
-        assert test_pandas_two["Total number of characters"][2] == 46
+        assert test_pandas_one.iloc[4, 0] == 80
+        assert test_pandas_one.iloc[4, 1] == 15
+        assert test_pandas_two.iloc[4, 2] == 46
 
     def test_average(self):
-        assert test_pandas_one["Average number of terms"][0] == 20
-        assert test_pandas_one["Average number of terms"][1] == 3
-        assert test_pandas_two["Average number of characters"][2] == 11.5
+        assert test_pandas_one.iloc[0, 0] == 20
+        assert test_pandas_one.iloc[0, 1] == 3
+        assert test_pandas_two.iloc[0, 2] == 11.5
 
     def test_hapax(self):
-        assert test_pandas_one["Number of terms occurring once"][0] == 0
-        assert test_pandas_one["Number of terms occurring once"][1] == 1
-        assert test_pandas_two["Number of characters occurring once"][2] == 0
+        assert test_pandas_one.iloc[3, 0] == 0
+        assert test_pandas_one.iloc[3, 1] == 1
+        assert test_pandas_two.iloc[3, 2] == 0
 
 
 class TestCorpusInfo:

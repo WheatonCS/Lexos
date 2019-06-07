@@ -311,7 +311,7 @@ class KMeansModel(BaseModel):
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return go.Figure(data=data, layout=layout) # UNIT TEST ISSUE HERE
+        return go.Figure(data=data, layout=layout)
 
     def _get_2d_scatter_result(self) -> go.Figure:
         """Generate a 2D plot that contains just the dots for K means result.
