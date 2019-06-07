@@ -257,7 +257,8 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color="#47BCFF")
+            marker=dict(color="#47BCFF"),
+            jitter=0.15
         )
 
         # Create a figure with two subplots and fill the figure.
