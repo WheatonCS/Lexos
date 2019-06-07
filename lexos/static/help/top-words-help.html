@@ -1,6 +1,135 @@
-<!-- The top words tool -->
+<!-- The Top Words Tool -->
 <h3 class="help-section-title">The Top Words Tool</h3>
 
 <h3 class="help-section-paragraph">
-    The help section for this tool has not been migrated yet.
+    The Lexos Topwords tool helps you find terms that are more prominent in a
+    certain document or class of documents than in other documents or classes of
+    documents. We call these highly prominent terms "topwords" (even when the
+    terms may not, strictly speaking, be "words".) The Topwords tool uses a
+    Z-test to determine which terms are outliers beyond the normal range of
+    distribution in a document or a group of documents. Our experience shows
+    that the prominent terms you identify here in Topwords make good candidates
+    for further analysis using the Lexos <a href="/rolling-window"><u>Rolling Windows</u></a> tool.
+</h3>
+
+<!-- Options -->
+<h3 class="help-section-title">Options</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Comparison Method</b></li>
+    <h3 class="help-section-paragraph">
+
+        <ul class="help-section-list">
+
+            <li>Each document to the corpus: If you have not set any class labels
+                on the Manage page, Topwords will, by default, compare each document
+                to all the other active documents in your workspace.</li>
+
+            <li>Each document to other classes: Allows you to compare the proportion
+                of each term in a document within one class to their proportions
+                in another class as a whole</li>
+
+            <li>Each class to other classes: Allows you to the proportion of each
+                term in one class to their proportions in another class. Lexos
+                performs the analysis on all terms that appear at least once in
+                the corpus</li>
+
+        </ul>
+    </h3>
+
+    <li><b>Class Divisions</b></li>
+    <h3 class="help-section-paragraph">
+        Topwords uses the power of class labels. In the <a href="/manage"><u>Manage</u></a>
+        tool, you can right-click and set a class label on an individual document
+        or group of documents. For example, you might set the class of a group
+        of documents with the same author to the author’s name or label documents
+        by genre, and so on. If you do not assign class labels to your active
+        documents, Topwords will only allow you to compare each document to the
+        corpus (all active documents).
+    </h3>
+
+    <li><b>Tokenize</b></li>
+    <h3 class="help-section-paragraph">
+        By default Lexos tokenizes by tokens, meaning it splits strings of text
+        into tokens every time it encounters a space character. For Western languages,
+        this means that each token generally corresponds to a word. To tokenize
+        by multiple words, you can increase the n-gram size.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example given the text: "the dog ran" tokenizing by 1-gram tokens
+        would produce tokens "the", "dog", "ran". Tokenizing by 2-grams would
+        count the instances of bi-grams or pairs of words, thus producing tokens
+        "the dog", "dog ran", and so on.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you wish to tokenize by characters, Lexos will treat every character
+        (letters, whitespace, punctuation, etc.) as a separate token. Tokenizing
+        by 2-gram characters would produce tokens "th","he","e ", and so on.
+        Tokenizing by characters is best used for non-western languages that don't
+        have whitespace between tokens such as classical Chinese.
+    </h3>
+
+    <li><b>Cull</b></li>
+    <h3 class="help-section-paragraph">
+        "Culling" is a generic term we use for methods of decreasing the number
+        of terms used to generate the DTM based on statistical criteria (as
+        opposed to something like applying a stop-word list in Scrubber). Culling
+        is optional to use in Lexos. Lexos offers two different methods:
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Use the top ___ words": This method takes a slice of the DTM
+        containing only the top N most frequently occurring terms in the
+        set of active documents. The default setting is 100, meaning
+        Tokenizer will generate the DTM using only the top 100 most
+        frequent terms.
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Must be in ___ documents": This method build the DTM using only
+        terms that occur in at least N documents. The default setting is
+        1. If you have 10 active documents and you want to generate the
+        DTM using only terms that appear in all your active documents,
+        set the value to 10. <em><b>Note:</b> You can quickly determine
+        the number of active documents in your workspace as indicated by
+        the counter in the bottom right corner.</em>
+    </h3>
+
+</ul>
+
+<!-- Results -->
+<h3 class="help-section-title">Results</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Top Words</b></li>
+    <h3 class="help-section-paragraph">
+        Topwords produces a series of tables, each showing a different comparison
+        (labeled at the top of the table). For example, Document "A" compares to
+        Document "B". Within each table, the terms are ranked according to their
+        Z-score. Only the top 30 statistically significant terms are shown
+        (those for which the Z-score has an absolute value larger than 1.96).
+        If a term has a larger positive z-score, the term is used more frequently
+        in document or class “A” relative to document or class “B”. If a term has
+        a larger negative z-score, the term is used more frequently in document
+        or class “B” relative to “A”
+    </h3>
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        To download the result click the "CSV" button and you will get a
+        results <code>.csv</code> file. “CSV” is short for Comma-Separated Values.
+        In your downloaded file, a comma will serve as the column delimiter and
+        these files can be opened by other programs later, e.g., Excel.
+    </h3>
+
+</ul>
+
+<!-- Examples -->
+<h3 class="help-section-title">Examples</h3>
+
+<h3 class="help-section-paragraph">
+    Visit our public repository on GitHub
+    <a target="_blank" href="https://github.com/WheatonCS/Lexos/tree/master/test/test_suite/Topwords"><u>here</u></a>
+    for a test suite of examples you can use to generate Top Words results
+    before testing your own documents.
 </h3>
