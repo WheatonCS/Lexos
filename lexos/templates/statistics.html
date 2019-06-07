@@ -34,20 +34,51 @@
 
             <!-- Tokenize -->
             <div id="tokenize-section" class="section">
-                <h3 class="section-top title">Tokenize</h3>
+
+                <div class="vertical-splitter section-top">
+                    <h3 class="title">Tokenize</h3>
+                    <h3 id="tokenize-tooltip-button" class="right-justified button">?</h3>
+                </div>
+
                 <div class="section-body">
-                    <label class="circle-label"><input name="tokenType" value="word" type="radio" checked><span>By Tokens</span></label><br>
-                    <label class="circle-label"><input name="tokenType" value="char" type="radio"><span>By Characters</span></label><br>
-                    <h3>Grams</h3><label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label class="circle-label">
+                        <input name="tokenType" value="word" type="radio" checked>
+                        <span>By Tokens</span>
+                    </label><br>
+
+                    <label class="circle-label">
+                        <input name="tokenType" value="char" type="radio">
+                        <span>By Characters</span>
+                    </label><br>
+
+                    <h3>Grams</h3>
+                    <label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
                 </div>
             </div>
 
             <!-- Cull -->
             <div id="cull-section" class="section">
-                <h3 class="section-top title">Cull</h3>
+
+                <div class="vertical-splitter section-top">
+                    <h3 class="title">Cull</h3>
+                    <h3 id="cull-tooltip-button" class="right-justified button">?</h3>
+                </div>
+
                 <div class="section-body">
-                    <label class="checkbox-label"><input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox"><span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span></label>
-                    <label class="checkbox-label"><input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox"><span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span></label>
+
+                    <label class="checkbox-label">
+                        <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
+                        <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
+                    </label>
+
+                    <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
+
+                    <label class="checkbox-label">
+                        <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
+                        <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
+                    </label>
+
+                    <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
                 </div>
             </div>
         </div>

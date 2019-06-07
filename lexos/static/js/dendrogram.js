@@ -1,10 +1,12 @@
 $(function(){
 
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_analyze_tooltips();
-
     // Display the loading overlay on the "Dendrogram" section
     start_loading("#graph-container");
+
+    // Initialize the tooltips for the "Options", "Tokenize", "Normalize",
+    // and "Cull" sections
+    initialize_analyze_tooltips();
+    initialize_tooltips();
 
     // Register option popup creation callbacks for the "Distance Metric" and
     // "Linkage Method" buttons
@@ -17,10 +19,8 @@ $(function(){
             [["left", "Left"],  ["bottom", "Bottom"]]);
     });
 
-    // Initialize legacy form inputs and create the dendrogram
-    $.ajax({type: "GET", url: "/active-file-ids"}).done(initialize);
-
-    create_tooltips();
+    // Initialize the legacy form inputs and create the dendrogram
+    get_active_file_ids(initialize, "#graph-container");
 });
 
 
@@ -52,14 +52,19 @@ function initialize(response){
     $("#generate-button").click(function(){
         if(!validate_analyze_inputs()) return;
         start_loading("#graph-container", "#generate-button");
+        remove_errors();
         create_graph("dendrogram/graph");
     });
 }
 
-function create_tooltips(){
-    //Distance Metric
-    create_tooltip("#distance-metric-tooltip-button", 'Different methods for measuring the distance (differences) between documents.');
+function initialize_tooltips(){
 
-    //Linkage Method
-    create_tooltip("#linkage-method-tooltip-button", 'Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters.');
+    // "Distance Metric"
+    create_tooltip("#distance-metric-tooltip-button", `The method for measuring
+        the distance (difference) between documents.`);
+
+    // "Linkage Method"
+    create_tooltip("#linkage-method-tooltip-button", `The method used to
+        determine when documents and/or other sub-clusters should be joined
+        into new clusters.`);
 }

@@ -1,6 +1,3 @@
-/**
- * Initializes the page after it has loaded.
- */
 $("document").ready(function(){
     highlight_navbar_button();
     initialize_dropdown_menus();
@@ -21,21 +18,21 @@ function highlight_navbar_button(){
 
     switch(window.location.pathname.substring(1)){
 
-        // Upload
+        // "Upload"
         case "upload": highlight($("#upload-button")); break;
 
-        // Manage
+        // "Manage"
         case "manage": highlight($("#manage-button")); break;
 
-        // Prepare
+        // "Prepare"
         case "scrub": case "cut": case "tokenize":
             highlight($("#prepare-button")); break;
 
-        // Visualize
+        // "Visualize"
         case "word-cloud": case "multicloud": case "bubbleviz": case "rolling-window":
             highlight($("#visualize-button")); break;
 
-        // Analyze
+        // "Analyze"
         case "statistics": case "dendrogram": case "k-means": case "consensus-tree":
         case "similarity": case "top-words": case "content-analysis":
             highlight($("#analyze-button"));
@@ -57,14 +54,14 @@ function highlight(element){
  */
 function initialize_dropdown_menus(){
 
-    // Prepare
+    // "Prepare"
     add_dropdown_menu_callback("prepare", [
         ["Scrub", "scrub"],
         ["Cut", "cut"],
         ["Tokenize", "tokenize"]
     ]);
 
-    // Visualize
+    // "Visualize"
     add_dropdown_menu_callback("visualize", [
         ["Word Cloud", "word-cloud"],
         ["Multicloud", "multicloud"],
@@ -72,21 +69,22 @@ function initialize_dropdown_menus(){
         ["Rolling Window", "rolling-window"]
     ]);
 
-    // Analyze
+    // "Analyze"
     add_dropdown_menu_callback("analyze", [
         ["Statistics", "statistics"],
         ["Dendrogram", "dendrogram"],
-        ["K-Means Clustering", "k-means"],
+        ["K-Means", "k-means"],
         ["Consensus Tree", "consensus-tree"],
         ["Similarity Query", "similarity-query"],
         ["Top Words", "top-words"],
         ["Content Analysis", "content-analysis"]
     ]);
 
-    // Remove menus if an outside element was clicked
+    // Remove the menu if an outside element was clicked
     $(window).click(remove_dropdown_menus);
 
-    // Stop click propagation on navbar menu button clicks
+    // Stop click propagation on navbar menu button clicks so that the menu
+    // is not removed undesirably
     $(".navbar-button").each(function(){
        $(this).click(function(event){ event.stopPropagation(); });
     });
