@@ -16,6 +16,7 @@ form {
     display: grid;
     grid-gap: 2rem;
     grid-template-columns: 35rem auto 30rem;
+    grid-template-rows: 45rem auto 40rem;
 }
 
 #left-column {
@@ -34,6 +35,13 @@ form {
     margin: 1rem;
 }
 
+#standard-error-test{
+    overflow-y: auto;
+}
+
+#interquartile-range-test{
+    overflow-y: auto;
+}
 
 /* Table */
 #table {
@@ -64,7 +72,7 @@ form {
 
 #table-body {
     height: calc(100% - 3rem);
-    overflow-y: overlay;
+    overflow-y: auto;
 }
 
 .table-row {
