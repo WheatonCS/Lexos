@@ -15,7 +15,7 @@ form {
 #top-section {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: 30rem auto 30rem;
+    grid-template-columns: 35rem auto 30rem;
 }
 
 #left-column {

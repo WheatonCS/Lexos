@@ -13,7 +13,6 @@ base_blueprint = Blueprint("base", __name__)
 @base_blueprint.route("/", methods=["GET"])
 def base() -> str:
     """Handles redirection to other pages.
-
     :return: A redirect to the upload page.
     """
 
@@ -23,7 +22,6 @@ def base() -> str:
 @base_blueprint.route("/active-documents", methods=["GET"])
 def get_active_documents() -> str:
     """Returns the number of active documents.
-
     :return: The number of active documents.
     """
 
@@ -53,7 +51,6 @@ def get_active_files() -> str:
 @base_blueprint.route("/document-previews", methods=["GET"])
 def get_document_previews() -> str:
     """Returns previews of the active documents.
-
     :return: Previews of the active documents.
     """
 
@@ -64,11 +61,9 @@ def get_document_previews() -> str:
 @base_blueprint.route("/no-session", methods=["GET"])
 def no_session() -> str:
     """Loads the "no session" page.
-
     If the user reaches a page without an active session, this function will
     load a page with a warning about having no session. The page will redirect
     to the upload page.
-
     :return: The "no session" page.
     """
 
@@ -78,7 +73,6 @@ def no_session() -> str:
 @base_blueprint.route("/download-workspace", methods=["GET"])
 def download_workspace() -> str:
     """Send the workspace file (.lexos) to the user.
-
     :return: The workspace file.
     """
 
@@ -94,7 +88,6 @@ def download_workspace() -> str:
 @base_blueprint.route("/reset", methods=["GET", "POST"])
 def reset() -> str:
     """ Resets the session and initializes a new one.
-
     :return: A redirect to the upload page.
     """
 
@@ -106,7 +99,6 @@ def reset() -> str:
 
 def detect_active_docs() -> int:
     """Detects the number of active documents.
-
     :return: The number of active documents.
     """
 

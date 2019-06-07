@@ -14,34 +14,67 @@
 <!-- Options -->
 {% block options %}
 
-    <!-- K-means options -->
+    <!-- Options -->
     <div id="k-means-options-section" class="section">
         <h3 class="section-top title">Options</h3>
         <div class="section-body">
-            <h3>Clusters</h3><input id="clusters-input" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="numclusters-tooltip-button" class="button">?</h3><br>
-            <label class="circle-label"><input name="viz" value="Voronoi" type="radio" checked><span>Voronoi</span></label>
+
+            <!-- Clusters -->
+            <h3>Clusters</h3>
+            <input id="clusters-input" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off">
+            <h3 id="clusters-tooltip-button" class="button">?</h3><br>
+
+            <!-- Voronoi -->
+            <label class="circle-label">
+                <input name="viz" value="Voronoi" type="radio" checked>
+                <span>Voronoi</span>
+            </label>
             <h3 id="visualization-method-tooltip-button" class="button">?</h3><br>
-            <label class="circle-label"><input name="viz" value="2DScatter" type="radio"><span>2D-Scatter</span></label><br>
-            <label class="circle-label"><input name="viz" value="3DScatter" type="radio"><span>3D-Scatter</span></label>
+
+            <!-- 2D Scatter -->
+            <label class="circle-label"><input name="viz" value="2DScatter" type="radio">
+                <span>2D Scatter</span>
+            </label><br>
+
+            <!-- 3D Scatter -->
+            <label class="circle-label">
+                <input name="viz" value="3DScatter" type="radio">
+                <span>3D Scatter</span>
+            </label>
         </div>
     </div>
 
-    <!-- Advanced k-means options -->
+    <!-- Advanced -->
     <div id="advanced-options-section" class="section">
         <h3 class="section-top title">Advanced</h3>
         <div class="section-body">
-            <label class="circle-label"><input name="init" value="k-means++" type="radio" checked><span>K-Means++</span></label>
-            <label class="circle-label"><input name="init" value="random" type="radio"><span>Random</span></label>
+
+            <!-- K-Means -->
+            <label class="circle-label">
+                <input name="init" value="k-means++" type="radio" checked>
+                <span>K-Means++</span>
+            </label>
+
+            <!-- Random -->
+            <label class="circle-label">
+                <input name="init" value="random" type="radio">
+                <span>Random</span>
+            </label>
             <h3 id="initialization-method-tooltip-button" class="button">?</h3><br>
-            <h3>Maximum Iterations</h3><input id="maximum-iterations-input" name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="max-iterations-tooltip-button" class="button">?</h3><br>
-            <h3>Different Centroids</h3><input id="different-centroids-input" name="n_init" value="10" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="diff-centroids-tooltip-button" class="button">?</h3><br>
-            <div>
-                <h3>Relative Tolerance</h3><input id="relative-tolerance-input" name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
-                <h3 id="relative-tolerance-tooltip-button" class="button">?</h3><br>
-            </div>
+
+            <!-- Maximum Iterations -->
+            <h3>Maximum Iterations</h3>
+            <input id="maximum-iterations-input" name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off">
+
+            <!-- Different Centriods -->
+            <h3>Different Centroids</h3>
+            <input id="different-centroids-input" name="n_init" value="10" type="text" spellcheck="false" autocomplete="off">
+            <h3 id="different-centroids-tooltip-button" class="button">?</h3><br>
+
+            <!-- Relative Tolerance -->
+            <h3>Relative Tolerance</h3>
+            <input id="relative-tolerance-input" name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
+            <h3 id="relative-tolerance-tooltip-button" class="button">?</h3><br>
         </div>
     </div>
 {% endblock %}
@@ -50,12 +83,22 @@
 <!-- Results -->
 {% block results %}
 
-    <!-- K-means graph -->
+    <!-- K-means -->
     <div class="section">
+
+        <!-- Top -->
         <div class="vertical-splitter section-top">
             <h3 class="title">K-Means</h3>
             <h3 id="generate-button" class="disabled right-justified button">Generate</h3>
         </div>
+
+        <!-- Graph -->
         <div id="graph-container" class="section-body"></div>
     </div>
+{% endblock %}
+
+
+<!-- Hidden elements -->
+{% block hidden_elements %}
+
 {% endblock %}

@@ -26,21 +26,34 @@
         <!-- Tokenize -->
         <div id="tokenize-section" class="section">
 
+            <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Tokenize</h3>
                 <h3 id="tokenize-tooltip-button" class="right-justified button">?</h3>
             </div>
 
+            <!-- By Tokens -->
             <div class="section-body">
-                <label class="circle-label"><input name="tokenType" value="word" type="radio" checked><span>By Tokens</span></label><br>
-                <label class="circle-label"><input name="tokenType" value="char" type="radio"><span>By Characters</span></label><br>
-                <h3>Grams</h3><label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                <label class="circle-label">
+                    <input name="tokenType" value="word" type="radio" checked>
+                    <span>By Tokens</span>
+                </label><br>
+
+                <label class="circle-label">
+                    <input name="tokenType" value="char" type="radio">
+                    <span>By Characters</span>
+                </label><br>
+
+                <!-- Grams -->
+                <h3>Grams</h3>
+                <label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
             </div>
         </div>
 
         <!-- Normalize -->
         <div id="normalize-section" class="section">
 
+            <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Normalize</h3>
                 <h3 id="normalize-tooltip-button" class="right-justified button">?</h3>
@@ -48,17 +61,19 @@
 
             <div class="section-body">
 
+                <!-- Proportional -->
                 <label class="circle-label">
                     <input name="normalizeType" value="freq" type="radio" checked>
                     <span>Proportional</span>
                 </label><br>
 
+                <!-- Raw -->
                 <label class="circle-label">
                     <input name="normalizeType" value="raw" type="radio">
                     <span>Raw</span>
                 </label><br>
 
-
+                <!-- TF-IDF -->
                 <label class="circle-label">
                     <input name="normalizeType" value="tfidf" type="radio">
                     <span>TF-IDF</span>
@@ -70,6 +85,7 @@
         <!-- Cull -->
         <div id="cull-section" class="section">
 
+            <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Cull</h3>
                 <h3 id="cull-tooltip-button" class="right-justified button">?</h3>
@@ -77,23 +93,24 @@
 
             <div class="section-body">
 
+                <!-- Use the top X words -->
                 <label class="checkbox-label">
                     <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
                     <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
                 </label>
-
                 <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
 
+                <!-- Must be in X documents -->
                 <label class="checkbox-label">
                     <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
                     <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
                 </label>
-
                 <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
             </div>
         </div>
     </div>
 
+    <!-- Results -->
     {% block results %}{% endblock %}
 
     <!-- Hidden elements -->
