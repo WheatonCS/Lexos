@@ -163,8 +163,15 @@ function toggle_help_section(){
     let url = "/static/help"+window.location.pathname+"-help.html";
     help_section.load(url);
     help_visible = true;
+
+    console.log($("#help-content"));
+    $("#help-content").load("/static/help"+window.location.pathname+"-help-default.html")
+    $("#glossary-button").click(load_glossary())
 }
 
+function load_glossary(){
+    $("#content").load("/static/help/glossary-help.html")
+}
 
 /**
  * Update the number of active documents displayed after the "Active

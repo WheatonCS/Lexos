@@ -355,6 +355,29 @@ td, th {
     padding: 8px;
 }
 
+
+#help-section-nav{
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 100%;
+    min-width: 40rem;
+    height: 7rem;
+    background-color: #FFFFFF;
+}
+
+#help-navbar-left {
+    justify-self: center;
+    margin-left: 1.5rem;
+}
+
+#help-navbar-right {
+    justify-self: right;
+    margin-top: 2.3rem;
+    margin-right: 2rem;
+}
+
+
 /* Text input */
 input[type="text"] {
     height: 3rem;
