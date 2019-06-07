@@ -1,12 +1,43 @@
 $(function(){
 
-    // Display the loading overlay
-    start_loading("#bubbleviz");
+    // Initialize the "Color" button
+    initialize_color_button();
 
     // Create the bubbleviz
-    $.ajax({type: "GET", url: "bubbleviz/get-word-counts"})
-        .done(create_bubbleviz);
+    send_word_counts_request();
+
+    // If the "Generate" button is pressed, recreate the bubbleviz
+    $("#generate-button").click(send_word_counts_request);
 });
+
+
+/**
+ * Sends the request for the word counts and creates the bubbleviz.
+ */
+function send_word_counts_request(){
+
+    // Validate the "Term Count" input
+    if(!validate_visualize_inputs()) return;
+
+    // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
+    // buttons
+    start_loading("#bubbleviz", "#png-button, #svg-button, #generate-button");
+
+    // Send the request for the word counts
+    $.ajax({
+        type: "POST",
+        url: "bubbleviz/get-word-counts",
+        contentType: "application/JSON",
+        data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
+    })
+
+    // If the request is successful, create the bubbleviz
+    .done(create_bubbleviz)
+
+    // If the request failed, display and error
+    .fail(function(){ error("Failed to retrieve the bubbleviz data."); });
+}
+
 
 /**
  * Create the bubbleviz.
@@ -35,11 +66,6 @@ function create_bubbleviz(response){
 
     let base_font_size = 5;
 
-    // Create the color map
-    let color = d3.scaleLinear()
-        .domain([0, 1])
-        .range(["#505050", "#47BCFF"]);
-
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
         .size([diameter, diameter])
@@ -47,6 +73,9 @@ function create_bubbleviz(response){
 
     let svg = d3.select("#bubbleviz")
         .append("svg")
+            .attr("version", "1.1")
+            .attr("xmlns", "http://www.w3.org/2000/svg")
+
             .style("width", diameter+"px")
             .style("height", diameter+"px")
             .attr("class", "bubble");
@@ -60,24 +89,33 @@ function create_bubbleviz(response){
         .filter(function(d){ return !d.children; })
         .append("g")
             .attr("class", "node")
-            .attr("transform", function(d){ return "translate("+d.x+", "+d.y+')'; });
+            .attr("transform", function(d){
+                return "translate("+d.x+", "+d.y+')';
+            });
 
     node.append("circle")
         .attr("r", function(d){ return d.r; })
-        .style("fill", function(d, i){ return color(d.data.value); });
+        .style("fill", function(d){
+            return get_visualize_color(d.data.value);
+        });
 
     node.append("text")
         .attr("dy", ".2em")
         .style("text-anchor", "middle")
         .text(function(d){ return d.data.word; })
-        .attr("font-family", "Open Sans")
+        .attr("font-family", $("#font-input").val())
         .attr("font-size", function(d){ return d.r/3+base_font_size; })
-        .attr("fill", "#E3E3E3")
+        .attr("fill", "#FFFFFF")
 
     node.append("svg:title")
         .text(function(d){ return "Word: "+d.data.word+"\nCount: "+d.data.count; });
 
     // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");
-    finish_loading("#bubbleviz", "#bubbleviz");
+    finish_loading("#bubbleviz", "#bubbleviz",
+        "#png-button, #svg-button, #generate-button");
+
+    // Initialize the SVG and PNG download buttons
+    initialize_png_link("svg", "#png-button", diameter, diameter, "bubbleviz.png");
+    initialize_svg_link("svg", "#svg-button", "bubbleviz.svg");
 }

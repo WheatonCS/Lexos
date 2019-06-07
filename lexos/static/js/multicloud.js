@@ -1,28 +1,51 @@
 let layouts = [];
 let word_cloud_count;
-let rendered_count = 0;
-let color;
+let rendered_count;
 
 $(function(){
 
-    // Display the loading overlay
-    start_loading("#multicloud");
-
-    // Create the color map
-    color = d3.scale.linear()
-        .domain([100, 0])
-        .range(["#505050", "#47BCFF"]);
+    // Initialize the "Color" button
+    initialize_color_button();
 
     // Create the multicloud
-    $.ajax({type: "GET", url: "multicloud/get-word-counts"})
-        .done(create_word_cloud_layouts);
+    get_multicloud_data();
+
+    // If the "Generate" button is pressed, recreate the multicloud
+    $("#generate-button").click(get_multicloud_data);
 });
+
+
+/**
+ * Get the multicloud data.
+ */
+function get_multicloud_data(){
+
+    // Validate the "Term Count" input
+    if(!validate_visualize_inputs()) return;
+
+    // Reset the rendered word cloud count
+    rendered_count = 0;
+
+    // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
+    // buttons
+    start_loading("#multicloud", "#png-button, #svg-button, #generate-button");
+
+    // Create the multicloud
+    $.ajax({
+        type: "POST",
+        url: "multicloud/get-word-counts",
+        contentType: "application/JSON",
+        data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
+    })
+    .done(create_word_cloud_layouts);
+}
 
 
 /**
  * Creates the multicloud (a word cloud for each active document).
  * @param {string} response: The response from the get-word-counts request.
  */
+let diameter;
 function create_word_cloud_layouts(response){
 
     // Parse the JSON response
@@ -45,13 +68,22 @@ function create_word_cloud_layouts(response){
         // Create the word cloud element
         let word_cloud_element = $(`
             <div id="word-cloud-wrapper-${i}" class="word-cloud-wrapper">
-                <h3 class="title">${document.name}</h3>
+            
+                <div class="vertical-splitter section-top">
+                    <h3 class="title">${document.name}</h3>
+                    
+                    <div class="right-justified">
+                        <a id="png-button-${i}" class="button">PNG</a>
+                        <a id="svg-button-${i}" class="button">SVG</a>
+                    </div>
+                </div>
+                
                 <div id="word-cloud-${i}" class="word-cloud"></div>
             </div>
         `).appendTo("#multicloud").find(".word-cloud");
 
         // Calculate the sizes
-        let diameter = rem_to_px(46);
+        diameter = rem_to_px(46);
         let base_size = diameter/50;
         let maximum_size = diameter/3-base_size;
 
@@ -59,6 +91,7 @@ function create_word_cloud_layouts(response){
         let words = []
         for(const word of document.words)
             words.push({"text": word[0], "count": word[1],
+                "normalized_count": word[2],
                 "size": word[2]*maximum_size+base_size});
 
         // Create the layout
@@ -82,7 +115,7 @@ function create_word_cloud_layout(id, name, words, diameter){
         .words(words)
         .padding(5)
         .rotate(function(){ return ~~(Math.random()*2)*90; })
-        .font("Open Sans")
+        .font($("#font-input").val())
         .fontSize(function(d){ return d.size; })
         .on("end", function(words){
             create_word_cloud(id, name, words);
@@ -119,7 +152,9 @@ function create_word_cloud(id, name, words){
 
         .append("text")
             .style("font-size", function(d){ return d.size+"px"; })
-            .style("fill", function(d, i){ return color(i); })
+            .style("fill", function(d){
+                return get_visualize_color(d.normalized_count);
+            })
             .style("font-family", layout.font())
             .attr("text-anchor", "middle")
             .attr("transform", function(d){
@@ -130,8 +165,15 @@ function create_word_cloud(id, name, words){
         .append("svg:title")
             .text(function(d){ return `Word: ${d.text} \nCount: ${d.count}`; });
 
+    // Initialize the PNG and SVG download buttons
+    initialize_png_link(`#word-cloud-${id} svg`, `#png-button-${id}`,
+        diameter, diameter, "multicloud.png");
+    initialize_svg_link(`#word-cloud-${id} svg`,
+        `#svg-button-${id}`, "multicloud.svg");
+
     // Remove the loading overlay and fade in the word clouds if this is the
     // last word cloud to render
     if(++rendered_count === word_cloud_count)
-        finish_loading("#multicloud", ".word-cloud-wrapper");
+        finish_loading("#multicloud", ".word-cloud-wrapper",
+            "#png-button, #svg-button, #generate-button");
 }

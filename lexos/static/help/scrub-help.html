@@ -1,6 +1,311 @@
-<!-- The rolling window tool -->
-<h3 class="help-section-title">The Scrub Tool</h3>
+<!-- The Scrubber Tool -->
+
+<h3 class="help-section-title">The Scrubber Tool</h3>
 
 <h3 class="help-section-paragraph">
-    The help section for this tool has not been migrated yet.
+    Pre-processing your texts, what we refer to as "scrubbing", is a critical
+    step when probing digitized texts and is a primary step in the Lexos workflow.
+    In order to facilitate a conscious consideration of the many small decisions
+    required, scrubbing options are isolated into individual choices. If for
+    no other reason, your careful deliberation and choice of the many options
+    during scrubbing facilitates replication of your analyses in the future,
+    both by you and others who wish to replicate your experimental results.
 </h3>
+
+<h3 class="help-section-paragraph">
+    <b><em>Scrubbing affects all active documents and cannot be undone.</em></b>
+    So make sure to de-activate any documents you do not wish to scrub using
+    the <u><a href="http://lexos3.wheatoncollege.edu/manage">Manage</a></u>
+    tool. If you apply scrubbing and later wish to revert to the un-scrubbed
+    version, you will have to upload another copy to Lexos.
+</h3>
+
+<!-- Usage -->
+<h3 class="help-section-title">Usage</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Preview and Apply</b></li>
+    <h3 class="help-section-paragraph">
+        The "Preview" button allows you to view your options without
+        permanently saving the changes. At this point, only the beginning and
+        end of each document is displayed, separated by ellipses (…). When
+        you are satisfied that you have achieved the desired effect, click the
+        "Apply" button. Your documents will be scrubbed, and the scrubbed
+        versions will be used by all the other Lexos tools.
+    </h3>
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        The "Download" button allows you to download the scrubbed versions of
+        your files. A <code>.zip</code> folder of your scrubbed versions will
+        be downloaded. Downloading scrubbed files can facilitate future analyses
+        by uploading the previous scrubbed versions, allowing you to skip the
+        scrubbing step and ensuring that your analyses are based on the
+        same scrubbing options.
+    </h3>
+
+</ul>
+
+<!-- Options -->
+<h3 class="help-section-title">Options</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Remove <u><a href="https://www.gutenberg.org">Project Gutenberg</a></u> boilerplate material</b></li>
+    <h3 class="help-section-paragraph">
+        If you have uploaded a file from the Project Gutenberg website without
+        removing the boilerplate material (i.e., text added by the
+        Project Gutenberg site at the top and license material at the end of
+        the text), you will receive a warning.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you select the "Apply" button without removing
+        this extra text, Lexos will attempt to remove the Project Gutenberg
+        boilerplate material at the top and end of the file. However, we
+        suggest you remove the boilerplate material using a text editor before
+        uploading it to Lexos in order to prevent unwanted text from being
+        included in subsequent analyses (e.g. including Project Gutenberg
+        licensure material in your word counts) due to the inconsistency of
+        the boilerplate format.
+    </h3>
+
+    <li><b>Make Lowercase</b></li>
+    <h3 class="help-section-paragraph">
+        Converts all uppercase characters to lowercase characters so that the
+        tokens "The" and "the" will be considered as the same term. In addition,
+        all contents (whether in uploaded files or entered manually) for the
+        Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters
+        options will also have all uppercase characters changed to lowercase.
+        Lowercase is not applied inside any <code>HTML</code>, <code>XML</code>,
+        or <code>SGML</code> markup tags remaining in the text.
+    </h3>
+
+    <li><b>Remove Digits</b></li>
+    <h3 class="help-section-paragraph">
+        Removes all number characters from the text. Similar to the handling of
+        punctuation marks, any Unicode character in each of the active texts
+        with a "Number Character Property" is removed. For example, this option
+        will remove a Chinese three (㈢) and Eastern Arabic six (۶) from the tex
+        t. Note: at present, Lexos does not match Real numbers as a unit.
+        For example, for 3.14, Lexos will remove (only) the 3, 1, and 4 and the
+        decimal point will be removed only if the Remove All Punctuation option
+        is selected. Remove Digits is not applied inside any <code>HTML</code>,
+        <code>XML</code>, or <code>SGML</code> markup tags remaining in the text.
+    </h3>
+
+    <li><b>Remove Whitespace</b></li>
+    <h3 class="help-section-paragraph">
+        <ul class="help-section-list">
+            <li>Remove Spaces: each blank space will be removed.</li>
+            <li>Remove Tabs: each tab character <code>\t</code> wil be removed.</li>
+            <li>Remove Line Break: each newline character <code>\n</code> and carriage return
+            character <code>\r</code>  will be removed.</li>
+        </ul>
+        Remove Whitespace is not applied inside any <code>HTML</code>,
+        <code>XML</code>, or <code>SGML</code> markup tags remaining in the text.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Removing whitespace characters may be useful when you are working with
+        languages such as Chinese that do not use whitespace for word boundaries.
+        In addition, this option may be desired when tokenizing by character
+        n-grams if you do not want spaces to be part of your n-grams. See the
+        section on <u>Tokenization</u> for further discussion on tokenizing by
+        character n-grams
+    </h3>
+
+    <li><b>Scrub Tags</b></li>
+    <h3 class="help-section-paragraph">
+        Handles markup tags in angular brackets, such as those used in
+        <code>HTML</code>, <code>XML</code>, or <code>SGML</code>. In markup
+        languages like these, start and end tags like
+        <code>&lt;p&gt;...&lt;/p&gt;</code> are used to designate an "element".
+        Elements may be modified by "attributes" specified inside the start tag.
+        For instance, a text using the the Text Encoding Initiative (TEI)
+        specification for XML might contain the markup
+        <code>&lt;p rend=&quot;italic&quot;&gt;...&lt;/p&gt;</code>
+        for a paragraph in italics.
+    </h3>
+    <h3 class="help-section-paragraph">
+        When "Scrub Tags" is selected, you may click "[Options]" to open the
+        tag scrubbing dialog. This will allow you to choose one of four options
+        to handle each type of tag or to handle all the tags at once:
+    </h3>
+    <h3 class="help-section-paragraph">
+        <ul class="help-section-list">
+            <li>Remove Tag: Removes the start and end tags but keeps the content in between.</li>
+            <li>Remove All: Removes the start and end tags and all the content in between.</li>
+            <li>Replace: Replaces the start and end tags as well as all of the content between
+                with whatever you place in the "Replacement" text field. </li>
+            <li>None: This option will leave the specified element untouched in the text.
+                This is especially useful if you want to scrub other markup tags. </li>
+        </ul>
+        <b>Troubleshooting note:</b> Lexos will only scrub lowercase tags. As
+        a result, the Lexos scrubbing function will miss <code>HTML</code>
+        (and <code>SGML</code>) tags that contain uppercase letters. In this
+        case, you may have to check each of the tags Lexos finds to make sure
+        it does not have uppercase letters in your original document. If you find
+        that Lexos is not scrubbing tags containing capital letters, you will
+        have to change these in an editor before uploading the files. This issue
+        does not affect valid <code>XML</code> files since <code>XML</code>
+        parsers are case sensitive.
+    </h3>
+
+    <li><b>Remove Punctuation</b></li>
+    <h3 class="help-section-paragraph">
+        Lexos assumes that uploaded files may be in any language and automatically
+        converts them to
+        <a target="_blank" href="https://en.wikipedia.org/wiki/Unicode"><u>Unicode</u></a>
+        using
+        <a target="_blank" href="https://en.wikipedia.org/wiki/UTF-8"><u>UTF-8 Character encoding</u></a>.
+        This enables Lexos to recognize punctuation marks from a wide variety of languages.
+        If the "Remove All Punctuation" option is selected, Lexos will remove
+        any Unicode Punctuation Character and any Unicode Symbol Character in each
+        of the active texts.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If "Remove All Punctuation" is selected, three additional sub-options are available:
+        <ul class="help-section-list">
+            <li>Keep Hyphens: Selecting this option will change all variations of
+                Unicode hyphens to a single type of hyphen ("-") and this will
+                be left in the text. Hyphenated words will be subsequently
+                treated as a single token (e.g., <em>computer-aided</em> becomes
+                <em>computeraided</em>).</li>
+            <li>Keep Apostrophes:  If this option is selected, apostrophes will
+                be retained in contractions (e.g. <em>can’t</em>) and possessives
+                (e.g. <em>Scott’s</em>), but not those in plural possessives (<em>students’</em>
+                becomes the term <em>students</em>) nor those that appear at the start
+                of a token (<em>'bout</em> becomes the term <em>bout</em>).</li>
+            <li>Keep Ampersands: This option will not treat ampersands as
+                punctuation marks and will retain them in the text. Note that
+                <code>HTML</code>, <code>XML</code>, and <code>SGML</code>
+                entities such as <code>&amp;aelig</code> (æ) are handled separately. You can
+                choose how to convert these entities to standard Unicode characters
+                using the Special Characters option described below in
+                <em><u>Additional Options</u></em>. </li>
+        </ul>
+    </h3>
+</ul>
+
+<!-- Additional Options -->
+<h3 class="help-section-title">Additional Options</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Stop Words and Keep Words</b></li>
+    <h3 class="help-section-paragraph">
+        You may upload a list of words (e.g. stopWords.txt) or manually enter
+        a list of words as either comma-separated or line-separated as seen below:
+        <pre>a, some, that, the, which</pre>
+        OR
+        <pre>a <br>some <br>that <br>the <br>which</pre>
+        "Stop Words" represents a list of words or terms to remove from your
+        documents, and "Keep Words" represents a list of words or terms that
+        should remain in your documents with all other words removed. Note that
+        the "Make Lowercase" option will be applied to your list of stop/keep
+        words if that option is also selected.
+    </h3>
+
+    <li><b>Lemmas</b></li>
+    <h3 class="help-section-paragraph">
+        Replaces all instances of terms in a list with a common replacement
+        term called a "lemma". Lemmas might be conceived of as dictionary
+        headwords. Using the lemmas option will allow you to count a lemma and
+        all of its variants (such grammatically inflected forms) as a single term.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example, in Old English, the word for "king", <em>cyning</em> may
+        occur as <em>cyninges</em> or <em>cyningas</em>, amongst other variants.
+        If each of these forms occurs one time in a text, the Lemmas function
+        will instruct Lexos to treat this as three occurrences of the type
+        <em>cyning</em>.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Lemmas are specified by providing a comma-separated list of variants
+        followed by a colon and then the lemma. Multiple lemmas can be specified
+        in separate lines as shown below:
+        <pre>cyninges, cyningas: cyning <br>Beowulfes, Beowulfe: Beowulf</pre>
+        You can manually enter a list of lemmas or upload your own.
+    </h3>
+
+    <li><b>Consolidations</b></li>
+    <h3 class="help-section-paragraph">
+        Replaces a list of characters with a different character. This is
+        typically to consolidate symbols considered equivalent.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example, in Old English,  the character common character "eth" ð 
+        is interchangeable with the character "thorn" þ. The Consolidations 
+        option allows you to choose to merge the two using a single character.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Consolidations should be entered in the format <pre>ð: þ</pre> Where you wish to
+        change all occurrences of <code>ð</code> to <code>þ</code> . Multiple
+        consolidations can be separated by commas or line breaks.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Consolidations can be entered manually in the provided form field or
+        uploaded from a file. Note that the "Make Lowercase" option will be applied
+        to your list of characters if that option is also selected. To replace
+        entire words (terms) with other words, you should use the <b>Lemma</b> option.
+    </h3>
+
+    <li><b>Special Characters</b></li>
+    <h3 class="help-section-paragraph">
+        Replaces character entities with their glyph equivalents.
+        For instance, in HTML, the Old English character &ldquo;ash&rdquo; (æ)
+        is represented with the entity <code>&amp;aelig;</code>. Since Lexos
+        works entirely with Unicode characters you will most likely want to
+        replace character entities with their Unicode equivalents prior to
+        further analysis using the "Special Characters" tool. Lexos provides
+        four rule sets of pre-defined entities and their corresponding glyphs:
+        <ul class="help-section-list">
+            <li>Early English HTML: Transforms a variety of HTML entities used
+                to encode Old English, Middle English, and Early Modern English
+                into their corresponding glyphs.</li>
+            <li>Old English SGML: Transforms SGML entities used by the
+                <em>Dictionary of Old English</em> into their corresponding
+                glyphs.</li>
+            <li>MUFI 3: Transforms entities specified in version 3.0 of the
+                Medieval Unicode Font Initiative (MUFI 3) to their corresponding
+                glyphs.</li>
+            <li>MUFI 4: Transforms entities specified in version 4.0 of the
+                Medieval Unicode Font Initiative (MUFI 4) to their corresponding
+                glyphs.</li>
+        </ul>
+        You may also design your own ruleset if you are not using a language
+        covered by one of the pre-defined rule sets. To do this, enter your
+        transformation rules in the provided form field or upload a file. The
+        entity should be separated from its replacement glyph by a comma.
+        <pre>&amp;aelig;,æ</pre>
+        Multiple transformation rules should be listed on separate lines.
+    </h3>
+</ul>
+
+<!-- Replacing Patterns -->
+<h3 class="help-section-title">Replacing Patterns</h3>
+
+<h3 class="help-section-paragraph">
+    Sometimes it is necessary to replace a pattern rather than a precise string.
+    For instance, if a document contains multiple URLs like
+    <code>http://lexos.wheatoncollege.edu</code> and
+    <code>http://scalar.usc.edu/works/lexos/</code>, and you need to strip
+    these URLs, a method is required for matching all URLs without knowing
+    what they are in advance. One technique is to apply regular expression
+    (regex) pattern matching. Lexos uses regular expressions internally to
+    perform some of its scrubbing options, but, as of version 3.0, it does
+    not provide a way for users to supply their own regular expression
+    patterns when scrubbing. If users need to strip or replace patterns by
+    regular expressions, it will be necessary to perform that action using
+    a separate script or tool <em><u>prior to using Lexos</u></em>. A useful
+    regular expressions tutorial can be found at
+    <a target="_blank" href="https://regexone.com/"><u>RegexOne</u></a>.
+    Most modern text editors like
+    <a target="_blank" href="https://www.sublimetext.com/"><u>Sublime Text</u></a> and
+    <a target="_blank" href="http://www.barebones.com/products/TextWrangler/"><u>TextWrangler</u></a>
+    accept regular expressions in their search and replace functions, and
+    users may find them to be a convenient means of performing actions with
+    regular expressions. We hope to add a regular expression pattern matching
+    to Lexos in the future.
+</h3>
+
