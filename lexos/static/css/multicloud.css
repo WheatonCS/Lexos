@@ -1,7 +1,11 @@
-/* Form */
-form {
-    min-height: calc(100% - 4rem);
-    height: auto;
+/* Options */
+#graph-section-top{
+    grid-template-columns: .6fr 1fr 1fr 1fr .7fr;
+}
+
+#png-button,
+#svg-button {
+    display: none;
 }
 
 
@@ -10,8 +14,9 @@ form {
     display: grid;
     grid-template-columns: repeat(auto-fit, 46rem);
     grid-gap: 2rem;
-    align-content: center;
+    align-items: center;
     justify-content: center;
+    overflow-y: auto;
 }
 
 
@@ -24,14 +29,19 @@ form {
 }
 
 .word-cloud-wrapper .title {
-    display: block;
-    height: 4rem;
-    padding: 1rem;
     overflow: hidden;
+    margin-right: 1rem;
     white-space: nowrap;
-    background-color: #FFFFFF;
 }
 
 .word-cloud {
     height: calc(100% - 4rem);
+}
+
+.word-cloud-wrapper .button {
+    background-color: #FFFFFF;
+}
+
+.word-cloud-wrapper .button:hover {
+    background-color: #EAF5FF;
 }

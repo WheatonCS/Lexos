@@ -1,0 +1,60 @@
+{% extends "helpers/base.html" %}
+
+
+<!-- Head -->
+{% block head %}
+
+    <!-- d3.v4.js -->
+    <script type="text/javascript" src="//d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="//d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    <!-- Template Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+
+    <!-- Template JS and CSS -->
+    <script type="text/javascript" src="static/js/helpers/visualize-template.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/visualize-template.css"/>
+
+    {% block page_head %}{% endblock %}
+{% endblock %}
+
+
+<!-- Content -->
+{% block content %}
+
+    <!-- Graph -->
+    <div class="section">
+        <div id="graph-section-top" class="section-top">
+
+            <h3 class="title">{% block graph_title %}{% endblock %}</h3>
+
+            <div class="center-justified">
+                <h3>Font:</h3>
+                <input id="font-input" name="mfwnumber" value="Open Sans" type="text" spellcheck="false" autocomplete="off">
+            </div>
+
+            <div class="center-justified">
+                <h3>Term Count:</h3>
+                <input id="term-count-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
+            </div>
+
+            <div class="center-justified">
+                <h3>Color: </h3>
+                <h3 id="color-button" class="button">Lexos</h3>
+            </div>
+
+            <div class="right-justified">
+                <a id="png-button" class="disabled button">PNG</a>
+                <a id="svg-button" class="disabled button">SVG</a>
+                <h3 id="generate-button" class="disabled button">Generate</h3>
+            </div>
+        </div>
+
+        {% block graph %}{% endblock %}
+    </div>
+
+    <!-- Hidden elements -->
+    <input id="color-input" value="lexos" type="hidden">
+
+{% endblock %}

@@ -1,7 +1,7 @@
 import json
 
 import pandas as pd
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, request
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
@@ -23,7 +23,7 @@ def word_cloud() -> str:
     return render_template("word-cloud.html")
 
 
-@word_cloud_blueprint.route("/word-cloud/get-word-counts", methods=["GET"])
+@word_cloud_blueprint.route("/word-cloud/get-word-counts", methods=["POST"])
 def get_word_counts() -> str:
     """ Gets the top 100 word counts across all active files.
 
@@ -50,9 +50,13 @@ def get_word_counts() -> str:
 
     # Create a list of the top 100 words and their normalized counts
     response = []
-    maximum = dataframe.iloc[0]["count"]
-    dataframe = dataframe[:100]
+    maximum_top_words = int(request.get_json()["maximum_top_words"])
+    maximum_count = dataframe.iloc[0]["count"]
+    dataframe = dataframe[:maximum_top_words]
+
     for i in range(len(dataframe)):
         response.append([dataframe.iloc[i]["word"],
-                         dataframe.iloc[i]["count"]/maximum])
+                         str(dataframe.iloc[i]["count"]),
+                         dataframe.iloc[i]["count"]/maximum_count])
+
     return json.dumps(response)

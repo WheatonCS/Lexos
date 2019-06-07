@@ -28,12 +28,6 @@ form {
 }
 
 
-/* Scrubbing options */
-#punctuation-options {
-    transition: opacity .2s;
-}
-
-
 /* General */
 .scrub-section {
     display: grid;
@@ -54,9 +48,22 @@ form {
 }
 
 
-/* Stop words and keep words */
+/* Scrubbing options */
+#punctuation-options {
+    transition: opacity .2s;
+}
+
+
+/* Stop/keep words */
 #stop-words-section .circle-label {
     margin-right: 3rem;
+}
+
+
+/* Special characters */
+.options-section label {
+    margin-top: .2rem;
+    margin-bottom: 1rem;
 }
 
 

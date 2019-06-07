@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize the tooltips
+    initialize_tooltips();
+
     // Display the loading overlay
     start_loading("#graph-container");
 
@@ -108,4 +111,46 @@ function validate_inputs(){
     }
 
     return true;
+}
+
+
+/**
+ * Initializes the tooltips.
+ */
+function initialize_tooltips(){
+
+    // "Rolling Average"
+    create_tooltip("#rolling-average-tooltip-button", `Measures the number of
+        times the input appears in the window, divided by the overall size of
+        the window.`);
+
+    // "Rolling Ratio"
+    create_tooltip("#rolling-ratio-tooltip-button", `Measures the value of the
+        first input divided by the sum of the first and second inputs.`);
+
+    // "Search Terms" input
+    create_tooltip("#search-terms-input-tooltip-button", `Please divide inputs
+        by commas. For rolling ratios, input the numerator and denominator.`);
+
+    // "Strings"
+    create_tooltip("#strings-tooltip-button", `A string can be of any length.
+        When searching for multiple stings, separate each string by comma with
+        no whitespace. Any entered whitespace will be included in the
+        search.`);
+
+    // "Regex"
+    create_tooltip("#regex-tooltip-button", `Visit
+        <a href="https://en.wikipedia.org/wiki/Regular_expression"
+        target="_blank">this page</a> for more information on regular
+        expressions.`);
+
+    // "Window"
+    create_tooltip("#window-size-tooltip-button", `The number of characters,
+        tokens, or lines each window should contain. The maximum size is
+        10000.`);
+
+    // "Milestone"
+    create_tooltip("#milestone-tooltip-button", `Search the file for all
+        instances of a specified string and plot a vertical dividing line at
+        those locations.`, true);
 }

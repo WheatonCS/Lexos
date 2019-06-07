@@ -339,7 +339,8 @@ function create_tooltip(query, text, on_right_edge = false){
         // tooltip was removed, return
         let tooltip_element = $(".lexos-tooltip");
         if(tooltip_element.length){
-            let toggled = $(`#${id}-input`).length;
+            let toggled = $(`#${id}`).length;
+            console.log(toggled);
             remove_tooltips();
             if(toggled) return;
         }
@@ -366,7 +367,6 @@ function create_tooltip(query, text, on_right_edge = false){
         // Stop propagation so that the tooltip isn't removed undesirably
         tooltip_element.click(function(event){
             event.stopPropagation();
-            event.preventDefault();
         });
 
         // If the window is resized, reposition the tooltip

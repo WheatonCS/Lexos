@@ -1,11 +1,8 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/visualize-template.html" %}
 
 
 <!-- Head -->
-{% block head %}
-
-    <!-- d3.js -->
-    <script type="text/javascript" src="static/node_modules/d3/d3.min.js"></script>
+{% block page_head %}
 
     <!-- d3-cloud.js -->
     <script type="text/javascript" src="static/node_modules/d3-cloud/build/d3.layout.cloud.js"></script>
@@ -13,13 +10,16 @@
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/word-cloud.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/word-cloud.css"/>
-
 {% endblock %}
 
 
-<!-- Content -->
-{% block content %}
+<!-- Title -->
+{% block graph_title %}Word Cloud{% endblock %}
+
+
+<!-- Graph -->
+{% block graph %}
 
     <!-- Word cloud -->
-    <div id="word-cloud-container"></div>
+    <div id="word-cloud-container" class="section-body"></div>
 {% endblock %}
