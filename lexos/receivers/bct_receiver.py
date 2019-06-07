@@ -39,8 +39,7 @@ class BCTReceiver(BaseReceiver):
 
         :return: A BCTOption object to hold all the options.
         """
-        replace = \
-            False if self._front_end_data['replace'] == 'without' else True
+        replace = hasattr(self._front_end_data, 'replace')
 
         return BCTOption(
             linkage_method=self._front_end_data['linkage'],

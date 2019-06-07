@@ -215,7 +215,6 @@ class TopwordModel(BaseModel):
                     index=words,
                     name="The Corpus"))
             for file_id in self._doc_term_matrix.index.values]
-
         return readable_result
 
     def _analyze_file_to_class(self) -> AnalysisResult:
