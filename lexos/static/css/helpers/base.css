@@ -181,6 +181,12 @@ form {
     border-top: none;
 }
 
+/* Logo */
+#logo {
+    width: 100px;
+    height: 50px;
+}
+
 
 /* Links */
 a, a:hover, a:focus {
