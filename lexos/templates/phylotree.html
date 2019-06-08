@@ -73,13 +73,13 @@
                 </button>
             </div>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default active btn-sm">
+                <label class="btn btn-default btn-sm">
                     <input type="radio" name="options"
                            class="phylotree-layout-mode" data-mode="linear"
                            autocomplete="off"
                            title="Layout left-to-right"> Linear
                 </label>
-                <label class="btn btn-default  btn-sm">
+                <label class="btn btn-default active btn-sm">
                     <input type="radio" name="options"
                            class="phylotree-layout-mode" data-mode="radial"
                            autocomplete="off" checked
@@ -134,10 +134,8 @@
   })
 
   $('.phylotree-layout-mode').on('change', function (e) {
-    if ($(this).is(':checked')) {
-      if (tree.radial() !== ($(this).data('mode') === 'radial')) {
-        tree.radial(!tree.radial()).placenodes().update()
-      }
+    if (tree.radial() !== ($(this).data('mode') === 'radial')) {
+      tree.radial(!tree.radial()).placenodes().update()
     }
   })
 
@@ -148,10 +146,8 @@
   })
 
   $('.phylotree-align-toggler').on('change', function (e) {
-    if ($(this).is(':checked')) {
-      if (tree.align_tips($(this).data('align') === 'right')) {
-        tree.placenodes().update()
-      }
+    if (tree.align_tips($(this).data('align') === 'right')) {
+      tree.placenodes().update()
     }
   })
 
