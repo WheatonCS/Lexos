@@ -69,6 +69,7 @@
                         <span class="cut-label-text cut-label">{{ 'Number of Segments' if session['cuttingoptions']['cutType'] == 'number' else 'Segment Size' }}:</span>
                         <input type="number" min="1" name="cutValue"
                                class="cut-text-input" id="overallcutvalue"
+                               style="width:100px;height:32px;"
                                value="{{ session['cuttingoptions']['cutValue'] }}"/>
                         <i class="fa fa-question-circle lexos-tooltip-trigger"
                            data-toggle="tooltip" data-html="true"
@@ -85,6 +86,7 @@
                         <input type="number" min="0" name="cutOverlap"
                                class="cut-text-input overlap-input"
                                id="overallOverlapValue"
+                               style="width:100px;height:32px;"
                                value="{{ session['cuttingoptions']['cutOverlap'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
                         <i class="fa fa-question-circle lexos-tooltip-trigger"
                            data-toggle="tooltip" data-html="true"
@@ -96,12 +98,13 @@
             </div>
             <div class="row lastprop-div {{ 'transparent' if session['cuttingoptions']['cutType'] == 'number' }}">
                 <div class="col-md-8 col-md-offset-4"
-                     style="padding-right:10%; padding-left:5px">
+                     style="padding-right:7.45%;">
                     <label class="pull-right txt-right cut-label">Last Segment
                         Size Threshold:
                         <input type="number" min="0" max="100"
                                name="cutLastProp"
                                class="cut-text-input lastprop-input"
+                               style="width:50px;height:32px;"
                                value="{{ session['cuttingoptions']['cutLastProp'] }}" {{ "disabled" if session['cuttingoptions']['cutType'] == 'number' }}/>
                         %
                         <i class="fa fa-question-circle lexos-tooltip-trigger"
