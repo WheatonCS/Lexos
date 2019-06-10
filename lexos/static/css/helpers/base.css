@@ -311,7 +311,8 @@ footer {
 }
 
 #help-section-navbar {
-    display: block;
+    display: flex;
+    justify-content: space-around;
     margin-top: 2rem;
     padding: 2rem;
     background-color: #FFFFFF;
