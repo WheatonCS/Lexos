@@ -57,7 +57,6 @@ function create_bubbleviz(response){
     var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
-    //d3.select('.d3tooltip').attr('role', 'tooltip')
 
     let word_counts = parse_json(response);
 
@@ -114,10 +113,6 @@ function create_bubbleviz(response){
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
             tooltip.style("opacity", 1);
-            // tooltip.transition()
-            //     .duration(20)
-            //     .style("opacity", .9);
-            //tooltip.html(`<div class="tooltip-arrow"></div><div class="tooltip-inner"> Word: ${d.data.word}<br>Count: ${d.data.count}</div>`);
         })
         .on("mousemove", function (d){
             tooltip
@@ -127,8 +122,6 @@ function create_bubbleviz(response){
         })
         .on("mouseout", function () {
             d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
-            //tooltip.transition()
-                //.duration(20)
             tooltip.style("opacity", 0);
         });
 
@@ -142,10 +135,6 @@ function create_bubbleviz(response){
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
             tooltip.style("opacity", 1);
-            // tooltip.transition()
-            //     .duration(20)
-            //     .style("opacity", .9);
-            // tooltip.html(`<div class="tooltip-arrow"></div><div class="tooltip-inner"> Word: ${d.data.word}<br>Count: ${d.data.count}</div>`);
         })
         .on("mousemove", function (d){
             tooltip
@@ -155,8 +144,6 @@ function create_bubbleviz(response){
         })
         .on("mouseout", function () {
             d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
-            //tooltip.transition()
-                //.duration(20)
             tooltip.style("opacity", 0);
         });
 
