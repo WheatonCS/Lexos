@@ -160,7 +160,7 @@ function toggle_help_section(){
         <div id="help-section">
             <div id="help-section-navbar">
                 <h3 id="help-button-header" class="button">Help</h3>
-                <h3 id="about-button" class="button">About</h3>
+                <h3 id="about-button" class="button">About Lexos</h3>
                 <h3 id="glossary-button" class="button">Glossary</h3>
                 
                 
