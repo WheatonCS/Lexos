@@ -47,7 +47,7 @@ function send_word_counts_request(){
 function create_bubbleviz(response){
     // Define the div for the tooltip
     var tooltip = d3.select("body").append("div")
-        .attr("class", "d3tooltip tooltip right")
+        .attr("class", "d3 tooltip")
         .style("opacity", 0);
     d3.select('.d3tooltip').attr('role', 'tooltip')
 
@@ -105,7 +105,7 @@ function create_bubbleviz(response){
         })
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
-            tooltip.style("opacity", .8);
+            tooltip.style("opacity", 1);
             // tooltip.transition()
             //     .duration(20)
             //     .style("opacity", .9);
@@ -133,7 +133,7 @@ function create_bubbleviz(response){
         .attr("fill", "#FFFFFF")
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
-            tooltip.style("opacity", .8);
+            tooltip.style("opacity", 1);
             // tooltip.transition()
             //     .duration(20)
             //     .style("opacity", .9);
