@@ -47,9 +47,9 @@ function send_word_counts_request(){
 function create_bubbleviz(response){
     // Define the div for the tooltip
     var tooltip = d3.select("body").append("div")
-        .attr("class", "d3 tooltip")
+        .attr("class", "tooltip")
         .style("opacity", 0);
-    d3.select('.d3tooltip').attr('role', 'tooltip')
+    //d3.select('.d3tooltip').attr('role', 'tooltip')
 
     let word_counts = parse_json(response);
 
@@ -113,7 +113,7 @@ function create_bubbleviz(response){
         })
         .on("mousemove", function (d){
             tooltip
-                .text(`Word: ${d.data.word}\nCount: ${d.data.count}`)
+                .html('Word: ' + d.data.word + '<br/>' + 'Count: ' + d.data.count)
                 .style('left', (d3.event.pageX + 34) + 'px')
                 .style('top', (d3.event.pageY - 12) + 'px');
         })
@@ -141,7 +141,7 @@ function create_bubbleviz(response){
         })
         .on("mousemove", function (d){
             tooltip
-                .text(`Word: ${d.data.word}\nCount: ${d.data.count}`)
+                .html('Word: ' + d.data.word + '<br/>' + 'Count: ' + d.data.count)
                 .style('left', (d3.event.pageX + 34) + 'px')
                 .style('top', (d3.event.pageY - 12) + 'px');
         })
