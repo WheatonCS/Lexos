@@ -44,8 +44,9 @@ function close_popup(){
  * @returns {jQuery}: The popup element.
  */
 function create_ok_popup(title){
-    $(`<h3 id="popup-ok-button" class="button">OK</h3>`)
-        .appendTo(create_popup(title));
+   let popup_element = $(`<h3 id="popup-ok-button" class="button">OK</h3>`);
+    popup_element.appendTo(create_popup(title));
+    return popup_element;
 }
 
 
@@ -55,12 +56,10 @@ function create_ok_popup(title){
  * @returns {jQuery}: The popup element.
  */
 function create_text_input_popup(title){
-    let popup = create_ok_popup(title);
-
+    let popup_element = create_ok_popup(title);
     $(`<input id="popup-input" type="text" spellcheck="false" autocomplete="off">`)
         .appendTo("#popup-content");
-
-    return popup;
+    return popup_element;
 }
 
 

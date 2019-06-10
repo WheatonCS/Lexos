@@ -15,7 +15,7 @@ $(function(){
     $("#edit-name-button").mousedown(edit_name);
     $("#edit-class-button").mousedown(edit_class);
     $("#delete-button").mousedown(delete_document);
-    // $("#merge-selected-button").mousedown(merge_selected_callback);
+    $("#merge-selected-button").mousedown(merge_selected);
     $("#edit-selected-classes-button").mousedown(edit_selected_classes);
     $("#delete-selected-button").mousedown(delete_selected);
     $("#select-all-button").mousedown(select_all);
@@ -86,7 +86,10 @@ function create_table(){
         })
 
         // Otherwise, display an error
-        .fail(function(){ error("Failed to fetch the documents."); });
+        .fail(function(){
+            error("Failed to fetch the documents.");
+            add_text_overlay("#table-body", "Loading Failed");
+        });
 }
 
 
@@ -143,10 +146,22 @@ function show_context_menu(event){
 
     // Set the custom context menu's position to the right-click and make it
     // visible and clickable
-    let mouse_position = get_mouse_position(event);
-    let context_menu_element = $("#context-menu");
-    context_menu_element.css({"pointer-events": "auto", "opacity": "1",
-        "left": `${mouse_position.x}px`, "top": `${mouse_position.y}px`});
+    let position = get_mouse_position(event);
+
+    let page_size = get_page_size();
+    let context_menu_size = get_element_size("#context-menu");
+    let context_menu_far_position = point_add(position, context_menu_size);
+
+    if(context_menu_far_position.x > page_size.x)
+        position.x -= context_menu_size.x;
+
+    if(context_menu_far_position.y > page_size.y)
+        position.y -= context_menu_size.y;
+
+    console.log(page_size, context_menu_far_position);
+
+    $("#context-menu").css({"pointer-events": "auto", "opacity": "1",
+        "left": `${position.x}px`, "top": `${position.y}px`});
 }
 
 
@@ -261,7 +276,46 @@ function delete_document(){
  * Merges the selected documents.
  */
 function merge_selected(){
-    // Not implemented
+
+    let selected_document_ids = get_selected_document_ids();
+    let first_selected_document = documents[selected_document_ids[0]];
+
+    // Create the popup
+    create_ok_popup("Merge Active");
+    $(`
+        <h3>Name: </h3>
+        <label><input id="merge-name-input" name="" value="Merge-${first_selected_document.label}" type="text" spellcheck="false" autocomplete="off"></label>
+        <br>
+        
+        <input id="merge-milestone-checkbox" name="" type="checkbox">
+        <span>Milestone: <input id="merge-milestone-input" name="" value="#EOF#" type="text" spellcheck="false" autocomplete="off"></span>
+
+    `).appendTo("#popup-content");
+
+    // If the popup's "OK" button is clicked...
+    $("#popup-ok-button").click(function(){
+
+        // Create the payload
+        let payload = [
+            selected_document_ids,
+            $("#merge-name-input").val(),
+            first_selected_document.source,
+            $("#merge-milestone-checkbox").is(":checked") ?
+                $("#merge-milestone-input").val() : ""
+        ];
+
+        // Send the merge request
+        send_request("merge-selected", payload)
+
+            // If the request was successful, close the popup and recreate the
+            // table
+            .done(function(){ close_popup(); create_table(); })
+
+            // If the request failed, display an error
+            .fail(function(){
+                error("Failed to merge the active documents.");
+            });
+    });
 }
 
 
@@ -286,8 +340,9 @@ function edit_selected_classes(){
             .done(function(){ close_popup(); create_table(); })
 
             // If the request failed, display an error
-            .fail(function(){ error("Failed to edit the "+
-                "active documents' classes."); });
+            .fail(function(){
+                error("Failed to edit the active documents' classes.");
+            });
     });
 }
 

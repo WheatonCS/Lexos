@@ -113,3 +113,12 @@ form {
 input[type="text"] {
     width: 100%;
 }
+
+#popup #merge-name-input {
+    width: calc(100% + 7rem);
+    margin-bottom: 1rem;
+}
+
+#merge-milestone-input {
+    width: calc(100% - 9rem);
+}

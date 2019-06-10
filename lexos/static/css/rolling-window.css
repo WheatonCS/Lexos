@@ -23,14 +23,22 @@ form {
 
 
 /* Text inputs */
-#window-section input[type=text],
-#search-terms-section input[type=text] {
-    width: 11rem;
-    margin-left: 0;
+#search-input-grid {
+    display: grid;
+    grid-auto-flow: column;
 }
 
-#search-terms-section input[type=text] {
-    width: calc(100% - 6rem);
+#search-input-grid input {
+    width: calc(100% - 1rem);
+}
+
+#search-terms-input-denominator {
+    display: none;
+}
+
+#window-section input[type=text] {
+    width: 11rem;
+    margin-left: 0;
 }
 
 #display-section input[type=text] {
