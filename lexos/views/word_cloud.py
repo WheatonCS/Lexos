@@ -12,7 +12,6 @@ word_cloud_blueprint = Blueprint("word_cloud", __name__)
 @word_cloud_blueprint.route("/word-cloud", methods=["GET"])
 def word_cloud() -> str:
     """ Gets the word cloud page.
-
     :return: The word cloud page.
     """
 
@@ -26,7 +25,6 @@ def word_cloud() -> str:
 @word_cloud_blueprint.route("/word-cloud/get-word-counts", methods=["POST"])
 def get_word_counts() -> str:
     """ Gets the top 100 word counts across all active files.
-
     :return: The top 100 word counts across all active files.
     """
 
