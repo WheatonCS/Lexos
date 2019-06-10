@@ -1,12 +1,15 @@
 /**
  * Initialize the "Color" button.
+ * @param {function} ok_callback: The function to call when the popup's "Ok"
+ *      button is clicked.
  */
-function initialize_color_button(){
+function initialize_color_button(ok_callback){
 
     // If the "Color" button is clicked, create a popup with the color options
     $("#color-button").click(function(){
 
-        create_radio_options_popup("Color", "color", "#color-button",
+        create_radio_options_popup(
+            "Color", "color", "#color-button",
             "#color-input", [
                 ["lexos", "Lexos"],
                 ["grey", "Grey"],
@@ -21,6 +24,8 @@ function initialize_color_button(){
                 ["rainbow", "Rainbow"],
                 ["splatter", "Splatter"]
             ]);
+
+        $("#ok-button").click(ok_callback);
     });
 }
 
@@ -42,7 +47,7 @@ function get_visualize_color(x){
         case "Blue Lilac": return d3.interpolatePuBu(x*2);
         case "Cherry Tree": return d3.interpolatePuRd(x*2);
         case "Sunset": return d3.interpolateYlOrRd(x*2);
-        case "Nebula": return d3.interpolatePlasma(x/1.8);
+        case "Nebula": return d3.interpolatePlasma(x/1.7);
         case "Spring": return d3.interpolateYlGn(x*2);
         case "Iridescent": return d3.interpolateViridis(x/1.4);
         case "Rainbow": return d3.interpolateRainbow(Math.log10(x));

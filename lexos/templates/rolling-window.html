@@ -36,10 +36,18 @@
 
         <!-- Search terms -->
         <div id="search-terms-section" class="section">
-            <h3 class="section-top title">Search Terms</h3>
+
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Search Terms</h3>
+                <h3 id="search-terms-input-tooltip-button" class="right-justified button">?</h3><br>
+            </div>
+
+
             <div class="section-body">
-                <input id="search-terms-input" name="rollingsearchword" type="text" spellcheck="false" autocomplete="off">
-                <h3 id="search-terms-input-tooltip-button" class="button">?</h3><br>
+                <div id="search-input-grid">
+                    <input id="search-terms-input" name="rollingsearchword" type="text" spellcheck="false" autocomplete="off">
+                    <input id="search-terms-input-denominator" name="rollingsearchwordopt" type="text" spellcheck="false" autocomplete="off">
+                </div>
 
                 <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span>Words</span></label><br>
 

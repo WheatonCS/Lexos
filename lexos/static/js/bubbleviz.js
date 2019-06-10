@@ -1,7 +1,7 @@
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(send_word_counts_request);
 
     // Create the bubbleviz
     send_word_counts_request();
@@ -19,6 +19,9 @@ function send_word_counts_request(){
     // Validate the "Term Count" input
     if(!validate_visualize_inputs()) return;
 
+    // Remove any existing error messages
+    remove_errors();
+
     // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
     // buttons
     start_loading("#bubbleviz", "#png-button, #svg-button, #generate-button");
@@ -31,11 +34,16 @@ function send_word_counts_request(){
         data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
     })
 
-    // If the request is successful, create the bubbleviz
-    .done(create_bubbleviz)
+        // If the request is successful, create the bubbleviz
+        .done(create_bubbleviz)
 
-    // If the request failed, display and error
-    .fail(function(){ error("Failed to retrieve the bubbleviz data."); });
+        // If the request failed, display an error message, display
+        // "Loading Failed" text, and enable the "Generate" button
+        .fail(function(){
+            error("Failed to retrieve the bubbleviz data.");
+            add_text_overlay("#bubbleviz", "Loading Failed");
+            enable("#generate-button");
+        });
 }
 
 
@@ -47,16 +55,16 @@ function send_word_counts_request(){
 function create_bubbleviz(response){
     // Define the div for the tooltip
     var tooltip = d3.select("body").append("div")
-        .attr("class", "d3tooltip tooltip right")
+        .attr("class", "tooltip")
         .style("opacity", 0);
-    d3.select('.d3tooltip').attr('role', 'tooltip')
+    //d3.select('.d3tooltip').attr('role', 'tooltip')
 
     let word_counts = parse_json(response);
 
     // If there are no word counts, display "No Active Documents" text and
     // return
     if(!word_counts.length){
-        add_text_overlay("form", "No Active Documents");
+        add_text_overlay("#bubbleviz", "No Active Documents");
         return;
     }
 
@@ -105,7 +113,7 @@ function create_bubbleviz(response){
         })
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
-            tooltip.style("opacity", .8);
+            tooltip.style("opacity", 1);
             // tooltip.transition()
             //     .duration(20)
             //     .style("opacity", .9);
@@ -113,7 +121,7 @@ function create_bubbleviz(response){
         })
         .on("mousemove", function (d){
             tooltip
-                .text(`Word: ${d.data.word}\nCount: ${d.data.count}`)
+                .html('Word: ' + d.data.word + '<br/>' + 'Count: ' + d.data.count)
                 .style('left', (d3.event.pageX + 34) + 'px')
                 .style('top', (d3.event.pageY - 12) + 'px');
         })
@@ -133,7 +141,7 @@ function create_bubbleviz(response){
         .attr("fill", "#FFFFFF")
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
-            tooltip.style("opacity", .8);
+            tooltip.style("opacity", 1);
             // tooltip.transition()
             //     .duration(20)
             //     .style("opacity", .9);
@@ -141,7 +149,7 @@ function create_bubbleviz(response){
         })
         .on("mousemove", function (d){
             tooltip
-                .text(`Word: ${d.data.word}\nCount: ${d.data.count}`)
+                .html('Word: ' + d.data.word + '<br/>' + 'Count: ' + d.data.count)
                 .style('left', (d3.event.pageX + 34) + 'px')
                 .style('top', (d3.event.pageY - 12) + 'px');
         })

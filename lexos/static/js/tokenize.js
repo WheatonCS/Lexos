@@ -15,7 +15,7 @@ $(function(){
         when the "Download" button is clicked.`);
 
     // Initialize the legacy form inputs and create the token table
-    get_active_file_ids(initialize);
+    get_active_file_ids(initialize, "#generate-button, #download-button");
 })
 
 
@@ -90,6 +90,9 @@ function send_token_table_data_request(page_change = true, queued_request = fals
     // Otherwise, update the previous page number
     previous_page_number = page_number;
 
+    // Remove any existing error messages
+    remove_errors();
+
     // Display the loading overlay on the table
     if(!queued_request) start_loading("#table-data");
     let start = (page_number-1)*$(`input[name="length"]:checked`).val();
@@ -103,6 +106,7 @@ function send_token_table_data_request(page_change = true, queued_request = fals
         // If the request failed, display an error
         .fail(function(){
             error("Failed to retrieve the token table data.");
+            add_text_overlay("#table-data", "Loading Failed");
         });
 }
 
@@ -158,7 +162,7 @@ function create_token_table(response){
             let id = $(this).attr("id");
             if(selected_column !== id){
                 selected_column = id;
-                send_table_data_request(false);
+                send_token_table_data_request(false);
             }
         });
     }
@@ -198,16 +202,18 @@ function create_token_table_button_callbacks(){
 
     // If the "Search" input is changed, recreate the table
     $("#search-input").on("input", function(){
-        send_table_data_request(false);
+        send_token_table_data_request(false);
     });
 
     // If the "Rows Per Page" option is changed, recreate the table
     $(`input[type="radio"][name="length"],
         input[type="radio"][name="sort-ascending"]`)
-        .change(function(){ send_table_data_request(false); });
+        .change(function(){ send_token_table_data_request(false); });
 
     // If the "Generate" button is pressed, recreate the table
-    $("#generate-button").click(function(){ send_table_data_request(false); });
+    $("#generate-button").click(function(){
+        send_token_table_data_request(false);
+    });
 
     // If the "Download" button is pressed, download the table as a CSV
     $("#download-button").click(function(){
@@ -216,21 +222,21 @@ function create_token_table_button_callbacks(){
 
     // If the page number input is changed, recreate the table
     $(page_number_element).on("input", function(){
-        send_table_data_request();
+        send_token_table_data_request();
     });
 
     // If the "Previous" button is clicked, decrement the page number and
     // recreate the table
     $("#previous-button").click(function(){
         page_number_element.val(parseInt(page_number_element.val())-1);
-        send_table_data_request();
+        send_token_table_data_request();
     });
 
     // If the "Next" button is clicked, increment the page number and recreate
     // the table
     $("#next-button").click(function(){
         page_number_element.val(parseInt(page_number_element.val())+1);
-        send_table_data_request();
+        send_token_table_data_request();
     });
 }
 
@@ -243,7 +249,7 @@ function execute_queued_table_recreation(){
     // If a table recreation was queued, perform the reload
     if(queue.queued){
         queue.queued = false;
-        send_table_data_request(queue.page_change, true);
+        send_token_table_data_request(queue.page_change, true);
         queue.page_change = false;
     }
 }

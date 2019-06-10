@@ -38,7 +38,7 @@ function create_graph(url, callback =
     // call the callback
     .fail(function(){
         error("Failed to retrieve the Plotly data.");
-        add_text_overlay("#graph-container", "Loading Failed", true);
+        add_text_overlay("#graph-container", "Loading Failed");
         callback();
     });
 }

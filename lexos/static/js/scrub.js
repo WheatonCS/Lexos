@@ -1,11 +1,7 @@
 $(function(){
 
-    // Initialize the tooltips
-    initialize_tooltips();
-
-    // Display the loading overlay and disable the buttons on the document
-    // previews section
-    start_document_previews_loading();
+     // Display the loading overlay on the "Previews" section
+    start_loading("#previews");
 
     // Create a preview for each active document
     $.ajax({type: "GET", url: "document-previews"})
@@ -14,8 +10,14 @@ $(function(){
         .done(function(response){ initialize_document_previews(response); })
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to retrieve "+
-            "the document previews."); });
+        .fail(function(){
+            error("Failed to retrieve the document previews.");
+            add_text_overlay("#previews", "Loading Failed");
+            enable("#preview-button, #apply-button");
+        });
+
+    // Initialize the tooltips
+    initialize_tooltips();
 
     // Disable the punctuation options when the "Remove Punctuation" checkbox
     // is unchecked
@@ -34,13 +36,18 @@ $(function(){
     // Create the tag options popup when the "Scrub Tags" "Options" button is
     // pressed
     $("#scrub-tags-settings-button").click(function(){
+
+        // Send the request
         $.ajax({type: "GET", url: "scrub/get-tag-options"})
 
-        // If the response was successful, create the tag options
-        .done(create_tag_options_popup)
+            // If the response was successful, create the tag options
+            .done(create_tag_options_popup)
 
-        // If the response failed, display an error
-        .fail(function(){ error("Failed to retrieve the document tags."); });
+            // If the response failed, display an error and "Loading Failed"
+            // text
+            .fail(function(){
+                error("Failed to retrieve the document tags.");
+            });
     });
 
     // Initialize the upload buttons
@@ -160,6 +167,9 @@ function save_tag_options(){
  */
 function scrub(action){
 
+    // Remove any error messages
+    remove_errors();
+
     // Display the loading overlay and disable the buttons on the document
     // previews section
     start_document_previews_loading();
@@ -180,8 +190,14 @@ function scrub(action){
         // If the request was successful, update the document previews
         .done(update_document_previews)
 
-        // If the request failed, display an error
-        .fail(function(){ error("Failed to execute the scrubbing."); });
+        // If the request failed, display an error and "Loading Failed"
+        // text
+        .fail(function()
+        {
+            error("Failed to execute the scrubbing.");
+            add_text_overlay("#previews", "Loading Failed");
+            enable("#preview-button, #apply-button");
+        });
 }
 
 
