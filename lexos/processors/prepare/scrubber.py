@@ -469,14 +469,13 @@ def get_remove_digits(text: str) -> str:
     :return: A string with all digits removed
     """
 
-    # Using "d" to represent a digit, character, "."
-    # to represent any unicode character used to indicate
+    # Using "." to represent any unicode character used to indicate
     # a decimal number, and "***" to represent any sequence of
-    # any digits, this pattern will match:
+    # unicode digits, this pattern will match:
     # 1) ***
     # 2) ***.***
-    pattern = re.compile(r"(\d)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
-                         r"|\u02D9|\u066B|\u066C|\u2396]\d)", re.UNICODE)
+    pattern = re.compile(r"(\d+)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
+                         r"|\u02D9|\u066B|\u066C|\u2396]\d+)", re.UNICODE)
     remove_digits = str(re.sub(pattern, r"", text))
 
     return remove_digits

@@ -740,20 +740,26 @@ class TestGetRemovePunctuationMap:
 class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_store(self):
-        string = "1 40 600 hey here's a number: 7000 hey here's a " \
-                 "decimal num: 3.14 31.41 cool! 314.15 3141.59265345678" \
-                 "99876534567897423456787653211346789097645322356 acc355 1. " \
-                 "t3st .1 numb3r .1. Europeans do decimals this way * rolls " \
-                 "eyes * 3, 14 31, 415926535879 314, 15 344734864856409675" \
-                 "23417389684532412748960608753141, 59 1..1 401 - 465 - 2140" \
-                 " 000 - 00 - 0000 1, 234, 567.89 1, 234, 567·89 1 '234' " \
-                 "567.89 1 '234' 567, 89 1.234 .567 '89 1˙234˙567, 89"
+        string = "hey here's a few numbers: " \
+                    "1 20 500 7000 " \
+                    "hey here's a few decimal numbers: " \
+                    "3.14 31.41 cool! 314.15 3141.5926 " \
+                    "sample passwords and trap cases: " \
+                    "acc355 1. t3st .1 numb3r .1. " \
+                    "000-000-0000 1..1' 3.141' \"3.141\" " \
+                    "Europeans do decimals this way: " \
+                    "3,14 31,415926535879 314,15 141,592 " \
+                    "The rest of the world does decimals like this: " \
+                    "1,234,567.89 1,234,567·89 1'234'567.891 " \
+                    "2'234'567,89 1.234.567'89 1˙234˙567,89"
+
+        print(get_remove_digits(string))
 
         assert get_remove_digits(string) == (
-            "   hey here's a number:  hey here's a decimal num:   cool!   "
-            "acc . tst . numbr .. Europeans do decimals this way * rolls "
-            "eyes * ,  ,  ,  ,  ..  -  -   -  -  , ,  , ,   ''   '' ,   . "
-            "' , ")
+            "hey here's a few numbers:     hey here's a few decimal numbers: "
+            "  cool!   sample passwords and trap cases: acc . tst . "
+            "numbr .. -- ..' ' \"\" Europeans do decimals this way:     "
+            "The rest of the world does decimals like this:      ")
 
 
 class TestHandleFileAndManualStrings:
