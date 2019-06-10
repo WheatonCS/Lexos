@@ -2,6 +2,10 @@ import os
 
 
 def get_phylotree(nwk_tree):
+    """
+        :param nwk_tree: A str containing a tree in Newick format
+        :return: phylotree in html
+    """
     current_dir = os.path.dirname(__file__)
     filepath = os.path.join(current_dir + '/../templates', 'phylotree.html')
     with open(filepath, 'r') as file:
