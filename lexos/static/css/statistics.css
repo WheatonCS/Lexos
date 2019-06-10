@@ -44,8 +44,46 @@ form {
 }
 
 /* Table */
-#table {
+#table-data{
     height: calc(100% - 5rem);
+}
+
+/* Table top */
+#table-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.1fr;
+    height: 3rem;
+    margin: 1rem;
+}
+
+.table-top-radio-option {
+    justify-self: center;
+}
+
+.table-top-radio-option > h3,
+.table-top-radio-option > label {
+    margin-right: 1rem;
+}
+
+#table-top-buttons {
+    justify-self: right;
+}
+
+
+/* Table data */
+#table-data-grid {
+    height: 100%;
+    display: grid;
+    grid-template-rows: max-content auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+
+/* Table head */
+
+#table-head .table-cell.selected-cell {
+    background-color: #EAF5FF;
 }
 
 #table-head,

@@ -114,10 +114,35 @@
         </div>
     </div>
 
-    <!-- Document statistics -->
-    <div id="documents-section" class="section">
-        <h3 class="section-top title">Document Statistics</h3>
-        <div id="table" class="borderless-section-body"></div>
+
+
+    <!-- Table -->
+    <div id="table" class="section">
+
+        <!-- Table top -->
+        <div id="table-top">
+
+            <!-- Documents Statistics -->
+            <div id="documents-section" class="section">
+                <h3>Document Statistics</h3>
+            </div>
+
+            <!-- Sort direction -->
+            <div class="table-top-radio-option">
+                <h3>Order: </h3>
+                <label class="circle-label"><input name="sort-ascending" value="true" type="radio" checked><span>Ascending</span></label>
+                <label class="circle-label"><input name="sort-ascending" value="false" type="radio"><span>Descending</span></label>
+            </div>
+
+            <!-- Download -->
+            <div id="table-top-buttons">
+                <h3 id="download-button" class="disabled button">Download</h3>
+            </div>
+        </div>
+
+        <!-- Table data -->
+        <div id="table-data" class="borderless-section-body"></div>
+
     </div>
 
     <!-- Hidden elements -->

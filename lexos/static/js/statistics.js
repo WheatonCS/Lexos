@@ -1,14 +1,14 @@
 $(function(){
 
     // Display the loading overlays
-    start_loading("#graph-container, #table, #corpus-statistics, "+
+    start_loading("#graph-container, #table-data, #corpus-statistics, "+
         "#standard-error-test, #interquartile-range-test");
 
     // Initialize the tooltips
     initialize_tooltips();
 
     // Initialize the legacy form inputs and create the statistics
-    get_active_file_ids(initialize, "#graph-container, #table, "+
+    get_active_file_ids(initialize, "#graph-container, #table-data, "+
         "#corpus-statistics, #standard-error-test, #interquartile-range-test");
 });
 
@@ -22,7 +22,7 @@ function initialize(response){
     // Initialize the legacy form inputs. If there are no active documents,
     // display "No Active Documents" text and return
     if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#graph-container, #table, #corpus-statistics, "+
+        add_text_overlay("#graph-container, #table-data, #corpus-statistics, "+
             "#standard-error-test, #interquartile-range-test",
             "No Active Documents");
         return;
@@ -38,7 +38,7 @@ function initialize(response){
         if(!validate_analyze_inputs()) return;
 
         // Otherwise, display the loading overlays
-        start_loading("#graph-container, #table, #corpus-statistics, "+
+        start_loading("#graph-container, #table-data, #corpus-statistics, "+
             "#standard-error-test, #interquartile-range-test",
             "#generate-button");
 
@@ -79,7 +79,7 @@ function create_statistics(){
         // If the request failed, display an error and "Loading Failed" text
         .fail(function(){
             error("Failed to retrieve the document statistics.");
-            add_text_overlay("#table", "Loading Failed");
+            add_text_overlay("#table-data", "Loading Failed");
             loading_complete_check();
         });
 
@@ -157,6 +157,13 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
  */
 function create_document_statistics(response){
 
+    $(`
+        <div id="table-data-grid" class="hidden">
+            <div id="table-head"></div>
+            <div id="table-row" class="hidden-scrollbar"></div>
+        </div>
+    `).appendTo("#table-data");
+
     // Create the head and table body
     $(`
         <div id="table-head" class="hidden">
@@ -167,7 +174,7 @@ function create_document_statistics(response){
             <h3 class="table-head-cell">Distinct Terms</h3>
         </div>
         <div id="table-body" class="hidden hidden-scrollbar"></div>
-    `).appendTo("#table");
+    `).appendTo("#table-data");
 
     // Create the rows
     let rows = Object.entries(parse_json(response));
@@ -186,7 +193,7 @@ function create_document_statistics(response){
     }
 
     // Remove the loading overlay and fade the table in
-    finish_loading("#table", "#table-head, #table-body");
+    finish_loading("#table-data", "#table-head, #table-body");
 
     // Enable the "Generate" button if all elements have finished loading
     loading_complete_check();
