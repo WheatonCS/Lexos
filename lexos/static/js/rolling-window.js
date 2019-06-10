@@ -1,14 +1,23 @@
 $(function(){
 
-    // Initialize the tooltips
-    initialize_tooltips();
-
     // Display the loading overlay
     start_loading("#graph-container");
 
+    // Initialize the tooltips
+    initialize_tooltips();
+
+    // If the "Calculation Type" is changed, set the appropriate "Search
+    // Terms" input
+    $(`input[name="counttype"]`).change(function(){
+
+        if($(`input[name="counttype"]:checked`).val() === "average")
+            $("#search-terms-input-denominator").css("display", "none");
+        else $("#search-terms-input-denominator").css("display", "inline");
+    });
+
     // Check that there is exactly one document active and display the
     // appropriate text on the "Rolling Window" section
-    get_active_file_ids(single_active_document_check);
+    get_active_file_ids(single_active_document_check, "#graph-container");
 });
 
 
@@ -57,11 +66,17 @@ function single_active_document_check(response){
  */
 function create_rolling_window(){
 
+    // Validate the inputs
     if(!validate_inputs()) return;
 
-    start_loading("#graph-container",
-        "#generate-button, #download-button");
+    // Remove any existing errors
+    remove_errors();
 
+    // Display the loading overlay and disable the "Generate" and "Download"
+    // buttons
+    start_loading("#graph-container", "#generate-button, #download-button");
+
+    // Create the rolling window graph
     create_graph("/rolling-window/get-graph",
         function(){ enable("#generate-button, #download-button"); });
 }

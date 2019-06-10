@@ -50,7 +50,7 @@ function initialize(response){
         .fail(function(){
             error("Failed to retrieve the class divisions.");
             add_text_overlay("#class-divisions-body, #top-words-body",
-                "Loading Failed", true);
+                "Loading Failed");
         });
 }
 
@@ -190,7 +190,7 @@ function top_words_loading_failure(){
         "#generate-button, #download-button");
 
     // Display "Loading Failed" text
-    add_text_overlay("#top-words-body", "Loading Failed", true);
+    add_text_overlay("#top-words-body", "Loading Failed");
 }
 
 
