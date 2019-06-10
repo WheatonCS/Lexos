@@ -3,6 +3,7 @@
 import re
 import os
 import copy
+import time
 import numpy as np
 import pandas as pd
 import colorlover as cl
@@ -243,7 +244,7 @@ class RollingWindowsModel(BaseModel):
         tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
         if self._options.window_options.window_unit is WindowUnitType.word:
-            passage_list = get_words_with_right_boundary(self._passage)
+            passage_list = self._passage.split()
         elif self._options.window_options.window_unit is WindowUnitType.line:
             print("Do something")
 
@@ -268,18 +269,20 @@ class RollingWindowsModel(BaseModel):
             #  - the type hinting does not support keyword parameter
             #       (on Python 3.6.1)
             #  - the function that sent in has different keywords
+            time2 = time.time()
+            window_sum = [passage_list[:window_size - 1].count(token) / window_size for token in tokens]
+            first_sum = [copy.deepcopy(window_sum) for i in range(1)]
 
-            window_sum = [passage_list[:window_size - 1].count(token) for token
-                          in tokens]
-            list_matrix = [copy.deepcopy(window_sum) for i in range(1)]
 
             def _generate_word_window(window_index: int) -> list:
                 if self._options.average_token_options.token_type is token_type.word:
                     for token_index, token in enumerate(tokens):
-                        if token == passage_list[window_index].strip():
-                            window_sum[token_index] -= 1
-                        if token == passage_list[window_size + window_index].strip():
-                            window_sum[token_index] += 1
+                        print('.',end='')
+                        if token == passage_list[window_index]:
+                            window_sum[token_index] -= 1 / window_size
+                        if token == passage_list[window_size + window_index]:
+                            window_sum[token_index] += 1 / window_size
+
                 # elif self._options.average_token_options.token_type
                 # is token_type.string():
                 #    for token_index, token in enumerate(tokens):
@@ -289,14 +292,13 @@ class RollingWindowsModel(BaseModel):
                 return copy.deepcopy(window_sum)
 
             appendlist = [_generate_word_window(window_index=index) for
-                          index in range(len(passage_list) - len(window_size))]
+                          index in range(len(passage_list) - window_size)]
 
-            list_matrix.append(appendlist)
-
+            list_matrix = [y for x in [first_sum, appendlist] for y in x]
+            time3 = time.time()
             #    [copy.deepcopy(window_sum) for tokenindex, token in enumerate
             #    tokens]
-
-
+            print("Sigh", time3 - time2)
 
             #    [
             #        [window_term_count_func(window, token) / window_size
@@ -592,8 +594,11 @@ class RollingWindowsModel(BaseModel):
         """
         # Get the windows and toke average data frame.
         windows = self._get_windows()
+        time0 = time.time()
         token_average_data_frame = self._find_tokens_average_in_windows(
             windows=windows)
+        time1 = time.time()
+        print(time1-time0)
 
         # Find the proper plotting mode.
         plot_mode = "lines+markers" \
