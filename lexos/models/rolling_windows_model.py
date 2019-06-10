@@ -2,6 +2,7 @@
 
 import re
 import os
+import copy
 import numpy as np
 import pandas as pd
 import colorlover as cl
@@ -241,6 +242,10 @@ class RollingWindowsModel(BaseModel):
         token_type = self._options.average_token_options.token_type
         tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
+        if self._options.window_options.window_unit is WindowUnitType.word:
+            passage_list = get_words_with_right_boundary(self._passage)
+        elif self._options.window_options.window_unit is WindowUnitType.line:
+            print("Do something")
 
         def _average_matrix_helper(
             window_term_count_func: Callable[[str, str], int]) \
@@ -263,12 +268,41 @@ class RollingWindowsModel(BaseModel):
             #  - the type hinting does not support keyword parameter
             #       (on Python 3.6.1)
             #  - the function that sent in has different keywords
-            list_matrix = \
-                [
-                    [window_term_count_func(window, token) / window_size
-                     for token in tokens]
-                    for window in windows
-                ]
+
+            window_sum = [passage_list[:window_size - 1].count(token) for token
+                          in tokens]
+            list_matrix = [copy.deepcopy(window_sum) for i in range(1)]
+
+            def _generate_word_window(window_index: int) -> list:
+                if self._options.average_token_options.token_type is token_type.word:
+                    for token_index, token in enumerate(tokens):
+                        if token == passage_list[window_index].strip():
+                            window_sum[token_index] -= 1
+                        if token == passage_list[window_size + window_index].strip():
+                            window_sum[token_index] += 1
+                # elif self._options.average_token_options.token_type
+                # is token_type.string():
+                #    for token_index, token in enumerate(tokens):
+                #        if token == passage_list[window_index] + \
+                #            passage_list[window_index + 1][:len(token)]:
+                #            print("something will be here eventually")
+                return copy.deepcopy(window_sum)
+
+            appendlist = [_generate_word_window(window_index=index) for
+                          index in range(len(passage_list) - len(window_size))]
+
+            list_matrix.append(appendlist)
+
+            #    [copy.deepcopy(window_sum) for tokenindex, token in enumerate
+            #    tokens]
+
+
+
+            #    [
+            #        [window_term_count_func(window, token) / window_size
+            #         for token in tokens]
+            #        for window in windows
+            #    ]
 
             return pd.DataFrame(list_matrix, columns=tokens).transpose()
 
