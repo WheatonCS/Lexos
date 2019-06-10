@@ -81,7 +81,7 @@ function send_similarity_table_request(){
         // If the request failed, display an error
         .fail(function(){
             error("Failed to retrieve the similarity query data.");
-            add_text_overlay("#table", "Loading Failed", true);
+            add_text_overlay("#table", "Loading Failed");
             enable("#generate-button, #download-button");
         });
 }

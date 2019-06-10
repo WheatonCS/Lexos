@@ -29,6 +29,9 @@ $(function(){
  */
 function upload_files(event){
 
+    // Remove any existing error messages
+    remove_errors();
+
     // Get the selected files from the event
     let files = event.target.files || event.originalEvent.dataTransfer.files;
 

@@ -36,7 +36,7 @@ def get_table():
     return json.dumps(result)
 
 
-@tokenize_blueprint.route("/tokenize", methods=["POST"])
+@tokenize_blueprint.route("/tokenize", methods=["GET"])
 def download():
     """Sends the DTM to the user.
     :return: The DTM download.
