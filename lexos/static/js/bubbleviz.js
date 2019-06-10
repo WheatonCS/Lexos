@@ -45,6 +45,11 @@ function send_word_counts_request(){
  *      request.
  */
 function create_bubbleviz(response){
+    // Define the div for the tooltip
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "d3tooltip tooltip right")
+        .style("opacity", 0);
+    d3.select('.d3tooltip').attr('role', 'tooltip')
 
     let word_counts = parse_json(response);
 
@@ -97,6 +102,26 @@ function create_bubbleviz(response){
         .attr("r", function(d){ return d.r; })
         .style("fill", function(d){
             return get_visualize_color(d.data.value);
+        })
+        .on("mouseover", function () {
+            d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
+            tooltip.style("opacity", .8);
+            // tooltip.transition()
+            //     .duration(20)
+            //     .style("opacity", .9);
+            //tooltip.html(`<div class="tooltip-arrow"></div><div class="tooltip-inner"> Word: ${d.data.word}<br>Count: ${d.data.count}</div>`);
+        })
+        .on("mousemove", function (d){
+            tooltip
+                .text(`Word: ${d.data.word}\nCount: ${d.data.count}`)
+                .style('left', (d3.event.pageX + 34) + 'px')
+                .style('top', (d3.event.pageY - 12) + 'px');
+        })
+        .on("mouseout", function () {
+            d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
+            //tooltip.transition()
+                //.duration(20)
+            tooltip.style("opacity", 0);
         });
 
     node.append("text")
@@ -106,9 +131,29 @@ function create_bubbleviz(response){
         .attr("font-family", $("#font-input").val())
         .attr("font-size", function(d){ return d.r/(d.data.word.length/3); })
         .attr("fill", "#FFFFFF")
+        .on("mouseover", function () {
+            d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
+            tooltip.style("opacity", .8);
+            // tooltip.transition()
+            //     .duration(20)
+            //     .style("opacity", .9);
+            // tooltip.html(`<div class="tooltip-arrow"></div><div class="tooltip-inner"> Word: ${d.data.word}<br>Count: ${d.data.count}</div>`);
+        })
+        .on("mousemove", function (d){
+            tooltip
+                .text(`Word: ${d.data.word}\nCount: ${d.data.count}`)
+                .style('left', (d3.event.pageX + 34) + 'px')
+                .style('top', (d3.event.pageY - 12) + 'px');
+        })
+        .on("mouseout", function () {
+            d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
+            //tooltip.transition()
+                //.duration(20)
+            tooltip.style("opacity", 0);
+        });
 
-    node.append("svg:title")
-        .text(function(d){ return "Word: "+d.data.word+"\nCount: "+d.data.count; });
+    // node.append("svg:title")
+    //     .text(function(d){ return "Word: "+d.data.word+"\nCount: "+d.data.count; });
 
     // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");
