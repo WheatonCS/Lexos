@@ -47,7 +47,7 @@ function get_visualize_color(x){
         case "Blue Lilac": return d3.interpolatePuBu(x*2);
         case "Cherry Tree": return d3.interpolatePuRd(x*2);
         case "Sunset": return d3.interpolateYlOrRd(x*2);
-        case "Nebula": return d3.interpolatePlasma(x/1.8);
+        case "Nebula": return d3.interpolatePlasma(x/1.7);
         case "Spring": return d3.interpolateYlGn(x*2);
         case "Iridescent": return d3.interpolateViridis(x/1.4);
         case "Rainbow": return d3.interpolateRainbow(Math.log10(x));
