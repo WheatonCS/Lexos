@@ -1,23 +1,28 @@
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(get_word_cloud_data);
 
     // Send the request for the word cloud data
-    send_data_request();
+    get_word_cloud_data();
 
     // If the "Generate" button is pressed, recreate the word cloud
-    $("#generate-button").click(send_data_request)
+    $("#generate-button").click(function(){
+        get_word_cloud_data();
+    })
 });
 
 
 /**
  * Requests the data for the word cloud and creates the word cloud.
  */
-function send_data_request(){
+function get_word_cloud_data(){
 
     // Validate the "Term Count" input
     if(!validate_visualize_inputs()) return;
+
+    // Remove any existing error messages
+    remove_errors();
 
     // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
     // buttons
@@ -33,11 +38,16 @@ function send_data_request(){
         data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
     })
 
-    // If the request is successful, create the word cloud
-    .done(create_word_cloud_layout)
+        // If the request is successful, create the word cloud
+        .done(create_word_cloud_layout)
 
-    // If the request failed, display an error message
-    .fail(function(){ error("Failed to retrieve the word cloud data."); });
+        // If the request failed, display an error message, display
+        // "Loading Failed" text, and enable the "Generate" button
+        .fail(function(){
+            error("Failed to retrieve the word cloud data.");
+            add_text_overlay("#word-cloud-container", "Loading Failed");
+            enable("#generate-button");
+        });
 }
 
 

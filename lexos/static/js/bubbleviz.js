@@ -1,7 +1,7 @@
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(send_word_counts_request);
 
     // Create the bubbleviz
     send_word_counts_request();
@@ -19,6 +19,9 @@ function send_word_counts_request(){
     // Validate the "Term Count" input
     if(!validate_visualize_inputs()) return;
 
+    // Remove any existing error messages
+    remove_errors();
+
     // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
     // buttons
     start_loading("#bubbleviz", "#png-button, #svg-button, #generate-button");
@@ -31,11 +34,16 @@ function send_word_counts_request(){
         data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
     })
 
-    // If the request is successful, create the bubbleviz
-    .done(create_bubbleviz)
+        // If the request is successful, create the bubbleviz
+        .done(create_bubbleviz)
 
-    // If the request failed, display and error
-    .fail(function(){ error("Failed to retrieve the bubbleviz data."); });
+        // If the request failed, display an error message, display
+        // "Loading Failed" text, and enable the "Generate" button
+        .fail(function(){
+            error("Failed to retrieve the bubbleviz data.");
+            add_text_overlay("#bubbleviz", "Loading Failed");
+            enable("#generate-button");
+        });
 }
 
 
@@ -51,7 +59,7 @@ function create_bubbleviz(response){
     // If there are no word counts, display "No Active Documents" text and
     // return
     if(!word_counts.length){
-        add_text_overlay("form", "No Active Documents");
+        add_text_overlay("#bubbleviz", "No Active Documents");
         return;
     }
 

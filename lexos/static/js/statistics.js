@@ -66,7 +66,7 @@ function create_statistics(){
         .fail(function(){
             error("Failed to retrieve the corpus statistics.");
             add_text_overlay("#corpus-statistics, #standard-error-test, "+
-                "#interquartile-range-test", "Loading Failed", true);
+                "#interquartile-range-test", "Loading Failed");
             loading_complete_check(3);
         });
 
@@ -79,7 +79,7 @@ function create_statistics(){
         // If the request failed, display an error and "Loading Failed" text
         .fail(function(){
             error("Failed to retrieve the document statistics.");
-            add_text_overlay("#table", "Loading Failed", true);
+            add_text_overlay("#table", "Loading Failed");
             loading_complete_check();
         });
 

@@ -28,6 +28,27 @@ function get_mouse_position(event){
 
 
 /**
+ * Gets the page size.
+ * @returns {{x, y}}: The page size.
+ */
+function get_page_size(){
+    let page_element = $(document);
+    return {x: page_element.width(), y: page_element.height()};
+}
+
+
+/**
+ * Gets the size of an element.
+ * @param {string} query: The query for the element to get the size of.
+ * @returns {{x, y}}: The element's size.
+ */
+function get_element_size(query){
+    let element = $(query);
+    return {x: element.outerWidth(), y: element.outerHeight()};
+}
+
+
+/**
  * Gets the form as a JSON string.
  * @param {object} additional_entries: Additional entries to append to the
  *      form.
@@ -71,7 +92,7 @@ function send_ajax_form_request(url, additional_entries = {}){
  * @param {string} text: The text to show.
  * @param {boolean} fade_in: Whether to fade in the text or not.
  */
-function add_text_overlay(query, text, fade_in = false){
+function add_text_overlay(query, text, fade_in = true){
     $(query).each(function(){
 
         // Remove any existing content
@@ -287,8 +308,13 @@ function error(message){
  * Removes any existing error messages.
  */
 function remove_errors(){
-    $("#error-section").remove();
-    fade_in("footer");
+
+    // Remove any existing error messages
+    let error_element = $("#error-section");
+    error_element.remove();
+
+    // If an error element was removed, fade in the footer
+    if(error_element.length) fade_in("footer");
 }
 
 
@@ -309,15 +335,15 @@ function parse_json(json){
  * @param {number} maximum: The maximum the value can be.
  * @returns {boolean}: Whether the value is valid.
  */
-function validate_number(number, minimum = null, maximum = null){
+function validate_number(number, minimum = NaN, maximum = NaN){
 
     // Check that the value is a number
     let parsed_value = +number;
     if(!number || isNaN(parsed_value)) return false;
 
     // Check that the number is within bounds
-    if(minimum !== null && parsed_value < minimum) return false;
-    if(maximum !== null && parsed_value > maximum) return false;
+    if(isNaN(minimum) && parsed_value < minimum) return false;
+    if(isNaN(maximum) && parsed_value > maximum) return false;
 
     // Return true as all validation checks have passed
     return true;
@@ -437,7 +463,7 @@ function get_active_file_ids(callback, loading_failed_query){
         // call the failure callback
         .fail(function()
         {
-            add_text_overlay(loading_failed_query, "Loading Failed", true);
+            add_text_overlay(loading_failed_query, "Loading Failed");
             error("Failed to retrieve the active file IDs.");
         });
 }

@@ -1,21 +1,31 @@
 let document_previews;
 $(function(){
 
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_tooltips();
-
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
+
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_tooltips();
 
     // Load the appropriate content for the "Cut Settings" element
     load_cut_settings_section();
 
-    // Create a preview for each active document
+    // Send a request for the document preview data
     $.ajax({type: "GET", url: "document-previews"})
-    .done(function(response){
-        document_previews = parse_json(response);
-        initialize_document_previews(response);
-    });
+
+        // If the request was successful, create a preview for each active
+        // document
+        .done(function(response){
+            document_previews = parse_json(response);
+            initialize_document_previews(response);
+        })
+
+        // If the request failed, display an error and "Loading Failed" text
+        .fail(function(){
+            error("Failed to retrieve the document previews.");
+            add_text_overlay("#previews", "Loading Failed");
+            enable("#preview-button, #apply-button");
+        });
 
     // Perform the cutting if the "Preview" or "Apply" button is pressed
     $("#preview-button").click(function(){ cut("preview"); });
@@ -72,6 +82,9 @@ function cut(action){
     // Validate the inputs. If the inputs are invalid, return
     if(!validate_inputs()) return;
 
+    // Remove any existing error messages
+    remove_errors();
+
     // Display the loading overlay and disable the buttons on the document
     // previews section
     start_document_previews_loading();
@@ -105,8 +118,8 @@ function cut(action){
     // If the request failed, display an error and remove the loading overlay
     .fail(function(){
         error("Failed to cut the documents.");
-        add_text_overlay("#previews", "No Previews");
-        finish_document_previews_loading();
+        add_text_overlay("#previews", "Loading Failed");
+        enable("#preview-button, #apply-button");
     })
 }
 
