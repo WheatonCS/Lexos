@@ -1,12 +1,15 @@
 /**
  * Initialize the "Color" button.
+ * @param {function} ok_callback: The function to call when the popup's "Ok"
+ *      button is clicked.
  */
-function initialize_color_button(){
+function initialize_color_button(ok_callback){
 
     // If the "Color" button is clicked, create a popup with the color options
     $("#color-button").click(function(){
 
-        create_radio_options_popup("Color", "color", "#color-button",
+        create_radio_options_popup(
+            "Color", "color", "#color-button",
             "#color-input", [
                 ["lexos", "Lexos"],
                 ["grey", "Grey"],
@@ -21,6 +24,8 @@ function initialize_color_button(){
                 ["rainbow", "Rainbow"],
                 ["splatter", "Splatter"]
             ]);
+
+        $("#ok-button").click(ok_callback);
     });
 }
 

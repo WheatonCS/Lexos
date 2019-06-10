@@ -5,7 +5,7 @@ let rendered_count;
 $(function(){
 
     // Initialize the "Color" button
-    initialize_color_button();
+    initialize_color_button(get_multicloud_data);
 
     // Create the multicloud
     get_multicloud_data();
@@ -23,6 +23,9 @@ function get_multicloud_data(){
     // Validate the "Term Count" input
     if(!validate_visualize_inputs()) return;
 
+    // Remove any error messages
+    remove_errors();
+
     // Reset the rendered word cloud count
     rendered_count = 0;
 
@@ -30,14 +33,24 @@ function get_multicloud_data(){
     // buttons
     start_loading("#multicloud", "#png-button, #svg-button, #generate-button");
 
-    // Create the multicloud
+    // Send a request to get the word counts
     $.ajax({
         type: "POST",
         url: "multicloud/get-word-counts",
         contentType: "application/JSON",
         data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
     })
-    .done(create_word_cloud_layouts);
+
+        // If the request was successful, create the multicloud
+        .done(create_word_cloud_layouts)
+
+        // If the request failed, display an error message, display
+        // "Loading Failed" text, and enable the "Generate" button
+        .fail(function(){
+            error("Failed to retrieve the multicloud data.");
+            add_text_overlay("#multicloud", "Loading Failed");
+            enable("#generate-button");
+        });
 }
 
 
@@ -66,7 +79,7 @@ function create_word_cloud_layouts(response){
         let document = response[i];
 
         // Create the word cloud element
-        let word_cloud_element = $(`
+        $(`
             <div id="word-cloud-wrapper-${i}" class="word-cloud-wrapper">
             
                 <div class="vertical-splitter section-top">
