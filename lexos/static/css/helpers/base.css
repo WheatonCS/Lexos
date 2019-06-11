@@ -367,6 +367,8 @@ input[type="text"] {
     border: none;
     box-shadow: inset #E3E3E3 0 0 0 .2rem;
     transition: color .2s, box-shadow .2s, background-color .2s;
+    user-select: text;
+    -moz-user-select: text;
 }
 
 input[type="text"]:focus {
@@ -396,6 +398,8 @@ textarea {
     background-color: #F3F3F3;
     resize: none;
     border: none;
+    user-select: text;
+    -moz-user-select: text;
 }
 
 .textarea-label {
