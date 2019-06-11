@@ -46,7 +46,7 @@ function initialize_graph(graph_html){
 }
 
 /**
- * Removes any existing plotly graphs.
+ * Removes any existing Plotly graphs.
  */
 function remove_graphs(){
     for(const element of $(".js-plotly-plot")) Plotly.purge(element);
