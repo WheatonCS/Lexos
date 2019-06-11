@@ -310,6 +310,15 @@ footer {
     overflow-y: auto;
 }
 
+#help-section-navbar {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #FFFFFF;
+    height: 7rem;
+}
+
 .help-section-title {
     display: block;
     margin-top: 2rem;
@@ -354,6 +363,8 @@ td, th {
     text-align: left;
     padding: 8px;
 }
+
+
 
 /* Text input */
 input[type="text"] {
