@@ -276,7 +276,7 @@ class RollingWindowsModel(BaseModel):
 
             def _word_window_word_search(window_index: int) -> list:
                 for token_index, token in enumerate(tokens):
-                    if token == passage_list[window_index]:
+                    if token == passage_list[window_index-1]:
                         window_sum[token_index] -= 1 / window_size
                     if token == passage_list[window_size + window_index]:
                         window_sum[token_index] += 1 / window_size
@@ -291,24 +291,24 @@ class RollingWindowsModel(BaseModel):
 
             def _char_window_word_search(window_index: int) -> list:
                 for token_index, token in enumerate(tokens):
-                    length = len(token)-1
-                    if token == passage[window_index:window_index + (length-1)]:
+                    length = len(token)
+                    if token == passage[window_index-1:window_index + length-1]:
                         window_sum[token_index] -= 1 / window_size
-                    if token == passage[window_size + window_index - (length-1):window_size + window_index]:
+                    if token == passage[window_size + window_index - length:window_size + window_index]:
                         window_sum[token_index] += 1 / window_size
                 return copy.deepcopy(window_sum)
 
             if token_type == RWATokenType.word and window_unit == WindowUnitType.word:
-                window_sum = [passage_list[:window_size - 1].count(token) / window_size for token in tokens]
+                window_sum = [passage_list[:window_size].count(token) / window_size for token in tokens]
                 first_sum = [copy.deepcopy(window_sum) for i in range(1)]
                 data_function = _word_window_word_search
             elif token_type == RWATokenType.word and window_unit == WindowUnitType.letter:
-                window_sum = [passage[:window_size - 1].split().count(token) / window_size for token in tokens]
+                window_sum = [passage[:window_size].strip().split().count(token) / window_size for token in tokens]
                 first_sum = [copy.deepcopy(window_sum) for i in range(1)]
                 data_function = _char_window_word_search
 
             appendlist = [data_function(window_index=index) for
-                          index in range(passage_length - window_size)]
+                          index in range(1, passage_length - window_size)]
 
             list_matrix = [y for x in [first_sum, appendlist] for y in x]
 
