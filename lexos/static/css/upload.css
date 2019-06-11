@@ -48,7 +48,8 @@ form {
 /* Upload list */
 #upload-previews {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(8rem, 1fr));
     grid-gap: 1rem;
     height: 100%;
     overflow-y: auto;
@@ -60,7 +61,7 @@ form {
     justify-content: center;
     min-height: 8rem;
     max-height: 8rem;
-    max-width: 40rem;
+    max-width:40rem;
     padding: 1rem;
     background-color: #F3F3F3;
 }
