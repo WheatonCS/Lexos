@@ -148,7 +148,6 @@ function toggle_help_section(){
     if(help_visible){
         main_grid.css("grid-template-columns", "100%");
         $("#help-section").remove();
-        help_button.removeClass("highlight");
         help_visible = false;
         return;
     }
@@ -156,7 +155,6 @@ function toggle_help_section(){
     // Otherwise, show the help section
     main_grid.css("grid-template-columns", "40rem auto");
     let help_section = $(`<div id="help-section"></div>`).prependTo(main_grid);
-    help_button.addClass("highlight");
 
     let url = "/static/help"+window.location.pathname+"-help.html";
     help_section.load(url);
