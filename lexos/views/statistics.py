@@ -49,17 +49,14 @@ def corpus() -> str:
     })
 
 
-@statistics_blueprint.route("/statistics/documents", methods=["POST"])
+@statistics_blueprint.route("/statistics/document-statistics", methods=["POST"])
 def documents() -> str:
     """ Gets the statistics of the individual documents.
     :return: The statistics of the individual documents.
     """
 
-    # Cache options
     session_manager.cache_analysis_option()
-
-    # Return the individual document statistics
-    return StatsModel().get_file_stats()
+    return StatsModel().get_document_statistics()
 
 
 @statistics_blueprint.route("/statistics/box-plot", methods=["POST"])
@@ -68,8 +65,5 @@ def box_plot() -> str:
     :return: The Plotly box plot of the document sizes.
     """
 
-    # Cache options
     session_manager.cache_analysis_option()
-
-    # Return the Plotly box plot
     return StatsModel().get_box_plot()

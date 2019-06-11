@@ -70,9 +70,10 @@ function create_tag_options_popup(response){
     let popup_content_element = $("#popup-content");
 
     // If there are no tags, display "No Tags" text and return
+    let popup_ok_button_element = $("#popup-ok-button");
     if(!tags.length){
         add_text_overlay("#popup-content", "No Tags");
-        $("#popup-ok-button").click(close_popup);
+        popup_ok_button_element.click(close_popup);
         return;
     }
 
@@ -102,19 +103,29 @@ function create_tag_options_popup(response){
                     <label class="circle-label"><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span>Replace</span></label>
                     <label class="circle-label"><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span>None</span></label>
                 </div>
-                <input type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">
+                <input class="disabled" type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">
             </div>
         `).appendTo("#tag-table-body");
 
         // Add the HTML-escaped tag name to the row element
         row_element.find("h3").text(tag[0]);
 
+        // If the row's "Replace" radio button is selected, enable the
+        // "Replacement" input, otherwise disable it
+        $(`input[name="${formatted_tag}-action"]`).change(function(){
+            let input_element = row_element.find(`input[type="text"]`);
+            if($(this).val() === "replace-element")
+                input_element.removeClass("disabled");
+            else input_element.addClass("disabled");
+        });
+
         // Check the appropriate option
-        row_element.find(`#${formatted_tag}-${tag[1]}-button`).prop("checked", true);
+        row_element.find(`#${formatted_tag}-${tag[1]}-button`)
+            .prop("checked", true).change();
     }
 
     // Save the tag options when the "OK" button is pressed
-    $("#popup-ok-button").click(save_tag_options);
+    popup_ok_button_element.click(save_tag_options);
 }
 
 

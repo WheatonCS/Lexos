@@ -87,6 +87,7 @@ form {
 /* Table body */
 #table-body {
     overflow-x: visible;
+    overflow-y: auto;
     overflow-y: overlay;
 }
 
