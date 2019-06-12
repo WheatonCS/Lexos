@@ -1,4 +1,4 @@
-from flask import session, render_template, Blueprint, send_file
+from flask import session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager

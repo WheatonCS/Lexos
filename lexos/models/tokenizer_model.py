@@ -1,6 +1,5 @@
 """This is the tokenizer model which gets the tokenizer table."""
 
-import os
 import pandas as pd
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
@@ -125,7 +124,7 @@ class TokenizerModel(BaseModel):
 
         # Sort the DTM. If the sort column is 0, sort by index
         dtm_sorted = dtm.sort_values(
-            by=[dtm.columns[self._front_end_option.sort_column - 1]],
+            by=[dtm.columns[self._front_end_option.sort_column-1]],
             ascending=self._front_end_option.sort_method
         ) if self._front_end_option.sort_column != 0 \
             else dtm.sort_index(ascending=self._front_end_option.sort_method)

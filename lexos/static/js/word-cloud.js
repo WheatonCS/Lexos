@@ -98,11 +98,16 @@ function create_word_cloud_layout(response){
     layout.start();
 }
 
+
 /**
  * Creates the word cloud.
  * @param {string[]} dataset: The dataset of words and their sizes.
  */
 function create_word_cloud(dataset){
+    // Define the div for the tooltip
+    var tooltip = d3.select("#word-cloud-container").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     // Create the word cloud
     $(`<div id="word-cloud" class="hidden"></div>`)
@@ -132,9 +137,20 @@ function create_word_cloud(dataset){
                 return "translate("+[d.x, d.y]+")rotate("+d.rotate+")";
             })
             .text(function(d){ return d.text; })
-
-        .append("svg:title")
-            .text(function(d){ return `Word: ${d.text} \nCount: ${d.count}`; });
+            .on("mouseover", function () {
+                d3.select(this).style('fill', 'gold')
+                tooltip.style("opacity", 1);
+            })
+            .on("mousemove", function (d){
+                tooltip
+                    .html('Count: ' + d.count)
+                    .style('left', (d3.event.pageX + 34) + 'px')
+                    .style('top', (d3.event.pageY - 12) + 'px');
+            })
+            .on("mouseout", function () {
+                d3.select(this).style("fill", function(d){ return get_visualize_color(d.normalized_count)})
+                tooltip.style("opacity", 0);
+            });
 
     // Remove the loading overlay and fade the word cloud in
     finish_loading("#word-cloud-container", "#word-cloud",

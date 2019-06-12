@@ -239,8 +239,14 @@ class StatsModel(BaseModel):
         """
 
         result = self._get_document_statistics_dataframe.round(3)
-        return jsonify({"table": result.to_json(orient="index"),
-                        "csv": result.to_csv()})
+
+        sorted_result = result.sort_values(
+            by=[result.columns[self._stats_option.sort_column]],
+            ascending=self._stats_option.sort_ascending
+        )
+
+        return jsonify({"table": sorted_result.to_json(orient="values"),
+                        "csv": sorted_result.to_csv()})
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.

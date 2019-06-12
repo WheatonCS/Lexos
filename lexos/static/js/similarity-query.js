@@ -155,7 +155,7 @@ function initialize_tooltips(){
     create_tooltip("#similarity-query-tooltip-button", `The rankings are
         determined by the distance between documents. Small distances
         (near zero) represent documents that are similar, and distances close
-        to one represent documents that are different.`);
+        to one represent documents that are different.`, true);
 
     // "Comparison Document"
     create_tooltip("#comparison-document-tooltip-button", `Select one document
