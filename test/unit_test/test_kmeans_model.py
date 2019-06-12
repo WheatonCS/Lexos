@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import plotly.graph_objs as go
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.kmeans_model import KMeansTestOptions, KMeansModel
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansViz, KMeansInit

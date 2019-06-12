@@ -1,6 +1,6 @@
 import json
 
-from flask import session, render_template, send_file, Blueprint
+from flask import session, render_template, Blueprint
 
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
