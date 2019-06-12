@@ -1,0 +1,128 @@
+<!-- About Lexos -->
+<h3 class="help-section-title">About Lexos</h3>
+
+<h3 class="help-section-paragraph">
+    Lexos is a web-based tool designed for transforming, analyzing, and visualizing
+    texts. Lexos is designed for use primarily with small to medium-sized text
+    collections, and especially for use with ancient languages and languages that
+    do not employ the Latin alphabet. Lexos was created as an entry-level platform
+    for Humanities scholars and students new to computational techniques while
+    providing tools and techniques sophisticated enough for advanced research.
+    See our website
+    <a target="_blank" href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/"><u><b>here</b></u></a>
+    for more information beyond this page.
+</h3>
+
+<!-- The Lexomics Workflow -->
+<h3 class="help-section-title">The Lexomics Workflow</h3>
+
+<h3 class="help-section-paragraph">
+    Keeping track of your experimental methods is important. It is also challenging
+    to sufficiently document experimental steps and decisions so that future
+    readers and experimenters can reproduce published results. Our workflow is
+    an attempt to share effective practices that make one's choices intentional.
+    When we openly share our methods, data, and workflow, we submit that we
+    facilitate the replication of results
+    (<a target="_blank" href="https://dh2017.adho.org/abstracts/027/027.pdf">LeBlanc, 2017</a>).
+</h3>
+
+<h3 class="help-section-paragraph">
+    We call Lexos "An Integrated Lexomics Workflow" because it brings together
+    many of the processing steps we in the Lexomics project regularly perform in
+    our research. Some history of the Lexomics project may give some useful
+    perspective on what we mean by a workflow. When the Lexomics project began,
+    it consisted of three simple PERL scripts: one to clean-up texts, one to cut
+    them, and one to perform cluster analysis on them. Each script had to be run
+    in sequence. So, after a while, it made sense to create a single tool that
+    would guide the user from one to the next. It then became clear the tool's
+    interface could allow the user to go back to earlier steps, tweak the settings,
+    and then repeat their experiments. There were, in fact, many ways in which
+    a user could design experiments using a single tool, and the tool could help
+    the user manage their activities and, perhaps more importantly, to think
+    critically about their process. Thus was Lexos born.
+</h3>
+
+<h3 class="help-section-paragraph">
+    While the strictly linear steps of its origins are no longer the only possible
+    approaches you can adopt when using Lexos, they provided important insight
+    into how computational text analysis workflows are constructed. They essentially
+    have three basic steps: pre-processing (scrubbing, segmenting), analysis,
+    and visualization. It is not always possible to clearly separate these activities.
+    Even in our earliest scripts, the first two were pre-processing steps and
+    the last, which plotted a tree diagram of the cluster analysis, combined
+    analysis and visualization. But, as Lexos has developed, we have tried to
+    make this its organizing principle, encouraging the user to proceed from
+    text preparation to simple visualization of their data to more complex
+    analysis. This is particularly useful for entry-level users and those whose
+    training has not explored the issues raised by computational methods.
+    Lexos is thus designed to enable newcomers to the field to adopt the Lexomics
+    workflow, empowering them to do sophisticated work in relatively little time.
+</h3>
+
+<h3 class="help-section-paragraph">
+    Following an effective workflow helps you document your computational
+    methods so others can replicate your results.
+</h3>
+
+<!-- How to Run Lexos -->
+<h3 class="help-section-title">How to Run Lexos</h3>
+
+<h3 class="help-section-paragraph">
+    Lexos runs through your web browser and currently, Lexos supports Google Chrome
+    and Mozilla Firefox; other browsers may not function properly.
+</h3>
+
+<h3 class="help-section-paragraph">
+    There are two modes of running Lexos:
+
+    <ol class="help-section-list">
+
+        <li><b>Recommended:</b> Use our public server hosted by the Lexomics
+            project at <a href="http://lexos.wheatoncollege.edu/">http://lexos.wheatoncollege.edu/</a>.
+            This is your best first step. The limitations of the public server:
+            (i) if you are leading a classroom of 10+ users, your response times
+            may be slow, and (ii) uploading many and/or large text files may result
+            in slow response times. <em><b>Note:</b> The public server has a single
+            file size limit set at 250 MB (as of August 2018, v3.2.0).</em> For
+            comparison sake, the novel <em>War and Peace</em> is 3.2M,
+            <em>El ingenioso hidalgo don Quijote de la Mancha</em> is 2.1M, and
+            <em>Moby Dick</em> is 1.2MB; 250MB is the size of nine Webster's
+            Unabridged Dictionaries.</li>
+
+        <li><b>Power Users:</b>
+            <a target="_blank" href="http://wheatoncollege.edu/lexomics/lexos-installers/"><u>Download and Install Lexos</u></a>.
+            This method requires you to install the Python programming language
+            on your computer and the open-source software for Lexos on github.
+            Once installed, you can run Lexos locally using your browser.</li>
+
+    </ol>
+
+</h3>
+
+<!-- Using Local Mode -->
+<h3 class="help-section-title">Using Local Mode</h3>
+
+<h3 class="help-section-paragraph">
+    Many functions in Lexos are based on common Javascript libraries like jQuery
+    and Twitter Bootstrap, which are employed all over the internet. So, chances
+    are that your browser has cached these libraries already and doesn't need to
+    load them, which makes loading times much faster. But we can't rely on it.
+    So, even if you are running Lexos on your own computer using localhost, Lexos
+    still requires an active internet connection to download these Javascript
+    libraries. Most of the time, this is not an issue.
+</h3>
+
+<h3 class="help-section-paragraph">
+    But what if you don't have an internet connection? You can still run Lexos
+    locally on your computer. Lexos has all the Javascript libraries built in and
+    will switch to them if you put it in "local mode". All you have to do is find
+    the Lexos folder on your computer and open the file <code>config.cfg</code> in a text editor.
+    Change <code>LOCAL_MODE = False</code> to <code>LOCAL_MODE = True</code>
+    (be careful, it is case sensitive); then save the file. You can ignore the
+    other settings. If you are already running Lexos, quit form it by typing
+    <code>Control+C</code> on the command line and then restart it by typing
+    <code>python run.py</code>. (See the
+    <a target="_blank" href="http://wheatoncollege.edu/lexomics/lexos-installers/">Manual Installation instructions</a>
+    on the Lexomics website if you need help with this.) You will now be running
+    in local mode.
+</h3>

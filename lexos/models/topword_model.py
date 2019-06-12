@@ -1,18 +1,15 @@
 """This is a model to find the topwords."""
 
-import os
 import math
 import itertools
 import pandas as pd
 from flask import jsonify
 from collections import OrderedDict
 from typing import List, Optional, NamedTuple
-from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.models.filemanager_model import FileManagerModel
-from lexos.helpers.constants import RESULTS_FOLDER, TOPWORD_CSV_FILE_NAME
 from lexos.receivers.topword_receiver import TopwordReceiver, \
     TopwordAnalysisType
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
@@ -29,6 +26,13 @@ class TopwordTestOptions(NamedTuple):
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
+
+
+class TopwordResult(NamedTuple):
+    """A typed tuple to hold topword results."""
+
+    header: str
+    results: AnalysisResult
 
 
 class TopwordModel(BaseModel):
@@ -329,34 +333,40 @@ class TopwordModel(BaseModel):
 
         return readable_result
 
-    def _get_result(self) -> List:
+    def _get_result(self) -> TopwordResult:
         """Call the right method corresponding to user's selection.
-
-        :return: The topword result.
+        :return: a namedtuple that holds the topword result, which contains a
+             header and a list of pandas series.
         """
+
         topword_analysis_option = self._topword_front_end_option
 
         if topword_analysis_option == TopwordAnalysisType.ALL_TO_PARA:
-            return self._analyze_file_to_all()
+            header = "Compare Each Document to All the Documents as a Whole."
+            results = self._analyze_file_to_all()
+            return TopwordResult(header=header, results=results)
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_PARA:
-            return self._analyze_file_to_class()
+            header = "Compare Each Document to Other Classes."
+            results = self._analyze_file_to_class()
+            return TopwordResult(header=header, results=results)
 
         elif topword_analysis_option == TopwordAnalysisType.CLASS_TO_CLASS:
-            return self._analyze_class_to_class()
+            header = "Compare Each Class to Other Classes."
+            results = self._analyze_class_to_class()
+            return TopwordResult(header=header, results=results)
 
         else:
             raise ValueError("Invalid topword analysis option.")
 
-    def get_displayable_result(self) -> jsonify:
-        """Get the data to display on the web page.
-
-        :return: a json object that holds the topword results.
+    def get_results(self) -> jsonify:
+        """Gets the top words data as a JSON object.
+        :return: The top words data as a JSON object.
         """
-        topword_result = self._get_result()
 
-        def helper_series_to_table(series: pd.Series) -> pd.DataFrame:
-            # Only take the most significant 30 data.
+        def helper_series_to_table(series: pd.Series) -> List:
+
+            # Get the top 30 words
             series = series[: 30]
             frame = pd.DataFrame(data={
                 "Terms/Characters": series.index,
@@ -365,39 +375,15 @@ class TopwordModel(BaseModel):
 
             return frame.to_numpy().tolist()
 
-        readable_result = [{"title": result.name,
-                            "result": helper_series_to_table(series=result)}
-                           for result in topword_result]
-
-        return jsonify(readable_result)
-
-    def get_download_path(self) -> str:
-        """Write the generated top word results to an output CSV file.
-
-        :return: path of the generated CSV file.
-        """
-        # Get topword result.
+        # Get the tables.
         topword_result = self._get_result()
+        tables = [{"title": result.name,
+                   "result": helper_series_to_table(series=result)}
+                  for result in topword_result.results]
 
-        # Get the default saving directory of topword result.
-        result_folder_path = os.path.join(
-            session_manager.session_folder(), RESULTS_FOLDER)
+        # Get the CSV data.
+        csv = topword_result.header+'\n'
+        for result in topword_result.results:
+            csv += pd.DataFrame(result).transpose().to_csv(header=True)
 
-        # Attempt to make the directory.
-        if not os.path.isdir(result_folder_path):
-            os.makedirs(result_folder_path)
-
-        # Get the complete saving path of topword result.
-        save_path = os.path.join(result_folder_path, TOPWORD_CSV_FILE_NAME)
-
-        # Write to the file.
-        with open(save_path, 'w', encoding='utf-8') as file:
-            # Write header to the file.
-            file.write(topword_result.header + '\n')
-            # Write results to the file.
-            # Since we want indexes and data in rows, we get the transpose.
-            for result in topword_result.results:
-                file.write(
-                    pd.DataFrame(result).transpose().to_csv(header=True))
-
-        return save_path
+        return jsonify({"tables": tables, "csv": csv})

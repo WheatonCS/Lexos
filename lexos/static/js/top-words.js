@@ -1,4 +1,5 @@
 let documents;
+let csv;
 $(function(){
 
     // Display the loading overlay on the "Class Divisions" and "Top Words"
@@ -16,6 +17,9 @@ $(function(){
     // Initialize the legacy form inputs, create the class division tables,
     // and create the top words tables
     get_active_file_ids(initialize, "#class-divisions-body, #top-words-body");
+
+    // If the "Download" button is pressed, download the CSV
+    $("#download-button").click(function(){ download(csv, "top-words.csv"); });
 });
 
 
@@ -127,11 +131,15 @@ function send_top_words_request(){
         return;
     }
 
-     // Otherwise, send a request for the top words data
-    send_ajax_form_request("top-words/tables")
+    // Otherwise, send a request for the top words results
+    send_ajax_form_request("top-words/results")
 
-        // If the request was successful, create the top words tables
-        .done(create_top_words_tables)
+        // If the request was successful, create the top words tables and
+        // store the CSV result
+        .done(function(response){
+            csv = response.csv;
+            create_top_words_tables(response.tables);
+        })
 
         // If the request failed, display an error, remove the loading
         // overlay, and enable the buttons
@@ -144,16 +152,17 @@ function send_top_words_request(){
 
 /**
  * Creates the top words tables.
- * @param {string} response: The response from the "top-words/table" request.
+ * @param {string} tables: The "tables" portion of the response from the
+ *      "top-words/get-results" request.
  */
-function create_top_words_tables(response){
+function create_top_words_tables(tables){
 
     // Create the table grid
     $(`<div id="top-words-grid" class="hidden"></div>`)
         .appendTo("#top-words-body");
 
     // Create the top words tables
-    for(const table of response) create_table(
+    for(const table of tables) create_table(
         table["title"], "#top-words-grid", table["result"]);
 
     // Remove the loading overlay and enable the buttons
@@ -185,9 +194,8 @@ function validate_inputs(){
  */
 function top_words_loading_failure(){
 
-    // Remove the loading overlay and enable the buttons
-    finish_loading("#top-words-body", "",
-        "#generate-button, #download-button");
+    // Remove the loading overlay and enable the "Generate" button
+    finish_loading("#top-words-body", "", "#generate-button");
 
     // Display "Loading Failed" text
     add_text_overlay("#top-words-body", "Loading Failed");
