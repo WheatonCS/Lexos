@@ -1,6 +1,5 @@
 """This is the tokenizer model which gets the tokenizer table."""
 
-import os
 import pandas as pd
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel

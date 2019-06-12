@@ -49,7 +49,8 @@ def corpus() -> str:
     })
 
 
-@statistics_blueprint.route("/statistics/document-statistics", methods=["POST"])
+@statistics_blueprint.route("/statistics/document-statistics",
+                            methods=["POST"])
 def documents() -> str:
     """ Gets the statistics of the individual documents.
     :return: The statistics of the individual documents.
