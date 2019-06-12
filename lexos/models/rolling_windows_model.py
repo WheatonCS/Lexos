@@ -243,100 +243,146 @@ class RollingWindowsModel(BaseModel):
         token_type = self._options.average_token_options.token_type
         tokens = self._options.average_token_options.tokens
         window_size = self._options.window_options.window_size
+        window_division = 1 / window_size
         window_unit = self._options.window_options.window_unit
         if window_unit is WindowUnitType.word:
-            passage_list = self._passage.split()
+            if token_type == RWATokenType.word:
+                passage_list = self._passage.split()
+            elif token_type == RWATokenType.string:
+                passage_list = get_words_with_right_boundary(self._passage)
             passage_length = len(passage_list)
-        elif window_unit is WindowUnitType.line or window_unit is WindowUnitType.letter:
+        elif window_unit is WindowUnitType.letter:
             passage = self._passage
             passage_length = len(passage)
+        elif window_unit is WindowUnitType.line:
+            passage_list = self._passage.split('\n')
+            passage_length = len(passage_list)
+        if token_type == RWATokenType.word and window_unit == WindowUnitType.letter:
+            boolean_array = [[False for token in tokens]for i in range(2)]
 
+        def _word_window_word_search(window_index: int) -> list:
+            for token_index, token in enumerate(tokens):
+                if token == passage_list[window_index-1]:
+                    window_sum[token_index] -= window_division
+                if token == passage_list[window_size + window_index - 1]:
+                    window_sum[token_index] += window_division
+            return copy.deepcopy(window_sum)
 
-        def _average_matrix_helper(
-            window_term_count_func: Callable[[str, str], int]) \
-                -> pd.DataFrame:
-            """Get the average matrix.
+        def _char_window_word_search(window_index: int) -> list:
+            window_list = passage[window_index - 1:window_size+window_index].strip().split()
+            for token_index, token in enumerate(tokens):
+                length = len(token)
 
-            :param window_term_count_func:
-                the function to get count of term in the window
-                the window is the first argument
-                the term is the second argument,
-                returns an int, that is the count of the term in the window
-            :return: a panda data frame where
-                - the index header is the tokens
-                - the column header corresponds to the windows but
-                    but there is no column header, because it is impossible to
-                    set the header as windows
-            """
-            # we cannot use keyword parameter in window_term_count_func
-            # because:
-            #  - the type hinting does not support keyword parameter
-            #       (on Python 3.6.1)
-            #  - the function that sent in has different keywords
+                if boolean_array[0][token_index]:
+                    if token == window_list[-1]:
+                        boolean_array[0][token_index] = False
+                    else:
+                        window_sum[token_index] -= window_division
+                        boolean_array[0][token_index] = False
+                elif token == window_list[-1]:
+                    window_sum[token_index] += window_division
+                    boolean_array[0][token_index] = True
 
-            def _word_window_word_search(window_index: int) -> list:
-                for token_index, token in enumerate(tokens):
-                    if token == passage_list[window_index-1]:
-                        window_sum[token_index] -= 1 / window_size
-                    if token == passage_list[window_size + window_index]:
-                        window_sum[token_index] += 1 / window_size
+                if token == window_list[0][-length:] and len(window_list[0]) > length and not boolean_array[1][token_index]:
+                    boolean_array[1][token_index] = True
+                elif token == window_list[0][1:]:
+                    if boolean_array[1][token_index]:
+                        window_sum[token_index] += window_division
+                        boolean_array[1][token_index] = False
+                if token == window_list[0] and token[0] == passage[window_index-1]:
+                    window_sum[token_index] -= window_division
+            return copy.deepcopy(window_sum)
 
-                # elif self._options.average_token_options.token_type
-                # is token_type.string():
-                #    for token_index, token in enumerate(tokens):
-                #        if token == passage_list[window_index] + \
-                #            passage_list[window_index + 1][:len(token)]:
-                #            print("something will be here eventually")
-                return copy.deepcopy(window_sum)
+        def _line_window_word_search(window_index: int) -> list:
+            prev_line = passage_list[window_index - 1].strip().split()
+            new_line = passage_list[window_size+window_index-1].strip().split()
+            for token_index, token in enumerate(tokens):
+                window_sum[token_index] -= window_division * prev_line.count(token)
+                window_sum[token_index] += window_division * new_line.count(token)
+            return copy.deepcopy(window_sum)
 
-            def _char_window_word_search(window_index: int) -> list:
-                for token_index, token in enumerate(tokens):
-                    length = len(token)
-                    if token == passage[window_index-1:window_index + length-1]:
-                        window_sum[token_index] -= 1 / window_size
-                    if token == passage[window_size + window_index - length:window_size + window_index]:
-                        window_sum[token_index] += 1 / window_size
-                return copy.deepcopy(window_sum)
+        def get_compare_string(window_index: int, length: int, reverse: bool) -> str:
+            length -= 1
+            if reverse:
+                compare_string = passage_list[window_index][::-1]
+                window_index -= 1
+            else:
+                compare_string = passage_list[window_index]
+                window_index += 1
 
-            if token_type == RWATokenType.word and window_unit == WindowUnitType.word:
-                window_sum = [passage_list[:window_size].count(token) / window_size for token in tokens]
-                first_sum = [copy.deepcopy(window_sum) for i in range(1)]
-                data_function = _word_window_word_search
-            elif token_type == RWATokenType.word and window_unit == WindowUnitType.letter:
-                window_sum = [passage[:window_size].strip().split().count(token) / window_size for token in tokens]
-                first_sum = [copy.deepcopy(window_sum) for i in range(1)]
-                data_function = _char_window_word_search
+            while length > 0:
+                if len(passage_list[window_index]) < length:
+                    if reverse:
+                        compare_string += passage_list[window_index][::-1]
+                    else:
+                        compare_string += passage_list[window_index]
+                    length -= len(passage_list[window_index])
+                    if reverse:
+                        window_index += 1
+                    else:
+                        window_index -= 1
+                else:
+                    if reverse:
+                        compare_string += passage_list[window_index][-length:][::-1]
+                    else:
+                        compare_string += passage_list[window_index][:length]
+                    length = 0
 
-            appendlist = [data_function(window_index=index) for
-                          index in range(1, passage_length - window_size)]
+            if reverse:
+                return compare_string[::-1]
+            else:
+                return compare_string
 
-            list_matrix = [y for x in [first_sum, appendlist] for y in x]
+        def _word_window_string_search(window_index: int) -> list:
+            for token_index, token in enumerate(tokens):
+                length = len(token)
+                window_sum[token_index] -= window_division * get_compare_string(window_index-1, length, reverse=False).count(token)
+                window_sum[token_index] += window_division * get_compare_string(window_index + window_size - 1, length, reverse=True).count(token)
+            return copy.deepcopy(window_sum)
 
-            #    [copy.deepcopy(window_sum) for tokenindex, token in enumerate
-            #    tokens]
+        def _char_window_string_search(window_index: int) -> list:
+            for token_index, token in enumerate(tokens):
+                length = len(token)
+                if token == passage[window_index-1:window_index+(length-1)]:
+                    window_sum[token_index] -= window_division
+                if token == passage[window_index+window_size-length:window_index+window_size]:
+                    window_sum[token_index] += window_division
+            return copy.deepcopy(window_sum)
 
-            #    [
-            #        [window_term_count_func(window, token) / window_size
-            #         for token in tokens]
-            #        for window in windows
-            #    ]
+        def _line_window_string_search(window_index: int) -> list:
+            prev_line = passage_list[window_index - 1]
+            new_line = passage_list[window_size + window_index - 1]
+            for token_index, token in enumerate(tokens):
+                window_sum[token_index] -= window_division * prev_line.count(token)
+                window_sum[token_index] += window_division * new_line.count(token)
+            return copy.deepcopy(window_sum)
 
-            return pd.DataFrame(list_matrix, columns=tokens).transpose()
+        if token_type == RWATokenType.word and window_unit == WindowUnitType.word:
+            window_sum = [passage_list[:window_size].count(token) / window_size for token in tokens]
+            data_function = _word_window_word_search
+        elif token_type == RWATokenType.word and window_unit == WindowUnitType.letter:
+            window_sum = [passage[:window_size].strip().split().count(token) / window_size for token in tokens]
+            data_function = _char_window_word_search
+        elif token_type == RWATokenType.word and window_unit == WindowUnitType.line:
+            window_sum = [''.join(passage_list[:window_size]).strip().split().count(token) / window_size for token in tokens]
+            data_function = _line_window_word_search
+        if token_type == RWATokenType.string and window_unit == WindowUnitType.word:
+            window_sum = [''.join(passage_list[:window_size]).count(token) / window_size for token in tokens]
+            data_function = _word_window_string_search
+        elif token_type == RWATokenType.string and window_unit == WindowUnitType.letter:
+            window_sum = [passage[:window_size].count(token) / window_size for token in tokens]
+            data_function = _char_window_string_search
+        elif token_type == RWATokenType.string and window_unit == WindowUnitType.line:
+            window_sum = [''.join(passage_list[:window_size]).count(token) / window_size for token in tokens]
+            data_function = _line_window_string_search
 
-        if token_type is RWATokenType.string:
-            return _average_matrix_helper(
-                window_term_count_func=self._find_string_in_window)
+        first_sum = [copy.deepcopy(window_sum) for i in range(1)]
+        appendlist = [data_function(window_index=index) for
+                      index in range(1, passage_length - window_size + 1)]
 
-        elif token_type is RWATokenType.word:
-            return _average_matrix_helper(
-                window_term_count_func=self._find_word_in_window)
+        list_matrix = [y for x in [first_sum, appendlist] for y in x]
 
-        elif token_type is RWATokenType.regex:
-            return _average_matrix_helper(
-                window_term_count_func=self._find_regex_in_window)
-
-        else:
-            raise ValueError(f"unhandled token type: {token_type}")
+        return pd.DataFrame(list_matrix, columns=tokens).transpose()
 
     def _find_token_ratio_in_windows(self,
                                      numerator_token: str,
