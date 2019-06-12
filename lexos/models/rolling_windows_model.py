@@ -248,7 +248,7 @@ class RollingWindowsModel(BaseModel):
         if window_unit is WindowUnitType.word:
             if token_type == RWATokenType.word:
                 passage_list = self._passage.split()
-            elif token_type == RWATokenType.string:
+            else:
                 passage_list = get_words_with_right_boundary(self._passage)
             passage_length = len(passage_list)
         elif window_unit is WindowUnitType.letter:
@@ -357,6 +357,16 @@ class RollingWindowsModel(BaseModel):
                 window_sum[token_index] += window_division * new_line.count(token)
             return copy.deepcopy(window_sum)
 
+        def _word_window_regex_search():
+            return [[len(re.findall(pattern=token,string=''.join(passage_list[index:index+window_size]),flags=rwa_regex_flags)) for token in tokens] for index in range(1, passage_length - window_size + 1)]
+
+        def _char_window_regex_search():
+            return [[len(re.findall(pattern=token,string=passage[index:index+window_size],flags=rwa_regex_flags)) for token in tokens] for index in range(1, passage_length - window_size + 1)]
+
+        def _line_window_regex_search():
+            return [[len(re.findall(pattern=token,string=''.join(passage_list[index:index+window_size]),flags=rwa_regex_flags)) for token in tokens] for index in range(1, passage_length - window_size + 1)]
+
+
         if token_type == RWATokenType.word and window_unit == WindowUnitType.word:
             window_sum = [passage_list[:window_size].count(token) / window_size for token in tokens]
             data_function = _word_window_word_search
@@ -376,11 +386,15 @@ class RollingWindowsModel(BaseModel):
             window_sum = [''.join(passage_list[:window_size]).count(token) / window_size for token in tokens]
             data_function = _line_window_string_search
 
-        first_sum = [copy.deepcopy(window_sum) for i in range(1)]
-        appendlist = [data_function(window_index=index) for
-                      index in range(1, passage_length - window_size + 1)]
+        elif token_type == RWATokenType.regex and window_unit == WindowUnitType.letter:
+            list_matrix = [[len(re.findall(pattern=token,string=passage[index:index+window_size],flags=rwa_regex_flags)) / window_size for token in tokens] for index in range(1, passage_length - window_size + 1)]
+        elif token_type == RWATokenType.regex:
+            list_matrix = [[len(re.findall(pattern=token,string=''.join(passage_list[index:index+window_size]),flags=rwa_regex_flags)) / window_size for token in tokens] for index in range(1, passage_length - window_size + 1)]
 
-        list_matrix = [y for x in [first_sum, appendlist] for y in x]
+        if token_type != RWATokenType.regex:
+            first_sum = [copy.deepcopy(window_sum) for i in range(1)]
+            appendlist = [data_function(window_index=index) for index in range(1, passage_length - window_size + 1)]
+            list_matrix = [y for x in [first_sum, appendlist] for y in x]
 
         return pd.DataFrame(list_matrix, columns=tokens).transpose()
 
