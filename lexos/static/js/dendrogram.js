@@ -50,13 +50,28 @@ function initialize(response){
 
     // When the "Generate" button is pressed, recreate the dendrogram
     $("#generate-button").click(function(){
+
+        // Validate the inputs
         if(!validate_analyze_inputs()) return;
-        start_loading("#graph-container", "#generate-button");
+
+        // Remove any existing Plotly graphs
+        remove_graphs();
+
+        // Remove any existing error messages
         remove_errors();
+
+        // Display the loading overlay and disable the "Generate" button
+        start_loading("#graph-container", "#generate-button");
+
+        // Create the Plotly dendrogram graph
         create_graph("dendrogram/graph");
     });
 }
 
+
+/**
+ * Initializes the tooltips.
+ */
 function initialize_tooltips(){
 
     // "Distance Metric"

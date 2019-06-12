@@ -33,6 +33,7 @@
 #table-body {
     height: calc(100% - 3rem);
     overflow-y: auto;
+    overflow-y: overlay;
 }
 
 .table-row {

@@ -31,19 +31,18 @@ def class_divisions() -> str:
     """
 
     file_manager = FileManagerModel().load_file_manager()
-
     return file_manager.get_class_division_map().transpose().to_json()
 
 
-@top_words_blueprint.route("/top-words/tables", methods=["POST"])
-def tables() -> str:
-    """ Gets the top words tables.
-    :return: The top words tables.
+@top_words_blueprint.route("/top-words/results", methods=["POST"])
+def results() -> str:
+    """ Gets the top words results.
+    :return: The top words results.
     """
 
     # Cache the options
     session_manager.cache_analysis_option()
     session_manager.cache_top_word_options()
 
-    # Return the top words tables
-    return TopwordModel().get_displayable_result()
+    # Return the top words results
+    return TopwordModel().get_results()

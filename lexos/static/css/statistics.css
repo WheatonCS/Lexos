@@ -16,7 +16,6 @@ form {
     display: grid;
     grid-gap: 2rem;
     grid-template-columns: 35rem auto 30rem;
-    grid-template-rows: 45rem auto 40rem;
 }
 
 #left-column {
@@ -35,55 +34,10 @@ form {
     margin: 1rem;
 }
 
-#standard-error-test{
-    overflow-y: auto;
-}
-
-#interquartile-range-test{
-    overflow-y: auto;
-}
 
 /* Table */
-#table-data{
+#table {
     height: calc(100% - 5rem);
-}
-
-/* Table top */
-#table-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.1fr;
-    height: 3rem;
-    margin: 1rem;
-}
-
-.table-top-radio-option {
-    justify-self: center;
-}
-
-.table-top-radio-option > h3,
-.table-top-radio-option > label {
-    margin-right: 1rem;
-}
-
-#table-top-buttons {
-    justify-self: right;
-}
-
-
-/* Table data */
-#table-data-grid {
-    height: 100%;
-    display: grid;
-    grid-template-rows: max-content auto;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-
-/* Table head */
-
-#table-head .table-cell.selected-cell {
-    background-color: #EAF5FF;
 }
 
 #table-head,
@@ -111,6 +65,7 @@ form {
 #table-body {
     height: calc(100% - 3rem);
     overflow-y: auto;
+    overflow-y: overlay;
 }
 
 .table-row {

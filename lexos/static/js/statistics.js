@@ -1,14 +1,14 @@
 $(function(){
 
     // Display the loading overlays
-    start_loading("#graph-container, #table-data, #corpus-statistics, "+
+    start_loading("#graph-container, #table, #corpus-statistics, "+
         "#standard-error-test, #interquartile-range-test");
 
     // Initialize the tooltips
     initialize_tooltips();
 
     // Initialize the legacy form inputs and create the statistics
-    get_active_file_ids(initialize, "#graph-container, #table-data, "+
+    get_active_file_ids(initialize, "#graph-container, #table, "+
         "#corpus-statistics, #standard-error-test, #interquartile-range-test");
 });
 
@@ -17,12 +17,13 @@ $(function(){
  * Initializes the legacy form inputs and creates the statistics.
  * @param {string} response: The response from the "active-file-ids" request.
  */
+let document_statistics_csv;
 function initialize(response){
 
     // Initialize the legacy form inputs. If there are no active documents,
     // display "No Active Documents" text and return
     if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#graph-container, #table-data, #corpus-statistics, "+
+        add_text_overlay("#graph-container, #table, #corpus-statistics, "+
             "#standard-error-test, #interquartile-range-test",
             "No Active Documents");
         return;
@@ -34,16 +35,29 @@ function initialize(response){
     // If the "Generate" button is pressed, recreate the statistics
     $("#generate-button").click(function(){
 
-        // If an input is invalid, return
+        // Validate the inputs
         if(!validate_analyze_inputs()) return;
 
-        // Otherwise, display the loading overlays
-        start_loading("#graph-container, #table-data, #corpus-statistics, "+
+        // Remove any existing Plotly graphs
+        remove_graphs();
+
+        // Remove any existing error messages
+        remove_errors();
+
+        // Display the loading overlays and disable the "Generate" and
+        // "Download"  buttons
+        start_loading("#graph-container, #table, #corpus-statistics, "+
             "#standard-error-test, #interquartile-range-test",
-            "#generate-button");
+            "#generate-button, #download-button");
 
         // Create the statistics
         create_statistics();
+    });
+
+    // If the "Download" button is pressed, download the document statistics
+    // CSV
+    $("#download-button").click(function(){
+        download(document_statistics_csv, "document-statistics.csv");
     });
 }
 
@@ -52,9 +66,6 @@ function initialize(response){
  * Creates the statistics.
  */
 function create_statistics(){
-
-    // Remove any existing error messages
-    remove_errors();
 
     // Send a request to get the corpus statistics
     send_ajax_form_request("/statistics/corpus")
@@ -71,15 +82,19 @@ function create_statistics(){
         });
 
     // Send a request to get the document statistics
-    send_ajax_form_request("/statistics/documents")
+    send_ajax_form_request("/statistics/document-statistics")
 
-        // If the request was successful, create the document statistics
-        .done(create_document_statistics)
+        // If the request was successful, store the CSV data and create the
+        // table
+        .done(function(response){
+            document_statistics_csv = response.csv;
+            create_document_statistics_table(response.table);
+        })
 
         // If the request failed, display an error and "Loading Failed" text
         .fail(function(){
             error("Failed to retrieve the document statistics.");
-            add_text_overlay("#table-data", "Loading Failed");
+            add_text_overlay("#table", "Loading Failed");
             loading_complete_check();
         });
 
@@ -90,9 +105,10 @@ function create_statistics(){
 
 
 /**
- * Create the statistics for the "Corpus Statistics", "Standard Error Test",
+ * Creates the statistics for the "Corpus Statistics", "Standard Error Test",
  *      and "Interquartile Range Test" sections.
- * @param response
+ * @param {string} response: The response from the "/statistics/corpus"
+ *      request.
  */
 function create_corpus_statistics(response){
 
@@ -152,32 +168,25 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
 
 /**
  * Create the table for the "Document Statistics" section.
- * @param {string} response: The response from the "/statistics/documents"
- *      request.
+ * @param {string} table: The "table" portion of the response from the
+ *      "/statistics/document-statistics" request.
  */
-function create_document_statistics(response){
-
-    $(`
-        <div id="table-data-grid" class="hidden">
-            <div id="table-head"></div>
-            <div id="table-row" class="hidden-scrollbar"></div>
-        </div>
-    `).appendTo("#table-data");
+function create_document_statistics_table(table){
 
     // Create the head and table body
     $(`
         <div id="table-head" class="hidden">
             <h3 class="table-head-cell">Name</h3>
-            <h3 class="table-head-cell">Single-Occurrence Terms</h3>
             <h3 class="table-head-cell">Total Terms</h3>
-            <h3 class="table-head-cell">Average Terms</h3>
             <h3 class="table-head-cell">Distinct Terms</h3>
+            <h3 class="table-head-cell">Average Terms</h3>
+            <h3 class="table-head-cell">Single-Occurrence Terms</h3>
         </div>
-        <div id="table-body" class="hidden hidden-scrollbar"></div>
-    `).appendTo("#table-data");
+        <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
+    `).appendTo("#table");
 
     // Create the rows
-    let rows = Object.entries(parse_json(response));
+    let rows = Object.entries(JSON.parse(table));
     for(row of rows){
         let data = Object.values(row[1]);
 
@@ -192,8 +201,9 @@ function create_document_statistics(response){
         `).appendTo("#table-body");
     }
 
-    // Remove the loading overlay and fade the table in
-    finish_loading("#table-data", "#table-head, #table-body");
+    // Remove the loading overlay, fade the table in, and enable the
+    // "Download" button
+    finish_loading("#table", "#table-head, #table-body", "#download-button");
 
     // Enable the "Generate" button if all elements have finished loading
     loading_complete_check();

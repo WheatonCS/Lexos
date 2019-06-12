@@ -5,8 +5,6 @@ import pandas as pd
 from typing import Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.helpers.constants import RESULTS_FOLDER
-from lexos.managers.session_manager import session_folder
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
@@ -107,33 +105,40 @@ class TokenizerModel(BaseModel):
 
         return file_col_dtm.round(4)
 
-    def select_file_col_dtm(self) -> dict:
-        """Select required portion of the file col dtm respond to ajax call.
+    def _get_file_row_dtm(self) -> pd.DataFrame:
+        """Get DTM with documents as rows and terms/characters as columns.
 
-        :return: A Json object contains values the datatable ajax call needs.
+        :return: DataFrame that contains DTM where each document is a row.
         """
-        # Get the file column dtm.
+        return self._get_file_col_dtm().transpose()
+
+    def get_table(self) -> dict:
+        """ Gets the desired DTM as a JSON object.
+        :return: The desired DTM as a JSON object.
+        """
+
+        # Get the DTM in file-column orientation
         dtm = self._get_file_col_dtm()
 
-        # Apply the search first before anything happens.
+        # Apply the search
         dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]
 
-        # Sort the dtm; if the sort column is 0, sort by index.
+        # Sort the DTM. If the sort column is 0, sort by index
         dtm_sorted = dtm.sort_values(
             by=[dtm.columns[self._front_end_option.sort_column - 1]],
             ascending=self._front_end_option.sort_method
         ) if self._front_end_option.sort_column != 0 \
             else dtm.sort_index(ascending=self._front_end_option.sort_method)
 
-        # Slice the desired portion of the dtm.
+        # Slice the desired portion of the DTM
         data_start = self._front_end_option.start
         data_length = self._front_end_option.length
         required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
 
-        # Convert the data to a list of lists.
+        # Convert the data to a list of lists
         data = required_dtm.values.tolist()
 
-        # Insert the index (terms/characters) in front of the count.
+        # Insert the index (terms/characters) in front of the count
         for index, value in enumerate(required_dtm.index):
             data[index].insert(0, value)
 
@@ -142,40 +147,26 @@ class TokenizerModel(BaseModel):
         if dtm.shape[0] % self._front_end_option.length != 0 or pages == 0:
             pages += 1
 
-        # Return the sliced DTM and total count as a JSON object.
+        # Return the JSON data
         return {
             "pages": pages,
             "head": self._get_file_col_dtm().columns.values.tolist(),
             "data": data
         }
 
-    def _get_file_row_dtm(self) -> pd.DataFrame:
-        """Get DTM with documents as rows and terms/characters as columns.
-
-        :return: DataFrame that contains DTM where each document is a row.
+    def get_csv(self) -> str:
+        """Gets the desired DTM as a CSV.
+        :return: the desired DTM as a CSV.
         """
-        return self._get_file_col_dtm().transpose()
 
-    def download_dtm(self) -> str:
-        """Download the desired DTM as a CSV file.
-
-        :return: The file path that saves the CSV file.
-        """
-        # Select proper DTM based on users choice.
-        required_dtm = self._get_file_col_dtm() \
+        # Get the DTM in the desired orientation
+        dtm = self._get_file_col_dtm() \
             if self._front_end_option.orientation == "file_col" \
             else self._get_file_row_dtm()
 
-        # Get the default folder path, if it does not exist, create one.
-        folder_path = os.path.join(session_folder(), RESULTS_FOLDER)
-        if not os.path.isdir(folder_path):
-            os.makedirs(folder_path)
+        # Apply the search
+        print(self._front_end_option.search)
+        dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]
 
-        # Set the default file path.
-        file_path = os.path.join(folder_path, "tokenizer_result.csv")
-
-        # Save it to the file path.
-        required_dtm.to_csv(file_path)
-
-        # Return where the file is.
-        return file_path
+        # Return the CSV conversion
+        return dtm.to_csv()

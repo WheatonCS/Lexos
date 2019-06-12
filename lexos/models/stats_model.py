@@ -1,10 +1,10 @@
 """This is the Stats model which gets basic statistics."""
 
 import pandas as pd
-import numpy as np
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
+from flask import jsonify
 from typing import Optional, NamedTuple, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -100,25 +100,51 @@ class StatsModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "terms" if token_type == "word" else "character n-grams"
 
-    def __get_quartile__(self, index: float, arr: np.array) -> float:
-        if index % 1 == .5:
-            ind = int(index)
-            return arr[ind] * .5 + arr[ind + 1] * .5
-        elif index % 1 == .25:
-            ind = int(index)
-            return arr[ind] * .75 + arr[ind + 1] * .25
-        elif index % 1 == .75:
-            ind = int(index)
-            return arr[ind] * .25 + arr[ind + 1] * .75
-        else:
-            ind = int(index)
-            return arr[ind]
+    @property
+    def _get_document_statistics_dataframe(self) -> pd.DataFrame:
+        """Gets a Pandas dataframe containing the statistics of each document.
+        :return: A Pandas dataframe containing statistics of each document.
+        """
+
+        # Check if empty corpus is given.
+        assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._active_doc_term_matrix.index.values]
+
+        # Set up data frame with proper headers.
+        file_stats = pd.DataFrame(
+            columns=["Documents",
+                     f"Number of {self._token_type_str} occurring once",
+                     f"Total number of {self._token_type_str}",
+                     f"Average number of {self._token_type_str}",
+                     f"Distinct number of {self._token_type_str}"])
+
+        # Save document names in the data frame.
+        file_stats["Documents"] = labels
+        # Find number of token that appears only once.
+        file_stats[f"Number of {self._token_type_str} occurring once"] = \
+            self._active_doc_term_matrix.eq(1).sum(axis=1).values
+        # Find total number of tokens.
+        file_stats[f"Total number of {self._token_type_str}"] = \
+            self._active_doc_term_matrix.sum(axis=1).values
+        # Find distinct number of tokens.
+        file_stats[f"Distinct number of {self._token_type_str}"] = \
+            self._active_doc_term_matrix.ne(0).sum(axis=1).values
+        # Find average number of appearance of tokens.
+        file_stats[f"Average number of {self._token_type_str}"] = \
+            file_stats[f"Total number of {self._token_type_str}"] / \
+            file_stats[f"Distinct number of {self._token_type_str}"]
+
+        return file_stats
 
     def get_corpus_stats(self) -> CorpusStats:
         """Convert word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
+
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -133,16 +159,9 @@ class StatsModel(BaseModel):
         # Get the standard deviation of the file word counts.
         std_deviation = file_sizes.std(axis="index")
 
-        # Get quartile indices
-        arr = np.array(file_sizes)
-        arr.sort()
-        length = len(arr)
-        q1_index = int(length * .25 + .5 - 1)
-        q3_index = int(length * .75 + .5 - 1)
-
         # Get the iqr of the file word counts.
-        first_quartile = self.__get_quartile__(index=q1_index, arr=arr)
-        third_quartile = self.__get_quartile__(index=q3_index, arr=arr)
+        first_quartile = file_sizes.quantile(0.25)
+        third_quartile = file_sizes.quantile(0.75)
         iqr = third_quartile - first_quartile
 
         # Standard error analysis: assume file sizes are normally distributed;
@@ -192,45 +211,14 @@ class StatsModel(BaseModel):
             inter_quartile_range=round(iqr, 2),
         )
 
-    def get_file_stats(self) -> str:
-        """Get statistics of each file.
-
-        :return: A JSONified Pandas dataframe
+    def get_document_statistics(self) -> str:
+        """ Gets the document statistics.
+        :return: The document statistics.
         """
 
-        # Check if empty corpus is given.
-        assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
-
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._active_doc_term_matrix.index.values]
-
-        # Set up data frame with proper headers.
-        file_stats = pd.DataFrame(
-            columns=["Documents",
-                     f"Number of {self._token_type_str} occurring once",
-                     f"Total number of {self._token_type_str}",
-                     f"Average number of {self._token_type_str}",
-                     f"Distinct number of {self._token_type_str}"])
-
-        # Save document names in the data frame.
-        file_stats["Documents"] = labels
-        # Find number of token that appears only once.
-        file_stats[f"Number of {self._token_type_str} occurring once"] = \
-            self._active_doc_term_matrix.eq(1).sum(axis=1).values
-        # Find total number of tokens.
-        file_stats[f"Total number of {self._token_type_str}"] = \
-            self._active_doc_term_matrix.sum(axis=1).values
-        # Find distinct number of tokens.
-        file_stats[f"Distinct number of {self._token_type_str}"] = \
-            self._active_doc_term_matrix.ne(0).sum(axis=1).values
-        # Find average number of appearance of tokens.
-        file_stats[f"Average number of {self._token_type_str}"] = \
-            file_stats[f"Total number of {self._token_type_str}"] / \
-            file_stats[f"Distinct number of {self._token_type_str}"]
-
-        # Round all the values and return as a JSON string.
-        return file_stats.round(3).to_json(orient="index")
+        result = self._get_document_statistics_dataframe.round(3)
+        return jsonify({"table": result.to_json(orient="index"),
+                        "csv": result.to_csv()})
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.
@@ -243,9 +231,8 @@ class StatsModel(BaseModel):
 
         # Set up the points.
         scatter_plot = go.Scatter(
-            x=[_ for _ in labels],
+            x=[0 for _ in labels],
             y=self._active_doc_term_matrix.sum(1).values,
-            name="Corpus Scatter Plot",
             hoverinfo="text",
             mode="markers",
             marker=dict(color="#47BCFF"),
@@ -257,60 +244,48 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color="#47BCFF"),
-            jitter=0.15
+            marker=dict(color="#47BCFF")
         )
 
         # Create a figure with two subplots and fill the figure.
-        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=False)
+        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=True)
         figure.append_trace(trace=scatter_plot, row=1, col=1)
         figure.append_trace(trace=box_plot, row=1, col=2)
 
         # Hide useless information on x-axis and set up title.
         figure.layout.update(
             autosize=True,
-            height=300,
             showlegend=False,
             margin=dict(
                 r=0,
-                b=30,
-                t=25,
+                b=0,
+                t=0,
                 pad=4
             ),
             xaxis=dict(
-                title="Scatter Plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=True,
+                showline=False,
                 showticklabels=False
-            ),
-            yaxis=dict(
-                showline=True,
-                zeroline=False
             ),
             xaxis2=dict(
-                title="Box Plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=True,
+                showline=False,
                 showticklabels=False
-            ),
-            yaxis2=dict(
-                showline=True,
-                zeroline=False
             ),
             hovermode="closest"
         )
 
-        # Return the plotly figure.
+        # Return the Plotly graph.
         return figure
 
     def get_box_plot(self) -> str:
-        """Return a HTML string that is ready to be displayed on the web.
-
-        :return: A string in HTML format that contains the plotly box plot.
+        """ Returns the document size Plotly graph.
+        :return: The document size Plotly graph.
         """
-        # Return plotly object as a div.
+
+        # Return Plotly object as a div.
         return plot(self._get_box_plot_object(),
                     include_plotlyjs=False,
                     output_type="div",
