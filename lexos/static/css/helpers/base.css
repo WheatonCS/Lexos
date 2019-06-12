@@ -439,12 +439,14 @@ textarea {
     -ms-user-select: none;
     user-select: none;
 }
+
 /* Hide the browser's default radio button */
 .circle-label input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
 }
+
 /* Create a custom radio button */
 .radiomark {
     position: absolute;
@@ -506,12 +508,14 @@ textarea {
     -ms-user-select: none;
     user-select: none;
 }
+
 /* Hide the browser's default checkbox */
 .checkbox-label input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
 }
+
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
