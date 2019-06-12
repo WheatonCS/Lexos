@@ -108,7 +108,9 @@ function append_row(id, row_number, active, label, class_name, source, preview){
     // Create a new row and append it to the "table-body" element
     let row = $(`
         <div id="${id}" class="table-row">
-            <div class="checkbox"></div>
+            <label id=${id} class="checkbox-label" style="display: inline-block; left: 4rem; top: 1rem;">
+            <input type="checkbox" checked="checked"><span class="checkmark"></span>
+            </label>
             <h3 class="table-cell">${row_number}</h3>
             <h3 class="table-cell"></h3>
             <h3 class="table-cell"></h3>
