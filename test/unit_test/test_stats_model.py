@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import lexos.application as application
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.stats_model import StatsModel, StatsTestOptions
 
@@ -18,12 +19,13 @@ test_option_one = StatsTestOptions(
     doc_term_matrix=test_dtm_one,
     front_end_option=test_front_end_option_one,
     id_temp_label_map=test_id_temp_table_one)
-test_stats_model_one = StatsModel(test_options=test_option_one)
-test_corpus_result_one = test_stats_model_one.get_corpus_stats()
-test_file_result_one = test_stats_model_one.get_file_stats()
-# noinspection PyProtectedMember
-test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
-test_pandas_one = pd.read_json(test_file_result_one)
+with application.app.app_context():
+    test_stats_model_one = StatsModel(test_options=test_option_one)
+    test_corpus_result_one = test_stats_model_one.get_corpus_stats()
+    test_file_result_one = test_stats_model_one.get_document_statistics()
+    # noinspection PyProtectedMember
+    test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
+    test_pandas_one = pd.read_json(test_file_result_one)
 # ------------------------------------------------------------------
 
 # ------------------------ Second test suite -----------------------
@@ -44,7 +46,7 @@ test_option_two = StatsTestOptions(
     id_temp_label_map=test_id_temp_table_two)
 test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
-test_file_result_two = test_stats_model_two.get_file_stats()
+test_file_result_two = test_stats_model_two.get_document_statistics()
 test_box_plot_result_two = test_stats_model_two.get_box_plot()
 test_pandas_two = pd.read_json(test_file_result_two)
 # ------------------------------------------------------------------
@@ -67,7 +69,7 @@ test_option_anomaly = \
                      id_temp_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
-test_file_result_anomaly = test_stats_model_anomaly.get_file_stats()
+test_file_result_anomaly = test_stats_model_anomaly.get_document_statistics()
 test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
 test_pandas_anomaly = pd.read_json(test_file_result_anomaly)[0]
 
@@ -90,10 +92,10 @@ class TestFileResult:
         assert test_pandas_one.iloc[4, 1] == 15
         assert test_pandas_two.iloc[4, 2] == 46
 
-    def test_average(self):
-        assert test_pandas_one.iloc[0, 0] == 20
-        assert test_pandas_one.iloc[0, 1] == 3
-        assert test_pandas_two.iloc[0, 2] == 11.5
+    def test_vocab_density(self):
+        assert test_pandas_one.iloc[0, 0] == 0.05
+        assert test_pandas_one.iloc[0, 1] == 0.333
+        assert test_pandas_two.iloc[0, 2] == 0.0870
 
     def test_hapax(self):
         assert test_pandas_one.iloc[3, 0] == 0
@@ -148,7 +150,7 @@ test_stats_model_empty = StatsModel(test_options=test_option_empty)
 class TestSpecialCase:
     def test_empty_list(self):
         try:
-            _ = test_stats_model_empty.get_file_stats()
+            _ = test_stats_model_empty.get_document_statistics()
             raise AssertionError("Empty input error message did not raise")
         except AssertionError as error:
             assert str(error) == EMPTY_DTM_MESSAGE

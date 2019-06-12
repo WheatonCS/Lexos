@@ -119,7 +119,7 @@ class StatsModel(BaseModel):
             columns=["Documents",
                      f"Number of {self._token_type_str} occurring once",
                      f"Total number of {self._token_type_str}",
-                     f"Average number of {self._token_type_str}",
+                     f"Vocabulary Density",
                      f"Distinct number of {self._token_type_str}"])
 
         # Save document names in the data frame.
@@ -134,9 +134,10 @@ class StatsModel(BaseModel):
         file_stats[f"Distinct number of {self._token_type_str}"] = \
             self._active_doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
-        file_stats[f"Average number of {self._token_type_str}"] = \
-            file_stats[f"Total number of {self._token_type_str}"] / \
-            file_stats[f"Distinct number of {self._token_type_str}"]
+        file_stats[f"Vocabulary Density"] = \
+            file_stats[f"Distinct number of {self._token_type_str}"]/\
+            file_stats[f"Total number of {self._token_type_str}"]
+
 
         return file_stats
 

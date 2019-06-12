@@ -177,10 +177,10 @@ function create_document_statistics_table(table){
     $(`
         <div id="table-head" class="hidden">
             <h3 class="table-head-cell">Name</h3>
-            <h3 class="table-head-cell">Total Terms</h3>
-            <h3 class="table-head-cell">Distinct Terms</h3>
-            <h3 class="table-head-cell">Average Terms</h3>
             <h3 class="table-head-cell">Single-Occurrence Terms</h3>
+            <h3 class="table-head-cell">Total Terms</h3>
+            <h3 class="table-head-cell">Vocabulary Density
+            <h3 class="table-head-cell">Distinct Terms</h3>
         </div>
         <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
     `).appendTo("#table");
