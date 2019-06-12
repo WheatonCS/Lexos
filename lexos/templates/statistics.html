@@ -120,8 +120,20 @@
 
     <!-- Document statistics -->
     <div id="documents-section" class="section">
-        <div class="vertical-splitter section-top">
+
+        <div id="table-top" class="section-top">
+
+            <!-- Title -->
             <h3 class="title">Document Statistics</h3>
+
+            <!-- Sort direction -->
+            <div class="table-top-radio-option">
+                <h3>Order: </h3>
+                <label class="circle-label"><input name="sort-ascending" value="true" type="radio" checked><span>Ascending</span></label>
+                <label class="circle-label"><input name="sort-ascending" value="false" type="radio"><span>Descending</span></label>
+            </div>
+
+            <!-- Download -->
             <a id="download-button" class="right-justified disabled button">Download</a>
         </div>
 
@@ -134,4 +146,6 @@
     <input name="normalizeType" value="raw" type="hidden">
     <input id="active-file-ids" name="active_file_ids" type="hidden">
     <div id="document-names-section"></div>
+    <input name="sort-column" value="0" type="hidden">
+
 {% endblock %}

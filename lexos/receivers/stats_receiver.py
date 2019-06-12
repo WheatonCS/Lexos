@@ -10,6 +10,12 @@ class StatsFrontEndOption(NamedTuple):
     # This is the list of active file ids.
     active_file_ids: List[int]
 
+    # The column to sort by
+    sort_column: int
+
+    # The sort method
+    sort_ascending: bool
+
 
 class StatsReceiver(BaseReceiver):
     """This is the class that gets front end options for the stats model."""
@@ -25,12 +31,22 @@ class StatsReceiver(BaseReceiver):
         """
         # Get active file ids from front end as a string.
         active_file_ids_string = self._front_end_data["active_file_ids"]
+
         # Split the file ids.
         active_file_ids_string_list = active_file_ids_string.split(" ")
+
         # Force file ids to be integer type and remove extra blank.
         active_file_ids = \
             [int(file_id)
              for file_id in active_file_ids_string_list if file_id != ""]
 
+        # Get the selected column
+        sort_column = int(self._front_end_data["sort-column"])
+
+        # Get the sort column
+        sort_ascending = bool(self._front_end_data["sort-ascending"] == "true")
+
         # Return stats front end option.
-        return StatsFrontEndOption(active_file_ids=active_file_ids)
+        return StatsFrontEndOption(active_file_ids=active_file_ids,
+                                   sort_column=sort_column,
+                                   sort_ascending=sort_ascending)

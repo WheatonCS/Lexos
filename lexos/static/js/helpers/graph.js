@@ -45,6 +45,7 @@ function initialize_graph(graph_html){
     finish_loading("#graph-container", "#graph");
 }
 
+
 /**
  * Removes any existing Plotly graphs.
  */

@@ -98,13 +98,14 @@ function create_word_cloud_layout(response){
     layout.start();
 }
 
+
 /**
  * Creates the word cloud.
  * @param {string[]} dataset: The dataset of words and their sizes.
  */
 function create_word_cloud(dataset){
     // Define the div for the tooltip
-    var tooltip = d3.select("body").append("div")
+    var tooltip = d3.select("#word-cloud-container").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 

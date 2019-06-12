@@ -160,8 +160,6 @@ function show_context_menu(event){
     if(context_menu_far_position.y > page_size.y)
         position.y -= context_menu_size.y;
 
-    console.log(page_size, context_menu_far_position);
-
     $("#context-menu").css({"pointer-events": "auto", "opacity": "1",
         "left": `${position.x}px`, "top": `${position.y}px`});
 }

@@ -54,7 +54,7 @@ function send_word_counts_request(){
  */
 function create_bubbleviz(response){
     // Define the div for the tooltip
-    var tooltip = d3.select("body").append("div")
+    var tooltip = d3.select("#bubbleviz").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
@@ -75,8 +75,6 @@ function create_bubbleviz(response){
     let bubbleviz_element = $("#bubbleviz");
     let diameter = Math.min(bubbleviz_element.width(),
         bubbleviz_element.height());
-
-    let base_font_size = 5;
 
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
@@ -130,7 +128,7 @@ function create_bubbleviz(response){
         .style("text-anchor", "middle")
         .text(function(d){ return d.data.word; })
         .attr("font-family", $("#font-input").val())
-        .attr("font-size", function(d){ return d.r/(d.data.word.length/3); })
+        .attr("font-size", function(d){ return d.r/((d.data.word.length+1)/3); })
         .attr("fill", "#FFFFFF")
         .on("mouseover", function () {
             d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
@@ -146,9 +144,6 @@ function create_bubbleviz(response){
             d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
             tooltip.style("opacity", 0);
         });
-
-    // node.append("svg:title")
-    //     .text(function(d){ return "Word: "+d.data.word+"\nCount: "+d.data.count; });
 
     // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");

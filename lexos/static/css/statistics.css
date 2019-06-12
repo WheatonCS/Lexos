@@ -40,6 +40,20 @@ form {
     height: calc(100% - 5rem);
 }
 
+#table-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.table-top-radio-option {
+    justify-self: center;
+}
+
+#table-top h3,
+#table-top label {
+    margin-right: 1rem;
+}
+
 #table-head,
 .table-row {
     display: grid;
@@ -47,7 +61,11 @@ form {
 }
 
 #table-head {
-    height: 3rem;
+    height: 4rem;
+}
+
+.selected-cell {
+    background-color: #EAF5FF;
 }
 
 .table-head-cell,
@@ -57,13 +75,15 @@ form {
 }
 
 .table-head-cell {
+    display: flex;
+    align-items: center;
     padding-left: 1rem;
     padding-right: 1rem;
     color: #47BCFF;
 }
 
 #table-body {
-    height: calc(100% - 3rem);
+    height: calc(100% - 4rem);
     overflow-y: auto;
     overflow-y: overlay;
 }
