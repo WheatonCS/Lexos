@@ -35,12 +35,14 @@
             <!-- By Tokens -->
             <div class="section-body">
                 <label class="circle-label">
-                    <input name="tokenType" value="word" type="radio" checked>
+                    <input name="tokenType" value="word" type="radio" checked="checked">
+                    <span class="radiomark"></span>
                     <span>By Tokens</span>
                 </label><br>
 
                 <label class="circle-label">
                     <input name="tokenType" value="char" type="radio">
+                    <span class="radiomark"></span>
                     <span>By Characters</span>
                 </label><br>
 
@@ -63,19 +65,22 @@
 
                 <!-- Proportional -->
                 <label class="circle-label">
-                    <input name="normalizeType" value="freq" type="radio" checked>
+                    <input name="normalizeType" value="freq" type="radio" checked="checked">
+                    <span class="radiomark"></span>
                     <span>Proportional</span>
                 </label><br>
 
                 <!-- Raw -->
                 <label class="circle-label">
                     <input name="normalizeType" value="raw" type="radio">
+                    <span class="radiomark"></span>
                     <span>Raw</span>
                 </label><br>
 
                 <!-- TF-IDF -->
                 <label class="circle-label">
                     <input name="normalizeType" value="tfidf" type="radio">
+                    <span class="radiomark"></span>
                     <span>TF-IDF</span>
                 </label>
                 <h3 id="tf-idf-tooltip-button" class="button">?</h3>
