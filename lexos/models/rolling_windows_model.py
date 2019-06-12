@@ -1,16 +1,14 @@
 """This is the model that generates rolling window results."""
 
 import re
-import os
 import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
+from flask import jsonify
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
-from lexos.managers import session_manager
 from lexos.models.base_model import BaseModel
-from lexos.helpers.constants import RESULTS_FOLDER
 from lexos.models.matrix_model import FileIDContentMap
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
@@ -617,17 +615,6 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("Unhandled count type")
 
-    def get_rwa_graph(self) -> str:
-        """Get the displayable rolling window graph.
-
-        :return: A formatted HTML string that represents the plotly graph.
-        """
-        return plot(self._generate_rwa_graph(),
-                    filename="show-legend",
-                    show_link=False,
-                    output_type="div",
-                    include_plotlyjs=False)
-
     def _get_average_csv_frame(self) -> pd.DataFrame:
         """Get the average token frame that is ready to be converted to CSV.
 
@@ -679,24 +666,15 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled count type")
 
-    def download_rwa(self) -> str:
-        """Download rolling window analysis result as CSV file.
-
-        :return: The directory of the saved CSV file.
+    def get_results(self) -> str:
+        """ Get the rolling window results.
+        :return: The rolling window results.
         """
-        # Get the default saving directory of rolling window result.
-        result_folder_path = os.path.join(
-            session_manager.session_folder(), RESULTS_FOLDER)
 
-        # Attempt to make the directory.
-        if not os.path.isdir(result_folder_path):
-            os.makedirs(result_folder_path)
-
-        # Get the complete saving path of rolling window result.
-        save_path = os.path.join(result_folder_path, "rolling_window.csv")
-
-        self._get_rwa_csv_frame().to_csv(path_or_buf=save_path,
-                                         index_label="# Window",
-                                         na_rep="NA")
-
-        return save_path
+        return jsonify({
+            "graph": plot(self._generate_rwa_graph(), filename="show-legend",
+                          show_link=False, output_type="div",
+                          include_plotlyjs=False),
+            "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                    na_rep="NA")
+        })

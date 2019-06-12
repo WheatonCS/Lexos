@@ -23,10 +23,11 @@ def similarity_query() -> str:
     return render_template("similarity-query.html")
 
 
-@similarity_query_blueprint.route("/similarity-query/table", methods=["POST"])
+@similarity_query_blueprint.route(
+    "/similarity-query/results", methods=["POST"])
 def get_table() -> str:
-    """ Gets the similarity query table.
-    :return: The similarity query table.
+    """ Gets the similarity query results.
+    :return: The similarity query results.
     """
 
     # Cache the options
@@ -34,4 +35,4 @@ def get_table() -> str:
     session_manager.cache_sim_options()
 
     # Return the table data
-    return SimilarityModel().generate_sims_html()
+    return SimilarityModel().get_results()

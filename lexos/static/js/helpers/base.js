@@ -148,19 +148,45 @@ function toggle_help_section(){
     if(help_visible){
         main_grid.css("grid-template-columns", "100%");
         $("#help-section").remove();
+        help_button.removeClass("highlight");
         help_visible = false;
         return;
     }
 
     // Otherwise, show the help section
     main_grid.css("grid-template-columns", "40rem auto");
-    let help_section = $(`<div id="help-section"></div>`).prependTo(main_grid);
 
-    let url = "/static/help"+window.location.pathname+"-help.html";
-    help_section.load(url);
+    $(`
+        <div id="help-section">
+            <div id="help-section-navbar">
+                <h3 id="help-button-header" class="button">Help</h3>
+                <h3 id="about-button" class="button">About Lexos</h3>
+                <h3 id="glossary-button" class="button">Glossary</h3>
+                
+                
+            </div>
+            <div id="help-section-content"></div>
+        </div>
+    `).prependTo(main_grid);
+
+    help_button.addClass("highlight");
+
     help_visible = true;
-}
+    let help_content_element = $("#help-section-content");
+    help_content_element.load("/static/help"+window.location.pathname+"-help.html");
 
+    $("#glossary-button").click(function(){
+        help_content_element.load("/static/help/glossary-help.html");
+    });
+
+    $("#about-button").click(function(){
+        help_content_element.load("/static/help/about-help.html");
+    });
+
+    $("#help-button-header").click(function(){
+        help_content_element.load("/static/help"+window.location.pathname+"-help.html");
+    });
+}
 
 /**
  * Update the number of active documents displayed after the "Active

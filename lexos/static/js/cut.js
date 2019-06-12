@@ -7,9 +7,6 @@ $(function(){
     // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
     initialize_tooltips();
 
-    // Load the appropriate content for the "Cut Settings" element
-    load_cut_settings_section();
-
     // Send a request for the document preview data
     $.ajax({type: "GET", url: "document-previews"})
 

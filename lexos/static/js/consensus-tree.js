@@ -12,7 +12,8 @@ $(function(){
     // "Linkage Method" buttons
     initialize_tree_options();
 
-    // Initialize the legacy form inputs and create the consensus tree
+    // Initialize the legacy form inputs and create the consensus tree,
+    // and initialize the "Generate" and "Download" buttons
     get_active_file_ids(initialize, "#consensus-tree-body");
 });
 
@@ -21,6 +22,7 @@ $(function(){
  * Initializes legacy form inputs and creates the consensus tree.
  * @param {string} response: The response from the "active-file-ids" request.
  */
+let image_data;
 function initialize(response){
 
     // Initialize the legacy form inputs. If there are no active documents,
@@ -33,11 +35,24 @@ function initialize(response){
     // Create the consensus tree
     create_consensus_tree();
 
-    // When the "Generate" button is pressed, recreate the consensus tree
+    // When the "Generate" button is pressed...
     $("#generate-button").click(function(){
-        start_loading("#consensus-tree-body", "#generate-button");
+
+        // Display the loading overlay and disable the "Generate" and
+        // "Download" buttons
+        start_loading("#consensus-tree-body",
+            "#generate-button, #download-button");
+
+        // Remove any existing error messages
         remove_errors();
+
+        // Recreate the consensus tree
         create_consensus_tree();
+    });
+
+    // When the "Download" button is pressed, download the consensus tree PNG
+    $("#download-button").click(function(){
+        download(image_data, "consensus-tree.png", false);
     });
 }
 
@@ -56,17 +71,19 @@ function create_consensus_tree(){
         // If the request was successful...
         .done(function(response){
 
+            image_data = `data:image/png;base64,${response}`;
+
             // Create the consensus tree
             $(`
                 <div id="consensus-tree" class="hidden">
-                    <img src="data:image/png;base64,${response}">
+                    <img src="${image_data}">
                 </div>
             `).appendTo("#consensus-tree-body");
 
             // Remove the loading overlay, fade in the consensus tree,
-            // and enable the "Generate" button
+            // and enable the "Generate" and "Download" buttons
             finish_loading("#consensus-tree-body",
-                "#consensus-tree", "#generate-button");
+                "#consensus-tree", "#generate-button, #download-button");
         })
 
         // If the request failed, display an error, and enable the "Generate"

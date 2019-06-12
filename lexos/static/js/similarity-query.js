@@ -1,3 +1,4 @@
+let csv;
 $(function(){
 
     // Display the loading overlay for the "Comparison Document" and
@@ -10,7 +11,11 @@ $(function(){
     initialize_tooltips();
 
     // Initialize the legacy form inputs and create the similarity table
-    get_active_file_ids(initialize, "#comparison-document-section-body, #table");
+    get_active_file_ids(initialize,
+        "#comparison-document-section-body, #table");
+
+    // If the "Download" button is pressed, download the CSV
+    $("#download-button").click(function(){ download(csv, "similarity-query.csv"); });
 });
 
 
@@ -70,23 +75,37 @@ function initialize(response){
 }
 
 
+/**
+ * Sends a request for the similarity query data and creates the similarity
+ *      query table.
+ */
 function send_similarity_table_request(){
 
     // Send a request for the similarity query data
-    send_ajax_form_request("similarity-query/table")
+    send_ajax_form_request("similarity-query/results")
 
-        // If the request was successful, create the similarity query table
-        .done(create_similarity_table)
+        // If the request was successful, store the CSV result and create the
+        // similarity query table
+        .done(function(response){
+            csv = response.csv;
+            create_similarity_table(response.table);
+        })
 
-        // If the request failed, display an error
+        // If the request failed, display an error and "Loading Failed" text
+        // and enable the "Generate" button
         .fail(function(){
             error("Failed to retrieve the similarity query data.");
             add_text_overlay("#table", "Loading Failed");
-            enable("#generate-button, #download-button");
+            enable("#generate-button");
         });
 }
 
 
+/**
+ * Creates the similarity query table.
+ * @param {string} response: The "table" part of the response from the
+ *      "similarity-query/results" request.
+ */
 function create_similarity_table(response){
 
     let table_data = parse_json(response);
@@ -97,7 +116,7 @@ function create_similarity_table(response){
             <h3 class="table-cell">Document</h3>
             <h3 class="table-cell">Cosine Similarity</h3>
         </div>
-        <div id="table-body" class="hidden"></div>
+        <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
     `).appendTo("#table");
 
     // Create the body
@@ -126,6 +145,10 @@ function create_similarity_table(response){
 }
 
 
+/**
+ * Initializes the tooltips for the "Similarity Query" and
+ *      "Comparison Document" sections.
+ */
 function initialize_tooltips(){
 
     // "Similarity Query"

@@ -467,3 +467,19 @@ function get_active_file_ids(callback, loading_failed_query){
             error("Failed to retrieve the active file IDs.");
         });
 }
+
+
+/**
+ * Downloads the given data.
+ */
+function download(data, file_name, convert = true){
+
+    let blob;
+    if(convert) blob = window.URL.createObjectURL(new Blob([data]));
+    else blob = data;
+
+    let link = document.createElement('a');
+    link.href = blob;
+    link.download = file_name;
+    link.click();
+}
