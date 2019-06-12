@@ -12,7 +12,85 @@
 <!-- Content -->
 {% block content %}
 
-    <div class="centerer">
-        <h3>This Page Has Not Been Migrated Yet</h3>
+    <!-- Top -->
+    <div id="top-section">
+
+        <!-- Dictionaries -->
+        <div id="dictionaries-section" class="section">
+
+            <!-- Top -->
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Dictionaries</h3>
+
+                <div class="right-justified">
+                    <h3 id="upload-button" class="button">Upload</h3>
+                    <h3 id="dictionaries-tooltip-button" class="button">?</h3>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="borderless-section-body">
+                <h3 class="centerer">No Uploads</h3>
+            </div>
+        </div>
+
+        <!-- Formula --->
+        <div id="formula-section" class="section">
+
+            <!-- Top -->
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Formula</h3>
+
+                <div class="right-justified">
+                    <h3 id="analyze-button" class="button">Analyze</h3>
+                    <h3 id="formula-tooltip-button" class="button">?</h3>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div id="formula-body" class="section-body">
+
+                <textarea id="formula-textarea" spellcheck="false"></textarea>
+
+                <div id="formula-documents">
+                    <h3 class="centerer">No Uploads</h3>
+                </div>
+
+                <div id="formula-buttons">
+                    <div id="number-pad">
+                        <h3>1</h3><h3>2</h3><h3>3</h3>
+                        <h3>4</h3><h3>5</h3><h3>6</h3>
+                        <h3>7</h3><h3>8</h3><h3>9</h3>
+                        <div></div><h3>0</h3><div></div>
+                    </div>
+
+                    <div></div>
+
+                    <div id="operations-pad">
+                        <h3>DEL</h3><h3>CLR</h3><h3>(</h3><h3>)</h3>
+                        <h3>+</h3><h3>-</h3><h3>/</h3><h3>X</h3>
+                        <h3>SIN</h3><h3>COS</h3><h3>TAN</h3><h3>LOG</h3>
+                        <div></div><h3>POW</h3><h3>√</h3><div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Results --->
+    <div id="results-section" class="section">
+
+        <!-- Top -->
+        <h3 class="section-top title">Results</h3>
+
+        <!-- Results -->
+        <div class="borderless-section-body">
+            <h3 class="centerer">No Results</h3>
+        </div>
+    </div>
+
+    <!-- Hidden elements -->
+    <input id="file-input" name="swfileselect[]" type="file" class="hidden">
+
 {% endblock %}

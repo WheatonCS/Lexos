@@ -87,8 +87,16 @@ function create_statistics(){
         // If the request was successful, store the CSV data and create the
         // table
         .done(function(response){
+
             document_statistics_csv = response.csv;
             create_document_statistics_table(response.table);
+
+            // Remove the loading overlay, fade the table in, and enable the
+            // "Download" button
+            finish_loading("#table", "#table-head, #table-body", "#download-button");
+
+            // Enable the "Generate" button if all elements have finished loading
+            loading_complete_check();
         })
 
         // If the request failed, display an error and "Loading Failed" text
@@ -100,7 +108,7 @@ function create_statistics(){
 
     // Create the box plot graph and enable the "Generate" button if all
     // sections have finished loading
-    create_graph("/statistics/box-plot", loading_complete_check);
+    create_graph("/statistics/box-plot", function(){ loading_complete_check(); });
 }
 
 
@@ -168,22 +176,30 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
 
 /**
  * Create the table for the "Document Statistics" section.
- * @param {string} table: The "table" portion of the response from the
- *      "/statistics/document-statistics" request.
+ * @param table: The table data to display.
  */
 function create_document_statistics_table(table){
 
     // Create the head and table body
     $(`
         <div id="table-head" class="hidden">
-            <h3 class="table-head-cell">Name</h3>
-            <h3 class="table-head-cell">Total Terms</h3>
-            <h3 class="table-head-cell">Distinct Terms</h3>
-            <h3 class="table-head-cell">Average Terms</h3>
-            <h3 class="table-head-cell">Single-Occurrence Terms</h3>
+            <h3 id="0" class="table-head-cell">Name</h3>
+            <h3 id="1" class="table-head-cell">Total Terms</h3>
+            <h3 id="2" class="table-head-cell">Distinct Terms</h3>
+            <h3 id="3" class="table-head-cell">Average Terms</h3>
+            <h3 id="4" class="table-head-cell">Single-Occurrence Terms</h3>
         </div>
         <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
     `).appendTo("#table");
+
+    // Highlight the selected column
+    highlight_selected_column();
+
+    // If the table head cell is clicked, update the selected column
+    $(".table-head-cell").click(function(){
+        $(`input[name="sort-column"]`).val($(this).attr("id"));
+        highlight_selected_column();
+    });
 
     // Create the rows
     let rows = Object.entries(JSON.parse(table));
@@ -200,13 +216,17 @@ function create_document_statistics_table(table){
             </div>
         `).appendTo("#table-body");
     }
+}
 
-    // Remove the loading overlay, fade the table in, and enable the
-    // "Download" button
-    finish_loading("#table", "#table-head, #table-body", "#download-button");
 
-    // Enable the "Generate" button if all elements have finished loading
-    loading_complete_check();
+function highlight_selected_column(){
+
+    $(".table-head-cell").each(function(){
+        $(this).removeClass("selected-cell");
+    });
+
+    $(`#table-head #${$(`input[name="sort-column"]`).val()}`)
+        .addClass("selected-cell");
 }
 
 

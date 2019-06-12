@@ -181,10 +181,11 @@ form {
     border-top: none;
 }
 
-/* Logo */
-#logo {
+/* Lexos dragon logo */
+#lexos-dragon {
     width: 100px;
     height: 50px;
+    margin: 0 1rem 1rem 0;
 }
 
 
@@ -244,7 +245,6 @@ footer {
     padding-right: 10rem;
     animation: marquee 20s infinite linear;
     animation-delay: -10s;
-    font-weight: 700;
     color: #FFFFFF;
 }
 
@@ -271,7 +271,6 @@ footer {
 #error-close-button {
     pointer-events: all;
     color: #FFFFFF;
-    font-weight: 700;
     background-color: #CD2741;
     box-shadow: none;
 }
