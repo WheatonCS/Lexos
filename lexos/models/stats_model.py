@@ -1,6 +1,7 @@
 """This is the Stats model which gets basic statistics."""
 
 import pandas as pd
+import numpy as np
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
@@ -139,12 +140,25 @@ class StatsModel(BaseModel):
 
         return file_stats
 
+    def __get_quartile__(self, index: float, arr: np.array) -> float:
+        if index % 1 == .5:
+            ind = int(index)
+            return arr[ind] * .5 + arr[ind + 1] * .5
+        elif index % 1 == .25:
+            ind = int(index)
+            return arr[ind] * .75 + arr[ind + 1] * .25
+        elif index % 1 == .75:
+            ind = int(index)
+            return arr[ind] * .25 + arr[ind + 1] * .75
+        else:
+            ind = int(index)
+            return arr[ind]
+
     def get_corpus_stats(self) -> CorpusStats:
         """Convert word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
-
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -159,9 +173,16 @@ class StatsModel(BaseModel):
         # Get the standard deviation of the file word counts.
         std_deviation = file_sizes.std(axis="index")
 
+        # Get quartile indexes
+        arr = np.array(file_sizes)
+        arr.sort()
+        length = len(arr)
+        q1_index = int(length * .25 + .5 - 1)
+        q3_index = int(length * .75 + .5 - 1)
+
         # Get the iqr of the file word counts.
-        first_quartile = file_sizes.quantile(0.25)
-        third_quartile = file_sizes.quantile(0.75)
+        first_quartile = self.__get_quartile__(index=q1_index, arr=arr)
+        third_quartile = self.__get_quartile__(index=q3_index, arr=arr)
         iqr = third_quartile - first_quartile
 
         # Standard error analysis: assume file sizes are normally distributed;
@@ -231,7 +252,7 @@ class StatsModel(BaseModel):
 
         # Set up the points.
         scatter_plot = go.Scatter(
-            x=[0 for _ in labels],
+            x=[_ for _ in labels],
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="text",
             mode="markers",
@@ -244,11 +265,12 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color="#47BCFF")
+            marker=dict(color="#47BCFF"),
+            jitter=.15
         )
 
         # Create a figure with two subplots and fill the figure.
-        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=True)
+        figure = tools.make_subplots(rows=1, cols=2, shared_yaxes=False)
         figure.append_trace(trace=scatter_plot, row=1, col=1)
         figure.append_trace(trace=box_plot, row=1, col=2)
 
@@ -258,21 +280,31 @@ class StatsModel(BaseModel):
             showlegend=False,
             margin=dict(
                 r=0,
-                b=0,
-                t=0,
+                b=30,
+                t=10,
                 pad=4
             ),
             xaxis=dict(
+                title="Scatter plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=False,
+                showline=True,
                 showticklabels=False
             ),
+            yaxis=dict(
+                showline=True,
+                zeroline=False
+            ),
             xaxis2=dict(
+                title="Box Plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=False,
+                showline=True,
                 showticklabels=False
+            ),
+            yaxis2=dict(
+                showline=True,
+                zeroline=False
             ),
             hovermode="closest"
         )
