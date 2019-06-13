@@ -27,24 +27,28 @@ $(function(){
  * drop.
  * @param {event} event: The event that triggered the callback.
  */
+let files = [];
 function upload_files(event){
 
     // Remove any existing error messages
     remove_errors();
 
     // Get the selected files from the event
-    let files = event.target.files || event.originalEvent.dataTransfer.files;
+    files = Object.values(event.target.files || event.originalEvent.dataTransfer.files);
 
     // Upload each file
-    for(let file of files) upload_file(file);
+    send_file_upload_requests();
 }
 
 
 /**
  * Uploads the given file.
- * @param {object} file: The file to upload.
  */
-function upload_file(file){
+function send_file_upload_requests(){
+
+    // Get the next file
+    let file = files.pop();
+    if(!file) return;
 
     // If the file exceeds the 256 MB size limit, display an error message
     // and return
@@ -75,14 +79,16 @@ function upload_file(file){
         url: "upload/add-document",
         data: file,
         processData: false,
-        async: false,  // Async results in errors for file uploads
         contentType: file.type,
         headers: {"file-name": encodeURIComponent(file_name)}
       })
 
         // If the request is successful, call the "upload_success_callback()"
-        // function
-        .done(function(){ upload_success_callback(file_name); })
+        // function and upload the next file in the list
+        .done(function(){
+            upload_success_callback(file_name);
+            send_file_upload_requests();
+        })
 
         // If the request failed, display an error
         .fail(function(){ error("One or more files encountered errors "+
