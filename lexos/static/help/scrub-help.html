@@ -83,15 +83,16 @@
 
     <li><b>Remove Digits</b></li>
     <h3 class="help-section-paragraph">
-        Removes all number characters from the text. Similar to the handling of
-        punctuation marks, any Unicode character in each of the active texts
-        with a "Number Character Property" is removed. For example, this option
-        will remove a Chinese three (㈢) and Eastern Arabic six (۶) from the tex
-        t. Note: at present, Lexos does not match Real numbers as a unit.
-        For example, for 3.14, Lexos will remove (only) the 3, 1, and 4 and the
-        decimal point will be removed only if the Remove All Punctuation option
-        is selected. Remove Digits is not applied inside any <code>HTML</code>,
-        <code>XML</code>, or <code>SGML</code> markup tags remaining in the text.
+        Removes all signed and unsigned number characters from the text,
+        including decimal and delimiter separated values such as "3,123.40",
+        "3.123,40", etc... Similar to the handling of punctuation marks, any
+        Unicode character in each of the active texts with a "Number Character
+        Property" is removed. For example, this option will remove a Chinese
+        three (㈢) and Eastern Arabic six (۶) from the text. Note: This feature
+        does not remove currency symbols, and will also modify some tokens in
+        which digits appear. Remove Digits is not applied inside any
+        <code>HTML</code>, <code>XML</code>, or <code>SGML</code> markup tags
+        remaining in the text.
     </h3>
 
     <li><b>Remove Whitespace</b></li>
