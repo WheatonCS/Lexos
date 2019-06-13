@@ -41,16 +41,16 @@ function get_visualize_color(x){
     switch(color_scheme){
         case "Lexos": return d3.scaleLinear()
             .domain([0, 1]).range(["#F3F3F3", "#47BCFF"])(x);
-        case "Grey": return d3.interpolateGreys(x*2);
-        case "Plum": return d3.interpolateBuPu(x*2);
-        case "Ocean": return d3.interpolateYlGnBu(x*2);
-        case "Blue Lilac": return d3.interpolatePuBu(x*2);
-        case "Cherry Tree": return d3.interpolatePuRd(x*2);
-        case "Sunset": return d3.interpolateYlOrRd(x*2);
+        case "Grey": return d3.interpolateGreys(x);
+        case "Plum": return d3.interpolateBuPu(x);
+        case "Ocean": return d3.interpolateYlGnBu(x);
+        case "Blue Lilac": return d3.interpolatePuBu(x);
+        case "Cherry Tree": return d3.interpolatePuRd(x);
+        case "Sunset": return d3.interpolateYlOrRd(x);
         case "Nebula": return d3.interpolatePlasma(x/1.7);
-        case "Spring": return d3.interpolateYlGn(x*2);
+        case "Spring": return d3.interpolateYlGn(x);
         case "Iridescent": return d3.interpolateViridis(x/1.4);
-        case "Rainbow": return d3.interpolateRainbow(Math.log10(x));
+        case "Rainbow": return d3.interpolateRainbow(x);
         case "Splatter": return d3.interpolateRainbow(Math.log(x));
     }
 }
