@@ -53,10 +53,6 @@ function send_word_counts_request(){
  *      request.
  */
 function create_bubbleviz(response){
-    // Define the div for the tooltip
-    var tooltip = d3.select("#bubbleviz").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
 
     let word_counts = parse_json(response);
 
@@ -75,6 +71,10 @@ function create_bubbleviz(response){
     let bubbleviz_element = $("#bubbleviz");
     let diameter = Math.min(bubbleviz_element.width(),
         bubbleviz_element.height());
+
+    // Create the tooltip
+    let tooltip = d3.select("#bubbleviz").append("h3")
+        .attr("class", "visualize-tooltip");
 
     // Create the bubbleviz
     let bubble = d3.pack(dataset)
@@ -100,29 +100,35 @@ function create_bubbleviz(response){
         .append("g")
             .attr("class", "node")
             .attr("transform", function(d){
-                return "translate("+d.x+", "+d.y+')';
+                return "translate("+d.x+", "+d.y+")";
             });
 
+    // Create the bubbles
     node.append("circle")
         .attr("r", function(d){ return d.r; })
         .style("fill", function(d){
             return get_visualize_color(d.data.value);
         })
-        .on("mouseover", function () {
-            d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
-            tooltip.style("opacity", 1);
+
+        // If the bubble is moused over, create a tooltip with information on
+        // the bubble and highlight the bubble
+        .style("transition", "opacity .2s")
+        .on("mouseover", function(){
+            d3.select(this.parentNode.childNodes[0]).style("opacity", ".7")
+            tooltip.style("opacity", "1");
         })
-        .on("mousemove", function (d){
+        .on("mousemove", function(d){
             tooltip
-                .html('Word: ' + d.data.word + '<br/>' + 'Count: ' + d.data.count)
-                .style('left', (d3.event.pageX + 34) + 'px')
-                .style('top', (d3.event.pageY - 12) + 'px');
+                .html(`Word: ${d.data.word}<br/>Count: ${d.data.count}`)
+                .style("left", `${d3.event.pageX+34}px`)
+                .style("top", `${d3.event.pageY-12}px`);
         })
-        .on("mouseout", function () {
-            d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
-            tooltip.style("opacity", 0);
+        .on("mouseout", function(){
+            d3.select(this.parentNode.childNodes[0]).style("opacity", "1")
+            tooltip.style("opacity", "0");
         });
 
+    // Create the bubble text
     node.append("text")
         .attr("dy", ".3em")
         .style("text-anchor", "middle")
@@ -130,20 +136,7 @@ function create_bubbleviz(response){
         .attr("font-family", $("#font-input").val())
         .attr("font-size", function(d){ return d.r/((d.data.word.length+1)/3); })
         .attr("fill", "#FFFFFF")
-        .on("mouseover", function () {
-            d3.select(this.parentNode.childNodes[0]).style('fill', 'gold')
-            tooltip.style("opacity", 1);
-        })
-        .on("mousemove", function (d){
-            tooltip
-                .html('Word: ' + d.data.word + '<br/>' + 'Count: ' + d.data.count)
-                .style('left', (d3.event.pageX + 34) + 'px')
-                .style('top', (d3.event.pageY - 12) + 'px');
-        })
-        .on("mouseout", function () {
-            d3.select(this.parentNode.childNodes[0]).style("fill", function(d){ return get_visualize_color(d.data.value)})
-            tooltip.style("opacity", 0);
-        });
+        .style("pointer-events", "none");
 
     // Fade in the bubbleviz
     d3.select(self.frameElement).style("height", diameter+"px");

@@ -10,9 +10,12 @@
     <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
 
     <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
     <script type="text/javascript" src="static/js/statistics.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/statistics.css"/>
 {% endblock %}
@@ -89,8 +92,12 @@
 
         <!-- Document sizes -->
         <div id="graph-section" class="section">
-            <div id="graph-section-top">
-                <h3 class="section-top title">Document Sizes</h3>
+            <div id="graph-section-top" class="vertical-splitter section-top">
+                <h3 class="title">Document Sizes</h3>
+                <div class="right-justified">
+                    <h3 id="png-button" class="disabled button">PNG</h3>
+                    <h3 id="svg-button" class="disabled button">SVG</h3>
+                </div>
             </div>
             <div id="graph-container" class="section-body"></div>
         </div>

@@ -7,8 +7,14 @@
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <!-- Page JS and CSS -->
+    <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+
+
+    <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/rolling-window.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/rolling-window.css"/>
 {% endblock %}
@@ -98,7 +104,9 @@
             <h3 class="title">Rolling Window</h3>
             <div class="right-justified">
                 <h3 id="generate-button" class="disabled button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
+                <h3 id="png-button" class="disabled button">PNG</h3>
+                <h3 id="svg-button" class="disabled button">SVG</h3>
+                <h3 id="csv-button" class="disabled button">CSV</h3>
             </div>
         </div>
 
