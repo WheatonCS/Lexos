@@ -178,8 +178,12 @@ class StatsModel(BaseModel):
         arr = np.array(file_sizes)
         arr.sort()
         length = len(arr)
-        q1_index = length * .25 + .5 - 1
-        q3_index = length * .75 + .5 - 1
+        if length == 1:
+            q1_index = 0
+            q3_index = 0
+        else:
+            q1_index = length * .25 + .5 - 1
+            q3_index = length * .75 + .5 - 1
 
         # Get the iqr of the file word counts.
         first_quartile = self.__get_quartile__(index=q1_index, arr=arr)
