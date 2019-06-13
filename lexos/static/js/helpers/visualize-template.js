@@ -22,7 +22,7 @@ function initialize_color_button(ok_callback){
                 ["iridescent", "Iridescent"],
                 ["nebula", "Nebula"],
                 ["rainbow", "Rainbow"],
-                ["splatter", "Splatter"]
+                ["tie-dye", "Tie-Dye"]
             ]);
 
         $("#ok-button").click(ok_callback);
@@ -51,7 +51,7 @@ function get_visualize_color(x){
         case "Spring": return d3.interpolateYlGn(x);
         case "Iridescent": return d3.interpolateViridis(x/1.4);
         case "Rainbow": return d3.interpolateRainbow(x);
-        case "Splatter": return d3.interpolateRainbow(Math.log(x));
+        case "Tie-Dye": return d3.interpolateRainbow(Math.log(x));
     }
 }
 
