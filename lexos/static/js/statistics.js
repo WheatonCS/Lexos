@@ -44,11 +44,10 @@ function initialize(response){
         // Remove any existing error messages
         remove_errors();
 
-        // Display the loading overlays and disable the "Generate" and
-        // "Download"  buttons
+        // Display the loading overlays and disable the appropriate buttons
         start_loading("#graph-container, #table, #corpus-statistics, "+
             "#standard-error-test, #interquartile-range-test",
-            "#generate-button, #download-button");
+            "#generate-button, #download-button, #png-button, #svg-button");
 
         // Create the statistics
         create_statistics();
@@ -59,6 +58,9 @@ function initialize(response){
     $("#download-button").click(function(){
         download(document_statistics_csv, "document-statistics.csv");
     });
+
+    // If the "PNG" or "SVG" buttons are pressed, download the graph
+    initialize_graph_download_buttons();
 }
 
 

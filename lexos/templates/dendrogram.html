@@ -5,9 +5,10 @@
 {% block page_head %}
 
     <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
     <script type="text/javascript" src="static/js/helpers/popup.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
-    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
     <script type="text/javascript" src="static/js/helpers/tree-options.js"></script>
 
     <!-- Page JS and CSS -->
@@ -52,7 +53,11 @@
     <div class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Dendrogram</h3>
-            <h3 id="generate-button" class="right-justified disabled button">Generate</h3>
+            <div class="right-justified">
+                <h3 id="generate-button" class="disabled button">Generate</h3>
+                <h3 id="png-button" class="disabled button">PNG</h3>
+                <h3 id="svg-button" class="disabled button">SVG</h3>
+            </div>
         </div>
 
         <div id="graph-container" class="section-body"></div>

@@ -4,8 +4,13 @@
 <!-- Head -->
 {% block page_head %}
 
-    <!-- Page JS and CSS -->
+    <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+
+    <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/k-means.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/k-means.css"/>
 {% endblock %}
@@ -26,19 +31,22 @@
 
             <!-- Voronoi -->
             <label class="circle-label">
-                <input name="viz" value="Voronoi" type="radio" checked>
+                <input name="viz" value="Voronoi" type="radio" checked="checked">
+                <span class="radiomark"></span>
                 <span>Voronoi</span>
             </label>
             <h3 id="visualization-method-tooltip-button" class="button">?</h3><br>
 
             <!-- 2D Scatter -->
             <label class="circle-label"><input name="viz" value="2DScatter" type="radio">
+                <span class="radiomark"></span>
                 <span>2D Scatter</span>
             </label><br>
 
             <!-- 3D Scatter -->
             <label class="circle-label">
                 <input name="viz" value="3DScatter" type="radio">
+                <span class="radiomark"></span>
                 <span>3D Scatter</span>
             </label>
         </div>
@@ -51,13 +59,15 @@
 
             <!-- K-Means -->
             <label class="circle-label">
-                <input name="init" value="k-means++" type="radio" checked>
+                <input name="init" value="k-means++" type="radio" checked="checked">
+                <span class="radiomark"></span>
                 <span>K-Means++</span>
             </label>
 
             <!-- Random -->
             <label class="circle-label">
                 <input name="init" value="random" type="radio">
+                <span class="radiomark"></span>
                 <span>Random</span>
             </label>
             <h3 id="initialization-method-tooltip-button" class="button">?</h3><br>
@@ -92,7 +102,9 @@
 
             <div class="right-justified">
                 <h3 id="generate-button" class="disabled button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
+                <h3 id="png-button" class="disabled button">PNG</h3>
+                <h3 id="svg-button" class="disabled button">SVG</h3>
+                <h3 id="csv-button" class="disabled button">CSV</h3>
             </div>
         </div>
 

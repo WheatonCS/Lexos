@@ -98,10 +98,10 @@ function create_tag_options_popup(response){
             <div class="tag-table-row">
                 <h3></h3>
                 <div>
-                    <label class="circle-label"><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}-action" value="remove-tag"><span>Remove Tag</span></label>
-                    <label class="circle-label"><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}-action" value="remove-element"><span>Remove All</span></label>
-                    <label class="circle-label"><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span>Replace</span></label>
-                    <label class="circle-label"><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span>None</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}-action" value="remove-tag"><span class="radiomark"></span><span>Remove Tag</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}-action" value="remove-element"><span class="radiomark"></span><span>Remove All</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span class="radiomark"></span><span>Replace</span></label>
+                    <label class="circle-label"><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span class="radiomark"></span><span>None</span></label>
                 </div>
                 <input class="disabled" type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">
             </div>

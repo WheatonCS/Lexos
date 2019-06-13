@@ -283,7 +283,7 @@ class StatsModel(BaseModel):
 
         # Hide useless information on x-axis and set up title.
         figure.layout.update(
-            autosize=True,
+            dragmode="pan",
             showlegend=False,
             margin=dict(
                 r=0,
@@ -324,8 +324,15 @@ class StatsModel(BaseModel):
         :return: The document size Plotly graph.
         """
 
+        config = {
+            "displaylogo": False,
+            "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
+            "scrollZoom": True
+        }
+
         # Return Plotly object as a div.
         return plot(self._get_box_plot_object(),
                     include_plotlyjs=False,
                     output_type="div",
-                    show_link=False)
+                    show_link=False,
+                    config=config)
