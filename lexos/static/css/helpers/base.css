@@ -198,15 +198,6 @@ a:hover {
     color: #47BCFF;
 }
 
-.underlined-link {
-    box-shadow: inset 0 -.2rem 0 #505050;
-    transition: box-shadow .2s, color .2s;
-}
-
-.underlined-link:hover {
-    box-shadow: inset 0 -.2rem 0 #47BCFF;
-}
-
 
 /* Footer */
 footer {
@@ -373,16 +364,15 @@ td, th {
 
 /* Text input */
 input[type="text"] {
-    height: 3rem;
+    height: calc(3rem - .2rem);
     width: 6rem;
     padding: 0 1.3rem 0 1.3rem;
     margin: 0 .5rem 0 .5rem;
     border-radius: 3rem;
     outline: none;
     background-color: #FFFFFF;
-    border: none;
-    box-shadow: inset #E3E3E3 0 0 0 .2rem;
-    transition: color .2s, box-shadow .2s, background-color .2s;
+    border: .2rem solid #E3E3E3;
+    transition: color .2s, border-color .2s, background-color .2s;
     user-select: text;
     -moz-user-select: text;
 }
@@ -390,7 +380,7 @@ input[type="text"] {
 input[type="text"]:focus {
     color: #47BCFF;
     background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 .2rem;
+    border-color: #47BCFF;
 }
 
 span > input[type="text"] {
@@ -569,14 +559,14 @@ textarea {
     align-content: center;
     justify-content: center;
     width: max-content;
-    height: 3rem;
+    height: calc(3rem - .2rem);
     padding: 1rem 1.5rem 1rem 1.5rem;
     margin: 0 .5rem 0 .5rem;
     border-radius: 3rem;
-    box-shadow: inset #F3F3F3 0 0 0 .2rem;
+    border: .2rem solid #F3F3F3;
     background-color: #F3F3F3;
     cursor: pointer;
-    transition: color .2s, box-shadow .2s, background-color .2s, opacity .5s;
+    transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
 }
 
 .section-body .button {
@@ -587,7 +577,7 @@ textarea {
 .button-active{
     color: #47BCFF;
     background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 .2rem;
+    border-color: #47BCFF;
 }
 
 .button:hover > h3,
