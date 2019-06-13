@@ -7,7 +7,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
     handle_file_and_manual_strings, remove_stopwords, keep_words, \
-    get_remove_digits_map, get_all_punctuation_map, get_remove_punctuation_map
+    get_all_punctuation_map, get_remove_punctuation_map, get_remove_digits
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
@@ -740,21 +740,35 @@ class TestGetRemovePunctuationMap:
 class TestGetRemoveDigitsMap:
 
     def test_get_remove_digits_no_store(self):
-        remove_digits_map = get_remove_digits_map()
-        for i in range(0, 48):
-            assert i not in remove_digits_map
-        for i in range(48, 58):
-            assert i in remove_digits_map
-        for i in range(58, 123):
-            assert i not in remove_digits_map
-        assert 6995 in remove_digits_map
-        assert 7002 not in remove_digits_map
-        assert 43219 in remove_digits_map
-        assert 43230 not in remove_digits_map
-        assert 68088 in remove_digits_map
-        assert 68100 not in remove_digits_map
-        assert 119533 in remove_digits_map
-        assert 119600 not in remove_digits_map
+        string = "hey here's a few numbers: " \
+                    "1 20 500 7000 " \
+                    "hey here's a few decimal numbers: " \
+                    "3.14 31.41 cool! 314.15 3141.5926 " \
+                    "signed numbers too! " \
+                    "+100 +3.14 -7000 -2.79 " \
+                    "tricky trap cases: " \
+                    "1. .1 .1. 1..1 .1.1.1" \
+                    "000-000-0000 1..1' 3.141' \"3.141\" " \
+                    "Europeans do decimals this way: " \
+                    "3,14 31,415926535879 314,15 141,592 " \
+                    "The rest of the world does decimals like this: " \
+                    "1,234,567.89 1,234,567·89 1'234'567.891 " \
+                    "2'234'567,89 1.234.567'89 1˙234˙567,89 " \
+                    "we currently modify some tokens where digits appear: " \
+                    "J@m3s 1t3st.3.2.1.abc @1 9# $14"
+
+        assert get_remove_digits(string) == (
+            "hey here's a few numbers: "
+            "    hey here's a few decimal numbers: "
+            "  cool!   signed numbers too! "
+            "    tricky trap cases: "
+            ". . .. .. . ..' ' \"\" "
+            "Europeans do decimals this way: "
+            "    "
+            "The rest of the world does decimals like this: "
+            "      "
+            "we currently modify some tokens where digits appear: "
+            "J@ms tst..abc @ # $")
 
 
 class TestHandleFileAndManualStrings:

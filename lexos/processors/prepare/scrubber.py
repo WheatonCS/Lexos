@@ -461,32 +461,26 @@ def get_remove_punctuation_map(
     return text, remove_punctuation_map
 
 
-def get_remove_digits_map() -> Dict[int, type(None)]:
-    """Get the digit removal map.
+def get_remove_digits(text: str) -> str:
+    """Removes signed / unsigned numbers, removes decimal / delimiter
+    separated numbers, does not remove currency symbols, will modify
+    some tokens where digits appear.
 
-    :return: A dictionary that contains all the digits that should be removed
-        mapped to None.
+    :param text: A unicode string representing the whole text that is being
+        manipulated.
+    :return: A string with all digits removed.
     """
 
-    # Map of digits to be removed
-    try:
-        remove_digit_map = load_character_deletion_map(
-            constants.CACHE_FOLDER, constants.DIGIT_MAP_FILENAME)
+    # Using "." to represent any unicode character used to indicate
+    # a decimal number, and "***" to represent any sequence of
+    # unicode digits, this pattern will match:
+    # 1) ***
+    # 2) ***.***
+    pattern = re.compile(r"([+-]?\d+)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
+                         r"|\u02D9|\u066B|\u066C|\u2396]\d+)", re.UNICODE)
+    remove_digits = str(re.sub(pattern, r"", text))
 
-    except FileNotFoundError:
-        # If the digit map does not already exist, generate it with all
-        # unicode characters that start with the category 'N'
-        # See http://www.fileformat.info/info/unicode/category/index.htm for
-        # the list of categories
-        remove_digit_map = dict.fromkeys(
-            [i for i in range(sys.maxunicode)
-             if unicodedata.category(chr(i)).startswith('N')])
-
-        save_character_deletion_map(
-            remove_digit_map, constants.CACHE_FOLDER,
-            constants.DIGIT_MAP_FILENAME)
-
-    return remove_digit_map
+    return remove_digits
 
 
 def handle_file_and_manual_strings(file_string: str, manual_string: str,
@@ -955,9 +949,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 5. digits -----------------------------------------------------------
     if digits:
-        remove_digits_map = get_remove_digits_map()
-    else:
-        remove_digits_map = {}
+        get_remove_digits(text)
 
     # -- 6. whitespace ------------------------------------------------------
 
@@ -970,7 +962,6 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # -- create total removal function -----------------------------
     # merge all the removal map
     total_removal_map = remove_punctuation_map.copy()
-    total_removal_map.update(remove_digits_map)
     total_removal_map.update(remove_whitespace_map)
 
     # create a remove function
@@ -1051,6 +1042,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         input_string=text, functions=[to_lower_function,
                                       consolidation_function,
                                       lemmatize_function,
+                                      get_remove_digits,
                                       stop_keep_words_function,
                                       total_removal_function])
 
