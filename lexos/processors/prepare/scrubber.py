@@ -462,11 +462,13 @@ def get_remove_punctuation_map(
 
 
 def get_remove_digits(text: str) -> str:
-    """Removes all digits.
+    """Removes signed / unsigned numbers, removes decimal / delimiter
+    separated numbers, does not remove currency symbols, will modify
+    some tokens where digits appear.
 
     :param text: A unicode string representing the whole text that is being
         manipulated.
-    :return: A string with all digits removed
+    :return: A string with all digits removed.
     """
 
     # Using "." to represent any unicode character used to indicate
@@ -474,7 +476,7 @@ def get_remove_digits(text: str) -> str:
     # unicode digits, this pattern will match:
     # 1) ***
     # 2) ***.***
-    pattern = re.compile(r"(\d+)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
+    pattern = re.compile(r"([+-]?\d+)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
                          r"|\u02D9|\u066B|\u066C|\u2396]\d+)", re.UNICODE)
     remove_digits = str(re.sub(pattern, r"", text))
 
