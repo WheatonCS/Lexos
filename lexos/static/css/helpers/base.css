@@ -415,73 +415,141 @@ textarea {
 }
 
 
-/* Radio button */
-.radio {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background-color: #FFFFFF;
-    border: .2rem solid #D3D3D3;
-    cursor: pointer;
-    transition: background-color .2s;
-}
-
-
-/* Checkbox */
-.checkbox {
-    width: 2rem;
-    height: 2rem;
-    background-color: #FFFFFF;
-    border: .2rem solid #D3D3D3;
-    cursor: pointer;
-    transition: border-color .2s;
-}
-
-
-/* Labels */
-label {
-    display: inline-block;
-    cursor: pointer;
-}
-
-.section-body label,
-.borderless-section-body label {
-    margin-top: .2rem;
-    margin-bottom: 1rem;
-}
-
-.checkbox-label > span:before,
-.circle-label > span:before{
-    content: "";
+/* Radio Buttons */
+.circle-label {
     display: inline-block;
     position: relative;
-    top: .4rem;
-    width: 2rem;
+    margin-top: .2rem;
+    margin-bottom: 1rem;
+    padding-left: 2.5rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.circle-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.radiomark {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 2rem;
-    margin-right: 1rem;
+    width: 2rem;
     background-color: #FFFFFF;
     border: .2rem solid #D3D3D3;
-    transition: background-color .2s, border-color .2s;
+    transition: border-color .2s;
+    border-radius: 50%;
 }
 
-input[type=checkbox],
-input[type=radio] {
-    display: none;
-}
-
-.checkbox-label :checked + span,
-.circle-label :checked + span {
-    color: #47BCFF;
-}
-
-.checkbox-label :checked + span:before,
-.circle-label :checked + span:before {
+/* On mouse-over, add a highlight */
+.circle-label:hover input ~ .radiomark {
     background-color: #EAF5FF;
     border-color: #47BCFF;
 }
 
-.circle-label > span:before {
-    border-radius: 50%;
+/* When the radio button is checked, change the color */
+.circle-label input:checked ~ .radiomark {
+    background-color: #EAF5FF;
+    border-color: #47BCFF;
+}
+
+/* Create the dot - hidden when not checked */
+.radiomark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the dot when checked */
+.circle-label input:checked ~ .radiomark:after {
+    display: block;
+}
+
+/* Style the dot */
+.circle-label .radiomark:after {
+ 	top: .4rem;
+	left: .4rem;
+	width: .8rem;
+	height: .8rem;
+	border-radius: 50%;
+	background: #47BCFF;
+}
+
+
+/* Checkboxes */
+.checkbox-label {
+    display: inline-block;
+    position: relative;
+    margin-top: .2rem;
+    margin-bottom: 1rem;
+    padding-left: 2.5rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2rem;
+    width: 2rem;
+    background-color: #FFFFFF;
+    border: .2rem solid #D3D3D3;
+    transition: border-color .2s;
+}
+
+/* On mouse-over, add a highlight */
+.checkbox-label:hover input ~ .checkmark {
+    background-color: #EAF5FF;
+    border-color: #47BCFF;
+}
+
+/* When the checkbox is checked, change the color */
+.checkbox-label input:checked ~ .checkmark {
+    background-color: #EAF5FF;
+    border-color: #47BCFF;
+}
+
+/* Create the check - hidden when not checked */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the check when checked */
+.checkbox-label input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the check */
+.checkbox-label .checkmark:after {
+    top: .3rem;
+    left: .25rem;
+    height: .6rem;
+    width: 1.1rem;
+    border-left: .2rem solid #47BCFF;
+    border-bottom: .2rem solid #47BCFF;
+    transform: rotate(-45deg);
 }
 
 
