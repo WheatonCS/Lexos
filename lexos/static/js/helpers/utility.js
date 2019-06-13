@@ -342,10 +342,10 @@ function validate_number(number, minimum = NaN, maximum = NaN){
     if(!number || isNaN(parsed_value)) return false;
 
     // Check that the number is within bounds
-    if(isNaN(minimum) && parsed_value < minimum) return false;
-    if(isNaN(maximum) && parsed_value > maximum) return false;
+    if((!isNaN(minimum) && parsed_value < minimum) ||
+        (!isNaN(maximum) && parsed_value > maximum)) return false;
 
-    // Return true as all validation checks have passed
+    // Return true since all validation checks have passed
     return true;
 }
 

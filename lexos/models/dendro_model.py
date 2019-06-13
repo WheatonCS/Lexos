@@ -185,8 +185,7 @@ class DendrogramModel(BaseModel):
 
         # Update the size of the image.
         figure.layout.update(
-            autosize=True,
-            height=600,
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
@@ -209,10 +208,18 @@ class DendrogramModel(BaseModel):
 
         :return: A HTML formatted div for plotly.
         """
+
+        config = {
+            "displaylogo": False,
+            "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
+            "scrollZoom": True
+        }
+
         # Return the figure as div.
         return plot(
             figure_or_data=self._get_processed_dendrogram_figure(),
             show_link=False,
             output_type="div",
-            include_plotlyjs=False
+            include_plotlyjs=False,
+            config=config
         )

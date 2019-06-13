@@ -539,15 +539,14 @@ class RollingWindowsModel(BaseModel):
         else:
             return go.Figure(data=result_plot,
                              layout=go.Layout(
-                                autosize=True,
-                                height=580,
+                                dragmode="pan",
                                 margin=dict(
                                     l=40,
                                     r=0,
                                     b=30,
                                     t=0,
                                     pad=4
-                                 )))
+                                )))
 
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
@@ -584,12 +583,11 @@ class RollingWindowsModel(BaseModel):
         else:
             return go.Figure(data=result_plot,
                              layout=go.Layout(
-                                autosize=True,
-                                height=565,
+                                dragmode="pan",
                                 margin=dict(
                                     l=40,
                                     r=0,
-                                    b=25,
+                                    b=30,
                                     t=0,
                                     pad=4
                                 )))
@@ -671,10 +669,20 @@ class RollingWindowsModel(BaseModel):
         :return: The rolling window results.
         """
 
+        config = {
+            "displaylogo": False,
+            "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
+            "scrollZoom": True
+        }
+
         return jsonify({
-            "graph": plot(self._generate_rwa_graph(), filename="show-legend",
-                          show_link=False, output_type="div",
-                          include_plotlyjs=False),
+            "graph": plot(self._generate_rwa_graph(),
+                          filename="show-legend",
+                          show_link=False,
+                          output_type="div",
+                          include_plotlyjs=False,
+                          config=config),
+
             "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
                                                     na_rep="NA")
         })
