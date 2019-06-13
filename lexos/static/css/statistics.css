@@ -15,6 +15,7 @@ form {
 #top-section {
     display: grid;
     grid-gap: 2rem;
+    grid-template-rows: 45rem auto 40rem;
     grid-template-columns: 36rem auto 30rem;
 }
 
@@ -32,6 +33,13 @@ form {
 
 #generate-button {
     margin: 1rem;
+}
+#standard-error-test-section{
+    overflow-y: auto;
+}
+
+#interquartile-range-test-section{
+    overflow-y: auto;
 }
 
 
