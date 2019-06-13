@@ -45,12 +45,14 @@
 
                 <div class="section-body">
                     <label class="circle-label">
-                        <input name="tokenType" value="word" type="radio" checked>
+                        <input name="tokenType" value="word" type="radio" checked="checked">
+                        <span class="radiomark"></span>
                         <span>By Tokens</span>
                     </label><br>
 
                     <label class="circle-label">
                         <input name="tokenType" value="char" type="radio">
+                        <span class="radiomark"></span>
                         <span>By Characters</span>
                     </label><br>
 
@@ -71,6 +73,7 @@
 
                     <label class="checkbox-label">
                         <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
+                        <span class="checkmark"></span>
                         <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
                     </label>
 
@@ -78,6 +81,7 @@
 
                     <label class="checkbox-label">
                         <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
+                        <span class="checkmark"></span>
                         <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
                     </label>
 

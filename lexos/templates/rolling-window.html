@@ -31,11 +31,11 @@
             <h3 class="section-top title">Calculation Type</h3>
             <div class="section-body">
 
-                <label class="circle-label"><input name="counttype" value="average" type="radio" checked><span>Rolling Average</span></label>
+                <label class="circle-label"><input name="counttype" value="average" type="radio" checked><span class="radiomark"></span><span>Rolling Average</span></label>
                 <h3 id="rolling-average-tooltip-button" class="button">?</h3>
                 <br>
 
-                <label class="circle-label"><input name="counttype" value="ratio" type="radio"><span>Rolling Ratio</span></label>
+                <label class="circle-label"><input name="counttype" value="ratio" type="radio"><span class="radiomark"></span><span>Rolling Ratio</span></label>
                 <h3 id="rolling-ratio-tooltip-button" class="button">?</h3>
             </div>
         </div>
@@ -55,12 +55,12 @@
                     <input id="search-terms-input-denominator" name="rollingsearchwordopt" type="text" spellcheck="false" autocomplete="off">
                 </div>
 
-                <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span>Words</span></label><br>
+                <label class="circle-label"><input name="inputtype" value="word" type="radio" checked><span class="radiomark"></span><span>Words</span></label><br>
 
-                <label class="circle-label"><input name="inputtype" value="string" type="radio"><span>Strings</span></label>
+                <label class="circle-label"><input name="inputtype" value="string" type="radio"><span class="radiomark"></span><span>Strings</span></label>
                 <h3 id="strings-tooltip-button" class="button">?</h3><br>
 
-                <label class="circle-label"><input name="inputtype" value="regex" type="radio"><span>Regex</span></label>
+                <label class="circle-label"><input name="inputtype" value="regex" type="radio"><span class="radiomark"></span><span>Regex</span></label>
                 <h3 id="regex-tooltip-button" class="button">?</h3>
             </div>
         </div>
@@ -73,9 +73,9 @@
                 <input id="window-size-input" name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off">
                 <h3 id="window-size-tooltip-button" class="button">?</h3><br>
 
-                <label class="circle-label"><input name="windowtype" value="word" type="radio" checked><span>Words</span></label><br>
-                <label class="circle-label"><input name="windowtype" value="letter" type="radio"><span>Characters</span></label><br>
-                <label class="circle-label"><input name="windowtype" value="line" type="radio"><span>Lines</span></label>
+                <label class="circle-label"><input name="windowtype" value="word" type="radio" checked><span class="radiomark"></span><span>Words</span></label><br>
+                <label class="circle-label"><input name="windowtype" value="letter" type="radio"><span class="radiomark"></span><span>Characters</span></label><br>
+                <label class="circle-label"><input name="windowtype" value="line" type="radio"><span class="radiomark"></span><span>Lines</span></label>
             </div>
         </div>
 
@@ -86,12 +86,13 @@
 
                 <label class="checkbox-label">
                     <input id="milestone-checkbox" name="rollinghasmilestone" type="checkbox">
+                    <span class="checkmark"></span>
                     <span>Milestone<input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off"></span>
                 </label>
                 <h3 id="milestone-tooltip-button" class="button">?</h3>
 
-                <label class="checkbox-label"><input name="showDots" type="checkbox"><span>Show Individual Points</span></label><br>
-                <label class="checkbox-label"><input name="BWoutput" type="checkbox"><span>Black and White</span></label>
+                <label class="checkbox-label"><input name="showDots" type="checkbox"><span class="checkmark"></span><span>Show Individual Points</span></label><br>
+                <label class="checkbox-label"><input name="BWoutput" type="checkbox"><span class="checkmark"></span><span>Black and White</span></label>
             </div>
         </div>
     </div>

@@ -93,7 +93,7 @@ function create_radio_options_popup(title, radio_buttons_name,
             <div>
                 <label class="circle-label">
                     <input type="radio" name="${radio_buttons_name}" value="${option[0]}">
-                    <span>${option[1]}</span>
+                    <span>${option[1]}</span><span class="radiomark"></span>
                 </label>
             </div>
         `).appendTo(popup_content);
