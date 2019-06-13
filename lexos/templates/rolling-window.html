@@ -83,13 +83,18 @@
         <div id="display-section" class="section">
             <h3 class="section-top title">Display</h3>
             <div class="section-body">
-
-                <label class="checkbox-label">
-                    <input id="milestone-checkbox" name="rollinghasmilestone" type="checkbox">
-                    <span class="checkmark"></span>
-                    <span>Milestone<input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off"></span>
-                </label>
-                <h3 id="milestone-tooltip-button" class="button">?</h3>
+                <fieldset>
+                    <legend></legend>
+                    <label class="checkbox-label">
+                        <input id="milestone-checkbox" name="rollinghasmilestone" type="checkbox">
+                        <span class="checkmark"></span>
+                        <span>Milestone:</span>
+                    </label>
+                    <label>
+                        <input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off">
+                    </label>
+                    <h3 id="milestone-tooltip-button" class="button">?</h3>
+                </fieldset>
 
                 <label class="checkbox-label"><input name="showDots" type="checkbox"><span class="checkmark"></span><span>Show Individual Points</span></label><br>
                 <label class="checkbox-label"><input name="BWoutput" type="checkbox"><span class="checkmark"></span><span>Black and White</span></label>

@@ -284,11 +284,17 @@ function merge_selected(){
         <h3>Name: </h3>
         <label><input id="merge-name-input" name="" value="Merge-${first_selected_document.label}" type="text" spellcheck="false" autocomplete="off"></label>
         <br>
-        <label class="checkbox-label">
-            <input id="merge-milestone-checkbox" name="" type="checkbox">
-            <span class="checkmark"></span>
-            <span>Milestone: <input id="merge-milestone-input" name="" value="#EOF#" type="text" spellcheck="false" autocomplete="off"></span>
-         </label>
+        <fieldset>
+        <legend></legend>
+            <label class="checkbox-label">
+                <input id="merge-milestone-checkbox" name="" type="checkbox">
+                <span class="checkmark"></span>
+                <span>Milestone: </span>
+            </label>
+            <label>
+                <input id="merge-milestone-input" name="" value="#EOF#" type="text" spellcheck="false" autocomplete="off">
+            </label>
+         </fieldset>
 
     `).appendTo("#popup-content");
 
