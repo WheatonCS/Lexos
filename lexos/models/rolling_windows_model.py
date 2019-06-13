@@ -226,8 +226,7 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError(f"unhandled window type: {window_unit}")
 
-    def _find_tokens_average_in_windows(self,
-                                        windows: window_str) -> pd.DataFrame:
+    def _find_tokens_average_in_windows(self) -> pd.DataFrame:
         """Find the token average in the given windows.
 
         A token average is calculated by the number of times the token
@@ -248,7 +247,7 @@ class RollingWindowsModel(BaseModel):
 
         # this is the proportion by which to increment/decrement for each new
         # term that rolls into the window
-        window_division = 1 / window_size
+        incrementer = 1 / window_size
 
         # following block decides how to split up passage depending on
         # window unit. use passage_list if splitting into a list of words or
@@ -261,10 +260,20 @@ class RollingWindowsModel(BaseModel):
                 passage_list = get_words_with_right_boundary(self._passage)
             passage_length = len(passage_list)
         elif window_unit is WindowUnitType.letter:
-            passage = self._passage
+            if token_type == RWATokenType.word:
+                # if looking for words by char window, strip out consecutive
+                # whitespace. this is due to a shortcoming in the routine
+                # for this configuration, which could be fixed.
+                passage = self._passage.strip()
+            else:
+                passage = self._passage
             passage_length = len(passage)
         elif window_unit is WindowUnitType.line:
             passage_list = self._passage.split('\n')
+            # add whitespace so words don't get connected over line breaks
+            # when lines are "joined" in some modes.
+            for index in range(len(passage_list)):
+                passage_list[index] += ' '
             passage_length = len(passage_list)
 
         # for this particular case, two arrays of booleans are used to flag
@@ -277,59 +286,108 @@ class RollingWindowsModel(BaseModel):
         # one of these functions will then be called, except in the case of a
         # regex search.
         def _word_window_word_search(window_index: int) -> list:
+            """Find sum of word matches for a window consisting of words.
+
+            This method simply increments the current sum when the token
+            rolls into the window and decrements the sum when the token rolls
+            out of the window.
+            :param window_index: Index of the first word of the current window.
+            :return: A copy of the current list of sums for each token.
+            """
             for token_index, token in enumerate(tokens):
                 # check if the previous word was a match; decrement
-                if token == passage_list[window_index-1]:
-                    window_sum[token_index] -= window_division
+                if token == passage_list[window_index - 1]:
+                    window_sum[token_index] -= incrementer
                 # check if the newly added word was a match; increment
                 if token == passage_list[window_size + window_index - 1]:
-                    window_sum[token_index] += window_division
+                    window_sum[token_index] += incrementer
             return copy.deepcopy(window_sum)
 
+        # this is a tricky one...
         def _char_window_word_search(window_index: int) -> list:
-            window_list = passage[window_index - 1:window_size+window_index]\
+            """Find sum of word matches for a window consisting of chars.
+
+            This method is more complex; it catches matches that scroll into
+            and out of the window, as above, but also matches that appear at
+            the beginning or end of a word that will be counted for a single
+            window only.
+            :param window_index: Index of the first char of the current window.
+            :return: A copy of the current list of sums for each token.
+            """
+            # note that we keep the window one char behind where it really is
+            # so we can check what has just rolled out.
+            window_list = passage[window_index - 1:window_size + window_index]\
                           .strip().split()
             for token_index, token in enumerate(tokens):
                 length = len(token)
 
+                # if we previously turned on first bool, check if the last word
+                # is the same as it was then; if not, decrement; the match is
+                # no longer in the window
                 if boolean_array[0][token_index]:
-                    if token == window_list[-1]:
-                        boolean_array[0][token_index] = False
-                    else:
-                        window_sum[token_index] -= window_division
-                        boolean_array[0][token_index] = False
+                    if token != window_list[-1]:
+                        window_sum[token_index] -= incrementer
+                    boolean_array[0][token_index] = False
+                # if there's a match at the end of the window, increment and
+                # turn on the first bool
                 elif token == window_list[-1]:
-                    window_sum[token_index] += window_division
+                    window_sum[token_index] += incrementer
                     boolean_array[0][token_index] = True
 
+                # if the end of the first word is a match, but the word is
+                # longer than the search term, turn on second bool.
                 if token == window_list[0][-length:] and\
                    len(window_list[0]) > length and\
                    not boolean_array[1][token_index]:
                     boolean_array[1][token_index] = True
+                # if the search term is right at the front of the window and
+                # we previously turned second bool, increment.
                 elif token == window_list[0][1:]:
                     if boolean_array[1][token_index]:
-                        window_sum[token_index] += window_division
+                        window_sum[token_index] += incrementer
                         boolean_array[1][token_index] = False
+                # if search term has just rolled out of window, decrement
                 if token == window_list[0] and\
                    token[0] == passage[window_index-1]:
-                    window_sum[token_index] -= window_division
+                    window_sum[token_index] -= incrementer
             return copy.deepcopy(window_sum)
 
         def _line_window_word_search(window_index: int) -> list:
+            """Find sum of word matches for a window consisting of lines.
+
+            This method splits up into words the newest line in the window and
+            the line that just scrolled out, incrementing and decrementing the
+            sum by the number of matches in each.
+            :param window_index: Index of the first line of the current window.
+            :return: A copy of the current list of sums for each token.
+            """
             # split previous and new lines into words
             prev_line = passage_list[window_index - 1].strip().split()
             new_line = passage_list[window_size+window_index-1].strip().split()
             for token_index, token in enumerate(tokens):
                 # add or subtract count of word matches in those lines
-                window_sum[token_index] -= window_division *\
+                window_sum[token_index] -= incrementer *\
                                            prev_line.count(token)
-                window_sum[token_index] += window_division *\
+                window_sum[token_index] += incrementer *\
                                            new_line.count(token)
             return copy.deepcopy(window_sum)
 
         # this function helps the following one
         def get_compare_string(window_index: int, length: int,
                                reverse: bool) -> str:
+            """Generate a string of a specific length out of a list of strings.
+
+            This helper method generates a string to check for matches that
+            have rolled into or out of the window. When the search term is
+            longer than the word that rolled in, a match could include adjacent
+            words and/or parts of words, which are here combined into a string,
+            one char at a time.
+            :param window_index: The index of the word to start from.
+            :param length: The length of the search term.
+            :param reverse: If this is on, pull chars in reverse starting from
+            the end of previous words.
+            :return: The string to search for matches.
+            """
             length -= 1
             if reverse:
                 compare_string = passage_list[window_index][::-1]
@@ -365,30 +423,46 @@ class RollingWindowsModel(BaseModel):
                 return compare_string
 
         def _word_window_string_search(window_index: int) -> list:
+            """Find sum of string matches for a window consisting of words.
+
+            This method checks words that roll into or out of the window,
+            including adjacent words that may contribute to a match, and adds
+            or subtracts the number of new string matches.
+            :param window_index: Index of the first word of the current window.
+            :return: A copy of the current list of sums for each token.
+            """
             for token_index, token in enumerate(tokens):
                 # add or subtract the number of string matches in the new and
                 # previous words
                 length = len(token)
-                window_sum[token_index] -= window_division *\
-                    get_compare_string(window_index-1, length,
+                window_sum[token_index] -= incrementer *\
+                    get_compare_string(window_index - 1, length,
                                        reverse=False).count(token)
-                window_sum[token_index] += window_division *\
+                window_sum[token_index] += incrementer *\
                     get_compare_string(window_index + window_size - 1, length,
                                        reverse=True).count(token)
             return copy.deepcopy(window_sum)
 
         def _char_window_string_search(window_index: int) -> list:
+            """Find sum of string matches for a window consisting of chars.
+
+            This method checks a slice of chars at the beginning and end of the
+            window for a match to the string and decrements/increments.
+            :param window_index: Index of the first word of the current window.
+            :return: A copy of the current list of sums for each token.
+            """
             for token_index, token in enumerate(tokens):
                 length = len(token)
-                if token == passage[window_index-1:window_index+(length-1)]:
+                if token == passage[window_index - 1:
+                                    window_index + (length - 1)]:
                     # check a token-sized slice including previous character;
                     # decrement
-                    window_sum[token_index] -= window_division
-                if token == passage[window_index+window_size-length:
-                                    window_index+window_size]:
+                    window_sum[token_index] -= incrementer
+                if token == passage[window_index + window_size - length:
+                                    window_index + window_size]:
                     # check a token-sized slice including new character;
                     # increment
-                    window_sum[token_index] += window_division
+                    window_sum[token_index] += incrementer
             return copy.deepcopy(window_sum)
 
         def _line_window_string_search(window_index: int) -> list:
@@ -397,9 +471,9 @@ class RollingWindowsModel(BaseModel):
             for token_index, token in enumerate(tokens):
                 # add or subtract the number of string matches in the new and
                 # previous lines
-                window_sum[token_index] -= window_division *\
+                window_sum[token_index] -= incrementer *\
                                            prev_line.count(token)
-                window_sum[token_index] += window_division *\
+                window_sum[token_index] += incrementer *\
                                            new_line.count(token)
             return copy.deepcopy(window_sum)
 
@@ -418,7 +492,7 @@ class RollingWindowsModel(BaseModel):
             data_function = _char_window_word_search
         elif token_type == RWATokenType.word and window_unit ==\
                                                  WindowUnitType.line:
-            window_sum = [''.join(passage_list[:window_size]).strip().split().\
+            window_sum = [''.join(passage_list[:window_size]).strip().split().
                           count(token) / window_size for token in tokens]
             data_function = _line_window_word_search
         if token_type == RWATokenType.string and window_unit ==\
@@ -560,23 +634,48 @@ class RollingWindowsModel(BaseModel):
             raise ValueError(f"unhandled token type: {token_type}")
 
     def _find_mile_stone_windows_indexes_in_all_windows(
-            self, windows: window_str) -> milestone_count_dict:
+            self) -> milestone_count_dict:
         """Get a indexes of the mile stone windows.
 
         A "mile stone window" is a window where the window that starts with
         the milestone string.
-        :param windows: a iterator of windows.
         :return: a list of indexes of the mile stone windows.
         """
         # Get index for all mile stone strings.
         list_milestone_str = self._options.milestone
-        return {
-            milestone_str:
-                [index for index, window in enumerate(windows)
-                 if window.startswith(milestone_str)]
 
-            for milestone_str in list_milestone_str
-        }
+        # Get info to help with locating windows
+        window_unit = self._options.window_options.window_unit
+        window_size = self._options.window_options.window_size
+
+        # following block decides how to split up passage depending on
+        # window unit.
+        if window_unit is WindowUnitType.word:
+            passage = get_words_with_right_boundary(self._passage)
+        elif window_unit is WindowUnitType.letter:
+            passage = self._passage
+        elif window_unit is WindowUnitType.line:
+            passage = self._passage.split('\n')
+        passage_length = len(passage)
+
+        # scroll through the passage by window units and check where to put
+        # the milestones
+        if window_unit is WindowUnitType.letter:
+            return {
+                milestone_str:
+                    [index for index in range(passage_length - window_size + 1)
+                     if passage[index:index + window_size]
+                        .startswith(milestone_str)]
+                for milestone_str in list_milestone_str
+            }
+        else:
+            return {
+                milestone_str:
+                    [index for index in range(passage_length - window_size + 1)
+                     if ''.join(passage[index:index + window_size])
+                        .startswith(milestone_str)]
+                for milestone_str in list_milestone_str
+            }
 
     def _get_scatter_color(self, index: int) -> str:
         """Get color for scatter plot.
@@ -605,20 +704,15 @@ class RollingWindowsModel(BaseModel):
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
-    def _add_milestone(self,
-                       windows: window_str,
-                       result_plot: List[go.Scattergl]) -> go.Figure:
+    def _add_milestone(self, result_plot: List[go.Scattergl]) -> go.Figure:
         """Add milestone to the existing plot.
 
-        :param windows: an array of windows to calculate.
         :param result_plot: List of existing scatter rolling window plot.
         :return: A plotly figure object.
         """
         # Get all mile stone locations.
         milestones_dict = \
-            self._find_mile_stone_windows_indexes_in_all_windows(
-                windows=windows
-            )
+            self._find_mile_stone_windows_indexes_in_all_windows()
 
         # Check if passed in mile stones exist in the file.
         if milestones_dict is not {}:
@@ -717,8 +811,7 @@ class RollingWindowsModel(BaseModel):
         ]
 
         if self._options.milestone is not None:
-            return self._add_milestone(windows=windows,
-                                       result_plot=result_plot)
+            return self._add_milestone(result_plot=result_plot)
         else:
             return go.Figure(data=result_plot,
                              layout=go.Layout(
@@ -738,9 +831,7 @@ class RollingWindowsModel(BaseModel):
         :return: a list of plotly graph object
         """
         # Get the windows and toke average data frame.
-        windows = self._get_windows()
-        token_average_data_frame = self._find_tokens_average_in_windows(
-            windows=windows)
+        token_average_data_frame = self._find_tokens_average_in_windows()
 
         # Find the proper plotting mode.
         plot_mode = "lines+markers" \
@@ -762,8 +853,7 @@ class RollingWindowsModel(BaseModel):
         ]
 
         if self._options.milestone is not None:
-            return self._add_milestone(windows=windows,
-                                       result_plot=result_plot)
+            return self._add_milestone(result_plot=result_plot)
         else:
             return go.Figure(data=result_plot,
                              layout=go.Layout(
@@ -815,9 +905,7 @@ class RollingWindowsModel(BaseModel):
         :return: The data frame that needs to be converted to CSV.
         """
         # Get the average data frame, transpose it and return it.
-        return self._find_tokens_average_in_windows(
-            windows=self._get_windows()
-        ).transpose()
+        return self._find_tokens_average_in_windows().transpose()
 
     def _get_ratio_csv_frame(self) -> pd.DataFrame:
         """Get the ratio token frame that is ready to be converted to CSV.
