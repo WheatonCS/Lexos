@@ -262,7 +262,4 @@ function initialize_tooltips(){
 
     // "Cull"
     initialize_cull_tooltips(false);
-
-    create_tooltip("#vocab-density-tooltip-button", `(the distinct terms/the
-        total terms).`);
 }

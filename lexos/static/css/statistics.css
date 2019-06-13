@@ -50,7 +50,7 @@ form {
 
 #table-top {
     display: grid;
-    grid-template-columns: 1fr 1fr 0.5fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .table-top-radio-option {
