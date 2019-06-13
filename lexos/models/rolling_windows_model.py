@@ -1,9 +1,7 @@
 """This is the model that generates rolling window results."""
 
 import re
-import os
 import copy
-import time
 import numpy as np
 import pandas as pd
 import colorlover as cl
