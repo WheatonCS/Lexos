@@ -342,10 +342,10 @@ function validate_number(number, minimum = NaN, maximum = NaN){
     if(!number || isNaN(parsed_value)) return false;
 
     // Check that the number is within bounds
-    if(isNaN(minimum) && parsed_value < minimum) return false;
-    if(isNaN(maximum) && parsed_value > maximum) return false;
+    if((!isNaN(minimum) && parsed_value < minimum) ||
+        (!isNaN(maximum) && parsed_value > maximum)) return false;
 
-    // Return true as all validation checks have passed
+    // Return true since all validation checks have passed
     return true;
 }
 
@@ -466,4 +466,20 @@ function get_active_file_ids(callback, loading_failed_query){
             add_text_overlay(loading_failed_query, "Loading Failed");
             error("Failed to retrieve the active file IDs.");
         });
+}
+
+
+/**
+ * Downloads the given data.
+ */
+function download(data, file_name, convert = true){
+
+    let blob;
+    if(convert) blob = window.URL.createObjectURL(new Blob([data]));
+    else blob = data;
+
+    let link = document.createElement('a');
+    link.href = blob;
+    link.download = file_name;
+    link.click();
 }

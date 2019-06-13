@@ -26,6 +26,7 @@ $(function(){
  * text in the "Rolling Window" section.
  * @param {string} response: The response from the "get-active-files" request.
  */
+let csv;
 function single_active_document_check(response){
 
     // Get the active documents
@@ -33,33 +34,35 @@ function single_active_document_check(response){
 
     // If there are no active documents, display "No Active Documents" text
     // on the "Rolling Window" section
-    let text;
-    if(documents.length === 0) text= "No Active Documents";
+    if(documents.length === 0)
+        add_text_overlay("#graph-container", "No Active Documents");
 
     // If there is more than one active document, display "This Tool Requires
     // A Single Active Document" text on the "Rolling Window" section
-    else if(documents.length > 1)
-        text = "This Tool Requires A Single Active Document";
+    else if(documents.length > 1) add_text_overlay("#graph-container",
+        "This Tool Requires a Single Active Document");
 
     // Otherwise, set the legacy form input for the file to analyze to the
     // active document, display "No Graph" text on the "Rolling Window"
     // section, and enable the generate button
     else {
-        text = "No Graph";
+        add_text_overlay("#graph-container", "No Graph");
         $("#file-to-analyze").val(documents[0][0]);
-        enable("#generate-button, #download-button");
+        enable("#generate-button");
     }
-
-    // Display the text in the graph container
-    add_text_overlay("#graph-container", text);
 
     // If the "Generate" button is clicked, create the rolling window graph
     $("#generate-button").click(create_rolling_window);
 
-    // If the "Download" button is clicked, for legacy compatibility, click
-    // the "download-input" button which sends a download request
-    $("#download-button").click(function(){ $("#download-input").click(); });
+    // Initialize the "PNG" and "SVG" download buttons
+    enable_graph_download_buttons();
+
+    // If the "CSV" button is pressed, download the CSV
+    $("#csv-button").click(function(){
+        download(csv, "rolling-window.csv");
+    });
 }
+
 
 /**
  * Creates the rolling window.
@@ -69,16 +72,43 @@ function create_rolling_window(){
     // Validate the inputs
     if(!validate_inputs()) return;
 
-    // Remove any existing errors
+    // Remove any existing Plotly graphs
+    remove_graphs();
+
+    // Remove any existing error messages
     remove_errors();
 
-    // Display the loading overlay and disable the "Generate" and "Download"
-    // buttons
-    start_loading("#graph-container", "#generate-button, #download-button");
+    // Display the loading overlay and disable the appropriate buttons
+    start_loading("#graph-container",
+        "#generate-button, #png-button, #svg-button, #csv-button");
 
-    // Create the rolling window graph
-    create_graph("/rolling-window/get-graph",
-        function(){ enable("#generate-button, #download-button"); });
+    // Create the rolling window graph and get the CSV data
+    send_rolling_window_result_request();
+}
+
+
+/**
+ * Creates the rolling window graph and gets the CSV data.
+ */
+function send_rolling_window_result_request(){
+
+    // Send a request for the k-means results
+    send_ajax_form_request("/rolling-window/results")
+
+        // If the request was successful, initialize the graph, store the CSV
+        // data, and enable the "Generate" and "CSV" buttons
+        .done(function(response){
+            csv = response.csv;
+            initialize_graph(response.graph);
+            enable("#generate-button, #csv-button");
+        })
+
+        // If the request failed, display an error and enable the "Generate"
+        // button
+        .fail(function(){
+            error("Failed to retrieve the rolling window data.");
+            enable("#generate-button");
+        });
 }
 
 

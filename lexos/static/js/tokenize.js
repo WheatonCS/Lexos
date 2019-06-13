@@ -20,6 +20,42 @@ $(function(){
 
 
 /**
+ * Initializes the "Download" button.
+ */
+function initialize_download_button(){
+
+    // If the "Download" button is pressed...
+    $("#download-button").click(function(){
+
+        // Validate inputs, disable the "Generate" and "Download" buttons
+        // and remove any existing error messages
+        if(!validate_table(false)) return;
+        disable("#download-button");
+
+        // Send a request for the table data
+        send_ajax_form_request("tokenize/csv",
+            {"sort-column": selected_column, "start": 0})
+
+            // Always enable the "Download" button, set the "loading" variable
+            // to false, and execute any queued requests
+            .always(function(){
+                loading = false;
+                enable("#download-button");
+                if(queue.queued) execute_queued_table_recreation(true);
+            })
+
+            // If the request was successful, download the document statistics
+            .done(function(response){ download(response, "tokenizer.csv"); })
+
+            // If the request failed, display an error message
+            .fail(function(){
+                error("Failed to download the tokenizer data.");
+            });
+    });
+}
+
+
+/**
  * Initializes the legacy inputs and creates the token table.
  * @param {string} response: The response from the "active-file-ids" request.
  */
@@ -38,10 +74,10 @@ function initialize(response){
     enable("#generate-button, #download-button");
 
     // Create the token table
-    send_token_table_data_request();
+    send_table_data_request();
 
     // Create callbacks for the buttons and inputs on the token table
-    create_token_table_button_callbacks();
+    create_table_button_callbacks();
 }
 
 
@@ -50,21 +86,50 @@ function initialize(response){
  *      creates the table.
  * @param {boolean} page_change: Whether the action that triggered this table
  *      creation was a page change.
- * @param {boolean} queued_request: Whether this table creation was queued.
+ * @param {boolean} loading_overlay: Whether to display the loading overlay.
  */
-function send_token_table_data_request(page_change = true, queued_request = false){
+let page_number;
+function send_table_data_request(page_change = true, loading_overlay = true){
+
+    // Perform table checks
+    if(!validate_table(page_change)) return;
+
+    // Display the loading overlay on the table
+    if(loading_overlay) start_loading("#table-data", "#download-button");
+    let start = (page_number-1)*$(`input[name="length"]:checked`).val();
+
+    send_ajax_form_request("tokenize/table",
+        { "sort-column": selected_column, "start": start })
+
+        // If the request was successful, recreate the table
+        .done(create_table)
+
+        // If the request failed, display an error
+        .fail(function(){
+            error("Failed to retrieve the token table data.");
+            add_text_overlay("#table-data", "Loading Failed");
+        });
+}
+
+
+/**
+ * Performs the necessary validation for table generation.
+ * @param {boolean} page_change: Whether the page has changed.
+ * @return {boolean}: Whether the table inputs are valid.
+ */
+function validate_table(page_change){
 
     // Perform the immediate validation checks
-    immediate_validation(page_change);
+    immediate_table_validation(page_change);
 
     // If the table is already loading, queue a recreation and return
     if(loading){
 
         // If there is already a recreation queued, prefer resetting the page
-        if(queue.queued) if(!page_change) queue.page_change = false;
+        if(queue.queued){ if(!page_change) queue.page_change = false; }
         else queue.page_change = page_change;
         queue.queued = true;
-        return;
+        return false;
     }
 
     // Otherwise, set the "loading" variable to true
@@ -79,35 +144,20 @@ function send_token_table_data_request(page_change = true, queued_request = fals
     // attempted but the page number remained the same due to clamping or
     // input of the same number, or if the "Tokenize" or "Cull" sections have
     // an invalid input
-    let page_number = page_number_element.val();
+    page_number = page_number_element.val();
     if(isNaN(page_number) || page_change & (page_number ===
         previous_page_number) || !validate_analyze_inputs()){
         loading = false;
         execute_queued_table_recreation();
-        return;
+        return false;
     }
 
-    // Otherwise, update the previous page number
+    // Otherwise, update the previous page number and remove any existing
+    // error messages
     previous_page_number = page_number;
-
-    // Remove any existing error messages
     remove_errors();
 
-    // Display the loading overlay on the table
-    if(!queued_request) start_loading("#table-data");
-    let start = (page_number-1)*$(`input[name="length"]:checked`).val();
-
-    send_ajax_form_request("tokenize/get-table",
-        { "sort-column": selected_column, start: start })
-
-        // If the request was successful, recreate the table
-        .done(create_token_table)
-
-        // If the request failed, display an error
-        .fail(function(){
-            error("Failed to retrieve the token table data.");
-            add_text_overlay("#table-data", "Loading Failed");
-        });
+    return true;
 }
 
 
@@ -115,7 +165,7 @@ function send_token_table_data_request(page_change = true, queued_request = fals
  * Creates the token table.
  * @param {string} response: The response from the "tokenize/get-table" request.
  */
-function create_token_table(response){
+function create_table(response){
 
     // If there is a queued table recreation, execute it and return
     loading = false;
@@ -125,14 +175,14 @@ function create_token_table(response){
     }
 
     // Otherwise, parse the response
-    response = parse_json(response);
+    let parsed_response = parse_json(response);
 
     // Set the page count
-    page_count = parseInt(response["pages"]);
+    page_count = parseInt(parsed_response["pages"]);
     $("#page-count").text(page_count);
 
     // If there is no data, display "No Data" text and return
-    if(response["data"].length === 0){
+    if(parsed_response["data"].length === 0){
         add_text_overlay("#table-body", "No Data");
         return;
     }
@@ -141,14 +191,14 @@ function create_token_table(response){
     $(`
         <div id="table-data-grid" class="hidden">
             <div id="table-head"></div>
-            <div id="table-body" class="hidden-scrollbar"></div>
+            <div id="table-body" class="firefox-hidden-scrollbar"></div>
         </div>
     `).appendTo("#table-data");
 
     // Create the table head
-    response["head"].unshift("Terms");
+    parsed_response["head"].unshift("Terms");
     let id = 0;
-    for(cell of response["head"]){
+    for(const cell of parsed_response["head"]){
 
         // Create the cell element
         let cell_element = $(`<h3 id=${id} class="table-cell"></h3>`)
@@ -162,7 +212,7 @@ function create_token_table(response){
             let id = $(this).attr("id");
             if(selected_column !== id){
                 selected_column = id;
-                send_token_table_data_request(false);
+                send_table_data_request(false);
             }
         });
     }
@@ -172,84 +222,82 @@ function create_token_table(response){
 
     // Populate the table body
     let table_body_element = $("#table-body");
-    for(row of response["data"]){
+    for(const row of parsed_response["data"]){
 
         // Create a row
         let row_element = $(`<div class="table-row"></div>`)
             .appendTo(table_body_element);
 
         // Populate the row with cells
-        for(cell of row){
+        for(const cell of row){
             let element = $(`<h3 class="table-cell"></h3>`)
                 .appendTo(row_element);
             element.text(cell);
         }
     }
 
-
     // Remove the loading overlay and fade in the table data
-    finish_loading("#table-data", "#table-data-grid");
+    finish_loading("#table-data", "#table-data-grid ", "#download-button");
 }
 
 
 /**
  * Creates callbacks for the buttons and inputs on the table
  */
-function create_token_table_button_callbacks(){
+function create_table_button_callbacks(){
 
     // Get the page number element
     let page_number_element = $("#page-number");
 
     // If the "Search" input is changed, recreate the table
     $("#search-input").on("input", function(){
-        send_token_table_data_request(false);
+        send_table_data_request(false);
     });
 
     // If the "Rows Per Page" option is changed, recreate the table
     $(`input[type="radio"][name="length"],
         input[type="radio"][name="sort-ascending"]`)
-        .change(function(){ send_token_table_data_request(false); });
+        .change(function(){ send_table_data_request(false); });
 
     // If the "Generate" button is pressed, recreate the table
     $("#generate-button").click(function(){
-        send_token_table_data_request(false);
+        send_table_data_request(false);
     });
 
-    // If the "Download" button is pressed, download the table as a CSV
-    $("#download-button").click(function(){
-        $("#trigger-download").click();
-    });
+    // Initialize the "Download" button
+    initialize_download_button();
 
     // If the page number input is changed, recreate the table
     $(page_number_element).on("input", function(){
-        send_token_table_data_request();
+        send_table_data_request();
     });
 
     // If the "Previous" button is clicked, decrement the page number and
     // recreate the table
     $("#previous-button").click(function(){
         page_number_element.val(parseInt(page_number_element.val())-1);
-        send_token_table_data_request();
+        send_table_data_request();
     });
 
     // If the "Next" button is clicked, increment the page number and recreate
     // the table
     $("#next-button").click(function(){
         page_number_element.val(parseInt(page_number_element.val())+1);
-        send_token_table_data_request();
+        send_table_data_request();
     });
 }
 
 
 /**
  * Executes the queued table recreation if it exists.
+ * @param {boolean} loading_overlay: Whether to show the loading overlay.
  */
-function execute_queued_table_recreation(){
+function execute_queued_table_recreation(loading_overlay = false){
 
     // If a table recreation was queued, perform the reload
     if(queue.queued){
         queue.queued = false;
-        send_token_table_data_request(queue.page_change, true);
+        send_table_data_request(queue.page_change, loading_overlay);
         queue.page_change = false;
     }
 }
@@ -261,7 +309,7 @@ function execute_queued_table_recreation(){
  * @param {boolean} page_change: Whether the action that triggered the table
  *      recreation was a page change.
  */
-function immediate_validation(page_change){
+function immediate_table_validation(page_change){
 
     // Parse the page number from the input
     let page_number_element = $("#page-number");

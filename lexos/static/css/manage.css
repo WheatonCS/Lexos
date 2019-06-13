@@ -45,8 +45,9 @@ form {
 }
 
 #table-body {
-    overflow-y: overlay;
     height: calc(100% - 4rem);
+    overflow-y: auto;
+    overflow-y: overlay;
 }
 
 .table-row {
@@ -74,13 +75,21 @@ form {
     color: #47BCFF;
 }
 
-.checkbox {
-    margin: 1rem;
+.active-dot {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin: auto;
 }
 
-.selected-table-row > .checkbox {
+.table-row > .active-dot {
+    border: .2rem solid #D3D3D3;
+    background-color: #F3F3F3;
+}
+
+.selected-table-row > .active-dot {
     border: .2rem solid #47BCFF;
-    background-color: #EAF5FF;
+    background-color: #47BCFF;
 }
 
 

@@ -149,6 +149,10 @@ function create_word_cloud(id, name, words){
 
     let layout = layouts[id];
 
+    // Create the tooltip
+    let tooltip = d3.select("#multicloud").append("h3")
+        .attr("class", "visualize-tooltip");
+
     // Create the word cloud
     d3.select(`#word-cloud-${id}`)
 
@@ -175,8 +179,23 @@ function create_word_cloud(id, name, words){
             })
             .text(function(d){ return d.text; })
 
-        .append("svg:title")
-            .text(function(d){ return `Word: ${d.text} \nCount: ${d.count}`; });
+            // If the text is moused over, create a tooltip with information on
+            // the bubble and highlight the bubble
+            .style("transition", "opacity .2s")
+            .on("mouseover", function(){
+                d3.select(this).style("opacity", ".7")
+                tooltip.style("opacity", "1");
+            })
+            .on("mousemove", function(d){
+                tooltip
+                    .html(`Word: ${d.text}<br>Count: ${d.count}`)
+                    .style("left", (d3.event.pageX+30)+"px")
+                    .style("top", (d3.event.pageY-12)+"px");
+            })
+            .on("mouseout", function(){
+                d3.select(this).style("opacity", "1")
+                tooltip.style("opacity", "0");
+            });
 
     // Initialize the PNG and SVG download buttons
     initialize_png_link(`#word-cloud-${id} svg`, `#png-button-${id}`,

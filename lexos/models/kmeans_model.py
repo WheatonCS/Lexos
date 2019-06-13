@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
+from flask import jsonify
 from plotly.offline import plot
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
@@ -24,12 +25,26 @@ PlotlyHTMLPlot = str
 HTMLTable = str
 
 
+class KMeansResult(NamedTuple):
+    """A typed tuple to hold processed k-means results."""
+
+    plot: PlotlyHTMLPlot
+    table: HTMLTable
+
+
 class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
 
     doc_term_matrix: pd.DataFrame
     id_temp_label_map: IdTempLabelMap
     front_end_option: KMeansOption
+
+
+class KMeansUnprocessedResult(NamedTuple):
+    """A typed tuple to hold unprocessed k-means results."""
+
+    plot: go.Figure
+    table: pd.DataFrame
 
 
 class KMeansModel(BaseModel):
@@ -124,6 +139,7 @@ class KMeansModel(BaseModel):
         contains cluster numbers and the second column contains document names,
         the rest columns contain the coordinates of the files.
         """
+
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
@@ -150,6 +166,7 @@ class KMeansModel(BaseModel):
         :param reduced_data: PCA reduced two dimensional data.
         :return: A plotly heat map object that contains all polygons.
         """
+
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -158,6 +175,7 @@ class KMeansModel(BaseModel):
         x_min, x_max = x_value.min(), x_value.max()
         x_low_bound = x_min - (x_max - x_min) / 5
         x_up_bound = x_max + (x_max - x_min) / 5
+
         # Increase 200 will make lines smoother.
         x_step = (x_up_bound - x_low_bound) / 200
 
@@ -203,6 +221,7 @@ class KMeansModel(BaseModel):
         """
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
         # Create scatter plots for points in each cluster.
         return [
             go.Scatter(
@@ -232,8 +251,10 @@ class KMeansModel(BaseModel):
         :param k_means_index: Cluster result for all files.
         :return: A list of scatter plot contains centroid for each cluster.
         """
+
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
+
         # Create scatter plots for centroid in each cluster.
         return [
             go.Scatter(
@@ -254,11 +275,11 @@ class KMeansModel(BaseModel):
             for group_number in np.unique(k_means_index)
         ]
 
-    def _get_voronoi_result(self) -> go.Figure:
+    def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
-
         :return: A plotly object hat has been converted to HTML format string.
         """
+
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -294,11 +315,12 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
                 b=0,
-                t=30,
+                t=25,
                 pad=4
             ),
             hovermode="closest")
@@ -311,9 +333,12 @@ class KMeansModel(BaseModel):
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return go.Figure(data=data, layout=layout)
+        return KMeansUnprocessedResult(
+            plot=go.Figure(data=data, layout=layout),
+            table=self._get_2d_frame(k_means_index=k_means_index)
+        )
 
-    def _get_2d_scatter_result(self) -> go.Figure:
+    def _get_2d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 2D plot that contains just the dots for K means result.
 
         :return: A plotly object hat has been converted to HTML format string.
@@ -350,11 +375,12 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
                 b=0,
-                t=0,
+                t=25,
                 pad=4
             ),
             hovermode="closest")
@@ -363,13 +389,16 @@ class KMeansModel(BaseModel):
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return go.Figure(data=data, layout=layout)
+        return KMeansUnprocessedResult(
+            plot=go.Figure(data=data, layout=layout),
+            table=self._get_2d_frame(k_means_index=k_means_index)
+        )
 
-    def _get_3d_scatter_result(self) -> go.Figure:
+    def _get_3d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 3D plot that contains just the dots for K means result.
-
         :return: A plotly object hat has been converted to HTML format string.
         """
+
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -404,11 +433,12 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot, mainly set the background color to grey.
         layout = go.Layout(
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
                 b=0,
-                t=0,
+                t=25,
                 pad=4
             ),
             scene=dict(
@@ -425,13 +455,16 @@ class KMeansModel(BaseModel):
         # The reason we have to do this together is that K-Means cluster result
         # is randomized. So if we want to be consistent, plot and table must
         # be done together.
-        return go.Figure(data=data, layout=layout)
+        return KMeansUnprocessedResult(
+            plot=go.Figure(data=data, layout=layout),
+            table=self._get_3d_frame(k_means_index=k_means_index)
+        )
 
-    def get_result(self) -> go.Figure:
-        """Get the plotly graph based on users selection.
-
-        :return: A HTML formatted plotly graph that is ready to be displayed.
+    def _get_result(self) -> KMeansUnprocessedResult:
+        """ Get the k-means data.
+        :return: The k-means data.
         """
+
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -451,10 +484,25 @@ class KMeansModel(BaseModel):
         else:
             raise ValueError("Invalid K-Means analysis option from front end.")
 
-        # Process the result before return them.
-        return plot(
-                k_means_unprocessed_result,
-                show_link=False,
-                output_type="div",
-                include_plotlyjs=False
-            )
+        return k_means_unprocessed_result
+
+    def get_results(self) -> str:
+        """ Gets the k-means results.
+        :return: The k-means results.
+        """
+
+        config = {
+            "displaylogo": False,
+            "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
+            "scrollZoom": True
+        }
+
+        result = self._get_result()
+
+        return jsonify({"graph": plot(
+                            self._get_result().plot,
+                            show_link=False,
+                            output_type="div",
+                            include_plotlyjs=False,
+                            config=config),
+                        "csv": result.table.to_csv()})

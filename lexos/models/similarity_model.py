@@ -4,6 +4,7 @@ from typing import NamedTuple
 
 import pandas as pd
 from scipy.spatial.distance import cosine
+from flask import jsonify
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
@@ -58,7 +59,7 @@ class SimilarityModel(BaseModel):
         return self._test_option if self._test_option is not None \
             else SimilarityReceiver().options_from_front_end()
 
-    def _gen_exact_similarity(self) -> pd.DataFrame:
+    def _get_similarity_query(self) -> pd.DataFrame:
         """Get the exact (not rounded) cos-similarity between files.
 
         :return a two rows pandas data frame where
@@ -66,6 +67,7 @@ class SimilarityModel(BaseModel):
             - the name of the second row is Cosine Similarity Scores, contains
               distance between this file and "comp_file".
         """
+
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
@@ -93,15 +95,19 @@ class SimilarityModel(BaseModel):
                   for file_id in other_file_word_counts.index]
 
         # pack score and labels into a pandas data frame
-        return pd.DataFrame(index=["Documents", "Cosine Similarity"],
-                            data=[labels, cos_scores])
+        dataframe = pd.DataFrame(index=["Documents", "Cosine Similarity"],
+                                 data=[labels, cos_scores]).transpose()
 
-    def generate_sims_html(self) -> str:
-        """Generate the html for sim query.
+        # Format the dataframe and return it
+        return dataframe.sort_values("Cosine Similarity", ascending=False) \
+            .round(4)
 
-        We also round all the data to 4 digits for better display
-        :return: the table to put into the web page
+    def get_results(self) -> str:
+        """ Gets the similarity query results.
+        :return: The similarity query results.
         """
-        return self._gen_exact_similarity().transpose() \
-            .sort_values("Cosine Similarity", ascending=False) \
-            .round(4).to_json(orient="values")
+
+        similarity_query = self._get_similarity_query()
+
+        return jsonify({"table": similarity_query.to_json(orient="values"),
+                        "csv": similarity_query.to_csv()})

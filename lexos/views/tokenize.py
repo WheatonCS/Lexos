@@ -1,6 +1,6 @@
 import json
 
-from flask import session, render_template, send_file, Blueprint
+from flask import session, render_template, Blueprint
 
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
@@ -22,7 +22,7 @@ def tokenizer():
     return render_template("tokenize.html")
 
 
-@tokenize_blueprint.route("/tokenize/get-table", methods=["POST"])
+@tokenize_blueprint.route("/tokenize/table", methods=["POST"])
 def get_table():
     """Gets the requested table data.
     :return: The requested table data.
@@ -32,20 +32,17 @@ def get_table():
     session_manager.cache_analysis_option()
 
     # Return the generated document term matrix.
-    result = TokenizerModel().select_file_col_dtm()
-    return json.dumps(result)
+    return json.dumps(TokenizerModel().get_table())
 
 
-@tokenize_blueprint.route("/tokenize", methods=["GET"])
+@tokenize_blueprint.route("/tokenize/csv", methods=["POST"])
 def download():
-    """Sends the DTM to the user.
-    :return: The DTM download.
+    """Gets the table data in a CSV.
+    :return: The table data in a CSV.
     """
 
-    # Generate the file and get the file path.
-    file_path = TokenizerModel().download_dtm()
+    # Cache the options.
+    session_manager.cache_analysis_option()
 
-    # Send the file as a download.
-    return send_file(file_path,
-                     as_attachment=True,
-                     attachment_filename="tokenizer-result.csv")
+    # Return the table data CSV
+    return TokenizerModel().get_csv()

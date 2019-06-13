@@ -10,9 +10,12 @@
     <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
 
     <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
     <script type="text/javascript" src="static/js/statistics.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/statistics.css"/>
 {% endblock %}
@@ -42,12 +45,14 @@
 
                 <div class="section-body">
                     <label class="circle-label">
-                        <input name="tokenType" value="word" type="radio" checked>
+                        <input name="tokenType" value="word" type="radio" checked="checked">
+                        <span class="radiomark"></span>
                         <span>By Tokens</span>
                     </label><br>
 
                     <label class="circle-label">
                         <input name="tokenType" value="char" type="radio">
+                        <span class="radiomark"></span>
                         <span>By Characters</span>
                     </label><br>
 
@@ -68,6 +73,7 @@
 
                     <label class="checkbox-label">
                         <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
+                        <span class="checkmark"></span>
                         <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
                     </label>
 
@@ -75,6 +81,7 @@
 
                     <label class="checkbox-label">
                         <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
+                        <span class="checkmark"></span>
                         <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
                     </label>
 
@@ -85,8 +92,12 @@
 
         <!-- Document sizes -->
         <div id="graph-section" class="section">
-            <div id="graph-section-top">
-                <h3 class="section-top title">Document Sizes</h3>
+            <div id="graph-section-top" class="vertical-splitter section-top">
+                <h3 class="title">Document Sizes</h3>
+                <div class="right-justified">
+                    <h3 id="png-button" class="disabled button">PNG</h3>
+                    <h3 id="svg-button" class="disabled button">SVG</h3>
+                </div>
             </div>
             <div id="graph-container" class="section-body"></div>
         </div>
@@ -116,7 +127,23 @@
 
     <!-- Document statistics -->
     <div id="documents-section" class="section">
-        <h3 class="section-top title">Document Statistics</h3>
+
+        <div id="table-top" class="section-top">
+
+            <!-- Title -->
+            <h3 class="title">Document Statistics</h3>
+
+            <!-- Sort direction -->
+            <div class="table-top-radio-option">
+                <h3>Order: </h3>
+                <label class="circle-label"><input name="sort-ascending" value="true" type="radio" checked><span>Ascending</span></label>
+                <label class="circle-label"><input name="sort-ascending" value="false" type="radio"><span>Descending</span></label>
+            </div>
+
+            <!-- Download -->
+            <a id="download-button" class="right-justified disabled button">Download</a>
+        </div>
+
         <div id="table" class="borderless-section-body"></div>
     </div>
 
@@ -126,4 +153,6 @@
     <input name="normalizeType" value="raw" type="hidden">
     <input id="active-file-ids" name="active_file_ids" type="hidden">
     <div id="document-names-section"></div>
+    <input name="sort-column" value="0" type="hidden">
+
 {% endblock %}

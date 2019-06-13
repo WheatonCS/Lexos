@@ -1,4 +1,4 @@
-from flask import session, render_template, Blueprint, jsonify
+from flask import session, render_template, Blueprint
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
@@ -23,15 +23,15 @@ def k_means() -> str:
     return render_template("k-means.html")
 
 
-@k_means_blueprint.route("/k-means/graph", methods=["POST"])
-def graph():
-    """ Gets the k-means graph.
-    :return: The k-means graph.
+@k_means_blueprint.route("/k-means/results", methods=["POST"])
+def results():
+    """ Gets the k-means results.
+    :return: The k-means results.
     """
 
     # Cache options
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
 
-    # Get the graph
-    return jsonify(KMeansModel().get_result())
+    # Get the k-means results
+    return KMeansModel().get_results()

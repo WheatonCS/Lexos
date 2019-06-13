@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
+from flask import jsonify
 from typing import Optional, NamedTuple, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -99,11 +100,51 @@ class StatsModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "terms" if token_type == "word" else "character n-grams"
 
+    @property
+    def _get_document_statistics_dataframe(self) -> pd.DataFrame:
+        """Gets a Pandas dataframe containing the statistics of each document.
+        :return: A Pandas dataframe containing statistics of each document.
+        """
+
+        # Check if empty corpus is given.
+        assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
+        # Get file names.
+        labels = [self._id_temp_label_map[file_id]
+                  for file_id in self._active_doc_term_matrix.index.values]
+
+        # Set up data frame with proper headers.
+        file_stats = pd.DataFrame(
+            columns=["Documents",
+                     f"Number of {self._token_type_str} occurring once",
+                     f"Total number of {self._token_type_str}",
+                     f"Average number of {self._token_type_str}",
+                     f"Distinct number of {self._token_type_str}"])
+
+        # Save document names in the data frame.
+        file_stats["Documents"] = labels
+        # Find number of token that appears only once.
+        file_stats[f"Number of {self._token_type_str} occurring once"] = \
+            self._active_doc_term_matrix.eq(1).sum(axis=1).values
+        # Find total number of tokens.
+        file_stats[f"Total number of {self._token_type_str}"] = \
+            self._active_doc_term_matrix.sum(axis=1).values
+        # Find distinct number of tokens.
+        file_stats[f"Distinct number of {self._token_type_str}"] = \
+            self._active_doc_term_matrix.ne(0).sum(axis=1).values
+        # Find average number of appearance of tokens.
+        file_stats[f"Average number of {self._token_type_str}"] = \
+            file_stats[f"Total number of {self._token_type_str}"] / \
+            file_stats[f"Distinct number of {self._token_type_str}"]
+
+        return file_stats
+
     def get_corpus_stats(self) -> CorpusStats:
         """Convert word lists completely to statistic.
 
         :return: a typed tuple that holds all statistic of the entire corpus.
         """
+
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -170,45 +211,20 @@ class StatsModel(BaseModel):
             inter_quartile_range=round(iqr, 2),
         )
 
-    def get_file_stats(self) -> str:
-        """Get statistics of each file.
-
-        :return: A JSONified Pandas dataframe
+    def get_document_statistics(self) -> str:
+        """ Gets the document statistics.
+        :return: The document statistics.
         """
 
-        # Check if empty corpus is given.
-        assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+        result = self._get_document_statistics_dataframe.round(3)
 
-        # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._active_doc_term_matrix.index.values]
+        sorted_result = result.sort_values(
+            by=[result.columns[self._stats_option.sort_column]],
+            ascending=self._stats_option.sort_ascending
+        )
 
-        # Set up data frame with proper headers.
-        file_stats = pd.DataFrame(
-            columns=["Documents",
-                     f"Number of {self._token_type_str} occurring once",
-                     f"Total number of {self._token_type_str}",
-                     f"Average number of {self._token_type_str}",
-                     f"Distinct number of {self._token_type_str}"])
-
-        # Save document names in the data frame.
-        file_stats["Documents"] = labels
-        # Find number of token that appears only once.
-        file_stats[f"Number of {self._token_type_str} occurring once"] = \
-            self._active_doc_term_matrix.eq(1).sum(axis=1).values
-        # Find total number of tokens.
-        file_stats[f"Total number of {self._token_type_str}"] = \
-            self._active_doc_term_matrix.sum(axis=1).values
-        # Find distinct number of tokens.
-        file_stats[f"Distinct number of {self._token_type_str}"] = \
-            self._active_doc_term_matrix.ne(0).sum(axis=1).values
-        # Find average number of appearance of tokens.
-        file_stats[f"Average number of {self._token_type_str}"] = \
-            file_stats[f"Total number of {self._token_type_str}"] / \
-            file_stats[f"Distinct number of {self._token_type_str}"]
-
-        # Round all the values and return as a JSON string.
-        return file_stats.round(3).to_json(orient="index")
+        return jsonify({"table": sorted_result.to_json(orient="values"),
+                        "csv": sorted_result.to_csv()})
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.
@@ -244,8 +260,7 @@ class StatsModel(BaseModel):
 
         # Hide useless information on x-axis and set up title.
         figure.layout.update(
-            autosize=True,
-            height=340,
+            dragmode="pan",
             showlegend=False,
             margin=dict(
                 r=0,
@@ -268,16 +283,23 @@ class StatsModel(BaseModel):
             hovermode="closest"
         )
 
-        # Return the plotly figure.
+        # Return the Plotly graph.
         return figure
 
     def get_box_plot(self) -> str:
-        """Return a HTML string that is ready to be displayed on the web.
-
-        :return: A string in HTML format that contains the plotly box plot.
+        """ Returns the document size Plotly graph.
+        :return: The document size Plotly graph.
         """
-        # Return plotly object as a div.
+
+        config = {
+            "displaylogo": False,
+            "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
+            "scrollZoom": True
+        }
+
+        # Return Plotly object as a div.
         return plot(self._get_box_plot_object(),
                     include_plotlyjs=False,
                     output_type="div",
-                    show_link=False)
+                    show_link=False,
+                    config=config)

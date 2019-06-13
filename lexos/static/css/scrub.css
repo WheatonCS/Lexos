@@ -8,11 +8,16 @@
 /* Form */
 form {
     grid-template-columns: 1.3fr 1fr 1.3fr;
+    grid-template-rows: 100%;
     min-height: 60rem;
 }
 
 
 /* Columns */
+.column {
+    overflow: hidden;
+}
+
 #left-column,
 #middle-column {
     display: grid;
@@ -30,14 +35,18 @@ form {
 
 /* General */
 .scrub-section {
-    display: grid;
     grid-template-rows: min-content 1fr;
     background-color: #FFFFFF;
+    overflow: hidden;
 }
 
 .scrub-section-top {
     margin: 1rem;
     grid-gap: 1rem;
+}
+
+.scrub-section-body {
+    height: calc(100% - 5rem);
 }
 
 .upload-text,
@@ -59,11 +68,19 @@ form {
     margin-right: 3rem;
 }
 
+#stop-words-section .scrub-section-body {
+    height: calc(100% - 9.6rem);
+}
+
 
 /* Special characters */
 .options-section label {
     margin-top: .2rem;
     margin-bottom: 1rem;
+}
+
+#special-characters-section .scrub-section-body {
+    height: calc(100% - 17rem);
 }
 
 
@@ -94,6 +111,7 @@ form {
 #tag-table-body {
     width: 100rem;
     max-height: calc(100% - 3rem);
+    overflow-y: auto;
     overflow-y: overlay;
 }
 
