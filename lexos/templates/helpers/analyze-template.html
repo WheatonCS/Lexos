@@ -99,20 +99,33 @@
             <div class="section-body">
 
                 <!-- Use the top X words -->
-                <label class="checkbox-label">
-                    <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
-                    <span class="checkmark"></span>
-                    <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
-                </label>
-                <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
+                <fieldset>
+                    <legend></legend>
+                    <label class="checkbox-label">
+                        <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
+                        <span class="checkmark"></span>
+                        <span>Use the top</span>
+                    </label>
+                    <label>
+                        <input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off"><span>terms</span>
+                    </label>
+                    <h3 id="most-frequent-words-tooltip-button" class="button">?</h3>
+                </fieldset>
+                <br>
 
                 <!-- Must be in X documents -->
-                <label class="checkbox-label">
-                    <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
-                    <span class="checkmark"></span>
-                    <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
-                </label>
-                <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
+                <fieldset>
+                    <legend></legend>
+                    <label class="checkbox-label">
+                        <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
+                        <span class="checkmark"></span>
+                        <span>Must be in</span>
+                    </label>
+                    <label>
+                        <input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off"><span>documents</span>
+                    </label>
+                    <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
+                </fieldset>
             </div>
         </div>
     </div>
