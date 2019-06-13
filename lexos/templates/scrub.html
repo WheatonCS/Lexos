@@ -30,30 +30,30 @@
             <div class="section-body vertical-splitter">
 
                 <!-- Left section -->
-                <div>
-                    <label class="checkbox-label"><input name="lowercasebox" type="checkbox" checked="checked"><span class="checkmark"></span><span>Make Lowercase</span></label><br>
-                    <label class="checkbox-label"><input name="digitsbox" type="checkbox" checked="checked"><span class="checkmark"></span><span>Remove Digits</span></label><br>
-                    <label class="checkbox-label"><input name="spacesbox"type="checkbox"><span class="checkmark"></span><span>Remove Spaces</span></label><br>
-                    <label class="checkbox-label"><input name="tabsbox" type="checkbox"><span class="checkmark"></span><span>Remove Tabs</span></label><br>
-                    <label class="checkbox-label"><input name="newlinesbox" type="checkbox"><span class="checkmark"></span><span>Remove Newlines</span></label>
+                <div class="options-section">
+                    <label><input name="lowercasebox" type="checkbox" checked><span></span>Make Lowercase</label><br>
+                    <label><input name="digitsbox" type="checkbox" checked><span></span>Remove Digits</label><br>
+                    <label><input name="spacesbox" type="checkbox"><span></span>Remove Spaces</label><br>
+                    <label><input name="tabsbox" type="checkbox"><span></span>Remove Tabs</label><br>
+                    <label><input name="newlinesbox" type="checkbox"><span></span>Remove Newlines</label>
                 </div>
 
                 <!-- Right section -->
-                <div>
-                    <label class="checkbox-label"><input name="tagbox" type="checkbox"><span class="checkmark"></span><span>Scrub Tags</span></label>
+                <div class="options-section">
+                    <label><input name="tagbox" type="checkbox"><span></span>Scrub Tags</label>
                     <h3 id="scrub-tags-settings-button" class="button">Options</h3>
                     <h3 id="scrub-tags-tooltip-button" class="button">?</h3><br>
 
-                    <label class="checkbox-label"><input id="punctuation-checkbox" name="punctuationbox" type="checkbox" checked="checked"><span class="checkmark"></span><span>Remove Punctuation</span></label><br>
+                    <label><input id="punctuation-checkbox" name="punctuationbox" type="checkbox" checked><span></span>Remove Punctuation</label><br>
 
                     <div id="punctuation-options">
-                        <label class="checkbox-label"><input name="hyphensbox" type="checkbox"><span class="checkmark"></span><span>Keep Hyphens</span></label>
+                        <label><input name="hyphensbox" type="checkbox"><span></span>Keep Hyphens</label>
                         <h3 id="keep-hyphens-tooltip-button" class="button">?</h3><br>
 
-                        <label class="checkbox-label"><input name="aposbox" type="checkbox"><span class="checkmark"></span><span>Keep Apostrophes</span></label>
+                        <label><input name="aposbox" type="checkbox"><span></span>Keep Apostrophes</label>
                         <h3 id="keep-apostrophes-tooltip-button" class="button">?</h3><br>
 
-                        <label class="checkbox-label"><input name="ampersandbox" type="checkbox"><span class="checkmark"></span><span>Keep Ampersands</span></label>
+                        <label><input name="ampersandbox" type="checkbox"><span></span>Keep Ampersands</label>
                         <h3 id="keep-ampersands-tooltip-button" class="button">?</h3>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label class="textarea-label"><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
+                <label><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
             </div>
         </div>
 
@@ -94,7 +94,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label class="textarea-label"><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
+                <label><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
             </div>
         </div>
     </div>
@@ -117,14 +117,14 @@
                 <h3 id="stop-words-upload-text" class="hidden upload-text"></h3>
 
                 <div id="stop-words-options" class="options-section">
-                    <label class="circle-label"><input type="radio" name="sw_option" value="off" checked="checked"><span class="radiomark"></span><span>None</span></label>
-                    <label class="circle-label"><input type="radio" name="sw_option" value="stop"><span class="radiomark"></span><span>Stop</span></label>
-                    <label class="circle-label"><input type="radio" name="sw_option" value="keep"><span class="radiomark"></span><span>Keep</span></label>
+                    <label><input type="radio" name="sw_option" value="off" checked><span></span>None</label>
+                    <label><input type="radio" name="sw_option" value="stop"><span></span>Stop</label>
+                    <label><input type="radio" name="sw_option" value="keep"><span></span>Keep</label>
                 </div>
             </div>
 
             <div class="scrub-section-body">
-                <label class="textarea-label"><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
+                <label><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
             </div>
         </div>
 
@@ -143,19 +143,19 @@
 
                 <div id="special-characters-options" class="vertical-splitter">
                     <div class="options-section">
-                        <label class="circle-label"><input type="radio" name="entityrules" value="default" checked="checked"><span class="radiomark"></span><span>None</span></label><br>
-                        <label class="circle-label"><input type="radio" name="entityrules" value="early-english-html"><span class="radiomark"></span><span>Early English HTML</span></label><br>
-                        <label class="circle-label"><input type="radio" name="entityrules" value="doe-sgml"><span class="radiomark"></span><span>Old English SGML</span></label>
+                        <label><input type="radio" name="entityrules" value="default" checked><span></span>None</label><br>
+                        <label><input type="radio" name="entityrules" value="early-english-html"><span></span>Early English HTML</label><br>
+                        <label><input type="radio" name="entityrules" value="doe-sgml"><span></span>Old English SGML</label>
                     </div>
                     <div class="options-section">
-                        <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-3"><span class="radiomark"></span><span>MUFI 3</span></label><br>
-                        <label class="circle-label"><input type="radio" name="entityrules" value="MUFI-4"><span class="radiomark"></span><span>MUFI 4</span></label>
+                        <label><input type="radio" name="entityrules" value="MUFI-3"><span></span>MUFI 3</label><br>
+                        <label><input type="radio" name="entityrules" value="MUFI-4"><span></span>MUFI 4</label>
                     </div>
                 </div>
             </div>
 
             <div class="scrub-section-body">
-                <label class="textarea-label"><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
+                <label><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
             </div>
         </div>
     </div>

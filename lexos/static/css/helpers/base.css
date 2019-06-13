@@ -25,7 +25,7 @@ h1 {
     color: #505050;
 }
 
-h3, a, ul, textarea, input[type="text"], span {
+h3, a, ul, label, textarea, input[type="text"], span {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
     font-size: 1.6rem;
@@ -124,7 +124,7 @@ form {
 }
 
 .firefox-hidden-scrollbar {
-    scrollbar-width: none;  /* Disable the scrollbar in Firefox*/
+    scrollbar-width: none;
 }
 
 .vertical-splitter {
@@ -181,7 +181,8 @@ form {
     border-top: none;
 }
 
-/* Lexos dragon logo */
+
+/* Lexos dragon */
 #lexos-dragon {
     width: 100px;
     height: 50px;
@@ -218,64 +219,6 @@ footer {
 }
 
 
-/* Error */
-#error-section {
-    z-index: 10;
-    position: relative;
-    overflow: hidden;
-    background-color: #E62843;
-}
-
-#error-text,
-#error-text-2 {
-    position: absolute;
-    bottom: 1rem;
-    display: inline-block;
-    white-space: nowrap;
-    padding-left: 100%;
-    padding-right: 10rem;
-    animation: marquee 20s infinite linear;
-    animation-delay: -10s;
-    color: #FFFFFF;
-}
-
-#error-text-2 {
-    animation-delay: 0s;
-}
-
-#error-section:hover #error-text,
-#error-section:hover #error-text-2 {
-    animation-play-state: paused;
-}
-
-#error-button-container {
-    z-index: 11;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 4rem;
-    padding: .5rem 2rem 0 2rem;
-    pointer-events: none;
-    background-color: #E62843;
-}
-
-#error-close-button {
-    pointer-events: all;
-    color: #FFFFFF;
-    background-color: #CD2741;
-    box-shadow: none;
-}
-
-#error-close-button:hover {
-    background-color: #B4263C;
-}
-
-@keyframes marquee {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-100%, 0); }
-}
-
-
 /* Section */
 .section {
     background-color: #FFFFFF;
@@ -296,70 +239,6 @@ footer {
 .borderless-section-body {
     height: calc(100% - 5rem);
 }
-
-
-/* Help section */
-#help-section {
-    display: block;
-    width: 40rem;
-    padding-bottom: 2rem;
-    overflow-y: auto;
-}
-
-#help-section-navbar {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 2rem;
-    padding: 2rem;
-    background-color: #FFFFFF;
-    height: 7rem;
-}
-
-.help-section-title {
-    display: block;
-    margin-top: 2rem;
-    padding: 2rem;
-    color: #47BCFF;
-    background-color: #FFFFFF;
-}
-
-.help-section-paragraph,
-.help-section-list {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-bottom: 2rem;
-}
-
-.help-section-paragraph {
-    display: block;
-    background-color: #FFFFFF;
-}
-
-.help-section-list {
-    background-color: #FFFFFF;
-    display: block;
-}
-
-.help-section-list > li {
-    padding-bottom: 1rem;
-}
-
-.help-section-list > li:last-child {
-    padding-bottom: 0;
-}
-table {
-    font-size: 1.3rem;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-td, th {
-    font-size: 1.3rem;
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
 
 
 /* Text input */
@@ -415,141 +294,102 @@ textarea {
 }
 
 
-/* Radio Buttons */
-.circle-label {
+/* Labels */
+label {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.section-body label,
+.borderless-section-body label {
+    margin-bottom: 1rem;
+}
+
+label > span:before {
+    content: "";
     display: inline-block;
     position: relative;
-    margin-top: .2rem;
-    margin-bottom: 1rem;
-    padding-left: 2.5rem;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Hide the browser's default radio button */
-.circle-label input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-/* Create a custom radio button */
-.radiomark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
+    top: .4rem;
     width: 2rem;
+    height: 2rem;
+    margin-right: 1rem;
     background-color: #FFFFFF;
     border: .2rem solid #D3D3D3;
-    transition: border-color .2s;
+    transition: background-color .2s, border-color .2s;
+}
+
+label :checked + span:before {
+    background-color: #EAF5FF;
+    border-color: #47BCFF;
+}
+
+
+/* Radio button */
+input[type=radio] {
+    display: none;
+}
+
+.radio {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: .2rem solid #D3D3D3;
+    cursor: pointer;
+    transition: background-color .2s;
+}
+
+label input[type="radio"] + span:before {
     border-radius: 50%;
 }
 
-/* On mouse-over, add a highlight */
-.circle-label:hover input ~ .radiomark {
-    background-color: #EAF5FF;
-    border-color: #47BCFF;
-}
-
-/* When the radio button is checked, change the color */
-.circle-label input:checked ~ .radiomark {
-    background-color: #EAF5FF;
-    border-color: #47BCFF;
-}
-
-/* Create the dot - hidden when not checked */
-.radiomark:after {
+label input[type="radio"] + span:after {
     content: "";
     position: absolute;
+    height: .4rem;
+    width: .4rem;
+    border-radius: 50%;
+    background-color: #47BCFF;
+    transform: translate(-2.2rem, 1.2rem);
+    transition: opacity .2s;
+    opacity: 0;
+}
+
+label input[type="radio"]:checked + span:after {
+    opacity: 1;
+}
+
+
+/* Checkbox */
+input[type=checkbox] {
     display: none;
 }
 
-/* Show the dot when checked */
-.circle-label input:checked ~ .radiomark:after {
-    display: block;
-}
-
-/* Style the dot */
-.circle-label .radiomark:after {
- 	top: .4rem;
-	left: .4rem;
-	width: .8rem;
-	height: .8rem;
-	border-radius: 50%;
-	background: #47BCFF;
-}
-
-
-/* Checkboxes */
-.checkbox-label {
-    display: inline-block;
+.checkbox {
     position: relative;
-    margin-top: .2rem;
-    margin-bottom: 1rem;
-    padding-left: 2.5rem;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Hide the browser's default checkbox */
-.checkbox-label input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-/* Create a custom checkbox */
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 2rem;
     width: 2rem;
+    height: 2rem;
     background-color: #FFFFFF;
     border: .2rem solid #D3D3D3;
     transition: border-color .2s;
 }
 
-/* On mouse-over, add a highlight */
-.checkbox-label:hover input ~ .checkmark {
-    background-color: #EAF5FF;
-    border-color: #47BCFF;
-}
-
-/* When the checkbox is checked, change the color */
-.checkbox-label input:checked ~ .checkmark {
-    background-color: #EAF5FF;
-    border-color: #47BCFF;
-}
-
-/* Create the check - hidden when not checked */
-.checkmark:after {
+label input[type="checkbox"] + span:after {
     content: "";
     position: absolute;
-    display: none;
-}
-
-/* Show the check when checked */
-.checkbox-label input:checked ~ .checkmark:after {
-    display: block;
-}
-
-/* Style the check */
-.checkbox-label .checkmark:after {
-    top: .3rem;
-    left: .25rem;
     height: .6rem;
-    width: 1.1rem;
+    width: 1.2rem;
     border-left: .2rem solid #47BCFF;
     border-bottom: .2rem solid #47BCFF;
-    transform: rotate(-45deg);
+    transform: rotate(-45deg) translate(-2.55rem, -1.1rem);
+    transition: opacity .2s;
+    opacity: 0;
+}
+
+label input[type="checkbox"]:checked + span:after {
+    opacity: 1;
 }
 
 
@@ -607,10 +447,4 @@ textarea {
 /* Plotly */
 .plotly-notifier {
     display: none;
-}
-
-
-/* Temporary Bootstrap overrides */
-label {
-    margin-bottom: 0;
 }

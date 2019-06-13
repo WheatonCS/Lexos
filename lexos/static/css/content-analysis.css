@@ -9,14 +9,14 @@
 /* Formula */
 #formula-body {
     display: grid;
-    grid-template-rows: 1fr 1fr 2fr;
+    grid-template-rows: 1fr 2fr;
     grid-gap: 1rem;
 }
 
 #formula-buttons {
     display: grid;
     height: 100%;
-    grid-template-columns: 1fr .333fr 1.333fr;
+    grid-template-columns: 1fr .7fr 1fr;
     grid-gap: 1rem;
 }
 
@@ -32,10 +32,12 @@
 }
 
 #operations-pad {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 }
 
-#formula-buttons h3 {
+#number-pad h3,
+#operations-pad h3,
+#documents-pad h3 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,7 +48,9 @@
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
-#formula-buttons h3:hover {
+#number-pad h3:hover,
+#operations-pad h3:hover,
+#documents-pad h3:hover {
     color: #47BCFF;
     background-color: #EAF5FF;
     border-color: #47BCFF;

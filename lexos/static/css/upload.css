@@ -31,11 +31,10 @@ form {
 }
 
 #drag-and-drop-section {
-    height: calc(100% - 9rem);
-    width: calc(100% - 2.5rem);
-    margin: 0 auto;
+    height: calc(100% - 8rem);
+    width: 100%;
     background-color: #F3F3F3;
-    border: .4rem dashed #D3D3D3;
+    border: .2rem dashed #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
 

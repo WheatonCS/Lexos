@@ -127,11 +127,14 @@ function upload_success_callback(file_name)
 
     // Create an upload preview element
     let upload_preview_element = $(`
-        <div class="upload-preview"><h3></h3></div>
+        <div id="preview-${active_documents}" class="hidden upload-preview"><h3></h3></div>
     `).appendTo("#upload-previews");
 
     // Add the HTML-escaped file name to the upload preview element
     upload_preview_element.find("h3").text(file_name);
+
+    // Fade in the preview element
+    fade_in(`#preview-${active_documents}`,".5s");
 }
 
 

@@ -55,7 +55,7 @@ function single_active_document_check(response){
     $("#generate-button").click(create_rolling_window);
 
     // Initialize the "PNG" and "SVG" download buttons
-    enable_graph_download_buttons();
+    initialize_graph_download_buttons();
 
     // If the "CSV" button is pressed, download the CSV
     $("#csv-button").click(function(){

@@ -34,17 +34,8 @@
 
             <!-- By Tokens -->
             <div class="section-body">
-                <label class="circle-label">
-                    <input name="tokenType" value="word" type="radio" checked="checked">
-                    <span class="radiomark"></span>
-                    <span>By Tokens</span>
-                </label><br>
-
-                <label class="circle-label">
-                    <input name="tokenType" value="char" type="radio">
-                    <span class="radiomark"></span>
-                    <span>By Characters</span>
-                </label><br>
+                <label><input name="tokenType" value="word" type="radio" checked><span></span>By Tokens</label><br>
+                <label><input name="tokenType" value="char" type="radio"><span></span>By Characters</label><br>
 
                 <!-- Grams -->
                 <h3>Grams</h3>
@@ -64,25 +55,13 @@
             <div class="section-body">
 
                 <!-- Proportional -->
-                <label class="circle-label">
-                    <input name="normalizeType" value="freq" type="radio" checked="checked">
-                    <span class="radiomark"></span>
-                    <span>Proportional</span>
-                </label><br>
+                <label><input name="normalizeType" value="freq" type="radio" checked><span></span>Proportional</label><br>
 
                 <!-- Raw -->
-                <label class="circle-label">
-                    <input name="normalizeType" value="raw" type="radio">
-                    <span class="radiomark"></span>
-                    <span>Raw</span>
-                </label><br>
+                <label><input name="normalizeType" value="raw" type="radio"><span></span>Raw</label><br>
 
                 <!-- TF-IDF -->
-                <label class="circle-label">
-                    <input name="normalizeType" value="tfidf" type="radio">
-                    <span class="radiomark"></span>
-                    <span>TF-IDF</span>
-                </label>
+                <label><input name="normalizeType" value="tfidf" type="radio"><span></span>TF-IDF</label>
                 <h3 id="tf-idf-tooltip-button" class="button">?</h3>
             </div>
         </div>
@@ -99,18 +78,22 @@
             <div class="section-body">
 
                 <!-- Use the top X words -->
-                <label class="checkbox-label">
+                <label>
                     <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
-                    <span class="checkmark"></span>
-                    <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
+                    <span></span>
+                    Use the top
+                    <input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
+                    terms
                 </label>
                 <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
 
                 <!-- Must be in X documents -->
-                <label class="checkbox-label">
+                <label>
                     <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
-                    <span class="checkmark"></span>
-                    <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
+                    <span></span>
+                    Must be in
+                    <input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">
+                    documents
                 </label>
                 <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
             </div>
