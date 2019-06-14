@@ -34,12 +34,11 @@ form {
 #generate-button {
     margin: 1rem;
 }
-#standard-error-test-section{
-    overflow-y: auto;
-}
 
-#interquartile-range-test-section{
+#standard-error-test,
+#interquartile-range-test {
     overflow-y: auto;
+    word-break: break-word;
 }
 
 
@@ -88,6 +87,7 @@ form {
     padding-left: 1rem;
     padding-right: 1rem;
     color: #47BCFF;
+    transition: background-color .2s;
 }
 
 #table-body {

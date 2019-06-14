@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en-us">
 
 <!-- Head -->
 <head>
@@ -30,8 +31,8 @@
     <!-- Navbar -->
     <div id="navbar">
         <div id="navbar-left">
-            <img id="lexos-dragon" src="static/lexos_dragon.png" id="logo">
-            <h1 style="display: inline-block">{L}exos</h1>
+            <h1 id="lexos-logo">{L}exos</h1>
+            <img id="lexos-dragon" src="static/images/lexos_dragon.png" id="logo">
         </div>
         <div id="navbar-right">
             <a id="upload-button" href="/upload">Upload</a>
@@ -69,27 +70,16 @@
     <!-- Footer -->
     <footer>
 
-        <!-- Left footer -->
-        <div id="left-footer">
-            <h3>Lexos v4.0b © 2019</h3>
-            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank"><u>Lexomics Research Group</u></a>
-            ·
-			<a href="http://wheatoncollege.edu/" target="_blank">Wheaton College</a>
+        <!-- Left -->
+        <a href="http://www.neh.gov/" target="_blank"><img id="neh-logo" src="static/images/neh.jpg"></a>
 
-            <span id="license">
-                    <!-- image 252 x 62 -->
-                <a href="http://www.neh.gov/" target="_blank" style="border:none;">
-                <img src="{{ url_for('static', filename='neh_logo_horizontal_rgb.jpg') }}"
-                     alt="Funded with support from the National Endowment for the Humanities"
-                     style="width:126px;height:31px;">
-                    </a>
-
-		    </span>
+        <div>
+            <h3>Lexos v4 © 2019</h3>
+            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank">Wheaton Lexomics</a>
         </div>
 
-
-        <!-- Right footer -->
-        <div id="right-footer"><h3><a href="/manage">Active Documents: </a></h3><h3 id="active-document-count">0</h3></div>
+        <!-- Right -->
+        <div class="right-justified"><h3><a href="/manage">Active Documents: </a></h3><h3 id="active-document-count">0</h3></div>
     </footer>
 </body>
 </html>

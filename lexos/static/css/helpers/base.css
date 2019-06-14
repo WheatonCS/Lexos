@@ -155,6 +155,15 @@ form {
     margin-left: 1.5rem;
 }
 
+#lexos-dragon {
+    height: 5rem;
+    margin: 0 1rem 1rem 0;
+}
+
+#lexos-logo {
+    display: inline-block;
+}
+
 #navbar-right {
     justify-self: right;
     margin-top: 2.3rem;
@@ -182,14 +191,6 @@ form {
 }
 
 
-/* Lexos dragon */
-#lexos-dragon {
-    width: 100px;
-    height: 50px;
-    margin: 0 1rem 1rem 0;
-}
-
-
 /* Links */
 a, a:hover, a:focus {
     text-decoration: none;
@@ -203,19 +204,17 @@ a:hover {
 /* Footer */
 footer {
     display: grid;
-    grid-template-columns: 70% 30%;
-    align-content: center;
+    grid-template-columns: min-content .7fr .3fr;
+    grid-gap: 1rem;
+    align-items: center;
     height: 4rem;
+    padding: 0 2rem 0 2rem;
     background-color: #FFFFFF;
 }
 
-#left-footer {
-    margin-left: 2rem;
-}
-
-#right-footer {
-    margin-right: 2rem;
-    justify-self: right;
+#neh-logo {
+    filter: grayscale(100%);
+    height: 3rem;
 }
 
 
@@ -258,7 +257,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     color: #47BCFF;
-    background-color: #EAF5FF;
+        background-color: #EAF5FF;
     border-color: #47BCFF;
 }
 
@@ -394,13 +393,14 @@ label input[type="checkbox"]:checked + span:after {
 
 
 /* Button */
-.button {
+.button,
+.important-button {
     display: inline-grid;
     align-content: center;
     justify-content: center;
     width: max-content;
     height: calc(3rem - .2rem);
-    padding: 1rem 1.5rem 1rem 1.5rem;
+    padding: .9rem 1.5rem 1rem 1.5rem;
     margin: 0 .5rem 0 .5rem;
     border-radius: 3rem;
     border: .2rem solid #F3F3F3;
@@ -423,6 +423,17 @@ label input[type="checkbox"]:checked + span:after {
 .button:hover > h3,
 .button-active > h3{
     color: inherit;
+}
+
+.important-button {
+    background-color: #47BCFF;
+    border-color: #47BCFF;
+    color: #FFFFFF;
+}
+
+.important-button:hover {
+    background-color: #EAF5FF;
+    color: #47BCFF;
 }
 
 

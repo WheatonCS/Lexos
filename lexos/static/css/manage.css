@@ -18,17 +18,12 @@ form {
 }
 
 #download-button {
-    justify-self: right;
-    margin-bottom: 0;
+    border-color: #FFFFFF;
     background-color: #FFFFFF;
-    box-shadow: inset #FFFFFF 0 0 0 .2rem;
-
 }
 
 #download-button:hover {
-    color: #47BCFF;
-    background-color: #EAF5FF;
-    box-shadow: inset #47BCFF 0 0 0 .2rem;
+    border-color: #47BCFF;
 }
 
 
