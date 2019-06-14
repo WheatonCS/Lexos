@@ -32,11 +32,11 @@
             <div class="section-body">
 
                 <label><input name="counttype" value="average" type="radio" checked><span></span>Rolling Average</label>
-                <h3 id="rolling-average-tooltip-button" class="button">?</h3>
+                <span id="rolling-average-tooltip-button" class="tooltip-button">?</span>
                 <br>
 
                 <label><input name="counttype" value="ratio" type="radio"><span></span>Rolling Ratio</label>
-                <h3 id="rolling-ratio-tooltip-button" class="button">?</h3>
+                <span id="rolling-ratio-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
 
@@ -45,23 +45,23 @@
 
             <div class="vertical-splitter section-top">
                 <h3 class="title">Search Terms</h3>
-                <h3 id="search-terms-input-tooltip-button" class="right-justified button">?</h3><br>
+                <span id="search-terms-input-tooltip-button" class="right-justified tooltip-button">?</span><br>
             </div>
 
 
             <div class="section-body">
                 <div id="search-input-grid">
-                    <input id="search-terms-input" name="rollingsearchword" type="text" spellcheck="false" autocomplete="off">
-                    <input id="search-terms-input-denominator" name="rollingsearchwordopt" type="text" spellcheck="false" autocomplete="off">
+                    <label id="search-terms-input"><input name="rollingsearchword" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label id="search-terms-input-denominator"><input name="rollingsearchwordopt" type="text" spellcheck="false" autocomplete="off"></label>
                 </div>
 
                 <label><input name="inputtype" value="word" type="radio" checked><span></span>Words</label><br>
 
                 <label><input name="inputtype" value="string" type="radio"><span></span>Strings</label>
-                <h3 id="strings-tooltip-button" class="button">?</h3><br>
+                <span id="strings-tooltip-button" class="tooltip-button">?</span><br>
 
                 <label><input name="inputtype" value="regex" type="radio"><span></span>Regex</label>
-                <h3 id="regex-tooltip-button" class="button">?</h3>
+                <span id="regex-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
 
@@ -70,8 +70,8 @@
             <h3 class="section-top title">Window</h3>
             <div class="section-body">
 
-                <input id="window-size-input" name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off">
-                <h3 id="window-size-tooltip-button" class="button">?</h3><br>
+                <label><input id="window-size-input" name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off"></label>
+                <span id="window-size-tooltip-button" class="tooltip-button">?</span><br>
 
                 <label><input name="windowtype" value="word" type="radio" checked><span></span>Words</label><br>
                 <label><input name="windowtype" value="letter" type="radio"><span></span>Characters</label><br>
@@ -84,12 +84,11 @@
             <h3 class="section-top title">Display</h3>
             <div class="section-body">
 
-                <label>
+                <label id="display-section-input-label">
                     <input id="milestone-checkbox" name="rollinghasmilestone" type="checkbox">
-                    <span></span>Milestone
-                    <input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off">
+                    <span></span>Milestone<input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off">
                 </label>
-                <h3 id="milestone-tooltip-button" class="button">?</h3>
+                <span id="milestone-tooltip-button" class="tooltip-button">?</span>
 
                 <label><input name="showDots" type="checkbox"><span></span>Show Individual Points</label><br>
                 <label><input name="BWoutput" type="checkbox"><span></span>Black and White</label>
@@ -103,10 +102,10 @@
         <div class="vertical-splitter section-top">
             <h3 class="title">Rolling Window</h3>
             <div class="right-justified">
-                <h3 id="generate-button" class="disabled important-button">Generate</h3>
-                <h3 id="png-button" class="disabled button">PNG</h3>
-                <h3 id="svg-button" class="disabled button">SVG</h3>
-                <h3 id="csv-button" class="disabled button">CSV</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="png-button" class="disabled button">PNG</span>
+                <span id="svg-button" class="disabled button">SVG</span>
+                <span id="csv-button" class="disabled button">CSV</span>
             </div>
         </div>
 

@@ -4,12 +4,6 @@
 }
 
 
-/* Form */
-form {
-    grid-template-rows: 3rem 1fr;
-}
-
-
 /* Top section */
 #top-section {
     display: grid;
@@ -18,29 +12,29 @@ form {
 }
 
 #download-button {
-    border-color: #FFFFFF;
-    background-color: #FFFFFF;
-}
-
-#download-button:hover {
-    border-color: #47BCFF;
+    margin: 1rem 1rem;
 }
 
 
 /* Table */
-#table-head,
+#table-head {
+    display: grid;
+    grid-template-columns: 7% 7% 16% 14% 16% 25% 15%;
+    background-color: #FFFFFF;
+    height: 5rem;
+}
+
+#table-head .table-cell {
+    color: #47BCFF;
+}
+
 .table-row {
     display: grid;
     grid-template-columns: 7% 7% 16% 14% 16% 40%;
 }
 
-#table-head {
-    background-color: #FFFFFF;
-    height: 4rem;
-}
-
 #table-body {
-    height: calc(100% - 4rem);
+    height: calc(100% - 5rem);
     overflow-y: auto;
     overflow-y: overlay;
 }
@@ -64,10 +58,6 @@ form {
     word-wrap: break-word;
     overflow: hidden;
     color: #505050;
-}
-
-#table-head .table-cell {
-    color: #47BCFF;
 }
 
 .active-indicator {

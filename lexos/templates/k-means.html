@@ -27,11 +27,11 @@
             <!-- Clusters -->
             <h3>Clusters</h3>
             <input id="clusters-input" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="clusters-tooltip-button" class="button">?</h3><br>
+            <span id="clusters-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Voronoi -->
             <label><input name="viz" value="Voronoi" type="radio" checked><span></span>Voronoi</label>
-            <h3 id="visualization-method-tooltip-button" class="button">?</h3><br>
+            <span id="visualization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- 2D Scatter -->
             <label><input name="viz" value="2DScatter" type="radio"><span></span>2D Scatter</label><br>
@@ -51,7 +51,7 @@
 
             <!-- Random -->
             <label><input name="init" value="random" type="radio"><span></span>Random</label>
-            <h3 id="initialization-method-tooltip-button" class="button">?</h3><br>
+            <span id="initialization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Maximum Iterations -->
             <h3>Maximum Iterations</h3>
@@ -60,12 +60,12 @@
             <!-- Different Centriods -->
             <h3>Different Centroids</h3>
             <input id="different-centroids-input" name="n_init" value="10" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="different-centroids-tooltip-button" class="button">?</h3><br>
+            <span id="different-centroids-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Relative Tolerance -->
             <h3>Relative Tolerance</h3>
             <input id="relative-tolerance-input" name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="relative-tolerance-tooltip-button" class="button">?</h3>
+            <span id="relative-tolerance-tooltip-button" class="tooltip-button">?</span>
         </div>
     </div>
 {% endblock %}
@@ -82,10 +82,10 @@
             <h3 class="title">K-Means</h3>
 
             <div class="right-justified">
-                <h3 id="generate-button" class="disabled important-button">Generate</h3>
-                <h3 id="png-button" class="disabled button">PNG</h3>
-                <h3 id="svg-button" class="disabled button">SVG</h3>
-                <h3 id="csv-button" class="disabled button">CSV</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="png-button" class="disabled button">PNG</span>
+                <span id="svg-button" class="disabled button">SVG</span>
+                <span id="csv-button" class="disabled button">CSV</span>
             </div>
         </div>
 

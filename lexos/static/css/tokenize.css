@@ -26,29 +26,14 @@ form {
 #table-top {
     display: grid;
     grid-template-columns: .9fr 1fr 1.1fr .8fr;
-    height: 3rem;
-    margin: 1rem;
 }
 
 .table-top-radio-option {
     justify-self: center;
 }
 
-.table-top-radio-option > h3,
-.table-top-radio-option > label {
-    margin-right: 1rem;
-}
-
 #search-input {
     width: 20rem;
-}
-
-#table-top-buttons {
-    justify-self: right;
-}
-
-#generate-button {
-    margin-right: .5rem;
 }
 
 
@@ -115,6 +100,10 @@ form {
     grid-template-columns: 1fr 1fr;
     height: 3rem;
     margin: 1rem;
+}
+
+#page-number {
+    margin: 0 .5rem 0 .5rem;
 }
 
 #navigation-buttons {

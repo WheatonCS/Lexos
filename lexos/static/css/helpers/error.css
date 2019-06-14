@@ -33,7 +33,7 @@
     right: 0;
     bottom: 0;
     height: 4rem;
-    padding: .5rem 2rem 0 2rem;
+    padding: .7rem 2rem 0 2rem;
     pointer-events: none;
     background-color: #E62843;
 }
@@ -42,7 +42,7 @@
     pointer-events: all;
     color: #FFFFFF;
     background-color: #CD2741;
-    box-shadow: none;
+    border: none;
 }
 
 #error-close-button:hover {

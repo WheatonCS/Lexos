@@ -10,11 +10,7 @@
     <!-- jQuery -->
     <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script type="text/javascript" src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Base Lexos dependencies -->
+    <!-- Core Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/error.css"/>
@@ -30,11 +26,12 @@
 
     <!-- Navbar -->
     <div id="navbar">
-        <div id="navbar-left">
-            <h1 id="lexos-logo">{L}exos</h1>
-            <img id="lexos-dragon" src="static/images/lexos_dragon.png" id="logo">
-        </div>
-        <div id="navbar-right">
+
+        <h1 id="lexos-logo">{L}exos</h1>
+
+        <img id="lexos-dragon" src="static/images/lexos-dragon-crop.png" id="logo">
+
+        <div id="navbar-right" class="right-justified">
             <a id="upload-button" href="/upload">Upload</a>
             <a id="manage-button" href="/manage">Manage</a>
 
@@ -71,7 +68,7 @@
     <footer>
 
         <!-- Left -->
-        <a href="http://www.neh.gov/" target="_blank"><img id="neh-logo" src="static/images/neh.jpg"></a>
+        <a href="http://www.neh.gov/" target="_blank"><img id="neh-logo" src="static/images/neh.png"></a>
 
         <div>
             <h3>Lexos v4 © 2019</h3>
@@ -79,7 +76,7 @@
         </div>
 
         <!-- Right -->
-        <div class="right-justified"><h3><a href="/manage">Active Documents: </a></h3><h3 id="active-document-count">0</h3></div>
+        <a id="active-document-count" class="right-justified" href="/manage">Active Documents: 0</a>
     </footer>
 </body>
 </html>

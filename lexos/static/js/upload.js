@@ -123,7 +123,7 @@ function upload_success_callback(file_name)
     // Update the "Active Document Count" element
     let active_documents_element = $("#active-document-count");
     let active_documents = parseInt(active_documents_element.text())+1;
-    active_documents_element.text(active_documents.toString());
+    active_documents_element.text(`Active Documents: ${active_documents.toString()}`);
 
     // Create an upload preview element
     let upload_preview_element = $(`

@@ -17,7 +17,7 @@
     <div id="orientation-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Orientation</h3>
-            <h3 id="orientation-tooltip-button" class="right-justified button">?</h3>
+            <span id="orientation-tooltip-button" class="right-justified tooltip-button">?</span>
         </div>
 
         <div class="section-body">
@@ -35,7 +35,7 @@
     <div id="table" class="section">
 
         <!-- Table top -->
-        <div id="table-top">
+        <div id="table-top" class="section-top">
 
             <!-- Search -->
             <div id="#search-input">
@@ -45,7 +45,7 @@
 
             <!-- Rows per page -->
             <div class="table-top-radio-option">
-                <h3>Rows: </h3>
+                <h3>Rows:</h3>
                 <label><input name="length" value="10" type="radio" checked><span></span>10</label>
                 <label><input name="length" value="50" type="radio"><span></span>50</label>
                 <label><input name="length" value="100" type="radio"><span></span>100</label>
@@ -53,15 +53,15 @@
 
             <!-- Sort direction -->
             <div class="table-top-radio-option">
-                <h3>Order: </h3>
+                <h3>Order:</h3>
                 <label><input name="sort-ascending" value="true" type="radio" checked><span></span>Ascending</label>
                 <label><input name="sort-ascending" value="false" type="radio"><span></span>Descending</label>
             </div>
 
             <!-- Download -->
-            <div id="table-top-buttons">
-                <h3 id="generate-button" class="important-button important-button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
+            <div class="right-justified">
+                <span id="generate-button" class="important-button important-button">Generate</span>
+                <span id="download-button" class="disabled button">Download</span>
             </div>
         </div>
 
@@ -71,12 +71,13 @@
         <!-- Table bottom -->
         <div id="table-bottom">
             <div>
-                <h3>Page</h3><input id="page-number" name="page-number" type="text" spellcheck="false" autocomplete="off" value="1"></label><h3>of</h3>
+                <h3>Page</h3><input id="page-number" name="page-number" type="text" spellcheck="false" autocomplete="off" value="1"></label>
+                <h3>of </h3>
                 <h3 id="page-count">1</h3>
             </div>
             <div id="navigation-buttons">
-                <h3 id="previous-button" class="button">Previous</h3>
-                <h3 id="next-button" class="button">Next</h3>
+                <span id="previous-button" class="button">Previous</span>
+                <span id="next-button" class="button">Next</span>
             </div>
         </div>
     </div>

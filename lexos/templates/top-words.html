@@ -21,15 +21,15 @@
     <div id="comparison-method-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Comparison Method</h3>
-            <h3 id="comparison-method-tooltip-button" class="right-justified button">?</h3>
+            <span id="comparison-method-tooltip-button" class="right-justified tooltip-button">?</span>
         </div>
         <div class="section-body">
             <label><input name="testInput" value="allToPara" type="radio" checked><span class></span>Each document to the corpus</label>
-            <h3 id="document-corpus-tooltip-button" class="button">?</h3><br>
+            <span id="document-corpus-tooltip-button" class="tooltip-button">?</span><br>
             <label><input name="testInput" value="classToPara" type="radio"><span></span>Each document to other classes</label>
-            <h3 id="document-class-tooltip-button" class="button">?</h3><br>
+            <span id="document-class-tooltip-button" class="tooltip-button">?</span><br>
             <label><input name="testInput" value="classToClass" type="radio"><span></span>Each class to other classes</label>
-            <h3 id="class-class-tooltip-button" class="button">?</h3>
+            <span id="class-class-tooltip-button" class="tooltip-button">?</span>
         </div>
     </div>
 {% endblock %}
@@ -40,7 +40,7 @@
     <div id="class-divisions-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Class Divisions</h3>
-            <h3 id="class-division-tooltip-button" class="right-justified button">?</h3>
+            <span id="class-division-tooltip-button" class="right-justified tooltip-button">?</span>
         </div>
 
         <div id="class-divisions-body" class="section-body"></div>
@@ -51,9 +51,9 @@
         <div class="vertical-splitter section-top">
             <h3 class="title">Top Words</h3>
             <div class="right-justified">
-                <h3 id="generate-button" class="disabled important-button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
-                <h3 id="download-tooltip-button" class="button">?</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="download-button" class="disabled button">Download</span>
+                <span id="download-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
 

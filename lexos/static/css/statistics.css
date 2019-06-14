@@ -56,11 +56,6 @@ form {
     justify-self: center;
 }
 
-#table-top h3,
-#table-top label {
-    margin-right: 1rem;
-}
-
 #table-head,
 .table-row {
     display: grid;

@@ -45,10 +45,20 @@ b {
 }
 
 
+/* h3 */
+.section-top h3 {
+    margin-right: 1rem;
+}
+
+
 /* Main Elements */
-* {
+*,
+*:before,
+*:after {
     user-select: none;
     -moz-user-select: none;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 ::selection {
@@ -58,13 +68,15 @@ b {
 
 html {
     height: 99.9%;
+    font-size: 10px;
 }
 
 body {
     display: grid;
+    position: relative;
     grid-template-rows: 7rem calc((100vh - (100vh - 100%)) - 11rem) 4rem;
     height: 100%;
-    position: relative;
+    margin: 0;
     background-color: #E3E3E3;
 }
 
@@ -75,15 +87,15 @@ body {
 
 #main-section {
     overflow: auto;
-    min-width: 90rem;
+    min-width: 100rem;
 }
 
 form {
     display: grid;
     grid-gap: 2rem;
-    padding: 2rem;
-    width: 100%;
-    height: 100%;
+    margin: 2rem;
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
     min-height: 50rem;
 }
 
@@ -115,6 +127,10 @@ form {
     opacity: 0;
 }
 
+.hidden {
+    display: none;
+}
+
 .center-justified {
     justify-self: center;
 }
@@ -143,31 +159,21 @@ form {
 #navbar {
     z-index: 3;
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 15rem 10rem 1fr;
+    padding: 0 2rem 0 2rem;
+    align-items: center;
     width: 100%;
-    min-width: 90rem;
+    min-width: 100rem;
     height: 7rem;
     background-color: #FFFFFF;
 }
 
-#navbar-left {
-    margin-top: 1rem;
-    margin-left: 1.5rem;
-}
-
 #lexos-dragon {
     height: 5rem;
-    margin: 0 1rem 1rem 0;
 }
 
 #lexos-logo {
-    display: inline-block;
-}
-
-#navbar-right {
-    justify-self: right;
-    margin-top: 2.3rem;
-    margin-right: 2rem;
+    margin-bottom: 1rem;
 }
 
 #navbar-right > a,
@@ -213,8 +219,8 @@ footer {
 }
 
 #neh-logo {
-    filter: grayscale(100%);
     height: 3rem;
+    margin-top: .5rem;
 }
 
 
@@ -245,7 +251,6 @@ input[type="text"] {
     height: calc(3rem - .2rem);
     width: 6rem;
     padding: 0 1.3rem 0 1.3rem;
-    margin: 0 .5rem 0 .5rem;
     border-radius: 3rem;
     outline: none;
     background-color: #FFFFFF;
@@ -257,7 +262,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     color: #47BCFF;
-        background-color: #EAF5FF;
+    background-color: #EAF5FF;
     border-color: #47BCFF;
 }
 
@@ -265,12 +270,13 @@ span > input[type="text"] {
     color: inherit;
 }
 
-label input[type="text"] {
-    margin-bottom: 0;
+.section-body input[type="text"] {
+    margin-left: .5rem;
+    margin-bottom: 1rem;
 }
 
-#popup input[type="text"] {
-    margin: 0;
+.section-body label input[type="text"] {
+    margin-bottom: 0;
 }
 
 
@@ -300,16 +306,11 @@ label {
     cursor: pointer;
 }
 
-.section-body label,
-.borderless-section-body label {
-    margin-bottom: 1rem;
-}
-
 label > span:before {
     content: "";
     display: inline-block;
     position: relative;
-    top: .4rem;
+    top: .35rem;
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
@@ -321,6 +322,15 @@ label > span:before {
 label :checked + span:before {
     background-color: #EAF5FF;
     border-color: #47BCFF;
+}
+
+.section-body label,
+.borderless-section-body label {
+    margin-bottom: 1rem;
+}
+
+.section-top label {
+    margin-right: 2rem;
 }
 
 
@@ -395,13 +405,11 @@ label input[type="checkbox"]:checked + span:after {
 /* Button */
 .button,
 .important-button {
-    display: inline-grid;
-    align-content: center;
-    justify-content: center;
+    display: inline-flex;
+    align-items: center;
     width: max-content;
-    height: calc(3rem - .2rem);
+    height: 3rem;
     padding: .9rem 1.5rem 1rem 1.5rem;
-    margin: 0 .5rem 0 .5rem;
     border-radius: 3rem;
     border: .2rem solid #F3F3F3;
     background-color: #F3F3F3;
@@ -409,19 +417,13 @@ label input[type="checkbox"]:checked + span:after {
     transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
 }
 
-.section-body .button {
-    margin-bottom: .5rem;
-}
-
-.button:hover,
-.button-active{
+.button:hover {
     color: #47BCFF;
     background-color: #EAF5FF;
     border-color: #47BCFF;
 }
 
-.button:hover > h3,
-.button-active > h3{
+.button:hover > h3 {
     color: inherit;
 }
 
@@ -436,6 +438,18 @@ label input[type="checkbox"]:checked + span:after {
     color: #47BCFF;
 }
 
+.section-top .button {
+    margin-left: 1rem;
+}
+
+.section-top h3 + .button {
+    margin-left: 0;
+}
+
+.section-body .button {
+    margin: 0 0 .5rem .5rem;
+}
+
 
 /* Tooltip */
 .lexos-tooltip {
@@ -445,13 +459,33 @@ label input[type="checkbox"]:checked + span:after {
     width: 35rem;
     padding: 1rem;
     overflow-y: auto;
-    transform: translate(4rem, 0);
+    transform: translate(3rem, 0);
     background-color: #FFFFFF;
     border: 2rem solid #EAF5FF;
 }
 
 .right-edge-tooltip {
-    transform: translate(-31rem, 3.5rem);
+    transform: translate(-33rem, 3rem);
+}
+
+.tooltip-button {
+    display: inline-flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: .5rem;
+    font-size: 1.3rem;
+    background-color: #F3F3F3;
+    border-radius: 50%;
+    transition: color .2s, background-color .2s;
+}
+
+.tooltip-button:hover,
+.tooltip-button-active {
+    color: #47BCFF;
+    background-color: #EAF5FF;
 }
 
 

@@ -29,7 +29,7 @@
             <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Tokenize</h3>
-                <h3 id="tokenize-tooltip-button" class="right-justified button">?</h3>
+                <span id="tokenize-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
             <!-- By Tokens -->
@@ -38,8 +38,7 @@
                 <label><input name="tokenType" value="char" type="radio"><span></span>By Characters</label><br>
 
                 <!-- Grams -->
-                <h3>Grams</h3>
-                <label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                <h3>Grams: </h3><label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
             </div>
         </div>
 
@@ -49,7 +48,7 @@
             <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Normalize</h3>
-                <h3 id="normalize-tooltip-button" class="right-justified button">?</h3>
+                <span id="normalize-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
             <div class="section-body">
@@ -62,7 +61,7 @@
 
                 <!-- TF-IDF -->
                 <label><input name="normalizeType" value="tfidf" type="radio"><span></span>TF-IDF</label>
-                <h3 id="tf-idf-tooltip-button" class="button">?</h3>
+                <span id="tf-idf-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
 
@@ -72,30 +71,18 @@
             <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Cull</h3>
-                <h3 id="cull-tooltip-button" class="right-justified button">?</h3>
+                <span id="cull-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
             <div class="section-body">
 
                 <!-- Use the top X words -->
-                <label>
-                    <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
-                    <span></span>
-                    Use the top
-                    <input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
-                    terms
-                </label>
-                <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
+                <label><input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox"><span></span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</label>
+                <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
 
                 <!-- Must be in X documents -->
-                <label>
-                    <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
-                    <span></span>
-                    Must be in
-                    <input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">
-                    documents
-                </label>
-                <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
+                <label><input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox"><span></span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</label>
+                <span id="minimum-occurrences-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
     </div>
