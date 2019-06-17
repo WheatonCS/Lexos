@@ -95,8 +95,8 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
     assert overlap >= 0 and last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
-    # split all the chars while keeping all the whitespace
-    seg_list = re.findall(r"\S", text)
+    # chop up the string by characters (keeping whitespace)
+    seg_list = [char for char in text]
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
