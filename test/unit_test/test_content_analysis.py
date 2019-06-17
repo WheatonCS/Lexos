@@ -243,10 +243,9 @@ def test_generate_corpus_counts_table():
     test.add_file(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
-    html_table = test.generate_corpus_counts_table(test.count(),
-                                                   test.dictionary_colors)
-    assert html_table.startswith("<table")
-    assert html_table.endswith("</table>")
+    html_table = test.generate_corpus_results(test.count())
+    assert html_table[0][0] == "dict1"
+    assert html_table[-1][0] == "dict2"
 
 
 def test_generate_files_raw_counts_tables():
@@ -256,11 +255,10 @@ def test_generate_files_raw_counts_tables():
     test.add_file(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
-    html_tables = test.generate_files_raw_counts_tables(
-        test.count(), test.dictionary_colors)
+    html_tables = test.generate_document_results(test.count())
     for html_table in html_tables:
-        assert html_table.startswith("<table")
-        assert html_table.endswith("</table>")
+        assert html_table["name"] == "file1"
+        # assert html_table == "dict2"
 
 
 def test_analyze():
@@ -270,13 +268,13 @@ def test_analyze():
     test.add_file(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
-    result_table, individual_counts_table, files_raw_counts_tables, \
+    result_table, csv_results, results_corpus, corpus_csv, doc_results, \
         formula_errors = test.analyze()
     assert result_table == ""
     assert isinstance(formula_errors, str)
     test.test_option = TestOptions(formula="[dict1]")
     test.save_formula()
-    result_table, individual_counts_table, files_raw_counts_tables, \
+    result_table, csv_results, results_corpus, corpus_csv, doc_results, \
         formula_errors = test.analyze()
-    assert result_table == test.to_html()
+    # assert result_table == test.to_html()
     assert formula_errors == ""

@@ -236,7 +236,7 @@ class StatsModel(BaseModel):
             inter_quartile_range=round(iqr, 2),
         )
 
-    def get_document_statistics(self) -> str:
+    def get_document_statistics(self) -> dict:
         """ Gets the document statistics.
         :return: The document statistics.
         """
@@ -248,8 +248,8 @@ class StatsModel(BaseModel):
             ascending=self._stats_option.sort_ascending
         )
 
-        return jsonify({"table": sorted_result.to_json(orient="values"),
-                        "csv": sorted_result.to_csv()})
+        return {"table": sorted_result.to_json(orient="values"),
+                "csv": sorted_result.to_csv()}
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.

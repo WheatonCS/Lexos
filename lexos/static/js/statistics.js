@@ -86,6 +86,11 @@ function create_statistics(){
     // Send a request to get the document statistics
     send_ajax_form_request("/statistics/document-statistics")
 
+        // Always check if the loading has completed
+        .always(function(){
+             loading_complete_check();
+        })
+
         // If the request was successful, store the CSV data and create the
         // table
         .done(function(response){
@@ -115,17 +120,13 @@ function create_statistics(){
 
             // Remove the loading overlay, fade the table in, and enable the
             // "Download" button
-            finish_loading("#table", "#.lexos-table", "#download-button");
-
-            // Enable the "Generate" button if all elements have finished loading
-            loading_complete_check();
+            finish_loading("#table", ".lexos-table", "#download-button");
         })
 
         // If the request failed, display an error and "Loading Failed" text
         .fail(function(){
             error("Failed to retrieve the document statistics.");
             add_text_overlay("#table", "Loading Failed");
-            loading_complete_check();
         });
 
     // Create the box plot graph and enable the "Generate" button if all
@@ -222,6 +223,7 @@ function loading_complete_check(number_loaded = 1){
     elements_loaded += number_loaded;
 
     // If all 5 elements have not finished loading, return
+    console.log(elements_loaded);
     if(elements_loaded < 5) return;
 
     // Otherwise, re-enable the "Generate" button and reset "elements_loaded"
