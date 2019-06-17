@@ -1,5 +1,0 @@
-,four,one,three,two,Class Label
-fourTest,1,0,0,0,
-oneTest,0,1,0,0,
-threeTest,0,0,1,0,
-twoTest,0,0,0,1,

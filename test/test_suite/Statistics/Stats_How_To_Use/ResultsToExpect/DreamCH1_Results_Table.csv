@@ -1,0 +1,12 @@
+,Documents,Number of character n-grams occurring once,Total number of character n-grams,Vocabulary Density,Distinct number of character n-grams
+0,DreamCH1_01,204,630.0,0.529,333
+1,DreamCH1_02,170,635.0,0.477,303
+2,DreamCH1_03,202,645.0,0.509,328
+3,DreamCH1_04,257,620.0,0.595,369
+4,DreamCH1_05,172,645.0,0.478,308
+5,DreamCH1_06,182,630.0,0.487,307
+6,DreamCH1_07,201,640.0,0.498,319
+7,DreamCH1_08,226,615.0,0.558,343
+8,DreamCH1_09,206,640.0,0.508,325
+9,DreamCH1_10,208,600.0,0.528,317
+10,DreamCH1_11,139,346.0,0.601,208
