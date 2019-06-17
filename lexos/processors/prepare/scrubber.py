@@ -953,7 +953,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 6. whitespace ------------------------------------------------------
 
-    if white_space:
+    if spaces or tabs or new_lines:
         remove_whitespace_map = get_remove_whitespace_map(
             spaces, tabs, new_lines)
     else:
