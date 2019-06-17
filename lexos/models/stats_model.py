@@ -149,7 +149,7 @@ class StatsModel(BaseModel):
         so this is how plotly calculates the quartiles.
         :param index: the index of the array that is where the quartile is
         :param arr: the sorted array of all the document sizes
-        :return: the value of quartile of the array
+        :return: the value of the quartile of the array
         """
         if index % 1 == .5:
             ind = int(index)
