@@ -2,8 +2,11 @@
 
 This is the test suite for Upload page.
 
-- ProjectGutenberg: contains txt files from ProjectGutenberg for uploading test
+- ProjectGutenberg: contains text files from ProjectGutenberg for uploading test
 
-- Upload_Timing_Test: uploading timing test on txt files with different encoding types and different file size with all the results in .ods file
+- Upload_Timing_Test: uploading timing test on text files and different file sizes
+ with all the results in .ods file
+ 
+- Encoding: upload timing test on text file with different type of encoding
 
-- XMLfiles: contains a few xml files for uploading test
+- XMLfiles: contains a few XML files for uploading test
