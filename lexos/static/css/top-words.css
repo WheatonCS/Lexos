@@ -16,15 +16,21 @@ form {
 }
 
 
-/* General */
+/* Results */
 .lexos-table {
     background-color: #F3F3F3;
-    max-height: 35rem;
+    max-height: 34.2rem;
     min-height: 25rem;
 }
 
 .lexos-table-row {
     background-color: #FFFFFF;
+    margin-bottom: 0;
+    border-bottom: 1rem solid #FFFFFF;
+}
+
+.lexos-table-row:last-child {
+    border-bottom: none;
 }
 
 #class-divisions-section,

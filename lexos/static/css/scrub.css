@@ -49,6 +49,11 @@ form {
     height: calc(100% - 5rem);
 }
 
+.scrub-section-body label {
+    width: 100%;
+    height: 100%;
+}
+
 .upload-text,
 #stop-words-options,
 #special-characters-options {
@@ -64,7 +69,7 @@ form {
 
 
 /* Stop/keep words */
-#stop-words-section .circle-label {
+#stop-words-section label {
     margin-right: 3rem;
 }
 

@@ -159,11 +159,9 @@ function toggle_help_section(){
     $(`
         <div id="help-section">
             <div id="help-section-navbar">
-                <h3 id="help-button-header" class="button">Help</h3>
-                <h3 id="about-button" class="button">About Lexos</h3>
-                <h3 id="glossary-button" class="button">Glossary</h3>
-                
-                
+                <span id="help-button-header" class="button">Help</span>
+                <span id="about-button" class="button">About Lexos</span>
+                <span id="glossary-button" class="button">Glossary</span>
             </div>
             <div id="help-section-content"></div>
         </div>
@@ -197,7 +195,7 @@ function update_active_document_count(){
 
     $.ajax({type: "GET", url: "active-documents"}).done(function(response){
         active_document_count = parseInt(response);
-        $("#active-document-count").text(response);
+        $("#active-document-count").text(`Active Documents: ${response}`);
     })
 
     .fail(function(){ error("Failed to update the active document count."); });

@@ -15,7 +15,8 @@ form {
 #top-section {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: 35rem auto 30rem;
+    grid-template-rows: 45rem auto 40rem;
+    grid-template-columns: 36rem auto 30rem;
 }
 
 #left-column {
@@ -34,6 +35,12 @@ form {
     margin: 1rem;
 }
 
+#standard-error-test,
+#interquartile-range-test {
+    overflow-y: auto;
+    word-break: break-word;
+}
+
 
 /* Table */
 #table {
@@ -49,59 +56,9 @@ form {
     justify-self: center;
 }
 
-#table-top h3,
-#table-top label {
-    margin-right: 1rem;
-}
-
-#table-head,
-.table-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-}
-
-#table-head {
-    height: 4rem;
-}
-
 .selected-cell {
     background-color: #EAF5FF;
 }
-
-.table-head-cell,
-.table-cell {
-    overflow: hidden;
-    overflow-wrap: break-word;
-}
-
-.table-head-cell {
-    display: flex;
-    align-items: center;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    color: #47BCFF;
-}
-
-#table-body {
-    height: calc(100% - 4rem);
-    overflow-y: auto;
-    overflow-y: overlay;
-}
-
-.table-row {
-    min-height: 4rem;
-    margin-bottom: 1rem;
-    background-color: #F3F3F3;
-}
-
-.table-row:last-child {
-    margin-bottom: 0;
-}
-
-.table-cell {
-    padding: 1rem;
-}
-
 
 /* Hidden elements */
 #document-names-section {

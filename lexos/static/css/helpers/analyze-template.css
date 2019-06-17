@@ -18,6 +18,10 @@ form {
     grid-gap: 2rem;
 }
 
+#cull-section input[type="text"] {
+    margin-right: .5rem;
+}
+
 
 /* Document names */
 #document-names-section {

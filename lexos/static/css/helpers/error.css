@@ -1,0 +1,55 @@
+#error-section {
+    z-index: 10;
+    position: relative;
+    overflow: hidden;
+    background-color: #E62843;
+}
+
+#error-text,
+#error-text-2 {
+    position: absolute;
+    bottom: 1rem;
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 100%;
+    padding-right: 10rem;
+    animation: marquee 20s infinite linear;
+    animation-delay: -10s;
+    color: #FFFFFF;
+}
+
+#error-text-2 {
+    animation-delay: 0s;
+}
+
+#error-section:hover #error-text,
+#error-section:hover #error-text-2 {
+    animation-play-state: paused;
+}
+
+#error-button-container {
+    z-index: 11;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 4rem;
+    padding: .7rem 2rem 0 2rem;
+    pointer-events: none;
+    background-color: #E62843;
+}
+
+#error-close-button {
+    pointer-events: all;
+    color: #FFFFFF;
+    background-color: #CD2741;
+    border: none;
+}
+
+#error-close-button:hover {
+    background-color: #B4263C;
+}
+
+@keyframes marquee {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}

@@ -86,7 +86,7 @@ function send_file_upload_requests(){
         // If the request is successful, call the "upload_success_callback()"
         // function and upload the next file in the list
         .done(function(){
-            upload_success_callback(file_name);
+            create_upload_preview(file_name);
             send_file_upload_requests();
         })
 
@@ -113,9 +113,9 @@ function file_type_supported(filename){
 
 
 /**
- * Called when a file has successfully uploaded.
+ * Create an upload preview element.
  */
-function upload_success_callback(file_name)
+function create_upload_preview(file_name)
 {
     // Remove the "No Uploads" text if it exists
     $("#no-uploads-text").remove();
@@ -123,15 +123,18 @@ function upload_success_callback(file_name)
     // Update the "Active Document Count" element
     let active_documents_element = $("#active-document-count");
     let active_documents = parseInt(active_documents_element.text())+1;
-    active_documents_element.text(active_documents.toString());
+    active_documents_element.text(`Active Documents: ${active_documents.toString()}`);
 
     // Create an upload preview element
     let upload_preview_element = $(`
-        <div class="upload-preview"><h3></h3></div>
+        <div id="preview-${active_documents}" class="hidden upload-preview"><h3></h3></div>
     `).appendTo("#upload-previews");
 
     // Add the HTML-escaped file name to the upload preview element
     upload_preview_element.find("h3").text(file_name);
+
+    // Fade in the preview element
+    fade_in(`#preview-${active_documents}`,".5s");
 }
 
 
