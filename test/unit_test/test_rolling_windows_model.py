@@ -43,9 +43,7 @@ class TestRatioCountOne:
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
     rw_ratio_csv_frame = rw_ratio_model._get_rwa_csv_frame()
     rw_ratio_milestone = \
-        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows(
-            windows=rw_ratio_windows
-        )
+        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows()
 
     def test_get_windows(self):
         np.testing.assert_array_equal(
@@ -133,9 +131,7 @@ class TestRatioCountTwo:
     rw_ratio_windows = rw_ratio_model._get_windows()
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
     rw_ratio_milestone = \
-        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows(
-            windows=rw_ratio_windows
-        )
+        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows()
 
     def test_get_windows(self):
         np.testing.assert_array_equal(
