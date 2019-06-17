@@ -90,10 +90,14 @@ test_tokenizer_ajax = TokenizerModel(test_options=test_option)
 
 class TestTokenizerAjax:
     def test_tokenizer_ajax(self):
-        result = test_tokenizer_ajax.select_file_col_dtm()
-        assert result["pages"] == 2
-        assert result["data"] == [
-            ['A', 6.0, 3.0, 0.0, 6.0], ['B', 6.0, 3.0, 1.0, 5.0],
-            ['C', 6.0, 3.0, 2.0, 4.0], ['D', 6.0, 3.0, 3.0, 3.0],
-            ['E', 6.0, 3.0, 4.0, 2.0]
+        result = test_tokenizer_ajax._get_file_col_dtm().values.tolist()
+        print(result)
+        assert result == [
+            [6.0, 3.0, 0.0, 6.0],
+            [6.0, 3.0, 1.0, 5.0],
+            [6.0, 3.0, 2.0, 4.0],
+            [6.0, 3.0, 3.0, 3.0],
+            [6.0, 3.0, 4.0, 2.0],
+            [6.0, 3.0, 5.0, 1.0],
+            [6.0, 3.0, 6.0, 0.0],
         ]
