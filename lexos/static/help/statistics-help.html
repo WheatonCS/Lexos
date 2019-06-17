@@ -86,9 +86,6 @@
 
         <ul class="help-section-list">
 
-            <li>Camera icon: This option will download the graph as a <code>.png</code>
-            image.</li>
-
             <li>Zoom: This option allows you to click and drag to zoom in to a
             specific part of the graph.</li>
 
@@ -127,6 +124,12 @@
         files or you may select a subset of your active documents by using the
         <a href="/manage"><u>Manage</u></a> page.
     </h3>
+    <h3 class="help-section-paragraph">
+        To sort the table, click on a column header, and either "Ascending" or
+        "Descending" at the top next to "Order". These results will display
+        immediately, thus clicking "Generate" is not necessary to reflect these
+        changes.
+    </h3>
 
     <li><b>Corpus Statistics</b></li>
     <h3 class="help-section-paragraph">
@@ -152,18 +155,36 @@
         your corpus. Outliers are those document sizes that fall below Q1 - 1.5(IQR)
         or above Q3 + 1.5(IQR).
     </h3>
+    <h3 class="help-section-paragraph">
+        You should consider removing outlier documents from subsequent
+        analyses and/or consider additional cutting of some documents to make
+        term counts more uniform.provides a anomaly warning for any document with
+        a size that is particularly large or small compared to the rest of your
+        corpus. You should consider removing outlier documents from subsequent
+        analyses and/or consider additional cutting of some documents to make
+        term counts more uniform.
+    </h3>
+
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        The Document Sizes box plot is downloadable in either <code>.svg</code> or
+        <code>.png</code> format. SVG images are very useful because they scale
+        well in web browsers. If you click the SVG button, a new window will open
+        with a copy of your graph. Use your browser’s "Save as…" function to save the web page.
+        If you click the PNG button, the image will open in a new window.
+        The procedure for saving a PNG image is not standard in all browsers,
+        so follow the instructions you see on the screen.
+    </h3>
+    <h3 class="help-section-paragraph">
+        To download the Document Statistics as a data file, click the "Download"
+        button and you will get a results <code>.csv</code> file. “CSV” is short
+        for Comma-Separated Values. In your downloaded file, a comma will serve
+        as the column delimiter and these files can be opened by other programs
+        later, e.g., Excel.
+    </h3>
 
 </ul>
-
-<h3 class="help-section-paragraph">
-    You should consider removing outlier documents from subsequent
-    analyses and/or consider additional cutting of some documents to make
-    term counts more uniform.provides a anomaly warning for any document with
-    a size that is particularly large or small compared to the rest of your
-    corpus. You should consider removing outlier documents from subsequent
-    analyses and/or consider additional cutting of some documents to make
-    term counts more uniform.
-</h3>
 
 
 
