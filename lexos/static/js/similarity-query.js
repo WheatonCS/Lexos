@@ -108,35 +108,9 @@ function send_similarity_table_request(){
  */
 function create_similarity_table(response){
 
-    let table_data = parse_json(response);
-
-    // Create the layout
-    $(`
-        <div id="table-head" class="hidden">
-            <h3 class="table-cell">Document</h3>
-            <h3 class="table-cell">Cosine Similarity</h3>
-        </div>
-        <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
-    `).appendTo("#table");
-
-    // Create the body
-    let table_body = $("#table-body");
-    for(const row of table_data){
-
-        // Create a row element
-        let row_element = $(`
-            <h3 class="table-row"></h3>
-        `).appendTo(table_body);
-
-        // Populate the row
-        for(const cell of row){
-            let cell_element = $(`
-                <h3 class="table-cell"></h3>
-            `).appendTo(row_element);
-
-            cell_element.text(cell);
-        }
-    }
+    // Create the tables
+    create_table("#table", parse_json(response),
+        ["Document", "Cosine Similarity"]);
 
     // Remove the loading overlay, fade in the table, and enable the
     // "Generate" and "Download" buttons
@@ -155,7 +129,7 @@ function initialize_tooltips(){
     create_tooltip("#similarity-query-tooltip-button", `The rankings are
         determined by the distance between documents. Small distances
         (near zero) represent documents that are similar, and distances close
-        to one represent documents that are different.`);
+        to one represent documents that are different.`, true);
 
     // "Comparison Document"
     create_tooltip("#comparison-document-tooltip-button", `Select one document

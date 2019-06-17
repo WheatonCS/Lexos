@@ -15,7 +15,8 @@ form {
 #top-section {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: 35rem auto 30rem;
+    grid-template-rows: 45rem auto 40rem;
+    grid-template-columns: 36rem auto 30rem;
 }
 
 #left-column {
@@ -34,54 +35,30 @@ form {
     margin: 1rem;
 }
 
+#standard-error-test,
+#interquartile-range-test {
+    overflow-y: auto;
+    word-break: break-word;
+}
+
 
 /* Table */
 #table {
     height: calc(100% - 5rem);
 }
 
-#table-head,
-.table-row {
+#table-top {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
-#table-head {
-    height: 3rem;
+.table-top-radio-option {
+    justify-self: center;
 }
 
-.table-head-cell,
-.table-cell {
-    overflow: hidden;
-    overflow-wrap: break-word;
+.selected-cell {
+    background-color: #EAF5FF;
 }
-
-.table-head-cell {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    color: #47BCFF;
-}
-
-#table-body {
-    height: calc(100% - 3rem);
-    overflow-y: auto;
-    overflow-y: overlay;
-}
-
-.table-row {
-    min-height: 4rem;
-    margin-bottom: 1rem;
-    background-color: #F3F3F3;
-}
-
-.table-row:last-child {
-    margin-bottom: 0;
-}
-
-.table-cell {
-    padding: 1rem;
-}
-
 
 /* Hidden elements */
 #document-names-section {

@@ -13,11 +13,16 @@ function initialize_color_button(ok_callback){
             "#color-input", [
                 ["lexos", "Lexos"],
                 ["grey", "Grey"],
-                ["emerald", "Emerald"],
-                ["plum", "Plum"],
-                ["ice", "Ice"],
                 ["cherry-tree", "Cherry Tree"],
-                ["ocean", "Ocean"]
+                ["sunset", "Sunset"],
+                ["spring", "Spring"],
+                ["ocean", "Ocean"],
+                ["blue-lilac", "Blue Lilac"],
+                ["plum", "Plum"],
+                ["iridescent", "Iridescent"],
+                ["nebula", "Nebula"],
+                ["rainbow", "Rainbow"],
+                ["tie-dye", "Tie-Dye"]
             ]);
 
         $("#ok-button").click(ok_callback);
@@ -37,11 +42,16 @@ function get_visualize_color(x){
         case "Lexos": return d3.scaleLinear()
             .domain([0, 1]).range(["#F3F3F3", "#47BCFF"])(x);
         case "Grey": return d3.interpolateGreys(x);
-        case "Emerald": return d3.interpolateBuGn(x);
         case "Plum": return d3.interpolateBuPu(x);
-        case "Ocean": return d3.interpolateGnBu(x);
-        case "Ice": return d3.interpolatePuBu(x);
+        case "Ocean": return d3.interpolateYlGnBu(x);
+        case "Blue Lilac": return d3.interpolatePuBu(x);
         case "Cherry Tree": return d3.interpolatePuRd(x);
+        case "Sunset": return d3.interpolateYlOrRd(x);
+        case "Nebula": return d3.interpolatePlasma(x/1.7);
+        case "Spring": return d3.interpolateYlGn(x);
+        case "Iridescent": return d3.interpolateViridis(x/1.4);
+        case "Rainbow": return d3.interpolateRainbow(x);
+        case "Tie-Dye": return d3.interpolateRainbow(Math.log(x));
     }
 }
 

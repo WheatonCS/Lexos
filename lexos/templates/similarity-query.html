@@ -7,6 +7,8 @@
     <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/popup.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
 
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/similarity-query.js"></script>
@@ -20,11 +22,12 @@
     <!-- Comparison document -->
     <div id="comparison-document-section" class="section">
         <div class="vertical-splitter section-top">
-            <div>
-                <h3 class="title">Comparison Document</h3>
-                <h3 id="comparison-document-tooltip-button" class="button">?</h3>
+            <h3 class="title">Comparison Document</h3>
+
+            <div class="right-justified">
+                <span id="select-button" class="disabled button">Select</span>
+                <span id="comparison-document-tooltip-button" class="tooltip-button">?</span>
             </div>
-            <h3 id="select-button" class="right-justified disabled button">Select</h3>
         </div>
         <div id="comparison-document-section-body" class="section-body"></div>
     </div>
@@ -37,12 +40,12 @@
         <div class="vertical-splitter section-top">
             <div>
                 <h3 class="title">Similarity Query</h3>
-                <h3 id="similarity-query-tooltip-button" class="button">?</h3>
             </div>
 
             <div class="right-justified">
-                <h3 id="generate-button" class="disabled button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="download-button" class="disabled button">Download</span>
+                <span id="similarity-query-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
 

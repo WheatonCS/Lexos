@@ -44,11 +44,10 @@ function initialize(response){
         // Remove any existing error messages
         remove_errors();
 
-        // Display the loading overlays and disable the "Generate" and
-        // "Download"  buttons
+        // Display the loading overlays and disable the appropriate buttons
         start_loading("#graph-container, #table, #corpus-statistics, "+
             "#standard-error-test, #interquartile-range-test",
-            "#generate-button, #download-button");
+            "#generate-button, #download-button, #png-button, #svg-button");
 
         // Create the statistics
         create_statistics();
@@ -59,6 +58,9 @@ function initialize(response){
     $("#download-button").click(function(){
         download(document_statistics_csv, "document-statistics.csv");
     });
+
+    // If the "PNG" or "SVG" buttons are pressed, download the graph
+    initialize_graph_download_buttons();
 }
 
 
@@ -87,8 +89,36 @@ function create_statistics(){
         // If the request was successful, store the CSV data and create the
         // table
         .done(function(response){
+
             document_statistics_csv = response.csv;
-            create_document_statistics_table(response.table);
+
+            // Create the table
+             create_table("#table", JSON.parse(response.table), ["Name",
+                "Single-Occurrence Terms", "Total Terms", "Vocabulary Density",
+                "Distinct Terms"]);
+
+            // Label the columns
+            let id = 0;
+            let head_cell_elements = $(".lexos-table-head-cell");
+            head_cell_elements.each(function(){
+                $(this).attr("id", id++);
+            });
+
+            // Highlight the currently selected column
+            highlight_selected_column();
+
+            // If the table head cell is clicked, update the selected column
+            head_cell_elements.click(function(){
+                $(`input[name="sort-column"]`).val($(this).attr("id"));
+                highlight_selected_column();
+            });
+
+            // Remove the loading overlay, fade the table in, and enable the
+            // "Download" button
+            finish_loading("#table", "#.lexos-table", "#download-button");
+
+            // Enable the "Generate" button if all elements have finished loading
+            loading_complete_check();
         })
 
         // If the request failed, display an error and "Loading Failed" text
@@ -100,7 +130,7 @@ function create_statistics(){
 
     // Create the box plot graph and enable the "Generate" button if all
     // sections have finished loading
-    create_graph("/statistics/box-plot", loading_complete_check);
+    create_graph("/statistics/box-plot", function(){ loading_complete_check(); });
 }
 
 
@@ -165,48 +195,17 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
     $(`<h3>${text}</h3>`).appendTo(element_id);
 }
 
-
 /**
- * Create the table for the "Document Statistics" section.
- * @param {string} table: The "table" portion of the response from the
- *      "/statistics/document-statistics" request.
+ * Highlights the currently selected "Document Statistics" table column.
  */
-function create_document_statistics_table(table){
+function highlight_selected_column(){
 
-    // Create the head and table body
-    $(`
-        <div id="table-head" class="hidden">
-            <h3 class="table-head-cell">Name</h3>
-            <h3 class="table-head-cell">Total Terms</h3>
-            <h3 class="table-head-cell">Distinct Terms</h3>
-            <h3 class="table-head-cell">Average Terms</h3>
-            <h3 class="table-head-cell">Single-Occurrence Terms</h3>
-        </div>
-        <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
-    `).appendTo("#table");
+    $(".lexos-table-head-cell").each(function(){
+        $(this).removeClass("selected-cell");
+    });
 
-    // Create the rows
-    let rows = Object.entries(JSON.parse(table));
-    for(row of rows){
-        let data = Object.values(row[1]);
-
-        $(`
-            <div class="table-row">
-                <h3 class="table-cell">${data[0]}</h3>
-                <h3 class="table-cell">${data[1]}</h3>
-                <h3 class="table-cell">${data[2]}</h3>
-                <h3 class="table-cell">${data[3]}</h3>
-                <h3 class="table-cell">${data[4]}</h3>
-            </div>
-        `).appendTo("#table-body");
-    }
-
-    // Remove the loading overlay, fade the table in, and enable the
-    // "Download" button
-    finish_loading("#table", "#table-head, #table-body", "#download-button");
-
-    // Enable the "Generate" button if all elements have finished loading
-    loading_complete_check();
+    $(`.lexos-table-head #${$(`input[name="sort-column"]`).val()}`)
+        .addClass("selected-cell");
 }
 
 

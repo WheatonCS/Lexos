@@ -54,8 +54,11 @@ function single_active_document_check(response){
     // If the "Generate" button is clicked, create the rolling window graph
     $("#generate-button").click(create_rolling_window);
 
-    // If the "Download" button is pressed, download the CSV
-    $("#download-button").click(function(){
+    // Initialize the "PNG" and "SVG" download buttons
+    initialize_graph_download_buttons();
+
+    // If the "CSV" button is pressed, download the CSV
+    $("#csv-button").click(function(){
         download(csv, "rolling-window.csv");
     });
 }
@@ -75,9 +78,9 @@ function create_rolling_window(){
     // Remove any existing error messages
     remove_errors();
 
-    // Display the loading overlay and disable the "Generate" and "Download"
-    // buttons
-    start_loading("#graph-container", "#generate-button, #download-button");
+    // Display the loading overlay and disable the appropriate buttons
+    start_loading("#graph-container",
+        "#generate-button, #png-button, #svg-button, #csv-button");
 
     // Create the rolling window graph and get the CSV data
     send_rolling_window_result_request();
@@ -93,11 +96,11 @@ function send_rolling_window_result_request(){
     send_ajax_form_request("/rolling-window/results")
 
         // If the request was successful, initialize the graph, store the CSV
-        // data, and enable the "Generate" and "Download" buttons
+        // data, and enable the "Generate" and "CSV" buttons
         .done(function(response){
             csv = response.csv;
             initialize_graph(response.graph);
-            enable("#generate-button, #download-button");
+            enable("#generate-button, #csv-button");
         })
 
         // If the request failed, display an error and enable the "Generate"

@@ -81,11 +81,10 @@ with application.app.app_context():
 # ------------------------------------------------------------------
 class TestFileResult:
     def test_basic_info(self):
-        print("!!!!", test_pandas_two)
-        print("????", test_pandas_two[0][2])
-        assert test_pandas_one[0][2] == "F1.txt"
-        assert test_pandas_one[1][2] == "F2.txt"
-        assert test_pandas_two[2][2] == "F3.txt"
+        print("!!!!", test_pandas_one)
+        assert test_pandas_one.iloc[2, 0] == "F1.txt"
+        assert test_pandas_one.iloc[2, 1] == "F2.txt"
+        assert test_pandas_two.iloc[2, 2] == "F3.txt"
 
     def test_distinct_words(self):
         assert test_pandas_one.iloc[1, 0] == 4

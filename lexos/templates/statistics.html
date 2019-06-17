@@ -10,9 +10,14 @@
     <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
 
     <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
     <script type="text/javascript" src="static/js/statistics.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/statistics.css"/>
 {% endblock %}
@@ -29,7 +34,7 @@
 
             <!-- Generate -->
             <div class="section">
-                <h3 id="generate-button" class="disabled button">Generate</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
             </div>
 
             <!-- Tokenize -->
@@ -37,19 +42,12 @@
 
                 <div class="vertical-splitter section-top">
                     <h3 class="title">Tokenize</h3>
-                    <h3 id="tokenize-tooltip-button" class="right-justified button">?</h3>
+                    <span id="tokenize-tooltip-button" class="right-justified tooltip-button">?</span>
                 </div>
 
                 <div class="section-body">
-                    <label class="circle-label">
-                        <input name="tokenType" value="word" type="radio" checked>
-                        <span>By Tokens</span>
-                    </label><br>
-
-                    <label class="circle-label">
-                        <input name="tokenType" value="char" type="radio">
-                        <span>By Characters</span>
-                    </label><br>
+                    <label><input name="tokenType" value="word" type="radio" checked><span></span>By Tokens</label><br>
+                    <label><input name="tokenType" value="char" type="radio"><span></span>By Characters</label><br>
 
                     <h3>Grams</h3>
                     <label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
@@ -61,32 +59,44 @@
 
                 <div class="vertical-splitter section-top">
                     <h3 class="title">Cull</h3>
-                    <h3 id="cull-tooltip-button" class="right-justified button">?</h3>
+                    <span id="cull-tooltip-button" class="right-justified tooltip-button">?</span>
                 </div>
 
                 <div class="section-body">
 
-                    <label class="checkbox-label">
+                    <label>
                         <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
-                        <span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</span>
+                        <span></span>
+                        Use the top
+                        <input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
+                        terms
                     </label>
 
-                    <h3 id="most-frequent-words-tooltip-button" class="button">?</h3><br>
+                    <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
 
-                    <label class="checkbox-label">
+                    <label>
                         <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
-                        <span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</span>
+                        <span></span>
+                        Must be in
+                        <input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">
+                        documents
                     </label>
 
-                    <h3 id="minimum-occurrences-tooltip-button" class="button">?</h3>
+                    <span id="minimum-occurrences-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
         </div>
 
         <!-- Document sizes -->
         <div id="graph-section" class="section">
-            <div id="graph-section-top">
-                <h3 class="section-top title">Document Sizes</h3>
+            <div id="graph-section-top" class="vertical-splitter section-top">
+
+                <h3 class="title">Document Sizes</h3>
+
+                <div class="right-justified">
+                    <span id="png-button" class="disabled button">PNG</span>
+                    <span id="svg-button" class="disabled button">SVG</span>
+                </div>
             </div>
             <div id="graph-container" class="section-body"></div>
         </div>
@@ -116,8 +126,20 @@
 
     <!-- Document statistics -->
     <div id="documents-section" class="section">
-        <div class="vertical-splitter section-top">
+
+        <div id="table-top" class="section-top">
+
+            <!-- Title -->
             <h3 class="title">Document Statistics</h3>
+
+            <!-- Sort direction -->
+            <div class="table-top-radio-option">
+                <h3>Order: </h3>
+                <label><input name="sort-ascending" value="true" type="radio" checked><span></span>Ascending</label>
+                <label><input name="sort-ascending" value="false" type="radio"><span></span>Descending</label>
+            </div>
+
+            <!-- Download -->
             <a id="download-button" class="right-justified disabled button">Download</a>
         </div>
 
@@ -130,4 +152,6 @@
     <input name="normalizeType" value="raw" type="hidden">
     <input id="active-file-ids" name="active_file_ids" type="hidden">
     <div id="document-names-section"></div>
+    <input name="sort-column" value="0" type="hidden">
+
 {% endblock %}

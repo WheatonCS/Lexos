@@ -19,8 +19,9 @@ form {
     height: 6rem;
     margin: 1rem;
     border-radius: 3rem;
-    background-color: #F3F3F3;
-    border: .2rem solid #D3D3D3;
+    color: #FFFFFF;
+    background-color: #47BCFF;
+    border: .2rem solid #47BCFF;
     transition: background-color .2s, border-color .2s;
 }
 
@@ -31,7 +32,9 @@ form {
 }
 
 #drag-and-drop-section {
-    height: calc(100% - 7rem);
+    height: calc(100% - 8rem);
+    width: 100%;
+    color: #505050;
     background-color: #F3F3F3;
     border: .2rem dashed #D3D3D3;
     transition: background-color .2s, border-color .2s;
@@ -46,7 +49,8 @@ form {
 /* Upload list */
 #upload-previews {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(8rem, 1fr));
     grid-gap: 1rem;
     height: 100%;
     overflow-y: auto;
@@ -57,6 +61,8 @@ form {
     align-content: center;
     justify-content: center;
     min-height: 8rem;
+    max-height: 8rem;
+    max-width:40rem;
     padding: 1rem;
     background-color: #F3F3F3;
 }

@@ -3,6 +3,10 @@
 <!-- Head -->
 {% block head %}
 
+    <!-- Page Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/content-analysis.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/content-analysis.css"/>
@@ -12,7 +16,109 @@
 <!-- Content -->
 {% block content %}
 
-    <div class="centerer">
-        <h3>This Page Has Not Been Migrated Yet</h3>
+    <!-- Top -->
+    <div id="top-section">
+
+        <!-- Dictionaries -->
+        <div id="dictionaries-section" class="section">
+
+            <!-- Top -->
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Dictionaries</h3>
+
+                <div class="right-justified">
+                    <span id="upload-button" class="important-button">Upload</span>
+                    <span id="dictionaries-tooltip-button" class="tooltip-button">?</span>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="borderless-section-body dictionaries-wrapper">
+                <h3 class="centerer">No Uploads</h3>
+            </div>
+        </div>
+
+        <!-- Formula --->
+        <div id="formula-section" class="section">
+
+            <!-- Top -->
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Formula</h3>
+
+                <div class="right-justified">
+                    <span id="analyze-button" class="important-button">Analyze</span>
+                    <span id="formula-tooltip-button" class="tooltip-button">?</span>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div id="formula-body" class="section-body">
+
+                <textarea id="formula-textarea" spellcheck="false"></textarea>
+
+                <div id="formula-buttons">
+                    <div id="number-pad">
+                        <h3>1</h3><h3>2</h3><h3>3</h3>
+                        <h3>4</h3><h3>5</h3><h3>6</h3>
+                        <h3>7</h3><h3>8</h3><h3>9</h3>
+                        <h3>DEL</h3><h3>0</h3><h3>CLR</h3>
+                    </div>
+
+                    <div id="operations-pad">
+                        <h3>(</h3><h3>)</h3>
+                        <h3>+</h3><h3>-</h3>
+                        <h3>/</h3><h3>X</h3>
+                        <h3>.</h3><h3>^</h3>
+                    </div>
+
+                    <div id="documents-pad" class="dictionaries-wrapper">
+                        <h3 class="centerer">No Uploads</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Overview -->
+    <div class="section">
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Overview</h3>
+            <span id="overview-download-button" class="disabled right-justified button">Download</span>
+        </div>
+        <div id="overview-body" class="borderless-section-body">
+            <h3 class="centerer">No Results</h3>
+        </div>
+    </div>
+
+
+    <!-- Corpus -->
+    <div class="section">
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Corpus</h3>
+            <div class="right-justified">
+                <span id="corpus-download-button" class="disabled button">Download</span>
+                <span id="corpus-tooltip-button" class="tooltip-button">?</span>
+            </div>
+        </div>
+        <div id="corpus-body" class="borderless-section-body">
+            <h3 class="centerer">No Results</h3>
+        </div>
+    </div>
+
+    <!-- Documents -->
+    <div class="section">
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Documents</h3>
+            <span id="documents-tooltip-button" class="right-justified tooltip-button">?</span>
+        </div>
+        <div id="documents-body" class="section-body">
+            <h3 class="centerer">No Results</h3>
+        </div>
+    </div>
+
+
+    <!-- Hidden elements -->
+    <input id="file-input" name="lemfileselect[]" type="file" class="hidden" multiple>
+
 {% endblock %}

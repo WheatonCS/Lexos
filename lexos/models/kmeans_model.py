@@ -315,6 +315,7 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
@@ -374,6 +375,7 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot.
         layout = go.Layout(
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
@@ -431,6 +433,7 @@ class KMeansModel(BaseModel):
 
         # Set the layout of the plot, mainly set the background color to grey.
         layout = go.Layout(
+            dragmode="pan",
             margin=dict(
                 l=0,
                 r=0,
@@ -488,8 +491,18 @@ class KMeansModel(BaseModel):
         :return: The k-means results.
         """
 
+        config = {
+            "displaylogo": False,
+            "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
+            "scrollZoom": True
+        }
+
         result = self._get_result()
 
-        return jsonify({"graph": plot(self._get_result().plot, show_link=False,
-                        output_type="div", include_plotlyjs=False),
+        return jsonify({"graph": plot(
+                            self._get_result().plot,
+                            show_link=False,
+                            output_type="div",
+                            include_plotlyjs=False,
+                            config=config),
                         "csv": result.table.to_csv()})

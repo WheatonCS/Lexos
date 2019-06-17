@@ -4,8 +4,13 @@
 <!-- Head -->
 {% block page_head %}
 
-    <!-- Page JS and CSS -->
+    <!-- Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+
+    <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/k-means.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/k-means.css"/>
 {% endblock %}
@@ -22,25 +27,17 @@
             <!-- Clusters -->
             <h3>Clusters</h3>
             <input id="clusters-input" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="clusters-tooltip-button" class="button">?</h3><br>
+            <span id="clusters-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Voronoi -->
-            <label class="circle-label">
-                <input name="viz" value="Voronoi" type="radio" checked>
-                <span>Voronoi</span>
-            </label>
-            <h3 id="visualization-method-tooltip-button" class="button">?</h3><br>
+            <label><input name="viz" value="Voronoi" type="radio" checked><span></span>Voronoi</label>
+            <span id="visualization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- 2D Scatter -->
-            <label class="circle-label"><input name="viz" value="2DScatter" type="radio">
-                <span>2D Scatter</span>
-            </label><br>
+            <label><input name="viz" value="2DScatter" type="radio"><span></span>2D Scatter</label><br>
 
             <!-- 3D Scatter -->
-            <label class="circle-label">
-                <input name="viz" value="3DScatter" type="radio">
-                <span>3D Scatter</span>
-            </label>
+            <label><input name="viz" value="3DScatter" type="radio"><span></span>3D Scatter</label>
         </div>
     </div>
 
@@ -50,31 +47,25 @@
         <div class="section-body">
 
             <!-- K-Means -->
-            <label class="circle-label">
-                <input name="init" value="k-means++" type="radio" checked>
-                <span>K-Means++</span>
-            </label>
+            <label><input name="init" value="k-means++" type="radio" checked><span></span>K-Means++</label>
 
             <!-- Random -->
-            <label class="circle-label">
-                <input name="init" value="random" type="radio">
-                <span>Random</span>
-            </label>
-            <h3 id="initialization-method-tooltip-button" class="button">?</h3><br>
+            <label><input name="init" value="random" type="radio"><span></span>Random</label>
+            <span id="initialization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Maximum Iterations -->
             <h3>Maximum Iterations</h3>
-            <input id="maximum-iterations-input" name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off">
+            <input id="maximum-iterations-input" name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off"><br>
 
             <!-- Different Centriods -->
             <h3>Different Centroids</h3>
             <input id="different-centroids-input" name="n_init" value="10" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="different-centroids-tooltip-button" class="button">?</h3><br>
+            <span id="different-centroids-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Relative Tolerance -->
             <h3>Relative Tolerance</h3>
             <input id="relative-tolerance-input" name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
-            <h3 id="relative-tolerance-tooltip-button" class="button">?</h3><br>
+            <span id="relative-tolerance-tooltip-button" class="tooltip-button">?</span>
         </div>
     </div>
 {% endblock %}
@@ -91,8 +82,10 @@
             <h3 class="title">K-Means</h3>
 
             <div class="right-justified">
-                <h3 id="generate-button" class="disabled button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="png-button" class="disabled button">PNG</span>
+                <span id="svg-button" class="disabled button">SVG</span>
+                <span id="csv-button" class="disabled button">CSV</span>
             </div>
         </div>
 

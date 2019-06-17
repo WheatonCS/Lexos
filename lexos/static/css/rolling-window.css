@@ -17,10 +17,6 @@ form {
     grid-gap: 2rem;
 }
 
-.section input[type=text]{
-    margin-bottom: 1rem;
-}
-
 
 /* Text inputs */
 #search-input-grid {
@@ -29,7 +25,8 @@ form {
 }
 
 #search-input-grid input {
-    width: calc(100% - 1rem);
+    width: 100%;
+    margin-left: 0;
 }
 
 #search-terms-input-denominator {
@@ -41,10 +38,12 @@ form {
     margin-left: 0;
 }
 
-#display-section input[type=text] {
-    margin-bottom: 0;
-    margin-right: 0;
-    width: calc(100% - 12rem);
+#display-section-input-label {
+    width: calc(100% - 3rem);
+}
+
+#display-section input {
+    width: calc(100% - 11.2rem);
 }
 
 

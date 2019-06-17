@@ -9,7 +9,7 @@ $(function(){
     initialize_tooltips();
 
     // Check that there are at least two active documents, initialize the
-    // legacy inputs and the "Generate" and "Download" buttons, create the
+    // legacy inputs and the "Generate" and download buttons, create the
     // k-means graph, and get the CSV data
     get_active_file_ids(initialize, "#graph-container");
 });
@@ -17,7 +17,7 @@ $(function(){
 
 /**
  * Checks that there are at least two active documents, initializes the legacy
- *      inputs and the "Generate" and "Download" buttons, creates the k-means
+ *      inputs and the "Generate" and download buttons, creates the k-means
  *      graph, and gets the CSV data.
  * @param {string} response: The response from the "active-file-ids" request.
  */
@@ -60,16 +60,19 @@ function initialize(response){
         remove_errors();
 
         // Display the loading overlays and disable the "Generate" and
-        // "Download" buttons
+        // download buttons
         start_loading("#graph-container",
-            "#generate-button, #download-button");
+            "#generate-button, #png-button, #svg-button, #csv-button");
 
         // Create the k-means graph and get the CSV data
         send_k_means_result_request();
     });
 
-    // If the "Download" button is pressed, download the CSV
-    $("#download-button").click(function(){ download(csv, "k-means.csv"); });
+    // If the "CSV" button is pressed, download the CSV
+    $("#csv-button").click(function(){ download(csv, "k-means.csv"); });
+
+    // If the "PNG" or "SVG" buttons were pressed, download the graph
+    initialize_graph_download_buttons();
 }
 
 
@@ -82,11 +85,11 @@ function send_k_means_result_request(){
     send_ajax_form_request("/k-means/results")
 
         // If the request was successful, initialize the graph, store the CSV
-        // data, and enable the "Generate" and "Download" buttons
+        // data, and enable the "Generate" and download buttons
         .done(function(response){
             csv = response.csv;
             initialize_graph(response.graph);
-            enable("#generate-button, #download-button");
+            enable("#generate-button, #png-button, #svg-button, #csv-button");
         })
 
         // If the request failed, display an error and enable the "Generate"

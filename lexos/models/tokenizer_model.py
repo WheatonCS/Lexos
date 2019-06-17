@@ -124,7 +124,7 @@ class TokenizerModel(BaseModel):
 
         # Sort the DTM. If the sort column is 0, sort by index
         dtm_sorted = dtm.sort_values(
-            by=[dtm.columns[self._front_end_option.sort_column - 1]],
+            by=[dtm.columns[self._front_end_option.sort_column-1]],
             ascending=self._front_end_option.sort_method
         ) if self._front_end_option.sort_column != 0 \
             else dtm.sort_index(ascending=self._front_end_option.sort_method)

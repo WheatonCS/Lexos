@@ -44,7 +44,7 @@ function close_popup(){
  * @returns {jQuery}: The popup element.
  */
 function create_ok_popup(title){
-   let popup_element = $(`<h3 id="popup-ok-button" class="button">OK</h3>`);
+   let popup_element = $(`<span id="popup-ok-button" class="button">OK</span>`);
     popup_element.appendTo(create_popup(title));
     return popup_element;
 }
@@ -91,9 +91,10 @@ function create_radio_options_popup(title, radio_buttons_name,
         // Create the radio button
         let element = $(`
             <div>
-                <label class="circle-label">
+                <label>
                     <input type="radio" name="${radio_buttons_name}" value="${option[0]}">
-                    <span>${option[1]}</span>
+                    <span></span>
+                    ${option[1]}
                 </label>
             </div>
         `).appendTo(popup_content);
@@ -103,15 +104,15 @@ function create_radio_options_popup(title, radio_buttons_name,
             element.find("input").prop("checked", true);
     }
 
-    $(`<h3 id="ok-button" class="button">OK</h3>`).appendTo("#popup");
+    $(`<span id="ok-button" class="button">OK</span>`).appendTo("#popup");
 
     // If the "OK" button is pressed, set the input element's value, the
     // display element's text, and close the popup
     $("#ok-button").click(function(){
         let selected_element = $(`input[name="${radio_buttons_name}"]:checked`);
         input_element.val(selected_element.val());
-        $(display_element_query).text(selected_element
-            .closest("div").find("span").html());
+        $(display_element_query).text(
+            selected_element.closest("div").text().trim());
         close_popup();
     });
 

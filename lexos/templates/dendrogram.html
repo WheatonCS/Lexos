@@ -5,9 +5,10 @@
 {% block page_head %}
 
     <!-- Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
     <script type="text/javascript" src="static/js/helpers/popup.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
-    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
     <script type="text/javascript" src="static/js/helpers/tree-options.js"></script>
 
     <!-- Page JS and CSS -->
@@ -28,18 +29,18 @@
             <!-- Distance metric -->
             <div>
                 <h3>Distance Metric: </h3>
-                <h3 id="distance-metric-button" class="button">Euclidean</h3>
-                <h3 id="distance-metric-tooltip-button" class="button">?</h3><br>
+                <span id="distance-metric-button" class="button">Euclidean</span>
+                <span id="distance-metric-tooltip-button" class="tooltip-button">?</span><br>
             </div>
 
             <!-- Linkage method -->
             <h3>Linkage Method: </h3>
-            <h3 id="linkage-method-button" class="button">Average</h3>
-            <h3 id="linkage-method-tooltip-button" class="button">?</h3><br>
+            <span id="linkage-method-button" class="button">Average</span>
+            <span id="linkage-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Orientation -->
             <h3>Orientation: </h3>
-            <h3 id="orientation-button" class="button">Left</h3>
+            <span id="orientation-button" class="button">Left</span>
         </div>
     </div>
 {% endblock %}
@@ -52,7 +53,11 @@
     <div class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Dendrogram</h3>
-            <h3 id="generate-button" class="right-justified disabled button">Generate</h3>
+            <div class="right-justified">
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="png-button" class="disabled button">PNG</span>
+                <span id="svg-button" class="disabled button">SVG</span>
+            </div>
         </div>
 
         <div id="graph-container" class="section-body"></div>
