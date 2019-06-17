@@ -1,0 +1,60 @@
+#help-section {
+    display: block;
+    width: 40rem;
+    padding-bottom: 2rem;
+    overflow-y: auto;
+}
+
+#help-section-navbar {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #FFFFFF;
+    height: 7rem;
+}
+
+.help-section-title {
+    display: block;
+    margin-top: 2rem;
+    padding: 2rem;
+    color: #47BCFF;
+    background-color: #FFFFFF;
+}
+
+.help-section-paragraph,
+.help-section-list {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+}
+
+.help-section-paragraph {
+    display: block;
+    background-color: #FFFFFF;
+}
+
+.help-section-list {
+    background-color: #FFFFFF;
+    display: block;
+}
+
+.help-section-list > li {
+    padding-bottom: 1rem;
+}
+
+.help-section-list > li:last-child {
+    padding-bottom: 0;
+}
+table {
+    font-size: 1.3rem;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    font-size: 1.3rem;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}

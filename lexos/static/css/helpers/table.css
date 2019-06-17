@@ -1,14 +1,19 @@
 .lexos-table {
     display: grid;
     grid-template-rows: min-content 1fr;
+    max-height: 39.3rem;
     background-color: #FFFFFF;
 }
 
 .lexos-table-title {
-    display: block;
-    min-height: 3rem;
-    margin: 1rem;
-    word-break: break-word;
+    min-height: 4rem;
+    padding: 1rem;
+    color: #47BCFF;
+}
+
+.lexos-table-head-cell {
+    padding: 1rem;
+    word-break: break-all;
     color: #47BCFF;
 }
 
@@ -16,12 +21,15 @@
     overflow-y: auto;
 }
 
+.lexos-table-head,
 .lexos-table-row {
     display: grid;
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
+}
+
+.lexos-table-row {
     margin-bottom: 1rem;
-    background-color: #F3F3F3;
 }
 
 .lexos-table-row:last-child {
@@ -31,4 +39,5 @@
 .lexos-table-cell {
     padding: 1rem;
     word-break: break-all;
+    background-color: #F3F3F3;
 }

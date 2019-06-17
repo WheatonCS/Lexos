@@ -92,7 +92,7 @@ function create_class_division_tables(response){
     single_class = classes.length <= 1;
     for(const entry of classes){
 
-        // Push an object containing the class name and an empty array
+        // Push an object containing the class name and an empty data array
         let class_name = entry[0];
         table_data.push({name: class_name, data: []});
 
@@ -110,8 +110,8 @@ function create_class_division_tables(response){
         .appendTo("#class-divisions-body");
 
     // Create the class divisions tables
-    for(const table of table_data) create_table(table.name,
-        "#class-divisions-grid", table.data);
+    for(const table of table_data) create_table(
+        "#class-divisions-grid", table.data, '', table.name);
 
     // Remove the loading overlay from the "Class Divisions" section and fade
     // in the tables
@@ -162,8 +162,8 @@ function create_top_words_tables(tables){
         .appendTo("#top-words-body");
 
     // Create the top words tables
-    for(const table of tables) create_table(
-        table["title"], "#top-words-grid", table["result"]);
+    for(const table of tables) create_table("#top-words-grid",
+        table["result"], '', table["title"]);
 
     // Remove the loading overlay and enable the buttons
     finish_loading("#top-words-body", "#top-words-grid",
@@ -211,7 +211,7 @@ function initialize_tooltips(){
     // "Comparison Method"
     create_tooltip("#comparison-method-tooltip-button", `By default, topwords
     compares individual documents to the entire set of active documents. If
-    you wish to compare individual documents to other classes, got to the
+    you wish to compare individual documents to other classes, go to the
     Manage tool to edit class labels.`);
 
     // "Each document to the corpus"
@@ -234,7 +234,7 @@ function initialize_tooltips(){
 
     // "Class Divisions"
     create_tooltip("#class-division-tooltip-button", `This indicates assigned
-        classes and the documents contained in each class.`);
+        classes and the documents contained in each class.`, true);
 
     // "Top Words"
     create_tooltip("#download-tooltip-button", `Get Topwords only displays the

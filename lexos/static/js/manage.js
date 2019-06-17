@@ -108,7 +108,7 @@ function append_row(id, row_number, active, label, class_name, source, preview){
     // Create a new row and append it to the "table-body" element
     let row = $(`
         <div id="${id}" class="table-row">
-            <div class="active-dot"></div>
+            <div class="active-indicator"></div>
             <h3 class="table-cell">${row_number}</h3>
             <h3 class="table-cell"></h3>
             <h3 class="table-cell"></h3>
@@ -284,10 +284,11 @@ function merge_selected(){
         <h3>Name: </h3>
         <label><input id="merge-name-input" name="" value="Merge-${first_selected_document.label}" type="text" spellcheck="false" autocomplete="off"></label>
         <br>
-        <label class="checkbox-label">
+        <label>
             <input id="merge-milestone-checkbox" name="" type="checkbox">
-            <span class="checkmark"></span>
-            <span>Milestone: <input id="merge-milestone-input" name="" value="#EOF#" type="text" spellcheck="false" autocomplete="off"></span>
+            <span></span>
+            Milestone:
+            <input id="merge-milestone-input" name="" value="#EOF#" type="text" spellcheck="false" autocomplete="off">
          </label>
 
     `).appendTo("#popup-content");

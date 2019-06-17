@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en-us">
 
 <!-- Head -->
 <head>
@@ -11,13 +10,11 @@
     <!-- jQuery -->
     <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script type="text/javascript" src="static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Base Lexos dependencies -->
+    <!-- Core Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/error.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/help.css"/>
     <script type="text/javascript" src="static/js/helpers/utility.js"></script>
 
     {% block head %}{% endblock %}
@@ -29,11 +26,12 @@
 
     <!-- Navbar -->
     <div id="navbar">
-        <div id="navbar-left">
-            <img id="lexos-dragon" src="static/lexos_dragon.png" id="logo">
-            <h1 style="display: inline-block">{L}exos</h1>
-        </div>
-        <div id="navbar-right">
+
+        <h1 id="lexos-logo">{L}exos</h1>
+
+        <img id="lexos-dragon" src="static/images/lexos-dragon-crop.png" id="logo">
+
+        <div id="navbar-right" class="right-justified">
             <a id="upload-button" href="/upload">Upload</a>
             <a id="manage-button" href="/manage">Manage</a>
 
@@ -69,27 +67,16 @@
     <!-- Footer -->
     <footer>
 
-        <!-- Left footer -->
-        <div id="left-footer">
-            <h3>Lexos v4.0b © 2019</h3>
-            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank"><u>Lexomics Research Group</u></a>
-            ·
-			<a href="http://wheatoncollege.edu/" target="_blank">Wheaton College</a>
+        <!-- Left -->
+        <a href="http://www.neh.gov/" target="_blank"><img id="neh-logo" src="static/images/neh.png"></a>
 
-            <span id="license">
-                    <!-- image 252 x 62 -->
-                <a href="http://www.neh.gov/" target="_blank" style="border:none;">
-                <img src="{{ url_for('static', filename='neh_logo_horizontal_rgb.jpg') }}"
-                     alt="Funded with support from the National Endowment for the Humanities"
-                     style="width:126px;height:31px;">
-                    </a>
-
-		    </span>
+        <div>
+            <h3>Lexos v4 © 2019 </h3>
+            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank">Wheaton Lexomics</a>
         </div>
 
-
-        <!-- Right footer -->
-        <div id="right-footer"><h3><a href="/manage">Active Documents: </a></h3><h3 id="active-document-count">0</h3></div>
+        <!-- Right -->
+        <a id="active-document-count" class="right-justified" href="/manage">Active Documents: 0</a>
     </footer>
 </body>
 </html>

@@ -306,10 +306,8 @@ class StatsModel(BaseModel):
                 pad=4
             ),
             xaxis=dict(
-                title="Scatter plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=True,
                 showticklabels=False
             ),
             yaxis=dict(
@@ -317,10 +315,8 @@ class StatsModel(BaseModel):
                 zeroline=False
             ),
             xaxis2=dict(
-                title="Box Plot of Text Size",
                 showgrid=False,
                 zeroline=False,
-                showline=True,
                 showticklabels=False
             ),
             yaxis2=dict(
@@ -344,7 +340,7 @@ class StatsModel(BaseModel):
             "scrollZoom": True
         }
 
-        # Return Plotly object as a div.
+        # Return the Plotly object as a div
         return plot(self._get_box_plot_object(),
                     include_plotlyjs=False,
                     output_type="div",

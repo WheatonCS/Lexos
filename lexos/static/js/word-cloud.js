@@ -7,9 +7,7 @@ $(function(){
     get_word_cloud_data();
 
     // If the "Generate" button is pressed, recreate the word cloud
-    $("#generate-button").click(function(){
-        get_word_cloud_data();
-    })
+    $("#generate-button").click(get_word_cloud_data);
 });
 
 
@@ -137,7 +135,7 @@ function create_word_cloud(dataset){
                 return "translate("+[d.x, d.y]+")rotate("+d.rotate+")";
             })
             .text(function(d){ return d.text; })
-        
+
             // If the text is moused over, create a tooltip with information on
             // the bubble and highlight the bubble
             .style("transition", "opacity .2s")

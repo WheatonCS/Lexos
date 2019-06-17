@@ -27,17 +27,16 @@
             <div>
 
                 <!-- Sample with replacement -->
-                <label class="checkbox-label">
-                    <input name="replace" type="checkbox"><span class="checkmark"></span><span>Sample with replacement</span>
-                </label><br>
+                <label><input name="replace" type="checkbox"><span></span>Sample with replacement</label>
+                <br>
 
                 <!-- Distance metric -->
-                <h3>Distance Metric </h3><h3 id="distance-metric-button" class="button">Euclidean</h3>
-                <h3 id="distance-metric-tooltip-button" class="button">?</h3><br>
+                <h3>Distance Metric: </h3><span id="distance-metric-button" class="button">Euclidean</span>
+                <span id="distance-metric-tooltip-button" class="tooltip-button">?</span><br>
 
                 <!-- Linkage method -->
-                <h3>Linkage Method </h3><h3 id="linkage-method-button" class="button">Average</h3>
-                <h3 id="linkage-method-tooltip-button" class="button">?</h3>
+                <h3>Linkage Method: </h3><span id="linkage-method-button" class="button">Average</span>
+                <span id="linkage-method-tooltip-button" class="tooltip-button">?</span>
             </div>
 
             <!-- Right column -->
@@ -46,13 +45,13 @@
                 <!-- Cutoff -->
                 <div>
                     <h3>Cutoff</h3><input id="cutoff-input" name="cutoff" value="0.5" type="text" spellcheck="false" autocomplete="off">
-                    <h3 id="cutoff-tooltip-button" class="button">?</h3><br>
+                    <span id="cutoff-tooltip-button" class="tooltip-button">?</span><br>
                 </div>
 
                 <!-- Iterations -->
                 <div>
                     <h3>Iterations</h3><input id="iterations-input" name="iterations" value="100" type="text" spellcheck="false" autocomplete="off">
-                    <h3 id="iterations-tooltip-button" class="button">?</h3>
+                    <span id="iterations-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
         </div>
@@ -70,8 +69,8 @@
         <div class="vertical-splitter section-top">
             <h3 class="title">Consensus Tree</h3>
             <div class="right-justified">
-                <h3 id="generate-button" class="disabled button">Generate</h3>
-                <h3 id="download-button" class="disabled button">Download</h3>
+                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="download-button" class="disabled button">Download</span>
             </div>
         </div>
 

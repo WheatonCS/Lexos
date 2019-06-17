@@ -1,3 +1,16 @@
+/* Main section */
+#main-section {
+    min-width: 130rem;
+}
+
+/* Form */
+form {
+    grid-template-rows: 45rem repeat(3, minmax(16rem, auto));
+    min-height: calc(100% - 4rem);
+    height: auto;
+}
+
+
 /* Top section */
 #top-section {
     display: grid;
@@ -6,17 +19,38 @@
 }
 
 
+/* Dictionaries */
+.dictionaries-wrapper {
+    overflow: auto;
+}
+
+.dictionaries h3 {
+    display: flex;
+    word-break: break-word;
+    min-height: 3rem;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #F3F3F3;
+}
+
+.dictionaries h3:last-child {
+    margin-bottom: 0;
+}
+
+
 /* Formula */
 #formula-body {
     display: grid;
-    grid-template-rows: 1fr 1fr 2fr;
+    grid-template-rows: 10rem 1fr;
     grid-gap: 1rem;
 }
 
 #formula-buttons {
     display: grid;
     height: 100%;
-    grid-template-columns: 1fr .333fr 1.333fr;
+    min-height: 0;
+    grid-template-columns: 1fr .7fr 1fr;
     grid-gap: 1rem;
 }
 
@@ -32,10 +66,10 @@
 }
 
 #operations-pad {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 }
 
-#formula-buttons h3 {
+#formula-buttons h3:not(.centerer) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,8 +80,37 @@
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
-#formula-buttons h3:hover {
+#formula-buttons h3:not(.centerer):hover {
     color: #47BCFF;
     background-color: #EAF5FF;
     border-color: #47BCFF;
+}
+
+
+/* Results */
+#overview-table,
+#corpus-table {
+    border-bottom: 2rem solid #E3E3E3;
+}
+
+#document-tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+    grid-gap: 1rem;
+}
+
+#document-tables-grid .lexos-table {
+    background-color: #F3F3F3;
+    max-height: 38.4rem;
+    min-height: 25rem;
+}
+
+#document-tables-grid .lexos-table-row {
+    background-color: #FFFFFF;
+    margin-bottom: 0;
+    border-bottom: 1rem solid #FFFFFF;
+}
+
+#document-tables-grid .lexos-table-row:last-child {
+    border-bottom: none;
 }

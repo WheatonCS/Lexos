@@ -291,7 +291,7 @@ function error(message){
             <h3 id="error-text">${message}</h3>
             <h3 id="error-text-2">${message}</h3>
             <div id="error-button-container">
-                <h3 id="error-close-button" class="right-justified button">Dismiss</h3>
+                <span id="error-close-button" class="right-justified button">Dismiss</span>
             </div>
         </div>
     `).appendTo("body");
@@ -376,7 +376,7 @@ function create_tooltip(query, text, on_right_edge = false){
         }
 
         // Otherwise, create the tooltip
-        $(this).addClass("button-active");
+        $(this).addClass("tooltip-button-active");
         tooltip_element = $(`
             <div id="${id}" class="hidden lexos-tooltip">
                 <h3>${text}</h3>
@@ -415,7 +415,7 @@ function create_tooltip(query, text, on_right_edge = false){
  */
 function remove_tooltips(){
 
-    $(".button-active").removeClass("button-active");
+    $(".tooltip-button-active").removeClass("tooltip-button-active");
     $(".lexos-tooltip").remove();
 }
 
