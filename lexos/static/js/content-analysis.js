@@ -169,7 +169,8 @@ function display_results(response){
 
     // Create the overview table
     let overview = response["overview"]
-    create_table("#overview-body", overview.splice(1), overview[0]);
+    let head = overview[0];
+    create_table("#overview-body", overview.splice(1), head);
 
     // Create the corpus table
     create_table("#corpus-body", response["corpus"],
