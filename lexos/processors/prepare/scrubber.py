@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import re
+import regex as re
 import sys
 import unicodedata
 from typing import List, Dict, Match
@@ -476,8 +476,9 @@ def get_remove_digits(text: str) -> str:
     # unicode digits, this pattern will match:
     # 1) ***
     # 2) ***.***
-    pattern = re.compile(r"([+-]?\d+)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
-                         r"|\u02D9|\u066B|\u066C|\u2396]\d+)", re.UNICODE)
+    pattern = re.compile(r"([+-]?\p{Nd}+|\p{No}+|\p{Nl}+)|((?<=\p{Nd}|\p{No}|"
+                         r"\p{Nl})[\u0027|\u002C|\u002E|\u00B7|\u02D9|\u066B|"
+                         r"\u066C|\u2396]\p{Nd}+|\p{No}+|\p{Nl}+)", re.UNICODE)
     remove_digits = str(re.sub(pattern, r"", text))
 
     return remove_digits
@@ -953,7 +954,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 6. whitespace ------------------------------------------------------
 
-    if white_space:
+    if spaces or tabs or new_lines:
         remove_whitespace_map = get_remove_whitespace_map(
             spaces, tabs, new_lines)
     else:
