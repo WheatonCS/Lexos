@@ -77,7 +77,6 @@ def scrape():
     file_manager = utility.load_file_manager()
 
     scraped_files = []
-    print(urls)
     for i, url in enumerate(urls):
         response = requests.get(url)
         file_name = "url"+str(i)+".txt"
