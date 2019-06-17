@@ -14,7 +14,9 @@ test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                             columns=np.array(["A", "B", "C", "D", "E", "F",
                                               "G", "H", "I"]))
 test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
-test_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1])
+test_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1],
+                                                sort_ascending=True,
+                                                sort_column=0)
 test_option_one = StatsTestOptions(
     token_type_str="terms",
     doc_term_matrix=test_dtm_one,
@@ -40,7 +42,9 @@ test_dtm_two = pd.DataFrame(
                       "I", "J", "K", "L"]))
 test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_stats_front_end_option_two = \
-    StatsFrontEndOption(active_file_ids=[0, 1, 2])
+    StatsFrontEndOption(active_file_ids=[0, 1, 2],
+                        sort_ascending=True,
+                        sort_column=0)
 test_option_two = StatsTestOptions(
     token_type_str="characters",
     doc_term_matrix=test_dtm_two,
@@ -64,7 +68,9 @@ test_id_temp_table_anomaly = \
     {0: "F1.txt", 1: "F2.txt", 2: "F3.txt", 3: "F4.txt", 4: "F5.txt",
      5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
 test_stats_front_end_option_anomaly = \
-    StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        sort_ascending=True,
+                        sort_column=0)
 test_option_anomaly = \
     StatsTestOptions(token_type_str="characters",
                      doc_term_matrix=test_dtm_anomaly,
@@ -142,7 +148,9 @@ class TestCorpusInfo:
 # -------------------- Empty data frame case test suite ---------------------
 test_dtm_empty = pd.DataFrame()
 test_id_temp_table_empty = {}
-test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[])
+test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[],
+                                                        sort_ascending=True,
+                                                        sort_column=0)
 test_option_empty = \
     StatsTestOptions(token_type_str="terms",
                      doc_term_matrix=test_dtm_empty,
