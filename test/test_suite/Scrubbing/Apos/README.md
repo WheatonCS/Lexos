@@ -1,5 +1,6 @@
-Apostrophes
-===========
+# Apostrophes
+
+***
 
 #### Test Keep Word-Internal Apostrophes
 
@@ -9,16 +10,17 @@ Apostrophes
                 apos3Results.txt
             
 
-1. UPLOAD FILES
+1. Upload all files
 
-2. SCRUB: 
-    - Remove All Punctuation
+2. Scrub: 
     - Make Lowercase
     - Remove Digits
-    - Keep Word-Internal Apostrophes
+    - Remove Punctuation
+    - Keep Apostrophes
     
-3. RESULTS
+3. Click "Apply"
     - Four files containing
         * lowercase letters
         * no digits
         * no punctuation except for word-internal apostrophes
+    - (see ResultsToExpect)

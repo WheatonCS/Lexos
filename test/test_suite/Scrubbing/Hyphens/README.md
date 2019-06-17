@@ -1,5 +1,6 @@
-Hyphens
-=======
+# Hyphens
+
+***
 
 #### Test Keep Hyphens
 
@@ -7,25 +8,18 @@ Hyphens
 
 *Result files:* hyphensResults.txt, puncPcResults.txt, puncPdResults.txt
 
-1. UPLOAD FILES
+1. Upload files
 
-2. SCRUB: 
-    - Remove All Punctuation
+2. Scrub: 
+    - Remove Punctuation
     - Make Lowercase 
     - Remove Digits 
     - Keep Hyphens
 
-3. RESULTS
-    - a file(hyphensResults.txt) containing
+3. Results
+    - a file containing
         * lowercase letters
         * no digits
         * no punctuation except for hyphens
-        
-    - a file(puncPcResults.txt) containing
-        * no digits
-        * no punctuation except for hyphens  
-        * **THIS FILE WILL BE EMPTY**
-        
-    - a file(puncPdResults.txt) containing
-        * no digits
-        * no punctuation except for hyphens  
+    - see ResultsToExpect
+        * *Note:* puncPcResults.txt will be empty

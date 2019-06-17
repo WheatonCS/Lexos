@@ -1,5 +1,6 @@
-Lowercase
-=====
+# Lowercase
+
+***
 
 #### Test Make Lowercase
 
@@ -8,12 +9,13 @@ Lowercase
 *Result Files:* lowerResults.txt, greekTestResults.txt, lowerTest1Results.txt,
 spanishTestResults.txt
 
-1. UPLOAD FILES
+1. Upload files
 
-2. SCRUB: 
-    - Remove All Punctuation
+2. Scrub: 
+    - Remove Punctuation
     - Make Lowercase
     - Remove Digits 
 
-3. RESULTS:
+3. Results:
     - four files with only lowercase letters
+    - see ResultsToExpect

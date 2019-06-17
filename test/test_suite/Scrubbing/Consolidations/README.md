@@ -1,5 +1,6 @@
-Consolidations
-==============
+# Consolidations
+
+***
 
 #### Test Consolidations
 
@@ -7,16 +8,17 @@ Consolidations
 
 *Result file:* experimentResults.txt
 
-1. UPLOAD experiment.txt
+1. Upload experiment.txt
 
-2. SCRUB: 
-    - deselect Remove All Punctuation
+2. Scrub: 
+    - deselect Remove Punctuation
     - deselect Make Lowercase
     - deselect Remove Digits
     
-3. CONSOLIDATIONS:
-    - UPLOAD consolidations_for_experiment.txt
+3. Consolidations:
+    - Upload consolidations_for_experiment.txt
 
-4. RESULTS
-    - a file(experimentResults.txt) with
+4. Results
+    - a file with
         * all 'o's consolidated to 'a's
+    - (Expected: experimentResults.txt)

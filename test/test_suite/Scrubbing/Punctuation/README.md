@@ -1,5 +1,6 @@
-Punctuation
-===========
+# Punctuation
+
+***
 
 #### Test Remove All Punctuation
 
@@ -13,13 +14,14 @@ currencySymbolsResults.txt, currencyWikiResults.txt, punct1Results.txt,
 SpanishPunc1Results.txt
 
 
-1. UPLOAD FILES
+1. Upload files
 
-2. SCRUB:
+2. Scrub:
     - Remove All Punctuation
     - Make Lowercase
     - Remove Digits
 
-3. RESULTS:
+3. Results:
     - nine files with all forms of punctuation removed
+    - see ResultsToExpect
     

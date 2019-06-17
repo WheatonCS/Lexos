@@ -1,5 +1,6 @@
-Digits
-=======
+# Digits
+
+***
 
 #### Test Remove Digits 
 
@@ -9,15 +10,15 @@ Digits
 *Result file:* all_digits_and_test_Results.txt, digitsResults.txt, 
                digits_Chinese_Results.txt, digits_easternArabicResults.txt
 
-- allDigits.txt and numberLetter.txt could NOT be tested
-- digits_Chinese.txt does NOT contain any digits
 
-1. UPLOAD FILES
+1. Upload all files
 
-2. SCRUB: 
-    - Remove All Punctuation (optional)
-    - Make Lowercase (optional)
-    - Remove Digits
+2. Scrub: 
+    - deselect Remove Punctuation
+    - deselect Make Lowercase
+    - select Remove Digits
 
 3. RESULTS: 
     - all digits have been removed from test files
+    - see ResultsToExpect
+        * *Note:* scrubbed_numberLetter.txt will be an empty file

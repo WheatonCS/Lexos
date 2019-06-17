@@ -1,5 +1,6 @@
-Ampersands
-==========
+# Ampersands
+
+***
 
 #### Test Keep Ampersands
 
@@ -7,16 +8,17 @@ Ampersands
 
 *Result file:* AmpersandsResults.txt
 
-1. UPLOAD Ampersands.txt
+1. Upload Ampersands.txt
 
-2. SCRUB: 
-    - Remove All Punctuation
+2. Scrub: 
     - Make Lowercase
     - Remove Digits
+    - Remove Punctuation
     - Keep Ampersands
 
-3. RESULTS
-    - a file(AmpersandsResults.txt) containing
+3. Click "Apply"
+    - a file containing
         * lowercase letters
         * no digits
         * no punctuation except for ampersands
+    - (expected: AmpersandsResults.txt)

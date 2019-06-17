@@ -1,5 +1,6 @@
-Lemmas
-======
+# Lemmas
+
+***
 
 #### Test Lemmas
 
@@ -7,19 +8,20 @@ Lemmas
 
 *Result file:* lemma_experimentResults.txt
 
-1. UPLOAD experiment.txt
+1. Upload lemma_experiment.txt
 
-2. SCRUB: 
+2. Scrub: 
     - deselect Remove All Punctuation
     - deselect Make Lowercase
     - deselect Remove Digits
     
-3. LEMMAS:
-    - UPLOAD lemmas_for_experiment.txt
+3. Lemma:
+    - Upload lemmas_for_experiment.txt
 
-4. RESULTS
-    - a file(lemma_experimentResults.txt) with
+4. Results:
+    - a file with
         * all 'a' changed to 'the'
         * all 'Mary' changed to 'Margaret'
         * all 'little' changed to 'tiny'
         * all 'lamb' changed to 'sheep'
+    - see ResultsToExpect
