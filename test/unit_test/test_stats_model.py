@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import flask.json
 import lexos.application as application
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.stats_model import StatsModel, StatsTestOptions
@@ -27,7 +28,8 @@ with application.app.app_context():
     test_file_result_one = test_stats_model_one.get_document_statistics()
     # noinspection PyProtectedMember
     test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
-    test_pandas_one = test_file_result_one
+    print(test_file_result_one["table"])
+    test_pandas_one = pd.read_json(test_file_result_one["table"])
 # ------------------------------------------------------------------
 
 # ------------------------ Second test suite -----------------------
@@ -40,8 +42,9 @@ test_dtm_two = pd.DataFrame(
                       "I", "J", "K", "L"]))
 test_id_temp_table_two = {0: "F1.txt", 1: "F2.txt", 2: "F3.txt"}
 test_stats_front_end_option_two = \
-    StatsFrontEndOption(active_file_ids=[0, 1, 2], sort_column=0,
-                        sort_ascending=True)
+    StatsFrontEndOption(active_file_ids=[0, 1, 2],
+                        sort_ascending=True,
+                        sort_column=0)
 test_option_two = StatsTestOptions(
     token_type_str="characters",
     doc_term_matrix=test_dtm_two,
@@ -51,9 +54,8 @@ with application.app.app_context():
     test_stats_model_two = StatsModel(test_options=test_option_two)
     test_corpus_result_two = test_stats_model_two.get_corpus_stats()
     test_file_result_two = test_stats_model_two.get_document_statistics()
-    # noinspection PyProtectedMember
     test_box_plot_result_two = test_stats_model_two.get_box_plot()
-    test_pandas_two = test_file_result_two
+    test_pandas_two = pd.read_json(test_file_result_two["table"])
 # ------------------------------------------------------------------
 
 # ------------------- test suite for anomaly test ------------------
@@ -67,7 +69,8 @@ test_id_temp_table_anomaly = \
      5: "F6.txt", 6: "F7.txt", 7: "F8.txt", 8: "F9.txt", 9: "F10.txt"}
 test_stats_front_end_option_anomaly = \
     StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                        sort_column=0, sort_ascending=True)
+                        sort_ascending=True,
+                        sort_column=0)
 test_option_anomaly = \
     StatsTestOptions(token_type_str="characters",
                      doc_term_matrix=test_dtm_anomaly,
@@ -78,12 +81,11 @@ with application.app.app_context():
     test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
     test_file_result_anomaly = test_stats_model_anomaly.get_document_statistics()
     test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
-    test_pandas_anomaly = test_file_result_anomaly
+    test_pandas_anomaly = flask.json.text_type(test_file_result_anomaly)[0]
 
 
 # ------------------------------------------------------------------
-'''class TestFileResult:
-
+class TestFileResult:
     def test_basic_info(self):
         print("!!!!", test_pandas_one)
         assert test_pandas_one.iloc[2, 0] == "F1.txt"
@@ -100,17 +102,17 @@ with application.app.app_context():
         assert test_pandas_one.iloc[4, 1] == 15
         assert test_pandas_two.iloc[4, 2] == 46
 
-    def test_vocab_density(self):
-        assert test_pandas_one.iloc[0, 0] == 0.05
-        assert test_pandas_one.iloc[0, 1] == 0.333
-        assert test_pandas_two.iloc[0, 2] == 0.0870
+    def test_average(self):
+        assert test_pandas_one.iloc[0, 0] == 20
+        assert test_pandas_one.iloc[0, 1] == 3
+        assert test_pandas_two.iloc[0, 2] == 11.5
 
     def test_hapax(self):
         assert test_pandas_one.iloc[3, 0] == 0
         assert test_pandas_one.iloc[3, 1] == 1
         assert test_pandas_two.iloc[3, 2] == 0
 
-'''
+
 class TestCorpusInfo:
     def test_average(self):
         assert test_corpus_result_one.mean == 47.5
@@ -121,8 +123,8 @@ class TestCorpusInfo:
         assert test_corpus_result_two.std_deviation == 32.51
 
     def test_quartiles(self):
-        assert test_corpus_result_one.inter_quartile_range == 65
-        assert test_corpus_result_two.inter_quartile_range == 48.75
+        assert test_corpus_result_one.inter_quartile_range == 32.5
+        assert test_corpus_result_two.inter_quartile_range == 32.5
 
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr.small_items == []
@@ -196,4 +198,4 @@ class TestStatsPlotly:
 
         assert basic_fig['layout']['xaxis']['zeroline'] is False
 
-        assert basic_fig['layout']['xaxis']['showline'] is True
+        assert basic_fig['layout']['xaxis']['showline'] is False

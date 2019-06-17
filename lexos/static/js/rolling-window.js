@@ -119,7 +119,7 @@ function send_rolling_window_result_request(){
 function validate_inputs(){
 
     // "Search terms"
-    if($("#search-terms-input").val().length < 1){
+    if($("#search-terms-input input").val().length < 1){
         error("Please enter the search terms.");
         return false;
     }
