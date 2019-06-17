@@ -13,31 +13,32 @@
 <!-- Main content -->
 {% block content %}
 
-     <!-- About section -->
-    <div class="section">
+    <div id="top-section">
 
-        <h3 class="section-top title">Welcome to Lexos!</h3>
+        <!-- Upload section -->
+        <div id="upload-section" class="section">
 
-        <div class="section-body">
-            <h3>
-                Upload your files here. The maximum file size is 250 MB and
-                the supported formats are: .txt, .html, .xml, .sgml, and
-                .lexos. Click the "Help" button on the top right for more
-                information about using the current tool.
-            </h3>
+            <h3 class="section-top title">Upload</h3>
+
+            <div class="borderless-section-body">
+                <span id="browse-button">Browse...</span>
+
+                <div id="drag-and-drop-section">
+                    <h3>Drag Files Here</h3>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Upload section -->
-    <div id="upload-section" class="section">
+        <!-- Scrape section -->
+        <div id="scrape-section" class="section">
 
-        <h3 class="section-top title">Upload</h3>
+             <div class="vertical-splitter section-top">
+                <h3 class="title">Scrape</h3>
+                <span id="scrape-button" class="right-justified button">Scrape</span>
+            </div>
 
-        <div class="borderless-section-body">
-            <h3 id="browse-button">Browse...</h3>
-
-            <div id="drag-and-drop-section">
-                <h3>Drag Files Here</h3>
+            <div class="borderless-section-body">
+                <textarea id="scrape-input" spellcheck="false" placeholder="Enter URLs to scrape here."></textarea>
             </div>
         </div>
     </div>
@@ -49,8 +50,7 @@
 
         <div class="section-body">
             <div id="no-uploads-text" class="centerer"><h3>No Uploads</h3></div>
-            <div id="upload-previews">
-                </div>
+            <div id="upload-previews"></div>
         </div>
     </div>
 

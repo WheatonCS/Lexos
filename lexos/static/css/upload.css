@@ -1,7 +1,15 @@
 /* Form */
 form {
-    grid-template-rows: min-content 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     min-height: 75rem;
+}
+
+
+/* Top section */
+#top-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
 }
 
 
@@ -11,7 +19,6 @@ form {
     display: grid;
     justify-items: center;
     align-items: center;
-    color: #505050;
 }
 
 #browse-button {

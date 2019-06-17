@@ -17,6 +17,33 @@ $(function(){
     $("body").on("dragover dragenter drop", drag_and_drop_intercept);
     drag_and_drop_section.on("dragover dragenter", drag_and_drop_intercept);
 
+    // If the "Scrape" button is pressed...
+    $("#scrape-button").click(function(){
+
+        // Disable the "Scrape" button
+        disable("#scrape-button");
+
+        // Remove any existing errors
+        remove_errors();
+
+        // Send the scrape request
+        send_ajax_request("/upload/scrape", $("#scrape-input").val())
+
+        // Always enable the "Scrape" button
+        .always(function(){ enable("#scrape-button"); })
+
+        // If the request was successful, display the uploaded files in the
+        // "Upload List" section.
+        .done(function(response){
+            for(const file_name of response) create_upload_preview(file_name);
+        })
+
+        // If the request failed, display an error.
+        .fail(function(){
+            error("Scraping failed.");
+        });
+    });
+
     // Highlight the drag and drop section when files are dragged over it
     initialize_drag_and_drop_section_highlighting();
 })
@@ -91,8 +118,9 @@ function send_file_upload_requests(){
         })
 
         // If the request failed, display an error
-        .fail(function(){ error("One or more files encountered errors "+
-            +"during upload."); });
+        .fail(function(){
+            error("One or more files encountered errors during upload.");
+        });
 }
 
 
