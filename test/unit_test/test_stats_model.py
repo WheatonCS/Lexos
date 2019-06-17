@@ -101,9 +101,9 @@ class TestFileResult:
         assert test_pandas_two[2][2] == 46
 
     def test_average(self):
-        assert test_pandas_one.iloc[0, 0] == 20
-        assert test_pandas_one.iloc[0, 1] == 3
-        assert test_pandas_two.iloc[0, 2] == 11.5
+        assert test_pandas_one[3][0] == 0.05
+        assert test_pandas_one[3][1] == 0.333
+        assert round(test_pandas_two[3][2], 4) == 0.087
 
     def test_hapax(self):
         assert test_pandas_one[1][0] == 0
@@ -121,8 +121,8 @@ class TestCorpusInfo:
         assert test_corpus_result_two.std_deviation == 32.51
 
     def test_quartiles(self):
-        assert test_corpus_result_one.inter_quartile_range == 32.5
-        assert test_corpus_result_two.inter_quartile_range == 32.5
+        assert test_corpus_result_one.inter_quartile_range == 65
+        assert test_corpus_result_two.inter_quartile_range == 48.75
 
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr.small_items == []
@@ -196,4 +196,4 @@ class TestStatsPlotly:
 
         assert basic_fig['layout']['xaxis']['zeroline'] is False
 
-        assert basic_fig['layout']['xaxis']['showline'] is False
+        assert basic_fig['layout']['xaxis']['showticklabels'] is False
