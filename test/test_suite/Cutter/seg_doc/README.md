@@ -11,14 +11,18 @@ i.e. BaJin_Autumn_1940.txt
 
 
 
-## Test file: catBobcat.txt
+## Test file: BaJin_Autumn_1940.txt
 
-0. UPLOAD BaJin_Autumn_1940.txt
+1. Upload BaJin_Autumn_1940.txt
 
-1. CUT: 
+2. Under the "Prepare" menu, select "Cut"
 
-	- Select Segment/Document
-	- Set Number of Segments to 10
+3. Set the cut mode to "Segments"
 
-Results:
-- After the cut you should have 10 equal length segments
+4. Set "Segment Size" to 10
+
+5. Click "Apply"
+
+6. You should now have 10 documents, each a segment of the original, all equal in length
+
+Results: ResultFiles_BaJin_Autumn_1940

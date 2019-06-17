@@ -1,6 +1,7 @@
 # Lines/Segment
 
-In this function the segments are divided based on the number of lines per segment (counted by each new line character). 
+In this function the segments are divided based on the number of lines per segment 
+(counted by each new line character). 
 
 
 *Test Files:* Sentences.txt, dog_cat.txt
@@ -12,46 +13,63 @@ ResultFiles_dog_cat
 
 ## Test file: Sentences.txt
 
-0. UPLOAD Sentences.txt
+1. Upload Sentences.txt
 
-1. CUT: 
+2. Under the "Prepare" menu, select "Cut"
 
-	- Select Lines/Segment
-	- Change the Segment Size to 3
-	- Keep Overlap at 0
-	- Keep Last Segment Size Threshold (%) at 50
+3. Set the cut mode to "Lines"
 
-Results:
-- After the cut you should have 4 segments, three with 3 lines and one with 4 lines.
-- ResultFiles_Sentences_1
+4. Set the "Segment Size" to 3
+
+5. Keep "Overlap" at 0
+
+6. Keep Merge % as the default
+
+7. Click "Apply"
+
+8. You should now have 4 documents, each a segment of the original, three with 3
+ lines and one with 4 lines.
+
+Results: ResultFiles_Sentences_1
 
 ## Test file: Sentences.txt
 
-0. UPLOAD Sentences.txt
+1. Upload Sentences.txt
 
-1. CUT: 
+2. Under the "Prepare" menu, select "Cut"
 
-	- Select Lines/Segment
-	- Change the Segment Size to 5
-	- Change Overlap to 2
-	- Keep Last Segment Size Threshold (%) at 50
+3. Set the cut mode to "Lines"
 
-Results:
-- After the cut you should have 4 segments, three with 5 lines and one with 4 lines.
-- ResultFiles_Sentences_2
+4. Set the "Segment Size" to 5
+
+5. Change "Overlap" to 2
+
+6. Keep Merge % as the default
+
+7. Click "Apply"
+
+8. You should now have 4 documents, each a segment of the original, three with 5 
+lines and one with 4 lines.
+
+Results: ResultFiles_Sentences_2
 
 ## Test file: dog_cat.txt
 
-0. UPLOAD dog_cat.txt
+1. Upload dog_cat.txt
 
-1. CUT: 
+2. Under the "Prepare" menu, select "Cut"
 
-	- Select Lines/Segment
-	- Change the Segment Size to 2
-	- change Overlap to 1
-	- Change Last Segment Size Threshold (%) to 15
+3. Set the cut mode to "Lines"
 
-Results:
-- After the cut you should have 9 segments, all with 2 lines except last one.
-- ResultFiles_dog_cat
+4. Set the "Segment Size" to 2
 
+5. Change "Overlap" to 1
+
+6. Change Merge % to 15
+
+7. Click "Apply"
+
+8. You should now have 9 documents, each a segment of the original, all with 2 lines 
+except last one.
+
+Results: ResultFiles_dog_cat

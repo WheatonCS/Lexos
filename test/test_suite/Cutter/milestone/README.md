@@ -2,7 +2,8 @@
 
 Milestones are used to split the text at designated spots such as chapters. 
 Words that are used in the .txt shouldn't be used as milestones.
-As seen in testing of catBobcat.txt and catCaterpillar.txt, if the word cat is used as a milestone every instance of it concatenated or not is removed.
+As seen in testing of catBobcat.txt and catCaterpillar.txt, if the word cat is
+ used as a milestone every instance of it concatenated or not is removed.
 
 *Test Files:* catCaterpillar.txt, catBobcat.txt
 
@@ -12,29 +13,35 @@ As seen in testing of catBobcat.txt and catCaterpillar.txt, if the word cat is u
 
 ## Test file: catBobcat.txt
 
-0. UPLOAD catBobcat.txt
+1. Upload catBobcat.txt
 
-1. CUT: 
+2. Under the "Prepare" menu, select "Cut"
 
-	- Select Cut by Milestones
-	- Type in "cat"
+3. Set the cut mode to "Milestones"
 
-Results:
-- After the cut you should have 10 segments, cut on the string "cat"
-- ResultFiles_catBobcat
+4. Set the "Milestone" to "cat"
 
+5. Click "Apply"
+
+6. You should now have 10 documents, each a segment of the original, cut on the string
+"cat"
+
+Results: ResultFiles_catBobcat
 
 
 ## Test file: catCaterpillar.txt
 
-0. UPLOAD catCaterpillar.txt
+1. Upload catCaterpillar.txt
 
-1. CUT: 
+2. Under the "Prepare" menu, select "Cut"
 
-	- Select Cut by Milestones
-	- Type in " cat " (cat surrounded by spaces)
+3. Set the cut mode to "Milestones"
 
-Results:
-- After the cut you should have 5 segments, cut on the string " cat " 
+4. Set the "Milestone" to " cat " (cat surrounded by spaces)
+
+5. Click "Apply"
+
+6. You should now have 5 documents, each a segment of the original, cut on the string " cat " 
 (caterpillar should be intact)
-- ResultFiles_catCaterpillar
+
+Results: ResultFiles_catCaterpillar
