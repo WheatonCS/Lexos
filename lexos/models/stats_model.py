@@ -135,13 +135,22 @@ class StatsModel(BaseModel):
             self._active_doc_term_matrix.ne(0).sum(axis=1).values
         # Find average number of appearance of tokens.
         file_stats[f"Vocabulary Density"] = \
-            file_stats[f"Distinct number of {self._token_type_str}"]/\
+            file_stats[f"Distinct number of {self._token_type_str}"] / \
             file_stats[f"Total number of {self._token_type_str}"]
-
 
         return file_stats
 
-    def __get_quartile__(self, index: float, arr: np.array) -> float:
+    @staticmethod
+    def __get_quartile__(index: float, arr: np.array) -> float:
+        """Gets the quartile of the array.
+
+        The numpy quantile function calculates the quartiles in a different way
+        than how plotly calculates them and the results are slightly different
+        so this is how plotly calculates the quartiles.
+        :param index: the index of the array that is where the quartile is
+        :param arr: the sorted array of all the document sizes
+        :return: the value of quartile of the array
+        """
         if index % 1 == .5:
             ind = int(index)
             return arr[ind] * .5 + arr[ind + 1] * .5
@@ -178,6 +187,7 @@ class StatsModel(BaseModel):
         arr = np.array(file_sizes)
         arr.sort()
         length = len(arr)
+        # if there is only one document automatically set the indexes to 0
         if length == 1:
             q1_index = 0
             q3_index = 0
