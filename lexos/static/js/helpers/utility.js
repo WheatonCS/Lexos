@@ -85,6 +85,21 @@ function send_ajax_form_request(url, additional_entries = {}){
     });
 }
 
+/**
+ * Sends an AJAX request with a the given payload.
+ * @param {string} url: The URL to send the request to.
+ * @param {object} payload: The payload to send.
+ * @returns {jqXHR}: The jQuery request object.
+ */
+function send_ajax_request(url, payload){
+    return $.ajax({
+        type: "POST",
+        url: url,
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(payload)
+    });
+}
+
 
 /**
  * Adds a text overlay to the elements found in the query.

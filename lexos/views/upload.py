@@ -3,7 +3,7 @@ import requests
 
 from urllib.parse import unquote
 
-from flask import request, session, render_template, Blueprint
+from flask import request, session, render_template, Blueprint, jsonify
 
 from lexos.helpers import constants
 from lexos.managers import session_manager, utility
@@ -14,8 +14,7 @@ upload_blueprint = Blueprint("upload", __name__)
 
 @upload_blueprint.route("/upload", methods=["GET"])
 def upload():
-    """Gets the upload page.
-
+    """ Gets the upload page.
     :return: The upload page.
     """
 
@@ -40,8 +39,7 @@ def upload():
 
 @upload_blueprint.route("/upload/add-document", methods=["POST"])
 def add_document() -> str:
-    """Adds a document to the file manager or loads a .lexos file.
-
+    """ Adds a document to the file manager or loads a .lexos file.
     :return: None.
     """
 
@@ -62,44 +60,30 @@ def add_document() -> str:
         file_manager.add_upload_file(request.data, file_name)
 
     utility.save_file_manager(file_manager)
-    return ""
+    return ''
 
 
-@upload_blueprint.route("/scrape", methods=["GET", "POST"])
+@upload_blueprint.route("/upload/scrape", methods=["POST"])
 def scrape():
-    """Scrapes the given URLs an generates a text file from each.
-
-    :return: None.
+    """ Scrapes the URLs an generates text file from each URL.
+    :return: A list of the scraped files.
     """
 
-    num_active_docs = detect_active_docs()
+    urls = request.json
+    urls = urls.strip()
+    urls = urls.replace(',', '\n')  # Replace commas with line breaks
+    urls = re.sub(r"\s+", '\n', urls)  # Get rid of extra white space
+    urls = urls.split('\n')
+    file_manager = utility.load_file_manager()
 
-    # GET request
-    if request.method == "GET":
-        return render_template('scrape.html', numActiveDocs=num_active_docs)
+    scraped_files = []
+    print(urls)
+    for i, url in enumerate(urls):
+        response = requests.get(url)
+        file_name = "url"+str(i)+".txt"
+        scraped_files.append(file_name)
+        file_manager.add_upload_file(response.text, file_name)
 
-    # POST request
-    if request.method == "POST":
-        urls = request.json["urls"]
-        urls = urls.strip()
-        urls = urls.replace(",", "\n")  # Replace commas with line breaks
-        urls = re.sub(r"\s+", "\n", urls)  # Get rid of extra whitespace
-        urls = urls.split("\n")
-        file_manager = utility.load_file_manager()
+    utility.save_file_manager(file_manager)
 
-        for i, url in enumerate(urls):
-            r = requests.get(url)
-            file_manager.add_upload_file(r.text, "url"+str(i)+".txt")
-
-        utility.save_file_manager(file_manager)
-        return ""
-
-
-@upload_blueprint.route("/update-settings", methods=["POST"])
-def update_settings():
-    """Caches the general settings.
-
-    :return: None.
-    """
-    session_manager.cache_general_settings()
-    return ""
+    return jsonify(scraped_files)
