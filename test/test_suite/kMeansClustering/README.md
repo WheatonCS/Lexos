@@ -11,19 +11,22 @@ Poe_FallOfHouseUsher_1839.txt
 results_numberOfClusters.png, results_2D_Scatter.png, results_3D_Scatter.png,
 results_rawCounts.png, results_culling.png
 
-
+***
 
 ## Test Default Settings
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. K-Means Clustering 
-	- Change **NO** settings  
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Change **NO** settings.
+
+4. Click "Generate" 
 	
 Results:
 - results_defaults.png
@@ -31,67 +34,83 @@ Results:
 
 ## Test Tokenize by Characters
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. K-Means Clustering 
-	- Change Tokenize to "by Characters"
-	- Keep all other settings as default
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Under "Tokenize" select "By Characters"
+
+4. Keep all other settings as default
 	
+5. Click "Generate"
+
 Results:
 - results_byCharacters.png
 
 
-## Test Number pf Clusters
+## Test Number of Clusters
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. K-Means Clustering 
-	- Change Number of Clusters (K-Value) to 5
-	- Keep all other settings as default
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Under "Options" change "Clusters" (K-Value) to 5
+
+4. Keep all other settings as default
+
+5. Click "Generate"
 	
 Results:
 - results_numberOfClusters.png
 
 
-## Test Method of Visualization, 2D scatter
+## Test 2D scatter
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. K-Means Clustering 
-	- Change Method of Visualization to 2D-Scatter
-	- Keep all other settings as default
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Under "Options" select "2D Scatter"
+
+4. Keep all other settings as default
+
+5. Click "Generate"
 	
 Results:
 - results_2D_Scatter.png
 
 
-## Test Method of Visualization, 3D scatter
+## Test 3D scatter
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. K-Means Clustering 
-	- Change Method of Visualization to 3D-Scatter
-	- Keep all other settings as default
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Under "Options" select "3D Scatter"
+
+4. Keep all other settings as default
+
+5. Click "Generate"
 	
 Results:
 - results_3D_Scatter.png
@@ -99,17 +118,20 @@ Results:
 
 ## Test Culling Options, Culling
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. Hierarchical Clustering 
-	- Select Culling Options, Culling
-	- Change Must be in Documents to 5
-	- Keep all other settings as default
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Under "Cull", select "Must be in [ ] documents" and change it to 5
+
+4. Keep all other settings as default
+
+5. Click "Generate"
 	
 Results:
 - results_culling.png
@@ -117,16 +139,20 @@ Results:
 
 ## Test Normalize, Raw Counts
 
-0. UPLOAD ALL TEST FILES:
+1. Upload all test files:
     - HenryWP_ThePirate.txt
     - Irving_ripVanWrinkle.txt, 
     - Lippard_BelOfPrairieEden.txt
     - Melville_MobyDick.txt, 
     - Poe_FallOfHouseUsher_1839.txt
 
-1. Hierarchical Clustering 
-    - Select Normalize, Raw Counts
-	- Keep all other settings as default
+2. Under the "Analyze" menu, click "K-Means"
+
+3. Under "Normalize" select "Raw"
+
+4. Keep all other settings as default
+
+5. Click "Generate"
 	
 Results:
 - results_rawCounts.png
