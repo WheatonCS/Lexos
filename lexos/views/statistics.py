@@ -1,6 +1,6 @@
 import json
 
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, jsonify
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
@@ -57,7 +57,7 @@ def documents() -> str:
     """
 
     session_manager.cache_analysis_option()
-    return StatsModel().get_document_statistics()
+    return jsonify(StatsModel().get_document_statistics())
 
 
 @statistics_blueprint.route("/statistics/box-plot", methods=["POST"])
