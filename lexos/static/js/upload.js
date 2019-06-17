@@ -86,7 +86,7 @@ function send_file_upload_requests(){
         // If the request is successful, call the "upload_success_callback()"
         // function and upload the next file in the list
         .done(function(){
-            upload_success_callback(file_name);
+            create_upload_preview(file_name);
             send_file_upload_requests();
         })
 
@@ -113,9 +113,9 @@ function file_type_supported(filename){
 
 
 /**
- * Called when a file has successfully uploaded.
+ * Create an upload preview element.
  */
-function upload_success_callback(file_name)
+function create_upload_preview(file_name)
 {
     // Remove the "No Uploads" text if it exists
     $("#no-uploads-text").remove();

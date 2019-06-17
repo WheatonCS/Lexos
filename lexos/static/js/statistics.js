@@ -91,11 +91,31 @@ function create_statistics(){
         .done(function(response){
 
             document_statistics_csv = response.csv;
-            create_document_statistics_table(response.table);
+
+            // Create the table
+             create_table("#table", JSON.parse(response.table), ["Name",
+                "Single-Occurrence Terms", "Total Terms", "Vocabulary Density",
+                "Distinct Terms"]);
+
+            // Label the columns
+            let id = 0;
+            let head_cell_elements = $(".lexos-table-head-cell");
+            head_cell_elements.each(function(){
+                $(this).attr("id", id++);
+            });
+
+            // Highlight the currently selected column
+            highlight_selected_column();
+
+            // If the table head cell is clicked, update the selected column
+            head_cell_elements.click(function(){
+                $(`input[name="sort-column"]`).val($(this).attr("id"));
+                highlight_selected_column();
+            });
 
             // Remove the loading overlay, fade the table in, and enable the
             // "Download" button
-            finish_loading("#table", "#table-head, #table-body", "#download-button");
+            finish_loading("#table", "#.lexos-table", "#download-button");
 
             // Enable the "Generate" button if all elements have finished loading
             loading_complete_check();
@@ -175,59 +195,16 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
     $(`<h3>${text}</h3>`).appendTo(element_id);
 }
 
-
 /**
- * Create the table for the "Document Statistics" section.
- * @param table: The table data to display.
+ * Highlights the currently selected "Document Statistics" table column.
  */
-function create_document_statistics_table(table){
-
-    // Create the head and table body
-    $(`
-        <div id="table-head" class="hidden">
-            <h3 id="0" class="table-head-cell">Name</h3>
-            <h3 id="4" class="table-head-cell">Single-Occurrence Terms</h3>
-            <h3 id="1" class="table-head-cell">Total Terms</h3>
-            <h3 id="3" class="table-head-cell">Vocabulary Density</h3>
-            <h3 id="2" class="table-head-cell">Distinct Terms</h3>
-        </div>
-        <div id="table-body" class="hidden firefox-hidden-scrollbar"></div>
-    `).appendTo("#table");
-
-    // Highlight the selected column
-    highlight_selected_column();
-
-    // If the table head cell is clicked, update the selected column
-    $(".table-head-cell").click(function(){
-        $(`input[name="sort-column"]`).val($(this).attr("id"));
-        highlight_selected_column();
-    });
-
-    // Create the rows
-    let rows = Object.entries(JSON.parse(table));
-    for(row of rows){
-        let data = Object.values(row[1]);
-
-        $(`
-            <div class="table-row">
-                <h3 class="table-cell">${data[0]}</h3>
-                <h3 class="table-cell">${data[1]}</h3>
-                <h3 class="table-cell">${data[2]}</h3>
-                <h3 class="table-cell">${data[3]}</h3>
-                <h3 class="table-cell">${data[4]}</h3>
-            </div>
-        `).appendTo("#table-body");
-    }
-}
-
-
 function highlight_selected_column(){
 
-    $(".table-head-cell").each(function(){
+    $(".lexos-table-head-cell").each(function(){
         $(this).removeClass("selected-cell");
     });
 
-    $(`#table-head #${$(`input[name="sort-column"]`).val()}`)
+    $(`.lexos-table-head #${$(`input[name="sort-column"]`).val()}`)
         .addClass("selected-cell");
 }
 

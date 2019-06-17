@@ -2,23 +2,42 @@
  * Creates a table.
  * @param {string} parent_element_query: The query for the table's parent
  *      element.
- * @param {string} title: The title of the table.
- * @param {string[][]} data: The data for the table to display.
+ * @param {string[][]} data: The data to display.
+ * @param {string} head: The column labels.
+ * @param {string} title: The title.
  */
-function create_table(title, parent_element_query, data){
+function create_table(parent_element_query, data, head = "", title = ""){
 
-    // Create the table
+    // Create the layout
     let table_element = $(`
-        <div class="lexos-table">
-            <h3 class="lexos-table-title"></h3>
+        <div class="hidden lexos-table">
+            <h3 class="lexos-table-head"></h3>
             <div class="lexos-table-body"></div>
         </div>
     `).appendTo(parent_element_query);
 
+    let table_head_element = table_element.find(".lexos-table-head");
     let table_body_element = table_element.find(".lexos-table-body");
 
-    // Set the table title element to the HTML-escaped title
-    table_element.find(".lexos-table-title").text(title);
+    // Create the title
+    if(title !== ""){
+        table_element.css("grid-template-rows",
+            "min-content min-content 1fr");
+        $(`<h3 class="lexos-table-title">${title}</h3>`)
+            .prependTo(table_element);
+    }
+
+
+    // For each head cell...
+    for(const cell of head){
+
+        // Create the cell element and append it to the table head element
+        let cell_element = $(`<h3 class="lexos-table-head-cell"></h3>`)
+            .appendTo(table_head_element);
+
+        // Set the cell element's text
+        cell_element.text(cell);
+    }
 
     // For each row...
     for(const row of data){

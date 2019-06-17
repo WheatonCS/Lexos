@@ -111,8 +111,8 @@ function create_radio_options_popup(title, radio_buttons_name,
     $("#ok-button").click(function(){
         let selected_element = $(`input[name="${radio_buttons_name}"]:checked`);
         input_element.val(selected_element.val());
-        $(display_element_query).text(selected_element
-            .closest("div").find("span").html());
+        $(display_element_query).text(
+            selected_element.closest("div").text().trim());
         close_popup();
     });
 

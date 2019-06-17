@@ -79,70 +79,49 @@ class ContentAnalysisModel(object):
         """
         self._counters = []
         dictionaries = self.join_active_dicts()
+
         for file in deepcopy(self._corpus):
-            dictionaries = count_phrases(dictionary=dictionaries,
-                                         file=file)
+            dictionaries = count_phrases(dictionary=dictionaries, file=file)
             self.get_dictionary_counts(dictionaries)
+
         return dictionaries
 
-    def generate_corpus_counts_table(self, dictionaries: list, colors: dict)\
-            -> str:
-        """Generate a html table.
-
-         Each row has a phrase, its count in the entire corpus, and the
-         dictionary it belongs to.
-
-        :param colors: dict with a hex color for each dictionary
-        :param dictionaries: list of Phrase objects
-        :return: str containing the html table
+    def generate_corpus_results(self, dictionaries: list) -> list:
+        """ Generates the corpus counts.
+        :return: The corpus counts.
         """
-        # Set table headers
-        corpus_counts_html = "<table class='corpus dataframe " \
-                             "table table-striped table-bordered'><thead>" \
-                             "<tr><th>Dictionary</th>" \
-                             "<th>Phrase</th><th>Count</th></tr></thead>" \
-                             "<tbody>"
+
         # Add a row for each phrase found in the corpus
+        corpus_results = []
         for phrase in dictionaries:
+
             count = 0
             for i in phrase.file_counts:
                 count += phrase.file_counts[i]
-            corpus_counts_html += "<tr style='color:#" + \
-                                  colors[phrase.dict_label] + ";'>" + \
-                                  "<td>" + phrase.dict_label + "</td>" + \
-                                  "<td>" + phrase.content + "</td>" \
-                                  "<td >" + str(count) + "</td></tr>"
-        corpus_counts_html += "</tbody></table>"
-        return corpus_counts_html
 
-    def generate_files_raw_counts_tables(self, dictionaries: list,
-                                         colors: dict) -> list:
-        """Generate a html table for each file in the corpus.
+            corpus_results.append([phrase.dict_label,
+                                  phrase.content, str(count)])
 
-        Each row has a phrase, its count, and the dictionary it belongs to.
+        return corpus_results
 
-        :param colors: dict with a hex color for each dictionary
-        :param dictionaries: list of Phrase objects
-        :return: list of str containing the html tables
+    def generate_document_results(self, dictionaries: list) -> list:
+        """Generates the results for each document
+        :return: The results for each document.
         """
-        tables = []
+
+        document_results = []
         for file in self._corpus:
-            # Set table headers
-            html_table = "<table class='file dataframe table " \
-                         "table-striped table-bordered'><caption>" +\
-                         file.label + \
-                         "</caption><thead><tr><th>Dictionary</th>" \
-                         "<th>Phrase</th><th>Count</th></tr></thead><tbody>"
+
+            result = {"name": file.label, "table": []}
+
             for phrase in dictionaries:
-                html_table += "<tr style='color:#" + \
-                              colors[phrase.dict_label] + ";'>" + \
-                              "<td>" + phrase.dict_label + "</td>" + \
-                              "<td>" + phrase.content + "</td>" \
-                              "<td >" + str(phrase.file_counts[file.label]) +\
-                              "</td></tr>"
-            html_table += "</tbody></table>"
-            tables.append(html_table)
-        return tables
+                result["table"].append([phrase.dict_label,
+                                        phrase.content,
+                                        str(phrase.file_counts[file.label])])
+
+            document_results.append(result)
+
+        return document_results
 
     def get_dictionary_counts(self, dictionaries: list):
         """Get the counts for each dictionary.
@@ -240,36 +219,32 @@ class ContentAnalysisModel(object):
         dictionaries.sort(key=lambda x: len(x.content.split()), reverse=True)
         return dictionaries
 
-    def to_html(self) -> str:
-        """Generate an html table from dataframe.
-
-        :return: dataframe table in html
-        """
-        df = self.to_data_frame()
-        html = df.to_html(classes="result table table-striped table-bordered",
-                          index=False)
-        return html
-
     def to_data_frame(self) -> pd.DataFrame:
-        """Generate a dataframe containing all values stored in this class.
-
-        :return: a data frame containing all values stored in this class
-        members
+        """ Generate a dataframe containing all values stored in this class.
+        :return: A data frame containing all values stored in this class.
         """
-        columns = ['Document Name'] + [dictionary.label for dictionary in
+
+        columns = ["Document Name"] + [dictionary.label for dictionary in
                                        self.get_active_dicts()] + \
-                  ['formula', 'total word count', 'score']
-        df = pd.DataFrame(columns=columns)
+                  ["Formula", "Word Count", "Score"]
+
+        dataframe = pd.DataFrame(columns=columns)
+
         avg_column = pd.Series(["Averages"] + self._averages, index=columns)
-        df = df.append(avg_column, ignore_index=True)
+
+        dataframe = dataframe.append(avg_column, ignore_index=True)
+
         for index, (file, formula, score, counters) in enumerate(
             zip(self._corpus, self._formulas,
                 self._scores, self._counters)):
+
             column = pd.Series(
                 [file.label] + counters + [formula] + [file.total_word_count]
                 + [score], index=columns)
-            df = df.append(column, ignore_index=True)
-        return df
+
+            dataframe = dataframe.append(column, ignore_index=True)
+
+        return dataframe
 
     def is_secure(self) -> bool:
         """Check if the formula is secure.
@@ -331,32 +306,62 @@ class ContentAnalysisModel(object):
             return error_msg
         return ""
 
-    def analyze(self) -> (Optional[str], Optional[str]):
-        """Generate html table containing counts, averages, & formula.
-
-        :return: formula_errors: str with error message if there is no
-                 errors.
-                 result_table: str containing result html table or None if
-                 there are any errors in the formula
+    def get_top_results(self, dataframe) -> list:
+        """ Gets the top 100 corpus or document results.
+        :param data: The corpus or document data.
+        :return: The top 100 results.
         """
+
+        dataframe.Count = pd.to_numeric(dataframe.Count, errors="coerce")
+        dataframe = dataframe.sort_values(by="Count", ascending=False)
+        return dataframe.head(100).values.tolist()
+
+    def analyze(self) -> (Optional[str], Optional[str]):
+        """ Performs the analysis.
+        :return: The results of the analysis.
+        """
+
         dictionaries = self.count()
+
         if self.is_secure():
             formula_errors = self.save_formula()
             self.generate_scores()
             self.generate_averages()
-            result_table = self.to_html()
-            colors = self.dictionary_colors
-            individual_counts_table = self.generate_corpus_counts_table(
-                dictionaries=dictionaries, colors=colors)
-            files_raw_counts_tables = self.generate_files_raw_counts_tables(
-                dictionaries=dictionaries, colors=colors)
+
+            # Get the overview results
+            dataframe = self.to_data_frame()
+            overview = dataframe.values.tolist()
+            overview.insert(0, dataframe.columns.values.tolist())
+            overview_csv = dataframe.to_csv()
+
+            # Get the corpus results
+            corpus_dataframe = pd.DataFrame(self.generate_corpus_results(
+                dictionaries=dictionaries),
+                columns=["Dictionary", "Phrase", "Count"])
+            corpus_results = self.get_top_results(corpus_dataframe)
+            corpus_csv = corpus_dataframe.to_csv()
+
+            # Get the document results
+            document_results = []
+            for document_result in self.generate_document_results(
+                    dictionaries=dictionaries):
+                document_results.append({
+                    "name": document_result["name"],
+                    "table": self.get_top_results(pd.DataFrame(
+                        document_result["table"],
+                        columns=["Dictionary", "Phrase", "Count"]))
+                })
+
         else:
             formula_errors = "Formula error: Invalid input"
-            result_table = ""
-            individual_counts_table = ""
-            files_raw_counts_tables = ""
-        return result_table, individual_counts_table, \
-            files_raw_counts_tables, formula_errors
+            overview = ""
+            overview_csv = ""
+            corpus_results = ""
+            corpus_csv = ""
+            document_results = ""
+
+        return overview, overview_csv, corpus_results, \
+            corpus_csv, document_results, formula_errors
 
     @property
     def dictionaries(self) -> list:
@@ -439,13 +444,18 @@ def count_phrases(dictionary: list, file: object) -> list:
     :param file: a File object
     :return: list of Phrase objects with their counts
     """
+
     for phrase in dictionary:
+
         phrase.count = count_phrase_in_text(phrase=phrase.content,
                                             text=file.content)
+
         phrase.file_counts[file.label] = count_phrase_in_text(
             phrase=phrase.content, text=file.content)
+
         if ' ' in phrase.content:
             file.content = file.content.replace(phrase.content, ' ')
+
     return dictionary
 
 

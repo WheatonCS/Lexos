@@ -250,7 +250,7 @@ footer {
 input[type="text"] {
     height: calc(3rem - .2rem);
     width: 6rem;
-    padding: 0 1.3rem 0 1.3rem;
+    padding: 0 1.3rem .1rem 1.3rem;
     border-radius: 3rem;
     outline: none;
     background-color: #FFFFFF;
@@ -360,7 +360,7 @@ label input[type="radio"] + span:after {
     width: .4rem;
     border-radius: 50%;
     background-color: #47BCFF;
-    transform: translate(-2.2rem, 1.2rem);
+    transform: translate(-2.21rem, 1.15rem);
     transition: opacity .2s;
     opacity: 0;
 }
@@ -392,7 +392,7 @@ label input[type="checkbox"] + span:after {
     width: 1.2rem;
     border-left: .2rem solid #47BCFF;
     border-bottom: .2rem solid #47BCFF;
-    transform: rotate(-45deg) translate(-2.55rem, -1.1rem);
+    transform: rotate(-45deg) translate(-2.5rem, -1.2rem);
     transition: opacity .2s;
     opacity: 0;
 }

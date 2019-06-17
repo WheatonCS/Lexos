@@ -109,10 +109,10 @@ input[type="text"] {
 }
 
 #popup #merge-name-input {
-    width: calc(100% + 7rem);
+    width: calc(100% + 6.4rem);
     margin-bottom: 1rem;
 }
 
 #merge-milestone-input {
-    width: calc(100% - 9rem);
+    width: calc(100% - 11.9rem);
 }
