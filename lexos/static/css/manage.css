@@ -60,6 +60,10 @@
     color: #505050;
 }
 
+.table-cell:last-child {
+    padding-right: 2rem;
+}
+
 .active-indicator {
     width: 2rem;
     height: 2rem;
@@ -87,7 +91,7 @@
     row-gap: 1rem;
     top: 0;
     left: 0;
-    width: 18rem;
+    width: 21rem;
     padding: 1rem;
     background-color: #FFFFFF;
     border: 2rem solid #EAF5FF;
@@ -117,4 +121,9 @@ input[type="text"] {
 
 #merge-milestone-input {
     width: calc(100% - 11.9rem);
+}
+
+
+#document-preview-text {
+    white-space: pre-line;
 }

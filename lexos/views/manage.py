@@ -21,6 +21,7 @@ def get_documents() -> str:
     :return: The JSON of a list of uploaded documents.
     """
 
+    print("rete")
     return json.dumps(utility.load_file_manager().get_previews_of_all())
 
 
@@ -30,6 +31,7 @@ def download() -> str:
     :return: A .zip containing the active files.
     """
 
+    print("SAS")
     file_manager = utility.load_file_manager()
 
     response = make_response(file_manager.zip_active_files(
