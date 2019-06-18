@@ -8,6 +8,11 @@ $("document").ready(function(){
 
     // Fade the page content in
     $("main").css("opacity", "1");
+
+    // If the "Active Documents" text is clicked, go to the "Manage" page
+    $("#active-documents-text").click(function(){
+
+    });
 });
 
 
@@ -193,9 +198,9 @@ function toggle_help_section(){
 let active_document_count;
 function update_active_document_count(){
 
-    $.ajax({type: "GET", url: "active-documents"}).done(function(response){
+    return $.ajax({type: "GET", url: "active-documents"}).done(function(response){
         active_document_count = parseInt(response);
-        $("#active-document-count").text(`Active Documents: ${response}`);
+        $("#active-document-count").text(response);
     })
 
     .fail(function(){ error("Failed to update the active document count."); });

@@ -30,6 +30,7 @@ def download() -> str:
     :return: A .zip containing the active files.
     """
 
+    print("SAS")
     file_manager = utility.load_file_manager()
 
     response = make_response(file_manager.zip_active_files(
