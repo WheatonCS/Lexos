@@ -219,5 +219,7 @@ function initialize_tooltips(){
         threshold, it will be attached to the previous segment.`, true);
 
     // "Milestone"
-    create_tooltip("#milestone-tooltip-button", ``);
+    create_tooltip("#milestone-tooltip-button", `Split the document into
+        segments at each appearance of the provided string. Child segments will not
+        contain the Milestone delimiter.`);
 }
