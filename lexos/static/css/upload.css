@@ -21,6 +21,14 @@ form {
     align-items: center;
 }
 
+#guide-button {
+    color: grey;
+}
+
+#guide-button:hover {
+    color: #47BCFF;
+}
+
 #browse-button {
     width: 20rem;
     height: 6rem;
