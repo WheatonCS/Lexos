@@ -5,9 +5,10 @@ $(function(){
     introguide.setOptions({
         steps: [
             {
-                element: '#navbar',
+                element: '#cram',
                 intro: 'Welcome to Lexos!',
-                position: 'auto'
+                position: 'right',
+                font_size: 13px
             },
             {
                 element: '#upload-section',
@@ -22,7 +23,7 @@ $(function(){
             {
                 element: '#drag-and-drop-section',
                 intro: '...or you can simply drag-and-drop your files here.',
-                position: 'right'
+                position: 'top'
             },
             {
                 element: '#scrape-section',
@@ -31,18 +32,23 @@ $(function(){
             },
             {
                 element: '#scrape-input',
-                intro: 'You can enter newline separated URLs here',
+                intro: 'You can enter newline-separated URLs here.',
                 position: 'bottom'
             },
             {
                 element: '#scrape-button',
-                intro: 'Initialize here',
+                intro: 'Initialize here.',
                 position: 'bottom'
             },
             {
                 element: '#upload-list',
-                intro: 'Any files uploaded appear here',
+                intro: 'All uploaded files appear here.',
                 position: 'top'
+            },
+            {
+                element: '#manage-button',
+                intro: 'Once you\'ve uploaded some documents, check out the Manage page for the next step of this tutorial!',
+                position: 'bottom'
             }
         ]
     })
