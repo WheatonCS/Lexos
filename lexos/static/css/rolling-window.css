@@ -46,6 +46,10 @@ form {
     width: calc(100% - 11.2rem);
 }
 
+::placeholder {
+    color: #ffb8b8;
+}
+
 
 /* Display options */
 #display-section .section-body > .checkbox-label {

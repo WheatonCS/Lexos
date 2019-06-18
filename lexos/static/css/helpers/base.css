@@ -110,6 +110,14 @@ form {
     color: #47BCFF;
 }
 
+.help-selectable:hover {
+    color: #c96533;
+    cursor: pointer;
+}
+.help-highlight {
+    color: #ff8447;
+}
+
 .centerer {
     display: grid;
     justify-items: center;
@@ -404,14 +412,15 @@ label input[type="checkbox"]:checked + span:after {
 
 /* Button */
 .button,
-.important-button {
+.important-button,
+.help-button {
     display: inline-flex;
     align-items: center;
     width: max-content;
     height: 3rem;
     padding: .9rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
-    border: .2rem solid #F3F3F3;
+    border: .1rem solid #47BCFF;
     background-color: #F3F3F3;
     cursor: pointer;
     transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
@@ -438,6 +447,16 @@ label input[type="checkbox"]:checked + span:after {
     color: #47BCFF;
 }
 
+.help-button {
+    border-color: #ff8447;
+}
+
+.help-button:hover {
+    color: #ff8447;
+    background-color: #fff2ea;
+    border-color: #ff8447;
+}
+
 .section-top .button {
     margin-left: 1rem;
 }
@@ -461,7 +480,7 @@ label input[type="checkbox"]:checked + span:after {
     overflow-y: auto;
     transform: translate(3rem, 0);
     background-color: #FFFFFF;
-    border: 2rem solid #EAF5FF;
+    border: 1rem solid #fff2ea;
 }
 
 .right-edge-tooltip {
@@ -469,6 +488,7 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .tooltip-button {
+    color: #d17a40;
     display: inline-flex;
     cursor: pointer;
     align-items: center;
@@ -477,15 +497,16 @@ label input[type="checkbox"]:checked + span:after {
     height: 2rem;
     margin-left: .5rem;
     font-size: 1.3rem;
-    background-color: #F3F3F3;
+    background-color: #fff2ea;
     border-radius: 50%;
+    border: .1rem solid #d17a40;
     transition: color .2s, background-color .2s;
 }
 
 .tooltip-button:hover,
 .tooltip-button-active {
-    color: #47BCFF;
-    background-color: #EAF5FF;
+    color: #ff8447;
+    background-color: #fad3ad;
 }
 
 
