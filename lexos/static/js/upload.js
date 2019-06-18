@@ -71,7 +71,7 @@ function upload_files(event){
         event.originalEvent.dataTransfer.files)){
 
         // Validate the file
-        if(!validate_file(file)) return;
+        if(!validate_file(file)) continue;
 
         // Replace the file name's spaces with underscores
         file.name = file.name.replace(/ /g, '_');
