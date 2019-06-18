@@ -44,7 +44,7 @@ MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
 MAX_FILE_SIZE_INT = 250
 MAX_FILE_SIZE_UNITS = "M"
 # note: number of characters in a preview screen (e.g., on Select page)
-PREVIEW_SIZE = 500
+PREVIEW_SIZE = 255
 # minimum number of characters used to detect a file's encoding scheme
 # upon upload
 MIN_ENCODING_DETECT = 10000
