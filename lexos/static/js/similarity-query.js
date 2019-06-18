@@ -114,7 +114,7 @@ function create_similarity_table(response){
 
     // Remove the loading overlay, fade in the table, and enable the
     // "Generate" and "Download" buttons
-    finish_loading("#table", "#table-head, #table-body",
+    finish_loading("#table", ".lexos-table",
         "#generate-button, #download-button");
 }
 

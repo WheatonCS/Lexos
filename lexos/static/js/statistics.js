@@ -87,41 +87,11 @@ function create_statistics(){
     send_ajax_form_request("/statistics/document-statistics")
 
         // Always check if the loading has completed
-        .always(function(){
-             loading_complete_check();
-        })
+        .always(function(){ loading_complete_check(); })
 
         // If the request was successful, store the CSV data and create the
         // table
-        .done(function(response){
-
-            document_statistics_csv = response.csv;
-
-            // Create the table
-             create_table("#table", JSON.parse(response.table), ["Name",
-                "Single-Occurrence Terms", "Total Terms", "Vocabulary Density",
-                "Distinct Terms"]);
-
-            // Label the columns
-            let id = 0;
-            let head_cell_elements = $(".lexos-table-head-cell");
-            head_cell_elements.each(function(){
-                $(this).attr("id", id++);
-            });
-
-            // Highlight the currently selected column
-            highlight_selected_column();
-
-            // If the table head cell is clicked, update the selected column
-            head_cell_elements.click(function(){
-                $(`input[name="sort-column"]`).val($(this).attr("id"));
-                highlight_selected_column();
-            });
-
-            // Remove the loading overlay, fade the table in, and enable the
-            // "Download" button
-            finish_loading("#table", ".lexos-table", "#download-button");
-        })
+        .done(create_document_statistics_table)
 
         // If the request failed, display an error and "Loading Failed" text
         .fail(function(){
@@ -132,6 +102,28 @@ function create_statistics(){
     // Create the box plot graph and enable the "Generate" button if all
     // sections have finished loading
     create_graph("/statistics/box-plot", function(){ loading_complete_check(); });
+}
+
+
+/**
+ * Create the "Document Statistics" table.
+ * @param {string} response: The response from the
+ */
+function create_document_statistics_table(response){
+
+        document_statistics_csv = response.csv;
+
+        // Create the table
+        let sort_column_input = $(`input[name="sort-column"]`);
+        create_table("#table", JSON.parse(response.table), ["Name",
+            "Single-Occurrence Terms", "Total Terms", "Vocabulary Density",
+            "Distinct Terms"], "", function(selected_head_cell_id){
+                sort_column_input.val(selected_head_cell_id);
+            }, sort_column_input.val());
+
+        // Remove the loading overlay, fade the table in, and enable the
+        // "Download" button
+        finish_loading("#table", ".lexos-table", "#download-button");
 }
 
 
@@ -196,19 +188,6 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
     $(`<h3>${text}</h3>`).appendTo(element_id);
 }
 
-/**
- * Highlights the currently selected "Document Statistics" table column.
- */
-function highlight_selected_column(){
-
-    $(".lexos-table-head-cell").each(function(){
-        $(this).removeClass("selected-cell");
-    });
-
-    $(`.lexos-table-head #${$(`input[name="sort-column"]`).val()}`)
-        .addClass("selected-cell");
-}
-
 
 /**
  * Re-enables the "Generate" button if all elements have finished loading.
@@ -223,7 +202,6 @@ function loading_complete_check(number_loaded = 1){
     elements_loaded += number_loaded;
 
     // If all 5 elements have not finished loading, return
-    console.log(elements_loaded);
     if(elements_loaded < 5) return;
 
     // Otherwise, re-enable the "Generate" button and reset "elements_loaded"
