@@ -175,9 +175,9 @@ function validate_inputs(){
         return false;
     }
 
-    if(int_overlap > int_segment_size){
+    if(int_overlap >= int_segment_size){
         error("The overlap cannot be "+
-            "greater than the segment size.");
+            "greater than or equal to the segment size.");
         return false;
     }
 
