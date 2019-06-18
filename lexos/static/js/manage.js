@@ -121,7 +121,7 @@ function append_row(id, row_number, active, label, class_name, source, preview){
     $(row.find(".table-cell")[1]).text(label);
     $(row.find(".table-cell")[2]).text(class_name);
     $(row.find(".table-cell")[3]).text(source);
-    $(row.find(".table-cell")[4]).text(preview.substring(0, 200));
+    $(row.find(".table-cell")[4]).text(preview);
 
     // If the row is active, add the "selected-table-row" class
     if(active) row.addClass("selected-table-row");
@@ -186,13 +186,14 @@ function preview(){
         // HTML-escaped document preview to it
         .done(function(response){
             create_popup("Preview");
-            let preview = $(`<h3></h3>`).appendTo("#popup-content");
+            let preview = $(`<h3 id="document-preview-text"></h3>`)
+                .appendTo("#popup-content");
             preview.text(parse_json(response).previewText);
         })
 
         // If the request failed, display an error
-        .fail(function(){ error("Failed to retrieve "+
-            "the document's preview."); });
+        .fail(function(){ error(`Failed to retrieve 
+            the document's preview.`); });
 }
 
 
@@ -433,7 +434,7 @@ function send_request(url, payload = ""){
         contentType: "application/json; charset=utf-8"
     })
 
-    // If the request is succesful...
+    // If the request is successful...
     .done(function(){
         update_active_document_count()
             .done(function(response){

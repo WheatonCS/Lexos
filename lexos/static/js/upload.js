@@ -51,7 +51,7 @@ $(function(){
 
 /**
  * Uploads the files selected via the OS file selection window or drag and
- * drop.
+ *      drop.
  * @param {event} event: The event that triggered the callback.
  */
 let files = [];
