@@ -41,10 +41,16 @@ form {
 #drag-and-drop-section {
     height: calc(100% - 8rem);
     width: 100%;
-    color: #505050;
+    color: #757575;
     background-color: #F3F3F3;
-    border: .2rem dashed #D3D3D3;
+    border: .2rem dashed #909090;
     transition: background-color .2s, border-color .2s;
+}
+
+#drag-and-drop-section.highlighted {
+    color: #47BCFF;
+    border-color: #47BCFF;
+    background-color: #EAF5FF;
 }
 
 #browse-button > h3,
