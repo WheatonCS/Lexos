@@ -168,17 +168,18 @@ function display_results(response){
     }
 
     // Create the overview table
-    let overview = response["overview"]
+    let overview = response["overview"];
     let head = overview[0];
-    create_table("#overview-body", overview.splice(1), head);
+    let data = overview.splice(1);
+    console.log(head, data);
+    create_table("#overview-body", data, head);
 
     // Create the corpus table
     create_table("#corpus-body", response["corpus"],
         ["Dictionary", "Phrase", "Count"]);
 
     // Create the document tables
-    $(`<div id="document-tables-grid" class="hidden"></div>`)
-        .appendTo("#documents-body");
+    $(`<div id="document-tables-grid""></div>`).appendTo("#documents-body");
 
     for(const document of response["documents"])
         create_table("#document-tables-grid", document["table"],
@@ -196,10 +197,10 @@ function display_results(response){
     // Remove the loading overlay and enable the
     // "Upload", "Analyze", and "Download" buttons
     finish_loading("#overview-body, #corpus-body, #documents-body",
-        "#overview-body .lexos-table, #corpus-body .lexos-table," +
-        "#document-tables-grid", `#formula-section #analyze-button,
-            #dictionaries-section #upload-button, #overview-download-button,
-            #corpus-download-button`);
+        `#overview-body .lexos-table, #corpus-body .lexos-table,
+        #document-tables-grid .lexos-table`, `#formula-section
+        #analyze-button, #dictionaries-section #upload-button,
+        #overview-download-button, #corpus-download-button`);
 }
 
 

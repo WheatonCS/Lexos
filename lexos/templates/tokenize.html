@@ -4,6 +4,10 @@
 <!-- Head -->
 {% block page_head %}
 
+    <!-- Page Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
+
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/tokenize.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/tokenize.css"/>
@@ -32,7 +36,7 @@
 {% block results %}
 
     <!-- Table -->
-    <div id="table" class="section">
+    <div id="table-section" class="section">
 
         <!-- Table top -->
         <div id="table-top" class="section-top">
@@ -65,8 +69,8 @@
             </div>
         </div>
 
-        <!-- Table data -->
-        <div id="table-data"></div>
+        <!-- Table container -->
+        <div id="table"></div>
 
         <!-- Table bottom -->
         <div id="table-bottom">

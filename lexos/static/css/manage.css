@@ -70,6 +70,7 @@
 .table-row > .active-indicator {
     border: .2rem solid #D3D3D3;
     background-color: #F3F3F3;
+    transition: border .2s, background-color .2s;
 }
 
 .selected-table-row > .active-indicator {

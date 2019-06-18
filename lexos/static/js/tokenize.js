@@ -66,7 +66,7 @@ function initialize(response){
 
         // If there are no active documents, display "No Active Documents"
         // text and return
-        add_text_overlay("#table-data", "No Active Documents");
+        add_text_overlay("#table", "No Active Documents");
         return;
     }
 
@@ -95,19 +95,19 @@ function send_table_data_request(page_change = true, loading_overlay = true){
     if(!validate_table(page_change)) return;
 
     // Display the loading overlay on the table
-    if(loading_overlay) start_loading("#table-data", "#download-button");
+    if(loading_overlay) start_loading("#table", "#download-button");
     let start = (page_number-1)*$(`input[name="length"]:checked`).val();
 
     send_ajax_form_request("tokenize/table",
         { "sort-column": selected_column, "start": start })
 
         // If the request was successful, recreate the table
-        .done(create_table)
+        .done(create_token_table)
 
         // If the request failed, display an error
         .fail(function(){
             error("Failed to retrieve the token table data.");
-            add_text_overlay("#table-data", "Loading Failed");
+            add_text_overlay("#table", "Loading Failed");
         });
 }
 
@@ -162,10 +162,10 @@ function validate_table(page_change){
 
 
 /**
- * Creates the token table.
+ * Creates the table.
  * @param {string} response: The response from the "tokenize/get-table" request.
  */
-function create_table(response){
+function create_token_table(response){
 
     // If there is a queued table recreation, execute it and return
     loading = false;
@@ -183,61 +183,21 @@ function create_table(response){
 
     // If there is no data, display "No Data" text and return
     if(parsed_response["data"].length === 0){
-        add_text_overlay("#table-body", "No Data");
+        add_text_overlay("#table", "No Data");
         return;
     }
 
-    // Create the table layout
-    $(`
-        <div id="table-data-grid" class="hidden">
-            <div id="table-head"></div>
-            <div id="table-body" class="firefox-hidden-scrollbar"></div>
-        </div>
-    `).appendTo("#table-data");
-
-    // Create the table head
-    parsed_response["head"].unshift("Terms");
-    let id = 0;
-    for(const cell of parsed_response["head"]){
-
-        // Create the cell element
-        let cell_element = $(`<h3 id=${id} class="table-cell"></h3>`)
-            .appendTo("#table-head");
-        ++id;
-        cell_element.text(cell);
-
-        // If a column is clicked, select it and recreate the table if it
-        // was not previously selected
-        cell_element.click(function(){
-            let id = $(this).attr("id");
-            if(selected_column !== id){
-                selected_column = id;
-                send_table_data_request(false);
-            }
-        });
-    }
-
-    // Highlight the cell of the selected column
-    $(`#table-head #${selected_column}`).addClass("selected-cell");
-
-    // Populate the table body
-    let table_body_element = $("#table-body");
-    for(const row of parsed_response["data"]){
-
-        // Create a row
-        let row_element = $(`<div class="table-row"></div>`)
-            .appendTo(table_body_element);
-
-        // Populate the row with cells
-        for(const cell of row){
-            let element = $(`<h3 class="table-cell"></h3>`)
-                .appendTo(row_element);
-            element.text(cell);
-        }
-    }
+    // Otherwise, create the table
+    parsed_response["head"].unshift("Term")
+    create_table("#table", parsed_response["data"],
+        parsed_response["head"], '',
+        function(selected_head_cell_id){
+            selected_column = selected_head_cell_id;
+            send_table_data_request(false);
+        }, selected_column);
 
     // Remove the loading overlay and fade in the table data
-    finish_loading("#table-data", "#table-data-grid ", "#download-button");
+    finish_loading("#table", ".lexos-table", "#download-button");
 }
 
 

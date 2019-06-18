@@ -27,6 +27,7 @@ form {
     background-color: #FFFFFF;
     margin-bottom: 0;
     border-bottom: 1rem solid #FFFFFF;
+    grid-auto-columns: 1fr 1fr;
 }
 
 .lexos-table-row:last-child {

@@ -3,48 +3,66 @@
 This function BubbleViz offers an alternative to word clouds as a method of 
 visualizing the Document-Term Matrix.
 
-*Test Files:* Irving_ripVanWrinkle.txt, 
+*Test Files:* Irving_ripVanWinkle.txt, 
 
-*Result Files:* results_defaults.png, results_numberOfTerms10.png
+*Result Files:* results_defaults.png, results_font.png, results_numTerms.png, 
+results_color.png
 
 
 
-## Test Default Settings
+### Test Default Settings
 
-0. UPLOAD TEST FILES:
-    - Irving_ripVanWrinkle.txt, 
+1. Upload test file:
+    - Irving_ripVanWinkle.txt, 
   
-1. BubbleViz
-    - Make sure the test file is selected
-	- Change **NO** settings  
+2. Under the "Visualize" menu select "BubbleViz"
+
+3. Change **NO** settings  
+
+4. Click "Generate"
 	
 Results:
 - results_defaults.png
 
 
-## Test Maximum Number of Terms
+### Test Font Settings
 
-0. UPLOAD TEST FILES:
-    - Irving_ripVanWrinkle.txt, 
+1. Upload test file:
+    - Irving_ripVanWinkle.txt, 
   
-1. BubbleViz
-    - Make sure the test file is selected
-	- Change Number of Terms to 10
-	- Leave all other settings at default
+2. Under the "Visualize" menu select "BubbleViz"
+
+3. Change "Font" to "Serif"  
+
+4. Click "Generate"
 	
 Results:
-- results_numberOfTerms10.png
+- results_font.png
 
+### Test Term Count Settings
 
-## Test Minimum Term Length
-
-0. UPLOAD TEST FILES:
-    - Irving_ripVanWrinkle.txt, 
+1. Upload test file:
+    - Irving_ripVanWinkle.txt, 
   
-1. BubbleViz
-    - Make sure the test file is selected
-	- Change Minimum Term Length to 10
-	- Leave all other settings at default
+2. Under the "Visualize" menu select "BubbleViz"
+
+3. Change "Term Count" to 10
+
+4. Click "Generate"
 	
 Results:
-- results_minimumTermLength10.png
+- results_numTerms.png
+
+### Test Color Settings
+
+1. Upload test file:
+    - Irving_ripVanWinkle.txt, 
+  
+2. Under the "Visualize" menu select "BubbleViz"
+
+3. Click the button next to "Color" and select "Tie-Dye"
+
+4. Click "Generate"
+	
+Results:
+- results_color.png
