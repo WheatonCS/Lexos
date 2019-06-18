@@ -12,7 +12,6 @@ ResultFiles_dog_cat
 
 
 ## Test file: Sentences.txt
-
 1. Upload Sentences.txt
 
 2. Under the "Prepare" menu, select "Cut"

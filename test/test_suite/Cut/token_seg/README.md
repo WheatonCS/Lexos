@@ -45,7 +45,7 @@ Results: ResultFiles_alphaSpace_1
 
 7. Click "Apply"
 
-8. After the cut you should have four abc's in 11 segments.
+8. After the cut you should have four abc's in 11 segments, except for the last one, which will have 2.
 
 Results: ResultFiles_alphaSpace_2
 
