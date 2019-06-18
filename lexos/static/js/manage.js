@@ -421,6 +421,11 @@ function deselect_all(){
  * @returns {jqXHR}: The jQuery request object.
  */
 function send_request(url, payload = ""){
+
+    // Disable the download button
+    disable("#download-button");
+
+    // Send the request
     return $.ajax({
         type: "POST",
         url: "manage/"+url,
@@ -428,7 +433,16 @@ function send_request(url, payload = ""){
         contentType: "application/json; charset=utf-8"
     })
 
-    .done(update_active_document_count);
+    // If the request is succesful...
+    .done(function(){
+        update_active_document_count()
+            .done(function(response){
+
+                // If there is at least one active document, enable the
+                // "Download" button
+                if(parseInt(response) >= 1) enable("#download-button");
+            });
+    });h
 }
 
 
