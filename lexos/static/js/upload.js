@@ -222,7 +222,7 @@ function create_upload_preview(file_name){
             <h3 class="disabled upload-preview-content"></h3>
             <div class="progress-bar"></div>
         </div>
-    `).appendTo("#upload-previews");
+    `).appendTo("#upload-previews-grid");
 
     // Add the HTML-escaped file name to the upload preview element
     upload_preview_element.find(".upload-preview-content")
