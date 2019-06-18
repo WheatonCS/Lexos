@@ -54,9 +54,9 @@ def execute() -> str:
     # Scrub
     previews = file_manager.scrub_files(saving_changes=saving_changes)
 
-    # HTML escape the previews
-    previews = [[preview[1], general_functions.html_escape(preview[3])]
-                for preview in previews]
+    # (DO NOT) HTML escape the previews (THIS LINE USED TO DO THAT, BUT NOW
+    # IT JUST PUTS THE DATA IN THE CORRECT FORMAT OR SOMETHING)
+    previews = [[preview[1], preview[3]] for preview in previews]
 
     # Save the changes if requested
     if saving_changes:

@@ -187,25 +187,16 @@ function initialize_drag_and_drop_section_highlighting(){
 
     drag_and_drop_section.on("dragenter", function(){
         ++drag_counter;
-        $("#drag-and-drop-section").css({"color": "#47BCFF",
-            "border-color": "#47BCFF", "background-color": "#EAF5FF"});
+        drag_and_drop_section.addClass("highlighted");
     });
 
     drag_and_drop_section.on("dragleave", function(){
-        if(--drag_counter === 0) set_default_drop_section_colors();
+        if(--drag_counter === 0)
+            drag_and_drop_section.removeClass("highlighted");
     });
 
     drag_and_drop_section.on("drop", function(){
         drag_counter = 0;
-        set_default_drop_section_colors();
+        drag_and_drop_section.removeClass("highlighted");
     });
-}
-
-
-/**
- * Returns the drag and drop section to its default colors.
- */
-function set_default_drop_section_colors(){
-    $("#drag-and-drop-section").css({"color": "#505050",
-        "border-color": "#D3D3D3", "background-color": "#F3F3F3"});
 }

@@ -106,7 +106,7 @@ function create_class_division_tables(response){
     }
 
     // Create the class divisions grid
-    $(`<div id="class-divisions-grid" class="hidden"></div>`)
+    $(`<div id="class-divisions-grid"></div>`)
         .appendTo("#class-divisions-body");
 
     // Create the class divisions tables
@@ -115,7 +115,8 @@ function create_class_division_tables(response){
 
     // Remove the loading overlay from the "Class Divisions" section and fade
     // in the tables
-    finish_loading("#class-divisions-body", "#class-divisions-grid");
+    finish_loading("#class-divisions-body",
+        "#class-divisions-grid .lexos-table");
 }
 
 
@@ -158,15 +159,14 @@ function send_top_words_request(){
 function create_top_words_tables(tables){
 
     // Create the table grid
-    $(`<div id="top-words-grid" class="hidden"></div>`)
-        .appendTo("#top-words-body");
+    $(`<div id="top-words-grid"></div>`).appendTo("#top-words-body");
 
     // Create the top words tables
     for(const table of tables) create_table("#top-words-grid",
         table["result"], '', table["title"]);
 
-    // Remove the loading overlay and enable the buttons
-    finish_loading("#top-words-body", "#top-words-grid",
+    // Remove the loading overlay, fade in the tables, and enable the buttons
+    finish_loading("#top-words-body", "#top-words-grid .lexos-table",
         "#generate-button, #download-button");
 }
 

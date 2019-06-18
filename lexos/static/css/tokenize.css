@@ -16,12 +16,6 @@ form {
 }
 
 
-/* Table */
-#table-data {
-    height: calc(100% - 10rem);
-}
-
-
 /* Table top */
 #table-top {
     display: grid;
@@ -37,60 +31,9 @@ form {
 }
 
 
-/* Table data */
-#table-data-grid {
-    height: 100%;
-    display: grid;
-    grid-template-rows: max-content auto;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-
-/* Table head */
-#table-head,
-.table-row {
-    grid-auto-columns: minmax(20rem, 1fr);
-    grid-auto-flow: column;
-}
-
-#table-head {
-    display: grid;
-    grid-template-rows: 1fr;
-}
-
-#table-head .table-cell {
-    color: #47BCFF;
-    background-color: #FFFFFF;
-}
-
-#table-head .table-cell.selected-cell {
-    background-color: #EAF5FF;
-}
-
-
-/* Table body */
-#table-body {
-    overflow-x: visible;
-    overflow-y: auto;
-    overflow-y: overlay;
-}
-
-.table-row {
-    display: grid;
-    margin-bottom: 1rem;
-}
-
-.table-row:last-child {
-    margin-bottom: 0;
-}
-
-.table-cell {
-    padding: 1rem;
-    min-height: 4rem;
-    overflow: hidden;
-    overflow-wrap: break-word;
-    background-color: #F3F3F3;
+/* Table */
+#table {
+    height: calc(100% - 10rem);
 }
 
 
@@ -110,6 +53,6 @@ form {
     justify-self: right;
 }
 
-#navigation-buttons > h3 {
-    margin-left: .5rem;
+#navigation-buttons > span {
+    margin-left: 1rem;
 }

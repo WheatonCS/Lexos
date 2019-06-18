@@ -56,9 +56,6 @@ form {
     justify-self: center;
 }
 
-.selected-cell {
-    background-color: #EAF5FF;
-}
 
 /* Hidden elements */
 #document-names-section {
