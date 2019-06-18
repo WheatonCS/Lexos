@@ -81,7 +81,6 @@ test_pandas_anomaly = pd.read_json(test_file_result_anomaly["table"])
 # ------------------------------------------------------------------
 class TestFileResult:
     def test_basic_info(self):
-        print(test_pandas_one)
         assert test_pandas_one[0][0] == "F1.txt"
         assert test_pandas_one[0][1] == "F2.txt"
 

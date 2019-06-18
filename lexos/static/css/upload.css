@@ -70,17 +70,27 @@ form {
 }
 
 .upload-preview {
-    display: grid;
-    align-content: center;
-    justify-content: center;
-    min-height: 8rem;
-    max-height: 8rem;
-    max-width:40rem;
-    padding: 1rem;
-    background-color: #F3F3F3;
+    position: relative;
 }
 
-.upload-preview > h3 {
+.upload-preview-content{
+    display: grid;
+    height: 100%;
+    padding: 1rem;
+    align-content: center;
+    justify-items: center;
+    background-color: #F3F3F3;
     min-width: 0;
     word-break: break-all;
+    transition: opacity .5s;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: .2rem;
+    background-color: #47BCFF;
+    transition: opacity .5s, width .5s;
 }

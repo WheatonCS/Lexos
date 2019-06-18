@@ -119,12 +119,12 @@ form {
 }
 
 .disabled {
-    opacity: .5;
-    pointer-events: none;
+    opacity: .5 !important;
+    pointer-events: none !important;
 }
 
 .invisible {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .hidden {
