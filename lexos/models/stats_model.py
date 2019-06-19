@@ -1,11 +1,8 @@
-"""This is the Stats model which gets basic statistics."""
-
 import pandas as pd
 import numpy as np
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
-from flask import jsonify
 from typing import Optional, NamedTuple, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel

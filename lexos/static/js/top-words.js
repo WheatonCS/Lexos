@@ -2,10 +2,6 @@ let documents;
 let csv;
 $(function(){
 
-    // Display the loading overlay on the "Class Divisions" and "Top Words"
-    // sections
-    start_loading("#class-divisions-body, #top-words-body");
-
     // Initialize the tooltips in the "Comparison Method", "Tokenize",
     // "Cull", "Class Divisions", and "Top Words" sections
     initialize_analyze_tooltips();
@@ -30,7 +26,7 @@ $(function(){
  */
 function initialize(response){
 
-    documents = Object.values(parse_json(response));
+    documents = parse_json(response);
 
     // Initialize the legacy form inputs. If there are no active documents,
     // display "No Active Documents" text and return
@@ -43,11 +39,18 @@ function initialize(response){
     // Send a request to get the class divisions
     $.ajax({type: "GET", url: "top-words/class-divisions"})
 
-        // If the request was successful, create the class division tables
-        // and initialize the "Top Words" section
+        // If the request was successful...
         .done(function(response){
+
+            // Create the class division tables
             create_class_division_tables(response);
-            initialize_top_words();
+
+            // If the "Generate" button is pressed, create the "Top Words" section
+            $("#generate-button").click(function(){
+                start_loading("#top-words-body", "#generate-button, #download-button");
+                remove_errors();
+                send_top_words_request();
+            });
         })
 
         // If the request failed, display an error and "Loading Failed" text
@@ -56,23 +59,6 @@ function initialize(response){
             add_text_overlay("#class-divisions-body, #top-words-body",
                 "Loading Failed");
         });
-}
-
-
-/**
- * Initializes the "Top Words" section.
- */
-function initialize_top_words(){
-
-    // Create the "Top Words" section
-    send_top_words_request();
-
-    // If the "Generate" button is pressed, recreate the "Top Words" section
-    $("#generate-button").click(function(){
-        start_loading("#top-words-body", "#generate-button, #download-button");
-        remove_errors();
-        send_top_words_request();
-    });
 }
 
 
@@ -142,8 +128,8 @@ function send_top_words_request(){
             create_top_words_tables(response.tables);
         })
 
-        // If the request failed, display an error, remove the loading
-        // overlay, and enable the buttons
+        // If the request failed, display an error, remove the loading overlay,
+        // and enable the buttons
         .fail(function(){
             top_words_loading_failure();
             error("Failed to retrieve the top words data.");

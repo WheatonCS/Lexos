@@ -84,8 +84,9 @@ def analyze():
 
     # Add the dictionaries
     for name in os.listdir(path):
-        analysis.add_dictionary(file_name=name, label=name, content=
-                                open(os.path.join(path, name), 'r').read())
+        analysis.add_dictionary(file_name=name, label=name,
+                                content=open(os.path.join(path, name), 'r')
+                                .read())
 
     # Analyze
     overview_results, overview_csv, corpus_results, corpus_csv, \
