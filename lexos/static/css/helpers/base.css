@@ -503,7 +503,15 @@ label input[type="checkbox"]:checked + span:after {
     display: none;
 }
 
-/* Intro.js overrides */
+/* Intro.js & overrides */
+#guide-button {
+    color: grey;
+}
+
+#guide-button:hover {
+    color: #47BCFF;
+}
+
 .introjs-button {
   box-sizing: content-box;
   position: relative;

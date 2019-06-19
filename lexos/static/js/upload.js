@@ -45,6 +45,11 @@ $(function(){
                 position: 'top'
             },
             {
+                element: '#help-button',
+                intro: 'Check our Help section for more advice on the Upload page.',
+                position: 'bottom'
+            },
+            {
                 element: '#manage-button',
                 intro: 'Once you\'ve uploaded some documents, check out the Manage page for the next step of this tutorial!',
                 position: 'bottom'

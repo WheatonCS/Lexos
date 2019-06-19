@@ -1,4 +1,51 @@
 $(function(){
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#table',
+                intro: 'This is the Manage page.',
+                position: 'top',
+            },
+            {
+                element: '#active',
+                intro: 'Active documents will have a blue highlight to them. You can deactivate documents by clicking while holding down "D".',
+                position: 'bottom'
+            },
+            {
+                element: '#document',
+                intro: 'The Document column holds custom document names. You can rename documents by right clicking.',
+                position: 'bottom'
+            },
+            {
+                element: '#class',
+                intro: 'If you want to group documents together, you may give them a class by right clicking.',
+                position: 'bottom'
+            },
+            {
+                element: '#excerpt',
+                intro: 'Excerpt will give you a preview of your document.',
+                position: 'bottom'
+            },
+            {
+                element: '#help-button',
+                intro: 'Check our Help section for more advice on the Manage page.',
+                position: 'bottom'
+            },
+            {
+                element: '#prepare-button',
+                intro: 'Once you\'re satisfied with your active documents, you can move on to the Prepare step! Exit this tutorial and click "Scrub" from the dropdown menu.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    // If guide button is clicked...
+    $("#guide-button").click(function() {
+        introguide.start();
+    });
 
     // Create the table displaying the uploaded documents
     create_table();
