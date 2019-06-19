@@ -90,7 +90,7 @@ form {
 /* Results */
 #overview-body,
 #corpus-body {
-    max-height: 39.5rem;
+    height: 40rem;
     display: flex;
     flex-direction: column;
 }
