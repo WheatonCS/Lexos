@@ -34,7 +34,7 @@ OR
     (b) Go to Analyze - Similarity Query
     (c) Tokenize - by Characters
     
-    Get Similarity Rankings: the two files should be identical, and should have a
+    Get Similarity Rankings: the two files should be identical and should have a
     similarity score of 0.364.
 
 mjl - May 20, 2019

@@ -1,6 +1,6 @@
 # Classical Chinese - 诗词歌赋The_Poems_And_Songs
 
-The Lexos tool can be used to help detect the authorship, contents, era and 
+The Lexos tool can be used to help detect the authorship, contents, era, and 
 genre in classical Chinese texts. Here we analyze several different texts written
 in different dynasties and authors, which includes the genres of Chuci (verses
 of Chu), Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu 

@@ -54,9 +54,9 @@ Steps
         (Right click, deactivate all, then click on those three parts)
     (b) Right click on any of the files and select Merge Active
         Name the merge "Henry_VI" (this will create a new file)
-    (c) Merge the two parts of Tambulaine as "Marlowe_Tambulaine_the_Great"
+    (c) Merge the two parts of Tamburlaine as "Marlowe_Tamburlaine_the_Great"
     (d) Delete the partial documents (you should be left with 13 documents)
-    (e) Right click and select Activate All
+    (e) Right-click and select Activate All
         
 
 (3) ANALYZE - Similarity Query:

@@ -33,7 +33,7 @@ of this text. A possible approach to minimize this effect would be to
 scrub the text individually, replacing "th" and "y" with thorn and 
 yogh, then download the scrub text and upload it in place of the 
 original with the other texts. However, this is likely to affect 
-occurrences of these letters where they should not be changed.
+the occurrences of these letters where they should not be changed.
 
 Using the tools from:   http://lexos.wheatoncollege.edu
 and the files found in the FilesToUse/ directory, you should

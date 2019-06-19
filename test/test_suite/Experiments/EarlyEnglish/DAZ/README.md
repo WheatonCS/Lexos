@@ -42,8 +42,8 @@ Steps:
 (2) CUT:
 
     (a) Go to Manange (this is optional)
-        - Right Click on A1.3_Dan_T00030 and edit it's name to "Dan" (without the quotes)
-        - Right Click on A3.3_Az_T00130 and edit it's name to "AZ" (without the quotes)
+        - Right Click on A1.3_Dan_T00030 and edit its name to "Dan" (without the quotes)
+        - Right Click on A3.3_Az_T00130 and edit its name to "AZ" (without the quotes)
     (b) On manage, deselect AZ so Dan is the only active document
     (c) Cut Dan using these settings:
         - Set Cut Mode to "Tokens"
