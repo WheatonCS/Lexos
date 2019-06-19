@@ -38,47 +38,44 @@ $(function(){
  * Loads the appropriate content for the "Cut Settings" section.
  */
 let cut_mode;
-let previous_mode = "normal";
+let previous_cut_mode = "default";
 function load_cut_settings_section(){
 
-    let cut_settings_grid_element = $("#cut-settings-grid");
+    // Return if the same cut mode was selected
     cut_mode = $("#cut-mode-grid input:checked").val();
+    if(cut_mode !== "number" && cut_mode !== "milestone") cut_mode = "default";
+    if(cut_mode === previous_cut_mode) return;
+
+    // Hide the cut settings
+    let cut_settings_grid_element = $("#cut-settings-grid");
+    cut_settings_grid_element.css("opacity", "0");
 
     // If the cut mode is set to "Segments"...
     if(cut_mode === "number"){
-        cut_settings_grid_element.css("opacity", "0");
-        previous_mode = "number";
+        previous_cut_mode = "number";
         hide("#milestone-input, #overlap-input, #merge-threshold-input, #segment-size-input");
-        show("#num-segment-input");
-        // Fade in the settings
-        fade_in(cut_settings_grid_element);
+        show("#number-of-segments-input");
     }
 
     // Otherwise, if the cut mode is set to "Milestones"...
     else if(cut_mode === "milestone"){
-        cut_settings_grid_element.css("opacity", "0");
-        previous_mode = "milestone";
-        hide("#segment-size-input, #overlap-input, #merge-threshold-input, #num-segment-input");
+        previous_cut_mode = "milestone";
+        hide("#segment-size-input, #overlap-input, #merge-threshold-input");
         show("#milestone-input");
-        // Fade in the settings
-        fade_in(cut_settings_grid_element);
     }
 
     // Otherwise, if the cut mode is set to "Tokens", "Characters", or "Lines"...
     else {
-        if (previous_mode !== "normal"){
-            cut_settings_grid_element.css("opacity", "0");
-            previous_mode = "normal";
-            hide("#milestone-input, #num-segment-input");
-            show("#segment-size-input, #overlap-input, #merge-threshold-input");
-            // Fade in the settings
-            fade_in(cut_settings_grid_element);
-        }
+        previous_cut_mode = "default";
+        hide("#milestone-input, #number-of-segments-input");
+        show("#segment-size-input, #overlap-input, #merge-threshold-input");
     }
 
     // Set the legacy "cutByMS" input if the cut mode is "milestone"
     $("#cut-by-milestone-input").val(cut_mode === "milestone" ? "on" : "off")
 
+    // Fade in the settings
+    fade_in(cut_settings_grid_element);
 }
 
 
@@ -219,6 +216,10 @@ function initialize_tooltips(){
         divide up the text. Either the number of letters, words, or lines 
         per segment.`);
 
+    // "Number of Segments"
+    create_tooltip("#number-of-segments-tooltip-button", `The number of
+        segments per document.`);
+
     // "Overlap"
     create_tooltip("#overlap-tooltip-button", `The amount of overlapping
         content at the start and end of segments. This number must be smaller
@@ -234,7 +235,4 @@ function initialize_tooltips(){
     create_tooltip("#milestone-tooltip-button", `Split the document into
         segments at each appearance of the provided string. Child segments will not
         contain the Milestone delimiter.`);
-
-    create_tooltip("#number-segment-tooltip-button", `A positive integer
-        used to divide the document into that number of even segments.`)
 }

@@ -31,22 +31,15 @@
             <div id="cut-mode-grid" class="section-body">
 
                 <div>
-                    <!-- Tokens -->
                     <label><input type="radio" name="cutType" value="words" checked><span></span>Tokens</label><br>
-
-                    <!-- Characters -->
                     <label><input type="radio" name="cutType" value="letters"><span></span>Characters</label>
                 </div>
 
                 <div>
-                    <!-- Lines -->
                     <label><input type="radio" name="cutType" value="lines"><span></span>Lines</label><br>
-
-                    <!-- Segments -->
                     <label><input type="radio" name="cutType" value="number"><span></span>Segments</label>
                 </div>
 
-                <!-- Milestones -->
                 <label><input type="radio" name="cutType" value="milestone"><span></span>Milestones</label>
             </div>
         </div>
@@ -58,35 +51,35 @@
             <div id="cut-settings-grid" class="section-body">
 
                 <!-- Segment size -->
-                <div id="segment-size-input" >
+                <div id="segment-size-input">
                     <h3>Segment Size</h3>
                     <input name="cutValue" type="text" spellcheck="false" autocomplete="off">
                     <span id="segment-size-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
-                <!-- Number of Segments -->
-                <div id="num-segment-input" class="hidden" >
+                <!-- Number of segments -->
+                <div id="number-of-segments-input" class="hidden">
                     <h3>Number of Segments</h3>
                     <input name="cutValue" type="text" spellcheck="false" autocomplete="off">
-                    <span id="number-segment-tooltip-button" class="tooltip-button">?</span>
+                    <span id="number-of-segments-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Overlap -->
-                <div id="overlap-input" >
+                <div id="overlap-input">
                     <h3>Overlap</h3>
                     <input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0">
                     <span id="overlap-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Merge threshold -->
-                <div id="merge-threshold-input" >
+                <div id="merge-threshold-input">
                     <h3>Merge %</h3>
                     <input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50">
                     <span id="merge-threshold-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Milestone -->
-                <div id="milestone-input" class="hidden" >
+                <div id="milestone-input" class="hidden">
                     <h3>Milestone</h3>
                     <input name="MScutWord" type="text" spellcheck="false" autocomplete="off">
                     <span id="milestone-tooltip-button" class="tooltip-button">?</span>
