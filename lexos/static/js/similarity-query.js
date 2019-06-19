@@ -15,7 +15,9 @@ $(function(){
         "#comparison-document-section-body, #table");
 
     // If the "Download" button is pressed, download the CSV
-    $("#download-button").click(function(){ download(csv, "similarity-query.csv"); });
+    $("#download-button").click(function(){
+        download(csv, "similarity-query.csv");
+    });
 });
 
 
@@ -25,13 +27,18 @@ $(function(){
  */
 function initialize(response){
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#comparison-document-section-body, #table",
-            "No Active Documents");
+    // If there are fewer than two active documents, display warning text
+    // and return
+    document_count = Object.entries(parse_json(response)).length;
+    if(document_count <  2){
+        add_text_overlay("#table", `This Tool Requires at Least Two Active
+            Documents`);
+        add_text_overlay("#comparison-document-section-body", '');
         return;
     }
+
+    // Initialize the legacy form inputs
+    if(!initialize_legacy_inputs(response)) return;
 
     // Otherwise, parse the response
     let documents = Object.entries(parse_json(response));

@@ -19,7 +19,7 @@ $(function(){
  * Checks that there are at least two active documents, initializes the legacy
  *      inputs and the "Generate" and download buttons, creates the k-means
  *      graph, and gets the CSV data.
- * @param {string} response: The response from the "active-file-ids" request.
+ * @param {string} response: The response from the "/active-file-ids" request.
  */
 let document_count;
 let csv;

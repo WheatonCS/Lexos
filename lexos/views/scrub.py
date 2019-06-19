@@ -2,8 +2,7 @@ import json
 
 from flask import request, session, render_template, Blueprint
 
-from lexos.helpers import constants as constants, \
-    general_functions as general_functions
+from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 
 from natsort import humansorted
