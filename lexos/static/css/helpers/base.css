@@ -114,6 +114,11 @@ form {
     color: #FF8447;
 }
 
+.help-highlight:hover {
+    color: #D66C37;
+    cursor: pointer;
+}
+
 .centerer {
     display: grid;
     justify-items: center;
@@ -268,6 +273,12 @@ input[type="text"]:focus {
     color: #47BCFF;
     background-color: #EAF5FF;
     border-color: #47BCFF;
+}
+
+input[type="text"].error-highlight {
+    border-color: #E62843;
+    color:  #E62843;
+    background-color: #FFE7E9;
 }
 
 span > input[type="text"] {
@@ -486,6 +497,7 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .tooltip-button {
+    color: #FF8447;
     display: inline-flex;
     cursor: pointer;
     align-items: center;
@@ -503,6 +515,7 @@ label input[type="checkbox"]:checked + span:after {
 .tooltip-button-active {
     color: #FF8447;
     background-color: #FFF2EA;
+    border: .1rem solid #FF8447;
 }
 
 
