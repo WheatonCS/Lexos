@@ -1,4 +1,51 @@
 $(function(){
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#graph-container',
+                intro: 'Welcome to K-Means!',
+                position: 'top',
+            },
+            {
+                element: '#k-means-options-section',
+                intro: 'These settings control how the K-Means graph is generated. You can set the number of clusters and the graph\'s type.',
+                position: 'top',
+            },
+            {
+                element: '#tokenize-section',
+                intro: 'Tokenize determines how terms are counted when generating data.',
+                position: 'top',
+            },
+            {
+                element: '#normalize-section',
+                intro: 'Normalize determines if and how term totals are weighted.',
+                position: 'top',
+            },
+            {
+                element: '#cull-section',
+                intro: 'Cull limits the number of terms used to generate data, and is optional.',
+                position: 'top',
+            },
+            {
+                element: '#dendrogram-buttons',
+                intro: 'Here you can generate a new Dendrogram. You can also choose to download the Dendrogram as a static PNG or a vector SVG.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the Dendrogram features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    // If guide button is clicked...
+    $("#guide-button").click(function() {
+        introguide.start();
+    });
 
     // Display the loading overlay on the "K-Means" section
     start_loading("#graph-container");
