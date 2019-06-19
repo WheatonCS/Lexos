@@ -80,27 +80,39 @@ $(function(){
  * Loads the appropriate content for the "Cut Settings" section.
  */
 let cut_mode;
+let previous_cut_mode = "default";
 function load_cut_settings_section(){
 
+    // Return if the same cut mode was selected
+    cut_mode = $("#cut-mode-grid input:checked").val();
+    if(cut_mode !== "number" && cut_mode !== "milestone") cut_mode = "default";
+    if(cut_mode === previous_cut_mode) return;
+
+    // Hide the cut settings
     let cut_settings_grid_element = $("#cut-settings-grid");
     cut_settings_grid_element.css("opacity", "0");
-    cut_mode = $("#cut-mode-grid input:checked").val();
 
     // If the cut mode is set to "Segments"...
     if(cut_mode === "number"){
-        hide("#milestone-input, #overlap-input, #merge-threshold-input");
-        show("#segment-size-input");
+        previous_cut_mode = "number";
+        hide(`#milestone-input, #overlap-input,
+            #merge-threshold-input, #segment-size-input`);
+        show("#number-of-segments-input");
     }
 
     // Otherwise, if the cut mode is set to "Milestones"...
     else if(cut_mode === "milestone"){
-        hide("#segment-size-input, #overlap-input, #merge-threshold-input");
+        previous_cut_mode = "milestone";
+        hide(`#segment-size-input, #overlap-input,
+            #merge-threshold-input, #number-of-segments-input`);
         show("#milestone-input");
     }
 
-    // Otherwise, if the cut mode is set to "Tokens", "Characters", or "Lines"...
+    // Otherwise, if the cut mode is set to "Tokens", "Characters", or
+    // "Lines"...
     else {
-        hide("#milestone-input");
+        previous_cut_mode = "default";
+        hide("#milestone-input, #number-of-segments-input");
         show("#segment-size-input, #overlap-input, #merge-threshold-input");
     }
 
@@ -192,17 +204,20 @@ function validate_inputs(){
     // "Milestone"
     if(cut_mode === "milestone"){
         if($("#milestone-input input").val().length <= 0){
-            error("A milestone must be provided.");
+            error("A milestone must be provided.", "#milestone-input input");
             return false;
         }
         return true;
     }
 
     // "Segment size"
-    let segment_size = $("#segment-size-input input").val();
+    let segment_size = (cut_mode === "number") ?
+        $("#number-of-segments-input input").val() :
+        $("#segment-size-input input").val();
     let int_segment_size = parseInt(segment_size);
     if(!validate_number(segment_size, 1)){
-        error("Invalid segment size.");
+        error("Invalid segment size.", (cut_mode === "number") ?
+            "#number-of-segments-input input" : "#segment-size-input input");
         return false;
     }
 
@@ -213,19 +228,19 @@ function validate_inputs(){
     let overlap = $("#overlap-input input").val();
     let int_overlap = parseInt(overlap);
     if(!validate_number(overlap, 0)){
-        error("Invalid overlap size.");
+        error("Invalid overlap size.", "#overlap-input input");
         return false;
     }
 
     if(int_overlap >= int_segment_size){
-        error("The overlap cannot be "+
-            "greater than or equal to the segment size.");
+        error(`The overlap cannot be greater than or equal to the segment
+            size.`, "#overlap-input input");
         return false;
     }
 
     // "Merge threshold"
     if(!validate_number($("#merge-threshold-input input").val(), 0, 100)){
-        error("Invalid merge threshold.");
+        error("Invalid merge threshold.", "#merge-threshold-input input");
         return false;
     }
 
@@ -247,7 +262,11 @@ function initialize_tooltips(){
     // "Segment Size"
     create_tooltip("#segment-size-tooltip-button", `A positive integer used to 
         divide up the text. Either the number of letters, words, or lines 
-        per segment, or the number of segments per document.`);
+        per segment.`);
+
+    // "Number of Segments"
+    create_tooltip("#number-of-segments-tooltip-button", `The number of
+        segments per document.`);
 
     // "Overlap"
     create_tooltip("#overlap-tooltip-button", `The amount of overlapping

@@ -167,21 +167,21 @@ function validate_inputs(){
 
     // "Search terms"
     if($("#search-terms-input input").val().length < 1){
-        error("Please enter the search terms.");
+        error("Please enter the search terms.", "#search-terms-input input");
         return false;
     }
 
     // "Window"
     if(!validate_number($("#window-size-input").val(), 1)){
-        error("Invalid window size.");
+        error("Invalid window size.", "#window-size-input");
         return false;
     }
 
     // "Milestone"
     if($("#milestone-checkbox").is("checked") &&
         $("#milestone-input").val().length < 1){
-        error("Please either enter a milestone or "+
-            "uncheck the milestone option.");
+        error(`Please either enter a milestone or uncheck the milestone
+            option.`, "#milestone-input");
         return false;
     }
 

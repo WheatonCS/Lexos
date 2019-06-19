@@ -35,20 +35,8 @@ function initialize(response){
     // Create the consensus tree
     create_consensus_tree();
 
-    // When the "Generate" button is pressed...
-    $("#generate-button").click(function(){
-
-        // Display the loading overlay and disable the "Generate" and
-        // "Download" buttons
-        start_loading("#consensus-tree-body",
-            "#generate-button, #download-button");
-
-        // Remove any existing error messages
-        remove_errors();
-
-        // Recreate the consensus tree
-        create_consensus_tree();
-    });
+    // When the "Generate" button is pressed, create the consensus tree
+    $("#generate-button").click(create_consensus_tree);
 
     // When the "Download" button is pressed, download the consensus tree PNG
     $("#download-button").click(function(){
@@ -64,6 +52,14 @@ function create_consensus_tree(){
 
     // Validate the inputs
     if(!validate_inputs() || !validate_analyze_inputs()) return;
+
+    // Display the loading overlay and disable the "Generate" and "Download"
+    // buttons
+    start_loading("#consensus-tree-body",
+        "#generate-button, #download-button");
+
+    // Remove any existing error messages
+    remove_errors();
 
     // Send a request for the consensus tree data
     send_ajax_form_request("consensus-tree/graph")
@@ -104,13 +100,13 @@ function validate_inputs(){
 
     // "Cutoff"
     if(!validate_number($("#cutoff-input").val(), 0, 1)){
-        error("Invalid cutoff.");
+        error("Invalid cutoff.", "#cutoff-input");
         return false;
     }
 
     // "Iterations"
     if(!validate_number($("#iterations-input").val(), 1)){
-        error("Invalid number of iterations.");
+        error("Invalid number of iterations.", "#iterations-input");
         return false;
     }
 

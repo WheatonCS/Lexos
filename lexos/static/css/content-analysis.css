@@ -76,7 +76,7 @@ form {
     width: calc(100% - .2rem);
     height: calc(100% - .2rem);
     background-color: #F3F3F3;
-    border: .2rem solid #F3F3F3;
+    border: .1rem solid #47BCFF;
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
@@ -90,7 +90,9 @@ form {
 /* Results */
 #overview-body,
 #corpus-body {
-    max-height: 39.5rem;
+    height: 40rem;
+    display: flex;
+    flex-direction: column;
 }
 
 #document-tables-grid {
@@ -104,7 +106,17 @@ form {
     min-height: 25rem;
 }
 
-.lexos-table-row,
-.lexos-table-head {
-    grid-template-columns: 1fr 1fr 1fr;
+#document-tables-grid .lexos-table-row {
+    background-color: #F3F3F3;
+    margin-bottom: 0;
+    border-bottom: 1rem solid #FFFFFF;
+    grid-auto-columns: minmax(13rem, 1fr);
+}
+
+#document-tables-grid .lexos-table-head {
+    grid-auto-columns: minmax(13rem, 1fr);
+}
+
+#document-tables-grid .lexos-table-row:last-child {
+    border-bottom: none;
 }
