@@ -91,6 +91,8 @@ form {
 #overview-body,
 #corpus-body {
     max-height: 39.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 #document-tables-grid {
@@ -100,20 +102,19 @@ form {
 }
 
 #document-tables-grid .lexos-table {
-    background-color: #F3F3F3;
     max-height: 38.4rem;
     min-height: 25rem;
 }
 
 #document-tables-grid .lexos-table-row {
-    background-color: #FFFFFF;
+    background-color: #F3F3F3;
     margin-bottom: 0;
     border-bottom: 1rem solid #FFFFFF;
-    grid-auto-columns: minmax(13rem, 15rem);
+    grid-auto-columns: minmax(13rem, 1fr);
 }
 
 #document-tables-grid .lexos-table-head {
-    grid-auto-columns: minmax(13rem, 15rem);
+    grid-auto-columns: minmax(13rem, 1fr);
 }
 
 #document-tables-grid .lexos-table-row:last-child {
