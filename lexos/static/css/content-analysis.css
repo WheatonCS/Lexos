@@ -109,6 +109,11 @@ form {
     background-color: #FFFFFF;
     margin-bottom: 0;
     border-bottom: 1rem solid #FFFFFF;
+    grid-auto-columns: minmax(13rem, 15rem);
+}
+
+#document-tables-grid .lexos-table-head {
+    grid-auto-columns: minmax(13rem, 15rem);
 }
 
 #document-tables-grid .lexos-table-row:last-child {
