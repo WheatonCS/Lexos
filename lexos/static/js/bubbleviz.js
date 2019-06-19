@@ -1,4 +1,46 @@
 $(function(){
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#bubbleviz',
+                intro: 'Here is your Bubbleviz.',
+                position: 'top',
+            },
+            {
+                element: '#visualize-font',
+                intro: 'You can change the font-style of your Bubbleviz here (provided your computer has access to the font).',
+                position: 'top',
+            },
+            {
+                element: '#visualize-term-count',
+                intro: 'You can change the amount of words displayed in your Bubbleviz here.',
+                position: 'top',
+            },
+            {
+                element: '#visualize-color',
+                intro: 'You can choose from a variety of color themes from the dropdown menu here. Click "OK" to generate.',
+                position: 'top',
+            },
+            {
+                element: '#visualize-buttons',
+                intro: 'You can generate a new Bubbleviz at anytime here. You can also choose to download a static PNG or vector SVG.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For more about Bubbleviz, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    // If guide button is clicked...
+    $("#guide-button").click(function() {
+        introguide.start();
+    });
 
     // Initialize the "Color" button
     initialize_color_button(send_word_counts_request);

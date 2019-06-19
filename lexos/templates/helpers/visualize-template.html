@@ -27,24 +27,27 @@
     <div class="section">
         <div id="graph-section-top" class="section-top">
 
-            <h3 class="title">{% block graph_title %}{% endblock %}</h3>
+            <div>
+                <h3 class="title">{% block graph_title %}{% endblock %}</h3>
+                <span id="guide-button" class="right-justified" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
+            </div>
 
-            <div class="center-justified">
+            <div class="center-justified" id="visualize-font">
                 <h3>Font:</h3>
                 <input id="font-input" name="mfwnumber" value="Open Sans" type="text" spellcheck="false" autocomplete="off">
             </div>
 
-            <div class="center-justified">
+            <div class="center-justified" id="visualize-term-count">
                 <h3>Term Count:</h3>
                 <input id="term-count-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
             </div>
 
-            <div class="center-justified">
+            <div class="center-justified" id="visualize-color">
                 <h3>Color: </h3>
                 <span id="color-button" class="button">Lexos</span>
             </div>
 
-            <div class="right-justified">
+            <div class="right-justified" id="visualize-buttons">
                 <span id="generate-button" class="disabled important-button">Generate</span>
                 <a id="png-button" class="disabled button">PNG</a>
                 <a id="svg-button" class="disabled button">SVG</a>
