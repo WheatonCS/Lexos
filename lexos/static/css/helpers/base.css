@@ -114,6 +114,11 @@ form {
     color: #FF8447;
 }
 
+.help-highlight:hover {
+    color: #D66C37;
+    cursor: pointer;
+}
+
 .centerer {
     display: grid;
     justify-items: center;
@@ -492,6 +497,7 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .tooltip-button {
+    color: #FF8447;
     display: inline-flex;
     cursor: pointer;
     align-items: center;
@@ -509,6 +515,7 @@ label input[type="checkbox"]:checked + span:after {
 .tooltip-button-active {
     color: #FF8447;
     background-color: #FFF2EA;
+    border: .1rem solid #FF8447;
 }
 
 
