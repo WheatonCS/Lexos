@@ -164,9 +164,9 @@ function toggle_help_section(){
     $(`
         <div id="help-section">
             <div id="help-section-navbar">
-                <span id="help-button-header" class="button">Help</span>
-                <span id="about-button" class="button">About Lexos</span>
-                <span id="glossary-button" class="button">Glossary</span>
+                <span id="help-button-header" class="button help-button">Help</span>
+                <span id="about-button" class="button help-button">About Lexos</span>
+                <span id="glossary-button" class="button help-button">Glossary</span>
             </div>
             <div id="help-section-content"></div>
         </div>

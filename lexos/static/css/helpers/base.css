@@ -110,6 +110,14 @@ form {
     color: #47BCFF;
 }
 
+.help-selectable:hover {
+    color: #c96533;
+    cursor: pointer;
+}
+.help-highlight {
+    color: #ff8447;
+}
+
 .centerer {
     display: grid;
     justify-items: center;
@@ -119,12 +127,12 @@ form {
 }
 
 .disabled {
-    opacity: .5 !important;
-    pointer-events: none !important;
+    opacity: .5;
+    pointer-events: none;
 }
 
 .invisible {
-    opacity: 0 !important;
+    opacity: 0;
 }
 
 .hidden {
@@ -314,7 +322,7 @@ label > span:before {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
-    background-color: #F3F3F3;
+    background-color: #FFFFFF;
     border: .2rem solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
@@ -436,6 +444,16 @@ label input[type="checkbox"]:checked + span:after {
 .important-button:hover {
     background-color: #EAF5FF;
     color: #47BCFF;
+}
+
+.help-button {
+    border-color: #ff8447;
+}
+
+.help-button:hover {
+    color: #ff8447;
+    background-color: #fff2ea;
+    border-color: #ff8447;
 }
 
 .section-top .button {
