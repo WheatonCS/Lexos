@@ -38,35 +38,47 @@ $(function(){
  * Loads the appropriate content for the "Cut Settings" section.
  */
 let cut_mode;
+let previous_mode = "normal";
 function load_cut_settings_section(){
 
     let cut_settings_grid_element = $("#cut-settings-grid");
-    cut_settings_grid_element.css("opacity", "0");
     cut_mode = $("#cut-mode-grid input:checked").val();
 
     // If the cut mode is set to "Segments"...
     if(cut_mode === "number"){
-        hide("#milestone-input, #overlap-input, #merge-threshold-input");
-        show("#segment-size-input");
+        cut_settings_grid_element.css("opacity", "0");
+        previous_mode = "number";
+        hide("#milestone-input, #overlap-input, #merge-threshold-input, #segment-size-input");
+        show("#num-segment-input");
+        // Fade in the settings
+        fade_in(cut_settings_grid_element);
     }
 
     // Otherwise, if the cut mode is set to "Milestones"...
     else if(cut_mode === "milestone"){
-        hide("#segment-size-input, #overlap-input, #merge-threshold-input");
+        cut_settings_grid_element.css("opacity", "0");
+        previous_mode = "milestone";
+        hide("#segment-size-input, #overlap-input, #merge-threshold-input, #num-segment-input");
         show("#milestone-input");
+        // Fade in the settings
+        fade_in(cut_settings_grid_element);
     }
 
     // Otherwise, if the cut mode is set to "Tokens", "Characters", or "Lines"...
     else {
-        hide("#milestone-input");
-        show("#segment-size-input, #overlap-input, #merge-threshold-input");
+        if (previous_mode !== "normal"){
+            cut_settings_grid_element.css("opacity", "0");
+            previous_mode = "normal";
+            hide("#milestone-input, #num-segment-input");
+            show("#segment-size-input, #overlap-input, #merge-threshold-input");
+            // Fade in the settings
+            fade_in(cut_settings_grid_element);
+        }
     }
 
     // Set the legacy "cutByMS" input if the cut mode is "milestone"
     $("#cut-by-milestone-input").val(cut_mode === "milestone" ? "on" : "off")
 
-    // Fade in the settings
-    fade_in(cut_settings_grid_element);
 }
 
 
@@ -205,7 +217,7 @@ function initialize_tooltips(){
     // "Segment Size"
     create_tooltip("#segment-size-tooltip-button", `A positive integer used to 
         divide up the text. Either the number of letters, words, or lines 
-        per segment, or the number of segments per document.`);
+        per segment.`);
 
     // "Overlap"
     create_tooltip("#overlap-tooltip-button", `The amount of overlapping
@@ -222,4 +234,7 @@ function initialize_tooltips(){
     create_tooltip("#milestone-tooltip-button", `Split the document into
         segments at each appearance of the provided string. Child segments will not
         contain the Milestone delimiter.`);
+
+    create_tooltip("#number-segment-tooltip-button", `A positive integer
+        used to divide the document into that number of even segments.`)
 }
