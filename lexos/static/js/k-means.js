@@ -11,7 +11,12 @@ $(function(){
             },
             {
                 element: '#k-means-options-section',
-                intro: 'These settings control how the K-Means graph is generated. You can set the number of clusters and the graph\'s type.',
+                intro: 'These settings control how the K-Means graph will appear. You can set the number of clusters and the graph\'s type.',
+                position: 'top',
+            },
+            {
+                element: '#advanced-options-section',
+                intro: 'The advanced settings control the process that the data goes through when generating the K-Means graph.',
                 position: 'top',
             },
             {
@@ -30,13 +35,13 @@ $(function(){
                 position: 'top',
             },
             {
-                element: '#dendrogram-buttons',
-                intro: 'Here you can generate a new Dendrogram. You can also choose to download the Dendrogram as a static PNG or a vector SVG.',
+                element: '#k-means-buttons',
+                intro: 'Here you can generate a new K-Means. You can also choose to download the K-Means as a static PNG or a vector SVG. K-Means data is also available as a CSV file.',
                 position: 'top',
             },
             {
                 element: '#help-button',
-                intro: 'For a more advanced summary of the Dendrogram features, check out the Help section.',
+                intro: 'For a more advanced summary of the K-Means features, check out the Help section.',
                 position: 'bottom'
             }
         ]
