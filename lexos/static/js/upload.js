@@ -8,7 +8,6 @@ $(function(){
                 element: '#cram',
                 intro: 'Welcome to Lexos!',
                 position: 'right',
-                font_size: 13px
             },
             {
                 element: '#upload-section',
