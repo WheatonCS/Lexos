@@ -175,9 +175,9 @@ function validate_inputs(){
         return false;
     }
 
-    if(int_overlap > int_segment_size){
+    if(int_overlap >= int_segment_size){
         error("The overlap cannot be "+
-            "greater than the segment size.");
+            "greater than or equal to the segment size.");
         return false;
     }
 
@@ -219,5 +219,7 @@ function initialize_tooltips(){
         threshold, it will be attached to the previous segment.`, true);
 
     // "Milestone"
-    create_tooltip("#milestone-tooltip-button", ``);
+    create_tooltip("#milestone-tooltip-button", `Split the document into
+        segments at each appearance of the provided string. Child segments will not
+        contain the Milestone delimiter.`);
 }
