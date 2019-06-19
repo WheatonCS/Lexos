@@ -301,7 +301,7 @@ class FileManager:
 
         # update the savepath of each file
         for l_file in list(self.files.values()):
-            l_file.savePath = pathjoin(
+            l_file.save_path = pathjoin(
                 session_manager.session_folder(),
                 constants.FILE_CONTENTS_FOLDER,
                 str(l_file.id) + '.txt')
