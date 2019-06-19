@@ -1,3 +1,8 @@
+/* Main section */
+#main-section {
+    min-width: 130rem;
+}
+
 /* Normalize */
 #normalize-section {
     display: none;

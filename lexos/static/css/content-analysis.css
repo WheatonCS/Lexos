@@ -100,17 +100,11 @@ form {
 }
 
 #document-tables-grid .lexos-table {
-    background-color: #F3F3F3;
     max-height: 38.4rem;
     min-height: 25rem;
 }
 
-#document-tables-grid .lexos-table-row {
-    background-color: #FFFFFF;
-    margin-bottom: 0;
-    border-bottom: 1rem solid #FFFFFF;
-}
-
-#document-tables-grid .lexos-table-row:last-child {
-    border-bottom: none;
+.lexos-table-row,
+.lexos-table-head {
+    grid-template-columns: 1fr 1fr 1fr;
 }

@@ -164,7 +164,6 @@ class TokenizerModel(BaseModel):
             else self._get_file_row_dtm()
 
         # Apply the search
-        print(self._front_end_option.search)
         dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]
 
         # Return the CSV conversion
