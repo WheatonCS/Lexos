@@ -496,5 +496,7 @@ function download(data, file_name, convert = true){
     let link = document.createElement('a');
     link.href = blob;
     link.download = file_name;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 }
