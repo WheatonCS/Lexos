@@ -330,7 +330,7 @@ class ContentAnalysisModel(object):
 
             # Get the overview results
             dataframe = self.to_data_frame()
-            overview = dataframe.columns.values.tolist()
+            overview = dataframe.values.tolist()
             overview.insert(0, dataframe.columns.values.tolist())
             overview_csv = dataframe.to_csv()
 

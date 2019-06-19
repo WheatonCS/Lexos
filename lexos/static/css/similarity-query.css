@@ -1,3 +1,8 @@
+/* Main section */
+#main-section {
+    min-width: 130rem;
+}
+
 /* Normalize */
 #normalize-section {
     display: none;
@@ -11,44 +16,4 @@
 
 #comparison-document-text {
     word-break: break-all;
-}
-
-
-/* Table */
-#table-head {
-    background-color: #FFFFFF;
-}
-
-#table-head,
-.table-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-#table-head .table-cell {
-    padding-top: 0;
-    color: #47BCFF;
-}
-
-#table-body {
-    height: calc(100% - 3rem);
-    overflow-y: auto;
-    overflow-y: overlay;
-}
-
-.table-row {
-    background-color: #F3F3F3;
-    min-height: 5rem;
-    margin-bottom: 1rem;
-}
-
-.table-row:last-child {
-    margin-bottom: 0;
-}
-
-.table-cell {
-    display: grid;
-    align-content: center;
-    padding: 1rem;
-    word-break: break-word;
 }

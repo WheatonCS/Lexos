@@ -2,8 +2,7 @@ import json
 
 from flask import request, session, render_template, Blueprint
 
-from lexos.helpers import constants as constants, \
-    general_functions as general_functions
+from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
 
 from natsort import humansorted
@@ -54,9 +53,9 @@ def execute() -> str:
     # Scrub
     previews = file_manager.scrub_files(saving_changes=saving_changes)
 
-    # HTML escape the previews
-    previews = [[preview[1], general_functions.html_escape(preview[3])]
-                for preview in previews]
+    # (DO NOT) HTML escape the previews (THIS LINE USED TO DO THAT, BUT NOW
+    # IT JUST PUTS THE DATA IN THE CORRECT FORMAT OR SOMETHING)
+    previews = [[preview[1], preview[3]] for preview in previews]
 
     # Save the changes if requested
     if saving_changes:

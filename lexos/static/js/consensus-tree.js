@@ -90,8 +90,8 @@ function create_consensus_tree(){
         // button
         .fail(function(){
             error("Failed to retrieve the consensus tree data.");
-            finish_loading("#consensus-tree-body",
-                "#consensus-tree", "#generate-button");
+            enable("#generate-button");
+            add_text_overlay("#consensus-tree-body", "Loading Failed");
         });
 }
 

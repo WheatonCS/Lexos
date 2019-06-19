@@ -1,6 +1,6 @@
 import json
 import re
-from flask import request, render_template, Blueprint
+from flask import request, render_template, Blueprint, make_response
 from lexos.managers import utility
 
 manage_blueprint = Blueprint("manage", __name__)
@@ -9,7 +9,6 @@ manage_blueprint = Blueprint("manage", __name__)
 @manage_blueprint.route("/manage", methods=["GET"])
 def manage() -> str:
     """ Loads the manage page.
-
     :return: The HTML of the manage page.
     """
 
@@ -19,28 +18,37 @@ def manage() -> str:
 @manage_blueprint.route("/manage/documents", methods=["GET"])
 def get_documents() -> str:
     """ Returns a list of the uploaded documents.
-
     :return: The JSON of a list of uploaded documents.
     """
 
+    print("rete")
     return json.dumps(utility.load_file_manager().get_previews_of_all())
 
 
 @manage_blueprint.route("/manage/download", methods=["GET"])
 def download() -> str:
     """ Downloads the active files.
-
     :return: A .zip containing the active files.
     """
 
+    print("SAS")
     file_manager = utility.load_file_manager()
-    return file_manager.zip_active_files("selected_documents.zip")
+
+    response = make_response(file_manager.zip_active_files(
+        "selected_documents.zip"))
+
+    # Disable download caching
+    response.headers["Cache-Control"] = \
+        "max-age=0, no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+
+    return response
 
 
 @manage_blueprint.route("/manage/preview", methods=["POST"])
 def get_previews() -> str:
     """ Returns a preview of the desired file.
-
     :return: A preview of the desired file.
     """
 
@@ -58,7 +66,6 @@ def get_previews() -> str:
 @manage_blueprint.route("/manage/activate", methods=["POST"])
 def enable_rows() -> str:
     """ Activates the files with the given IDs.
-
     :return: None.
     """
 
@@ -74,7 +81,6 @@ def enable_rows() -> str:
 @manage_blueprint.route("/manage/deactivate", methods=["POST"])
 def deactivate() -> str:
     """ Deactivates the files with the given IDs.
-
     :return: None.
     """
 
@@ -90,7 +96,6 @@ def deactivate() -> str:
 @manage_blueprint.route("/manage/edit-name", methods=["POST"])
 def edit_name() -> str:
     """ Sets the name of the file with the given ID.
-
     :return: None.
     """
 
@@ -108,7 +113,6 @@ def edit_name() -> str:
 @manage_blueprint.route("/manage/set-class", methods=["POST"])
 def set_class() -> str:
     """ Sets the class of the file with the given ID.
-
     :return: None.
     """
 
@@ -125,7 +129,6 @@ def set_class() -> str:
 @manage_blueprint.route("/manage/delete", methods=["POST"])
 def delete() -> str:
     """ Deletes the selected files.
-
     :return: None.
     """
 
@@ -138,7 +141,6 @@ def delete() -> str:
 @manage_blueprint.route("/manage/merge-selected", methods=["POST"])
 def merge_selected() -> str:
     """ Merges the active files.
-
     :return: None.
     """
 
@@ -168,7 +170,6 @@ def merge_selected() -> str:
 @manage_blueprint.route("/manage/edit-selected-classes", methods=["POST"])
 def edit_selected_classes() -> str:
     """ Edits the classes of the selected files.
-
     :return: None.
     """
 
@@ -186,7 +187,6 @@ def edit_selected_classes() -> str:
 @manage_blueprint.route("/manage/delete-selected", methods=["POST"])
 def delete_selected() -> str:
     """ Deletes the selected files.
-
     :return: None.
     """
 

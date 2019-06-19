@@ -119,16 +119,16 @@ form {
 }
 
 .disabled {
-    opacity: .5;
-    pointer-events: none;
+    opacity: .5 !important;
+    pointer-events: none !important;
 }
 
 .invisible {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .center-justified {
@@ -365,11 +365,11 @@ label input[type="radio"] + span:before {
 label input[type="radio"] + span:after {
     content: "";
     position: absolute;
-    height: .4rem;
-    width: .4rem;
+    height: .7rem;
+    width: .7rem;
     border-radius: 50%;
     background-color: #47BCFF;
-    transform: translate(-2.21rem, 1.15rem);
+    transform: translate(-2.35rem, 1.01rem);
     transition: opacity .2s;
     opacity: 0;
 }

@@ -5,7 +5,7 @@
 
 /* Form */
 form {
-    grid-template-rows: 45rem repeat(3, minmax(16rem, auto));
+    grid-template-rows: 50rem repeat(3, minmax(23rem, auto));
     min-height: calc(100% - 4rem);
     height: auto;
 }
@@ -88,9 +88,9 @@ form {
 
 
 /* Results */
-#overview-table,
-#corpus-table {
-    border-bottom: 2rem solid #E3E3E3;
+#overview-body,
+#corpus-body {
+    max-height: 39.5rem;
 }
 
 #document-tables-grid {
@@ -100,17 +100,11 @@ form {
 }
 
 #document-tables-grid .lexos-table {
-    background-color: #F3F3F3;
     max-height: 38.4rem;
     min-height: 25rem;
 }
 
-#document-tables-grid .lexos-table-row {
-    background-color: #FFFFFF;
-    margin-bottom: 0;
-    border-bottom: 1rem solid #FFFFFF;
-}
-
-#document-tables-grid .lexos-table-row:last-child {
-    border-bottom: none;
+.lexos-table-row,
+.lexos-table-head {
+    grid-template-columns: 1fr 1fr 1fr;
 }

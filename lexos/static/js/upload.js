@@ -76,31 +76,7 @@ $(function(){
     drag_and_drop_section.on("dragover dragenter", drag_and_drop_intercept);
 
     // If the "Scrape" button is pressed...
-    $("#scrape-button").click(function(){
-
-        // Disable the "Scrape" button
-        disable("#scrape-button");
-
-        // Remove any existing errors
-        remove_errors();
-
-        // Send the scrape request
-        send_ajax_request("/upload/scrape", $("#scrape-input").val())
-
-        // Always enable the "Scrape" button
-        .always(function(){ enable("#scrape-button"); })
-
-        // If the request was successful, display the uploaded files in the
-        // "Upload List" section.
-        .done(function(response){
-            for(const file_name of response) create_upload_preview(file_name);
-        })
-
-        // If the request failed, display an error.
-        .fail(function(){
-            error("Scraping failed.");
-        });
-    });
+    $("#scrape-button").click(scrape);
 
     // Highlight the drag and drop section when files are dragged over it
     initialize_drag_and_drop_section_highlighting();
@@ -108,8 +84,38 @@ $(function(){
 
 
 /**
+ * Performs scraping on the given URLs.
+ */
+function scrape(){
+
+    // Disable the "Scrape" button
+    disable("#scrape-button");
+
+    // Remove any existing errors
+    remove_errors();
+
+    // Send the scrape request
+    send_ajax_request("/upload/scrape", $("#scrape-input").val())
+
+    // Always enable the "Scrape" button
+    .always(function(){ enable("#scrape-button"); })
+
+    // If the request was successful, display the uploaded files in the
+    // "Upload List" section.
+    .done(function(response){
+        for(const file_name of response) create_upload_preview(file_name);
+    })
+
+    // If the request failed, display an error.
+    .fail(function(){
+        error("Scraping failed.");
+    });
+}
+
+
+/**
  * Uploads the files selected via the OS file selection window or drag and
- * drop.
+ *      drop.
  * @param {event} event: The event that triggered the callback.
  */
 let files = [];
@@ -118,11 +124,57 @@ function upload_files(event){
     // Remove any existing error messages
     remove_errors();
 
-    // Get the selected files from the event
-    files = Object.values(event.target.files || event.originalEvent.dataTransfer.files);
+    // For each selected file...
+    for(let file of Object.values(event.target.files ||
+        event.originalEvent.dataTransfer.files)){
+
+        // Validate the file
+        if(!validate_file(file)) continue;
+
+        // Replace the file name's spaces with underscores
+        file.name = file.name.replace(/ /g, '_');
+
+        // Create the upload preview and add the progress element to the file
+        // element
+        file["upload_preview_element"] = create_upload_preview(file.name);
+
+        // Add the file to the upload list
+        files.unshift(file);
+    }
 
     // Upload each file
     send_file_upload_requests();
+}
+
+
+/**
+ * Validates the given file.
+ * @param file: The file to validate.
+ * @returns {boolean}: Whether the file is valid.
+ */
+function validate_file(file){
+
+    // If the file exceeds the 256 MB size limit, display an error message
+    // and return false
+    if(file.size > 256000000){
+        error("One or more files exceeded the 256 MB size limit.");
+        return false;
+    }
+
+    // If the file is empty, display an error message and return false
+    if(file.size <= 0){
+        error("One or more uploaded files were empty.");
+        return false;
+    }
+
+    // If the file is not of a supported type, display an error message and
+    // return false
+    if(!file_type_supported(file.name)){
+        error("One or more files were of an unsupported file type.");
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -135,50 +187,61 @@ function send_file_upload_requests(){
     let file = files.pop();
     if(!file) return;
 
-    // If the file exceeds the 256 MB size limit, display an error message
-    // and return
-    if(file.size > 256000000){
-        error("One or more files exceeded the 256 MB size limit.");
-        return;
-    }
-
-    // If the file is empty, display an error message and return
-    if(file.size <= 0){
-        error("One or more uploaded files were empty.");
-        return;
-    }
-
-    // Replace the file name's spaces with underscores
-    let file_name = file.name.replace(/ /g, '_');
-
-    // If the file is not of a supported type, display an error message and
-    // return
-    if(!file_type_supported(file.name)){
-        error("One or more files were of an unsupported file type.");
-        return;
-    }
-
     // Send a request to upload the file
     $.ajax({
+        xhr: initialize_upload_progress_callback(file),
         type: "POST",
         url: "upload/add-document",
         data: file,
         processData: false,
         contentType: file.type,
-        headers: {"file-name": encodeURIComponent(file_name)}
+        headers: {"file-name": encodeURIComponent(file.name)}
       })
 
         // If the request is successful, call the "upload_success_callback()"
         // function and upload the next file in the list
-        .done(function(){
-            create_upload_preview(file_name);
-            send_file_upload_requests();
-        })
+        .done(function(){ send_file_upload_requests(); })
 
         // If the request failed, display an error
         .fail(function(){
             error("One or more files encountered errors during upload.");
         });
+}
+
+
+/**
+ * Initializes the XHR file upload progress callback.
+ * @param file: The file whose upload preview will be updated.
+ * @returns {function(): Window.XMLHttpRequest}: The XHR object.
+ */
+function initialize_upload_progress_callback(file){
+
+    return function(){
+
+        // Create the XHR object
+        let xhr = $.ajaxSettings.xhr();
+
+        // When upload progress has been made...
+        xhr.upload.onprogress = function(event){
+
+            // Update the file's upload preview with the file's upload
+            // progress
+            let progress = event.loaded/event.total;
+            let progress_bar_element =
+                file.upload_preview_element.find(".progress-bar")
+                .css("width", `${progress*100}%`);
+
+            // If the upload has completed, increase the upload preview's
+            // opacity
+            if(progress >= 1){
+                progress_bar_element.css("opacity", "0");
+                file.upload_preview_element.find(".upload-preview-content")
+                    .removeClass("disabled");
+            }
+        };
+
+        return xhr;
+    };
 }
 
 
@@ -201,26 +264,33 @@ function file_type_supported(filename){
 /**
  * Create an upload preview element.
  */
-function create_upload_preview(file_name)
-{
+function create_upload_preview(file_name){
+
     // Remove the "No Uploads" text if it exists
     $("#no-uploads-text").remove();
 
     // Update the "Active Document Count" element
     let active_documents_element = $("#active-document-count");
     let active_documents = parseInt(active_documents_element.text())+1;
-    active_documents_element.text(`Active Documents: ${active_documents.toString()}`);
+    active_documents_element.text(active_documents.toString());
 
-    // Create an upload preview element
+    // Create the upload preview element
     let upload_preview_element = $(`
-        <div id="preview-${active_documents}" class="hidden upload-preview"><h3></h3></div>
-    `).appendTo("#upload-previews");
+        <div id="preview-${active_documents}" class="hidden upload-preview">
+            <h3 class="disabled upload-preview-content"></h3>
+            <div class="progress-bar"></div>
+        </div>
+    `).appendTo("#upload-previews-grid");
 
     // Add the HTML-escaped file name to the upload preview element
-    upload_preview_element.find("h3").text(file_name);
+    upload_preview_element.find(".upload-preview-content")
+        .text(file_name);
 
     // Fade in the preview element
     fade_in(`#preview-${active_documents}`,".5s");
+
+    // Return the upload preview element
+    return upload_preview_element;
 }
 
 
@@ -245,25 +315,16 @@ function initialize_drag_and_drop_section_highlighting(){
 
     drag_and_drop_section.on("dragenter", function(){
         ++drag_counter;
-        $("#drag-and-drop-section").css({"color": "#47BCFF",
-            "border-color": "#47BCFF", "background-color": "#EAF5FF"});
+        drag_and_drop_section.addClass("highlighted");
     });
 
     drag_and_drop_section.on("dragleave", function(){
-        if(--drag_counter === 0) set_default_drop_section_colors();
+        if(--drag_counter === 0)
+            drag_and_drop_section.removeClass("highlighted");
     });
 
     drag_and_drop_section.on("drop", function(){
         drag_counter = 0;
-        set_default_drop_section_colors();
+        drag_and_drop_section.removeClass("highlighted");
     });
-}
-
-
-/**
- * Returns the drag and drop section to its default colors.
- */
-function set_default_drop_section_colors(){
-    $("#drag-and-drop-section").css({"color": "#505050",
-        "border-color": "#D3D3D3", "background-color": "#F3F3F3"});
 }

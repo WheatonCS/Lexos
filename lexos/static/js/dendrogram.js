@@ -41,7 +41,7 @@ function initialize(response){
     // text and return
     if(Object.entries(parse_json(response)).length < 2){
         add_text_overlay("#graph-container",
-            "This Tool Requires At Least Two Active Documents");
+            "This Tool Requires at Least Two Active Documents");
         return;
     }
 

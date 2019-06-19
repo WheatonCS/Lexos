@@ -276,8 +276,8 @@ class RollingWindowsModel(BaseModel):
         # for this particular case, two arrays of booleans are used to flag
         # edge cases for inspection next window.
         if token_type == RWATokenType.word and \
-           window_unit == WindowUnitType.letter:
-            boolean_array = [[False for token in tokens]for i in range(2)]
+                window_unit == WindowUnitType.letter:
+            boolean_array = [[False for token in tokens] for i in range(2)]
 
         # six helper functions follow for handling six different configurations
         # one of these functions will then be called, except in the case of a
@@ -314,7 +314,7 @@ class RollingWindowsModel(BaseModel):
             # note that we keep the window one char behind where it really is
             # so we can check what has just rolled out.
             window_list = passage[window_index - 1:window_size + window_index]\
-                          .strip().split()
+                .strip().split()
             for token_index, token in enumerate(tokens):
                 length = len(token)
 
@@ -363,10 +363,10 @@ class RollingWindowsModel(BaseModel):
             new_line = passage_list[window_size+window_index-1].strip().split()
             for token_index, token in enumerate(tokens):
                 # add or subtract count of word matches in those lines
-                window_sum[token_index] -= incrementer *\
-                                           prev_line.count(token)
-                window_sum[token_index] += incrementer *\
-                                           new_line.count(token)
+                window_sum[token_index] -= incrementer * \
+                    prev_line.count(token)
+                window_sum[token_index] += incrementer * \
+                    new_line.count(token)
             return copy.deepcopy(window_sum)
 
         # this function helps the following one
@@ -468,50 +468,50 @@ class RollingWindowsModel(BaseModel):
             for token_index, token in enumerate(tokens):
                 # add or subtract the number of string matches in the new and
                 # previous lines
-                window_sum[token_index] -= incrementer *\
-                                           prev_line.count(token)
-                window_sum[token_index] += incrementer *\
-                                           new_line.count(token)
+                window_sum[token_index] -= incrementer * \
+                    prev_line.count(token)
+                window_sum[token_index] += incrementer * \
+                    new_line.count(token)
             return copy.deepcopy(window_sum)
 
         # this block decides which of the above functions to use to check
         # windows; each condition also contains its own case for checking the
         # entirety of the first window, a one-time operation.
-        if token_type == RWATokenType.word and window_unit ==\
-                                               WindowUnitType.word:
+        if token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.word:
             window_sum = [passage_list[:window_size].count(token)
                           / window_size for token in tokens]
             data_function = _word_window_word_search
-        elif token_type == RWATokenType.word and window_unit ==\
-                                                 WindowUnitType.letter:
+        elif token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.letter:
             window_sum = [passage[:window_size].strip().split().count(token)
                           / window_size for token in tokens]
             data_function = _char_window_word_search
-        elif token_type == RWATokenType.word and window_unit ==\
-                                                 WindowUnitType.line:
+        elif token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.line:
             window_sum = [''.join(passage_list[:window_size]).strip().split().
                           count(token) / window_size for token in tokens]
             data_function = _line_window_word_search
-        if token_type == RWATokenType.string and window_unit ==\
-                                                 WindowUnitType.word:
+        if token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.word:
             window_sum = [''.join(passage_list[:window_size]).count(token)
                           / window_size for token in tokens]
             data_function = _word_window_string_search
-        elif token_type == RWATokenType.string and window_unit ==\
-                                                   WindowUnitType.letter:
+        elif token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.letter:
             window_sum = [passage[:window_size].count(token)
                           / window_size for token in tokens]
             data_function = _char_window_string_search
-        elif token_type == RWATokenType.string and window_unit ==\
-                                                   WindowUnitType.line:
+        elif token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.line:
             window_sum = [''.join(passage_list[:window_size]).count(token)
                           / window_size for token in tokens]
             data_function = _line_window_string_search
 
         # in the case of regex searches, simply perform the search on each
         # each window and store the result
-        elif token_type == RWATokenType.regex and\
-             window_unit == WindowUnitType.letter:
+        elif token_type == RWATokenType.regex and \
+                window_unit == WindowUnitType.letter:
             list_matrix = [[len(re.findall(pattern=token,
                                            string=passage[index:
                                                           index+window_size],
@@ -814,7 +814,7 @@ class RollingWindowsModel(BaseModel):
                              layout=go.Layout(
                                 dragmode="pan",
                                 margin=dict(
-                                    l=40,
+                                    l=40,  # nopep8
                                     r=0,
                                     b=30,
                                     t=0,
@@ -855,7 +855,7 @@ class RollingWindowsModel(BaseModel):
                              layout=go.Layout(
                                 dragmode="pan",
                                 margin=dict(
-                                    l=40,
+                                    l=40,  # nopep8
                                     r=0,
                                     b=30,
                                     t=0,

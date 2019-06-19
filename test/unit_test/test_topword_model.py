@@ -54,7 +54,8 @@ test_topword_model_all_to_para = TopwordModel(
     test_options=test_option_all_to_para)
 
 # noinspection PyProtectedMember
-test_results_all_to_para = test_topword_model_all_to_para._get_result()
+test_results_all_to_para =\
+    test_topword_model_all_to_para._get_result().results
 
 # -------------------------Test Special ALL_TO_PARA---------------------------
 # Create test suite for special case.
@@ -72,7 +73,7 @@ test_topword_model_empty_all_to_para = TopwordModel(
 
 class TestParaToGroup:
     def test_normal_case_result(self):
-        # UNIT TEST ISSUE HERE
+
         assert test_results_all_to_para[0]['D'] == -2.1483
 
         assert test_results_all_to_para[1].dtype == "float64"
@@ -116,7 +117,8 @@ test_topword_model_one_class_to_para = TopwordModel(
     test_options=test_option_class_to_para)
 
 # noinspection PyProtectedMember
-test_results_class_to_para = test_topword_model_one_class_to_para._get_result()
+test_results_class_to_para =\
+    test_topword_model_one_class_to_para._get_result().results
 
 # -------------------- Test Special CLASS_TO_PARA-----------------------------
 # Create test suite for special case.
@@ -179,7 +181,7 @@ test_topword_model_two_class_to_class = TopwordModel(
 
 # noinspection PyProtectedMember
 test_results_class_to_class = \
-    test_topword_model_two_class_to_class._get_result()
+    test_topword_model_two_class_to_class._get_result().results
 
 # ---------------------Test Special CLASS_TO_CLASS----------------------------
 # Create test suite for special case.
