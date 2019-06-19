@@ -49,15 +49,15 @@ Steps:
 
     Apply Scrubbing
     
-(2) ANALYZE - Clustering - Hierarchical Clustering:
+(2) ANALYZE - Dendrogram:
 
-     (a) Use the default metrics:
-        Distance Method: Euclidean
-        Linkage Method: Average
-     (b) Choose Tokenize - 1 - gram, by Characters
-     (c) Choose Normalize - Proportional Counts
-     
-     Get Dendrogram
+     (a) Use the following metrics:
+        - Distance Method: Euclidean (default)
+        - Linkage Method: Average (default)
+        - Orientation: Bottom
+     (b) Tokenize - By Characters
+          
+     Generate Dendrogram
      Compare your result with the .png found in the ResultsToExpect/ directory.
 
 mjl - May 20, 2019
