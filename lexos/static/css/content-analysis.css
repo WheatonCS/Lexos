@@ -76,7 +76,7 @@ form {
     width: calc(100% - .2rem);
     height: calc(100% - .2rem);
     background-color: #F3F3F3;
-    border: .2rem solid #F3F3F3;
+    border: .1rem solid #47BCFF;
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
