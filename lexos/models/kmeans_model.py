@@ -317,7 +317,7 @@ class KMeansModel(BaseModel):
         layout = go.Layout(
             dragmode="pan",
             margin=dict(
-                l=0,
+                l=0,  # nopep8
                 r=0,
                 b=0,
                 t=25,
@@ -377,7 +377,7 @@ class KMeansModel(BaseModel):
         layout = go.Layout(
             dragmode="pan",
             margin=dict(
-                l=0,
+                l=0,  # nopep8
                 r=0,
                 b=0,
                 t=25,
@@ -435,7 +435,7 @@ class KMeansModel(BaseModel):
         layout = go.Layout(
             dragmode="pan",
             margin=dict(
-                l=0,
+                l=0,  # nopep8
                 r=0,
                 b=0,
                 t=25,
