@@ -94,7 +94,7 @@
     width: 21rem;
     padding: 1rem;
     background-color: #FFFFFF;
-    border: 2rem solid #EAF5FF;
+    border: 1rem solid #EAF5FF;
     opacity: 0;
     transition: opacity .2s;
     pointer-events: none;
