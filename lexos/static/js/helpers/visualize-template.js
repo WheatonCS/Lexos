@@ -135,7 +135,7 @@ function validate_visualize_inputs(){
 
     // "Term Count"
     if(!validate_number($("#term-count-input").val(), 1, 1000)){
-        error("Invalid term count.");
+        error("Invalid term count.", "#term-count-input");
         return false;
     }
 

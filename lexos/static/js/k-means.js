@@ -109,25 +109,27 @@ function validate_k_means_inputs(){
 
     // "Clusters"
     if(!validate_number($("#clusters-input").val(), 1, document_count)){
-        error("Invalid number of clusters.");
+        error("Invalid number of clusters.", "#clusters-input");
         return false;
     }
 
     // "Maximum Iterations"
     if(!validate_number($("#maximum-iterations-input").val(), 1)){
-        error("Invalid number of maximum iterations.");
+        error("Invalid number of maximum iterations.",
+            "#maximum-iterations-input");
         return false;
     }
 
     // "Different Centroids"
     if(!validate_number($("#different-centroids-input").val(), 1)){
-        error("Invalid number of different centroids.");
+        error("Invalid number of different centroids.",
+            "#different-centroids-input");
         return false;
     }
 
     // "Relative Tolerance"
     if(!validate_number($("#relative-tolerance-input").val(), 0)){
-        error("Invalid relative tolerance.");
+        error("Invalid relative tolerance.", "#relative-tolerance-input");
         return false;
     }
 

@@ -270,6 +270,12 @@ input[type="text"]:focus {
     border-color: #47BCFF;
 }
 
+input[type="text"].error-highlight {
+    border-color: #E62843;
+    color:  #E62843;
+    background-color: #FFE7E9;
+}
+
 span > input[type="text"] {
     color: inherit;
 }
