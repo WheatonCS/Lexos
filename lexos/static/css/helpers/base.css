@@ -381,11 +381,12 @@ label input[type="radio"] + span:before {
 label input[type="radio"] + span:after {
     content: "";
     position: absolute;
-    height: .7rem;
-    width: .7rem;
+    height: .8rem;
+    width: .8rem;
     border-radius: 50%;
     background-color: #47BCFF;
-    transform: translate(-2.35rem, 1.01rem);
+    top: .95rem;
+    left: .6rem;
     transition: opacity .2s;
     opacity: 0;
 }
@@ -417,7 +418,9 @@ label input[type="checkbox"] + span:after {
     width: 1.2rem;
     border-left: .2rem solid #47BCFF;
     border-bottom: .2rem solid #47BCFF;
-    transform: rotate(-45deg) translate(-2.5rem, -1.2rem);
+    transform: rotate(-45deg);
+    top: .95rem;
+    left: .4rem;
     transition: opacity .2s;
     opacity: 0;
 }
