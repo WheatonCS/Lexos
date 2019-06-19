@@ -291,11 +291,17 @@ function key_down_callback(key, callback){
 /**
  * Displays an error message.
  * @param {string} message: The message to display.
+ * @param {string} error_highlight_query: A query for the element to apply
+ *      an error highlight to.
  */
-function error(message){
+function error(message, error_highlight_query){
 
-    // Remove any existing error message
+    // Remove any existing error messages and error highlights
     $("#error-section").remove();
+    $(".error-highlight").removeClass("error-highlight");
+
+    // Apply the error highlight
+    $(error_highlight_query).addClass("error-highlight");
 
     // Hide the footer
     hide("footer");
@@ -323,6 +329,9 @@ function error(message){
  * Removes any existing error messages.
  */
 function remove_errors(){
+
+    // Remove any existing error highlights
+    $(".error-highlight").removeClass("error-highlight");
 
     // Remove any existing error messages
     let error_element = $("#error-section");
