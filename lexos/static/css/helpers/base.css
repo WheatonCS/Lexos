@@ -110,12 +110,8 @@ form {
     color: #47BCFF;
 }
 
-.help-selectable:hover {
-    color: #c96533;
-    cursor: pointer;
-}
 .help-highlight {
-    color: #ff8447;
+    color: #FF8447;
 }
 
 .centerer {
@@ -127,12 +123,12 @@ form {
 }
 
 .disabled {
-    opacity: .5;
-    pointer-events: none;
+    opacity: .5 !important;
+    pointer-events: none !important;
 }
 
 .invisible {
-    opacity: 0;
+    opacity: 0 !important;
 }
 
 .hidden {
@@ -322,12 +318,13 @@ label > span:before {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
-    background-color: #FFFFFF;
+    background-color: #F3F3F3;
     border: .2rem solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
 
-label :checked + span:before {
+label :checked + span:before,
+label:hover > span:before {
     background-color: #EAF5FF;
     border-color: #47BCFF;
 }
@@ -447,13 +444,15 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .help-button {
-    border-color: #ff8447;
+    border-color: #FF8447;
+    background-color: #FF8447;
+    color: #FFFFFF;
 }
 
 .help-button:hover {
-    color: #ff8447;
-    background-color: #fff2ea;
-    border-color: #ff8447;
+    color: #FF8447;
+    background-color: #FFF2EA;
+    border-color: #FF8447;
 }
 
 .section-top .button {
@@ -479,7 +478,7 @@ label input[type="checkbox"]:checked + span:after {
     overflow-y: auto;
     transform: translate(3rem, 0);
     background-color: #FFFFFF;
-    border: 2rem solid #EAF5FF;
+    border: 1rem solid #FFF2EA;
 }
 
 .right-edge-tooltip {
@@ -502,8 +501,8 @@ label input[type="checkbox"]:checked + span:after {
 
 .tooltip-button:hover,
 .tooltip-button-active {
-    color: #47BCFF;
-    background-color: #EAF5FF;
+    color: #FF8447;
+    background-color: #FFF2EA;
 }
 
 

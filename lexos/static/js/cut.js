@@ -38,27 +38,36 @@ $(function(){
  * Loads the appropriate content for the "Cut Settings" section.
  */
 let cut_mode;
+let previous_cut_mode = "default";
 function load_cut_settings_section(){
 
+    // Return if the same cut mode was selected
+    cut_mode = $("#cut-mode-grid input:checked").val();
+    if(cut_mode !== "number" && cut_mode !== "milestone") cut_mode = "default";
+    if(cut_mode === previous_cut_mode) return;
+
+    // Hide the cut settings
     let cut_settings_grid_element = $("#cut-settings-grid");
     cut_settings_grid_element.css("opacity", "0");
-    cut_mode = $("#cut-mode-grid input:checked").val();
 
     // If the cut mode is set to "Segments"...
     if(cut_mode === "number"){
-        hide("#milestone-input, #overlap-input, #merge-threshold-input");
-        show("#segment-size-input");
+        previous_cut_mode = "number";
+        hide("#milestone-input, #overlap-input, #merge-threshold-input, #segment-size-input");
+        show("#number-of-segments-input");
     }
 
     // Otherwise, if the cut mode is set to "Milestones"...
     else if(cut_mode === "milestone"){
+        previous_cut_mode = "milestone";
         hide("#segment-size-input, #overlap-input, #merge-threshold-input");
         show("#milestone-input");
     }
 
     // Otherwise, if the cut mode is set to "Tokens", "Characters", or "Lines"...
     else {
-        hide("#milestone-input");
+        previous_cut_mode = "default";
+        hide("#milestone-input, #number-of-segments-input");
         show("#segment-size-input, #overlap-input, #merge-threshold-input");
     }
 
@@ -205,7 +214,11 @@ function initialize_tooltips(){
     // "Segment Size"
     create_tooltip("#segment-size-tooltip-button", `A positive integer used to 
         divide up the text. Either the number of letters, words, or lines 
-        per segment, or the number of segments per document.`);
+        per segment.`);
+
+    // "Number of Segments"
+    create_tooltip("#number-of-segments-tooltip-button", `The number of
+        segments per document.`);
 
     // "Overlap"
     create_tooltip("#overlap-tooltip-button", `The amount of overlapping
