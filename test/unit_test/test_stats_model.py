@@ -93,8 +93,8 @@ class TestFileResult:
         assert test_pandas_one[2][1] == 15
 
     def test_average(self):
-        assert test_pandas_one[3][0] == 20
-        assert test_pandas_one[3][1] == 3
+        assert test_pandas_one[3][0] == 0.05
+        assert test_pandas_one[3][1] == 0.333
 
     def test_distinct_words(self):
         assert test_pandas_one[4][0] == 4
@@ -111,8 +111,8 @@ class TestCorpusInfo:
         assert test_corpus_result_two.std_deviation == 32.51
 
     def test_quartiles(self):
-        assert test_corpus_result_one.inter_quartile_range == 32.5
-        assert test_corpus_result_two.inter_quartile_range == 32.5
+        assert test_corpus_result_one.inter_quartile_range == 65
+        assert test_corpus_result_two.inter_quartile_range == 48.75
 
     def test_file_anomaly_iqr(self):
         assert test_corpus_result_one.anomaly_iqr.small_items == []

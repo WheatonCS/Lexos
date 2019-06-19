@@ -171,7 +171,7 @@ function display_results(response){
     let overview = response["overview"];
     let head = overview[0];
     let data = overview.splice(1);
-    console.log(head, data);
+
     create_table("#overview-body", data, head);
 
     // Create the corpus table

@@ -314,7 +314,7 @@ label > span:before {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
-    background-color: #FFFFFF;
+    background-color: #F3F3F3;
     border: .2rem solid #D3D3D3;
     transition: background-color .2s, border-color .2s;
 }
@@ -411,7 +411,7 @@ label input[type="checkbox"]:checked + span:after {
     height: 3rem;
     padding: .9rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
-    border: .2rem solid #F3F3F3;
+    border: .2rem solid #E3E3E3;
     background-color: #F3F3F3;
     cursor: pointer;
     transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
