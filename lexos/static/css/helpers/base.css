@@ -509,7 +509,7 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 #guide-button:hover {
-    color: #47BCFF;
+    color: #FF8447;
 }
 
 .introjs-button {
@@ -545,6 +545,19 @@ label input[type="checkbox"]:checked + span:after {
   margin-top: 10px;
 }
 
+.introjs-button:hover {
+  color: #FF8447;
+  border-color: #bcbcbc;
+  text-decoration: none;
+  box-shadow: 0px 1px 1px #e3e3e3;
+}
+
+.introjs-tooltip {
+    font-size: 14px;
+    font-family: Open Sans;
+    text-align: center;
+}
+
 .introjs-helperNumberLayer {
   box-sizing: content-box;
   position: absolute;
@@ -553,7 +566,7 @@ label input[type="checkbox"]:checked + span:after {
   left: -16px;
   z-index: 9999999999 !important;
   padding: 2px;
-  font-family: Arial, verdana, tahoma;
+  font-family: Open Sans;
   font-size: 13px;
   font-weight: bold;
   color: white;
