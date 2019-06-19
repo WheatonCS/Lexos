@@ -5,7 +5,7 @@ $(function(){
     introguide.setOptions({
         steps: [
             {
-                element: '#cram',
+                element: '#dragon-logo',
                 intro: 'Welcome to Lexos!',
                 position: 'right',
             },
