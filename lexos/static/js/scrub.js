@@ -314,7 +314,7 @@ function initialize_upload_buttons(names){
             // the displayed file name, and change the "Remove Upload" button
             // to say "Upload" again
             if (file_input_element.val()) {
-                file_input_element.val("");
+                file_input_element.val('');
                 upload_text_element.addClass("hidden");
                 upload_button_element.text("Upload");
                 return;
@@ -328,7 +328,7 @@ function initialize_upload_buttons(names){
             // "Remove Upload"
             file_input_element.change(function(event) {
                 let file = event.target.files[0];
-                upload_text_element.text(file.name);
+                upload_text_element.text(`Upload: ${file.name}`);
                 upload_text_element.removeClass("hidden");
                 upload_button_element.text("Remove Upload");
             });

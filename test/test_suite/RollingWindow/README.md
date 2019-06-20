@@ -1,6 +1,6 @@
 # Rolling Window Analysis Test
 
-This function makes a graph that shows the frequency of strings or words por reg-ex
+This function makes a graph that shows the frequency of strings or words or reg-ex
 
 *Test Files:* BeowulfFullLines.txt
 

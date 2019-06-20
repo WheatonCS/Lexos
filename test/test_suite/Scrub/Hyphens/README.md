@@ -16,7 +16,7 @@
     - Remove Digits 
     - Keep Hyphens
 
-3. Results
+3. Results:
     - a file containing
         * lowercase letters
         * no digits

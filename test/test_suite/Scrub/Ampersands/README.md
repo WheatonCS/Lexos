@@ -17,6 +17,8 @@
     - Keep Ampersands
 
 3. Click "Apply"
+
+4. Results:
     - a file containing
         * lowercase letters
         * no digits

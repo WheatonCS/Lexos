@@ -5,7 +5,7 @@
 
 /* Form */
 form {
-    grid-template-rows: 50rem repeat(3, minmax(23rem, auto));
+    grid-template-rows: 50rem repeat(3, minmax(39.5rem, auto));
     min-height: calc(100% - 4rem);
     height: auto;
 }
@@ -76,7 +76,7 @@ form {
     width: calc(100% - .2rem);
     height: calc(100% - .2rem);
     background-color: #F3F3F3;
-    border: .1rem solid #47BCFF;
+    border: .2rem solid #E3E3E3;
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
@@ -90,14 +90,12 @@ form {
 /* Results */
 #overview-body,
 #corpus-body {
-    height: 40rem;
-    display: flex;
-    flex-direction: column;
+    height: 39.5rem;
 }
 
 #document-tables-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(39.5rem, 1fr));
     grid-gap: 1rem;
 }
 
@@ -106,17 +104,7 @@ form {
     min-height: 25rem;
 }
 
-#document-tables-grid .lexos-table-row {
-    background-color: #F3F3F3;
-    margin-bottom: 0;
-    border-bottom: 1rem solid #FFFFFF;
-    grid-auto-columns: minmax(13rem, 1fr);
-}
-
-#document-tables-grid .lexos-table-head {
-    grid-auto-columns: minmax(13rem, 1fr);
-}
-
-#document-tables-grid .lexos-table-row:last-child {
-    border-bottom: none;
+.lexos-table-head,
+.lexos-table-row {
+    grid-template-columns: 1fr 1fr 1fr;
 }

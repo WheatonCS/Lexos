@@ -50,38 +50,35 @@ Steps
     Apply Scrubbing
 (2) MANAGE:
 
-    Some alterations can be made to documents in the Manage tab.
-        Recommended: select Display All Documents
-    (a) Select "Henry VI_Part1", "Henry_VI_Part2", and "Henry_VI_Part3"
-        (deselect all, select one part, shift click to select the others in between)
-    (b) Right click on any of the files and select Merge Selected Documents
+    (a) Select "Henry VI_Part1", "Henry_VI_Part2", and "Henry_VI_Part3" only
+        (Right click, deactivate all, then click on those three parts)
+    (b) Right click on any of the files and select Merge Active
         Name the merge "Henry_VI" (this will create a new file)
-    (c) Merge the two parts of Tambulaine as "Marlowe_Tambulaine_the_Great"
-    (d) OPTIONAL: delete the partial documents (you should be left with 13 documents)
-      (If you skip this step, make sure the 5 documents are not selected as you work)
+    (c) Merge the two parts of Tamburlaine as "Marlowe_Tamburlaine_the_Great"
+    (d) Delete the partial documents (you should be left with 13 documents)
+    (e) Right-click and select Activate All
         
 
 (3) ANALYZE - Similarity Query:
 
-    (a) Choose "Henry_VI" as the comparison document
+    (a) Comparison Documet - Select Henry_VI
     
-    Get Similarity Rankings
+    Generate Similarity Rankings
     Compare your results with the .png in the ResultsToExpect/ directory.
-(4) ANALYZE - Clustering - Hierarchical Clustering:
+(4) ANALYZE - Dendrogram
 
-    (a) Use the default metrics:
-        Distance Method: Euclidean
-        Linkage Method: Average
-    (b) Choose Tokenize - 1 - gram, by Tokens (default)
-    (c) Choose Normalize - Proportional Counts (default)
+    (a) Use the following metrics:
+        - Distance Method: Euclidean
+        - Linkage Method: Average
+        - Orientation: Bottom
     
-    Get Dendrogram
+    Generate Dendrogram
     Compare your results with the .png in the ResultsToExpect/ directory.
-(5) ANALYZE - Clustering - K-Means Clustering
+(5) ANALYZE - K-Means
 
-    (a) Choose Number of Clusters: 6
+    (a) Change Clusters to 6
     
-    Get K-Means Result
+    Generate K-Means Result
     Compare your results with the .png in the ResultsToExpect/ directory.
 
 mjl - May 20, 2019

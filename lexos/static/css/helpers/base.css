@@ -372,11 +372,12 @@ label input[type="radio"] + span:before {
 label input[type="radio"] + span:after {
     content: "";
     position: absolute;
-    height: .7rem;
-    width: .7rem;
+    height: .8rem;
+    width: .8rem;
+    top: .95rem;
+    left: .6rem;
     border-radius: 50%;
     background-color: #47BCFF;
-    transform: translate(-2.35rem, 1.01rem);
     transition: opacity .2s;
     opacity: 0;
 }
@@ -497,7 +498,6 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .tooltip-button {
-    color: #FF8447;
     display: inline-flex;
     cursor: pointer;
     align-items: center;
@@ -508,14 +508,15 @@ label input[type="checkbox"]:checked + span:after {
     font-size: 1.3rem;
     background-color: #F3F3F3;
     border-radius: 50%;
-    transition: color .2s, background-color .2s;
+    border: .14rem solid #F3F3F3;
+    transition: color .2s, border-color .2s, background-color .2s;
 }
 
 .tooltip-button:hover,
 .tooltip-button-active {
     color: #FF8447;
     background-color: #FFF2EA;
-    border: .1rem solid #FF8447;
+    border-color: #FF8447;
 }
 
 
