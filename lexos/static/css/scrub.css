@@ -7,7 +7,7 @@
 
 /* Form */
 form {
-    grid-template-columns: 1.3fr 1fr 1.3fr;
+    grid-template-columns: 0.5fr 1fr;
     grid-template-rows: 100%;
     min-height: 60rem;
 }
@@ -21,11 +21,11 @@ form {
 #left-column,
 #middle-column {
     display: grid;
-    row-gap: 2rem;
+    row-gap: 1rem;
 }
 
 #left-column {
-    grid-template-rows: 24rem 1fr 1fr;
+    grid-template-rows: 24rem 9rem 9rem 15rem 15rem;
 }
 
 #middle-column {
@@ -40,13 +40,35 @@ form {
     overflow: hidden;
 }
 
+.scrub-section-lemmas,
+.scrub-section-consolidations {
+    grid-template-rows: min-content 1fr;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    height: 9rem;
+}
+
+.scrub-section-stop-words {
+    grid-template-rows: min-content 1fr;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    height: 15rem;
+}
+
+.scrub-section-special {
+    grid-template-rows: min-content 1fr;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    height: 20rem;
+}
+
 .scrub-section-top {
     margin: 1rem;
-    grid-gap: 1rem;
+    grid-gap: .1rem;
 }
 
 .scrub-section-body {
-    height: calc(100% - 5rem);
+    height: calc(100%);
 }
 
 .scrub-section-body label {
@@ -74,7 +96,7 @@ form {
 }
 
 #stop-words-section .scrub-section-body {
-    height: calc(100% - 9.6rem);
+    height: calc(100%);
 }
 
 
@@ -84,8 +106,12 @@ form {
     margin-bottom: 1rem;
 }
 
+.options-section-special label {
+    margin: .1rem;
+}
+
 #special-characters-section .scrub-section-body {
-    height: calc(100% - 17rem);
+    height: calc(100%);
 }
 
 

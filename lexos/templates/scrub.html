@@ -61,7 +61,7 @@
         </div>
 
         <!-- Lemmas -->
-        <div id="lemmas-section" class="scrub-section">
+        <div id="lemmas-section" class="scrub-section-lemmas">
 
             <div class="vertical-splitter scrub-section-top">
                 <h3 class="title">Lemmas</h3>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Consolidations -->
-        <div id="consolidations-section" class="scrub-section">
+        <div id="consolidations-section" class="scrub-section-consolidations">
 
             <div class="vertical-splitter scrub-section-top">
                 <h3 class="title">Consolidations</h3>
@@ -97,13 +97,9 @@
                 <label><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
             </div>
         </div>
-    </div>
 
-    <!-- Middle column -->
-    <div id="middle-column" class="column">
-
-        <!-- Stop and keep words -->
-        <div id="stop-words-section" class="scrub-section">
+    <!-- Stop and keep words -->
+        <div id="stop-words-section" class="scrub-section-stop-words">
 
             <div class="vertical-splitter scrub-section-top">
 
@@ -128,8 +124,8 @@
             </div>
         </div>
 
-        <!-- Special characters -->
-        <div id="special-characters-section" class="scrub-section">
+    <!-- Special characters -->
+        <div id="special-characters-section" class="scrub-section-special">
 
             <div class="vertical-splitter scrub-section-top">
                 <h3 class="title">Special Characters</h3>
@@ -142,12 +138,12 @@
                 <h3 id="special-characters-upload-text" class="hidden upload-text"></h3>
 
                 <div id="special-characters-options" class="vertical-splitter">
-                    <div class="options-section">
+                    <div class="options-section-special">
                         <label><input type="radio" name="entityrules" value="default" checked><span></span>None</label><br>
                         <label><input type="radio" name="entityrules" value="early-english-html"><span></span>Early English HTML</label><br>
                         <label><input type="radio" name="entityrules" value="doe-sgml"><span></span>Old English SGML</label>
                     </div>
-                    <div class="options-section">
+                    <div class="options-section-special">
                         <label><input type="radio" name="entityrules" value="MUFI-3"><span></span>MUFI 3</label><br>
                         <label><input type="radio" name="entityrules" value="MUFI-4"><span></span>MUFI 4</label>
                     </div>
@@ -159,6 +155,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Document previews -->
     <div id="document-previews-section" class="column section">
@@ -176,6 +173,8 @@
 
         <div id="previews"></div>
     </div>
+
+
 
     <!-- Hidden elements -->
     <input id="stop-words-file-input" name="swfileselect[]" type="file" class="hidden">
