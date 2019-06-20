@@ -214,6 +214,9 @@ function create_word_cloud(id, name, words){
             "#png-button, #svg-button, #generate-button");
 }
 
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
 function tool_intro() {
     // Intro Guide Stuff
     let introguide = introJs();

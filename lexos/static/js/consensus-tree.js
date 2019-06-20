@@ -141,6 +141,9 @@ function initialize_tooltips(){
         the tokens will be chosen with or without replacement.`);
 }
 
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
 function tool_info() {
     // Intro Guide Stuff
     let introguide = introJs();

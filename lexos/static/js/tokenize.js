@@ -298,6 +298,9 @@ function immediate_table_validation(page_change){
     }
 }
 
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
 function tool_intro() {
     // Intro Guide Stuff
     let introguide = introJs();

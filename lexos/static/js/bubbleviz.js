@@ -152,6 +152,9 @@ function create_bubbleviz(response){
     initialize_svg_link("svg", "#svg-button", "bubbleviz.svg");
 }
 
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
 function tool_info() {
     // Intro Guide Stuff
     let introguide = introJs();

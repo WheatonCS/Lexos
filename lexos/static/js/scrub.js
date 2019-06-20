@@ -340,6 +340,9 @@ function initialize_upload_buttons(names){
     }
 }
 
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
 function tool_intro() {
     // Intro Guide Stuff
     let introguide = introJs();

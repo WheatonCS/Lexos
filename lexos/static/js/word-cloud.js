@@ -167,6 +167,9 @@ function create_word_cloud(dataset){
     initialize_svg_link("svg", "#svg-button", "word-cloud.svg");
 }
 
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
 function tool_intro() {
         // Intro Guide Stuff
     let introguide = introJs();
