@@ -1,7 +1,7 @@
 # Scrubbing
 
 
-A list of unicode categories can be viewed from: http://www.fileformat.info/info/unicode/category/index.htm
+A list of Unicode categories can be viewed from http://www.fileformat.info/info/unicode/category/index.htm
 
 Order Of Implementations:
 
@@ -27,11 +27,11 @@ Consolidations:
 - Scrubber function should convert the first character under consolidations.txt to the second character. 
 
 Digits:
-- Digits folder includes all digits including Arabic language, Chinese, Roman Numerals etc. 
+- Digits folder includes all digits including Arabic language, Chinese, Roman Numerals, etc. 
 
 Hyphens:
-- Hyphens folder includes all hyphens in the unicode category.
-- For more references, please see the unicode category under [Pc] and [Pd].
+- Hyphens folder includes all hyphens in the Unicode category.
+- For more references, please see the Unicode category under [Pc] and [Pd].
 
 Lemma:
 - lemmas.txt contains all the testing characters that we want to convert. Scrubber function will convert the first character to the second character separated with ','.

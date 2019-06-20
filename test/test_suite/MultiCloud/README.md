@@ -6,7 +6,9 @@ The Lexos Multicloud tool allows
     to “eyeball” similarities and differences between the proportions of terms
     in each document.
 
-*Test Files:* Irving_ripVanWinkle.txt, 
+*Test Files:* HenryWP_ThePirate.txt, Irving_ripVanWrinkle.txt, 
+Lippard_BelOfPrairieEden.txt, Melville_MobyDick.txt, 
+Poe_FallOfHouseUsher_1839.txt
 
 *Result Files:* results_defaults.png, results_font.png, results_numTerms.png, 
 results_color.png
@@ -15,8 +17,12 @@ results_color.png
 
 ### Test Default Settings
 
-1. Upload test file:
-    - Irving_ripVanWinkle.txt, 
+1. Upload all test files:
+    - HenryWP_ThePirate.txt
+    - Irving_ripVanWrinkle.txt, 
+    - Lippard_BelOfPrairieEden.txt
+    - Melville_MobyDick.txt, 
+    - Poe_FallOfHouseUsher_1839.txt
   
 2. Under the "Visualize" menu select "MultiCloud"
 
@@ -30,8 +36,12 @@ Results:
 
 ### Test Font Settings
 
-1. Upload test file:
-    - Irving_ripVanWinkle.txt, 
+1. Upload all test files:
+    - HenryWP_ThePirate.txt
+    - Irving_ripVanWrinkle.txt, 
+    - Lippard_BelOfPrairieEden.txt
+    - Melville_MobyDick.txt, 
+    - Poe_FallOfHouseUsher_1839.txt
   
 2. Under the "Visualize" menu select "MultiCloud"
 
@@ -45,7 +55,12 @@ Results:
 ### Test Term Count Settings
 
 1. Upload test file:
-    - Irving_ripVanWinkle.txt, 
+    1. Upload all test files:
+    - HenryWP_ThePirate.txt
+    - Irving_ripVanWrinkle.txt, 
+    - Lippard_BelOfPrairieEden.txt
+    - Melville_MobyDick.txt, 
+    - Poe_FallOfHouseUsher_1839.txt
   
 2. Under the "Visualize" menu select "MultiCloud"
 
@@ -58,8 +73,12 @@ Results:
 
 ### Test Color Settings
 
-1. Upload test file:
-    - Irving_ripVanWinkle.txt, 
+1. Upload all test files:
+    - HenryWP_ThePirate.txt
+    - Irving_ripVanWrinkle.txt, 
+    - Lippard_BelOfPrairieEden.txt
+    - Melville_MobyDick.txt, 
+    - Poe_FallOfHouseUsher_1839.txt
   
 2. Under the "Visualize" menu select "MultiCloud"
 
