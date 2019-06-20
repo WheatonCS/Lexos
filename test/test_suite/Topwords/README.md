@@ -1,4 +1,4 @@
-# Topwords
+# Top Words
 
 This function finds the Z-score of words in texts
 
