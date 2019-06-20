@@ -1,5 +1,7 @@
 {% extends "helpers/base.html" %}
 
+{% block title %}Content Analysis{% endblock %}
+
 <!-- Head -->
 {% block head %}
 
@@ -24,7 +26,10 @@
 
             <!-- Top -->
             <div class="vertical-splitter section-top">
-                <h3 class="title">Dictionaries</h3>
+                <div>
+                     <h3 class="title">Dictionaries</h3>
+                    <span id="guide-button" class="right-justified" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
+                </div>
 
                 <div class="right-justified">
                     <span id="upload-button" class="important-button">Upload</span>
@@ -46,7 +51,7 @@
                 <h3 class="title">Formula</h3>
 
                 <div class="right-justified">
-                    <span id="analyze-button" class="important-button">Analyze</span>
+                    <span id="ca-analyze-button" class="important-button">Analyze</span>
                     <span id="formula-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
@@ -81,7 +86,7 @@
     </div>
 
     <!-- Overview -->
-    <div class="section">
+    <div id="overview-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Overview</h3>
             <span id="overview-download-button" class="disabled right-justified button">Download</span>
@@ -93,7 +98,7 @@
 
 
     <!-- Corpus -->
-    <div class="section">
+    <div id="corpus-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Corpus</h3>
             <div class="right-justified">
@@ -107,7 +112,7 @@
     </div>
 
     <!-- Documents -->
-    <div class="section">
+    <div id="documents-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Documents</h3>
             <span id="documents-tooltip-button" class="right-justified tooltip-button">?</span>

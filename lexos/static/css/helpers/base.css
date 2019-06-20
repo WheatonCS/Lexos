@@ -25,6 +25,14 @@ h1 {
     color: #505050;
 }
 
+h2 {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 500;
+    font-size: 2.75rem;
+    margin: 0;
+    color: #505050;
+}
+
 h3, a, ul, label, textarea, input[type="text"], span {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
@@ -164,17 +172,12 @@ form {
 }
 
 
-/* Navbar */
-#navbar {
-    z-index: 3;
+/* Cram */
+#dragon-logo {
     display: grid;
-    grid-template-columns: 15rem 10rem 1fr;
-    padding: 0 2rem 0 2rem;
+    grid-template-columns: 15rem 5rem;
+    padding: 0 2rem 0 0;
     align-items: center;
-    width: 100%;
-    min-width: 100rem;
-    height: 7rem;
-    background-color: #FFFFFF;
 }
 
 #lexos-dragon {
@@ -183,6 +186,27 @@ form {
 
 #lexos-logo {
     margin-bottom: 1rem;
+    display: inline-block;
+}
+
+
+/* Tool Name */
+#tool-name {
+    padding: 0 0 0 2.5rem;
+}
+
+
+/* Navbar */
+#navbar {
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 20rem 25rem 1fr;
+    padding: 0 2rem 0 2rem;
+    align-items: center;
+    width: 100%;
+    min-width: 100rem;
+    height: 7rem;
+    background-color: #FFFFFF;
 }
 
 #navbar-right > a,
@@ -409,7 +433,9 @@ label input[type="checkbox"] + span:after {
     width: 1.2rem;
     border-left: .2rem solid #47BCFF;
     border-bottom: .2rem solid #47BCFF;
-    transform: rotate(-45deg) translate(-2.5rem, -1.2rem);
+    transform: rotate(-45deg);
+    top: .95rem;
+    left: .4rem;
     transition: opacity .2s;
     opacity: 0;
 }
@@ -523,4 +549,90 @@ label input[type="checkbox"]:checked + span:after {
 /* Plotly */
 .plotly-notifier {
     display: none;
+}
+
+/* Intro.js & overrides */
+#guide-button {
+    color: grey;
+}
+
+#guide-button:hover {
+    color: #FF8447;
+}
+
+.introjs-button {
+  box-sizing: content-box;
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border: 1px solid #d4d4d4;
+  margin: 0;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 #fff;
+  font: 13px/normal sans-serif !important;
+  color: #333;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  background-color: #ececec;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+  background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+  background-image: -o-linear-gradient(#f4f4f4, #ececec);
+  background-image: linear-gradient(#f4f4f4, #ececec);
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  -o-background-clip: padding-box;
+  /*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
+  /* IE hacks */
+  zoom: 1;
+  *display: inline;
+  margin-top: 10px;
+}
+
+.introjs-button:hover {
+  color: #FF8447;
+  border-color: #bcbcbc;
+  text-decoration: none;
+  box-shadow: 0px 1px 1px #e3e3e3;
+}
+
+.introjs-tooltip {
+    font-size: 14px;
+    font-family: Open Sans;
+    text-align: center;
+}
+
+.introjs-helperNumberLayer {
+  box-sizing: content-box;
+  position: absolute;
+  visibility: visible;
+  top: -16px;
+  left: -16px;
+  z-index: 9999999999 !important;
+  padding: 2px;
+  font-family: Open Sans;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  text-shadow: 1px 1px 1px rgba(0,0,0,.3);
+  background: #ff3019; /* Old browsers */
+  background: -webkit-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* Chrome10+,Safari5.1+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff3019), color-stop(100%, #cf0404)); /* Chrome,Safari4+ */
+  background:    -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* FF3.6+ */
+  background:     -ms-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* IE10+ */
+  background:      -o-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* Opera 11.10+ */
+  background:         linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);  /* W3C */
+  width: 20px;
+  height:20px;
+  line-height: 20px;
+  border: 3px solid white;
+  border-radius: 50%;
+  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)"; /* IE6-9 */
+  filter: "progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)"; /* IE10 text shadows */
+  box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }

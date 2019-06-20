@@ -1,5 +1,9 @@
 let document_previews;
 $(function(){
+    // If guide button is clicked...
+    $("#guide-button").click(function() {
+        tool_intro();
+    });
 
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
@@ -241,4 +245,48 @@ function initialize_tooltips(){
     create_tooltip("#milestone-tooltip-button", `Split the document into
         segments at each appearance of the provided string. Child segments will not
         contain the Milestone delimiter.`);
+}
+
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
+function tool_intro() {
+        // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#cut-mode-section',
+                intro: 'This is the Cut Mode section. Here you can specify how you would like to cut up your documents.',
+                position: 'top',
+            },
+            {
+                element: '#cut-settings-section',
+                intro: 'Based on your selection in the Cut Mode section, there are additional settings to fill out before you can initiate a cut.',
+                position: 'top',
+            },
+            {
+                element: '#preview-button',
+                intro: 'Similar to Scrub, you can preview your changes without saving them here.',
+                position: 'top',
+            },
+            {
+                element: '#apply-button',
+                intro: 'Unlike in Scrub, Apply works by creating new documents based on your cutting parameters. The original document is kept intact, but is deselected.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more in-depth discussion of cutting features, visit the Help section of the Cut page.',
+                position: 'top',
+            },
+            {
+                element: '#navbar-right',
+                intro: 'Once you\'re satisfied with your cut documents, you can move on to other pages in Prepare, Visualize, or Analyze.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

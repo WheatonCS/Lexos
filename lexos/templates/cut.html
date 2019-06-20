@@ -1,5 +1,6 @@
 {% extends "helpers/base.html" %}
 
+{% block title %}Cut{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -24,9 +25,13 @@
         <div id="cut-mode-section" class="section">
 
             <div class="vertical-splitter section-top">
-                <h3 class="title">Cut Mode</h3>
+                <div>
+                    <h3 class="title">Cut Mode</h3>
+                    <span id="guide-button" class="right-justified" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
+                </div>
                 <span id="cut-mode-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
+
 
             <div id="cut-mode-grid" class="section-body">
 

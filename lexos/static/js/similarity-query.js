@@ -1,5 +1,9 @@
 let csv;
 $(function(){
+    // If guide button is clicked...
+    $("#guide-button").click(function() {
+        tool_intro();
+    });
 
     // Display the loading overlay for the "Comparison Document" and
     // "Similarity Query" sections
@@ -143,4 +147,48 @@ function initialize_tooltips(){
         to be the external comparison. All other documents will be used to
         make the model and will be ranked in order of most to least similar
         to the comparison document in your results.`);
+}
+
+/**
+ * Initiates a walkthrough of the tool on this page using Intro.js
+ */
+function tool_intro() {
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#table',
+                intro: 'Welcome to Similarity Query!',
+                position: 'top',
+            },
+            {
+                element: '#comparison-document-section',
+                intro: 'By clicking "Select" you can choose which document is the baseline for comparison.',
+                position: 'top',
+            },
+            {
+                element: '#tokenize-section',
+                intro: 'Tokenize determines how terms are counted when generating data.',
+                position: 'top',
+            },
+            {
+                element: '#cull-section',
+                intro: 'Cull limits the number of terms used to generate data, and is optional.',
+                position: 'top',
+            },
+            {
+                element: '#sim-query-buttons',
+                intro: 'Here you can generate a new Similarity Query. You can also choose to download the current table as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of Similarity Query\'s features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

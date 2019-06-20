@@ -1,5 +1,6 @@
 {% extends "helpers/base.html" %}
 
+{% block title %}Manage{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -19,17 +20,23 @@
 <!-- Content -->
 {% block content %}
 
+    <div id="manage-tips">
+        <span id="guide-button" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
+        <b id="deselect-tip" style="padding-left: 2rem;">Activate the documents you want to work with. Click and drag to activate
+multiple documents. Hold "D" to deactivate. Right-click for more options.</b>
+    </div>
+
     <!-- Table -->
     <div id="table" class="section">
 
         <!-- Table head -->
         <div id="table-head">
-            <h3 class="table-cell">Active</h3>
-            <h3 class="table-cell">#</h3>
-            <h3 class="table-cell">Document</h3>
-            <h3 class="table-cell">Class</h3>
-            <h3 class="table-cell">Source</h3>
-            <h3 class="table-cell">Excerpt</h3>
+            <h3 class="table-cell" id="active">Active</h3>
+            <h3 class="table-cell" id="hashtag">#</h3>
+            <h3 class="table-cell" id="document">Document</h3>
+            <h3 class="table-cell" id="class">Class</h3>
+            <h3 class="table-cell" id="source">Source</h3>
+            <h3 class="table-cell" id="excerpt">Excerpt</h3>
             <a id="download-button" class="disabled right-justified button" href="manage/download">Download Selected</a>
         </div>
 

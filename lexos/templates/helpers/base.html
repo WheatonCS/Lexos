@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="static/favicon.png"/>
 
     <!-- jQuery -->
-    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
+    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js"></script>
 
     <!-- Core Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
@@ -16,6 +16,10 @@
     <link rel="stylesheet" type="text/css" href="static/css/helpers/error.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/help.css"/>
     <script type="text/javascript" src="static/js/helpers/utility.js"></script>
+
+    <!-- Intro.js for Welcome to Lexos Guide -->
+    <script type="text/javascript" src="static/node_modules/intro.js/intro.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/node_modules/intro.js/introjs.css">
 
     {% block head %}{% endblock %}
 </head>
@@ -26,10 +30,11 @@
 
     <!-- Navbar -->
     <div id="navbar">
-
-        <h1 id="lexos-logo">{L}exos</h1>
-
-        <img id="lexos-dragon" src="static/images/lexos-dragon-crop.png" id="logo">
+        <div id="dragon-logo">
+            <h1 id="lexos-logo">{L}exos</h1>
+            <img id="lexos-dragon" src="static/images/lexos-dragon-crop.png">
+        </div>
+        <h2 id="tool-name">{% block title %}{% endblock %}</h2>
 
         <div id="navbar-right" class="right-justified">
             <a id="upload-button" href="/upload">Upload</a>

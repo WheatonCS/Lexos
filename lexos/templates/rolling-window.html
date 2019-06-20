@@ -1,5 +1,6 @@
 {% extends "helpers/base.html" %}
 
+{% block title %}Rolling Window{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -29,6 +30,7 @@
         <!-- Calculation type -->
         <div id="calculation-type-section" class="section">
             <h3 class="section-top title">Calculation Type</h3>
+            <span id="guide-button" class="right-justified" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
             <div class="section-body">
 
                 <label><input name="counttype" value="average" type="radio" checked><span></span>Rolling Average</label>
@@ -97,11 +99,11 @@
     </div>
 
     <!-- Rolling Window -->
-    <div class="section">
+    <div id="rolling-window-display-section" class="section">
 
         <div class="vertical-splitter section-top">
             <h3 class="title">Rolling Window</h3>
-            <div class="right-justified">
+            <div id="rolling-window-buttons" class="right-justified">
                 <span id="generate-button" class="disabled important-button">Generate</span>
                 <span id="png-button" class="disabled button">PNG</span>
                 <span id="svg-button" class="disabled button">SVG</span>

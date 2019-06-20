@@ -1,5 +1,6 @@
 {% extends "helpers/base.html" %}
 
+{% block title %}Upload{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -8,7 +9,6 @@
     <script type="text/javascript" src="static/js/upload.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/upload.css"/>
 {% endblock %}
-
 
 <!-- Main content -->
 {% block content %}
@@ -19,6 +19,7 @@
         <div id="upload-section" class="section">
 
             <h3 class="section-top title">Upload</h3>
+            <span id="guide-button">What is this?</span>
 
             <div class="borderless-section-body">
                 <span id="browse-button">Browse...</span>
