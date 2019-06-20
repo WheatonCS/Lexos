@@ -1,6 +1,6 @@
 # Stats Compare
 
-In order to verify correctness of the Lexos Statistics tool, we used two other tools
+In order to verify the correctness of the Lexos Statistics tool, we used two other tools
 to compare data.
 
 The tools used were:
@@ -16,15 +16,15 @@ The tools used were:
 
 1. Upload your file
 
-2. In the summary window, there is a sentace describing the total words (e.g. This corpus has 1 document
+2. In the summary window, there is a sentence describing the total words (e.g. This corpus has 1 document
  with 5,389 total words and 1,809 unique word forms). The total words should be equal to Lexos' count
  of Total Terms and Voyant's "unique word forms" should equal Lexos' "Distinct Terms"
 
 3. The Vocabulary Density should be equal to Lexos' Vocabulary Density
 
 4. On small documents (documents with 59 or less distinct terms) Voyant can find the number of Single-Occurance
-terms by sliding the "items" scale all the way to the right, and looking at the counts under "Most frequent
-words in the corpus" in Voyant's "Sumary" window. 
+terms by sliding the "items" scale all the way to the right and looking at the counts under "Most frequent
+words in the corpus" in Voyant's "Summary" window. 
 
 ### How to use Intelligent Archive 
 
@@ -40,7 +40,7 @@ words in the corpus" in Voyant's "Sumary" window.
 
 5. "Size" should equal the "Total Terms"
 
-6. To count Single-Occurance terms, set the "Output Size" to one of the other tests' distinct number of terms 
+6. To count Single-Occurrence terms, set the "Output Size" to one of the other tests' distinct number of terms 
 (the larger one) and count how many words have the frequency one
 
 Test files:
