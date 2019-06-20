@@ -79,6 +79,11 @@ function initialize(response){
         remove_errors();
         send_similarity_table_request();
     });
+
+    $('input[type="radio"][name="sort-ascending"]').change(function(){
+        start_loading("#table", "#generate-button, #download-button");
+        send_similarity_table_request()
+    });
 }
 
 
@@ -86,27 +91,26 @@ function initialize(response){
  * Sends a request for the similarity query data and creates the similarity
  *      query table.
  */
-function send_similarity_table_request(){
+function send_similarity_table_request() {
 
     // Send a request for the similarity query data
     send_ajax_form_request("similarity-query/results")
 
-        // If the request was successful, store the CSV result and create the
-        // similarity query table
-        .done(function(response){
+    // If the request was successful, store the CSV result and create the
+    // similarity query table
+        .done(function (response) {
             csv = response.csv;
             create_similarity_table(response.table);
         })
 
         // If the request failed, display an error and "Loading Failed" text
         // and enable the "Generate" button
-        .fail(function(){
+        .fail(function () {
             error("Failed to retrieve the similarity query data.");
             add_text_overlay("#table", "Loading Failed");
             enable("#generate-button");
         });
 }
-
 
 /**
  * Creates the similarity query table.
@@ -116,8 +120,13 @@ function send_similarity_table_request(){
 function create_similarity_table(response){
 
     // Create the tables
+    let sort_column_input = $(`input[name="sort-column"]`);
     create_table("#table", parse_json(response),
-        ["Document", "Cosine Similarity"]);
+        ["Document", "Cosine Similarity"], "", function(selected_head_cell_id){
+            sort_column_input.val(selected_head_cell_id);
+            start_loading("#table", "#generate-button, #download-button");
+            send_similarity_table_request()
+        }, sort_column_input.val());
 
     // Remove the loading overlay, fade in the table, and enable the
     // "Generate" and "Download" buttons

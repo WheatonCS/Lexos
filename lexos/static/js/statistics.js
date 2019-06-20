@@ -62,7 +62,9 @@ function initialize(response){
     // If the "PNG" or "SVG" buttons are pressed, download the graph
     initialize_graph_download_buttons();
 
-    create_statistics_button_callbacks();
+    $('input[type="radio"][name="sort-ascending"]').change(function() {
+        regenerate_document_statistics();
+    });
 }
 
 
@@ -95,7 +97,6 @@ function create_statistics(){
 
 
 function regenerate_document_statistics(){
-    console.log("PEP sukz");
     start_loading("#table", "#download-button")
     send_ajax_form_request("/statistics/document-statistics")
 
@@ -230,15 +231,4 @@ function initialize_tooltips(){
 
     // "Cull"
     initialize_cull_tooltips(false);
-}
-
-/**
- * Creates callbacks for the buttons and inputs on the table
- */
-function create_statistics_button_callbacks(){
-    console.log("Mark please help us");
-    // If the "Rows Per Page" option is changed, recreate the table
-    $('input[type="radio"][name="sort-ascending"]')
-        .change(function(){ regenerate_document_statistics(); });
-
 }
