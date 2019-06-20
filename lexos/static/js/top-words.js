@@ -6,6 +6,9 @@ $(function(){
         tool_intro();
     });
 
+    // Add the loading overlays
+    start_loading("#class-divisions-body, #top-words-body");
+
     // Initialize the tooltips in the "Comparison Method", "Tokenize",
     // "Cull", "Class Divisions", and "Top Words" sections
     initialize_analyze_tooltips();
@@ -32,13 +35,22 @@ function initialize(response){
 
     documents = parse_json(response);
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#class-divisions-body, #top-words-body",
-            "No Active Documents");
+    // If there are fewer than two active documents, display warning text
+    // and return
+    document_count = Object.entries(parse_json(response)).length;
+    if(document_count <  2){
+        add_text_overlay("#class-divisions-body, #top-words-body", `This Tool
+            Requires at Least Two Active Documents`);
         return;
     }
+
+    // Otherwise, display "No Results" text on the "Top Words" section and
+    // enable the "Generate" button
+    add_text_overlay("#top-words-body", "No Results");
+    enable("#generate-button");
+
+    // Initialize the legacy form inputs
+    initialize_legacy_inputs(response);
 
     // Send a request to get the class divisions
     $.ajax({type: "GET", url: "top-words/class-divisions"})

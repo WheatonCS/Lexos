@@ -25,11 +25,11 @@ form {
 }
 
 #left-column {
-    grid-template-rows: 24rem 1fr 1fr;
+    grid-template-rows: 24rem 1.37fr 1fr;
 }
 
 #middle-column {
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1.3fr 1fr;
 }
 
 

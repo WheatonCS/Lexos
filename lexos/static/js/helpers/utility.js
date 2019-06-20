@@ -294,7 +294,7 @@ function key_down_callback(key, callback){
  * @param {string} error_highlight_query: A query for the element to apply
  *      an error highlight to.
  */
-function error(message, error_highlight_query){
+function error(message, error_highlight_query = ''){
 
     // Remove any existing error messages and error highlights
     $("#error-section").remove();
