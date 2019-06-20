@@ -50,19 +50,20 @@ function load_cut_settings_section(){
     let cut_settings_grid_element = $("#cut-settings-grid");
     cut_settings_grid_element.css("opacity", "0");
 
+    let segment_text = $("#segment-size-label");
+
     // If the cut mode is set to "Segments"...
     if(cut_mode === "number"){
         previous_cut_mode = "number";
-        hide(`#milestone-input, #overlap-input,
-            #merge-threshold-input, #segment-size-input`);
-        show("#number-of-segments-input");
+        hide("#milestone-input, #overlap-input, #merge-threshold-input, #segment-size-tooltip-button");
+        segment_text.text("Number of Segments")
+        show("#segment-size-input, #number-of-segments-tooltip-button");
     }
 
     // Otherwise, if the cut mode is set to "Milestones"...
     else if(cut_mode === "milestone"){
         previous_cut_mode = "milestone";
-        hide(`#segment-size-input, #overlap-input,
-            #merge-threshold-input, #number-of-segments-input`);
+        hide("#segment-size-input, #overlap-input, #merge-threshold-input");
         show("#milestone-input");
     }
 
@@ -70,8 +71,9 @@ function load_cut_settings_section(){
     // "Lines"...
     else {
         previous_cut_mode = "default";
-        hide("#milestone-input, #number-of-segments-input");
-        show("#segment-size-input, #overlap-input, #merge-threshold-input");
+        hide("#milestone-input, #number-of-segments-tooltip-button");
+        segment_text.text("Segment Size")
+        show("#segment-size-input, #overlap-input, #merge-threshold-input, #segment-size-tooltip-button");
     }
 
     // Set the legacy "cutByMS" input if the cut mode is "milestone"
@@ -109,7 +111,6 @@ function cut(action){
     for(const document of document_previews)
         for(const option of options)
             form_data.append(option+'_'+document[0], form_data.get(option));
-
     // Send the cut request
     $.ajax({
         type: "POST",
@@ -169,13 +170,10 @@ function validate_inputs(){
     }
 
     // "Segment size"
-    let segment_size = (cut_mode === "number") ?
-        $("#number-of-segments-input input").val() :
-        $("#segment-size-input input").val();
+    let segment_size = $("#segment-size-input input").val();
     let int_segment_size = parseInt(segment_size);
     if(!validate_number(segment_size, 1)){
-        error("Invalid segment size.", (cut_mode === "number") ?
-            "#number-of-segments-input input" : "#segment-size-input input");
+        error("Invalid segment size.", "#segment-size-input input");
         return false;
     }
 
