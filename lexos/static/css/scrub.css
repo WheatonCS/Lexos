@@ -37,7 +37,6 @@ form {
 .scrub-section {
     grid-template-rows: min-content 1fr;
     background-color: #FFFFFF;
-    overflow: hidden;
 }
 
 .scrub-section-top {
