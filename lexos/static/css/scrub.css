@@ -9,7 +9,7 @@
 form {
     grid-template-columns: 0.8fr 1fr;
     grid-template-rows: 100%;
-    min-height: 60rem;
+    min-height: 75rem;
 }
 
 
