@@ -19,7 +19,7 @@ i.e. BaJin_Autumn_1940.txt
 
 3. Set the cut mode to "Segments"
 
-4. Set "Segment Size" to 10
+4. Set "Number of Segments" to 10
 
 5. Click "Apply"
 

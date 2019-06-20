@@ -49,12 +49,12 @@ Steps:
     (a) Go to manage and deselect Late40Chapters so that First80Chapters is the only active document
     (b) Cut the First80Chapters using these settings:
         - Set Cut Mode to "Segments"
-        - Set "Segment Size" to 8
+        - Set "Number of Segments" to 8
         - Click Apply
     (c) Go back to manage and deselect all documents except Late40Chapters
     (d) Cut the Late40Chapters using these settings:
         - Set Cut Mode to "Segments"
-        - Set "Segment Size" to 8
+        - Set "Number of Segments" to 8
         - Click Apply
     (e) Go back to manage and select all of the documents that were cut (everything except the original documents)
     

@@ -46,7 +46,7 @@ Steps:
 (2) CUT: 
 
     (a) Set cut mode to "Segments"
-    (b) Set "Segment Size" to 2
+    (b) Set "Number of Segments" to 2
     
     Apply Cuts
     (There should be 16 Active Documents after cutting)
