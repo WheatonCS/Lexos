@@ -5,18 +5,13 @@ $(function(){
     introguide.setOptions({
         steps: [
             {
-                element: '#graph-container',
+                element: '#consensus-tree-body',
                 intro: 'Welcome to Consensus Tree!',
                 position: 'top',
             },
             {
-                element: '#k-means-options-section',
-                intro: 'These settings control how the K-Means graph will appear. You can set the number of clusters and the graph\'s type.',
-                position: 'top',
-            },
-            {
-                element: '#advanced-options-section',
-                intro: 'The advanced settings control the process that the data goes through when generating the K-Means graph.',
+                element: '#consensus-tree-options-section',
+                intro: 'These settings control how the Consensus Tree is generated. Checking sample with replacement will allow the segments to be used by another iteration.',
                 position: 'top',
             },
             {
@@ -35,13 +30,13 @@ $(function(){
                 position: 'top',
             },
             {
-                element: '#k-means-buttons',
-                intro: 'Here you can generate a new K-Means. You can also choose to download the K-Means as a static PNG or a vector SVG. K-Means data is also available as a CSV file.',
+                element: '#consensus-tree-buttons',
+                intro: 'Here you can generate a new Consensus Tree. You can also choose to download the Consensus Tree as a static PNG.',
                 position: 'top',
             },
             {
                 element: '#help-button',
-                intro: 'For a more advanced summary of the K-Means features, check out the Help section.',
+                intro: 'For a more advanced summary of the Consensus Tree features, check out the Help section.',
                 position: 'bottom'
             }
         ]
