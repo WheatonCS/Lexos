@@ -29,7 +29,8 @@ $(function(){
 
         // Send a request to analyze the files
         send_ajax_form_request("/content-analysis/analyze",
-            {formula: $("#formula-textarea").val()})
+            {formula: $("#formula-textarea").val(), sort_column: $("#sort-column").val(),
+            sort_ascending: $("#sort-ascending").val()})
 
             // If the request was successful, display the results
             .done(display_results)
@@ -91,6 +92,10 @@ function initialize_button_callbacks(){
             formula_element.val(formula);
         });
     });
+
+    $('input[type="radio"][name="sort-ascending"]').change(function(){
+        regenerate_overview()
+    });
 }
 
 
@@ -149,6 +154,28 @@ function create_upload_previews(response)
         "#dictionaries-section #upload-button");
 }
 
+function regenerate_overview(response){
+    send_ajax_form_request("/content-analysis/analyze",
+            {formula: $("#formula-textarea").val(), sort_column: $("#sort-column").val(),
+            sort_ascending: $("#sort-ascending").val()})
+
+            // If the request was successful, display the results
+            .done(function(){
+                response = JSON.parse(response);
+                let overview = response["overview"];
+                let head = overview[0];
+                let data = overview.splice(1);
+                create_table("#overview-body", data, head);
+            })
+
+            // If the request failed, display an error message and remove the
+            // loading overlay
+            .fail(function(){
+                error("Failed to perform the analysis.");
+                finish_loading("#results-container", "", `#formula-section
+                    #analyze-button, #dictionaries-section #upload-button`);
+            });
+}
 
 /**
  * Displays the results.

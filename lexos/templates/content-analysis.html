@@ -84,6 +84,11 @@
     <div class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Overview</h3>
+            <div class="table-top-radio-option">
+                <h3>Order: </h3>
+                <label><input name="sort-ascending" value="true" type="radio" checked><span></span>Ascending</label>
+                <label><input name="sort-ascending" value="false" type="radio"><span></span>Descending</label>
+            </div>
             <span id="overview-download-button" class="disabled right-justified button">Download</span>
         </div>
         <div id="overview-body" class="borderless-section-body">
@@ -120,5 +125,6 @@
 
     <!-- Hidden elements -->
     <input id="file-input" name="lemfileselect[]" type="file" class="hidden" multiple>
+    <input name="sort-column" value="0" type="hidden">
 
 {% endblock %}
