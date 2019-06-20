@@ -25,7 +25,7 @@ form {
 }
 
 #left-column {
-    grid-template-rows: 24rem 15rem 15rem 15rem;
+    grid-template-rows: 24rem 15rem 15rem 25rem;
 }
 
 #middle-column {
@@ -40,35 +40,13 @@ form {
     overflow: hidden;
 }
 
-.scrub-section-lemmas,
-.scrub-section-consolidations {
-    grid-template-rows: min-content 1fr;
-    background-color: #FFFFFF;
-    overflow: hidden;
-    height: 20rem;
-}
-
-.scrub-section-stop-words {
-    grid-template-rows: min-content 1fr;
-    background-color: #FFFFFF;
-    overflow: hidden;
-    height: 15rem;
-}
-
-.scrub-section-special {
-    grid-template-rows: min-content 1fr;
-    background-color: #FFFFFF;
-    overflow: hidden;
-    height: 25rem;
-}
-
 .scrub-section-top {
     margin: 1rem;
     grid-gap: .1rem;
 }
 
 .scrub-section-body {
-    height: calc(100%);
+    height: calc(50% + 2rem);
 }
 
 .scrub-section-body label {
@@ -102,7 +80,7 @@ form {
 }
 
 #stop-words-section .scrub-section-body {
-    height: calc(100%);
+    height: calc(40%);
 }
 
 
@@ -117,7 +95,7 @@ form {
 }
 
 #special-characters-section .scrub-section-body {
-    height: calc(100%);
+    height: calc(38%);
 }
 
 
