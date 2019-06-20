@@ -7,7 +7,7 @@
 
 /* Form */
 form {
-    grid-template-columns: 0.5fr 1fr;
+    grid-template-columns: 0.8fr 1fr;
     grid-template-rows: 100%;
     min-height: 60rem;
 }
@@ -25,7 +25,7 @@ form {
 }
 
 #left-column {
-    grid-template-rows: 24rem 9rem 9rem 15rem 15rem;
+    grid-template-rows: 24rem 15rem 15rem 15rem;
 }
 
 #middle-column {
@@ -45,7 +45,8 @@ form {
     grid-template-rows: min-content 1fr;
     background-color: #FFFFFF;
     overflow: hidden;
-    height: 9rem;
+    height: 20rem;
+    width: 40rem;
 }
 
 .scrub-section-stop-words {
@@ -59,7 +60,7 @@ form {
     grid-template-rows: min-content 1fr;
     background-color: #FFFFFF;
     overflow: hidden;
-    height: 20rem;
+    height: 25rem;
 }
 
 .scrub-section-top {
@@ -89,6 +90,12 @@ form {
     transition: opacity .2s;
 }
 
+/* Lemmas and Consolidations */
+#lemmas-consolidations{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: .5rem;
+}
 
 /* Stop/keep words */
 #stop-words-section label {
