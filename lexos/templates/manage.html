@@ -20,6 +20,11 @@
 <!-- Content -->
 {% block content %}
 
+    <div>
+        <span id="guide-button" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
+        <b id="deselect-tip" style="padding-left: 2rem;">To deselect documents, hold down "D" while clicking.</b>
+    </div>
+
     <!-- Table -->
     <div id="table" class="section">
 
@@ -31,10 +36,7 @@
             <h3 class="table-cell" id="class">Class</h3>
             <h3 class="table-cell" id="source">Source</h3>
             <h3 class="table-cell" id="excerpt">Excerpt</h3>
-            <div>
-                <span id="guide-button" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
-                <a id="download-button" class="disabled right-justified button" href="manage/download">Download Selected</a>
-            </div>
+            <a id="download-button" class="disabled right-justified button" href="manage/download">Download Selected</a>
         </div>
 
         <!-- Table body -->
