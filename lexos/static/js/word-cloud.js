@@ -1,45 +1,7 @@
 $(function(){
-    // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#word-cloud-container',
-                intro: 'This is your Word Cloud.',
-                position: 'top',
-            },
-            {
-                element: '#visualize-font',
-                intro: 'You can change the font-style of your Word Cloud here (provided your computer has access to the font).',
-                position: 'top',
-            },
-            {
-                element: '#visualize-term-count',
-                intro: 'You can change the amount of words displayed in your cloud here.',
-                position: 'top',
-            },
-            {
-                element: '#visualize-color',
-                intro: 'You can choose from a variety of color themes from the dropdown menu here. Click "OK" to generate.',
-                position: 'top',
-            },
-            {
-                element: '#visualize-buttons',
-                intro: 'You can generate a new Word Cloud at anytime here. You can also choose to download a static PNG or vector SVG.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For more about Word Cloud, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
-
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_intro();
     });
 
     // Initialize the "Color" button
@@ -203,4 +165,45 @@ function create_word_cloud(dataset){
     // Initialize the SVG and PNG download buttons
     initialize_png_link("svg", "#png-button", width, height, "word-cloud.png");
     initialize_svg_link("svg", "#svg-button", "word-cloud.svg");
+}
+
+function tool_intro() {
+        // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#word-cloud-container',
+                intro: 'This is your Word Cloud.',
+                position: 'top',
+            },
+            {
+                element: '#visualize-font',
+                intro: 'You can change the font-style of your Word Cloud here (provided your computer has access to the font).',
+                position: 'top',
+            },
+            {
+                element: '#visualize-term-count',
+                intro: 'You can change the amount of words displayed in your cloud here.',
+                position: 'top',
+            },
+            {
+                element: '#visualize-color',
+                intro: 'You can choose from a variety of color themes from the dropdown menu here. Click "OK" to generate.',
+                position: 'top',
+            },
+            {
+                element: '#visualize-buttons',
+                intro: 'You can generate a new Word Cloud at anytime here. You can also choose to download a static PNG or vector SVG.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For more about Word Cloud, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

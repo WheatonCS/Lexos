@@ -1,41 +1,7 @@
 $(function(){
-    // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#left-column',
-                intro: 'These are the settings for statistics. Tokenize and Cull can be used to control how data is compared. ' +
-                    'Generate is here if you wish to change these settings.',
-                position: 'top',
-            },
-            {
-                element: '#graph-section',
-                intro: 'Here the document sizes are graphed. This graph can be downloaded as a static PNG or vector SVG.',
-                position: 'top',
-            },
-            {
-                element: '#right-column',
-                intro: 'Here are the overall statistics for your documents, used by the tool to determine outliers.',
-                position: 'top',
-            },
-            {
-                element: '#documents-section',
-                intro: 'This table displays information concerning term usage across your documents. This table can be downloaded as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Statistics features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
-
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_intro();
     });
 
     // Display the loading overlays
@@ -259,4 +225,41 @@ function initialize_tooltips(){
 
     // "Cull"
     initialize_cull_tooltips(false);
+}
+
+function tool_intro() {
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#left-column',
+                intro: 'These are the settings for statistics. Tokenize and Cull can be used to control how data is compared. ' +
+                    'Generate is here if you wish to change these settings.',
+                position: 'top',
+            },
+            {
+                element: '#graph-section',
+                intro: 'Here the document sizes are graphed. This graph can be downloaded as a static PNG or vector SVG.',
+                position: 'top',
+            },
+            {
+                element: '#right-column',
+                intro: 'Here are the overall statistics for your documents, used by the tool to determine outliers.',
+                position: 'top',
+            },
+            {
+                element: '#documents-section',
+                intro: 'This table displays information concerning term usage across your documents. This table can be downloaded as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the Statistics features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

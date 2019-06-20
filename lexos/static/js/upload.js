@@ -1,70 +1,11 @@
 $(function(){
-    // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#dragon-logo',
-                intro: 'Welcome to Lexos!',
-                position: 'right',
-            },
-            {
-                element: '#upload-section',
-                intro: 'This is the Upload section.',
-                position: 'right'
-            },
-            {
-                element: '#browse-button',
-                intro: 'With the browse button you can select files to upload directly from your computer...',
-                position: 'right'
-            },
-            {
-                element: '#drag-and-drop-section',
-                intro: '...or you can simply drag-and-drop your files here.',
-                position: 'top'
-            },
-            {
-                element: '#scrape-section',
-                intro: 'The Scrape section utilizes URL scraping as a method of uploading files to Lexos.',
-                position: 'bottom'
-            },
-            {
-                element: '#scrape-input',
-                intro: 'You can enter newline-separated URLs here.',
-                position: 'bottom'
-            },
-            {
-                element: '#scrape-button',
-                intro: 'Initialize here.',
-                position: 'bottom'
-            },
-            {
-                element: '#upload-list',
-                intro: 'All uploaded files appear here.',
-                position: 'top'
-            },
-            {
-                element: '#help-button',
-                intro: 'Check our Help section for more advice on the Upload page.',
-                position: 'bottom'
-            },
-            {
-                element: '#manage-button',
-                intro: 'Once you\'ve uploaded some documents, check out the Manage page for the next step of this tutorial!',
-                position: 'bottom'
-            }
-        ]
-    })
-
-
     // Redirect "Browse..." button clicks to the file selection input element
     // which will open an OS file selection window
     $("#browse-button").click(function(){ $("#file-select-input").click(); });
 
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_intro();
     });
 
     // When the user finishes selecting files using the OS file selection
@@ -332,4 +273,65 @@ function initialize_drag_and_drop_section_highlighting(){
         drag_counter = 0;
         drag_and_drop_section.removeClass("highlighted");
     });
+}
+
+function tool_intro() {
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#dragon-logo',
+                intro: 'Welcome to Lexos!',
+                position: 'right',
+            },
+            {
+                element: '#upload-section',
+                intro: 'This is the Upload section.',
+                position: 'right'
+            },
+            {
+                element: '#browse-button',
+                intro: 'With the browse button you can select files to upload directly from your computer...',
+                position: 'right'
+            },
+            {
+                element: '#drag-and-drop-section',
+                intro: '...or you can simply drag-and-drop your files here.',
+                position: 'top'
+            },
+            {
+                element: '#scrape-section',
+                intro: 'The Scrape section utilizes URL scraping as a method of uploading files to Lexos.',
+                position: 'bottom'
+            },
+            {
+                element: '#scrape-input',
+                intro: 'You can enter newline-separated URLs here.',
+                position: 'bottom'
+            },
+            {
+                element: '#scrape-button',
+                intro: 'Initialize here.',
+                position: 'bottom'
+            },
+            {
+                element: '#upload-list',
+                intro: 'All uploaded files appear here.',
+                position: 'top'
+            },
+            {
+                element: '#help-button',
+                intro: 'Check our Help section for more advice on the Upload page.',
+                position: 'bottom'
+            },
+            {
+                element: '#manage-button',
+                intro: 'Once you\'ve uploaded some documents, check out the Manage page for the next step of this tutorial!',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

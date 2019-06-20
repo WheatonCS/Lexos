@@ -1,47 +1,9 @@
 let documents;
 let csv;
 $(function(){
-    // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#comparison-method-section',
-                intro: 'Welcome to Top Words! Here you can select how you want to compare documents.',
-                position: 'top',
-            },
-            {
-                element: '#tokenize-section',
-                intro: 'Tokenize determines how terms are counted when generating data.',
-                position: 'top',
-            },
-            {
-                element: '#cull-section',
-                intro: 'Cull limits the number of terms used to generate data, and is optional.',
-                position: 'top',
-            },
-            {
-                element: '#class-divisions-section',
-                intro: 'If you have assigned classes on the Manage page, your documents will be displayed here separated by class.',
-                position: 'top',
-            },
-            {
-                element: '#top-words-buttons',
-                intro: 'Here you can generate new Top Words data. You can also choose to download the results as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Top Words features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
-
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_intro();
     });
 
     // Initialize the tooltips in the "Comparison Method", "Tokenize",
@@ -268,4 +230,45 @@ function initialize_tooltips(){
     create_tooltip("#download-tooltip-button", `Get Topwords only displays the
         top 30 results. Download if you wish to see the full result.`, true);
 
+}
+
+function tool_intro() {
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#comparison-method-section',
+                intro: 'Welcome to Top Words! Here you can select how you want to compare documents.',
+                position: 'top',
+            },
+            {
+                element: '#tokenize-section',
+                intro: 'Tokenize determines how terms are counted when generating data.',
+                position: 'top',
+            },
+            {
+                element: '#cull-section',
+                intro: 'Cull limits the number of terms used to generate data, and is optional.',
+                position: 'top',
+            },
+            {
+                element: '#class-divisions-section',
+                intro: 'If you have assigned classes on the Manage page, your documents will be displayed here separated by class.',
+                position: 'top',
+            },
+            {
+                element: '#top-words-buttons',
+                intro: 'Here you can generate new Top Words data. You can also choose to download the results as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the Top Words features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

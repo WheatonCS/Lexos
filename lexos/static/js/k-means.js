@@ -1,55 +1,7 @@
 $(function(){
-    // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#graph-container',
-                intro: 'Welcome to K-Means!',
-                position: 'top',
-            },
-            {
-                element: '#k-means-options-section',
-                intro: 'These settings control how the K-Means graph will appear. You can set the number of clusters and the graph\'s type.',
-                position: 'top',
-            },
-            {
-                element: '#advanced-options-section',
-                intro: 'The advanced settings control the process that the data goes through when generating the K-Means graph.',
-                position: 'top',
-            },
-            {
-                element: '#tokenize-section',
-                intro: 'Tokenize determines how terms are counted when generating data.',
-                position: 'top',
-            },
-            {
-                element: '#normalize-section',
-                intro: 'Normalize determines if and how term totals are weighted.',
-                position: 'top',
-            },
-            {
-                element: '#cull-section',
-                intro: 'Cull limits the number of terms used to generate data, and is optional.',
-                position: 'top',
-            },
-            {
-                element: '#k-means-buttons',
-                intro: 'Here you can generate a new K-Means. You can also choose to download the K-Means as a static PNG or a vector SVG. K-Means data is also available as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the K-Means features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
-
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_intro();
     });
 
     // Display the loading overlay on the "K-Means" section
@@ -222,4 +174,55 @@ function initialize_tooltips(){
     // "Relative Tolerance"
     create_tooltip("#relative-tolerance-tooltip-button", `Decimal, relative
         tolerance with respect to inertia to declare convergence.`);
+}
+
+function tool_intro() {
+        // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#graph-container',
+                intro: 'Welcome to K-Means!',
+                position: 'top',
+            },
+            {
+                element: '#k-means-options-section',
+                intro: 'These settings control how the K-Means graph will appear. You can set the number of clusters and the graph\'s type.',
+                position: 'top',
+            },
+            {
+                element: '#advanced-options-section',
+                intro: 'The advanced settings control the process that the data goes through when generating the K-Means graph.',
+                position: 'top',
+            },
+            {
+                element: '#tokenize-section',
+                intro: 'Tokenize determines how terms are counted when generating data.',
+                position: 'top',
+            },
+            {
+                element: '#normalize-section',
+                intro: 'Normalize determines if and how term totals are weighted.',
+                position: 'top',
+            },
+            {
+                element: '#cull-section',
+                intro: 'Cull limits the number of terms used to generate data, and is optional.',
+                position: 'top',
+            },
+            {
+                element: '#k-means-buttons',
+                intro: 'Here you can generate a new K-Means. You can also choose to download the K-Means as a static PNG or a vector SVG. K-Means data is also available as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the K-Means features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

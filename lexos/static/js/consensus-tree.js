@@ -1,50 +1,7 @@
 $(function(){
-    // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#consensus-tree-body',
-                intro: 'Welcome to Consensus Tree!',
-                position: 'top',
-            },
-            {
-                element: '#consensus-tree-options-section',
-                intro: 'These settings control how the Consensus Tree is generated. Checking sample with replacement will allow the segments to be used by another iteration.',
-                position: 'top',
-            },
-            {
-                element: '#tokenize-section',
-                intro: 'Tokenize determines how terms are counted when generating data.',
-                position: 'top',
-            },
-            {
-                element: '#normalize-section',
-                intro: 'Normalize determines if and how term totals are weighted.',
-                position: 'top',
-            },
-            {
-                element: '#cull-section',
-                intro: 'Cull limits the number of terms used to generate data, and is optional.',
-                position: 'top',
-            },
-            {
-                element: '#consensus-tree-buttons',
-                intro: 'Here you can generate a new Consensus Tree. You can also choose to download the Consensus Tree as a static PNG.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Consensus Tree features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
-
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_info();
     });
 
     // Display the loading overlay
@@ -182,4 +139,50 @@ function initialize_tooltips(){
     // "Iterations"
     create_tooltip("#iterations-tooltip-button", `For 100 iterations, 80% of
         the tokens will be chosen with or without replacement.`);
+}
+
+function tool_info() {
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#consensus-tree-body',
+                intro: 'Welcome to Consensus Tree!',
+                position: 'top',
+            },
+            {
+                element: '#consensus-tree-options-section',
+                intro: 'These settings control how the Consensus Tree is generated. Checking sample with replacement will allow the segments to be used by another iteration.',
+                position: 'top',
+            },
+            {
+                element: '#tokenize-section',
+                intro: 'Tokenize determines how terms are counted when generating data.',
+                position: 'top',
+            },
+            {
+                element: '#normalize-section',
+                intro: 'Normalize determines if and how term totals are weighted.',
+                position: 'top',
+            },
+            {
+                element: '#cull-section',
+                intro: 'Cull limits the number of terms used to generate data, and is optional.',
+                position: 'top',
+            },
+            {
+                element: '#consensus-tree-buttons',
+                intro: 'Here you can generate a new Consensus Tree. You can also choose to download the Consensus Tree as a static PNG.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the Consensus Tree features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }

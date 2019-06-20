@@ -1,50 +1,7 @@
 $(function(){
-     // Intro Guide Stuff
-    let introguide = introJs();
-
-    introguide.setOptions({
-        steps: [
-            {
-                element: '#dictionaries-section',
-                intro: 'Welcome to Content Analysis! Here you can upload dictionaries for your analysis.',
-                position: 'top',
-            },
-            {
-                element: '#formula-section',
-                intro: 'Here you can create your formula using the calculator buttons. Buttons for each uploaded dictionary will appear on the right.',
-                position: 'top',
-            },
-            {
-                element: '#ca-analyze-button',
-                intro: 'Click here to generate your data. This will take some time...',
-                position: 'top',
-            },
-            {
-                element: '#overview-section',
-                intro: 'This section provides a general overview of your data. You can download this data as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#corpus-section',
-                intro: 'This section displays the most commonly used words along with the dictionary each word belongs to. You can download this data as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#documents-section',
-                intro: 'Much like the previous section, although this section contains the data for each individual document rather than the full corpus.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of our Content Analysis features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
-
     // If guide button is clicked...
     $("#guide-button").click(function() {
-        introguide.start();
+        tool_intro();
     });
 
     // If the "Upload" button was clicked...
@@ -284,4 +241,50 @@ function initialize_tooltips(){
         For a list of all of the words, click the "Download" button.`, true);
     create_tooltip("#documents-tooltip-button", `The top 100 words are
         displayed for each document.`, true);
+}
+
+function tool_intro() {
+    // Intro Guide Stuff
+    let introguide = introJs();
+
+    introguide.setOptions({
+        steps: [
+            {
+                element: '#dictionaries-section',
+                intro: 'Welcome to Content Analysis! Here you can upload dictionaries for your analysis.',
+                position: 'top',
+            },
+            {
+                element: '#formula-section',
+                intro: 'Here you can create your formula using the calculator buttons. Buttons for each uploaded dictionary will appear on the right.',
+                position: 'top',
+            },
+            {
+                element: '#ca-analyze-button',
+                intro: 'Click here to generate your data. This will take some time...',
+                position: 'top',
+            },
+            {
+                element: '#overview-section',
+                intro: 'This section provides a general overview of your data. You can download this data as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#corpus-section',
+                intro: 'This section displays the most commonly used words along with the dictionary each word belongs to. You can download this data as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#documents-section',
+                intro: 'Much like the previous section, although this section contains the data for each individual document rather than the full corpus.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of our Content Analysis features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+    introguide.start();
 }
