@@ -19,6 +19,8 @@
     - Keep Apostrophes
     
 3. Click "Apply"
+
+4. Results:
     - Four files containing
         * lowercase letters
         * no digits

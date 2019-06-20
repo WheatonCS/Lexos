@@ -14,7 +14,7 @@ byCharactersandRawCounts.csv
 
 2. Under the "Prepare" menu click "Tokenize"
 
-3. Using the default settings, click generate 
+3. Using the default settings then click generate 
     - Documents as columns, terms as rows
     - Tokenize by tokens
     - Normalize, proportional
@@ -27,7 +27,7 @@ Result: results_defaults.csv
 
 2. Under the "Prepare" menu click "Tokenize"
 
-3. Using the following settings, click generate 
+3. Using the following settings then click generate 
     - Documents as columns, terms as rows (default)
     - Tokenize by tokens (default)
     - Normalize, Raw Counts
@@ -40,7 +40,7 @@ Result: results_rawCounts.csv
 
 2. Under the "Prepare" menu click "Tokenize"
 
-3. Using the following settings, click generate 
+3. Using the following settings then click generate 
     - Documents as columns, terms as rows (default)
     - Tokenize by tokens, grams: 2
     - Normalize, proportional (default)
@@ -53,7 +53,7 @@ Result: results_biGrams.csv
 
 2. Under the "Prepare" menu click "Tokenize"
 
-3. Using the following settings, click generate 
+3. Using the following settings then click generate 
     - Documents as columns, terms as rows (default)
     - Tokenize by tokens (default)
     - Normalize, TF-IDF
@@ -67,8 +67,10 @@ Result: results_weighted.csv
 
 2. Under the "Prepare" menu click "Tokenize"
 
-3. Using the following settings, click generate 
-    - Documents as columns, terms as columns
+3. Using the following settings then click generate 
+    - Documents as rows, terms as columns
+        - *Note* You will not be able to see this change on the website. To see
+        the changes you need to download the table.
     - Tokenize by characters
     - Normalize, Raw Counts
 

@@ -20,12 +20,12 @@ JP Morgan2009.txt, Enactment.txt, Opportunity.txt, Org_Identity.txt, Threat.txt
     - Make Lowercase
     - Remove Digits
 
-4. Under the "Analyze" menu, select "Content Analysis"
+3. Under the "Analyze" menu, select "Content Analysis"
 
-5. Select "Upload Files" under Dictionaries and select the 4 provided dictionary 
+4. Select "Upload Files" under Dictionaries and select the 4 provided dictionary 
 files: Enactment.txt, Opportunity.txt, Org_Identity.txt, Threat.txt
 
-6. Using the calculator under Formula, set formula to **[Enactment] + [Opportunity] + [Org_Identity] + [Threat]**
+5. Using the calculator under Formula, set formula to **[Enactment] + [Opportunity] + [Org_Identity] + [Threat]**
 
-7. To get your results, click "Analyze". The first table you see should be what 
+6. To get your results, click "Analyze". The first table you see should be what 
 is shown in the ResultsToExpect folder

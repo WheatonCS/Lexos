@@ -62,7 +62,7 @@ You should get:
 
 4. Under "Cut Mode" select "Segments"
 
-5. Under "Cut Settings" change "Segment Size" to 10 (keep 'Overlap' and 'Threshold' as default)
+5. Under "Cut Settings" change "Number of Segments" to 10 
 
 6. Click "Apply"
 

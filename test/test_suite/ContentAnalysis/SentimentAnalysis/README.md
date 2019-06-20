@@ -12,17 +12,15 @@
 
 1. Upload Melville_MobyDick.txt
 
-2. Under the "Prepare" menu, select "Scrub"
-
-3. Scrubbing has already been applied using the default settings
+2. Scrubbing has already been applied using the default settings
     - Remove Punctuation
     - Make Lowercase
     - Remove Digits
 
-4. Under the "Analyze" menu, select "Content Analysis"
+3. Under the "Analyze" menu, select "Content Analysis"
 
-5. Select "Upload Files" under Dictionaries and select the two provided dictionary files: positive.txt, negative.txt
+4. Select "Upload Files" under Dictionaries and select the two provided dictionary files: positive.txt, negative.txt
 
-6. Using the calculator under Formula, set formula to **[positive] - [negative]**
+5. Using the calculator under Formula, set formula to **[positive] - [negative]**
 
-7. To get your results, click "Analyze". The first table you see should be what is shown in the ResultsToExpect folder
+6. To get your results, click "Analyze". The first table you see should be what is shown in the ResultsToExpect folder
