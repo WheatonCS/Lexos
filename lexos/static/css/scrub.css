@@ -46,7 +46,7 @@ form {
 }
 
 .scrub-section-body {
-    height: calc(50% + 2rem);
+    height: calc(100% - 5rem);
 }
 
 .scrub-section-body label {
@@ -80,7 +80,7 @@ form {
 }
 
 #stop-words-section .scrub-section-body {
-    height: calc(40%);
+    height: calc(100% - 8.9rem);
 }
 
 
@@ -95,7 +95,7 @@ form {
 }
 
 #special-characters-section .scrub-section-body {
-    height: calc(38%);
+    height: calc(100% - 15rem);
 }
 
 
