@@ -8,11 +8,6 @@ $("document").ready(function(){
 
     // Fade the page content in
     $("main").css("opacity", "1");
-
-    // If the "Active Documents" text is clicked, go to the "Manage" page
-    $("#active-documents-text").click(function(){
-
-    });
 });
 
 
@@ -149,7 +144,10 @@ let walkthrough_button_callback = function(){};
 function toggle_help_section(){
 
     // If the help section is visible, close it
-    if(help_visible) close_help_section();
+    if(help_visible){
+        close_help_section();
+        return;
+    }
 
     // Otherwise, show the help section
     let main_grid = $("#main-grid").css("grid-template-columns", "40rem auto");
