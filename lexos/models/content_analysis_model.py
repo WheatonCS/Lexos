@@ -322,7 +322,6 @@ class ContentAnalysisModel(object):
         """ Performs the analysis.
         :return: The results of the analysis.
         """
-
         dictionaries = self.count()
 
         if self.is_secure():
@@ -332,9 +331,14 @@ class ContentAnalysisModel(object):
 
             # Get the overview results
             dataframe_unsorted = self.to_data_frame()
+            print("ANALYZE: SORT COLUMN", self.content_analysis_option.sort_column)
+            print(self.content_analysis_option.sort_column)
+            print(type(self.content_analysis_option.sort_column))
+            print("ANALYZE: SORT ASCENDING", self.content_analysis_option.sort_ascending)
+            print(type(self.content_analysis_option.sort_ascending))
             dataframe = dataframe_unsorted.sort_values(
-                by=[dataframe_unsorted.columns[self._sort_columns]],
-                ascending=self._sort_ascending)
+                by=[dataframe_unsorted.columns[self.content_analysis_option.sort_column]],
+                ascending=self.content_analysis_option.sort_ascending)
             overview = dataframe.values.tolist()
             overview.insert(0, dataframe.columns.values.tolist())
             overview_csv = dataframe.to_csv()

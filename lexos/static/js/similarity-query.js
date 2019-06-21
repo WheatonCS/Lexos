@@ -125,7 +125,7 @@ function create_similarity_table(response){
         ["Document", "Cosine Similarity"], "", function(selected_head_cell_id){
             sort_column_input.val(selected_head_cell_id);
             start_loading("#table", "#generate-button, #download-button");
-            send_similarity_table_request()
+            send_similarity_table_request();
         }, sort_column_input.val());
 
     // Remove the loading overlay, fade in the table, and enable the

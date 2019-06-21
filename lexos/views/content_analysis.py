@@ -76,6 +76,12 @@ def analyze():
     session["formula"] = ContentAnalysisReceiver() \
         .options_from_front_end().formula
 
+    session["sort_column"] = ContentAnalysisReceiver().options_from_front_end().sort_column
+    session["sort_ascending"] = ContentAnalysisReceiver().options_from_front_end().sort_ascending
+
+    print("VIEW: SORT COLUMN", session["sort_column"])
+    print("VIEW:: SORT ASCENDING", session["sort_ascending"])
+
     # Add the files to analyze
     for file in active_files:
         analysis.add_file(file_name=file.name,
