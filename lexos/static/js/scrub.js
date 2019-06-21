@@ -1,5 +1,8 @@
 $(function(){
 
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
+
      // Display the loading overlay on the "Previews" section
     start_loading("#previews");
 
@@ -334,4 +337,44 @@ function initialize_upload_buttons(names){
             });
         });
     }
+}
+
+
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                element: '#scrubbing-options-section',
+                intro: 'This is the Scrubbing Options section. These are the basic scrubbing functions of Lexos. A few recommended options are already selected.',
+                position: 'top',
+            },
+            {
+                element: '#preview-button',
+                intro: 'You can preview your selected scrubbing options here.',
+                position: 'top',
+            },
+            {
+                element: '#apply-button',
+                intro: 'To make any scrubbing choices permanent to your document(s), click here.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For more advanced scrubbing options, consult our Help section for the Scrub page.',
+                position: 'bottom'
+            },
+            {
+                element: '#navbar-right',
+                intro: 'Once you\'re satisfied with your scrubbed documents, you can move on to other pages in Prepare, Visualize, or Analyze.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    intro.start();
 }

@@ -1,5 +1,8 @@
 $(function(){
 
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
+
     // Display the loading overlays
     start_loading("#graph-container, #table, #corpus-statistics, "+
         "#standard-error-test, #interquartile-range-test");
@@ -231,4 +234,45 @@ function initialize_tooltips(){
 
     // "Cull"
     initialize_cull_tooltips(false);
+}
+
+
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                element: '#left-column',
+                intro: 'These are the settings for statistics. Tokenize and Cull can be used to control how data is compared. ' +
+                    'Generate is here if you wish to change these settings.',
+                position: 'top',
+            },
+            {
+                element: '#graph-section',
+                intro: 'Here the document sizes are graphed. This graph can be downloaded as a static PNG or vector SVG.',
+                position: 'top',
+            },
+            {
+                element: '#right-column',
+                intro: 'Here are the overall statistics for your documents, used by the tool to determine outliers.',
+                position: 'top',
+            },
+            {
+                element: '#documents-section',
+                intro: 'This table displays information concerning term usage across your documents. This table can be downloaded as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the Statistics features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    intro.start();
 }

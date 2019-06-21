@@ -1,5 +1,6 @@
 {% extends "helpers/analyze-template.html" %}
 
+{% block title %}K-Means{% endblock %}
 
 <!-- Head -->
 {% block page_head %}
@@ -22,6 +23,7 @@
     <!-- Options -->
     <div id="k-means-options-section" class="section">
         <h3 class="section-top title">Options</h3>
+
         <div class="section-body">
 
             <!-- Clusters -->
@@ -81,7 +83,7 @@
         <div class="vertical-splitter section-top">
             <h3 class="title">K-Means</h3>
 
-            <div class="right-justified">
+            <div id="k-means-buttons" class="right-justified">
                 <span id="generate-button" class="disabled important-button">Generate</span>
                 <span id="png-button" class="disabled button">PNG</span>
                 <span id="svg-button" class="disabled button">SVG</span>

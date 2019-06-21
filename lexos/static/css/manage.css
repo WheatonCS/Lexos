@@ -3,6 +3,9 @@
     min-width: 130rem;
 }
 
+#manage-tips {
+    position: absolute;
+}
 
 /* Top section */
 #top-section {

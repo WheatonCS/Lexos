@@ -50,7 +50,7 @@ form {
     display: grid;
     height: 100%;
     min-height: 0;
-    grid-template-columns: 1fr .7fr 1fr;
+    grid-template-columns: 1fr .66fr 1.1fr;
     grid-gap: 1rem;
 }
 

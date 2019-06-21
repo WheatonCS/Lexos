@@ -1,5 +1,6 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/base-template.html" %}
 
+{% block title %}Rolling Window{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -97,11 +98,11 @@
     </div>
 
     <!-- Rolling Window -->
-    <div class="section">
+    <div id="rolling-window-display-section" class="section">
 
         <div class="vertical-splitter section-top">
             <h3 class="title">Rolling Window</h3>
-            <div class="right-justified">
+            <div id="rolling-window-buttons" class="right-justified">
                 <span id="generate-button" class="disabled important-button">Generate</span>
                 <span id="png-button" class="disabled button">PNG</span>
                 <span id="svg-button" class="disabled button">SVG</span>

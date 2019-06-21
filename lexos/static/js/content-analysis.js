@@ -1,5 +1,8 @@
 $(function(){
 
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
+
     // If the "Upload" button was clicked...
     $("#dictionaries-section #upload-button").click(function(){
 
@@ -15,12 +18,12 @@ $(function(){
     initialize_button_callbacks();
 
     // If the "Analyze" button is pressed...
-    $("#formula-section #analyze-button").click(function(){
+    $("#formula-section #ca-analyze-button").click(function(){
 
         // Display the loading overlays and disable the "Upload" and "Analyze"
         // buttons
         start_loading("#overview-body, #corpus-body, #documents-body",
-            `#formula-section #analyze-button, #dictionaries-section
+            `#formula-section #ca-analyze-button, #dictionaries-section
             #upload-button, #overview-download-button,
             #corpus-download-button`);
 
@@ -42,7 +45,7 @@ $(function(){
             .fail(function(){
                 error("Failed to perform the analysis.");
                 finish_loading("#results-container", "", `#formula-section
-                    #analyze-button, #dictionaries-section #upload-button`);
+                    #ca-analyze-button, #dictionaries-section #upload-button`);
             });
     });
 
@@ -197,7 +200,7 @@ function display_results(response){
     if(error_message){
         error(error_message);
         finish_loading("#results-container", '', `#formula-section
-            #analyze-button, #dictionaries-section #upload-button`);
+            #ca-analyze-button, #dictionaries-section #upload-button`);
         return;
     }
 
@@ -237,7 +240,7 @@ function display_results(response){
     finish_loading("#overview-body, #corpus-body, #documents-body",
         `#overview-body .lexos-table, #corpus-body .lexos-table,
         #document-tables-grid .lexos-table`, `#formula-section
-        #analyze-button, #dictionaries-section #upload-button,
+        #ca-analyze-button, #dictionaries-section #upload-button,
         #overview-download-button, #corpus-download-button`);
 }
 
@@ -275,4 +278,54 @@ function initialize_tooltips(){
         For a list of all of the words, click the "Download" button.`, true);
     create_tooltip("#documents-tooltip-button", `The top 100 words are
         displayed for each document.`, true);
+}
+
+
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                element: '#dictionaries-section',
+                intro: 'Welcome to Content Analysis! Here you can upload dictionaries for your analysis.',
+                position: 'top',
+            },
+            {
+                element: '#formula-section',
+                intro: 'Here you can create your formula using the calculator buttons. Buttons for each uploaded dictionary will appear on the right.',
+                position: 'top',
+            },
+            {
+                element: '#ca-analyze-button',
+                intro: 'Click here to generate your data. This will take some time...',
+                position: 'top',
+            },
+            {
+                element: '#overview-section',
+                intro: 'This section provides a general overview of your data. You can download this data as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#corpus-section',
+                intro: 'This section displays the most commonly used words along with the dictionary each word belongs to. You can download this data as a CSV file.',
+                position: 'top',
+            },
+            {
+                element: '#documents-section',
+                intro: 'Much like the previous section, although this section contains the data for each individual document rather than the full corpus.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of our Content Analysis features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    intro.start();
 }

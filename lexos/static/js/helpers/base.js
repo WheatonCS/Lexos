@@ -8,11 +8,6 @@ $("document").ready(function(){
 
     // Fade the page content in
     $("main").css("opacity", "1");
-
-    // If the "Active Documents" text is clicked, go to the "Manage" page
-    $("#active-documents-text").click(function(){
-
-    });
 });
 
 
@@ -145,34 +140,31 @@ function remove_dropdown_menus(){
  * Toggles the visibility of the help section.
  */
 let help_visible = false;
+let walkthrough_button_callback = function(){};
 function toggle_help_section(){
-    let main_grid = $("#main-grid");
-    let help_button = $("#help-button");
 
-    // If the help section is visible, close it
+    // If the help section is visible, close it and return
     if(help_visible){
-        main_grid.css("grid-template-columns", "100%");
-        $("#help-section").remove();
-        help_button.removeClass("highlight");
-        help_visible = false;
+        close_help_section();
         return;
     }
 
     // Otherwise, show the help section
-    main_grid.css("grid-template-columns", "40rem auto");
+    let main_grid = $("#main-grid").css("grid-template-columns", "40rem auto");
 
     $(`
-        <div id="help-section">
+        <div id="help-section" class="invisible">
             <div id="help-section-navbar">
-                <span id="help-button-header" class="button help-button">Help</span>
-                <span id="about-button" class="button help-button">About Lexos</span>
-                <span id="glossary-button" class="button help-button">Glossary</span>
+                <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
+                <span id="page-help-button" class="right-justified help-button">Page Help</span>
+                <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
+                <span id="about-button" class="right-justified help-button">About Lexos</span>
             </div>
             <div id="help-section-content"></div>
         </div>
     `).prependTo(main_grid);
 
-    help_button.addClass("highlight");
+    $("#help-button").addClass("highlight");
 
     help_visible = true;
     let help_content_element = $("#help-section-content");
@@ -186,10 +178,27 @@ function toggle_help_section(){
         help_content_element.load("/static/help/about-help.html");
     });
 
-    $("#help-button-header").click(function(){
+    $("#page-help-button").click(function(){
         help_content_element.load("/static/help"+window.location.pathname+"-help.html");
     });
+
+    $("#walkthrough-button").click(function(){
+        close_help_section();
+        walkthrough_button_callback();
+        $(".introjs-prevbutton").text("Back");
+        $(".introjs-nextbutton").text("Next");
+    });
+
+    fade_in("#help-section", ".5s");
 }
+
+function close_help_section(){
+    $("#main-grid").css("grid-template-columns", "100%");
+    $("#help-section").remove();
+    $("#help-button").removeClass("highlight");
+    help_visible = false;
+}
+
 
 /**
  * Update the number of active documents displayed after the "Active

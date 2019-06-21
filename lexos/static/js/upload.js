@@ -22,6 +22,9 @@ $(function(){
 
     // Highlight the drag and drop section when files are dragged over it
     initialize_drag_and_drop_section_highlighting();
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 })
 
 
@@ -39,19 +42,19 @@ function scrape(){
     // Send the scrape request
     send_ajax_request("/upload/scrape", $("#scrape-input").val())
 
-    // Always enable the "Scrape" button
-    .always(function(){ enable("#scrape-button"); })
+        // Always enable the "Scrape" button
+        .always(function(){ enable("#scrape-button"); })
 
-    // If the request was successful, display the uploaded files in the
-    // "Upload List" section.
-    .done(function(response){
-        for(const file_name of response) create_upload_preview(file_name);
-    })
+        // If the request was successful, display the uploaded files in the
+        // "Upload List" section.
+        .done(function(response){
+            for(const file_name of response) create_upload_preview(file_name);
+        })
 
-    // If the request failed, display an error.
-    .fail(function(){
-        error("Scraping failed.");
-    });
+        // If the request failed, display an error.
+        .fail(function(){
+            error("Scraping failed.");
+        });
 }
 
 
@@ -269,4 +272,69 @@ function initialize_drag_and_drop_section_highlighting(){
         drag_counter = 0;
         drag_and_drop_section.removeClass("highlighted");
     });
+}
+
+
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                element: '#lexos-dragon',
+                intro: 'Welcome to Lexos!',
+                position: 'right',
+            },
+            {
+                element: '#upload-section',
+                intro: 'This is the Upload section.',
+                position: 'right'
+            },
+            {
+                element: '#browse-button',
+                intro: 'With the browse button you can select files to upload directly from your computer...',
+                position: 'right'
+            },
+            {
+                element: '#drag-and-drop-section',
+                intro: '...or you can simply drag-and-drop your files here.',
+                position: 'top'
+            },
+            {
+                element: '#scrape-section',
+                intro: 'The Scrape section utilizes URL scraping as a method of uploading files to Lexos.',
+                position: 'bottom'
+            },
+            {
+                element: '#scrape-input',
+                intro: 'You can enter newline-separated URLs here.',
+                position: 'bottom'
+            },
+            {
+                element: '#scrape-button',
+                intro: 'Initialize here.',
+                position: 'bottom'
+            },
+            {
+                element: '#upload-list',
+                intro: 'All uploaded files appear here.',
+                position: 'top'
+            },
+            {
+                element: '#help-button',
+                intro: 'Check our Help section for more advice on the Upload page.',
+                position: 'bottom'
+            },
+            {
+                element: '#manage-button',
+                intro: 'Once you\'ve uploaded some documents, check out the Manage page for the next step of this tutorial!',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    intro.start();
 }

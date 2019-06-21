@@ -1,5 +1,6 @@
 {% extends "helpers/analyze-template.html" %}
 
+{% block title %}Consensus Tree{% endblock %}
 
 <!-- Head -->
 {% block page_head %}
@@ -19,7 +20,7 @@
 {% block options %}
 
     <!-- Options -->
-    <div class="section">
+    <div id="consensus-tree-options-section" class="section">
         <h3 class="section-top title">Options</h3>
         <div class="section-body vertical-splitter">
 
@@ -68,7 +69,7 @@
         <!-- Top -->
         <div class="vertical-splitter section-top">
             <h3 class="title">Consensus Tree</h3>
-            <div class="right-justified">
+            <div id="consensus-tree-buttons" class="right-justified">
                 <span id="generate-button" class="disabled important-button">Generate</span>
                 <span id="download-button" class="disabled button">Download</span>
             </div>

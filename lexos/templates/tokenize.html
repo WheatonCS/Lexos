@@ -1,5 +1,6 @@
 {% extends "helpers/analyze-template.html" %}
 
+{% block title %}Tokenize{% endblock %}
 
 <!-- Head -->
 {% block page_head %}
@@ -20,7 +21,9 @@
     <!-- Orientation -->
     <div id="orientation-section" class="section">
         <div class="vertical-splitter section-top">
-            <h3 class="title">Orientation</h3>
+            <div>
+                <h3 class="title">Orientation</h3>
+            </div>
             <span id="orientation-tooltip-button" class="right-justified tooltip-button">?</span>
         </div>
 
@@ -56,14 +59,14 @@
             </div>
 
             <!-- Sort direction -->
-            <div class="table-top-radio-option">
+            <div id="sort-buttons" class="table-top-radio-option">
                 <h3>Order:</h3>
                 <label><input name="sort-ascending" value="true" type="radio" checked><span></span>Ascending</label>
                 <label><input name="sort-ascending" value="false" type="radio"><span></span>Descending</label>
             </div>
 
             <!-- Download -->
-            <div class="right-justified">
+            <div id="tokenize-buttons" class="right-justified">
                 <span id="generate-button" class="important-button important-button">Generate</span>
                 <span id="download-button" class="disabled button">Download</span>
             </div>

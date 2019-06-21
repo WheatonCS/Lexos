@@ -1,9 +1,3 @@
-/* Main section */
-#main-section {
-    min-width: 120rem;
-}
-
-
 /* Form */
 form {
     grid-template-rows: 45rem 1fr;

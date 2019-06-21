@@ -1,5 +1,8 @@
 $(function(){
 
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
+
     // Display the loading overlay
     start_loading("#consensus-tree-body");
 
@@ -25,12 +28,17 @@ $(function(){
 let image_data;
 function initialize(response){
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#consensus-tree-body", "No Active Documents");
+    // If there are fewer than two active documents, display warning text
+    // and return
+    document_count = Object.entries(parse_json(response)).length;
+    if(document_count <  2){
+        add_text_overlay("#consensus-tree-body", `This Tool Requires at Least
+            Two Active Documents`);
         return;
     }
+
+    // Initialize the legacy form inputs
+    initialize_legacy_inputs(response);
 
     // Create the consensus tree
     create_consensus_tree();
@@ -135,4 +143,54 @@ function initialize_tooltips(){
     // "Iterations"
     create_tooltip("#iterations-tooltip-button", `For 100 iterations, 80% of
         the tokens will be chosen with or without replacement.`);
+}
+
+
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                element: '#consensus-tree-body',
+                intro: 'Welcome to Consensus Tree!',
+                position: 'top',
+            },
+            {
+                element: '#consensus-tree-options-section',
+                intro: 'These settings control how the Consensus Tree is generated. Checking sample with replacement will allow the segments to be used by another iteration.',
+                position: 'top',
+            },
+            {
+                element: '#tokenize-section',
+                intro: 'Tokenize determines how terms are counted when generating data.',
+                position: 'top',
+            },
+            {
+                element: '#normalize-section',
+                intro: 'Normalize determines if and how term totals are weighted.',
+                position: 'top',
+            },
+            {
+                element: '#cull-section',
+                intro: 'Cull limits the number of terms used to generate data, and is optional.',
+                position: 'top',
+            },
+            {
+                element: '#consensus-tree-buttons',
+                intro: 'Here you can generate a new Consensus Tree. You can also choose to download the Consensus Tree as a static PNG.',
+                position: 'top',
+            },
+            {
+                element: '#help-button',
+                intro: 'For a more advanced summary of the Consensus Tree features, check out the Help section.',
+                position: 'bottom'
+            }
+        ]
+    })
+
+    intro.start();
 }
