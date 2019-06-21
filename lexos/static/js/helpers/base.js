@@ -143,7 +143,7 @@ let help_visible = false;
 let walkthrough_button_callback = function(){};
 function toggle_help_section(){
 
-    // If the help section is visible, close it
+    // If the help section is visible, close it and return
     if(help_visible){
         close_help_section();
         return;
@@ -153,7 +153,7 @@ function toggle_help_section(){
     let main_grid = $("#main-grid").css("grid-template-columns", "40rem auto");
 
     $(`
-        <div id="help-section">
+        <div id="help-section" class="invisible">
             <div id="help-section-navbar">
                 <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
                 <span id="page-help-button" class="right-justified help-button">Page Help</span>
@@ -188,6 +188,8 @@ function toggle_help_section(){
         $(".introjs-prevbutton").text("Back");
         $(".introjs-nextbutton").text("Next");
     });
+
+    fade_in("#help-section", ".5s");
 }
 
 function close_help_section(){
