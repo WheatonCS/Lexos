@@ -1,8 +1,7 @@
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Display the loading overlay
     start_loading("#graph-container");
@@ -187,14 +186,14 @@ function initialize_tooltips(){
         those locations.`, true);
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#rolling-window-display-section',
@@ -233,5 +232,6 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

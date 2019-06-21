@@ -1,0 +1,91 @@
+/* General */
+.introjs-disabled {
+    opacity: .5 !important;
+    pointer-events: none !important;
+}
+
+
+/* Overlay */
+.introjs-overlay {
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+}
+
+
+/* Step number */
+.introjs-helperNumberLayer {
+    display: none;
+}
+
+
+/* Highlight box */
+.introjs-helperLayer {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+/* Tooltip */
+.introjs-tooltip {
+    display: grid !important;
+    grid-template-rows: 1fr min-content;
+    grid-gap: 2rem;
+    width: 30rem;
+    max-width: none;
+    padding: 2rem;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+/* Bullets */
+.introjs-bullets {
+    display: none;
+}
+
+
+/* Buttons */
+.introjs-tooltiptext {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.introjs-button,
+.introjs-button:focus,
+.introjs-button:active {
+    display: inline-flex;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    align-items: center;
+    width: max-content;
+    height: 3rem;
+    box-sizing: border-box;
+    margin-top: 0;
+    padding: .9rem 1.5rem 1rem 1.5rem;
+    border-radius: 3rem;
+    border: .2rem solid #FF8447;
+    background-color: #FF8447;
+    background-image: none;
+    text-shadow: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
+}
+
+.introjs-button:hover {
+    color: #FF8447;
+    background-color: #FFF2EA;
+    box-shadow: none;
+    border-color: #FF8447;
+}
+
+.introjs-skipbutton {
+    display: none;
+}
+
+.introjs-button {
+    margin-left: 1rem;
+}

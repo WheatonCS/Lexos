@@ -1,8 +1,7 @@
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Initialize the "Color" button
     initialize_color_button(get_word_cloud_data);
@@ -167,14 +166,14 @@ function create_word_cloud(dataset){
     initialize_svg_link("svg", "#svg-button", "word-cloud.svg");
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-        // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#word-cloud-container',
@@ -208,5 +207,6 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

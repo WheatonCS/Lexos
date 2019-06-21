@@ -1,4 +1,4 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/base-template.html" %}
 
 {% block title %}Rolling Window{% endblock %}
 
@@ -30,7 +30,6 @@
         <!-- Calculation type -->
         <div id="calculation-type-section" class="section">
             <h3 class="section-top title">Calculation Type</h3>
-            <span id="guide-button" class="right-justified" data-step="1" data-intro="Hello, Welcome to Lexos!">What is this?</span>
             <div class="section-body">
 
                 <label><input name="counttype" value="average" type="radio" checked><span></span>Rolling Average</label>

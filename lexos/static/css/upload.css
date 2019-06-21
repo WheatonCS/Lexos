@@ -22,6 +22,7 @@ form {
 }
 
 #browse-button {
+    cursor: pointer;
     width: 20rem;
     height: 6rem;
     margin: 1rem;

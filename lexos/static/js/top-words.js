@@ -1,10 +1,9 @@
 let documents;
 let csv;
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Add the loading overlays
     start_loading("#class-divisions-body, #top-words-body");
@@ -244,14 +243,14 @@ function initialize_tooltips(){
 
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#comparison-method-section',
@@ -285,5 +284,6 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

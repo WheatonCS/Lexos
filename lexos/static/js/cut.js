@@ -1,9 +1,8 @@
 let document_previews;
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
@@ -247,14 +246,14 @@ function initialize_tooltips(){
         contain the Milestone delimiter.`);
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-        // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#cut-mode-section',
@@ -288,5 +287,5 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+    intro.start();
 }

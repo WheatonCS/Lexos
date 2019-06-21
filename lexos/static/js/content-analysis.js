@@ -1,8 +1,7 @@
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // If the "Upload" button was clicked...
     $("#dictionaries-section #upload-button").click(function(){
@@ -243,14 +242,14 @@ function initialize_tooltips(){
         displayed for each document.`, true);
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#dictionaries-section',
@@ -289,5 +288,6 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

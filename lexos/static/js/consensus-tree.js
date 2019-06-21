@@ -1,8 +1,7 @@
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_info();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Display the loading overlay
     start_loading("#consensus-tree-body");
@@ -29,12 +28,17 @@ $(function(){
 let image_data;
 function initialize(response){
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#consensus-tree-body", "No Active Documents");
+    // If there are fewer than two active documents, display warning text
+    // and return
+    document_count = Object.entries(parse_json(response)).length;
+    if(document_count <  2){
+        add_text_overlay("#consensus-tree-body", `This Tool Requires at Least
+            Two Active Documents`);
         return;
     }
+
+    // Initialize the legacy form inputs
+    initialize_legacy_inputs(response);
 
     // Create the consensus tree
     create_consensus_tree();
@@ -141,14 +145,14 @@ function initialize_tooltips(){
         the tokens will be chosen with or without replacement.`);
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_info() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#consensus-tree-body',
@@ -187,5 +191,6 @@ function tool_info() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

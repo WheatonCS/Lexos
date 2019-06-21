@@ -3,10 +3,9 @@ let word_cloud_count;
 let rendered_count;
 
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Initialize the "Color" button
     initialize_color_button(get_multicloud_data);
@@ -214,14 +213,14 @@ function create_word_cloud(id, name, words){
             "#png-button, #svg-button, #generate-button");
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#multicloud',
@@ -255,5 +254,6 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

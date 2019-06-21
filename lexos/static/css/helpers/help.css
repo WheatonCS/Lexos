@@ -6,12 +6,13 @@
 }
 
 #help-section-navbar {
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 2rem;
+    justify-items: center;
     margin-top: 2rem;
     padding: 2rem;
     background-color: #FFFFFF;
-    height: 7rem;
 }
 
 .help-section-title {

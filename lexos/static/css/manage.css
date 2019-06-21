@@ -20,9 +20,6 @@
 
 
 /* Table */
-#table {
-    margin-top: 4rem;
-}
 #table-head {
     display: grid;
     grid-template-columns: 7% 7% 16% 14% 16% 25% 15%;

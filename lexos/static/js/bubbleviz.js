@@ -1,8 +1,7 @@
 $(function(){
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_info();
-    });
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 
     // Initialize the "Color" button
     initialize_color_button(send_word_counts_request);
@@ -152,14 +151,14 @@ function create_bubbleviz(response){
     initialize_svg_link("svg", "#svg-button", "bubbleviz.svg");
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_info() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
                 element: '#bubbleviz',
@@ -193,5 +192,6 @@ function tool_info() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }

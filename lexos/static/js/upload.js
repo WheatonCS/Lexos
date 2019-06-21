@@ -1,12 +1,8 @@
 $(function(){
+
     // Redirect "Browse..." button clicks to the file selection input element
     // which will open an OS file selection window
     $("#browse-button").click(function(){ $("#file-select-input").click(); });
-
-    // If guide button is clicked...
-    $("#guide-button").click(function() {
-        tool_intro();
-    });
 
     // When the user finishes selecting files using the OS file selection
     // window, upload the selected files
@@ -26,6 +22,9 @@ $(function(){
 
     // Highlight the drag and drop section when files are dragged over it
     initialize_drag_and_drop_section_highlighting();
+
+    // If the walkthrough button is clicked, start the walkthrough
+    walkthrough_button_callback = walkthrough;
 })
 
 
@@ -43,19 +42,19 @@ function scrape(){
     // Send the scrape request
     send_ajax_request("/upload/scrape", $("#scrape-input").val())
 
-    // Always enable the "Scrape" button
-    .always(function(){ enable("#scrape-button"); })
+        // Always enable the "Scrape" button
+        .always(function(){ enable("#scrape-button"); })
 
-    // If the request was successful, display the uploaded files in the
-    // "Upload List" section.
-    .done(function(response){
-        for(const file_name of response) create_upload_preview(file_name);
-    })
+        // If the request was successful, display the uploaded files in the
+        // "Upload List" section.
+        .done(function(response){
+            for(const file_name of response) create_upload_preview(file_name);
+        })
 
-    // If the request failed, display an error.
-    .fail(function(){
-        error("Scraping failed.");
-    });
+        // If the request failed, display an error.
+        .fail(function(){
+            error("Scraping failed.");
+        });
 }
 
 
@@ -275,17 +274,17 @@ function initialize_drag_and_drop_section_highlighting(){
     });
 }
 
-/**
- * Initiates a walkthrough of the tool on this page using Intro.js
- */
-function tool_intro() {
-    // Intro Guide Stuff
-    let introguide = introJs();
 
-    introguide.setOptions({
+/**
+ * Initiates a walkthrough of the page.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({
         steps: [
             {
-                element: '#dragon-logo',
+                element: '#lexos-dragon',
                 intro: 'Welcome to Lexos!',
                 position: 'right',
             },
@@ -336,5 +335,6 @@ function tool_intro() {
             }
         ]
     })
-    introguide.start();
+
+    intro.start();
 }
