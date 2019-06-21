@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import regex as re
+import re
 import sys
 import unicodedata
 from typing import List, Dict, Match
@@ -476,9 +476,16 @@ def get_remove_digits(text: str) -> str:
     # unicode digits, this pattern will match:
     # 1) ***
     # 2) ***.***
-    pattern = re.compile(r"([+-]?\p{Nd}+|\p{No}+|\p{Nl}+)|((?<=\p{Nd}|\p{No}|"
-                         r"\p{Nl})[\u0027|\u002C|\u002E|\u00B7|\u02D9|\u066B|"
-                         r"\u066C|\u2396]\p{Nd}+|\p{No}+|\p{Nl}+)", re.UNICODE)
+    unicode_digits = ""
+    for i in range(sys.maxunicode):
+        if unicodedata.category(chr(i)).startswith('N'):
+            unicode_digits = unicode_digits + chr(i)
+
+    pattern = re.compile(r"([+-]?[" + re.escape(unicode_digits) + r"])|((?<="
+                         + re.escape(unicode_digits) +
+                         r")[\u0027|\u002C|\u002E|\u00B7|"
+                         r"\u02D9|\u066B|\u066C|\u2396]["
+                         + re.escape(unicode_digits) + r"]+)", re.UNICODE)
     remove_digits = str(re.sub(pattern, r"", text))
 
     return remove_digits
