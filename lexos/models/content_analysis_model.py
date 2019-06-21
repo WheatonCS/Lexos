@@ -331,13 +331,9 @@ class ContentAnalysisModel(object):
 
             # Get the overview results
             dataframe_unsorted = self.to_data_frame()
-            print("ANALYZE: SORT COLUMN", self.content_analysis_option.sort_column)
-            print(self.content_analysis_option.sort_column)
-            print(type(self.content_analysis_option.sort_column))
-            print("ANALYZE: SORT ASCENDING", self.content_analysis_option.sort_ascending)
-            print(type(self.content_analysis_option.sort_ascending))
             dataframe = dataframe_unsorted.sort_values(
-                by=[dataframe_unsorted.columns[self.content_analysis_option.sort_column]],
+                by=[dataframe_unsorted.columns
+                    [self.content_analysis_option.sort_column]],
                 ascending=self.content_analysis_option.sort_ascending)
             overview = dataframe.values.tolist()
             overview.insert(0, dataframe.columns.values.tolist())

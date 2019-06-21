@@ -20,10 +20,6 @@ class ContentAnalysisOption:
         self.sort_column = sort_column
         self.sort_ascending = sort_ascending
 
-        print("RECEIVER 3: SORT COLUMN", self.sort_column)
-        print("RECEIVER 3: SORT ASCENDING", self.sort_ascending)
-        print("RECEIVER 3: FORMULA", self.formula)
-
 
 class ContentAnalysisReceiver(BaseReceiver):
     """This is the class that receives the options from front end."""
@@ -38,10 +34,6 @@ class ContentAnalysisReceiver(BaseReceiver):
         :return: a ContentAnalysisOption object to hold all the options
         """
 
-        if "sort_column" in self._front_end_data:
-            print("RECEIVER 1: SORT COLUMN", self._front_end_data["sort_column"])
-            print("RECEIVER 1: SORT ASCENDING", self._front_end_data["sort_ascending"])
-
         options = [Option('formula', None),
                    Option('dict_label', None),
                    Option('toggle_all', None),
@@ -53,9 +45,6 @@ class ContentAnalysisReceiver(BaseReceiver):
         for option in options:
             if option.name in self._front_end_data:
                 option.value = self._front_end_data[option.name]
-
-        print("RECEIVER 2: SORT COLUMN", options[6].value)
-        print("RECEIVER 2: SORT ASCENDING", options[7].value)
 
         return ContentAnalysisOption(formula=options[0].value,
                                      dict_label=options[1].value,
