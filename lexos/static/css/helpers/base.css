@@ -507,7 +507,7 @@ label input[type="checkbox"]:checked + span:after {
     overflow-y: auto;
     transform: translate(3rem, 0);
     background-color: #FFFFFF;
-    border: 1rem solid #FF8447;
+    border: 1rem solid #FFDDCC;
 }
 
 .right-edge-tooltip {
@@ -526,6 +526,7 @@ label input[type="checkbox"]:checked + span:after {
     background-color: #F3F3F3;
     border-radius: 50%;
     transition: color .2s, background-color .2s;
+    color: #FF8447;
 }
 
 .tooltip-button:hover,
