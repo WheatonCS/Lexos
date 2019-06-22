@@ -11,6 +11,12 @@ class SimilarityFrontEndOption(NamedTuple):
     # This is the id of the file to be compared
     comp_file_id: int
 
+    # The column to sort by
+    sort_column: int
+
+    # The sort method
+    sort_ascending: bool
+
 
 class SimilarityReceiver(BaseReceiver):
     """This is the class to get the options from front end."""
@@ -26,4 +32,12 @@ class SimilarityReceiver(BaseReceiver):
         """
         comp_file_id = int(self._front_end_data['uploadname'])
 
-        return SimilarityFrontEndOption(comp_file_id=comp_file_id)
+        # Get the selected column
+        sort_column = int(self._front_end_data["sort-column"])
+
+        # Get the sort column
+        sort_ascending = bool(self._front_end_data["sort-ascending"] == "true")
+
+        return SimilarityFrontEndOption(comp_file_id=comp_file_id,
+                                        sort_column=sort_column,
+                                        sort_ascending=sort_ascending)

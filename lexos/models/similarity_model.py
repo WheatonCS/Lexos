@@ -99,7 +99,9 @@ class SimilarityModel(BaseModel):
                                  data=[labels, cos_scores]).transpose()
 
         # Format the dataframe and return it
-        return dataframe.sort_values("Cosine Similarity", ascending=False) \
+        return dataframe.sort_values(
+            by=[dataframe.columns[self._similarity_option.sort_column]],
+            ascending=self._similarity_option.sort_ascending) \
             .round(4)
 
     def get_results(self) -> str:

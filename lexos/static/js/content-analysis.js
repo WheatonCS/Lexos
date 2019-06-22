@@ -30,9 +30,12 @@ $(function(){
         // Remove any existing error messages
         remove_errors();
 
+        console.log($('input[type="radio"][name="sort-ascending"]').val());
+
         // Send a request to analyze the files
         send_ajax_form_request("/content-analysis/analyze",
-            {formula: $("#formula-textarea").val()})
+            {formula: $("#formula-textarea").val(), sort_column: parseInt($('input[name="sort-column"]').val()),
+            sort_ascending: $('input[type="radio"][name="sort-ascending"]:checked').val() === "true"})
 
             // If the request was successful, display the results
             .done(display_results)
@@ -94,6 +97,10 @@ function initialize_button_callbacks(){
             formula_element.val(formula);
         });
     });
+
+    $('input[type="radio"][name="sort-ascending"]').change(function(){
+        regenerate_overview();
+    });
 }
 
 
@@ -152,6 +159,33 @@ function create_upload_previews(response)
         "#dictionaries-section #upload-button");
 }
 
+function regenerate_overview(){
+    // Display the loading overlays and disable the "Upload" and "Analyze"
+    // buttons
+    start_loading("#overview-body, #corpus-body, #documents-body",
+        `#formula-section #analyze-button, #dictionaries-section
+        #upload-button, #overview-download-button,
+        #corpus-download-button`);
+
+    // Remove any existing error messages
+    remove_errors();
+
+    // Send a request to analyze the files
+    send_ajax_form_request("/content-analysis/analyze",
+        {formula: $("#formula-textarea").val(), sort_column: parseInt($('input[name="sort-column"]').val()),
+        sort_ascending: $('input[type="radio"][name="sort-ascending"]:checked').val() === "true"})
+
+        // If the request was successful, display the results
+        .done(display_results)
+
+        // If the request failed, display an error message and remove the
+        // loading overlay
+        .fail(function(){
+            error("Failed to perform the analysis.");
+            finish_loading("#results-container", "", `#formula-section
+                #analyze-button, #dictionaries-section #upload-button`);
+        });
+}
 
 /**
  * Displays the results.
@@ -175,7 +209,11 @@ function display_results(response){
     let head = overview[0];
     let data = overview.splice(1);
 
-    create_table("#overview-body", data, head);
+    let sort_column_input = $('input[name="sort-column"]')
+    create_table("#overview-body", data, head, "", function(selected_head_cell_id){
+            sort_column_input.val(selected_head_cell_id);
+            regenerate_overview();
+        }, sort_column_input.val() );
 
     // Create the corpus table
     create_table("#corpus-body", response["corpus"],

@@ -40,9 +40,16 @@
 <!-- Results -->
 {% block results %}
     <div class="section">
-        <div class="vertical-splitter section-top">
+        <div id="table-top" class="section-top">
             <div>
                 <h3 class="title">Similarity Query</h3>
+            </div>
+
+            <!-- Sort direction -->
+            <div class="table-top-radio-option">
+                <h3>Order: </h3>
+                <label><input name="sort-ascending" value="true" type="radio" checked><span></span>Ascending</label>
+                <label><input name="sort-ascending" value="false" type="radio"><span></span>Descending</label>
             </div>
 
             <div id="sim-query-buttons" class="right-justified">
@@ -60,5 +67,6 @@
 <!-- Hidden elements -->
 {% block hidden_elements %}
     <input id="comparison-document-input" name="uploadname" value="" type="hidden">
+    <input name="sort-column" value="0" type="hidden">
 {% endblock %}
 

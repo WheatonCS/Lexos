@@ -64,6 +64,10 @@ function initialize(response){
 
     // If the "PNG" or "SVG" buttons are pressed, download the graph
     initialize_graph_download_buttons();
+
+    $('input[type="radio"][name="sort-ascending"]').change(function() {
+        regenerate_document_statistics();
+    });
 }
 
 
@@ -87,6 +91,16 @@ function create_statistics(){
         });
 
     // Send a request to get the document statistics
+    regenerate_document_statistics();
+
+    // Create the box plot graph and enable the "Generate" button if all
+    // sections have finished loading
+    create_graph("/statistics/box-plot", function(){ loading_complete_check(); });
+}
+
+
+function regenerate_document_statistics(){
+    start_loading("#table", "#download-button")
     send_ajax_form_request("/statistics/document-statistics")
 
         // Always check if the loading has completed
@@ -101,12 +115,7 @@ function create_statistics(){
             error("Failed to retrieve the document statistics.");
             add_text_overlay("#table", "Loading Failed");
         });
-
-    // Create the box plot graph and enable the "Generate" button if all
-    // sections have finished loading
-    create_graph("/statistics/box-plot", function(){ loading_complete_check(); });
 }
-
 
 /**
  * Create the "Document Statistics" table.
@@ -122,6 +131,7 @@ function create_document_statistics_table(response){
             "Single-Occurrence Terms", "Total Terms", "Vocabulary Density",
             "Distinct Terms"], "", function(selected_head_cell_id){
                 sort_column_input.val(selected_head_cell_id);
+                regenerate_document_statistics();
             }, sort_column_input.val());
 
         // Remove the loading overlay, fade the table in, and enable the

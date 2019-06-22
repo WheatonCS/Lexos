@@ -36,6 +36,8 @@ class ContentAnalysisModel(object):
         self._averages = []
         self._formula = ""
         self._toggle_all = True
+        self._sort_columns = 0
+        self._sort_ascending = True
 
     def add_file(self, file_name: str, label: str, content: str):
         """Add a file to the corpus.
@@ -320,7 +322,6 @@ class ContentAnalysisModel(object):
         """ Performs the analysis.
         :return: The results of the analysis.
         """
-
         dictionaries = self.count()
 
         if self.is_secure():
@@ -329,7 +330,11 @@ class ContentAnalysisModel(object):
             self.generate_averages()
 
             # Get the overview results
-            dataframe = self.to_data_frame()
+            dataframe_unsorted = self.to_data_frame()
+            dataframe = dataframe_unsorted.sort_values(
+                by=[dataframe_unsorted.columns
+                    [self.content_analysis_option.sort_column]],
+                ascending=self.content_analysis_option.sort_ascending)
             overview = dataframe.values.tolist()
             overview.insert(0, dataframe.columns.values.tolist())
             overview_csv = dataframe.to_csv()
