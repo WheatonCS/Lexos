@@ -1,4 +1,4 @@
-"""This is the reciever for the content analysis model."""
+"""This is the receiver for the content analysis model."""
 
 from lexos.receivers.base_receiver import BaseReceiver
 
@@ -40,8 +40,8 @@ class ContentAnalysisReceiver(BaseReceiver):
                    Option('dict_labels', None),
                    Option('active_dicts', None),
                    Option('toggle_all_value', None),
-                   Option('sort_column', None),
-                   Option('sort_ascending', None)]
+                   Option('overview-table-selected-column', None),
+                   Option('overview-table-sort-mode', None)]
         for option in options:
             if option.name in self._front_end_data:
                 option.value = self._front_end_data[option.name]
@@ -52,8 +52,9 @@ class ContentAnalysisReceiver(BaseReceiver):
                                      dict_labels=options[3].value,
                                      active_dicts=options[4].value,
                                      toggle_all_value=options[5].value,
-                                     sort_column=options[6].value,
-                                     sort_ascending=options[7].value)
+                                     sort_column=int(options[6].value),
+                                     sort_ascending=bool(
+                                         options[7].value == "ascending"))
 
 
 class Option(object):

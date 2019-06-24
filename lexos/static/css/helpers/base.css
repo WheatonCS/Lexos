@@ -55,6 +55,7 @@ b {
 *:after {
     user-select: none;
     -moz-user-select: none;
+    -webkit-user-drag: none;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
@@ -289,6 +290,10 @@ input[type="text"].error-highlight {
     border-color: #E62843;
     color:  #E62843;
     background-color: #FFE7E9;
+}
+
+input[type="text"].error-highlight::selection {
+    background-color: #E62843;
 }
 
 span > input[type="text"] {

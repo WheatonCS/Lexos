@@ -1,18 +1,25 @@
+let table;
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
     // Display the loading overlays
-    start_loading("#graph-container, #table, #corpus-statistics, "+
-        "#standard-error-test, #interquartile-range-test");
+    start_loading(`#graph-container, #table, #corpus-statistics,
+        #standard-error-test, #interquartile-range-test`);
+
+    // Initialize the document statistics table
+    table = new Table("statistics", "/statistics/document-statistics",
+        "#table-section", "Document Statistics", validate_analyze_inputs,
+        function(){ loading_complete_check(); }, true, true, false, true,
+        false);
+
+    // Initialize the legacy form inputs and create the statistics
+    get_active_file_ids(initialize, `#graph-container, #table,
+        #corpus-statistics, #standard-error-test, #interquartile-range-test`);
 
     // Initialize the tooltips
     initialize_tooltips();
 
-    // Initialize the legacy form inputs and create the statistics
-    get_active_file_ids(initialize, "#graph-container, #table, "+
-        "#corpus-statistics, #standard-error-test, #interquartile-range-test");
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -20,14 +27,13 @@ $(function(){
  * Initializes the legacy form inputs and creates the statistics.
  * @param {string} response: The response from the "active-file-ids" request.
  */
-let document_statistics_csv;
 function initialize(response){
 
     // Initialize the legacy form inputs. If there are no active documents,
     // display "No Active Documents" text and return
     if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#graph-container, #table, #corpus-statistics, "+
-            "#standard-error-test, #interquartile-range-test",
+        add_text_overlay(`#graph-container, #table, #corpus-statistics,
+            #standard-error-test, #interquartile-range-test`,
             "No Active Documents");
         return;
     }
@@ -48,25 +54,12 @@ function initialize(response){
         remove_errors();
 
         // Display the loading overlays and disable the appropriate buttons
-        start_loading("#graph-container, #table, #corpus-statistics, "+
-            "#standard-error-test, #interquartile-range-test",
-            "#generate-button, #download-button, #png-button, #svg-button");
+        start_loading(`#graph-container, #corpus-statistics,
+            #standard-error-test, #interquartile-range-test`,
+            "#generate-button, #png-button, #svg-button");
 
         // Create the statistics
         create_statistics();
-    });
-
-    // If the "Download" button is pressed, download the document statistics
-    // CSV
-    $("#download-button").click(function(){
-        download(document_statistics_csv, "document-statistics.csv");
-    });
-
-    // If the "PNG" or "SVG" buttons are pressed, download the graph
-    initialize_graph_download_buttons();
-
-    $('input[type="radio"][name="sort-ascending"]').change(function() {
-        regenerate_document_statistics();
     });
 }
 
@@ -85,58 +78,18 @@ function create_statistics(){
         // If the request failed, display an error and "Loading Failed" text
         .fail(function(){
             error("Failed to retrieve the corpus statistics.");
-            add_text_overlay("#corpus-statistics, #standard-error-test, "+
-                "#interquartile-range-test", "Loading Failed");
+            add_text_overlay(`#corpus-statistics, #standard-error-test,
+                #interquartile-range-test`, "Loading Failed");
             loading_complete_check(3);
         });
 
-    // Send a request to get the document statistics
-    regenerate_document_statistics();
+    // Create the document statistics table
+    table.create();
 
     // Create the box plot graph and enable the "Generate" button if all
     // sections have finished loading
-    create_graph("/statistics/box-plot", function(){ loading_complete_check(); });
-}
-
-
-function regenerate_document_statistics(){
-    start_loading("#table", "#download-button")
-    send_ajax_form_request("/statistics/document-statistics")
-
-        // Always check if the loading has completed
-        .always(function(){ loading_complete_check(); })
-
-        // If the request was successful, store the CSV data and create the
-        // table
-        .done(create_document_statistics_table)
-
-        // If the request failed, display an error and "Loading Failed" text
-        .fail(function(){
-            error("Failed to retrieve the document statistics.");
-            add_text_overlay("#table", "Loading Failed");
-        });
-}
-
-/**
- * Create the "Document Statistics" table.
- * @param {string} response: The response from the
- */
-function create_document_statistics_table(response){
-
-        document_statistics_csv = response.csv;
-
-        // Create the table
-        let sort_column_input = $(`input[name="sort-column"]`);
-        create_table("#table", JSON.parse(response.table), ["Name",
-            "Single-Occurrence Terms", "Total Terms", "Vocabulary Density",
-            "Distinct Terms"], "", function(selected_head_cell_id){
-                sort_column_input.val(selected_head_cell_id);
-                regenerate_document_statistics();
-            }, sort_column_input.val());
-
-        // Remove the loading overlay, fade the table in, and enable the
-        // "Download" button
-        finish_loading("#table", ".lexos-table", "#download-button");
+    create_graph("/statistics/box-plot",
+        function(){ loading_complete_check(); });
 }
 
 
@@ -238,41 +191,47 @@ function initialize_tooltips(){
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#left-column',
-                intro: 'These are the settings for statistics. Tokenize and Cull can be used to control how data is compared. ' +
-                    'Generate is here if you wish to change these settings.',
-                position: 'top',
-            },
-            {
-                element: '#graph-section',
-                intro: 'Here the document sizes are graphed. This graph can be downloaded as a static PNG or vector SVG.',
-                position: 'top',
-            },
-            {
-                element: '#right-column',
-                intro: 'Here are the overall statistics for your documents, used by the tool to determine outliers.',
-                position: 'top',
-            },
-            {
-                element: '#documents-section',
-                intro: 'This table displays information concerning term usage across your documents. This table can be downloaded as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Statistics features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to the Statistics page!`,
+            position: "top",
+        },
+        {
+            element: "#left-column",
+            intro: `These are the settings for statistics. Tokenize and Cull
+                can be used to control how data is compared. Generate is here
+                if you wish to change these settings.`,
+            position: "top",
+        },
+        {
+            element: "#graph-section",
+            intro: `Here the document sizes are graphed. This graph can be
+                downloaded as a PNG or SVG.`,
+            position: "top",
+        },
+        {
+            element: "#right-column",
+            intro: `Here are the overall statistics for your documents, used
+                by the tool to determine outliers.`,
+            position: "top",
+        },
+        {
+            element: "#documents-section",
+            intro: `This table displays information concerning term usage
+                across your documents. This table can be downloaded as a CSV
+                file.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Statistics walkthrough!`,
+            position: "top",
+        }
+    ]});
 
     intro.start();
 }

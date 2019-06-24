@@ -140,7 +140,7 @@ function remove_dropdown_menus(){
  * Toggles the visibility of the help section.
  */
 let help_visible = false;
-let walkthrough_button_callback = function(){};
+let walkthrough_callback = null;
 function toggle_help_section(){
 
     // If the help section is visible, close it and return
@@ -149,7 +149,7 @@ function toggle_help_section(){
         return;
     }
 
-    // Otherwise, show the help section
+    // Otherwise, create the help section
     let main_grid = $("#main-grid").css("grid-template-columns", "40rem auto");
 
     $(`
@@ -170,6 +170,7 @@ function toggle_help_section(){
     let help_content_element = $("#help-section-content");
     help_content_element.load("/static/help"+window.location.pathname+"-help.html");
 
+    // Initialize the help section's buttons
     $("#glossary-button").click(function(){
         help_content_element.load("/static/help/glossary-help.html");
     });
@@ -184,19 +185,34 @@ function toggle_help_section(){
 
     $("#walkthrough-button").click(function(){
         close_help_section();
-        walkthrough_button_callback();
+        walkthrough_callback();
         $(".introjs-prevbutton").text("Back");
         $(".introjs-nextbutton").text("Next");
+        $(".introjs-tooltip").css("opacity", "1");
     });
 
+    // Fade in the help section
     fade_in("#help-section", ".5s");
 }
 
+
+/**
+ * Closes the help section.
+ */
 function close_help_section(){
     $("#main-grid").css("grid-template-columns", "100%");
     $("#help-section").remove();
     $("#help-button").removeClass("highlight");
     help_visible = false;
+}
+
+
+/**
+ * Binds the walkthrough callback.
+ * @param {function} walkthrough: The walkthrough callback to bind.
+ */
+function initialize_walkthrough(walkthrough){
+    walkthrough_callback = walkthrough;
 }
 
 

@@ -5,7 +5,7 @@
 
 /* Form */
 form {
-    grid-template-rows: 50rem repeat(3, minmax(39.5rem, auto));
+    grid-template-rows: 50rem 39.2rem 39.2rem minmax(39.2rem, min-content);
     min-height: calc(100% - 4rem);
     height: auto;
 }
@@ -69,7 +69,9 @@ form {
     grid-template-columns: repeat(2, 1fr);
 }
 
-#formula-buttons h3:not(.centerer) {
+#number-pad h3,
+#operations-pad h3,
+#documents-pad .dictionaries h3 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,7 +82,9 @@ form {
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
-#formula-buttons h3:not(.centerer):hover {
+#number-pad h3:hover,
+#operations-pad h3:hover,
+#documents-pad .dictionaries h3:hover {
     color: #47BCFF;
     background-color: #EAF5FF;
     border-color: #47BCFF;
@@ -95,25 +99,20 @@ form {
 
 #document-tables-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(39.5rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(39.4rem, 1fr));
     grid-gap: 1rem;
 }
 
 #document-tables-grid .lexos-table {
-    max-height: 38.4rem;
-    min-height: 25rem;
+    height: 39.2rem;
+    background-color: #F3F3F3;
 }
 
-.lexos-table-head,
-.lexos-table-row {
+#document-tables-grid .lexos-table .button {
+    background-color: #FFFFFF;
+}
+
+#documents-section .lexos-table-head,
+#documents-section .lexos-table-row {
     grid-template-columns: 1fr 1fr 1fr;
-}
-
-#table-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.table-top-radio-option {
-    justify-self: center;
 }

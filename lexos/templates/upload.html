@@ -20,7 +20,10 @@
         <!-- Upload section -->
         <div id="upload-section" class="section">
 
-            <h3 class="section-top title">Upload</h3>
+            <div class="vertical-splitter section-top">
+                <h3 class="title">Upload</h3>
+                <span id="upload-tooltip-button" class="right-justified tooltip-button">?</span>
+            </div>
 
             <div class="borderless-section-body">
                 <span id="browse-button">Browse...</span>
@@ -36,7 +39,10 @@
 
             <div class="vertical-splitter section-top">
                 <h3 class="title">Scrape</h3>
-                <span id="scrape-button" class="right-justified button">Scrape</span>
+                <div class="right-justified">
+                    <span id="scrape-button" class="button">Scrape</span>
+                    <span id="scrape-tooltip-button" class="tooltip-button">?</span>
+                </div>
             </div>
 
             <div class="borderless-section-body">
@@ -48,7 +54,10 @@
     <!-- Upload list -->
     <div id="upload-list" class="section">
 
-        <h3 class="section-top title">Upload List</h3>
+        <div class="vertical-splitter section-top">
+            <h3 class="title">Upload List</h3>
+            <span id="upload-list-tooltip-button" class="right-justified tooltip-button">?</span>
+        </div>
 
         <div class="section-body">
             <div id="no-uploads-text" class="centerer"><h3>No Uploads</h3></div>

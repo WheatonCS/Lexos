@@ -1,6 +1,4 @@
-import json
-
-from flask import session, render_template, Blueprint
+from flask import session, render_template, Blueprint, jsonify
 
 from lexos.managers import session_manager
 from lexos.helpers import constants as constants
@@ -32,17 +30,4 @@ def get_table():
     session_manager.cache_analysis_option()
 
     # Return the generated document term matrix.
-    return json.dumps(TokenizerModel().get_table())
-
-
-@tokenize_blueprint.route("/tokenize/csv", methods=["POST"])
-def download():
-    """Gets the table data in a CSV.
-    :return: The table data in a CSV.
-    """
-
-    # Cache the options.
-    session_manager.cache_analysis_option()
-
-    # Return the table data CSV
-    return TokenizerModel().get_csv()
+    return jsonify(TokenizerModel().get_table())

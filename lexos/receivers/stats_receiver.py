@@ -41,10 +41,12 @@ class StatsReceiver(BaseReceiver):
              for file_id in active_file_ids_string_list if file_id != ""]
 
         # Get the selected column
-        sort_column = int(self._front_end_data["sort-column"])
+        sort_column = int(self._front_end_data[
+            "statistics-table-selected-column"])
 
         # Get the sort column
-        sort_ascending = bool(self._front_end_data["sort-ascending"] == "true")
+        sort_ascending = bool(self._front_end_data[
+            "statistics-table-sort-mode"] == "ascending")
 
         # Return stats front end option.
         return StatsFrontEndOption(active_file_ids=active_file_ids,

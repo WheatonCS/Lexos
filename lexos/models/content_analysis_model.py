@@ -36,8 +36,6 @@ class ContentAnalysisModel(object):
         self._averages = []
         self._formula = ""
         self._toggle_all = True
-        self._sort_columns = 0
-        self._sort_ascending = True
 
     def add_file(self, file_name: str, label: str, content: str):
         """Add a file to the corpus.
@@ -348,13 +346,18 @@ class ContentAnalysisModel(object):
 
             # Get the document results
             document_results = []
+
             for document_result in self.generate_document_results(
                     dictionaries=dictionaries):
+
+                dataframe = pd.DataFrame(
+                    document_result["table"],
+                    columns=["Dictionary", "Phrase", "Count"])
+
                 document_results.append({
                     "name": document_result["name"],
-                    "table": self.get_top_results(pd.DataFrame(
-                        document_result["table"],
-                        columns=["Dictionary", "Phrase", "Count"]))
+                    "data": self.get_top_results(dataframe),
+                    "csv": dataframe.to_csv()
                 })
 
         else:

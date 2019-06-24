@@ -22,7 +22,8 @@
 /* Table */
 #table-head {
     display: grid;
-    grid-template-columns: 7% 7% 16% 14% 16% 25% 15%;
+    grid-template-columns: 7% 7% 16% 14% 16% 25% 12% 3%;
+    align-items: center;
     background-color: #FFFFFF;
     height: 5rem;
 }

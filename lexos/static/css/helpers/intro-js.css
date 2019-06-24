@@ -36,6 +36,8 @@
     padding: 2rem;
     border-radius: 0;
     box-shadow: none;
+    opacity: 0;
+    transition: opacity .5s;
 }
 
 

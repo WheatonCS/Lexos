@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, session
+from flask import render_template, Blueprint, session, jsonify
 
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
@@ -35,4 +35,4 @@ def get_table() -> str:
     session_manager.cache_sim_options()
 
     # Return the table data
-    return SimilarityModel().get_results()
+    return jsonify(SimilarityModel().get_results())

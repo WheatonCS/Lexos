@@ -20,6 +20,7 @@ form {
 .lexos-table {
     max-height: 34.2rem;
     min-height: 25rem;
+    background-color: #F3F3F3;
 }
 
 .lexos-table-row {

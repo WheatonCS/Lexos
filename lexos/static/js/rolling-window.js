@@ -1,13 +1,7 @@
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
     // Display the loading overlay
     start_loading("#graph-container");
-
-    // Initialize the tooltips
-    initialize_tooltips();
 
     // If the "Calculation Type" is changed, set the appropriate "Search
     // Terms" input
@@ -21,6 +15,12 @@ $(function(){
     // Check that there is exactly one document active and display the
     // appropriate text on the "Rolling Window" section
     get_active_file_ids(single_active_document_check, "#graph-container");
+
+    // Initialize the tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -188,50 +188,52 @@ function initialize_tooltips(){
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#rolling-window-display-section',
-                intro: 'Welcome to Rolling Window! This tool requires both a single active document and a few required settings to create the graph.',
-                position: 'top',
-            },
-            {
-                element: '#calculation-type-section',
-                intro: 'Here you can choose how the data is graphed.',
-                position: 'top',
-            },
-            {
-                element: '#search-terms-section',
-                intro: 'Choose what type of search you will make and enter the terms here.',
-                position: 'top',
-            },
-            {
-                element: '#window-section',
-                intro: 'Set the size of your window here.',
-                position: 'top',
-            },
-            {
-                element: '#display-section',
-                intro: 'These settings are optional. Checking any of these boxes will add the feature to the graph.',
-                position: 'top',
-            },
-            {
-                element: '#rolling-window-buttons',
-                intro: 'Generate your graph here. You can also choose to download your graph as a static PNG or vector SVG. Additionally, the data of your graph can be downloaded as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Rolling Window features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Rolling Window! This tool requires both a
+                single active document and a few required settings to create
+                the graph.`,
+            position: "top",
+        },
+        {
+            element: "#calculation-type-section",
+            intro: `Here you can choose how the data is graphed.`,
+            position: "top",
+        },
+        {
+            element: "#search-terms-section",
+            intro: `Choose what type of search you will make and enter the
+                terms here.`,
+            position: "top",
+        },
+        {
+            element: "#window-section",
+            intro: `Set the size of your window here.`,
+            position: "top",
+        },
+        {
+            element: "#display-section",
+            intro: `These settings are optional. Checking any of these boxes
+                will add the feature to the graph.`,
+            position: "top",
+        },
+        {
+            element: "#rolling-window-buttons",
+            intro: `Generate your graph here. You can also choose to download
+                your graph as a static PNG or vector SVG. Additionally, the
+                data of your graph can be downloaded as a CSV file.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Rolling Window walkthrough!`,
+            position: "top",
+        }
+    ]});
 
     intro.start();
 }

@@ -40,7 +40,7 @@ form {
 }
 
 #drag-and-drop-section {
-    height: calc(100% - 8rem);
+    height: calc(100% - 7rem);
     width: 100%;
     color: #757575;
     background-color: #F3F3F3;

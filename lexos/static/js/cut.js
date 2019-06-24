@@ -1,14 +1,8 @@
 let document_previews;
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
-
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_tooltips();
 
     // Send a request for the document preview data
     $.ajax({type: "GET", url: "document-previews"})
@@ -34,6 +28,12 @@ $(function(){
     // Load the appropriate content for the "Cut Settings" section when the
     // "Cut Mode" setting is changed
     $("#cut-mode-section input").change(load_cut_settings_section);
+
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -248,44 +248,53 @@ function initialize_tooltips(){
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#cut-mode-section',
-                intro: 'This is the Cut Mode section. Here you can specify how you would like to cut up your documents.',
-                position: 'top',
-            },
-            {
-                element: '#cut-settings-section',
-                intro: 'Based on your selection in the Cut Mode section, there are additional settings to fill out before you can initiate a cut.',
-                position: 'top',
-            },
-            {
-                element: '#preview-button',
-                intro: 'Similar to Scrub, you can preview your changes without saving them here.',
-                position: 'top',
-            },
-            {
-                element: '#apply-button',
-                intro: 'Unlike in Scrub, Apply works by creating new documents based on your cutting parameters. The original document is kept intact, but is deselected.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more in-depth discussion of cutting features, visit the Help section of the Cut page.',
-                position: 'top',
-            },
-            {
-                element: '#navbar-right',
-                intro: 'Once you\'re satisfied with your cut documents, you can move on to other pages in Prepare, Visualize, or Analyze.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to the Cut page!`,
+            position: "top",
+        },
+        {
+            element: "#cut-mode-section",
+            intro: `This is the Cut Mode section. Here you can specify how you
+                would like to cut up your documents.`,
+            position: "top",
+        },
+        {
+            element: "#cut-settings-section",
+            intro: `Based on your selection in the Cut Mode section, there are
+                additional settings to fill out before you can initiate a
+                cut.`,
+            position: "top",
+        },
+        {
+            element: "#preview-button",
+            intro: `Similar to Scrub, you can preview your changes without
+                saving them here.`,
+            position: "top",
+        },
+        {
+            element: "#apply-button",
+            intro: `Unlike in Scrub, Apply works by creating new documents
+                based on your cutting parameters. The original document is
+                kept intact, but is deselected.`,
+            position: "top",
+        },
+        {
+            element: "#navbar-right",
+            intro: `Once you're satisfied with your cut documents, you can
+                move on to other pages in Prepare, Visualize, or Analyze.`,
+            position: "bottom"
+        },
+        {
+            intro: `This concludes the Cut walkthrough!`,
+            position: "top",
+        }
+    ]});
+
     intro.start();
 }

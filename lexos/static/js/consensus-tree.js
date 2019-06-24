@@ -1,15 +1,7 @@
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
     // Display the loading overlay
     start_loading("#consensus-tree-body");
-
-    // Initialize the tooltips for the "Options", "Tokenize", "Normalize",
-    // and "Cull" sections
-    initialize_analyze_tooltips();
-    initialize_tooltips();
 
     // Register option popup creation callbacks for the "Distance Metric" and
     // "Linkage Method" buttons
@@ -18,6 +10,13 @@ $(function(){
     // Initialize the legacy form inputs and create the consensus tree,
     // and initialize the "Generate" and "Download" buttons
     get_active_file_ids(initialize, "#consensus-tree-body");
+
+    // Initialize the tooltips
+    initialize_analyze_tooltips();
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -147,50 +146,51 @@ function initialize_tooltips(){
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#consensus-tree-body',
-                intro: 'Welcome to Consensus Tree!',
-                position: 'top',
-            },
-            {
-                element: '#consensus-tree-options-section',
-                intro: 'These settings control how the Consensus Tree is generated. Checking sample with replacement will allow the segments to be used by another iteration.',
-                position: 'top',
-            },
-            {
-                element: '#tokenize-section',
-                intro: 'Tokenize determines how terms are counted when generating data.',
-                position: 'top',
-            },
-            {
-                element: '#normalize-section',
-                intro: 'Normalize determines if and how term totals are weighted.',
-                position: 'top',
-            },
-            {
-                element: '#cull-section',
-                intro: 'Cull limits the number of terms used to generate data, and is optional.',
-                position: 'top',
-            },
-            {
-                element: '#consensus-tree-buttons',
-                intro: 'Here you can generate a new Consensus Tree. You can also choose to download the Consensus Tree as a static PNG.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Consensus Tree features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Consensus Tree!`,
+            position: "top",
+        },
+        {
+            element: "#consensus-tree-options-section",
+            intro: `These settings control how the Consensus Tree is
+                generated. Checking sample with replacement will allow the
+                segments to be used by another iteration.`,
+            position: "top",
+        },
+        {
+            element: "#tokenize-section",
+            intro: `Tokenize determines how terms are counted when generating
+                data.`,
+            position: "top",
+        },
+        {
+            element: "#normalize-section",
+            intro: `Normalize determines if and how term totals are weighted.`,
+            position: "top",
+        },
+        {
+            element: "#cull-section",
+            intro: `Cull limits the number of terms used to generate data, and
+                is optional.`,
+            position: "top",
+        },
+        {
+            element: "#consensus-tree-buttons",
+            intro: `Here you can generate a new Consensus Tree. You can also
+                choose to download the Consensus Tree as a static PNG.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Consensus Tree walkthrough!`,
+            position: "top",
+        }
+    ]});
 
     intro.start();
 }

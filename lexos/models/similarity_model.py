@@ -104,12 +104,15 @@ class SimilarityModel(BaseModel):
             ascending=self._similarity_option.sort_ascending) \
             .round(4)
 
-    def get_results(self) -> str:
+    def get_results(self) -> dict:
         """ Gets the similarity query results.
         :return: The similarity query results.
         """
 
         similarity_query = self._get_similarity_query()
 
-        return jsonify({"table": similarity_query.to_json(orient="values"),
-                        "csv": similarity_query.to_csv()})
+        return {
+            "similarity-table-head": ["Document", "Cosine Similarity"],
+            "similarity-table-body": similarity_query.values.tolist(),
+            "similarity-table-csv": similarity_query.to_csv()
+        }

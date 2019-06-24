@@ -1,15 +1,7 @@
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
     // Display the loading overlay on the "Dendrogram" section
     start_loading("#graph-container");
-
-    // Initialize the tooltips for the "Options", "Tokenize", "Normalize",
-    // and "Cull" sections
-    initialize_analyze_tooltips();
-    initialize_tooltips();
 
     // Register option popup creation callbacks for the "Distance Metric" and
     // "Linkage Method" buttons
@@ -24,6 +16,13 @@ $(function(){
 
     // Initialize the legacy form inputs and create the dendrogram
     get_active_file_ids(initialize, "#graph-container");
+
+    // Initialize the tooltips
+    initialize_analyze_tooltips();
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -93,50 +92,51 @@ function initialize_tooltips(){
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#graph-container',
-                intro: 'Welcome to Dendrogram!',
-                position: 'top',
-            },
-            {
-                element: '#dendrogram-options-section',
-                intro: 'These settings control how the Dendrogram is generated. Orientation changes which way the graph is displayed.',
-                position: 'top',
-            },
-            {
-                element: '#tokenize-section',
-                intro: 'Tokenize determines how terms are counted when generating data.',
-                position: 'top',
-            },
-            {
-                element: '#normalize-section',
-                intro: 'Normalize determines if and how term totals are weighted.',
-                position: 'top',
-            },
-            {
-                element: '#cull-section',
-                intro: 'Cull limits the number of terms used to generate data, and is optional.',
-                position: 'top',
-            },
-            {
-                element: '#dendrogram-buttons',
-                intro: 'Here you can generate a new Dendrogram. You can also choose to download the Dendrogram as a static PNG or a vector SVG.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of the Dendrogram features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Dendrogram!`,
+            position: "top",
+        },
+        {
+            element: "#dendrogram-options-section",
+            intro: `These settings control how the Dendrogram is generated.
+                Orientation changes which way the graph is displayed.`,
+            position: "top",
+        },
+        {
+            element: "#tokenize-section",
+            intro: `Tokenize determines how terms are counted when generating
+                data.`,
+            position: "top",
+        },
+        {
+            element: "#normalize-section",
+            intro: `Normalize determines if and how term totals are weighted.`,
+            position: "top",
+        },
+        {
+            element: "#cull-section",
+            intro: `Cull limits the number of terms used to generate data, and
+                is optional.`,
+            position: "top",
+        },
+        {
+            element: "#dendrogram-buttons",
+            intro: `Here you can generate a new Dendrogram. You can also
+                choose to download the Dendrogram as a static PNG or a vector
+                SVG.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Dendrogram walkthrough!`,
+            position: "top",
+        }
+    ]});
 
-    intro.start();;
+    intro.start();
 }

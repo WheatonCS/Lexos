@@ -35,7 +35,7 @@
 
             <!-- Generate -->
             <div class="section">
-                <span id="generate-button" class="disabled important-button">Generate</span>
+                <span id="generate-button" class="disabled important-button">Generate All</span>
             </div>
 
             <!-- Tokenize -->
@@ -126,26 +126,7 @@
     </div>
 
     <!-- Document statistics -->
-    <div id="documents-section" class="section">
-
-        <div id="table-top" class="section-top">
-
-            <!-- Title -->
-            <h3 class="title">Document Statistics</h3>
-
-            <!-- Sort direction -->
-            <div class="table-top-radio-option">
-                <h3>Order: </h3>
-                <label><input name="sort-ascending" value="true" type="radio" checked><span></span>Ascending</label>
-                <label><input name="sort-ascending" value="false" type="radio"><span></span>Descending</label>
-            </div>
-
-            <!-- Download -->
-            <a id="download-button" class="right-justified disabled button">Download</a>
-        </div>
-
-        <div id="table" class="borderless-section-body"></div>
-    </div>
+    <div id="table-section" class="section"></div>
 
     <!-- Hidden elements -->
     <input name="csvdelimiter" value="comma" type="hidden">

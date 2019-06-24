@@ -129,10 +129,15 @@ class TokenizerModel(BaseModel):
         ) if self._front_end_option.sort_column != 0 \
             else dtm.sort_index(ascending=self._front_end_option.sort_method)
 
+        # Calculate the number of pages
+        pages = dtm.shape[0] // self._front_end_option.length
+        if dtm.shape[0] % self._front_end_option.length != 0 or pages == 0:
+            pages += 1
+
         # Slice the desired portion of the DTM
-        data_start = self._front_end_option.start
         data_length = self._front_end_option.length
-        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
+        data_start = (min(self._front_end_option.start, pages)-1)*data_length
+        required_dtm = dtm_sorted.iloc[data_start: data_start+data_length]
 
         # Convert the data to a list of lists
         data = required_dtm.values.tolist()
@@ -141,16 +146,14 @@ class TokenizerModel(BaseModel):
         for index, value in enumerate(required_dtm.index):
             data[index].insert(0, value)
 
-        # Calculate the number of pages
-        pages = dtm.shape[0] // self._front_end_option.length
-        if dtm.shape[0] % self._front_end_option.length != 0 or pages == 0:
-            pages += 1
-
         # Return the JSON data
+        head = self._get_file_col_dtm().columns.values.tolist()
+        head.insert(0, "Term")
         return {
-            "pages": pages,
-            "head": self._get_file_col_dtm().columns.values.tolist(),
-            "data": data
+            "tokenizer-table-page-count": pages,
+            "tokenizer-table-head": head,
+            "tokenizer-table-body": data,
+            "tokenizer-table-csv": dtm_sorted.to_csv()
         }
 
     def get_csv(self) -> str:
