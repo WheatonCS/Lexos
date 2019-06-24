@@ -50,7 +50,7 @@ function apply_theme_css(){
     let css_element = $(`<link id="theme">`)
         .appendTo("head")
         .attr({type: "text/css", rel: "stylesheet",
-            href: `static/css/Themes/${theme}.css`});
+            href: `static/css/themes/${theme}.css`});
 
     // When the theme CSS element is loaded, fade in the page
     css_element[0].onload = function(){
