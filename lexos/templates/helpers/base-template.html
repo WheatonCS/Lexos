@@ -34,7 +34,9 @@
     <!-- Navbar -->
     <div id="navbar">
         <div id="navbar-left">
-            <img id="lexos-dragon" src="static/images/Lexos_Dragon_Prime_closed.png">
+            <img id="lexos-dragon" src="static/images/Lexos_Dragon_Prime_closed.png"
+                 onmouseover="this.src='static/images/Lexos_Dragon_Prime_open.png';"
+                 onmouseout="this.src='static/images/Lexos_Dragon_Prime_closed.png';">
             <h1>{L}exos</h1>
             <i><h1 id="page-title">{% block title %}{% endblock %}</h1></i>
         </div>
