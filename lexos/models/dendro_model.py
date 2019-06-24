@@ -1,13 +1,15 @@
 """This is a model to produce dendrograms of the dtm."""
 
 import math
+from typing import NamedTuple, Optional
+
 import pandas as pd
 import plotly.figure_factory as ff
-from typing import NamedTuple, Optional
-from scipy.spatial.distance import pdist
-from scipy.cluster.hierarchy import linkage
-from plotly.offline import plot
 from plotly.graph_objs.graph_objs import Figure, Scatter
+from plotly.offline import plot
+from scipy.cluster.hierarchy import linkage
+from scipy.spatial.distance import pdist
+
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
 from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
@@ -208,7 +210,6 @@ class DendrogramModel(BaseModel):
 
         :return: A HTML formatted div for plotly.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

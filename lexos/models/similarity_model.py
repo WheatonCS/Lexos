@@ -15,6 +15,7 @@ from lexos.receivers.similarity_receiver import SimilarityFrontEndOption, \
 
 class SimilarityTestOption(NamedTuple):
     """A typed tuple to hold topword test options."""
+
     doc_term_matrix: pd.DataFrame
     front_end_option: SimilarityFrontEndOption
     id_temp_label_map: IdTempLabelMap
