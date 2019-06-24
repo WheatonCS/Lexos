@@ -4,7 +4,6 @@ from typing import NamedTuple
 
 import pandas as pd
 from scipy.spatial.distance import cosine
-from flask import jsonify
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel

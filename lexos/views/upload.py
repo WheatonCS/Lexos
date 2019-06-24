@@ -3,7 +3,7 @@ import requests
 
 from urllib.parse import unquote
 
-from flask import request, session, render_template, Blueprint, jsonify
+from flask import request, render_template, Blueprint, jsonify
 
 from lexos.helpers import constants
 from lexos.managers import session_manager, utility

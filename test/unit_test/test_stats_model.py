@@ -25,7 +25,7 @@ test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_document_statistics()
 # noinspection PyProtectedMember
 test_box_plot_result_one = test_stats_model_one._get_box_plot_object()
-test_pandas_one = pd.read_json(test_file_result_one["table"])
+test_pandas_one = pd.DataFrame(test_file_result_one["statistics-table-body"])
 # ------------------------------------------------------------------
 
 # ------------------------ Second test suite -----------------------
@@ -50,7 +50,7 @@ test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
 test_file_result_two = test_stats_model_two.get_document_statistics()
 test_box_plot_result_two = test_stats_model_two.get_box_plot()
-test_pandas_two = pd.read_json(test_file_result_two["table"])
+test_pandas_two = pd.DataFrame(test_file_result_two["statistics-table-body"])
 # ------------------------------------------------------------------
 
 # ------------------- test suite for anomaly test ------------------
@@ -75,7 +75,8 @@ test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
 test_file_result_anomaly = test_stats_model_anomaly.get_document_statistics()
 test_box_plot_anomaly = test_stats_model_anomaly.get_box_plot()
-test_pandas_anomaly = pd.read_json(test_file_result_anomaly["table"])
+test_pandas_anomaly = pd.DataFrame(
+    test_file_result_anomaly["statistics-table-body"])
 
 
 # ------------------------------------------------------------------

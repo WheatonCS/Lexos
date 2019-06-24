@@ -268,13 +268,7 @@ def test_analyze():
     test.add_file(file_name="file1", label='file1', content='test')
     test.add_dictionary(file_name="dict1.txt", label="dict1", content="test")
     test.add_dictionary(file_name="dict2.txt", label="dict2", content="test2")
-    result_table, csv_results, results_corpus, corpus_csv, doc_results, \
-        formula_errors = test.analyze()
-    assert result_table == ""
-    assert isinstance(formula_errors, str)
-    test.test_option = TestOptions(formula="[dict1]")
-    test.save_formula()
-    result_table, csv_results, results_corpus, corpus_csv, doc_results, \
-        formula_errors = test.analyze()
-    # assert result_table == test.to_html()
-    assert formula_errors == ""
+    overview_results, overview_csv, corpus_results, corpus_csv, \
+        document_results, errors = test.analyze()
+    assert overview_results == ""
+    assert isinstance(errors, str)
