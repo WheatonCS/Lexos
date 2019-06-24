@@ -99,15 +99,20 @@ class SimilarityModel(BaseModel):
                                  data=[labels, cos_scores]).transpose()
 
         # Format the dataframe and return it
-        return dataframe.sort_values("Cosine Similarity", ascending=False) \
+        return dataframe.sort_values(
+            by=[dataframe.columns[self._similarity_option.sort_column]],
+            ascending=self._similarity_option.sort_ascending) \
             .round(4)
 
-    def get_results(self) -> str:
+    def get_results(self) -> dict:
         """ Gets the similarity query results.
         :return: The similarity query results.
         """
 
         similarity_query = self._get_similarity_query()
 
-        return jsonify({"table": similarity_query.to_json(orient="values"),
-                        "csv": similarity_query.to_csv()})
+        return {
+            "similarity-table-head": ["Document", "Cosine Similarity"],
+            "similarity-table-body": similarity_query.values.tolist(),
+            "similarity-table-csv": similarity_query.to_csv()
+        }

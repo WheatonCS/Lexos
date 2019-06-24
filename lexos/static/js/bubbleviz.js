@@ -1,8 +1,5 @@
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
     // Initialize the "Color" button
     initialize_color_button(send_word_counts_request);
 
@@ -11,6 +8,9 @@ $(function(){
 
     // If the "Generate" button is pressed, recreate the bubbleviz
     $("#generate-button").click(send_word_counts_request);
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -153,45 +153,45 @@ function create_bubbleviz(response){
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#bubbleviz',
-                intro: 'Here is your Bubbleviz.',
-                position: 'top',
-            },
-            {
-                element: '#visualize-font',
-                intro: 'You can change the font-style of your Bubbleviz here (provided your computer has access to the font).',
-                position: 'top',
-            },
-            {
-                element: '#visualize-term-count',
-                intro: 'You can change the amount of words displayed in your Bubbleviz here.',
-                position: 'top',
-            },
-            {
-                element: '#visualize-color',
-                intro: 'You can choose from a variety of color themes from the dropdown menu here. Click "OK" to generate.',
-                position: 'top',
-            },
-            {
-                element: '#visualize-buttons',
-                intro: 'You can generate a new Bubbleviz at anytime here. You can also choose to download a static PNG or vector SVG.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For more about Bubbleviz, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Bubbleviz!`,
+            position: "top",
+        },
+        {
+            element: "#visualize-font",
+            intro: `You can change the font-style of your Bubbleviz here,
+                provided your computer has access to the font.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-term-count",
+            intro: `You can change the amount of words displayed in your
+                Bubbleviz here.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-color",
+            intro: `You can choose from a variety of color themes from the
+                dropdown menu here. Click "OK" to generate.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-buttons",
+            intro: `You can generate a new Bubbleviz at any time here. You can
+                also choose to download a static PNG or vector SVG.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Bubbleviz walkthrough!`,
+            position: "top",
+        }
+    ]});
 
     intro.start();
 }

@@ -27,18 +27,20 @@ class TokenizerReceiver(BaseReceiver):
 
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
+
         # This orientation option must always exist.
         orientation = self._front_end_data["orientation"]
 
         # This exception is here because when header is requested, values
         # above related to data table drawing are not passed in.
         try:
-            start = int(self._front_end_data["start"])
-            search = self._front_end_data["search-term"]
-            length = int(self._front_end_data["length"])
-            sort_method = True if self._front_end_data["sort-ascending"] \
-                == "true" else False
-            sort_column = int(self._front_end_data["sort-column"])
+            start = int(self._front_end_data["tokenizer-table-page-number"])
+            search = self._front_end_data["tokenizer-table-search-input"]
+            length = int(self._front_end_data["tokenizer-table-row-count"])
+            sort_method =  bool(self._front_end_data[
+                "tokenizer-table-sort-mode"] == "ascending")
+            sort_column = int(self._front_end_data[
+                "tokenizer-table-selected-column"])
 
         except KeyError:
             start = None

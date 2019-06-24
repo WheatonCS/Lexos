@@ -147,7 +147,7 @@ function start_loading(query, disable_query = ""){
         element.empty();
 
         let loading_overlay_element = $(`
-            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity .5s">
+            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity .2s">
                 <h3>Loading</h3>
             </div>
         `).appendTo(element);

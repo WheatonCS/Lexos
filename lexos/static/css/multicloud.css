@@ -24,7 +24,7 @@
 .word-cloud-wrapper {
     width: 46rem;
     height: 50rem;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
     overflow: hidden;
 }
 
@@ -39,9 +39,9 @@
 }
 
 .word-cloud-wrapper .button {
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
 }
 
 .word-cloud-wrapper .button:hover {
-    background-color: #EAF5FF;
+    background-color: var(--highlight-color-light);
 }

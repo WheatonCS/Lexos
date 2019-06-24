@@ -22,7 +22,7 @@
 
 .preview {
     overflow-wrap: break-word;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
     margin-bottom: 1rem;
     padding: 1rem;
 }
@@ -33,6 +33,6 @@
 
 .preview-name {
     display: block;
-    color: #47BCFF;
+    color: var(--highlight-color);
     margin-bottom: 1rem;
 }

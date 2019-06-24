@@ -256,8 +256,13 @@ class StatsModel(BaseModel):
             ascending=self._stats_option.sort_ascending
         )
 
-        return {"table": sorted_result.to_json(orient="values"),
-                "csv": sorted_result.to_csv()}
+        return {
+            "statistics-table-head":
+                ["Name", "Single-Occurrence Terms", "Total Terms",
+                 "Vocabulary Density", "Distinct Terms"],
+            "statistics-table-body": sorted_result.values.tolist(),
+            "statistics-table-csv": sorted_result.to_csv()
+        }
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.

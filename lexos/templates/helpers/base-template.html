@@ -18,9 +18,11 @@
     <!-- Core Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
+    <script type="text/javascript" src="static/js/helpers/utility.js"></script>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/error.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/help.css"/>
-    <script type="text/javascript" src="static/js/helpers/utility.js"></script>
 
     {% block head %}{% endblock %}
 </head>
@@ -41,16 +43,16 @@
             <a id="upload-button" href="/upload">Upload</a>
             <a id="manage-button" href="/manage">Manage</a>
 
-            <h3 id="prepare-button" class="navbar-button selectable">Prepare</h3>
-            <h3 id="visualize-button" class="navbar-button selectable">Visualize</h3>
-            <h3 id="analyze-button" class="navbar-button selectable">Analyze</h3>
+            <h3 id="prepare-button" class="navbar-button clickable-text">Prepare</h3>
+            <h3 id="visualize-button" class="navbar-button clickable-text">Visualize</h3>
+            <h3 id="analyze-button" class="navbar-button clickable-text">Analyze</h3>
 
             <h3>|</h3>
             <a href="/download-workspace">Save</a>
             <a href="/reset">Reset</a>
 
             <h3>|</h3>
-            <h3 id="help-button" class="help-highlight">Help</h3>
+            <h3 id="help-button">Help</h3>
         </div>
     </div>
 

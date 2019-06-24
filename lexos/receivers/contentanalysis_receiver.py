@@ -1,4 +1,4 @@
-"""This is the reciever for the content analysis model."""
+"""This is the receiver for the content analysis model."""
 
 from lexos.receivers.base_receiver import BaseReceiver
 
@@ -8,7 +8,8 @@ class ContentAnalysisOption:
 
     def __init__(self, formula: str, dict_label: str, toggle_all: bool,
                  dict_labels: [str], active_dicts: [bool],
-                 toggle_all_value: bool):
+                 toggle_all_value: bool, sort_column: int,
+                 sort_ascending: bool):
         """Assign content analysis options."""
         self.formula = formula
         self.dict_label = dict_label
@@ -16,6 +17,8 @@ class ContentAnalysisOption:
         self.dict_labels = dict_labels
         self.active_dicts = active_dicts
         self.toggle_all_value = toggle_all_value
+        self.sort_column = sort_column
+        self.sort_ascending = sort_ascending
 
 
 class ContentAnalysisReceiver(BaseReceiver):
@@ -30,12 +33,15 @@ class ContentAnalysisReceiver(BaseReceiver):
 
         :return: a ContentAnalysisOption object to hold all the options
         """
+
         options = [Option('formula', None),
                    Option('dict_label', None),
                    Option('toggle_all', None),
                    Option('dict_labels', None),
                    Option('active_dicts', None),
-                   Option('toggle_all_value', None)]
+                   Option('toggle_all_value', None),
+                   Option('overview-table-selected-column', None),
+                   Option('overview-table-sort-mode', None)]
         for option in options:
             if option.name in self._front_end_data:
                 option.value = self._front_end_data[option.name]
@@ -45,7 +51,10 @@ class ContentAnalysisReceiver(BaseReceiver):
                                      toggle_all=options[2].value,
                                      dict_labels=options[3].value,
                                      active_dicts=options[4].value,
-                                     toggle_all_value=options[5].value)
+                                     toggle_all_value=options[5].value,
+                                     sort_column=int(options[6].value),
+                                     sort_ascending=bool(
+                                         options[7].value == "ascending"))
 
 
 class Option(object):

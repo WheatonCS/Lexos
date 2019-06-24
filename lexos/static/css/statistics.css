@@ -36,21 +36,6 @@ form {
 }
 
 
-/* Table */
-#table {
-    height: calc(100% - 5rem);
-}
-
-#table-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.table-top-radio-option {
-    justify-self: center;
-}
-
-
 /* Hidden elements */
 #document-names-section {
     display: none;

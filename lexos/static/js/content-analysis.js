@@ -1,9 +1,8 @@
+let overview_table;
+let corpus_table;
 $(function(){
 
-    // If the walkthrough button is clicked, start the walkthrough
-    walkthrough_button_callback = walkthrough;
-
-    // If the "Upload" button was clicked...
+    // If the "Upload" button is clicked...
     $("#dictionaries-section #upload-button").click(function(){
 
         // Click the file input element
@@ -18,37 +17,55 @@ $(function(){
     initialize_button_callbacks();
 
     // If the "Analyze" button is pressed...
-    $("#formula-section #ca-analyze-button").click(function(){
+    $("#formula-section #analyze-button").click(
+        send_content_analysis_request);
 
-        // Display the loading overlays and disable the "Upload" and "Analyze"
-        // buttons
-        start_loading("#overview-body, #corpus-body, #documents-body",
-            `#formula-section #ca-analyze-button, #dictionaries-section
-            #upload-button, #overview-download-button,
-            #corpus-download-button`);
-
-        // Remove any existing error messages
-        remove_errors();
-
-        // Send a request to analyze the files
-        send_ajax_form_request("/content-analysis/analyze",
-            {formula: $("#formula-textarea").val()})
-
-            // If the request was successful, display the results
-            .done(display_results)
-
-            // If the request failed, display an error message and remove the
-            // loading overlay
-            .fail(function(){
-                error("Failed to perform the analysis.");
-                finish_loading("#results-container", "", `#formula-section
-                    #ca-analyze-button, #dictionaries-section #upload-button`);
-            });
-    });
+    // Initialize the overview and corpus tables
+    overview_table = new Table("overview", "/content-analysis/analyze",
+        "#overview-table-section", "Overview", null, null, true, true,
+        false, true, true);
+    corpus_table = new Table("corpus", "/content-analysis/analyze",
+        "#corpus-table-section", "Corpus", null, null, true, true,
+        true, true, true);
 
     // Initialize the tooltips
     initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
+
+
+/**
+ * Sends the content analysis request and creates the tables.
+ */
+function send_content_analysis_request(){
+
+    // Display the loading overlays and disable the "Upload" and "Analyze"
+    // buttons
+    start_loading("#overview-table-content, #corpus-table-content," +
+        "#documents-body", `#formula-section #analyze-button,
+        #dictionaries-section #upload-button, #corpus-download-button`);
+
+    // Remove any existing error messages
+    remove_errors();
+
+    // Send a request to analyze the files
+    send_ajax_form_request("/content-analysis/analyze")
+
+        // If the request was successful, display the results
+        .done(display_results)
+
+        // If the request failed, display an error message and remove the
+        // loading overlay
+        .fail(function(){
+            error("Failed to perform the analysis.");
+            show(`#formula-section #analyze-button,
+                #dictionaries-section #upload-button`);
+            add_text_overlay(`#overview-table-content, #corpus-table-content,
+                #documents-body`, "Loading Failed");
+        });
+}
 
 
 /**
@@ -94,6 +111,10 @@ function initialize_button_callbacks(){
             formula_element.val(formula);
         });
     });
+
+    $(`input[type="radio"][name="sort-ascending"]`).change(function(){
+        send_content_analysis_request();
+    });
 }
 
 
@@ -112,7 +133,13 @@ function upload_files(){
         "#dictionaries-section #upload-button");
 
     // Send a request to upload the files
-    send_ajax_request("/content-analysis/upload-dictionaries")
+    return $.ajax({
+        type: "POST",
+        url: "/content-analysis/upload-dictionaries",
+        processData: false,
+        contentType: false,
+        data: new FormData($("form")[0])
+    })
 
         // If the request is successful, create the upload previews
         .done(create_upload_previews)
@@ -127,14 +154,13 @@ function upload_files(){
  * @param {string} response: The response from the
  *      "/content-analysis/upload-dictionaries" request.
  */
-function create_upload_previews(response)
-{
+function create_upload_previews(response){
+
     // Create the upload previews
-    let uploads = JSON.parse(response);
     $(`<div class="hidden dictionaries"></div>`)
         .appendTo(".dictionaries-wrapper");
 
-    for(const upload of uploads)
+    for(const upload of response)
         $(`<h3>${upload}</h3>`).appendTo(".dictionaries");
 
     // Create the callbacks for the formula section document buttons
@@ -159,68 +185,36 @@ function create_upload_previews(response)
  *      "/content-analysis/analyze" request.
  */
 function display_results(response){
-    response = JSON.parse(response);
 
     // Check for errors
     let error_message = response["error"];
     if(error_message){
         error(error_message);
         finish_loading("#results-container", '', `#formula-section
-            #ca-analyze-button, #dictionaries-section #upload-button`);
+            #analyze-button, #dictionaries-section #upload-button`);
         return;
     }
 
     // Create the overview table
-    let overview = response["overview"];
-    let head = overview[0];
-    let data = overview.splice(1);
-
-    create_table("#overview-body", data, head);
+    overview_table.display(response["overview-table-body"],
+        response["overview-table-head"], response["overview-table-csv"]);
 
     // Create the corpus table
-    create_table("#corpus-body", response["corpus"],
-        ["Dictionary", "Phrase", "Count"]);
+    corpus_table.display(response["corpus-table-body"],
+        response["corpus-table-head"], response["corpus-table-csv"]);
 
     // Create the document tables
-    $(`<div id="document-tables-grid""></div>`).appendTo("#documents-body");
+    $(`<div id="document-tables-grid"></div>`).appendTo("#documents-body");
 
     for(const document of response["documents"])
-        create_table("#document-tables-grid", document["table"],
-            ["Dictionary", "Phrase", "Count"], document["name"]);
+        Table.create_basic_table("#document-tables-grid",
+            document["data"], ["Dictionary", "Phrase", "Count"],
+            document["name"], document["csv"]);
 
-    // Initialize the download buttons
-    $("#overview-download-button").click(function(){
-        download(response["overview-csv"], "analysis-overview.csv");
-    });
-
-    $("#corpus-download-button").click(function(){
-        download(response["corpus-csv"], "analysis-corpus.csv");
-    });
-
-    // Remove the loading overlay and enable the
-    // "Upload", "Analyze", and "Download" buttons
-    finish_loading("#overview-body, #corpus-body, #documents-body",
-        `#overview-body .lexos-table, #corpus-body .lexos-table,
-        #document-tables-grid .lexos-table`, `#formula-section
-        #ca-analyze-button, #dictionaries-section #upload-button,
-        #overview-download-button, #corpus-download-button`);
-}
-
-
-/**
- * Sends an AJAX request containing the file inputs.
- * @param {string} url: The URL to send the request to.
- * @returns {jqXHR}: The jQuery AJAX request.
- */
-function send_ajax_request(url){
-
-    return $.ajax({
-        type: "POST",
-        url: url,
-        processData: false,
-        contentType: false,
-        data: new FormData($("form")[0])
-    })
+    // Remove the loading overlays and enable the buttons
+    finish_loading("#documents-body", `#document-tables-grid .lexos-table`,
+        `#formula-section #analyze-button,
+        #dictionaries-section #upload-button`);
 }
 
 
@@ -228,66 +222,76 @@ function send_ajax_request(url){
  * Initialize the tooltips.
  */
 function initialize_tooltips(){
+
     create_tooltip("#dictionaries-tooltip-button", `Upload a text file
         containing a comma-separated list of key words and phrases associated
         with the characteristic to test. For example, if one is analyzing
         sentiment, a positive file might include: "happy, very happy, great,
         good".`);
+
     create_tooltip("#formula-tooltip-button", `Create a formula that uses the
         dictionaries to compute a final score. For example: "[happy] –
         [sad]".`, true);
-    create_tooltip("#corpus-tooltip-button", `The top 100 words are displayed.
+
+    create_tooltip("#corpus-table-tooltip-button", `The top 100 words are displayed.
         For a list of all of the words, click the "Download" button.`, true);
+
     create_tooltip("#documents-tooltip-button", `The top 100 words are
-        displayed for each document.`, true);
+        displayed for each document. For a list of all of the words, click
+        the "Download" button.`, true);
 }
 
 
 /**
- * Initiates a walkthrough of the page.
+ * Initializes the walkthrough.
  */
 function walkthrough(){
 
     let intro = introJs();
-    intro.setOptions({
-        steps: [
-            {
-                element: '#dictionaries-section',
-                intro: 'Welcome to Content Analysis! Here you can upload dictionaries for your analysis.',
-                position: 'top',
-            },
-            {
-                element: '#formula-section',
-                intro: 'Here you can create your formula using the calculator buttons. Buttons for each uploaded dictionary will appear on the right.',
-                position: 'top',
-            },
-            {
-                element: '#ca-analyze-button',
-                intro: 'Click here to generate your data. This will take some time...',
-                position: 'top',
-            },
-            {
-                element: '#overview-section',
-                intro: 'This section provides a general overview of your data. You can download this data as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#corpus-section',
-                intro: 'This section displays the most commonly used words along with the dictionary each word belongs to. You can download this data as a CSV file.',
-                position: 'top',
-            },
-            {
-                element: '#documents-section',
-                intro: 'Much like the previous section, although this section contains the data for each individual document rather than the full corpus.',
-                position: 'top',
-            },
-            {
-                element: '#help-button',
-                intro: 'For a more advanced summary of our Content Analysis features, check out the Help section.',
-                position: 'bottom'
-            }
-        ]
-    })
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Content Analysis! Here you can upload
+                dictionaries for your analysis.`,
+            position: "top",
+        },
+        {
+            element: "#formula-section",
+            intro: `Here you can create your formula using the calculator
+                buttons. Buttons for each uploaded dictionary will appear on
+                the right.`,
+            position: "top",
+        },
+        {
+            element: "#formula-section #analyze-button",
+            intro: `Click here to generate your data. This will take some
+                time.`,
+            position: "top",
+        },
+        {
+            element: "#overview-table-section",
+            intro: `This section provides a general overview of your data.
+                You can download this data as a CSV file.`,
+            position: "top",
+        },
+        {
+            element: "#corpus-table-section",
+            intro: `This section displays the most commonly used words along
+                with the dictionary each word belongs to. You can download
+                this data as a CSV file.`,
+            position: "top",
+        },
+        {
+            element: "#documents-section",
+            intro: `Much like the previous section, although this section
+                contains the data for each individual document rather than
+                the full corpus.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Content Analysis walkthrough!`,
+            position: "top",
+        }
+    ]});
 
     intro.start();
 }

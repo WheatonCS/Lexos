@@ -27,31 +27,31 @@ form {
     height: 6rem;
     margin: 1rem;
     border-radius: 3rem;
-    color: #FFFFFF;
-    background-color: #47BCFF;
-    border: .2rem solid #47BCFF;
+    color: var(--foreground-color);
+    background-color: var(--highlight-color);
+    border: .2rem solid var(--highlight-color);
     transition: background-color .2s, border-color .2s;
 }
 
 #browse-button:hover {
-    color: #47BCFF;
-    background-color: #EAF5FF;
-    border: .2rem solid #47BCFF;
+    color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
+    border: .2rem solid var(--highlight-color);
 }
 
 #drag-and-drop-section {
-    height: calc(100% - 8rem);
+    height: calc(100% - 7rem);
     width: 100%;
-    color: #757575;
-    background-color: #F3F3F3;
-    border: .2rem dashed #909090;
+    color: var(--text-color);
+    background-color: var(--foreground-color-alternate);
+    border: .2rem dashed var(--text-color);
     transition: background-color .2s, border-color .2s;
 }
 
 #drag-and-drop-section.highlighted {
-    color: #47BCFF;
-    border-color: #47BCFF;
-    background-color: #EAF5FF;
+    color: var(--highlight-color);
+    border-color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
 }
 
 #browse-button > h3,
@@ -81,7 +81,7 @@ form {
     height: 100%;
     align-content: center;
     justify-items: center;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
     min-width: 0;
     word-break: break-all;
     transition: opacity .5s;
@@ -93,6 +93,6 @@ form {
     top: 0;
     width: 0;
     height: .2rem;
-    background-color: #47BCFF;
+    background-color: var(--highlight-color);
     transition: opacity .5s, width .5s;
 }

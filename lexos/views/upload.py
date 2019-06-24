@@ -24,9 +24,6 @@ def upload():
 
         # Fix the session in case the browser is caching the old session
         session_manager.fix()
-        if "generalsettings" not in session:
-            session["generalsettings"] = \
-                constants.DEFAULT_GENERALSETTINGS_OPTIONS
 
         return render_template(
             "upload.html",

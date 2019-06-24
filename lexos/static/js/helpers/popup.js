@@ -9,7 +9,7 @@ function create_popup(title){
             <div id="popup">
                 <div class="vertical-splitter">
                     <h3 class="title">${title}</h3>
-                    <h3 id="popup-close-button" class="right-justified selectable">X</h3>
+                    <h3 id="popup-close-button" class="right-justified clickable-text">X</h3>
                 </div>
                 <div id="popup-content"></div>
             </div>
@@ -68,7 +68,7 @@ function create_text_input_popup(title){
  * @param {string} title: The title to display on the popup.
  * @param {string} radio_buttons_name: The name of the radio buttons.
  * @param {string} display_element_query: The query for the element to display
- *      the  selected option's text on.
+ *      the selected option's text on.
  * @param {string} input_element_query: The query for the input element whose
  *      value  will be set to the selected option.
  * @param {string[][]} options: The value and text of each radio button.
@@ -79,6 +79,30 @@ function create_radio_options_popup(title, radio_buttons_name,
     // Get the currently set option from the input element
     let input_element = $(input_element_query);
     let set_option = input_element.val();
+
+    // Display the popup
+    return display_radio_options_popup(
+        title, radio_buttons_name, set_option, options,
+
+        // If the "OK" button is pressed, update the elements and close
+        // the popup
+        function(selected_element_value, selected_element_name){
+            input_element.val(selected_element_value);
+            $(display_element_query).text(selected_element_name);
+            close_popup();
+    });
+}
+
+/**
+ * Creates a popup containing radio button options.
+ * @param {string} title: The title to display on the popup.
+ * @param {string} radio_buttons_name: The name of the radio buttons.
+ * @param {string} set_option: The value of the currently set option.
+ * @param {string[][]} options: The value and text of each radio button.
+ * @param {function} callback: The callback to call when a selection has been made.
+ */
+function display_radio_options_popup(title,
+    radio_buttons_name, set_option, options, callback){
 
     // Create the popup
     let popup = create_popup(title).addClass("radio-button-popup");
@@ -104,16 +128,15 @@ function create_radio_options_popup(title, radio_buttons_name,
             element.find("input").prop("checked", true);
     }
 
-    $(`<span id="ok-button" class="button">OK</span>`).appendTo("#popup");
+    // Create the "OK" buttons
+    $(`<span id="ok-button" class="button">OK</span>`).appendTo("#popup")
 
-    // If the "OK" button is pressed, set the input element's value, the
-    // display element's text, and close the popup
-    $("#ok-button").click(function(){
-        let selected_element = $(`input[name="${radio_buttons_name}"]:checked`);
-        input_element.val(selected_element.val());
-        $(display_element_query).text(
+    // If the "OK" button is pressed, call the callback
+    .click(function(){
+        let selected_element =
+            $(`input[name="${radio_buttons_name}"]:checked`);
+        callback(selected_element.val(),
             selected_element.closest("div").text().trim());
-        close_popup();
     });
 
     return popup;

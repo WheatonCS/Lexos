@@ -320,7 +320,6 @@ class ContentAnalysisModel(object):
         """ Performs the analysis.
         :return: The results of the analysis.
         """
-
         dictionaries = self.count()
 
         if self.is_secure():
@@ -329,7 +328,11 @@ class ContentAnalysisModel(object):
             self.generate_averages()
 
             # Get the overview results
-            dataframe = self.to_data_frame()
+            dataframe_unsorted = self.to_data_frame()
+            dataframe = dataframe_unsorted.sort_values(
+                by=[dataframe_unsorted.columns
+                    [self.content_analysis_option.sort_column]],
+                ascending=self.content_analysis_option.sort_ascending)
             overview = dataframe.values.tolist()
             overview.insert(0, dataframe.columns.values.tolist())
             overview_csv = dataframe.to_csv()
@@ -343,13 +346,18 @@ class ContentAnalysisModel(object):
 
             # Get the document results
             document_results = []
+
             for document_result in self.generate_document_results(
                     dictionaries=dictionaries):
+
+                dataframe = pd.DataFrame(
+                    document_result["table"],
+                    columns=["Dictionary", "Phrase", "Count"])
+
                 document_results.append({
                     "name": document_result["name"],
-                    "table": self.get_top_results(pd.DataFrame(
-                        document_result["table"],
-                        columns=["Dictionary", "Phrase", "Count"]))
+                    "data": self.get_top_results(dataframe),
+                    "csv": dataframe.to_csv()
                 })
 
         else:

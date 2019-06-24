@@ -97,6 +97,28 @@ def reset() -> str:
     return redirect("upload")
 
 
+@base_blueprint.route("/set-theme", methods=["POST"])
+def set_theme() -> str:
+    """ Sets the theme.
+    :return: None.
+    """
+
+    session_manager.cache_general_settings()
+    return ''
+
+
+@base_blueprint.route("/get-theme", methods=["GET"])
+def get_theme() -> str:
+    """ Gets the currently set theme.
+    :return: The currently set theme.
+    """
+
+    if "generalsettings" not in session:
+        session["generalsettings"] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
+
+    return session["generalsettings"]["theme"]
+
+
 def detect_active_docs() -> int:
     """Detects the number of active documents.
     :return: The number of active documents.

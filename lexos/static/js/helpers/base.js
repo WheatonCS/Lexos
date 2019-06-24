@@ -1,14 +1,96 @@
+let theme = "default";
 $("document").ready(function(){
     highlight_navbar_button();
-    initialize_dropdown_menus();
     update_active_document_count();
+    initialize_theme();
 
     // If the "Help" button is pressed, toggle the help section visibility
     $("#help-button").click(toggle_help_section);
 
-    // Fade the page content in
-    $("main").css("opacity", "1");
+    initialize_dropdown_menus();
 });
+
+
+/**
+ * Initializes the theme.
+ */
+function initialize_theme(){
+
+    // Get the currently set theme
+    $.ajax({type: "GET", url: "/get-theme"})
+
+        // If the request was successful, update the theme
+        .done(function(response){
+            theme = response;
+        })
+
+        // If the request failed, display an error
+        .fail(function(){ error("Could not get the theme."); })
+
+        // Always apply the theme CSS and initialize the theme popup
+        .always(function(){
+            apply_theme_css();
+            initialize_theme_popup();
+        });
+}
+
+
+/**
+ * Applies the currently selected theme's CSS.
+ */
+function apply_theme_css(){
+
+    // Hide the page
+    $("body").css({transition: "opacity 0s", opacity: '0'});
+
+    // Remove any existing theme CSS element
+    $("#theme").remove();
+
+    // Create the theme CSS element
+    let css_element = $(`<link id="theme">`)
+        .appendTo("head")
+        .attr({type: "text/css", rel: "stylesheet",
+            href: `static/css/themes/${theme}.css`});
+
+    // When the theme CSS element is loaded, fade in the page
+    css_element[0].onload = function(){
+        $("body").css({transition: '', opacity: '1'});
+    };
+}
+
+
+/**
+ * Initializes the theme popup.
+ */
+function initialize_theme_popup(){
+
+    // If the Lexos logo is clicked...
+    $("#lexos-dragon").click(function(){
+
+        // Create a theme popup
+        display_radio_options_popup("Theme", "theme", theme,
+
+            [
+                ["default", "Default"],
+                ["grey", "Grey"],
+                ["mint", "Mint"]
+            ],
+
+            // If the "OK" button is pressed, set the theme
+            function(selected_value){
+                send_ajax_request("/set-theme", {theme: selected_value})
+                    .done(function(){
+                        theme = selected_value;
+                        close_popup();
+                        apply_theme_css();
+                    })
+                    .fail(function(){
+                        error("Failed to set the theme.");
+                    });
+            }
+        );
+    });
+}
 
 
 /**
@@ -45,7 +127,7 @@ function highlight_navbar_button(){
  * @param {jQuery} element: The element to highlight.
  */
 function highlight(element){
-    element.css("color", "#47BCFF");
+    element.addClass("highlight");
 }
 
 
@@ -140,20 +222,20 @@ function remove_dropdown_menus(){
  * Toggles the visibility of the help section.
  */
 let help_visible = false;
-let walkthrough_button_callback = function(){};
+let walkthrough_callback = null;
 function toggle_help_section(){
 
-    // If the help section is visible, close it
+    // If the help section is visible, close it and return
     if(help_visible){
         close_help_section();
         return;
     }
 
-    // Otherwise, show the help section
+    // Otherwise, create the help section
     let main_grid = $("#main-grid").css("grid-template-columns", "40rem auto");
 
     $(`
-        <div id="help-section">
+        <div id="help-section" class="invisible">
             <div id="help-section-navbar">
                 <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
                 <span id="page-help-button" class="right-justified help-button">Page Help</span>
@@ -170,6 +252,7 @@ function toggle_help_section(){
     let help_content_element = $("#help-section-content");
     help_content_element.load("/static/help"+window.location.pathname+"-help.html");
 
+    // Initialize the help section's buttons
     $("#glossary-button").click(function(){
         help_content_element.load("/static/help/glossary-help.html");
     });
@@ -184,17 +267,34 @@ function toggle_help_section(){
 
     $("#walkthrough-button").click(function(){
         close_help_section();
-        walkthrough_button_callback();
+        walkthrough_callback();
         $(".introjs-prevbutton").text("Back");
         $(".introjs-nextbutton").text("Next");
+        $(".introjs-tooltip").css("opacity", "1");
     });
+
+    // Fade in the help section
+    fade_in("#help-section", ".5s");
 }
 
+
+/**
+ * Closes the help section.
+ */
 function close_help_section(){
     $("#main-grid").css("grid-template-columns", "100%");
     $("#help-section").remove();
     $("#help-button").removeClass("highlight");
     help_visible = false;
+}
+
+
+/**
+ * Binds the walkthrough callback.
+ * @param {function} walkthrough: The walkthrough callback to bind.
+ */
+function initialize_walkthrough(walkthrough){
+    walkthrough_callback = walkthrough;
 }
 
 

@@ -36,7 +36,7 @@ form {
 /* General */
 .scrub-section {
     grid-template-rows: min-content 1fr;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
     overflow: hidden;
 }
 
@@ -110,7 +110,7 @@ form {
 }
 
 #tag-table-head h3 {
-    color: #47BCFF;
+    color: var(--highlight-color);
 }
 
 #tag-table-body {
@@ -123,7 +123,7 @@ form {
 .tag-table-row {
     align-items: center;
     margin-bottom: 1rem;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
 }
 
 .tag-table-row:last-child {

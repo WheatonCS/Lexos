@@ -50,7 +50,7 @@
                 <h3 class="title">Formula</h3>
 
                 <div class="right-justified">
-                    <span id="ca-analyze-button" class="important-button">Analyze</span>
+                    <span id="analyze-button" class="important-button">Analyze</span>
                     <span id="formula-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <!-- Body -->
             <div id="formula-body" class="section-body">
 
-                <textarea id="formula-textarea" spellcheck="false"></textarea>
+                <label><textarea id="formula-textarea" name="formula" spellcheck="false"></textarea></label>
 
                 <div id="formula-buttons">
                     <div id="number-pad">
@@ -85,30 +85,12 @@
     </div>
 
     <!-- Overview -->
-    <div id="overview-section" class="section">
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Overview</h3>
-            <span id="overview-download-button" class="disabled right-justified button">Download</span>
-        </div>
-        <div id="overview-body" class="borderless-section-body">
-            <h3 class="centerer">No Results</h3>
-        </div>
-    </div>
+    <div id="overview-table-section" class="section"></div>
 
 
     <!-- Corpus -->
-    <div id="corpus-section" class="section">
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Corpus</h3>
-            <div class="right-justified">
-                <span id="corpus-download-button" class="disabled button">Download</span>
-                <span id="corpus-tooltip-button" class="tooltip-button">?</span>
-            </div>
-        </div>
-        <div id="corpus-body" class="borderless-section-body">
-            <h3 class="centerer">No Results</h3>
-        </div>
-    </div>
+    <div id="corpus-table-section" class="section"></div>
+
 
     <!-- Documents -->
     <div id="documents-section" class="section">
