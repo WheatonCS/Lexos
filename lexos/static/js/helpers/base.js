@@ -40,12 +40,6 @@ function initialize_theme(){
  */
 function apply_theme_css(){
 
-    // Hide the page
-    $("body").css({transition: "opacity 0s", opacity: '0'});
-
-    // Remove any existing theme CSS element
-    $("#theme").remove();
-
     // Create the theme CSS element
     let css_element = $(`<link id="theme">`)
         .appendTo("head")
@@ -82,7 +76,7 @@ function initialize_theme_popup(){
                     .done(function(){
                         theme = selected_value;
                         close_popup();
-                        apply_theme_css();
+                        location.reload();
                     })
                     .fail(function(){
                         error("Failed to set the theme.");

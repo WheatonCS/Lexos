@@ -509,3 +509,18 @@ function download(data, file_name, convert = true){
     link.click();
     document.body.removeChild(link);
 }
+
+
+/**
+ * Gets the RGB representation of the given color variable.
+ * @param {string} color_name: The color variable.
+ * @returns {string}: The RGB representation of the color variable.
+ */
+function get_color(color_name){
+
+    let element = $(`<div style="color: var(${color_name})"></div>`)
+        .appendTo("body")
+    let color = element.css("color");
+    element.remove();
+    return color;
+}

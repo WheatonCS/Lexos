@@ -8,7 +8,7 @@ form {
 /* Top section */
 #top-section {
     display: grid;
-    grid-template-columns: 1fr .25fr;
+    grid-template-columns: 1fr .4fr;
     grid-gap: 2rem;
 }
 

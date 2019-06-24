@@ -40,7 +40,8 @@ function get_visualize_color(x){
 
     switch(color_scheme){
         case "Lexos": return d3.scaleLinear()
-            .domain([0, 1]).range(["#F3F3F3", "#47BCFF"])(x);
+            .domain([0, 1]).range([get_color("--background-color"),
+                get_color("--highlight-color")])(x);
         case "Grey": return d3.interpolateGreys(x);
         case "Plum": return d3.interpolateBuPu(x);
         case "Ocean": return d3.interpolateYlGnBu(x);

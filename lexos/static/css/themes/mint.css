@@ -11,12 +11,12 @@
     --foreground-color: #FFFFFF;
 
     /* Primary highlight */
-    --highlight-color: #93F2D3;
-    --highlight-color-light: #EDFFFC;
+    --highlight-color: #20ecba;
+    --highlight-color-light: #ddfff3;
 
     /* Secondary highlight */
-    --secondary-highlight-color: #93F2D3;
-    --secondary-highlight-color-light: #EDFFFC;
+    --secondary-highlight-color: #20ecba;
+    --secondary-highlight-color-light: #ddfff3;
 
     /* Error */
     --error-button-hover-color: #B4263C;
