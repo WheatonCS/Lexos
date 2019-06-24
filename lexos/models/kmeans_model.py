@@ -139,7 +139,6 @@ class KMeansModel(BaseModel):
         contains cluster numbers and the second column contains document names,
         the rest columns contain the coordinates of the files.
         """
-
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
@@ -277,9 +276,9 @@ class KMeansModel(BaseModel):
 
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
+
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -396,9 +395,9 @@ class KMeansModel(BaseModel):
 
     def _get_3d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 3D plot that contains just the dots for K means result.
+
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -461,10 +460,10 @@ class KMeansModel(BaseModel):
         )
 
     def _get_result(self) -> KMeansUnprocessedResult:
-        """ Get the k-means data.
+        """Get the k-means data.
+
         :return: The k-means data.
         """
-
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -487,10 +486,10 @@ class KMeansModel(BaseModel):
         return k_means_unprocessed_result
 
     def get_results(self) -> str:
-        """ Gets the k-means results.
+        """Get the k-means results.
+
         :return: The k-means results.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

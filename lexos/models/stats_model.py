@@ -245,10 +245,10 @@ class StatsModel(BaseModel):
         )
 
     def get_document_statistics(self) -> dict:
-        """ Gets the document statistics.
+        """Get the document statistics.
+
         :return: The document statistics.
         """
-
         result = self._get_document_statistics_dataframe.round(3)
 
         sorted_result = result.sort_values(
@@ -332,10 +332,10 @@ class StatsModel(BaseModel):
         return figure
 
     def get_box_plot(self) -> str:
-        """ Returns the document size Plotly graph.
+        """Return the document size Plotly graph.
+
         :return: The document size Plotly graph.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

@@ -12,10 +12,10 @@ content_analysis_blueprint = Blueprint("content-analysis", __name__)
 
 @content_analysis_blueprint.route("/content-analysis", methods=["GET"])
 def content_analysis() -> str:
-    """ Gets the content analysis page.
+    """Get the content analysis page.
+
     :return: The content analysis page.
     """
-
     # Remove any existing uploaded files
     session["dictionary_labels"] = []
     files = glob.glob(get_path()+'*')
@@ -29,10 +29,10 @@ def content_analysis() -> str:
 @content_analysis_blueprint.route("/content-analysis/dictionaries",
                                   methods=["POST"])
 def dictionaries() -> str:
-    """ Gets the uploaded file names.
+    """Get the uploaded file names.
+
     :return: The uploaded file names.
     """
-
     return jsonify(session["dictionary_labels"] if
                    "dictionary_labels" in session else [])
 
@@ -40,10 +40,10 @@ def dictionaries() -> str:
 @content_analysis_blueprint.route("/content-analysis/upload-dictionaries",
                                   methods=["POST"])
 def upload_dictionaries() -> str:
-    """ Uploads dictionaries to the content analysis object.
+    """Upload dictionaries to the content analysis object.
+
     :return: The uploaded file names.
     """
-
     # Upload each file
     path = get_path()
     for upload_file in request.files.getlist("lemfileselect[]"):
@@ -62,10 +62,10 @@ def upload_dictionaries() -> str:
 @content_analysis_blueprint.route("/content-analysis/analyze",
                                   methods=["POST"])
 def analyze():
-    """ Analyze the files.
+    """Analyze the files.
+
     :return: The results of the analysis.
     """
-
     path = get_path()
     analysis = ContentAnalysisModel()
     file_manager = load_file_manager()
@@ -113,10 +113,10 @@ def analyze():
 
 
 def get_path() -> str:
-    """ Gets the content analysis directory path.
+    """Get the content analysis directory path.
+
     :return: The content analysis directory path.
     """
-
     path = os.path.join(constants.TMP_FOLDER,
                         constants.UPLOAD_FOLDER,
                         session["id"], "content_analysis/")

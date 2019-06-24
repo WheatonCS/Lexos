@@ -215,14 +215,13 @@ class LexosFile:
         return scrub_options
 
     def scrub_contents(self, saving_changes: bool) -> str:
-        """ Scrubs the contents of the file according to the user's options
+        """Scrub the contents of the file according to the user's options
 
         May save the changes or not.
         :param saving_changes: boolean saying whether or not to save the
                                changes made.
         :return: a preview string of the possibly changed file.
         """
-
         storage_options = []
         for key in list(request.form.keys()):
             if 'usecache' in key:
@@ -414,7 +413,7 @@ class LexosFile:
     # TODO: Legacy code
     def generate_d3_json_object(self, word_label: str,
                                 count_label: str) -> object:
-        """ Generates a JSON object for d3 from the word counts of the file.
+        """Generate a JSON object for d3 from the word counts of the file.
 
         :param word_label: label to use for identifying words in the
                            sub-objects.
@@ -422,7 +421,6 @@ class LexosFile:
                             sub-objects.
         :return: the resultant JSON object, formatted for d3.
         """
-
         word_counts = self.get_word_counts()
         return general_functions.generate_d3_object(
             word_counts, self.label, word_label, count_label)

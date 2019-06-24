@@ -11,7 +11,7 @@ statistics_blueprint = Blueprint("statistics", __name__)
 
 @statistics_blueprint.route("/statistics", methods=["GET"])
 def statistics() -> str:
-    """ Gets the statistics page.
+    """Get the statistics page.
     :return: The statistics page.
     """
 
@@ -25,7 +25,8 @@ def statistics() -> str:
 
 @statistics_blueprint.route("/statistics/corpus", methods=["POST"])
 def corpus() -> str:
-    """ Gets statistics on the corpus.
+    """Get statistics on the corpus.
+
     :return: Statistics on the corpus.
     """
 
@@ -52,19 +53,19 @@ def corpus() -> str:
 @statistics_blueprint.route("/statistics/document-statistics",
                             methods=["POST"])
 def documents() -> str:
-    """ Gets the statistics of the individual documents.
+    """Get the statistics of the individual documents.
+
     :return: The statistics of the individual documents.
     """
-
     session_manager.cache_analysis_option()
     return jsonify(StatsModel().get_document_statistics())
 
 
 @statistics_blueprint.route("/statistics/box-plot", methods=["POST"])
 def box_plot() -> str:
-    """ Gets a Plotly box plot of the document sizes.
+    """Get a Plotly box plot of the document sizes.
+
     :return: The Plotly box plot of the document sizes.
     """
-
     session_manager.cache_analysis_option()
     return StatsModel().get_box_plot()
