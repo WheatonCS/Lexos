@@ -27,7 +27,6 @@ class TokenizerReceiver(BaseReceiver):
 
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
-
         # This orientation option must always exist.
         orientation = self._front_end_data["orientation"]
 
