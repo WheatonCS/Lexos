@@ -10,10 +10,10 @@ top_words_blueprint = Blueprint("top-words", __name__)
 
 @top_words_blueprint.route("/top-words", methods=["GET"])
 def top_words() -> str:
-    """ Gets the top words page.
+    """Get the top words page.
+
     :return: The top words page.
     """
-
     # Set the default options
     if "topwordoption" not in session:
         session["topwordoption"] = constants.DEFAULT_TOPWORD_OPTIONS
@@ -26,20 +26,20 @@ def top_words() -> str:
 
 @top_words_blueprint.route("/top-words/class-divisions", methods=["GET"])
 def class_divisions() -> str:
-    """ Gets the class divisions.
+    """Get the class divisions.
+
     :return: The class divisions.
     """
-
     file_manager = FileManagerModel().load_file_manager()
     return file_manager.get_class_division_map().transpose().to_json()
 
 
 @top_words_blueprint.route("/top-words/results", methods=["POST"])
 def results() -> str:
-    """ Gets the top words results.
+    """Get the top words results.
+
     :return: The top words results.
     """
-
     # Cache the options
     session_manager.cache_analysis_option()
     session_manager.cache_top_word_options()

@@ -26,11 +26,10 @@ def viz():
 
 @bubbleviz_blueprint.route("/bubbleviz/get-word-counts", methods=["POST"])
 def get_word_counts() -> str:
-    """ Gets the top 100 word counts across all active files.
+    """Get the top 100 word counts across all active files.
 
     :return: The top 100 word counts across all active files.
     """
-
     file_manager = utility.load_file_manager()
     session_manager.cache_cloud_option()
 

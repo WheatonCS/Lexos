@@ -683,7 +683,6 @@ class RollingWindowsModel(BaseModel):
         :param index: The index to get the desired RGB color.
         :return: A string that contains the desired RGB color.
         """
-
         return cl.scales['8']['qual']['Set1'][index % 8] \
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
@@ -933,10 +932,10 @@ class RollingWindowsModel(BaseModel):
             raise ValueError("unhandled count type")
 
     def get_results(self) -> str:
-        """ Get the rolling window results.
+        """Get the rolling window results.
+
         :return: The rolling window results.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

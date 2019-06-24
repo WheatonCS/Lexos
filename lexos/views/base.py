@@ -40,10 +40,10 @@ def get_active_documents() -> str:
 
 @base_blueprint.route("/active-file-ids", methods=["GET"])
 def get_active_files() -> str:
-    """ Gets the active files.
+    """Get the active files.
+
     :return: The active files.
     """
-
     file_manager = FileManagerModel().load_file_manager()
     return json.dumps(file_manager.get_active_labels_with_id())
 
@@ -87,10 +87,10 @@ def download_workspace() -> str:
 
 @base_blueprint.route("/reset", methods=["GET", "POST"])
 def reset() -> str:
-    """ Resets the session and initializes a new one.
+    """Reset the session and initialize a new one.
+
     :return: A redirect to the upload page.
     """
-
     session_manager.reset()  # Reset the session and session folder
     session_manager.init()  # Initialize the new session
 
@@ -99,20 +99,20 @@ def reset() -> str:
 
 @base_blueprint.route("/set-theme", methods=["POST"])
 def set_theme() -> str:
-    """ Sets the theme.
+    """Set the theme.
+
     :return: None.
     """
-
     session_manager.cache_general_settings()
     return ''
 
 
 @base_blueprint.route("/get-theme", methods=["GET"])
 def get_theme() -> str:
-    """ Gets the currently set theme.
+    """Gets the currently set theme.
+
     :return: The currently set theme.
     """
-
     if "generalsettings" not in session:
         session["generalsettings"] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
 

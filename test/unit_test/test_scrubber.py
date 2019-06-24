@@ -7,7 +7,7 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
     handle_file_and_manual_strings, remove_stopwords, keep_words, \
-    get_all_punctuation_map, get_remove_punctuation_map, get_remove_digits
+    get_all_punctuation_map, get_remove_punctuation_map
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 

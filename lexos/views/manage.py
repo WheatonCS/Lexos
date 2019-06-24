@@ -8,28 +8,28 @@ manage_blueprint = Blueprint("manage", __name__)
 
 @manage_blueprint.route("/manage", methods=["GET"])
 def manage() -> str:
-    """ Loads the manage page.
+    """Load the manage page.
+
     :return: The HTML of the manage page.
     """
-
     return render_template("manage.html")
 
 
 @manage_blueprint.route("/manage/documents", methods=["GET"])
 def get_documents() -> str:
-    """ Returns a list of the uploaded documents.
+    """Return a list of the uploaded documents.
+
     :return: The JSON of a list of uploaded documents.
     """
-
     return json.dumps(utility.load_file_manager().get_previews_of_all())
 
 
 @manage_blueprint.route("/manage/download", methods=["GET"])
 def download() -> str:
-    """ Downloads the active files.
+    """Download the active files.
+
     :return: A .zip containing the active files.
     """
-
     file_manager = utility.load_file_manager()
 
     response = make_response(file_manager.zip_active_files(
@@ -46,10 +46,10 @@ def download() -> str:
 
 @manage_blueprint.route("/manage/preview", methods=["POST"])
 def get_previews() -> str:
-    """ Returns a preview of the desired file.
+    """Return a preview of the desired file.
+
     :return: A preview of the desired file.
     """
-
     file_manager = utility.load_file_manager()
     file_id = int(request.json)
 
@@ -63,10 +63,10 @@ def get_previews() -> str:
 
 @manage_blueprint.route("/manage/activate", methods=["POST"])
 def enable_rows() -> str:
-    """ Activates the files with the given IDs.
+    """Activate the files with the given IDs.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
 
     for file_id in request.json:
@@ -78,10 +78,10 @@ def enable_rows() -> str:
 
 @manage_blueprint.route("/manage/deactivate", methods=["POST"])
 def deactivate() -> str:
-    """ Deactivates the files with the given IDs.
+    """Deactivates the files with the given IDs.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
 
     for file_id in request.json:
@@ -94,9 +94,9 @@ def deactivate() -> str:
 @manage_blueprint.route("/manage/edit-name", methods=["POST"])
 def edit_name() -> str:
     """ Sets the name of the file with the given ID.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
     file_id = int(request.json[0])
     new_name = request.json[1]
@@ -110,10 +110,10 @@ def edit_name() -> str:
 
 @manage_blueprint.route("/manage/set-class", methods=["POST"])
 def set_class() -> str:
-    """ Sets the class of the file with the given ID.
+    """Set the class of the file with the given ID.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
     file_id = request.json[0]
     new_class_label = request.json[1]
@@ -126,10 +126,10 @@ def set_class() -> str:
 
 @manage_blueprint.route("/manage/delete", methods=["POST"])
 def delete() -> str:
-    """ Deletes the selected files.
+    """Deletes the selected files.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
     file_manager.delete_files([int(request.json)])
     utility.save_file_manager(file_manager)
@@ -138,10 +138,10 @@ def delete() -> str:
 
 @manage_blueprint.route("/manage/merge-selected", methods=["POST"])
 def merge_selected() -> str:
-    """ Merges the active files.
+    """Merge the active files.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
     file_manager.disable_all()
     file_ids = request.json[0]
@@ -167,10 +167,10 @@ def merge_selected() -> str:
 
 @manage_blueprint.route("/manage/edit-selected-classes", methods=["POST"])
 def edit_selected_classes() -> str:
-    """ Edits the classes of the selected files.
+    """Edit the classes of the selected files.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
     rows = request.json[0]
     new_class_label = request.json[1]
@@ -184,10 +184,10 @@ def edit_selected_classes() -> str:
 
 @manage_blueprint.route("/manage/delete-selected", methods=["POST"])
 def delete_selected() -> str:
-    """ Deletes the selected files.
+    """Delete the selected files.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
     file_manager.delete_active_files()
     utility.save_file_manager(file_manager)

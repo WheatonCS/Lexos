@@ -14,10 +14,10 @@ upload_blueprint = Blueprint("upload", __name__)
 
 @upload_blueprint.route("/upload", methods=["GET"])
 def upload():
-    """ Gets the upload page.
+    """Get the upload page.
+
     :return: The upload page.
     """
-
     # Detect the number of active documents.
     num_active_docs = detect_active_docs()
     if request.method == "GET":
@@ -36,10 +36,10 @@ def upload():
 
 @upload_blueprint.route("/upload/add-document", methods=["POST"])
 def add_document() -> str:
-    """ Adds a document to the file manager or loads a .lexos file.
+    """Add a document to the file manager or load a .lexos file.
+
     :return: None.
     """
-
     file_manager = utility.load_file_manager()
 
     # Get and decode the file name
@@ -62,10 +62,10 @@ def add_document() -> str:
 
 @upload_blueprint.route("/upload/scrape", methods=["POST"])
 def scrape():
-    """ Scrapes the URLs an generates text file from each URL.
+    """Scrape the URLs an generates text file from each URL.
+
     :return: A list of the scraped files.
     """
-
     urls = request.json
     urls = urls.strip()
     urls = urls.replace(',', '\n')  # Replace commas with line breaks

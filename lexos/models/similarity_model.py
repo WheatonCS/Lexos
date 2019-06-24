@@ -15,7 +15,6 @@ from lexos.receivers.similarity_receiver import SimilarityFrontEndOption, \
 
 class SimilarityTestOption(NamedTuple):
     """A typed tuple to hold topword test options."""
-
     doc_term_matrix: pd.DataFrame
     front_end_option: SimilarityFrontEndOption
     id_temp_label_map: IdTempLabelMap
@@ -66,7 +65,6 @@ class SimilarityModel(BaseModel):
             - the name of the second row is Cosine Similarity Scores, contains
               distance between this file and "comp_file".
         """
-
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
@@ -104,10 +102,10 @@ class SimilarityModel(BaseModel):
             .round(4)
 
     def get_results(self) -> dict:
-        """ Gets the similarity query results.
+        """Get the similarity query results.
+
         :return: The similarity query results.
         """
-
         similarity_query = self._get_similarity_query()
 
         return {

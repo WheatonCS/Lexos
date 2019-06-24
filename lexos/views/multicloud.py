@@ -27,7 +27,7 @@ def multicloud() -> str:
 
 @multicloud_blueprint.route("/multicloud/get-word-counts", methods=["POST"])
 def get_word_counts() -> str:
-    """ Gets the top 100 word counts for each active file.
+    """Get the top 100 word counts for each active file.
 
     :return: The top 100 word counts for each active file.
     """
@@ -47,7 +47,7 @@ def get_word_counts() -> str:
 
 
 def get_word_counts_single_file(contents) -> list:
-    """ Gets the top 100 word counts for the given contents.
+    """Get the top 100 word counts for the given contents.
 
     :param contents: The words to count.
     :return: The top 100 word counts.

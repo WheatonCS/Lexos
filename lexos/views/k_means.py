@@ -25,10 +25,10 @@ def k_means() -> str:
 
 @k_means_blueprint.route("/k-means/results", methods=["POST"])
 def results():
-    """ Gets the k-means results.
+    """Get the k-means results.
+
     :return: The k-means results.
     """
-
     # Cache options
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()
