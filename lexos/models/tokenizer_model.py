@@ -1,10 +1,12 @@
 """This is the tokenizer model which gets the tokenizer table."""
 
-import pandas as pd
 from typing import Optional, NamedTuple
+
+import pandas as pd
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
@@ -112,8 +114,7 @@ class TokenizerModel(BaseModel):
         return self._get_file_col_dtm().transpose()
 
     def get_table(self) -> dict:
-        """Get the desired DTM as a JSON object.
-
+        """ Get the desired DTM as a JSON object.
         :return: The desired DTM as a JSON object.
         """
         # Get the DTM in file-column orientation
@@ -157,10 +158,9 @@ class TokenizerModel(BaseModel):
         }
 
     def get_csv(self) -> str:
-        """Gets the desired DTM as a CSV.
+        """Get the desired DTM as a CSV.
         :return: the desired DTM as a CSV.
         """
-
         # Get the DTM in the desired orientation
         dtm = self._get_file_col_dtm() \
             if self._front_end_option.orientation == "file_col" \
