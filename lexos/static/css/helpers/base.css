@@ -186,7 +186,9 @@ form {
 }
 
 #page-title {
-    opacity: .5;
+    opacity: .75;
+    font-size: 2.5rem;
+    padding-top: 1rem;
 }
 
 #lexos-dragon {
