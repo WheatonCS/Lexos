@@ -114,7 +114,8 @@ class TokenizerModel(BaseModel):
         return self._get_file_col_dtm().transpose()
 
     def get_table(self) -> dict:
-        """ Get the desired DTM as a JSON object.
+        """Get the desired DTM as a JSON object.
+
         :return: The desired DTM as a JSON object.
         """
         # Get the DTM in file-column orientation
@@ -159,6 +160,7 @@ class TokenizerModel(BaseModel):
 
     def get_csv(self) -> str:
         """Get the desired DTM as a CSV.
+
         :return: the desired DTM as a CSV.
         """
         # Get the DTM in the desired orientation

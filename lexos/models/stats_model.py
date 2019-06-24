@@ -105,6 +105,7 @@ class StatsModel(BaseModel):
     @property
     def _get_document_statistics_dataframe(self) -> pd.DataFrame:
         """Get a Pandas dataframe containing the statistics of each document.
+
         :return: A Pandas dataframe containing statistics of each document.
         """
         # Check if empty corpus is given.
@@ -248,7 +249,8 @@ class StatsModel(BaseModel):
         )
 
     def get_document_statistics(self) -> dict:
-        """ Get the document statistics.
+        """Get the document statistics.
+
         :return: The document statistics.
         """
         result = self._get_document_statistics_dataframe.round(3)
@@ -334,7 +336,8 @@ class StatsModel(BaseModel):
         return figure
 
     def get_box_plot(self) -> str:
-        """ Return the document size Plotly graph.
+        """Return the document size Plotly graph.
+
         :return: The document size Plotly graph.
         """
         config = {
