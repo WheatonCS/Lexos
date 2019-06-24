@@ -167,7 +167,6 @@ class KMeansModel(BaseModel):
         :param reduced_data: PCA reduced two dimensional data.
         :return: A plotly heat map object that contains all polygons.
         """
-
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -252,7 +251,6 @@ class KMeansModel(BaseModel):
         :param k_means_index: Cluster result for all files.
         :return: A list of scatter plot contains centroid for each cluster.
         """
-
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -280,7 +278,6 @@ class KMeansModel(BaseModel):
         """Generate voronoi formatted graph for K Means result.
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -399,7 +396,6 @@ class KMeansModel(BaseModel):
         """Generate a 3D plot that contains just the dots for K means result.
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -465,7 +461,6 @@ class KMeansModel(BaseModel):
         """ Get the k-means data.
         :return: The k-means data.
         """
-
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -488,10 +483,9 @@ class KMeansModel(BaseModel):
         return k_means_unprocessed_result
 
     def get_results(self) -> str:
-        """ Gets the k-means results.
+        """ Get the k-means results.
         :return: The k-means results.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
