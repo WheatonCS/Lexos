@@ -87,10 +87,9 @@ class ContentAnalysisModel(object):
         return dictionaries
 
     def generate_corpus_results(self, dictionaries: list) -> list:
-        """ Generates the corpus counts.
+        """ Generate the corpus counts.
         :return: The corpus counts.
         """
-
         # Add a row for each phrase found in the corpus
         corpus_results = []
         for phrase in dictionaries:
@@ -105,10 +104,9 @@ class ContentAnalysisModel(object):
         return corpus_results
 
     def generate_document_results(self, dictionaries: list) -> list:
-        """Generates the results for each document
+        """Generate the results for each document.
         :return: The results for each document.
         """
-
         document_results = []
         for file in self._corpus:
 
@@ -223,7 +221,6 @@ class ContentAnalysisModel(object):
         """ Generate a dataframe containing all values stored in this class.
         :return: A data frame containing all values stored in this class.
         """
-
         columns = ["Document Name"] + [dictionary.label for dictionary in
                                        self.get_active_dicts()] + \
                   ["Formula", "Word Count", "Score"]
@@ -307,17 +304,16 @@ class ContentAnalysisModel(object):
         return ""
 
     def get_top_results(self, dataframe) -> list:
-        """ Gets the top 100 corpus or document results.
+        """ Get the top 100 corpus or document results.
         :param data: The corpus or document data.
         :return: The top 100 results.
         """
-
         dataframe.Count = pd.to_numeric(dataframe.Count, errors="coerce")
         dataframe = dataframe.sort_values(by="Count", ascending=False)
         return dataframe.head(100).values.tolist()
 
     def analyze(self) -> (Optional[str], Optional[str]):
-        """ Performs the analysis.
+        """ Perform the analysis.
         :return: The results of the analysis.
         """
         dictionaries = self.count()
@@ -452,7 +448,6 @@ def count_phrases(dictionary: list, file: object) -> list:
     :param file: a File object
     :return: list of Phrase objects with their counts
     """
-
     for phrase in dictionary:
 
         phrase.count = count_phrase_in_text(phrase=phrase.content,

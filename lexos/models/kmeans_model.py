@@ -4,21 +4,23 @@ It uses sklearn.cluster.KMeans for most important analysis, please see:
 http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 """
 
+from typing import Optional, NamedTuple, List
+
+import colorlover as cl
 import numpy as np
 import pandas as pd
-import colorlover as cl
 import plotly.graph_objs as go
 from flask import jsonify
 from plotly.offline import plot
-from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
-from typing import Optional, NamedTuple, List
+from sklearn.decomposition import PCA
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
+from lexos.receivers.matrix_receiver import IdTempLabelMap
 
 # Alias for typed tuple to increase readability.
 PlotlyHTMLPlot = str
@@ -139,7 +141,6 @@ class KMeansModel(BaseModel):
         contains cluster numbers and the second column contains document names,
         the rest columns contain the coordinates of the files.
         """
-
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
