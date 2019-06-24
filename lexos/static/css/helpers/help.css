@@ -12,15 +12,15 @@
     justify-items: center;
     margin-top: 2rem;
     padding: 2rem;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
 }
 
 .help-section-title {
     display: block;
     margin-top: 2rem;
     padding: 2rem;
-    color: #FF8447;
-    background-color: #FFFFFF;
+    color: var(--secondary-highlight-color);
+    background-color: var(--foreground-color);
 }
 
 .help-section-paragraph,
@@ -32,11 +32,11 @@
 
 .help-section-paragraph {
     display: block;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
 }
 
 .help-section-list {
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
     display: block;
 }
 

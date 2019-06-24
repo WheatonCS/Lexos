@@ -307,14 +307,8 @@ def cache_top_word_options():
 
 
 def cache_general_settings():
-    """Stores all general settings options in the session cookie object.
-
-    These options were from request.json.
+    """Stores the general settings.
     """
 
-    # for setting in constants.GENERALSETTINGS:
-    if request.json:
-        session['generalsettings']["beta_onbox"] = request.json["beta_onbox"]
-    else:
-        session['generalsettings']["beta_onbox"] = const.GENERALSETTINGS
+    session["generalsettings"]["theme"] = request.json["theme"]
     session.modified = True

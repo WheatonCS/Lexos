@@ -45,7 +45,7 @@ function set_selection_box_color(){
 
     // If the "D" key is not pressed, set the selection box to the selection
     // color
-    else $("#selection-box").css({"background-color": "#47BCFF"});
+    else $("#selection-box").css({"background-color": ""});
 }
 
 

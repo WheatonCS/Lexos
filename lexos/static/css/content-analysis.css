@@ -31,7 +31,7 @@ form {
     width: 100%;
     padding: 1rem;
     margin-bottom: 1rem;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
 }
 
 .dictionaries h3:last-child {
@@ -77,17 +77,17 @@ form {
     justify-content: center;
     width: calc(100% - .2rem);
     height: calc(100% - .2rem);
-    background-color: #F3F3F3;
-    border: .2rem solid #E3E3E3;
+    background-color: var(--foreground-color-alternate);
+    border: .2rem solid var(--background-color);
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
 #number-pad h3:hover,
 #operations-pad h3:hover,
 #documents-pad .dictionaries h3:hover {
-    color: #47BCFF;
-    background-color: #EAF5FF;
-    border-color: #47BCFF;
+    color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
+    border-color: var(--highlight-color);
 }
 
 
@@ -105,11 +105,11 @@ form {
 
 #document-tables-grid .lexos-table {
     height: 39.2rem;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
 }
 
 #document-tables-grid .lexos-table .button {
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
 }
 
 #documents-section .lexos-table-head,

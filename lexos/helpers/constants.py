@@ -59,7 +59,7 @@ FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
 '''session caching option'''
 # for general settings
-GENERALSETTINGS = 'beta_onbox'
+GENERALSETTINGS = 'theme'
 
 # for scrub
 SCRUBBOXES = (
@@ -197,7 +197,9 @@ SIMBOX = ('simsuniquetokens',)
 TOPWORDINPUT = ['testInput']
 
 '''the request form default value'''
-DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
+DEFAULT_GENERALSETTINGS_OPTIONS = {
+    'theme': 'default'
+}
 
 DEFAULT_SCRUB_OPTIONS = {
     'aposbox': False,

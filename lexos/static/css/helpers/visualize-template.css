@@ -26,8 +26,8 @@
     position: absolute;
     white-space: nowrap;
     padding: 1rem;
-    background: #FFFFFF;
-    border: 1rem solid #EAF5FF;
+    background: var(--foreground-color);
+    border: 1rem solid var(--highlight-color-light);
     opacity: 0;
     transition: opacity .2s;
 }

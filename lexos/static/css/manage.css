@@ -22,14 +22,14 @@
 /* Table */
 #table-head {
     display: grid;
-    grid-template-columns: 7% 7% 16% 14% 16% 25% 12% 3%;
+    grid-template-columns: 7% 7% 16% 14% 16% 21% 16% 3%;
     align-items: center;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
     height: 5rem;
 }
 
 #table-head .table-cell {
-    color: #47BCFF;
+    color: var(--highlight-color);
 }
 
 .table-row {
@@ -44,13 +44,13 @@
 }
 
 .table-row {
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
     transition: background-color .2s;
     margin-bottom: 1rem;
 }
 
 .selected-table-row {
-    background-color: #EAF5FF;
+    background-color: var(--highlight-color-light);
 }
 
 .table-row:last-child {
@@ -61,7 +61,7 @@
     padding: 1rem;
     word-wrap: break-word;
     overflow: hidden;
-    color: #505050;
+    color: var(--text-color);
 }
 
 .table-cell:last-child {
@@ -76,14 +76,14 @@
 }
 
 .table-row > .active-indicator {
-    border: .2rem solid #D3D3D3;
-    background-color: #F3F3F3;
+    border: .2rem solid var(--background-color);
+    background-color: var(--foreground-color-alternate);
     transition: border .2s, background-color .2s;
 }
 
 .selected-table-row > .active-indicator {
-    border: .2rem solid #47BCFF;
-    background-color: #47BCFF;
+    border: .2rem solid var(--highlight-color);
+    background-color: var(--highlight-color);
 }
 
 
@@ -97,8 +97,8 @@
     left: 0;
     width: 21rem;
     padding: 1rem;
-    background-color: #FFFFFF;
-    border: 1rem solid #EAF5FF;
+    background-color: var(--foreground-color);
+    border: 1rem solid var(--highlight-color-light);
     opacity: 0;
     transition: opacity .2s;
     pointer-events: none;
@@ -109,6 +109,7 @@
 #selection-box {
     position: absolute;
     pointer-events: none;
+    background-color: var(--highlight-color);
     transition: opacity .2s;
 }
 

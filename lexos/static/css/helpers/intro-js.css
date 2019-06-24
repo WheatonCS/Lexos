@@ -68,20 +68,20 @@
     margin-top: 0;
     padding: .9rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
-    border: .2rem solid #FF8447;
-    background-color: #FF8447;
+    border: .2rem solid var(--secondary-highlight-color);
+    background-color: var(--secondary-highlight-color);
     background-image: none;
     text-shadow: none;
-    color: #FFFFFF;
+    color: var(--foreground-color);
     cursor: pointer;
     transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
 }
 
 .introjs-button:hover {
-    color: #FF8447;
-    background-color: #FFF2EA;
+    color: var(--secondary-highlight-color);
+    background-color: var(--secondary-highlight-color-light);
     box-shadow: none;
-    border-color: #FF8447;
+    border-color: var(--secondary-highlight-color);
 }
 
 .introjs-skipbutton {

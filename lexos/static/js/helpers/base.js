@@ -1,14 +1,96 @@
+let theme = "default";
 $("document").ready(function(){
     highlight_navbar_button();
-    initialize_dropdown_menus();
     update_active_document_count();
+    initialize_theme();
 
     // If the "Help" button is pressed, toggle the help section visibility
     $("#help-button").click(toggle_help_section);
 
-    // Fade the page content in
-    $("main").css("opacity", "1");
+    initialize_dropdown_menus();
 });
+
+
+/**
+ * Initializes the theme.
+ */
+function initialize_theme(){
+
+    // Get the currently set theme
+    $.ajax({type: "GET", url: "/get-theme"})
+
+        // If the request was successful, update the theme
+        .done(function(response){
+            theme = response;
+        })
+
+        // If the request failed, display an error
+        .fail(function(){ error("Could not get the theme."); })
+
+        // Always apply the theme CSS and initialize the theme popup
+        .always(function(){
+            apply_theme_css();
+            initialize_theme_popup();
+        });
+}
+
+
+/**
+ * Applies the currently selected theme's CSS.
+ */
+function apply_theme_css(){
+
+    // Hide the page
+    $("body").css({transition: "opacity 0s", opacity: '0'});
+
+    // Remove any existing theme CSS element
+    $("#theme").remove();
+
+    // Create the theme CSS element
+    let css_element = $(`<link id="theme">`)
+        .appendTo("head")
+        .attr({type: "text/css", rel: "stylesheet",
+            href: `static/css/themes/${theme}.css`});
+
+    // When the theme CSS element is loaded, fade in the page
+    css_element[0].onload = function(){
+        $("body").css({transition: '', opacity: '1'});
+    };
+}
+
+
+/**
+ * Initializes the theme popup.
+ */
+function initialize_theme_popup(){
+
+    // If the Lexos logo is clicked...
+    $("#lexos-dragon").click(function(){
+
+        // Create a theme popup
+        display_radio_options_popup("Theme", "theme", theme,
+
+            [
+                ["default", "Default"],
+                ["grey", "Grey"],
+                ["mint", "Mint"]
+            ],
+
+            // If the "OK" button is pressed, set the theme
+            function(selected_value){
+                send_ajax_request("/set-theme", {theme: selected_value})
+                    .done(function(){
+                        theme = selected_value;
+                        close_popup();
+                        apply_theme_css();
+                    })
+                    .fail(function(){
+                        error("Failed to set the theme.");
+                    });
+            }
+        );
+    });
+}
 
 
 /**
@@ -45,7 +127,7 @@ function highlight_navbar_button(){
  * @param {jQuery} element: The element to highlight.
  */
 function highlight(element){
-    element.css("color", "#47BCFF");
+    element.addClass("highlight");
 }
 
 
