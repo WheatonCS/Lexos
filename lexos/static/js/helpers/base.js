@@ -7,6 +7,14 @@ $("document").ready(function(){
     // If the "Help" button is pressed, toggle the help section visibility
     $("#help-button").click(toggle_help_section);
 
+    $("#walkthrough-button").click(function(){
+        close_help_section();
+        walkthrough_callback();
+        $(".introjs-prevbutton").text("Back");
+        $(".introjs-nextbutton").text("Next");
+        $(".introjs-tooltip").css("opacity", "1");
+    });
+
     initialize_dropdown_menus();
 });
 
@@ -257,14 +265,6 @@ function toggle_help_section(){
 
     $("#page-help-button").click(function(){
         help_content_element.load("/static/help"+window.location.pathname+"-help.html");
-    });
-
-    $("#walkthrough-button").click(function(){
-        close_help_section();
-        walkthrough_callback();
-        $(".introjs-prevbutton").text("Back");
-        $(".introjs-nextbutton").text("Next");
-        $(".introjs-tooltip").css("opacity", "1");
     });
 
     // Fade in the help section

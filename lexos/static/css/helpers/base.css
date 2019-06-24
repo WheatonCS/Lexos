@@ -534,8 +534,24 @@ label input[type="checkbox"]:checked + span:after {
     background-color: var(--secondary-highlight-color-light);
 }
 
+.navbar-tooltip-button {
+    display: inline-flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    margin-left: 1rem;
+    font-size: 2rem;
+    border-radius: 50%;
+    transition: color .2s, background-color .2s;
+    color: var(--secondary-highlight-color);
+    background-color: var(--secondary-highlight-color-light);
+}
+
 .tooltip-button:hover,
-.tooltip-button-active {
+.tooltip-button-active,
+.navbar-tooltip-button:hover {
     color: var(--foreground-color);
     background-color: var(--secondary-highlight-color);
 }
