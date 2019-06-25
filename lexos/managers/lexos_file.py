@@ -236,17 +236,17 @@ class LexosFile:
         text_string = scrubber.scrub(
             text_strfile_managering,
             gutenberg=self.is_gutenberg,
-            lower=scrub_options['lowercasebox'],
-            punct=scrub_options['punctuationbox'],
-            apos=scrub_options['aposbox'],
-            hyphen=scrub_options['hyphensbox'],
-            amper=scrub_options['ampersandbox'],
-            digits=scrub_options['digitsbox'],
-            tags=scrub_options['tagbox'],
-            white_space=scrub_options['whitespacebox'],
-            spaces=scrub_options['spacesbox'],
-            tabs=scrub_options['tabsbox'],
-            new_lines=scrub_options['newlinesbox'],
+            lower=scrub_options['make_lowercase'],
+                punct=scrub_options['remove_punctuation'],
+            apos=scrub_options['keep_apostrophes'],
+            hyphen=scrub_options['keep_hyphens'],
+            amper=scrub_options['keep_ampersands'],
+            digits=scrub_options['remove_digits'],
+            tags=scrub_options['scrub_tags'],
+            white_space=True,
+            spaces=scrub_options['remove_spaces'],
+            tabs=scrub_options['remove_tabs'],
+            new_lines=scrub_options['remove_newlines'],
             opt_uploads=request.files,
             storage_options=storage_options,
             storage_folder=session_manager.session_folder() + '/scrub/',
@@ -446,38 +446,38 @@ class LexosFile:
 
         if 'scrub' in self.options:
 
-            if ("punctuationbox" in self.options["scrub"]) and (
-                    self.options["scrub"]['punctuationbox']):
+            if ("remove_punctuation" in self.options["scrub"]) and (
+                    self.options["scrub"]['remove_punctuation']):
                 str_legend += "Punctuation: removed, "
 
-                if ('aposbox' in self.options["scrub"]) and (
-                        self.options["scrub"]['aposbox']):
+                if ('keep_apostrophes' in self.options["scrub"]) and (
+                        self.options["scrub"]['keep_apostrophes']):
                     str_legend += "Apostrophes: kept, "
                 else:
                     str_legend += "Apostrophes: removed, "
 
-                if ('hyphensbox' in self.options["scrub"]) and (
-                        self.options["scrub"]['hyphensbox']):
+                if ('keep_hyphens' in self.options["scrub"]) and (
+                        self.options["scrub"]['keep_hyphens']):
                     str_legend += "Hyphens: kept, "
                 else:
                     str_legend += "Hypens: removed, "
             else:
                 str_legend += "Punctuation: kept, "
 
-            if ('lowercasebox' in self.options["scrub"]) and (
-                    self.options["scrub"]['lowercasebox']):
+            if ('make_lowercase' in self.options["scrub"]) and (
+                    self.options["scrub"]['make_lowercase']):
                 str_legend += "Lowercase: on, "
             else:
                 str_legend += "Lowercase: off, "
 
-            if ('digitsbox' in self.options["scrub"]) and (
-                    self.options["scrub"]['digitsbox']):
+            if ('remove_digits' in self.options["scrub"]) and (
+                    self.options["scrub"]['remove_digits']):
                 str_legend += "Digits: removed, "
             else:
                 str_legend += "Digits: kept, "
 
-            if ('tagbox' in self.options["scrub"]) and (
-                    self.options["scrub"]['tagbox']):
+            if ('scrub_tags' in self.options["scrub"]) and (
+                    self.options["scrub"]['scrub_tags']):
                 str_legend += "Tags: removed, "
             else:
                 str_legend += "Tags: kept, "
@@ -489,14 +489,14 @@ class LexosFile:
                     str_legend += "corr/foreign words: discard, "
 
             # stop words
-            if ('swfileselect[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['swfileselect[]'] != ''):
+            if ('stop_words_file[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['stop_words_file[]'] != ''):
                 str_legend = str_legend + "Stopword file: " + \
-                    self.options["scrub"]['swfileselect[]'] + ", "
-            if ('manualstopwords' in self.options["scrub"]) and (
-                    self.options["scrub"]['manualstopwords'] != ''):
+                    self.options["scrub"]['stop_words_file[]'] + ", "
+            if ('stop_words' in self.options["scrub"]) and (
+                    self.options["scrub"]['stop_words'] != ''):
                 str_legend = str_legend + \
-                    "Stopwords: [" + self.options["scrub"]['manualstopwords'] \
+                    "Stopwords: [" + self.options["scrub"]['stop_words'] \
                     + "], "
 
             # lemmas
@@ -504,21 +504,21 @@ class LexosFile:
                     self.options["scrub"]['lemfileselect[]'] != ''):
                 str_legend = str_legend + "Lemma file: " + \
                     self.options["scrub"]['lemfileselect[]'] + ", "
-            if ('manuallemmas' in self.options["scrub"]) and (
-                    self.options["scrub"]['manuallemmas'] != ''):
+            if ('lemmas' in self.options["scrub"]) and (
+                    self.options["scrub"]['lemmas'] != ''):
                 str_legend = str_legend + \
-                    "Lemmas: [" + self.options["scrub"]['manuallemmas'] + "], "
+                    "Lemmas: [" + self.options["scrub"]['lemmas'] + "], "
 
             # consolidations
             if ('consfileselect[]' in self.options["scrub"]) and (
                     self.options["scrub"]['consfileselect[]'] != ''):
                 str_legend = str_legend + "Consolidation file: " + \
                     self.options["scrub"]['consfileselect[]'] + ", "
-            if ('manualconsolidations' in self.options["scrub"]) and (
-                    self.options["scrub"]['manualconsolidations'] != ''):
+            if ('consolidations' in self.options["scrub"]) and (
+                    self.options["scrub"]['consolidations'] != ''):
                 str_legend = str_legend + \
                     "Consolidations: [" + \
-                    self.options["scrub"]['manualconsolidations'] + "], "
+                    self.options["scrub"]['consolidations'] + "], "
 
             # special characters (entities) - pull down
             if ('entityrules' in self.options["scrub"]) and (
@@ -529,11 +529,11 @@ class LexosFile:
                     self.options["scrub"]['scfileselect[]'] != ''):
                 str_legend = str_legend + "Special Character file: " + \
                     self.options["scrub"]['scfileselect[]'] + ", "
-            if ('manualspecialchars' in self.options["scrub"]) and (
-                    self.options["scrub"]['manualspecialchars'] != ''):
+            if ('special_characters' in self.options["scrub"]) and (
+                    self.options["scrub"]['special_characters'] != ''):
                 str_legend = str_legend + \
                     "Special Characters: [" + \
-                    self.options["scrub"]['manualspecialchars'] + "], "
+                    self.options["scrub"]['special_characters'] + "], "
 
         else:
             str_legend += "Unscrubbed."

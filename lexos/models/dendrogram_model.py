@@ -12,7 +12,7 @@ from scipy.spatial.distance import pdist
 
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
-from lexos.receivers.dendro_receiver import DendroOption, DendroReceiver
+from lexos.receivers.dendrogram_receiver import DendroOption, DendroReceiver
 
 
 class DendroTestOptions(NamedTuple):

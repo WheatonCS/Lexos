@@ -5,7 +5,7 @@ from flask import session, redirect, url_for, render_template, send_file, \
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.file_manager_model import FileManagerModel
 
 base_blueprint = Blueprint("base", __name__)
 

@@ -11,7 +11,7 @@ from scipy.cluster.hierarchy import linkage, to_tree, ClusterNode
 from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
-from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
+from lexos.receivers.consensus_tree_receiver import BCTOption, BCTReceiver
 
 # Make plt to use a non-interactive backend to generate PNG instead of window.
 plt.switch_backend("Agg")

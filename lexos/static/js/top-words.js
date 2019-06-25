@@ -6,7 +6,7 @@ $(function(){
     start_loading("#class-divisions-body, #top-words-body");
 
     // Set the normalize option to raw counts
-    $(`input[name="normalizeType"][value="raw"]`).prop("checked", true);
+    $(`input[name="normalization_method"][value="raw"]`).prop("checked", true);
 
     // Initialize the legacy form inputs, create the class division tables,
     // and create the top words tables
@@ -193,7 +193,7 @@ function create_top_words_tables(tables){
  * @return {boolean}: Whether the inputs are valid.
  */
 function validate_inputs(){
-    let comparison_method = $(`input[name="testInput"]:checked`).val();
+    let comparison_method = $(`input[name="comparison_method"]:checked`).val();
 
     if((comparison_method === "classToPara" ||
         comparison_method === "classToClass") && single_class){

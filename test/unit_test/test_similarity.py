@@ -1,8 +1,8 @@
 import pandas as pd
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
-from lexos.models.similarity_model import SimilarityModel, SimilarityTestOption
-from lexos.receivers.similarity_receiver import SimilarityFrontEndOption
+from lexos.models.similarity_query_model import SimilarityModel, SimilarityTestOption
+from lexos.receivers.similarity_query_receiver import SimilarityFrontEndOption
 
 
 # --------------------- test with similarity equals one --------------------

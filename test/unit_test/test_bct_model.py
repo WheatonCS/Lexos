@@ -3,8 +3,8 @@ from io import StringIO
 from Bio import Phylo
 from scipy.cluster.hierarchy import linkage
 
-from lexos.receivers.bct_receiver import BCTOption
-from lexos.models.bct_model import BCTTestOptions, BCTModel
+from lexos.receivers.consensus_tree_receiver import BCTOption
+from lexos.models.consensus_tree_model import BCTTestOptions, BCTModel
 
 
 # noinspection PyProtectedMember

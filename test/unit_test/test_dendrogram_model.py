@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from lexos.models.dendro_model import DendroOption, DendrogramModel, \
+from lexos.models.dendrogram_model import DendroOption, DendrogramModel, \
     DendroTestOptions
 
 

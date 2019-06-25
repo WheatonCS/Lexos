@@ -30,11 +30,11 @@
             <h3 class="section-top title">Calculation Type</h3>
             <div class="section-body">
 
-                <label><input name="counttype" value="average" type="radio" checked><span></span>Rolling Average</label>
+                <label><input name="count_method" value="Rolling Average" type="radio" checked><span></span>Rolling Average</label>
                 <span id="rolling-average-tooltip-button" class="tooltip-button">?</span>
                 <br>
 
-                <label><input name="counttype" value="ratio" type="radio"><span></span>Rolling Ratio</label>
+                <label><input name="count_method" value="Rolling Ratio" type="radio"><span></span>Rolling Ratio</label>
                 <span id="rolling-ratio-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
@@ -50,16 +50,16 @@
 
             <div class="section-body">
                 <div id="search-input-grid">
-                    <label id="search-terms-input"><input name="rollingsearchword" type="text" spellcheck="false" autocomplete="off"></label>
-                    <label id="search-terms-input-denominator"><input name="rollingsearchwordopt" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label id="search-terms-input"><input name="search_term" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label id="search-terms-input-denominator"><input name="search_term_denominator" type="text" spellcheck="false" autocomplete="off"></label>
                 </div>
 
-                <label><input name="inputtype" value="word" type="radio" checked><span></span>Words</label><br>
+                <label><input name="input_type" value="Words" type="radio" checked><span></span>Words</label><br>
 
-                <label><input name="inputtype" value="string" type="radio"><span></span>Strings</label>
+                <label><input name="input_type" value="Strings" type="radio"><span></span>Strings</label>
                 <span id="strings-tooltip-button" class="tooltip-button">?</span><br>
 
-                <label><input name="inputtype" value="regex" type="radio"><span></span>Regex</label>
+                <label><input name="input_type" value="Regex" type="radio"><span></span>Regex</label>
                 <span id="regex-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
@@ -69,12 +69,12 @@
             <h3 class="section-top title">Window</h3>
             <div class="section-body">
 
-                <label><input id="window-size-input" name="rollingwindowsize" type="text" spellcheck="false" autocomplete="off"></label>
+                <label><input id="window-size-input" name="window_size" type="text" spellcheck="false" autocomplete="off"></label>
                 <span id="window-size-tooltip-button" class="tooltip-button">?</span><br>
 
-                <label><input name="windowtype" value="word" type="radio" checked><span></span>Words</label><br>
-                <label><input name="windowtype" value="letter" type="radio"><span></span>Characters</label><br>
-                <label><input name="windowtype" value="line" type="radio"><span></span>Lines</label>
+                <label><input name="window_type" value="Words" type="radio" checked><span></span>Words</label><br>
+                <label><input name="window_type" value="Characters" type="radio"><span></span>Characters</label><br>
+                <label><input name="window_type" value="Lines" type="radio"><span></span>Lines</label>
             </div>
         </div>
 
@@ -84,13 +84,13 @@
             <div class="section-body">
 
                 <label id="display-section-input-label">
-                    <input id="milestone-checkbox" name="rollinghasmilestone" type="checkbox">
-                    <span></span>Milestone<input id="milestone-input" name="rollingmilestonetype" type="text" spellcheck="false" autocomplete="off">
+                    <input id="milestone-checkbox" name="enable_milestone" type="checkbox">
+                    <span></span>Milestone<input id="milestone-input" name="milestone" type="text" spellcheck="false" autocomplete="off">
                 </label>
                 <span id="milestone-tooltip-button" class="tooltip-button">?</span>
 
-                <label><input name="showDots" type="checkbox"><span></span>Show Individual Points</label><br>
-                <label><input name="BWoutput" type="checkbox"><span></span>Black and White</label>
+                <label><input name="show_points" type="checkbox"><span></span>Show Individual Points</label><br>
+                <label><input name="black_and_white" type="checkbox"><span></span>Black and White</label>
             </div>
         </div>
     </div>
@@ -110,7 +110,4 @@
 
         <div id="graph-container" class="section-body"></div>
     </div>
-
-    <!-- Hidden elements -->
-    <input id="file-to-analyze" name="filetorollinganalyze" type="hidden">
 {% endblock %}

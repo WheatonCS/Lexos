@@ -7,7 +7,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
 from lexos.models.base_model import BaseModel
-from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.file_manager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
     MatrixReceiver, \
     IdTempLabelMap

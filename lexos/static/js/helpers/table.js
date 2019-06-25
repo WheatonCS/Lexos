@@ -303,7 +303,7 @@ class Table{
                 <div id="${this.name}-table-content" class="lexos-table-content">
                     <h3 class="centerer">No Results</h3>
                 </div>
-                <input name="${this.name}-table-selected-column" value="0" type="hidden">
+                <input name="${this.name}_table_selected_column" value="0" type="hidden">
             </div>
         `).appendTo(this.parent_element_query);
 
@@ -318,7 +318,7 @@ class Table{
         if(this.searchable) $(`
                 <div>
                     <h3>Search: </h3>
-                    <label><input name="${this.name}-table-search-input" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label><input name="${this.name}_table_search_input" type="text" spellcheck="false" autocomplete="off"></label>
                 </div>
             `).appendTo(table_top_element);
 
@@ -326,9 +326,9 @@ class Table{
         if(this.paginated) $(`
                 <div class="table-top-radio-option">
                     <h3>Rows:</h3>
-                    <label><input name="${this.name}-table-row-count" value="10" type="radio" checked><span></span>10</label>
-                    <label><input name="${this.name}-table-row-count" value="50" type="radio"><span></span>50</label>
-                    <label><input name="${this.name}-table-row-count" value="100" type="radio"><span></span>100</label>
+                    <label><input name="${this.name}_table_row_count" value="10" type="radio" checked><span></span>10</label>
+                    <label><input name="${this.name}_table_row_count" value="50" type="radio"><span></span>50</label>
+                    <label><input name="${this.name}_table_row_count" value="100" type="radio"><span></span>100</label>
                 </div>
             `).appendTo(table_top_element);
 
@@ -336,8 +336,8 @@ class Table{
         if(this.sortable) $(`
                 <div id="sort-radio-option" class="table-top-radio-option">
                     <h3>Order:</h3>
-                    <label><input name="${this.name}-table-sort-mode" value="ascending" type="radio" checked><span></span>Ascending</label>
-                    <label><input name="${this.name}-table-sort-mode" value="descending" type="radio"><span></span>Descending</label>
+                    <label><input name="${this.name}_table_sort_mode" value="ascending" type="radio" checked><span></span>Ascending</label>
+                    <label><input name="${this.name}_table_sort_mode" value="descending" type="radio"><span></span>Descending</label>
                 </div>
             `).appendTo(table_top_element);
 
@@ -367,7 +367,7 @@ class Table{
             $(`
                 <div class="lexos-table-bottom">
                     <div>
-                        <h3>Page</h3><input name="${this.name}-table-page-number" type="text" spellcheck="false" autocomplete="off" value="1"></label>
+                        <h3>Page</h3><input name="${this.name}_table_page_number" type="text" spellcheck="false" autocomplete="off" value="1"></label>
                         <h3>of </h3>
                         <h3 id="${this.name}-table-page-count">1</h3>
                     </div>
@@ -379,7 +379,7 @@ class Table{
             `).appendTo(this.table_element);
 
             this.page_number_element =
-                $(`input[name="${this.name}-table-page-number"]`);
+                $(`input[name="${this.name}_table_page_number"]`);
         }
     }
 
@@ -471,7 +471,7 @@ class Table{
             .addClass("selected-cell");
 
         // Set the selected cell input
-        $(`input[name="${this.name}-table-selected-column"]`)
+        $(`input[name="${this.name}_table_selected_column"]`)
             .val(this.selected_column_id);
     }
 }

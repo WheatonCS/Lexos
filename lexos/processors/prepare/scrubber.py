@@ -764,9 +764,9 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     """
 
     file_strings = {'consfileselect[]': '', 'lemfileselect[]': '',
-                    'scfileselect[]': '', 'swfileselect[]': '',
-                    'manualconsolidations': '', 'manuallemmas': '',
-                    'manualspecialchars': '', 'manualstopwords': ''}
+                    'scfileselect[]': '', 'stop_words_file[]': '',
+                    'consolidations': '', 'lemmas': '',
+                    'special_characters': '', 'stop_words': ''}
 
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
@@ -787,11 +787,11 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
     all_options = [file_strings.get('consfileselect[]'),
                    file_strings.get('lemfileselect[]'),
                    file_strings.get('scfileselect[]'),
-                   file_strings.get('swfileselect[]'),
-                   request.form['manualconsolidations'],
-                   request.form['manuallemmas'],
-                   request.form['manualspecialchars'],
-                   request.form['manualstopwords']]
+                   file_strings.get('stop_words_file[]'),
+                   request.form['consolidations'],
+                   request.form['lemmas'],
+                   request.form['special_characters'],
+                   request.form['stop_words']]
 
     return all_options
 
@@ -1032,13 +1032,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         # if file_and_manual does not contain words there is no issue calling
         # remove_stopwords()
-        if request.form['sw_option'] == "stop":
+        if request.form['stop_words_method'] == "Stop":
             return remove_stopwords(
                 text=orig_text, removal_string=file_and_manual)
 
         # but all the text would be deleted if we called keep_words()
         # "\n" comes from "" + "\n" + ""
-        elif request.form['sw_option'] == "keep" and file_and_manual != "\n":
+        elif request.form['stop_words_method'] == "Keep" and file_and_manual != "\n":
             return keep_words(
                 text=orig_text, non_removal_string=file_and_manual)
 

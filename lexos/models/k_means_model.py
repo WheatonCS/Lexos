@@ -18,7 +18,7 @@ from sklearn.decomposition import PCA
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
+from lexos.receivers.k_means_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
 from lexos.receivers.matrix_receiver import IdTempLabelMap
 

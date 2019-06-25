@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     EMPTY_DTM_MESSAGE
-from lexos.models.topword_model import TopwordModel, TopwordTestOptions
-from lexos.receivers.topword_receiver import TopwordAnalysisType
+from lexos.models.top_words_model import TopwordModel, TopwordTestOptions
+from lexos.receivers.top_words_receiver import TopwordAnalysisType
 
 
 # ---------------------------- Test for z-test ------------------------------

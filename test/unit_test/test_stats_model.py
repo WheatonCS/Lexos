@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.models.stats_model import StatsModel, StatsTestOptions
+from lexos.models.statistics_model import StatsModel, StatsTestOptions
 
 # ------------------------ First test suite ------------------------
-from lexos.receivers.stats_receiver import StatsFrontEndOption
+from lexos.receivers.statistics_receiver import StatsFrontEndOption
 
 test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),

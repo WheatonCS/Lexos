@@ -9,8 +9,8 @@ from typing import List, Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.models.filemanager_model import FileManagerModel
-from lexos.receivers.topword_receiver import TopwordReceiver, \
+from lexos.models.file_manager_model import FileManagerModel
+from lexos.receivers.top_words_receiver import TopwordReceiver, \
     TopwordAnalysisType
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NOT_ENOUGH_CLASSES_MESSAGE, EMPTY_DTM_MESSAGE

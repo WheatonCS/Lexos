@@ -9,7 +9,7 @@ from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.receivers.similarity_receiver import SimilarityFrontEndOption, \
+from lexos.receivers.similarity_query_receiver import SimilarityFrontEndOption, \
     SimilarityReceiver
 
 

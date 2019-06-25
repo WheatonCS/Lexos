@@ -5,7 +5,7 @@ from lexos.helpers import constants
 from lexos.managers.utility import load_file_manager
 from lexos.managers.session_manager import session
 from lexos.models.content_analysis_model import ContentAnalysisModel
-from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver
+from lexos.receivers.content_analysis_receiver import ContentAnalysisReceiver
 from lexos.views.base import render
 
 content_analysis_blueprint = Blueprint("content-analysis", __name__)

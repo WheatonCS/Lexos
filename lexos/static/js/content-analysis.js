@@ -112,7 +112,7 @@ function initialize_button_callbacks(){
         });
     });
 
-    $(`input[type="radio"][name="sort-ascending"]`).change(function(){
+    $(`input[type="radio"][name="sort_ascending"]`).change(function(){
         send_content_analysis_request();
     });
 }
