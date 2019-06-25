@@ -335,10 +335,10 @@ class TopwordModel(BaseModel):
 
     def _get_result(self) -> TopwordResult:
         """Call the right method corresponding to user's selection.
+
         :return: a namedtuple that holds the topword result, which contains a
              header and a list of pandas series.
         """
-
         topword_analysis_option = self._topword_front_end_option
 
         if topword_analysis_option == TopwordAnalysisType.ALL_TO_PARA:
@@ -360,10 +360,10 @@ class TopwordModel(BaseModel):
             raise ValueError("Invalid topword analysis option.")
 
     def get_results(self) -> jsonify:
-        """Gets the top words data as a JSON object.
+        """Get the top words data as a JSON object.
+
         :return: The top words data as a JSON object.
         """
-
         def helper_series_to_table(series: pd.Series) -> List:
 
             # Get the top 30 words

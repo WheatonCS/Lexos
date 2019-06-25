@@ -16,6 +16,10 @@ class StatsFrontEndOption(NamedTuple):
     # The sort method
     sort_ascending: bool
 
+    # The colors
+    text_color: str
+    highlight_color: str
+
 
 class StatsReceiver(BaseReceiver):
     """This is the class that gets front end options for the stats model."""
@@ -48,7 +52,13 @@ class StatsReceiver(BaseReceiver):
         sort_ascending = bool(self._front_end_data[
             "statistics-table-sort-mode"] == "ascending")
 
+        # Get the colors
+        text_color = self._front_end_data.get("text_color")
+        highlight_color = self._front_end_data.get("highlight_color")
+
         # Return stats front end option.
         return StatsFrontEndOption(active_file_ids=active_file_ids,
                                    sort_column=sort_column,
-                                   sort_ascending=sort_ascending)
+                                   sort_ascending=sort_ascending,
+                                   text_color=text_color,
+                                   highlight_color=highlight_color)

@@ -11,7 +11,7 @@ function initialize_color_button(ok_callback){
         create_radio_options_popup(
             "Color", "color", "#color-button",
             "#color-input", [
-                ["lexos", "Lexos"],
+                ["default", "Default"],
                 ["grey", "Grey"],
                 ["cherry-tree", "Cherry Tree"],
                 ["sunset", "Sunset"],
@@ -39,8 +39,9 @@ function get_visualize_color(x){
     x = Math.sqrt(x);
 
     switch(color_scheme){
-        case "Lexos": return d3.scaleLinear()
-            .domain([0, 1]).range(["#F3F3F3", "#47BCFF"])(x);
+        case "Default": return d3.scaleLinear()
+            .domain([0, 1]).range([get_color("--foreground-color"),
+                get_color("--highlight-color")])(x);
         case "Grey": return d3.interpolateGreys(x);
         case "Plum": return d3.interpolateBuPu(x);
         case "Ocean": return d3.interpolateYlGnBu(x);

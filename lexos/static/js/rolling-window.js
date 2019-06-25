@@ -96,7 +96,8 @@ function create_rolling_window(){
 function send_rolling_window_result_request(){
 
     // Send a request for the k-means results
-    send_ajax_form_request("/rolling-window/results")
+    send_ajax_form_request("/rolling-window/results",
+        {text_color: get_color("--text-color")})
 
         // If the request was successful, initialize the graph, store the CSV
         // data, and enable the "Generate" and "CSV" buttons

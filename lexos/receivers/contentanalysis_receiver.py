@@ -33,7 +33,6 @@ class ContentAnalysisReceiver(BaseReceiver):
 
         :return: a ContentAnalysisOption object to hold all the options
         """
-
         options = [Option('formula', None),
                    Option('dict_label', None),
                    Option('toggle_all', None),

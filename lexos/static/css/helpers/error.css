@@ -15,7 +15,7 @@
     padding-right: 10rem;
     animation: marquee 20s infinite linear;
     animation-delay: -10s;
-    color: var(--foreground-color);
+    color: var(--error-text-color);
 }
 
 #error-text-2 {
@@ -40,7 +40,7 @@
 
 #error-close-button {
     pointer-events: all;
-    color: var(--foreground-color);
+    color: var(--error-text-color);
     background-color: var(--error-button-color);
     border: none;
 }

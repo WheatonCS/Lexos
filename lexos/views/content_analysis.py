@@ -1,11 +1,12 @@
 import os
 import glob
-from flask import request, render_template, Blueprint, jsonify
+from flask import request, Blueprint, jsonify
 from lexos.helpers import constants
 from lexos.managers.utility import load_file_manager
 from lexos.managers.session_manager import session
 from lexos.models.content_analysis_model import ContentAnalysisModel
 from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver
+from lexos.views.base import render
 
 content_analysis_blueprint = Blueprint("content-analysis", __name__)
 
@@ -23,7 +24,7 @@ def content_analysis() -> str:
         os.remove(file)
 
     # Return the content analysis page
-    return render_template("content-analysis.html")
+    return render("content-analysis.html")
 
 
 @content_analysis_blueprint.route("/content-analysis/dictionaries",
@@ -62,7 +63,7 @@ def upload_dictionaries() -> str:
 @content_analysis_blueprint.route("/content-analysis/analyze",
                                   methods=["POST"])
 def analyze():
-    """ Analyze the files.
+    """ Analyzes the files.
     :return: The results of the analysis.
     """
 

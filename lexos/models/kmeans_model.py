@@ -4,21 +4,23 @@ It uses sklearn.cluster.KMeans for most important analysis, please see:
 http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 """
 
+from typing import Optional, NamedTuple, List
+
+import colorlover as cl
 import numpy as np
 import pandas as pd
-import colorlover as cl
 import plotly.graph_objs as go
 from flask import jsonify
 from plotly.offline import plot
-from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
-from typing import Optional, NamedTuple, List
+from sklearn.decomposition import PCA
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
+from lexos.receivers.matrix_receiver import IdTempLabelMap
 
 # Alias for typed tuple to increase readability.
 PlotlyHTMLPlot = str
@@ -139,7 +141,6 @@ class KMeansModel(BaseModel):
         contains cluster numbers and the second column contains document names,
         the rest columns contain the coordinates of the files.
         """
-
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
@@ -166,7 +167,6 @@ class KMeansModel(BaseModel):
         :param reduced_data: PCA reduced two dimensional data.
         :return: A plotly heat map object that contains all polygons.
         """
-
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -251,7 +251,6 @@ class KMeansModel(BaseModel):
         :param k_means_index: Cluster result for all files.
         :return: A list of scatter plot contains centroid for each cluster.
         """
-
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -277,9 +276,9 @@ class KMeansModel(BaseModel):
 
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
+
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -320,10 +319,16 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
-            hovermode="closest")
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._k_means_front_end_option.text_color,
+                      size=16)
+        )
 
         # noinspection PyTypeChecker
         # Pack all data together in a list.
@@ -380,10 +385,23 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
-            hovermode="closest")
+            xaxis=dict(
+                showgrid=False,
+                zeroline=False
+            ),
+            yaxis=dict(
+                showgrid=False,
+                zeroline=False
+            ),
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._k_means_front_end_option.text_color,
+                      size=16))
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
@@ -396,9 +414,9 @@ class KMeansModel(BaseModel):
 
     def _get_3d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 3D plot that contains just the dots for K means result.
+
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
@@ -438,7 +456,7 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
             scene=dict(
@@ -448,7 +466,12 @@ class KMeansModel(BaseModel):
                            backgroundcolor="rgb(230,230,230)"),
                 zaxis=dict(showbackground=True,
                            backgroundcolor="rgb(230,230,230)")
-            )
+            ),
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._k_means_front_end_option.text_color,
+                      size=16)
         )
 
         # Return the plotly figure and table.
@@ -461,10 +484,10 @@ class KMeansModel(BaseModel):
         )
 
     def _get_result(self) -> KMeansUnprocessedResult:
-        """ Get the k-means data.
+        """Get the k-means data.
+
         :return: The k-means data.
         """
-
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -487,10 +510,10 @@ class KMeansModel(BaseModel):
         return k_means_unprocessed_result
 
     def get_results(self) -> str:
-        """ Gets the k-means results.
+        """Get the k-means results.
+
         :return: The k-means results.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

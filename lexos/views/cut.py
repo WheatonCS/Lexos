@@ -1,16 +1,15 @@
 import json
-
-from flask import request, session, render_template, Blueprint
-
+from flask import request, session, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.views.base import render
 
 cut_blueprint = Blueprint("cut", __name__)
 
 
 @cut_blueprint.route("/cut", methods=["GET"])
 def cut():
-    """Gets the cut page.
+    """ Gets the cut page.
     :return: The cut page.
     """
 
@@ -18,13 +17,12 @@ def cut():
     if "cuttingoptions" not in session:
         session["cuttingoptions"] = constants.DEFAULT_CUT_OPTIONS
 
-    return render_template("cut.html")
+    return render("cut.html")
 
 
 @cut_blueprint.route("/cut/download", methods=["GET"])
 def download():
-    """Downloads the cut files.
-
+    """ Downloads the cut files.
     :return: A .zip file containing the cut files.
     """
 
@@ -34,8 +32,7 @@ def download():
 
 @cut_blueprint.route("/cut/execute", methods=["POST"])
 def execute():
-    """Cuts the files.
-
+    """ Cuts the files.
     :return: Previews of the cut files.
     """
 

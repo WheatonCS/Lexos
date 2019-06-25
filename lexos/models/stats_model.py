@@ -1,12 +1,16 @@
-import pandas as pd
+"""This is the statistics model which gets the statistics data."""
+
+from typing import Optional, NamedTuple, List
+
 import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
-from typing import Optional, NamedTuple, List
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
 from lexos.receivers.stats_receiver import StatsReceiver, StatsFrontEndOption
 
@@ -100,10 +104,10 @@ class StatsModel(BaseModel):
 
     @property
     def _get_document_statistics_dataframe(self) -> pd.DataFrame:
-        """Gets a Pandas dataframe containing the statistics of each document.
+        """Get a Pandas dataframe containing the statistics of each document.
+
         :return: A Pandas dataframe containing statistics of each document.
         """
-
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -139,7 +143,7 @@ class StatsModel(BaseModel):
 
     @staticmethod
     def __get_quartile__(index: float, arr: np.array) -> float:
-        """Gets the quartile of the array.
+        """Get the quartile of the array.
 
         The numpy quantile function calculates the quartiles in a different way
         than how plotly calculates them and the results are slightly different
@@ -245,10 +249,10 @@ class StatsModel(BaseModel):
         )
 
     def get_document_statistics(self) -> dict:
-        """ Gets the document statistics.
+        """Get the document statistics.
+
         :return: The document statistics.
         """
-
         result = self._get_document_statistics_dataframe.round(3)
 
         sorted_result = result.sort_values(
@@ -279,7 +283,7 @@ class StatsModel(BaseModel):
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="text",
             mode="markers",
-            marker=dict(color="#47BCFF"),
+            marker=dict(color=self._stats_option.highlight_color),
             text=labels
         )
 
@@ -288,7 +292,7 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color="#47BCFF"),
+            marker=dict(color=self._stats_option.highlight_color),
             jitter=.15
         )
 
@@ -313,8 +317,9 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis=dict(
-                showline=True,
-                zeroline=False
+                showline=False,
+                zeroline=False,
+                gridcolor=self._stats_option.text_color
             ),
             xaxis2=dict(
                 showgrid=False,
@@ -322,20 +327,25 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis2=dict(
-                showline=True,
-                zeroline=False
+                showline=False,
+                zeroline=False,
+                gridcolor=self._stats_option.text_color
             ),
-            hovermode="closest"
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._stats_option.text_color, size=16)
         )
 
         # Return the Plotly graph.
         return figure
 
     def get_box_plot(self) -> str:
-        """ Returns the document size Plotly graph.
+        """Return the document size Plotly graph.
+
         :return: The document size Plotly graph.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

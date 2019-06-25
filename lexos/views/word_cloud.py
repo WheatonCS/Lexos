@@ -1,10 +1,9 @@
 import json
-
 import pandas as pd
-from flask import session, render_template, Blueprint, request
-
+from flask import session, Blueprint, request
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.views.base import render
 
 word_cloud_blueprint = Blueprint("word_cloud", __name__)
 
@@ -19,7 +18,7 @@ def word_cloud() -> str:
     if "cloudoption" not in session:
         session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
 
-    return render_template("word-cloud.html")
+    return render("word-cloud.html")
 
 
 @word_cloud_blueprint.route("/word-cloud/get-word-counts", methods=["POST"])

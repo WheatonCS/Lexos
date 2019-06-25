@@ -176,21 +176,33 @@ class BCTModel(BaseModel):
         )
 
     def _get_bootstrap_consensus_tree_plot(self) -> plt:
+
+        # Get the colors
+        color = tuple(map(int, self._bct_option.text_color[4:-1].split(",")))
+        normalized_color = tuple(x / 255 for x in color)
+
         # Draw the consensus tree as a MatPlotLib object.
+        tree = self._get_bootstrap_consensus_tree()
+        tree.root.color = color
         Phylo.draw(
-            self._get_bootstrap_consensus_tree(),
+            tree,
             do_show=False,
             branch_labels=lambda clade: "{0:.4f}\n".format(clade.branch_length)
             if clade.branch_length is not None else ""
         )
 
         # Set labels for the plot.
-        plt.xlabel("Branch Length")
-        plt.ylabel("Documents")
+        plt.xlabel("Branch Length", color=normalized_color)
+        plt.ylabel("Documents", color=normalized_color)
 
         # Hide the two unused border.
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
+
+        # Set the color of the used borders and labels.
+        plt.gca().spines["bottom"].set_color(normalized_color)
+        plt.gca().spines["left"].set_color(normalized_color)
+        plt.gca().tick_params(colors=normalized_color)
 
         # Extend x-axis to the right to fit longer labels.
         x_left, x_right, y_low, y_high = plt.axis()
@@ -201,12 +213,13 @@ class BCTModel(BaseModel):
             w=9.5,
             h=(len(self._id_temp_label_map) * 0.3 + 1)
         )
-        plt.title("Bootstrap Consensus Tree Result")
+        plt.title("Bootstrap Consensus Tree Result", color=normalized_color)
         plt.gcf().tight_layout()
 
         # Change line spacing
         for text in plt.gca().texts:
             text.set_linespacing(spacing=0.1)
+            text.set_color(normalized_color)
 
         return plt
 
@@ -220,7 +233,7 @@ class BCTModel(BaseModel):
 
         # Create a bytes IO image holder and save figure to it.
         image_holder = BytesIO()
-        bct_plot.savefig(image_holder)
+        bct_plot.savefig(image_holder, transparent=True)
         image_holder.seek(0)
 
         # Decode image to utf-8 string.

@@ -1,7 +1,8 @@
 import json
 import re
-from flask import request, render_template, Blueprint, make_response
+from flask import request, Blueprint, make_response
 from lexos.managers import utility
+from lexos.views.base import render
 
 manage_blueprint = Blueprint("manage", __name__)
 
@@ -12,7 +13,7 @@ def manage() -> str:
     :return: The HTML of the manage page.
     """
 
-    return render_template("manage.html")
+    return render("manage.html")
 
 
 @manage_blueprint.route("/manage/documents", methods=["GET"])

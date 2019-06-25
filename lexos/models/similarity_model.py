@@ -4,7 +4,6 @@ from typing import NamedTuple
 
 import pandas as pd
 from scipy.spatial.distance import cosine
-from flask import jsonify
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
@@ -67,7 +66,6 @@ class SimilarityModel(BaseModel):
             - the name of the second row is Cosine Similarity Scores, contains
               distance between this file and "comp_file".
         """
-
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
@@ -105,10 +103,10 @@ class SimilarityModel(BaseModel):
             .round(4)
 
     def get_results(self) -> dict:
-        """ Gets the similarity query results.
+        """Get the similarity query results.
+
         :return: The similarity query results.
         """
-
         similarity_query = self._get_similarity_query()
 
         return {

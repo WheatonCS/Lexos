@@ -56,6 +56,10 @@
     overflow-y: hidden;
 }
 
+.lexos-table-content .centerer {
+    grid-row: span 2;
+}
+
 
 /* Head */
 .lexos-table-head-cell,

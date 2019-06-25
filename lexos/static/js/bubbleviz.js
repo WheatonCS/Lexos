@@ -138,7 +138,7 @@ function create_bubbleviz(response){
         .text(function(d){ return d.data.word; })
         .attr("font-family", $("#font-input").val())
         .attr("font-size", function(d){ return d.r/((d.data.word.length+1)/3); })
-        .attr("fill", "#FFFFFF")
+        .attr("fill", "var(--foreground-color)")
         .style("pointer-events", "none");
 
     // Fade in the bubbleviz

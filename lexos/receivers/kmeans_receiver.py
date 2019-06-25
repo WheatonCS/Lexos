@@ -29,6 +29,7 @@ class KMeansOption(NamedTuple):
     max_iter: int  # maximum number of iterations.
     tolerance: float  # relative tolerance, inertia to declare convergence.
     init_method: KMeansInit  # method of initialization.
+    text_color: str
 
 
 class KMeansReceiver(BaseReceiver):
@@ -58,9 +59,12 @@ class KMeansReceiver(BaseReceiver):
         max_iter = int(self._front_end_data["max_iter"])
         tolerance = float(self._front_end_data["tolerance"])
 
+        text_color = self._front_end_data["text_color"]
+
         return KMeansOption(viz=viz,
                             n_init=n_init,
                             k_value=k_value,
                             max_iter=max_iter,
                             tolerance=tolerance,
-                            init_method=init_method)
+                            init_method=init_method,
+                            text_color=text_color)

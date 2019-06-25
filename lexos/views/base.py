@@ -12,7 +12,7 @@ base_blueprint = Blueprint("base", __name__)
 
 @base_blueprint.route("/", methods=["GET"])
 def base() -> str:
-    """Handles redirection to other pages.
+    """ Handles redirection to other pages.
     :return: A redirect to the upload page.
     """
 
@@ -21,7 +21,7 @@ def base() -> str:
 
 @base_blueprint.route("/active-documents", methods=["GET"])
 def get_active_documents() -> str:
-    """Returns the number of active documents.
+    """ Returns the number of active documents.
     :return: The number of active documents.
     """
 
@@ -50,7 +50,7 @@ def get_active_files() -> str:
 
 @base_blueprint.route("/document-previews", methods=["GET"])
 def get_document_previews() -> str:
-    """Returns previews of the active documents.
+    """ Returns previews of the active documents.
     :return: Previews of the active documents.
     """
 
@@ -60,19 +60,19 @@ def get_document_previews() -> str:
 
 @base_blueprint.route("/no-session", methods=["GET"])
 def no_session() -> str:
-    """Loads the "no session" page.
+    """ Loads the "no session" page.
     If the user reaches a page without an active session, this function will
     load a page with a warning about having no session. The page will redirect
     to the upload page.
     :return: The "no session" page.
     """
 
-    return render_template("no-session.html")
+    return render("no-session.html")
 
 
 @base_blueprint.route("/download-workspace", methods=["GET"])
 def download_workspace() -> str:
-    """Send the workspace file (.lexos) to the user.
+    """ Sends the workspace file (.lexos) to the user.
     :return: The workspace file.
     """
 
@@ -87,7 +87,7 @@ def download_workspace() -> str:
 
 @base_blueprint.route("/reset", methods=["GET", "POST"])
 def reset() -> str:
-    """ Resets the session and initializes a new one.
+    """ Resets the session and initialize a new one.
     :return: A redirect to the upload page.
     """
 
@@ -107,20 +107,8 @@ def set_theme() -> str:
     return ''
 
 
-@base_blueprint.route("/get-theme", methods=["GET"])
-def get_theme() -> str:
-    """ Gets the currently set theme.
-    :return: The currently set theme.
-    """
-
-    if "generalsettings" not in session:
-        session["generalsettings"] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
-
-    return session["generalsettings"]["theme"]
-
-
 def detect_active_docs() -> int:
-    """Detects the number of active documents.
+    """ Detects the number of active documents.
     :return: The number of active documents.
     """
 
@@ -134,3 +122,15 @@ def detect_active_docs() -> int:
     else:
         redirect(url_for('base.no_session'))
         return 0
+
+
+def render(page) -> str:
+    """ Renders the given page.
+    :param page: The page to render
+    :return: The given page.
+    """
+
+    if "generalsettings" not in session:
+        session["generalsettings"] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
+
+    return render_template(page, theme=session["generalsettings"]["theme"])

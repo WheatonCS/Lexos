@@ -1,8 +1,8 @@
-from flask import session, render_template, Blueprint
-
+from flask import session, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
 from lexos.models.rolling_windows_model import RollingWindowsModel
+from lexos.views.base import render
 
 rolling_window_blueprint = Blueprint("rolling_window", __name__)
 
@@ -18,7 +18,7 @@ def rolling_window() -> str:
         session["rwoption"] = constants.DEFAULT_ROLLINGWINDOW_OPTIONS
 
     # Return the page
-    return render_template("rolling-window.html")
+    return render("rolling-window.html")
 
 
 @rolling_window_blueprint.route("/rolling-window/results", methods=["POST"])
