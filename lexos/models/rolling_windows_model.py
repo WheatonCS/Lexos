@@ -291,8 +291,8 @@ class RollingWindowsModel(BaseModel):
             # we previously turned second bool, increment.
             elif token == window_list[0][1:]:
                 if boolean_array[1][token_index]:
-                   window_sum[token_index] += incrementer
-                   boolean_array[1][token_index] = False
+                    window_sum[token_index] += incrementer
+                    boolean_array[1][token_index] = False
             # if search term has just rolled out of window, decrement
             if token == window_list[0] and \
                token[0] == passage[window_index - 1]:
@@ -327,7 +327,8 @@ class RollingWindowsModel(BaseModel):
         return copy.deepcopy(window_sum)
 
     # this function helps the following one
-    def get_compare_string(self, window_index: int, passage, length: int,
+    @staticmethod
+    def get_compare_string(window_index: int, passage, length: int,
                            reverse: bool) -> str:
         """Generate a string of a specific length out of a list of strings.
 
@@ -394,10 +395,10 @@ class RollingWindowsModel(BaseModel):
             # add or subtract the number of string matches in the new and
             # previous words
             length = len(token)
-            window_sum[token_index] -= incrementer * self.get_compare_string\
-                (window_index - 1, passage, length, reverse=False).count(token)
-            window_sum[token_index] += incrementer * self.get_compare_string\
-                (window_index + window_size - 1, passage, length, reverse=True)\
+            window_sum[token_index] -= incrementer * self.get_compare_string(
+                window_index - 1, passage, length, reverse=False).count(token)
+            window_sum[token_index] += incrementer * self.get_compare_string(
+                window_index + window_size - 1, passage, length, reverse=True)\
                 .count(token)
         return copy.deepcopy(window_sum)
 
@@ -420,7 +421,8 @@ class RollingWindowsModel(BaseModel):
                 # check a token-sized slice including previous character;
                 # decrement
                 window_sum[token_index] -= incrementer
-            if token == passage[window_index + window_size - length:window_index + window_size]:
+            if token == passage[window_index + window_size - length:
+                                window_index + window_size]:
                 # check a token-sized slice including new character;
                 # increment
                 window_sum[token_index] += incrementer
@@ -440,6 +442,60 @@ class RollingWindowsModel(BaseModel):
             window_sum[token_index] -= incrementer * prev_line.count(token)
             window_sum[token_index] += incrementer * new_line.count(token)
         return copy.deepcopy(window_sum)
+
+    def _choose_search_mode(self) -> callable:
+        token_type = self._options.average_token_options.token_type
+        window_unit = self._options.window_options.window_unit
+
+        if token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.word:
+            return self._word_window_word_search
+        elif token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.letter:
+            return self._char_window_word_search
+        elif token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.line:
+            return self._line_window_word_search
+        if token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.word:
+            return self._word_window_string_search
+        elif token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.letter:
+            return self._char_window_string_search
+        elif token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.line:
+            return self._line_window_string_search
+
+    def _get_first_sum(self, passage) -> list:  # passage may be str or list
+        tokens = self._options.average_token_options.tokens
+        token_type = self._options.average_token_options.token_type
+        window_unit = self._options.window_options.window_unit
+        window_size = self._options.window_options.window_size
+
+        if token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.word:
+            return [passage[:window_size].count(token)
+                    / window_size for token in tokens]
+        elif token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.letter:
+            return [passage[:window_size].strip().split().count(token)
+                    / window_size for token in tokens]
+        elif token_type == RWATokenType.word and window_unit == \
+                WindowUnitType.line:
+            return [''.join(passage[:window_size]).strip().split().count(token)
+                    / window_size for token in tokens]
+        if token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.word:
+            return [''.join(passage[:window_size]).count(token)
+                    / window_size for token in tokens]
+        elif token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.letter:
+            return [passage[:window_size].count(token)
+                    / window_size for token in tokens]
+        elif token_type == RWATokenType.string and window_unit == \
+                WindowUnitType.line:
+            return [''.join(passage[:window_size]).count(token)
+                    / window_size for token in tokens]
 
     def _find_tokens_average_in_windows(self) -> pd.DataFrame:
         """Find the token average in the given windows.
@@ -495,36 +551,9 @@ class RollingWindowsModel(BaseModel):
         # this block decides which of the above functions to use to check
         # windows; each condition also contains its own case for checking the
         # entirety of the first window, a one-time operation.
-        if token_type == RWATokenType.word and window_unit == \
-                WindowUnitType.word:
-            window_sum = [passage[:window_size].count(token)
-                          / window_size for token in tokens]
-            data_function = self._word_window_word_search
-        elif token_type == RWATokenType.word and window_unit == \
-                WindowUnitType.letter:
-            window_sum = [passage[:window_size].strip().split().count(token)
-                          / window_size for token in tokens]
-            data_function = self._char_window_word_search
-        elif token_type == RWATokenType.word and window_unit == \
-                WindowUnitType.line:
-            window_sum = [''.join(passage[:window_size]).strip().split().
-                          count(token) / window_size for token in tokens]
-            data_function = self._line_window_word_search
-        if token_type == RWATokenType.string and window_unit == \
-                WindowUnitType.word:
-            window_sum = [''.join(passage[:window_size]).count(token)
-                          / window_size for token in tokens]
-            data_function = self._word_window_string_search
-        elif token_type == RWATokenType.string and window_unit == \
-                WindowUnitType.letter:
-            window_sum = [passage[:window_size].count(token)
-                          / window_size for token in tokens]
-            data_function = self._char_window_string_search
-        elif token_type == RWATokenType.string and window_unit == \
-                WindowUnitType.line:
-            window_sum = [''.join(passage[:window_size]).count(token)
-                          / window_size for token in tokens]
-            data_function = self._line_window_string_search
+        if token_type != RWATokenType.regex:
+            data_function = self._choose_search_mode()
+            window_sum = self._get_first_sum(passage)
 
         # in the case of regex searches, simply perform the search on each
         # each window and store the result
@@ -538,9 +567,9 @@ class RollingWindowsModel(BaseModel):
                            index in range(1, passage_length - window_size + 1)]
         elif token_type == RWATokenType.regex:
             list_matrix = [[len(re.findall(pattern=token,
-                                           string=''.join(passage
-                                                          [index:
-                                                           index+window_size]),
+                                           string=''.join(
+                                               passage[index:
+                                                       index+window_size]),
                                            flags=rwa_regex_flags))
                             / window_size for token in tokens] for
                            index in range(1, passage_length - window_size + 1)]
