@@ -26,7 +26,7 @@ class TestBCTModel:
             iterations=20,
             cutoff=0.5,
             replace=False,
-            text_color="blue"
+            text_color="rgb(0, 0, 0)"
         )
     )
 
