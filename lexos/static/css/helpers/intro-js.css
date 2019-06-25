@@ -21,7 +21,7 @@
 /* Highlight box */
 .introjs-helperLayer {
     border: none;
-    border-radius: 0;
+    border-radius: 2px;
     box-shadow: none;
     background-color: var(--foreground-color);
 }
@@ -52,7 +52,7 @@
     width: 30rem;
     max-width: none;
     padding: 2rem;
-    border-radius: 0;
+    border-radius: 2px;
     background-color: var(--foreground-color);
     color: var(--text-color);
     box-shadow: none;
@@ -62,8 +62,17 @@
 
 
 /* Bullets */
-.introjs-bullets {
-    display: none;
+.introjs-bullets ul li a {
+  width: 9px;
+  height: 9px;
+}
+
+.introjs-bullets ul li a:hover {
+  background: #777;
+}
+
+.introjs-bullets ul li a.active {
+  background: #777;
 }
 
 
@@ -103,10 +112,6 @@
     background-color: var(--secondary-highlight-color-light);
     box-shadow: none;
     border-color: var(--secondary-highlight-color);
-}
-
-.introjs-skipbutton {
-    display: none;
 }
 
 .introjs-button {

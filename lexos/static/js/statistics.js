@@ -221,7 +221,7 @@ function walkthrough(){
             position: "top",
         },
         {
-            element: "#documents-section",
+            element: "#table-section",
             intro: `This table displays information concerning term usage
                 across your documents. This table can be downloaded as a CSV
                 file.`,

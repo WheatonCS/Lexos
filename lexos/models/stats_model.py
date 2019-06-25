@@ -334,8 +334,7 @@ class StatsModel(BaseModel):
             hovermode="closest",
             paper_bgcolor="rgba(0, 0, 0, 0)",
             plot_bgcolor="rgba(0, 0, 0, 0)",
-            font=dict(family="Open Sans Semibold",
-                      color=self._stats_option.text_color, size=16)
+            font=dict(color=self._stats_option.text_color, size=16)
         )
 
         # Return the Plotly graph.
