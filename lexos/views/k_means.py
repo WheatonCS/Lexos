@@ -1,8 +1,8 @@
-from flask import session, render_template, Blueprint
-
+from flask import session, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
 from lexos.models.kmeans_model import KMeansModel
+from lexos.views.base import render
 
 k_means_blueprint = Blueprint("k-means", __name__)
 
@@ -20,15 +20,15 @@ def k_means() -> str:
         session["kmeanoption"] = constants.DEFAULT_KMEAN_OPTIONS
 
     # Return the k-means clustering page
-    return render_template("k-means.html")
+    return render("k-means.html")
 
 
 @k_means_blueprint.route("/k-means/results", methods=["POST"])
 def results():
-    """Get the k-means results.
-
+    """Gets the k-means results.
     :return: The k-means results.
     """
+
     # Cache options
     session_manager.cache_analysis_option()
     session_manager.cache_k_mean_option()

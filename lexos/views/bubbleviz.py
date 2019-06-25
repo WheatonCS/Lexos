@@ -1,18 +1,16 @@
 import json
-
 import pandas as pd
-from flask import session, render_template, Blueprint, request
-
+from flask import session, Blueprint, request
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
+from lexos.views.base import render
 
 bubbleviz_blueprint = Blueprint("bubbleviz", __name__)
 
 
 @bubbleviz_blueprint.route("/bubbleviz", methods=["GET"])
 def viz():
-    """Gets the bubbleviz page.
-
+    """ Gets the bubbleviz page.
     :return: The bubbleviz page.
     """
 
@@ -21,15 +19,15 @@ def viz():
     if "bubblevisoption" not in session:
         session["bubblevisoption"] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
 
-    return render_template("bubbleviz.html")
+    return render("bubbleviz.html")
 
 
 @bubbleviz_blueprint.route("/bubbleviz/get-word-counts", methods=["POST"])
 def get_word_counts() -> str:
-    """Get the top 100 word counts across all active files.
-
+    """ Gets the top 100 word counts across all active files.
     :return: The top 100 word counts across all active files.
     """
+
     file_manager = utility.load_file_manager()
     session_manager.cache_cloud_option()
 

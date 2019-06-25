@@ -1,19 +1,19 @@
-from flask import render_template, Blueprint, session
-
+from flask import Blueprint, session
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
 from lexos.models.filemanager_model import FileManagerModel
 from lexos.models.topword_model import TopwordModel
+from lexos.views.base import render
 
 top_words_blueprint = Blueprint("top-words", __name__)
 
 
 @top_words_blueprint.route("/top-words", methods=["GET"])
 def top_words() -> str:
-    """Get the top words page.
-
+    """ Gets the top words page.
     :return: The top words page.
     """
+
     # Set the default options
     if "topwordoption" not in session:
         session["topwordoption"] = constants.DEFAULT_TOPWORD_OPTIONS
@@ -21,25 +21,25 @@ def top_words() -> str:
         session["analyoption"] = constants.DEFAULT_ANALYZE_OPTIONS
 
     # Return the top words page
-    return render_template("top-words.html")
+    return render("top-words.html")
 
 
 @top_words_blueprint.route("/top-words/class-divisions", methods=["GET"])
 def class_divisions() -> str:
-    """Get the class divisions.
-
+    """ Gets the class divisions.
     :return: The class divisions.
     """
+
     file_manager = FileManagerModel().load_file_manager()
     return file_manager.get_class_division_map().transpose().to_json()
 
 
 @top_words_blueprint.route("/top-words/results", methods=["POST"])
 def results() -> str:
-    """Get the top words results.
-
+    """ Gets the top words results.
     :return: The top words results.
     """
+
     # Cache the options
     session_manager.cache_analysis_option()
     session_manager.cache_top_word_options()

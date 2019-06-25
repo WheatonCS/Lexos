@@ -1,21 +1,22 @@
 import os
 import glob
-from flask import request, render_template, Blueprint, jsonify
+from flask import request, Blueprint, jsonify
 from lexos.helpers import constants
 from lexos.managers.utility import load_file_manager
 from lexos.managers.session_manager import session
 from lexos.models.content_analysis_model import ContentAnalysisModel
 from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver
+from lexos.views.base import render
 
 content_analysis_blueprint = Blueprint("content-analysis", __name__)
 
 
 @content_analysis_blueprint.route("/content-analysis", methods=["GET"])
 def content_analysis() -> str:
-    """Get the content analysis page.
-
+    """ Gets the content analysis page.
     :return: The content analysis page.
     """
+
     # Remove any existing uploaded files
     session["dictionary_labels"] = []
     files = glob.glob(get_path()+'*')
@@ -23,16 +24,16 @@ def content_analysis() -> str:
         os.remove(file)
 
     # Return the content analysis page
-    return render_template("content-analysis.html")
+    return render("content-analysis.html")
 
 
 @content_analysis_blueprint.route("/content-analysis/dictionaries",
                                   methods=["POST"])
 def dictionaries() -> str:
-    """Get the uploaded file names.
-
+    """ Gets the uploaded file names.
     :return: The uploaded file names.
     """
+
     return jsonify(session["dictionary_labels"] if
                    "dictionary_labels" in session else [])
 
@@ -40,10 +41,10 @@ def dictionaries() -> str:
 @content_analysis_blueprint.route("/content-analysis/upload-dictionaries",
                                   methods=["POST"])
 def upload_dictionaries() -> str:
-    """Upload dictionaries to the content analysis object.
-
+    """ Uploads dictionaries to the content analysis object.
     :return: The uploaded file names.
     """
+
     # Upload each file
     path = get_path()
     for upload_file in request.files.getlist("lemfileselect[]"):
@@ -62,10 +63,10 @@ def upload_dictionaries() -> str:
 @content_analysis_blueprint.route("/content-analysis/analyze",
                                   methods=["POST"])
 def analyze():
-    """Analyze the files.
-
+    """ Analyzes the files.
     :return: The results of the analysis.
     """
+
     path = get_path()
     analysis = ContentAnalysisModel()
     file_manager = load_file_manager()
@@ -113,10 +114,10 @@ def analyze():
 
 
 def get_path() -> str:
-    """Get the content analysis directory path.
-
+    """ Gets the content analysis directory path.
     :return: The content analysis directory path.
     """
+
     path = os.path.join(constants.TMP_FOLDER,
                         constants.UPLOAD_FOLDER,
                         session["id"], "content_analysis/")

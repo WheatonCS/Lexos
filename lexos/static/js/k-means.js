@@ -84,7 +84,8 @@ function initialize(response){
 function send_k_means_result_request(){
 
     // Send a request for the k-means results
-    send_ajax_form_request("/k-means/results")
+    send_ajax_form_request("/k-means/results",
+        {text_color: get_color("--text-color")})
 
         // If the request was successful, initialize the graph, store the CSV
         // data, and enable the "Generate" and download buttons

@@ -7,6 +7,12 @@
 
 @font-face {
     font-family: "Open Sans";
+    src: url("../../fonts/open-sans-regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Open Sans";
     src: url("../../fonts/open-sans-semibold.ttf") format("truetype");
     font-weight: 600;
 }
@@ -20,7 +26,7 @@
 h1 {
     font-family: "Quicksand", sans-serif;
     font-weight: 400;
-    font-size: 4rem;
+    font-size: 3.5rem;
     margin: 0;
     color: var(--text-color);
 }
@@ -68,6 +74,7 @@ b {
 html {
     height: 99.9%;
     font-size: 10px;
+    background-color: var(--background-color);
 }
 
 body {
@@ -76,9 +83,8 @@ body {
     grid-template-rows: 7rem calc((100vh - (100vh - 100%)) - 11rem) 4rem;
     height: 100%;
     margin: 0;
-    background-color: var(--background-color);
     opacity: 0;
-    transition: opacity .2s .2s;
+    transition: opacity .5s .2s;
 }
 
 #main-grid {
@@ -174,25 +180,32 @@ form {
 }
 
 #navbar-left {
-    display: grid;
-    grid-template-columns: min-content min-content auto;
+    display: flex;
     align-items: center;
-    grid-gap: 2rem;
-}
-
-#navbar-left h1 {
-    margin-bottom: .7rem;
     white-space: nowrap;
 }
 
-#page-title {
-    opacity: .75;
-    font-size: 2.5rem;
-    padding-top: 1rem;
+#lexos-dragon {
+    cursor: pointer;
+    height: 5rem;
+    margin-right: 2.3rem;
 }
 
-#lexos-dragon {
-    height: 5rem;
+#lexos-text {
+    cursor: pointer;
+    white-space: nowrap;
+    margin-right: 2rem;
+    margin-bottom: .7rem;
+    font-size: 4rem;
+}
+
+#page-title {
+    opacity: .5;
+    font-size: 3rem;
+}
+
+#navbar .tooltip-button {
+    margin-bottom: 1.6rem;
 }
 
 #navbar-right > a,
@@ -245,6 +258,7 @@ footer {
 #neh-logo {
     height: 3rem;
     margin-top: .5rem;
+    filter: brightness(var(--neh-logo-brightness));
 }
 
 
@@ -272,13 +286,13 @@ footer {
 
 /* Text input */
 input[type="text"] {
-    height: calc(3rem - .2rem);
+    height: 3rem;
     width: 6rem;
     padding: 0 1.3rem .1rem 1.3rem;
     border-radius: 3rem;
     outline: none;
     background-color: var(--foreground-color);
-    border: .2rem solid var(--background-color);
+    border: .2rem solid var(--button-border-color);
     transition: color .2s, border-color .2s, background-color .2s;
     user-select: text;
     -moz-user-select: text;
@@ -313,6 +327,16 @@ span > input[type="text"] {
     margin-bottom: 0;
 }
 
+textarea::-webkit-input-placeholder {
+    color: var(--text-color);
+    opacity: .5;
+}
+
+textarea::-moz-placeholder {
+    color: var(--text-color);
+    opacity: .5;
+}
+
 
 /* Textarea */
 textarea {
@@ -338,6 +362,7 @@ label {
     position: relative;
     display: inline-block;
     cursor: pointer;
+    height: 3rem;
 }
 
 label > span:before {
@@ -348,8 +373,8 @@ label > span:before {
     width: 2rem;
     height: 2rem;
     margin-right: 1rem;
-    background-color: var(--foreground-color-alternate);
-    border: .2rem solid var(--background-color);
+    background-color: var(--button-background-color);
+    border: .2rem solid var(--button-border-color);
     transition: background-color .2s, border-color .2s;
 }
 
@@ -378,8 +403,8 @@ input[type=radio] {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
-    background-color: var(--foreground-color);
-    border: .2rem solid var(--background-color);
+    background-color: var(--button-background-color);
+    border: .2rem solid var(--button-border-color);
     cursor: pointer;
     transition: background-color .2s;
 }
@@ -416,8 +441,8 @@ input[type=checkbox] {
     cursor: pointer;
     width: 2rem;
     height: 2rem;
-    background-color: var(--foreground-color);
-    border: .2rem solid var(--background-color);
+    background-color: var(--button-background-color);
+    border: .2rem solid var(--button-border-color);
     transition: border-color .2s;
 }
 
@@ -450,8 +475,8 @@ label input[type="checkbox"]:checked + span:after {
     height: 3rem;
     padding: .9rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
-    border: .2rem solid var(--background-color);
-    background-color: var(--foreground-color-alternate);
+    border: .2rem solid var(--button-border-color);
+    background-color: var(--button-background-color);
     cursor: pointer;
     transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
 }
@@ -498,7 +523,7 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .section-body .button {
-    margin: 0 0 .5rem .5rem;
+    margin: 0 0 1rem .5rem;
 }
 
 
@@ -528,21 +553,6 @@ label input[type="checkbox"]:checked + span:after {
     height: 2rem;
     margin-left: .5rem;
     font-size: 1.3rem;
-    border-radius: 50%;
-    transition: color .2s, background-color .2s;
-    color: var(--secondary-highlight-color);
-    background-color: var(--secondary-highlight-color-light);
-}
-
-.navbar-tooltip-button {
-    display: inline-flex;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    width: 4rem;
-    height: 4rem;
-    margin-left: 1rem;
-    font-size: 2rem;
     border-radius: 50%;
     transition: color .2s, background-color .2s;
     color: var(--secondary-highlight-color);

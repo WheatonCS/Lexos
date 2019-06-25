@@ -1,45 +1,30 @@
 import re
 import requests
-
 from urllib.parse import unquote
-
-from flask import request, render_template, Blueprint, jsonify
-
-from lexos.helpers import constants
+from flask import request, Blueprint, jsonify
 from lexos.managers import session_manager, utility
-from lexos.views.base import detect_active_docs
+from lexos.views.base import render
 
 upload_blueprint = Blueprint("upload", __name__)
 
 
 @upload_blueprint.route("/upload", methods=["GET"])
 def upload():
-    """Get the upload page.
-
+    """ Gets the upload page.
     :return: The upload page.
     """
-    # Detect the number of active documents.
-    num_active_docs = detect_active_docs()
-    if request.method == "GET":
 
-        # Fix the session in case the browser is caching the old session
-        session_manager.fix()
-
-        return render_template(
-            "upload.html",
-            MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
-            MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
-            MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,
-            itm="upload-tool",
-            numActiveDocs=num_active_docs)
+    # Fix the session in case the browser is caching the old session
+    session_manager.fix()
+    return render("upload.html")
 
 
 @upload_blueprint.route("/upload/add-document", methods=["POST"])
 def add_document() -> str:
-    """Add a document to the file manager or load a .lexos file.
-
+    """ Adds a document to the file manager or load a .lexos file.
     :return: None.
     """
+
     file_manager = utility.load_file_manager()
 
     # Get and decode the file name
@@ -62,10 +47,10 @@ def add_document() -> str:
 
 @upload_blueprint.route("/upload/scrape", methods=["POST"])
 def scrape():
-    """Scrape the URLs an generates text file from each URL.
-
+    """ Scrapes the URLs and generates a text file from each URL.
     :return: A list of the scraped files.
     """
+
     urls = request.json
     urls = urls.strip()
     urls = urls.replace(',', '\n')  # Replace commas with line breaks

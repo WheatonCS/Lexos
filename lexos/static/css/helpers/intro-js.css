@@ -23,10 +23,28 @@
     border: none;
     border-radius: 0;
     box-shadow: none;
+    background-color: var(--foreground-color);
 }
 
 
 /* Tooltip */
+.introjs-arrow.top,
+.introjs-arrow.top-right {
+    border-bottom-color: var(--foreground-color);
+}
+
+.introjs-arrow.left {
+    border-right-color: var(--foreground-color);
+}
+
+.introjs-arrow.bottom {
+    border-top-color: var(--foreground-color);
+}
+
+.introjs-arrow.right {
+    border-left-color: var(--foreground-color);
+}
+
 .introjs-tooltip {
     display: grid !important;
     grid-template-rows: 1fr min-content;
@@ -35,6 +53,8 @@
     max-width: none;
     padding: 2rem;
     border-radius: 0;
+    background-color: var(--foreground-color);
+    color: var(--text-color);
     box-shadow: none;
     opacity: 0;
     transition: opacity .5s;
@@ -70,6 +90,7 @@
     border-radius: 3rem;
     border: .2rem solid var(--secondary-highlight-color);
     background-color: var(--secondary-highlight-color);
+    -webkit-background-clip: inherit;
     background-image: none;
     text-shadow: none;
     color: var(--foreground-color);

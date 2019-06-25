@@ -319,10 +319,16 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
-            hovermode="closest")
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._k_means_front_end_option.text_color,
+                      size=16)
+        )
 
         # noinspection PyTypeChecker
         # Pack all data together in a list.
@@ -379,10 +385,23 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
-            hovermode="closest")
+            xaxis=dict(
+                showgrid=False,
+                zeroline=False
+            ),
+            yaxis=dict(
+                showgrid=False,
+                zeroline=False
+            ),
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._k_means_front_end_option.text_color,
+                      size=16))
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
@@ -437,7 +456,7 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
             scene=dict(
@@ -447,7 +466,12 @@ class KMeansModel(BaseModel):
                            backgroundcolor="rgb(230,230,230)"),
                 zaxis=dict(showbackground=True,
                            backgroundcolor="rgb(230,230,230)")
-            )
+            ),
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._k_means_front_end_option.text_color,
+                      size=16)
         )
 
         # Return the plotly figure and table.

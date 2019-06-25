@@ -1,8 +1,13 @@
-let theme = "default";
 $("document").ready(function(){
+
+    // Highlight the navbar button of the current page
     highlight_navbar_button();
+
+    // Initialize the active document count
     update_active_document_count();
-    initialize_theme();
+
+    // Initialize the theme popup
+    initialize_theme_popup();
 
     // If the "Help" button is pressed, toggle the help section visibility
     $("#help-button").click(toggle_help_section);
@@ -10,83 +15,55 @@ $("document").ready(function(){
     // If the navbar walkthrough button is pressed, begin the walkthrough
     $("#navbar-walkthrough-button").click(start_walkthrough);
 
+    // Initialize the navbar dropdown menus
     initialize_dropdown_menus();
+
+    // Fade in the page
+    $("body").css({transition: '', opacity: '1'});
 });
 
 
 /**
  * Initializes the theme.
  */
-function initialize_theme(){
-
-    // Get the currently set theme
-    $.ajax({type: "GET", url: "/get-theme"})
-
-        // If the request was successful, update the theme
-        .done(function(response){
-            theme = response;
-        })
-
-        // If the request failed, display an error
-        .fail(function(){ error("Could not get the theme."); })
-
-        // Always apply the theme CSS and initialize the theme popup
-        .always(function(){
-            apply_theme_css();
-            initialize_theme_popup();
-        });
-}
-
-
-/**
- * Applies the currently selected theme's CSS.
- */
-function apply_theme_css(){
-
-    // Create the theme CSS element
-    let css_element = $(`<link id="theme">`)
-        .appendTo("head")
-        .attr({type: "text/css", rel: "stylesheet",
-            href: `static/css/themes/${theme}.css`});
-
-    // When the theme CSS element is loaded, fade in the page
-    css_element[0].onload = function(){
-        $("body").css({transition: '', opacity: '1'});
-    };
-}
-
-
-/**
- * Initializes the theme popup.
- */
 function initialize_theme_popup(){
 
     // If the Lexos logo is clicked...
-    $("#lexos-dragon").click(function(){
+    $("#lexos-dragon, #lexos-text").click(function(){
 
         // Create a theme popup
         display_radio_options_popup("Theme", "theme", theme,
-
             [
                 ["default", "Default"],
                 ["grey", "Grey"],
-                ["mint", "Mint"]
-            ],
-
-            // If the "OK" button is pressed, set the theme
-            function(selected_value){
-                send_ajax_request("/set-theme", {theme: selected_value})
-                    .done(function(){
-                        theme = selected_value;
-                        close_popup();
-                        location.reload();
-                    })
-                    .fail(function(){
-                        error("Failed to set the theme.");
-                    });
-            }
-        );
+                ["grey-dark", "Grey Dark"],
+                ["mint", "Mint"],
+                ["mint-dark", "Mint Dark"],
+                ["solarized-light", "Solarized Light"],
+                ["solarized-dark", "Solarized Dark"]
+            ], set_theme);
     });
+}
+
+
+/**
+ * Sets the theme.
+ * @param {string} selected_theme: The theme to set.
+ */
+function set_theme(selected_theme){
+
+    // Send a request to set the theme
+    send_ajax_request("/set-theme", {theme: selected_theme})
+
+        // If the request was successful, update the theme and
+        // reload the page
+        .done(function(){
+            theme = selected_theme;
+            location.reload();
+        })
+
+        // If the request failed, display an error message
+        .fail(function(){ error("Failed to set the theme."); });
 }
 
 

@@ -8,7 +8,8 @@ function create_graph(url, callback =
     function(){ enable("#generate-button"); }){
 
     // Send the request for the Plotly graph
-    send_ajax_form_request(url)
+    send_ajax_form_request(url, {text_color: get_color("--text-color"),
+        highlight_color: get_color("--highlight-color")})
 
         // Always call the callback
         .always(callback)

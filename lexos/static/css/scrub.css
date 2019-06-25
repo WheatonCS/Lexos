@@ -25,11 +25,11 @@ form {
 }
 
 #left-column {
-    grid-template-rows: 24rem 1.37fr 1fr;
+    grid-template-rows: 25.5rem 1fr 1fr;
 }
 
 #middle-column {
-    grid-template-rows: 1.3fr 1fr;
+    grid-template-rows: 1fr 1fr;
 }
 
 
@@ -69,7 +69,7 @@ form {
 
 
 /* Stop/keep words */
-#stop-words-section label {
+#stop-words-section .scrub-section-top label {
     margin-right: 3rem;
 }
 
@@ -80,7 +80,6 @@ form {
 
 /* Special characters */
 .options-section label {
-    margin-top: .2rem;
     margin-bottom: 1rem;
 }
 

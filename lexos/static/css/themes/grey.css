@@ -1,9 +1,12 @@
-/* Palette */
 :root {
 
     /* Text */
     --text-color: #000000;
     --text-color-light: #909090;
+
+    /* Buttons */
+    --button-border-color: var(--text-color);
+    --button-background-color: var(--foreground-color-alternate);
 
     /* Background and foreground */
     --background-color: #E3E3E3;
@@ -12,7 +15,7 @@
 
     /* Primary highlight */
     --highlight-color: #000000;
-    --highlight-color-light: #dedede;
+    --highlight-color-light: #DEDEDE;
 
     /* Secondary highlight */
     --secondary-highlight-color: #181818;
@@ -23,6 +26,10 @@
     --error-button-color: #CD2741;
     --error-color: #E62843;
     --error-color-light: #FFE7E9;
+    --error-text-color: #FFFFFF;
+
+    /* NEH logo */
+    --neh-logo-brightness: 1;
 }
 
 

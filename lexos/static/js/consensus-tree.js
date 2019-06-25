@@ -69,7 +69,8 @@ function create_consensus_tree(){
     remove_errors();
 
     // Send a request for the consensus tree data
-    send_ajax_form_request("consensus-tree/graph")
+    send_ajax_form_request("consensus-tree/graph",
+        {text_color: get_color("--text-color")})
 
         // If the request was successful...
         .done(function(response){

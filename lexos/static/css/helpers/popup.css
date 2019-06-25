@@ -37,3 +37,7 @@
     justify-self: center;
     margin-top: 2rem;
 }
+
+.radio-button-popup #popup-content div:not(:last-child) {
+    margin-bottom: 1rem;
+}

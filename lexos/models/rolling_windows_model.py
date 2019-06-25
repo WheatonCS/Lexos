@@ -809,16 +809,26 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(data=result_plot,
-                             layout=go.Layout(
-                                dragmode="pan",
-                                margin=dict(
-                                    l=40,  # nopep8
-                                    r=0,
-                                    b=30,
-                                    t=0,
-                                    pad=4
-                                )))
+            return go.Figure(
+                data=result_plot,
+                layout=go.Layout(
+                    dragmode="pan",
+                    margin=dict(
+                        l=60,  # nopep8
+                        r=0,
+                        b=30,
+                        t=0,
+                        pad=4
+                    ),
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    font=dict(
+                        family="Open Sans Semibold",
+                        color=self._options.text_color,
+                        size=16
+                    )
+                )
+            )
 
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
@@ -850,16 +860,36 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(data=result_plot,
-                             layout=go.Layout(
-                                dragmode="pan",
-                                margin=dict(
-                                    l=40,  # nopep8
-                                    r=0,
-                                    b=30,
-                                    t=0,
-                                    pad=4
-                                )))
+            return go.Figure(
+                data=result_plot,
+                layout=go.Layout(
+                    dragmode="pan",
+                    margin=dict(
+                        l=60,  # nopep8
+                        r=0,
+                        b=30,
+                        t=0,
+                        pad=4
+                    ),
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    font=dict(
+                        family="Open Sans Semibold",
+                        color=self._options.text_color,
+                        size=16
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    )
+                )
+            )
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph.

@@ -7,6 +7,11 @@
     <title>Lexos</title>
     <link rel="shortcut icon" href="static/favicon.png"/>
 
+    <!-- Variables -->
+    <script>
+        let theme = "{{ theme }}";
+    </script>
+
     <!-- jQuery -->
     <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js"></script>
 
@@ -25,6 +30,9 @@
     <link rel="stylesheet" type="text/css" href="static/css/helpers/help.css"/>
 
     {% block head %}{% endblock %}
+
+    <!-- Theme -->
+    <link rel="stylesheet" type="text/css" href="static/css/themes/{{ theme }}.css"/>
 </head>
 
 
@@ -35,13 +43,11 @@
     <div id="navbar">
         <div id="navbar-left">
             <img id="lexos-dragon" src="static/images/Lexos_Dragon_Prime_closed.png"
-                 onmouseover="this.src='static/images/Lexos_Dragon_Prime_open.png';"
-                 onmouseout="this.src='static/images/Lexos_Dragon_Prime_closed.png';">
-            <h1>{L}exos</h1>
-            <h1 id="page-title">
-                <i>{% block title %}{% endblock %}</i>
-                <span id="navbar-walkthrough-button" class="left-justified navbar-tooltip-button">?</span>
-            </h1>
+                 onmouseover="this.src='static/images/Lexos_Dragon_Prime_open.png'"
+                 onmouseout="this.src='static/images/Lexos_Dragon_Prime_closed.png'">
+            <h1 id="lexos-text">{L}exos</h1>
+            <h1 id="page-title">{% block title %}{% endblock %}</h1>
+            <span id="navbar-walkthrough-button" class="left-justified tooltip-button">?</span>
         </div>
 
         <div id="navbar-right" class="right-justified">

@@ -126,10 +126,10 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
-        figure.layout.update({'margin': {'b': max_label_len * 4.5}})
+        figure.layout.update({'margin': {'b': max_label_len * 6}})
         # Calculate the space right most label needs.
-        right_margin = len(figure.layout.xaxis.ticktext[-1]) * 4 \
-            if len(figure.layout.xaxis.ticktext[-1]) * 4 > 100 else 100
+        right_margin = len(figure.layout.xaxis.ticktext[-1]) * 5 \
+            if len(figure.layout.xaxis.ticktext[-1]) * 5 > 100 else 100
         # Update right margin as well.
         figure.layout.update({'margin': {'r': right_margin}})
 
@@ -137,7 +137,7 @@ class DendrogramModel(BaseModel):
         max_x = max([max(data['x']) for data in figure.data])
 
         # Calculate proper x coordinate the figure should extend to.
-        x_value = max_x + 3
+        x_value = max_x + 5
 
         # Get the dummy scatter plot.
         dummy_scatter = self.get_dummy_scatter(x_value=x_value)
@@ -160,7 +160,7 @@ class DendrogramModel(BaseModel):
                  for file_id in self._doc_term_matrix.index.values])
 
         # Extend the left margin to fit all labels.
-        figure.layout.update({'margin': {'l': max_label_len * 8}})
+        figure.layout.update({'margin': {'l': max_label_len * 11}})
 
         # Find the max x value in the plot.
         max_x = max([max(data['x']) for data in figure['data']])
@@ -195,7 +195,19 @@ class DendrogramModel(BaseModel):
                 t=0,
                 pad=4
             ),
-            hovermode='x'
+            hovermode='x',
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._dendro_option.text_color, size=16),
+            xaxis=dict(
+                showline=False,
+                ticks=''
+            ),
+            yaxis=dict(
+                showline=False,
+                ticks=''
+            )
         )
 
         # Note that the extend figure method is a hack.

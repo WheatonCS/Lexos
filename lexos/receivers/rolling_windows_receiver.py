@@ -86,6 +86,9 @@ class RWAFrontEndOptions(NamedTuple):
     # A milestone, it is none if it is not given from frontend.
     milestone: Optional[str]
 
+    # The color to use
+    text_color: str
+
 
 class RollingWindowsReceiver(BaseReceiver):
     """Get all the options to generate rolling windows result."""
@@ -194,7 +197,8 @@ class RollingWindowsReceiver(BaseReceiver):
                 window_options=self._get_window_option(),
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
-                passage_file_id=self._get_passage_file_id()
+                passage_file_id=self._get_passage_file_id(),
+                text_color=self._front_end_data["text_color"]
             )
         elif self._front_end_data['counttype'] == 'average':
             return RWAFrontEndOptions(
@@ -203,7 +207,8 @@ class RollingWindowsReceiver(BaseReceiver):
                 window_options=self._get_window_option(),
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
-                passage_file_id=self._get_passage_file_id()
+                passage_file_id=self._get_passage_file_id(),
+                text_color=self._front_end_data["text_color"]
             )
         else:
             raise ValueError("invalid count type from front end")

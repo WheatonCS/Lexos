@@ -283,7 +283,7 @@ class StatsModel(BaseModel):
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="text",
             mode="markers",
-            marker=dict(color="#47BCFF"),
+            marker=dict(color=self._stats_option.highlight_color),
             text=labels
         )
 
@@ -292,7 +292,7 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color="#47BCFF"),
+            marker=dict(color=self._stats_option.highlight_color),
             jitter=.15
         )
 
@@ -317,8 +317,9 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis=dict(
-                showline=True,
-                zeroline=False
+                showline=False,
+                zeroline=False,
+                gridcolor=self._stats_option.text_color
             ),
             xaxis2=dict(
                 showgrid=False,
@@ -326,10 +327,15 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis2=dict(
-                showline=True,
-                zeroline=False
+                showline=False,
+                zeroline=False,
+                gridcolor=self._stats_option.text_color
             ),
-            hovermode="closest"
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(family="Open Sans Semibold",
+                      color=self._stats_option.text_color, size=16)
         )
 
         # Return the Plotly graph.
