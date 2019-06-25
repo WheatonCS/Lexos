@@ -115,21 +115,25 @@ def replacement_handler(text: str,
                          if token != ""]
 
     for replacement_line in replacement_lines:
-        if replacement_line and replacement_line.count(':') != 1:
-            raise LexosException(
-                NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
+        assert replacement_line and replacement_line.count(':') == 1, \
+            NOT_ONE_REPLACEMENT_COLON_MESSAGE
+        # if replacement_line and replacement_line.count(':') != 1:
+        #    raise LexosException(
+        #        NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
 
         # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
         replace_from_line, replace_to = replacement_line.split(':')
 
         # Not valid inputs -- ":word" or ":a"
-        if replace_from_line == "":
-            raise LexosException(
-                REPLACEMENT_NO_LEFT_HAND_MESSAGE + replacement_line)
+        assert replace_from_line != "", REPLACEMENT_NO_LEFT_HAND_MESSAGE
+        # if replace_from_line == "":
+        #    raise LexosException(
+        #        REPLACEMENT_NO_LEFT_HAND_MESSAGE + replacement_line)
         # Not valid inputs -- "a:b,c" or "a,b:c,d"
-        if ',' in replace_to:
-            raise LexosException(
-                REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
+        assert ',' not in replace_to, REPLACEMENT_RIGHT_OPERAND_MESSAGE
+        # if ',' in replace_to:
+        #    raise LexosException(
+        #        REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
 
         replacement_dict = {replace_from: replace_to
                             for replace_from in replace_from_line.split(",")
