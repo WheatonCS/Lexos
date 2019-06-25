@@ -325,8 +325,7 @@ class KMeansModel(BaseModel):
             hovermode="closest",
             paper_bgcolor="rgba(0, 0, 0, 0)",
             plot_bgcolor="rgba(0, 0, 0, 0)",
-            font=dict(family="Open Sans Semibold",
-                      color=self._k_means_front_end_option.text_color,
+            font=dict(color=self._k_means_front_end_option.text_color,
                       size=16)
         )
 
@@ -399,8 +398,7 @@ class KMeansModel(BaseModel):
             hovermode="closest",
             paper_bgcolor="rgba(0, 0, 0, 0)",
             plot_bgcolor="rgba(0, 0, 0, 0)",
-            font=dict(family="Open Sans Semibold",
-                      color=self._k_means_front_end_option.text_color,
+            font=dict(color=self._k_means_front_end_option.text_color,
                       size=16))
 
         # Return the plotly figure and table.
@@ -469,8 +467,7 @@ class KMeansModel(BaseModel):
             ),
             paper_bgcolor="rgba(0, 0, 0, 0)",
             plot_bgcolor="rgba(0, 0, 0, 0)",
-            font=dict(family="Open Sans Semibold",
-                      color=self._k_means_front_end_option.text_color,
+            font=dict(color=self._k_means_front_end_option.text_color,
                       size=16)
         )
 

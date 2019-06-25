@@ -84,13 +84,13 @@ function walkthrough(){
             position: "top",
         },
         {
-            element: "#sort-buttons",
+            element: "#sort-radio-option",
             intro: `You can sort your data table with these options, and by
                 clicking column headers on the data table.`,
             position: "top",
         },
         {
-            element: "#tokenize-buttons",
+            element: "#table-button-section",
             intro: `Here you can generate a data table. You can also choose to
                 download the data table as a CSV file.`,
             position: "top",

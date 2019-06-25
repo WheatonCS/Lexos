@@ -823,7 +823,6 @@ class RollingWindowsModel(BaseModel):
                     paper_bgcolor="rgba(0, 0, 0, 0)",
                     plot_bgcolor="rgba(0, 0, 0, 0)",
                     font=dict(
-                        family="Open Sans Semibold",
                         color=self._options.text_color,
                         size=16
                     )
@@ -874,7 +873,6 @@ class RollingWindowsModel(BaseModel):
                     paper_bgcolor="rgba(0, 0, 0, 0)",
                     plot_bgcolor="rgba(0, 0, 0, 0)",
                     font=dict(
-                        family="Open Sans Semibold",
                         color=self._options.text_color,
                         size=16
                     ),
