@@ -334,7 +334,7 @@ class Table{
 
         // If the table is sortable, create the sort direction option
         if(this.sortable) $(`
-                <div class="table-top-radio-option">
+                <div id="sort-radio-option" class="table-top-radio-option">
                     <h3>Order:</h3>
                     <label><input name="${this.name}-table-sort-mode" value="ascending" type="radio" checked><span></span>Ascending</label>
                     <label><input name="${this.name}-table-sort-mode" value="descending" type="radio"><span></span>Descending</label>
@@ -344,7 +344,7 @@ class Table{
         // If the table needs a button, create the button section
         let button_section_element;
         if(this.download_button || this.generate_button || this.tooltip)
-            button_section_element = $(`<div class="lexos-table-buttons"></div>`)
+            button_section_element = $(`<div id="table-button-section" class="lexos-table-buttons"></div>`)
                 .appendTo(table_top_element);
 
         // If the table needs a generate button, create one
