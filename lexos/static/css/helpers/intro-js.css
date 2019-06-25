@@ -105,9 +105,9 @@
     border-color: var(--secondary-highlight-color);
 }
 
-.introjs-skipbutton {
+/*.introjs-skipbutton {
     display: none;
-}
+}*/
 
 .introjs-button {
     margin-left: 1rem;
