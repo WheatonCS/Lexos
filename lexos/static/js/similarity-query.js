@@ -140,7 +140,7 @@ function walkthrough(){
             position: "top",
         },
         {
-            element: "#sim-query-buttons",
+            element: "#table-button-section",
             intro: `Here you can generate a new Similarity Query. You can also
                 choose to download the current table as a CSV file.`,
             position: "top",
