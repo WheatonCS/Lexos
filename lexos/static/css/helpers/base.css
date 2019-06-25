@@ -54,6 +54,10 @@ b {
     color: var(--text-color);
 }
 
+::placeholder {
+    color: var(--error-color);
+    opacity: 1;
+}
 
 /* Main Elements */
 *,
