@@ -110,7 +110,7 @@ def page_not_found(_):
     """Custom 404 Page"""
 
     app.logger.error("\nPage not found: {url}".format(url=request.path))
-    return render_template("404.html")
+    return render("404.html")
 
 
 @app.errorhandler(Exception)
