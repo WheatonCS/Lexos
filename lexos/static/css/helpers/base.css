@@ -213,9 +213,13 @@ form {
     margin: 1rem;
 }
 
-#navbar-right > #help-button {
+#navbar-right > #help-button{
     cursor: pointer;
     color: var(--secondary-highlight-color);
+}
+
+#navbar-right > #help-button:hover{
+    color: var(--secondary-highlight-color-dark);
 }
 
 
