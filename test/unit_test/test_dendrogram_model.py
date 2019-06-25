@@ -20,7 +20,8 @@ class TestLeftOrientation:
         front_end_option=DendroOption(
             orientation='left',
             linkage_method='average',
-            dist_metric='euclidean'
+            dist_metric='euclidean',
+            text_color="blue"
         ),
 
         id_temp_label_map={
@@ -68,7 +69,8 @@ class TestBottomOrientation:
         front_end_option=DendroOption(
             orientation='bottom',
             linkage_method='average',
-            dist_metric='euclidean'
+            dist_metric='euclidean',
+            text_color="blue"
         ),
 
         id_temp_label_map={

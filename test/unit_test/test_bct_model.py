@@ -25,7 +25,8 @@ class TestBCTModel:
             dist_metric="euclidean",
             iterations=20,
             cutoff=0.5,
-            replace=False
+            replace=False,
+            text_color="blue"
         )
     )
 

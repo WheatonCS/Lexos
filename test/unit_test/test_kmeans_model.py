@@ -27,7 +27,8 @@ front_end_option_voronoi = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 
 # Pack all test components.
@@ -86,7 +87,8 @@ front_end_option_two_d = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 # Pack all test components.
 test_option_two_d = KMeansTestOptions(
@@ -142,7 +144,8 @@ front_end_option_three_d = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 # Pack all test components.
 test_option_three_d = KMeansTestOptions(
@@ -188,7 +191,8 @@ front_end_option_special = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 # Pack all test components.
 test_option_empty = KMeansTestOptions(
