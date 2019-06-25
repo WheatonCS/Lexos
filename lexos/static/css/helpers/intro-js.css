@@ -62,8 +62,17 @@
 
 
 /* Bullets */
-.introjs-bullets {
-    display: none;
+.introjs-bullets ul li a {
+  width: 9px;
+  height: 9px;
+}
+
+.introjs-bullets ul li a:hover {
+  background: #777;
+}
+
+.introjs-bullets ul li a.active {
+  background: #777;
 }
 
 
@@ -104,10 +113,6 @@
     box-shadow: none;
     border-color: var(--secondary-highlight-color);
 }
-
-/*.introjs-skipbutton {
-    display: none;
-}*/
 
 .introjs-button {
     margin-left: 1rem;
