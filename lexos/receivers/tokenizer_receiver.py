@@ -7,7 +7,6 @@ from lexos.receivers.base_receiver import BaseReceiver
 class TokenizerOption(NamedTuple):
     """The typed tuple to hold tokenizer front end option."""
 
-    orientation: str
     start: Optional[int]
     length: Optional[int]
     search: Optional[str]
@@ -27,8 +26,6 @@ class TokenizerReceiver(BaseReceiver):
 
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
-        # This orientation option must always exist.
-        orientation = self._front_end_data["orientation"]
 
         # This exception is here because when header is requested, values
         # above related to data table drawing are not passed in.
@@ -53,7 +50,6 @@ class TokenizerReceiver(BaseReceiver):
             start=start,
             length=length,
             search=search,
-            orientation=orientation,
             sort_column=sort_column,
             sort_method=sort_method
         )
