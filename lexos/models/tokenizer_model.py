@@ -10,6 +10,7 @@ from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
+from lexos.managers.utility import load_file_manager
 
 
 class TokenizerTestOption(NamedTuple):
@@ -76,8 +77,12 @@ class TokenizerModel(BaseModel):
         # Check if empty DTM is received.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
+        labels = [file.label for file in load_file_manager().get_active_files()]
+
         # Transpose the dtm for easier calculation.
         file_col_dtm = self._doc_term_matrix.transpose()
+
+        file_col_dtm.columns = labels
 
         # Find total and average of each row's data.
         file_col_dtm.insert(loc=0, column="Total",
