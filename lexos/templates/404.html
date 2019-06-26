@@ -1,9 +1,21 @@
 {% extends "helpers/base-template.html" %}
 {% block title %}404{% endblock %}
+{% block head %}
+    <!-- 3D Modeler Stuff -->
+    <script type="text/javascript" src="/static/node_modules/jsmodeler/three.min.js"></script>
+	<script type="text/javascript" src="/static/node_modules/jsmodeler/jsmodeler.js"></script>
+	<script type="text/javascript" src="/static/node_modules/jsmodeler/jsmodeler.ext.three.js"></script>
+    <script type="text/javascript" src="/static/node_modules/jsmodeler/online3dembedder.js"></script>
+
+    <!-- Page JS -->
+    <script type="text/javascript" src="/static/js/404.js"></script>
+{% endblock %}
 
 <!-- Content -->
 {% block content %}
 <div class="centerer">
-    <h3>404 - Not Found</h3>
+    <!-- <h3>404 - Not Found</h3> -->
+    <!-- Edit sourcefiles names to the corresponding model when replacing 3D model -->
+    <canvas id="fullscreen" class="3dviewer threeddiv" sourcefiles="static/3d_files/lexos_dragon.stl" style="width: 1fr; height: 1fr"></canvas>
 </div>
 {% endblock %}

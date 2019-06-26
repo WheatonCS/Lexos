@@ -571,3 +571,10 @@ label input[type="checkbox"]:checked + span:after {
 .plotly-notifier {
     display: none;
 }
+
+/* 404 page */
+.threeddiv {
+    display: grid;
+    width: 80%;
+    height: 80%;
+  }
