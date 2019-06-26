@@ -79,8 +79,10 @@ class SimilarityModel(BaseModel):
         ]
 
         # get the labels for cos_scores
-        labels = [file.label for file in
-                  load_file_manager().get_active_files()]
+        labels = []
+        for file in load_file_manager().get_active_files():
+            if file.id != self._similarity_option.comp_file_id:
+                labels.append(file.label)
 
         # pack score and labels into a pandas data frame
         dataframe = pd.DataFrame(index=["Documents", "Cosine Similarity"],
