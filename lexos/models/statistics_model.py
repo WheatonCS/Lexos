@@ -1,14 +1,20 @@
-import pandas as pd
+"""This is the statistics model which gets the statistics data."""
+
+from typing import Optional, NamedTuple, List
+
 import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 from plotly import tools
 from plotly.offline import plot
-from typing import Optional, NamedTuple, List
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.receivers.matrix_receiver import MatrixReceiver, IdTempLabelMap
-from lexos.receivers.stats_receiver import StatsReceiver, StatsFrontEndOption
+from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.receivers.statistics_receiver import StatsReceiver, \
+    StatsFrontEndOption
+from lexos.managers.utility import load_file_manager
 
 
 class TextAnomalies(NamedTuple):
@@ -37,7 +43,6 @@ class StatsTestOptions(NamedTuple):
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: StatsFrontEndOption
-    id_temp_label_map: IdTempLabelMap
 
 
 class StatsModel(BaseModel):
@@ -54,25 +59,16 @@ class StatsModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_token_type_str = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _stats_option(self):
@@ -89,27 +85,24 @@ class StatsModel(BaseModel):
     @property
     def _token_type_str(self) -> str:
         """:return: the token type that was used when calculating the stats."""
-        if self._test_id_temp_label_map is not None:
-            return self._test_token_type_str
-        else:
-            # Get dtm front end options.
-            dtm_options = MatrixReceiver().options_from_front_end()
-            # Get the correct current type.
-            token_type = dtm_options.token_option.token_type
-            return "terms" if token_type == "word" else "character n-grams"
+        # Get dtm front end options.
+        dtm_options = MatrixReceiver().options_from_front_end()
+        # Get the correct current type.
+        token_type = dtm_options.token_option.token_type
+        return "terms" if token_type == "word" else "character n-grams"
 
     @property
     def _get_document_statistics_dataframe(self) -> pd.DataFrame:
-        """Gets a Pandas dataframe containing the statistics of each document.
+        """Get a Pandas dataframe containing the statistics of each document.
+
         :return: A Pandas dataframe containing statistics of each document.
         """
-
         # Check if empty corpus is given.
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._active_doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
@@ -139,7 +132,7 @@ class StatsModel(BaseModel):
 
     @staticmethod
     def __get_quartile__(index: float, arr: np.array) -> float:
-        """Gets the quartile of the array.
+        """Get the quartile of the array.
 
         The numpy quantile function calculates the quartiles in a different way
         than how plotly calculates them and the results are slightly different
@@ -201,14 +194,15 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
+        file_manager = load_file_manager()
         anomaly_se_small = [
-            self._id_temp_label_map[file_id]
+            file_manager.get_active_files()[file_id].label
             for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
         ]
 
         anomaly_se_large = [
-            self._id_temp_label_map[file_id]
+            file_manager.get_active_files()[file_id].label
             for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
         ]
@@ -220,13 +214,13 @@ class StatsModel(BaseModel):
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr_small = list(set(
-            self._id_temp_label_map[file_id]
+            file_manager.get_active_files()[file_id].label
             for file_id in active_file_ids
             if file_sizes[file_id] < first_quartile - 1.5 * iqr
         ))
 
         anomaly_iqr_large = list(set(
-            self._id_temp_label_map[file_id]
+            file_manager.get_active_files()[file_id].label
             for file_id in active_file_ids
             if file_sizes[file_id] > third_quartile + 1.5 * iqr
         ))
@@ -245,10 +239,10 @@ class StatsModel(BaseModel):
         )
 
     def get_document_statistics(self) -> dict:
-        """ Gets the document statistics.
+        """Get the document statistics.
+
         :return: The document statistics.
         """
-
         result = self._get_document_statistics_dataframe.round(3)
 
         sorted_result = result.sort_values(
@@ -256,8 +250,13 @@ class StatsModel(BaseModel):
             ascending=self._stats_option.sort_ascending
         )
 
-        return {"table": sorted_result.to_json(orient="values"),
-                "csv": sorted_result.to_csv()}
+        return {
+            "statistics-table-head":
+                ["Name", "Single-Occurrence Terms", "Total Terms",
+                 "Vocabulary Density", "Distinct Terms"],
+            "statistics-table-body": sorted_result.values.tolist(),
+            "statistics-table-csv": sorted_result.to_csv()
+        }
 
     def _get_box_plot_object(self) -> go.Figure:
         """Get box plot for the entire corpus.
@@ -265,8 +264,8 @@ class StatsModel(BaseModel):
         :return: A plotly object that contains the box plot.
         """
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._active_doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # Set up the points.
         scatter_plot = go.Scatter(
@@ -274,7 +273,7 @@ class StatsModel(BaseModel):
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="text",
             mode="markers",
-            marker=dict(color="#47BCFF"),
+            marker=dict(color=self._stats_option.highlight_color),
             text=labels
         )
 
@@ -283,7 +282,7 @@ class StatsModel(BaseModel):
             x0=0,  # Initial position of the box plot
             y=self._active_doc_term_matrix.sum(1).values,
             hoverinfo="y",
-            marker=dict(color="#47BCFF"),
+            marker=dict(color=self._stats_option.highlight_color),
             jitter=.15
         )
 
@@ -308,8 +307,9 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis=dict(
-                showline=True,
-                zeroline=False
+                showline=False,
+                zeroline=False,
+                gridcolor=self._stats_option.text_color
             ),
             xaxis2=dict(
                 showgrid=False,
@@ -317,20 +317,24 @@ class StatsModel(BaseModel):
                 showticklabels=False
             ),
             yaxis2=dict(
-                showline=True,
-                zeroline=False
+                showline=False,
+                zeroline=False,
+                gridcolor=self._stats_option.text_color
             ),
-            hovermode="closest"
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(color=self._stats_option.text_color, size=16)
         )
 
         # Return the Plotly graph.
         return figure
 
     def get_box_plot(self) -> str:
-        """ Returns the document size Plotly graph.
+        """Return the document size Plotly graph.
+
         :return: The document size Plotly graph.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

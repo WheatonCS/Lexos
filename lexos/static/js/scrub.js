@@ -16,9 +16,6 @@ $(function(){
             enable("#preview-button, #apply-button");
         });
 
-    // Initialize the tooltips
-    initialize_tooltips();
-
     // Disable the punctuation options when the "Remove Punctuation" checkbox
     // is unchecked
     let punctuation_checkbox_element = $("#punctuation-checkbox");
@@ -53,6 +50,12 @@ $(function(){
     // Initialize the upload buttons
     initialize_upload_buttons(["lemmas", "consolidations",
         "stop-words", "special-characters"]);
+
+    // Initialize the tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -98,10 +101,10 @@ function create_tag_options_popup(response){
             <div class="tag-table-row">
                 <h3></h3>
                 <div>
-                    <label><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}-action" value="remove-tag"><span></span>Remove Tag</label>
-                    <label><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}-action" value="remove-element"><span></span>Remove All</label>
-                    <label><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span></span>Replace</label>
-                    <label><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span></span>None</label>
+                    <label><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}_action" value="Remove Tag"><span></span>Remove Tag</label>
+                    <label><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}_action" value="Remove Element"><span></span>Remove All</label>
+                    <label><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}_action" value="Replace Element"><span></span>Replace</label>
+                    <label><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}_action" value="Leave Alone"><span></span>None</label>
                 </div>
                 <input class="disabled" type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">
             </div>
@@ -112,7 +115,7 @@ function create_tag_options_popup(response){
 
         // If the row's "Replace" radio button is selected, enable the
         // "Replacement" input, otherwise disable it
-        $(`input[name="${formatted_tag}-action"]`).change(function(){
+        $(`input[name="${formatted_tag}_action"]`).change(function(){
             let input_element = row_element.find(`input[type="text"]`);
             if($(this).val() === "replace-element")
                 input_element.removeClass("disabled");
@@ -205,7 +208,8 @@ function scrub(action){
         // text
         .fail(function()
         {
-            error("Failed to execute the scrubbing.");
+            error("Failed to execute the scrubbing. Check the " +
+                "formatting of additional options before retrying.");
             add_text_overlay("#previews", "Loading Failed");
             enable("#preview-button, #apply-button");
         });
@@ -314,7 +318,7 @@ function initialize_upload_buttons(names){
             // the displayed file name, and change the "Remove Upload" button
             // to say "Upload" again
             if (file_input_element.val()) {
-                file_input_element.val("");
+                file_input_element.val('');
                 upload_text_element.addClass("hidden");
                 upload_button_element.text("Upload");
                 return;
@@ -328,10 +332,55 @@ function initialize_upload_buttons(names){
             // "Remove Upload"
             file_input_element.change(function(event) {
                 let file = event.target.files[0];
-                upload_text_element.text(file.name);
+                upload_text_element.text(`Upload: ${file.name}`);
                 upload_text_element.removeClass("hidden");
                 upload_button_element.text("Remove Upload");
             });
         });
     }
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to the Scrub page!`,
+            position: "top",
+        },
+        {
+            element: "#scrubbing-options-section",
+            intro: `This is the Scrubbing Options section. These are the basic
+                scrubbing functions of Lexos. A few recommended options are
+                already selected.`,
+            position: "top",
+        },
+        {
+            element: "#preview-button",
+            intro: `You can preview your selected scrubbing options here.`,
+            position: "top",
+        },
+        {
+            element: "#apply-button",
+            intro: `To make any scrubbing choices permanent to your
+                documents, click here.`,
+            position: "top",
+        },
+        {
+            element: "#navbar-right",
+            intro: `Once you're satisfied with your scrubbed documents, you
+                can move on to other pages in Prepare, Visualize, or Analyze.`,
+            position: "bottom"
+        },
+        {
+            intro: `This concludes the Scrub walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

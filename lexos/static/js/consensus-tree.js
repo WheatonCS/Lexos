@@ -3,32 +3,35 @@ $(function(){
     // Display the loading overlay
     start_loading("#consensus-tree-body");
 
-    // Initialize the tooltips for the "Options", "Tokenize", "Normalize",
-    // and "Cull" sections
-    initialize_analyze_tooltips();
-    initialize_tooltips();
-
     // Register option popup creation callbacks for the "Distance Metric" and
     // "Linkage Method" buttons
     initialize_tree_options();
 
-    // Initialize the legacy form inputs and create the consensus tree,
-    // and initialize the "Generate" and "Download" buttons
-    get_active_file_ids(initialize, "#consensus-tree-body");
+    // Create the consensus tree and initialize the "Generate" and "Download"
+    // buttons
+    initialize();
+
+    // Initialize the tooltips
+    initialize_analyze_tooltips();
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
 /**
- * Initializes legacy form inputs and creates the consensus tree.
- * @param {string} response: The response from the "active-file-ids" request.
+ * Creates the consensus tree and initializes the "Generate" and "Download"
+ * buttons.
  */
 let image_data;
-function initialize(response){
+function initialize(){
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#consensus-tree-body", "No Active Documents");
+    // If there are fewer than two active documents, display warning text
+    // and return
+    if(active_document_count < 2){
+        add_text_overlay("#consensus-tree-body", `This Tool Requires at Least
+            Two Active Documents`);
         return;
     }
 
@@ -62,7 +65,8 @@ function create_consensus_tree(){
     remove_errors();
 
     // Send a request for the consensus tree data
-    send_ajax_form_request("consensus-tree/graph")
+    send_ajax_form_request("consensus-tree/graph",
+        {text_color: get_color("--text-color")})
 
         // If the request was successful...
         .done(function(response){
@@ -135,4 +139,55 @@ function initialize_tooltips(){
     // "Iterations"
     create_tooltip("#iterations-tooltip-button", `For 100 iterations, 80% of
         the tokens will be chosen with or without replacement.`);
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Consensus Tree!`,
+            position: "top",
+        },
+        {
+            element: "#consensus-tree-options-section",
+            intro: `These settings control how the Consensus Tree is
+                generated. Checking sample with replacement will allow the
+                segments to be used by another iteration.`,
+            position: "top",
+        },
+        {
+            element: "#tokenize-section",
+            intro: `Tokenize determines how terms are counted when generating
+                data.`,
+            position: "top",
+        },
+        {
+            element: "#normalize-section",
+            intro: `Normalize determines if and how term totals are weighted.`,
+            position: "top",
+        },
+        {
+            element: "#cull-section",
+            intro: `Cull limits the number of terms used to generate data, and
+                is optional.`,
+            position: "top",
+        },
+        {
+            element: "#consensus-tree-buttons",
+            intro: `Here you can generate a new Consensus Tree. You can also
+                choose to download the Consensus Tree as a static PNG.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Consensus Tree walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

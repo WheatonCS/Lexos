@@ -11,10 +11,10 @@ from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import FileIDContentMap
-from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.file_manager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
-from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
+from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
 
 # Set the rwa regex flags.
@@ -683,7 +683,6 @@ class RollingWindowsModel(BaseModel):
         :param index: The index to get the desired RGB color.
         :return: A string that contains the desired RGB color.
         """
-
         return cl.scales['8']['qual']['Set1'][index % 8] \
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
@@ -810,16 +809,29 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(data=result_plot,
-                             layout=go.Layout(
-                                dragmode="pan",
-                                margin=dict(
-                                    l=40,  # nopep8
-                                    r=0,
-                                    b=30,
-                                    t=0,
-                                    pad=4
-                                )))
+            return go.Figure(
+                data=result_plot,
+                layout=go.Layout(
+                    dragmode="pan",
+                    margin=dict(
+                        l=60,  # nopep8
+                        r=0,
+                        b=30,
+                        t=0,
+                        pad=4
+                    ),
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    font=dict(
+                        color=self._options.text_color,
+                        size=16
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
+                    )
+                )
+            )
 
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
@@ -851,16 +863,39 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(data=result_plot,
-                             layout=go.Layout(
-                                dragmode="pan",
-                                margin=dict(
-                                    l=40,  # nopep8
-                                    r=0,
-                                    b=30,
-                                    t=0,
-                                    pad=4
-                                )))
+            return go.Figure(
+                data=result_plot,
+                layout=go.Layout(
+                    dragmode="pan",
+                    margin=dict(
+                        l=60,  # nopep8
+                        r=0,
+                        b=30,
+                        t=0,
+                        pad=4
+                    ),
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    font=dict(
+                        color=self._options.text_color,
+                        size=16
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
+                    )
+                )
+            )
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph.
@@ -933,10 +968,10 @@ class RollingWindowsModel(BaseModel):
             raise ValueError("unhandled count type")
 
     def get_results(self) -> str:
-        """ Get the rolling window results.
+        """Get the rolling window results.
+
         :return: The rolling window results.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],

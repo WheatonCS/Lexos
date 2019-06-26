@@ -6,20 +6,21 @@
 }
 
 #help-section-navbar {
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 2rem;
+    justify-items: center;
     margin-top: 2rem;
     padding: 2rem;
-    background-color: #FFFFFF;
-    height: 7rem;
+    background-color: var(--foreground-color);
 }
 
 .help-section-title {
     display: block;
     margin-top: 2rem;
     padding: 2rem;
-    color: #FF8447;
-    background-color: #FFFFFF;
+    color: var(--secondary-highlight-color);
+    background-color: var(--foreground-color);
 }
 
 .help-section-paragraph,
@@ -31,11 +32,11 @@
 
 .help-section-paragraph {
     display: block;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
 }
 
 .help-section-list {
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
     display: block;
 }
 

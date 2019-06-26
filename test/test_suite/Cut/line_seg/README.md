@@ -1,6 +1,6 @@
 # Lines/Segment
 
-In this function the segments are divided based on the number of lines per segment 
+In this function, the segments are divided based on the number of lines per segment 
 (counted by each new line character). 
 
 
@@ -12,7 +12,6 @@ ResultFiles_dog_cat
 
 
 ## Test file: Sentences.txt
-
 1. Upload Sentences.txt
 
 2. Under the "Prepare" menu, select "Cut"
@@ -70,6 +69,6 @@ Results: ResultFiles_Sentences_2
 7. Click "Apply"
 
 8. You should now have 9 documents, each a segment of the original, all with 2 lines 
-except last one.
+except the last one.
 
 Results: ResultFiles_dog_cat

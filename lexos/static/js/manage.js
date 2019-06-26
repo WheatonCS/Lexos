@@ -23,6 +23,12 @@ $(function(){
 
     // Toggle selection when the "A" key is pressed
     key_down_callback('A', toggle_selection);
+
+    // Initialize the tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 /**
@@ -443,7 +449,7 @@ function send_request(url, payload = ""){
                 // "Download" button
                 if(parseInt(response) >= 1) enable("#download-button");
             });
-    });h
+    });
 }
 
 
@@ -461,3 +467,71 @@ function get_selected_document_ids(){
     return id_list;
 }
 
+
+/**
+ * Initializes the tooltips.
+ */
+function initialize_tooltips(){
+
+    // "Upload List"
+    create_tooltip("#manage-tooltip-button", `You can manage your uploaded
+        files here. Single-click or click and drag to select. Hold "D" while
+        performing these actions to deselect. Right-click for more options.`,
+        true);
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to the Manage page!`,
+            position: "top",
+        },
+        {
+            element: "#active",
+            intro: `Active documents will have a blue highlight to them. You
+                can deactivate documents by clicking while holding down "D".`,
+            position: "bottom"
+        },
+        {
+            element: "#document",
+            intro: `The Document column holds custom document names. You can
+                rename documents by right-clicking.`,
+            position: "bottom"
+        },
+        {
+            element: "#class",
+            intro: `If you want to group documents together, you may give them
+                a class by right-clicking.`,
+            position: "bottom"
+        },
+        {
+            element: "#excerpt",
+            intro: `Excerpt will give you a preview of your document.`,
+            position: "bottom"
+        },
+        {
+            element: "#help-button",
+            intro: `Check our Help section for more advice on the Manage
+                page.`,
+            position: "bottom"
+        },
+        {
+            element: "#prepare-button",
+            intro: `Once you"re satisfied with your active documents, you can
+                move on to the "Prepare" pages.`,
+            position: "bottom"
+        },
+        {
+            intro: `This concludes the Manage walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
+}

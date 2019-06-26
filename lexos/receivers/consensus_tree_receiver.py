@@ -26,6 +26,9 @@ class BCTOption(NamedTuple):
     # Sample with or without replacement.
     replace: bool
 
+    # The color to use
+    text_color: str
+
 
 class BCTReceiver(BaseReceiver):
     """This is the class to receive bootstrap consensus tree options."""
@@ -42,9 +45,10 @@ class BCTReceiver(BaseReceiver):
         replace = hasattr(self._front_end_data, 'replace')
 
         return BCTOption(
-            linkage_method=self._front_end_data['linkage'],
-            dist_metric=self._front_end_data['metric'],
+            linkage_method=self._front_end_data['linkage_method'].lower(),
+            dist_metric=self._front_end_data['distance_metric'],
             iterations=int(self._front_end_data['iterations']),
             cutoff=float(self._front_end_data['cutoff']),
-            replace=replace
+            replace=replace,
+            text_color=self._front_end_data["text_color"]
         )

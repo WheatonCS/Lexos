@@ -1,8 +1,8 @@
-from flask import render_template, Blueprint, session
-
+from flask import Blueprint, session, jsonify
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.similarity_model import SimilarityModel
+from lexos.models.similarity_query_model import SimilarityModel
+from lexos.views.base import render
 
 similarity_query_blueprint = Blueprint("similarity-query", __name__)
 
@@ -20,7 +20,7 @@ def similarity_query() -> str:
         session["similarities"] = constants.DEFAULT_SIM_OPTIONS
 
     # Return the similarity query page
-    return render_template("similarity-query.html")
+    return render("similarity-query.html")
 
 
 @similarity_query_blueprint.route(
@@ -35,4 +35,4 @@ def get_table() -> str:
     session_manager.cache_sim_options()
 
     # Return the table data
-    return SimilarityModel().get_results()
+    return jsonify(SimilarityModel().get_results())

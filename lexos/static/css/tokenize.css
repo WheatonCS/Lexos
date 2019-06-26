@@ -12,47 +12,5 @@ form {
 
 /* Options section */
 #options-section {
-    grid-template-columns: 1.6fr .8fr .8fr 1.5fr;
-}
-
-
-/* Table top */
-#table-top {
-    display: grid;
-    grid-template-columns: .9fr 1fr 1.1fr .8fr;
-}
-
-.table-top-radio-option {
-    justify-self: center;
-}
-
-#search-input {
-    width: 20rem;
-}
-
-
-/* Table */
-#table {
-    height: calc(100% - 10rem);
-}
-
-
-/* Table bottom */
-#table-bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 3rem;
-    margin: 1rem;
-}
-
-#page-number {
-    margin: 0 .5rem 0 .5rem;
-}
-
-#navigation-buttons {
-    justify-self: right;
-}
-
-#navigation-buttons > span {
-    margin-left: 1rem;
+    grid-template-columns: 1.0fr 1.0fr 1.0fr;
 }

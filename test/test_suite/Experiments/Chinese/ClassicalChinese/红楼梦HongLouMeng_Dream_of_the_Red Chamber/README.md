@@ -13,9 +13,9 @@ Hsiang, 2013)
 Here, we analyze two segments of files including one with the first 80 chapters and
 the other one with the remaining 40 chapters. After cutting them into pieces (each
 with approximately 10 chapters) you can observe that the last 40 chapters cluster
-seperately from the first 80 chapters in the dendrogram.
+separately from the first 80 chapters in the dendrogram.
 
-Though the K-Means clustering method with 12 clustsers, the Lexos tool groups
+Though the K-Means clustering method with 12 clusters, the Lexos tool groups
 different stories in each cluster, with the last 40 chapters almost grouped
 together in one cluster.
 
@@ -38,9 +38,6 @@ Steps:
     (a) First80Chapters.txt
     (b) Last40Chapters.txt
 
-    OR if testing individual chapters:
-    (c) all files in Individual_Chapters folder
-
 (1) SCRUB:
 
     (a) Remove Punctuation
@@ -49,36 +46,52 @@ Steps:
     Apply Scrubbing
 (2) CUT:
 
-    (a) Default Cutting Options - Segments/Documents - Number of Segments: 1
-    (b) Individual Cutting Options: (next to the document title in the Preview window) 
-        First80Chapters - Segments/Documents - Number of Segments: 8
-        Late40Chapters - Segments/Documents - Number of Segments: 4
-
-    Apply Cuts
-(3) ANALYZE - Clustering - Hierarchical Clustering:
+    (a) Go to manage and deselect Late40Chapters so that First80Chapters is the only active document
+    (b) Cut the First80Chapters using these settings:
+        - Set Cut Mode to "Segments"
+        - Set "Number of Segments" to 8
+        - Click Apply
+    (c) Go back to manage and deselect all documents except Late40Chapters
+    (d) Cut the Late40Chapters using these settings:
+        - Set Cut Mode to "Segments"
+        - Set "Number of Segments" to 8
+        - Click Apply
+    (e) Go back to manage and select all of the documents that were cut (everything except the original documents)
+    
+    You should have 12 Active Documents
+(3) ANALYZE - Dendrogram:
 
     (a) Use the default metrics:
-        Distance Method: Euclidean
-        Linkage Method: Average
-    (b) Choose Tokenize - 2 - gram, by Characters
-    (c) Choose Normalize - Proportional Counts (default)
+        - Distance Method: Euclidean (default)
+        - Linkage Method: Average (default)
+        - Orientation: Bottom
+    (b) Tokenize
+        - By Characters
+        - Change grams to 2
     
-    Get Dendrogram
+    Generate Dendrogram
     Compare your result with the .png found in the ResultsToExpect/ directory.
 
-#### (IF TESTING INDIVIDUAL CHAPTERS)
+IF TESTING INDIVIDUAL CHAPTERS:
+=====================================================================
 
-Do not forget to SCRUB the individual chapter files (see above)
+(0) UPLOAD:
+    
+    (a) All files in the Individual_Chapters folder
+    
+(1) SCRUB:
 
-(4) ANALYZE - Clustering - K-Means Clustering:
+    (a) Remove Punctuation
+    (b) Remove Digits
 
-     (a) K Value: 12
-     (b) Advanced K-Means Options:
-            Maximum Number of Iterations: 1000
-     (c) Choose Tokenize - 2 - gram, by Characters
-     (d) Choose Normalize - Proportional Counts (default)
+    Apply Scrubbing
+(2) ANALYZE - K-Means
+
+     (a) Options - change Clusters to 12
+     (b) Advanced - change Maximum Iterations: 1000
+     (c) Tokenize - choose By Characters, change grams to 2
      
-     Get K-Means Result
+     Generate K-Means Result
      Compare your result with the .png found in the ResultsToExpect/ directory.
         Do not expect a perfect match, but it should be quite similar.
 

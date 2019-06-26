@@ -1,17 +1,71 @@
+/* Table */
 .lexos-table {
     display: grid;
-    grid-template-rows: max-content auto;
+    grid-template-rows: min-content 1fr min-content;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
+}
+
+
+/* Top */
+.lexos-table-top,
+.lexos-table-bottom {
+    display: grid;
+    grid-auto-flow: column;
+    align-content: center;
+    justify-items: center;
+    min-height: 3rem;
+    margin: 1rem;
+}
+
+.lexos-table-top :last-child,
+.lexos-table-bottom :last-child {
+    justify-self: right;
+}
+
+.lexos-table-top :first-child,
+.lexos-table-bottom :first-child {
+    justify-self: left;
+}
+
+.lexos-table-top h3,
+.lexos-table-top label {
+    margin-right: 1rem;
+}
+
+.lexos-table .important-button {
+    margin-right: 1rem;
 }
 
 .lexos-table-title {
-    padding: 1rem;
-    color: #47BCFF;
+    word-break: break-word;
+    color: var(--highlight-color);
 }
 
+.lexos-table-top input[type="text"] {
+    width: 20rem;
+}
+
+
+/* Content */
+.lexos-table-content,
+.basic-lexos-table-content {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.lexos-table-content {
+    display: grid;
+    grid-template-rows: min-content auto;
+}
+
+.lexos-table-content .centerer {
+    grid-row: span 2;
+}
+
+
+/* Head */
 .lexos-table-head-cell,
 .lexos-table-cell {
     min-height: 4rem;
@@ -21,18 +75,22 @@
 }
 
 .lexos-table-head-cell {
-    color: #47BCFF;
+    color: var(--highlight-color);
 }
 
 .selected-cell {
-    background-color: #EAF5FF;
+    background-color: var(--highlight-color-light);
     transition: background-color .2s;
 }
 
+
+/* Body */
 .lexos-table-body {
     overflow-x: visible;
     overflow-y: auto;
     overflow-y: overlay;
+    min-width: min-content;
+    height: 100%;
 }
 
 .lexos-table-head,
@@ -51,5 +109,26 @@
 }
 
 .lexos-table-cell {
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
+}
+
+
+/* Bottom */
+.lexos-table-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 3rem;
+    margin: 1rem;
+}
+
+.lexos-table-bottom input {
+    margin: 0 1rem 0 1rem;
+}
+
+.lexos-table-page-number {
+    margin: 0 .5rem 0 .5rem;
+}
+
+.lexos-table-navigation-buttons span {
+    margin-left: 1rem;
 }

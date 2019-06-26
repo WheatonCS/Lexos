@@ -1,40 +1,62 @@
-let documents;
 let csv;
 $(function(){
 
-    // Initialize the tooltips in the "Comparison Method", "Tokenize",
-    // "Cull", "Class Divisions", and "Top Words" sections
+    // Add the loading overlays
+    start_loading("#class-divisions-body, #top-words-body");
+
+    // Set the normalize option to raw counts
+    $(`input[name="normalization_method"][value="Raw"]`).prop("checked", true);
+
+    // Create the class division tables and the top words tables
+    get_active_file_ids(initialize, "#class-divisions-body, #top-words-body");
+
+    // If the "Download" button is clicked, download the CSV
+    $("#download-button").click(function(){
+        download(csv, "top-words.csv");
+    });
+
+    // Initialize the tooltips
     initialize_analyze_tooltips();
     initialize_tooltips();
 
-    // Set the normalize option to raw counts
-    $(`input[name="normalizeType"][value="raw"]`).prop("checked", true);
-
-    // Initialize the legacy form inputs, create the class division tables,
-    // and create the top words tables
-    get_active_file_ids(initialize, "#class-divisions-body, #top-words-body");
-
-    // If the "Download" button is pressed, download the CSV
-    $("#download-button").click(function(){ download(csv, "top-words.csv"); });
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
 /**
- * Initializes the legacy form inputs, creates the class division tables,
- *      and creates the top words tables.
+ * Creates the class division tables and the top words tables.
  * @param {string} response: The response from the "active-file-ids" request.
  */
+let documents;
 function initialize(response){
 
     documents = parse_json(response);
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#class-divisions-body, #top-words-body",
-            "No Active Documents");
+    // If there are fewer than two active documents, display warning text
+    // and return
+    if(active_document_count <  2){
+        add_text_overlay("#class-divisions-body, #top-words-body", `This Tool
+            Requires at Least Two Active Documents`);
         return;
     }
+
+    // Otherwise, display "No Results" text on the "Top Words" section and
+    // enable the "Generate" button
+    add_text_overlay("#top-words-body", "No Results");
+    enable("#generate-button");
+
+    // Send the request for the class divisions data and create the class
+    // division tables
+    send_class_divisions_request();
+}
+
+
+/**
+ * Send the request for the class divisions data and create the class
+ *      division tables
+ */
+function send_class_divisions_request(){
 
     // Send a request to get the class divisions
     $.ajax({type: "GET", url: "top-words/class-divisions"})
@@ -47,7 +69,6 @@ function initialize(response){
 
             // If the "Generate" button is pressed, create the "Top Words" section
             $("#generate-button").click(function(){
-                start_loading("#top-words-body", "#generate-button, #download-button");
                 remove_errors();
                 send_top_words_request();
             });
@@ -96,7 +117,7 @@ function create_class_division_tables(response){
         .appendTo("#class-divisions-body");
 
     // Create the class divisions tables
-    for(const table of table_data) create_table(
+    for(const table of table_data) Table.create_basic_table(
         "#class-divisions-grid", table.data, '', table.name);
 
     // Remove the loading overlay from the "Class Divisions" section and fade
@@ -111,14 +132,17 @@ function create_class_division_tables(response){
  */
 function send_top_words_request(){
 
-    // If the inputs are invalid, remove the loading overlay, enable the
-    // buttons, and return
+    // If the inputs are invalid, display an error enable the "Generate"
+    // button, and return
     if(!validate_inputs() || !validate_analyze_inputs()){
-        top_words_loading_failure();
+        enable("#generate-button");
         return;
     }
 
-    // Otherwise, send a request for the top words results
+    // Otherwise, display the loading overlay
+    start_loading("#top-words-body", "#generate-button, #download-button");
+
+    // Send a request for the top words results
     send_ajax_form_request("top-words/results")
 
         // If the request was successful, create the top words tables and
@@ -131,7 +155,8 @@ function send_top_words_request(){
         // If the request failed, display an error, remove the loading overlay,
         // and enable the buttons
         .fail(function(){
-            top_words_loading_failure();
+            finish_loading("#top-words-body", '', "#generate-button");
+            add_text_overlay("#top-words-body", "Loading Failed");
             error("Failed to retrieve the top words data.");
         });
 }
@@ -148,8 +173,8 @@ function create_top_words_tables(tables){
     $(`<div id="top-words-grid"></div>`).appendTo("#top-words-body");
 
     // Create the top words tables
-    for(const table of tables) create_table("#top-words-grid",
-        table["result"], '', table["title"]);
+    for(const table of tables) Table.create_basic_table(
+        "#top-words-grid", table["result"], '', table["title"]);
 
     // Remove the loading overlay, fade in the tables, and enable the buttons
     finish_loading("#top-words-body", "#top-words-grid .lexos-table",
@@ -162,29 +187,15 @@ function create_top_words_tables(tables){
  * @return {boolean}: Whether the inputs are valid.
  */
 function validate_inputs(){
-    let comparison_method = $(`input[name="testInput"]:checked`).val();
+    let comparison_method = $(`input[name="comparison_method"]:checked`).val();
 
-    if((comparison_method === "classToPara" ||
-        comparison_method === "classToClass") && single_class){
+    if((comparison_method === "Each Document to Other Classes" ||
+        comparison_method === "Each Class to Other Classes") && single_class){
         error("Invalid comparison method.");
         return false;
     }
 
     return true;
-}
-
-
-/**
- * Remove the loading overlay and enable the buttons on the "Top Words"
- *      section.
- */
-function top_words_loading_failure(){
-
-    // Remove the loading overlay and enable the "Generate" button
-    finish_loading("#top-words-body", "", "#generate-button");
-
-    // Display "Loading Failed" text
-    add_text_overlay("#top-words-body", "Loading Failed");
 }
 
 
@@ -225,5 +236,54 @@ function initialize_tooltips(){
     // "Top Words"
     create_tooltip("#download-tooltip-button", `Get Topwords only displays the
         top 30 results. Download if you wish to see the full result.`, true);
+}
 
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Top Words!`,
+            position: "top",
+        },
+        {
+            element: "#comparison-method-section",
+            intro: `Here you can select how you want to compare documents.`,
+            position: "top",
+        },
+        {
+            element: "#tokenize-section",
+            intro: `Tokenize determines how terms are counted when generating
+                data.`,
+            position: "top",
+        },
+        {
+            element: "#cull-section",
+            intro: `Cull limits the number of terms used to generate data, and
+                is optional.`,
+            position: "top",
+        },
+        {
+            element: "#class-divisions-section",
+            intro: `If you have assigned classes on the Manage page, your
+                documents will be displayed here separated by class.`,
+            position: "top",
+        },
+        {
+            element: "#top-words-buttons",
+            intro: `Here you can generate new Top Words data. You can also
+                choose to download the results as a CSV file.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Top Words walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

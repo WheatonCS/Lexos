@@ -1,6 +1,6 @@
 # Cutter
 
-The cutter is a powerful tool to break up a text into different "chunks". 
+The cutter is a powerful tool that breaks up a text into different "chunks". 
 A chunk is a segment of the original text as tokenized by a letter 
 (character n-gram) or word (word n-gram) size that is
 determined by the user's choices on the cutter page.

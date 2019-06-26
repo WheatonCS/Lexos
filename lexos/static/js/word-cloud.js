@@ -8,6 +8,9 @@ $(function(){
 
     // If the "Generate" button is pressed, recreate the word cloud
     $("#generate-button").click(get_word_cloud_data);
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -161,4 +164,54 @@ function create_word_cloud(dataset){
     // Initialize the SVG and PNG download buttons
     initialize_png_link("svg", "#png-button", width, height, "word-cloud.png");
     initialize_svg_link("svg", "#svg-button", "word-cloud.svg");
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Word Cloud!`,
+            position: "top",
+        },
+        {
+            element: "#word-cloud-container",
+            intro: `This is your Word Cloud.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-font",
+            intro: `You can change the font-style of your Word Cloud here
+                provided your computer has access to the font.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-term-count",
+            intro: `You can change the amount of words displayed in your cloud
+                here.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-color",
+            intro: `You can choose from a variety of color themes from the
+                dropdown menu here. Click "OK" to generate.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-buttons",
+            intro: `You can generate a new Word Cloud at anytime here. You can
+                also choose to download a static PNG or vector SVG.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Word Cloud walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

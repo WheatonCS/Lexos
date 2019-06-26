@@ -1,5 +1,6 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/base-template.html" %}
 
+{% block title %}Cut{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -24,23 +25,26 @@
         <div id="cut-mode-section" class="section">
 
             <div class="vertical-splitter section-top">
-                <h3 class="title">Cut Mode</h3>
+                <div>
+                    <h3 class="title">Cut Mode</h3>
+                </div>
                 <span id="cut-mode-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
+
 
             <div id="cut-mode-grid" class="section-body">
 
                 <div>
-                    <label><input type="radio" name="cutType" value="words" checked><span></span>Tokens</label><br>
-                    <label><input type="radio" name="cutType" value="letters"><span></span>Characters</label>
+                    <label><input type="radio" name="cut_mode" value="Tokens" checked><span></span>Tokens</label><br>
+                    <label><input type="radio" name="cut_mode" value="Characters"><span></span>Characters</label>
                 </div>
 
                 <div>
-                    <label><input type="radio" name="cutType" value="lines"><span></span>Lines</label><br>
-                    <label><input type="radio" name="cutType" value="number"><span></span>Segments</label>
+                    <label><input type="radio" name="cut_mode" value="Lines"><span></span>Lines</label><br>
+                    <label><input type="radio" name="cut_mode" value="Segments"><span></span>Segments</label>
                 </div>
 
-                <label><input type="radio" name="cutType" value="milestone"><span></span>Milestones</label>
+                <label><input type="radio" name="cut_mode" value="Milestones"><span></span>Milestones</label>
             </div>
         </div>
 
@@ -52,36 +56,30 @@
 
                 <!-- Segment size -->
                 <div id="segment-size-input">
-                    <h3>Segment Size</h3>
-                    <input name="cutValue" type="text" spellcheck="false" autocomplete="off">
+                    <h3 id="segment-size-label">Segment Size</h3>
+                    <input name="segment_size" type="text" spellcheck="false" autocomplete="off">
                     <span id="segment-size-tooltip-button" class="tooltip-button">?</span>
-                </div>
-
-                <!-- Number of segments -->
-                <div id="number-of-segments-input" class="hidden">
-                    <h3>Number of Segments</h3>
-                    <input name="cutValue" type="text" spellcheck="false" autocomplete="off">
-                    <span id="number-of-segments-tooltip-button" class="tooltip-button">?</span>
+                    <span id="number-of-segments-tooltip-button" class="tooltip-button hidden">?</span>
                 </div>
 
                 <!-- Overlap -->
                 <div id="overlap-input">
                     <h3>Overlap</h3>
-                    <input name="cutOverlap" type="text" spellcheck="false" autocomplete="off" value="0">
+                    <input name="overlap" type="text" spellcheck="false" autocomplete="off" value="0">
                     <span id="overlap-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Merge threshold -->
                 <div id="merge-threshold-input">
                     <h3>Merge %</h3>
-                    <input name="cutLastProp" type="text" spellcheck="false" autocomplete="off" value="50">
+                    <input name="merge_threshold" type="text" spellcheck="false" autocomplete="off" value="50">
                     <span id="merge-threshold-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Milestone -->
                 <div id="milestone-input" class="hidden">
                     <h3>Milestone</h3>
-                    <input name="MScutWord" type="text" spellcheck="false" autocomplete="off">
+                    <input name="milestone" type="text" spellcheck="false" autocomplete="off">
                     <span id="milestone-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
@@ -101,9 +99,4 @@
         </div>
         <div id="previews"></div>
     </div>
-
-    <!-- Hidden elements -->
-    <input id="cut-by-milestone-input" name="cutByMS" type="hidden">
-    <input name="hasErrors" type="hidden" value="false">
-    <input name="needsWarning" type="hidden" value="false">
 {% endblock %}

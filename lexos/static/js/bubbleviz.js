@@ -8,6 +8,9 @@ $(function(){
 
     // If the "Generate" button is pressed, recreate the bubbleviz
     $("#generate-button").click(send_word_counts_request);
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -135,7 +138,7 @@ function create_bubbleviz(response){
         .text(function(d){ return d.data.word; })
         .attr("font-family", $("#font-input").val())
         .attr("font-size", function(d){ return d.r/((d.data.word.length+1)/3); })
-        .attr("fill", "#FFFFFF")
+        .attr("fill", "var(--foreground-color)")
         .style("pointer-events", "none");
 
     // Fade in the bubbleviz
@@ -146,4 +149,49 @@ function create_bubbleviz(response){
     // Initialize the SVG and PNG download buttons
     initialize_png_link("svg", "#png-button", diameter, diameter, "bubbleviz.png");
     initialize_svg_link("svg", "#svg-button", "bubbleviz.svg");
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Bubbleviz!`,
+            position: "top",
+        },
+        {
+            element: "#visualize-font",
+            intro: `You can change the font-style of your Bubbleviz here,
+                provided your computer has access to the font.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-term-count",
+            intro: `You can change the amount of words displayed in your
+                Bubbleviz here.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-color",
+            intro: `You can choose from a variety of color themes from the
+                dropdown menu here. Click "OK" to generate.`,
+            position: "top",
+        },
+        {
+            element: "#visualize-buttons",
+            intro: `You can generate a new Bubbleviz at any time here. You can
+                also choose to download a static PNG or vector SVG.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Bubbleviz walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

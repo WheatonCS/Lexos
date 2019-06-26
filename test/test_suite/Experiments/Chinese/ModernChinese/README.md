@@ -45,20 +45,24 @@ Steps:
     Apply Scrubbing
 (2) CUT: 
 
-    (a) Cut all the files by Segments - 2 per document
-        (16 segments total)
+    (a) Set cut mode to "Segments"
+    (b) Set "Number of Segments" to 2
     
     Apply Cuts
-    
-(3) ANALYZE - Clustering - Hierarchical Clustering:
+    (There should be 16 Active Documents after cutting)
+(3) ANALYZE - Dendrogram:
 
-    (a) Use the default metrics:
-        Distance Method: Euclidean
-        Linkage Method: Average
-    (b) Choose Tokenize: 2-gram by Characters
-    (c) Choose Normalize: Weighted Counts (TF/IDF) - Euclidean Distance
+    (a) Use the following metrics:
+        - Distance Method: Euclidean (default)
+        - Linkage Method: Average (default)
+        - Orientation: Bottom
+    (b) Tokenize:
+        - By Characters
+        - Change grams to 2
+    (c) Normalize:
+        - Choose TF-IDF
     
-    Get Dendrogram
+    Generate Dendrogram
     Compare your result with the .png found in the ResultsToExpect/ directory.
 
 

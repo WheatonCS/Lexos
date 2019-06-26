@@ -21,12 +21,13 @@
     "datatables.net-select": "^1.2.2",
     "datatables.net-select-bs": "^1.2.2",
     "font-awesome": "^4.7.0",
+    "intro.js": "^2.9.3",
     "jquery": "^3.4.0",
     "lato-font": "^3.0.0",
     "lodash": "^4.17.11",
     "package-lock.json": "^1.0.0",
-    "smartmenus": "^1.0.1",
-    "regex": "^0.1.1"
+    "regex": "^0.1.1",
+    "smartmenus": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^4.3.0",

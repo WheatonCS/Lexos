@@ -18,8 +18,8 @@ form {
 
 /* Results */
 .lexos-table {
-    max-height: 34.2rem;
-    min-height: 25rem;
+    height: 25rem;
+    background-color: var(--foreground-color-alternate);
 }
 
 .lexos-table-row {
@@ -28,7 +28,7 @@ form {
 
 #class-divisions-section,
 #top-words-section {
-    min-height: 30rem;
+    min-height: 28rem;
     height: 100%;
 }
 

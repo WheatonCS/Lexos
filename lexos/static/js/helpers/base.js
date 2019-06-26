@@ -1,19 +1,70 @@
 $("document").ready(function(){
+
+    // Highlight the navbar button of the current page
     highlight_navbar_button();
-    initialize_dropdown_menus();
-    update_active_document_count();
+
+    // Initialize the theme popup
+    initialize_theme_popup();
 
     // If the "Help" button is pressed, toggle the help section visibility
-    $("#help-button").click(toggle_help_section);
-
-    // Fade the page content in
-    $("main").css("opacity", "1");
-
-    // If the "Active Documents" text is clicked, go to the "Manage" page
-    $("#active-documents-text").click(function(){
-
+    $("#help-button").click(function(){
+        toggle_help_section()
+        update_graph_size()
     });
+
+    // If the navbar walkthrough button is pressed, begin the walkthrough
+    $("#navbar-walkthrough-button").click(start_walkthrough);
+
+    // Initialize the navbar dropdown menus
+    initialize_dropdown_menus();
+
+    // Fade in the page
+    $("body").css({transition: '', opacity: '1'});
 });
+
+
+/**
+ * Initializes the theme.
+ */
+function initialize_theme_popup(){
+
+    // If the Lexos logo is clicked...
+    $("#lexos-dragon, #lexos-text").click(function(){
+
+        // Create a theme popup
+        display_radio_options_popup("Theme", "theme", theme,
+            [
+                ["default", "Default"],
+                ["grey", "Grey"],
+                ["grey-dark", "Grey Dark"],
+                ["mint", "Mint"],
+                ["mint-dark", "Mint Dark"],
+                ["solarized-light", "Solarized Light"],
+                ["solarized-dark", "Solarized Dark"]
+            ], set_theme);
+    });
+}
+
+
+/**
+ * Sets the theme.
+ * @param {string} selected_theme: The theme to set.
+ */
+function set_theme(selected_theme){
+
+    // Send a request to set the theme
+    send_ajax_request("/set-theme", {theme: selected_theme})
+
+        // If the request was successful, update the theme and
+        // reload the page
+        .done(function(){
+            theme = selected_theme;
+            location.reload();
+        })
+
+        // If the request failed, display an error message
+        .fail(function(){ error("Failed to set the theme."); });
+}
 
 
 /**
@@ -50,7 +101,7 @@ function highlight_navbar_button(){
  * @param {jQuery} element: The element to highlight.
  */
 function highlight(element){
-    element.css("color", "#47BCFF");
+    element.addClass("highlight");
 }
 
 
@@ -145,39 +196,37 @@ function remove_dropdown_menus(){
  * Toggles the visibility of the help section.
  */
 let help_visible = false;
+let walkthrough_callback = null;
 function toggle_help_section(){
-    let main_grid = $("#main-grid");
-    let help_button = $("#help-button");
 
-    // If the help section is visible, close it
+    // If the help section is visible, close it and return
     if(help_visible){
-        main_grid.css("grid-template-columns", "100%");
-        $("#help-section").remove();
-        help_button.removeClass("highlight");
-        help_visible = false;
+        close_help_section();
         return;
     }
 
-    // Otherwise, show the help section
-    main_grid.css("grid-template-columns", "40rem auto");
+    // Otherwise, create the help section
+    let main_grid = $("#main-grid").css("grid-template-columns", "40rem auto");
 
     $(`
-        <div id="help-section">
+        <div id="help-section" class="invisible">
             <div id="help-section-navbar">
-                <span id="help-button-header" class="button help-button">Help</span>
-                <span id="about-button" class="button help-button">About Lexos</span>
-                <span id="glossary-button" class="button help-button">Glossary</span>
+                <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
+                <span id="page-help-button" class="right-justified help-button">Page Help</span>
+                <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
+                <span id="about-button" class="right-justified help-button">About Lexos</span>
             </div>
             <div id="help-section-content"></div>
         </div>
     `).prependTo(main_grid);
 
-    help_button.addClass("highlight");
+    $("#help-button").addClass("highlight");
 
     help_visible = true;
     let help_content_element = $("#help-section-content");
     help_content_element.load("/static/help"+window.location.pathname+"-help.html");
 
+    // Initialize the help section's buttons
     $("#glossary-button").click(function(){
         help_content_element.load("/static/help/glossary-help.html");
     });
@@ -186,22 +235,62 @@ function toggle_help_section(){
         help_content_element.load("/static/help/about-help.html");
     });
 
-    $("#help-button-header").click(function(){
+    $("#page-help-button").click(function(){
         help_content_element.load("/static/help"+window.location.pathname+"-help.html");
     });
+
+    $("#walkthrough-button").click(function(){
+        close_help_section();
+        start_walkthrough();
+    });
+
+    // Fade in the help section
+    fade_in("#help-section", ".5s");
 }
+
+
+/**
+ * Closes the help section.
+ */
+function close_help_section(){
+    $("#main-grid").css("grid-template-columns", "100%");
+    $("#help-section").remove();
+    $("#help-button").removeClass("highlight");
+    help_visible = false;
+}
+
+
+/**
+ * Starts the walkthough.
+ */
+function start_walkthrough(){
+    walkthrough_callback();
+    $(".introjs-prevbutton").text("Back");
+    $(".introjs-nextbutton").text("Next");
+    $(".introjs-tooltip").css("opacity", "1");
+}
+
+
+/**
+ * Binds the walkthrough callback.
+ * @param {function} walkthrough: The walkthrough callback to bind.
+ */
+function initialize_walkthrough(walkthrough){
+    walkthrough_callback = walkthrough;
+}
+
 
 /**
  * Update the number of active documents displayed after the "Active
  * Documents" text in the footer
  */
-let active_document_count;
 function update_active_document_count(){
 
-    return $.ajax({type: "GET", url: "active-documents"}).done(function(response){
-        active_document_count = parseInt(response);
-        $("#active-document-count").text(response);
-    })
+    return $.ajax({type: "GET", url: "active-documents"})
+        .done(function(response){
+            active_document_count = parseInt(response);
+            $("#active-document-count").text(response);
+        })
 
     .fail(function(){ error("Failed to update the active document count."); });
 }

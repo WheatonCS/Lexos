@@ -25,7 +25,7 @@
     min-width: 40rem;
     max-width: 90rem;
     word-wrap: break-word;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
 }
 
 #popup-content {
@@ -36,4 +36,8 @@
 #popup .button {
     justify-self: center;
     margin-top: 2rem;
+}
+
+.radio-button-popup #popup-content div:not(:last-child) {
+    margin-bottom: 1rem;
 }

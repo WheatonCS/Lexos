@@ -4,14 +4,13 @@ from typing import NamedTuple
 
 import pandas as pd
 from scipy.spatial.distance import cosine
-from flask import jsonify
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.receivers.similarity_receiver import SimilarityFrontEndOption, \
+from lexos.receivers.similarity_query_receiver import SimilarityFrontEndOption, \
     SimilarityReceiver
+from lexos.managers.utility import load_file_manager
 
 
 class SimilarityTestOption(NamedTuple):
@@ -19,7 +18,6 @@ class SimilarityTestOption(NamedTuple):
 
     doc_term_matrix: pd.DataFrame
     front_end_option: SimilarityFrontEndOption
-    id_temp_label_map: IdTempLabelMap
 
 
 class SimilarityModel(BaseModel):
@@ -34,24 +32,15 @@ class SimilarityModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _similarity_option(self) -> SimilarityFrontEndOption:
@@ -67,7 +56,6 @@ class SimilarityModel(BaseModel):
             - the name of the second row is Cosine Similarity Scores, contains
               distance between this file and "comp_file".
         """
-
         # precondition
         assert self._similarity_option.comp_file_id >= 0, \
             NON_NEGATIVE_INDEX_MESSAGE
@@ -91,23 +79,30 @@ class SimilarityModel(BaseModel):
         ]
 
         # get the labels for cos_scores
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in other_file_word_counts.index]
+        labels = []
+        for file in load_file_manager().get_active_files():
+            if file.id != self._similarity_option.comp_file_id:
+                labels.append(file.label)
 
         # pack score and labels into a pandas data frame
         dataframe = pd.DataFrame(index=["Documents", "Cosine Similarity"],
                                  data=[labels, cos_scores]).transpose()
 
         # Format the dataframe and return it
-        return dataframe.sort_values("Cosine Similarity", ascending=False) \
+        return dataframe.sort_values(
+            by=[dataframe.columns[self._similarity_option.sort_column]],
+            ascending=self._similarity_option.sort_ascending) \
             .round(4)
 
-    def get_results(self) -> str:
-        """ Gets the similarity query results.
+    def get_results(self) -> dict:
+        """Get the similarity query results.
+
         :return: The similarity query results.
         """
-
         similarity_query = self._get_similarity_query()
 
-        return jsonify({"table": similarity_query.to_json(orient="values"),
-                        "csv": similarity_query.to_csv()})
+        return {
+            "similarity-table-head": ["Document", "Cosine Similarity"],
+            "similarity-table-body": similarity_query.values.tolist(),
+            "similarity-table-csv": similarity_query.to_csv()
+        }
