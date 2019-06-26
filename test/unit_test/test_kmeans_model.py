@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.models.kmeans_model import KMeansTestOptions, KMeansModel
-from lexos.receivers.kmeans_receiver import KMeansOption, KMeansViz, KMeansInit
+from lexos.models.k_means_model import KMeansTestOptions, KMeansModel
+from lexos.receivers.k_means_receiver import KMeansOption, KMeansViz, KMeansInit
 
 # ------------------------- Voronoi test suite --------------------------------
 # Create test DTM for voronoi.

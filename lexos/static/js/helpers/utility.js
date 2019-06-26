@@ -345,7 +345,7 @@ function remove_errors(){
 /**
  * Parses the given JSON string and returns the parsed object.
  * @param {string} json: The JSON string to parse.
- * @returns {any}: The parsed object.
+ * @returns {object}: The parsed object.
  */
 function parse_json(json){
     return JSON.parse(json.replace(/\bNaN\b/g, "\"N/A\""));

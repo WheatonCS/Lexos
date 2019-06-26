@@ -112,7 +112,7 @@ function initialize_button_callbacks(){
         });
     });
 
-    $(`input[type="radio"][name="sort-ascending"]`).change(function(){
+    $(`input[type="radio"][name="sort_ascending"]`).change(function(){
         send_content_analysis_request();
     });
 }
@@ -250,8 +250,12 @@ function walkthrough(){
     let intro = introJs();
     intro.setOptions({steps: [
         {
-            intro: `Welcome to Content Analysis! Here you can upload
-                dictionaries for your analysis.`,
+            intro: `Welcome to Content Analysis!`,
+            position: "top",
+        },
+        {
+            element: '#dictionaries-section',
+            intro: `Here you can upload dictionaries for your analysis.`,
             position: "top",
         },
         {

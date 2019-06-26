@@ -6,8 +6,8 @@ $(function(){
         validate_analyze_inputs, null, true, true, false, true, true, true,
         true);
 
-    // Initialize the legacy form inputs and create the table
-    get_active_file_ids(initialize, "#tokenizer-table-body");
+    // Create the table
+    initialize();
 
     //Initialize the "Orientation" tooltip
     create_tooltip("#orientation-tooltip-button", `This option will not be
@@ -23,17 +23,14 @@ $(function(){
 
 
 /**
- * Initializes the legacy inputs and creates the token table.
- * @param {string} response: The response from the "active-file-ids" request.
+ * Creates the token table.
  */
-function initialize(response){
+function initialize(){
 
-    // Initialize the legacy inputs
-    if(!initialize_legacy_inputs(response)){
-
-        // If there are no active documents, display "No Active Documents"
-        // text and return
-        add_text_overlay(".lexos-table-body", "No Active Documents");
+    // If there are no active documents, display "No Active Documents"
+    // text and return
+    if(!active_document_count){
+        add_text_overlay(".lexos-table-content", "No Active Documents");
         return;
     }
 
@@ -84,13 +81,13 @@ function walkthrough(){
             position: "top",
         },
         {
-            element: "#sort-buttons",
+            element: "#sort-radio-option",
             intro: `You can sort your data table with these options, and by
                 clicking column headers on the data table.`,
             position: "top",
         },
         {
-            element: "#tokenize-buttons",
+            element: "#table-button-section",
             intro: `Here you can generate a data table. You can also choose to
                 download the data table as a CSV file.`,
             position: "top",
