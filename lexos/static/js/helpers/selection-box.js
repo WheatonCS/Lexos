@@ -3,9 +3,6 @@
  */
 function initialize_selection_box(){
 
-    // Keep track of whether the "D" key is pressed or not
-    key_callback('D', set_d_key);
-
     // Disable the selection box if the mouse moves outside of the table body
     $(window).mousemove(function(){ $("#selection-box").css("opacity", "0"); });
 
@@ -14,38 +11,6 @@ function initialize_selection_box(){
     let manage_table_body = $("#table-body");
     manage_table_body.mousedown(start_selection);
     manage_table_body.mouseup(end_selection);
-}
-
-
-/**
- * Keeps track of whether the "D" key is pressed and updates the selection box
- * color accordingly.
- * @param {event} event: The keydown or keyup event that caused the callback.
- * @param {boolean} pressed: Whether the key was pressed.
- */
-let d_held = false;
-function set_d_key(event, pressed){
-
-    // Set "d_held" to the appropriate value
-    d_held = pressed;
-
-    // Make the selection box the corresponding color
-    set_selection_box_color();
-}
-
-
-/**
- * Sets the selection box to the appropriate color.
- */
-function set_selection_box_color(){
-
-    // If the "D" key is pressed, set the selection box color to the
-    // deselection color
-    if(d_held) $("#selection-box").css({"background-color": "#000000"});
-
-    // If the "D" key is not pressed, set the selection box to the selection
-    // color
-    else $("#selection-box").css({"background-color": ""});
 }
 
 
@@ -69,7 +34,6 @@ function start_selection(event){
 
     // Create the selection box element
     let selection_box = $("#selection-box");
-    set_selection_box_color();
     selection_box.css({
         "width": "0",
         "height": "0",
@@ -173,7 +137,8 @@ function apply_selection(event){
     let selection_maximum = point_maximum(selection_start, mouse_position);
 
     // For each row in the table...
-    let modified = [];
+    let selected_ids = [];
+    let deselected_ids = [];
     $(".table-row").each(function(){
 
         // Get the row element's bounding box
@@ -185,25 +150,29 @@ function apply_selection(event){
             window_scroll_offset.y+bounding_box.top < selection_maximum.y &&
             window_scroll_offset.y+bounding_box.bottom > selection_minimum.y){
 
-            // If the selection would modify the row, add it to the "modified"
-            // list
-            if(d_held && $(this).hasClass("selected-table-row") ||
-                !d_held && !$(this).hasClass("selected-table-row"))
-                modified.push($(this));
+            // Update the selection visual and the selected elements to either
+            // the "selected" or "deselected" list
+            let id = $(this).attr("id");
+            if($(this).hasClass("selected-table-row")){
+                $(this).removeClass("selected-table-row");
+                deselected_ids.push(id);
+            }
+            else {
+                $(this).addClass("selected-table-row");
+                selected_ids.push(id);
+            }
         }
     });
 
-    // Update the table to represent the selection and get the IDs of the
-    // modified documents
-    let modified_ids = [];
-    for(const element of modified){
-        if(d_held) element.removeClass("selected-table-row");
-        else element.addClass("selected-table-row");
-        modified_ids.push(element.attr("id"));
-    }
+    // Send requests to apply the selection to the modified documents
+    send_request("deactivate", deselected_ids)
 
-    // Send a request to apply the selection to the modified documents
-    if(modified.length)
-        send_request(d_held ? "deactivate" : "activate", modified_ids)
-            .fail("Failed to apply the document selection");
+        // If the request was successful, send the activate request
+        .done(function(){
+            send_request("activate", selected_ids)
+                .fail("Failed to apply the document selection");
+        })
+
+        // If the request failed, display an error
+        .fail("Failed to apply the document selection");
 }

@@ -371,18 +371,18 @@ class KMeansModel(BaseModel):
         layout = go.Layout(
             dragmode="pan",
             margin=dict(
-                l=0,  # nopep8
+                l=60,  # nopep8
                 r=0,
-                b=0,
-                t=0,
+                b=30,
+                t=30,
                 pad=4
             ),
             xaxis=dict(
-                showgrid=False,
+                gridcolor=self._k_means_front_end_option.text_color,
                 zeroline=False
             ),
             yaxis=dict(
-                showgrid=False,
+                gridcolor=self._k_means_front_end_option.text_color,
                 zeroline=False
             ),
             hovermode="closest",
