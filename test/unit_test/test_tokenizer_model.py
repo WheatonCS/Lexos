@@ -10,7 +10,6 @@ test_dtm = pd.DataFrame(
 test_id_temp_label_map = {0: "F1.txt", 1: "F2.txt"}
 test_token_type = "Tokens"
 test_front_end_option = TokenizerOption(
-    orientation="file_col",
     start=None,
     length=None,
     search=None,
@@ -21,7 +20,6 @@ test_option = TokenizerTestOption(
     token_type_str=test_token_type,
     doc_term_matrix=test_dtm,
     front_end_option=test_front_end_option,
-    id_temp_label_map=test_id_temp_label_map
 )
 test_tokenizer = TokenizerModel(test_options=test_option)
 
@@ -72,7 +70,6 @@ test_dtm = pd.DataFrame(
 test_id_temp_label_map = {0: "F1.txt", 1: "F2.txt"}
 test_token_type = "Tokens"
 test_front_end_option = TokenizerOption(
-    orientation="file_col",
     start=0,
     length=5,
     search="",
@@ -83,7 +80,6 @@ test_option = TokenizerTestOption(
     token_type_str=test_token_type,
     doc_term_matrix=test_dtm,
     front_end_option=test_front_end_option,
-    id_temp_label_map=test_id_temp_label_map
 )
 test_tokenizer_ajax = TokenizerModel(test_options=test_option)
 

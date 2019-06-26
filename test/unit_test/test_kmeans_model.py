@@ -35,7 +35,7 @@ front_end_option_voronoi = KMeansOption(
 test_option_voronoi = KMeansTestOptions(
     doc_term_matrix=voronoi_dtm,
     front_end_option=front_end_option_voronoi,
-    id_temp_label_map=id_temp_label_map_voronoi
+    # id_temp_label_map=id_temp_label_map_voronoi
 )
 
 # Create test Model and get test result.
