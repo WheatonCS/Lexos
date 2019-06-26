@@ -208,7 +208,8 @@ function scrub(action){
         // text
         .fail(function()
         {
-            error("Failed to execute the scrubbing.");
+            error("Failed to execute the scrubbing. Check the " +
+                "formatting of additional options before retrying.");
             add_text_overlay("#previews", "Loading Failed");
             enable("#preview-button, #apply-button");
         });
