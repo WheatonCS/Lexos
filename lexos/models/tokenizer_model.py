@@ -147,9 +147,7 @@ class TokenizerModel(BaseModel):
         :return: the desired DTM as a CSV.
         """
         # Get the DTM in the desired orientation
-        dtm = self._get_file_col_dtm() \
-            if self._front_end_option.orientation == "file_col" \
-            else self._get_file_row_dtm()
+        dtm = self._get_file_col_dtm()
 
         # Apply the search
         dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]

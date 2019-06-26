@@ -51,13 +51,6 @@ function walkthrough(){
             position: "top",
         },
         {
-            element: "#orientation-section",
-            intro: `Here you can select how your
-                documents are oriented. Note that "Documents as Rows, Terms as
-                Columns" only applies to the downloaded CSV file.`,
-            position: "top",
-        },
-        {
             element: "#tokenize-section",
             intro: `Tokenize determines how terms are counted when generating
                 data.`,
