@@ -18,8 +18,9 @@
     --highlight-color-light: #E5EEF3;
 
     /* Secondary highlight */
-    --secondary-highlight-color: #B58900;
-    --secondary-highlight-color-light: #FBEBB9;
+    --secondary-highlight-color: #6c71c4;
+    --secondary-highlight-color-light: #ededfc;
+    --secondary-highlight-color-dark: #ededfc;
 
     /* Error */
     --error-button-hover-color: #B4263C;

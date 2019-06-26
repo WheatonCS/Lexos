@@ -11,9 +11,8 @@ $(function(){
         function(){ loading_complete_check(); }, true, true, false, true,
         false);
 
-    // Initialize the legacy form inputs and create the statistics
-    get_active_file_ids(initialize, `#graph-container, #table,
-        #corpus-statistics, #standard-error-test, #interquartile-range-test`);
+    // Create the statistics and initialize the "Generate" button.
+    initialize();
 
     // Initialize the tooltips
     initialize_tooltips();
@@ -24,21 +23,20 @@ $(function(){
 
 
 /**
- * Initializes the legacy form inputs and creates the statistics.
- * @param {string} response: The response from the "active-file-ids" request.
+ * Creates the statistics and initializes the "Generate" button.
  */
-function initialize(response){
+function initialize(){
 
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
+    // If there are no active documents, display "No Active Documents" text
+    // and return
+    if(!active_document_count){
         add_text_overlay(`#graph-container, #table, #corpus-statistics,
             #standard-error-test, #interquartile-range-test`,
             "No Active Documents");
         return;
     }
 
-    // Create the statistics
+    // Otherwise, create the statistics
     create_statistics();
 
     // If the "Generate" button is pressed, recreate the statistics
@@ -105,7 +103,7 @@ function create_corpus_statistics(response){
 
     // Populate the corpus statistics section with data
     $(`
-        <h3>Average: ${response.average}</h3><br>
+        <h3>Average: ${response["average"]}</h3><br>
         <h3>Standard Deviation: ${response["standard_deviation"]}</h3><br>
         <h3>Interquartile Range: ${response["interquartile_range"]}</h3>
     `).appendTo("#corpus-statistics");
@@ -142,7 +140,8 @@ function create_anomalies(element_id, small_anomalies, large_anomalies){
 
     // Create a string stating the anomalies
     let text;
-    if(!small_anomalies.length && !large_anomalies.length) text = "No Anomalies";
+    if(!small_anomalies.length && !large_anomalies.length)
+        text = "No Anomalies";
     else {
         text = "Anomalies: ";
         for(const anomaly of small_anomalies) text += anomaly+" (small), ";

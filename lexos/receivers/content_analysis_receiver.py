@@ -39,8 +39,8 @@ class ContentAnalysisReceiver(BaseReceiver):
                    Option('dict_labels', None),
                    Option('active_dicts', None),
                    Option('toggle_all_value', None),
-                   Option('overview-table-selected-column', None),
-                   Option('overview-table-sort-mode', None)]
+                   Option('overview_table_selected_column', None),
+                   Option('overview_table_sort_mode', None)]
         for option in options:
             if option.name in self._front_end_data:
                 option.value = self._front_end_data[option.name]

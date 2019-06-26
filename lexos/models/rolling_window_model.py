@@ -11,10 +11,10 @@ from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import FileIDContentMap
-from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.file_manager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
-from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
+from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
 
 # Set the rwa regex flags.

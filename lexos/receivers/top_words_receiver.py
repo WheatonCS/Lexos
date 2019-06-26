@@ -7,9 +7,9 @@ from lexos.receivers.base_receiver import BaseReceiver
 class TopwordAnalysisType(Enum):
     """This is the class that assigns the options to constants."""
 
-    ALL_TO_PARA = "allToPara"
-    CLASS_TO_PARA = "classToPara"
-    CLASS_TO_CLASS = "classToClass"
+    ALL_TO_PARA = "Each Document to the Corpus"
+    CLASS_TO_PARA = "Each Document to Other Classes"
+    CLASS_TO_CLASS = "Each Class to Other Classes"
 
 
 class TopwordReceiver(BaseReceiver):
@@ -24,11 +24,14 @@ class TopwordReceiver(BaseReceiver):
 
         :return: a TopwordAnalysisType object that holds the analysis option.
         """
-        if self._front_end_data["testInput"] == "allToPara":
+        if self._front_end_data["comparison_method"] == \
+                "Each Document to the Corpus":
             return TopwordAnalysisType.ALL_TO_PARA
-        elif self._front_end_data["testInput"] == "classToPara":
+        elif self._front_end_data["comparison_method"] == \
+                "Each Document to Other Classes":
             return TopwordAnalysisType.CLASS_TO_PARA
-        elif self._front_end_data["testInput"] == "classToClass":
+        elif self._front_end_data["comparison_method"] == \
+                "Each Class to Other Classes":
             return TopwordAnalysisType.CLASS_TO_CLASS
         else:
             raise ValueError("Invalid topword analysis option from front end.")

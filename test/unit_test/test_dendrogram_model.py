@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from lexos.models.dendro_model import DendroOption, DendrogramModel, \
+from lexos.models.dendrogram_model import DendroOption, DendrogramModel, \
     DendroTestOptions
 
 
@@ -18,9 +18,10 @@ class TestLeftOrientation:
         ),
 
         front_end_option=DendroOption(
-            orientation='left',
-            linkage_method='average',
-            dist_metric='euclidean'
+            orientation='Left',
+            linkage_method='Average',
+            dist_metric='Euclidean'
+            text_color="blue"
         ),
 
         id_temp_label_map={
@@ -66,9 +67,10 @@ class TestBottomOrientation:
         ),
 
         front_end_option=DendroOption(
-            orientation='bottom',
-            linkage_method='average',
-            dist_metric='euclidean'
+            orientation='Bottom',
+            linkage_method='Average',
+            dist_metric='Euclidean'
+            text_color="blue"
         ),
 
         id_temp_label_map={

@@ -3,8 +3,8 @@ from io import StringIO
 from Bio import Phylo
 from scipy.cluster.hierarchy import linkage
 
-from lexos.receivers.bct_receiver import BCTOption
-from lexos.models.bct_model import BCTTestOptions, BCTModel
+from lexos.receivers.consensus_tree_receiver import BCTOption
+from lexos.models.consensus_tree_model import BCTTestOptions, BCTModel
 
 
 # noinspection PyProtectedMember
@@ -21,11 +21,12 @@ class TestBCTModel:
         ),
         id_temp_label_map={0: "F1.txt", 1: "F2.txt"},
         front_end_option=BCTOption(
-            linkage_method="average",
-            dist_metric="euclidean",
+            linkage_method="Average",
+            dist_metric="Euclidean",
             iterations=20,
             cutoff=0.5,
-            replace=False
+            replace=False,
+            text_color="rgb(0, 0, 0)"
         )
     )
 

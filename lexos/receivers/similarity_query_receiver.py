@@ -30,15 +30,15 @@ class SimilarityReceiver(BaseReceiver):
 
         :return: a similarity option object that holds all the options
         """
-        comp_file_id = int(self._front_end_data['uploadname'])
+        comp_file_id = int(self._front_end_data['comparison_document'])
 
         # Get the selected column
         sort_column = int(self._front_end_data[
-            "similarity-table-selected-column"])
+            "similarity_table_selected_column"])
 
         # Get the sort column
         sort_ascending = bool(self._front_end_data[
-            "similarity-table-sort-mode"] == "ascending")
+            "similarity_table_sort_mode"] == "ascending")
 
         return SimilarityFrontEndOption(comp_file_id=comp_file_id,
                                         sort_column=sort_column,
