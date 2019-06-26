@@ -23,11 +23,11 @@ class BasicTest:
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
                                          mfw_lowest_rank=None),
-            id_temp_label_map={
-                0: "test_label_1",
-                2: "test_label_2",
-                3: "test_label_3"
-            }
+            # id_temp_label_map={
+            #     0: "test_label_1",
+            #     2: "test_label_2",
+            #     3: "test_label_3"
+            # }
         )
     )
 
@@ -69,12 +69,7 @@ class CullingTest:
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=3,
-                                         mfw_lowest_rank=1),
-            id_temp_label_map={
-                1: "label_1",
-                2: "test_2",
-                3: "la_la_la_3"
-            }
+                                         mfw_lowest_rank=1)
         )
     )
 
