@@ -7,7 +7,7 @@ import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
+from lexos.receivers.matrix_receiver import MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
 
@@ -18,7 +18,6 @@ class TokenizerTestOption(NamedTuple):
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerOption
-    id_temp_label_map: IdTempLabelMap
 
 
 class TokenizerModel(BaseModel):
@@ -38,25 +37,16 @@ class TokenizerModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_token_type_str = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: A map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _front_end_option(self) -> TokenizerOption:
@@ -75,7 +65,7 @@ class TokenizerModel(BaseModel):
             dtm_options = MatrixReceiver().options_from_front_end()
             # Get the correct current type.
             token_type = dtm_options.token_option.token_type
-            return "Terms" if token_type == "word" else "Characters"
+            return "Terms" if token_type == "Tokens" else "Characters"
 
     def _get_file_col_dtm(self) -> pd.DataFrame:
         """Get DTM with documents as columns and terms/characters as rows.
@@ -86,15 +76,8 @@ class TokenizerModel(BaseModel):
         # Check if empty DTM is received.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        # Get temp file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
         # Transpose the dtm for easier calculation.
         file_col_dtm = self._doc_term_matrix.transpose()
-
-        # Change matrix column names to file labels.
-        file_col_dtm.columns = labels
 
         # Find total and average of each row's data.
         file_col_dtm.insert(loc=0, column="Total",

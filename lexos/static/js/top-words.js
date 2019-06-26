@@ -1,4 +1,3 @@
-let documents;
 let csv;
 $(function(){
 
@@ -6,10 +5,9 @@ $(function(){
     start_loading("#class-divisions-body, #top-words-body");
 
     // Set the normalize option to raw counts
-    $(`input[name="normalizeType"][value="raw"]`).prop("checked", true);
+    $(`input[name="normalization_method"][value="Raw"]`).prop("checked", true);
 
-    // Initialize the legacy form inputs, create the class division tables,
-    // and create the top words tables
+    // Create the class division tables and the top words tables
     get_active_file_ids(initialize, "#class-divisions-body, #top-words-body");
 
     // If the "Download" button is clicked, download the CSV
@@ -27,18 +25,17 @@ $(function(){
 
 
 /**
- * Initializes the legacy form inputs, creates the class division tables,
- *      and creates the top words tables.
+ * Creates the class division tables and the top words tables.
  * @param {string} response: The response from the "active-file-ids" request.
  */
+let documents;
 function initialize(response){
 
     documents = parse_json(response);
 
     // If there are fewer than two active documents, display warning text
     // and return
-    document_count = Object.entries(parse_json(response)).length;
-    if(document_count <  2){
+    if(active_document_count <  2){
         add_text_overlay("#class-divisions-body, #top-words-body", `This Tool
             Requires at Least Two Active Documents`);
         return;
@@ -48,9 +45,6 @@ function initialize(response){
     // enable the "Generate" button
     add_text_overlay("#top-words-body", "No Results");
     enable("#generate-button");
-
-    // Initialize the legacy form inputs
-    initialize_legacy_inputs(response);
 
     // Send the request for the class divisions data and create the class
     // division tables
@@ -193,10 +187,10 @@ function create_top_words_tables(tables){
  * @return {boolean}: Whether the inputs are valid.
  */
 function validate_inputs(){
-    let comparison_method = $(`input[name="testInput"]:checked`).val();
+    let comparison_method = $(`input[name="comparison_method"]:checked`).val();
 
-    if((comparison_method === "classToPara" ||
-        comparison_method === "classToClass") && single_class){
+    if((comparison_method === "Each Document to Other Classes" ||
+        comparison_method === "Each Class to Other Classes") && single_class){
         error("Invalid comparison method.");
         return false;
     }
@@ -242,7 +236,6 @@ function initialize_tooltips(){
     // "Top Words"
     create_tooltip("#download-tooltip-button", `Get Topwords only displays the
         top 30 results. Download if you wish to see the full result.`, true);
-
 }
 
 

@@ -5,7 +5,7 @@ from lexos.helpers import constants
 from lexos.managers.utility import load_file_manager
 from lexos.managers.session_manager import session
 from lexos.models.content_analysis_model import ContentAnalysisModel
-from lexos.receivers.contentanalysis_receiver import ContentAnalysisReceiver
+from lexos.receivers.content_analysis_receiver import ContentAnalysisReceiver
 from lexos.views.base import render
 
 content_analysis_blueprint = Blueprint("content-analysis", __name__)
@@ -47,7 +47,7 @@ def upload_dictionaries() -> str:
 
     # Upload each file
     path = get_path()
-    for upload_file in request.files.getlist("lemfileselect[]"):
+    for upload_file in request.files.getlist("dictionaries[]"):
         file_name = upload_file.filename
         content = upload_file.read().decode("utf-8").replace('\n', '')
         file = open(path+file_name, 'w')

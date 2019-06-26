@@ -14,8 +14,8 @@ $(function(){
             [["left", "Left"],  ["bottom", "Bottom"]]);
     });
 
-    // Initialize the legacy form inputs and create the dendrogram
-    get_active_file_ids(initialize, "#graph-container");
+    // Create the dendrogram and initialize the "Generate" button
+    initialize();
 
     // Initialize the tooltips
     initialize_analyze_tooltips();
@@ -27,21 +27,13 @@ $(function(){
 
 
 /**
- * Initializes legacy form inputs and creates the dendrogram.
- * @param {string} response: The response from the "active-file-ids" request.
+ * Creates the dendrogram and initializes the "Generate" button.
  */
-function initialize(response){
-
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#graph-container", "No Active Documents");
-        return;
-    }
+function initialize(){
 
     // If there are fewer than two active files, display warning
     // text and return
-    if(Object.entries(parse_json(response)).length < 2){
+    if(active_document_count < 2){
         add_text_overlay("#graph-container",
             "This Tool Requires at Least Two Active Documents");
         return;

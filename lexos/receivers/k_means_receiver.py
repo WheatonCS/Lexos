@@ -41,23 +41,23 @@ class KMeansReceiver(BaseReceiver):
         :return: a KMeansOption object to hold all the options.
         """
         # Get all front end data.
-        if self._front_end_data["viz"] == "2DScatter":
+        if self._front_end_data["visualization_method"] == "2D Scatter":
             viz = KMeansViz.two_d
-        elif self._front_end_data["viz"] == "3DScatter":
+        elif self._front_end_data["visualization_method"] == "3D Scatter":
             viz = KMeansViz.three_d
-        elif self._front_end_data["viz"] == "Voronoi":
+        elif self._front_end_data["visualization_method"] == "Voronoi":
             viz = KMeansViz.voronoi
         else:
             raise ValueError("Invalid K-Means visualization method.")
 
         init_method = KMeansInit.k_means \
-            if self._front_end_data["init"] == "k-means++" \
+            if self._front_end_data["initialization_method"] == "K-Means++" \
             else KMeansInit.random
 
-        n_init = int(self._front_end_data["n_init"])
-        k_value = int(self._front_end_data["nclusters"])
-        max_iter = int(self._front_end_data["max_iter"])
-        tolerance = float(self._front_end_data["tolerance"])
+        n_init = int(self._front_end_data["different_centroids"])
+        k_value = int(self._front_end_data["clusters"])
+        max_iter = int(self._front_end_data["maximum_iterations"])
+        tolerance = float(self._front_end_data["relative_tolerance"])
 
         text_color = self._front_end_data["text_color"]
 

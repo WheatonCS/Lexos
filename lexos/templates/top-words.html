@@ -27,11 +27,11 @@
             <span id="comparison-method-tooltip-button" class="right-justified tooltip-button">?</span>
         </div>
         <div class="section-body">
-            <label><input name="testInput" value="allToPara" type="radio" checked><span class></span>Each document to the corpus</label>
+            <label><input name="comparison_method" value="Each Document to the Corpus" type="radio" checked><span class></span>Each Document to the Corpus</label>
             <span id="document-corpus-tooltip-button" class="tooltip-button">?</span><br>
-            <label><input name="testInput" value="classToPara" type="radio"><span></span>Each document to other classes</label>
+            <label><input name="comparison_method" value="Each Document to Other Classes" type="radio"><span></span>Each Document to Other Classes</label>
             <span id="document-class-tooltip-button" class="tooltip-button">?</span><br>
-            <label><input name="testInput" value="classToClass" type="radio"><span></span>Each class to other classes</label>
+            <label><input name="comparison_method" value="Each Class to Other Classes" type="radio"><span></span>Each Class to Other Classes</label>
             <span id="class-class-tooltip-button" class="tooltip-button">?</span>
         </div>
     </div>
@@ -53,7 +53,7 @@
 
         <div class="vertical-splitter section-top">
             <h3 class="title">Top Words</h3>
-            <div class="right-justified">
+            <div id="top-words-buttons" class="right-justified">
                 <span id="generate-button" class="disabled important-button">Generate</span>
                 <span id="download-button" class="disabled button">Download</span>
                 <span id="download-tooltip-button" class="tooltip-button">?</span>

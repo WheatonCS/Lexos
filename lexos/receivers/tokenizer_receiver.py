@@ -30,13 +30,13 @@ class TokenizerReceiver(BaseReceiver):
         # This exception is here because when header is requested, values
         # above related to data table drawing are not passed in.
         try:
-            start = int(self._front_end_data["tokenizer-table-page-number"])
-            search = self._front_end_data["tokenizer-table-search-input"]
-            length = int(self._front_end_data["tokenizer-table-row-count"])
+            start = int(self._front_end_data["tokenizer_table_page_number"])
+            search = self._front_end_data["tokenizer_table_search_input"]
+            length = int(self._front_end_data["tokenizer_table_row_count"])
             sort_method = bool(self._front_end_data[
-                "tokenizer-table-sort-mode"] == "ascending")
+                "tokenizer_table_sort_mode"] == "ascending")
             sort_column = int(self._front_end_data[
-                "tokenizer-table-selected-column"])
+                "tokenizer_table_selected_column"])
 
         except KeyError:
             start = None

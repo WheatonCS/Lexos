@@ -46,6 +46,10 @@ form {
     grid-gap: 1rem;
 }
 
+#formula-body label {
+    height: 100%;
+}
+
 #formula-buttons {
     display: grid;
     height: 100%;

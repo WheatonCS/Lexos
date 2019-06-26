@@ -135,7 +135,7 @@ def cache_alteration_files():
     for upload_file in request.files:
         file_name = request.files[upload_file].filename
         if file_name != '':
-            session['scrubbingoptions']['optuploadnames'][upload_file] = \
+            session['scrubbingoptions']['file_uploads'][upload_file] = \
                 file_name
 
 
@@ -149,30 +149,32 @@ def cache_scrub_options():
         session['scrubbingoptions'][box] = (
             request.form[box] if box in request.form else '')
 
-    session['scrubbingoptions']['sw_option'] = request.form['sw_option']
+    session['scrubbingoptions']['stop_words_'] = \
+        request.form['stop_words_method']
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = \
             request.form['tags'] == 'keep'
 
-    session['scrubbingoptions']['entityrules'] = request.form['entityrules']
+    session['scrubbingoptions']['special_characters_preset'] = \
+        request.form['special_characters_preset']
 
 
 def cache_cutting_options():
     """Stores cutting options from request.form in session cookie object."""
 
     session['cuttingoptions'] = {
-        'cutType': request.form['cutType'],
+        'cut_mode': request.form['cut_mode'],
 
-        'cutValue': request.form['cutValue'],
+        'segment_size': request.form['segment_size'],
 
-        'cutOverlap': request.form['cutOverlap']
-        if 'cutOverlap' in request.form else '0',
+        'overlap': request.form['overlap']
+        if 'overlap' in request.form else '0',
 
-        'cutLastProp': request.form['cutLastProp']
-        if 'cutLastProp' in request.form else '50'}
+        'merge_threshold': request.form['merge_threshold']
+        if 'merge_threshold' in request.form else '50'}
     if "cutByMS" in request.form:
-        session['cuttingoptions']['cutType'] = "milestone"
-        session['cuttingoptions']['cutValue'] = request.form['MScutWord']
+        session['cuttingoptions']['cut_mode'] = "Milestones"
+        session['cuttingoptions']['segment_size'] = request.form['MScutWord']
 
 
 def cache_analysis_option():
@@ -209,47 +211,6 @@ def cache_rw_analysis_option():
         session['rwoption'][request_input] = (
             request.form[request_input] if input in request.form
             else const.DEFAULT_ROLLINGWINDOW_OPTIONS[request_input])
-
-
-def cache_cloud_option():
-    """Stores global cloud options from request.form in session cookie object.
-
-    See constant.CLOUDLIST for more.
-    """
-    for item in const.CLOUDLIST:
-        session['cloudoption'][item] = request.form.getlist(item)
-
-
-def cache_multi_cloud_options():
-    """Stores filename if uploading topic file to use for multicloud."""
-
-    for request_input in const.MULTICLOUDINPUTS:
-        session['multicloudoptions'][request_input] = \
-            request.form[request_input] if input in request.form \
-            else const.DEFAULT_MULTICLOUD_OPTIONS[request_input]
-
-    for file in const.MULTICLOUDFILES:
-
-        file_pointer = request.files[file] \
-            if file in request.files \
-            else const.DEFAULT_MULTICLOUD_OPTIONS[file]
-
-        topic_string = str(file_pointer)
-        topic_string = re.search(r"'(.*?)'", topic_string)
-        if topic_string is not None:
-            session['multicloudoptions'][file] = topic_string.group(1)
-
-
-def cache_bubble_viz_option():
-    """Stores Bubble Viz options from request.form in session cookie object."""
-
-    for box in const.BUBBLEVIZBOX:
-        session['bubblevisoption'][box] = (box in request.form)
-
-    for request_input in const.BUBBLEVIZINPUT:
-        session['bubblevisoption'][request_input] = (
-            request.form[request_input] if input in request.form
-            else const.DEFAULT_BUBBLEVIZ_OPTIONS[request_input])
 
 
 def cache_hierarchy_option():
@@ -289,8 +250,6 @@ def cache_k_mean_option():
 def cache_sim_options():
     """Stores filename if uploading topic file to use for similarity query."""
 
-    for box in const.SIMBOX:
-        session['similarities'][box] = (box in request.form)
     for request_input in const.SIMINPUT:
         session['similarities'][request_input] = (
             request.form[request_input] if input in request.form

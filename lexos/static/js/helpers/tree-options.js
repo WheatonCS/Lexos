@@ -6,7 +6,7 @@ function initialize_tree_options(){
 
     // Register the "Distance Metric" button callback
     $("#distance-metric-button").click(function(){
-        create_radio_options_popup("Distance Metric", "distance-metric",
+        create_radio_options_popup("Distance Metric", "distance_metric",
             "#distance-metric-button", "#distance-metric-input", [
             ["euclidean", "Euclidean"],
             ["minkowski", "Minkowski"],
@@ -24,7 +24,7 @@ function initialize_tree_options(){
 
     // Register the "Linkage Method" button callback
     $("#linkage-method-button").click(function(){
-        create_radio_options_popup("Linkage Method", "linkage-method",
+        create_radio_options_popup("Linkage Method", "linkage_method",
             "#linkage-method-button", "#linkage-method-input", [
             ["average", "Average"],
             ["single", "Single"],

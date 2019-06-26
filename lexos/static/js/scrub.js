@@ -101,10 +101,10 @@ function create_tag_options_popup(response){
             <div class="tag-table-row">
                 <h3></h3>
                 <div>
-                    <label><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}-action" value="remove-tag"><span></span>Remove Tag</label>
-                    <label><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}-action" value="remove-element"><span></span>Remove All</label>
-                    <label><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}-action" value="replace-element"><span></span>Replace</label>
-                    <label><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}-action" value="leave-alone"><span></span>None</label>
+                    <label><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}_action" value="Remove Tag"><span></span>Remove Tag</label>
+                    <label><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}_action" value="Remove Element"><span></span>Remove All</label>
+                    <label><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}_action" value="Replace Element"><span></span>Replace</label>
+                    <label><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}_action" value="Leave Alone"><span></span>None</label>
                 </div>
                 <input class="disabled" type="text" spellcheck="false" autocomplete="off" value="${tag[2]}">
             </div>
@@ -115,7 +115,7 @@ function create_tag_options_popup(response){
 
         // If the row's "Replace" radio button is selected, enable the
         // "Replacement" input, otherwise disable it
-        $(`input[name="${formatted_tag}-action"]`).change(function(){
+        $(`input[name="${formatted_tag}_action"]`).change(function(){
             let input_element = row_element.find(`input[type="text"]`);
             if($(this).val() === "replace-element")
                 input_element.removeClass("disabled");
@@ -208,7 +208,8 @@ function scrub(action){
         // text
         .fail(function()
         {
-            error("Failed to execute the scrubbing.");
+            error("Failed to execute the scrubbing. Check the " +
+                "formatting of additional options before retrying.");
             add_text_overlay("#previews", "Loading Failed");
             enable("#preview-button, #apply-button");
         });
