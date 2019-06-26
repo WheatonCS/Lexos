@@ -45,8 +45,8 @@
                 </div>
 
                 <div class="section-body">
-                    <label><input name="token_type" value="Word" type="radio" checked><span></span>By Tokens</label><br>
-                    <label><input name="token_type" value="Character" type="radio"><span></span>By Characters</label><br>
+                    <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
+                    <label><input name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
 
                     <h3>Grams</h3>
                     <label><input id="grams-input" name="token_size" value="1" type="text" spellcheck="false" autocomplete="off"></label>
@@ -128,10 +128,6 @@
 
     <!-- Hidden elements -->
     <input name="csv_delimiter" value="Comma" type="hidden">
-    <input name="normalization_method" value="L2" type="hidden">
-    <input name="normalization_type" value="Raw" type="hidden">
-    <input id="active-file-ids" name="active_files" type="hidden">
-    <div id="document-names-section"></div>
-    <input name="sort_column" value="0" type="hidden">
+    <input name="normalization_method" value="Raw" type="hidden">
 
 {% endblock %}

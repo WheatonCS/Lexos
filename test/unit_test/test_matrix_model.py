@@ -18,7 +18,7 @@ class BasicTest:
         },
 
         front_end_option=MatrixFrontEndOption(
-            token_option=TokenOption(n_gram_size=1, token_type="word"),
+            token_option=TokenOption(n_gram_size=1, token_type="Tokens"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
@@ -65,7 +65,7 @@ class CullingTest:
         },
 
         front_end_option=MatrixFrontEndOption(
-            token_option=TokenOption(n_gram_size=1, token_type="word"),
+            token_option=TokenOption(n_gram_size=1, token_type="Tokens"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=3,
@@ -110,7 +110,7 @@ class TfTest:
         },
 
         front_end_option=MatrixFrontEndOption(
-            token_option=TokenOption(n_gram_size=1, token_type="word"),
+            token_option=TokenOption(n_gram_size=1, token_type="Tokens"),
             norm_option=NormOption(use_freq=True, use_tf_idf=True,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,

@@ -20,7 +20,7 @@ from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.k_means_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
-from lexos.receivers.matrix_receiver import IdTempLabelMap
+from lexos.managers.utility import load_file_manager
 
 # Alias for typed tuple to increase readability.
 PlotlyHTMLPlot = str
@@ -38,7 +38,6 @@ class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
 
     doc_term_matrix: pd.DataFrame
-    id_temp_label_map: IdTempLabelMap
     front_end_option: KMeansOption
 
 
@@ -62,24 +61,15 @@ class KMeansModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _k_means_front_end_option(self) -> KMeansOption:
@@ -122,8 +112,8 @@ class KMeansModel(BaseModel):
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # Initialize the table with proper headers.
         return pd.DataFrame(data={
@@ -144,8 +134,8 @@ class KMeansModel(BaseModel):
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # Initialize the table with proper headers.
         return pd.DataFrame(data={
@@ -285,8 +275,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
+        labels = np.array([file.label for file in
+                           load_file_manager().get_active_files()])
 
         # Pick a color for following scatter plots.
         color = cl.scales["10"]["qual"]["Paired"]
@@ -353,8 +343,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
+        labels = np.array([file.label for file in
+                           load_file_manager().get_active_files()])
 
         # Separate x, y coordinates from the reduced data set.
         x_value = reduced_data[:, 0]
@@ -421,8 +411,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
+        labels = np.array([file.label for file in
+                           load_file_manager().get_active_files()])
 
         # Get x, y, z coordinates.
         x_value = reduced_data[:, 0]

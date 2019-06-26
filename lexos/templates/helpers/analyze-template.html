@@ -11,6 +11,7 @@
     <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
 
+    <!-- Page head -->
     {% block page_head %}{% endblock %}
 {% endblock %}
 
@@ -21,23 +22,20 @@
     <!-- Options -->
     <div id="options-section">
 
+        <!-- Page options -->
         {% block options %}{% endblock %}
 
         <!-- Tokenize -->
         <div id="tokenize-section" class="section">
 
-            <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Tokenize</h3>
                 <span id="tokenize-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
-            <!-- By Tokens -->
             <div class="section-body">
                 <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
                 <label><input name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
-
-                <!-- Grams -->
                 <h3>Grams: </h3><label><input id="grams-input" name="token_size" value="1" type="text" spellcheck="false" autocomplete="off"></label>
             </div>
         </div>
@@ -45,22 +43,15 @@
         <!-- Normalize -->
         <div id="normalize-section" class="section">
 
-            <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Normalize</h3>
                 <span id="normalize-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
             <div class="section-body">
-
-                <!-- Proportional -->
-                <label><input name="normalization_method" value="proportional" type="radio" checked><span></span>Proportional</label><br>
-
-                <!-- Raw -->
-                <label><input name="normalization_method" value="raw" type="radio"><span></span>Raw</label><br>
-
-                <!-- TF-IDF -->
-                <label><input name="normalization_method" value="tf_idf" type="radio"><span></span>TF-IDF</label>
+                <label><input name="normalization_method" value="Proportional" type="radio" checked><span></span>Proportional</label><br>
+                <label><input name="normalization_method" value="Raw" type="radio"><span></span>Raw</label><br>
+                <label><input name="normalization_method" value="TF-IDF" type="radio"><span></span>TF-IDF</label>
                 <span id="tf-idf-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
@@ -68,20 +59,15 @@
         <!-- Cull -->
         <div id="cull-section" class="section">
 
-            <!-- Top -->
             <div class="vertical-splitter section-top">
                 <h3 class="title">Cull</h3>
                 <span id="cull-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
             <div class="section-body">
-
-                <!-- Use the top X words -->
-                <label><input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox"><span></span>Use the top<input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">terms</label>
+                <label><input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox"><span></span>Use the top<input id="most-frequent-words-input" name="most_frequent_words" value="100" type="text" spellcheck="false" autocomplete="off">terms</label>
                 <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
-
-                <!-- Must be in X documents -->
-                <label><input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox"><span></span>Must be in<input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">documents</label>
+                <label><input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox"><span></span>Must be in<input id="minimum-occurrences-input" name="minimum_occurrences" value="1" type="text" spellcheck="false" autocomplete="off">documents</label>
                 <span id="minimum-occurrences-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>

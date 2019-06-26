@@ -300,7 +300,7 @@ class LexosFile:
             self.get_cutting_options()
 
         # From Lexos 3.1, trim the milestone at the start and end of the string
-        if cutting_type == "milestone":
+        if cutting_type == "Milestones":
             milestone = r'^' + cutting_value + '|' + cutting_value + '$'
             milestone = re.compile(milestone)
             text_string = milestone.sub('', text_string)
@@ -314,43 +314,23 @@ class LexosFile:
 
         return text_strings
 
-    def get_cutting_options(self, override_id: int = None) -> Tuple[str, str,
-                                                                    str, str]:
+    def get_cutting_options(self) -> Tuple[str, str, str, str]:
         """Gets the cutting options for a specific file.
 
         If cutting options not defined, then grabs the overall options, from
         the request.form.
-        :param override_id: an id for which to grab the options instead of the
-                            object's id.
         :return: a tuple of options for cutting the files.
         """
+        cutting_type = request.form['cut_mode']
 
-        if override_id is None:
-            file_id = self.id
-        else:
-            file_id = override_id
+        cutting_value = request.form['segment_size'] \
+            if cutting_type != "Milestones" else request.form['Milestone']
 
-        # A specific cutting value has been set for this file
-        if request.form['cutValue_' + str(file_id)] != '' or \
-                'cutByMS_' + str(file_id) in request.form:
-            option_identifier = '_' + str(file_id)
-        else:
-            option_identifier = ''
+        overlap = request.form['overlap'] \
+            if 'overlap' in request.form else '0'
 
-        cutting_value = request.form['cutValue' + option_identifier] \
-            if 'cutByMS' + option_identifier not in request.form \
-            else request.form['MScutWord' + option_identifier]
-
-        cutting_type = request.form['cutType' + option_identifier] \
-            if 'cutByMS' + option_identifier not in request.form \
-            else 'milestone'
-
-        overlap = request.form['cutOverlap' + option_identifier] \
-            if 'cutOverlap' + option_identifier in request.form \
-            else '0'
-
-        last_prop = request.form['cutLastProp' + option_identifier].strip('%')\
-            if 'cutLastProp' + option_identifier in request.form else '50'
+        last_prop = request.form['merge_threshold'].strip('%') \
+            if 'merge_threshold' in request.form else '50'
 
         return cutting_value, cutting_type, overlap, last_prop
 
@@ -500,20 +480,20 @@ class LexosFile:
                     + "], "
 
             # lemmas
-            if ('lemfileselect[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['lemfileselect[]'] != ''):
+            if ('lemmas_file[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['lemmas_file[]'] != ''):
                 str_legend = str_legend + "Lemma file: " + \
-                    self.options["scrub"]['lemfileselect[]'] + ", "
+                    self.options["scrub"]['lemmas_file[]'] + ", "
             if ('lemmas' in self.options["scrub"]) and (
                     self.options["scrub"]['lemmas'] != ''):
                 str_legend = str_legend + \
                     "Lemmas: [" + self.options["scrub"]['lemmas'] + "], "
 
             # consolidations
-            if ('consfileselect[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['consfileselect[]'] != ''):
+            if ('consolidations_file[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['consolidations_file[]'] != ''):
                 str_legend = str_legend + "Consolidation file: " + \
-                    self.options["scrub"]['consfileselect[]'] + ", "
+                    self.options["scrub"]['consolidations_file[]'] + ", "
             if ('consolidations' in self.options["scrub"]) and (
                     self.options["scrub"]['consolidations'] != ''):
                 str_legend = str_legend + \
@@ -521,14 +501,15 @@ class LexosFile:
                     self.options["scrub"]['consolidations'] + "], "
 
             # special characters (entities) - pull down
-            if ('entityrules' in self.options["scrub"]) and (
-                    self.options["scrub"]['entityrules'] != 'default'):
+            if ('special_characters_preset' in self.options["scrub"]) and (
+                    self.options["scrub"]['special_characters_preset']
+                    != 'None'):
                 str_legend = str_legend + "Special Character Rule Set: " + \
-                    self.options["scrub"]['entityrules'] + ", "
-            if ('scfileselect[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['scfileselect[]'] != ''):
+                    self.options["scrub"]['special_characters_preset'] + ", "
+            if ('special_characters_file[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['special_characters_file[]'] != ''):
                 str_legend = str_legend + "Special Character file: " + \
-                    self.options["scrub"]['scfileselect[]'] + ", "
+                    self.options["scrub"]['special_characters_file[]'] + ", "
             if ('special_characters' in self.options["scrub"]) and (
                     self.options["scrub"]['special_characters'] != ''):
                 str_legend = str_legend + \

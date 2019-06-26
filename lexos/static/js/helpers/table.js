@@ -16,7 +16,7 @@ class Table{
         let table_element = $(`
             <div class="hidden lexos-table">
                 <div class="lexos-table-top"></div>
-                <div class="lexos-table-content">
+                <div class="basic-lexos-table-content">
                     <div class="lexos-table-body firefox-hidden-scrollbar"></div>
                 </div>
             </div>
@@ -190,7 +190,7 @@ class Table{
             // If the request failed, display an error
             .fail(function(){
                 error("Failed to retrieve the table data.");
-                add_text_overlay(`#${table.name}-table-body`,
+                add_text_overlay(`#${table.name}-table-content`,
                     "Loading Failed");
             });
     }
@@ -336,8 +336,8 @@ class Table{
         if(this.sortable) $(`
                 <div id="sort-radio-option" class="table-top-radio-option">
                     <h3>Order:</h3>
-                    <label><input name="${this.name}_table_sort_mode" value="ascending" type="radio" checked><span></span>Ascending</label>
-                    <label><input name="${this.name}_table_sort_mode" value="descending" type="radio"><span></span>Descending</label>
+                    <label><input name="${this.name}_table_sort_mode" value="Ascending" type="radio" checked><span></span>Ascending</label>
+                    <label><input name="${this.name}_table_sort_mode" value="Descending" type="radio"><span></span>Descending</label>
                 </div>
             `).appendTo(table_top_element);
 

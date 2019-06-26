@@ -18,9 +18,9 @@ class TestLeftOrientation:
         ),
 
         front_end_option=DendroOption(
-            orientation='left',
-            linkage_method='average',
-            dist_metric='euclidean'
+            orientation='Left',
+            linkage_method='Average',
+            dist_metric='Euclidean'
         ),
 
         id_temp_label_map={
@@ -66,9 +66,9 @@ class TestBottomOrientation:
         ),
 
         front_end_option=DendroOption(
-            orientation='bottom',
-            linkage_method='average',
-            dist_metric='euclidean'
+            orientation='Bottom',
+            linkage_method='Average',
+            dist_metric='Euclidean'
         ),
 
         id_temp_label_map={

@@ -47,7 +47,7 @@ def upload_dictionaries() -> str:
 
     # Upload each file
     path = get_path()
-    for upload_file in request.files.getlist("lemfileselect[]"):
+    for upload_file in request.files.getlist("dictionaries[]"):
         file_name = upload_file.filename
         content = upload_file.read().decode("utf-8").replace('\n', '')
         file = open(path+file_name, 'w')

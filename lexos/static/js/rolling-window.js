@@ -5,7 +5,7 @@ $(function(){
 
     // If the "Calculation Type" is changed, set the appropriate "Search
     // Terms" input
-    $(`input[name="calculation_method"]`).change(function(){
+    $(`input[name="calculation_type"]`).change(function(){
 
         if($(`input[name="calculation_method"]:checked`).val() === "average")
             $("#search-terms-input-denominator").css("display", "none");

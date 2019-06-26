@@ -8,12 +8,12 @@ from collections import OrderedDict
 from typing import List, Optional, NamedTuple
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import IdTempLabelMap
 from lexos.models.file_manager_model import FileManagerModel
 from lexos.receivers.top_words_receiver import TopwordReceiver, \
     TopwordAnalysisType
 from lexos.helpers.error_messages import SEG_NON_POSITIVE_MESSAGE, \
     NOT_ENOUGH_CLASSES_MESSAGE, EMPTY_DTM_MESSAGE
+from lexos.managers.utility import load_file_manager
 
 # Type hinting for the analysis result each function returns.
 AnalysisResult = List[pd.Series]
@@ -24,7 +24,6 @@ class TopwordTestOptions(NamedTuple):
 
     division_map: pd.DataFrame
     doc_term_matrix: pd.DataFrame
-    id_temp_label_map: IdTempLabelMap
     front_end_option: TopwordAnalysisType
 
 
@@ -48,12 +47,10 @@ class TopwordModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
             self._test_class_division_map = test_options.division_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
             self._test_class_division_map = None
 
     @property
@@ -61,13 +58,6 @@ class TopwordModel(BaseModel):
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _topword_front_end_option(self) -> TopwordAnalysisType:
@@ -213,7 +203,9 @@ class TopwordModel(BaseModel):
                 word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
-                    name=f"Document \"{self._id_temp_label_map[file_id]}\""),
+                    name="Document \"" +
+                         load_file_manager().get_active_files()[file_id].label
+                         + "\""),
                 word_count_series_two=pd.Series(
                     data=word_count_sum,
                     index=words,
@@ -270,7 +262,9 @@ class TopwordModel(BaseModel):
                 word_count_series_one=pd.Series(
                     data=self._doc_term_matrix.loc[file_id],
                     index=words,
-                    name=f"Document \"{self._id_temp_label_map[file_id]}\""),
+                    name="Document \"" +
+                         load_file_manager().get_active_files()[file_id].label
+                         + "\""),
                 word_count_series_two=pd.Series(
                     data=group_data.loc[class_label],
                     index=words,

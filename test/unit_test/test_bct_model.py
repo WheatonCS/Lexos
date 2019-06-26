@@ -21,8 +21,8 @@ class TestBCTModel:
         ),
         id_temp_label_map={0: "F1.txt", 1: "F2.txt"},
         front_end_option=BCTOption(
-            linkage_method="average",
-            dist_metric="euclidean",
+            linkage_method="Average",
+            dist_metric="Euclidean",
             iterations=20,
             cutoff=0.5,
             replace=False

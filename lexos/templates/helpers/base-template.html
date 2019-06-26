@@ -5,11 +5,12 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Lexos</title>
-    <link rel="shortcut icon" href="static/favicon.png"/>
+    <link rel="icon" href="static/favicon.png"/>
 
     <!-- Variables -->
     <script>
         let theme = "{{ theme }}";
+        let active_document_count = {{ active_document_count }};
     </script>
 
     <!-- jQuery -->
@@ -98,7 +99,7 @@
         <div class="right-justified">
             <a href="/manage">Active Documents</a>
             <h3>: </h3>
-            <h3 id="active-document-count">0</h3>
+            <h3 id="active-document-count">{{ active_document_count }}</h3>
         </div>
     </footer>
 </body>

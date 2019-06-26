@@ -79,7 +79,7 @@ class TestParaToGroup:
         assert test_results_all_to_para[1].dtype == "float64"
 
         assert test_results_all_to_para[1].name == \
-            "Document \"F2\" Compared To The Corpus"
+            "Document \"F2\" Compared to the Corpus"
 
     def test_special_case(self):
         try:
@@ -142,7 +142,7 @@ class TestClassToAll:
         assert test_results_class_to_para[0]['H'] == -6.3857
         assert test_results_class_to_para[1].dtype == 'float64'
         assert test_results_class_to_para[1].name == \
-            'Document "F2" Compared To Class "C2"'
+            'Document "F2" Compared to Class "C2"'
 
     def test_special_case(self):
         try:
@@ -206,7 +206,7 @@ class TestClassToClass:
         assert test_results_class_to_class[0]['D'] == 5.0983
         assert test_results_class_to_class[0].dtype == 'float64'
         assert test_results_class_to_class[0].name == \
-            'Class "C1" Compared To Class "C2"'
+            'Class "C1" Compared to Class "C2"'
 
     def test_special_case(self):
         try:
