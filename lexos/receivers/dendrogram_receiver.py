@@ -14,11 +14,13 @@ class DendroOption(NamedTuple):
     orientation: str
 
     # the distance metric to send to pdist
-    # see: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html"
+    # see:
+    # "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html"
     dist_metric: str
 
     # the linkage method to send to scipy.cluster.hierarchy.linkage
-    # see: "https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.cluster.hierarchy.linkage.html"
+    # see:
+    # "https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.cluster.hierarchy.linkage.html"
     linkage_method: str
 
     text_color: str
@@ -36,9 +38,9 @@ class DendroReceiver(BaseReceiver):
 
         :return: a DendroOption object to hold all the options.
         """
-        orientation = self._front_end_data['orientation']
-        linkage_method = self._front_end_data['linkage']
-        metric = self._front_end_data['metric']
+        orientation = self._front_end_data['orientation'].lower()
+        linkage_method = self._front_end_data['linkage_method'].lower()
+        metric = self._front_end_data['distance_metric']
         text_color = self._front_end_data["text_color"]
 
         return DendroOption(orientation=orientation,

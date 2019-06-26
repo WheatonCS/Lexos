@@ -31,29 +31,29 @@
 
                 <!-- Left section -->
                 <div class="options-section">
-                    <label><input name="lowercasebox" type="checkbox" checked><span></span>Make Lowercase</label><br>
-                    <label><input name="digitsbox" type="checkbox" checked><span></span>Remove Digits</label><br>
-                    <label><input name="spacesbox" type="checkbox"><span></span>Remove Spaces</label><br>
-                    <label><input name="tabsbox" type="checkbox"><span></span>Remove Tabs</label><br>
-                    <label><input name="newlinesbox" type="checkbox"><span></span>Remove Newlines</label>
+                    <label><input name="make_lowercase" type="checkbox" checked><span></span>Make Lowercase</label><br>
+                    <label><input name="remove_digits" type="checkbox" checked><span></span>Remove Digits</label><br>
+                    <label><input name="remove_spaces" type="checkbox"><span></span>Remove Spaces</label><br>
+                    <label><input name="remove_tabs" type="checkbox"><span></span>Remove Tabs</label><br>
+                    <label><input name="remove_newlines" type="checkbox"><span></span>Remove Newlines</label>
                 </div>
 
                 <!-- Right section -->
                 <div class="options-section">
-                    <label><input name="tagbox" type="checkbox"><span></span>Scrub Tags</label>
+                    <label><input name="scrub_tags" type="checkbox"><span></span>Scrub Tags</label>
                     <span id="scrub-tags-settings-button" class="button">Options</span>
                     <span id="scrub-tags-tooltip-button" class="tooltip-button">?</span><br>
 
-                    <label><input id="punctuation-checkbox" name="punctuationbox" type="checkbox" checked><span></span>Remove Punctuation</label><br>
+                    <label><input id="punctuation-checkbox" name="remove_punctuation" type="checkbox" checked><span></span>Remove Punctuation</label><br>
 
                     <div id="punctuation-options">
-                        <label><input name="hyphensbox" type="checkbox"><span></span>Keep Hyphens</label>
+                        <label><input name="keep_hyphens" type="checkbox"><span></span>Keep Hyphens</label>
                         <span id="keep-hyphens-tooltip-button" class="tooltip-button">?</span><br>
 
-                        <label><input name="aposbox" type="checkbox"><span></span>Keep Apostrophes</label>
+                        <label><input name="keep_apostrophes" type="checkbox"><span></span>Keep Apostrophes</label>
                         <span id="keep-apostrophes-tooltip-button" class="tooltip-button">?</span><br>
 
-                        <label><input name="ampersandbox" type="checkbox"><span></span>Keep Ampersands</label>
+                        <label><input name="keep_ampersands" type="checkbox"><span></span>Keep Ampersands</label>
                         <span id="keep-ampersands-tooltip-button" class="tooltip-button">?</span>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="manuallemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
+                <label><textarea name="lemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
             </div>
         </div>
 
@@ -94,7 +94,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="manualconsolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
+                <label><textarea name="consolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
             </div>
         </div>
     </div>
@@ -117,14 +117,14 @@
                 <h3 id="stop-words-upload-text" class="hidden upload-text"></h3>
 
                 <div id="stop-words-options" class="options-section">
-                    <label><input type="radio" name="sw_option" value="off" checked><span></span>None</label>
-                    <label><input type="radio" name="sw_option" value="stop"><span></span>Stop</label>
-                    <label><input type="radio" name="sw_option" value="keep"><span></span>Keep</label>
+                    <label><input type="radio" name="stop_words_method" value="Off" checked><span></span>Off</label>
+                    <label><input type="radio" name="stop_words_method" value="Stop"><span></span>Stop</label>
+                    <label><input type="radio" name="stop_words_method" value="Keep"><span></span>Keep</label>
                 </div>
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="manualstopwords" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
+                <label><textarea name="stop_words" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
             </div>
         </div>
 
@@ -143,19 +143,19 @@
 
                 <div id="special-characters-options" class="vertical-splitter">
                     <div class="options-section">
-                        <label><input type="radio" name="entityrules" value="default" checked><span></span>None</label><br>
-                        <label><input type="radio" name="entityrules" value="early-english-html"><span></span>Early English HTML</label><br>
-                        <label><input type="radio" name="entityrules" value="doe-sgml"><span></span>Old English SGML</label>
+                        <label><input type="radio" name="special_characters_preset" value="None" checked><span></span>None</label><br>
+                        <label><input type="radio" name="special_characters_preset" value="Early English HTML"><span></span>Early English HTML</label><br>
+                        <label><input type="radio" name="special_characters_preset" value="Old English SGML"><span></span>Old English SGML</label>
                     </div>
                     <div class="options-section">
-                        <label><input type="radio" name="entityrules" value="MUFI-3"><span></span>MUFI 3</label><br>
-                        <label><input type="radio" name="entityrules" value="MUFI-4"><span></span>MUFI 4</label>
+                        <label><input type="radio" name="special_characters_preset" value="MUFI 3"><span></span>MUFI 3</label><br>
+                        <label><input type="radio" name="special_characters_preset" value="MUFI 4"><span></span>MUFI 4</label>
                     </div>
                 </div>
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="manualspecialchars" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
+                <label><textarea name="special_characters" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
             </div>
         </div>
     </div>
@@ -178,9 +178,9 @@
     </div>
 
     <!-- Hidden elements -->
-    <input id="stop-words-file-input" name="swfileselect[]" type="file" class="hidden">
-    <input id="lemmas-file-input" name="lemfileselect[]" type="file" class="hidden">
-    <input id="consolidations-file-input" name="consfileselect[]" type="file" class="hidden">
-    <input id="special-characters-file-input" name="scfileselect[]" type="file" class="hidden">
+    <input id="stop-words-file-input" name="stop_words_file[]" type="file" class="hidden">
+    <input id="lemmas-file-input" name="lemmas_file[]" type="file" class="hidden">
+    <input id="consolidations-file-input" name="consolidations_file[]" type="file" class="hidden">
+    <input id="special-characters-file-input" name="special_characters_file[]" type="file" class="hidden">
 
 {% endblock %}

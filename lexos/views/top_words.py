@@ -1,8 +1,8 @@
 from flask import Blueprint, session
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.filemanager_model import FileManagerModel
-from lexos.models.topword_model import TopwordModel
+from lexos.models.file_manager_model import FileManagerModel
+from lexos.models.top_words_model import TopwordModel
 from lexos.views.base import render
 
 top_words_blueprint = Blueprint("top-words", __name__)

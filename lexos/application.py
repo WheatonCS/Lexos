@@ -4,12 +4,13 @@ import re
 import sys
 import time
 
-from flask import Flask, request, render_template
+from flask import Flask, request
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
 import lexos.helpers.constants
 from lexos.helpers.exceptions import LexosException
+from lexos.views.base import render
 
 from lexos.views.base import base_blueprint
 from lexos.views.bubbleviz import bubbleviz_blueprint

@@ -48,12 +48,16 @@
 
 
 /* Content */
-.lexos-table-content {
-    display: grid;
-    grid-template-rows: min-content auto;
+.lexos-table-content,
+.basic-lexos-table-content {
     height: 100%;
     overflow-x: auto;
     overflow-y: hidden;
+}
+
+.lexos-table-content {
+    display: grid;
+    grid-template-rows: min-content auto;
 }
 
 .lexos-table-content .centerer {
