@@ -568,8 +568,7 @@ label input[type="checkbox"]:checked + span:after {
 }
 
 .tooltip-button:hover,
-.tooltip-button-active,
-.navbar-tooltip-button:hover {
+.tooltip-button-active {
     color: var(--foreground-color);
     background-color: var(--secondary-highlight-color);
 }
@@ -578,4 +577,28 @@ label input[type="checkbox"]:checked + span:after {
 /* Plotly */
 .plotly-notifier {
     display: none;
+}
+
+
+.navbar-tooltip-button {
+    font-family: Libre Baskerville;
+    display: inline-flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: .5rem;
+    font-size: 1.3rem;
+    transition: color .2s, background-color .2s;
+    color: var(--text-color);
+    border-radius: 50%;
+    border: .25rem solid var(--button-border-color);
+    background-color: var(--foreground-color);
+}
+
+.navbar-tooltip-button:hover {
+    border-radius: 50%;
+    color: var(--foreground-color);
+    background-color: var(--button-border-color);
 }
