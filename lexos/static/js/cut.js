@@ -159,6 +159,9 @@ function create_document_previews(response){
     // Remove the loading overlay, fade in the previews, and enable the
     // buttons for the document previews section
     finish_document_previews_loading();
+
+    // Update the active document count
+    update_active_document_count();
 }
 
 

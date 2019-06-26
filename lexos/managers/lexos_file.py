@@ -336,13 +336,10 @@ class LexosFile:
 
     def save_cut_options(self, parent_id: int):
         """Saves the cutting options into the LexosFile object's metadata.
-
-        :param parent_id: the id of the parent file from which this file has
-                          been cut.
         """
 
         cutting_value, cutting_type, overlap, last_prop = \
-            self.get_cutting_options(parent_id)
+            self.get_cutting_options()
 
         if 'cut' not in self.options:
             self.options['cut'] = {}
