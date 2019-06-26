@@ -25,6 +25,13 @@ $(function(){
             punctuation_options_element.removeClass("disabled");
         else punctuation_options_element.addClass("disabled");
     });
+    let tags_checkbox_element = $("#tags-checkbox");
+    tags_checkbox_element.click(function(){
+        let tags_options_element = $("#scrub-tags-settings-button");
+        if(tags_options_element.hasClass("disabled"))
+            tags_options_element.removeClass("disabled");
+        else tags_options_element.addClass("disabled");
+    });
 
     // Scrub the documents when the "Preview" and "Apply" buttons are pressed
     $("#preview-button").click(function(){ scrub("preview"); });
@@ -101,7 +108,7 @@ function create_tag_options_popup(response){
             <div class="tag-table-row">
                 <h3></h3>
                 <div>
-                    <label><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}_action" value="Remove Tag"><span></span>Remove Tag</label>
+                    <label><input id="${formatted_tag}-remove-tag-button" type="radio" name="${formatted_tag}_action" value="Remove Tag" checked><span></span>Remove Tag</label>
                     <label><input id="${formatted_tag}-remove-element-button" type="radio" name="${formatted_tag}_action" value="Remove Element"><span></span>Remove All</label>
                     <label><input id="${formatted_tag}-replace-element-button" type="radio" name="${formatted_tag}_action" value="Replace Element"><span></span>Replace</label>
                     <label><input id="${formatted_tag}-leave-alone-button" type="radio" name="${formatted_tag}_action" value="Leave Alone"><span></span>None</label>
