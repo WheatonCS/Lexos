@@ -3,8 +3,11 @@ $(function(){
 
     // Initialize the table
     table = new Table("tokenizer", "tokenize/table", "#table-section", "",
-        validate_analyze_inputs, null, true, true, false, true, true, true,
+        validate_analyze_inputs, null, true, false, false, true, true, true,
         true);
+
+    // Initialize the download button
+    initialize_download_button();
 
     // Create the table
     initialize();
@@ -20,6 +23,42 @@ $(function(){
     // Initialize the walkthrough
     initialize_walkthrough(walkthrough);
 })
+
+
+/**
+ * Initializes the download button.
+ */
+function initialize_download_button(){
+
+    // Create the download button
+    let download_button = $(`<span class="button">Download</span>`)
+        .appendTo(table.table_element.find(".lexos-table-buttons"));
+
+    // If the download button is clicked...
+    download_button.click(function(){
+
+        // Create the popup
+        create_ok_popup("Download");
+        $(`
+            <label><input name="csv_orientation" value="Documents as Rows" type="radio" checked><span></span>Documents as Rows</label><br>
+            <label><input name="csv_orientation" value="Documents as Columns" type="radio"><span></span>Documents as Columns</label>
+        `).appendTo("#popup-content");
+
+        // If the popup's "OK" button is clicked...
+        $("#popup-ok-button").click(function(){
+
+            // Send a request to create the table with the selected orientation
+            table.create(false)
+
+                // If the request is successful, download the table and close
+                // the popup
+                .done(function(){
+                    download(table.csv, `${table.name}-table.csv`);
+                    close_popup();
+                });
+        });
+    });
+}
 
 
 /**

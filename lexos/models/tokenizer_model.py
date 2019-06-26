@@ -139,6 +139,11 @@ class TokenizerModel(BaseModel):
         # Return the JSON data
         head = self._get_file_col_dtm().columns.values.tolist()
         head.insert(0, "Term")
+
+        # Transpose the data if requested
+        if not self._front_end_option.csv_documents_as_rows:
+            dtm_sorted = dtm_sorted.transpose()
+
         return {
             "tokenizer-table-page-count": pages,
             "tokenizer-table-head": head,

@@ -143,7 +143,7 @@ class Table{
     /**
      * Sends a request for the table data and creates the table.
      */
-    create(){
+    create(display = true){
 
         // Validate the inputs
         if(this.validation_callback && !this.validation_callback()) return;
@@ -154,7 +154,7 @@ class Table{
         remove_errors();
 
         // Display the loading overlay
-        start_loading(`#${this.name}-table-content`,
+        if(display) start_loading(`#${this.name}-table-content`,
             `#${this.name}-table-generate-button,
             #${this.name}-table-download-button,
             #${this.name}-table-previous-button,
@@ -162,13 +162,19 @@ class Table{
 
         // Send the request for data
         let table = this;
-        send_ajax_form_request(this.request_url)
+        return send_ajax_form_request(this.request_url)
 
             // Always call the completion callback
             .always(this.completion_callback)
 
             // If the request was successful...
             .done(function(response){
+
+                // Update the CSV
+                table.csv = response[`${table.name}-table-csv`];
+
+                // If a table display update is undesired, return
+                if(!display) return;
 
                 // Update the page count and number
                 table.page_count = response[`${table.name}-table-page-count`];
@@ -178,8 +184,7 @@ class Table{
                 // If data was returned, display it
                 if(response[`${table.name}-table-body`].length)
                     table.display(response[`${table.name}-table-body`],
-                        response[`${table.name}-table-head`],
-                        response[`${table.name}-table-csv`]);
+                        response[`${table.name}-table-head`]);
 
                 // Otherwise, if no data was returned, display "No Results"
                 // text
@@ -200,14 +205,9 @@ class Table{
      * Creates the table head and body.
      * @param {string[][]} body: The data to display.
      * @param {string[]} head: The column labels.
-     * @param {string} csv: The CSV data to send when the "Download" button
-     *      is pressed.
      * @private
      */
-    display(body, head = [], csv = ''){
-
-        // If there is a "Download" button, update the CSV
-        if(this.download_button) this.csv = csv;
+    display(body, head = []){
 
         // Create the head and body elements
         $(`
@@ -267,7 +267,7 @@ class Table{
     }
 
 
-     /**
+    /**
      * Validates the table's inputs.
      * @private
      */
@@ -344,7 +344,7 @@ class Table{
         // If the table needs a button, create the button section
         let button_section_element;
         if(this.download_button || this.generate_button || this.tooltip)
-            button_section_element = $(`<div id="table-button-section" class="lexos-table-buttons"></div>`)
+            button_section_element = $(`<div class="lexos-table-buttons"></div>`)
                 .appendTo(table_top_element);
 
         // If the table needs a generate button, create one
