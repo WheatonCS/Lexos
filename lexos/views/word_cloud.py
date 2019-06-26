@@ -14,10 +14,6 @@ def word_cloud() -> str:
     :return: The word cloud page.
     """
 
-    # Set the cloud options to their defaults if they do not exist
-    if "cloudoption" not in session:
-        session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
-
     return render("word-cloud.html")
 
 
@@ -28,7 +24,6 @@ def get_word_counts() -> str:
     """
 
     file_manager = utility.load_file_manager()
-    session_manager.cache_cloud_option()
 
     # Get the contents of the active documents
     contents = ""

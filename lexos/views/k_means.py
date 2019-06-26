@@ -1,7 +1,7 @@
 from flask import session, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.kmeans_model import KMeansModel
+from lexos.models.k_means_model import KMeansModel
 from lexos.views.base import render
 
 k_means_blueprint = Blueprint("k-means", __name__)

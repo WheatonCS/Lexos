@@ -11,10 +11,10 @@ from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import FileIDContentMap
-from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.file_manager_model import FileManagerModel
 from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
-from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
+from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
 
 # Set the rwa regex flags.
@@ -825,6 +825,10 @@ class RollingWindowsModel(BaseModel):
                     font=dict(
                         color=self._options.text_color,
                         size=16
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
                     )
                 )
             )
@@ -885,6 +889,10 @@ class RollingWindowsModel(BaseModel):
                         zeroline=False,
                         showgrid=False,
                         tickcolor=self._options.text_color
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
                     )
                 )
             )

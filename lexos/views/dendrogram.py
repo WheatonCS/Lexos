@@ -1,7 +1,7 @@
 from flask import session, Blueprint
 from lexos.helpers import constants
 from lexos.managers import session_manager
-from lexos.models.dendro_model import DendrogramModel
+from lexos.models.dendrogram_model import DendrogramModel
 from lexos.views.base import render
 
 dendrogram_blueprint = Blueprint("dendrogram", __name__)

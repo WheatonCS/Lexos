@@ -14,13 +14,6 @@ def multicloud() -> str:
     :return: The multicloud page.
     """
 
-    # Sets the cloud and multicloud options to their defaults if they do not
-    # exist
-    if "cloudoption" not in session:
-        session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
-    if "multicloudoptions" not in session:
-        session["multicloudoptions"] = constants.DEFAULT_MULTICLOUD_OPTIONS
-
     return render("multicloud.html")
 
 
@@ -31,7 +24,6 @@ def get_word_counts() -> str:
     """
 
     file_manager = utility.load_file_manager()
-    session_manager.cache_cloud_option()
 
     # Get the contents of the active documents
     response = []

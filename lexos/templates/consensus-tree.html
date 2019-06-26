@@ -26,7 +26,7 @@
             <div>
 
                 <!-- Sample with replacement -->
-                <label><input name="replace" type="checkbox"><span></span>Sample with replacement</label>
+                <label><input name="sample_with_replacement" type="checkbox"><span></span>Sample with replacement</label>
                 <br>
 
                 <!-- Distance metric -->
@@ -43,13 +43,13 @@
 
                 <!-- Cutoff -->
                 <div>
-                    <h3>Cutoff</h3><input id="cutoff-input" name="cutoff" value="0.5" type="text" spellcheck="false" autocomplete="off">
+                    <h3>Cutoff</h3><input id="cutoff-input" name="cutoff" value="0.5" type="text" spellcheck="false" autocomplete="off" placeholder="Required">
                     <span id="cutoff-tooltip-button" class="tooltip-button">?</span><br>
                 </div>
 
                 <!-- Iterations -->
                 <div>
-                    <h3>Iterations</h3><input id="iterations-input" name="iterations" value="100" type="text" spellcheck="false" autocomplete="off">
+                    <h3>Iterations</h3><input id="iterations-input" name="iterations" value="100" type="text" spellcheck="false" autocomplete="off" placeholder="Required">
                     <span id="iterations-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
@@ -81,6 +81,6 @@
 
 <!-- Hidden elements -->
 {% block hidden_elements %}
-    <input id="distance-metric-input" name="metric" value="euclidean" type="hidden">
-    <input id="linkage-method-input" name="linkage" value="average" type="hidden">
+    <input id="distance-metric-input" name="distance_metric" value="Euclidean" type="hidden">
+    <input id="linkage-method-input" name="linkage_method" value="Average" type="hidden">
 {% endblock %}

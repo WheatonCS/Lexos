@@ -45,17 +45,16 @@ def execute() -> str:
     session_manager.cache_alteration_files()
     session_manager.cache_scrub_options()
 
-    # Save changes only if the "Apply Scrubbing" button is clicked
+    # Save changes only if the "Apply Scrubbing" button is clicked.
     saving_changes = request.form["action"] == "apply"
 
-    # Scrub
+    # Scrub.
     previews = file_manager.scrub_files(saving_changes=saving_changes)
 
-    # (DO NOT) HTML escape the previews (THIS LINE USED TO DO THAT, BUT NOW
-    # IT JUST PUTS THE DATA IN THE CORRECT FORMAT OR SOMETHING)
+    # Create the previews.
     previews = [[preview[1], preview[3]] for preview in previews]
 
-    # Save the changes if requested
+    # Save the changes if requested.
     if saving_changes:
         utility.save_file_manager(file_manager)
 

@@ -3,14 +3,14 @@ $("document").ready(function(){
     // Highlight the navbar button of the current page
     highlight_navbar_button();
 
-    // Initialize the active document count
-    update_active_document_count();
-
     // Initialize the theme popup
     initialize_theme_popup();
 
     // If the "Help" button is pressed, toggle the help section visibility
-    $("#help-button").click(toggle_help_section);
+    $("#help-button").click(function(){
+        toggle_help_section()
+        update_graph_size()
+    });
 
     // If the navbar walkthrough button is pressed, begin the walkthrough
     $("#navbar-walkthrough-button").click(start_walkthrough);
@@ -284,7 +284,6 @@ function initialize_walkthrough(walkthrough){
  * Update the number of active documents displayed after the "Active
  * Documents" text in the footer
  */
-let active_document_count;
 function update_active_document_count(){
 
     return $.ajax({type: "GET", url: "active-documents"})

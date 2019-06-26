@@ -18,33 +18,23 @@ $(function(){
 
 
 /**
- * Checks that there are at least two active documents, initializes the legacy
- *      inputs and the "Generate" and download buttons, creates the k-means
- *      graph, and gets the CSV data.
- * @param {string} response: The response from the "/active-file-ids" request.
+ * Checks that there are at least two active documents, initializes the
+ * "Generate" and download buttons, creates the k-means graph, and gets the
+ * CSV data.
  */
-let document_count;
 let csv;
-function initialize(response){
-
-    // Initialize the legacy form inputs. If there are no active documents,
-    // display "No Active Documents" text and return
-    if(!initialize_legacy_inputs(response)){
-        add_text_overlay("#graph-container", "No Active Documents");
-        return;
-    }
+function initialize(){
 
     // If there are fewer than two active documents, display warning text
     // and return
-    document_count = Object.entries(parse_json(response)).length;
-    if(document_count <  2){
+    if(active_document_count <  2){
         add_text_overlay("#graph-container",
             "This Tool Requires at Least Two Active Documents");
         return;
     }
 
     // Otherwise, set the default "Clusters" value
-    $("#clusters-input").val(Math.floor(document_count/2)+1);
+    $("#clusters-input").val(Math.floor(active_document_count/2)+1);
 
     // Create the k-means graph and get the CSV data
     send_k_means_result_request();
@@ -99,6 +89,7 @@ function send_k_means_result_request(){
         // button
         .fail(function(){
             error("Failed to retrieve the k-means data.");
+            add_text_overlay("#graph-container", "Loading Failed");
             enable("#generate-button");
         });
 }
@@ -111,7 +102,7 @@ function send_k_means_result_request(){
 function validate_k_means_inputs(){
 
     // "Clusters"
-    if(!validate_number($("#clusters-input").val(), 1, document_count)){
+    if(!validate_number($("#clusters-input").val(), 1, active_document_count)){
         error("Invalid number of clusters.", "#clusters-input");
         return false;
     }

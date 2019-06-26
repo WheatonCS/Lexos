@@ -45,11 +45,11 @@
                 </div>
 
                 <div class="section-body">
-                    <label><input name="tokenType" value="word" type="radio" checked><span></span>By Tokens</label><br>
-                    <label><input name="tokenType" value="char" type="radio"><span></span>By Characters</label><br>
+                    <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
+                    <label><input name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
 
                     <h3>Grams</h3>
-                    <label><input id="grams-input" name="tokenSize" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label><input id="grams-input" name="token_size" value="1" type="text" placeholder="Required" spellcheck="false" autocomplete="off"></label>
                 </div>
             </div>
 
@@ -64,20 +64,20 @@
                 <div class="section-body">
 
                     <label>
-                        <input id="most-frequent-words-checkbox" name="mfwcheckbox" type="checkbox">
+                        <input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox">
                         <span></span>
                         Use the top
-                        <input id="most-frequent-words-input" name="mfwnumber" value="100" type="text" spellcheck="false" autocomplete="off">
+                        <input id="most-frequent-words-input" name="most_frequent_words" value="100" placeholder="Required" type="text" spellcheck="false" autocomplete="off">
                         terms
                     </label>
 
                     <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
 
                     <label>
-                        <input id="minimum-occurrences-checkbox" name="cullcheckbox" type="checkbox">
+                        <input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox">
                         <span></span>
                         Must be in
-                        <input id="minimum-occurrences-input" name="cullnumber" value="1" type="text" spellcheck="false" autocomplete="off">
+                        <input id="minimum-occurrences-input" name="minimum_occurrences" value="1" placeholder="Required" type="text" spellcheck="false" autocomplete="off">
                         documents
                     </label>
 
@@ -105,7 +105,7 @@
 
             <!-- Corpus statistics -->
             <div id="corpus-statistics-section" class="section">
-                <h3 class="section-top title">Corpus Statistics</h3>
+                <h3 class="section-top title">Document Size Statistics</h3>
                 <div id="corpus-statistics" class="section-body"></div>
             </div>
 
@@ -127,11 +127,7 @@
     <div id="table-section" class="section"></div>
 
     <!-- Hidden elements -->
-    <input name="csvdelimiter" value="comma" type="hidden">
-    <input name="norm" value="l2" type="hidden">
-    <input name="normalizeType" value="raw" type="hidden">
-    <input id="active-file-ids" name="active_file_ids" type="hidden">
-    <div id="document-names-section"></div>
-    <input name="sort-column" value="0" type="hidden">
+    <input name="csv_delimiter" value="Comma" type="hidden">
+    <input name="normalization_method" value="Raw" type="hidden">
 
 {% endblock %}

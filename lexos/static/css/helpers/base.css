@@ -54,6 +54,10 @@ b {
     color: var(--text-color);
 }
 
+::placeholder {
+    color: var(--error-color);
+    opacity: 1;
+}
 
 /* Main Elements */
 *,
@@ -213,9 +217,13 @@ form {
     margin: 1rem;
 }
 
-#navbar-right > #help-button {
+#navbar-right > #help-button{
     cursor: pointer;
     color: var(--secondary-highlight-color);
+}
+
+#navbar-right > #help-button:hover{
+    color: var(--secondary-highlight-color-dark);
 }
 
 
