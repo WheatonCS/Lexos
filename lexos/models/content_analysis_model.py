@@ -6,7 +6,7 @@ from typing import Optional
 import pandas as pd
 
 from lexos.helpers.definitions import count_phrase_in_text
-from lexos.receivers.contentanalysis_receiver import \
+from lexos.receivers.content_analysis_receiver import \
     ContentAnalysisReceiver, ContentAnalysisOption
 
 

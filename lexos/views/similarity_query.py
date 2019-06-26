@@ -1,7 +1,7 @@
 from flask import Blueprint, session, jsonify
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.similarity_model import SimilarityModel
+from lexos.models.similarity_query_model import SimilarityModel
 from lexos.views.base import render
 
 similarity_query_blueprint = Blueprint("similarity-query", __name__)
