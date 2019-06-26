@@ -1,8 +1,7 @@
 import json
 import pandas as pd
-from flask import session, Blueprint, request
-from lexos.helpers import constants as constants
-from lexos.managers import utility, session_manager as session_manager
+from flask import Blueprint, request
+from lexos.managers import utility
 from lexos.views.base import render
 
 word_cloud_blueprint = Blueprint("word_cloud", __name__)
