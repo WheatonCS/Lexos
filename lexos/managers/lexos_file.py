@@ -324,7 +324,7 @@ class LexosFile:
         cutting_type = request.form['cut_mode']
 
         cutting_value = request.form['segment_size'] \
-            if cutting_type != "Milestones" else request.form['Milestone']
+            if cutting_type != "Milestones" else request.form['milestone']
 
         overlap = request.form['overlap'] \
             if 'overlap' in request.form else '0'
