@@ -10,7 +10,10 @@ $("document").ready(function(){
     initialize_theme_popup();
 
     // If the "Help" button is pressed, toggle the help section visibility
-    $("#help-button").click(toggle_help_section);
+    $("#help-button").click(function(){
+        toggle_help_section()
+        update_graph_size()
+    });
 
     // If the navbar walkthrough button is pressed, begin the walkthrough
     $("#navbar-walkthrough-button").click(start_walkthrough);
