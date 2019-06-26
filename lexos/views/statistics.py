@@ -1,10 +1,9 @@
 import json
-
-from flask import session, render_template, Blueprint, jsonify
-
+from flask import session, Blueprint, jsonify
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.stats_model import StatsModel
+from lexos.models.statistics_model import StatsModel
+from lexos.views.base import render
 
 statistics_blueprint = Blueprint("statistics", __name__)
 
@@ -20,13 +19,13 @@ def statistics() -> str:
         session["analyoption"] = constants.DEFAULT_ANALYZE_OPTIONS
 
     # Return the statistics page
-    return render_template("statistics.html")
+    return render("statistics.html")
 
 
 @statistics_blueprint.route("/statistics/corpus", methods=["POST"])
 def corpus() -> str:
-    """ Gets statistics on the corpus.
-    :return: Statistics on the corpus.
+    """ Gets the corpus statistics.
+    :return: The corpus statistics.
     """
 
     # Cache the options
@@ -52,7 +51,7 @@ def corpus() -> str:
 @statistics_blueprint.route("/statistics/document-statistics",
                             methods=["POST"])
 def documents() -> str:
-    """ Gets the statistics of the individual documents.
+    """Get the statistics of the individual documents.
     :return: The statistics of the individual documents.
     """
 
@@ -62,7 +61,7 @@ def documents() -> str:
 
 @statistics_blueprint.route("/statistics/box-plot", methods=["POST"])
 def box_plot() -> str:
-    """ Gets a Plotly box plot of the document sizes.
+    """ Get a Plotly box plot of the document sizes.
     :return: The Plotly box plot of the document sizes.
     """
 

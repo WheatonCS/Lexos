@@ -1,47 +1,63 @@
-let csv;
+let table;
 $(function(){
 
     // Display the loading overlay for the "Comparison Document" and
     // "Similarity Query" sections
     start_loading("#comparison-document-section-body, #table");
 
-    // Initialize the "Comparison Document", "Tokenize", "Cull", and
-    // "Similarity Query" sections
-    initialize_analyze_tooltips();
-    initialize_tooltips();
-
-    // Initialize the legacy form inputs and create the similarity table
+    // Initialize the comparison document section and create the similarity
+    // table
     get_active_file_ids(initialize,
         "#comparison-document-section-body, #table");
+
+    // Initialize the table
+    table = new Table("similarity", "similarity-query/results",
+        "#table-section", "Similarity Query", validate_analyze_inputs,
+        null, true, true, false, true, true);
 
     // If the "Download" button is pressed, download the CSV
     $("#download-button").click(function(){
         download(csv, "similarity-query.csv");
     });
+
+    // Initialize the tooltips
+    initialize_analyze_tooltips();
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
 /**
- * Initialize the legacy form inputs and create the similarity table.
+ * Initialize the comparison document section and create the similarity table.
  * @param {string} response: The response from the "/active-file-ids" request.
  */
 function initialize(response){
 
     // If there are fewer than two active documents, display warning text
     // and return
-    document_count = Object.entries(parse_json(response)).length;
-    if(document_count <  2){
-        add_text_overlay("#table", `This Tool Requires at Least Two Active
-            Documents`);
+    if(active_document_count <  2){
+        add_text_overlay("#similarity-table-content", `This Tool Requires at
+            Least Two Active Documents`);
         add_text_overlay("#comparison-document-section-body", '');
         return;
     }
 
-    // Initialize the legacy form inputs
-    if(!initialize_legacy_inputs(response)) return;
+    // Initialize the comparison document section
+    initialize_comparison_document_section(
+        Object.entries(parse_json(response)));
 
-    // Otherwise, parse the response
-    let documents = Object.entries(parse_json(response));
+    // Create the similarity table
+    table.create();
+}
+
+
+/**
+ * Initializes the comparison document section.
+ * @param {Object[]} documents: The documents to display as options.
+ */
+function initialize_comparison_document_section(documents){
 
     // Enable the "Comparison Document" section's "Select" button
     let select_button_element = $("#select-button");
@@ -68,61 +84,6 @@ function initialize(response){
             "#comparison-document-input", documents
         );
     });
-
-    // Create the similarity table
-    send_similarity_table_request();
-
-    // If the "Generate" button is pressed, recreate the similarity table
-    $("#generate-button").click(function(){
-        if(!validate_analyze_inputs()) return;
-        start_loading("#table", "#generate-button, #download-button");
-        remove_errors();
-        send_similarity_table_request();
-    });
-}
-
-
-/**
- * Sends a request for the similarity query data and creates the similarity
- *      query table.
- */
-function send_similarity_table_request(){
-
-    // Send a request for the similarity query data
-    send_ajax_form_request("similarity-query/results")
-
-        // If the request was successful, store the CSV result and create the
-        // similarity query table
-        .done(function(response){
-            csv = response.csv;
-            create_similarity_table(response.table);
-        })
-
-        // If the request failed, display an error and "Loading Failed" text
-        // and enable the "Generate" button
-        .fail(function(){
-            error("Failed to retrieve the similarity query data.");
-            add_text_overlay("#table", "Loading Failed");
-            enable("#generate-button");
-        });
-}
-
-
-/**
- * Creates the similarity query table.
- * @param {string} response: The "table" part of the response from the
- *      "similarity-query/results" request.
- */
-function create_similarity_table(response){
-
-    // Create the tables
-    create_table("#table", parse_json(response),
-        ["Document", "Cosine Similarity"]);
-
-    // Remove the loading overlay, fade in the table, and enable the
-    // "Generate" and "Download" buttons
-    finish_loading("#table", ".lexos-table",
-        "#generate-button, #download-button");
 }
 
 
@@ -143,4 +104,49 @@ function initialize_tooltips(){
         to be the external comparison. All other documents will be used to
         make the model and will be ranked in order of most to least similar
         to the comparison document in your results.`);
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Similarity Query!`,
+            position: "top",
+        },
+        {
+            element: "#comparison-document-section",
+            intro: `By clicking "Select" you can choose which document is the
+                baseline for comparison.`,
+            position: "top",
+        },
+        {
+            element: "#tokenize-section",
+            intro: `Tokenize determines how terms are counted when generating
+                data.`,
+            position: "top",
+        },
+        {
+            element: "#cull-section",
+            intro: `Cull limits the number of terms used to generate data, and
+                is optional.`,
+            position: "top",
+        },
+        {
+            element: "#table-button-section",
+            intro: `Here you can generate a new Similarity Query. You can also
+                choose to download the current table as a CSV file.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Similarity Query walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

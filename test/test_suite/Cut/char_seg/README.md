@@ -88,6 +88,6 @@ Results: ResultFiles_3_numbered_large.txt
 7. Click "Apply"
 
 8. You should now have 20 documents, each a segment of the original containing 5
- characters each, except for the last one which is shorter(3 characters), overlapping by 2
+ characters each, except for the last one which is shorter(contains 3 characters), overlapping by 2
 
 Results: ResultFiles_4_randomCharacters.txt

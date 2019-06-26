@@ -2,6 +2,7 @@
 
 from typing import List, NamedTuple
 from lexos.receivers.base_receiver import BaseReceiver
+from lexos.managers.utility import load_file_manager
 
 
 class StatsFrontEndOption(NamedTuple):
@@ -16,6 +17,10 @@ class StatsFrontEndOption(NamedTuple):
     # The sort method
     sort_ascending: bool
 
+    # The colors
+    text_color: str
+    highlight_color: str
+
 
 class StatsReceiver(BaseReceiver):
     """This is the class that gets front end options for the stats model."""
@@ -29,24 +34,25 @@ class StatsReceiver(BaseReceiver):
 
         The only option is selected file ids.
         """
-        # Get active file ids from front end as a string.
-        active_file_ids_string = self._front_end_data["active_file_ids"]
-
-        # Split the file ids.
-        active_file_ids_string_list = active_file_ids_string.split(" ")
-
         # Force file ids to be integer type and remove extra blank.
-        active_file_ids = \
-            [int(file_id)
-             for file_id in active_file_ids_string_list if file_id != ""]
+        active_file_ids = [file.id for file in
+                           load_file_manager().get_active_files()]
 
         # Get the selected column
-        sort_column = int(self._front_end_data["sort-column"])
+        sort_column = int(self._front_end_data[
+            "statistics_table_selected_column"])
 
         # Get the sort column
-        sort_ascending = bool(self._front_end_data["sort-ascending"] == "true")
+        sort_ascending = bool(self._front_end_data[
+            "statistics_table_sort_mode"] == "ascending")
+
+        # Get the colors
+        text_color = self._front_end_data.get("text_color")
+        highlight_color = self._front_end_data.get("highlight_color")
 
         # Return stats front end option.
         return StatsFrontEndOption(active_file_ids=active_file_ids,
                                    sort_column=sort_column,
-                                   sort_ascending=sort_ascending)
+                                   sort_ascending=sort_ascending,
+                                   text_color=text_color,
+                                   highlight_color=highlight_color)

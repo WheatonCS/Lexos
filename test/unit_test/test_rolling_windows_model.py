@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from lexos.models.rolling_windows_model import RollingWindowsModel, \
     RWATestOptions
-from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
+from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     WindowUnitType, RWATokenType, RWARatioTokenOptions, RWAWindowOptions, \
     RWAAverageTokenOptions, RWAPlotOptions
 
@@ -33,7 +33,8 @@ class TestRatioCountOne:
                 individual_points=False,
                 black_white=False
             ),
-            milestone="ta"
+            milestone="ta",
+            text_color="blue"
         )
     )
 
@@ -122,7 +123,8 @@ class TestRatioCountTwo:
                 individual_points=False,
                 black_white=False
             ),
-            milestone="ta"
+            milestone="ta",
+            text_color="blue"
         )
     )
 
@@ -179,7 +181,8 @@ class TestAverageCountOne:
                 individual_points=False,
                 black_white=False
             ),
-            milestone=None
+            milestone=None,
+            text_color="blue"
         )
     )
     # Get the rolling window model and other testing components.
@@ -242,7 +245,8 @@ class TestAverageCountTwo:
                 individual_points=False,
                 black_white=False
             ),
-            milestone=None
+            milestone=None,
+            text_color="blue"
         )
     )
     # Get the rolling window model and other testing components.

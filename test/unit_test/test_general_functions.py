@@ -1,4 +1,4 @@
-from lexos.helpers.general_functions import get_encoding, make_preview_from, \
+from lexos.helpers.general_functions import get_encoding, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
 
@@ -6,29 +6,6 @@ from lexos.helpers.general_functions import get_encoding, make_preview_from, \
 class TestGeneralFunctions:
     def test_get_encoding(self):
         assert get_encoding(b"asdf") == "ascii"
-
-    def test_make_preview_from(self):
-        newline = '\n'
-        one_char = "x"
-        less_than_255_char = "modgaecq"
-        str_127 = "hdxhbgsdbuhgbijhxnikjgsnhijkxnhgijgmsdnbgsijhnbn" \
-                  "gjixcnmijskxndgcmkovunhbwsrwiajkvocbihuajnros" \
-                  "ekltreajucsjnfhdcbvsekojnhxrwujhBS"
-        str_255 = str_127 + 'a' + str_127
-        more_than_255_char_even = \
-            str_127 + less_than_255_char + less_than_255_char + str_127
-        more_than_255_char_odd = \
-            str_127 + less_than_255_char + one_char + less_than_255_char + \
-            str_127
-        middle = '\u2026 \u2026'
-        assert make_preview_from(less_than_255_char) == less_than_255_char
-        assert make_preview_from(str_255) == str_255
-        print("Alright: ", make_preview_from(more_than_255_char_odd))
-        print("okay, PEP:", str_127 + middle + str_127)
-        assert make_preview_from(
-            more_than_255_char_odd) == str_127 + middle + str_127
-        assert make_preview_from(
-            more_than_255_char_even) == str_127 + middle + str_127
 
     def test_generate_d3_object(self):
         assert generate_d3_object(

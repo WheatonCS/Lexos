@@ -147,7 +147,7 @@ function start_loading(query, disable_query = ""){
         element.empty();
 
         let loading_overlay_element = $(`
-            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity .5s">
+            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity .2s">
                 <h3>Loading</h3>
             </div>
         `).appendTo(element);
@@ -291,11 +291,17 @@ function key_down_callback(key, callback){
 /**
  * Displays an error message.
  * @param {string} message: The message to display.
+ * @param {string} error_highlight_query: A query for the element to apply
+ *      an error highlight to.
  */
-function error(message){
+function error(message, error_highlight_query = ''){
 
-    // Remove any existing error message
+    // Remove any existing error messages and error highlights
     $("#error-section").remove();
+    $(".error-highlight").removeClass("error-highlight");
+
+    // Apply the error highlight
+    $(error_highlight_query).addClass("error-highlight");
 
     // Hide the footer
     hide("footer");
@@ -324,6 +330,9 @@ function error(message){
  */
 function remove_errors(){
 
+    // Remove any existing error highlights
+    $(".error-highlight").removeClass("error-highlight");
+
     // Remove any existing error messages
     let error_element = $("#error-section");
     error_element.remove();
@@ -336,7 +345,7 @@ function remove_errors(){
 /**
  * Parses the given JSON string and returns the parsed object.
  * @param {string} json: The JSON string to parse.
- * @returns {any}: The parsed object.
+ * @returns {object}: The parsed object.
  */
 function parse_json(json){
     return JSON.parse(json.replace(/\bNaN\b/g, "\"N/A\""));
@@ -496,5 +505,22 @@ function download(data, file_name, convert = true){
     let link = document.createElement('a');
     link.href = blob;
     link.download = file_name;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+}
+
+
+/**
+ * Gets the RGB representation of the given color variable.
+ * @param {string} color_name: The color variable.
+ * @returns {string}: The RGB representation of the color variable.
+ */
+function get_color(color_name){
+
+    let element = $(`<div style="color: var(${color_name})"></div>`)
+        .appendTo("body")
+    let color = element.css("color");
+    element.remove();
+    return color;
 }

@@ -22,6 +22,12 @@ $(function(){
 
     // Highlight the drag and drop section when files are dragged over it
     initialize_drag_and_drop_section_highlighting();
+
+    // Initialize the tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 })
 
 
@@ -39,19 +45,20 @@ function scrape(){
     // Send the scrape request
     send_ajax_request("/upload/scrape", $("#scrape-input").val())
 
-    // Always enable the "Scrape" button
-    .always(function(){ enable("#scrape-button"); })
+        // Always enable the "Scrape" button
+        .always(function(){ enable("#scrape-button"); })
 
-    // If the request was successful, display the uploaded files in the
-    // "Upload List" section.
-    .done(function(response){
-        for(const file_name of response) create_upload_preview(file_name);
-    })
+        // If the request was successful, display the uploaded files in the
+        // "Upload List" section.
+        .done(function(response){
+            for(const file_name of response) create_upload_preview(file_name)
+                .find(".upload-preview-content").removeClass("disabled");
+        })
 
-    // If the request failed, display an error.
-    .fail(function(){
-        error("Scraping failed.");
-    });
+        // If the request failed, display an error.
+        .fail(function(){
+            error("Scraping failed.");
+        });
 }
 
 
@@ -269,4 +276,93 @@ function initialize_drag_and_drop_section_highlighting(){
         drag_counter = 0;
         drag_and_drop_section.removeClass("highlighted");
     });
+}
+
+
+/**
+ * Initializes the tooltips.
+ */
+function initialize_tooltips(){
+
+    // "Upload"
+    create_tooltip("#upload-tooltip-button", `Click the "Browse" button or 
+        drag and drop a file into the "Drag Files Here" section. The maximum
+        file size is 250 MB, and the supported file types are: .txt, .html,
+        .xml, .sgml, and .lexos.`);
+
+    // "Scrape"
+    create_tooltip("#scrape-tooltip-button", `Enter the URLs of websites you
+        wish to extract text from. Separate each URL with a new line or a
+        comma.`, true);
+
+    // "Upload List"
+    create_tooltip("#upload-list-tooltip-button", `All uploaded and scraped
+        files will appear here. When uploading large files or many different
+        files, you will see blue bars indicating upload progress. Wait for
+        all files to finish uploading before proceeding.`, true);
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            element: "#lexos-dragon",
+            intro: `Welcome to Lexos!`,
+            position: "right",
+        },
+        {
+            element: "#upload-section",
+            intro: `This is the Upload section. You can upload the files you
+                want to work with here.`,
+            position: "right"
+        },
+        {
+            element: "#browse-button",
+            intro: `Click the "Browse..." button to select files to upload...`,
+            position: "right"
+        },
+        {
+            element: "#drag-and-drop-section",
+            intro: `...or drag and drop files here.`,
+            position: "top"
+        },
+        {
+            element: "#scrape-section",
+            intro: `The Scrape section extracts text from webpages for use
+                in Lexos.`,
+            position: "bottom"
+        },
+        {
+            element: "#scrape-input",
+            intro: "You can enter newline-separated URLs here.",
+            position: "bottom"
+        },
+        {
+            element: "#scrape-button",
+            intro: `When you have finished entering URLs, you can press the
+                "Scrape" button to extract text from the webpages.`,
+            position: "bottom"
+        },
+        {
+            element: "#upload-list",
+            intro: `The names of successfully uploaded and scraped files
+                will appear here.`,
+            position: "top"
+        },
+        {
+            element: "#manage-button",
+            intro: `This concludes the Upload walkthrough! When you have
+                finished uploading documents, try visiting the Manage page.
+                You can click outside of this message box at any time to close
+                the walkthrough.`,
+            position: "bottom"
+        }
+    ]});
+
+    intro.start();
 }

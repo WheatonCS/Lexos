@@ -4,9 +4,6 @@ $(function(){
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
 
-    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
-    initialize_tooltips();
-
     // Send a request for the document preview data
     $.ajax({type: "GET", url: "document-previews"})
 
@@ -31,6 +28,12 @@ $(function(){
     // Load the appropriate content for the "Cut Settings" section when the
     // "Cut Mode" setting is changed
     $("#cut-mode-section input").change(load_cut_settings_section);
+
+    // Initialize the "Tokenize", "Normalize", and "Cull" tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -38,32 +41,50 @@ $(function(){
  * Loads the appropriate content for the "Cut Settings" section.
  */
 let cut_mode;
+let previous_cut_mode = "Default";
 function load_cut_settings_section(){
 
+    // Return if the same cut mode was selected
+    cut_mode = $("#cut-mode-grid input:checked").val();
+    if(cut_mode !== "Segments" &&
+        cut_mode !== "Milestones") cut_mode = "Default";
+    if(cut_mode === previous_cut_mode) return;
+
+    // Hide the cut settings
     let cut_settings_grid_element = $("#cut-settings-grid");
     cut_settings_grid_element.css("opacity", "0");
-    cut_mode = $("#cut-mode-grid input:checked").val();
+
+    let segment_text = $("#segment-size-label")
 
     // If the cut mode is set to "Segments"...
-    if(cut_mode === "number"){
-        hide("#milestone-input, #overlap-input, #merge-threshold-input");
-        show("#segment-size-input");
+    if(cut_mode === "Segments"){
+        previous_cut_mode = "Segments";
+        hide(`#milestone-input, #overlap-input,
+            #merge-threshold-input, #segment-size-tooltip-button`);
+        segment_text.text("Number of Segments")
+        show("#segment-size-input, #number-of-segments-tooltip-button");
     }
 
     // Otherwise, if the cut mode is set to "Milestones"...
-    else if(cut_mode === "milestone"){
-        hide("#segment-size-input, #overlap-input, #merge-threshold-input");
+    else if(cut_mode === "Milestones"){
+        previous_cut_mode = "Milestones";
+        hide(`#segment-size-input, #overlap-input,
+            #merge-threshold-input`);
         show("#milestone-input");
     }
 
-    // Otherwise, if the cut mode is set to "Tokens", "Characters", or "Lines"...
+    // Otherwise, if the cut mode is set to "Tokens", "Characters", or
+    // "Lines"...
     else {
-        hide("#milestone-input");
-        show("#segment-size-input, #overlap-input, #merge-threshold-input");
+        previous_cut_mode = "Default";
+        hide("#milestone-input, #number-of-segments-tooltip-button");
+        segment_text.text("Segment Size")
+        show(`#segment-size-input, #overlap-input,
+            #merge-threshold-input, #segment-size-tooltip-button`);
     }
 
     // Set the legacy "cutByMS" input if the cut mode is "milestone"
-    $("#cut-by-milestone-input").val(cut_mode === "milestone" ? "on" : "off")
+    $("#cut-by-milestone-input").val(cut_mode === "Milestones" ? "on" : "off")
 
     // Fade in the settings
     fade_in(cut_settings_grid_element);
@@ -92,8 +113,8 @@ function cut(action){
 
     // Create a copy of the cut settings for each document to satisfy legacy
     // requirements
-    let options = ["cutType", "cutValue", "cutOverlap",
-        "cutLastProp", "MScutWord"]
+    let options = ["cut_mode", "segment_size", "overlap",
+        "merge_threshold", "milestone"]
     for(const document of document_previews)
         for(const option of options)
             form_data.append(option+'_'+document[0], form_data.get(option));
@@ -148,9 +169,9 @@ function create_document_previews(response){
 function validate_inputs(){
 
     // "Milestone"
-    if(cut_mode === "milestone"){
+    if(cut_mode === "Milestones"){
         if($("#milestone-input input").val().length <= 0){
-            error("A milestone must be provided.");
+            error("A milestone must be provided.", "#milestone-input input");
             return false;
         }
         return true;
@@ -160,30 +181,30 @@ function validate_inputs(){
     let segment_size = $("#segment-size-input input").val();
     let int_segment_size = parseInt(segment_size);
     if(!validate_number(segment_size, 1)){
-        error("Invalid segment size.");
+        error("Invalid segment size.", "#segment-size-input input");
         return false;
     }
 
     // "Segments"
-    if(cut_mode === "number") return true;
+    if(cut_mode === "Segments") return true;
 
     // "Overlap"
     let overlap = $("#overlap-input input").val();
     let int_overlap = parseInt(overlap);
     if(!validate_number(overlap, 0)){
-        error("Invalid overlap size.");
+        error("Invalid overlap size.", "#overlap-input input");
         return false;
     }
 
     if(int_overlap >= int_segment_size){
-        error("The overlap cannot be "+
-            "greater than or equal to the segment size.");
+        error(`The overlap cannot be greater than or equal to the segment
+            size.`, "#overlap-input input");
         return false;
     }
 
     // "Merge threshold"
     if(!validate_number($("#merge-threshold-input input").val(), 0, 100)){
-        error("Invalid merge threshold.");
+        error("Invalid merge threshold.", "#merge-threshold-input input");
         return false;
     }
 
@@ -205,7 +226,11 @@ function initialize_tooltips(){
     // "Segment Size"
     create_tooltip("#segment-size-tooltip-button", `A positive integer used to 
         divide up the text. Either the number of letters, words, or lines 
-        per segment, or the number of segments per document.`);
+        per segment.`);
+
+    // "Number of Segments"
+    create_tooltip("#number-of-segments-tooltip-button", `The number of
+        segments per document.`);
 
     // "Overlap"
     create_tooltip("#overlap-tooltip-button", `The amount of overlapping
@@ -222,4 +247,57 @@ function initialize_tooltips(){
     create_tooltip("#milestone-tooltip-button", `Split the document into
         segments at each appearance of the provided string. Child segments will not
         contain the Milestone delimiter.`);
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to the Cut page!`,
+            position: "top",
+        },
+        {
+            element: "#cut-mode-section",
+            intro: `This is the Cut Mode section. Here you can specify how you
+                would like to cut up your documents.`,
+            position: "top",
+        },
+        {
+            element: "#cut-settings-section",
+            intro: `Based on your selection in the Cut Mode section, there are
+                additional settings to fill out before you can initiate a
+                cut.`,
+            position: "top",
+        },
+        {
+            element: "#preview-button",
+            intro: `Similar to Scrub, you can preview your changes without
+                saving them here.`,
+            position: "top",
+        },
+        {
+            element: "#apply-button",
+            intro: `Unlike in Scrub, Apply works by creating new documents
+                based on your cutting parameters. The original document is
+                kept intact, but is deselected.`,
+            position: "top",
+        },
+        {
+            element: "#navbar-right",
+            intro: `Once you're satisfied with your cut documents, you can
+                move on to other pages in Prepare, Visualize, or Analyze.`,
+            position: "bottom"
+        },
+        {
+            intro: `This concludes the Cut walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

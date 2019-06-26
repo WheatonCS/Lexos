@@ -5,7 +5,7 @@
 
 /* Form */
 form {
-    grid-template-rows: 50rem repeat(3, minmax(23rem, auto));
+    grid-template-rows: 50rem 39.2rem 39.2rem minmax(39.2rem, min-content);
     min-height: calc(100% - 4rem);
     height: auto;
 }
@@ -31,7 +31,7 @@ form {
     width: 100%;
     padding: 1rem;
     margin-bottom: 1rem;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
 }
 
 .dictionaries h3:last-child {
@@ -46,11 +46,15 @@ form {
     grid-gap: 1rem;
 }
 
+#formula-body label {
+    height: 100%;
+}
+
 #formula-buttons {
     display: grid;
     height: 100%;
     min-height: 0;
-    grid-template-columns: 1fr .7fr 1fr;
+    grid-template-columns: 1fr .66fr 1.1fr;
     grid-gap: 1rem;
 }
 
@@ -69,42 +73,50 @@ form {
     grid-template-columns: repeat(2, 1fr);
 }
 
-#formula-buttons h3:not(.centerer) {
+#number-pad h3,
+#operations-pad h3,
+#documents-pad .dictionaries h3 {
     display: flex;
     align-items: center;
     justify-content: center;
     width: calc(100% - .2rem);
     height: calc(100% - .2rem);
-    background-color: #F3F3F3;
-    border: .2rem solid #F3F3F3;
+    background-color: var(--foreground-color-alternate);
+    border: .2rem solid var(--background-color);
     transition: color .2s, background-color .2s, border-color .2s;
 }
 
-#formula-buttons h3:not(.centerer):hover {
-    color: #47BCFF;
-    background-color: #EAF5FF;
-    border-color: #47BCFF;
+#number-pad h3:hover,
+#operations-pad h3:hover,
+#documents-pad .dictionaries h3:hover {
+    color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
+    border-color: var(--highlight-color);
 }
 
 
 /* Results */
 #overview-body,
 #corpus-body {
-    max-height: 39.5rem;
+    height: 39.5rem;
 }
 
 #document-tables-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(39.4rem, 1fr));
     grid-gap: 1rem;
 }
 
 #document-tables-grid .lexos-table {
-    max-height: 38.4rem;
-    min-height: 25rem;
+    height: 39.2rem;
+    background-color: var(--foreground-color-alternate);
 }
 
-.lexos-table-row,
-.lexos-table-head {
+#document-tables-grid .lexos-table .button {
+    background-color: var(--foreground-color);
+}
+
+#documents-section .lexos-table-head,
+#documents-section .lexos-table-row {
     grid-template-columns: 1fr 1fr 1fr;
 }

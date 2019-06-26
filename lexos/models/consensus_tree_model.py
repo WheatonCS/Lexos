@@ -10,8 +10,10 @@ from Bio.Phylo.Consensus import majority_consensus
 from scipy.cluster.hierarchy import linkage, to_tree, ClusterNode
 from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel, IdTempLabelMap
-from lexos.receivers.bct_receiver import BCTOption, BCTReceiver
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.consensus_tree_receiver import BCTOption, BCTReceiver
+from lexos.managers.utility import load_file_manager
+
 
 # Make plt to use a non-interactive backend to generate PNG instead of window.
 plt.switch_backend("Agg")
@@ -22,7 +24,6 @@ class BCTTestOptions(NamedTuple):
 
     doc_term_matrix: pd.DataFrame
     front_end_option: BCTOption
-    id_temp_label_map: IdTempLabelMap
 
 
 class BCTModel(BaseModel):
@@ -38,24 +39,15 @@ class BCTModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _bct_option(self) -> BCTOption:
@@ -147,8 +139,8 @@ class BCTModel(BaseModel):
         doc_term_matrix = self._doc_term_matrix
 
         # Get file names, since tree nodes need labels.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # The bootstrap process to get all the trees.
         return [
@@ -176,21 +168,33 @@ class BCTModel(BaseModel):
         )
 
     def _get_bootstrap_consensus_tree_plot(self) -> plt:
+
+        # Get the colors
+        color = tuple(map(int, self._bct_option.text_color[4:-1].split(",")))
+        normalized_color = tuple(x / 255 for x in color)
+
         # Draw the consensus tree as a MatPlotLib object.
+        tree = self._get_bootstrap_consensus_tree()
+        tree.root.color = color
         Phylo.draw(
-            self._get_bootstrap_consensus_tree(),
+            tree,
             do_show=False,
             branch_labels=lambda clade: "{0:.4f}\n".format(clade.branch_length)
             if clade.branch_length is not None else ""
         )
 
         # Set labels for the plot.
-        plt.xlabel("Branch Length")
-        plt.ylabel("Documents")
+        plt.xlabel("Branch Length", color=normalized_color)
+        plt.ylabel("Documents", color=normalized_color)
 
         # Hide the two unused border.
         plt.gca().spines["top"].set_visible(False)
         plt.gca().spines["right"].set_visible(False)
+
+        # Set the color of the used borders and labels.
+        plt.gca().spines["bottom"].set_color(normalized_color)
+        plt.gca().spines["left"].set_color(normalized_color)
+        plt.gca().tick_params(colors=normalized_color)
 
         # Extend x-axis to the right to fit longer labels.
         x_left, x_right, y_low, y_high = plt.axis()
@@ -199,14 +203,16 @@ class BCTModel(BaseModel):
         # Set graph size, title and tight layout.
         plt.gcf().set_size_inches(
             w=9.5,
-            h=(len(self._id_temp_label_map) * 0.3 + 1)
+            h=(len([file.label for file in
+                    load_file_manager().get_active_files()]) * 0.3 + 1)
         )
-        plt.title("Bootstrap Consensus Tree Result")
+        plt.title("Bootstrap Consensus Tree Result", color=normalized_color)
         plt.gcf().tight_layout()
 
         # Change line spacing
         for text in plt.gca().texts:
             text.set_linespacing(spacing=0.1)
+            text.set_color(normalized_color)
 
         return plt
 
@@ -220,7 +226,7 @@ class BCTModel(BaseModel):
 
         # Create a bytes IO image holder and save figure to it.
         image_holder = BytesIO()
-        bct_plot.savefig(image_holder)
+        bct_plot.savefig(image_holder, transparent=True)
         image_holder.seek(0)
 
         # Decode image to utf-8 string.

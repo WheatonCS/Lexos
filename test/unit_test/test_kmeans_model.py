@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.models.kmeans_model import KMeansTestOptions, KMeansModel
-from lexos.receivers.kmeans_receiver import KMeansOption, KMeansViz, KMeansInit
+from lexos.models.k_means_model import KMeansTestOptions, KMeansModel
+from lexos.receivers.k_means_receiver import KMeansOption, KMeansViz, KMeansInit
 
 # ------------------------- Voronoi test suite --------------------------------
 # Create test DTM for voronoi.
@@ -27,7 +27,8 @@ front_end_option_voronoi = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 
 # Pack all test components.
@@ -85,7 +86,8 @@ front_end_option_two_d = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 # Pack all test components.
 test_option_two_d = KMeansTestOptions(
@@ -140,7 +142,8 @@ front_end_option_three_d = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 # Pack all test components.
 test_option_three_d = KMeansTestOptions(
@@ -185,7 +188,8 @@ front_end_option_special = KMeansOption(
     k_value=2,
     max_iter=100,
     tolerance=1e-4,
-    init_method=KMeansInit.k_means
+    init_method=KMeansInit.k_means,
+    text_color="blue"
 )
 # Pack all test components.
 test_option_empty = KMeansTestOptions(

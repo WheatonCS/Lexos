@@ -1,4 +1,6 @@
-{% extends "helpers/base.html" %}
+{% extends "helpers/base-template.html" %}
+
+{% block title %}Content Analysis{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -24,7 +26,9 @@
 
             <!-- Top -->
             <div class="vertical-splitter section-top">
-                <h3 class="title">Dictionaries</h3>
+                <div>
+                     <h3 class="title">Dictionaries</h3>
+                </div>
 
                 <div class="right-justified">
                     <span id="upload-button" class="important-button">Upload</span>
@@ -54,7 +58,7 @@
             <!-- Body -->
             <div id="formula-body" class="section-body">
 
-                <textarea id="formula-textarea" spellcheck="false"></textarea>
+                <label><textarea id="formula-textarea" name="formula" spellcheck="false"></textarea></label>
 
                 <div id="formula-buttons">
                     <div id="number-pad">
@@ -81,33 +85,15 @@
     </div>
 
     <!-- Overview -->
-    <div class="section">
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Overview</h3>
-            <span id="overview-download-button" class="disabled right-justified button">Download</span>
-        </div>
-        <div id="overview-body" class="borderless-section-body">
-            <h3 class="centerer">No Results</h3>
-        </div>
-    </div>
+    <div id="overview-table-section" class="section"></div>
 
 
     <!-- Corpus -->
-    <div class="section">
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Corpus</h3>
-            <div class="right-justified">
-                <span id="corpus-download-button" class="disabled button">Download</span>
-                <span id="corpus-tooltip-button" class="tooltip-button">?</span>
-            </div>
-        </div>
-        <div id="corpus-body" class="borderless-section-body">
-            <h3 class="centerer">No Results</h3>
-        </div>
-    </div>
+    <div id="corpus-table-section" class="section"></div>
+
 
     <!-- Documents -->
-    <div class="section">
+    <div id="documents-section" class="section">
         <div class="vertical-splitter section-top">
             <h3 class="title">Documents</h3>
             <span id="documents-tooltip-button" class="right-justified tooltip-button">?</span>
@@ -119,6 +105,6 @@
 
 
     <!-- Hidden elements -->
-    <input id="file-input" name="lemfileselect[]" type="file" class="hidden" multiple>
+    <input id="file-input" name="dictionaries[]" type="file" class="hidden" multiple>
 
 {% endblock %}

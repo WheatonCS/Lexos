@@ -4,6 +4,7 @@ import pandas as pd
 from enum import Enum
 from typing import NamedTuple, Optional, List
 from lexos.receivers.base_receiver import BaseReceiver
+from lexos.managers.utility import load_file_manager
 
 
 class RWATokenType(Enum):
@@ -86,25 +87,28 @@ class RWAFrontEndOptions(NamedTuple):
     # A milestone, it is none if it is not given from frontend.
     milestone: Optional[str]
 
+    # The color to use
+    text_color: str
+
 
 class RollingWindowsReceiver(BaseReceiver):
     """Get all the options to generate rolling windows result."""
 
     def _get_ratio_token_options(self) -> RWARatioTokenOptions:
         """Get all the options to generate ratio count."""
-        raw_numerator = self._front_end_data['rollingsearchword']
-        raw_denominator = self._front_end_data['rollingsearchwordopt']
-        if self._front_end_data['inputtype'] == 'string':
+        raw_numerator = self._front_end_data['search_term']
+        raw_denominator = self._front_end_data['search_term_denominator']
+        if self._front_end_data['input_type'] == 'Strings':
             token_type = RWATokenType.string
             numerator_token = raw_numerator.split(",")
             denominator_token = raw_denominator.split(",")
 
-        elif self._front_end_data['inputtype'] == 'regex':
+        elif self._front_end_data['input_type'] == 'Regex':
             token_type = RWATokenType.regex
             numerator_token = raw_numerator.split(",")
             denominator_token = raw_denominator.split(",")
 
-        elif self._front_end_data['inputtype'] == 'word':
+        elif self._front_end_data['input_type'] == 'Words':
             token_type = RWATokenType.word
             numerator_token = [token.strip()
                                for token in raw_numerator.split(",")]
@@ -128,17 +132,17 @@ class RollingWindowsReceiver(BaseReceiver):
     def _get_average_token_options(self) -> RWAAverageTokenOptions:
         """Get all the options to generate average count."""
         # the unprocessed token
-        raw_token = self._front_end_data['rollingsearchword']
+        raw_token = self._front_end_data['search_term']
 
-        if self._front_end_data['inputtype'] == 'string':
+        if self._front_end_data['input_type'] == 'Strings':
             token_type = RWATokenType.string
             tokens = raw_token.split(',')
 
-        elif self._front_end_data['inputtype'] == 'regex':
+        elif self._front_end_data['input_type'] == 'Regex':
             token_type = RWATokenType.regex
             tokens = raw_token.split(',')
 
-        elif self._front_end_data['inputtype'] == 'word':
+        elif self._front_end_data['input_type'] == 'Words':
             token_type = RWATokenType.word
             tokens = [token.strip() for token in raw_token.split(',')]
 
@@ -149,61 +153,65 @@ class RollingWindowsReceiver(BaseReceiver):
 
     def _get_window_option(self) -> RWAWindowOptions:
         """Get all the option for windows."""
-        if self._front_end_data['windowtype'] == 'letter':
+        if self._front_end_data['window_type'] == 'Characters':
             window_unit = WindowUnitType.letter
-        elif self._front_end_data['windowtype'] == 'word':
+        elif self._front_end_data['window_type'] == 'Words':
             window_unit = WindowUnitType.word
-        elif self._front_end_data['windowtype'] == 'line':
+        elif self._front_end_data['window_type'] == 'Lines':
             window_unit = WindowUnitType.line
         else:
             raise ValueError("invalid window unit from front end")
 
-        window_size = int(self._front_end_data['rollingwindowsize'])
+        window_size = int(self._front_end_data['window_size'])
 
         return RWAWindowOptions(window_size=window_size,
                                 window_unit=window_unit)
 
     def _get_milestone(self) -> Optional[List[str]]:
         """Get the milestone string from front end and split it into words."""
-        if 'rollinghasmilestone' not in self._front_end_data:
+        if 'enable_milestone' not in self._front_end_data:
             return None
         else:
-            raw_mile_stones = self._front_end_data['rollingmilestonetype']
+            raw_mile_stones = self._front_end_data['milestone']
             return [mile_stone.strip()
                     for mile_stone in raw_mile_stones.split(",")]
 
     def _get_passage_file_id(self) -> int:
         """Get the file id for the passage to run rolling window."""
-        return int(self._front_end_data['filetorollinganalyze'])
+        return load_file_manager().get_active_files()[0].id
 
     def _get_plot_option(self) -> RWAPlotOptions:
         """Get the plot option from front end."""
-        individual_points = \
-            True if 'showDots' in self._front_end_data else False
-        black_white = True if 'BWoutput' in self._front_end_data else False
+        individual_points = True if 'show_points' \
+            in self._front_end_data else False
+
+        black_white = True if 'black_and_white' \
+            in self._front_end_data else False
 
         return RWAPlotOptions(individual_points=individual_points,
                               black_white=black_white)
 
     def options_from_front_end(self) -> RWAFrontEndOptions:
         """Pack all the front end options together."""
-        if self._front_end_data['counttype'] == 'ratio':
+        if self._front_end_data['calculation_type'] == 'Rolling Ratio':
             return RWAFrontEndOptions(
                 average_token_options=None,
                 ratio_token_options=self._get_ratio_token_options(),
                 window_options=self._get_window_option(),
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
-                passage_file_id=self._get_passage_file_id()
+                passage_file_id=self._get_passage_file_id(),
+                text_color=self._front_end_data["text_color"]
             )
-        elif self._front_end_data['counttype'] == 'average':
+        elif self._front_end_data['calculation_type'] == 'Rolling Average':
             return RWAFrontEndOptions(
                 average_token_options=self._get_average_token_options(),
                 ratio_token_options=None,
                 window_options=self._get_window_option(),
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
-                passage_file_id=self._get_passage_file_id()
+                passage_file_id=self._get_passage_file_id(),
+                text_color=self._front_end_data["text_color"]
             )
         else:
             raise ValueError("invalid count type from front end")

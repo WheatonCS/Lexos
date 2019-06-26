@@ -8,7 +8,7 @@ test_dtm = pd.DataFrame(
     columns=["A", "B", "C", "D", "E", "F", "G"]
 )
 test_id_temp_label_map = {0: "F1.txt", 1: "F2.txt"}
-test_token_type = "Terms"
+test_token_type = "Tokens"
 test_front_end_option = TokenizerOption(
     orientation="file_col",
     start=None,
@@ -70,7 +70,7 @@ test_dtm = pd.DataFrame(
     columns=["A", "B", "C", "D", "E", "F", "G"]
 )
 test_id_temp_label_map = {0: "F1.txt", 1: "F2.txt"}
-test_token_type = "Terms"
+test_token_type = "Tokens"
 test_front_end_option = TokenizerOption(
     orientation="file_col",
     start=0,

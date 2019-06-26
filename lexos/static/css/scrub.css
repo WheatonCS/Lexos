@@ -25,7 +25,7 @@ form {
 }
 
 #left-column {
-    grid-template-rows: 24rem 1fr 1fr;
+    grid-template-rows: 25.5rem 1fr 1fr;
 }
 
 #middle-column {
@@ -36,7 +36,7 @@ form {
 /* General */
 .scrub-section {
     grid-template-rows: min-content 1fr;
-    background-color: #FFFFFF;
+    background-color: var(--foreground-color);
     overflow: hidden;
 }
 
@@ -69,7 +69,7 @@ form {
 
 
 /* Stop/keep words */
-#stop-words-section label {
+#stop-words-section .scrub-section-top label {
     margin-right: 3rem;
 }
 
@@ -80,7 +80,6 @@ form {
 
 /* Special characters */
 .options-section label {
-    margin-top: .2rem;
     margin-bottom: 1rem;
 }
 
@@ -110,7 +109,7 @@ form {
 }
 
 #tag-table-head h3 {
-    color: #47BCFF;
+    color: var(--highlight-color);
 }
 
 #tag-table-body {
@@ -123,7 +122,7 @@ form {
 .tag-table-row {
     align-items: center;
     margin-bottom: 1rem;
-    background-color: #F3F3F3;
+    background-color: var(--foreground-color-alternate);
 }
 
 .tag-table-row:last-child {

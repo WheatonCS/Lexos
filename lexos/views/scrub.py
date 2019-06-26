@@ -1,18 +1,16 @@
 import json
-
-from flask import request, session, render_template, Blueprint
-
+from flask import request, session, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-
 from natsort import humansorted
+from lexos.views.base import render
 
 scrub_blueprint = Blueprint("scrub", __name__)
 
 
 @scrub_blueprint.route("/scrub", methods=["GET"])
 def scrub() -> str:
-    """Gets the scrub page.
+    """ Gets the scrub page.
     :return: The scrub page.
     """
 
@@ -23,12 +21,12 @@ def scrub() -> str:
             "myselect": {"action": "", "attribute": ""}}
     utility.xml_handling_options()
 
-    return render_template("scrub.html")
+    return render("scrub.html")
 
 
 @scrub_blueprint.route("/scrub/download", methods=["GET"])
 def download() -> str:
-    """Returns a download of the active files.
+    """ Returns a download of the active files.
     :return: the zip files needs to be downloaded.
     """
 
@@ -38,7 +36,7 @@ def download() -> str:
 
 @scrub_blueprint.route("/scrub/execute", methods=["POST"])
 def execute() -> str:
-    """Scrubs the active documents.
+    """ Scrubs the active documents.
     :return: A JSON object with previews of the scrubbed documents.
     """
 
@@ -47,17 +45,16 @@ def execute() -> str:
     session_manager.cache_alteration_files()
     session_manager.cache_scrub_options()
 
-    # Save changes only if the "Apply Scrubbing" button is clicked
+    # Save changes only if the "Apply Scrubbing" button is clicked.
     saving_changes = request.form["action"] == "apply"
 
-    # Scrub
+    # Scrub.
     previews = file_manager.scrub_files(saving_changes=saving_changes)
 
-    # (DO NOT) HTML escape the previews (THIS LINE USED TO DO THAT, BUT NOW
-    # IT JUST PUTS THE DATA IN THE CORRECT FORMAT OR SOMETHING)
+    # Create the previews.
     previews = [[preview[1], preview[3]] for preview in previews]
 
-    # Save the changes if requested
+    # Save the changes if requested.
     if saving_changes:
         utility.save_file_manager(file_manager)
 
@@ -66,7 +63,7 @@ def execute() -> str:
 
 @scrub_blueprint.route("/scrub/get-tag-options", methods=["GET"])
 def get_tags_table() -> str:
-    """Gets the tags in the active documents.
+    """ Gets the tags in the active documents.
     :return: The tags in the active documents.
     """
 
@@ -83,7 +80,7 @@ def get_tags_table() -> str:
 
 @scrub_blueprint.route("/scrub/save-tag-options", methods=["POST"])
 def xml() -> str:
-    """Sets the tag options.
+    """ Sets the tag options.
     :return: None.
     """
 

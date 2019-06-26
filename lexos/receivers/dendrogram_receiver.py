@@ -10,19 +10,20 @@ class DendroOption(NamedTuple):
 
     # the orientation of the dendrogram to send to plotly
     # available options are: 'top', 'right', 'bottom', or 'left'
-    # see:
-    #    "https://plot.ly/python/dendrogram/"
+    # see: "https://plot.ly/python/dendrogram/"
     orientation: str
 
     # the distance metric to send to pdist
     # see:
-    #    "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html"
+    # "https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html"
     dist_metric: str
 
     # the linkage method to send to scipy.cluster.hierarchy.linkage
     # see:
     # "https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.cluster.hierarchy.linkage.html"
     linkage_method: str
+
+    text_color: str
 
 
 class DendroReceiver(BaseReceiver):
@@ -37,10 +38,12 @@ class DendroReceiver(BaseReceiver):
 
         :return: a DendroOption object to hold all the options.
         """
-        orientation = self._front_end_data['orientation']
-        linkage_method = self._front_end_data['linkage']
-        metric = self._front_end_data['metric']
+        orientation = self._front_end_data['orientation'].lower()
+        linkage_method = self._front_end_data['linkage_method'].lower()
+        metric = self._front_end_data['distance_metric']
+        text_color = self._front_end_data["text_color"]
 
         return DendroOption(orientation=orientation,
                             linkage_method=linkage_method,
-                            dist_metric=metric)
+                            dist_metric=metric,
+                            text_color=text_color)

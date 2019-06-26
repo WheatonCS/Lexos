@@ -19,10 +19,11 @@ Steps
 
 (1) CUT:
 
-    (a) Check Cut by Milestone, enter "CHAPTER" (minus the quotes)
-    This will lead to twenty segments
+    (a) Set cut mode to "Milestones"
+    (b) Set "Milestone" to "CHAPTER" (not in quotes)
 
 	Apply Cuts
+	(You should have 20 segments of the original document)
 (2) SCRUB:
 
     (a) Remove Punctuation
@@ -30,13 +31,14 @@ Steps
     (c) Remove Digits
     
     Apply Scrubbing
-(3) ANALYZE - Clustering - Hierarchical Clustering:
+(3) ANALYZE - Dendrogram:
 
-	(a) Use the default metrics:
-	    Distance Method: Euclidean
-	    Linkage Method: Average
-	(c) Edit Labels (optional)
-	Get Dendrogram
+	(a) Use the following metrics:
+	    - Distance Method: Euclidean
+	    - Linkage Method: Average
+	    - Orientation: Bottom
+	    
+	Generate Dendrogram
 	Compare your result with the .png found in the ResultsToExpect/ directory.
 
 

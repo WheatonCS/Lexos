@@ -1,9 +1,3 @@
-/* Main section */
-#main-section {
-    min-width: 120rem;
-}
-
-
 /* Form */
 form {
     grid-template-rows: 45rem 1fr;
@@ -39,21 +33,6 @@ form {
 #interquartile-range-test {
     overflow-y: auto;
     word-break: break-word;
-}
-
-
-/* Table */
-#table {
-    height: calc(100% - 5rem);
-}
-
-#table-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.table-top-radio-option {
-    justify-self: center;
 }
 
 

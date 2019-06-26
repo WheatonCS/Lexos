@@ -1,13 +1,9 @@
 import re
 import requests
-
 from urllib.parse import unquote
-
-from flask import request, session, render_template, Blueprint, jsonify
-
-from lexos.helpers import constants
+from flask import request, Blueprint, jsonify
 from lexos.managers import session_manager, utility
-from lexos.views.base import detect_active_docs
+from lexos.views.base import render
 
 upload_blueprint = Blueprint("upload", __name__)
 
@@ -18,28 +14,14 @@ def upload():
     :return: The upload page.
     """
 
-    # Detect the number of active documents.
-    num_active_docs = detect_active_docs()
-    if request.method == "GET":
-
-        # Fix the session in case the browser is caching the old session
-        session_manager.fix()
-        if "generalsettings" not in session:
-            session["generalsettings"] = \
-                constants.DEFAULT_GENERALSETTINGS_OPTIONS
-
-        return render_template(
-            "upload.html",
-            MAX_FILE_SIZE=constants.MAX_FILE_SIZE,
-            MAX_FILE_SIZE_INT=constants.MAX_FILE_SIZE_INT,
-            MAX_FILE_SIZE_UNITS=constants.MAX_FILE_SIZE_UNITS,
-            itm="upload-tool",
-            numActiveDocs=num_active_docs)
+    # Fix the session in case the browser is caching the old session
+    session_manager.fix()
+    return render("upload.html")
 
 
 @upload_blueprint.route("/upload/add-document", methods=["POST"])
 def add_document() -> str:
-    """ Adds a document to the file manager or loads a .lexos file.
+    """ Adds a document to the file manager or load a .lexos file.
     :return: None.
     """
 
@@ -65,7 +47,7 @@ def add_document() -> str:
 
 @upload_blueprint.route("/upload/scrape", methods=["POST"])
 def scrape():
-    """ Scrapes the URLs an generates text file from each URL.
+    """ Scrapes the URLs and generates a text file from each URL.
     :return: A list of the scraped files.
     """
 

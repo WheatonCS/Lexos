@@ -1,11 +1,13 @@
 """This is the tokenizer model which gets the tokenizer table."""
 
-import pandas as pd
 from typing import Optional, NamedTuple
+
+import pandas as pd
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.receivers.matrix_receiver import IdTempLabelMap, MatrixReceiver
+from lexos.receivers.matrix_receiver import MatrixReceiver
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
 
@@ -16,7 +18,6 @@ class TokenizerTestOption(NamedTuple):
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerOption
-    id_temp_label_map: IdTempLabelMap
 
 
 class TokenizerModel(BaseModel):
@@ -36,25 +37,16 @@ class TokenizerModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_token_type_str = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: A map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _front_end_option(self) -> TokenizerOption:
@@ -73,7 +65,7 @@ class TokenizerModel(BaseModel):
             dtm_options = MatrixReceiver().options_from_front_end()
             # Get the correct current type.
             token_type = dtm_options.token_option.token_type
-            return "Terms" if token_type == "word" else "Characters"
+            return "Terms" if token_type == "Tokens" else "Characters"
 
     def _get_file_col_dtm(self) -> pd.DataFrame:
         """Get DTM with documents as columns and terms/characters as rows.
@@ -84,15 +76,8 @@ class TokenizerModel(BaseModel):
         # Check if empty DTM is received.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        # Get temp file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
-
         # Transpose the dtm for easier calculation.
         file_col_dtm = self._doc_term_matrix.transpose()
-
-        # Change matrix column names to file labels.
-        file_col_dtm.columns = labels
 
         # Find total and average of each row's data.
         file_col_dtm.insert(loc=0, column="Total",
@@ -112,10 +97,10 @@ class TokenizerModel(BaseModel):
         return self._get_file_col_dtm().transpose()
 
     def get_table(self) -> dict:
-        """ Gets the desired DTM as a JSON object.
+        """Get the desired DTM as a JSON object.
+
         :return: The desired DTM as a JSON object.
         """
-
         # Get the DTM in file-column orientation
         dtm = self._get_file_col_dtm()
 
@@ -129,10 +114,15 @@ class TokenizerModel(BaseModel):
         ) if self._front_end_option.sort_column != 0 \
             else dtm.sort_index(ascending=self._front_end_option.sort_method)
 
+        # Calculate the number of pages
+        pages = dtm.shape[0] // self._front_end_option.length
+        if dtm.shape[0] % self._front_end_option.length != 0 or pages == 0:
+            pages += 1
+
         # Slice the desired portion of the DTM
-        data_start = self._front_end_option.start
         data_length = self._front_end_option.length
-        required_dtm = dtm_sorted.iloc[data_start: data_start + data_length]
+        data_start = (min(self._front_end_option.start, pages)-1)*data_length
+        required_dtm = dtm_sorted.iloc[data_start: data_start+data_length]
 
         # Convert the data to a list of lists
         data = required_dtm.values.tolist()
@@ -141,27 +131,23 @@ class TokenizerModel(BaseModel):
         for index, value in enumerate(required_dtm.index):
             data[index].insert(0, value)
 
-        # Calculate the number of pages
-        pages = dtm.shape[0] // self._front_end_option.length
-        if dtm.shape[0] % self._front_end_option.length != 0 or pages == 0:
-            pages += 1
-
         # Return the JSON data
+        head = self._get_file_col_dtm().columns.values.tolist()
+        head.insert(0, "Term")
         return {
-            "pages": pages,
-            "head": self._get_file_col_dtm().columns.values.tolist(),
-            "data": data
+            "tokenizer-table-page-count": pages,
+            "tokenizer-table-head": head,
+            "tokenizer-table-body": data,
+            "tokenizer-table-csv": dtm_sorted.to_csv()
         }
 
     def get_csv(self) -> str:
-        """Gets the desired DTM as a CSV.
+        """Get the desired DTM as a CSV.
+
         :return: the desired DTM as a CSV.
         """
-
         # Get the DTM in the desired orientation
-        dtm = self._get_file_col_dtm() \
-            if self._front_end_option.orientation == "file_col" \
-            else self._get_file_row_dtm()
+        dtm = self._get_file_col_dtm()
 
         # Apply the search
         dtm = dtm.iloc[dtm.index.str.contains(self._front_end_option.search)]

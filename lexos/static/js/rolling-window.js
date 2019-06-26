@@ -3,14 +3,11 @@ $(function(){
     // Display the loading overlay
     start_loading("#graph-container");
 
-    // Initialize the tooltips
-    initialize_tooltips();
-
     // If the "Calculation Type" is changed, set the appropriate "Search
     // Terms" input
-    $(`input[name="counttype"]`).change(function(){
+    $(`input[name="calculation_type"]`).change(function(){
 
-        if($(`input[name="counttype"]:checked`).val() === "average")
+        if($(`input[name="calculation_method"]:checked`).val() === "average")
             $("#search-terms-input-denominator").css("display", "none");
         else $("#search-terms-input-denominator").css("display", "inline");
     });
@@ -18,6 +15,12 @@ $(function(){
     // Check that there is exactly one document active and display the
     // appropriate text on the "Rolling Window" section
     get_active_file_ids(single_active_document_check, "#graph-container");
+
+    // Initialize the tooltips
+    initialize_tooltips();
+
+    // Initialize the walkthrough
+    initialize_walkthrough(walkthrough);
 });
 
 
@@ -93,7 +96,8 @@ function create_rolling_window(){
 function send_rolling_window_result_request(){
 
     // Send a request for the k-means results
-    send_ajax_form_request("/rolling-window/results")
+    send_ajax_form_request("/rolling-window/results",
+        {text_color: get_color("--text-color")})
 
         // If the request was successful, initialize the graph, store the CSV
         // data, and enable the "Generate" and "CSV" buttons
@@ -120,21 +124,21 @@ function validate_inputs(){
 
     // "Search terms"
     if($("#search-terms-input input").val().length < 1){
-        error("Please enter the search terms.");
+        error("Please enter the search terms.", "#search-terms-input input");
         return false;
     }
 
     // "Window"
     if(!validate_number($("#window-size-input").val(), 1)){
-        error("Invalid window size.");
+        error("Invalid window size.", "#window-size-input");
         return false;
     }
 
     // "Milestone"
     if($("#milestone-checkbox").is("checked") &&
         $("#milestone-input").val().length < 1){
-        error("Please either enter a milestone or "+
-            "uncheck the milestone option.");
+        error(`Please either enter a milestone or uncheck the milestone
+            option.`, "#milestone-input");
         return false;
     }
 
@@ -181,4 +185,56 @@ function initialize_tooltips(){
     create_tooltip("#milestone-tooltip-button", `Search the file for all
         instances of a specified string and plot a vertical dividing line at
         those locations.`, true);
+}
+
+
+/**
+ * Initializes the walkthrough.
+ */
+function walkthrough(){
+
+    let intro = introJs();
+    intro.setOptions({steps: [
+        {
+            intro: `Welcome to Rolling Window! This tool requires both a
+                single active document and a few required settings to create
+                the graph.`,
+            position: "top",
+        },
+        {
+            element: "#calculation-type-section",
+            intro: `Here you can choose how the data is graphed.`,
+            position: "top",
+        },
+        {
+            element: "#search-terms-section",
+            intro: `Choose what type of search you will make and enter the
+                terms here.`,
+            position: "top",
+        },
+        {
+            element: "#window-section",
+            intro: `Set the size of your window here.`,
+            position: "top",
+        },
+        {
+            element: "#display-section",
+            intro: `These settings are optional. Checking any of these boxes
+                will add the feature to the graph.`,
+            position: "top",
+        },
+        {
+            element: "#rolling-window-buttons",
+            intro: `Generate your graph here. You can also choose to download
+                your graph as a static PNG or vector SVG. Additionally, the
+                data of your graph can be downloaded as a CSV file.`,
+            position: "top",
+        },
+        {
+            intro: `This concludes the Rolling Window walkthrough!`,
+            position: "top",
+        }
+    ]});
+
+    intro.start();
 }

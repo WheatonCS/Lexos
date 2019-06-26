@@ -2,7 +2,7 @@
     z-index: 10;
     position: relative;
     overflow: hidden;
-    background-color: #E62843;
+    background-color: var(--error-color);
 }
 
 #error-text,
@@ -15,7 +15,7 @@
     padding-right: 10rem;
     animation: marquee 20s infinite linear;
     animation-delay: -10s;
-    color: #FFFFFF;
+    color: var(--error-text-color);
 }
 
 #error-text-2 {
@@ -33,20 +33,20 @@
     right: 0;
     bottom: 0;
     height: 4rem;
-    padding: .7rem 2rem 0 2rem;
+    padding: .55rem 2rem 0 2rem;
     pointer-events: none;
-    background-color: #E62843;
+    background-color: var(--error-color);
 }
 
 #error-close-button {
     pointer-events: all;
-    color: #FFFFFF;
-    background-color: #CD2741;
+    color: var(--error-text-color);
+    background-color: var(--error-button-color);
     border: none;
 }
 
 #error-close-button:hover {
-    background-color: #B4263C;
+    background-color: var(--error-button-hover-color)
 }
 
 @keyframes marquee {

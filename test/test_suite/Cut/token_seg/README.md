@@ -1,7 +1,7 @@
 # Tokens/Segment
 
 This function splits the text by the number of tokens(words) to be put into each segment.
-In languages that don't have spaces between tokens (words), such as Chinese, the 
+In languages that don't have spaces between tokens(words), such as Chinese, the 
 function counts the "tokens" where it finds spaces.
 
 *Test Files:* alphaSpace.txt, randomCharactersSpaced.txt
@@ -25,7 +25,7 @@ ResultFiles_randomCharactersSpaced
 
 7. Click "Apply"
 
-8. After the cut you should have two abc's in 11 segments.
+8. You should now have 11 documents, each a segment of the original containing two abc's each.
 
 Results: ResultFiles_alphaSpace_1
 
@@ -45,13 +45,14 @@ Results: ResultFiles_alphaSpace_1
 
 7. Click "Apply"
 
-8. After the cut you should have four abc's in 11 segments, except for the last one, which will have 2.
+8. After the cut you should have 11 documents, each a segment of the original 
+containing four abc's each except the last segment which should contain two abc's.
 
 Results: ResultFiles_alphaSpace_2
 
 ## Test file: randomCharactersSpaced.txt
 
-1. Upload alphaSpace.txt
+1. Upload randomCharactersSpaced.txt
 
 2. Under the "Prepare" menu, select "Cut"
 

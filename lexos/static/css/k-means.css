@@ -6,7 +6,7 @@
 
 /* Form */
 form {
-    grid-template-rows: 20rem auto;
+    grid-template-rows: min-content auto;
 }
 
 
@@ -20,7 +20,6 @@ form {
 }
 
 #advanced-options-section input {
-    margin-bottom: .5rem;
     width: 10rem;
 }
 

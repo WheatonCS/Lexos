@@ -1,8 +1,8 @@
-from flask import session, render_template, Blueprint
-
+from flask import session, Blueprint
 from lexos.managers import session_manager
 from lexos.helpers import constants
-from lexos.models.bct_model import BCTModel
+from lexos.models.consensus_tree_model import BCTModel
+from lexos.views.base import render
 
 consensus_tree_blueprint = Blueprint("consensus-tree", __name__)
 
@@ -20,7 +20,7 @@ def consensus_tree() -> str:
         session["bctoption"] = constants.DEFAULT_BCT_OPTIONS
 
     # Return the consensus tree page
-    return render_template("consensus-tree.html")
+    return render("consensus-tree.html")
 
 
 @consensus_tree_blueprint.route("/consensus-tree/graph", methods=["POST"])

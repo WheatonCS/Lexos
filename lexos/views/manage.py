@@ -1,7 +1,8 @@
 import json
 import re
-from flask import request, render_template, Blueprint, make_response
+from flask import request, Blueprint, make_response
 from lexos.managers import utility
+from lexos.views.base import render
 
 manage_blueprint = Blueprint("manage", __name__)
 
@@ -12,7 +13,7 @@ def manage() -> str:
     :return: The HTML of the manage page.
     """
 
-    return render_template("manage.html")
+    return render("manage.html")
 
 
 @manage_blueprint.route("/manage/documents", methods=["GET"])
@@ -21,7 +22,6 @@ def get_documents() -> str:
     :return: The JSON of a list of uploaded documents.
     """
 
-    print("rete")
     return json.dumps(utility.load_file_manager().get_previews_of_all())
 
 
@@ -31,7 +31,6 @@ def download() -> str:
     :return: A .zip containing the active files.
     """
 
-    print("SAS")
     file_manager = utility.load_file_manager()
 
     response = make_response(file_manager.zip_active_files(

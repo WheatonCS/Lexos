@@ -18,7 +18,7 @@
     - deselect Make Lowercase
     - select Remove Digits
 
-3. RESULTS: 
+3. Results: 
     - all digits have been removed from test files
     - see ResultsToExpect
         * *Note:* scrubbed_numberLetter.txt will be an empty file

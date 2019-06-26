@@ -7,26 +7,26 @@ from lexos.processors.prepare.scrubber import replacement_handler, \
     get_special_char_dict_from_file, process_tag_replace_options, \
     scrub_select_apos, consolidate_hyphens, consolidate_ampers, \
     handle_file_and_manual_strings, remove_stopwords, keep_words, \
-    get_all_punctuation_map, get_remove_punctuation_map, get_remove_digits
+    get_all_punctuation_map, get_remove_punctuation_map
 from test.helpers import special_chars_and_punct as chars, gutenberg as guten
 
 
 class TestGetSpecialCharDictFromFile:
 
     def test_get_special_char_dict_from_file(self):
-        assert get_special_char_dict_from_file(char_set="MUFI-3") == \
+        assert get_special_char_dict_from_file(char_set="MUFI 3") == \
             chars.MUFI3
-        assert get_special_char_dict_from_file(char_set="MUFI-4") == \
+        assert get_special_char_dict_from_file(char_set="MUFI 4") == \
             chars.MUFI4
         # This option should be processed by handle_special_characters() only
         try:
-            get_special_char_dict_from_file(char_set="doe-sgml")
+            get_special_char_dict_from_file(char_set="Old English SGML")
         except ValueError:
             pass
         else:
             raise AssertionError
         try:
-            get_special_char_dict_from_file(char_set="early-english-html")
+            get_special_char_dict_from_file(char_set="Early English HTML")
         except ValueError:
             pass
         else:
@@ -451,7 +451,7 @@ class TestProcessTagReplaceOptions:
              " up."
 
     def test_process_tag_rep_options_remove_tag(self):
-        action = "remove-tag"
+        action = "Remove Tag"
         attribute = ""
 
         assert process_tag_replace_options(
@@ -477,7 +477,7 @@ class TestProcessTagReplaceOptions:
                                     "are a bit   messed up."
 
     def test_process_tag_rep_options_remove_element(self):
-        action = "remove-element"
+        action = "Remove Element"
         attribute = ""
 
         assert process_tag_replace_options(
@@ -499,7 +499,7 @@ class TestProcessTagReplaceOptions:
             attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_replace_element(self):
-        action = "replace-element"
+        action = "Replace Element"
         attribute = "a very nice attribute"
 
         assert process_tag_replace_options(
@@ -523,7 +523,7 @@ class TestProcessTagReplaceOptions:
             attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_leave_tag(self):
-        action = "leave-alone"
+        action = "Leave Alone"
         attribute = ""
 
         assert process_tag_replace_options(
@@ -540,7 +540,7 @@ class TestProcessTagReplaceOptions:
             attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_other(self):
-        action = "remove-tag"
+        action = "Remove Tag"
         attribute = ""
 
         assert process_tag_replace_options(
@@ -735,40 +735,6 @@ class TestGetRemovePunctuationMap:
         assert get_remove_punctuation_map(
             no_punct_string, apos=False, hyphen=False, amper=False,
             previewing=True) == (no_punct_string, map_previewing)
-
-
-class TestGetRemoveDigitsMap:
-
-    def test_get_remove_digits_no_store(self):
-        string = "hey here's a few numbers: " \
-                    "1 20 500 7000 " \
-                    "hey here's a few decimal numbers: " \
-                    "3.14 31.41 cool! 314.15 3141.5926 " \
-                    "signed numbers too! " \
-                    "+100 +3.14 -7000 -2.79 " \
-                    "tricky trap cases: " \
-                    "1. .1 .1. 1..1 .1.1.1" \
-                    "000-000-0000 1..1' 3.141' \"3.141\" " \
-                    "Europeans do decimals this way: " \
-                    "3,14 31,415926535879 314,15 141,592 " \
-                    "The rest of the world does decimals like this: " \
-                    "1,234,567.89 1,234,567·89 1'234'567.891 " \
-                    "2'234'567,89 1.234.567'89 1˙234˙567,89 " \
-                    "we currently modify some tokens where digits appear: " \
-                    "J@m3s 1t3st.3.2.1.abc @1 9# $14"
-
-        assert get_remove_digits(string) == (
-            "hey here's a few numbers: "
-            "    hey here's a few decimal numbers: "
-            "  cool!   signed numbers too! "
-            "    tricky trap cases: "
-            ". . .. .. . ..' ' \"\" "
-            "Europeans do decimals this way: "
-            "    "
-            "The rest of the world does decimals like this: "
-            "      "
-            "we currently modify some tokens where digits appear: "
-            "J@ms tst..abc @ # $")
 
 
 class TestHandleFileAndManualStrings:

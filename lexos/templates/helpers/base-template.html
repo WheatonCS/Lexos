@@ -5,19 +5,35 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Lexos</title>
-    <link rel="shortcut icon" href="static/favicon.png"/>
+    <link rel="icon" href="static/favicon.png"/>
+
+    <!-- Variables -->
+    <script>
+        let theme = "{{ theme }}";
+        let active_document_count = {{ active_document_count }};
+    </script>
 
     <!-- jQuery -->
-    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js")></script>
+    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js"></script>
+
+    <!-- Intro.js -->
+    <script type="text/javascript" src="static/node_modules/intro.js/intro.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/node_modules/intro.js/introjs.css">
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/intro-js.css">
 
     <!-- Core Lexos dependencies -->
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
+    <script type="text/javascript" src="static/js/helpers/utility.js"></script>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/error.css"/>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/help.css"/>
-    <script type="text/javascript" src="static/js/helpers/utility.js"></script>
 
     {% block head %}{% endblock %}
+
+    <!-- Theme -->
+    <link rel="stylesheet" type="text/css" href="static/css/themes/{{ theme }}.css"/>
 </head>
 
 
@@ -26,25 +42,29 @@
 
     <!-- Navbar -->
     <div id="navbar">
-
-        <h1 id="lexos-logo">{L}exos</h1>
-
-        <img id="lexos-dragon" src="static/images/lexos-dragon-crop.png" id="logo">
+        <div id="navbar-left">
+            <img id="lexos-dragon" src="static/images/lexos_dragon.png"
+                 onmouseover="this.src='static/images/lexos_dragon_open.png'"
+                 onmouseout="this.src='static/images/lexos_dragon.png'">
+            <h1 id="lexos-text">{L}exos</h1>
+            <h1 id="page-title">{% block title %}{% endblock %}</h1>
+            <span id="navbar-walkthrough-button" class="left-justified tooltip-button">?</span>
+        </div>
 
         <div id="navbar-right" class="right-justified">
             <a id="upload-button" href="/upload">Upload</a>
             <a id="manage-button" href="/manage">Manage</a>
 
-            <h3 id="prepare-button" class="navbar-button selectable">Prepare</h3>
-            <h3 id="visualize-button" class="navbar-button selectable">Visualize</h3>
-            <h3 id="analyze-button" class="navbar-button selectable">Analyze</h3>
+            <h3 id="prepare-button" class="navbar-button clickable-text">Prepare</h3>
+            <h3 id="visualize-button" class="navbar-button clickable-text">Visualize</h3>
+            <h3 id="analyze-button" class="navbar-button clickable-text">Analyze</h3>
 
             <h3>|</h3>
             <a href="/download-workspace">Save</a>
             <a href="/reset">Reset</a>
 
             <h3>|</h3>
-            <h3 id="help-button" class="selectable highlight">Help</h3>
+            <h3 id="help-button">Help</h3>
         </div>
     </div>
 
@@ -79,7 +99,7 @@
         <div class="right-justified">
             <a href="/manage">Active Documents</a>
             <h3>: </h3>
-            <h3 id="active-document-count">0</h3>
+            <h3 id="active-document-count">{{ active_document_count }}</h3>
         </div>
     </footer>
 </body>

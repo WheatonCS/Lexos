@@ -4,21 +4,23 @@ It uses sklearn.cluster.KMeans for most important analysis, please see:
 http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
 """
 
+from typing import Optional, NamedTuple, List
+
+import colorlover as cl
 import numpy as np
 import pandas as pd
-import colorlover as cl
 import plotly.graph_objs as go
 from flask import jsonify
 from plotly.offline import plot
-from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans as KMeans
-from typing import Optional, NamedTuple, List
+from sklearn.decomposition import PCA
+
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import IdTempLabelMap
-from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.receivers.kmeans_receiver import KMeansOption, KMeansReceiver, \
+from lexos.receivers.k_means_receiver import KMeansOption, KMeansReceiver, \
     KMeansViz
+from lexos.managers.utility import load_file_manager
 
 # Alias for typed tuple to increase readability.
 PlotlyHTMLPlot = str
@@ -36,7 +38,6 @@ class KMeansTestOptions(NamedTuple):
     """A typed tuple to hold k-means test options."""
 
     doc_term_matrix: pd.DataFrame
-    id_temp_label_map: IdTempLabelMap
     front_end_option: KMeansOption
 
 
@@ -60,24 +61,15 @@ class KMeansModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
-            self._test_id_temp_label_map = test_options.id_temp_label_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
-
-    @property
-    def _id_temp_label_map(self) -> IdTempLabelMap:
-        """:return: a map takes an id to temp labels."""
-        return self._test_id_temp_label_map \
-            if self._test_id_temp_label_map is not None \
-            else MatrixModel().get_id_temp_label_map()
 
     @property
     def _k_means_front_end_option(self) -> KMeansOption:
@@ -120,8 +112,8 @@ class KMeansModel(BaseModel):
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # Initialize the table with proper headers.
         return pd.DataFrame(data={
@@ -139,12 +131,11 @@ class KMeansModel(BaseModel):
         contains cluster numbers and the second column contains document names,
         the rest columns contain the coordinates of the files.
         """
-
         # Get reduced data.
         reduced_data = self._get_reduced_data()
         # Get file names.
-        labels = [self._id_temp_label_map[file_id]
-                  for file_id in self._doc_term_matrix.index.values]
+        labels = [file.label for file in
+                  load_file_manager().get_active_files()]
 
         # Initialize the table with proper headers.
         return pd.DataFrame(data={
@@ -166,7 +157,6 @@ class KMeansModel(BaseModel):
         :param reduced_data: PCA reduced two dimensional data.
         :return: A plotly heat map object that contains all polygons.
         """
-
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -251,7 +241,6 @@ class KMeansModel(BaseModel):
         :param k_means_index: Cluster result for all files.
         :return: A list of scatter plot contains centroid for each cluster.
         """
-
         # Find list of x, y coordinates.
         x_value, y_value = reduced_data[:, 0], reduced_data[:, 1]
 
@@ -277,17 +266,17 @@ class KMeansModel(BaseModel):
 
     def _get_voronoi_result(self) -> KMeansUnprocessedResult:
         """Generate voronoi formatted graph for K Means result.
+
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
+        labels = np.array([file.label for file in
+                           load_file_manager().get_active_files()])
 
         # Pick a color for following scatter plots.
         color = cl.scales["10"]["qual"]["Paired"]
@@ -320,10 +309,15 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
-            hovermode="closest")
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(color=self._k_means_front_end_option.text_color,
+                      size=16)
+        )
 
         # noinspection PyTypeChecker
         # Pack all data together in a list.
@@ -349,8 +343,8 @@ class KMeansModel(BaseModel):
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
+        labels = np.array([file.label for file in
+                           load_file_manager().get_active_files()])
 
         # Separate x, y coordinates from the reduced data set.
         x_value = reduced_data[:, 0]
@@ -377,13 +371,25 @@ class KMeansModel(BaseModel):
         layout = go.Layout(
             dragmode="pan",
             margin=dict(
-                l=0,  # nopep8
+                l=60,  # nopep8
                 r=0,
-                b=0,
-                t=25,
+                b=30,
+                t=30,
                 pad=4
             ),
-            hovermode="closest")
+            xaxis=dict(
+                gridcolor=self._k_means_front_end_option.text_color,
+                zeroline=False
+            ),
+            yaxis=dict(
+                gridcolor=self._k_means_front_end_option.text_color,
+                zeroline=False
+            ),
+            hovermode="closest",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(color=self._k_means_front_end_option.text_color,
+                      size=16))
 
         # Return the plotly figure and table.
         # The reason we have to do this together is that K-Means cluster result
@@ -396,17 +402,17 @@ class KMeansModel(BaseModel):
 
     def _get_3d_scatter_result(self) -> KMeansUnprocessedResult:
         """Generate a 3D plot that contains just the dots for K means result.
+
         :return: A plotly object hat has been converted to HTML format string.
         """
-
         # Get kMeans analyze result and unpack it.
         k_means = self._get_k_means()
         reduced_data = self._get_reduced_data()
         k_means_index = k_means.fit_predict(reduced_data)
 
         # Get file names.
-        labels = np.array([self._id_temp_label_map[file_id]
-                           for file_id in self._doc_term_matrix.index.values])
+        labels = np.array([file.label for file in
+                           load_file_manager().get_active_files()])
 
         # Get x, y, z coordinates.
         x_value = reduced_data[:, 0]
@@ -438,7 +444,7 @@ class KMeansModel(BaseModel):
                 l=0,  # nopep8
                 r=0,
                 b=0,
-                t=25,
+                t=0,
                 pad=4
             ),
             scene=dict(
@@ -448,7 +454,11 @@ class KMeansModel(BaseModel):
                            backgroundcolor="rgb(230,230,230)"),
                 zaxis=dict(showbackground=True,
                            backgroundcolor="rgb(230,230,230)")
-            )
+            ),
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            font=dict(color=self._k_means_front_end_option.text_color,
+                      size=16)
         )
 
         # Return the plotly figure and table.
@@ -461,10 +471,10 @@ class KMeansModel(BaseModel):
         )
 
     def _get_result(self) -> KMeansUnprocessedResult:
-        """ Get the k-means data.
+        """Get the k-means data.
+
         :return: The k-means data.
         """
-
         # Trap possible getting empty DTM error.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
@@ -487,10 +497,10 @@ class KMeansModel(BaseModel):
         return k_means_unprocessed_result
 
     def get_results(self) -> str:
-        """ Gets the k-means results.
+        """Get the k-means results.
+
         :return: The k-means results.
         """
-
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
