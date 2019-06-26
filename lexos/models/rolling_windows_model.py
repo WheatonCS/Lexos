@@ -827,7 +827,8 @@ class RollingWindowsModel(BaseModel):
                         size=16
                     ),
                     legend=dict(
-                        yanchor="bottom"
+                        x=1.01,
+                        y=0
                     )
                 )
             )
