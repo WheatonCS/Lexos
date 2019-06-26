@@ -165,10 +165,14 @@ function apply_selection(event){
     });
 
     // Send requests to apply the selection to the modified documents
-    send_request("activate", selected_ids)
-        .fail("Failed to apply the document selection")
+    send_request("deactivate", deselected_ids)
+
+        // If the request was successful, send the activate request
         .done(function(){
-                send_request("deactivate", deselected_ids)
-                    .fail("Failed to apply the document selection");
-        });
+            send_request("activate", selected_ids)
+                .fail("Failed to apply the document selection");
+        })
+
+        // If the request failed, display an error
+        .fail("Failed to apply the document selection");
 }
