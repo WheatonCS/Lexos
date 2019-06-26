@@ -34,7 +34,7 @@ class TokenizerReceiver(BaseReceiver):
             search = self._front_end_data["tokenizer_table_search_input"]
             length = int(self._front_end_data["tokenizer_table_row_count"])
             sort_method = bool(self._front_end_data[
-                "tokenizer_table_sort_mode"] == "ascending")
+                "tokenizer_table_sort_mode"] == "Ascending")
             sort_column = int(self._front_end_data[
                 "tokenizer_table_selected_column"])
 

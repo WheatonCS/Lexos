@@ -38,7 +38,7 @@ class SimilarityReceiver(BaseReceiver):
 
         # Get the sort column
         sort_ascending = bool(self._front_end_data[
-            "similarity_table_sort_mode"] == "ascending")
+            "similarity_table_sort_mode"] == "Ascending")
 
         return SimilarityFrontEndOption(comp_file_id=comp_file_id,
                                         sort_column=sort_column,
