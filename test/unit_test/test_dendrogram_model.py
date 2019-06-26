@@ -21,6 +21,7 @@ class TestLeftOrientation:
             orientation='Left',
             linkage_method='Average',
             dist_metric='Euclidean'
+            text_color="blue"
         ),
 
         id_temp_label_map={
@@ -69,6 +70,7 @@ class TestBottomOrientation:
             orientation='Bottom',
             linkage_method='Average',
             dist_metric='Euclidean'
+            text_color="blue"
         ),
 
         id_temp_label_map={
