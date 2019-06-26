@@ -825,6 +825,10 @@ class RollingWindowsModel(BaseModel):
                     font=dict(
                         color=self._options.text_color,
                         size=16
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
                     )
                 )
             )
@@ -885,6 +889,10 @@ class RollingWindowsModel(BaseModel):
                         zeroline=False,
                         showgrid=False,
                         tickcolor=self._options.text_color
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
                     )
                 )
             )
