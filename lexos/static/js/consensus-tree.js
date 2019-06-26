@@ -7,9 +7,9 @@ $(function(){
     // "Linkage Method" buttons
     initialize_tree_options();
 
-    // Initialize the legacy form inputs and create the consensus tree,
-    // and initialize the "Generate" and "Download" buttons
-    get_active_file_ids(initialize, "#consensus-tree-body");
+    // Create the consensus tree and initialize the "Generate" and "Download"
+    // buttons
+    initialize();
 
     // Initialize the tooltips
     initialize_analyze_tooltips();
@@ -21,23 +21,19 @@ $(function(){
 
 
 /**
- * Initializes legacy form inputs and creates the consensus tree.
- * @param {string} response: The response from the "active-file-ids" request.
+ * Creates the consensus tree and initializes the "Generate" and "Download"
+ * buttons.
  */
 let image_data;
-function initialize(response){
+function initialize(){
 
     // If there are fewer than two active documents, display warning text
     // and return
-    document_count = Object.entries(parse_json(response)).length;
-    if(document_count <  2){
+    if(active_document_count < 2){
         add_text_overlay("#consensus-tree-body", `This Tool Requires at Least
             Two Active Documents`);
         return;
     }
-
-    // Initialize the legacy form inputs
-    initialize_legacy_inputs(response);
 
     // Create the consensus tree
     create_consensus_tree();

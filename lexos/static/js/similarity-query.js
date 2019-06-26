@@ -5,7 +5,8 @@ $(function(){
     // "Similarity Query" sections
     start_loading("#comparison-document-section-body, #table");
 
-    // Initialize the legacy form inputs and create the similarity table
+    // Initialize the comparison document section and create the similarity
+    // table
     get_active_file_ids(initialize,
         "#comparison-document-section-body, #table");
 
@@ -29,23 +30,19 @@ $(function(){
 
 
 /**
- * Initialize the legacy form inputs and create the similarity table.
+ * Initialize the comparison document section and create the similarity table.
  * @param {string} response: The response from the "/active-file-ids" request.
  */
 function initialize(response){
 
     // If there are fewer than two active documents, display warning text
     // and return
-    document_count = Object.entries(parse_json(response)).length;
-    if(document_count <  2){
+    if(active_document_count <  2){
         add_text_overlay("#similarity-table-content", `This Tool Requires at
             Least Two Active Documents`);
         add_text_overlay("#comparison-document-section-body", '');
         return;
     }
-
-    // Otherwise, initialize the legacy form inputs
-    if(!initialize_legacy_inputs(response)) return;
 
     // Initialize the comparison document section
     initialize_comparison_document_section(

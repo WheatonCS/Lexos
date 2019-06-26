@@ -26,7 +26,7 @@
             <div>
 
                 <!-- Sample with replacement -->
-                <label><input name="replace" type="checkbox"><span></span>Sample with replacement</label>
+                <label><input name="sample_with_replacement" type="checkbox"><span></span>Sample with replacement</label>
                 <br>
 
                 <!-- Distance metric -->
@@ -81,6 +81,6 @@
 
 <!-- Hidden elements -->
 {% block hidden_elements %}
-    <input id="distance-metric-input" name="metric" value="euclidean" type="hidden">
-    <input id="linkage-method-input" name="linkage" value="average" type="hidden">
+    <input id="distance-metric-input" name="distance_metric" value="Euclidean" type="hidden">
+    <input id="linkage-method-input" name="linkage_method" value="Average" type="hidden">
 {% endblock %}

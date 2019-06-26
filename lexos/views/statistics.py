@@ -2,7 +2,7 @@ import json
 from flask import session, Blueprint, jsonify
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.stats_model import StatsModel
+from lexos.models.statistics_model import StatsModel
 from lexos.views.base import render
 
 statistics_blueprint = Blueprint("statistics", __name__)

@@ -38,9 +38,9 @@ class DendroReceiver(BaseReceiver):
 
         :return: a DendroOption object to hold all the options.
         """
-        orientation = self._front_end_data['orientation']
-        linkage_method = self._front_end_data['linkage']
-        metric = self._front_end_data['metric']
+        orientation = self._front_end_data['orientation'].lower()
+        linkage_method = self._front_end_data['linkage_method'].lower()
+        metric = self._front_end_data['distance_metric']
         text_color = self._front_end_data["text_color"]
 
         return DendroOption(orientation=orientation,

@@ -26,18 +26,18 @@
 
             <!-- Clusters -->
             <h3>Clusters</h3>
-            <input id="clusters-input" name="nclusters" value="1" type="text" spellcheck="false" autocomplete="off">
+            <input id="clusters-input" name="clusters" value="1" type="text" spellcheck="false" autocomplete="off">
             <span id="clusters-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Voronoi -->
-            <label><input name="viz" value="Voronoi" type="radio" checked><span></span>Voronoi</label>
+            <label><input name="visualization_method" value="Voronoi" type="radio" checked><span></span>Voronoi</label>
             <span id="visualization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- 2D Scatter -->
-            <label><input name="viz" value="2DScatter" type="radio"><span></span>2D Scatter</label><br>
+            <label><input name="visualization_method" value="2D Scatter" type="radio"><span></span>2D Scatter</label><br>
 
             <!-- 3D Scatter -->
-            <label><input name="viz" value="3DScatter" type="radio"><span></span>3D Scatter</label>
+            <label><input name="visualization_method" value="3D Scatter" type="radio"><span></span>3D Scatter</label>
         </div>
     </div>
 
@@ -47,24 +47,24 @@
         <div class="section-body">
 
             <!-- K-Means -->
-            <label><input name="init" value="k-means++" type="radio" checked><span></span>K-Means++</label>
+            <label><input name="initialization_method" value="K-Means++" type="radio" checked><span></span>K-Means++</label>
 
             <!-- Random -->
-            <label><input name="init" value="random" type="radio"><span></span>Random</label>
+            <label><input name="initialization_method" value="Random" type="radio"><span></span>Random</label>
             <span id="initialization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Maximum Iterations -->
             <h3>Maximum Iterations</h3>
-            <input id="maximum-iterations-input" name="max_iter" value="300" type="text" spellcheck="false" autocomplete="off"><br>
+            <input id="maximum-iterations-input" name="maximum_iterations" value="300" type="text" spellcheck="false" autocomplete="off"><br>
 
             <!-- Different Centriods -->
             <h3>Different Centroids</h3>
-            <input id="different-centroids-input" name="n_init" value="10" type="text" spellcheck="false" autocomplete="off">
+            <input id="different-centroids-input" name="different_centroids" value="10" type="text" spellcheck="false" autocomplete="off">
             <span id="different-centroids-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Relative Tolerance -->
             <h3>Relative Tolerance</h3>
-            <input id="relative-tolerance-input" name="tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
+            <input id="relative-tolerance-input" name="relative_tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
             <span id="relative-tolerance-tooltip-button" class="tooltip-button">?</span>
         </div>
     </div>

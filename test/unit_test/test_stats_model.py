@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
-from lexos.models.stats_model import StatsModel, StatsTestOptions
+from lexos.models.statistics_model import StatsModel, StatsTestOptions
 
 # ------------------------ First test suite ------------------------
-from lexos.receivers.stats_receiver import StatsFrontEndOption
+from lexos.receivers.statistics_receiver import StatsFrontEndOption
 
 test_dtm_one = pd.DataFrame(data=np.array([(40, 20, 15, 5, 0, 0, 0, 0, 0),
                                            (0, 0, 0, 0, 1, 2, 3, 4, 5)]),
@@ -16,7 +16,7 @@ test_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1],
                                                 sort_ascending=True,
                                                 sort_column=0)
 test_option_one = StatsTestOptions(
-    token_type_str="terms",
+    token_type_str="Tokens",
     doc_term_matrix=test_dtm_one,
     front_end_option=test_front_end_option_one,
     id_temp_label_map=test_id_temp_table_one)
@@ -42,7 +42,7 @@ test_stats_front_end_option_two = \
                         sort_ascending=True,
                         sort_column=0)
 test_option_two = StatsTestOptions(
-    token_type_str="characters",
+    token_type_str="Characters",
     doc_term_matrix=test_dtm_two,
     front_end_option=test_stats_front_end_option_two,
     id_temp_label_map=test_id_temp_table_two)
@@ -67,7 +67,7 @@ test_stats_front_end_option_anomaly = \
                         sort_ascending=True,
                         sort_column=0)
 test_option_anomaly = \
-    StatsTestOptions(token_type_str="characters",
+    StatsTestOptions(token_type_str="Characters",
                      doc_term_matrix=test_dtm_anomaly,
                      front_end_option=test_stats_front_end_option_anomaly,
                      id_temp_label_map=test_id_temp_table_anomaly)
@@ -141,7 +141,7 @@ test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[],
                                                         sort_ascending=True,
                                                         sort_column=0)
 test_option_empty = \
-    StatsTestOptions(token_type_str="terms",
+    StatsTestOptions(token_type_str="Tokens",
                      doc_term_matrix=test_dtm_empty,
                      front_end_option=test_stats_front_end_option_empty,
                      id_temp_label_map=test_id_temp_table_empty)

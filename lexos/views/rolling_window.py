@@ -1,7 +1,7 @@
 from flask import session, Blueprint
 from lexos.helpers import constants as constants
 from lexos.managers import session_manager as session_manager
-from lexos.models.rolling_windows_model import RollingWindowsModel
+from lexos.models.rolling_window_model import RollingWindowsModel
 from lexos.views.base import render
 
 rolling_window_blueprint = Blueprint("rolling_window", __name__)

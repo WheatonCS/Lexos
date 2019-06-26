@@ -14,11 +14,6 @@ def viz():
     :return: The bubbleviz page.
     """
 
-    if "cloudoption" not in session:
-        session["cloudoption"] = constants.DEFAULT_CLOUD_OPTIONS
-    if "bubblevisoption" not in session:
-        session["bubblevisoption"] = constants.DEFAULT_BUBBLEVIZ_OPTIONS
-
     return render("bubbleviz.html")
 
 
@@ -29,7 +24,6 @@ def get_word_counts() -> str:
     """
 
     file_manager = utility.load_file_manager()
-    session_manager.cache_cloud_option()
 
     # Get the contents of the active documents
     contents = ""

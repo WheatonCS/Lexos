@@ -5,7 +5,7 @@ from flask import session, redirect, url_for, render_template, send_file, \
 
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from lexos.models.filemanager_model import FileManagerModel
+from lexos.models.file_manager_model import FileManagerModel
 
 base_blueprint = Blueprint("base", __name__)
 
@@ -25,17 +25,7 @@ def get_active_documents() -> str:
     :return: The number of active documents.
     """
 
-    if session:
-        file_manager = utility.load_file_manager()
-        active_files = file_manager.get_active_files()
-
-        if active_files:
-            return str(len(active_files))
-        else:
-            return "0"
-    else:
-        redirect("no-session")
-        return "0"
+    return str(get_active_document_count())
 
 
 @base_blueprint.route("/active-file-ids", methods=["GET"])
@@ -124,6 +114,24 @@ def detect_active_docs() -> int:
         return 0
 
 
+def get_active_document_count() -> int:
+    """ Gets the number of active documents.
+    :return: The number of active documents.
+    """
+
+    if session:
+        file_manager = utility.load_file_manager()
+        active_files = file_manager.get_active_files()
+
+        if active_files:
+            return len(active_files)
+        else:
+            return 0
+    else:
+        redirect("no-session")
+        return 0
+
+
 def render(page) -> str:
     """ Renders the given page.
     :param page: The page to render
@@ -133,4 +141,6 @@ def render(page) -> str:
     if "generalsettings" not in session:
         session["generalsettings"] = constants.DEFAULT_GENERALSETTINGS_OPTIONS
 
-    return render_template(page, theme=session["generalsettings"]["theme"])
+    return render_template(page,
+                           theme=session["generalsettings"]["theme"],
+                           active_document_count=get_active_document_count())
