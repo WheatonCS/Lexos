@@ -17,9 +17,7 @@ function initialize_analyze_tooltips(){
     create_tooltip("#tf-idf-tooltip-button", `Normalize the data for different
         document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"
         target="_blank">Term Frequency-Inverse Document Frequency</a>.
-        Selecting TF-IDF allows you to choose the distance metric according to
-        which each document vector is normalized. Lexos uses base e (natural
-        log) as the default.`);
+        Lexos uses base e (natural log) as the default.`);
 
     initialize_cull_tooltips();
 }
