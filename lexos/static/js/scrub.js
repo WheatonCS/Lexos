@@ -25,7 +25,7 @@ $(function(){
             punctuation_options_element.removeClass("disabled");
         else punctuation_options_element.addClass("disabled");
     });
-    let tags_checkbox_element = $("#tags-checkbox");
+    let tags_checkbox_element = $("#scrub-tags-checkbox");
     tags_checkbox_element.click(function(){
         let tags_options_element = $("#scrub-tags-settings-button");
         if(tags_options_element.hasClass("disabled"))
