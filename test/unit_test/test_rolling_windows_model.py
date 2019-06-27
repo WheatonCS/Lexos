@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from lexos.models.rolling_windows_model import RollingWindowsModel, \
+from lexos.models.rolling_window_model import RollingWindowsModel, \
     RWATestOptions
 from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     WindowUnitType, RWATokenType, RWARatioTokenOptions, RWAWindowOptions, \
