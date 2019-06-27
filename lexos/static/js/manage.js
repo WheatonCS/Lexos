@@ -312,12 +312,6 @@ function walkthrough(){
             position: "bottom"
         },
         {
-            element: "#active-documents-footer",
-            intro: `By clicking Active Documents in any page, you can quickly
-            access a popup where you can toggle documents in-page.`,
-            position: "bottom"
-        },
-        {
             element: "#help-button",
             intro: `Check our Help section for more advice on the Manage
                 page.`,
