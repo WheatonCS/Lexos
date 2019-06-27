@@ -564,14 +564,14 @@ label input[type="checkbox"]:checked + span:after {
     font-size: 1.3rem;
     border-radius: 50%;
     transition: color .2s, background-color .2s;
-    color: var(--secondary-highlight-color);
-    background-color: var(--secondary-highlight-color-light);
+    color: var(--button-border-color);
+    background-color: var(--foreground-color);
 }
 
 .tooltip-button:hover,
 .tooltip-button-active {
     color: var(--foreground-color);
-    background-color: var(--secondary-highlight-color);
+    background-color: var(--button-border-color);
 }
 
 
