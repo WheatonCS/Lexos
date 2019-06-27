@@ -1,6 +1,9 @@
 let document_previews;
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_inputs);
+
     // Display the loading overlay on the "Previews" section
     start_loading("#previews");
 
@@ -59,8 +62,8 @@ function load_cut_settings_section(){
     // If the cut mode is set to "Segments"...
     if(cut_mode === "Segments"){
         previous_cut_mode = "Segments";
-        hide(`#milestone-input, #overlap-input,
-            #merge-threshold-input, #segment-size-tooltip-button`);
+        hide(`#milestone-input, #overlap-input, #merge-threshold-input,
+            #segment-size-tooltip-button`);
         segment_text.text("Number of Segments")
         show("#segment-size-input, #number-of-segments-tooltip-button");
     }
@@ -68,8 +71,7 @@ function load_cut_settings_section(){
     // Otherwise, if the cut mode is set to "Milestones"...
     else if(cut_mode === "Milestones"){
         previous_cut_mode = "Milestones";
-        hide(`#segment-size-input, #overlap-input,
-            #merge-threshold-input`);
+        hide(`#segment-size-input, #overlap-input, #merge-threshold-input`);
         show("#milestone-input");
     }
 
@@ -98,10 +100,7 @@ function load_cut_settings_section(){
 function cut(action){
 
     // Validate the inputs. If the inputs are invalid, return
-    if(!validate_inputs()) return;
-
-    // Remove any existing error messages
-    remove_errors();
+    if(!validate_inputs(true)) return;
 
     // Display the loading overlay and disable the buttons on the document
     // previews section
@@ -169,13 +168,19 @@ function create_document_previews(response){
  * Validate the inputs.
  * @returns {boolean}: Whether the inputs are valid.
  */
-function validate_inputs(){
+function validate_inputs(show_error = false){
+
+    // Remove any existing errors and error highlights
+    remove_highlights();
+    if(show_error) remove_errors();
 
     // "Milestone"
+    let valid = true;
     if(cut_mode === "Milestones"){
         if($("#milestone-input input").val().length <= 0){
-            error("A milestone must be provided.", "#milestone-input input");
-            return false;
+            error_highlight("#milestone-input input");
+            if(show_error) error("A milestone must be provided.");
+            valid = false;
         }
         return true;
     }
@@ -184,8 +189,9 @@ function validate_inputs(){
     let segment_size = $("#segment-size-input input").val();
     let int_segment_size = parseInt(segment_size);
     if(!validate_number(segment_size, 1)){
-        error("Invalid segment size.", "#segment-size-input input");
-        return false;
+        error_highlight("#segment-size-input input");
+        if(show_error) error("Invalid segment size.");
+        valid = false;
     }
 
     // "Segments"
@@ -195,23 +201,26 @@ function validate_inputs(){
     let overlap = $("#overlap-input input").val();
     let int_overlap = parseInt(overlap);
     if(!validate_number(overlap, 0)){
-        error("Invalid overlap size.", "#overlap-input input");
-        return false;
+        error_highlight("#overlap-input input");
+        if(show_error) error("Invalid overlap size.");
+        valid = false;
     }
 
     if(int_overlap >= int_segment_size){
-        error(`The overlap cannot be greater than or equal to the segment
-            size.`, "#overlap-input input");
-        return false;
+        error_highlight("#overlap-input input");
+        if(show_error) error(`The overlap cannot be greater than or equal to
+            the segment size.`, );
+        valid = false;
     }
 
     // "Merge threshold"
     if(!validate_number($("#merge-threshold-input input").val(), 0, 100)){
-        error("Invalid merge threshold.", "#merge-threshold-input input");
-        return false;
+        error_highlight("#merge-threshold-input input");
+        if(show_error) error("Invalid merge threshold.");
+        valid = false;
     }
 
-    return true;
+    return valid;
 }
 
 
@@ -302,5 +311,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

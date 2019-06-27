@@ -51,31 +51,40 @@ function initialize_cull_tooltips(on_right_edge = true){
  * Validates the inputs on the "Tokenize" and "Cull" sections.
  * @return {boolean}: Whether the inputs are valid.
  */
-function validate_analyze_inputs(){
+function validate_analyze_inputs(show_error, remove_existing_errors = true){
+
+    // Remove any existing errors and error highlights
+    if(remove_existing_errors){
+        remove_highlights();
+        if(show_error) remove_errors();
+    }
 
     // "Tokenize" - "Grams"
+    let valid = true;
     let grams = $("#grams-input").val();
     if(!validate_number(grams, 1)){
-        error("Invalid gram size.", "#grams-input");
-        return false;
+        error_highlight("#grams-input");
+        if(show_error) error("Invalid gram size.");
+        valid = false;
     }
 
     // "Cull" - "Use the top X terms"
     let most_frequent_words = $("#most-frequent-words-input").val();
     if($("#most-frequent-words-checkbox").is(":checked") &&
         !validate_number(most_frequent_words, 1)){
-        error("Invalid number of top terms.", "#most-frequent-words-input");
-        return false;
+        error_highlight("#most-frequent-words-input");
+        if(show_error) error("Invalid number of top terms.");
+        valid = false;
     }
 
     // "Cull" - "Must be in X documents"
     let minimum_documents = $("#minimum-occurrences-input").val();
     if($("#minimum-occurrences-checkbox").is(":checked") &&
         !validate_number(minimum_documents, 1, active_document_count)){
-        error("Invalid number of minimum occurrences.",
-            "#minimum-occurrences-input");
-        return false;
+        error_highlight("#minimum-occurrences-input");
+        if(show_error) error("Invalid number of minimum occurrences.");
+        valid = false;
     }
 
-    return true;
+    return valid;
 }

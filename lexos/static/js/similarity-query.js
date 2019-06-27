@@ -1,6 +1,9 @@
 let table;
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_analyze_inputs);
+
     // Display the loading overlay for the "Comparison Document" and
     // "Similarity Query" sections
     start_loading("#comparison-document-section-body, #table");
@@ -55,7 +58,7 @@ function initialize(response){
 
 /**
  * Initializes the comparison document section.
- * @param {Object[]} documents: The documents to display as options.
+ * @param {string[][]} documents: The documents to display as options.
  */
 function initialize_comparison_document_section(documents){
 
@@ -148,5 +151,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

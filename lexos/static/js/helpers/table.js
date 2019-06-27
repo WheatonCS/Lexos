@@ -146,7 +146,7 @@ class Table{
     create(display = true){
 
         // Validate the inputs
-        if(this.validation_callback && !this.validation_callback()) return;
+        if(this.validation_callback && !this.validation_callback(true)) return;
         this._validate_inputs();
         if(this.paginated) this.current_page = this.page_number_element.val();
 

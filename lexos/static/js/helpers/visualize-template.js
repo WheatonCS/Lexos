@@ -25,7 +25,7 @@ function initialize_color_button(ok_callback){
                 ["tie-dye", "Tie-Dye"]
             ]);
 
-        $("#ok-button").click(ok_callback);
+        $("#color-popup .popup-ok-button").click(ok_callback);
     });
 }
 

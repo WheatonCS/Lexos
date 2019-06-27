@@ -291,17 +291,8 @@ function key_down_callback(key, callback){
 /**
  * Displays an error message.
  * @param {string} message: The message to display.
- * @param {string} error_highlight_query: A query for the element to apply
- *      an error highlight to.
  */
-function error(message, error_highlight_query = ''){
-
-    // Remove any existing error messages and error highlights
-    $("#error-section").remove();
-    $(".error-highlight").removeClass("error-highlight");
-
-    // Apply the error highlight
-    $(error_highlight_query).addClass("error-highlight");
+function error(message){
 
     // Hide the footer
     hide("footer");
@@ -330,15 +321,30 @@ function error(message, error_highlight_query = ''){
  */
 function remove_errors(){
 
-    // Remove any existing error highlights
-    $(".error-highlight").removeClass("error-highlight");
-
     // Remove any existing error messages
     let error_element = $("#error-section");
     error_element.remove();
 
     // If an error element was removed, fade in the footer
     if(error_element.length) fade_in("footer");
+}
+
+
+/**
+ * Applies an error highlight to the selected elements.
+ * @param {string} error_highlight_query: The query for elements to apply an
+ *      error highlight to.
+ */
+function error_highlight(error_highlight_query){
+    $(error_highlight_query).addClass("error-highlight");
+}
+
+
+/**
+ * Removes any error highlights.
+ */
+function remove_highlights(){
+    $(".error-highlight").removeClass("error-highlight");
 }
 
 
@@ -429,7 +435,7 @@ function create_tooltip(query, text, on_right_edge = false){
         });
 
         // If there is a click outside of the tooltip, remove the tooltip
-        $("body").click(remove_tooltips);
+        $("body, .popup").click(remove_tooltips);
     });
 }
 
@@ -523,4 +529,12 @@ function get_color(color_name){
     let color = element.css("color");
     element.remove();
     return color;
+}
+
+/**
+ * Gets an HTML ID from the given string.
+ * @param {string} string: The string to convert into an HTML ID.
+ */
+function get_id(string){
+    return string.replace(/\s+/g, '-').toLowerCase();
 }

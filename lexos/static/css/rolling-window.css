@@ -22,6 +22,7 @@ form {
 #search-input-grid {
     display: grid;
     grid-auto-flow: column;
+    grid-gap: 1rem;
 }
 
 #search-input-grid input {

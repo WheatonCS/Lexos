@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_inputs);
+
     // Display the loading overlay
     start_loading("#consensus-tree-body");
 
@@ -54,7 +57,7 @@ function initialize(){
 function create_consensus_tree(){
 
     // Validate the inputs
-    if(!validate_inputs() || !validate_analyze_inputs()) return;
+    if(!validate_inputs(true)) return;
 
     // Display the loading overlay and disable the "Generate" and "Download"
     // buttons
@@ -100,21 +103,29 @@ function create_consensus_tree(){
  * Validate the consensus tree options inputs.
  * @returns {boolean}: Whether the inputs are valid.
  */
-function validate_inputs(){
+function validate_inputs(show_error = false){
+
+    // Remove any existing errors and error highlights
+    remove_highlights();
+    if(show_error) remove_errors();
 
     // "Cutoff"
+    let valid = true;
     if(!validate_number($("#cutoff-input").val(), 0, 1)){
-        error("Invalid cutoff.", "#cutoff-input");
-        return false;
+        error_highlight("#cutoff-input");
+        if(show_error) error("Invalid cutoff.");
+        valid = false;
     }
 
     // "Iterations"
     if(!validate_number($("#iterations-input").val(), 1)){
-        error("Invalid number of iterations.", "#iterations-input");
-        return false;
+        error_highlight("#iterations-input");
+        if(show_error) error("Invalid number of iterations.");
+        valid = false;
     }
 
-    return true;
+    if(!validate_analyze_inputs(show_error, false)) valid = false;
+    return valid;
 }
 
 
@@ -189,5 +200,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

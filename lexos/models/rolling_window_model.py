@@ -765,11 +765,21 @@ class RollingWindowsModel(BaseModel):
                 layout=go.Layout(
                     dragmode="pan",
                     margin=dict(
-                        l=60,  # nopep8
+                        l=75,  # nopep8
                         r=0,
                         b=30,
                         t=0,
                         pad=4
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
                     ),
                     paper_bgcolor="rgba(0, 0, 0, 0)",
                     plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -792,11 +802,21 @@ class RollingWindowsModel(BaseModel):
                 layout=go.Layout(
                     dragmode="pan",
                     margin=dict(
-                        l=60,  # nopep8
+                        l=75,  # nopep8
                         r=0,
                         b=30,
                         t=0,
                         pad=4
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
                     ),
                     paper_bgcolor="rgba(0, 0, 0, 0)",
                     plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -859,11 +879,21 @@ class RollingWindowsModel(BaseModel):
                 layout=go.Layout(
                     dragmode="pan",
                     margin=dict(
-                        l=60,  # nopep8
+                        l=75,  # nopep8
                         r=0,
                         b=30,
                         t=0,
                         pad=4
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
                     ),
                     paper_bgcolor="rgba(0, 0, 0, 0)",
                     plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -913,7 +943,7 @@ class RollingWindowsModel(BaseModel):
                 layout=go.Layout(
                     dragmode="pan",
                     margin=dict(
-                        l=60,  # nopep8
+                        l=75,  # nopep8
                         r=0,
                         b=30,
                         t=0,

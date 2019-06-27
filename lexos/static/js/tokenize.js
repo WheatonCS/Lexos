@@ -1,6 +1,9 @@
 let table;
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_analyze_inputs);
+
     // Initialize the table
     table = new Table("tokenizer", "tokenize/table", "#table-section", "",
         validate_analyze_inputs, null, true, false, false, true, true, true,
@@ -38,14 +41,15 @@ function initialize_download_button(){
     download_button.click(function(){
 
         // Create the popup
-        create_ok_popup("Download");
+        let popup_container_element = create_ok_popup("Download");
+
         $(`
             <label><input name="csv_orientation" value="Documents as Rows" type="radio" checked><span></span>Documents as Rows</label><br>
             <label><input name="csv_orientation" value="Documents as Columns" type="radio"><span></span>Documents as Columns</label>
-        `).appendTo("#popup-content");
+        `).appendTo(popup_container_element.find(".popup-content"));
 
         // If the popup's "OK" button is clicked...
-        $("#popup-ok-button").click(function(){
+        $(popup_container_element.find(".popup-ok-button")).click(function(){
 
             // Send a request to create the table with the selected orientation
             table.create(false)
@@ -130,5 +134,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }
