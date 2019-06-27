@@ -34,6 +34,9 @@ function create_manage_popup(){
 
     create_popup("Manage");
     initialize_manage_table("#manage-popup .popup-content");
+
+    $(`#manage-popup, #manage-popup .popup-close-button`)
+        .click(function(){ location.reload(); });
 }
 
 

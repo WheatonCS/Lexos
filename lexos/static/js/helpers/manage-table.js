@@ -137,7 +137,7 @@ function append_manage_table_row(id, row_number, active, label, class_name,
 function toggle_manage_table_selection(event, pressed){
 
     // If a popup is being displayed, return
-    if($(".popup").length) return;
+    if($(".popup-container:not(#manage-popup)").length) return;
 
     // Check whether all documents are selected
     let all_selected = true;
