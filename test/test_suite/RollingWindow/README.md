@@ -9,6 +9,7 @@ results_rollingWords.png, results_Regex.png, results_countByLines.png,
 results_milestones.png, results_blackAndWhite.png, 
 results_showIndividualPoints.png
 
+Unless otherwise noted, all examples for Rolling Window use calculation type "Rolling Average"
 
 ## Test Rolling Average Settings
 
@@ -146,7 +147,7 @@ Results:
 
 5. Set Size of Window to 1000
 
-6. Under "Display" select "Milestone" and enter "Grendle"
+6. Under "Display" select "Milestone" and enter "grendle"
 
 7. Keep all other settings as default
 
