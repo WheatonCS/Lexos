@@ -21,8 +21,8 @@ class TestBCTModel:
             ]
         ),
         front_end_option=BCTOption(
-            linkage_method="Average",
-            dist_metric="Euclidean",
+            linkage_method="average",
+            dist_metric="euclidean",
             iterations=20,
             cutoff=0.5,
             replace=False,

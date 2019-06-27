@@ -85,10 +85,11 @@ function create_text_input_popup(title){
  *      the selected option's text on.
  * @param {string} input_element_query: The query for the input element whose
  *      value  will be set to the selected option.
- * @param {string[][]} options: The value and text of each radio button.
+ * @param {string[]} options: The text of each radio button.
+ * @param {string[]} values: The values of each radio button.
  */
 function create_radio_options_popup(title, radio_buttons_name,
-    display_element_query, input_element_query, options){
+    display_element_query, input_element_query, options, values = []){
 
     // Get the currently set option from the input element
     let input_element = $(input_element_query);
@@ -96,7 +97,7 @@ function create_radio_options_popup(title, radio_buttons_name,
 
     // Display the popup
     return display_radio_options_popup(
-        title, radio_buttons_name, set_option, options,
+        title, radio_buttons_name, set_option, options, values,
 
         // If the "OK" button is pressed, update the elements and close
         // the popup
@@ -112,11 +113,17 @@ function create_radio_options_popup(title, radio_buttons_name,
  * @param {string} title: The title to display on the popup.
  * @param {string} radio_buttons_name: The name of the radio buttons.
  * @param {string} set_option: The value of the currently set option.
- * @param {string[][]} options: The value and text of each radio button.
+ * @param {string[]} options: The text of each radio button.
+ * @param {string[]} values: The values of each radio button.
  * @param {function} callback: The callback to call when a selection has been made.
  */
 function display_radio_options_popup(title,
-    radio_buttons_name, set_option, options, callback){
+    radio_buttons_name, set_option, options, values, callback){
+
+    console.log(set_option);
+
+    // If no values were provided, set them to the options
+    if(values.length !== options.length) values = options;
 
     // Create the popup
     let popup_container_element =
@@ -125,15 +132,15 @@ function display_radio_options_popup(title,
     let popup_content_element = popup_container_element.find(".popup-content");
 
     // For each option...
-    for(const option of options) {
+    for(let i = 0; i < options.length; ++i) {
 
         // Create the radio button
         let element = $(`
-            <div><label><input type="radio" name="${radio_buttons_name}" value="${option[0]}"><span></span>${option[1]}</label></div>
+            <div><label><input type="radio" name="${radio_buttons_name}" value="${values[i]}"><span></span>${options[i]}</label></div>
         `).appendTo(popup_content_element);
 
         // Check the currently set option's radio button
-        if(set_option === option[0])
+        if(set_option === values[i])
             element.find("input").prop("checked", true);
     }
 

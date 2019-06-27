@@ -44,6 +44,6 @@ class DendroReceiver(BaseReceiver):
         text_color = self._front_end_data["text_color"]
 
         return DendroOption(orientation=orientation,
-                            linkage_method=linkage_method,
+                            linkage_method=linkage_method.lower(),
                             dist_metric=metric,
                             text_color=text_color)
