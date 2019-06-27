@@ -14,7 +14,7 @@ function create_popup(title){
                 <div id="popup-content"></div>
             </div>
        </div>
-    `).appendTo("body");
+    `).appendTo("form");
 
     // Fade in the popup
     fade_in("#popup-container");
