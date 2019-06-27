@@ -165,7 +165,11 @@ class Table{
         return send_ajax_form_request(this.request_url)
 
             // Always call the completion callback
-            .always(this.completion_callback)
+            .always(function(response){
+                table._finish_loading();
+                if(table.completion_callback)
+                    table.completion_callback(response);
+            })
 
             // If the request was successful...
             .done(function(response){
@@ -258,12 +262,7 @@ class Table{
 
         // Remove the loading overlay, show the table content, and
         // enable the buttons
-        finish_loading(`#${this.name}-table-content`,
-            `#${this.name}-table-body, #${this.name}-table-head`,
-            `#${this.name}-table-generate-button,
-            #${this.name}-table-download-button,
-            #${this.name}-table-previous-button,
-            #${this.name}-table-next-button`);
+        this._finish_loading();
     }
 
 
@@ -473,5 +472,20 @@ class Table{
         // Set the selected cell input
         $(`input[name="${this.name}_table_selected_column"]`)
             .val(this.selected_column_id);
+    }
+
+
+    /**
+     * Remove the loading overlay, show the table content, and
+     *      enable the buttons
+     * @private
+     */
+    _finish_loading(){
+        finish_loading(`#${this.name}-table-content`,
+            `#${this.name}-table-body, #${this.name}-table-head`,
+            `#${this.name}-table-generate-button,
+            #${this.name}-table-download-button,
+            #${this.name}-table-previous-button,
+            #${this.name}-table-next-button`);
     }
 }
