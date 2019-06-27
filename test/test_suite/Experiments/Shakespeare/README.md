@@ -64,7 +64,7 @@ Steps
     (a) Comparison Documet - Select Henry_VI
     
     Generate Similarity Rankings
-    Compare your results with the .png in the ResultsToExpect/ directory.
+    Compare your results with the .csv in the ResultsToExpect/ directory.
 (4) ANALYZE - Dendrogram
 
     (a) Use the following metrics:
@@ -81,4 +81,5 @@ Steps
     Generate K-Means Result
     Compare your results with the .png in the ResultsToExpect/ directory.
 
+ms - June 27, 2019
 mjl - May 20, 2019

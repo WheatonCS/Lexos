@@ -67,9 +67,9 @@ Results: ResultFiles_2_numbered
 7. Click "Apply"
 
 8. You should now have 5 documents, each a segment of the original containing 100
- characters each, except the last one which is shorter.
+ characters each, except the last one which is larger.
 
-Results: ResultFiles_3_numbered_large.txt
+Results: ResultFiles_3_numbered_large
 
 ## Test file: 4_randomCharacters.txt
 
