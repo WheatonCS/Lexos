@@ -120,8 +120,6 @@ function create_radio_options_popup(title, radio_buttons_name,
 function display_radio_options_popup(title,
     radio_buttons_name, set_option, options, values, callback){
 
-    console.log(set_option);
-
     // If no values were provided, set them to the options
     if(values.length !== options.length) values = options;
 
