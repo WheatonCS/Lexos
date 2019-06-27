@@ -20,6 +20,9 @@ $(function(){
 
     // Initialize the walkthrough
     initialize_walkthrough(walkthrough);
+
+    // Disable Active Documents Button
+    $("#active-documents-text").addClass("disabled");
 });
 
 
