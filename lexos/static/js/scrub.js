@@ -124,13 +124,25 @@ function create_tag_options_popup(response){
         // "Replacement" input, otherwise disable it
         $(`input[name="${formatted_tag}_action"]`).change(function(){
             let input_element = row_element.find(`input[type="text"]`);
-            if($(this).val() === "replace-element")
+            if($(this).val() === "Replace Element")
                 input_element.removeClass("disabled");
             else input_element.addClass("disabled");
         });
 
+        // Convert prop to button name
+        let button_name
+        if (tag[1] === "Remove Tag")
+            button_name = "remove-tag"
+        else if (tag[1] === "Remove Element")
+            button_name = "remove-element"
+        else if (tag[1] === "Replace Element")
+            button_name = "replace-element"
+        else if (tag[1] === "Leave Alone")
+            button_name = "leave-alone"
+
+
         // Check the appropriate option
-        row_element.find(`#${formatted_tag}-${tag[1]}-button`)
+        row_element.find(`#${formatted_tag}-${button_name}-button`)
             .prop("checked", true).change();
     }
 
