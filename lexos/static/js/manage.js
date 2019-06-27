@@ -21,7 +21,7 @@ $(function(){
     // Initialize the walkthrough
     initialize_walkthrough(walkthrough);
 
-    // Disable Active Documents Button
+    // Disable the "Active Documents" button
     $("#active-documents-text").addClass("disabled");
 });
 
