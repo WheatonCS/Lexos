@@ -1,5 +1,6 @@
-/* Main section */
-#main-section {
+/* Minimum width */
+#main-section,
+.popup-container {
     min-width: 140rem;
 }
 
