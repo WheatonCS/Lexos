@@ -68,7 +68,7 @@
 }
 
 .introjs-bullets ul li a {
-    background-color: var(--text-color);
+    background-color: var(--background-color);
     transition: background-color .2s;
 }
 
