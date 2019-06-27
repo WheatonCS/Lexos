@@ -300,6 +300,11 @@ function walkthrough(){
             position: "top",
         },
         {
+            element: "#help-button",
+            intro: `For a more in-depth look at this page, visit the Help section.`,
+            position: "bottom"
+        },
+        {
             element: "#navbar-right",
             intro: `Once you're satisfied with your cut documents, you can
                 move on to other pages in Prepare, Visualize, or Analyze.`,
