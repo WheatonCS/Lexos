@@ -193,5 +193,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

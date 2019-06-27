@@ -22,6 +22,11 @@
     <link rel="stylesheet" type="text/css" href="static/css/helpers/intro-js.css">
 
     <!-- Core Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/point.js"></script>
+    <script type="text/javascript" src="static/js/helpers/manage-table-selection-box.js"></script>
+    <script type="text/javascript" src="static/js/helpers/manage-table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/manage-table.css"/>
+
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
     <script type="text/javascript" src="static/js/helpers/utility.js"></script>
@@ -97,7 +102,7 @@
 
         <!-- Right -->
         <div class="right-justified">
-            <a href="/manage">Active Documents</a>
+            <h3 id="active-documents-text" class="clickable-text">Active Documents</h3>
             <h3>: </h3>
             <h3 id="active-document-count">{{ active_document_count }}</h3>
         </div>

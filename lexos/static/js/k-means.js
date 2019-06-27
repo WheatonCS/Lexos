@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_inputs);
+
     // Display the loading overlay on the "K-Means" section
     start_loading("#graph-container");
 
@@ -43,7 +46,7 @@ function initialize(){
     $("#generate-button").click(function(){
 
         // Validate the inputs
-        if(!validate_k_means_inputs() || !validate_analyze_inputs()) return;
+        if(!validate_inputs(true)) return;
 
         // Remove any existing Plotly graphs
         remove_graphs();
@@ -99,35 +102,43 @@ function send_k_means_result_request(){
  * Validates the inputs in the "Options" and "Advanced" sections.
  * @return {boolean}: Whether the inputs are valid.
  */
-function validate_k_means_inputs(){
+function validate_inputs(show_error = false){
+
+    // Remove any existing errors and error highlights
+    remove_highlights();
+    if(show_error) remove_errors();
 
     // "Clusters"
+    let valid = true;
     if(!validate_number($("#clusters-input").val(), 1, active_document_count)){
-        error("Invalid number of clusters.", "#clusters-input");
-        return false;
+        error_highlight("#clusters-input");
+        if(show_error) error("Invalid number of clusters.");
+        valid = false;
     }
 
     // "Maximum Iterations"
     if(!validate_number($("#maximum-iterations-input").val(), 1)){
-        error("Invalid number of maximum iterations.",
-            "#maximum-iterations-input");
-        return false;
+        error_highlight("#maximum-iterations-input");
+        if(show_error) error("Invalid number of maximum iterations.");
+        valid = false;
     }
 
     // "Different Centroids"
     if(!validate_number($("#different-centroids-input").val(), 1)){
-        error("Invalid number of different centroids.",
-            "#different-centroids-input");
-        return false;
+        error_highlight("#different-centroids-input");
+        if(show_error) error("Invalid number of different centroids.");
+        valid = false;
     }
 
     // "Relative Tolerance"
     if(!validate_number($("#relative-tolerance-input").val(), 0)){
-        error("Invalid relative tolerance.", "#relative-tolerance-input");
-        return false;
+        error_highlight("#relative-tolerance-input");
+        if(show_error) error("Invalid relative tolerance.");
+        valid = false;
     }
 
-    return true;
+    if(!validate_analyze_inputs(show_error, false)) valid = false;
+    return valid;
 }
 
 
@@ -220,5 +231,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

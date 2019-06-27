@@ -31,8 +31,7 @@ form {
 /* Cut settings */
 #cut-settings-grid {
     display: grid;
-    grid-template-columns: 1fr .85fr .7fr;
-    align-content: center;
+    grid-auto-flow: column;
     height: 5rem;
 }
 

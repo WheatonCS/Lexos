@@ -1,5 +1,8 @@
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_analyze_inputs);
+
     // Display the loading overlay on the "Dendrogram" section
     start_loading("#graph-container");
 
@@ -46,7 +49,7 @@ function initialize(){
     $("#generate-button").click(function(){
 
         // Validate the inputs
-        if(!validate_analyze_inputs()) return;
+        if(!validate_analyze_inputs(true)) return;
 
         // Remove any existing Plotly graphs
         remove_graphs();
@@ -130,5 +133,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

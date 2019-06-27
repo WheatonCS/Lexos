@@ -5,11 +5,6 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="static/js/helpers/point.js"></script>
-    <script type="text/javascript" src="static/js/helpers/selection-box.js"></script>
-
-
     <!-- Page JS and CSS -->
     <script type="text/javascript" src="static/js/manage.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/manage.css"/>
@@ -20,23 +15,7 @@
 {% block content %}
 
     <!-- Table -->
-    <div id="table" class="section">
-
-        <!-- Table head -->
-        <div id="table-head">
-            <h3 class="table-cell" id="active">Active</h3>
-            <h3 class="table-cell" id="hashtag">#</h3>
-            <h3 class="table-cell" id="document">Document</h3>
-            <h3 class="table-cell" id="class">Class</h3>
-            <h3 class="table-cell" id="source">Source</h3>
-            <h3 class="table-cell" id="excerpt">Excerpt</h3>
-            <a id="download-button" class="disabled right-justified button" href="manage/download">Download Selected</a>
-            <span id="manage-tooltip-button" class="tooltip-button">?</span>
-        </div>
-
-        <!-- Table body -->
-        <div id="table-body" class="firefox-hidden-scrollbar"></div>
-    </div>
+    <div id="manage-table" class="section"></div>
 
      <!-- Context menu -->
     <div id="context-menu">
@@ -52,8 +31,5 @@
         <h3 id="select-all-button" class="clickable-text">Activate All</h3>
         <h3 id="deselect-all-button" class="clickable-text">Deactivate All</h3>
     </div>
-
-    <!-- Selection box -->
-    <div id="selection-box"></div>
 
 {% endblock %}

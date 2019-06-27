@@ -70,12 +70,12 @@ function create_tag_options_popup(response){
 
     // Create the popup
     create_ok_popup("Tag Options");
-    let popup_content_element = $("#popup-content");
+    let popup_content_element = $("#tag-options-popup .popup-content");
 
     // If there are no tags, display "No Tags" text and return
-    let popup_ok_button_element = $("#popup-ok-button");
+    let popup_ok_button_element = $("#tag-options-popup .popup-ok-button");
     if(!tags.length){
-        add_text_overlay("#popup-content", "No Tags");
+        add_text_overlay("#tag-options-popup .popup-content", "No Tags");
         popup_ok_button_element.click(close_popup);
         return;
     }
@@ -382,5 +382,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

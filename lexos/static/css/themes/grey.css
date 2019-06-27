@@ -18,10 +18,8 @@
     --highlight-color-light: #DEDEDE;
 
     /* Secondary highlight */
-    --secondary-highlight-color: #b7bfc7;
-    --secondary-highlight-color-light: #EFF1F7;
-    --secondary-highlight-color-dark: #C3D7E7;
-
+    --secondary-highlight-color: #181818;
+    --secondary-highlight-color-light: #F3F3F3;
 
     /* Error */
     --error-button-hover-color: #B4263C;
@@ -43,6 +41,6 @@ a:hover {
 }
 
 /* Selection box */
-#selection-box {
+#manage-table-selection-box {
     background-color: var(--foreground-color);
 }

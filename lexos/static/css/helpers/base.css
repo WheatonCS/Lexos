@@ -54,10 +54,6 @@ b {
     color: var(--text-color);
 }
 
-::placeholder {
-    color: var(--error-color);
-    opacity: 1;
-}
 
 /* Main Elements */
 *,
@@ -220,10 +216,11 @@ form {
 #navbar-right > #help-button{
     cursor: pointer;
     color: var(--secondary-highlight-color);
+    transition: opacity .2s;
 }
 
 #navbar-right > #help-button:hover{
-    color: var(--secondary-highlight-color-dark);
+    opacity: .6;
 }
 
 
@@ -295,7 +292,7 @@ footer {
 /* Text input */
 input[type="text"] {
     height: 3rem;
-    width: 6rem;
+    width: 7rem;
     padding: 0 1.3rem .1rem 1.3rem;
     border-radius: 3rem;
     outline: none;
@@ -335,13 +332,9 @@ span > input[type="text"] {
     margin-bottom: 0;
 }
 
-textarea::-webkit-input-placeholder {
-    color: var(--text-color);
-    opacity: .5;
-}
-
-textarea::-moz-placeholder {
-    color: var(--text-color);
+textarea::placeholder,
+input::placeholder{
+    color: inherit;
     opacity: .5;
 }
 

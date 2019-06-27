@@ -1,6 +1,5 @@
 /* Main section */
-#main-section,
-#popup-container {
+#main-section {
     min-width: 140rem;
 }
 
@@ -89,11 +88,7 @@ form {
 
 
 /* Tags popup */
-#popup {
-    max-width: 104rem;
-}
-
-#popup-content {
+#tag-options-popup .popup-content {
     overflow-y: hidden;
 }
 
