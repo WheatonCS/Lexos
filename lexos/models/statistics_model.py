@@ -196,13 +196,13 @@ class StatsModel(BaseModel):
         # with sizes that are not in the major 95% range.
         file_manager = load_file_manager()
         anomaly_se_small = [
-            file_manager.get_active_files()[file_id].label
+            file_manager.get_previews_of_all()[file_id]["label"]
             for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
         ]
 
         anomaly_se_large = [
-            file_manager.get_active_files()[file_id].label
+            file_manager.get_previews_of_all()[file_id]["label"]
             for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
         ]
@@ -214,13 +214,13 @@ class StatsModel(BaseModel):
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr_small = list(set(
-            file_manager.get_active_files()[file_id].label
+            file_manager.get_previews_of_all()[file_id]["label"]
             for file_id in active_file_ids
             if file_sizes[file_id] < first_quartile - 1.5 * iqr
         ))
 
         anomaly_iqr_large = list(set(
-            file_manager.get_active_files()[file_id].label
+            file_manager.get_previews_of_all()[file_id]["label"]
             for file_id in active_file_ids
             if file_sizes[file_id] > third_quartile + 1.5 * iqr
         ))
