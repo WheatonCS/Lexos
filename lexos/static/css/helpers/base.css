@@ -588,17 +588,16 @@ label input[type="checkbox"]:checked + span:after {
     justify-content: center;
     width: 2rem;
     height: 2rem;
-    margin-left: .5rem;
     font-size: 1.3rem;
     transition: color .2s, background-color .2s;
     color: var(--text-color);
     border-radius: 50%;
-    border: .25rem solid var(--button-border-color);
+    border: .20rem solid var(--button-border-color);
     background-color: var(--foreground-color);
+    margin: 0 0 2rem .5rem;
 }
 
 .navbar-tooltip-button:hover {
-    border-radius: 50%;
     color: var(--foreground-color);
     background-color: var(--button-border-color);
 }
