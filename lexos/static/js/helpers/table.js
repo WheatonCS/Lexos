@@ -344,7 +344,7 @@ class Table{
         // If the table needs a button, create the button section
         let button_section_element;
         if(this.download_button || this.generate_button || this.tooltip)
-            button_section_element = $(`<div class="lexos-table-buttons"></div>`)
+            button_section_element = $(`<div id="table-button-section" class="lexos-table-buttons"></div>`)
                 .appendTo(table_top_element);
 
         // If the table needs a generate button, create one
