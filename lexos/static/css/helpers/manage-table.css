@@ -1,3 +1,9 @@
+/* Popup */
+#manage-popup .popup {
+    min-width: 120rem;
+}
+
+
 /* Table */
 #manage-table-head {
     display: grid;
