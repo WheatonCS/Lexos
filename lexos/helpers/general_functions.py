@@ -190,19 +190,19 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     :param functions: a list of functions to apply to input_string
     :return: striped text
     """
-    striped_text = ''
+    stripped_text = ''
     tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
     tags = re.findall(tag_pattern, input_string)
     contents = re.split(tag_pattern, input_string)
     for i in range(len(tags)):
         for function_to_apply in functions:
             contents[i] = function_to_apply(contents[i])
-        striped_text += contents[i]
-        striped_text += tags[i]
+        stripped_text += contents[i]
+        stripped_text += tags[i]
     for function_to_apply in functions:
         contents[-1] = function_to_apply(contents[-1])
-    striped_text += contents[-1]
-    return striped_text
+    stripped_text += contents[-1]
+    return stripped_text
 
 
 def apply_function_no_tags(input_string: str, functions: list) -> str:
@@ -212,12 +212,12 @@ def apply_function_no_tags(input_string: str, functions: list) -> str:
     :param functions: a list of functions to apply to input_string
     :return: striped text
     """
-    striped_text = ''
+    stripped_text = ''
     contents = input_string
     for function_to_apply in functions:
         contents = function_to_apply(contents)
-    striped_text += contents
-    return striped_text
+    stripped_text += contents
+    return stripped_text
 
 
 def _try_decode_bytes_(raw_bytes: bytes) -> str:
