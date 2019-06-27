@@ -20,6 +20,9 @@ $(function(){
 
     // Initialize the walkthrough
     initialize_walkthrough(walkthrough);
+
+    // Disable Active Documents Button
+    $("#active-documents-text").addClass("disabled");
 });
 
 
@@ -169,7 +172,6 @@ function delete_document(){
 function merge_selected(){
 
     let selected_document_ids = get_selected_document_ids();
-    console.log(selected_document_ids);
     let first_selected_document =
         get_manage_document(selected_document_ids[0]);
 

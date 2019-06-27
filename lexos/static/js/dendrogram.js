@@ -13,8 +13,7 @@ $(function(){
     // If the "Orientation" button is pressed, display a radio options popup
     $("#orientation-button").click(function(){
         create_radio_options_popup("Orientation", "orientation",
-            "#orientation-button", "#orientation-input",
-            [["left", "Left"],  ["bottom", "Bottom"]]);
+            "#orientation-button", "#orientation-input", ["Left",  "Bottom"]);
     });
 
     // Create the dendrogram and initialize the "Generate" button
