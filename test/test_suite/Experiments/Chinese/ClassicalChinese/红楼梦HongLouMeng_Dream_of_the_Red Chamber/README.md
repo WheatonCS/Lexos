@@ -54,7 +54,7 @@ Steps:
     (c) Go back to manage and deselect all documents except Late40Chapters
     (d) Cut the Late40Chapters using these settings:
         - Set Cut Mode to "Segments"
-        - Set "Number of Segments" to 8
+        - Set "Number of Segments" to 4
         - Click Apply
     (e) Go back to manage and select all of the documents that were cut (everything except the original documents)
     
@@ -101,5 +101,6 @@ Attribution Problem of Dream of the Red Chamber. July 18, 2013.
 (http://dh2013.unl.edu/abstracts/ab-162.html)
 
 
+ms - June 27, 2019
 mjl - May 20, 2019
 jg - June 30, 2014
