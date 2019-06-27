@@ -355,6 +355,11 @@ function walkthrough(){
             position: "top"
         },
         {
+            element: "#help-button",
+            intro: `For a more in-depth look at this page, visit the Help section.`,
+            position: "bottom"
+        },
+        {
             element: "#manage-button",
             intro: `This concludes the Upload walkthrough! When you have
                 finished uploading documents, try visiting the Manage page.

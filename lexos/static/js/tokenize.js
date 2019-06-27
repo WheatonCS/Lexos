@@ -129,6 +129,11 @@ function walkthrough(){
             position: "top",
         },
         {
+            element: "#help-button",
+            intro: `For a more in-depth look at this page, visit the Help section.`,
+            position: "bottom"
+        },
+        {
             intro: `This concludes the Tokenize walkthrough!`,
             position: "top",
         }

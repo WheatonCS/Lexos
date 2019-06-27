@@ -313,8 +313,7 @@ function walkthrough(){
         },
         {
             element: "#help-button",
-            intro: `Check our Help section for more advice on the Manage
-                page.`,
+            intro: `For a more in-depth look at this page, visit the Help section.`,
             position: "bottom"
         },
         {
