@@ -59,5 +59,6 @@ def get_bct_result():
     # Cache all the options.
     session_manager.cache_bct_option()
     session_manager.cache_analysis_option()
+    from lexos.views.phylotree_view import get_phylotree
     # Get the bootstrap consensus tree result.
-    return BCTModel().get_bootstrap_consensus_tree_plot_decoded()
+    return get_phylotree(BCTModel().get_newick_consensus_tree())
