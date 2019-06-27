@@ -228,9 +228,12 @@ function initialize_manage_table_tooltips(){
  *      and re-enables the "Download" button.
  * @param {string} url: The URL to send the request to.
  * @param {object} payload: The JSON payload to send.
+ * @param {boolean} update_active_count: Whether to update the number of
+ *      active documents.
  * @returns {jqXHR}: The jQuery request object.
  */
-function send_manage_table_request(url, payload = ""){
+function send_manage_table_request(
+    url, payload = "", update_active_count = true){
 
     // Disable the download button
     disable("#manage-table-download-button");
@@ -245,6 +248,9 @@ function send_manage_table_request(url, payload = ""){
 
     // If the request is successful...
     .done(function(){
+
+        // Update the number of active documents if desired
+        if(!update_active_count) return;
         update_active_document_count()
             .done(function(response){
 

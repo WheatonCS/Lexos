@@ -22,7 +22,7 @@ $(function(){
     initialize_walkthrough(walkthrough);
 
     // Disable the "Active Documents" button
-    $("#active-documents-text").addClass("disabled");
+    $("#active-documents-text").css("pointer-events", "none");
 });
 
 

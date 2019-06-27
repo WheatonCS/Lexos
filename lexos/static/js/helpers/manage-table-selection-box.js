@@ -170,7 +170,7 @@ function apply_manage_table_selection(event){
     });
 
     // Send requests to apply the selection to the modified documents
-    send_manage_table_request("deactivate", deselected_ids)
+    send_manage_table_request("deactivate", deselected_ids, false)
 
         // If the request was successful, send the activate request
         .done(function(){
