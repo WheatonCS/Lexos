@@ -308,7 +308,8 @@ def simple_vectorizer(content: str, token_type: str, token_size: int):
         analyzer=token_type,
         ngram_range=(
             token_size,
-            token_size))
+            token_size),
+        token_pattern=r"(?u)\b\w+\b")
     dtm = vectorizer.fit_transform(content)  # a sparse matrix
     vocab = vectorizer.get_feature_names()  # a list
     dtm = dtm.toarray()  # convert to a regular array
