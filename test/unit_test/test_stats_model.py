@@ -20,8 +20,8 @@ test_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1],
 test_option_one = StatsTestOptions(
     token_type_str="Tokens",
     doc_term_matrix=test_dtm_one,
-    front_end_option=test_front_end_option_one,
-    id_temp_label_map=test_id_temp_table_one)
+    front_end_option=test_front_end_option_one)
+
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_document_statistics()
@@ -48,8 +48,8 @@ test_stats_front_end_option_two = \
 test_option_two = StatsTestOptions(
     token_type_str="Characters",
     doc_term_matrix=test_dtm_two,
-    front_end_option=test_stats_front_end_option_two,
-    id_temp_label_map=test_id_temp_table_two)
+    front_end_option=test_stats_front_end_option_two)
+
 test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
 test_file_result_two = test_stats_model_two.get_document_statistics()
@@ -75,8 +75,7 @@ test_stats_front_end_option_anomaly = \
 test_option_anomaly = \
     StatsTestOptions(token_type_str="Characters",
                      doc_term_matrix=test_dtm_anomaly,
-                     front_end_option=test_stats_front_end_option_anomaly,
-                     id_temp_label_map=test_id_temp_table_anomaly)
+                     front_end_option=test_stats_front_end_option_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
 test_file_result_anomaly = test_stats_model_anomaly.get_document_statistics()
@@ -151,8 +150,7 @@ test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[],
 test_option_empty = \
     StatsTestOptions(token_type_str="Tokens",
                      doc_term_matrix=test_dtm_empty,
-                     front_end_option=test_stats_front_end_option_empty,
-                     id_temp_label_map=test_id_temp_table_empty)
+                     front_end_option=test_stats_front_end_option_empty)
 test_stats_model_empty = StatsModel(test_options=test_option_empty)
 
 

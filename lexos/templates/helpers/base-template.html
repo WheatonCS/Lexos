@@ -22,6 +22,11 @@
     <link rel="stylesheet" type="text/css" href="static/css/helpers/intro-js.css">
 
     <!-- Core Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/point.js"></script>
+    <script type="text/javascript" src="static/js/helpers/manage-table-selection-box.js"></script>
+    <script type="text/javascript" src="static/js/helpers/manage-table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/manage-table.css"/>
+
     <script type="text/javascript" src="static/js/helpers/base.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
     <script type="text/javascript" src="static/js/helpers/utility.js"></script>
@@ -33,7 +38,7 @@
     {% block head %}{% endblock %}
 
     <!-- Theme -->
-    <link rel="stylesheet" type="text/css" href="static/css/themes/{{ theme }}.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/themes/{{ theme.replace(' ', '-').lower() }}.css"/>
 </head>
 
 
@@ -48,7 +53,7 @@
                  onmouseout="this.src='static/images/lexos_dragon.png'">
             <h1 id="lexos-text">{L}exos</h1>
             <h1 id="page-title">{% block title %}{% endblock %}</h1>
-            <span id="navbar-walkthrough-button" class="left-justified tooltip-button">?</span>
+            <span id="navbar-walkthrough-button" class="left-justified tooltip-button"><i>i</i></span>
         </div>
 
         <div id="navbar-right" class="right-justified">
@@ -91,13 +96,13 @@
         <a href="http://www.neh.gov/" target="_blank"><img id="neh-logo" src="static/images/neh.png"></a>
 
         <div>
-            <h3>Lexos v4 © 2019 </h3>
+            <h3>Lexos v4.0b © 2019 </h3>
             <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank">Wheaton Lexomics</a>
         </div>
 
         <!-- Right -->
         <div class="right-justified">
-            <a href="/manage">Active Documents</a>
+            <h3 id="active-documents-text" class="clickable-text">Active Documents</h3>
             <h3>: </h3>
             <h3 id="active-document-count">{{ active_document_count }}</h3>
         </div>

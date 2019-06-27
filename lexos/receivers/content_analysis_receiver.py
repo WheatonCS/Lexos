@@ -53,7 +53,7 @@ class ContentAnalysisReceiver(BaseReceiver):
                                      toggle_all_value=options[5].value,
                                      sort_column=int(options[6].value),
                                      sort_ascending=bool(
-                                         options[7].value == "ascending"))
+                                         options[7].value == "Ascending"))
 
 
 class Option(object):

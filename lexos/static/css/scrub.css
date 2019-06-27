@@ -1,6 +1,6 @@
-/* Main section */
+/* Minimum width */
 #main-section,
-#popup-container {
+.popup-container {
     min-width: 140rem;
 }
 
@@ -89,11 +89,7 @@ form {
 
 
 /* Tags popup */
-#popup {
-    max-width: 104rem;
-}
-
-#popup-content {
+#tag-options-popup .popup-content {
     overflow-y: hidden;
 }
 
@@ -140,4 +136,5 @@ form {
 .tag-table-row > input {
     width: 25rem;
     margin: 0;
+    transition: opacity .2s;
 }

@@ -196,12 +196,14 @@ function display_results(response){
     }
 
     // Create the overview table
+    overview_table.csv = response["overview-table-csv"];
     overview_table.display(response["overview-table-body"],
-        response["overview-table-head"], response["overview-table-csv"]);
+        response["overview-table-head"]);
 
     // Create the corpus table
+    corpus_table.csv = response["corpus-table-csv"];
     corpus_table.display(response["corpus-table-body"],
-        response["corpus-table-head"], response["corpus-table-csv"]);
+        response["corpus-table-head"]);
 
     // Create the document tables
     $(`<div id="document-tables-grid"></div>`).appendTo("#documents-body");
@@ -297,5 +299,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

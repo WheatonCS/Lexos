@@ -93,20 +93,26 @@ function save_graph(format){
     let default_height = Math.round(graph_container_element.height());
 
     // Create a popup prompting for the resolution
-    create_ok_popup(`Save as ${format.toUpperCase()}`);
+    let popup_container_element =
+        create_ok_popup(`Save as ${format.toUpperCase()}`);
+
     $(`
         <div id="save-graph-popup-content">
             <div><h3>Width: </h3><input id="popup-width-input" value="${default_width}" type="text" spellcheck="false" autocomplete="off"></div>
             <div><h3>Height: </h3><input id="popup-height-input" value="${default_height}" type="text" spellcheck="false" autocomplete="off"> </div>
         </div>
-    `).appendTo("#popup-content");
+    `).appendTo(".popup-content");
 
     // If the popup's "OK" button is pressed...
-    $("#popup-ok-button").click(function(){
+    $(popup_container_element.find(".popup-ok-button")).click(function(){
 
         // Validate the inputs
-        let width = $("#popup-width-input").val();
-        let height = $("#popup-height-input").val();
+        let width = $(popup_container_element
+            .find("#popup-width-input")).val();
+
+        let height = $(popup_container_element
+            .find("#popup-height-input")).val();
+
         if(!validate_number(width, 1, 4096) ||
             !validate_number(height, 1, 4096)){
             error("Invalid resolution.");

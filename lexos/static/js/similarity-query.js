@@ -1,6 +1,9 @@
 let table;
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_analyze_inputs);
+
     // Display the loading overlay for the "Comparison Document" and
     // "Similarity Query" sections
     start_loading("#comparison-document-section-body, #table");
@@ -45,8 +48,9 @@ function initialize(response){
     }
 
     // Initialize the comparison document section
+    response = parse_json(response);
     initialize_comparison_document_section(
-        Object.entries(parse_json(response)));
+        Object.values(response), Object.keys(response));
 
     // Create the similarity table
     table.create();
@@ -55,21 +59,21 @@ function initialize(response){
 
 /**
  * Initializes the comparison document section.
- * @param {Object[]} documents: The documents to display as options.
+ * @param {string[]} document_names: The documents to display as options.
+ * @param {string[]} document_ids: The IDs of the documents.
  */
-function initialize_comparison_document_section(documents){
+function initialize_comparison_document_section(document_names, document_ids){
 
     // Enable the "Comparison Document" section's "Select" button
     let select_button_element = $("#select-button");
     select_button_element.removeClass("disabled");
 
     // Set the comparison document to the first document
-    let first_document = documents[0];
-    $("#comparison-document-input").val(first_document[0]);
+    $("#comparison-document-input").val(document_ids[0]);
 
     $(`<h3 id="comparison-document-text" class="hidden"></h3>`)
         .appendTo("#comparison-document-section-body")
-        .text(first_document[1]);
+        .text(document_names[0]);
 
     // Remove the loading overlay from the "Comparison Document" section and
     // fade in the comparison document name
@@ -81,7 +85,7 @@ function initialize_comparison_document_section(documents){
     select_button_element.click(function(){
         create_radio_options_popup("Comparison Document",
             "comparison-document", "#comparison-document-text",
-            "#comparison-document-input", documents
+            "#comparison-document-input", document_names, document_ids
         );
     });
 }
@@ -148,5 +152,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

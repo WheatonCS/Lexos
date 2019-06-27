@@ -1,6 +1,9 @@
 let csv;
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_inputs);
+
     // Add the loading overlays
     start_loading("#class-divisions-body, #top-words-body");
 
@@ -134,7 +137,7 @@ function send_top_words_request(){
 
     // If the inputs are invalid, display an error enable the "Generate"
     // button, and return
-    if(!validate_inputs() || !validate_analyze_inputs()){
+    if(!validate_inputs(true)){
         enable("#generate-button");
         return;
     }
@@ -186,16 +189,23 @@ function create_top_words_tables(tables){
  * Validates the inputs in the "Comparison Method" section.
  * @return {boolean}: Whether the inputs are valid.
  */
-function validate_inputs(){
-    let comparison_method = $(`input[name="comparison_method"]:checked`).val();
+function validate_inputs(show_error = false){
 
+    // Remove any existing errors and error highlights
+    remove_highlights();
+    if(show_error) remove_errors();
+
+    // Comparison method
+    let valid = true;
+    let comparison_method = $(`input[name="comparison_method"]:checked`).val();
     if((comparison_method === "Each Document to Other Classes" ||
         comparison_method === "Each Class to Other Classes") && single_class){
-        error("Invalid comparison method.");
-        return false;
+        if(show_error) error("Invalid comparison method.");
+        valid = false;
     }
 
-    return true;
+    if(!validate_analyze_inputs(show_error, false)) valid = false;
+    return valid;
 }
 
 
@@ -285,5 +295,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

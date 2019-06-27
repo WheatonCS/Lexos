@@ -44,7 +44,7 @@ class StatsReceiver(BaseReceiver):
 
         # Get the sort column
         sort_ascending = bool(self._front_end_data[
-            "statistics_table_sort_mode"] == "ascending")
+            "statistics_table_sort_mode"] == "Ascending")
 
         # Get the colors
         text_color = self._front_end_data.get("text_color")

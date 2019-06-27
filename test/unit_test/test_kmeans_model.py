@@ -35,7 +35,7 @@ front_end_option_voronoi = KMeansOption(
 test_option_voronoi = KMeansTestOptions(
     doc_term_matrix=voronoi_dtm,
     front_end_option=front_end_option_voronoi,
-    id_temp_label_map=id_temp_label_map_voronoi
+    # id_temp_label_map=id_temp_label_map_voronoi
 )
 
 # Create test Model and get test result.
@@ -44,7 +44,6 @@ test_voronoi = KMeansModel(test_options=test_option_voronoi)
 # noinspection PyProtectedMember
 voronoi_result = test_voronoi._get_voronoi_result()
 
-# NO LONGER A ".data" ATTRIBUTE
 # ------------------------- Test voronoi plot result --------------------------
 # class TestVoronoiPlot:
 #     # Get plot result.
@@ -102,7 +101,6 @@ test_two_d = KMeansModel(test_options=test_option_two_d)
 two_d_result = test_two_d._get_2d_scatter_result()
 
 
-# NO LONGER A ".data" ATTRIBUTE
 # ------------------------- Test 2D scatter result --------------------------
 # class Test2DScatter:
 #     plot = two_d_result
@@ -158,7 +156,6 @@ test_three_d = KMeansModel(test_options=test_option_three_d)
 # noinspection PyProtectedMember
 three_d_result = test_three_d._get_3d_scatter_result()
 
-# NO LONGER A ".data" ATTRIBUTE
 # ------------------------- 3D scatter test suite -----------------------------
 # class Test3DScatter:
 #     plot = three_d_result

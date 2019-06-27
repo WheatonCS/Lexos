@@ -19,16 +19,16 @@ class TestLeftOrientation:
 
         front_end_option=DendroOption(
             orientation='Left',
-            linkage_method='Average',
-            dist_metric='Euclidean'
+            linkage_method='average',
+            dist_metric='euclidean',
             text_color="blue"
-        ),
+        )
 
-        id_temp_label_map={
-            2: "This is a test",
-            4: "Cheng is handsome",
-            10: "I look so good!"
-        }
+        # id_temp_label_map={
+        #     2: "This is a test",
+        #     4: "Cheng is handsome",
+        #     10: "I look so good!"
+        # }
     )
 
     model = DendrogramModel(test_options=test_options)
@@ -68,16 +68,16 @@ class TestBottomOrientation:
 
         front_end_option=DendroOption(
             orientation='Bottom',
-            linkage_method='Average',
-            dist_metric='Euclidean'
+            linkage_method='average',
+            dist_metric='euclidean',
             text_color="blue"
-        ),
+        )
 
-        id_temp_label_map={
-            2: "This is also a test",
-            4: "Weiqi is handsome as well",
-            10: "I look so good too!"
-        }
+        # id_temp_label_map={
+        #     2: "This is also a test",
+        #     4: "Weiqi is handsome as well",
+        #     10: "I look so good too!"
+        # }
     )
 
     model = DendrogramModel(test_options=test_options)

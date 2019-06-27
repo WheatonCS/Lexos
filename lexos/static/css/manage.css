@@ -1,89 +1,11 @@
-/* Main section */
-#main-section {
+/* Minimum width */
+#main-section,
+.popup-container {
     min-width: 130rem;
 }
 
 #manage-tips {
     position: absolute;
-}
-
-/* Top section */
-#top-section {
-    display: grid;
-    height: 3rem;
-    grid-template-columns: 85% 15%;
-}
-
-#download-button {
-    margin: 1rem 1rem;
-}
-
-
-/* Table */
-#table-head {
-    display: grid;
-    grid-template-columns: 7% 7% 16% 14% 16% 21% 16% 3%;
-    align-items: center;
-    background-color: var(--foreground-color);
-    height: 5rem;
-}
-
-#table-head .table-cell {
-    color: var(--highlight-color);
-}
-
-.table-row {
-    display: grid;
-    grid-template-columns: 7% 7% 16% 14% 16% 40%;
-}
-
-#table-body {
-    height: calc(100% - 5rem);
-    overflow-y: auto;
-    overflow-y: overlay;
-}
-
-.table-row {
-    background-color: var(--foreground-color-alternate);
-    transition: background-color .2s;
-    margin-bottom: 1rem;
-}
-
-.selected-table-row {
-    background-color: var(--highlight-color-light);
-}
-
-.table-row:last-child {
-    margin-bottom: 0;
-}
-
-.table-cell {
-    padding: 1rem;
-    word-wrap: break-word;
-    overflow: hidden;
-    color: var(--text-color);
-}
-
-.table-cell:last-child {
-    padding-right: 2rem;
-}
-
-.active-indicator {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    margin: 1rem 1rem;
-}
-
-.table-row > .active-indicator {
-    border: .2rem solid var(--background-color);
-    background-color: var(--foreground-color-alternate);
-    transition: border .2s, background-color .2s;
-}
-
-.selected-table-row > .active-indicator {
-    border: .2rem solid var(--highlight-color);
-    background-color: var(--highlight-color);
 }
 
 
@@ -105,23 +27,14 @@
 }
 
 
-/* Selection box */
-#selection-box {
-    position: absolute;
-    pointer-events: none;
-    background-color: var(--highlight-color);
-    transition: opacity .2s;
-}
-
-
 /* Popups */
 input[type="text"] {
     width: 100%;
 }
 
-#popup #merge-name-input {
-    width: calc(100% + 6.4rem);
+#merge-name-input {
     margin-bottom: 1rem;
+    width: calc(100% - 6.5rem);
 }
 
 #merge-milestone-input {

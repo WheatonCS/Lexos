@@ -1,16 +1,18 @@
 /**
  * Initializes the selection box.
  */
-function initialize_selection_box(){
+function initialize_manage_table_selection_box(){
 
     // Disable the selection box if the mouse moves outside of the table body
-    $(window).mousemove(function(){ $("#selection-box").css("opacity", "0"); });
+    $(window).mousemove(function(){
+        $("#manage-table-selection-box").css("opacity", '0');
+    });
 
     // Call the "start_selection()" function on mouse button presses and the
     // "end_selection()" function on mouse releases
-    let manage_table_body = $("#table-body");
-    manage_table_body.mousedown(start_selection);
-    manage_table_body.mouseup(end_selection);
+    let manage_table_body = $("#manage-table-body");
+    manage_table_body.mousedown(start_manage_table_selection);
+    manage_table_body.mouseup(end_manage_table_selection);
 }
 
 
@@ -20,20 +22,21 @@ function initialize_selection_box(){
  */
 let start_mouse_position;
 let start_scroll_offset;
-function start_selection(event){
+function start_manage_table_selection(event){
 
     // If the event was a right-click...
     if(event.which !== 1) return;
 
     // Save the starting mouse position and scroll offset for later use
     start_mouse_position = get_mouse_position(event);
-    start_scroll_offset = get_scroll_offset("#table-body");
+    start_scroll_offset = get_scroll_offset("#manage-table-body");
 
     // Call "update_selection_box()" on mouse movement and scrolling
-    $("#table-body").on("mousemove scroll", update_selection_box);
+    $("#manage-table-body").on("mousemove scroll",
+        update_manage_table_selection_box);
 
     // Create the selection box element
-    let selection_box = $("#selection-box");
+    let selection_box = $("#manage-table-selection-box");
     selection_box.css({
         "width": "0",
         "height": "0",
@@ -48,14 +51,14 @@ function start_selection(event){
  * @param {Event} event: The event which triggered the callback.
  */
 let mouse_position;
-function update_selection_box(event){
+function update_manage_table_selection_box(event){
 
     // Stop mouse click events from propagating to elements outside the table
     // body, as those would cause the "end_selection()" function to be called
     event.stopPropagation();
 
     // Get the current scroll offset
-    let scroll_offset = get_scroll_offset("#table-body");
+    let scroll_offset = get_scroll_offset("#manage-table-body");
 
     // If the event is a mouse movement event, get the mouse position
     if(event.type === "mousemove") mouse_position = get_mouse_position(event);
@@ -69,7 +72,8 @@ function update_selection_box(event){
     let selection_start = point_subtract(start_mouse_position, scroll_delta);
 
     // Clamp the selection start position to be within the table body
-    let table_body_bounding_box = $("#table-body")[0].getBoundingClientRect();
+    let table_body_bounding_box =
+        $("#manage-table-body")[0].getBoundingClientRect();
 
     let table_body_position =
         {x: table_body_bounding_box.left, y: table_body_bounding_box.top};
@@ -86,7 +90,7 @@ function update_selection_box(event){
         selection_start, mouse_position), position);
 
     // Update the selection box's CSS
-    let selection_box = $("#selection-box");
+    let selection_box = $("#manage-table-selection-box");
     selection_box.css({"left": `${position.x}px`, "top": `${position.y}px`,
         "width": `${size.x}px`, "height": `${size.y}px`});
 }
@@ -96,7 +100,7 @@ function update_selection_box(event){
  * Checks that the selection is valid, applies the selection, and cleans up.
  * @param {Event} event: The mouseup event that triggered the callback.
  */
-function end_selection(event){
+function end_manage_table_selection(event){
 
     // If the event was a left mouse button release...
     if(event.which !== 1) return;
@@ -105,14 +109,15 @@ function end_selection(event){
     if(!start_mouse_position || start_mouse_position.x.isNaN) return;
 
     // Unbind the update callbacks
-    $(window).unbind("mousemove", update_selection_box);
-    $("#table-body").unbind("scroll", update_selection_box);
+    $(window).unbind("mousemove", update_manage_table_selection_box);
+    $("#manage-table-body").unbind("scroll",
+        update_manage_table_selection_box);
 
     // Hide the selection box element
-    $("#selection-box").css("opacity", "0");
+    $("#manage-table-selection-box").css("opacity", "0");
 
     // Select the appropriate documents
-    apply_selection(event);
+    apply_manage_table_selection(event);
 
     // Reset the starting position
     start_mouse_position = {x: NaN, y: NaN};
@@ -123,7 +128,7 @@ function end_selection(event){
  * Applies the selection.
  * @param {Event} event: The mouseup event that triggered the callback.
  */
-function apply_selection(event){
+function apply_manage_table_selection(event){
 
     // Get the current mouse position and scroll offset
     let mouse_position = get_mouse_position(event);
@@ -131,7 +136,7 @@ function apply_selection(event){
 
     // Get the selection's bounding box
     let scroll_delta = point_subtract(get_scroll_offset(
-        "#table-body"), start_scroll_offset);
+        "#manage-table-body"), start_scroll_offset);
     let selection_start = point_subtract(start_mouse_position, scroll_delta);
     let selection_minimum = point_minimum(selection_start, mouse_position);
     let selection_maximum = point_maximum(selection_start, mouse_position);
@@ -139,7 +144,7 @@ function apply_selection(event){
     // For each row in the table...
     let selected_ids = [];
     let deselected_ids = [];
-    $(".table-row").each(function(){
+    $(".manage-table-row").each(function(){
 
         // Get the row element's bounding box
         let bounding_box = $(this)[0].getBoundingClientRect();
@@ -153,23 +158,23 @@ function apply_selection(event){
             // Update the selection visual and the selected elements to either
             // the "selected" or "deselected" list
             let id = $(this).attr("id");
-            if($(this).hasClass("selected-table-row")){
-                $(this).removeClass("selected-table-row");
+            if($(this).hasClass("manage-table-selected-row")){
+                $(this).removeClass("manage-table-selected-row");
                 deselected_ids.push(id);
             }
             else {
-                $(this).addClass("selected-table-row");
+                $(this).addClass("manage-table-selected-row");
                 selected_ids.push(id);
             }
         }
     });
 
     // Send requests to apply the selection to the modified documents
-    send_request("deactivate", deselected_ids)
+    send_manage_table_request("deactivate", deselected_ids)
 
         // If the request was successful, send the activate request
         .done(function(){
-            send_request("activate", selected_ids)
+            send_manage_table_request("activate", selected_ids)
                 .fail("Failed to apply the document selection");
         })
 

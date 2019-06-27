@@ -67,20 +67,36 @@
   height: 9px;
 }
 
+.introjs-bullets ul li a {
+    background-color: var(--text-color);
+    transition: background-color .2s;
+}
+
 .introjs-bullets ul li a:hover {
-  background: #777;
+    background-color: var(--secondary-highlight-color);
 }
 
 .introjs-bullets ul li a.active {
-  background: #777;
+    background-color: var(--secondary-highlight-color);
 }
 
 
 /* Buttons */
+.introjs-tooltipbuttons {
+    display: grid;
+    grid-template-columns: 1fr min-content min-content;
+    grid-gap: 1rem;
+}
+
 .introjs-tooltiptext {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
     font-size: 1.6rem;
+}
+
+.introjs-prevbutton,
+.introjs-nextbutton {
+    justify-self: right;
 }
 
 .introjs-button,
@@ -94,7 +110,7 @@
     width: max-content;
     height: 3rem;
     box-sizing: border-box;
-    margin-top: 0;
+    margin: 0 !important;
     padding: .9rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
     border: .2rem solid var(--secondary-highlight-color);

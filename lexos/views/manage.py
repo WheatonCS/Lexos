@@ -57,7 +57,7 @@ def get_previews() -> str:
     preview_vals = {
         "id": file_id,
         "label": file_manager.files[file_id].label,
-        "previewText": file_manager.files[file_id].load_contents()}
+        "preview_text": file_manager.files[file_id].load_contents()}
 
     return json.dumps(preview_vals)
 

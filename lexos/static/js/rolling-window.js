@@ -1,14 +1,22 @@
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_inputs);
+
     // Display the loading overlay
     start_loading("#graph-container");
 
-    // If the "Calculation Type" is changed, set the appropriate "Search
-    // Terms" input
+    // If the "Calculation Type" is changed...
     $(`input[name="calculation_type"]`).change(function(){
 
-        if($(`input[name="calculation_method"]:checked`).val() === "average")
-            $("#search-terms-input-denominator").css("display", "none");
+        // If the calculation type is "Rolling Average", display hide the
+        // denominator input and clear its input
+        if($(`input[name="calculation_type"]:checked`).val()
+            === "Rolling Average")
+            $("#search-terms-input-denominator")
+                .css("display", "none").find("input").val('');
+
+        // Otherwise, display the denominator input
         else $("#search-terms-input-denominator").css("display", "inline");
     });
 
@@ -73,7 +81,7 @@ function single_active_document_check(response){
 function create_rolling_window(){
 
     // Validate the inputs
-    if(!validate_inputs()) return;
+    if(!validate_inputs(true)) return;
 
     // Remove any existing Plotly graphs
     remove_graphs();
@@ -120,29 +128,44 @@ function send_rolling_window_result_request(){
  * Validates the inputs.
  * @return {boolean}: Whether the inputs are valid.
  */
-function validate_inputs(){
+function validate_inputs(show_error = false){
+
+    // Remove any existing errors and error highlights
+    remove_highlights();
+    if(show_error) remove_errors();
 
     // "Search terms"
+    let valid = true;
     if($("#search-terms-input input").val().length < 1){
-        error("Please enter the search terms.", "#search-terms-input input");
-        return false;
+        error_highlight("#search-terms-input input");
+        if(show_error) error("Please enter the search terms.");
+        valid = false;
+    }
+
+    if($(`input[name="calculation_type"]:checked`).val() === "Rolling Ratio"
+        && $("#search-terms-input-denominator input").val().length < 1){
+        error_highlight("#search-terms-input-denominator input");
+        if(show_error) error("Please enter the search terms.");
+        valid = false;
     }
 
     // "Window"
     if(!validate_number($("#window-size-input").val(), 1)){
-        error("Invalid window size.", "#window-size-input");
-        return false;
+        error_highlight("#window-size-input");
+        if(show_error) error("Invalid window size.");
+        valid = false;
     }
 
     // "Milestone"
-    if($("#milestone-checkbox").is("checked") &&
+    if($("#milestone-checkbox").prop("checked") &&
         $("#milestone-input").val().length < 1){
-        error(`Please either enter a milestone or uncheck the milestone
-            option.`, "#milestone-input");
-        return false;
+        error_highlight("#milestone-input");
+        if(show_error) error(`Please either enter a milestone or uncheck the
+            milestone option.`);
+        valid = false;
     }
 
-    return true;
+    return valid;
 }
 
 
@@ -236,5 +259,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

@@ -63,7 +63,7 @@ GENERALSETTINGS = "theme"
 
 # General
 DEFAULT_GENERALSETTINGS_OPTIONS = {
-    "theme": "default"
+    "theme": "Default"
 }
 
 # Scrub
@@ -249,13 +249,13 @@ DEFAULT_ANALYZE_OPTIONS = {
 }
 
 DEFAULT_HIERARCHICAL_OPTIONS = {
-    "distance_metric": "Euclidean",
+    "distance_metric": "euclidean",
     "linkage_method": "Average",
     "orientation": "Bottom"
 }
 
 DEFAULT_BCT_OPTIONS = {
-    "distance_metric": "Euclidean",
+    "distance_metric": "euclidean",
     "linkage_method": "Average",
     "cutoff": 0.5,
     "iterations": 100,

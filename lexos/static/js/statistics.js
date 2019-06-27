@@ -1,6 +1,9 @@
 let table;
 $(function(){
 
+    // Initialize validation
+    initialize_validation(validate_analyze_inputs);
+
     // Display the loading overlays
     start_loading(`#graph-container, #table, #corpus-statistics,
         #standard-error-test, #interquartile-range-test`);
@@ -43,7 +46,7 @@ function initialize(){
     $("#generate-button").click(function(){
 
         // Validate the inputs
-        if(!validate_analyze_inputs()) return;
+        if(!validate_analyze_inputs(true)) return;
 
         // Remove any existing Plotly graphs
         remove_graphs();
@@ -232,5 +235,5 @@ function walkthrough(){
         }
     ]});
 
-    intro.start();
+    return intro;
 }

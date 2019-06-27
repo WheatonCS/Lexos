@@ -760,11 +760,76 @@ class RollingWindowsModel(BaseModel):
             data = result_plot + legend_helper + mile_stone_data
 
             # Return the plot with milestones as layout.
-            return go.Figure(data=data)
+            return go.Figure(
+                data=data,
+                layout=go.Layout(
+                    dragmode="pan",
+                    margin=dict(
+                        l=75,  # nopep8
+                        r=0,
+                        b=30,
+                        t=0,
+                        pad=4
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    font=dict(
+                        color=self._options.text_color,
+                        size=16
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
+                    )
+                )
+
+            )
 
         else:
             # Return just the plot.
-            return go.Figure(data=result_plot)
+            return go.Figure(
+                data=result_plot,
+                layout=go.Layout(
+                    dragmode="pan",
+                    margin=dict(
+                        l=75,  # nopep8
+                        r=0,
+                        b=30,
+                        t=0,
+                        pad=4
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    font=dict(
+                        color=self._options.text_color,
+                        size=16
+                    ),
+                    legend=dict(
+                        x=1.01,
+                        y=0
+                    )
+                )
+            )
 
     def _get_token_ratio_graph(self) -> go.Figure:
         """Get the plotly graph for the token ratio without milestone.
@@ -814,11 +879,21 @@ class RollingWindowsModel(BaseModel):
                 layout=go.Layout(
                     dragmode="pan",
                     margin=dict(
-                        l=60,  # nopep8
+                        l=75,  # nopep8
                         r=0,
                         b=30,
                         t=0,
                         pad=4
+                    ),
+                    xaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
+                    ),
+                    yaxis=dict(
+                        zeroline=False,
+                        showgrid=False,
+                        tickcolor=self._options.text_color
                     ),
                     paper_bgcolor="rgba(0, 0, 0, 0)",
                     plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -868,7 +943,7 @@ class RollingWindowsModel(BaseModel):
                 layout=go.Layout(
                     dragmode="pan",
                     margin=dict(
-                        l=60,  # nopep8
+                        l=75,  # nopep8
                         r=0,
                         b=30,
                         t=0,

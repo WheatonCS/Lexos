@@ -1,20 +1,10 @@
-tags
+tags tags tags
 
-foo fee
-fee fi
+ 
+ 
+<TITLE someAttribute="foobar-has-hyphens">a list of old english texts</TITLE>
 
-
-
-
-
-
-
-
-<THISONEWONTWORK>dictionary of old english</THISONEWONTWORK>
-
-
-
-
-
+ 
+ 
 
 end tags

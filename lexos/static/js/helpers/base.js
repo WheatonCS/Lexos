@@ -7,9 +7,10 @@ $("document").ready(function(){
     initialize_theme_popup();
 
     // If the "Help" button is pressed, toggle the help section visibility
+    // and throw a resize event
     $("#help-button").click(function(){
-        toggle_help_section()
-        update_graph_size()
+        toggle_help_section();
+        $(window).trigger('resize');
     });
 
     // If the navbar walkthrough button is pressed, begin the walkthrough
@@ -18,9 +19,22 @@ $("document").ready(function(){
     // Initialize the navbar dropdown menus
     initialize_dropdown_menus();
 
+    // If the "Active Documents" text is pressed, display the manage popup
+    $("#active-documents-text").click(create_manage_popup);
+
     // Fade in the page
     $("body").css({transition: '', opacity: '1'});
 });
+
+
+/**
+ * Creates the manage popup.
+ */
+function create_manage_popup(){
+
+    create_popup("Manage");
+    initialize_manage_table("#manage-popup .popup-content");
+}
 
 
 /**
@@ -33,15 +47,8 @@ function initialize_theme_popup(){
 
         // Create a theme popup
         display_radio_options_popup("Theme", "theme", theme,
-            [
-                ["default", "Default"],
-                ["grey", "Grey"],
-                ["grey-dark", "Grey Dark"],
-                ["mint", "Mint"],
-                ["mint-dark", "Mint Dark"],
-                ["solarized-light", "Solarized Light"],
-                ["solarized-dark", "Solarized Dark"]
-            ], set_theme);
+            ["Default", "Grey", "Grey Dark", "Mint", "Mint Dark",
+            "Solarized Light", "Solarized Dark"], [], set_theme);
     });
 }
 
@@ -224,7 +231,8 @@ function toggle_help_section(){
 
     help_visible = true;
     let help_content_element = $("#help-section-content");
-    help_content_element.load("/static/help"+window.location.pathname+"-help.html");
+    help_content_element.load(
+        "/static/help"+window.location.pathname+"-help.html");
 
     // Initialize the help section's buttons
     $("#glossary-button").click(function(){
@@ -236,7 +244,8 @@ function toggle_help_section(){
     });
 
     $("#page-help-button").click(function(){
-        help_content_element.load("/static/help"+window.location.pathname+"-help.html");
+        help_content_element.load(
+            "/static/help"+window.location.pathname+"-help.html");
     });
 
     $("#walkthrough-button").click(function(){
@@ -264,7 +273,7 @@ function close_help_section(){
  * Starts the walkthough.
  */
 function start_walkthrough(){
-    walkthrough_callback();
+    walkthrough_callback().start();
     $(".introjs-prevbutton").text("Back");
     $(".introjs-nextbutton").text("Next");
     $(".introjs-tooltip").css("opacity", "1");
@@ -273,10 +282,21 @@ function start_walkthrough(){
 
 /**
  * Binds the walkthrough callback.
- * @param {function} walkthrough: The walkthrough callback to bind.
+ * @param {function} callback: The walkthrough callback to bind.
  */
-function initialize_walkthrough(walkthrough){
-    walkthrough_callback = walkthrough;
+function initialize_walkthrough(callback){
+    walkthrough_callback = callback;
+}
+
+
+/**
+ * Binds the input validation callback.
+ * @param {function} callback
+ */
+function initialize_validation(callback){
+
+    callback();
+    $(document).on("keyup change", "input", function(){ callback(); });
 }
 
 

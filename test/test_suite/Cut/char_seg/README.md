@@ -46,7 +46,7 @@ Results: ResultFiles_1_alpha
 
 7. Click "Apply"
 
-8. You should now have 13 documents, each a segment of the original containing 3 characters each.
+8. You should now have 16 documents, each a segment of the original containing 3 characters each.
 
 Results: ResultFiles_2_numbered
 
