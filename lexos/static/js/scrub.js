@@ -25,7 +25,7 @@ $(function(){
             punctuation_options_element.removeClass("disabled");
         else punctuation_options_element.addClass("disabled");
     });
-    let tags_checkbox_element = $("#tags-checkbox");
+    let tags_checkbox_element = $("#scrub-tags-checkbox");
     tags_checkbox_element.click(function(){
         let tags_options_element = $("#scrub-tags-settings-button");
         if(tags_options_element.hasClass("disabled"))
@@ -129,17 +129,8 @@ function create_tag_options_popup(response){
             else input_element.addClass("disabled");
         });
 
-        // Convert prop to button name
-        let button_name
-        if (tag[1] === "Remove Tag")
-            button_name = "remove-tag"
-        else if (tag[1] === "Remove Element")
-            button_name = "remove-element"
-        else if (tag[1] === "Replace Element")
-            button_name = "replace-element"
-        else if (tag[1] === "Leave Alone")
-            button_name = "leave-alone"
-
+        // Get the button name
+        let button_name = get_id(tag[1]);
 
         // Check the appropriate option
         row_element.find(`#${formatted_tag}-${button_name}-button`)
