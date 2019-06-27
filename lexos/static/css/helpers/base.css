@@ -209,6 +209,7 @@ form {
     margin-bottom: 1.6rem;
     border-radius: 50%;
     border: .20rem solid var(--button-border-color);
+    color: var(--button-border-color);
     background-color: var(--foreground-color);
 }
 
@@ -565,14 +566,14 @@ label input[type="checkbox"]:checked + span:after {
     font-size: 1.3rem;
     border-radius: 50%;
     transition: color .2s, background-color .2s;
-    color: var(--button-border-color);
-    background-color: var(--foreground-color);
+    color: var(--secondary-highlight-color);
+    background-color: var(--secondary-highlight-color-light);
 }
 
 .tooltip-button:hover,
 .tooltip-button-active {
-    color: var(--foreground-color);
-    background-color: var(--button-border-color);
+    color: var(--secondary-highlight-color-light);
+    background-color: var(--secondary-highlight-color);
 }
 
 
