@@ -109,12 +109,7 @@ class TfTest:
             norm_option=NormOption(use_freq=True, use_tf_idf=True,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
-                                         mfw_lowest_rank=None),
-            id_temp_label_map={
-                0: "test_label_1",
-                2: "test_label_2",
-                3: "test_label_3"
-            }
+                                         mfw_lowest_rank=None)
         )
     )
 
