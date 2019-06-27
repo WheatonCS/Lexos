@@ -793,7 +793,7 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
 
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
-          white_space: bool, spaces: bool, tabs: bool, new_lines: bool,
+          spaces: bool, tabs: bool, new_lines: bool,
           opt_uploads: Dict[str, FileStorage], storage_options: List[str],
           storage_folder: str, previewing: bool = False) -> str:
     """Scrubs the text according to the specifications chosen by the user.
@@ -813,8 +813,6 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     :param amper: A boolean indicating whether to keep ampersands in the text.
     :param digits: A boolean indicating whether to remove digits from the text.
     :param tags: A boolean indicating whether Scrub Tags has been checked.
-    :param white_space: A boolean indicating whether white spaces should be
-        removed.
     :param spaces: A boolean indicating whether spaces should be removed.
     :param tabs: A boolean indicating whether tabs should be removed.
     :param new_lines: A boolean indicating whether newlines should be removed.
@@ -1042,12 +1040,21 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             return orig_text
 
     # apply all the functions and exclude tag
-    text = general_functions.apply_function_exclude_tags(
-        input_string=text, functions=[to_lower_function,
-                                      consolidation_function,
-                                      lemmatize_function,
-                                      get_remove_digits,
-                                      stop_keep_words_function,
-                                      total_removal_function])
+    if tags:
+        text = general_functions.apply_function_exclude_tags(
+            input_string=text, functions=[to_lower_function,
+                                          consolidation_function,
+                                          lemmatize_function,
+                                          get_remove_digits,
+                                          stop_keep_words_function,
+                                          total_removal_function])
+    else:
+        text = general_functions.apply_function_no_tags(
+            input_string=text, functions=[to_lower_function,
+                                          consolidation_function,
+                                          lemmatize_function,
+                                          get_remove_digits,
+                                          stop_keep_words_function,
+                                          total_removal_function])
 
     return text

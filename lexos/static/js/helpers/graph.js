@@ -108,10 +108,10 @@ function save_graph(format){
 
         // Validate the inputs
         let width = $(popup_container_element
-            .find(".popup-width-input")).val();
+            .find("#popup-width-input")).val();
 
         let height = $(popup_container_element
-            .find(".popup-height-input")).val();
+            .find("#popup-height-input")).val();
 
         if(!validate_number(width, 1, 4096) ||
             !validate_number(height, 1, 4096)){

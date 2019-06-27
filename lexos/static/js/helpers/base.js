@@ -47,15 +47,8 @@ function initialize_theme_popup(){
 
         // Create a theme popup
         display_radio_options_popup("Theme", "theme", theme,
-            [
-                ["default", "Default"],
-                ["grey", "Grey"],
-                ["grey-dark", "Grey Dark"],
-                ["mint", "Mint"],
-                ["mint-dark", "Mint Dark"],
-                ["solarized-light", "Solarized Light"],
-                ["solarized-dark", "Solarized Dark"]
-            ], set_theme);
+            ["Default", "Grey", "Grey Dark", "Mint", "Mint Dark",
+            "Solarized Light", "Solarized Dark"], [], set_theme);
     });
 }
 

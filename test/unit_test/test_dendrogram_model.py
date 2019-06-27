@@ -19,8 +19,8 @@ class TestLeftOrientation:
 
         front_end_option=DendroOption(
             orientation='Left',
-            linkage_method='Average',
-            dist_metric='Euclidean',
+            linkage_method='average',
+            dist_metric='euclidean',
             text_color="blue"
         )
 
@@ -68,8 +68,8 @@ class TestBottomOrientation:
 
         front_end_option=DendroOption(
             orientation='Bottom',
-            linkage_method='Average',
-            dist_metric='Euclidean',
+            linkage_method='average',
+            dist_metric='euclidean',
             text_color="blue"
         )
 

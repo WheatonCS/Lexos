@@ -10,20 +10,9 @@ function initialize_color_button(ok_callback){
 
         create_radio_options_popup(
             "Color", "color", "#color-button",
-            "#color-input", [
-                ["default", "Default"],
-                ["grey", "Grey"],
-                ["cherry-tree", "Cherry Tree"],
-                ["sunset", "Sunset"],
-                ["spring", "Spring"],
-                ["ocean", "Ocean"],
-                ["blue-lilac", "Blue Lilac"],
-                ["plum", "Plum"],
-                ["iridescent", "Iridescent"],
-                ["nebula", "Nebula"],
-                ["rainbow", "Rainbow"],
-                ["tie-dye", "Tie-Dye"]
-            ]);
+            "#color-input", ["Default", "Grey", "Cherry Tree", "Sunset",
+                "Spring", "Ocean", "Blue Lilac", "Plum", "Iridescent",
+                "Nebula", "Rainbow", "Tie-Dye"]);
 
         $("#color-popup .popup-ok-button").click(ok_callback);
     });
