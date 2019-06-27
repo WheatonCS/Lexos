@@ -25,6 +25,13 @@ $(function(){
             punctuation_options_element.removeClass("disabled");
         else punctuation_options_element.addClass("disabled");
     });
+    let tags_checkbox_element = $("#scrub-tags-checkbox");
+    tags_checkbox_element.click(function(){
+        let tags_options_element = $("#scrub-tags-settings-button");
+        if(tags_options_element.hasClass("disabled"))
+            tags_options_element.removeClass("disabled");
+        else tags_options_element.addClass("disabled");
+    });
 
     // Scrub the documents when the "Preview" and "Apply" buttons are pressed
     $("#preview-button").click(function(){ scrub("preview"); });
@@ -117,13 +124,16 @@ function create_tag_options_popup(response){
         // "Replacement" input, otherwise disable it
         $(`input[name="${formatted_tag}_action"]`).change(function(){
             let input_element = row_element.find(`input[type="text"]`);
-            if($(this).val() === "replace-element")
+            if($(this).val() === "Replace Element")
                 input_element.removeClass("disabled");
             else input_element.addClass("disabled");
         });
 
+        // Get the button name
+        let button_name = get_id(tag[1]);
+
         // Check the appropriate option
-        row_element.find(`#${formatted_tag}-${tag[1]}-button`)
+        row_element.find(`#${formatted_tag}-${button_name}-button`)
             .prop("checked", true).change();
     }
 
