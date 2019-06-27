@@ -1,6 +1,6 @@
 # Classical Chinese - 诗词歌赋The_Poems_And_Songs
 
-The Lexos tool can be used to help detect the authorship, contents, era, and 
+The Lexos tool can be used to help detect the authorship, contents, era and 
 genre in classical Chinese texts. Here we analyze several different texts written
 in different dynasties and authors, which includes the genres of Chuci (verses
 of Chu), Tangshi (poems from Tang Dynasty), Songci (lyrics from Song Dynasty), Yuanqu 
@@ -49,15 +49,15 @@ Steps:
 
     Apply Scrubbing
     
-(2) ANALYZE - Dendrogram:
+(2) ANALYZE - Clustering - Hierarchical Clustering:
 
-     (a) Use the following metrics:
-        - Distance Method: Euclidean (default)
-        - Linkage Method: Average (default)
-        - Orientation: Bottom
-     (b) Tokenize - By Characters
-          
-     Generate Dendrogram
+     (a) Use the default metrics:
+        Distance Method: Euclidean
+        Linkage Method: Average
+     (b) Choose Tokenize - 1 - gram, by Characters
+     (c) Choose Normalize - Proportional Counts
+     
+     Get Dendrogram
      Compare your result with the .png found in the ResultsToExpect/ directory.
 
 mjl - May 20, 2019

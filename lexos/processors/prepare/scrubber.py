@@ -12,6 +12,7 @@ from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
     REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFT_HAND_MESSAGE
+from lexos.helpers.exceptions import LexosException
 
 
 def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
@@ -22,9 +23,9 @@ def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
         mode mapped to their unicode versions.
     """
 
-    if char_set == "MUFI 3":
+    if char_set == "MUFI-3":
         filename = constants.MUFI_3_FILENAME
-    elif char_set == "MUFI 4":
+    elif char_set == "MUFI-4":
         filename = constants.MUFI_4_FILENAME
     else:
         raise ValueError
@@ -55,12 +56,12 @@ def handle_special_characters(text: str) -> str:
     :return: The text string, now containing unicode character equivalents.
     """
 
-    char_set = request.form['special_characters_preset']
+    char_set = request.form['entityrules']
 
-    if char_set == 'None':
+    if char_set == 'default':
         return text
 
-    elif char_set == 'Old English SGML':
+    elif char_set == 'doe-sgml':
         conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
                            '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę',
                            '&oe;': 'œ', '&amp;': '⁊', '&egrave;': 'è',
@@ -72,14 +73,14 @@ def handle_special_characters(text: str) -> str:
                            '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
                            '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
 
-    elif char_set == 'Early English HTML':
+    elif char_set == 'early-english-html':
         conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
                            '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
                            '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
                            '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
                            '&gt;': '>', '&#383;': 'ſ'}
 
-    elif char_set == 'MUFI 3' or char_set == 'MUFI 4':
+    elif char_set == 'MUFI-3' or char_set == 'MUFI-4':
         conversion_dict = get_special_char_dict_from_file(char_set=char_set)
 
     else:
@@ -114,17 +115,21 @@ def replacement_handler(text: str,
                          if token != ""]
 
     for replacement_line in replacement_lines:
-        assert replacement_line and replacement_line.count(':') == 1, \
-            NOT_ONE_REPLACEMENT_COLON_MESSAGE
+        if replacement_line and replacement_line.count(':') != 1:
+            raise LexosException(
+                NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
 
         # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
         replace_from_line, replace_to = replacement_line.split(':')
 
         # Not valid inputs -- ":word" or ":a"
-        assert replace_from_line != "", REPLACEMENT_NO_LEFT_HAND_MESSAGE
-
+        if replace_from_line == "":
+            raise LexosException(
+                REPLACEMENT_NO_LEFT_HAND_MESSAGE + replacement_line)
         # Not valid inputs -- "a:b,c" or "a,b:c,d"
-        assert ',' not in replace_to, REPLACEMENT_RIGHT_OPERAND_MESSAGE
+        if ',' in replace_to:
+            raise LexosException(
+                REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
 
         replacement_dict = {replace_from: replace_to
                             for replace_from in replace_from_line.split(",")
@@ -197,7 +202,7 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
     """
 
     # in GUI:  Remove Tag Only
-    if action == "Remove Tag":
+    if action == "remove-tag":
         # searching for variants this specific tag:  <tag> ...
         pattern = re.compile(
             r'<(?:' + tag + r'(?=\s)(?!(?:[^>"\']|"[^"]*"|\'[^\']*\')*?(?<=\s)'
@@ -208,7 +213,7 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         processed_text = re.sub(pattern, " ", orig_text)
 
     # in GUI:  Remove Element and All Its Contents
-    elif action == "Remove Element":
+    elif action == "remove-element":
         # <[whitespaces] TAG [SPACE attributes]> contents </[whitespaces]TAG>
         # as applied across newlines, (re.MULTILINE), on re.UNICODE,
         # and .* includes newlines (re.DOTALL)
@@ -219,7 +224,7 @@ def process_tag_replace_options(orig_text: str, tag: str, action: str,
         processed_text = re.sub(pattern, " ", orig_text)
 
     # in GUI:  Replace Element and Its Contents with Attribute Value
-    elif action == "Replace Element":
+    elif action == "replace-element":
         pattern = re.compile(
             r"<\s*" + re.escape(tag) + r".*?>.+?</\s*" + re.escape(tag) +
             ".*?>", re.MULTILINE | re.DOTALL | re.UNICODE)
@@ -471,16 +476,8 @@ def get_remove_digits(text: str) -> str:
     # unicode digits, this pattern will match:
     # 1) ***
     # 2) ***.***
-    unicode_digits = ""
-    for i in range(sys.maxunicode):
-        if unicodedata.category(chr(i)).startswith('N'):
-            unicode_digits = unicode_digits + chr(i)
-
-    pattern = re.compile(r"([+-]?[" + re.escape(unicode_digits) + r"])|((?<="
-                         + re.escape(unicode_digits) +
-                         r")[\u0027|\u002C|\u002E|\u00B7|"
-                         r"\u02D9|\u066B|\u066C|\u2396]["
-                         + re.escape(unicode_digits) + r"]+)", re.UNICODE)
+    pattern = re.compile(r"([+-]?\d+)|((?<=\d)[\u0027|\u002C|\u002E|\u00B7"
+                         r"|\u02D9|\u066B|\u066C|\u2396]\d+)", re.UNICODE)
     remove_digits = str(re.sub(pattern, r"", text))
 
     return remove_digits
@@ -758,10 +755,10 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         option text fields and files.
     """
 
-    file_strings = {'consolidations_file[]': '', 'lemmas_file[]': '',
-                    'special_characters_file[]': '', 'stop_words_file[]': '',
-                    'consolidations': '', 'lemmas': '',
-                    'special_characters': '', 'stop_words': ''}
+    file_strings = {'consfileselect[]': '', 'lemfileselect[]': '',
+                    'scfileselect[]': '', 'swfileselect[]': '',
+                    'manualconsolidations': '', 'manuallemmas': '',
+                    'manualspecialchars': '', 'manualstopwords': ''}
 
     for index, key in enumerate(sorted(opt_uploads)):
         if opt_uploads[key].filename:
@@ -772,21 +769,21 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
             file_strings[key] = load_scrub_optional_upload(
                 storage_folder, storage_filenames[index])
         else:
-            session['scrubbingoptions']['file_uploads'][key] = ''
+            session['scrubbingoptions']['optuploadnames'][key] = ''
             file_strings[key] = ""
 
     # Create an array of option strings:
     # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
     #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
 
-    all_options = [file_strings.get('consolidations_file[]'),
-                   file_strings.get('lemmas_file[]'),
-                   file_strings.get('special_characters_file[]'),
-                   file_strings.get('stop_words_file[]'),
-                   request.form['consolidations'],
-                   request.form['lemmas'],
-                   request.form['special_characters'],
-                   request.form['stop_words']]
+    all_options = [file_strings.get('consfileselect[]'),
+                   file_strings.get('lemfileselect[]'),
+                   file_strings.get('scfileselect[]'),
+                   file_strings.get('swfileselect[]'),
+                   request.form['manualconsolidations'],
+                   request.form['manuallemmas'],
+                   request.form['manualspecialchars'],
+                   request.form['manualstopwords']]
 
     return all_options
 
@@ -956,7 +953,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # -- 6. whitespace ------------------------------------------------------
 
-    if spaces or tabs or new_lines:
+    if white_space:
         remove_whitespace_map = get_remove_whitespace_map(
             spaces, tabs, new_lines)
     else:
@@ -1027,14 +1024,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         # if file_and_manual does not contain words there is no issue calling
         # remove_stopwords()
-        if request.form['stop_words_method'] == "Stop":
+        if request.form['sw_option'] == "stop":
             return remove_stopwords(
                 text=orig_text, removal_string=file_and_manual)
 
         # but all the text would be deleted if we called keep_words()
         # "\n" comes from "" + "\n" + ""
-        elif request.form['stop_words_method'] == "Keep" \
-                and file_and_manual != "\n":
+        elif request.form['sw_option'] == "keep" and file_and_manual != "\n":
             return keep_words(
                 text=orig_text, non_removal_string=file_and_manual)
 

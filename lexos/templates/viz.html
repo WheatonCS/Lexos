@@ -1,0 +1,115 @@
+{% extends "base_visualize.html" %}
+{% set active_page = 'viz' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_viz.js') }}?ver={{version}}"></script>
+<script>
+var dataset = {{ JSONObj|safe or {} }};
+var numActiveDocs = {{ numActiveDocs }};
+$(function() {
+	$("#allCheckBoxSelector").click(function() {
+		if (!$("#allCheckBoxSelector").is(":checked")) {
+			$("#viz").empty();
+			$(".minifilepreview").prop("checked", false);
+		}
+	});
+  // If there is data scroll down to the graph on page load
+  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+  // Handle the return to top links
+});
+</script>
+<style type="text/css">
+.node {cursor: pointer;}
+#viz {margin-top:-30px;padding-top:0;}
+</style>
+{% endblock %}
+
+{% block title %}BubbleViz{% endblock %}
+
+{% block options %}
+    <div id="status-prepare">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+           style="color: #0068AF;"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+
+<legend>BubbleViz Options</legend>
+<div class="col-md-6">
+	<legend style="width:250px;">Select Document(s)</legend>
+	{% if labels|len > 0 %}
+   		<label><input type="checkbox" id="allCheckBoxSelector">Toggle All</label><br/>
+	{%- endif %}
+	<div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; padding-left: 15px;">
+		<div id="vizcreateoptions">
+			<!-- Need to empty the segmentlist value if Toggle All is checked -->
+			{% for fileID, label in labels.items() %}
+			<div class="forCheckBox">
+				<label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
+					<input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist'] }} id="{{fileID}}_selector" value="{{fileID}}">
+				</label>
+			</div>
+			{%- endfor %}
+			{% if labels|len == 0 %}
+				<span id="no-labels">No Documents are Selected</span>
+			{%- endif %}
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<legend>Filtering Options</legend>
+		<label>Graph Size:
+			<input type="number"
+                   min="100"
+                   max="3000"
+                   step="100"
+                   style="width:65px;height:32px;"
+                   id="graphsize"
+                   name="graphsize"
+                   value="{{ session['bubblevisoption']['graphsize']}}"/>
+		</label>
+		<br/>
+		<label>Maximum Number of Terms:
+			<input type="number"
+                   min="1" id="maxwords"
+                   name="maxwords"
+                   style="width:85px;height:32px;"
+                   value="{{ session['bubblevisoption']['maxwords'] or '100' }}"/>
+		</label>
+		<br/>
+		<label>Minimum Term Length:
+			<input type="number"
+                   min="0"
+                   id="minlength"
+                   name="minlength"
+                   style="width:75px;height:32px;"
+                   value="{{ session['bubblevisoption']['minlength'] or '0' }}"/>
+		</label>
+</div>
+
+{% endblock %}
+
+{% block results %}
+{% if not JSONObj %}
+<h4 id="nosegments">Please select the document(s) for the graph.</h4>
+
+{% else %}
+<a id="svg-save" target="_blank" class="btn bttn bttn-action" role="button">Save as SVG</a>
+<a id="png-save" target="_blank" class="btn bttn bttn-action" role="button">Save as PNG</a>
+
+<a name="graph-anchor" id="graph-anchor"></a>
+<div id="viz"></div>
+<div class="row"></div>
+
+<!-- Canvg Used for Save to PNG -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/rgbcolor@^1/index.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/stackblur-canvas@^1/dist/stackblur.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
+<canvas id="svg-canvas" style="display:none;"></canvas>
+<img id="svg-img" style="display:none;"/>
+<!-- -->
+{% endif %}
+{% endblock %}
+
+{% block submit %}
+<input type="submit" class="bttn bttn-action" id="getviz" role="button" style="float: left; margin-right: 10px;" value="Get Graph"/>
+{% endblock %}

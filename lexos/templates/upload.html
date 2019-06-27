@@ -1,70 +1,66 @@
-{% extends "helpers/base-template.html" %}
+{% extends "base_manage.html" %}
+{% set active_page = 'upload' %}
 
-{% block title %}Upload{% endblock %}
-
-
-<!-- Head -->
 {% block head %}
-
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/upload.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/upload.css"/>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_upload.js') }}?ver={{version}}"></script>
 {% endblock %}
 
+{% block title %}Loader{% endblock %}
 
-<!-- Main content -->
-{% block content %}
+{% block options %}
+<fieldset>
+<div class="row">
+	<div class="col-md-12">
+		<legend>File Upload
+ 			<p class="file-spec"> Max. file size: {{ MAX_FILE_SIZE_INT }} {{ MAX_FILE_SIZE_UNITS}}B -- Formats Supported: .txt, .html, .xml, .sgml, and .lexos
+			<i class="fa fa-question-circle lexos-tooltip-trigger" style="margin-left:8px;cursor:pointer;font-size:18px;" data-html="true" data-toggle="tooltip" data-placement="right" data-container="body" title=""
+               data-original-title="Upload times may vary, depending on internet speeds. If the upload seems to hang, try uploading smaller files. If you are uploading many files,
+               try uploading them in small batches."></i>
+			</p>
+			{% if session['generalsettings']['beta_onbox'] %}
+				<p class="file-spec">Or use <a href="{{ url_for("upload.scrape") }}">web scraper</a> (beta test) instead.</p>
+			{% endif %}
+		</legend>
+	</div>
+</div>
+<div class="row">
+		<div class="col-md-2">
+			<div class="row">
+                <input type="hidden" id="MAX_FILE_SIZE_INT" name="MAX_FILE_SIZE_INT" value={{MAX_FILE_SIZE_INT}} />
+                <input type="hidden"  id="MAX_FILE_SIZE_UNITS" name="MAX_FILE_SIZE_UNITS" value={{MAX_FILE_SIZE_UNITS}} />
+				<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value={{MAX_FILE_SIZE}} />
+                <div class="inputWrapper">
 
-    <div id="top-section">
-
-        <!-- Upload section -->
-        <div id="upload-section" class="section">
-
-            <div class="vertical-splitter section-top">
-                <h3 class="title">Upload</h3>
-                <span id="upload-tooltip-button" class="right-justified tooltip-button">?</span>
-            </div>
-
-            <div class="borderless-section-body">
-                <span id="browse-button">Browse...</span>
-
-                <div id="drag-and-drop-section">
-                    <h3>Drag Files Here</h3>
+                    <input type="file" id="fileselect" name="fileselect[]" multiple="multiple"/>
                 </div>
-            </div>
-        </div>
 
-        <!-- Scrape section -->
-        <div id="scrape-section" class="section">
+				<button id="uploadbrowse" class="bttn" type="button"><i class="fa fa-folder-open-o"></i><span>Browse</span></button>
+			</div>
+			<div class="row">
+	 			<div class="progress-div">
+					<p id="progress">Ready For Files To Upload</p>
+					<div id="progress-bar"></div>
+				</div>
+			</div>
+		</div>
+        <!--This input tag is used to count the number of active files -->
+        <label><input id="counter" style="display:none" value="0" type="text"> </label>
+		<div class="col-md-10">
+			<div id="dragndrop">Or drop files here</div>
+		</div>
+</div>
+</fieldset>
+{% endblock %}
 
-            <div class="vertical-splitter section-top">
-                <h3 class="title">Scrape</h3>
-                <div class="right-justified">
-                    <span id="scrape-button" class="button">Scrape</span>
-                    <span id="scrape-tooltip-button" class="tooltip-button">?</span>
-                </div>
-            </div>
-
-            <div class="borderless-section-body">
-                <textarea id="scrape-input" spellcheck="false" placeholder="Enter URLs to scrape here."></textarea>
-            </div>
-        </div>
-    </div>
-
-    <!-- Upload list -->
-    <div id="upload-list" class="section">
-
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Upload List</h3>
-            <span id="upload-list-tooltip-button" class="right-justified tooltip-button">?</span>
-        </div>
-
-        <div class="section-body">
-            <div id="no-uploads-text" class="centerer"><h3>No Uploads</h3></div>
-            <div id="upload-previews-grid"></div>
-        </div>
-    </div>
-
-    <!-- Hidden elements -->
-    <input type="file" id="file-select-input" style="display:none" multiple/>
+{% block previews %}
+<div class="row">
+	<div class="col-md-12">
+		<script type="text/template" id="file-preview-template">
+			<div class="uploadedfilespreivewwrapper">
+				<legend class="file-name"></legend>
+				<span class="file-information">File Type: <span class="file-type"></span>; Size: <span class="file-size"></span> </span>
+			</div>
+		</script>
+	</div>
+</div>
 {% endblock %}

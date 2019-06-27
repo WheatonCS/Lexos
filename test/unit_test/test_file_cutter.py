@@ -11,7 +11,7 @@ class TestCutByCharacters:
         assert cut_by_characters(text="", seg_size=10, overlap=5,
                                  last_prop=1) == [""]
         assert cut_by_characters(text=" ", seg_size=100, overlap=0,
-                                 last_prop=0.5) == [" "]
+                                 last_prop=0.5) == [""]
 
     def test_string_seg_size(self):
         assert cut_by_characters(text="ABABABAB", seg_size=10, overlap=0,
@@ -408,7 +408,7 @@ class TestCutterFunction:
                    overlap="0",
                    last_prop_percent="100%") == ["   \n", "test"]
         assert cut(text=" test", cutting_value="2", cutting_type="letters",
-                   overlap="0", last_prop_percent="100%") == [" t", "est"]
+                   overlap="0", last_prop_percent="100%") == ["te", "st"]
         assert cut(text="test", cutting_value="1", cutting_type="milestone",
                    overlap="0", last_prop_percent="100%") == ["test"]
         assert cut(text="test", cutting_value="test", cutting_type="milestone",

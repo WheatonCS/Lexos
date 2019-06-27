@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block section_head %}{% endblock %}
+
+{% block content %}
+    <div id="status-visualize">
+        <i class="fa fa-spinner fa-spin fa-2x fa-fw"
+           style="color: #0068AF;"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="row" id="visualize-options">
+        <div class="col-md-12">{% block options %}{% endblock %}</div>
+    </div>
+    <div class="row" id="visualize-submit">
+        {% block submit %}
+            <div class="col-md-12"></div>{% endblock %}
+    </div>
+    <div class="row" id="visualize-results" style="margin-top:20px;">
+        <div class="col-md-12">{% block results %}{% endblock %}</div>
+    </div>
+{% endblock %}

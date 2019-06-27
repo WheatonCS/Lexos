@@ -1,0 +1,217 @@
+{% extends "base_visualize.html" %}
+{% set active_page = 'wordcloud' %}
+
+{% block head %}
+  {% if config['LOCAL_MODE'] == True %}
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/d3-cloud/build/d3.layout.cloud.min.js') }}?ver={{version}}"></script>
+  {% else %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.4/d3.layout.cloud.min.js"></script>
+  {% endif %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts_wordcloud.js') }}?ver={{version}}"></script>
+
+ <!-- Latest compiled and minified DataTables CSS and JS -->
+  {% if config['LOCAL_MODE'] == True %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-bs/css/dataTables.bootstrap.css') }}?ver={{version}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='node_modules/datatables.net-select-bs/css/select.bootstrap.css') }}?ver={{version}}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net/js/jquery.dataTables.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-select/js/dataTables.select.js') }}?ver={{version}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
+  {% else %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/u/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.12,b-1.2.1,b-html5-1.2.1,b-print-1.2.1,fc-3.2.2,fh-3.1.2,se-1.2.0/datatables.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='node_modules/datatables.net-bs/js/dataTables.bootstrap.js') }}?ver={{version}}"></script>
+  {% endif %}
+
+<script type="text/javascript" charset="utf8" src="{{ url_for('static', filename='js/natural.js') }}?ver={{version}}"></script>
+
+<script>
+  var dataset = {{ JSONObj|safe or {} }};
+  var numActiveDocs = {{ numActiveDocs }};
+
+$(document).ready( function () {
+  // If there is data scroll down to the graph on page load
+  document.getElementById("graph-anchor").scrollIntoView({block: "start", behavior: "smooth"});
+  // Handle the return to top links
+});
+</script>
+{% endblock %}
+
+{% block title %}Word Cloud{% endblock %}
+
+{% block options %}
+{#<div class="row">#}
+{#  <div class="col-md-12">#}
+{#    <legend>Word Cloud Options</legend>#}
+{#  </div>#}
+{#</div>#}
+{% if JSONObj %}
+<script>
+$(document).ready(function() {
+  var data = [{% for row in columnValues %}{{ row|safe }}{%- if not loop.last %},{% endif %}{% endfor %}];
+  // DataTables needs the utf-8 decoded separately
+  for (var i = 0; i < data.length; i++) {
+    data[i][0] = decodeURIComponent(escape(data[i][0]));
+  }
+  var config = {
+    columns: [{ title: "Term" }, { title: "Count" }],
+    data: data
+  }
+  $('#termcounts').DataTable(config);
+});
+</script>
+<style type="text/css">
+#statsBtn { float: right; }
+#statsTable { display: none; padding: 3px 0; width: 100%; overflow: auto; }
+#termcounts { width: 99%; }
+</style>
+
+<!-- Word Count Dialog -->
+  <div class="modal fade" id="word-count-modal" tabindex="-1" role="dialog" aria-labelledby="word-count-modal-label">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content panel-primary">
+        <div class="modal-header panel-heading">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="word-count-modal-label">Term Counts</h4>
+        </div>
+        <div class="modal-body" style="max-height:600px;overflow-y:auto;">
+          <table id="termcounts" class="table-condensed table-striped table-bordered" style="width:100%;"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+<!-- May want to switch dropdown script to http://davidstutz.github.io/bootstrap-multiselect/ -->
+<!-- <div id="vizcreateoptions">
+	<select id="segmentlist" name="segmentlist" multiple="multiple">
+		{% for fileID, fileLabel in labels.items() %}
+		<option value="{{ fileID }}" {{ 'selected' if fileID|unicode in session['cloudoption']['segmentlist']}}>{{ fileLabel }}</option>
+		{% endfor %}
+	</select>
+	<span class="viz-tips">Large graphs can take a while to render.</span>
+</div> -->
+<div class="row">
+  <div class="col-md-12">
+    <legend style="width: 490px;">Select Document(s) <span style="display:inline;font-size:16px;">(Large graphs can take a while to render.)</span></legend>
+  </div>
+<!--   <div class="col-md-1">
+    {% if JSONObj %}
+    <div id="statsBtn">
+      <a class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Word Counts</a>
+    </div>
+    {% endif %}
+  </div> -->
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    {% if labels|len > 0 %}
+      <label style="position: relative; top: -8px; width: 200px;"><input type="checkbox" id="allCheckBoxSelector">Toggle All</label>
+      <br/>
+    {%- endif %}
+    <div id="vizoptionscontainer" name="segmentlist" style="overflow:auto; width: 300px; float: left; max-height: 125px; min-height: 2em; position: relative; top: -8px">
+      <div id="vizcreateoptions" style="padding-left:15px;">
+        {% for fileID, label in labels.items() %}
+          <div class="forCheckBox">
+            <label style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{label}}
+              <input type="checkbox" name="segmentlist" class="minifilepreview" {{ 'checked' if fileID|unicode in session['cloudoption']['segmentlist']}} id="{{fileID}}_selector" value="{{fileID}}">
+            </label>
+          </div>
+        {%- endfor %}
+        {% if labels|len == 0 %}
+          <span id="no-labels">No Documents are Selected</span>
+      {%- endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block results %}
+
+{% if not JSONObj %}
+<h4 id="nosegments">Please select the document(s) for the word cloud.</h4>
+{% else %}
+
+<a name="graph-anchor" id="graph-anchor"></a>
+<div id="vis" style="text-align:center;"></div>
+
+  <p id="status"></p>
+
+<div id="rule">
+  <div class="row">
+    <div class="col-md-6">
+      <label>To modify the word cloud, click on it after changing the options below.</label>
+    </div>
+{#    <div class="col-md-6">#}
+{#      <a style="float:right;" class="btn bttn bttn-action" id="viewstats" data-toggle="modal" data-target="#word-count-modal">View Counts Table</a>#}
+{#    </div>#}
+  </div>
+  <hr>
+</div>
+
+<div id="rightsideoptions">
+  <p><label for="maxwords">Number of words:</label> <input type="number" value="50" min="1" id="maxwords">
+  <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
+  <p><label>Download:</label>
+    <a id="download-svg" target="_blank" class="btn btn-info" role="button">SVG</a>
+    <a id="download-png" target="_blank" class="btn btn-info" role="button">PNG</a>
+  </p>
+</div>
+
+<div id="leftsideoptions">
+  <p><label>Spiral:</label>
+    <label for="archimedean"><input type="radio" name="spiral" id="archimedean" value="archimedean" checked="checked"> Archimedean</label>
+    <label for="rectangular"><input type="radio" name="spiral" id="rectangular" value="rectangular"> Rectangular</label>
+  </p>
+  <p><label for="scale">Scale:</label>
+    <label for="scale-log"><input type="radio" name="scale" id="scale-log" value="log" checked="checked"> log n</label>
+    <label for="scale-sqrt"><input type="radio" name="scale" id="scale-sqrt" value="sqrt"> √n</label>
+    <label for="scale-linear"><input type="radio" name="scale" id="scale-linear" value="linear"> n</label>
+  </p>
+  <p><label for="font">Font:</label> <input type="text" id="font" value="Impact"></p>
+</div>
+
+<div id="angles">
+  <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count">orientations</label>
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90" style="width:70px;"> &deg;
+    <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90"> &deg;
+  </p>
+</div>
+</div>
+
+<hr>
+
+<p id="wordcloudcopyright"><a href="http://www.jasondavies.com/wordcloud/about/" target="_blank">How the Word Cloud Generator Works</a>.
+<p id="copyright_tag">Copyright &copy; <a href="http://www.jasondavies.com/" target="_blank">Jason Davies</a> 2012.<br />
+Modified slightly to use Lexos data.</p>
+</form>
+
+<!-- Leave this script at the bottom so the cloud is computed/generated/shown AFTER the page loads and shows -->
+
+{% endif %}
+
+<!-- Canvg Used for Save to PNG -->
+{% if config['LOCAL_MODE'] == True %}
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/rgbcolor.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/canvg.min.js') }}?ver={{version}}"></script>
+{% else %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/canvg/1.4.0/rgbcolor.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='node_modules/canvg/StackBlur.js') }}?ver={{version}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/canvg/1.4.0/canvg.min.js"></script>
+{% endif %}
+
+<canvas id="svg-canvas" style="display:none;"></canvas>
+<img id="svg-img" style="display:none;"/>
+<!-- -->
+
+{% endblock %}
+
+{% block submit %}
+    <input class="bttn bttn-action" id="getviz" type="submit" value="Get Graph"/>
+    {# Remove this for now since this button does not function well. #}
+    {#{% if JSONObj %}#}
+        {#<input class="bttn bttn-action" id="viewstats" type="button" value="View Counts Table" data-toggle="modal" data-target="#word-count-modal"/>#}
+    {#{% endif %}#}
+{% endblock %}

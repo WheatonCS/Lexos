@@ -14,4 +14,3 @@ colorlover
 matplotlib
 scikit-learn
 beautifulsoup4
-regex
