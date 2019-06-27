@@ -56,7 +56,7 @@ Steps:
     Generate Dendrogram
     Compare your result with the .png found in the ResultsToExpect/ directory.
 
-
+ms - June 26, 2019
 mjl - May 20, 2019
 mdl - June 28, 2016
 

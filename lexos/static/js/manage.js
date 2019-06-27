@@ -22,7 +22,7 @@ $(function(){
     initialize_walkthrough(walkthrough);
 
     // Disable the "Active Documents" button
-    $("#active-documents-text").addClass("disabled");
+    $("#active-documents-text").css("pointer-events", "none");
 });
 
 
@@ -291,7 +291,7 @@ function walkthrough(){
         {
             element: "#active",
             intro: `Active documents will have a blue highlight to them. You
-                can deactivate documents by clicking while holding down "D".`,
+                can activate and deactivate documents by clicking.`,
             position: "bottom"
         },
         {
@@ -310,6 +310,12 @@ function walkthrough(){
             element: "#excerpt",
             intro: `Excerpt will give you a preview of your document.`,
             position: "bottom"
+        },
+        {
+            intro: `On any other page, you can activate and deactivate
+                documents by clicking "Active Documents" in the lower right
+                corner.`,
+            position: "top",
         },
         {
             element: "#help-button",

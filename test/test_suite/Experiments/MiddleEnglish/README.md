@@ -106,6 +106,6 @@ Steps:
     
     Compare your result with the .png in the ResultsToExpect/ directory.
 
-
+ms - June 27, 2019
 mjl - May 20, 2019
 sk - July 1, 2013

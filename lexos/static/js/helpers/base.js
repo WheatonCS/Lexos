@@ -22,9 +22,28 @@ $("document").ready(function(){
     // If the "Active Documents" text is pressed, display the manage popup
     $("#active-documents-text").click(create_manage_popup);
 
+    // Disable enter key form submission
+    disable_enter_key_form_submission();
+
     // Fade in the page
     $("body").css({transition: '', opacity: '1'});
 });
+
+
+/**
+ * Disables form submission when the "Enter" key is pressed.
+ */
+function disable_enter_key_form_submission(){
+
+    $("body").on("DOMNodeInserted", "input", function(){
+        $("input").keydown(function(event){
+            if(event.keyCode === 13){
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+}
 
 
 /**
@@ -34,6 +53,9 @@ function create_manage_popup(){
 
     create_popup("Manage");
     initialize_manage_table("#manage-popup .popup-content");
+
+    $(`#manage-popup, #manage-popup .popup-close-button`)
+        .click(function(){ location.reload(); });
 }
 
 
