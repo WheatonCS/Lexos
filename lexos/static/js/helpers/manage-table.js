@@ -10,12 +10,12 @@ function initialize_manage_table(parent_query, enable_context_menu = false){
     $(`
         <!-- Manage table head -->
         <div id="manage-table-head">
-            <h3 class="manage-table-cell">Active</h3>
+            <h3 id="active" class="manage-table-cell">Active</h3>
             <h3 class="manage-table-cell">#</h3>
-            <h3 class="manage-table-cell">Document</h3>
-            <h3 class="manage-table-cell">Class</h3>
+            <h3 id="document" class="manage-table-cell">Document</h3>
+            <h3 id="class" class="manage-table-cell">Class</h3>
             <h3 class="manage-table-cell">Source</h3>
-            <h3 class="manage-table-cell">Excerpt</h3>
+            <h3 id="excerpt" class="manage-table-cell">Excerpt</h3>
             <a id="manage-table-download-button" class="disabled right-justified button" href="manage/download">Download</a>
             <span id="manage-table-tooltip-button" class="tooltip-button">?</span>
         </div>
@@ -137,7 +137,7 @@ function append_manage_table_row(id, row_number, active, label, class_name,
 function toggle_manage_table_selection(event, pressed){
 
     // If a popup is being displayed, return
-    if($(".popup").length) return;
+    if($(".popup-container:not(#manage-popup)").length) return;
 
     // Check whether all documents are selected
     let all_selected = true;
@@ -228,9 +228,12 @@ function initialize_manage_table_tooltips(){
  *      and re-enables the "Download" button.
  * @param {string} url: The URL to send the request to.
  * @param {object} payload: The JSON payload to send.
+ * @param {boolean} update_active_count: Whether to update the number of
+ *      active documents.
  * @returns {jqXHR}: The jQuery request object.
  */
-function send_manage_table_request(url, payload = ""){
+function send_manage_table_request(
+    url, payload = "", update_active_count = true){
 
     // Disable the download button
     disable("#manage-table-download-button");
@@ -245,6 +248,9 @@ function send_manage_table_request(url, payload = ""){
 
     // If the request is successful...
     .done(function(){
+
+        // Update the number of active documents if desired
+        if(!update_active_count) return;
         update_active_document_count()
             .done(function(response){
 

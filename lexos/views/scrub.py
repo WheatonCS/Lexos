@@ -1,8 +1,10 @@
 import json
-from flask import request, session, Blueprint
+
+from flask import request, session, Blueprint, make_response
+from natsort import humansorted
+
 from lexos.helpers import constants as constants
 from lexos.managers import utility, session_manager as session_manager
-from natsort import humansorted
 from lexos.views.base import render
 
 scrub_blueprint = Blueprint("scrub", __name__)
@@ -31,7 +33,17 @@ def download() -> str:
     """
 
     file_manager = utility.load_file_manager()
-    return file_manager.zip_active_files("scrubbed-documents.zip")
+
+    response = make_response(file_manager.zip_active_files(
+        "scrubbed_documents.zip"))
+
+    # Disable download caching
+    response.headers["Cache-Control"] = \
+        "max-age=0, no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+
+    return response
 
 
 @scrub_blueprint.route("/scrub/execute", methods=["POST"])
