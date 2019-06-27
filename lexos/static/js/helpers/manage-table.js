@@ -10,12 +10,12 @@ function initialize_manage_table(parent_query, enable_context_menu = false){
     $(`
         <!-- Manage table head -->
         <div id="manage-table-head">
-            <h3 class="manage-table-cell">Active</h3>
+            <h3 id="active" class="manage-table-cell">Active</h3>
             <h3 class="manage-table-cell">#</h3>
-            <h3 class="manage-table-cell">Document</h3>
-            <h3 class="manage-table-cell">Class</h3>
+            <h3 id="document" class="manage-table-cell">Document</h3>
+            <h3 id="class" class="manage-table-cell">Class</h3>
             <h3 class="manage-table-cell">Source</h3>
-            <h3 class="manage-table-cell">Excerpt</h3>
+            <h3 id="excerpt" class="manage-table-cell">Excerpt</h3>
             <a id="manage-table-download-button" class="disabled right-justified button" href="manage/download">Download</a>
             <span id="manage-table-tooltip-button" class="tooltip-button">?</span>
         </div>
