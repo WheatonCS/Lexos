@@ -1,0 +1,48 @@
+{% extends "helpers/analyze-template.html" %}
+
+{% block title %}Similarity Query{% endblock %}
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/similarity-query.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/similarity-query.css"/>
+{% endblock %}
+
+
+<!-- Options -->
+{% block options %}
+
+    <!-- Comparison document -->
+    <div id="comparison-document-section" class="section">
+        <div class="vertical-splitter section-top">
+            <div>
+                <h3 class="title">Comparison Document</h3>
+            </div>
+
+            <div class="right-justified">
+                <span id="select-button" class="disabled button">Select</span>
+                <span id="comparison-document-tooltip-button" class="tooltip-button">?</span>
+            </div>
+        </div>
+        <div id="comparison-document-section-body" class="section-body"></div>
+    </div>
+{% endblock %}
+
+
+<!-- Results -->
+{% block results %}
+    <div id="table-section" class="section"></div>
+{% endblock %}
+
+
+<!-- Hidden elements -->
+{% block hidden_elements %}
+    <input id="comparison-document-input" name="comparison_document" value="" type="hidden">
+{% endblock %}
+

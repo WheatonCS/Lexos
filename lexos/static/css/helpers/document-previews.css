@@ -1,0 +1,38 @@
+/* Document previews section */
+#document-previews-top {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    margin: 1rem;
+}
+
+#document-previews-buttons {
+    justify-self: right;
+}
+
+#document-previews-buttons > .button {
+    margin-right: .5rem;
+}
+
+
+/* Previews */
+#previews {
+    height: calc(100% - 5rem);
+    overflow-y: auto;
+}
+
+.preview {
+    overflow-wrap: break-word;
+    background-color: var(--foreground-color-alternate);
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.preview:last-child {
+    margin-bottom: 0;
+}
+
+.preview-name {
+    display: block;
+    color: var(--highlight-color);
+    margin-bottom: 1rem;
+}

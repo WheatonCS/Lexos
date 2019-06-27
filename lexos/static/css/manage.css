@@ -1,0 +1,45 @@
+/* Main section */
+#main-section {
+    min-width: 130rem;
+}
+
+#manage-tips {
+    position: absolute;
+}
+
+
+/* Context Menu */
+#context-menu {
+    z-index: 1;
+    position: absolute;
+    display: grid;
+    row-gap: 1rem;
+    top: 0;
+    left: 0;
+    width: 21rem;
+    padding: 1rem;
+    background-color: var(--foreground-color);
+    border: 1rem solid var(--highlight-color-light);
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+}
+
+
+/* Popups */
+input[type="text"] {
+    width: 100%;
+}
+
+#merge-name-input {
+    margin-bottom: 1rem;
+    width: calc(100% - 6.5rem);
+}
+
+#merge-milestone-input {
+    width: calc(100% - 11.9rem);
+}
+
+#document-preview-text {
+    white-space: pre-line;
+}

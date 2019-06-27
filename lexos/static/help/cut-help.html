@@ -1,0 +1,96 @@
+<!-- The Cut Tool -->
+
+<h3 class="help-section-title">The Cut Tool</h3>
+
+<h3 class="help-section-paragraph">
+    The Lexos Cutter tool allows you to divide your texts into multiple segments.
+    Each segment is treated by Lexos exactly like any other document. You can
+    perform individual scrubbing actions, create word clouds of segments, and
+    cluster the segments of documents just as you would any other text.
+</h3>
+
+<!-- Usage -->
+<h3 class="help-section-title">Usage</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Preview and Apply</b></li>
+    <h3 class="help-section-paragraph">
+        Once you have selected the cutting options you desire, click the "Preview"
+        button to see the results in the preview window. If you are happy with
+        the cuts performed by Lexos, click the "Apply" button. This will create
+        new documents with the same name as the original followed by a number
+        for each segment. Each segment will appear as a new document in the
+        <a href="/manage"><u>Manage</u></a> tool. Once cutting is applied, the
+        original document is de-activated and the new segments are made active documents.
+    </h3>
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        You can download the new document segments by clicking the "Download"
+        button. This is handy when you want to work with your segmented documents
+        again but you want to begin by uploading your previous segmented documents,
+        thus allowing you to skip the cutting step.
+    </h3>
+</ul>
+
+<!-- Options -->
+<h3 class="help-section-title">Options</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Tokens</b></li>
+    <h3 class="help-section-paragraph">
+        This option allows you to designate the number of tokens you wish to be
+        included in each segment.
+        <ul class="help-section-list">
+            <li>"Segment Size" refers to the number of 1-gram "word" tokens you
+                wish to include in each segment (e.g. segment size = 100 will cut
+                the document into segments with 100 words each). The cutter tool
+                treats space-separated strings of characters as tokens.</li>
+            <li>"Overlap" allows you to specify an area of overlap between each
+                segment (e.g. segment size 100 and overlap of 10, segment 1 will
+                end at word #100 and segment 2 will start at #90).</li>
+            <li>"Merge Threshold" handles the situation where the final segment
+                does not reach the number of tokens in the designated segment size.
+                The default setting is if the final segment is 50% or more of
+                the length of the designated segment size. If the final segment
+                is too small, the entire final segment will be attached to the
+                previous one.</li>
+        </ul>
+    </h3>
+
+    <li><b>Characters</b></li>
+    <h3 class="help-section-paragraph">
+        This option allows you to designate the number of characters you wish
+        to be included in each segment. The other options function the same as
+        in the "Tokens" cutting mode, but using characters as the unit.
+    </h3>
+
+    <li><b>Lines</b></li>
+    <h3 class="help-section-paragraph">
+        If your document contains line breaks, this option allows you to designate
+        the number of lines is contained in each segment. "Segment Size" refers
+        to the number of lines after which Lexos will perform a cut. All other
+        options function the same as in the "Tokens" cutting mode, but using
+        lines as the unit.
+    </h3>
+
+    <li><b>Segments</b></li>
+    <h3 class="help-section-paragraph">
+        This option allows you to designate the number of evenly-sized segments
+        each document should be cut into, regardless of the length of the document.
+    </h3>
+
+    <li><b>Milestones</b></li>
+    <h3 class="help-section-paragraph">
+        This option allows you to use a text string that occurs multiple times
+        throughout the document as a delimiter between segments. Lexos will perform
+        a cut every time it encounters this term. <em>Note:</em> you must be careful
+        that your milestone term only occurs where you wish to cut your document,
+        and nowhere else as a part of the text of your document. For example,
+        the term "Chapter" could be used as a milestone term to cut the document
+        into individual chapters.
+    </h3>
+
+</ul>

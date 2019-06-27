@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<!-- Head -->
+<head>
+    <meta charset="UTF-8"/>
+    <title>Lexos</title>
+    <link rel="icon" href="static/favicon.png"/>
+
+    <!-- Variables -->
+    <script>
+        let theme = "{{ theme }}";
+        let active_document_count = {{ active_document_count }};
+    </script>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="static/node_modules/jquery/dist/jquery.min.js"></script>
+
+    <!-- Intro.js -->
+    <script type="text/javascript" src="static/node_modules/intro.js/intro.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/node_modules/intro.js/introjs.css">
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/intro-js.css">
+
+    <!-- Core Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/point.js"></script>
+    <script type="text/javascript" src="static/js/helpers/manage-table-selection-box.js"></script>
+    <script type="text/javascript" src="static/js/helpers/manage-table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/manage-table.css"/>
+
+    <script type="text/javascript" src="static/js/helpers/base.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/base.css"/>
+    <script type="text/javascript" src="static/js/helpers/utility.js"></script>
+    <script type="text/javascript" src="static/js/helpers/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/popup.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/error.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/help.css"/>
+
+    {% block head %}{% endblock %}
+
+    <!-- Theme -->
+    <link rel="stylesheet" type="text/css" href="static/css/themes/{{ theme }}.css"/>
+</head>
+
+
+<!-- Body -->
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar">
+        <div id="navbar-left">
+            <img id="lexos-dragon" src="static/images/lexos_dragon.png"
+                 onmouseover="this.src='static/images/lexos_dragon_open.png'"
+                 onmouseout="this.src='static/images/lexos_dragon.png'">
+            <h1 id="lexos-text">{L}exos</h1>
+            <h1 id="page-title">{% block title %}{% endblock %}</h1>
+            <span id="navbar-walkthrough-button" class="left-justified navbar-tooltip-button"><i>i</i></span>
+        </div>
+
+        <div id="navbar-right" class="right-justified">
+            <a id="upload-button" href="/upload">Upload</a>
+            <a id="manage-button" href="/manage">Manage</a>
+
+            <h3 id="prepare-button" class="navbar-button clickable-text">Prepare</h3>
+            <h3 id="visualize-button" class="navbar-button clickable-text">Visualize</h3>
+            <h3 id="analyze-button" class="navbar-button clickable-text">Analyze</h3>
+
+            <h3>|</h3>
+            <a href="/download-workspace">Save</a>
+            <a href="/reset">Reset</a>
+
+            <h3>|</h3>
+            <h3 id="help-button">Help</h3>
+        </div>
+    </div>
+
+    <!-- Main grid -->
+    <div id="main-grid">
+
+        <!-- Main section -->
+        <div id="main-section">
+
+                <!-- Form -->
+                <form method="POST" enctype="multipart/form-data">
+                    {% block content %}{% endblock %}
+                </form>
+
+            <!-- Help -->
+            <div id="help-container"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+
+        <!-- Left -->
+        <a href="http://www.neh.gov/" target="_blank"><img id="neh-logo" src="static/images/neh.png"></a>
+
+        <div>
+            <h3>Lexos v4.0b © 2019 </h3>
+            <a href="https://wheatoncollege.edu/academics/special-projects-initiatives/lexomics/" target="_blank">Wheaton Lexomics</a>
+        </div>
+
+        <!-- Right -->
+        <div class="right-justified">
+            <h3 id="active-documents-text" class="clickable-text">Active Documents</h3>
+            <h3>: </h3>
+            <h3 id="active-document-count">{{ active_document_count }}</h3>
+        </div>
+    </footer>
+</body>
+</html>

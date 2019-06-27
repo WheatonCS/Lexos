@@ -1,0 +1,33 @@
+/* Main section */
+#main-section {
+    min-width: 125rem;
+}
+
+
+/* Graph section top */
+#font-input {
+    width: 15rem;
+}
+
+#term-count-input {
+    width: 7rem;
+}
+
+#graph-section-top {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+
+/* Tooltip */
+.visualize-tooltip {
+    z-index: 1;
+    pointer-events: none;
+    position: absolute;
+    white-space: nowrap;
+    padding: 1rem;
+    background: var(--foreground-color);
+    border: 1rem solid var(--highlight-color-light);
+    opacity: 0;
+    transition: opacity .2s;
+}

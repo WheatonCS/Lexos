@@ -5,8 +5,6 @@ from typing import NamedTuple, Optional, Dict
 
 from lexos.receivers.base_receiver import BaseReceiver
 
-IdTempLabelMap = Dict[int, str]
-
 
 class TokenOption(NamedTuple):
     """A typed tuple to represent token option."""
@@ -57,9 +55,6 @@ class MatrixFrontEndOption(NamedTuple):
     # the culling options
     culling_option: CullingOption
 
-    # all the temp labels of segments
-    id_temp_label_map: IdTempLabelMap
-
 
 class MatrixReceiver(BaseReceiver):
     """This class receives the front end options."""
@@ -73,9 +68,9 @@ class MatrixReceiver(BaseReceiver):
 
         :return: a token option struct
         """
-        token_type_is_word = self._front_end_data['tokenType'] == 'word'
-        token_type_is_char = self._front_end_data['tokenType'] == 'char'
-        char_within_word = 'inWordsOnly' in self._front_end_data
+        token_type_is_word = self._front_end_data['token_type'] == 'Tokens'
+        token_type_is_char = self._front_end_data['token_type'] == 'Characters'
+        char_within_word = False
 
         # get the token type
         if token_type_is_word:
@@ -88,7 +83,7 @@ class MatrixReceiver(BaseReceiver):
             raise ValueError('invalid token type from front end')
 
         # get the n_gram_size
-        n_gram_size = int(self._front_end_data['tokenSize'])
+        n_gram_size = int(self._front_end_data['token_size'])
 
         return TokenOption(token_type=token_type, n_gram_size=n_gram_size)
 
@@ -97,72 +92,32 @@ class MatrixReceiver(BaseReceiver):
 
         :return: a normalize option struct
         """
-        use_freq = self._front_end_data['normalizeType'] == 'freq'
+        use_freq = self._front_end_data['normalization_method'] == \
+            'Proportional'
 
         # if use TF/IDF
-        use_tfidf = self._front_end_data['normalizeType'] == 'tfidf'
-
-        # only applicable when using "TF/IDF", set default value to N/A
-        if self._front_end_data['norm'] == 'l1':
-            norm_option = 'l1'
-        elif self._front_end_data['norm'] == 'l2':
-            norm_option = 'l2'
-        else:
-            norm_option = None
+        use_tfidf = self._front_end_data['normalization_method'] == 'TF-IDF'
 
         return NormOption(use_freq=use_freq, use_tf_idf=use_tfidf,
-                          tf_idf_norm_option=norm_option)
+                          tf_idf_norm_option='l2')
 
     def _get_culling_option_from_front_end(self) -> CullingOption:
         """Get the culling option from the front end.
 
         :return: a culling option struct
         """
-        if 'mfwcheckbox' in self._front_end_data:
-            lower_rank_bound = int(self._front_end_data['mfwnumber'])
+        if 'enable_most_frequent_words' in self._front_end_data:
+            lower_rank_bound = int(self._front_end_data['most_frequent_words'])
         else:
             lower_rank_bound = None
 
-        if 'cullcheckbox' in self._front_end_data:
-            least_num_seg = int(self._front_end_data['cullnumber'])
+        if 'enable_minimum_occurrences' in self._front_end_data:
+            least_num_seg = int(self._front_end_data['minimum_occurrences'])
         else:
             least_num_seg = None
 
         return CullingOption(cull_least_seg=least_num_seg,
                              mfw_lowest_rank=lower_rank_bound)
-
-    def _get_id_temp_label_map_from_front_end(self) -> Dict[int, str]:
-        """Get all the file id maps to temp labels from front end.
-
-        :return: a dict maps id to temp labels
-        """
-        label_key_regex = re.compile(r"file_(\d+)")
-
-        def parse_temp_label_data(label_key: str) -> (int, str):
-            """Parse the key of the temp label into a tuple.
-
-            Get the id from the label key and find the label corresponding to
-            the label key, then return a tuple of id and the label.
-            :param label_key: key of the label in _front_end_data
-            :return: a tuple where the first element is the file id
-                     and the second element is the temp label
-            """
-            # extract the file id
-            match_obj = label_key_regex.match(label_key)
-            file_id = int(match_obj.group(1))
-
-            # find the label
-            label = self._front_end_data[label_key]
-
-            return file_id, label
-
-        # a list of tuple where
-        # the first element is the key, the second element is the value
-        id_temp_label_list = [parse_temp_label_data(key)
-                              for key in self._front_end_data.keys()
-                              if label_key_regex.match(key)]
-
-        return dict(id_temp_label_list)
 
     def options_from_front_end(self) -> MatrixFrontEndOption:
         """Get all the matrix options from front end.
@@ -172,6 +127,5 @@ class MatrixReceiver(BaseReceiver):
         return MatrixFrontEndOption(
             token_option=self._get_token_option_from_front_end(),
             norm_option=self._get_normalize_option_from_front_end(),
-            culling_option=self._get_culling_option_from_front_end(),
-            id_temp_label_map=self._get_id_temp_label_map_from_front_end()
+            culling_option=self._get_culling_option_from_front_end()
         )

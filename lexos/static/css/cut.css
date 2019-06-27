@@ -1,0 +1,51 @@
+/* Main section */
+#main-section {
+    min-width: 136rem;
+}
+
+
+/* Form */
+form {
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-gap: 2rem;
+}
+
+
+/* Options */
+#options-section {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    grid-gap: 2rem;
+}
+
+
+/* Cut mode */
+#cut-mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 3rem;
+}
+
+
+/* Cut settings */
+#cut-settings-grid {
+    display: grid;
+    grid-auto-flow: column;
+    height: 5rem;
+}
+
+#milestone-input {
+    grid-column: span 2;
+}
+
+#milestone-input input {
+    width: 20rem;
+}
+
+
+/* Document previews */
+#document-previews-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}

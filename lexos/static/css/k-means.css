@@ -1,0 +1,33 @@
+/* Main section */
+#main-section {
+    min-width: 135rem;
+}
+
+
+/* Form */
+form {
+    grid-template-rows: min-content auto;
+}
+
+
+/* Options section */
+#options-section {
+    grid-template-columns: 1.2fr 2fr 1fr .9fr 2fr;
+}
+
+#advanced-options-section label {
+    margin-right: 2rem;
+}
+
+#advanced-options-section input {
+    width: 10rem;
+}
+
+
+/* K-means */
+#k-means {
+    width: calc(100% - 2rem);
+    height: 56rem;
+    overflow: hidden;
+    margin: 0 1rem 1rem 1rem;
+}

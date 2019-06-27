@@ -95,8 +95,8 @@ def cut_by_characters(text: str, seg_size: int, overlap: int,
     assert overlap >= 0 and last_prop >= 0, NEG_OVERLAP_LAST_PROP_MESSAGE
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
-    # split all the chars while keeping all the whitespace
-    seg_list = re.findall(r"\S", text)
+    # chop up the string by characters (keeping whitespace)
+    seg_list = [char for char in text]
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
@@ -267,9 +267,9 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     """
 
     # pre-condition assertion
-    assert cutting_type == "milestone" or cutting_type == "letters" or \
-        cutting_type == "words" or cutting_type == "lines" or \
-        cutting_type == "number", INVALID_CUTTING_TYPE_MESSAGE
+    assert cutting_type == "Milestones" or cutting_type == "Characters" or \
+        cutting_type == "Tokens" or cutting_type == "Lines" or \
+        cutting_type == "Segments", INVALID_CUTTING_TYPE_MESSAGE
 
     # standardize parameters
     cutting_type = str(cutting_type)
@@ -277,24 +277,24 @@ def cut(text: str, cutting_value: str, cutting_type: str, overlap: str,
     last_prop_percent = float(last_prop_percent.rstrip('%')) / 100
 
     # distribute cutting method by input cutting value
-    if cutting_type != 'milestone':
+    if cutting_type != 'Milestones':
         cutting_value = int(cutting_value)
 
-    if cutting_type == 'letters':
+    if cutting_type == 'Characters':
         string_list = cut_by_characters(text=text, seg_size=cutting_value,
                                         overlap=overlap,
                                         last_prop=last_prop_percent)
-    elif cutting_type == 'words':
+    elif cutting_type == 'Tokens':
         string_list = cut_by_words(text=text, seg_size=cutting_value,
                                    overlap=overlap,
                                    last_prop=last_prop_percent)
-    elif cutting_type == 'lines':
+    elif cutting_type == 'Lines':
         string_list = cut_by_lines(text=text, seg_size=cutting_value,
                                    overlap=overlap,
                                    last_prop=last_prop_percent)
-    elif cutting_type == 'milestone':
+    elif cutting_type == 'Milestones':
         string_list = cut_by_milestone(text=text, milestone=cutting_value)
-    elif cutting_type == 'number':
+    elif cutting_type == 'Segments':
         string_list = cut_by_number(text=text, num_segment=cutting_value)
 
     # noinspection PyUnboundLocalVariable

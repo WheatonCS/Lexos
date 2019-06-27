@@ -1,0 +1,98 @@
+/* Form */
+form {
+    grid-template-rows: 1fr 1fr;
+    min-height: 75rem;
+}
+
+
+/* Top section */
+#top-section {
+    display: grid;
+    grid-template-columns: 1fr .4fr;
+    grid-gap: 2rem;
+}
+
+
+/* Upload section */
+#browse-button,
+#drag-and-drop-section {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+#browse-button {
+    cursor: pointer;
+    width: 20rem;
+    height: 6rem;
+    margin: 1rem;
+    border-radius: 3rem;
+    color: var(--foreground-color);
+    background-color: var(--highlight-color);
+    border: .2rem solid var(--highlight-color);
+    transition: background-color .2s, border-color .2s;
+}
+
+#browse-button:hover {
+    color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
+    border: .2rem solid var(--highlight-color);
+}
+
+#drag-and-drop-section {
+    height: calc(100% - 7rem);
+    width: 100%;
+    color: var(--text-color);
+    background-color: var(--foreground-color-alternate);
+    border: .2rem dashed var(--text-color);
+    transition: background-color .2s, border-color .2s;
+}
+
+#drag-and-drop-section.highlighted {
+    color: var(--highlight-color);
+    border-color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
+}
+
+#browse-button > h3,
+#drag-and-drop-section  > h3 {
+    color: inherit;
+}
+
+
+/* Upload list */
+#upload-previews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    grid-auto-rows: min-content;
+    grid-gap: 1rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.upload-preview {
+    position: relative;
+}
+
+.upload-preview-content{
+    display: grid;
+    padding: 1rem;
+    min-height: 8.2rem;
+    height: 100%;
+    align-content: center;
+    justify-items: center;
+    background-color: var(--foreground-color-alternate);
+    min-width: 0;
+    word-break: break-all;
+    transition: opacity .5s;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: .2rem;
+    background-color: var(--highlight-color);
+    transition: opacity .5s, width .5s;
+}

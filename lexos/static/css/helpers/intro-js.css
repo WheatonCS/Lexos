@@ -1,0 +1,135 @@
+/* General */
+.introjs-disabled {
+    opacity: .5 !important;
+    pointer-events: none !important;
+}
+
+
+/* Overlay */
+.introjs-overlay {
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+}
+
+
+/* Step number */
+.introjs-helperNumberLayer {
+    display: none;
+}
+
+
+/* Highlight box */
+.introjs-helperLayer {
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    background-color: var(--foreground-color);
+}
+
+
+/* Tooltip */
+.introjs-arrow.top,
+.introjs-arrow.top-right {
+    border-bottom-color: var(--foreground-color);
+}
+
+.introjs-arrow.left {
+    border-right-color: var(--foreground-color);
+}
+
+.introjs-arrow.bottom {
+    border-top-color: var(--foreground-color);
+}
+
+.introjs-arrow.right {
+    border-left-color: var(--foreground-color);
+}
+
+.introjs-tooltip {
+    display: grid !important;
+    grid-template-rows: 1fr min-content;
+    grid-gap: 2rem;
+    width: 30rem;
+    max-width: none;
+    padding: 2rem;
+    border-radius: 2px;
+    background-color: var(--foreground-color);
+    color: var(--text-color);
+    box-shadow: none;
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+
+/* Bullets */
+.introjs-bullets ul li a {
+  width: 9px;
+  height: 9px;
+}
+
+.introjs-bullets ul li a {
+    background-color: var(--background-color);
+    transition: background-color .2s;
+}
+
+.introjs-bullets ul li a:hover {
+    background-color: var(--secondary-highlight-color);
+}
+
+.introjs-bullets ul li a.active {
+    background-color: var(--secondary-highlight-color);
+}
+
+
+/* Buttons */
+.introjs-tooltipbuttons {
+    display: grid;
+    grid-template-columns: 1fr min-content min-content;
+    grid-gap: 1rem;
+}
+
+.introjs-tooltiptext {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.introjs-prevbutton,
+.introjs-nextbutton {
+    justify-self: right;
+}
+
+.introjs-button,
+.introjs-button:focus,
+.introjs-button:active {
+    display: inline-flex;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    align-items: center;
+    width: max-content;
+    height: 3rem;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: .9rem 1.5rem 1rem 1.5rem;
+    border-radius: 3rem;
+    border: .2rem solid var(--secondary-highlight-color);
+    background-color: var(--secondary-highlight-color);
+    -webkit-background-clip: inherit;
+    background-image: none;
+    text-shadow: none;
+    color: var(--foreground-color);
+    cursor: pointer;
+    transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
+}
+
+.introjs-button:hover {
+    color: var(--secondary-highlight-color);
+    background-color: var(--secondary-highlight-color-light);
+    box-shadow: none;
+    border-color: var(--secondary-highlight-color);
+}
+
+.introjs-button {
+    margin-left: 1rem;
+}

@@ -1,0 +1,138 @@
+/* Main section */
+#main-section {
+    min-width: 140rem;
+}
+
+
+/* Form */
+form {
+    grid-template-columns: 1.3fr 1fr 1.3fr;
+    grid-template-rows: 100%;
+    min-height: 60rem;
+}
+
+
+/* Columns */
+.column {
+    overflow: hidden;
+}
+
+#left-column,
+#middle-column {
+    display: grid;
+    row-gap: 2rem;
+}
+
+#left-column {
+    grid-template-rows: 25.5rem 1fr 1fr;
+}
+
+#middle-column {
+    grid-template-rows: 1fr 1fr;
+}
+
+
+/* General */
+.scrub-section {
+    grid-template-rows: min-content 1fr;
+    background-color: var(--foreground-color);
+    overflow: hidden;
+}
+
+.scrub-section-top {
+    margin: 1rem;
+    grid-gap: 1rem;
+}
+
+.scrub-section-body {
+    height: calc(100% - 5rem);
+}
+
+.scrub-section-body label {
+    width: 100%;
+    height: 100%;
+}
+
+.upload-text,
+#stop-words-options,
+#special-characters-options {
+    grid-column: span 2;
+    word-break: break-all;
+}
+
+
+/* Scrubbing options */
+#punctuation-options {
+    transition: opacity .2s;
+}
+
+
+/* Stop/keep words */
+#stop-words-section .scrub-section-top label {
+    margin-right: 3rem;
+}
+
+#stop-words-section .scrub-section-body {
+    height: calc(100% - 9.6rem);
+}
+
+
+/* Special characters */
+.options-section label {
+    margin-bottom: 1rem;
+}
+
+#special-characters-section .scrub-section-body {
+    height: calc(100% - 17rem);
+}
+
+
+/* Tags popup */
+#tag-options-popup .popup-content {
+    overflow-y: hidden;
+}
+
+#tag-table-head,
+.tag-table-row {
+    display: grid;
+    grid-template-columns: 15% 58% 27%;
+    padding: 1rem;
+}
+
+#tag-table-head {
+    padding-top: 0;
+}
+
+#tag-table-head h3 {
+    color: var(--highlight-color);
+}
+
+#tag-table-body {
+    width: 100rem;
+    max-height: calc(100% - 3rem);
+    overflow-y: auto;
+    overflow-y: overlay;
+}
+
+.tag-table-row {
+    align-items: center;
+    margin-bottom: 1rem;
+    background-color: var(--foreground-color-alternate);
+}
+
+.tag-table-row:last-child {
+    margin-bottom: 0;
+}
+
+.tag-table-row label {
+    margin-right: 3rem;
+}
+
+.tag-table-row label:last-child {
+    margin-right: 0;
+}
+
+.tag-table-row > input {
+    width: 25rem;
+    margin: 0;
+}

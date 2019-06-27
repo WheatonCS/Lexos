@@ -1,0 +1,122 @@
+/* Main section */
+#main-section {
+    min-width: 130rem;
+}
+
+/* Form */
+form {
+    grid-template-rows: 50rem 39.2rem 39.2rem minmax(39.2rem, min-content);
+    min-height: calc(100% - 4rem);
+    height: auto;
+}
+
+
+/* Top section */
+#top-section {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    grid-gap: 2rem;
+}
+
+
+/* Dictionaries */
+.dictionaries-wrapper {
+    overflow: auto;
+}
+
+.dictionaries h3 {
+    display: flex;
+    word-break: break-word;
+    min-height: 3rem;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--foreground-color-alternate);
+}
+
+.dictionaries h3:last-child {
+    margin-bottom: 0;
+}
+
+
+/* Formula */
+#formula-body {
+    display: grid;
+    grid-template-rows: 10rem 1fr;
+    grid-gap: 1rem;
+}
+
+#formula-body label {
+    height: 100%;
+}
+
+#formula-buttons {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+    grid-template-columns: 1fr .66fr 1.1fr;
+    grid-gap: 1rem;
+}
+
+#number-pad,
+#operations-pad {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 1rem;
+}
+
+#number-pad {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#operations-pad {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+#number-pad h3,
+#operations-pad h3,
+#documents-pad .dictionaries h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - .2rem);
+    height: calc(100% - .2rem);
+    background-color: var(--foreground-color-alternate);
+    border: .2rem solid var(--background-color);
+    transition: color .2s, background-color .2s, border-color .2s;
+}
+
+#number-pad h3:hover,
+#operations-pad h3:hover,
+#documents-pad .dictionaries h3:hover {
+    color: var(--highlight-color);
+    background-color: var(--highlight-color-light);
+    border-color: var(--highlight-color);
+}
+
+
+/* Results */
+#overview-body,
+#corpus-body {
+    height: 39.5rem;
+}
+
+#document-tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(39.4rem, 1fr));
+    grid-gap: 1rem;
+}
+
+#document-tables-grid .lexos-table {
+    height: 39.2rem;
+    background-color: var(--foreground-color-alternate);
+}
+
+#document-tables-grid .lexos-table .button {
+    background-color: var(--foreground-color);
+}
+
+#documents-section .lexos-table-head,
+#documents-section .lexos-table-row {
+    grid-template-columns: 1fr 1fr 1fr;
+}

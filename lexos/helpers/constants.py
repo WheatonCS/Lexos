@@ -1,92 +1,102 @@
 import getpass
 import os
 
-""" Constants """
 
-'''configurations'''
+# Configurations
 IS_SERVER = False
 DUMPING = True
 
-'''file dir'''
-FILE_CONTENTS_FOLDER = 'filecontents/'
-RESULTS_FOLDER = 'analysis_results/'
-WORKSPACE_DIR = 'workspace/'
-# handle the temp dir in windows
+
+# File directories
+FILE_CONTENTS_FOLDER = "filecontents/"
+RESULTS_FOLDER = "analysis_results/"
+WORKSPACE_DIR = "workspace/"
 TMP_FOLDER = os.path.expanduser(
-    '~\\AppData\\Local\\Temp') if os.name == 'nt' else '/tmp/'
-UPLOAD_FOLDER = os.path.join(TMP_FOLDER, 'Lexos_' + str(getpass.getuser()))
-CACHE_FOLDER = os.path.join(UPLOAD_FOLDER, 'cache/')
+    "~\\AppData\\Local\\Temp") if os.name == "nt" else "/tmp/"
+UPLOAD_FOLDER = os.path.join(TMP_FOLDER, "Lexos_" + str(getpass.getuser()))
+CACHE_FOLDER = os.path.join(UPLOAD_FOLDER, "cache/")
 RESOURCE_DIR = "resources/"
 
-'''file name'''
-FILEMANAGER_FILENAME = 'filemanager.p'
-SESSION_FILENAME = 'session.p'
-FILE_INFORMATION_FIGNAME = 'statistic.svg'
-CORPUS_INFORMATION_FIGNAME = 'corpus_statistic.svg'
-WORKSPACE_FILENAME = 'workspace.lexos'
-MALLET_INPUT_FILE_NAME = 'topicfile'
-MALLET_OUTPUT_FILE_NAME = 'topicfile_for_json'
-TOPWORD_CSV_FILE_NAME = 'topwordResult.csv'
-DEBUG_LOG_FILE_NAME = 'debug.log'
-MUFI_3_FILENAME = 'MUFI_3_DICT.tsv'
-MUFI_4_FILENAME = 'MUFI_4_DICT.tsv'
-STOPWORD_FILENAME = 'stopwords.p'
-LEMMA_FILENAME = 'lemmas.p'
-CONSOLIDATION_FILENAME = 'consolidations.p'
-SPECIAL_CHAR_FILENAME = 'specialchars.p'
-DIGIT_MAP_FILENAME = 'digitmap.p'
-PUNCTUATION_MAP_FILENAME = 'punctuationmap.p'
-AMPERSAND_FILENAME = 'ampersand.p'
-HYPHEN_FILENAME = 'hyphen.p'
 
-'''constant numbers'''
+# File names
+FILEMANAGER_FILENAME = "filemanager.p"
+SESSION_FILENAME = "session.p"
+FILE_INFORMATION_FIGNAME = "statistic.svg"
+CORPUS_INFORMATION_FIGNAME = "corpus_statistic.svg"
+WORKSPACE_FILENAME = "workspace.lexos"
+MALLET_INPUT_FILE_NAME = "topicfile"
+MALLET_OUTPUT_FILE_NAME = "topicfile_for_json"
+TOPWORD_CSV_FILE_NAME = "topwordResult.csv"
+DEBUG_LOG_FILE_NAME = "debug.log"
+MUFI_3_FILENAME = "MUFI_3_DICT.tsv"
+MUFI_4_FILENAME = "MUFI_4_DICT.tsv"
+STOPWORD_FILENAME = "stopwords.p"
+LEMMA_FILENAME = "lemmas.p"
+CONSOLIDATION_FILENAME = "consolidations.p"
+SPECIAL_CHAR_FILENAME = "specialchars.p"
+DIGIT_MAP_FILENAME = "digitmap.p"
+PUNCTUATION_MAP_FILENAME = "punctuationmap.p"
+AMPERSAND_FILENAME = "ampersand.p"
+HYPHEN_FILENAME = "hyphen.p"
+
+
+# Numbers
 MAX_FILE_SIZE = 250 * 1024 * 1024  # 250 MB
 MAX_FILE_SIZE_INT = 250
 MAX_FILE_SIZE_UNITS = "M"
-# note: number of characters in a preview screen (e.g., on Select page)
-PREVIEW_SIZE = 500
-# minimum number of characters used to detect a file's encoding scheme
-# upon upload
+PREVIEW_SIZE = 255
 MIN_ENCODING_DETECT = 10000
 MIN_NEWLINE_DETECT = 1000
 CHARACTERS_PER_LINE_IN_LEGEND = 100
 ROUND_DIGIT = 4
 
-'''secret key <not functional for now>'''
-FILEMANAGER_KEY = ''  # the key you use to encrypt your file manager
-SESSION_KEY = ''  # the key you use to encrypt your session
-FILE_CONTENT_KEY = ''  # the key you use to encrypt you file content
 
-'''session caching option'''
-# for general settings
-GENERALSETTINGS = 'beta_onbox'
+# Keys
+FILEMANAGER_KEY = ""
+SESSION_KEY = ""
+FILE_CONTENT_KEY = ""
 
-# for scrub
+
+# General Settings
+GENERALSETTINGS = "theme"
+
+
+# General
+DEFAULT_GENERALSETTINGS_OPTIONS = {
+    "theme": "default"
+}
+
+# Scrub
 SCRUBBOXES = (
-    'ampersandbox',
-    'aposbox',
-    'digitsbox',
-    'hyphensbox',
-    'lowercasebox',
-    'newlinesbox',
-    'punctuationbox',
-    'spacesbox',
-    'tabsbox',
-    'tagbox',
-    'whitespacebox',
-    'sw_option',
+    "keep_ampersands",
+    "keep_apostrophes",
+    "remove_digits",
+    "keep_hyphens",
+    "make_lowercase",
+    "remove_newlines",
+    "remove_punctuation",
+    "remove_spaces",
+    "remove_tabs",
+    "scrub_tags",
+    "stop_words_method",
 )
+
 SCRUBINPUTS = (
-    'manualstopwords',
-    'manualspecialchars',
-    'manualconsolidations',
-    'manuallemmas')
+    "stop_words",
+    "special_characters",
+    "consolidations",
+    "lemmas"
+)
+
 OPTUPLOADNAMES = (
-    'swfileselect[]',
-    'lemfileselect[]',
-    'consfileselect[]',
-    'scfileselect[]')
-# all unicode punctuation, excluding the apostrophe char
+    "stop_words_file[]",
+    "lemmas_file[]",
+    "consolidations_file[]",
+    "special_characters_file[]"
+)
+
+
+# Unicode punctuation
 UNICODE_PUNCT = "-=_!\"#%&*{},./:;?()[]@\\$^*+<>~`"\
                 "\u00a1\u00a7\u00b6\u00b7\u00bf\u037e\u0387\u055a-"\
                 "\u055f\u0589\u05c0\u05c3\u05c6\u05f3\u05f4\u0609"\
@@ -113,181 +123,158 @@ UNICODE_PUNCT = "-=_!\"#%&*{},./:;?()[]@\\$^*+<>~`"\
                 "\uff0a\uff0c\uff0e\uff0f\uff1a\uff1b\uff1f\uff20"\
                 "\uff3c\uff61\uff64\uff65"
 
-# for xml handling
 
-# for cut
-WHITESPACE = ['\n', '\t', ' ', '', '\u3000']
+# Cut
+WHITESPACE = ["\n", "\t", " ", "", "\u3000"]
 
 CUTINPUTAREAS = (
-    'cut_type',
-    'lastprop',
-    'overlap',
-    'cutting_value',
-    'cutsetnaming')
+    "cut_mode",
+    "segment_size",
+    "overlap",
+    "merge_threshold",
+    "milestone"
+)
 
-# for base analyze
-ANALYZEBOXES = ('mfwcheckbox', 'cullcheckbox', 'greyword', 'inWordsOnly')
+# Analyze template
+ANALYZEBOXES = (
+    "enable_most_frequent_words",
+    "enable_minimum_occurrences"
+)
+
 ANALYZEINPUTS = (
-    'tokenSize',
-    'tokenType',
-    'normalizeType',
-    'norm',
-    'mfwnumber',
-    'cullnumber')
+    "token_size",
+    "token_type",
+    "normalization_method",
+    "most_frequent_words",
+    "minimum_occurrences"
+)
 
-# for rolling window
-# if there is no comma in the end, python recognize this var as a string
-# instead of a tuple
-RWBOXES = ('rollinghasmilestone', 'showDots', 'BWoutput')
+# Rolling window
+RWBOXES = ("enable_milestone", "show_points", "black_and_white")
 RWINPUTS = (
-    'filetorollinganalyze',
-    'counttype',
-    'windowtype',
-    'inputtype',
-    'rollingsearchword',
-    'rollingsearchwordopt',
-    'rollingwindowsize',
-    'rollingmilestonetype')
+    "calculation_type",
+    "window_type",
+    "input_type",
+    "search_term",
+    "search_term_denominator",
+    "window_size",
+    "milestone"
+)
 
-# for word cloud and multicloud and bubbleviz
-# if there is no comma in the end, python recognize this var as a string
-# instead of a tuple
-CLOUDLIST = ('segmentlist',)
-
-# for word cloud
-# for multicloud
-MULTICLOUDINPUTS = ('analysistype',)
-MULTICLOUDFILES = ('optuploadname',)
-
-# for BubbleViz
-BUBBLEVIZBOX = ('vizmaxwords',)
-BUBBLEVIZINPUT = ('minlength', 'graphsize', 'maxwords')
-
-# for hierarchical Clustering
+# Dendrogram
 HIERARCHICALINPUT = (
-    'metric',
-    'linkage',
-    'orientation'
+    "distance_metric",
+    "linkage_method",
+    "orientation"
 )
 
-# for BCT analysis
+# Consensus tree
 BCTINPUT = (
-    'metric',
-    'linkage',
-    'cutoff',
-    'iterations',
-    'replace'
+    "distance_metric",
+    "linkage_method",
+    "cutoff",
+    "iterations",
+    "replace"
 )
 
-# for kmeans Clustering
+# K-Means
 KMEANINPUT = (
-    'viz',
-    'init',
-    'n_init',
-    'max_iter',
-    'nclusters',
-    'tolerance'
+    "clusters",
+    "visualization_method",
+    "initialization_method",
+    "maximum_iterations",
+    "different_centroids",
+    "relative_tolerance"
 )
 
-# for similarity query
-SIMINPUT = ('uploadname',)
-SIMBOX = ('simsuniquetokens',)
+# Similarity query
+SIMINPUT = ("comparison_document",)
 
-# for topword
-TOPWORDINPUT = ['testInput']
+# Top words
+TOPWORDINPUT = ["comparison_method"]
 
-'''the request form default value'''
-DEFAULT_GENERALSETTINGS_OPTIONS = {'beta_onbox': False}
 
+# Defaults
 DEFAULT_SCRUB_OPTIONS = {
-    'aposbox': False,
-    'ampersandbox': False,
-    'digitsbox': True,
-    'hyphensbox': False,
-    'lowercasebox': True,
-    'newlinesbox': True,
-    'punctuationbox': True,
-    'tabsbox': True,
-    'spacesbox': True,
-    'whitespacebox': False,
-    'tagbox': False,
-    'manualstopwords': '',
-    'sw_option': 'off',
-    'manualspecialchars': '',
-    'manualconsolidations': '',
-    'manuallemmas': '',
-    'entityrules': 'default',
-    'optuploadnames': {
-        'swfileselect[]': '',
-        'lemfileselect[]': '',
-        'consfileselect[]': '',
-        'scfileselect[]': ''}}
+    "keep_apostrophes": False,
+    "keep_ampersands": False,
+    "remove_digits": True,
+    "keep_hyphens": False,
+    "make_lowercase": True,
+    "remove_newlines": True,
+    "remove_punctuation": True,
+    "remove_tabs": True,
+    "remove_spaces": True,
+    "scrub_tags": False,
+    "stop_words": "",
+    "stop_words_method": "Off",
+    "special_characters": "",
+    "consolidations": "",
+    "lemmas": "",
+    "special_characters_preset": "None",
+    "file_uploads": {
+        "stop_words_file[]": "",
+        "lemmas_file[]": "",
+        "consolidations_file[]": "",
+        "special_characters_file[]": ""}}
 
 DEFAULT_CUT_OPTIONS = {
-    'cutType': 'words', 'cutValue': '', 'cutOverlap': '0', 'cutLastProp': '50'
+    "cut_mode": "Tokens",
+    "segment_size": "",
+    "overlap": "0",
+    "merge_threshold": "50",
+    "milestone": ""
 }
 
 DEFAULT_ROLLINGWINDOW_OPTIONS = {
-    'rollinghasmilestone': False,
-    'showDots': False,
-    'BWoutput': False,
-    'filetorollinganalyze': '',
-    'counttype': 'average',
-    'windowtype': 'word',
-    'inputtype': 'word',
-    'rollingsearchword': '',
-    'rollingsearchwordopt': '',
-    'rollingwindowsize': '',
-    'rollingmilestonetype': ''}
+    "enable_milestone": False,
+    "show_points": False,
+    "black_and_white": False,
+    "calculation_type": "average",
+    "window_type": "word",
+    "input_type": "Words",
+    "search_term": "",
+    "search_term_denominator": "",
+    "window_size": "",
+    "milestone": ""}
 
 DEFAULT_ANALYZE_OPTIONS = {
-    'tokenSize': '1',
-    'tokenType': 'word',
-    'normalizeType': 'freq',
-    'norm': 'l0',
-    'mfwcheckbox': False,
-    'mfwnumber': '100',
-    'cullcheckbox': False,
-    'cullnumber': '1',
-    'greyword': False}
-
-DEFAULT_CLOUD_OPTIONS = {'segmentlist': []}
-
-DEFAULT_MULTICLOUD_OPTIONS = {'optuploadname': '', 'analysistype': 'userfiles'}
-
-DEFAULT_BUBBLEVIZ_OPTIONS = {
-    'minlength': '0',
-    'graphsize': '800',
-    'maxwords': '100'}
+    "token_size": "1",
+    "token_type": "Tokens",
+    "normalization_method": "Proportional",
+    "enable_most_frequent_words": False,
+    "most_frequent_words": "100",
+    "enable_minimum_occurrences": False,
+    "minimum_occurrences": "1"
+}
 
 DEFAULT_HIERARCHICAL_OPTIONS = {
-    'metric': 'euclidean',
-    'linkage': 'average',
-    'orientation': 'bottom'
+    "distance_metric": "Euclidean",
+    "linkage_method": "Average",
+    "orientation": "Bottom"
 }
 
 DEFAULT_BCT_OPTIONS = {
-    'metric': 'euclidean',
-    'linkage': 'average',
-    'cutoff': 0.5,
-    'iterations': 100,
-    'replace': 'without'
+    "distance_metric": "Euclidean",
+    "linkage_method": "Average",
+    "cutoff": 0.5,
+    "iterations": 100,
+    "replace": "Without"
 }
 
 DEFAULT_KMEAN_OPTIONS = {
-    'nclusters': '',  # This value has to be decided by number of files.
-    'viz': 'Voronoi',
-    'init': 'k-means++',
-    'n_init': 10,
-    'max_iter': 300,
-    'tolerance': 1e-4}
+    "clusters": "",
+    "visualization_method": "Voronoi",
+    "initialization_method": "K-Means++",
+    "maximum_iterations": 300,
+    "different_centroids": 10,
+    "relative_tolerance": 1e-4}
 
-DEFAULT_SIM_OPTIONS = {'uploadname': '', 'simsuniquetokens': True}
+DEFAULT_SIM_OPTIONS = {"comparison_document": ""}
 
-DEFAULT_TOPWORD_OPTIONS = {'testInput': 'allToPara'}
+DEFAULT_TOPWORD_OPTIONS = {"comparison_method": "Each Document to the Corpus"}
 
-DEFAULT_XMLHANDLING_OPTION = {'Remove Tag Only': 'foo'}
 
-'''do not cache options'''
+# Do not cache options
 SESSION_DO_NOT_CACHE = {}
 WORKSPACE_DO_NOT_CACHE = {}

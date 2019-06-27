@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from lexos.models.rolling_windows_model import RollingWindowsModel, \
     RWATestOptions
-from lexos.receivers.rolling_windows_receiver import RWAFrontEndOptions, \
+from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     WindowUnitType, RWATokenType, RWARatioTokenOptions, RWAWindowOptions, \
     RWAAverageTokenOptions, RWAPlotOptions
 
@@ -33,7 +33,8 @@ class TestRatioCountOne:
                 individual_points=False,
                 black_white=False
             ),
-            milestone="ta"
+            milestone="ta",
+            text_color="blue"
         )
     )
 
@@ -43,9 +44,7 @@ class TestRatioCountOne:
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
     rw_ratio_csv_frame = rw_ratio_model._get_rwa_csv_frame()
     rw_ratio_milestone = \
-        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows(
-            windows=rw_ratio_windows
-        )
+        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows()
 
     def test_get_windows(self):
         np.testing.assert_array_equal(
@@ -124,7 +123,8 @@ class TestRatioCountTwo:
                 individual_points=False,
                 black_white=False
             ),
-            milestone="ta"
+            milestone="ta",
+            text_color="blue"
         )
     )
 
@@ -133,9 +133,7 @@ class TestRatioCountTwo:
     rw_ratio_windows = rw_ratio_model._get_windows()
     rw_ratio_graph = rw_ratio_model._generate_rwa_graph()
     rw_ratio_milestone = \
-        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows(
-            windows=rw_ratio_windows
-        )
+        rw_ratio_model._find_mile_stone_windows_indexes_in_all_windows()
 
     def test_get_windows(self):
         np.testing.assert_array_equal(
@@ -183,7 +181,8 @@ class TestAverageCountOne:
                 individual_points=False,
                 black_white=False
             ),
-            milestone=None
+            milestone=None,
+            text_color="blue"
         )
     )
     # Get the rolling window model and other testing components.
@@ -246,7 +245,8 @@ class TestAverageCountTwo:
                 individual_points=False,
                 black_white=False
             ),
-            milestone=None
+            milestone=None,
+            text_color="blue"
         )
     )
     # Get the rolling window model and other testing components.
