@@ -1,73 +1,122 @@
-{% extends "helpers/analyze-template.html" %}
+{% extends "base_analyze.html" %}
+{% set active_page = 'cluster' %}
 
-{% block title %}Dendrogram{% endblock %}
-
-<!-- Head -->
-{% block page_head %}
-
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
-    <script type="text/javascript" src="static/js/helpers/tree-options.js"></script>
-
-
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="static/js/dendrogram.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/dendrogram.css"/>
+{% block head %}
+    <script type="module"
+            src="{{ url_for('static', filename='js/scripts_dendrogram.js') }}?ver={{ version }}"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 
+{% block title %}Hierarchical Clustering{% endblock %}
 
-<!-- Options -->
+
 {% block options %}
+    <fieldset>
+        <legend>Dendrogram Options
+            <a class="btn bttn bttn-video" title="Show video"
+               href="https://www.youtube.com/watch?v=Lir0ck691yM&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=7"
+               data-toggle="tooltip" data-trigger="hover"
+               data-placement="right" style="margin: -10px 5px;">
+                <i class="fa fa-video-camera fa-lg "></i>
+            </a>
+        </legend>
+        <div class="dendrogram-options cf" id="dendrocreateoptions">
+            <label for="metric">Distance Metric:
+                <select name="metric" id="metric">
+                    <option value="euclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'euclidean' }}>
+                        Euclidean
+                    </option>
+                    <option value="minkowski" {{ 'selected' if session['hierarchyoption']['metric'] == 'minkowski' }}>
+                        Minkowski
+                    </option>
+                    <option value="cityblock" {{ 'selected' if session['hierarchyoption']['metric'] == 'cityblock' }}>
+                        Manhattan
+                    </option>
+                    <option value="seuclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'seuclidean' }}>
+                        Standardized Euclidean
+                    </option>
+                    <option value="sqeuclidean" {{ 'selected' if session['hierarchyoption']['metric'] == 'sqeuclidean' }}>
+                        Squared Euclidean
+                    </option>
+                    <option value="cosine" {{ 'selected' if session['hierarchyoption']['metric'] == 'cosine' }}>
+                        Cosine
+                    </option>
+                    <option value="correlation" {{ 'selected' if session['hierarchyoption']['metric'] == 'correlation' }}>
+                        Correlation
+                    </option>
+                    <option value="hamming" {{ 'selected' if session['hierarchyoption']['metric'] == 'hamming' }}>
+                        Hamming
+                    </option>
+                    <option value="chebyshev" {{ 'selected' if session['hierarchyoption']['metric'] == 'chebyshev' }}>
+                        Chebyshev
+                    </option>
+                    <option value="jaccard" {{ 'selected' if session['hierarchyoption']['metric'] == 'jaccard' }}>
+                        Jaccard
+                    </option>
+                    <option value="canberra" {{ 'selected' if session['hierarchyoption']['metric'] == 'canberra' }}>
+                        Canberra
+                    </option>
+                    <option value="braycurtis" {{ 'selected' if session['hierarchyoption']['metric'] == 'braycurtis' }}>
+                        Braycurtis
+                    </option>
+                </select>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="popover" data-html="true"
+                   data-placement="right" data-container="body"
+                   data-content="Different methods for measuring the distance (differences) between documents. See <a href='http://scalar.usc.edu/works/lexos/choosing-a-distance-metric' target='_blank'>Choosing a distance metric</a>."
+                   style="padding-left:4px;font-size:18px;"></i>
+            </label>
 
-    <!-- Dendrogram options -->
-    <div id="dendrogram-options-section" class="section">
-        <h3 class="section-top title">Options</h3>
-
-        <div class="section-body">
-
-            <!-- Distance metric -->
-            <div>
-                <h3>Distance Metric: </h3>
-                <span id="distance-metric-button" class="button">Euclidean</span>
-                <span id="distance-metric-tooltip-button" class="tooltip-button">?</span><br>
-            </div>
-
-            <!-- Linkage method -->
-            <h3>Linkage Method: </h3>
-            <span id="linkage-method-button" class="button">Average</span>
-            <span id="linkage-method-tooltip-button" class="tooltip-button">?</span><br>
-
-            <!-- Orientation -->
-            <h3>Orientation: </h3>
-            <span id="orientation-button" class="button">Left</span>
+            <label for="linkage">Linkage Method:
+                <select name="linkage" id="linkage">
+                    <option value="average" {{ 'selected' if session['hierarchyoption']['linkage'] == 'average' }}>
+                        Average
+                    </option>
+                    <option value="single" {{ 'selected' if session['hierarchyoption']['linkage'] == 'single' }}>
+                        Single
+                    </option>
+                    <option value="complete" {{ 'selected' if session['hierarchyoption']['linkage'] == 'complete' }}>
+                        Complete
+                    </option>
+                    <option value="weighted" {{ 'selected' if session['hierarchyoption']['linkage'] == 'weighted' }}>
+                        Weighted
+                    </option>
+                </select>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true"
+                   data-placement="right" data-container="body"
+                   title="Linkage is the method used to determine when documents and/or other sub-clusters should be joined into new clusters."
+                   style="padding-left:4px;font-size:18px;"></i>
+            </label>
+            <label for="orientation">Dendrogram Leaves Orientation:
+                <select name="orientation" id="orientation">
+                    <option value="bottom" {{ 'selected' if session['hierarchyoption']['orientation'] == 'bottom' }}>
+                        Bottom
+                    </option>
+                    <option value="left" {{ 'selected' if session['hierarchyoption']['orientation'] == 'left' }}>
+                        Left
+                    </option>
+                    {# We comment these two options out since we don't think our users need them. #}
+                    {# But if we decide to add them back in the future, simply uncomment them. #}
+                    {# <option value="top" {{ 'selected' if session['hierarchyoption']['orientation'] == 'top' }}>Top</option> #}
+                    {# <option value="right" {{ 'selected' if session['hierarchyoption']['orientation'] == 'right' }}>Right</option> #}
+                </select>
+            </label>
         </div>
-    </div>
+    </fieldset>
 {% endblock %}
 
 
-<!-- Results -->
 {% block results %}
-
-    <!-- Dendrogram -->
-    <div class="section">
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Dendrogram</h3>
-            <div id="dendrogram-buttons" class="right-justified">
-                <span id="generate-button" class="disabled important-button">Generate</span>
-                <span id="png-button" class="disabled button">PNG</span>
-                <span id="svg-button" class="disabled button">SVG</span>
-            </div>
+    <div class="row submit-button-row">
+        <div class="col-md-12">
+            <input class="btn btn-success" id="getdendro" name="getdendro"
+                   type="button" value="Get Dendrogram" style=""/>
         </div>
-
-        <div id="graph-container" class="section-body"></div>
     </div>
+    <div id="dendrogram-result" class="row"></div>
 {% endblock %}
 
+{% block submit %}
 
-<!-- Hidden elements -->
-{% block hidden_elements %}
-    <input id="distance-metric-input" name="distance_metric" value="Euclidean" type="hidden">
-    <input id="linkage-method-input" name="linkage_method" value="Average" type="hidden">
-    <input id="orientation-input" name="orientation" value="Left" type="hidden">
 {% endblock %}

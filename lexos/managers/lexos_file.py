@@ -215,13 +215,14 @@ class LexosFile:
         return scrub_options
 
     def scrub_contents(self, saving_changes: bool) -> str:
-        """Scrub the contents of the file according to the user's options
+        """ Scrubs the contents of the file according to the user's options
 
         May save the changes or not.
         :param saving_changes: boolean saying whether or not to save the
                                changes made.
         :return: a preview string of the possibly changed file.
         """
+
         storage_options = []
         for key in list(request.form.keys()):
             if 'usecache' in key:
@@ -236,17 +237,17 @@ class LexosFile:
         text_string = scrubber.scrub(
             text_strfile_managering,
             gutenberg=self.is_gutenberg,
-            lower=scrub_options['make_lowercase'],
-                punct=scrub_options['remove_punctuation'],
-            apos=scrub_options['keep_apostrophes'],
-            hyphen=scrub_options['keep_hyphens'],
-            amper=scrub_options['keep_ampersands'],
-            digits=scrub_options['remove_digits'],
-            tags=scrub_options['scrub_tags'],
-            white_space=True,
-            spaces=scrub_options['remove_spaces'],
-            tabs=scrub_options['remove_tabs'],
-            new_lines=scrub_options['remove_newlines'],
+            lower=scrub_options['lowercasebox'],
+            punct=scrub_options['punctuationbox'],
+            apos=scrub_options['aposbox'],
+            hyphen=scrub_options['hyphensbox'],
+            amper=scrub_options['ampersandbox'],
+            digits=scrub_options['digitsbox'],
+            tags=scrub_options['tagbox'],
+            white_space=scrub_options['whitespacebox'],
+            spaces=scrub_options['spacesbox'],
+            tabs=scrub_options['tabsbox'],
+            new_lines=scrub_options['newlinesbox'],
             opt_uploads=request.files,
             storage_options=storage_options,
             storage_folder=session_manager.session_folder() + '/scrub/',
@@ -300,7 +301,7 @@ class LexosFile:
             self.get_cutting_options()
 
         # From Lexos 3.1, trim the milestone at the start and end of the string
-        if cutting_type == "Milestones":
+        if cutting_type == "milestone":
             milestone = r'^' + cutting_value + '|' + cutting_value + '$'
             milestone = re.compile(milestone)
             text_string = milestone.sub('', text_string)
@@ -314,32 +315,55 @@ class LexosFile:
 
         return text_strings
 
-    def get_cutting_options(self) -> Tuple[str, str, str, str]:
+    def get_cutting_options(self, override_id: int = None) -> Tuple[str, str,
+                                                                    str, str]:
         """Gets the cutting options for a specific file.
 
         If cutting options not defined, then grabs the overall options, from
         the request.form.
+        :param override_id: an id for which to grab the options instead of the
+                            object's id.
         :return: a tuple of options for cutting the files.
         """
-        cutting_type = request.form['cut_mode']
 
-        cutting_value = request.form['segment_size'] \
-            if cutting_type != "Milestones" else request.form['milestone']
+        if override_id is None:
+            file_id = self.id
+        else:
+            file_id = override_id
 
-        overlap = request.form['overlap'] \
-            if 'overlap' in request.form else '0'
+        # A specific cutting value has been set for this file
+        if request.form['cutValue_' + str(file_id)] != '' or \
+                'cutByMS_' + str(file_id) in request.form:
+            option_identifier = '_' + str(file_id)
+        else:
+            option_identifier = ''
 
-        last_prop = request.form['merge_threshold'].strip('%') \
-            if 'merge_threshold' in request.form else '50'
+        cutting_value = request.form['cutValue' + option_identifier] \
+            if 'cutByMS' + option_identifier not in request.form \
+            else request.form['MScutWord' + option_identifier]
+
+        cutting_type = request.form['cutType' + option_identifier] \
+            if 'cutByMS' + option_identifier not in request.form \
+            else 'milestone'
+
+        overlap = request.form['cutOverlap' + option_identifier] \
+            if 'cutOverlap' + option_identifier in request.form \
+            else '0'
+
+        last_prop = request.form['cutLastProp' + option_identifier].strip('%')\
+            if 'cutLastProp' + option_identifier in request.form else '50'
 
         return cutting_value, cutting_type, overlap, last_prop
 
     def save_cut_options(self, parent_id: int):
         """Saves the cutting options into the LexosFile object's metadata.
+
+        :param parent_id: the id of the parent file from which this file has
+                          been cut.
         """
 
         cutting_value, cutting_type, overlap, last_prop = \
-            self.get_cutting_options()
+            self.get_cutting_options(parent_id)
 
         if 'cut' not in self.options:
             self.options['cut'] = {}
@@ -390,7 +414,7 @@ class LexosFile:
     # TODO: Legacy code
     def generate_d3_json_object(self, word_label: str,
                                 count_label: str) -> object:
-        """Generate a JSON object for d3 from the word counts of the file.
+        """ Generates a JSON object for d3 from the word counts of the file.
 
         :param word_label: label to use for identifying words in the
                            sub-objects.
@@ -398,6 +422,7 @@ class LexosFile:
                             sub-objects.
         :return: the resultant JSON object, formatted for d3.
         """
+
         word_counts = self.get_word_counts()
         return general_functions.generate_d3_object(
             word_counts, self.label, word_label, count_label)
@@ -423,38 +448,38 @@ class LexosFile:
 
         if 'scrub' in self.options:
 
-            if ("remove_punctuation" in self.options["scrub"]) and (
-                    self.options["scrub"]['remove_punctuation']):
+            if ("punctuationbox" in self.options["scrub"]) and (
+                    self.options["scrub"]['punctuationbox']):
                 str_legend += "Punctuation: removed, "
 
-                if ('keep_apostrophes' in self.options["scrub"]) and (
-                        self.options["scrub"]['keep_apostrophes']):
+                if ('aposbox' in self.options["scrub"]) and (
+                        self.options["scrub"]['aposbox']):
                     str_legend += "Apostrophes: kept, "
                 else:
                     str_legend += "Apostrophes: removed, "
 
-                if ('keep_hyphens' in self.options["scrub"]) and (
-                        self.options["scrub"]['keep_hyphens']):
+                if ('hyphensbox' in self.options["scrub"]) and (
+                        self.options["scrub"]['hyphensbox']):
                     str_legend += "Hyphens: kept, "
                 else:
                     str_legend += "Hypens: removed, "
             else:
                 str_legend += "Punctuation: kept, "
 
-            if ('make_lowercase' in self.options["scrub"]) and (
-                    self.options["scrub"]['make_lowercase']):
+            if ('lowercasebox' in self.options["scrub"]) and (
+                    self.options["scrub"]['lowercasebox']):
                 str_legend += "Lowercase: on, "
             else:
                 str_legend += "Lowercase: off, "
 
-            if ('remove_digits' in self.options["scrub"]) and (
-                    self.options["scrub"]['remove_digits']):
+            if ('digitsbox' in self.options["scrub"]) and (
+                    self.options["scrub"]['digitsbox']):
                 str_legend += "Digits: removed, "
             else:
                 str_legend += "Digits: kept, "
 
-            if ('scrub_tags' in self.options["scrub"]) and (
-                    self.options["scrub"]['scrub_tags']):
+            if ('tagbox' in self.options["scrub"]) and (
+                    self.options["scrub"]['tagbox']):
                 str_legend += "Tags: removed, "
             else:
                 str_legend += "Tags: kept, "
@@ -466,52 +491,51 @@ class LexosFile:
                     str_legend += "corr/foreign words: discard, "
 
             # stop words
-            if ('stop_words_file[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['stop_words_file[]'] != ''):
+            if ('swfileselect[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['swfileselect[]'] != ''):
                 str_legend = str_legend + "Stopword file: " + \
-                    self.options["scrub"]['stop_words_file[]'] + ", "
-            if ('stop_words' in self.options["scrub"]) and (
-                    self.options["scrub"]['stop_words'] != ''):
+                    self.options["scrub"]['swfileselect[]'] + ", "
+            if ('manualstopwords' in self.options["scrub"]) and (
+                    self.options["scrub"]['manualstopwords'] != ''):
                 str_legend = str_legend + \
-                    "Stopwords: [" + self.options["scrub"]['stop_words'] \
+                    "Stopwords: [" + self.options["scrub"]['manualstopwords'] \
                     + "], "
 
             # lemmas
-            if ('lemmas_file[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['lemmas_file[]'] != ''):
+            if ('lemfileselect[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['lemfileselect[]'] != ''):
                 str_legend = str_legend + "Lemma file: " + \
-                    self.options["scrub"]['lemmas_file[]'] + ", "
-            if ('lemmas' in self.options["scrub"]) and (
-                    self.options["scrub"]['lemmas'] != ''):
+                    self.options["scrub"]['lemfileselect[]'] + ", "
+            if ('manuallemmas' in self.options["scrub"]) and (
+                    self.options["scrub"]['manuallemmas'] != ''):
                 str_legend = str_legend + \
-                    "Lemmas: [" + self.options["scrub"]['lemmas'] + "], "
+                    "Lemmas: [" + self.options["scrub"]['manuallemmas'] + "], "
 
             # consolidations
-            if ('consolidations_file[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['consolidations_file[]'] != ''):
+            if ('consfileselect[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['consfileselect[]'] != ''):
                 str_legend = str_legend + "Consolidation file: " + \
-                    self.options["scrub"]['consolidations_file[]'] + ", "
-            if ('consolidations' in self.options["scrub"]) and (
-                    self.options["scrub"]['consolidations'] != ''):
+                    self.options["scrub"]['consfileselect[]'] + ", "
+            if ('manualconsolidations' in self.options["scrub"]) and (
+                    self.options["scrub"]['manualconsolidations'] != ''):
                 str_legend = str_legend + \
                     "Consolidations: [" + \
-                    self.options["scrub"]['consolidations'] + "], "
+                    self.options["scrub"]['manualconsolidations'] + "], "
 
             # special characters (entities) - pull down
-            if ('special_characters_preset' in self.options["scrub"]) and (
-                    self.options["scrub"]['special_characters_preset']
-                    != 'None'):
+            if ('entityrules' in self.options["scrub"]) and (
+                    self.options["scrub"]['entityrules'] != 'default'):
                 str_legend = str_legend + "Special Character Rule Set: " + \
-                    self.options["scrub"]['special_characters_preset'] + ", "
-            if ('special_characters_file[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['special_characters_file[]'] != ''):
+                    self.options["scrub"]['entityrules'] + ", "
+            if ('scfileselect[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['scfileselect[]'] != ''):
                 str_legend = str_legend + "Special Character file: " + \
-                    self.options["scrub"]['special_characters_file[]'] + ", "
-            if ('special_characters' in self.options["scrub"]) and (
-                    self.options["scrub"]['special_characters'] != ''):
+                    self.options["scrub"]['scfileselect[]'] + ", "
+            if ('manualspecialchars' in self.options["scrub"]) and (
+                    self.options["scrub"]['manualspecialchars'] != ''):
                 str_legend = str_legend + \
                     "Special Characters: [" + \
-                    self.options["scrub"]['special_characters'] + "], "
+                    self.options["scrub"]['manualspecialchars'] + "], "
 
         else:
             str_legend += "Unscrubbed."

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block section_head %}{% endblock %}
+
+{% block content %}
+	<div id="manage-options" class="container">{% block options %}{% endblock %}</div>
+	<div id="manage-previews" class="container">
+		<div id="prepare-previews-context">
+			{% block previews %}{% endblock %}
+		</div>
+	</div> 
+{% endblock %}

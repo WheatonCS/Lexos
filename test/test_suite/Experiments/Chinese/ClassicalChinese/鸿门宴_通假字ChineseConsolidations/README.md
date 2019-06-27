@@ -22,7 +22,8 @@ Steps:
 
     (a) Remove Punctuation
     (b) Remove Digits
-    (c) Consolidations - Upload the Chinese_consolidations.txt file
+    (c) Consolidations
+        Upload the Chinese_consolidations.txt file
     
     Apply Scrubbing
 To compare the two files, you can:
@@ -30,12 +31,13 @@ To compare the two files, you can:
     Download Scrubbed Files for a manual compare.
 OR
 
-    (a) Upload 鸿门宴HongMenYan_without_consolidations.txt again
+    (a) Go back to Upload and upload the 鸿门宴HongMenYan_without_consolidations.txt
+        file found there
     (b) Go to Analyze - Similarity Query
-    (c) Tokenize - by Characters
+    (c) Choose Tokenize 1-gram by Characters
     
-    Get Similarity Rankings: the two files should be identical and should have a
-    similarity score of 0.364.
+    Get Similarity Rankings: the two files should be identical, and should have a
+    similarity score of 0.
 
 mjl - May 20, 2019
 jg - June 10, 2014

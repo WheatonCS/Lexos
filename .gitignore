@@ -1,6 +1,5 @@
 ### project specific
 secret_key
-.idea/**/lexos_core.xml
 
 ### JetBrains idea templates
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion,

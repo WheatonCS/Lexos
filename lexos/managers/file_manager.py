@@ -301,7 +301,7 @@ class FileManager:
 
         # update the savepath of each file
         for l_file in list(self.files.values()):
-            l_file.save_path = pathjoin(
+            l_file.savePath = pathjoin(
                 session_manager.session_folder(),
                 constants.FILE_CONTENTS_FOLDER,
                 str(l_file.id) + '.txt')
@@ -370,12 +370,14 @@ class FileManager:
                         class_label=l_file.class_label)
 
             else:
+                cut_preview = []
                 for i, file_string in enumerate(children_file_contents):
-                    previews.append(
-                        (l_file.id,
-                         l_file.name,
-                         l_file.label + '_' + str(i + 1),
+                    cut_preview.append(
+                        ('Segment ' + str(i + 1),
                          general_functions.make_preview_from(file_string)))
+
+                previews.append(
+                    (l_file.id, l_file.label, l_file.class_label, cut_preview))
 
         if saving_changes:
             previews = self.get_previews_of_active()

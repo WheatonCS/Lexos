@@ -1,9 +1,9 @@
-{% extends "helpers/base-template.html" %}
-{% block title %}500{% endblock %}
+{% extends "base.html" %}
 
-<!-- Content -->
+{% block title %}404{% endblock %}
+
 {% block content %}
-<div class="centerer">
-    <h3>500 - Internal Server Error</h3>
-</div>
+    <div style="text-align: center; margin-top: 7%">
+        <h3>Bad Backend! Bad!</h3>{# TODO: make this web page actually beautiful #}
+    </div>
 {% endblock %}

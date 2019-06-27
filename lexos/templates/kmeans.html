@@ -1,0 +1,162 @@
+{% extends "base_analyze.html" %}
+{% set active_page = 'kmeans' %}
+
+{% block head %}
+    <!-- Lexos K Means Script -->
+    <script type="module"
+            src="{{ url_for('static', filename='js/scripts_kmeans.js') }}?ver={{ version }}"></script>
+    <!-- Latest plotly js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Latest compiled and minimized DataTables CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.32/dt-1.10.16/b-1.5.1/b-colvis-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.css"/>
+    <!-- Latest compiled and minimized DataTables JS -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.32/dt-1.10.16/b-1.5.1/b-colvis-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/datatables.min.js"></script>
+    <!-- Datable plug in to truncate the columns. -->
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/plug-ins/1.10.16/dataRender/ellipsis.js"></script>
+{% endblock %}
+
+{% block title %}K-Means Clustering{% endblock %}
+
+{% block options %}
+    <fieldset class="row col-lg-12 col-md-12">
+        <legend>K-Means Options <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=B7_cJBeofn4&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=10" target="_blank" data-toggle="tooltip" data-trigger="hover" data-placement="right" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
+        <div>
+            <label for="n_clusters">Number of Clusters (K-Value):
+                <input type="number"
+                       name="nclusters"
+                       id="nclusters"
+                       min="1"
+                       step="1"
+                       style="width:65px;height:32px;"
+                       max="{{ numActiveDocs }}"
+                       value="{{ session['kmeanoption']['nclusters'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right"
+                   title="The number of clusters or the number of centroids.
+                          The K-value should always be fewer or equal to the
+                          number of active documents. By default, we set this
+                          value to be half of the number of active documents."></i>
+            </label>
+            <label for="viz">Method of Visualization:
+                <select name="viz" id="vizMethod">
+                    <option value="Voronoi" {{ 'selected' if session['kmeanoption']['viz'] == 'Voronoi' }}>
+                        Voronoi
+                    </option>
+                    <option value="2DScatter" {{ 'selected' if session['kmeanoption']['viz'] == '2DScatter' }}>
+                        2D-Scatter
+                    </option>
+                    <option value="3DScatter" {{ 'selected' if session['kmeanoption']['viz'] == '3DScatter' }}>
+                        3D-Scatter
+                    </option>
+                </select>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right"
+                   title='2D-Scatter plot and Voronoi diagram
+                          will reduce the DTM to a two dimensional matrix, whereas 3D-Scatter plot will reduce the DTM to a three dimensional matrix.
+                          Compared to the scatter plots, Voronoi displays the centroids and draws polygons for each document cluster.'></i>
+            </label>
+        </div>
+    </fieldset>
+
+    <fieldset class="row col-lg-12 col-md-12">
+        <legend class="has-chevron">Advanced K-Means Options
+            <span id="kmeansAdvancedChev" class="fa fa-chevron-right rotate"
+                  aria-expanded="false" data-target="#advancedkmeansOpts"
+                  aria-controls="advancedkmeansOpts">
+            </span>
+        </legend>
+
+        <div class="collapse" id="advancedkmeansOpts">
+            <label for="max_iter">Maximum Number of Iterations:
+                <input type="number"
+                       name="max_iter"
+                       id="max_iter"
+                       min="1"
+                       step="1"
+                       style="height:32px;"
+                       value="{{ session['kmeanoption']['max_iter'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px;"
+                   title="Maximum number of iterations of the k-means algorithm
+                          for a single run. The default is 300."></i>
+            </label>
+
+            <label for="init">Method of Initialization:
+                <select name="init" id="initMethod">
+                    <option value="k-means++" {{ 'selected' if session['kmeanoption']['init'] == 'k-means++' }}>
+                        k-means++
+                    </option>
+                    <option value="random" {{ 'selected' if session['kmeanoption']['init'] == 'random' }}>
+                        random
+                    </option>
+                </select>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px;"
+                   title="'k-means++' selects initial cluster centers using a weighted probability
+                          distribution to speed up convergence. The 'random'
+                          option chooses k observations at random from
+                          the data to serve as the initial centroids."></i>
+            </label>
+
+            <label for="n_init">Number of Iterations with Different Centroids:
+                <input type="number"
+                       name="n_init"
+                       id="n_init"
+                       min="1"
+                       step="1"
+                       style="height:32px;"
+                       value="{{ session['kmeanoption']['n_init'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px"
+                   title="The number of times (N) the k-means algorithm will be run
+                          with different centroid seeds. The final results will
+                          be the best output of those N consecutive runs. (The default is 10.)"></i>
+            </label>
+
+            <label for="tolerance">Relative Tolerance:
+                <input type="number"
+                       name="tolerance"
+                       placeholder="Default is 1e-4"
+                       id="tolerance"
+                       step=".0001"
+                       style="width:75px;height:32px;"
+                       value="{{ session['kmeanoption']['tolerance'] }}"/>
+                <i class="fa fa-question-circle lexos-tooltip-trigger"
+                   data-toggle="tooltip" data-html="true" data-container="body"
+                   data-placement="right" style="font-size:12px"
+                   title="Decimal, relative tolerance with respect to inertia
+                          to declare convergence."></i>
+            </label>
+        </div>
+    </fieldset>
+{% endblock %}
+
+{% block results %}
+    <div class="row col-lg-12 col-md-12" style="padding-top: 10px">
+        <input type="button" class="btn btn-success"
+               id="get-k-means-result" name="get-k-means-result"
+               value="Get KMeans Result"/>
+    </div>
+
+    <div id="KMeans-result" class="row col-lg-12 col-md-12"
+         style="padding-top: 10px">
+        <fieldset class="row col-lg-12 col-md-12">
+            <legend>
+                K-Means Result
+            </legend>
+        </fieldset>
+        <div id="KMeans-table" class="row col-lg-3 col-md-3"></div>
+        <div id="KMeans-plot" class="col-lg-9 col-md-9"></div>
+    </div>
+{% endblock %}
+
+{% block submit %}
+{% endblock %}

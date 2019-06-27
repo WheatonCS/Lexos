@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% set active_page = 'bct_analysis' %}
+
+{% block head %}{% endblock %}
+{% block title %}Bootstrap Consensus Tree{% endblock %}
+
+<!-- We have this page set up because scikit-bio library is hard to install on windows.
+     Thus if users choose to not to install scikit-bio, we display this page.
+     And once scikit-bio better supports windows or an alternative method is
+     written, this page should be removed. -->
+{% block content %}
+    <legend>Missing scikit-bio library!</legend>
+    <div class="row col-lg-11 col-md-11" style="padding-left: 30px">
+        <ul class="list-group" style="list-style-type:disc">
+            <li class="list-group-item-danger">
+                The Bootstrap Consensus Tree tool requires the
+                <code>scikit-bio</code> Python library. Lexos was unable to
+                detect this library on your machine.
+            </li>
+            <li class="list-group-item-text">
+                If you wish to use Lexos without Bootstrap Consensus Tree,
+                you may ignore this message. The other Lexos tools will run
+                fine.
+            </li>
+            <li class="list-group-item-text">
+                If you wish to use Bootstrap Consensus Tree tool without
+                installing <code>scikit-bio</code> on your machine, you can
+                visit our
+                <a href="http://lexos.wheatoncollege.edu">public server</a>.
+            </li>
+            <li class="list-group">
+                If you wish to run Bootstrap Consensus Tree on your own
+                computer, follow the instructions below.
+                <ul class="list-group" style="list-style-type:disc">
+                    <li class="list-group-item">
+                        Mac/Linux users: Open a terminal and run <code>pip install scikit-bio</code>
+                    </li>
+                    <li class="list-group-item">
+                        Windows users: Please follow the instructions on our
+                        <a href="https://github.com/WheatonCS/Lexos/wiki/How-to-Install-scikit-bio-on-Windows" target="_blank">Wiki</a>.
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

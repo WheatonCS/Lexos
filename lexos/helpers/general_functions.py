@@ -31,14 +31,13 @@ def make_preview_from(input_string: str) -> str:
     :param input_string: A string from which to create the formatted preview.
     :return: The formatted preview string.
     """
-
     if len(input_string) <= constants.PREVIEW_SIZE:
         preview_string = input_string
     else:
-        half_length = constants.PREVIEW_SIZE//2
-        input_string = re.sub(" +", ' ', input_string)  # Remove extra spaces
-        preview_string = input_string[:half_length].strip() \
-            + "\u2026 \u2026" + input_string[-half_length:].strip()
+        newline = '\n'
+        half_length = constants.PREVIEW_SIZE // 2
+        preview_string = input_string[:half_length] + '\u2026 ' + newline + \
+            newline + '\u2026' + input_string[-half_length:]  # New look
     return preview_string
 
 

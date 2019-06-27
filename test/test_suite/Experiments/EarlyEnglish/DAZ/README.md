@@ -33,30 +33,30 @@ Steps:
 	(b) Make Lowercase
 	(c) Remove Digits
 	(d) Scrub Tags - keep default options
-	    (the default is Remove Tag)
+	    (the default is to keep text within but remove <corr> and <foreign> tags)
 	(e) Lemmas: upload the DAZ_lemma.txt file
 	(f) Consolidations: upload the DAZ_consolidation.txt file
-	(g) Special Characters - choose Old English SGML
+	(g) Set Special Characters - Pre-Defined Rule Set to Dictionary of Old English SGML
 
     Apply Scrubbing
 (2) CUT:
 
-    (a) Go to Manange (this is optional)
-        - Right Click on A1.3_Dan_T00030 and edit its name to "Dan" (without the quotes)
-        - Right Click on A3.3_Az_T00130 and edit its name to "AZ" (without the quotes)
-    (b) On manage, deselect AZ so Dan is the only active document
-    (c) Cut Dan using these settings:
-        - Set Cut Mode to "Tokens"
-        - Set "Segment Size" to 450
-        - This should lead to ten segments of Daniel
-    (d) Go back to manage and select Az so you have 11 active documents
-    
+    (a) Choose Default Cutting Options, select Segments/Document and Number of
+        Segments as 1 (we don't want to cut Azarias)
+    (b) For Daniel, select the Individual Options button (by its title in the Preview
+        window) and select Segments/Document: Segment Size: 450 word chunks,
+        zero Overlap, 50% Last Proportion
+    This will lead to ten segments of Daniel
+
+	Apply Cuts
 (4) ANALYZE - Dendrogram
 
-	(a) Use the following metrics:
-	    - Distance Method: Euclidean
-	    - Linkage Method: Average
-	    - Orientation: Bottom
+	(a) Use the default metrics:
+	    Distance Method: Euclidean
+	    Linkage Method: Average
+	(b) Assign Temporary Labels: (recommended, but not required)
+	    Name the Azarias chunk as "AZ"
+	    Name the Daniel chunks as "Dan1", "Dan2", etc.
 	
 	Get Dendrogram
 	Compare your result with the .png found in the ResultsToExpect/ directory.

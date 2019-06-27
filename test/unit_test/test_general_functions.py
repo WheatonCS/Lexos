@@ -1,4 +1,4 @@
-from lexos.helpers.general_functions import get_encoding, \
+from lexos.helpers.general_functions import get_encoding, make_preview_from, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
     dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
 
@@ -6,6 +6,30 @@ from lexos.helpers.general_functions import get_encoding, \
 class TestGeneralFunctions:
     def test_get_encoding(self):
         assert get_encoding(b"asdf") == "ascii"
+
+    def test_make_preview_from(self):
+        newline = '\n'
+        one_char = "x"
+        less_than_500_char = "modgaecq"
+        str_250 = "gjzeqagitanbwnuwjkfbtpixhkcxltlcmvrbunoxovjzhyoiptckkxmd" \
+                  "brcnshyefsrqexbdeczdbqjvprgiyjwwsacutlahuwhmscyuwkqxfnxq" \
+                  "zxyozedtwmrztwzzvoxrjnaypzbrkxfytpqeqmemxylvrvgtsthbalai" \
+                  "byzxnoxxbtofhnpdepatvbihjoungenjidckhepgdlsmnrbqdgaalidw" \
+                  "gccbardglcnedcqqxduuaauzyv"
+        str_500 = str_250 + str_250
+        more_than_500_char_even = \
+            str_250 + less_than_500_char + less_than_500_char + str_250
+        more_than_500_char_odd = \
+            str_250 + less_than_500_char + one_char + less_than_500_char + \
+            str_250
+        middle = '\u2026 ' + newline + newline + '\u2026'
+        assert make_preview_from(less_than_500_char) == less_than_500_char
+        assert make_preview_from(str_500) == str_500
+
+        assert make_preview_from(
+            more_than_500_char_odd) == str_250 + middle + str_250
+        assert make_preview_from(
+            more_than_500_char_even) == str_250 + middle + str_250
 
     def test_generate_d3_object(self):
         assert generate_d3_object(

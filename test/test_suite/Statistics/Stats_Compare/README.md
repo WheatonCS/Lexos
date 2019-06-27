@@ -1,68 +1,43 @@
-# Stats Compare
+# STATS COMPARE
 
-In order to verify the correctness of the Lexos Statistics tool, we used two other tools
-to compare data.
+We want to check whether the counting on STATS page work for large files and whether the data come out are correct, thus we used other two tools to compare the result.
 
-The tools used were:
-- Voyant-Tools 
-    * https://voyant-tools.org/
-- Intelligent Archive 
-    * https://www.newcastle.edu.au/research-and-innovation/centre/education-arts/cllc/intelligent-archive
-    * Download required (best used with MacOS or other Java supporting OS)
+The other two are: 
+- Voyant(search it and use it online;
+- Intelligent Archive(need download to use, try on mac since it was written in JAVA, need whatever operating systems that supports java)
 
-### How to use Voyant
+Need to know:
+- Voyant does not do scrubbing stuff, it count the words as how it apperas in the original uploading files
+- Intelligent Archive provides a space to let users edit the words to exclude from process after uploading files and click "Word Frequencies", only tried a few punctuations but not sure whether those are all or not
 
-*Note:* Voyant does not scrub files, it counts the words as it appears in the original uploading files
-
-1. Upload your file
-
-2. In the summary window, there is a sentence describing the total words (e.g. This corpus has 1 document
- with 5,389 total words and 1,809 unique word forms). The total words should be equal to Lexos' count
- of Total Terms and Voyant's "unique word forms" should equal Lexos' "Distinct Terms"
-
-3. The Vocabulary Density should be equal to Lexos' Vocabulary Density
-
-4. On small documents (documents with 59 or less distinct terms) Voyant can find the number of Single-Occurance
-terms by sliding the "items" scale all the way to the right and looking at the counts under "Most frequent
-words in the corpus" in Voyant's "Summary" window. 
-
-### How to use Intelligent Archive 
-
-*Note:* Intelligent Archive provides a space to let users edit the words to exclude from the process
-
-1. After opening the .jar file, click "Add New"
-
-2. Give the file an Author and a Title
-
-3. Click "Word Frequencies" and change "Block Method" to "Text" (If your file is in Chinese click "Segment by Character")
-
-4. "Word Types" should equal Lexos' count of "Distinct Terms"
-
-5. "Size" should equal the "Total Terms"
-
-6. To count Single-Occurrence terms, set the "Output Size" to one of the other tests' distinct number of terms 
-(the larger one) and count how many words have the frequency one
 
 Test files:
-- catCaterpillar: original
-- catCaterpillar(scrubbed)
+- catCaterpillar:original one
 
-- DreamCH1: original
-- DreamCH1(scrubbed)
+- DreamCH1:original one
+- DreamCH1(no_punc):removed punctuations using Lexos
+- DreamCH1(no_punc&white_spaces):removed punctuations and white spaces using Lexos
 
-- Fog(beginning): original
-- Fog(beginning-scrubbed)
+- Fog(beginning):original one
+- Fog(beginning_no_space):removed spaces
+- Fog(beginning_one_line):removed all the white spaces
 
-- Heart_of_Darkness: original
-- Heart_of_Darkness(scrubbed)
+- Heart_of_Darkness:original one
+- Heart_of_Darkness(no_punc&lowercase&no_digits):removed punctuations and made all in lowercase and removed digits using Lexos
 
-- OnetoTen: original
-- OnetoTen(scrubbed)
+- OnetoTen:original one
+- OnetoTen(no_space):removed spaces
+- OnetoTen(one_line_with_no_space):removed all the white spaces
+- OnetoTen(one_line_with_space):removed new line characters
 
-- War and Peace: original
-- War and Peace(scrubbed)
+- War and Peace:original one
+- War and Peace(no_punc):removed punctuations using Lexos
+- War and Peace(no_punc&lowercase):removed punctuations and made all in lowercase using Lexos
+- War and Peace(no_punc&lowercase&no_digits):removed punctuations and made all in lowercase and removed digits using Lexos
+- War and Peace(no_punc&lowercase&no_digits):removed punctuations and made all in lowercase and removed digits using Lexos on June 28th, 2016(scrubbing has been edited since the last txt version)
 
-Go to "STATS_Compare.csv" and "STATS_Compare.png" in folder ResultsToExpect for results.
+
+Go to "STATS_Compare.ods" in folder ResultsToExpect for results.
 
 
 

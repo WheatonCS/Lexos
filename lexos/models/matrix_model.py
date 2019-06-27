@@ -7,9 +7,10 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from lexos.helpers import definitions
 from lexos.models.base_model import BaseModel
-from lexos.models.file_manager_model import FileManagerModel
+from lexos.models.filemanager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
-    MatrixReceiver
+    MatrixReceiver, \
+    IdTempLabelMap
 
 FileIDContentMap = Dict[int, str]
 
@@ -58,6 +59,15 @@ class MatrixModel(BaseModel):
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
             else MatrixReceiver().options_from_front_end()
+
+    def get_temp_label(self) -> Counter[str]:
+        """Get an unordered list (counter) of all the temp labels."""
+        # noinspection PyTypeHints
+        return Counter(self._opts.id_temp_label_map.values())
+
+    def get_id_temp_label_map(self) -> IdTempLabelMap:
+        """Get the dict where id maps to temp labels."""
+        return self._opts.id_temp_label_map
 
     def _get_raw_count_matrix(self) -> pd.DataFrame:
         """Get the raw count matrix for the whole corpus.

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from lexos.models.dendrogram_model import DendroOption, DendrogramModel, \
+from lexos.models.dendro_model import DendroOption, DendrogramModel, \
     DendroTestOptions
 
 
@@ -18,17 +18,16 @@ class TestLeftOrientation:
         ),
 
         front_end_option=DendroOption(
-            orientation='Left',
-            linkage_method='Average',
-            dist_metric='Euclidean',
-            text_color="blue"
-        )
+            orientation='left',
+            linkage_method='average',
+            dist_metric='euclidean'
+        ),
 
-        # id_temp_label_map={
-        #     2: "This is a test",
-        #     4: "Cheng is handsome",
-        #     10: "I look so good!"
-        # }
+        id_temp_label_map={
+            2: "This is a test",
+            4: "Cheng is handsome",
+            10: "I look so good!"
+        }
     )
 
     model = DendrogramModel(test_options=test_options)
@@ -67,17 +66,16 @@ class TestBottomOrientation:
         ),
 
         front_end_option=DendroOption(
-            orientation='Bottom',
-            linkage_method='Average',
-            dist_metric='Euclidean',
-            text_color="blue"
-        )
+            orientation='bottom',
+            linkage_method='average',
+            dist_metric='euclidean'
+        ),
 
-        # id_temp_label_map={
-        #     2: "This is also a test",
-        #     4: "Weiqi is handsome as well",
-        #     10: "I look so good too!"
-        # }
+        id_temp_label_map={
+            2: "This is also a test",
+            4: "Weiqi is handsome as well",
+            10: "I look so good too!"
+        }
     )
 
     model = DendrogramModel(test_options=test_options)

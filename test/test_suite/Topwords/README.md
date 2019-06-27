@@ -1,4 +1,4 @@
-# Top Words
+# Topwords
 
 This function finds the Z-score of words in texts
 
@@ -10,15 +10,12 @@ results_docToClass.csv, results_classToClass.csv
 
 ## Test Default Settings
 
-1. Upload all files:
+0. UPLOAD ALL TEST FILES:
     - Melville_MobyDick.txt, 
     - Pride_and_Prejudice.txt
 
-2. Under the "Analyze" menu, click "Top Words"
-
-3. Change **NO** settings  
-
-4. Click "Generate"
+1. Topwords
+	- Change **NO** settings  
 	
 Results:
 - results_defaults.csv
@@ -26,65 +23,49 @@ Results:
 
 ## Test Tokenize by Characters
 
-1. Upload all files:
+0. UPLOAD ALL TEST FILES:
     - Melville_MobyDick.txt, 
     - Pride_and_Prejudice.txt
 
-2. Under the "Analyze" menu, click "Top Words"
-
-3. Under "Tokenize" select "By Characters"
-
-4. Keep all other setting as default
-
-5. Click "Generate"
+1. Topwords
+	- Select by Characters
+	- Keep all other settings as default
 	
 Results:
 - results_byCharacters.csv
 
 
-## Test Compare Each Document to Other Classes
+## Test Compare each doc to other class
 
-1. Upload all files:
+0. UPLOAD ALL TEST FILES:
     - Melville_MobyDick.txt, 
     - Pride_and_Prejudice.txt
 
-2. Go to the "Manage" page. 
-
-3. Right click on Melville_MobyDick and click "Edit Class". Set the class to "Class1" 
-
-4. Right click on Pride_and_Prejudice and click "Edit Class". Set the class to "Class2" 
-
-5. Under the "Analyze" menu, click "Top Words"
+1. Manage
+    - Set class for Melville_MobyDick as "Class1"
+    - Set class for Pride_and_Prejudice as "Class2"
     
-6. Select "Each document to other classes"
-
-7. Keep all other settings as default
-
-8. Click "Generate"
+2. Topwords
+	- Select Compare each document to other class(es)
+	- Keep all other settings as default
 	
 Results:
 - results_docToClass.csv
 
 
-## Test Compare Class to Other Classes
+## Test Compare class to other class
 
-1. Upload all files:
+0. UPLOAD ALL TEST FILES:
     - Melville_MobyDick.txt, 
     - Pride_and_Prejudice.txt
 
-2. Go to the "Manage" page. 
-
-3. Right click on Melville_MobyDick and click "Edit Class". Set the class to "Class1" 
-
-4. Right click on Pride_and_Prejudice and click "Edit Class". Set the class to "Class2" 
-
-5. Under the "Analyze" menu, click "Top Words"
+1. Manage
+    - Set class for Melville_MobyDick as "Class1"
+    - Set class for Pride_and_Prejudice as "Class2"
     
-6. Select "Each class to other classes"
-
-7. Keep all other settings as default
-
-8. Click "Generate"
+2. Topwords
+	- Select Compare each class to other class(es)
+	- Keep all other settings as default
 	
 Results:
 - results_classToClass.csv

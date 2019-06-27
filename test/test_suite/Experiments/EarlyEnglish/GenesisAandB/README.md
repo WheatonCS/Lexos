@@ -2,9 +2,8 @@
 
 Corpus:  Anglo Saxon (Dictionary of Old English)
 
-Finding divisions within a poem is a problem, at least related to the one we 
-had addressed in the Daniel/Azarias analysis.
-
+Finding divisions within a poem is a problem at
+least related to the one we had addressed in the Daniel/Azarias analyses.
 Here we analyze the Anglo-Saxon poem Genesis to see
 if our lexomics methods distinguish the sections of the (one) Genesis poem
 where the two sections are known as Genesis A and Genesis B.
@@ -32,28 +31,31 @@ Steps:
     (a) Remove Punctuation
     (b) Make Lowercase
     (c) Remove Digits
-    (d) Scrub Tags and change the options to:
-        - Set all tags to:   Remove Tag (default)
-        - Set teiheader tag to:  Remove All
-        - Click OK
-    (e) Special Characters - choose Old English SGML
+    (d) Scrub Tags and then Tag Options:
+        (the gear for Tag Options will appear after selecting Scrub Tags)
+    - Set all tags to:   Remove Tag Only (default)
+    - Set teiheader tag to:  Remove Element and All Its Contents
+    - Save Changes and then Close
+    (e) Set Special Characters - Pre-Defined Rule Sets:
+        Dictionary of Old English SGML
 
     Apply Scrubbing
 (2) CUT:
 
-    (a) Set cut mode to "Tokens" (default)
-    (b) Set "Segment Size" to 1500
+    (a) Tokens/Segment with a Segment Size of 1500
+    (b) leave other options with their default option values
 
     Apply Cuts
-    (This should cut the document into 11 segments)
-(3) ANALYZE - Dendrogram:
+(3) ANALYZE - Clustering - Hierarchical Clustering:
 
-    (a) Use the following metrics:
-        - Distance Method: Euclidean
-        - Linkage Method: Average
-        - Orientation: Bottom
+    (a) Use the default metrics Distance Method: Euclidean and Linkage Method: Average
+    (b) Assign Temporary Labels (optional, but recommended)
+        Note that each segment ends in an underscore followed by a number
+        That number is the order of the sections, removing it is not recommended
+    (c) Choose the default Tokenization (token 1-grams)
+    (d) Choose the default Normalization (Proportional)
     
-    Generate Dendrogram
+    Get Dendrogram
     Compare your result with the .png found in the ResultsToExpect/ directory.
 
 
