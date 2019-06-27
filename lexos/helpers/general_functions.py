@@ -205,6 +205,21 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     return striped_text
 
 
+def apply_function_no_tags(input_string: str, functions: list) -> str:
+    """strips the given text and apply the given functions
+
+    :param input_string: string to strip
+    :param functions: a list of functions to apply to input_string
+    :return: striped text
+    """
+    striped_text = ''
+    contents = input_string
+    for function_to_apply in functions:
+        contents = function_to_apply(contents)
+    striped_text += contents
+    return striped_text
+
+
 def _try_decode_bytes_(raw_bytes: bytes) -> str:
     """helper function for decode_byte,try to decode the raw bytes
 

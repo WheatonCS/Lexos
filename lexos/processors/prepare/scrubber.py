@@ -1042,12 +1042,21 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             return orig_text
 
     # apply all the functions and exclude tag
-    text = general_functions.apply_function_exclude_tags(
-        input_string=text, functions=[to_lower_function,
-                                      consolidation_function,
-                                      lemmatize_function,
-                                      get_remove_digits,
-                                      stop_keep_words_function,
-                                      total_removal_function])
+    if tags:
+        text = general_functions.apply_function_exclude_tags(
+            input_string=text, functions=[to_lower_function,
+                                          consolidation_function,
+                                          lemmatize_function,
+                                          get_remove_digits,
+                                          stop_keep_words_function,
+                                          total_removal_function])
+    else:
+        text = general_functions.apply_function_no_tags(
+            input_string=text, functions=[to_lower_function,
+                                          consolidation_function,
+                                          lemmatize_function,
+                                          get_remove_digits,
+                                          stop_keep_words_function,
+                                          total_removal_function])
 
     return text
