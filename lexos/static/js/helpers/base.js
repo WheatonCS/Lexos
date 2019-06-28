@@ -52,6 +52,10 @@ function display_first_time_visit_popup(){
             on the top right for more detailed documentation.
         </h3>
     `).appendTo(popup_container_element.find(".popup-content"));
+
+    // If the popup's "OK" button was pressed, close the popup
+    popup_container_element.find(".popup-ok-button")
+        .click(function(){ close_popup(); });
 }
 
 
