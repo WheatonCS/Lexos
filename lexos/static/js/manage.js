@@ -324,7 +324,7 @@ function walkthrough(){
         },
         {
             element: "#prepare-button",
-            intro: `Once you"re satisfied with your active documents, you can
+            intro: `Once you're satisfied with your active documents, you can
                 move on to the "Prepare" pages.`,
             position: "bottom"
         },
