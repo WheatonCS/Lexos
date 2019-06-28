@@ -5,7 +5,7 @@ This file need to be stored in the project root dir"""
 import os
 
 SHORT_NAME = 'Lexos'
-VERSION = '3.2.0.0'
+VERSION = '4.0.0.0'
 ABOUT_URL = 'http://wheatoncollege.edu/lexomics/'
 REPO_URL = 'https://github.com/WheatonCS/Lexos'
 LIVE_URL = 'http://lexos.wheatoncollege.edu'
