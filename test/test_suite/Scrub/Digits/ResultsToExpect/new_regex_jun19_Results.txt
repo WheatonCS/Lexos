@@ -1,0 +1,15 @@
+hey here's a few numbers: 
+    
+hey here's a few decimal numbers: 
+  cool!   
+signed numbers too! 
+    
+tricky trap cases: 
+. . .. .. .  ..' ' "" 
+Europeans do decimals this way: 
+    
+The rest of the world does decimals like this: 
+   
+   
+we currently modify some tokens where digits appear: 
+J@ms tst..abc @ # $ 

@@ -192,7 +192,7 @@ function walkthrough(){
         {
             element: "#k-means-options-section",
             intro: `These settings control how the K-Means graph will appear.
-                You can set the number of clusters and the graph"s type.`,
+                You can set the number of clusters and the graph's type.`,
             position: "top",
         },
         {
