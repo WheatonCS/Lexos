@@ -592,3 +592,8 @@ label input[type="checkbox"]:checked + span:after {
     width: 80%;
     height: 80%;
   }
+
+/* First time visit popup */
+#welcome-to-lexos-popup .popup {
+    width: 50rem;
+}

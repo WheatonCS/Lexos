@@ -237,7 +237,7 @@ function walkthrough(){
         },
         {
             element: "#window-section",
-            intro: `Set the size of your window here.`,
+            intro: `Set the size and units to count in each window.`,
             position: "top",
         },
         {

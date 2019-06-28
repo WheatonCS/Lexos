@@ -14,7 +14,8 @@ test_front_end_option = TokenizerOption(
     length=None,
     search=None,
     sort_column=None,
-    sort_method=None
+    sort_method=None,
+    csv_documents_as_rows=None
 )
 test_option = TokenizerTestOption(
     token_type_str=test_token_type,
@@ -67,14 +68,14 @@ test_dtm = pd.DataFrame(
     data=[[0, 1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1, 0]],
     columns=["A", "B", "C", "D", "E", "F", "G"]
 )
-test_id_temp_label_map = {0: "F1.txt", 1: "F2.txt"}
 test_token_type = "Tokens"
 test_front_end_option = TokenizerOption(
     start=0,
     length=5,
     search="",
     sort_column=0,
-    sort_method=True
+    sort_method=True,
+    csv_documents_as_rows=False
 )
 test_option = TokenizerTestOption(
     token_type_str=test_token_type,

@@ -1,0 +1,15 @@
+hey here's a few numbers: 
+1 20 500 7000 
+hey here's a few decimal numbers: 
+3.14 31.41 cool! 314.15 3141.5926 
+signed numbers too! 
++100 +3.14 -7000 -2.79 
+tricky trap cases: 
+1. .1 .1. 1..1 .1.1.1 000-000-0000 1..1' 3.141' "3.141" 
+Europeans do decimals this way: 
+3,14 31,415926535879 314,15 141,592 
+The rest of the world does decimals like this: 
+1,234,567.89 1,234,567·89 1'234'567.891 
+2'234'567,89 1.234.567'89 1˙234˙567,89 
+we currently modify some tokens where digits appear: 
+J@m3s 1t3st.3.2.1.abc @1 9# $14 
