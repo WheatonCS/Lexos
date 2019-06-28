@@ -1,6 +1,7 @@
 /* Popup */
 #manage-popup .popup {
     min-width: 120rem;
+    min-height: 50rem;
 }
 
 
