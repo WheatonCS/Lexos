@@ -1,0 +1,23 @@
+{% extends "helpers/analyze-template.html" %}
+
+{% block title %}Tokenize{% endblock %}
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/tokenize.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/tokenize.css"/>
+{% endblock %}
+
+<!-- Results -->
+{% block results %}
+
+    <!-- Table -->
+    <div id="table-section" class="section"></div>
+
+{% endblock %}

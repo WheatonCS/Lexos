@@ -1,0 +1,17 @@
+{% extends "helpers/base-template.html" %}
+
+{% block title %}No Session{% endblock %}
+
+<!-- Head -->
+{% block head %}
+    <script type="text/javascript" src="/static/js/no-session.js"></script>
+{% endblock %}
+
+
+<!-- Content -->
+{% block content %}
+    <div class="centerer">
+        <h3>This page requires an active session. You will be redirected to the upload page.</h3>
+        <h3>If you are not redirected in 5 seconds, click <a href="/upload">here</a>.</h3>
+    </div>
+{% endblock %}

@@ -1,0 +1,143 @@
+<!-- The Tokenizer Tool -->
+
+<h3 class="help-section-title">The Tokenizer Tool</h3>
+
+<h3 class="help-section-paragraph">
+    The Tokenizer tool allows you to peek at and/or download your current
+    Document-Term Matrix (DTM) according to your current tokenize, normalize,
+    and culling options.
+</h3>
+
+<h3 class="help-section-paragraph">
+    Tokenizing is the backbone for many functions in Lexos.
+    Tokenization is the process of dividing a string of text into countable units
+    called “tokens”. Tokens are typically individual characters or words, but
+    they can also be “n-grams”, units composed of one or more sequences of
+    characters or words. By default, Lexos divides the text into tokens using s
+    paces as token delimiters. However, it can create n-grams by tokens (e.g.
+    1-gram: "the", 2-gram or bi-grams "the dog", etc.) or n-grams by character
+    (e.g. 5-grams: "the d" and "he do", etc.).
+</h3>
+
+<!-- Usage -->
+<h3 class="help-section-title">Usage</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>What is the DTM?</b></li>
+    <h3 class="help-section-paragraph">
+        Once the text is divided into tokens, Lexos assembles a Document-Term Matrix (DTM).
+        This is a table of “terms” — unique token forms — that occur in the
+        active documents. Lexos calculates the number of times each document
+        contains each term to produce the DTM. It displays the DTM as a table
+        where you can explore the table of term counts representing your texts.
+        <em><b>Note:</b> Text corpora containing a large number of documents or types
+        can take a while to process, so please be patient.</em>
+    </h3>
+
+    <li><b>Using the DTM</b></li>
+    <h3 class="help-section-paragraph">
+        By default, Lexos displays 10 table rows per page, but you can change this
+        using the "Rows" radio buttons. You can also filter the rows by entering
+        keywords in the "Search" form. Make sure to press "Generate" after
+        changing these options to refresh the table.
+    </h3>
+    <h3 class="help-section-paragraph">
+        To sort the table, click on a column header, and either "Ascending" or
+        "Descending" at the top next to "Order". Make sure to press "Generate" after
+        changing these options to refresh the table.
+    </h3>
+
+    <li><b>Orientation</b></li>
+    <h3 class="help-section-paragraph">
+        By default, Lexos displays the DTM with documents listed in columns and
+        terms listed in rows. When downloading the DTM you may choose to transpose
+        the table by selecting the Documents as Rows, Terms as Columns option. It
+        is most likely the case that you will have relatively few documents and a
+        relatively large number of terms. <em><b>Note:</b> Transposing the matrix
+        will produce a table with potentially hundreds or thousands of columns,
+        requiring you to scroll horizontally to view them.</em>
+    </h3>
+
+</ul>
+
+<!-- Options -->
+<h3 class="help-section-title">Options</h3>
+
+<h3 class="help-section-paragraph">
+    If you change the settings on any of the following options, make sure
+    to click "Generate" to see your changes reflected in the DTM.
+</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Tokenize</b></li>
+    <h3 class="help-section-paragraph">
+        By default Lexos tokenizes by tokens, meaning it splits strings of text
+        into tokens every time it encounters a space character. For Western languages,
+        this means that each token generally corresponds to a word. To tokenize
+        by multiple words, you can increase the n-gram size.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example given the text: "the dog ran" tokenizing by 1-gram tokens
+        would produce tokens "the", "dog", "ran". Tokenizing by 2-grams would
+        count the instances of bi-grams or pairs of words, thus producing tokens
+        "the dog", "dog ran", and so on.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you wish to tokenize by characters, Lexos will treat every character
+        (letters, whitespace, punctuation, etc.) as a separate token. Tokenizing
+        by 2-gram characters would produce tokens "th","he","e ", and so on.
+        Tokenizing by characters is best used for non-western languages that don't
+        have whitespace between tokens such as classical Chinese.
+    </h3>
+
+    <li><b>Normalize</b></li>
+    <h3 class="help-section-paragraph">
+        The default "Normalize" setting is "Proportional" which displays the
+        frequency of the occurrence of terms in your documents as a proportion
+        of the entire text.
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Raw Counts" will display in the table the actual number of occurrences
+        of each term in each document.
+    </h3>
+        <h3 class="help-section-paragraph">
+        "TF-IDF" or Term Frequency-Inverse Document Frequency attempts to
+        take into account difference in the lengths of your documents by
+        calculating their TF-IDF. Lexos uses base<em>e</em> (natural log) as the
+        default.
+    </h3>
+
+    <li><b>Cull</b></li>
+    <h3 class="help-section-paragraph">
+        "Culling" is a generic term we use for methods of decreasing the number
+        of terms used to generate the DTM based on statistical criteria (as
+        opposed to something like applying a stop-word list in Scrubber). Culling
+        is optional to use in Lexos. Lexos offers two different methods:
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Use the top ___ words": This method takes a slice of the DTM
+        containing only the top N most frequently occurring terms in the
+        set of active documents. The default setting is 100, meaning
+        Tokenizer will generate the DTM using only the top 100 most
+        frequent terms.
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Must be in ___ documents": This method build the DTM using only
+        terms that occur in at least N documents. The default setting is
+        1. If you have 10 active documents and you want to generate the
+        DTM using only terms that appear in all your active documents,
+        set the value to 10. <em><b>Note:</b> You can quickly determine
+        the number of active documents in your workspace as indicated by
+        the counter in the bottom right corner.</em>
+    </h3>
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        To download the DTM click the "Download" button and you will get a
+        results <code>.csv</code> file. “CSV” is short for Comma-Separated Values.
+        In your downloaded file, a comma will serve as the column delimiter and
+        these files can be opened by other programs later, e.g., Excel.
+    </h3>
+</ul>

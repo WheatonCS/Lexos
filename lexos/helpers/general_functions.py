@@ -31,13 +31,14 @@ def make_preview_from(input_string: str) -> str:
     :param input_string: A string from which to create the formatted preview.
     :return: The formatted preview string.
     """
+
     if len(input_string) <= constants.PREVIEW_SIZE:
         preview_string = input_string
     else:
-        newline = '\n'
-        half_length = constants.PREVIEW_SIZE // 2
-        preview_string = input_string[:half_length] + '\u2026 ' + newline + \
-            newline + '\u2026' + input_string[-half_length:]  # New look
+        half_length = constants.PREVIEW_SIZE//2
+        input_string = re.sub(" +", ' ', input_string)  # Remove extra spaces
+        preview_string = input_string[:half_length].strip() \
+            + "\u2026 \u2026" + input_string[-half_length:].strip()
     return preview_string
 
 
@@ -189,19 +190,34 @@ def apply_function_exclude_tags(input_string: str, functions: list) -> str:
     :param functions: a list of functions to apply to input_string
     :return: striped text
     """
-    striped_text = ''
+    stripped_text = ''
     tag_pattern = re.compile(r'<.+?>', re.UNICODE | re.MULTILINE)
     tags = re.findall(tag_pattern, input_string)
     contents = re.split(tag_pattern, input_string)
     for i in range(len(tags)):
         for function_to_apply in functions:
             contents[i] = function_to_apply(contents[i])
-        striped_text += contents[i]
-        striped_text += tags[i]
+        stripped_text += contents[i]
+        stripped_text += tags[i]
     for function_to_apply in functions:
         contents[-1] = function_to_apply(contents[-1])
-    striped_text += contents[-1]
-    return striped_text
+    stripped_text += contents[-1]
+    return stripped_text
+
+
+def apply_function_no_tags(input_string: str, functions: list) -> str:
+    """strips the given text and apply the given functions
+
+    :param input_string: string to strip
+    :param functions: a list of functions to apply to input_string
+    :return: striped text
+    """
+    stripped_text = ''
+    contents = input_string
+    for function_to_apply in functions:
+        contents = function_to_apply(contents)
+    stripped_text += contents
+    return stripped_text
 
 
 def _try_decode_bytes_(raw_bytes: bytes) -> str:

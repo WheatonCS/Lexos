@@ -9,26 +9,29 @@
 Use the similarity query to find out how close Chapter 67 
 is to all the other Chapters in the book.
 
-1. UPLOAD all files 
+1. Upload all files 
 
-2. Scrub using default settings
+2. Under the "Prepare" menu, go to the "Scrub" page, and using the default settings, click "Apply"
+    - Make Lowercase
+    - Remove Digits
+    - Remove Punctuation
 
-3. Similarity Query Rankings
+3. Under the "Analyze" menu, go to the "Similarity Query" page
 
-    - Click Chapter67 which is use to compare with all other files
-    - Token Type = by Characters 1 gram
-    - Deselect the Remove words that only appear once option (optional)
+4. In the "Comparison Document" section, click "Select" and use "Chapter67" as the comparison document.
 
+5. Under "Tokenize" select "By Characters"
+
+6. Click "Generate". 
+
+Expected Results are in the file: similarity-query-result.csv. 
 
 The module used to produce this ranking employs Latent Semantic Analysis to 
 generate unique vectors for each document. The cosine angle between your 
 comparison document's vector and the vector of each document of your corpus is 
 calculated and these values are then compared. Cosine similarity measures are
-between 0 and 1. The higher the value the closer the comparison document's 
+between 0 and 1. The lower the value the closer the comparison document's 
 vector is to that document's vector as opposed to the other documents' vectors.
 
-In the result ranking table Chapter 64 is the closest to Chapter 67. Also, 
-Chapter 67 is little bit closer to the late 40 Chapters, which is known to be 
-written by a different author than the author of the first 80 Chapters. Thus, 
-Chapter 67 and Chapter 64 might have been written by the same author as the 
-author of the late 40 Chapters. 
+The ordering, from least similar to most similar, is Chapter64, First80_without_64AND67, 
+First80Chapters, and finally Late40Chapters

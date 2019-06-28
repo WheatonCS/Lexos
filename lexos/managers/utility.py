@@ -26,16 +26,11 @@ def generate_json_for_d3(file_manager: FileManager, merged_set):
         An object, formatted in the JSON that d3 needs, either a list or a
         dictionary.
     """
-    chosen_file_ids = [int(x) for x in request.form.getlist('segmentlist')]
 
     active_files = []
-    if chosen_file_ids:
-        for file_id in chosen_file_ids:
-            active_files.append(file_manager.files[file_id])
-    else:
-        for l_file in list(file_manager.files.values()):
-            if l_file.active:
-                active_files.append(l_file)
+    for l_file in list(file_manager.files.values()):
+        if l_file.active:
+            active_files.append(l_file)
 
     if merged_set:  # Create one JSON Object across all the chunks
         minimum_length = int(request.form['minlength']) \
@@ -276,7 +271,7 @@ def xml_handling_options(data: dict = {}):
     for tag in tags:
         if tag not in session_manager.session['xmlhandlingoptions']:
             session_manager.session['xmlhandlingoptions'][tag] = {
-                "action": 'remove-tag', "attribute": ''}
+                "action": 'Remove Tag', "attribute": ''}
 
     # If they have saved, data is passed.
     # This block updates any previous entries in the dict that have been saved
@@ -313,7 +308,8 @@ def simple_vectorizer(content: str, token_type: str, token_size: int):
         analyzer=token_type,
         ngram_range=(
             token_size,
-            token_size))
+            token_size),
+        token_pattern=r"(?u)\b\w+\b")
     dtm = vectorizer.fit_transform(content)  # a sparse matrix
     vocab = vectorizer.get_feature_names()  # a list
     dtm = dtm.toarray()  # convert to a regular array

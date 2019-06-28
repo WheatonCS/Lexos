@@ -1,0 +1,23 @@
+{% extends "helpers/visualize-template.html" %}
+
+{% block title %}Bubbleviz{% endblock %}
+
+<!-- Head -->
+{% block page_head %}
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/bubbleviz.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/bubbleviz.css"/>
+{% endblock %}
+
+
+<!-- Title -->
+{% block graph_title %}Bubbleviz{% endblock %}
+
+
+<!-- Graph -->
+{% block graph %}
+
+    <!-- Bubbleviz -->
+    <div id="bubbleviz" class="section-body"></div>
+{% endblock %}

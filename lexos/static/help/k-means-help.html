@@ -1,0 +1,234 @@
+<!-- The K-Means Clustering Tool -->
+
+<h3 class="help-section-title">The K-Means Clustering Tool</h3>
+
+<h3 class="help-section-paragraph">
+    K-Means clustering partitions a set of documents into a number of groups or
+    clusters in a way that minimizes the variation within clusters. The "K"
+    refers to the number of partitions, so for example, if you wish to see how
+    your documents might cluster into three (3) groups, you would set K=3.
+</h3>
+
+<!-- Options -->
+<h3 class="help-section-title">Options</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>Clusters</b></li>
+    <h3 class="help-section-paragraph">
+        Lexos will automatically generate a k-means graph with a default number
+        of clusters, but you can also assign a K value for how many groups you
+        want to cluster your documents in to. There is no obvious way to choose
+        the number of clusters. It can be helpful to perform <a href="//dendrogram"><u>hierarchical clustering</u></a>
+        before performing K-Means clustering, as the resulting dendrogram may
+        suggest a certain number of clusters that is likely to produce meaningful
+        results. The K-means procedure is very sensitive to the position of the
+        initial seeds, although employing the K-means++ setting can help to
+        constrain this placement.
+    </h3>
+
+    <li><b>Visualization</b></li>
+    <h3 class="help-section-paragraph">
+        Lexos provides three methods of visualizing the results of a K-means
+        cluster analysis. In each case, Lexos first applies PCA (Principal
+        Component Analysis) to reduce the dimensions of the data so it can be
+        viewed in a 2-D or 3-D graph.
+    </h3>
+    <h3 class="help-section-paragraph">
+        <ul class="help-section-list">
+            <li>Voronoi: This is the default method of visualization which
+                identifies a centroid (central point) in each cluster and draws
+                a trapezoidal polygon around it. This may be helpful in allowing
+                you to see which points fall into which cluster.</li>
+
+            <li>2D-Scatter: K-means viewed as a traditional 2-D scatter plot
+            with each cluster as a data point</li>
+
+            <li>2D-Scatter: K-means viewed as a traditional 3-D scatter plot
+            with each cluster as a data point</li>
+        </ul>
+    </h3>
+
+    <li><b>Advanced</b></li>
+    <h3 class="help-section-paragraph">
+        <ul class="help-section-list">
+            <li>Method of initialization: "K-Means++" selects initial cluster
+                centers using a weighted probability distribution to speed up
+                convergence. The "Random" option chooses K observations at random
+                from the data to serve as the initial centroids.</li>
+
+            <li>Maximum iterations: Maximum number of iterations of the K-Means
+                algorithm for a single run. The default is 300.</li>
+
+            <li>Different centroids: The number of times (N) the k-means algorithm
+                will be run with different centroid seeds. The final results will
+                be the best output of those N consecutive runs. (The default is 10.)</li>
+
+            <li>Relative tolerance: Decimal, relative tolerance with respect to
+                inertia to declare convergence.</li>
+        </ul>
+    </h3>
+
+    <li><b>Tokenize</b></li>
+    <h3 class="help-section-paragraph">
+        By default Lexos tokenizes by tokens, meaning it splits strings of text
+        into tokens every time it encounters a space character. For Western languages,
+        this means that each token generally corresponds to a word. To tokenize
+        by multiple words, you can increase the n-gram size.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example given the text: "the dog ran" tokenizing by 1-gram tokens
+        would produce tokens "the", "dog", "ran". Tokenizing by 2-grams would
+        count the instances of bi-grams or pairs of words, thus producing tokens
+        "the dog", "dog ran", and so on.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you wish to tokenize by characters, Lexos will treat every character
+        (letters, whitespace, punctuation, etc.) as a separate token. Tokenizing
+        by 2-gram characters would produce tokens "th","he","e ", and so on.
+        Tokenizing by characters is best used for non-western languages that don't
+        have whitespace between tokens such as classical Chinese.
+    </h3>
+
+    <li><b>Normalize</b></li>
+    <h3 class="help-section-paragraph">
+        The default "Normalize" setting is "Proportional" which displays the
+        frequency of the occurrence of terms in your documents as a proportion
+        of the entire text.
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Raw Counts" will display in the table the actual number of occurrences
+        of each term in each document.
+    </h3>
+        <h3 class="help-section-paragraph">
+        "TF-IDF" or Term Frequency-Inverse Document Frequency attempts to
+        take into account difference in the lengths of your documents by
+        calculating their TF-IDF. Lexos uses base<em>e</em> (natural log) as the
+        default.
+    </h3>
+
+    <li><b>Cull</b></li>
+    <h3 class="help-section-paragraph">
+        "Culling" is a generic term we use for methods of decreasing the number
+        of terms used to generate the DTM based on statistical criteria (as
+        opposed to something like applying a stop-word list in Scrubber). Culling
+        is optional to use in Lexos. Lexos offers two different methods:
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Use the top ___ words": This method takes a slice of the DTM
+        containing only the top N most frequently occurring terms in the
+        set of active documents. The default setting is 100, meaning
+        Tokenizer will generate the DTM using only the top 100 most
+        frequent terms.
+    </h3>
+    <h3 class="help-section-paragraph">
+        "Must be in ___ documents": This method build the DTM using only
+        terms that occur in at least N documents. The default setting is
+        1. If you have 10 active documents and you want to generate the
+        DTM using only terms that appear in all your active documents,
+        set the value to 10. <em><b>Note:</b> You can quickly determine
+        the number of active documents in your workspace as indicated by
+        the counter in the bottom right corner.</em>
+    </h3>
+
+</ul>
+
+<!-- Results -->
+<h3 class="help-section-title">Results</h3>
+
+<ul class="help-section-list" style="list-style-type: none">
+
+    <li><b>K-Means graph</b></li>
+    <h3 class="help-section-paragraph">
+        When considering visualizations of K-means clusters, we recommend that
+        you think of each of your documents as represented by a single (x,y)
+        point on a two-dimensional coordinate plane. In this view, a cluster is
+        a collection of documents (points) that are close to one another and
+        together form a group. Assigning documents to a specific cluster amounts
+        to determining which cluster "center" is closest to your document.
+    </h3>
+
+    <li><b>The K-Means Algorithm</b></li>
+    <h3 class="help-section-paragraph">
+        The algorithm (general procedure or "recipe") for applying K-means to
+        your collection of documents is described next. Again, the overall goal
+        is to partition your documents into K non-empty subsets.
+    </h3>
+    <h3 class="help-section-paragraph">
+        <ol class="help-section-list">
+            <li>Decide on the number of clusters you wish to form.</li>
+            <li>The algorithm will compute a "center" or centroid for each cluster.
+                The centroid is the center (mean point) of a cluster. The procedure
+                for creating centroids at the very start can be varied and is
+                discussed below.</li>
+            <li>Assign each of your documents to the cluster with the nearest centroid.</li>
+            <li>Repeat steps 2 and 3, thereby re-calculating the locations of
+                centroids for the documents in each cluster and reassigning documents
+                to the cluster with the closest center. The algorithm continues
+                until no documents are reassigned to different clusters.</li>
+        </ol>
+    </h3>
+
+    <li><b>Plotly Menu</b></li>
+    <h3 class="help-section-paragraph">
+        If you pan over the graph, you'll notice that a menu appears in the top
+        right corner.
+        <ul class="help-section-list">
+
+            <li>Zoom: This option allows you to click and drag to zoom in to a
+            specific part of the graph.</li>
+
+            <li>Pan: This option will change the click and drag function to
+            panning across the graph.</li>
+
+            <li>Zoom in and Zoom out: These will automatically zoom to the center
+            of the graph.</li>
+
+            <li>Auto-scale and Reset Axis: These options will zoom all the way out
+            with the axis reset to fit the window</li>
+
+            <li>Toggle spike lines: This option allows you to hover your mouse
+            over data points and see where they are aligned on the x-axis and
+            y-axis</li>
+
+            <li>Show closest data on hover: If you hover over a data point,
+            this option will show you the value of the data point.</li>
+
+            <li>Compare data on hover: If you hover over a data point, this
+            option will show you the value of the data point and it's corresponding
+            x-axis value.</li>
+
+            <li>When you enable the 3-D scatter plot, there are other options that
+            function essentially the same as for a 2-D graph that will allow you
+            to view the 3-D plot at different angles.</li>
+
+        </ul>
+
+    </h3>
+
+    <li><b>Download</b></li>
+    <h3 class="help-section-paragraph">
+        The K-Means graph is downloadable in either <code>.svg</code> or
+        <code>.png</code> format. SVG images are very useful because they scale
+        well in web browsers.
+    </h3>
+    <h3 class="help-section-paragraph">
+        To download the K-Means data as a data file, click the "CSV"
+        button and you will get a results <code>.csv</code> file. “CSV” is short
+        for Comma-Separated Values. In your downloaded file, a comma will serve
+        as the column delimiter and these files can be opened by other programs
+        later, e.g., Excel.
+    </h3>
+
+</ul>
+
+<!-- Examples -->
+<h3 class="help-section-title">Examples</h3>
+
+<h3 class="help-section-paragraph">
+    Visit our public repository on GitHub
+    <a target="_blank" href="https://github.com/WheatonCS/Lexos/tree/master/test/test_suite/kMeansClustering"><u>here</u></a>
+    for a test suite of examples you can use to generate K-Means clustering results
+    before testing your own documents.
+</h3>
+

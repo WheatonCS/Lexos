@@ -1,0 +1,17 @@
+/* Minimum width */
+#main-section,
+.popup-container {
+    min-width: 130rem;
+}
+
+
+/* Form */
+form {
+    grid-template-rows: min-content 1fr;
+}
+
+
+/* Options section */
+#options-section {
+    grid-template-columns: 1.0fr 1.0fr 1.0fr;
+}

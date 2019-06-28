@@ -1,95 +1,133 @@
-{% extends "base_analyze.html" %}
-{% set active_page = 'statistics' %}
-
-{% block head %}
-    <!-- Latest compiled and minimized DataTables CSS -->
-    <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.32/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/sl-1.2.5/datatables.min.css"/>
-
-    <!-- Latest compiled and minimized DataTables JS -->
-    <script type="text/javascript"
-            src="https://cdn.datatables.net/v/bs/jszip-2.5.0/pdfmake-0.1.32/dt-1.10.16/b-1.5.1/b-html5-1.5.1/b-print-1.5.1/fc-3.2.4/fh-3.1.3/r-2.2.1/sl-1.2.5/datatables.min.js"></script>
-
-    <!-- Latest compiled and minimized plotly JS -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!-- Lexos Scripts -->
-    <script type="module"
-            src="{{ url_for('static', filename='js/scripts_statistics.js') }}?ver={{ version }}"></script>
-{% endblock %}
+{% extends "helpers/base-template.html" %}
 
 {% block title %}Statistics{% endblock %}
 
-{% block options %}
-     <div class="row">
-        <div class="col-md-12">
-            <!-- Hidden input to store active file ids. -->
-            <input type="hidden" id="active_file_ids" name="active_file_ids"/>
-            <legend style="width: 420px;">Select Document(s) <a class="btn bttn bttn-video" href="https://www.youtube.com/watch?v=UwfzNmYuZN4&list=PLEoAaCvaZOMMZD7x3SaQztPJxtpijv_gD&index=5" target="_blank" data-toggle="tooltip" data-placement="right" data-trigger="hover" title="Show video" style="margin: -10px 5px;"><i class="fa fa-video-camera fa-lg "></i></a></legend>
-            <!-- Check box for files. -->
-            {% if labels|len > 0 %}
-                <div class="forAllCheckBox">
-                    <label>
-                        <input type="checkbox" id="allCheckBoxSelector"
-                               checked="checked"> Check/Uncheck All
-                    </label>
-                </div>
-                <div class="col-md-11 col-lg-11" id="statsFileSelectContainer"
-                     style="overflow:auto; float: left; max-height: 140px; min-height: 2em;">
-                    <div id="statsFileSelect">
-                        {% for fileID, label in labels.items() %}
-                            <div class="eachFileCheck">
-                                <label id="statSelect"
-                                       style="width: 90%; margin: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ label }}
-                                    <input type="checkbox" checked="checked"
-                                           value="{{ fileID }}"
-                                           class="file-selector">
-                                </label>
-                            </div>
-                        {%- endfor %}
-                    </div>
-                </div>
-            {%- endif %}
-            {% if labels|len == 0 %}
-                <span id="no-labels">No Documents Activated.</span>
-            {%- endif %}
-        </div>
-    </div>
+<!-- Head -->
+{% block head %}
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Page Lexos dependencies -->
+    <script type="text/javascript" src="static/js/helpers/analyze-template.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/analyze-template.css"/>
+    <script type="text/javascript" src="static/js/helpers/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/graph.css"/>
+    <script type="text/javascript" src="static/js/helpers/table.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/helpers/table.css"/>
+
+    <!-- Page JS and CSS -->
+    <script type="text/javascript" src="static/js/statistics.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/statistics.css"/>
 {% endblock %}
 
-{% block results %}
-    <!-- Button to get the result. -->
-    <div class="row col-lg-12 col-md-12">
-        <input type="button" class="btn btn-success" id="get-stats"
-               name="gen-stats" value="Generate Statistics"/>
-    </div>
 
-    <!-- Result divs. -->
-    <div id="stats-result" style="width: 100%; margin-top:50px">
-        <div id="corpus-stats-result">
-            <fieldset class="row col-lg-12 col-md-12">
-                <legend>Statistics for Corpus</legend>
-            </fieldset>
-            <div id="box-plot" class="row col-lg-8 col-md-8"></div>
-            <div id="file-report"
-                 class="row col-lg-4 col-md-4"
-                 style="margin-left: 30px; margin-top: 35px; box-shadow: 0 0 10px 0 #888; padding:20px">
-                <p id="file-report-mean"class="tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The average is a sum of a collection of grams divided by the number of grams in the collection." style="font-size:14px;"></p>
-                <p id="file-report-std-deviation"
-                   class="tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The standard deviation is a measure that is used to quantify the amount of variation or dispersion of a set of data values. A low standard deviation indicates that the data points tend to be close to the mean of the set, while a high standard deviation indicates that the data points are spread out over a wider range of values." style="font-size:14px;"></p>
-                <p id="file-report-IQR"
-                   class="tooltip-trigger" data-toggle="tooltip" data-html="true" data-placement="right" data-container="body" title="The interquartile range is a measure of statistical dispersion, being equal to the difference between 75th and 25th percentiles, or between upper and lower quartiles." style="font-size:14px;"></p>
-                <p id="file-report-anomaly-se-result"></p>
-                <p id="file-report-anomaly-iqr-result"></p>
+<!-- Content -->
+{% block content %}
+
+    <!-- Top section -->
+    <div id="top-section">
+
+        <!-- Options -->
+        <div id="left-column">
+
+            <!-- Generate -->
+            <div class="section">
+                <span id="generate-button" class="disabled important-button">Generate All</span>
+            </div>
+
+            <!-- Tokenize -->
+            <div id="tokenize-section" class="section">
+
+                <div class="vertical-splitter section-top">
+                    <h3 class="title">Tokenize</h3>
+                    <span id="tokenize-tooltip-button" class="right-justified tooltip-button">?</span>
+                </div>
+
+                <div class="section-body">
+                    <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
+                    <label><input name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
+
+                    <h3>Grams</h3>
+                    <label><input id="grams-input" name="token_size" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                </div>
+            </div>
+
+            <!-- Cull -->
+            <div id="cull-section" class="section">
+
+                <div class="vertical-splitter section-top">
+                    <h3 class="title">Cull</h3>
+                    <span id="cull-tooltip-button" class="right-justified tooltip-button">?</span>
+                </div>
+
+                <div class="section-body">
+
+                    <label>
+                        <input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox">
+                        <span></span>
+                        Use the top
+                        <input id="most-frequent-words-input" name="most_frequent_words" value="100" type="text" spellcheck="false" autocomplete="off">
+                        terms
+                    </label>
+
+                    <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
+
+                    <label>
+                        <input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox">
+                        <span></span>
+                        Must be in
+                        <input id="minimum-occurrences-input" name="minimum_occurrences" value="1" type="text" spellcheck="false" autocomplete="off">
+                        documents
+                    </label>
+
+                    <span id="minimum-occurrences-tooltip-button" class="tooltip-button">?</span>
+                </div>
             </div>
         </div>
-        <div id="file-stats-result">
-            <fieldset class="row col-lg-12 col-md-12">
-                <legend>Statistics for each document</legend>
-            </fieldset>
-            <div id="file-stats-table" class="row col-lg-12 col-md-12"></div>
+
+        <!-- Document sizes -->
+        <div id="graph-section" class="section">
+            <div id="graph-section-top" class="vertical-splitter section-top">
+
+                <h3 class="title">Document Sizes</h3>
+
+                <div class="right-justified">
+                    <span id="png-button" class="disabled button">PNG</span>
+                    <span id="svg-button" class="disabled button">SVG</span>
+                </div>
+            </div>
+            <div id="graph-container" class="section-body"></div>
+        </div>
+
+        <!-- Corpus information section -->
+        <div id="right-column">
+
+            <!-- Corpus statistics -->
+            <div id="corpus-statistics-section" class="section">
+                <h3 class="section-top title">Document Size Statistics</h3>
+                <div id="corpus-statistics" class="section-body"></div>
+            </div>
+
+            <!-- Standard error test -->
+            <div id="standard-error-test-section" class="section">
+                <h3 class="section-top title">Standard Error Test</h3>
+                <div id="standard-error-test"  class="section-body"></div>
+            </div>
+
+            <!-- Interquartile range test -->
+            <div id="interquartile-range-test-section" class="section">
+                <h3 class="section-top title">Interquartile Range Test</h3>
+                <div id="interquartile-range-test"  class="section-body"></div>
+            </div>
         </div>
     </div>
-{% endblock %}
 
-{% block submit %}
+    <!-- Document statistics -->
+    <div id="table-section" class="section"></div>
+
+    <!-- Hidden elements -->
+    <input name="csv_delimiter" value="Comma" type="hidden">
+    <input name="normalization_method" value="Raw" type="hidden">
+
 {% endblock %}

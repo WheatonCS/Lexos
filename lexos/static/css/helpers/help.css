@@ -1,0 +1,61 @@
+#help-section {
+    display: block;
+    width: 40rem;
+    padding-bottom: 2rem;
+    overflow-y: auto;
+}
+
+#help-section-navbar {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 2rem;
+    justify-items: center;
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: var(--foreground-color);
+}
+
+.help-section-title {
+    display: block;
+    margin-top: 2rem;
+    padding: 2rem;
+    color: var(--secondary-highlight-color);
+    background-color: var(--foreground-color);
+}
+
+.help-section-paragraph,
+.help-section-list {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+}
+
+.help-section-paragraph {
+    display: block;
+    background-color: var(--foreground-color);
+}
+
+.help-section-list {
+    background-color: var(--foreground-color);
+    display: block;
+}
+
+.help-section-list > li {
+    padding-bottom: 1rem;
+}
+
+.help-section-list > li:last-child {
+    padding-bottom: 0;
+}
+table {
+    font-size: 1.3rem;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    font-size: 1.3rem;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}

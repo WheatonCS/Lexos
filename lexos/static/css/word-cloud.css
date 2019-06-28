@@ -1,0 +1,7 @@
+/* Word cloud */
+#word-cloud-container {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    overflow: hidden;
+}
