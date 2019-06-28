@@ -38,19 +38,20 @@ $("document").ready(function(){
  */
 function display_first_time_visit_popup(){
 
-    if(localStorage.getItem("visited") !== "true") {
+    // If this isn't the first visit, return
+    if(localStorage.getItem("visited") === "true") return;
 
-        localStorage.setItem("visited", "true");
-        let popup_container_element = create_ok_popup("Welcome to Lexos");
+    // Otherwise, create a popup
+    localStorage.setItem("visited", "true");
+    let popup_container_element = create_ok_popup("Welcome to Lexos");
 
-        $(`
-            <h3>
-                Welcome to Lexos 4.0! Click the "i" icon on the top left for
-                a walkthrough of the page you are on. Click the "Help" text
-                on the top right for more detailed documentation.
-            </h3>
-        `).appendTo(popup_container_element.find(".popup-content"));
-    }
+    $(`
+        <h3>
+            Welcome to Lexos 4.0! Click the "i" icon on the top left for
+            a walkthrough of the page you are on. Click the "Help" text
+            on the top right for more detailed documentation.
+        </h3>
+    `).appendTo(popup_container_element.find(".popup-content"));
 }
 
 
