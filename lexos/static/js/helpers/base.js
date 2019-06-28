@@ -19,6 +19,9 @@ $("document").ready(function(){
     // Initialize the navbar dropdown menus
     initialize_dropdown_menus();
 
+    // Display the first time visit popup
+    display_first_time_visit_popup();
+
     // If the "Active Documents" text is pressed, display the manage popup
     $("#active-documents-text").click(create_manage_popup);
 
@@ -28,6 +31,27 @@ $("document").ready(function(){
     // Fade in the page
     $("body").css({transition: '', opacity: '1'});
 });
+
+
+/**
+ * If this is the first time the user is visiting the page, display a popup.
+ */
+function display_first_time_visit_popup(){
+
+    if(localStorage.getItem("visited") !== "true") {
+
+        localStorage.setItem("visited", "true");
+        let popup_container_element = create_ok_popup("Welcome to Lexos");
+
+        $(`
+            <h3>
+                Welcome to Lexos 4.0! Click the "i" icon on the top left for
+                a walkthrough of the page you are on. Click the "Help" text
+                on the top right for more detailed documentation.
+            </h3>
+        `).appendTo(popup_container_element.find(".popup-content"));
+    }
+}
 
 
 /**

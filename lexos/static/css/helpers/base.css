@@ -585,3 +585,9 @@ label input[type="checkbox"]:checked + span:after {
 .plotly-notifier {
     display: none;
 }
+
+
+/* First time visit popup */
+#welcome-to-lexos-popup .popup {
+    width: 50rem;
+}
