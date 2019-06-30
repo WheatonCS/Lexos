@@ -1,8 +1,7 @@
 :root {
 
     /* Text */
-    --text-color: #93A1A1;
-    --text-color-light: #EEE8D5;
+    --text-color: #68A2A2; /*93A1A1*/
 
     /* Buttons */
     --button-border-color: var(--text-color);
@@ -14,7 +13,7 @@
     --foreground-color: #073642;
 
     /* Primary highlight */
-    --highlight-color: #268BD2;
+    --highlight-color: #25A5FF; /*268BD2*/
     --highlight-color-light: #0F4561;
 
     /* Secondary highlight */

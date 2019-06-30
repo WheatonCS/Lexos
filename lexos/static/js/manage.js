@@ -312,6 +312,7 @@ function walkthrough(){
             position: "bottom"
         },
         {
+            element: "#active-documents-footer",
             intro: `On any other page, you can activate and deactivate
                 documents by clicking "Active Documents" in the lower right
                 corner.`,

@@ -21,7 +21,7 @@
 /* Highlight box */
 .introjs-helperLayer {
     border: none;
-    border-radius: 2px;
+    border-radius: 0;
     box-shadow: none;
     background-color: var(--foreground-color);
 }
@@ -52,7 +52,7 @@
     width: 30rem;
     max-width: none;
     padding: 2rem;
-    border-radius: 2px;
+    border-radius: 0;
     background-color: var(--foreground-color);
     color: var(--text-color);
     box-shadow: none;

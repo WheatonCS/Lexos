@@ -1,12 +1,11 @@
 :root {
 
     /* Text */
-    --text-color: #CCCCCC;
-    --text-color-light: #000000;
+    --text-color: #6B9485;
 
     /* Buttons */
     --button-border-color: var(--text-color);
-    --button-background-color: #3E3E3E;
+    --button-background-color: #1D2321;
 
     /* Background and foreground */
     --background-color: #000000;
