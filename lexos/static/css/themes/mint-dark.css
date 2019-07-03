@@ -28,5 +28,5 @@
     --error-text-color: #FFFFFF;
 
     /* NEH logo */
-    --neh-logo-brightness: 3;
+    --neh-logo-filters: brightness(1.5) sepia(1) hue-rotate(110deg);
 }

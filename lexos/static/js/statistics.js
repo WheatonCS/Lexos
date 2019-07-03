@@ -62,6 +62,9 @@ function initialize(){
         // Create the statistics
         create_statistics();
     });
+
+    // If the "PNG" or "SVG" buttons are pressed, download the graph
+    initialize_graph_download_buttons();
 }
 
 

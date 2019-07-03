@@ -315,3 +315,23 @@ def simple_vectorizer(content: str, token_type: str, token_size: int):
     dtm = dtm.toarray()  # convert to a regular array
     vocab = np.array(vocab)
     return dtm, vocab
+
+
+def get_active_document_label_map():
+    """
+    Get a map of the ids and labels of the active documents.
+
+    :return: A map of the ids and labels of the active documents.
+    """
+    return {file.id: file.label for file in
+            load_file_manager().get_active_files()}
+
+
+def get_active_document_labels():
+    """
+    Get the labels of the active documents.
+
+    :return: The labels of the active documents.
+    """
+    return [file.label for file in
+            load_file_manager().get_active_files()]

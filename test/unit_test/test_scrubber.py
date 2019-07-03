@@ -523,7 +523,7 @@ class TestProcessTagReplaceOptions:
             attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_leave_tag(self):
-        action = "Leave Alone"
+        action = "leave-alone"
         attribute = ""
 
         assert process_tag_replace_options(
@@ -540,7 +540,7 @@ class TestProcessTagReplaceOptions:
             attribute=attribute) == self.no_end
 
     def test_process_tag_rep_options_other(self):
-        action = "Remove Tag"
+        action = "remove-tag"
         attribute = ""
 
         assert process_tag_replace_options(

@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.k_means_model import KMeansTestOptions, KMeansModel
-from lexos.receivers.k_means_receiver import KMeansOption, KMeansViz, KMeansInit
+from lexos.receivers.k_means_receiver import KMeansOption, KMeansViz, \
+    KMeansInit
 
 # ------------------------- Voronoi test suite --------------------------------
 # Create test DTM for voronoi.
@@ -28,14 +29,14 @@ front_end_option_voronoi = KMeansOption(
     max_iter=100,
     tolerance=1e-4,
     init_method=KMeansInit.k_means,
-    text_color="blue"
+    text_color="#000000"
 )
 
 # Pack all test components.
 test_option_voronoi = KMeansTestOptions(
     doc_term_matrix=voronoi_dtm,
     front_end_option=front_end_option_voronoi,
-    # id_temp_label_map=id_temp_label_map_voronoi
+    document_label_map=id_temp_label_map_voronoi
 )
 
 # Create test Model and get test result.
@@ -44,6 +45,7 @@ test_voronoi = KMeansModel(test_options=test_option_voronoi)
 # noinspection PyProtectedMember
 voronoi_result = test_voronoi._get_voronoi_result()
 
+# NO LONGER A ".data" ATTRIBUTE
 # ------------------------- Test voronoi plot result --------------------------
 # class TestVoronoiPlot:
 #     # Get plot result.
@@ -87,13 +89,13 @@ front_end_option_two_d = KMeansOption(
     max_iter=100,
     tolerance=1e-4,
     init_method=KMeansInit.k_means,
-    text_color="blue"
+    text_color="#000000"
 )
 # Pack all test components.
 test_option_two_d = KMeansTestOptions(
     doc_term_matrix=dtm_two_d,
     front_end_option=front_end_option_two_d,
-    id_temp_label_map=id_temp_label_map_two_d
+    document_label_map=id_temp_label_map_two_d
 )
 # Create test Model and get test result.
 test_two_d = KMeansModel(test_options=test_option_two_d)
@@ -101,6 +103,7 @@ test_two_d = KMeansModel(test_options=test_option_two_d)
 two_d_result = test_two_d._get_2d_scatter_result()
 
 
+# NO LONGER A ".data" ATTRIBUTE
 # ------------------------- Test 2D scatter result --------------------------
 # class Test2DScatter:
 #     plot = two_d_result
@@ -143,19 +146,20 @@ front_end_option_three_d = KMeansOption(
     max_iter=100,
     tolerance=1e-4,
     init_method=KMeansInit.k_means,
-    text_color="blue"
+    text_color="#000000"
 )
 # Pack all test components.
 test_option_three_d = KMeansTestOptions(
     doc_term_matrix=dtm_three_d,
     front_end_option=front_end_option_three_d,
-    id_temp_label_map=id_temp_label_map_three_d
+    document_label_map=id_temp_label_map_three_d
 )
 # Create test Model and get test result.
 test_three_d = KMeansModel(test_options=test_option_three_d)
 # noinspection PyProtectedMember
 three_d_result = test_three_d._get_3d_scatter_result()
 
+# NO LONGER A ".data" ATTRIBUTE
 # ------------------------- 3D scatter test suite -----------------------------
 # class Test3DScatter:
 #     plot = three_d_result
@@ -189,13 +193,13 @@ front_end_option_special = KMeansOption(
     max_iter=100,
     tolerance=1e-4,
     init_method=KMeansInit.k_means,
-    text_color="blue"
+    text_color="#000000"
 )
 # Pack all test components.
 test_option_empty = KMeansTestOptions(
     doc_term_matrix=dtm_empty,
     front_end_option=front_end_option_special,
-    id_temp_label_map=id_temp_label_map_empty
+    document_label_map=id_temp_label_map_empty
 )
 # Create empty K-Means test.
 test_empty = KMeansModel(test_options=test_option_empty)
@@ -210,7 +214,7 @@ id_temp_label_map_special = {0: "F1.txt", 1: "F2.txt"}
 test_option_special = KMeansTestOptions(
     doc_term_matrix=dtm_special,
     front_end_option=front_end_option_special,
-    id_temp_label_map=id_temp_label_map_special
+    document_label_map=id_temp_label_map_special
 )
 # Create special K-Means test.
 test_special = KMeansModel(test_options=test_option_special)

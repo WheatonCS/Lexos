@@ -18,16 +18,11 @@ class BasicTest:
         },
 
         front_end_option=MatrixFrontEndOption(
-            token_option=TokenOption(n_gram_size=1, token_type="Tokens"),
+            token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
-                                         mfw_lowest_rank=None),
-            # id_temp_label_map={
-            #     0: "test_label_1",
-            #     2: "test_label_2",
-            #     3: "test_label_3"
-            # }
+                                         mfw_lowest_rank=None)
         )
     )
 
@@ -65,7 +60,7 @@ class CullingTest:
         },
 
         front_end_option=MatrixFrontEndOption(
-            token_option=TokenOption(n_gram_size=1, token_type="Tokens"),
+            token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=3,
@@ -105,7 +100,7 @@ class TfTest:
         },
 
         front_end_option=MatrixFrontEndOption(
-            token_option=TokenOption(n_gram_size=1, token_type="Tokens"),
+            token_option=TokenOption(n_gram_size=1, token_type="word"),
             norm_option=NormOption(use_freq=True, use_tf_idf=True,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
@@ -124,37 +119,6 @@ class TfTest:
         index=[0, 2, 3],
         columns=['da', 'ha', 'la', 'ta']
     )
-
-
-# noinspection PyTypeHints
-def test_temp_label():
-    assert BasicTest.model.get_temp_label() == Counter([
-        "test_label_1", "test_label_2", "test_label_3"
-    ])
-    assert CullingTest.model.get_temp_label() == Counter([
-        "label_1", "test_2", "la_la_la_3"
-    ])
-    assert TfTest.model.get_temp_label() == Counter([
-        "test_label_1", "test_label_2", "test_label_3"
-    ])
-
-
-def test_temp_label_id_map():
-    assert BasicTest.model.get_id_temp_label_map() == {
-        0: "test_label_1",
-        2: "test_label_2",
-        3: "test_label_3"
-    }
-    assert CullingTest.model.get_id_temp_label_map() == {
-        1: "label_1",
-        2: "test_2",
-        3: "la_la_la_3"
-    }
-    assert TfTest.model.get_id_temp_label_map() == {
-        0: "test_label_1",
-        2: "test_label_2",
-        3: "test_label_3"
-    }
 
 
 # noinspection PyProtectedMember

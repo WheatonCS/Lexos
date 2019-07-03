@@ -11,10 +11,10 @@ from plotly.offline import plot
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.receivers.matrix_receiver import MatrixReceiver, DocumentLabelMap
 from lexos.receivers.statistics_receiver import StatsReceiver, \
     StatsFrontEndOption
-from lexos.managers.utility import load_file_manager
+import lexos.managers.utility as utility
 
 
 class TextAnomalies(NamedTuple):
@@ -43,6 +43,7 @@ class StatsTestOptions(NamedTuple):
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: StatsFrontEndOption
+    document_label_map: DocumentLabelMap
 
 
 class StatsModel(BaseModel):
@@ -59,16 +60,25 @@ class StatsModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
+            self._test_document_label_map = test_options.document_label_map
         else:
             self._test_dtm = None
             self._test_token_type_str = None
             self._test_front_end_option = None
+            self._test_document_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _document_label_map(self) -> DocumentLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_document_label_map \
+            if self._test_document_label_map is not None \
+            else utility.get_active_document_label_map()
 
     @property
     def _stats_option(self):
@@ -85,11 +95,14 @@ class StatsModel(BaseModel):
     @property
     def _token_type_str(self) -> str:
         """:return: the token type that was used when calculating the stats."""
-        # Get dtm front end options.
-        dtm_options = MatrixReceiver().options_from_front_end()
-        # Get the correct current type.
-        token_type = dtm_options.token_option.token_type
-        return "terms" if token_type == "word" else "character n-grams"
+        if self._test_document_label_map is not None:
+            return self._test_token_type_str
+        else:
+            # Get dtm front end options.
+            dtm_options = MatrixReceiver().options_from_front_end()
+            # Get the correct current type.
+            token_type = dtm_options.token_option.token_type
+            return "terms" if token_type == "word" else "character n-grams"
 
     @property
     def _get_document_statistics_dataframe(self) -> pd.DataFrame:
@@ -101,8 +114,8 @@ class StatsModel(BaseModel):
         assert not self._active_doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
         # Get file names.
-        labels = [file.label for file in
-                  load_file_manager().get_active_files()]
+        labels = [self._document_label_map[file_id]
+                  for file_id in self._active_doc_term_matrix.index.values]
 
         # Set up data frame with proper headers.
         file_stats = pd.DataFrame(
@@ -194,15 +207,14 @@ class StatsModel(BaseModel):
         # we detect anomaly by finding files with sizes that are more than two
         # standard deviation away from the mean. In another word, we find files
         # with sizes that are not in the major 95% range.
-        file_manager = load_file_manager()
         anomaly_se_small = [
-            file_manager.get_previews_of_all()[file_id]["label"]
+            self._document_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < mean - 2 * std_deviation
         ]
 
         anomaly_se_large = [
-            file_manager.get_previews_of_all()[file_id]["label"]
+            self._document_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > mean + 2 * std_deviation
         ]
@@ -214,13 +226,13 @@ class StatsModel(BaseModel):
         # sizes that are either 1.5 interquartile ranges above third quartile
         # or 1.5 interquartile ranges below first quartile.
         anomaly_iqr_small = list(set(
-            file_manager.get_previews_of_all()[file_id]["label"]
+            self._document_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] < first_quartile - 1.5 * iqr
         ))
 
         anomaly_iqr_large = list(set(
-            file_manager.get_previews_of_all()[file_id]["label"]
+            self._document_label_map[file_id]
             for file_id in active_file_ids
             if file_sizes[file_id] > third_quartile + 1.5 * iqr
         ))
@@ -264,8 +276,8 @@ class StatsModel(BaseModel):
         :return: A plotly object that contains the box plot.
         """
         # Get file names.
-        labels = [file.label for file in
-                  load_file_manager().get_active_files()]
+        labels = [self._document_label_map[file_id]
+                  for file_id in self._active_doc_term_matrix.index.values]
 
         # Set up the points.
         scatter_plot = go.Scatter(

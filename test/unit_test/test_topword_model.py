@@ -47,6 +47,7 @@ test_class_division_map_all_to_para = pd.DataFrame(
     columns=[0, 1])
 test_option_all_to_para = TopwordTestOptions(
     doc_term_matrix=test_dtm_all_to_para,
+    document_label_map=test_id_temp_label_map_all_to_para,
     front_end_option=test_front_end_option_all_to_para,
     division_map=test_class_division_map_all_to_para)
 test_topword_model_all_to_para = TopwordModel(
@@ -60,6 +61,7 @@ test_results_all_to_para =\
 # Create test suite for special case.
 test_option_empty_all_to_para = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
+    document_label_map={},
     front_end_option=test_front_end_option_all_to_para,
     division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_all_to_para = TopwordModel(
@@ -77,7 +79,7 @@ class TestParaToGroup:
         assert test_results_all_to_para[1].dtype == "float64"
 
         assert test_results_all_to_para[1].name == \
-            "Document \"F2\" Compared to the Corpus"
+            "Document \"F2\" Compared To The Corpus"
 
     def test_special_case(self):
         try:
@@ -108,7 +110,7 @@ test_class_division_map_class_to_para = pd.DataFrame(
     columns=np.array([0, 1, 2, 3]))
 test_option_class_to_para = TopwordTestOptions(
     doc_term_matrix=test_dtm_class_to_para,
-    id_temp_label_map=test_id_temp_label_map_class_to_para,
+    document_label_map=test_id_temp_label_map_class_to_para,
     front_end_option=test_front_end_option_class_to_para,
     division_map=test_class_division_map_class_to_para)
 test_topword_model_one_class_to_para = TopwordModel(
@@ -122,7 +124,7 @@ test_results_class_to_para =\
 # Create test suite for special case.
 test_option_empty_class_to_para = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
-    id_temp_label_map={},
+    document_label_map={},
     front_end_option=test_front_end_option_class_to_para,
     division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_one_class_to_para = \
@@ -140,7 +142,7 @@ class TestClassToAll:
         assert test_results_class_to_para[0]['H'] == -6.3857
         assert test_results_class_to_para[1].dtype == 'float64'
         assert test_results_class_to_para[1].name == \
-            'Document "F2" Compared to Class "C2"'
+            'Document "F2" Compared To Class "C2"'
 
     def test_special_case(self):
         try:
@@ -171,7 +173,7 @@ test_class_division_map_class_to_class = pd.DataFrame(
     columns=np.array([0, 1, 2, 3]))
 test_option_class_to_class = TopwordTestOptions(
     doc_term_matrix=test_dtm_class_to_class,
-    id_temp_label_map=test_id_temp_label_map_class_to_class,
+    document_label_map=test_id_temp_label_map_class_to_class,
     front_end_option=test_front_end_option_class_to_class,
     division_map=test_class_division_map_class_to_class)
 test_topword_model_two_class_to_class = TopwordModel(
@@ -185,7 +187,7 @@ test_results_class_to_class = \
 # Create test suite for special case.
 test_option_empty_class_to_class = TopwordTestOptions(
     doc_term_matrix=pd.DataFrame(data=[], index=[], columns=[]),
-    id_temp_label_map={},
+    document_label_map={},
     front_end_option=test_front_end_option_class_to_class,
     division_map=pd.DataFrame(data=[], index=[], columns=[]))
 test_topword_model_empty_two_class_to_class = TopwordModel(
@@ -204,7 +206,7 @@ class TestClassToClass:
         assert test_results_class_to_class[0]['D'] == 5.0983
         assert test_results_class_to_class[0].dtype == 'float64'
         assert test_results_class_to_class[0].name == \
-            'Class "C1" Compared to Class "C2"'
+            'Class "C1" Compared To Class "C2"'
 
     def test_special_case(self):
         try:

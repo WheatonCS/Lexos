@@ -7,10 +7,10 @@ import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.receivers.matrix_receiver import MatrixReceiver, DocumentLabelMap
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
-from lexos.managers.utility import load_file_manager
+import lexos.managers.utility as utility
 
 
 class TokenizerTestOption(NamedTuple):
@@ -19,6 +19,7 @@ class TokenizerTestOption(NamedTuple):
     token_type_str: str
     doc_term_matrix: pd.DataFrame
     front_end_option: TokenizerOption
+    document_label_map: DocumentLabelMap
 
 
 class TokenizerModel(BaseModel):
@@ -38,16 +39,25 @@ class TokenizerModel(BaseModel):
             self._test_dtm = test_options.doc_term_matrix
             self._test_token_type_str = test_options.token_type_str
             self._test_front_end_option = test_options.front_end_option
+            self._test_document_label_map = test_options.document_label_map
         else:
             self._test_dtm = None
             self._test_token_type_str = None
             self._test_front_end_option = None
+            self._test_document_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _document_label_map(self) -> DocumentLabelMap:
+        """:return: A map takes an id to temp labels."""
+        return self._test_document_label_map \
+            if self._test_document_label_map is not None \
+            else utility.get_active_document_label_map()
 
     @property
     def _front_end_option(self) -> TokenizerOption:
@@ -77,7 +87,8 @@ class TokenizerModel(BaseModel):
         # Check if empty DTM is received.
         assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
 
-        labels = [file.label for file in load_file_manager().get_active_files()]
+        labels = [self._document_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
         # Transpose the dtm for easier calculation.
         file_col_dtm = self._doc_term_matrix.transpose()

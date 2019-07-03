@@ -5,6 +5,8 @@ from typing import NamedTuple, Optional, Dict
 
 from lexos.receivers.base_receiver import BaseReceiver
 
+DocumentLabelMap = Dict[int, str]
+
 
 class TokenOption(NamedTuple):
     """A typed tuple to represent token option."""

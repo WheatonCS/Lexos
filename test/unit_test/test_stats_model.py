@@ -15,13 +15,13 @@ test_id_temp_table_one = {0: "F1.txt", 1: "F2.txt"}
 test_front_end_option_one = StatsFrontEndOption(active_file_ids=[0, 1],
                                                 sort_ascending=True,
                                                 sort_column=0,
-                                                text_color="blue",
-                                                highlight_color="gold")
+                                                text_color="#000000",
+                                                highlight_color="#000000")
 test_option_one = StatsTestOptions(
     token_type_str="Tokens",
     doc_term_matrix=test_dtm_one,
-    front_end_option=test_front_end_option_one)
-
+    front_end_option=test_front_end_option_one,
+    document_label_map=test_id_temp_table_one)
 test_stats_model_one = StatsModel(test_options=test_option_one)
 test_corpus_result_one = test_stats_model_one.get_corpus_stats()
 test_file_result_one = test_stats_model_one.get_document_statistics()
@@ -43,13 +43,13 @@ test_stats_front_end_option_two = \
     StatsFrontEndOption(active_file_ids=[0, 1, 2],
                         sort_ascending=True,
                         sort_column=0,
-                        text_color="blue",
-                        highlight_color="gold")
+                        text_color="#000000",
+                        highlight_color="#000000")
 test_option_two = StatsTestOptions(
     token_type_str="Characters",
     doc_term_matrix=test_dtm_two,
-    front_end_option=test_stats_front_end_option_two)
-
+    front_end_option=test_stats_front_end_option_two,
+    document_label_map=test_id_temp_table_two)
 test_stats_model_two = StatsModel(test_options=test_option_two)
 test_corpus_result_two = test_stats_model_two.get_corpus_stats()
 test_file_result_two = test_stats_model_two.get_document_statistics()
@@ -70,12 +70,13 @@ test_stats_front_end_option_anomaly = \
     StatsFrontEndOption(active_file_ids=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                         sort_ascending=True,
                         sort_column=0,
-                        text_color="blue",
-                        highlight_color="gold")
+                        text_color="#000000",
+                        highlight_color="#000000")
 test_option_anomaly = \
     StatsTestOptions(token_type_str="Characters",
                      doc_term_matrix=test_dtm_anomaly,
-                     front_end_option=test_stats_front_end_option_anomaly)
+                     front_end_option=test_stats_front_end_option_anomaly,
+                     document_label_map=test_id_temp_table_anomaly)
 test_stats_model_anomaly = StatsModel(test_options=test_option_anomaly)
 test_corpus_result_anomaly = test_stats_model_anomaly.get_corpus_stats()
 test_file_result_anomaly = test_stats_model_anomaly.get_document_statistics()
@@ -135,22 +136,24 @@ class TestCorpusInfo:
         assert test_corpus_result_anomaly.anomaly_se.large_items == ["F10.txt"]
 
     def test_file_unit(self):
-        assert test_corpus_result_one.unit == "terms"
-        assert test_corpus_result_two.unit == "characters"
+        assert test_corpus_result_one.unit == "Tokens"
+        assert test_corpus_result_two.unit == "Characters"
 
 
 # -------------------- Empty data frame case test suite ---------------------
 test_dtm_empty = pd.DataFrame()
 test_id_temp_table_empty = {}
-test_stats_front_end_option_empty = StatsFrontEndOption(active_file_ids=[],
-                                                        sort_ascending=True,
-                                                        sort_column=0,
-                                                        text_color="blue",
-                                                        highlight_color="gold")
+test_stats_front_end_option_empty = StatsFrontEndOption(
+    active_file_ids=[],
+    sort_ascending=True,
+    sort_column=0,
+    text_color="#000000",
+    highlight_color="#000000")
 test_option_empty = \
     StatsTestOptions(token_type_str="Tokens",
                      doc_term_matrix=test_dtm_empty,
-                     front_end_option=test_stats_front_end_option_empty)
+                     front_end_option=test_stats_front_end_option_empty,
+                     document_label_map=test_id_temp_table_empty)
 test_stats_model_empty = StatsModel(test_options=test_option_empty)
 
 

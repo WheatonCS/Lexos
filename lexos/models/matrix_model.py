@@ -9,7 +9,7 @@ from lexos.helpers import definitions
 from lexos.models.base_model import BaseModel
 from lexos.models.file_manager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
-    MatrixReceiver
+    MatrixReceiver, DocumentLabelMap
 
 FileIDContentMap = Dict[int, str]
 
