@@ -10,7 +10,8 @@ from Bio.Phylo.Consensus import majority_consensus
 from scipy.cluster.hierarchy import linkage, to_tree, ClusterNode
 from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel, DocumentLabelMap
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.consensus_tree_receiver import BCTOption, BCTReceiver
 import lexos.managers.utility as utility
 

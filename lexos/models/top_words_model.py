@@ -7,7 +7,8 @@ from flask import jsonify
 from collections import OrderedDict
 from typing import List, Optional, NamedTuple
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel, DocumentLabelMap
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.models.file_manager_model import FileManagerModel
 from lexos.receivers.top_words_receiver import TopwordReceiver, \
     TopwordAnalysisType

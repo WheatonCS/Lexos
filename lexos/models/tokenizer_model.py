@@ -7,7 +7,8 @@ import pandas as pd
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import MatrixReceiver, DocumentLabelMap
+from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.tokenizer_receiver import TokenizerOption, \
     TokenizerReceiver
 import lexos.managers.utility as utility

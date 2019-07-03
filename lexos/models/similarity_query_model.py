@@ -7,9 +7,10 @@ from scipy.spatial.distance import cosine
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel, DocumentLabelMap
-from lexos.receivers.similarity_query_receiver import SimilarityFrontEndOption, \
-    SimilarityReceiver
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import DocumentLabelMap
+from lexos.receivers.similarity_query_receiver import \
+    SimilarityFrontEndOption, SimilarityReceiver
 import lexos.managers.utility as utility
 
 
@@ -52,10 +53,10 @@ class SimilarityModel(BaseModel):
             return self._test_document_label_map
         else:
             labels = {}
-            for document_id, document in \
-                    utility.get_active_document_label_map().items:
+            for document_id, document_label in \
+                    utility.get_active_document_label_map().items():
                 if document_id != self._similarity_option.comp_file_id:
-                    labels[document_id] = document.label
+                    labels[document_id] = document_label
             return labels
 
     @property

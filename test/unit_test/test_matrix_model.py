@@ -1,5 +1,3 @@
-from typing import Counter
-
 import pandas as pd
 
 from lexos.models.matrix_model import MatrixModel, MatrixTestOptions

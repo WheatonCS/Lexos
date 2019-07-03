@@ -1,6 +1,6 @@
 """This is the matrix model which makes the dtm."""
 
-from typing import Counter, Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -9,7 +9,7 @@ from lexos.helpers import definitions
 from lexos.models.base_model import BaseModel
 from lexos.models.file_manager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
-    MatrixReceiver, DocumentLabelMap
+    MatrixReceiver
 
 FileIDContentMap = Dict[int, str]
 

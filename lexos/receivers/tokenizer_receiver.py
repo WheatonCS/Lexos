@@ -27,7 +27,6 @@ class TokenizerReceiver(BaseReceiver):
 
         :return: a TokenizerTableOrientation object that holds the orientation.
         """
-
         # This exception is here because when header is requested, values
         # above related to data table drawing are not passed in.
         try:

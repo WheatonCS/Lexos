@@ -11,7 +11,8 @@ from plotly.offline import plot
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.matrix_receiver import MatrixReceiver, DocumentLabelMap
+from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.statistics_receiver import StatsReceiver, \
     StatsFrontEndOption
 import lexos.managers.utility as utility

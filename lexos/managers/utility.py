@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 import pickle
 import numpy as np
 from flask import request
 from os import makedirs
+from typing import Dict, List
 from os.path import join as path_join
 import lexos.helpers.constants as constants
 import lexos.helpers.general_functions as general_functions
@@ -317,7 +317,7 @@ def simple_vectorizer(content: str, token_type: str, token_size: int):
     return dtm, vocab
 
 
-def get_active_document_label_map():
+def get_active_document_label_map() -> Dict:
     """
     Get a map of the ids and labels of the active documents.
 
@@ -327,7 +327,7 @@ def get_active_document_label_map():
             load_file_manager().get_active_files()}
 
 
-def get_active_document_labels():
+def get_active_document_labels() -> List:
     """
     Get the labels of the active documents.
 

@@ -1,7 +1,6 @@
 import os
 import pickle
 import random
-import re
 import string
 from shutil import rmtree
 

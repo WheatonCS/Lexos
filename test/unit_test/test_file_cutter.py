@@ -411,7 +411,8 @@ class TestCutterFunction:
                    overlap="0", last_prop_percent="100%") == [" t", "est"]
         assert cut(text="test", cutting_value="1", cutting_type="Milestones",
                    overlap="0", last_prop_percent="100%") == ["test"]
-        assert cut(text="test", cutting_value="test", cutting_type="Milestones",
+        assert cut(text="test", cutting_value="test",
+                   cutting_type="Milestones",
                    overlap="0", last_prop_percent="100%") == ["", ""]
 
         assert cut(text="test", cutting_value="e", cutting_type="Milestones",

@@ -11,7 +11,8 @@ from scipy.cluster.hierarchy import linkage
 from scipy.spatial.distance import pdist
 
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel, DocumentLabelMap
+from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.dendrogram_receiver import DendroOption, DendroReceiver
 import lexos.managers.utility as utility
 
@@ -68,7 +69,6 @@ class DendrogramModel(BaseModel):
 
         :return: A plotly figure object
         """
-
         labels = [self._document_label_map[file_id]
                   for file_id in self._doc_term_matrix.index.values]
 
