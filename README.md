@@ -1,11 +1,8 @@
 # Lexos
-
-<!--
 [![Build status](https://ci.appveyor.com/api/projects/status/vqyfuqr15gfqj544/branch/master?svg=true)](https://ci.appveyor.com/project/chantisnake/lexos/branch/master)
 [![Build Status](https://travis-ci.com/WheatonCS/Lexos.svg?branch=master)](https://travis-ci.com/WheatonCS/Lexos)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![DOI](https://zenodo.org/badge/10040275.svg)](https://zenodo.org/record/1403869#.W4LuCRgpA5k)
--->
 
 ## Summary
 
