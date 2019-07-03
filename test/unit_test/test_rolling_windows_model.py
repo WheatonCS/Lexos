@@ -34,7 +34,7 @@ class TestRatioCountOne:
                 black_white=False
             ),
             milestone="ta",
-            text_color="blue"
+            text_color="#000000"
         )
     )
 
@@ -124,7 +124,7 @@ class TestRatioCountTwo:
                 black_white=False
             ),
             milestone="ta",
-            text_color="blue"
+            text_color="#000000"
         )
     )
 
@@ -182,7 +182,7 @@ class TestAverageCountOne:
                 black_white=False
             ),
             milestone=None,
-            text_color="blue"
+            text_color="#000000"
         )
     )
     # Get the rolling window model and other testing components.
@@ -246,7 +246,7 @@ class TestAverageCountTwo:
                 black_white=False
             ),
             milestone=None,
-            text_color="blue"
+            text_color="#000000"
         )
     )
     # Get the rolling window model and other testing components.

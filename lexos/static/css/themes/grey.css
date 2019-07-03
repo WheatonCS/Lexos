@@ -2,7 +2,6 @@
 
     /* Text */
     --text-color: #000000;
-    --text-color-light: #909090;
 
     /* Buttons */
     --button-border-color: var(--text-color);
@@ -29,7 +28,7 @@
     --error-text-color: #FFFFFF;
 
     /* NEH logo */
-    --neh-logo-brightness: 1;
+    --neh-logo-filters: none;
 }
 
 
@@ -37,7 +36,7 @@
 .clickable-text:hover,
 .highlight,
 a:hover {
-    color: var(--text-color-light);
+    opacity: .5;
 }
 
 /* Selection box */

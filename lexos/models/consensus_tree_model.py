@@ -11,8 +11,9 @@ from scipy.cluster.hierarchy import linkage, to_tree, ClusterNode
 from typing import NamedTuple, Optional, List
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.consensus_tree_receiver import BCTOption, BCTReceiver
-from lexos.managers.utility import load_file_manager
+import lexos.managers.utility as utility
 
 
 # Make plt to use a non-interactive backend to generate PNG instead of window.
@@ -24,6 +25,7 @@ class BCTTestOptions(NamedTuple):
 
     doc_term_matrix: pd.DataFrame
     front_end_option: BCTOption
+    document_label_map: DocumentLabelMap
 
 
 class BCTModel(BaseModel):
@@ -39,15 +41,24 @@ class BCTModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
+            self._test_document_label_map = test_options.document_label_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
+            self._test_document_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _document_label_map(self) -> DocumentLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_document_label_map \
+            if self._test_document_label_map is not None \
+            else utility.get_active_document_label_map()
 
     @property
     def _bct_option(self) -> BCTOption:
@@ -139,8 +150,8 @@ class BCTModel(BaseModel):
         doc_term_matrix = self._doc_term_matrix
 
         # Get file names, since tree nodes need labels.
-        labels = [file.label for file in
-                  load_file_manager().get_active_files()]
+        labels = [self._document_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
         # The bootstrap process to get all the trees.
         return [
@@ -203,8 +214,7 @@ class BCTModel(BaseModel):
         # Set graph size, title and tight layout.
         plt.gcf().set_size_inches(
             w=9.5,
-            h=(len([file.label for file in
-                    load_file_manager().get_active_files()]) * 0.3 + 1)
+            h=(len(self._document_label_map) * 0.3 + 1)
         )
         plt.title("Bootstrap Consensus Tree Result", color=normalized_color)
         plt.gcf().tight_layout()

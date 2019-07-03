@@ -1,6 +1,6 @@
 """This is the matrix model which makes the dtm."""
 
-from typing import Counter, Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional
 
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer

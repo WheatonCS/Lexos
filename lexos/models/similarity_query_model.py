@@ -8,9 +8,10 @@ from scipy.spatial.distance import cosine
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
-from lexos.receivers.similarity_query_receiver import SimilarityFrontEndOption, \
-    SimilarityReceiver
-from lexos.managers.utility import load_file_manager
+from lexos.receivers.matrix_receiver import DocumentLabelMap
+from lexos.receivers.similarity_query_receiver import \
+    SimilarityFrontEndOption, SimilarityReceiver
+import lexos.managers.utility as utility
 
 
 class SimilarityTestOption(NamedTuple):
@@ -18,6 +19,7 @@ class SimilarityTestOption(NamedTuple):
 
     doc_term_matrix: pd.DataFrame
     front_end_option: SimilarityFrontEndOption
+    document_label_map: DocumentLabelMap
 
 
 class SimilarityModel(BaseModel):
@@ -32,15 +34,30 @@ class SimilarityModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_option = test_options.front_end_option
+            self._test_document_label_map = test_options.document_label_map
         else:
             self._test_dtm = None
             self._test_option = None
+            self._test_document_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _document_label_map(self) -> DocumentLabelMap:
+        """:return: a map takes an id to temp labels."""
+        if self._test_document_label_map is not None:
+            return self._test_document_label_map
+        else:
+            labels = {}
+            for document_id, document_label in \
+                    utility.get_active_document_label_map().items():
+                if document_id != self._similarity_option.comp_file_id:
+                    labels[document_id] = document_label
+            return labels
 
     @property
     def _similarity_option(self) -> SimilarityFrontEndOption:
@@ -79,10 +96,8 @@ class SimilarityModel(BaseModel):
         ]
 
         # get the labels for cos_scores
-        labels = []
-        for file in load_file_manager().get_active_files():
-            if file.id != self._similarity_option.comp_file_id:
-                labels.append(file.label)
+        labels = [self._document_label_map[file_id]
+                  for file_id in other_file_word_counts.index]
 
         # pack score and labels into a pandas data frame
         dataframe = pd.DataFrame(index=["Documents", "Cosine Similarity"],

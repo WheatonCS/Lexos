@@ -162,8 +162,8 @@ function create_word_cloud(dataset){
         "#png-button, #svg-button, #generate-button");
 
     // Initialize the SVG and PNG download buttons
-    initialize_png_link("svg", "#png-button", width, height, "word-cloud.png");
-    initialize_svg_link("svg", "#svg-button", "word-cloud.svg");
+    initialize_png_link("#word-cloud svg", "#png-button", width, height, "word-cloud.png");
+    initialize_svg_link("#word-cloud svg", "#svg-button", "word-cloud.svg");
 }
 
 

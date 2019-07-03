@@ -147,8 +147,9 @@ function create_bubbleviz(response){
         "#png-button, #svg-button, #generate-button");
 
     // Initialize the SVG and PNG download buttons
-    initialize_png_link("svg", "#png-button", diameter, diameter, "bubbleviz.png");
-    initialize_svg_link("svg", "#svg-button", "bubbleviz.svg");
+    initialize_png_link("#bubbleviz svg", "#png-button",
+        diameter, diameter, "bubbleviz.png");
+    initialize_svg_link("#bubbleviz svg", "#svg-button", "bubbleviz.svg");
 }
 
 

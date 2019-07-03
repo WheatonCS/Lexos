@@ -1,9 +1,10 @@
 """This is the receiver for the matrix model."""
 
-import re
 from typing import NamedTuple, Optional, Dict
 
 from lexos.receivers.base_receiver import BaseReceiver
+
+DocumentLabelMap = Dict[int, str]
 
 
 class TokenOption(NamedTuple):

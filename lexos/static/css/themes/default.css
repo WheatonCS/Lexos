@@ -2,7 +2,6 @@
 
     /* Text */
     --text-color: #505050;
-    --text-color-light: #909090;
 
     /* Buttons */
     --button-border-color: var(--text-color);
@@ -14,12 +13,12 @@
     --foreground-color: #FFFFFF;
 
     /* Primary highlight */
-    --highlight-color: #47BCFF;
-    --highlight-color-light: #EAF5FF;
+    --highlight-color: #A198FF;
+    --highlight-color-light: #EBE9FF;
 
     /* Secondary highlight */
-    --secondary-highlight-color: #FF8447;
-    --secondary-highlight-color-light: #FFF2EA;
+    --secondary-highlight-color: var(--highlight-color);
+    --secondary-highlight-color-light: var(--highlight-color-light);
 
     /* Error */
     --error-button-hover-color: #B4263C;
@@ -29,5 +28,5 @@
     --error-text-color: #FFFFFF;
 
     /* NEH logo */
-    --neh-logo-brightness: 1;
+    --neh-logo-filters: none;
 }

@@ -393,34 +393,35 @@ class TestCutByMileStone:
 
 class TestCutterFunction:
     def test_cutter_blank(self):
-        assert cut(text=" ", cutting_value="1", cutting_type="words",
+        assert cut(text=" ", cutting_value="1", cutting_type="Tokens",
                    overlap="0", last_prop_percent="100%") == [""]
-        assert cut(text="\n", cutting_value="1", cutting_type="lines",
+        assert cut(text="\n", cutting_value="1", cutting_type="Lines",
                    overlap="0", last_prop_percent="100%") == ["\n"]
 
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value="1",
-                   cutting_type="lines", overlap="0",
+                   cutting_type="Lines", overlap="0",
                    last_prop_percent="100%") == ["test\n", "test\n", "test"]
-        assert cut(text=" test", cutting_value="1", cutting_type="words",
+        assert cut(text=" test", cutting_value="1", cutting_type="Tokens",
                    overlap="0", last_prop_percent="100%") == ["test"]
-        assert cut(text="   \ntest", cutting_value="1", cutting_type="lines",
+        assert cut(text="   \ntest", cutting_value="1", cutting_type="Lines",
                    overlap="0",
                    last_prop_percent="100%") == ["   \n", "test"]
-        assert cut(text=" test", cutting_value="2", cutting_type="letters",
+        assert cut(text=" test", cutting_value="2", cutting_type="Characters",
                    overlap="0", last_prop_percent="100%") == [" t", "est"]
-        assert cut(text="test", cutting_value="1", cutting_type="milestone",
+        assert cut(text="test", cutting_value="1", cutting_type="Milestones",
                    overlap="0", last_prop_percent="100%") == ["test"]
-        assert cut(text="test", cutting_value="test", cutting_type="milestone",
+        assert cut(text="test", cutting_value="test",
+                   cutting_type="Milestones",
                    overlap="0", last_prop_percent="100%") == ["", ""]
 
-        assert cut(text="test", cutting_value="e", cutting_type="milestone",
+        assert cut(text="test", cutting_value="e", cutting_type="Milestones",
                    overlap="0", last_prop_percent="100%") == ["t", "st"]
         assert cut(text="test\ntesttest", cutting_value="3",
-                   cutting_type="number", overlap="0",
+                   cutting_type="Segments", overlap="0",
                    last_prop_percent="100%") == ["test\n", "testtest", ""]
         assert cut(text="test test test", cutting_value="3",
-                   cutting_type="number", overlap="0",
+                   cutting_type="Segments", overlap="0",
                    last_prop_percent="100%") == ["test ", "test ", "test"]
 
     def test_cutter_type(self):
@@ -433,7 +434,7 @@ class TestCutterFunction:
 
     def test_cutter_negative_numbers(self):
         try:
-            _ = cut(text="test", cutting_value="0", cutting_type="words",
+            _ = cut(text="test", cutting_value="0", cutting_type="Tokens",
                     overlap="0", last_prop_percent="100%") == ["test"]
             raise AssertionError("negative number error does not raise")
         except AssertionError as error:

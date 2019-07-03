@@ -12,14 +12,16 @@ from scipy.spatial.distance import pdist
 
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
+from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.dendrogram_receiver import DendroOption, DendroReceiver
-from lexos.managers.utility import load_file_manager
+import lexos.managers.utility as utility
 
 
 class DendroTestOptions(NamedTuple):
     """A typed tuple to hold test options."""
 
     doc_term_matrix: pd.DataFrame
+    document_label_map: DocumentLabelMap
     front_end_option: DendroOption
 
 
@@ -36,16 +38,24 @@ class DendrogramModel(BaseModel):
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
             self._test_front_end_option = test_options.front_end_option
+            self._test_document_label_map = test_options.document_label_map
         else:
             self._test_dtm = None
             self._test_front_end_option = None
-            self._test_id_temp_label_map = None
+            self._test_document_label_map = None
 
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: the document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+
+    @property
+    def _document_label_map(self) -> DocumentLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_document_label_map \
+            if self._test_document_label_map is not None \
+            else utility.get_active_document_label_map()
 
     @property
     def _dendro_option(self) -> DendroOption:
@@ -59,6 +69,8 @@ class DendrogramModel(BaseModel):
 
         :return: A plotly figure object
         """
+        labels = [self._document_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
 
         return ff.create_dendrogram(
             self._doc_term_matrix,
@@ -70,8 +82,7 @@ class DendrogramModel(BaseModel):
             linkagefun=lambda dist: linkage(
                 dist, method=self._dendro_option.linkage_method),
 
-            labels=[file.label for file in
-                    load_file_manager().get_active_files()]
+            labels=labels
         )
 
     def extend_figure(self, figure: Figure) -> Figure:
@@ -113,8 +124,8 @@ class DendrogramModel(BaseModel):
         """
         # Get the length of longest label.
         max_label_len = \
-            max([len(file.label) for file in
-                 load_file_manager().get_active_files()])
+            max([len(self._document_label_map[file_id])
+                 for file_id in self._doc_term_matrix.index.values])
 
         # Extend the bottom margin to fit all labels.
         figure.layout.update({'margin': {'b': max_label_len * 6}})
@@ -147,8 +158,8 @@ class DendrogramModel(BaseModel):
         """
         # Get the length of longest label.
         max_label_len = \
-            max([len(file.label) for file in
-                 load_file_manager().get_active_files()])
+            max([len(self._document_label_map[file_id])
+                 for file_id in self._doc_term_matrix.index.values])
 
         # Extend the left margin to fit all labels.
         figure.layout.update({'margin': {'l': max_label_len * 11}})

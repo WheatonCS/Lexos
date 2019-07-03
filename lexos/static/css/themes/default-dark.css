@@ -1,11 +1,11 @@
 :root {
 
     /* Text */
-    --text-color: #6B9485;
+    --text-color: #7E7B96;
 
     /* Buttons */
     --button-border-color: var(--text-color);
-    --button-background-color: #1D2321;
+    --button-background-color: #23222D;
 
     /* Background and foreground */
     --background-color: #000000;
@@ -13,12 +13,12 @@
     --foreground-color: #232323;
 
     /* Primary highlight */
-    --highlight-color: #20ECBA;
-    --highlight-color-light: #263A33;
+    --highlight-color: #A198FF;
+    --highlight-color-light: #403D5D;
 
     /* Secondary highlight */
-    --secondary-highlight-color: #20ECBA;
-    --secondary-highlight-color-light: #263A33;
+    --secondary-highlight-color: var(--highlight-color);
+    --secondary-highlight-color-light: var(--highlight-color-light);
 
     /* Error */
     --error-button-hover-color: #B4263C;
@@ -28,5 +28,5 @@
     --error-text-color: #FFFFFF;
 
     /* NEH logo */
-    --neh-logo-filters: brightness(1.5) sepia(1) hue-rotate(110deg);
+    --neh-logo-filters: brightness(1.4) sepia(1) hue-rotate(205deg);
 }

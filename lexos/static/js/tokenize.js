@@ -20,7 +20,7 @@ $(function(){
         represented in the table below, but will be applied to the file sent
         when the "Download" button is clicked.`);
 
-    // Initialize the tooltips
+    // Initialize the analyze tooltips
     initialize_analyze_tooltips();
 
     // Initialize the walkthrough

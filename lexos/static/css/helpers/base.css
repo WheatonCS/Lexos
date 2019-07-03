@@ -26,9 +26,9 @@
 h1 {
     font-family: "Quicksand", sans-serif;
     font-weight: 400;
-    font-size: 3.5rem;
-    margin: 0;
+    font-size: 3.3rem;
     color: var(--text-color);
+    margin: 0 0 .5rem 0;
 }
 
 h3, a, ul, label, textarea, input[type="text"], span {
@@ -166,6 +166,23 @@ form {
 }
 
 
+/* Logo */
+#lexos-dragon {
+    cursor: pointer;
+    height: 5rem;
+    margin-right: 2.3rem;
+}
+
+#lexos-dragon .circle { fill: var(--background-color); }
+#lexos-dragon .base { fill: var(--highlight-color-light); }
+#lexos-dragon .shadow { fill: var(--highlight-color); }
+#lexos-dragon .lines { fill: none; stroke: var(--text-color); }
+#lexos-dragon .iris { fill: var(--highlight-color); }
+
+#lexos-dragon #eye-2 { opacity: 0; }
+#lexos-dragon * { transition: opacity .2s; }
+
+
 /* Navbar */
 #navbar {
     z-index: 3;
@@ -185,32 +202,25 @@ form {
     white-space: nowrap;
 }
 
-#lexos-dragon {
-    cursor: pointer;
-    height: 5rem;
-    margin-right: 2.3rem;
-}
-
 #lexos-text {
-    cursor: pointer;
     white-space: nowrap;
     margin-right: 2rem;
-    margin-bottom: .7rem;
-    font-size: 4rem;
 }
 
 #page-title {
     opacity: .5;
-    font-size: 3rem;
 }
 
 #navbar-walkthrough-button {
     font-family: Libre Baskerville;
-    margin-bottom: 1.6rem;
+    margin-bottom: 2.3rem;
     border-radius: 50%;
     color: var(--text-color);
     background-color: var(--foreground-color);
-    border: .20rem solid var(--button-border-color);
+    border: .17rem solid var(--button-border-color);
+    padding-right: .06rem;
+    width: 1.83rem;
+    height: 1.83rem;
 }
 
 #navbar-walkthrough-button:hover {
@@ -277,7 +287,7 @@ footer {
 #neh-logo {
     height: 3rem;
     margin-top: .5rem;
-    filter: brightness(var(--neh-logo-brightness));
+    filter: var(--neh-logo-filters);
 }
 
 
@@ -539,6 +549,10 @@ label input[type="checkbox"]:checked + span:after {
 
 .section-body .button {
     margin: 0 0 1rem .5rem;
+}
+
+ul ul {
+    list-style-type: disc;
 }
 
 

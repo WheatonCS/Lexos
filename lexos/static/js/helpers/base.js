@@ -28,9 +28,35 @@ $("document").ready(function(){
     // Disable enter key form submission
     disable_enter_key_form_submission();
 
+    // Initialize the logo hover SVG transition
+    initialize_logo_hover();
+
     // Fade in the page
     $("body").css({transition: '', opacity: '1'});
 });
+
+
+/**
+ * Initializes the logo hover SVG transition.
+ */
+function initialize_logo_hover(){
+
+    // If the logo is hovered over...
+    $("#lexos-dragon").hover(
+
+        // On mouse in...
+        function(){
+            $("#lexos-dragon #eye, #lexos-dragon #iris").css("opacity", "0");
+            $("#lexos-dragon #eye-2").css("opacity", "1");
+        },
+
+        // On mouse out...
+        function(){
+            $("#lexos-dragon #eye, #lexos-dragon #iris").css("opacity", "1");
+            $("#lexos-dragon #eye-2").css("opacity", "0");
+        }
+    );
+}
 
 
 /**
@@ -94,11 +120,11 @@ function create_manage_popup(){
 function initialize_theme_popup(){
 
     // If the Lexos logo is clicked...
-    $("#lexos-dragon, #lexos-text").click(function(){
+    $("#lexos-dragon").click(function(){
 
         // Create a theme popup
-        display_radio_options_popup("Theme", "theme", theme,
-            ["Default", "Grey", "Grey Dark", "Mint", "Mint Dark",
+        display_radio_options_popup("Theme", "theme", theme, ["Default",
+            "Default Dark", "Grey", "Grey Dark", "Mint", "Mint Dark",
             "Solarized Light", "Solarized Dark"], [], set_theme);
     });
 }

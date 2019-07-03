@@ -2,7 +2,6 @@
 
     /* Text */
     --text-color: #505050;
-    --text-color-light: #909090;
 
     /* Buttons */
     --button-border-color: var(--text-color);
@@ -29,5 +28,5 @@
     --error-text-color: #FFFFFF;
 
     /* NEH logo */
-    --neh-logo-brightness: 1;
+    --neh-logo-filters: none;
 }

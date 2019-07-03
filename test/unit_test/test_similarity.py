@@ -1,7 +1,8 @@
 import pandas as pd
 
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
-from lexos.models.similarity_query_model import SimilarityModel, SimilarityTestOption
+from lexos.models.similarity_query_model import SimilarityModel, \
+    SimilarityTestOption
 from lexos.receivers.similarity_query_receiver import SimilarityFrontEndOption
 
 
@@ -23,7 +24,7 @@ def test_with_similarity_equal_one():
         test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
-            id_temp_label_map=test_id_table
+            document_label_map=test_id_table
         )
     )
 
@@ -51,7 +52,7 @@ def test_with_all_same_content_file():
         test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
-            id_temp_label_map=test_id_table
+            document_label_map=test_id_table
         )
     )
     pd.testing.assert_frame_equal(
@@ -76,7 +77,7 @@ def test_with_two_dimension():
         test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
-            id_temp_label_map=test_id_table
+            document_label_map=test_id_table
         )
     )
     # assertion
@@ -111,7 +112,7 @@ def test_with_three_dimension():
         test_options=SimilarityTestOption(
             doc_term_matrix=test_dtm,
             front_end_option=test_front_end_option,
-            id_temp_label_map=test_id_table
+            document_label_map=test_id_table
         )
     )
 
@@ -146,7 +147,7 @@ def test_with_special_case_one():
             test_options=SimilarityTestOption(
                 doc_term_matrix=test_dtm,
                 front_end_option=test_front_end_option,
-                id_temp_label_map=test_id_table
+                document_label_map=test_id_table
             )
         )
         _ = similarity_model._get_similarity_query()
@@ -166,7 +167,7 @@ def test_with_special_case_two():
             test_options=SimilarityTestOption(
                 doc_term_matrix=test_dtm,
                 front_end_option=test_front_end_option,
-                id_temp_label_map=test_id_table
+                document_label_map=test_id_table
             )
         )
         _ = similarity_model._get_similarity_query()
