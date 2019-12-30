@@ -123,9 +123,20 @@ function initialize_theme_popup(){
     $("#lexos-dragon").click(function(){
 
         // Create a theme popup
-        display_radio_options_popup("Theme", "theme", theme, ["Default",
-            "Default Dark", "Grey", "Grey Dark", "Mint", "Mint Dark",
-            "Solarized Light", "Solarized Dark"], [], set_theme);
+        display_radio_options_popup("Theme", "theme", theme, [
+            "Basil Light",
+            "Basil Dark",
+            "Indigo Light",
+            "Indigo Dark",
+            "Mint Light",
+            "Mint Dark",
+            "Saffron Light",
+            "Saffron Dark",
+            "Grey Light",
+            "Grey Dark",
+            "Solarized Light",
+            "Solarized Dark"
+        ], [], set_theme);
     });
 }
 
@@ -220,6 +231,9 @@ function initialize_dropdown_menus(){
         ["Content Analysis", "content-analysis"]
     ]);
 
+    // Remove the menu if the mouse leaves the navbar
+    $("#navbar").mouseleave(remove_dropdown_menus);
+
     // Remove the menu if an outside element was clicked
     $(window).click(remove_dropdown_menus);
 
@@ -237,31 +251,25 @@ function initialize_dropdown_menus(){
  * @param {list} items: The names and links of the dropdown rows.
  */
 function add_dropdown_menu_callback(element_name, items){
-    $(`#${element_name}-button`).click(function(){
-
-        let create = !$(`#${element_name}-menu`).length;
+    $(`#${element_name}-button`).on("mouseover click", function(){
 
         //If any dropdown menus exist, remove them
         remove_dropdown_menus();
 
-        //If the menu does not exist, create it
-        if(create){
+        // Create the dropdown menu grid
+        let menu = $(`<div id="${element_name}-menu" class=`+
+            `"navbar-menu"></div>`).insertBefore(
+            `#${element_name}-button`);
 
-            // Create the dropdown menu grid
-            let menu = $(`<div id="${element_name}-menu" class=`+
-                `"navbar-menu"></div>`).insertBefore(
-                `#${element_name}-button`);
-
-            // Populate the grid
-            for(const item of items){
-                let title = item[0];
-                let url = item[1];
-                $(`<a href="${url}">${title}</a>`).appendTo(menu);
-            }
-
-            // Stop click propagation if the menu is clicked
-            menu.click(function(event){ event.stopPropagation(); });
+        // Populate the grid
+        for(const item of items){
+            let title = item[0];
+            let url = item[1];
+            $(`<a href="${url}">${title}</a>`).appendTo(menu);
         }
+
+        // Stop click propagation if the menu is clicked
+        menu.click(function(event){ event.stopPropagation(); });
     });
 }
 

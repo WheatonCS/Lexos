@@ -63,7 +63,7 @@ GENERALSETTINGS = "theme"
 
 # General
 DEFAULT_GENERALSETTINGS_OPTIONS = {
-    "theme": "Default"
+    "theme": "Basil Light"
 }
 
 # Scrub
