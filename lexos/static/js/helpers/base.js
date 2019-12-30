@@ -123,9 +123,20 @@ function initialize_theme_popup(){
     $("#lexos-dragon").click(function(){
 
         // Create a theme popup
-        display_radio_options_popup("Theme", "theme", theme, ["Default",
-            "Default Dark", "Grey", "Grey Dark", "Mint", "Mint Dark",
-            "Solarized Light", "Solarized Dark"], [], set_theme);
+        display_radio_options_popup("Theme", "theme", theme, [
+            "Basil Light",
+            "Basil Dark",
+            "Indigo Light",
+            "Indigo Dark",
+            "Mint Light",
+            "Mint Dark",
+            "Saffron Light",
+            "Saffron Dark",
+            "Grey Light",
+            "Grey Dark",
+            "Solarized Light",
+            "Solarized Dark"
+        ], [], set_theme);
     });
 }
 
