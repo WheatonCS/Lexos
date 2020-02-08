@@ -148,7 +148,7 @@ def cache_scrub_options():
         session['scrubbingoptions'][box] = (
             request.form[box] if box in request.form else '')
 
-    session['scrubbingoptions']['stop_words_'] = \
+    session['scrubbingoptions']['stop_words'] = \
         request.form['stop_words_method']
     if 'tags' in request.form:
         session['scrubbingoptions']['keepDOEtags'] = \
