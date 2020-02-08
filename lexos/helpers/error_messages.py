@@ -28,7 +28,7 @@ WINDOW_NON_POSITIVE_MESSAGE = "The window size must be a positive integer"
 
 
 # ----------------------Scrubber Error Messages-------------------------------
-NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Invalid number of colons."
+NOT_ONE_REPLACEMENT_COLON_MESSAGE = "Invalid number of colons or commas."
 REPLACEMENT_RIGHT_OPERAND_MESSAGE = \
     "Too many values on right side of replacement string."
 REPLACEMENT_NO_LEFT_HAND_MESSAGE = \
