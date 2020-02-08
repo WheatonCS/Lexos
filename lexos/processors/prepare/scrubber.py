@@ -57,8 +57,9 @@ def handle_special_characters(text: str) -> str:
     """
 
     char_set = request.form['special_characters_preset']
+    conversion_dict = {}
 
-    if char_set == 'None':
+    if char_set == 'None' and len(request.form['special_characters']) == 0:
         return text
 
     elif char_set == 'Old English SGML':
@@ -74,17 +75,24 @@ def handle_special_characters(text: str) -> str:
                            '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
 
     elif char_set == 'Early English HTML':
-        conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ',
-                           '&e;': '\u0119', '&AE;': 'Æ', '&D;': 'Ð',
-                           '&T;': 'Þ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
-                           '&E;': 'Ę', '&amp;': '&', '&lt;': '<',
-                           '&gt;': '>', '&#383;': 'ſ'}
+        conversion_dict = {'&aelig;': 'æ', '&#230;': 'æ', '&AElig;': 'Æ',
+                           '&#198;': 'Æ', '&eth;': 'ð', '&#240;': 'ð', '&ETH;': 'Ð',
+                           '&#208;': 'Ð', '&thorn;': 'þ', '&#254;': 'þ',
+                           '&THORN;': 'Þ', '&#222;': 'Þ', '&#383;': 'ſ',
+                           '&#yogh;': 'ȝ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
+                           '&YOGH;': 'Ȝ', '&lt;': '<', '&gt;': '>', '&amp;': '&'}
 
     elif char_set == 'MUFI 3' or char_set == 'MUFI 4':
         conversion_dict = get_special_char_dict_from_file(char_set=char_set)
 
     else:
-        raise ValueError("Invalid special character set")
+        # try to parse manually-entered character mappings
+        try:
+            for char in request.form['special_characters'].split('\n'):
+                pat, replace = char.replace(' ','').split(',')
+                conversion_dict[pat] = replace
+        except:
+            raise ValueError("Invalid special character set")
 
     updated_text = replace_with_dict(
         text, replacement_dict=conversion_dict, edge1="()(", edge2=")()")
@@ -108,33 +116,44 @@ def replacement_handler(text: str,
 
     # Remove spaces in replacement string for consistent format, then split the
     # individual replacements to be made
-    no_space_replacer = replacer_string.translate({ord(" "): None})
+    no_space_replacer = replacer_string.translate({ord(" "): None}).strip('\n')
 
     # Handle excess blank lines in file, etc.
     replacement_lines = [token for token in no_space_replacer.split('\n')
                          if token != ""]
 
     for replacement_line in replacement_lines:
-        if replacement_line and replacement_line.count(':') != 1:
+        if replacement_line and replacement_line.count(':') != 1 and replacement_line.count(',') != 1:
+            # This really needs a separate error message for commas
             raise LexosException(
                 NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
 
-        # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
-        replace_from_line, replace_to = replacement_line.split(':')
+        if replacement_line and replacement_line.count(':') == 1:
+            # "a,b,c,d:e" => replace_from_str = "a,b,c,d", replace_to_str = "e"
+            replace_from_line, replace_to = replacement_line.split(':')
 
-        # Not valid inputs -- ":word" or ":a"
-        if replace_from_line == "":
-            raise LexosException(
-                REPLACEMENT_NO_LEFT_HAND_MESSAGE + replacement_line)
+            # Not valid inputs -- ":word" or ":a"
+            if replace_from_line == "":
+                raise LexosException(
+                    REPLACEMENT_NO_LEFT_HAND_MESSAGE + replacement_line)
 
-        # Not valid inputs -- "a:b,c" or "a,b:c,d"
-        if ',' in replace_to:
-            raise LexosException(
-                REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
+            # Not valid inputs -- "a:b,c" or "a,b:c,d"
+            if ',' in replace_to:
+                raise LexosException(
+                    REPLACEMENT_RIGHT_OPERAND_MESSAGE + replacement_line)
 
-        replacement_dict = {replace_from: replace_to
-                            for replace_from in replace_from_line.split(",")
-                            if replacement_line != ""}
+            replace_from_line = replace_from_line.strip()
+            replace_to = replace_to.strip()
+            replacement_dict = {replace_from: replace_to
+                                for replace_from in replace_from_line.split(",")
+                                if replacement_line != ""}
+
+        # For special characters
+        if replacement_line and replacement_line.count(':') == 0 and replacement_line.count(',') == 1:
+            replacement_dict = {}
+            replace_from, replace_to = replacement_line.split(',')
+            replacement_dict[replace_from] = replace_to
+
 
         # Lemmas are words surrounded by whitespace, while other
         # replacements are chars
@@ -142,7 +161,9 @@ def replacement_handler(text: str,
             # Beginning of the string or unicode punct or whitespace
             edge1 = r'(^|\s)('
             # Whitespace or unicode punct or end of the string
-            edge2 = r')(?=\s|$)'
+            # edge2 = r')(?=\s|$)'
+            # Whitespace or non-word character or end of the string
+            edge2 = r')(?=\W|\s|$)'
         else:
             edge1 = r'()('
             edge2 = r')()'
@@ -459,6 +480,7 @@ def get_remove_punctuation_map(
 
     # This function has the side-effect of altering the text, thus the
     # updated text must be returned
+
     return text, remove_punctuation_map
 
 
@@ -602,6 +624,14 @@ def keep_words(text: str, non_removal_string: str) -> str:
                  for line in split_lines
                  for word in re.split(r'\s', line, re.UNICODE)
                  if word != '']
+    # Hack to remove any unseparated tokens
+    unsplit_spans = []
+    for item in word_list:
+        if re.search(r'\s', item):
+            unsplit_spans = unsplit_spans + re.split(r'\s+', item)
+        else:
+            unsplit_spans.append(item)
+    word_list = unsplit_spans
 
     # remove_list is a copy of word_list without the keepwords
     remove_list = [word for word in word_list if word not in keep_list]
@@ -978,7 +1008,6 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         :param orig_text: A text string.
         :return: The text string, with removal characters deleted.
         """
-
         return orig_text.translate(total_removal_map)
 
     # -- 7. consolidations ---------------------------------------------------
@@ -994,8 +1023,9 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
             file_string=cons_file_string, manual_string=cons_manual,
             storage_folder=storage_folder, storage_filenames=storage_filenames,
             storage_number=0)
-        return replacement_handler(
+        text = replacement_handler(
             text=orig_text, replacer_string=replacer_string, is_lemma=False)
+        return text
 
     # -- 8. lemmatize --------------------------------------------------------
     def lemmatize_function(orig_text: str) -> str:
@@ -1045,22 +1075,24 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         else:
             return orig_text
 
+
     # apply all the functions and exclude tag
+    functions=[to_lower_function,
+                consolidation_function,
+                lemmatize_function,
+                total_removal_function,
+                stop_keep_words_function]
+    if lower:
+        functions.insert(0, to_lower_function)
+
+    if digits:
+        functions.insert(3, get_remove_digits)
+
     if tags:
         text = general_functions.apply_function_exclude_tags(
-            input_string=text, functions=[to_lower_function,
-                                          consolidation_function,
-                                          lemmatize_function,
-                                          get_remove_digits,
-                                          stop_keep_words_function,
-                                          total_removal_function])
+            input_string=text, functions=functions)
     else:
         text = general_functions.apply_function_no_tags(
-            input_string=text, functions=[to_lower_function,
-                                          consolidation_function,
-                                          lemmatize_function,
-                                          get_remove_digits,
-                                          stop_keep_words_function,
-                                          total_removal_function])
+            input_string=text, functions=functions)
 
     return text
