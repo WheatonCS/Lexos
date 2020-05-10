@@ -76,11 +76,12 @@ def handle_special_characters(text: str) -> str:
 
     elif char_set == 'Early English HTML':
         conversion_dict = {'&aelig;': 'æ', '&#230;': 'æ', '&AElig;': 'Æ',
-                           '&#198;': 'Æ', '&eth;': 'ð', '&#240;': 'ð', '&ETH;': 'Ð',
-                           '&#208;': 'Ð', '&thorn;': 'þ', '&#254;': 'þ',
-                           '&THORN;': 'Þ', '&#222;': 'Þ', '&#383;': 'ſ',
-                           '&#yogh;': 'ȝ', '&#541;': 'ȝ', '&#540;': 'Ȝ',
-                           '&YOGH;': 'Ȝ', '&lt;': '<', '&gt;': '>', '&amp;': '&'}
+                           '&#198;': 'Æ', '&eth;': 'ð', '&#240;': 'ð',
+                           '&ETH;': 'Ð', '&#208;': 'Ð', '&thorn;': 'þ',
+                           '&#254;': 'þ', '&THORN;': 'Þ', '&#222;': 'Þ',
+                           '&#383;': 'ſ', '&#yogh;': 'ȝ', '&#541;': 'ȝ',
+                           '&#540;': 'Ȝ', '&YOGH;': 'Ȝ', '&lt;': '<',
+                           '&gt;': '>', '&amp;': '&'}
 
     elif char_set == 'MUFI 3' or char_set == 'MUFI 4':
         conversion_dict = get_special_char_dict_from_file(char_set=char_set)
@@ -89,9 +90,9 @@ def handle_special_characters(text: str) -> str:
         # try to parse manually-entered character mappings
         try:
             for char in request.form['special_characters'].split('\n'):
-                pat, replace = char.replace(' ','').split(',')
+                pat, replace = char.replace(' ', '').split(',')
                 conversion_dict[pat] = replace
-        except:
+        except Exception:
             raise ValueError("Invalid special character set")
 
     updated_text = replace_with_dict(
@@ -123,7 +124,8 @@ def replacement_handler(text: str,
                          if token != ""]
 
     for replacement_line in replacement_lines:
-        if replacement_line and replacement_line.count(':') != 1 and replacement_line.count(',') != 1:
+        if replacement_line and replacement_line.count(':') != 1\
+                and replacement_line.count(',') != 1:
             # This really needs a separate error message for commas
             raise LexosException(
                 NOT_ONE_REPLACEMENT_COLON_MESSAGE + replacement_line)
@@ -145,15 +147,16 @@ def replacement_handler(text: str,
             replace_from_line = replace_from_line.strip()
             replace_to = replace_to.strip()
             replacement_dict = {replace_from: replace_to
-                                for replace_from in replace_from_line.split(",")
+                                for replace_from in
+                                replace_from_line.split(",")
                                 if replacement_line != ""}
 
         # For special characters
-        if replacement_line and replacement_line.count(':') == 0 and replacement_line.count(',') == 1:
+        if replacement_line and replacement_line.count(':') == 0\
+                and replacement_line.count(',') == 1:
             replacement_dict = {}
             replace_from, replace_to = replacement_line.split(',')
             replacement_dict[replace_from] = replace_to
-
 
         # Lemmas are words surrounded by whitespace, while other
         # replacements are chars
@@ -1075,13 +1078,12 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         else:
             return orig_text
 
-
     # apply all the functions and exclude tag
-    functions=[to_lower_function,
-                consolidation_function,
-                lemmatize_function,
-                total_removal_function,
-                stop_keep_words_function]
+    functions = [to_lower_function,
+                 consolidation_function,
+                 lemmatize_function,
+                 total_removal_function,
+                 stop_keep_words_function]
     if lower:
         functions.insert(0, to_lower_function)
 
