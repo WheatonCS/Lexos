@@ -988,8 +988,9 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         remove_punctuation_map = {}
 
     # -- 5. digits -----------------------------------------------------------
-    if digits:
-        get_remove_digits(text)
+    # will be applied at end if needed
+    # if digits:
+    #    get_remove_digits(text)
 
     # -- 6. whitespace ------------------------------------------------------
 
