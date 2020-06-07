@@ -8,3 +8,24 @@
 #options-section {
     grid-template-columns: 1.7fr 1fr 1fr 1.5fr;
 }
+
+/* Full screen section */
+/* Chrome, Safari and Opera syntax */
+:-webkit-full-screen {
+    background-color: #ffffff;
+  }
+
+  /* Firefox syntax */
+  :-moz-full-screen {
+    background-color: #ffffff;
+  }
+
+  /* IE/Edge syntax */
+  :-ms-fullscreen {
+    background-color: #ffffff;
+  }
+
+  /* Standard syntax */
+  :fullscreen {
+    background-color: #ffffff;
+  }

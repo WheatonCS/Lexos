@@ -58,7 +58,7 @@ function initialize(){
 
         // Display the loading overlay and disable the appropriate buttons
         start_loading("#graph-container",
-            "#generate-button, #png-button, #svg-button");
+            "#generate-button, #png-button, #svg-button, #full-screen-button");
 
         // Create the Plotly dendrogram graph
         create_graph("dendrogram/graph");
@@ -134,3 +134,19 @@ function walkthrough(){
 
     return intro;
 }
+
+/**
+ * Open dendrogram in fullscreen mode.
+ */
+function openFullscreen() {
+    let elem = document.getElementById('graph-container')
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen()
+     } else if (elem.mozRequestFullScreen) { /* Firefox */
+       elem.mozRequestFullScreen()
+     } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+       elem.webkitRequestFullscreen()
+     } else if (elem.msRequestFullscreen) { /* IE/Edge */
+       elem.msRequestFullscreen()
+     }
+  }

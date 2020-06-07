@@ -43,7 +43,7 @@ function initialize_graph(graph_html){
     $(window).resize(update_graph_size);
 
     // Remove the loading overlay and show the graph
-    finish_loading("#graph-container", "#graph", "#png-button, #svg-button");
+    finish_loading("#graph-container", "#graph", "#png-button, #svg-button, #full-screen-button");
 }
 
 
