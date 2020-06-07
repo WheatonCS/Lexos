@@ -153,7 +153,7 @@ class TokenizerModel(BaseModel):
         head.insert(0, "Term")
 
         # Transpose the data if requested
-        if not self._front_end_option.csv_documents_as_rows:
+        if self._front_end_option.csv_documents_as_rows:
             dtm_sorted = dtm_sorted.transpose()
 
         return {
