@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import html
 import os
 import re
 import sys
@@ -62,6 +63,9 @@ def handle_special_characters(text: str) -> str:
     if char_set == 'None' and len(request.form['special_characters']) == 0:
         return text
 
+    elif char_set == 'HTML' and len(request.form['special_characters']) == 0:
+        return html.unescape(text)
+
     elif char_set == 'Old English SGML':
         conversion_dict = {'&ae;': 'æ', '&d;': 'ð', '&t;': 'þ', '&e;': 'ę',
                            '&AE;': 'Æ', '&D;': 'Ð', '&T;': 'Þ', '&E;': 'Ę',
@@ -74,14 +78,15 @@ def handle_special_characters(text: str) -> str:
                            '&rmacron;': 'r̄', '&lt;': '<', '&gt;': '>',
                            '&lbar;': 'ł', '&tbar;': 'ꝥ', '&bbar;': 'ƀ'}
 
-    elif char_set == 'Early English HTML':
-        conversion_dict = {'&aelig;': 'æ', '&#230;': 'æ', '&AElig;': 'Æ',
-                           '&#198;': 'Æ', '&eth;': 'ð', '&#240;': 'ð',
-                           '&ETH;': 'Ð', '&#208;': 'Ð', '&thorn;': 'þ',
-                           '&#254;': 'þ', '&THORN;': 'Þ', '&#222;': 'Þ',
-                           '&#383;': 'ſ', '&#yogh;': 'ȝ', '&#541;': 'ȝ',
-                           '&#540;': 'Ȝ', '&YOGH;': 'Ȝ', '&lt;': '<',
-                           '&gt;': '>', '&amp;': '&'}
+    # Deprecated -- preserved for historical purposes
+    # elif char_set == 'Early English HTML':
+    #     conversion_dict = {'&aelig;': 'æ', '&#230;': 'æ', '&AElig;': 'Æ',
+    #                        '&#198;': 'Æ', '&eth;': 'ð', '&#240;': 'ð',
+    #                        '&ETH;': 'Ð', '&#208;': 'Ð', '&thorn;': 'þ',
+    #                        '&#254;': 'þ', '&THORN;': 'Þ', '&#222;': 'Þ',
+    #                        '&#383;': 'ſ', '&#yogh;': 'ȝ', '&#541;': 'ȝ',
+    #                        '&#540;': 'Ȝ', '&YOGH;': 'Ȝ', '&lt;': '<',
+    #                        '&gt;': '>', '&amp;': '&'}
 
     elif char_set == 'MUFI 3' or char_set == 'MUFI 4':
         conversion_dict = get_special_char_dict_from_file(char_set=char_set)
@@ -114,6 +119,11 @@ def replacement_handler(text: str,
         is for a lemma.
     :returns: The input string with replacements made.
     """
+
+    # Convert HTML character entities to Unicode if HTML is selected *and* there
+    # are further entities entered in the form field
+    if request.form['special_characters_preset'] == 'HTML':
+        text = html.unescape(text)
 
     # Remove spaces in replacement string for consistent format, then split the
     # individual replacements to be made
