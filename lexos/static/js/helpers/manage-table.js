@@ -10,19 +10,19 @@ function initialize_manage_table(parent_query, enable_context_menu = false){
     $(`
         <!-- Manage table head -->
         <div id="manage-table-head">
-            <h3 id="active" class="manage-table-cell">Active</h3>
-            <h3 class="manage-table-cell">#</h3>
-            <h3 id="document" class="manage-table-cell">Document</h3>
-            <h3 id="class" class="manage-table-cell">Class</h3>
-            <h3 class="manage-table-cell">Source</h3>
-            <h3 id="excerpt" class="manage-table-cell">Excerpt</h3>
+            <h3 id="active" class="manage-table-cell sortable">Active <i id="state-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 class="manage-table-cell sortable"># <i id="id-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 id="document" class="manage-table-cell sortable">Document <i id="label-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 id="class" class="manage-table-cell sortable">Class <i id="class-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 class="manage-table-cell sortable">Source <i id="source-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 id="excerpt" class="manage-table-cell sortable">Excerpt <i id="preview-sortdir" class="sort-by-asc">▲</i></h3>
             <a id="manage-table-download-button" class="disabled right-justified button" href="manage/download">Download</a>
             <span id="manage-table-tooltip-button" class="tooltip-button">?</span>
         </div>
 
         <!-- Manage table body -->
         <div id="manage-table-body" class="firefox-hidden-scrollbar"></div>
-        
+
         <!-- Selection box -->
         <div id="manage-table-selection-box"></div>
     `).appendTo(parent_query);
@@ -45,9 +45,8 @@ function initialize_manage_table(parent_query, enable_context_menu = false){
  * Creates the table displaying the uploaded documents.
  * @param {boolean} enable_context_menu: Whether to enable the context menu.
  */
-let manage_table_documents;
+var manage_table_documents = [];
 function create_manage_table(enable_context_menu = true){
-
     // Display the loading overlay on the table body
     start_loading("#manage-table-body");
 
@@ -87,6 +86,77 @@ function create_manage_table(enable_context_menu = true){
             add_text_overlay("#manage-table-body", "Loading Failed");
         });
 }
+
+
+/**
+ * Sorts an array of objects. Used for sorting the table.
+ * @param {string} key: The name of the column to sort by.
+ * @param {string} order: The sort direction, 'asc' or 'desc'.
+ */
+function sortArray(key, order = 'asc') {
+    return function innerSort(a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0;
+      }
+      const varA = (typeof a[key] === 'string')
+        ? a[key].toUpperCase() : a[key];
+      const varB = (typeof b[key] === 'string')
+        ? b[key].toUpperCase() : b[key];
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return (
+        (order === 'desc') ? (comparison * -1) : comparison
+      );
+    };
+  }
+
+
+/**
+ * Triggers table sorting when a sort arrow is clicked.
+ */
+$(document).on('click', '.sortable', function(){
+    const col = $(this).find('i').attr('id');
+    sort_manage_table(manage_table_documents, col);
+})
+
+
+/**
+ * Sorts the table displaying the uploaded documents.
+ * @param {array} manage_table_documents: The list of document row objects.
+ * @param {string} col: The id of the sort direction arrow.
+ * @param {boolean} enable_context_menu: Whether to enable the context menu.
+ */
+  function sort_manage_table(manage_table_documents, col, enable_context_menu = true){
+    // Make a copy of the array for sorting
+    const copyForSorting = [...manage_table_documents];
+    if($('#' + col).hasClass('sort-by-desc')){
+        copyForSorting.sort(sortArray(col.split('-')[0], 'desc'));
+        $('#' + col).removeClass('sort-by-desc').addClass('sort-by-asc').text('▲');
+        var reverse = false;
+    } else {
+        copyForSorting.sort(sortArray(col.split('-')[0]));
+        $('#' + col).removeClass('sort-by-asc').addClass('sort-by-desc').text('▼');
+        reverse = true;
+    }
+
+    // Create the new table content
+    $("#manage-table-body").empty();
+    for(let i = 0; i < manage_table_documents.length; ++i){
+        const d = copyForSorting[i];
+        let num = i + 1;
+        if (reverse === true) {
+            num = manage_table_documents.length - i;
+        }
+        append_manage_table_row(d["id"], num, d["state"],
+            d["label"], d["class"], d["source"], d["preview"],
+            enable_context_menu);
+    }
+  }
 
 
 /**
