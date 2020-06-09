@@ -225,8 +225,10 @@ def pattern_replacement_handler(text: str,
             # Remove whitespace around the separator and then split
             replacement_line = re.sub(r'\s+>\s+', '>', replacement_line)
             pattern, substitution = re.split(pat_for_sep, replacement_line)
-            print(substitution)
+            # Handle string internal greater than sign
             substitution = substitution.replace('\\>', '>')
+            # Convert \s token to a space
+            substitution = substitution.replace('\\s', ' ')
             # If the pattern has the prefix REGEX:, remove it and set regex=True
             if pattern.lower().startswith('regex:'):
                 regex = True
@@ -234,7 +236,6 @@ def pattern_replacement_handler(text: str,
             else:
                 regex = False
             replacement_jobs.append((regex, pattern, substitution))
-            print(replacement_jobs)
             # Do the replacement
             if regex == True:
                 text = re.sub(pattern, substitution, text)

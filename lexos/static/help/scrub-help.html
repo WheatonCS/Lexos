@@ -231,9 +231,19 @@
     </h3>
     <h3 class="help-section-paragraph">
         If you find that you need to replace the <code>&gt;</code> character itself, place a backslash
-        before it like <code>\></code>.
+        before it like <code>\></code>. To replace a character with a space, use <code>\s</code>. For
+        instance, the pattern <code>- > \s</code> will replace hyphens with spaces.
     </h3>
-        <h3 class="help-section-paragraph">
+    <h3 class="help-section-paragraph">
+        Lexos accepts regular expression (regex) patterns if the pattern begins with <code>REGEX:</code>.
+        For example, <code>REGEX:^c > k</code> will change <em>c</em> to <em>k</em> only at the beginning
+        of the text. If you are using regex capture groups, you can reference them with <code>\1</code>,
+        <code>\2</code>, etc. For example, the pattern <code>REGEX:(hi)-(ho) > \2-\1</code> will change
+        "hi-ho" to "ho-hi". A useful regular expressions tutorial can be found at
+        <a target="_blank" href="https://regexone.com/"><u>RegexOne</u></a>. Regex patterns can also be
+        tested at <a target="_blank" href="https://regex101.com/">Regex101</a>.
+    </h3>
+    <h3 class="help-section-paragraph">
         Pattern replacements can be entered manually in the provided form field or
         uploaded from a file. Note that the "Make Lowercase" option will be applied
         to your list of characters if that option is also selected. To replace
@@ -293,31 +303,3 @@
         Multiple transformation rules should be listed on separate lines.
     </h3>
 </ul>
-
-<!-- Replacing Patterns -->
-<h3 class="help-section-title">Replacing Patterns</h3>
-
-<h3 class="help-section-paragraph">
-    Sometimes it is necessary to replace a pattern rather than a precise string.
-    For instance, if a document contains multiple URLs like
-    <code>http://lexos.wheatoncollege.edu</code> and
-    <code>http://scalar.usc.edu/works/lexos/</code>, and you need to strip
-    these URLs, a method is required for matching all URLs without knowing
-    what they are in advance. One technique is to apply regular expression
-    (regex) pattern matching. Lexos uses regular expressions internally to
-    perform some of its scrubbing options, but, as of version 3.0, it does
-    not provide a way for users to supply their own regular expression
-    patterns when scrubbing. If users need to strip or replace patterns by
-    regular expressions, it will be necessary to perform that action using
-    a separate script or tool <em><u>prior to using Lexos</u></em>. A useful
-    regular expressions tutorial can be found at
-    <a target="_blank" href="https://regexone.com/"><u>RegexOne</u></a>.
-    Most modern text editors like
-    <a target="_blank" href="https://www.sublimetext.com/"><u>Sublime Text</u></a> and
-    <a target="_blank" href="http://www.barebones.com/products/TextWrangler/"><u>TextWrangler</u></a>
-    accept regular expressions in their search and replace functions, and
-    users may find them to be a convenient means of performing actions with
-    regular expressions. We hope to add a regular expression pattern matching
-    to Lexos in the future.
-</h3>
-
