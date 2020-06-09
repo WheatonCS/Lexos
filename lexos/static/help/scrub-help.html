@@ -75,7 +75,7 @@
         Converts all uppercase characters to lowercase characters so that the
         tokens "The" and "the" will be considered as the same term. In addition,
         all contents (whether in uploaded files or entered manually) for the
-        Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters
+        Stop Words/Keep Words, Pattern Replacements, Lemmas, or Special Characters
         options will also have all uppercase characters changed to lowercase.
         Lowercase is not applied inside any <code>HTML</code>, <code>XML</code>,
         or <code>SGML</code> markup tags remaining in the text.
@@ -212,6 +212,34 @@
         <a target="_blank" href="https://github.com/WheatonCS/Lexos/tree/master/test/test_suite/Scrubbing/Stop%20Words%20%26%20Keep%20Words"><u>click here</u></a>
     </h3>
 
+    <li><b>Pattern Replacements</b></li>
+    <h3 class="help-section-paragraph">
+        Replaces a list of character patterns with substitutions. This is
+        typically to consolidate symbols considered equivalent or to provide
+        highly specific cleaning functions.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example, in Old English, the character "eth" <em>ð</em>  is interchangeable
+        with the character "thorn" <em>þ</em>. The Pattern Replacements option allows you to
+        choose to merge the two using a single character.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Pattern replacements should be entered in the format: <pre>ð > þ</pre> Where you wish to
+        change all occurrences of <code>ð</code> to <code>þ</code>. Multiple
+        consolidations can be separated by commas or line breaks. All replacements will be
+        applied in the order in which they are listed.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you find that you need to replace the <code>&gt;</code> character itself, place a backslash
+        before it like <code>\></code>.
+    </h3>
+        <h3 class="help-section-paragraph">
+        Pattern replacements can be entered manually in the provided form field or
+        uploaded from a file. Note that the "Make Lowercase" option will be applied
+        to your list of characters if that option is also selected. To replace
+        entire words (terms) with other words, you should use the <b>Lemma</b> option.
+    </h3>
+
     <li><b>Lemmas</b></li>
     <h3 class="help-section-paragraph">
         Replaces all instances of terms in a list with a common replacement
@@ -232,28 +260,6 @@
         in separate lines as shown below:
         <pre>cyninges, cyningas: cyning <br>Beowulfes, Beowulfe: Beowulf</pre>
         You can manually enter a list of lemmas or upload your own.
-    </h3>
-
-    <li><b>Consolidations</b></li>
-    <h3 class="help-section-paragraph">
-        Replaces a list of characters with a different character. This is
-        typically to consolidate symbols considered equivalent.
-    </h3>
-    <h3 class="help-section-paragraph">
-        For example, in Old English, the character "eth" ð  is interchangeable
-        with the character "thorn" þ. The Consolidations option allows you to
-        choose to merge the two using a single character.
-    </h3>
-    <h3 class="help-section-paragraph">
-        Consolidations should be entered in the format: <pre>ð: þ</pre> Where you wish to
-        change all occurrences of <code>ð</code> to <code>þ</code> . Multiple
-        consolidations can be separated by commas or line breaks.
-    </h3>
-    <h3 class="help-section-paragraph">
-        Consolidations can be entered manually in the provided form field or
-        uploaded from a file. Note that the "Make Lowercase" option will be applied
-        to your list of characters if that option is also selected. To replace
-        entire words (terms) with other words, you should use the <b>Lemma</b> option.
     </h3>
 
     <li><b>Special Characters</b></li>
