@@ -256,7 +256,7 @@ form {
     display: inline-grid;
     row-gap: 1rem;
     padding: 1rem;
-    white-space: nowrap;;
+    white-space: nowrap;
     background-color: var(--foreground-color);
     border: 2rem solid var(--background-color);
     border-top: none;

@@ -45,11 +45,11 @@ function scrape () {
   // Send the scrape request
   send_ajax_request('/upload/scrape', $('#scrape-input').val())
 
-  // Always enable the "Scrape" button
+    // Always enable the "Scrape" button
     .always(function () { enable('#scrape-button') })
 
-  // If the request was successful, display the uploaded files in the
-  // "Upload List" section.
+    // If the request was successful, display the uploaded files in the
+    // "Upload List" section.
     .done(function (response) {
       for (const file_name of response) {
         create_upload_preview(file_name)
@@ -57,7 +57,7 @@ function scrape () {
       }
     })
 
-  // If the request failed, display an error.
+    // If the request failed, display an error.
     .fail(function () {
       error('Scraping failed.')
     })
@@ -129,7 +129,12 @@ function validate_file (file) {
 function send_file_upload_requests () {
   // Get the next file
   let file = files.pop()
-  if (!file) return
+
+  // If there are no more files to upload, display an upload complete message.
+  if (!file) {
+    show_message('All uploads have completed.')
+    return
+  }
 
   // Send a request to upload the file
   $.ajax({
@@ -216,11 +221,11 @@ function create_upload_preview (file_name) {
 
   // Create the upload preview element
   let upload_preview_element = $(`
-        <div id="preview-${active_documents}" class="hidden upload-preview">
-            <h3 class="disabled upload-preview-content"></h3>
-            <div class="progress-bar"></div>
-        </div>
-    `).appendTo('#upload-previews-grid')
+    <div id="preview-${active_documents}" class="hidden upload-preview">
+      <h3 class="disabled upload-preview-content"></h3>
+      <div class="progress-bar"></div>
+    </div>
+  `).appendTo('#upload-previews-grid')
 
   // Add the HTML-escaped file name to the upload preview element
   upload_preview_element.find('.upload-preview-content')
@@ -274,20 +279,20 @@ function initialize_drag_and_drop_section_highlighting () {
 function initialize_tooltips () {
   // "Upload"
   create_tooltip('#upload-tooltip-button', `Click the "Browse" button or
-        drag and drop a file into the "Drag Files Here" section. The maximum
-        file size is 250 MB, and the supported file types are: .txt, .html,
-        .xml, .sgml, and .lexos.`)
+    drag and drop a file into the "Drag Files Here" section. The maximum
+    file size is 250 MB, and the supported file types are: .txt, .html,
+    .xml, .sgml, and .lexos.`)
 
   // "Scrape"
   create_tooltip('#scrape-tooltip-button', `Enter the URLs of websites you
-        wish to extract text from. Separate each URL with a new line or a
-        comma.`, true)
+    wish to extract text from. Separate each URL with a new line or a
+    comma.`, true)
 
   // "Upload List"
   create_tooltip('#upload-list-tooltip-button', `All uploaded and scraped
-        files will appear here. When uploading large files or many different
-        files, you will see blue bars indicating upload progress. Wait for
-        all files to finish uploading before proceeding.`, true)
+    files will appear here. When uploading large files or many different
+    files, you will see blue bars indicating upload progress. Wait for
+    all files to finish uploading before proceeding.`, true)
 }
 
 /**
