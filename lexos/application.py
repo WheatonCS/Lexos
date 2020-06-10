@@ -4,7 +4,7 @@ import re
 import sys
 import time
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
@@ -115,20 +115,8 @@ def page_not_found(_):
 
 @app.errorhandler(Exception)
 def unhandled_exception(error):
-    """Handles internal server errors.
-
-    Send all the LexosException to the frontend.
-    For all the other Exceptions, render the 500 error page.
-    """
-
-    # If we want to send this backend error to the frontend
-    if isinstance(error, LexosException):
-        ret_data = {"lexosException": str(error)}
-        return json.dumps(ret_data)
-
-    # If Flask raises this error
-    else:
-        raise error
+    """Handles internal server errors."""
+    return jsonify({"error": str(error)})
 
 
 def run():
