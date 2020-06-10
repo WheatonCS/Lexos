@@ -3,8 +3,7 @@
     grid-template-columns: .6fr 1fr 1fr 1fr .7fr;
 }
 
-#png-button,
-#svg-button {
+#png-button, #svg-button, #fullscreen-button {
     display: none;
 }
 
@@ -35,6 +34,10 @@
 }
 
 .word-cloud {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--foreground-color-alternate);
     height: calc(100% - 4rem);
 }
 

@@ -1,7 +1,7 @@
 /**
  * Creates a popup.
- * @param {string} title: The title to display on the popup.
- * @returns {jQuery}: The popup element.
+ * @param {string} title The title to display on the popup.
+ * @returns {jQuery} The popup element.
  */
 function create_popup (title) {
   // Create the popup element
@@ -44,8 +44,8 @@ function close_popup () {
 
 /**
  * Creates a popup with an "OK" button.
- * @param {string} title: The title to display on the popup.
- * @returns {jQuery}: The popup element.
+ * @param {string} title The title to display on the popup.
+ * @returns {jQuery} The popup element.
  */
 function create_ok_popup (title) {
   let popup_container_element = create_popup(title)
@@ -58,8 +58,8 @@ function create_ok_popup (title) {
 
 /**
  * Creates a popup with a text input and "OK" button.
- * @param {string} title: The popup element.
- * @returns {jQuery}: The popup element.
+ * @param {string} title The popup element.
+ * @returns {jQuery} The popup element.
  */
 function create_text_input_popup (title) {
   let popup_container_element = create_ok_popup(title)
@@ -73,14 +73,14 @@ function create_text_input_popup (title) {
 
 /**
  * Creates a popup containing radio button options.
- * @param {string} title: The title to display on the popup.
- * @param {string} radio_buttons_name: The name of the radio buttons.
- * @param {string} display_element_query: The query for the element to display
+ * @param {string} title The title to display on the popup.
+ * @param {string} radio_buttons_name The name of the radio buttons.
+ * @param {string} display_element_query The query for the element to display
  *      the selected option's text on.
- * @param {string} input_element_query: The query for the input element whose
+ * @param {string} input_element_query The query for the input element whose
  *      value  will be set to the selected option.
- * @param {string[]} options: The text of each radio button.
- * @param {string[]} values: The values of each radio button.
+ * @param {string[]} options The text of each radio button.
+ * @param {string[]} values The values of each radio button.
  * @returns {void}
  */
 function create_radio_options_popup (title, radio_buttons_name,
@@ -104,12 +104,12 @@ function create_radio_options_popup (title, radio_buttons_name,
 
 /**
  * Creates a popup containing radio button options.
- * @param {string} title: The title to display on the popup.
- * @param {string} radio_buttons_name: The name of the radio buttons.
- * @param {string} set_option: The value of the currently set option.
- * @param {string[]} options: The text of each radio button.
- * @param {string[]} values: The values of each radio button.
- * @param {function} callback: The callback to call when a selection has been made.
+ * @param {string} title The title to display on the popup.
+ * @param {string} radio_buttons_name The name of the radio buttons.
+ * @param {string} set_option The value of the currently set option.
+ * @param {string[]} options The text of each radio button.
+ * @param {string[]} values The values of each radio button.
+ * @param {function} callback The callback to call when a selection has been made.
  * @returns {void}
  */
 function display_radio_options_popup (title,

@@ -306,6 +306,7 @@ footer {
     width: calc(100% - 2rem);
     height: calc(100% - 6rem);
     margin: 0 1rem 1rem 1rem;
+    background-color: var(--foreground-color);
 }
 
 .borderless-section-body {

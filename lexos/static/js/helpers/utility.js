@@ -2,8 +2,8 @@ let px_per_rem = parseInt(getComputedStyle(document.documentElement).fontSize)
 
 /**
  * Gets the scroll offset of the given element.
- * @param {string} query: The element to query for.
- * @returns {{x, y}}: The scroll offset.
+ * @param {string} query The element to query for.
+ * @returns {{x, y}} The scroll offset.
  */
 function get_scroll_offset (query) {
   let element = $(query)
@@ -22,7 +22,7 @@ function get_window_scroll_offset () {
 /**
  * Gets the mouse position relative to the window.
  * @param {Event} event The mouse movement event.
- * @returns {{x, y}}: The mouse position.
+ * @returns {{x, y}} The mouse position.
  */
 function get_mouse_position (event) {
   return {x: event.pageX, y: event.pageY}
@@ -30,7 +30,7 @@ function get_mouse_position (event) {
 
 /**
  * Gets the page size.
- * @returns {{x, y}}: The page size.
+ * @returns {{x, y}} The page size.
  */
 function get_page_size () {
   let page_element = $(document)
@@ -39,8 +39,8 @@ function get_page_size () {
 
 /**
  * Gets the size of an element.
- * @param {string} query: The query for the element to get the size of.
- * @returns {{x, y}}: The element's size.
+ * @param {string} query The query for the element to get the size of.
+ * @returns {{x, y}} The element's size.
  */
 function get_element_size (query) {
   let element = $(query)
@@ -49,9 +49,8 @@ function get_element_size (query) {
 
 /**
  * Gets the form as a JSON string.
- * @param {object} additional_entries: Additional entries to append to the
- *      form.
- * @returns {string}: The form as a JSON string.
+ * @param {object} additional_entries Additional entries to append to the form.
+ * @returns {string} The form as a JSON string.
  */
 function get_form_json (additional_entries = {}) {
   // Serialize the form
@@ -67,10 +66,10 @@ function get_form_json (additional_entries = {}) {
 
 /**
  * Sends an AJAX request with a JSONified form payload.
- * @param {string} url: The URL to send the request to.
- * @param {object} additional_entries: Additional entries to append to the
+ * @param {string} url The URL to send the request to.
+ * @param {object} additional_entries Additional entries to append to the
  *      form.
- * @returns {jqXHR}: The jQuery request object.
+ * @returns {jqXHR} The jQuery request object.
  */
 function send_ajax_form_request (url, additional_entries = {}) {
   return $.ajax({
@@ -83,9 +82,9 @@ function send_ajax_form_request (url, additional_entries = {}) {
 
 /**
  * Sends an AJAX request with a the given payload.
- * @param {string} url: The URL to send the request to.
- * @param {object} payload: The payload to send.
- * @returns {jqXHR}: The jQuery request object.
+ * @param {string} url The URL to send the request to.
+ * @param {object} payload The payload to send.
+ * @returns {jqXHR} The jQuery request object.
  */
 function send_ajax_request (url, payload) {
   return $.ajax({
@@ -98,9 +97,9 @@ function send_ajax_request (url, payload) {
 
 /**
  * Adds a text overlay to the elements found in the query.
- * @param {string} query: The element to query for.
- * @param {string} text: The text to show.
- * @param {boolean} fade_in: Whether to fade in the text or not.
+ * @param {string} query The element to query for.
+ * @param {string} text The text to show.
+ * @param {boolean} fade_in Whether to fade in the text or not.
  * @returns {void}
  */
 function add_text_overlay (query, text, fade_in = true) {
@@ -126,8 +125,8 @@ function add_text_overlay (query, text, fade_in = true) {
 /**
  * Adds a loading overlay to the elements found in the query and disables the
  *      specified elements.
- * @param {string} query: The query for elements to add the loading overlay to.
- * @param {string} disable_query: The query for elements to disable.
+ * @param {string} query The query for elements to add the loading overlay to.
+ * @param {string} disable_query The query for elements to disable.
  * @returns {void}
  */
 function start_loading (query, disable_query = '') {
@@ -151,10 +150,10 @@ function start_loading (query, disable_query = '') {
 
 /**
  * Removes the loading overlay and fades in the loaded elements.
- * @param {string} loading_overlay_query: The query for the element containing
+ * @param {string} loading_overlay_query The query for the element containing
  *   the loading overlay to remove.
- * @param {string} show_query: The query for elements to show.
- * @param {string} enable_query: The query for elements to enable.
+ * @param {string} show_query The query for elements to show.
+ * @param {string} enable_query The query for elements to enable.
  *   subsequent elements.
  * @returns {void}
  */
@@ -174,7 +173,7 @@ function finish_loading (loading_overlay_query,
 
 /**
  * Disables the specified elements.
- * @param {string} query: The query for elements to disable.
+ * @param {string} query The query for elements to disable.
  * @returns {void}
  */
 function disable (query) {
@@ -183,7 +182,7 @@ function disable (query) {
 
 /**
  * Enables the specified elements.
- * @param {string} query: The query for elements to enable.
+ * @param {string} query The query for elements to enable.
  * @returns {void}
  */
 function enable (query) {
@@ -192,7 +191,7 @@ function enable (query) {
 
 /**
  * Shows the specified elements.
- * @param {string} query: The query for elements to show.
+ * @param {string} query The query for elements to show.
  * @returns {void}
  */
 function show (query) {
@@ -201,7 +200,7 @@ function show (query) {
 
 /**
  * Hides the specified elements.
- * @param {string} query: The query for elements to hide.
+ * @param {string} query The query for elements to hide.
  * @returns {void}
  */
 function hide (query) {
@@ -210,9 +209,9 @@ function hide (query) {
 
 /**
  * Fades in the elements found in the query.
- * @param {string} query: The query for elements to fade in.
- * @param {string} duration: The CSS duration of the fade in.
- * @param {number} sequential_delay: The delay between fading in
+ * @param {string} query The query for elements to fade in.
+ * @param {string} duration The CSS duration of the fade in.
+ * @param {number} sequential_delay The delay between fading in
  *   subsequent elements.
  * @returns {void}
  */
@@ -240,15 +239,15 @@ function fade_in (query, duration = '.2s', sequential_delay = 0) {
 
 /**
  * Converts rem to px.
- * @param {number} rem: The number of rem.
- * @returns {number}: The number of px.
+ * @param {number} rem The number of rem.
+ * @returns {number} The number of px.
  */
 function rem_to_px (rem) { return rem * px_per_rem }
 
 /**
  * Registers a callback for a given key.
- * @param {string} key: The uppercase name of the key.
- * @param {function} callback: The function to call.
+ * @param {string} key The uppercase name of the key.
+ * @param {function} callback The function to call.
  * @returns {void}
  */
 function key_callback (key, callback) {
@@ -263,8 +262,8 @@ function key_callback (key, callback) {
 
 /**
  * Registers a callback for a given key press.
- * @param {string} key: The uppercase name of the key.
- * @param {function} callback: The function to call.
+ * @param {string} key The uppercase name of the key.
+ * @param {function} callback The function to call.
  * @returns {void}
  */
 function key_down_callback (key, callback) {
@@ -277,7 +276,7 @@ function key_down_callback (key, callback) {
 
 /**
  * Displays an error message.
- * @param {string} message: The message to display.
+ * @param {string} message The message to display.
  * @returns {void}
  */
 function error (message) {
@@ -317,7 +316,7 @@ function remove_errors () {
 
 /**
  * Applies an error highlight to the selected elements.
- * @param {string} error_highlight_query: The query for elements to apply an
+ * @param {string} error_highlight_query The query for elements to apply an
  *   error highlight to.
  * @returns {void}
  */
@@ -335,8 +334,8 @@ function remove_highlights () {
 
 /**
  * Parses the given JSON string and returns the parsed object.
- * @param {string} json: The JSON string to parse.
- * @returns {object}: The parsed object.
+ * @param {string} json The JSON string to parse.
+ * @returns {object} The parsed object.
  */
 function parse_json (json) {
   return JSON.parse(json.replace(/\bNaN\b/g, '"N/A"'))
@@ -344,10 +343,10 @@ function parse_json (json) {
 
 /**
  * Validates an integer input.
- * @param {string} number: The value to validate.
- * @param {number} minimum: The minimum value the number can be.
- * @param {number} maximum: The maximum the value can be.
- * @returns {boolean}: Whether the value is valid.
+ * @param {string} number The value to validate.
+ * @param {number} minimum The minimum value the number can be.
+ * @param {number} maximum The maximum the value can be.
+ * @returns {boolean} Whether the value is valid.
  */
 function validate_number (number, minimum = NaN, maximum = NaN) {
   // Check that the value is a number
@@ -364,10 +363,10 @@ function validate_number (number, minimum = NaN, maximum = NaN) {
 
 /**
  * Creates a tooltip.
- * @param {string} query: The query for the tooltip button element to append
+ * @param {string} query The query for the tooltip button element to append
  *   the tooltip to.
- * @param {string} text: The text to display on the tooltip.
- * @param {boolean} on_right_edge: Whether the tooltip on on the right edge and
+ * @param {string} text The text to display on the tooltip.
+ * @param {boolean} on_right_edge Whether the tooltip on on the right edge and
  *   thus needs to be translated to the left.
  * @returns {void}
  */
@@ -431,8 +430,8 @@ function remove_tooltips () {
 
 /**
  * Repositions the tooltip.
- * @param {jQuery} tooltip_element: The tooltip to reposition.
- * @param {jQuery} button_element: The button element to position the tooltip
+ * @param {jQuery} tooltip_element The tooltip to reposition.
+ * @param {jQuery} button_element The button element to position the tooltip
  *   relative to.
  * @returns {void}
  */
@@ -444,8 +443,8 @@ function reposition_tooltip (tooltip_element, button_element) {
 
 /**
  * Generates a UUID.
- * @param {number} length: The number of characters in the UUID.
- * @returns {string}: The UUID.
+ * @param {number} length The number of characters in the UUID.
+ * @returns {string} The UUID.
  */
 function get_uuid (length = 16) {
   let result = ''
@@ -455,8 +454,8 @@ function get_uuid (length = 16) {
 
 /**
  * Gets the IDs of the active files.
- * @param {function} callback: The callback to call if the request is successful.
- * @param {string} loading_failed_query: The query for elements to display
+ * @param {function} callback The callback to call if the request is successful.
+ * @param {string} loading_failed_query The query for elements to display
  *   "Loading Failed" text on if the request fails.
  * @returns {void}
  */
@@ -497,8 +496,8 @@ function download (data, file_name, convert = true) {
 
 /**
  * Gets the RGB representation of the given color variable.
- * @param {string} color_name: The color variable.
- * @returns {string}: The RGB representation of the color variable.
+ * @param {string} color_name The color variable.
+ * @returns {string} The RGB representation of the color variable.
  */
 function get_color (color_name) {
   let element = $(`<div style="color: var(${color_name})"></div>`)
@@ -510,7 +509,7 @@ function get_color (color_name) {
 
 /**
  * Gets an HTML ID from the given string.
- * @param {string} string: The string to convert into an HTML ID.
+ * @param {string} string The string to convert into an HTML ID.
  * @returns {void}
  */
 function get_id (string) {

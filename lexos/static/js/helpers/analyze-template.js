@@ -24,7 +24,7 @@ function initialize_analyze_tooltips () {
 
 /**
  * Initializes the tooltips for the "Cull" section
- * @param {boolean} on_right_edge: Whether the "Cull" section is on the right edge.
+ * @param {boolean} on_right_edge Whether the "Cull" section is on the right edge.
  * @returns {void}
  */
 function initialize_cull_tooltips (on_right_edge = true) {

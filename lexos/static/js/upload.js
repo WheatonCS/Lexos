@@ -96,7 +96,7 @@ function upload_files (event) {
 /**
  * Validates the given file.
  * @param {any} file The file to validate.
- * @returns {boolean}: Whether the file is valid.
+ * @returns {boolean} Whether the file is valid.
  */
 function validate_file (file) {
   // If the file exceeds the 256 MB size limit, display an error message

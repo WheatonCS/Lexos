@@ -79,22 +79,22 @@ class Table {
 
   /**
    * Initializes the table.
-   * @param {string} name: The name of the table.
-   * @param {string} request_url: The URL to send the request for table data to.
-   * @param {string} parent_element_query: The query for the table's parent element.
-   * @param {string} title: The text to display on the table's title.
-   * @param {function} validation_callback: The validation function to call
+   * @param {string} name The name of the table.
+   * @param {string} request_url The URL to send the request for table data to.
+   * @param {string} parent_element_query The query for the table's parent element.
+   * @param {string} title The text to display on the table's title.
+   * @param {function} validation_callback The validation function to call
    *   before generating the table.
-   * @param {function} completion_callback: The function to call after table
+   * @param {function} completion_callback The function to call after table
    *   generation has completed.
-   * @param {boolean} generate_button: Whether to give the table a generate button.
-   * @param {boolean} download_button: Whether to give the table a download button.
-   * @param {boolean} tooltip: Whether to display a tooltip button.
-   * @param {boolean} sortable: Whether the table is sortable.
-   * @param {boolean} backend_sort: Whether the table is to be sorted in the
+   * @param {boolean} generate_button Whether to give the table a generate button.
+   * @param {boolean} download_button Whether to give the table a download button.
+   * @param {boolean} tooltip Whether to display a tooltip button.
+   * @param {boolean} sortable Whether the table is sortable.
+   * @param {boolean} backend_sort Whether the table is to be sorted in the
    *   backend or the frontend.
-   * @param {boolean} searchable: Whether the table is searchable.
-   * @param {boolean} paginated: Whether the table has pages.
+   * @param {boolean} searchable Whether the table is searchable.
+   * @param {boolean} paginated:Whether the table has pages.
    */
   constructor (name, request_url, parent_element_query, title = '',
     validation_callback = null, completion_callback = null,
@@ -199,8 +199,8 @@ class Table {
 
   /**
    * Creates the table head and body.
-   * @param {string[]} body: The data to display.
-   * @param {string[]} head: The column labels.
+   * @param {string[]} body The data to display.
+   * @param {string[]} head The column labels.
    * @returns {void}
    * @private
    */
@@ -409,7 +409,7 @@ class Table {
 
   /**
    * Increments or decrements the page number and creates the table.
-   * @param {boolean} next: Whether to go to the next or previous page.
+   * @param {boolean} next Whether to go to the next or previous page.
    * @returns {void}
    * @private
    */

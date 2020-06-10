@@ -25,7 +25,8 @@ function send_word_counts_request () {
 
   // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
   // buttons
-  start_loading('#bubbleviz', '#png-button, #svg-button, #generate-button')
+  start_loading('#bubbleviz', '#png-button, ' +
+        '#svg-button, #generate-button, #fullscreen-button')
 
   // Send the request for the word counts
   $.ajax({
@@ -49,7 +50,7 @@ function send_word_counts_request () {
 
 /**
  * Create the bubbleviz.
- * @param {string} response: The response from the "bubbleviz/get-word-counts"
+ * @param {string} response The response from the "bubbleviz/get-word-counts"
  *   request.
  * @returns {void}
  */
@@ -140,13 +141,16 @@ function create_bubbleviz (response) {
 
   // Fade in the bubbleviz
   d3.select(self.frameElement).style('height', diameter + 'px')
-  finish_loading('#bubbleviz', '#bubbleviz',
-    '#png-button, #svg-button, #generate-button')
+  finish_loading('#bubbleviz', '#bubbleviz', '#png-button, ' +
+        '#svg-button, #generate-button, #fullscreen-button')
 
   // Initialize the SVG and PNG download buttons
   initialize_png_link('#bubbleviz svg', '#png-button',
     diameter, diameter, 'bubbleviz.png')
   initialize_svg_link('#bubbleviz svg', '#svg-button', 'bubbleviz.svg')
+
+  // Initialize the fullscreen button
+  initialize_visualize_fullscreen_button()
 }
 
 /**
