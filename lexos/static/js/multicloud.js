@@ -152,7 +152,7 @@ function create_word_cloud (id, name, words) {
   let layout = layouts[id]
 
   // Create the tooltip
-  let tooltip = d3.select('#multicloud').append('h3')
+  let tooltip = d3.select(`#word-cloud-${id}`).append('h3')
     .attr('class', 'visualize-tooltip')
 
     // Create the word cloud
