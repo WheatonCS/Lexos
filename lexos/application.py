@@ -1,4 +1,3 @@
-import json
 import os
 import re
 import sys
@@ -9,7 +8,6 @@ from jinja2 import evalcontextfilter
 from markupsafe import Markup, escape
 
 import lexos.helpers.constants
-from lexos.helpers.exceptions import LexosException
 from lexos.views.base import render
 
 from lexos.views.base import base_blueprint
