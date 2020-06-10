@@ -194,9 +194,9 @@ class TestCutByWords:
 class TestCutByLines:
     def test_cut_by_lines_empty(self):
         assert cut_by_lines(text="", seg_size=1, overlap=0,
-                            last_prop=1) == [""]
+                            last_prop=1) == []
         assert cut_by_lines(text="\n", seg_size=1, overlap=0,
-                            last_prop=1) == ["\n"]
+                            last_prop=1) == []
 
     def test_cut_by_lines_regular(self):
         assert cut_by_lines(text="test", seg_size=100, overlap=0,
@@ -209,7 +209,7 @@ class TestCutByLines:
         assert cut_by_lines(text="test\ntest\ntest", seg_size=1,
                             overlap=0, last_prop=200) == ["test\ntest\ntest"]
         assert cut_by_lines(text="   \n\ntest", seg_size=1, overlap=0,
-                            last_prop=1) == ["   \n", "\n", "test"]
+                            last_prop=1) == ["test"]
 
     def test_cut_by_lines_line_ending(self):
         assert cut_by_lines(text="test\rtest", seg_size=1,
@@ -396,7 +396,7 @@ class TestCutterFunction:
         assert cut(text=" ", cutting_value="1", cutting_type="Tokens",
                    overlap="0", last_prop_percent="100%") == [""]
         assert cut(text="\n", cutting_value="1", cutting_type="Lines",
-                   overlap="0", last_prop_percent="100%") == ["\n"]
+                   overlap="0", last_prop_percent="100%") == []
 
     def test_cutter_basic(self):
         assert cut(text="test\ntest\ntest", cutting_value="1",
@@ -406,7 +406,7 @@ class TestCutterFunction:
                    overlap="0", last_prop_percent="100%") == ["test"]
         assert cut(text="   \ntest", cutting_value="1", cutting_type="Lines",
                    overlap="0",
-                   last_prop_percent="100%") == ["   \n", "test"]
+                   last_prop_percent="100%") == ["test"]
         assert cut(text=" test", cutting_value="2", cutting_type="Characters",
                    overlap="0", last_prop_percent="100%") == [" t", "est"]
         assert cut(text="test", cutting_value="1", cutting_type="Milestones",
