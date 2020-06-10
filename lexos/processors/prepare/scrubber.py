@@ -123,9 +123,9 @@ def replacement_handler(text: str,
     :returns: The input string with replacements made.
     """
 
-    # Convert HTML character entities to Unicode if HTML is selected *and* there
-    # are further entities entered in the form field
-    if escape_html == True:
+    # Convert HTML character entities to Unicode if HTML is selected *and*
+    # there are further entities entered in the form field
+    if escape_html is True:
         text = html.unescape(text)
 
     # Remove spaces in replacement string for consistent format, then split the
