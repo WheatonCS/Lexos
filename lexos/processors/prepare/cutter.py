@@ -175,6 +175,9 @@ def cut_by_lines(text: str, seg_size: int, overlap: int,
     # join lines in each sublist
     final_seg_list = join_sublist_element(input_list=final_seg_list)
 
+    # remove empty lines
+    final_seg_list = [line for line in final_seg_list if line.strip()]
+
     return final_seg_list
 
 
