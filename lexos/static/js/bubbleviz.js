@@ -150,6 +150,13 @@ function create_bubbleviz(response){
     initialize_png_link("#bubbleviz svg", "#png-button",
         diameter, diameter, "bubbleviz.png");
     initialize_svg_link("#bubbleviz svg", "#svg-button", "bubbleviz.svg");
+
+    // Add the Full Screen button
+    let section = $('#graph-section-top').parent();
+    section.attr("id", "full-screen-id")
+    let fs_btn = $('<a class="button" href="#" onclick="openFullscreen(\'full-screen-id\');">Full Screen</a>')
+    fs_btn.attr("id", "full-screen-button");
+    $("#visualize-buttons").append(fs_btn);
 }
 
 

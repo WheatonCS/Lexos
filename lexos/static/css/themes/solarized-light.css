@@ -30,3 +30,24 @@
     /* NEH logo */
     --neh-logo-filters: none;
 }
+
+/* Full screen section */
+/* Chrome, Safari and Opera syntax */
+:-webkit-full-screen {
+    background-color: #FDF6E3;
+  }
+
+  /* Firefox syntax */
+  :-moz-full-screen {
+    background-color: #FDF6E3;
+  }
+
+  /* IE/Edge syntax */
+  :-ms-fullscreen {
+    background-color: #FDF6E3;
+  }
+
+  /* Standard syntax */
+  :fullscreen {
+    background-color: #FDF6E3;
+  }

@@ -43,3 +43,24 @@ a:hover {
 #manage-table-selection-box {
     background-color: var(--foreground-color);
 }
+
+/* Full screen section */
+/* Chrome, Safari and Opera syntax */
+:-webkit-full-screen {
+    background-color: #ffffff;
+  }
+
+  /* Firefox syntax */
+  :-moz-full-screen {
+    background-color: #ffffff;
+  }
+
+  /* IE/Edge syntax */
+  :-ms-fullscreen {
+    background-color: #ffffff;
+  }
+
+  /* Standard syntax */
+  :fullscreen {
+    background-color: #ffffff;
+  }

@@ -84,16 +84,16 @@ function create_word_cloud_layouts(response){
         // Create the word cloud element
         $(`
             <div id="word-cloud-wrapper-${i}" class="word-cloud-wrapper">
-            
+
                 <div class="vertical-splitter section-top">
                     <h3 class="title">${document.name}</h3>
-                    
+
                     <div class="right-justified">
                         <a id="png-button-${i}" class="button">PNG</a>
                         <a id="svg-button-${i}" class="button">SVG</a>
                     </div>
                 </div>
-                
+
                 <div id="word-cloud-${i}" class="word-cloud"></div>
             </div>
         `).appendTo("#multicloud").find(".word-cloud");
@@ -113,6 +113,12 @@ function create_word_cloud_layouts(response){
         // Create the layout
         create_word_cloud_layout(i, document.name, words, diameter);
     }
+    // Add the full screen button
+    let section = $('#graph-section-top').parent();
+    section.attr("id", "full-screen-id")
+    let fs_btn = $('<span class="button" onclick="openFullscreen(\'full-screen-id\');">Full Screen</span>')
+    fs_btn.attr("id", "full-screen-button");
+    $("#graph-section-top").append(fs_btn);
 }
 
 
@@ -210,7 +216,7 @@ function create_word_cloud(id, name, words){
     // last word cloud to render
     if(++rendered_count === word_cloud_count)
         finish_loading("#multicloud", ".word-cloud-wrapper",
-            "#png-button, #svg-button, #generate-button");
+            "#png-button, #svg-button, #generate-button", "full-screen-button");
 }
 
 

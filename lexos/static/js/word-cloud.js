@@ -159,11 +159,18 @@ function create_word_cloud(dataset){
 
     // Remove the loading overlay and fade the word cloud in
     finish_loading("#word-cloud-container", "#word-cloud",
-        "#png-button, #svg-button, #generate-button");
+        "#png-button, #svg-button, #generate-button, #full-screen-button");
 
     // Initialize the SVG and PNG download buttons
     initialize_png_link("#word-cloud svg", "#png-button", width, height, "word-cloud.png");
     initialize_svg_link("#word-cloud svg", "#svg-button", "word-cloud.svg");
+
+    // Add the Full Screen button
+    let section = $('#graph-section-top').parent();
+    section.attr("id", "full-screen-id")
+    let fs_btn = $('<a class="button" href="#" onclick="openFullscreen(\'full-screen-id\');">Full Screen</a>')
+    fs_btn.attr("id", "full-screen-button");
+    $("#visualize-buttons").append(fs_btn);
 }
 
 

@@ -149,7 +149,7 @@ function initialize_tooltips(){
 
     // "Clusters"
     create_tooltip("#clusters-tooltip-button", `The number of clusters (or
-        the number of centroids). The number of clusters should always be 
+        the number of centroids). The number of clusters should always be
         fewer or equal to the number of active documents. By default, this
         value is set to half the number of active documents.`);
 
@@ -233,3 +233,4 @@ function walkthrough(){
 
     return intro;
 }
+

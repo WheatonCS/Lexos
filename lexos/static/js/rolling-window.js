@@ -113,6 +113,13 @@ function send_rolling_window_result_request(){
             csv = response.csv;
             initialize_graph(response.graph);
             enable("#generate-button, #csv-button");
+
+            // Add the Full Screen button
+            let section = $('#graph-section-top').parent();
+            section.attr("id", "full-screen-id")
+            let fs_btn = $('<span class="button" onclick="openFullscreen(\'rolling-window-display-section\');">Full Screen</span>')
+            fs_btn.attr("id", "full-screen-button");
+            $("#rolling-window-buttons").append(fs_btn);
         })
 
         // If the request failed, display an error and enable the "Generate"
