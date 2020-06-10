@@ -17,8 +17,8 @@ $(function () {
 
   // Initialize the "Orientation" tooltip
   create_tooltip('#orientation-tooltip-button', `This option will not be
-        represented in the table below, but will be applied to the file sent
-        when the "Download" button is clicked.`)
+    represented in the table below, but will be applied to the file sent
+    when the "Download" button is clicked.`)
 
   // Initialize the analyze tooltips
   initialize_analyze_tooltips()

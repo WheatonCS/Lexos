@@ -52,10 +52,9 @@ function initialize () {
     // Remove any existing error messages
     remove_errors()
 
-    // Display the loading overlays and disable the "Generate" and
-    // download buttons
-    start_loading('#graph-container',
-      '#generate-button, #png-button, #svg-button, #csv-button')
+    // Display the loading overlays and disable the graph buttons.
+    start_loading('#graph-container', '#generate-button, #png-button, ' +
+        '#svg-button, #csv-button, #fullscreen-button')
 
     // Create the k-means graph and get the CSV data
     send_k_means_result_request()
@@ -66,6 +65,9 @@ function initialize () {
 
   // If the "PNG" or "SVG" buttons were pressed, download the graph
   initialize_graph_download_buttons()
+
+  // If the "Fullscreen" button is pressed, make the graph fullscreen.
+  initialize_graph_fullscreen_button()
 }
 
 /**
@@ -144,28 +146,28 @@ function validate_inputs (show_error = false) {
 function initialize_tooltips () {
   // "Clusters"
   create_tooltip('#clusters-tooltip-button', `The number of clusters (or
-        the number of centroids). The number of clusters should always be
-        fewer or equal to the number of active documents. By default, this
-        value is set to half the number of active documents.`)
+    the number of centroids). The number of clusters should always be
+    fewer or equal to the number of active documents. By default, this
+    value is set to half the number of active documents.`)
 
   // Visualization
   create_tooltip('#visualization-method-tooltip-button', `2D-Scatter plot
-        and Voroni diagram will reduce the DTM to a two dimensional matrix,
-        whereas 3D-Scatter plot will reduce the DTM to a three dimensional
-        matrix. Compared to the scatter plots, Voronoi displays the centroids
-        and draws polygons for each document cluster.`)
+    and Voroni diagram will reduce the DTM to a two dimensional matrix,
+    whereas 3D-Scatter plot will reduce the DTM to a three dimensional
+    matrix. Compared to the scatter plots, Voronoi displays the centroids
+    and draws polygons for each document cluster.`)
 
   // Initialization method
   create_tooltip('#initialization-method-tooltip-button', `"K-Means++
-        selects initial cluster centers using a weighted probability
-        distribution to speed up convergence. "Random" chooses k observations
-        at random from the data to serve as the initial centroids.`)
+    selects initial cluster centers using a weighted probability
+    distribution to speed up convergence. "Random" chooses k observations
+    at random from the data to serve as the initial centroids.`)
 
   // "Different Centroids"
   create_tooltip('#different-centroids-tooltip-button', `The number of times
-        (n) the k-means algorithm will be run with different centroid seeds.
-        The final results will be the best output of those n consecutive
-        runs.`)
+    (n) the k-means algorithm will be run with different centroid seeds.
+    The final results will be the best output of those n consecutive
+    runs.`)
 
   // "Relative Tolerance"
   create_tooltip('#relative-tolerance-tooltip-button', `Decimal, relative

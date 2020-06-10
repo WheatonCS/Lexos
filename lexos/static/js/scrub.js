@@ -61,7 +61,7 @@ $(function () {
 
 /**
  * Creates the tags options popup.
- * @param {string} response: The response from the "scrub/get-tags" request.
+ * @param {string} response The response from the "scrub/get-tags" request.
  * @returns {void}
  */
 function create_tag_options_popup (response) {
@@ -173,7 +173,7 @@ function save_tag_options () {
 
 /**
  * Performs scrubbing on the active documents.
- * @param {string} action: The action for the scrub operation (preview or apply).
+ * @param {string} action The action for the scrub operation (preview or apply).
  * @returns {void}
  */
 function scrub (action) {
@@ -212,7 +212,7 @@ function scrub (action) {
 
 /**
  * Updates the document previews.
- * @param {string} response: The response containing the new previews.
+ * @param {string} response The response containing the new previews.
  * @returns {void}
  */
 function update_document_previews (response) {
@@ -292,7 +292,7 @@ function initialize_tooltips () {
 
 /**
  * Initializes the upload buttons
- * @param {string[]} names: The names of the sections to initialize.
+ * @param {string[]} names The names of the sections to initialize.
  * @returns {void}
  */
 function initialize_upload_buttons (names) {

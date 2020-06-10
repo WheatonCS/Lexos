@@ -1,6 +1,6 @@
 /**
  * Initialize the "Color" button.
- * @param {function} ok_callback: The function to call when the popup's "Ok"
+ * @param {function} ok_callback The function to call when the popup's "Ok"
  *   button is clicked.
  * @returns {void}
  */
@@ -19,8 +19,8 @@ function initialize_color_button (ok_callback) {
 
 /**
  * Returns the interpolated color from the set color scheme.
- * @param {number} x: The interpolation value (0 to 1).
- * @returns {*}: The color.
+ * @param {number} x The interpolation value (0 to 1).
+ * @returns {*} The color.
  */
 function get_visualize_color (x) {
   let color_scheme = $('#color-button').text()
@@ -46,8 +46,8 @@ function get_visualize_color (x) {
 
 /**
  * Generates an SVG document from an SVG element
- * @param {string} svg_query: The query for the SVG element.
- * @returns {string}: The SVG document data.
+ * @param {string} svg_query The query for the SVG element.
+ * @returns {string} The SVG document data.
  */
 function generate_svg_data (svg_query) {
   let svg_document_type = document.implementation.createDocumentType(
@@ -65,10 +65,10 @@ function generate_svg_data (svg_query) {
 
 /**
  * Creates a SVG download link for an SVG element.
- * @param {string} svg_query: The query for the SVG element.
- * @param {string} link_query: The query for the link element to populate with
+ * @param {string} svg_query The query for the SVG element.
+ * @param {string} link_query The query for the link element to populate with
  *   the generated SVG data.
- * @param {string} download_name: The name of the file to send as a download.
+ * @param {string} download_name The name of the file to send as a download.
  * @returns {void}
  */
 function initialize_svg_link (svg_query, link_query, download_name) {
@@ -81,12 +81,12 @@ function initialize_svg_link (svg_query, link_query, download_name) {
 
 /**
  * Create a PNG download link for an SVG element.
- * @param {string} svg_query: The query for the SVG element.
- * @param {string} link_query: The query for the link element to populate with
+ * @param {string} svg_query The query for the SVG element.
+ * @param {string} link_query The query for the link element to populate with
  *   the generated PNG data.
- * @param {number} width: The width of the PNG.
- * @param {number} height: The height of the PNG.
- * @param {string} download_name: The name of the file to send as a download.
+ * @param {number} width The width of the PNG.
+ * @param {number} height The height of the PNG.
+ * @param {string} download_name The name of the file to send as a download.
  * @returns {void}
  */
 function initialize_png_link (svg_query,
@@ -124,4 +124,15 @@ function validate_visualize_inputs () {
   }
 
   return true
+}
+
+/**
+ * Opens the visualization in fullscreen mode.
+ * @param {String} button_selector The selector for the fullscreen button.
+ * @param {String} element_selector The selector for the element to make fullscreen.
+ * @returns {void}
+ */
+function initialize_visualize_fullscreen_button (
+  button_selector = '#fullscreen-button', element_selector = '.section-body') {
+  $(button_selector).click(() => $(element_selector)[0].requestFullscreen())
 }

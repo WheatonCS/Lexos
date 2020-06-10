@@ -79,19 +79,20 @@ function create_word_cloud_layouts (response) {
 
     // Create the word cloud element
     $(`
-      <div id="word-cloud-wrapper-${i}" class="word-cloud-wrapper">
+        <div id="word-cloud-wrapper-${i}" class="word-cloud-wrapper">
 
-          <div class="vertical-splitter section-top">
-              <h3 class="title">${document.name}</h3>
+            <div class="vertical-splitter section-top">
+                <h3 class="title">${document.name}</h3>
 
-              <div class="right-justified">
-                  <a id="png-button-${i}" class="button">PNG</a>
-                  <a id="svg-button-${i}" class="button">SVG</a>
-              </div>
-          </div>
+                <div class="right-justified">
+                    <a id="png-button-${i}" class="button">PNG</a>
+                    <a id="svg-button-${i}" class="button">SVG</a>
+                    <a id="fullscreen-button-${i}" class="button">Fullscreen</a>
+                </div>
+            </div>
 
-          <div id="word-cloud-${i}" class="word-cloud"></div>
-      </div>
+            <div id="word-cloud-${i}" class="word-cloud"></div>
+        </div>
     `).appendTo('#multicloud').find('.word-cloud')
 
     // Calculate the sizes
@@ -102,10 +103,12 @@ function create_word_cloud_layouts (response) {
     // Create the list of the words' text and sizes
     let words = []
     for (const word of document.words) {
-      words.push({'text': word[0],
+      words.push({
+        'text': word[0],
         'count': word[1],
         'normalized_count': word[2],
-        'size': word[2] * maximum_size + base_size})
+        'size': word[2] * maximum_size + base_size
+      })
     }
 
     // Create the layout
@@ -149,7 +152,7 @@ function create_word_cloud (id, name, words) {
   let layout = layouts[id]
 
   // Create the tooltip
-  let tooltip = d3.select('#multicloud').append('h3')
+  let tooltip = d3.select(`#word-cloud-${id}`).append('h3')
     .attr('class', 'visualize-tooltip')
 
     // Create the word cloud
@@ -196,11 +199,13 @@ function create_word_cloud (id, name, words) {
       tooltip.style('opacity', '0')
     })
 
-    // Initialize the PNG and SVG download buttons
-  initialize_png_link(`#word-cloud-${id} svg`, `#png-button-${id}`,
-    diameter, diameter, 'multicloud.png')
-  initialize_svg_link(`#word-cloud-${id} svg`,
-    `#svg-button-${id}`, 'multicloud.svg')
+  // Initialize the PNG and SVG download buttons
+  initialize_png_link(`#word-cloud-${id} svg`,
+    `#png-button-${id}`, diameter, diameter, 'multicloud.png')
+  initialize_svg_link(`#word-cloud-${id} svg`, `#svg-button-${id}`, 'multicloud.svg')
+
+  // Initialize the fullscreen button
+  initialize_visualize_fullscreen_button(`#fullscreen-button-${id}`, `#word-cloud-${id}`)
 
   // Remove the loading overlay and fade in the word clouds if this is the
   // last word cloud to render

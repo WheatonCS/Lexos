@@ -32,7 +32,7 @@ $(function () {
 /**
  * Checks that there is exactly one document active and sets the appropriate
  * text in the "Rolling Window" section.
- * @param {string} response: The response from the "get-active-files" request.
+ * @param {string} response The response from the "get-active-files" request.
  * @returns {void}
  */
 function single_active_document_check (response) {
@@ -47,8 +47,7 @@ function single_active_document_check (response) {
   // If there is more than one active document, display "This Tool Requires
   // A Single Active Document" text on the "Rolling Window" section
   } else if (documents.length > 1) {
-    add_text_overlay('#graph-container',
-      'This Tool Requires a Single Active Document')
+    add_text_overlay('#graph-container', 'This Tool Requires a Single Active Document')
 
   // Otherwise, set the legacy form input for the file to analyze to the
   // active document, display "No Graph" text on the "Rolling Window"
@@ -69,6 +68,9 @@ function single_active_document_check (response) {
   $('#csv-button').click(function () {
     download(csv, 'rolling-window.csv')
   })
+
+  // If the "Fullscreen" button is pressed, make the graph fullscreen.
+  initialize_graph_fullscreen_button()
 }
 
 /**
@@ -86,8 +88,8 @@ function create_rolling_window () {
   remove_errors()
 
   // Display the loading overlay and disable the appropriate buttons
-  start_loading('#graph-container',
-    '#generate-button, #png-button, #svg-button, #csv-button')
+  start_loading('#graph-container', '#generate-button, ' +
+        '#png-button, #svg-button, #csv-button, #full-screen-button')
 
   // Create the rolling window graph and get the CSV data
   send_rolling_window_result_request()
@@ -103,7 +105,7 @@ function send_rolling_window_result_request () {
     {text_color: get_color('--text-color')})
 
   // If the request was successful, initialize the graph, store the CSV
-  // data, and enable the "Generate" and "CSV" buttons
+  // data and enable the appropriate buttons
     .done(function (response) {
       csv = response.csv
       initialize_graph(response.graph)

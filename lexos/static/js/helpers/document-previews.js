@@ -23,8 +23,8 @@ function initialize_document_previews (response) {
 
 /**
  * Creates a document preview with the given name and text.
- * @param {string} preview_name: The name of the document.
- * @param {string} preview_text: The preview text.
+ * @param {string} preview_name The name of the document.
+ * @param {string} preview_text The preview text.
  * @returns {void}
  */
 function create_document_preview (preview_name, preview_text) {

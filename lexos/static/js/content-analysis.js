@@ -113,7 +113,7 @@ function initialize_button_callbacks () {
 
 /**
  * Upload files.
- * @param {event} event: The event that triggered the callback.
+ * @param {event} event The event that triggered the callback.
  * @returns {void}
  */
 function upload_files () {
@@ -142,7 +142,7 @@ function upload_files () {
 
 /**
  * Create the upload previews.
- * @param {string} response: The response from the
+ * @param {string} response The response from the
  *   "/content-analysis/upload-dictionaries" request.
  * @returns {void}
  */
@@ -169,7 +169,7 @@ function create_upload_previews (response) {
 
 /**
  * Displays the results.
- * @param {string} response: The response from the
+ * @param {string} response The response from the
  *   "/content-analysis/analyze" request.
  * @returns {void}
  */
