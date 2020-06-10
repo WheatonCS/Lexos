@@ -65,18 +65,16 @@ function load_cut_settings_section () {
             #segment-size-tooltip-button`)
     segment_text.text('Number of Segments')
     show('#segment-size-input, #number-of-segments-tooltip-button')
-  }
 
   // Otherwise, if the cut mode is set to "Milestones"...
-  else if (cut_mode === 'Milestones') {
+  } else if (cut_mode === 'Milestones') {
     previous_cut_mode = 'Milestones'
     hide(`#segment-size-input, #overlap-input, #merge-threshold-input`)
     show('#milestone-input')
-  }
 
   // Otherwise, if the cut mode is set to "Tokens", "Characters", or
   // "Lines"...
-  else {
+  } else {
     previous_cut_mode = 'Default'
     hide('#milestone-input, #number-of-segments-tooltip-button')
     segment_text.text('Segment Size')

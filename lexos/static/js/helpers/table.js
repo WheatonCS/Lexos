@@ -180,11 +180,10 @@ class Table {
         // If data was returned, display it
         if (response[`${table.name}-table-body`].length) {
           table.display(response[`${table.name}-table-body`], response[`${table.name}-table-head`])
-        }
 
         // Otherwise, if no data was returned, display "No Results"
         // text
-        else {
+        } else {
           add_text_overlay(`#${table.name}-table-content`,
             'No Results')
         }

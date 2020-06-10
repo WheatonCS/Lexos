@@ -85,14 +85,14 @@ function initialize_button_callbacks () {
         // If the deleted character is the end of a document label,
         // delete the entire document label
         let last_character = formula.slice(-1)
-        if (last_character === ']') { formula = formula.slice(0, formula.lastIndexOf('[')) }
+        if (last_character === ']') {
+          formula = formula.slice(0, formula.lastIndexOf('['))
 
         // Otherwise, delete a single character
-        else formula = formula.slice(0, -1)
-      }
+        } else formula = formula.slice(0, -1)
 
       // If the "CLR" button was pressed, clear the formula
-      else if (text === 'CLR') formula = ''
+      } else if (text === 'CLR') formula = ''
 
       // If the "X" or "^" button was pressed, append the appropriate
       // text

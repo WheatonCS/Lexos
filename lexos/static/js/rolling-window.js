@@ -41,11 +41,12 @@ function single_active_document_check (response) {
 
   // If there are no active documents, display "No Active Documents" text
   // on the "Rolling Window" section
-  if (documents.length === 0) { add_text_overlay('#graph-container', 'No Active Documents') }
+  if (documents.length === 0) {
+    add_text_overlay('#graph-container', 'No Active Documents')
 
   // If there is more than one active document, display "This Tool Requires
   // A Single Active Document" text on the "Rolling Window" section
-  else if (documents.length > 1) {
+  } else if (documents.length > 1) {
     add_text_overlay('#graph-container',
       'This Tool Requires a Single Active Document')
 
