@@ -11,10 +11,8 @@ $(function(){
 
         // If the calculation type is "Rolling Average", display hide the
         // denominator input and clear its input
-        if($(`input[name="calculation_type"]:checked`).val()
-            === "Rolling Average")
-            $("#search-terms-input-denominator")
-                .css("display", "none").find("input").val('');
+        if($(`input[name="calculation_type"]:checked`).val() === "Rolling Average")
+            $("#search-terms-input-denominator").css("display", "none").find("input").val('');
 
         // Otherwise, display the denominator input
         else $("#search-terms-input-denominator").css("display", "inline");
@@ -72,6 +70,9 @@ function single_active_document_check(response){
     $("#csv-button").click(function(){
         download(csv, "rolling-window.csv");
     });
+
+    // If the "Fullscreen" button is pressed, make the graph fullscreen.
+    initialize_graph_fullscreen_button();
 }
 
 
@@ -90,8 +91,8 @@ function create_rolling_window(){
     remove_errors();
 
     // Display the loading overlay and disable the appropriate buttons
-    start_loading("#graph-container",
-        "#generate-button, #png-button, #svg-button, #csv-button");
+    start_loading("#graph-container", "#generate-button, "+
+        "#png-button, #svg-button, #csv-button, #full-screen-button");
 
     // Create the rolling window graph and get the CSV data
     send_rolling_window_result_request();
@@ -108,7 +109,7 @@ function send_rolling_window_result_request(){
         {text_color: get_color("--text-color")})
 
         // If the request was successful, initialize the graph, store the CSV
-        // data, and enable the "Generate" and "CSV" buttons
+        // data and enable the appropriate buttons
         .done(function(response){
             csv = response.csv;
             initialize_graph(response.graph);

@@ -43,7 +43,8 @@ function initialize_graph(graph_html){
     $(window).resize(update_graph_size);
 
     // Remove the loading overlay and show the graph
-    finish_loading("#graph-container", "#graph", "#png-button, #svg-button, #full-screen-button");
+    finish_loading("#graph-container", "#graph",
+        "#png-button, #svg-button, #fullscreen-button");
 }
 
 
@@ -130,4 +131,13 @@ function save_graph(format){
                 close_popup();
             });
     });
+}
+
+
+/**
+ * Opens the graph in fullscreen mode.
+ */
+function initialize_graph_fullscreen_button(){
+    $("#fullscreen-button").click(() =>
+        $("#graph-container")[0].requestFullscreen())
 }

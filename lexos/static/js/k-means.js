@@ -54,10 +54,9 @@ function initialize(){
         // Remove any existing error messages
         remove_errors();
 
-        // Display the loading overlays and disable the "Generate" and
-        // download buttons
-        start_loading("#graph-container",
-            "#generate-button, #png-button, #svg-button, #csv-button");
+        // Display the loading overlays and disable the graph buttons.
+        start_loading("#graph-container", "#generate-button, #png-button, "+
+            "#svg-button, #csv-button, #fullscreen-button");
 
         // Create the k-means graph and get the CSV data
         send_k_means_result_request();
@@ -68,6 +67,9 @@ function initialize(){
 
     // If the "PNG" or "SVG" buttons were pressed, download the graph
     initialize_graph_download_buttons();
+
+    // If the "Fullscreen" button is pressed, make the graph fullscreen.
+    initialize_graph_fullscreen_button();
 }
 
 
@@ -149,7 +151,7 @@ function initialize_tooltips(){
 
     // "Clusters"
     create_tooltip("#clusters-tooltip-button", `The number of clusters (or
-        the number of centroids). The number of clusters should always be 
+        the number of centroids). The number of clusters should always be
         fewer or equal to the number of active documents. By default, this
         value is set to half the number of active documents.`);
 

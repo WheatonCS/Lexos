@@ -29,7 +29,7 @@ $(function(){
 
 
 /**
- * Creates the dendrogram and initializes the "Generate" button.
+ * Creates the dendrogram and initializes the graph buttons.
  */
 function initialize(){
 
@@ -57,8 +57,8 @@ function initialize(){
         remove_errors();
 
         // Display the loading overlay and disable the appropriate buttons
-        start_loading("#graph-container",
-            "#generate-button, #png-button, #svg-button, #full-screen-button");
+        start_loading("#graph-container", "#generate-button, "+
+            "#png-button, #svg-button, #full-screen-button");
 
         // Create the Plotly dendrogram graph
         create_graph("dendrogram/graph");
@@ -66,6 +66,9 @@ function initialize(){
 
     // If the "PNG" or "SVG" buttons are pressed, download the graph
     initialize_graph_download_buttons();
+
+    // If the "Fullscreen" button is pressed, make the graph fullscreen.
+    initialize_graph_fullscreen_button();
 }
 
 
@@ -134,19 +137,3 @@ function walkthrough(){
 
     return intro;
 }
-
-/**
- * Open dendrogram in fullscreen mode.
- */
-function openFullscreen() {
-    let elem = document.getElementById('graph-container')
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen()
-     } else if (elem.mozRequestFullScreen) { /* Firefox */
-       elem.mozRequestFullScreen()
-     } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-       elem.webkitRequestFullscreen()
-     } else if (elem.msRequestFullscreen) { /* IE/Edge */
-       elem.msRequestFullscreen()
-     }
-  }

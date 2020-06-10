@@ -55,9 +55,9 @@ function initialize(){
         remove_errors();
 
         // Display the loading overlays and disable the appropriate buttons
-        start_loading(`#graph-container, #corpus-statistics,
-            #standard-error-test, #interquartile-range-test`,
-            "#generate-button, #png-button, #svg-button");
+        start_loading("#graph-container, #corpus-statistics, #standard-error-test, "+
+            "#interquartile-range-test", "#generate-button, #png-button, "+
+            "#svg-button, #fullscreen-button");
 
         // Create the statistics
         create_statistics();
@@ -65,6 +65,9 @@ function initialize(){
 
     // If the "PNG" or "SVG" buttons are pressed, download the graph
     initialize_graph_download_buttons();
+
+    // If the "Fullscreen" button is pressed, make the graph fullscreen.
+    initialize_graph_fullscreen_button();
 }
 
 
