@@ -9,24 +9,24 @@ var manage_table_documents = []
 function initialize_manage_table (parent_query, enable_context_menu = false) {
   // Create the table layout
   $(`
-    <!-- Manage table head -->
-    <div id="manage-table-head">
-      <h3 id="active" class="manage-table-cell sortable">Active <i id="state-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 class="manage-table-cell sortable"># <i id="id-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 id="document" class="manage-table-cell sortable">Document <i id="label-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 id="class" class="manage-table-cell sortable">Class <i id="class-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 class="manage-table-cell sortable">Source <i id="source-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 id="excerpt" class="manage-table-cell sortable">Excerpt <i id="preview-sortdir" class="sort-ascending">▲</i></h3>
-      <a id="manage-table-download-button" class="disabled right-justified button" href="manage/download">Download</a>
-      <span id="manage-table-tooltip-button" class="tooltip-button">?</span>
-    </div>
+        <!-- Manage table head -->
+        <div id="manage-table-head">
+            <h3 id="active" class="manage-table-cell sortable">Active <i id="state-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 class="manage-table-cell sortable"># <i id="id-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 id="document" class="manage-table-cell sortable">Document <i id="label-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 id="class" class="manage-table-cell sortable">Class <i id="class-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 class="manage-table-cell sortable">Source <i id="source-sortdir" class="sort-by-asc">▲</i></h3>
+            <h3 id="excerpt" class="manage-table-cell sortable">Excerpt <i id="preview-sortdir" class="sort-by-asc">▲</i></h3>
+            <a id="manage-table-download-button" class="disabled right-justified button" href="manage/download">Download</a>
+            <span id="manage-table-tooltip-button" class="tooltip-button">?</span>
+        </div>
 
-    <!-- Manage table body -->
-    <div id="manage-table-body" class="firefox-hidden-scrollbar"></div>
+        <!-- Manage table body -->
+        <div id="manage-table-body" class="firefox-hidden-scrollbar"></div>
 
-    <!-- Selection box -->
-    <div id="manage-table-selection-box"></div>
-  `).appendTo(parent_query)
+        <!-- Selection box -->
+        <div id="manage-table-selection-box"></div>
+    `).appendTo(parent_query)
 
   // Create the table displaying the uploaded documents
   create_manage_table(enable_context_menu)
@@ -132,13 +132,13 @@ $(document).on('click', '.sortable', function () {
 function sort_manage_table (manage_table_documents, col, enable_context_menu = true) {
   // Make a copy of the array for sorting
   const copyForSorting = [...manage_table_documents]
-  if ($('#' + col).hasClass('sort-descending')) {
+  if ($('#' + col).hasClass('sort-by-desc')) {
     copyForSorting.sort(sortArray(col.split('-')[0], 'desc'))
-    $('#' + col).removeClass('sort-descending').addClass('sort-ascending').text('▲')
+    $('#' + col).removeClass('sort-by-desc').addClass('sort-by-asc').text('▲')
     var reverse = false
   } else {
     copyForSorting.sort(sortArray(col.split('-')[0]))
-    $('#' + col).removeClass('sort-ascending').addClass('sort-descending').text('▼')
+    $('#' + col).removeClass('sort-by-asc').addClass('sort-by-desc').text('▼')
     reverse = true
   }
 

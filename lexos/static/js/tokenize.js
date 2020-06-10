@@ -6,7 +6,8 @@ $(function () {
 
   // Initialize the table
   table = new Table('tokenizer', 'tokenize/table', '#table-section', '',
-    validate_analyze_inputs, null, true, false, false, true, true, true, true)
+    validate_analyze_inputs, null, true, false, false, true, true, true,
+    true)
 
   // Initialize the download button
   initialize_download_button()
@@ -35,7 +36,7 @@ function initialize_download_button () {
   let download_button = $(`<span class="button">Download</span>`)
     .appendTo(table.table_element.find('.lexos-table-buttons'))
 
-  // If the download button is clicked...
+    // If the download button is clicked...
   download_button.click(function () {
     // Create the popup
     let popup_container_element = create_ok_popup('Download')
@@ -50,8 +51,8 @@ function initialize_download_button () {
       // Send a request to create the table with the selected orientation
       table.create(false)
 
-        // If the request is successful, download the table and close
-        // the popup
+      // If the request is successful, download the table and close
+      // the popup
         .done(function () {
           download(table.csv, `${table.name}-table.csv`)
           close_popup()
