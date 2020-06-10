@@ -50,20 +50,23 @@ def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
     return conversion_dict
 
 
-def handle_special_characters(text: str) -> str:
+def handle_special_characters(text: str,
+                              char_set: str,
+                              special_characters: list) -> str:
     """Replaces encoded characters with their corresponding unicode characters.
 
     :param text: The text to be altered, containing common/encoded characters.
+    :param char_set: The character set to be used.
+    :param special_characters: The special characters to be used.
     :return: The text string, now containing unicode character equivalents.
     """
 
-    char_set = request.form['special_characters_preset']
     conversion_dict = {}
 
-    if char_set == 'None' and len(request.form['special_characters']) == 0:
+    if char_set == 'None' and len(special_characters) == 0:
         return text
 
-    elif char_set == 'HTML' and len(request.form['special_characters']) == 0:
+    elif char_set == 'HTML' and len(special_characters) == 0:
         return html.unescape(text)
 
     elif char_set == 'Old English SGML':
@@ -94,7 +97,7 @@ def handle_special_characters(text: str) -> str:
     else:
         # try to parse manually-entered character mappings
         try:
-            for char in request.form['special_characters'].split('\n'):
+            for char in special_characters.split('\n'):
                 pat, replace = char.replace(' ', '').split(',')
                 conversion_dict[pat] = replace
         except Exception:
@@ -980,13 +983,17 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         storage_folder=storage_folder, storage_filenames=storage_filenames,
         storage_number=2)
 
+    # Get form values
+    charset = request.form['special_characters_preset']
+    special_characters = request.form['special_characters']
+
     # determine if text is to be html escaped
-    if request.form['special_characters_preset'] == 'HTML':
+    if charset == 'HTML':
         escape_html = True
 
     # "\n" comes from "" + "\n" + ""
     if merged_string == "\n":
-        text = handle_special_characters(text)
+        text = handle_special_characters(text, charset, special_characters)
     else:
         text = replacement_handler(
             text=text, replacer_string=merged_string, is_lemma=False,
