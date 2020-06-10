@@ -371,7 +371,7 @@ class TopwordModel(BaseModel):
             series = series[: 30]
             frame = pd.DataFrame(data={
                 "Terms/Characters": series.index,
-                "Z-Score": series.data
+                "Z-Score": series.values
             })
 
             return frame.to_numpy().tolist()

@@ -259,7 +259,7 @@ def xml_handling_options(data: dict = {}):
         except ElementTree.ParseError:
             import bs4
             from bs4 import BeautifulSoup
-            soup = BeautifulSoup(file.load_contents(), 'html.parser')
+            soup = BeautifulSoup(file.load_contents(), 'xml')
             for e in soup:
                 if isinstance(e, bs4.element.ProcessingInstruction):
                     e.extract()
