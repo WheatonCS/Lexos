@@ -636,4 +636,5 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# VS Code
+.vscode
