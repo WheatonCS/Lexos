@@ -194,8 +194,8 @@ def replacement_handler(text: str,
 
 
 def pattern_replacement_handler(text: str,
-                        replacer_string: str) -> str:
-    """Handles pattern replacement lines found in the scrub-alteration-upload files.
+                                replacer_string: str) -> str:
+    """Handle pattern replacement lines found in scrub-alteration-upload files.
 
     :param text: A unicode string with the whole text to be altered.
     :param replacer_string: A formatted string input with newline-separated
@@ -204,8 +204,8 @@ def pattern_replacement_handler(text: str,
     :returns: The input string with replacements made.
     """
 
-    # Convert HTML character entities to Unicode if HTML is selected *and* there
-    # are further entities entered in the form field
+    # Convert HTML character entities to Unicode if HTML is selected *and*
+    #  there are further entities entered in the form field
     if request.form['special_characters_preset'] == 'HTML':
         text = html.unescape(text)
 
@@ -235,7 +235,8 @@ def pattern_replacement_handler(text: str,
             substitution = substitution.replace('\\>', '>')
             # Convert \s token to a space
             substitution = substitution.replace('\\s', ' ')
-            # If the pattern has the prefix REGEX:, remove it and set regex=True
+            # If the pattern has the prefix REGEX:, remove it,
+            # and set regex=True
             if pattern.lower().startswith('regex:'):
                 regex = True
                 pattern = re.sub(r'^REGEX:', '', pattern, flags=re.IGNORECASE)
@@ -243,7 +244,7 @@ def pattern_replacement_handler(text: str,
                 regex = False
             replacement_jobs.append((regex, pattern, substitution))
             # Do the replacement
-            if regex == True:
+            if regex is True:
                 text = re.sub(pattern, substitution, text)
             else:
                 text = text.replace(pattern, substitution)
@@ -889,8 +890,9 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
             file_strings[key] = ""
 
     # Create an array of option strings:
-    # pattern_replacements_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
-    #     pattern_replacements_manual, lem_manual, sc_manual, and sw_kw_manual
+    # pat_replacements_file_string, lem_file_string, sc_file_string,
+    # sw_kw_file_string, pattern_replacements_manual, lem_manual, sc_manual,
+    # and sw_kw_manual
 
     all_options = [file_strings.get('pattern_replacements_file[]'),
                    file_strings.get('lemmas_file[]'),
@@ -942,13 +944,14 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     storage_filenames = sorted(
         [constants.STOPWORD_FILENAME, constants.LEMMA_FILENAME,
-         constants.PATTERN_REPLACEMENTS_FILENAME, constants.SPECIAL_CHAR_FILENAME])
+         constants.PATTERN_REPLACEMENTS_FILENAME,
+         constants.SPECIAL_CHAR_FILENAME])
     option_strings = prepare_additional_options(
         opt_uploads, storage_options, storage_folder, storage_filenames)
 
     # handle uploaded FILES: pattern_replacements, lemmas, special characters,
     # stop-keep words
-    pattern_replacements_file_string = option_strings[0]
+    pat_replacements_file_string = option_strings[0]
     lem_file_string = option_strings[1]
     sc_file_string = option_strings[2]
     sw_kw_file_string = option_strings[3]
@@ -1014,7 +1017,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         # since lower is ON, apply lowercase to other options
         # apply to contents of any uploaded files
-        pattern_replacements_file_string = pattern_replacements_file_string.lower()
+        pat_replacements_file_string = pat_replacements_file_string.lower()
         lem_file_string = lem_file_string.lower()
         sc_file_string = sc_file_string.lower()
         sw_kw_file_string = sw_kw_file_string.lower()
@@ -1102,13 +1105,15 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """Replaces characters according to user input strings.
 
         :param orig_text: A text string.
-        :return: The text with characters swapped according to pattern_replacements_file_string
-            and pattern_replacements_manual.
+        :return: The text with characters swapped according to
+            pat_replacements_file_string and pattern_replacements_manual.
         """
 
         replacer_string = handle_file_and_manual_strings(
-            file_string=pattern_replacements_file_string, manual_string=pattern_replacements_manual,
-            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            file_string=pat_replacements_file_string,
+            manual_string=pattern_replacements_manual,
+            storage_folder=storage_folder,
+            storage_filenames=storage_filenames,
             storage_number=0)
         text = pattern_replacement_handler(
             text=orig_text, replacer_string=replacer_string)
