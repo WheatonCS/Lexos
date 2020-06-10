@@ -164,7 +164,7 @@ def cut_by_lines(text: str, seg_size: int, overlap: int,
     assert seg_size > overlap, LARGER_SEG_SIZE_MESSAGE
 
     # split text by new line while keeping all the whitespace
-    seg_list = [line for line in text.splitlines() if line]
+    seg_list = text.splitlines(keepends=True)
 
     # add sub-lists(segment) to final list
     final_seg_list = cut_list_with_overlap(input_list=seg_list,
@@ -174,6 +174,9 @@ def cut_by_lines(text: str, seg_size: int, overlap: int,
 
     # join lines in each sublist
     final_seg_list = join_sublist_element(input_list=final_seg_list)
+
+    # remove empty lines
+    final_seg_list = [line for line in final_seg_list if line.strip()]
 
     return final_seg_list
 

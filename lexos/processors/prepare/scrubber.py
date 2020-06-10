@@ -120,8 +120,8 @@ def replacement_handler(text: str,
     :returns: The input string with replacements made.
     """
 
-    # Convert HTML character entities to Unicode if HTML is selected *and* there
-    # are further entities entered in the form field
+    # Convert HTML character entities to Unicode if HTML is selected *and*
+    # there are further entities entered in the form field
     if request.form['special_characters_preset'] == 'HTML':
         text = html.unescape(text)
 
