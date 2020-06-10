@@ -29,8 +29,8 @@ class TestGetSpecialCharDictFromFile:
         #     get_special_char_dict_from_file(char_set="Early English HTML")
         # except ValueError:
         #     pass
-        else:
-            raise AssertionError
+        # else:
+        #     raise AssertionError
         try:
             get_special_char_dict_from_file(char_set="MADEUP-6")
         except ValueError:
