@@ -16,31 +16,41 @@ $(function () {
  * Sends the request for the word counts and creates the bubbleviz.
  * @returns {void}
  */
-function send_word_counts_request(){
+function send_word_counts_request () {
+  // Validate the "Term Count" input
+  if (!validate_visualize_inputs()) return
 
-    // Validate the "Term Count" input
-    if(!validate_visualize_inputs()) return;
+  // Remove any existing error messages
+  remove_errors()
 
-    // Remove any existing error messages
-    remove_errors();
+  // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
+  // buttons
+  start_loading('#bubbleviz', '#png-button, ' +
+        '#svg-button, #generate-button, #fullscreen-button')
 
-    // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
-    // buttons
-    start_loading("#bubbleviz", "#png-button, "+
-        "#svg-button, #generate-button, #fullscreen-button");
+  // Send the request for the word counts
+  $.ajax({
+    type: 'POST',
+    url: 'bubbleviz/get-word-counts',
+    contentType: 'application/JSON',
+    data: JSON.stringify({maximum_top_words: $('#term-count-input').val()})
+  })
 
-    // Send the request for the word counts
-    $.ajax({
-        type: "POST",
-        url: "bubbleviz/get-word-counts",
-        contentType: "application/JSON",
-        data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
+  // If the request is successful, create the bubbleviz
+    .done(create_bubbleviz)
+
+  // If the request failed, display an error message, display
+  // "Loading Failed" text, and enable the "Generate" button
+    .fail(function () {
+      error('Failed to retrieve the bubbleviz data.')
+      add_text_overlay('#bubbleviz', 'Loading Failed')
+      enable('#generate-button')
     })
 }
 
 /**
  * Create the bubbleviz.
- * @param {string} response: The response from the "bubbleviz/get-word-counts"
+ * @param {string} response The response from the "bubbleviz/get-word-counts"
  *   request.
  * @returns {void}
  */
@@ -120,27 +130,27 @@ function create_bubbleviz (response) {
     })
 
     // Create the bubble text
-    node.append("text")
-        .attr("dy", ".3em")
-        .style("text-anchor", "middle")
-        .text(function(d){ return d.data.word; })
-        .attr("font-family", $("#font-input").val())
-        .attr("font-size", function(d){ return d.r/((d.data.word.length+1)/3); })
-        .attr("fill", "var(--foreground-color)")
-        .style("pointer-events", "none");
+  node.append('text')
+    .attr('dy', '.3em')
+    .style('text-anchor', 'middle')
+    .text(function (d) { return d.data.word })
+    .attr('font-family', $('#font-input').val())
+    .attr('font-size', function (d) { return d.r / ((d.data.word.length + 1) / 3) })
+    .attr('fill', 'var(--foreground-color)')
+    .style('pointer-events', 'none')
 
-    // Fade in the bubbleviz
-    d3.select(self.frameElement).style("height", diameter+"px");
-    finish_loading("#bubbleviz", "#bubbleviz", "#png-button, "+
-        "#svg-button, #generate-button, #fullscreen-button");
+  // Fade in the bubbleviz
+  d3.select(self.frameElement).style('height', diameter + 'px')
+  finish_loading('#bubbleviz', '#bubbleviz', '#png-button, ' +
+        '#svg-button, #generate-button, #fullscreen-button')
 
-    // Initialize the SVG and PNG download buttons
-    initialize_png_link("#bubbleviz svg", "#png-button",
-        diameter, diameter, "bubbleviz.png");
-    initialize_svg_link("#bubbleviz svg", "#svg-button", "bubbleviz.svg");
+  // Initialize the SVG and PNG download buttons
+  initialize_png_link('#bubbleviz svg', '#png-button',
+    diameter, diameter, 'bubbleviz.png')
+  initialize_svg_link('#bubbleviz svg', '#svg-button', 'bubbleviz.svg')
 
-    // Initialize the fullscreen button
-    initialize_visualize_fullscreen_button()
+  // Initialize the fullscreen button
+  initialize_visualize_fullscreen_button()
 }
 
 /**

@@ -91,7 +91,7 @@ function load_cut_settings_section () {
 
 /**
  * Cuts the active documents.
- * @param {string} action: The cut operation action ("preview" or "apply").
+ * @param {string} action The cut operation action ("preview" or "apply").
  * @returns {void}
  */
 function cut (action) {
@@ -137,7 +137,7 @@ function cut (action) {
 
 /**
  * Creates the document previews.
- * @param {string} response: The response containing the new previews.
+ * @param {string} response The response containing the new previews.
  * @returns {void}
  */
 function create_document_previews (response) {
@@ -162,7 +162,7 @@ function create_document_previews (response) {
 /**
  * Validate the inputs.
  * @param {boolean} show_error Whether to show an error on invalid input.
- * @returns {boolean}: Whether the inputs are valid.
+ * @returns {boolean} Whether the inputs are valid.
  */
 function validate_inputs (show_error = false) {
   // Remove any existing errors and error highlights

@@ -33,7 +33,7 @@ $(function () {
 
 /**
  * Initialize the comparison document section and create the similarity table.
- * @param {string} response: The response from the "/active-file-ids" request.
+ * @param {string} response The response from the "/active-file-ids" request.
  * @returns {void}
  */
 function initialize (response) {

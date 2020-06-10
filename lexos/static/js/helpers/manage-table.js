@@ -2,8 +2,8 @@ var manage_table_documents = []
 
 /**
  * Initializes the manage table.
- * @param {string} parent_query: The query for the parent element to create the table in.
- * @param {boolean} enable_context_menu: Whether to enable the context menu.
+ * @param {string} parent_query The query for the parent element to create the table in.
+ * @param {boolean} enable_context_menu Whether to enable the context menu.
  * @returns {void}
  */
 function initialize_manage_table (parent_query, enable_context_menu = false) {
@@ -43,7 +43,7 @@ function initialize_manage_table (parent_query, enable_context_menu = false) {
 
 /**
  * Creates the table displaying the uploaded documents.
- * @param {boolean} enable_context_menu: Whether to enable the context menu.
+ * @param {boolean} enable_context_menu Whether to enable the context menu.
  * @returns {void}
  */
 function create_manage_table (enable_context_menu = true) {
@@ -88,8 +88,8 @@ function create_manage_table (enable_context_menu = true) {
 
 /**
  * Sorts an array of objects. Used for sorting the table.
- * @param {string} key: The name of the column to sort by.
- * @param {string} order: The sort direction, 'asc' or 'desc'.
+ * @param {string} key The name of the column to sort by.
+ * @param {string} order The sort direction, 'asc' or 'desc'.
  * @returns {void}
  */
 function sortArray (key, order = 'asc') {
@@ -124,9 +124,9 @@ $(document).on('click', '.sortable', function () {
 
 /**
  * Sorts the table displaying the uploaded documents.
- * @param {array} manage_table_documents: The list of document row objects.
- * @param {string} col: The id of the sort direction arrow.
- * @param {boolean} enable_context_menu: Whether to enable the context menu.
+ * @param {array} manage_table_documents The list of document row objects.
+ * @param {string} col The id of the sort direction arrow.
+ * @param {boolean} enable_context_menu Whether to enable the context menu.
  * @returns {void}
  */
 function sort_manage_table (manage_table_documents, col, enable_context_menu = true) {
@@ -158,14 +158,14 @@ function sort_manage_table (manage_table_documents, col, enable_context_menu = t
 
 /**
  * Appends a row to the table.
- * @param {string} id: The ID of the document.
- * @param {number} row_number: The number of the row.
- * @param {string} active: Whether the document is active ("true" or "false").
- * @param {string} label: The name of the document.
- * @param {string} class_name: The class name of the document.
- * @param {string} source: The source name of the document.
- * @param {string} preview: The preview of the document.
- * @param {boolean} enable_context_menu: Whether to enable the context menu.
+ * @param {string} id The ID of the document.
+ * @param {number} row_number The number of the row.
+ * @param {string} active Whether the document is active ("true" or "false").
+ * @param {string} label The name of the document.
+ * @param {string} class_name The class name of the document.
+ * @param {string} source The source name of the document.
+ * @param {string} preview The preview of the document.
+ * @param {boolean} enable_context_menu Whether to enable the context menu.
  * @returns {void}
  */
 function append_manage_table_row (id, row_number, active, label, class_name,
@@ -264,8 +264,8 @@ function manage_table_deselect_all () {
 
 /**
  * Gets the document with the given ID.
- * @param {number} id: The ID to search for.
- * @returns {Object}: The document with the given ID.
+ * @param {number} id The ID to search for.
+ * @returns {Object} The document with the given ID.
  */
 function get_manage_document (id) {
   return manage_table_documents.find(function (d) { return d.id === id })

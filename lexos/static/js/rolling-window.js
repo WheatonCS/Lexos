@@ -13,7 +13,7 @@ $(function () {
     // denominator input and clear its input
     if ($(`input[name="calculation_type"]:checked`).val() === 'Rolling Average') {
       $('#search-terms-input-denominator').css('display', 'none').find('input').val('')
-      
+
     // Otherwise, display the denominator input
     } else $('#search-terms-input-denominator').css('display', 'inline')
   })
@@ -32,47 +32,45 @@ $(function () {
 /**
  * Checks that there is exactly one document active and sets the appropriate
  * text in the "Rolling Window" section.
- * @param {string} response: The response from the "get-active-files" request.
+ * @param {string} response The response from the "get-active-files" request.
  * @returns {void}
  */
+function single_active_document_check (response) {
+  // Get the active documents
+  let documents = Object.entries(parse_json(response))
 
-function single_active_document_check(response){
+  // If there are no active documents, display "No Active Documents" text
+  // on the "Rolling Window" section
+  if (documents.length === 0) {
+    add_text_overlay('#graph-container', 'No Active Documents')
 
-    // Get the active documents
-    let documents = Object.entries(parse_json(response));
+  // If there is more than one active document, display "This Tool Requires
+  // A Single Active Document" text on the "Rolling Window" section
+  } else if (documents.length > 1) {
+    add_text_overlay('#graph-container', 'This Tool Requires a Single Active Document')
 
-    // If there are no active documents, display "No Active Documents" text
-    // on the "Rolling Window" section
-    if(documents.length === 0)
-        add_text_overlay("#graph-container", "No Active Documents");
+  // Otherwise, set the legacy form input for the file to analyze to the
+  // active document, display "No Graph" text on the "Rolling Window"
+  // section, and enable the generate button
+  } else {
+    add_text_overlay('#graph-container', 'No Graph')
+    $('#file-to-analyze').val(documents[0][0])
+    enable('#generate-button')
+  }
 
-    // If there is more than one active document, display "This Tool Requires
-    // A Single Active Document" text on the "Rolling Window" section
-    else if(documents.length > 1) add_text_overlay("#graph-container",
-        "This Tool Requires a Single Active Document");
+  // If the "Generate" button is clicked, create the rolling window graph
+  $('#generate-button').click(create_rolling_window)
 
-    // Otherwise, set the legacy form input for the file to analyze to the
-    // active document, display "No Graph" text on the "Rolling Window"
-    // section, and enable the generate button
-    else {
-        add_text_overlay("#graph-container", "No Graph");
-        $("#file-to-analyze").val(documents[0][0]);
-        enable("#generate-button");
-    }
+  // Initialize the "PNG" and "SVG" download buttons
+  initialize_graph_download_buttons()
 
-    // If the "Generate" button is clicked, create the rolling window graph
-    $("#generate-button").click(create_rolling_window);
+  // If the "CSV" button is pressed, download the CSV
+  $('#csv-button').click(function () {
+    download(csv, 'rolling-window.csv')
+  })
 
-    // Initialize the "PNG" and "SVG" download buttons
-    initialize_graph_download_buttons();
-
-    // If the "CSV" button is pressed, download the CSV
-    $("#csv-button").click(function(){
-        download(csv, "rolling-window.csv");
-    });
-
-    // If the "Fullscreen" button is pressed, make the graph fullscreen.
-    initialize_graph_fullscreen_button();
+  // If the "Fullscreen" button is pressed, make the graph fullscreen.
+  initialize_graph_fullscreen_button()
 }
 
 /**
@@ -89,9 +87,9 @@ function create_rolling_window () {
   // Remove any existing error messages
   remove_errors()
 
-    // Display the loading overlay and disable the appropriate buttons
-    start_loading("#graph-container", "#generate-button, "+
-        "#png-button, #svg-button, #csv-button, #full-screen-button");
+  // Display the loading overlay and disable the appropriate buttons
+  start_loading('#graph-container', '#generate-button, ' +
+        '#png-button, #svg-button, #csv-button, #full-screen-button')
 
   // Create the rolling window graph and get the CSV data
   send_rolling_window_result_request()
@@ -101,26 +99,25 @@ function create_rolling_window () {
  * Creates the rolling window graph and gets the CSV data.
  * @returns {void}
  */
-function send_rolling_window_result_request(){
+function send_rolling_window_result_request () {
+  // Send a request for the k-means results
+  send_ajax_form_request('/rolling-window/results',
+    {text_color: get_color('--text-color')})
 
-    // Send a request for the k-means results
-    send_ajax_form_request("/rolling-window/results",
-        {text_color: get_color("--text-color")})
+  // If the request was successful, initialize the graph, store the CSV
+  // data and enable the appropriate buttons
+    .done(function (response) {
+      csv = response.csv
+      initialize_graph(response.graph)
+      enable('#generate-button, #csv-button')
+    })
 
-        // If the request was successful, initialize the graph, store the CSV
-        // data and enable the appropriate buttons
-        .done(function(response){
-            csv = response.csv;
-            initialize_graph(response.graph);
-            enable("#generate-button, #csv-button");
-        })
-
-        // If the request failed, display an error and enable the "Generate"
-        // button
-        .fail(function(){
-            error("Failed to retrieve the rolling window data.");
-            enable("#generate-button");
-        });
+  // If the request failed, display an error and enable the "Generate"
+  // button
+    .fail(function () {
+      error('Failed to retrieve the rolling window data.')
+      enable('#generate-button')
+    })
 }
 
 /**

@@ -29,46 +29,44 @@ $(function () {
  * Creates the statistics and initializes the "Generate" button.
  * @returns {void}
  */
-function initialize(){
+function initialize () {
+  // If there are no active documents, display "No Active Documents" text
+  // and return
+  if (!active_document_count) {
+    add_text_overlay(`#graph-container, #table, #corpus-statistics,
+      #standard-error-test, #interquartile-range-test`,
+    'No Active Documents')
+    return
+  }
 
-    // If there are no active documents, display "No Active Documents" text
-    // and return
-    if(!active_document_count){
-        add_text_overlay(`#graph-container, #table, #corpus-statistics,
-            #standard-error-test, #interquartile-range-test`,
-            "No Active Documents");
-        return;
-    }
+  // Otherwise, create the statistics
+  create_statistics()
 
-    // Otherwise, create the statistics
-    create_statistics();
+  // If the "Generate" button is pressed, recreate the statistics
+  $('#generate-button').click(function () {
+    // Validate the inputs
+    if (!validate_analyze_inputs(true)) return
 
-    // If the "Generate" button is pressed, recreate the statistics
-    $("#generate-button").click(function(){
+    // Remove any existing Plotly graphs
+    remove_graphs()
 
-        // Validate the inputs
-        if(!validate_analyze_inputs(true)) return;
+    // Remove any existing error messages
+    remove_errors()
 
-        // Remove any existing Plotly graphs
-        remove_graphs();
+    // Display the loading overlays and disable the appropriate buttons
+    start_loading('#graph-container, #corpus-statistics, #standard-error-test, ' +
+      '#interquartile-range-test', '#generate-button, #png-button, ' +
+      '#svg-button, #fullscreen-button')
 
-        // Remove any existing error messages
-        remove_errors();
+    // Create the statistics
+    create_statistics()
+  })
 
-        // Display the loading overlays and disable the appropriate buttons
-        start_loading("#graph-container, #corpus-statistics, #standard-error-test, "+
-            "#interquartile-range-test", "#generate-button, #png-button, "+
-            "#svg-button, #fullscreen-button");
+  // If the "PNG" or "SVG" buttons are pressed, download the graph
+  initialize_graph_download_buttons()
 
-        // Create the statistics
-        create_statistics();
-    });
-
-    // If the "PNG" or "SVG" buttons are pressed, download the graph
-    initialize_graph_download_buttons();
-
-    // If the "Fullscreen" button is pressed, make the graph fullscreen.
-    initialize_graph_fullscreen_button();
+  // If the "Fullscreen" button is pressed, make the graph fullscreen.
+  initialize_graph_fullscreen_button()
 }
 
 /**
@@ -102,7 +100,7 @@ function create_statistics () {
 /**
  * Creates the statistics for the "Corpus Statistics", "Standard Error Test",
  *   and "Interquartile Range Test" sections.
- * @param {string} response: The response from the "/statistics/corpus" request.
+ * @param {string} response The response from the "/statistics/corpus" request.
  * @returns {void}
  */
 function create_corpus_statistics (response) {
@@ -159,7 +157,7 @@ function create_anomalies (element_id, small_anomalies, large_anomalies) {
 
 /**
  * Re-enables the "Generate" button if all elements have finished loading.
- * @param {number} number_loaded: The number of elements that were loaded by
+ * @param {number} number_loaded The number of elements that were loaded by
  *   the calling function.
  * @returns {void}
  */
@@ -183,7 +181,7 @@ function loading_complete_check (number_loaded = 1) {
 function initialize_tooltips () {
   // "Tokenize"
   create_tooltip('#tokenize-tooltip-button', `Divide the text into n-grams
-        (by tokens or characters) of the desired length.`)
+    (by tokens or characters) of the desired length.`)
 
   // "Cull"
   initialize_cull_tooltips(false)

@@ -20,32 +20,42 @@ $(function () {
  * Requests the data for the word cloud and creates the word cloud.
  * @returns {void}
  */
-function get_word_cloud_data(){
+function get_word_cloud_data () {
+  // Validate the "Term Count" input
+  if (!validate_visualize_inputs()) return
 
-    // Validate the "Term Count" input
-    if(!validate_visualize_inputs()) return;
+  // Remove any existing error messages
+  remove_errors()
 
-    // Remove any existing error messages
-    remove_errors();
+  // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
+  // buttons
+  start_loading('#word-cloud-container', '#png-button, ' +
+        '#svg-button, #generate-button, #fullscreen-button')
 
-    // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
-    // buttons
-    start_loading("#word-cloud-container", "#png-button, "+
-        "#svg-button, #generate-button, #fullscreen-button");
+  // Send a request for a list of the most frequent words and their number
+  // of occurrences
+  $.ajax({
+    type: 'POST',
+    url: 'word-cloud/get-word-counts',
+    contentType: 'application/JSON',
+    data: JSON.stringify({maximum_top_words: $('#term-count-input').val()})
+  })
 
-    // Send a request for a list of the most frequent words and their number
-    // of occurrences
-    $.ajax({
-        type: "POST",
-        url: "word-cloud/get-word-counts",
-        contentType: "application/JSON",
-        data: JSON.stringify({maximum_top_words: $("#term-count-input").val()})
+  // If the request is successful, create the word cloud
+    .done(create_word_cloud_layout)
+
+  // If the request failed, display an error message, display
+  // "Loading Failed" text, and enable the "Generate" button
+    .fail(function () {
+      error('Failed to retrieve the word cloud data.')
+      add_text_overlay('#word-cloud-container', 'Loading Failed')
+      enable('#generate-button')
     })
 }
 
 /**
  * Creates the word cloud layout.
- * @param {string} response: The response from the get-word-counts request.
+ * @param {string} response The response from the get-word-counts request.
  * @returns {void}
  */
 function create_word_cloud_layout (response) {
@@ -99,7 +109,7 @@ function create_word_cloud (dataset) {
   let tooltip = d3.select('#word-cloud-container').append('h3')
     .attr('class', 'visualize-tooltip')
 
-    // Create the word cloud
+  // Create the word cloud
   $(`<div id="word-cloud" class="hidden"></div>`)
     .appendTo('#word-cloud-container')
 
@@ -146,16 +156,16 @@ function create_word_cloud (dataset) {
       tooltip.style('opacity', '0')
     })
 
-    // Remove the loading overlay and fade the word cloud in
-    finish_loading("#word-cloud-container", "#word-cloud",
-        "#png-button, #svg-button, #generate-button, #fullscreen-button");
+  // Remove the loading overlay and fade the word cloud in
+  finish_loading('#word-cloud-container', '#word-cloud',
+    '#png-button, #svg-button, #generate-button, #fullscreen-button')
 
-    // Initialize the SVG and PNG download buttons
-    initialize_png_link("#word-cloud svg", "#png-button", width, height, "word-cloud.png");
-    initialize_svg_link("#word-cloud svg", "#svg-button", "word-cloud.svg");
+  // Initialize the SVG and PNG download buttons
+  initialize_png_link('#word-cloud svg', '#png-button', width, height, 'word-cloud.png')
+  initialize_svg_link('#word-cloud svg', '#svg-button', 'word-cloud.svg')
 
-    // Initialize the fullscreen button
-    initialize_visualize_fullscreen_button()
+  // Initialize the fullscreen button
+  initialize_visualize_fullscreen_button()
 }
 
 /**

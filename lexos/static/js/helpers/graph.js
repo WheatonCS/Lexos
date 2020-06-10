@@ -1,7 +1,7 @@
 /**
  * Creates a Plotly graph.
- * @param {string} url: The URL to send the request for the Plotly graph to.
- * @param {function} callback: The function to call when loading completes.
+ * @param {string} url The URL to send the request for the Plotly graph to.
+ * @param {function} callback The function to call when loading completes.
  *      By default, the function re-enables the "Generate" button.
  * @returns {void}
  */
@@ -28,23 +28,22 @@ function () { enable('#generate-button') }) {
 
 /**
  * Initializes the Plotly graph.
- * @param {string} graph_html: The Plotly graph HTML to display.
+ * @param {string} graph_html The Plotly graph HTML to display.
  * @returns {void}
  */
-function initialize_graph(graph_html){
+function initialize_graph (graph_html) {
+  // Add the Plotly graph HTML
+  $(`<div id="graph" class="hidden"></div>`)
+    .html(graph_html)
+    .appendTo('#graph-container')
 
-    // Add the Plotly graph HTML
-    $(`<div id="graph" class="hidden"></div>`)
-        .html(graph_html)
-        .appendTo("#graph-container");
+  // Update the graph size
+  update_graph_size()
+  $(window).resize(update_graph_size)
 
-    // Update the graph size
-    update_graph_size();
-    $(window).resize(update_graph_size);
-
-    // Remove the loading overlay and show the graph
-    finish_loading("#graph-container", "#graph",
-        "#png-button, #svg-button, #fullscreen-button");
+  // Remove the loading overlay and show the graph
+  finish_loading('#graph-container', '#graph',
+    '#png-button, #svg-button, #fullscreen-button')
 }
 
 /**
@@ -131,11 +130,11 @@ function save_graph (format) {
   })
 }
 
-
 /**
  * Opens the graph in fullscreen mode.
+ * @returns {void}
  */
-function initialize_graph_fullscreen_button(){
-    $("#fullscreen-button").click(() =>
-        $("#graph-container")[0].requestFullscreen())
+function initialize_graph_fullscreen_button () {
+  $('#fullscreen-button').click(() =>
+    $('#graph-container')[0].requestFullscreen())
 }

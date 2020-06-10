@@ -53,19 +53,19 @@ function initialize () {
     // Remove any existing error messages
     remove_errors()
 
-        // Display the loading overlay and disable the appropriate buttons
-        start_loading("#graph-container", "#generate-button, "+
-            "#png-button, #svg-button, #full-screen-button");
+    // Display the loading overlay and disable the appropriate buttons
+    start_loading('#graph-container', '#generate-button, ' +
+            '#png-button, #svg-button, #full-screen-button')
 
     // Create the Plotly dendrogram graph
     create_graph('dendrogram/graph')
   })
 
-    // If the "PNG" or "SVG" buttons are pressed, download the graph
-    initialize_graph_download_buttons();
+  // If the "PNG" or "SVG" buttons are pressed, download the graph
+  initialize_graph_download_buttons()
 
-    // If the "Fullscreen" button is pressed, make the graph fullscreen.
-    initialize_graph_fullscreen_button();
+  // If the "Fullscreen" button is pressed, make the graph fullscreen.
+  initialize_graph_fullscreen_button()
 }
 
 /**

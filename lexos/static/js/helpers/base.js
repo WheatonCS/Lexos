@@ -138,7 +138,7 @@ function initialize_theme_popup () {
 
 /**
  * Sets the theme.
- * @param {string} selected_theme: The theme to set.
+ * @param {string} selected_theme The theme to set.
  * @returns {void}
  */
 function set_theme (selected_theme) {
@@ -185,7 +185,7 @@ function highlight_navbar_button () {
 
 /**
  * Highlights the given element.
- * @param {jQuery} element: The element to highlight.
+ * @param {jQuery} element The element to highlight.
  * @returns {void}
  */
 function highlight (element) {
@@ -238,8 +238,8 @@ function initialize_dropdown_menus () {
 
 /**
  * Adds a click callback to toggle the dropdown menu.
- * @param {string} element_name: The name of the navbar elements.
- * @param {list} items: The names and links of the dropdown rows.
+ * @param {string} element_name The name of the navbar elements.
+ * @param {list} items The names and links of the dropdown rows.
  * @returns {void}
  */
 function add_dropdown_menu_callback (element_name, items) {
@@ -353,7 +353,7 @@ function start_walkthrough () {
 
 /**
  * Binds the walkthrough callback.
- * @param {function} callback: The walkthrough callback to bind.
+ * @param {function} callback The walkthrough callback to bind.
  * @returns {void}
  */
 function initialize_walkthrough (callback) {

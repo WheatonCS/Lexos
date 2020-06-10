@@ -111,13 +111,11 @@ function create_class_division_tables (response) {
   }
 
   // Create the class divisions grid
-  $(`<div id="class-divisions-grid"></div>`)
-    .appendTo('#class-divisions-body')
+  $(`<div id="class-divisions-grid"></div>`).appendTo('#class-divisions-body')
 
   // Create the class divisions tables
   for (const table of table_data) {
-    Table.create_basic_table(
-      '#class-divisions-grid', table.data, '', table.name)
+    Table.create_basic_table('#class-divisions-grid', table.data, '', table.name)
   }
 
   // Remove the loading overlay from the "Class Divisions" section and fade
