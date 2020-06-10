@@ -26,12 +26,6 @@ class TestGetSpecialCharDictFromFile:
         else:
             raise AssertionError
         try:
-            get_special_char_dict_from_file(char_set="Early English HTML")
-        except ValueError:
-            pass
-        else:
-            raise AssertionError
-        try:
             get_special_char_dict_from_file(char_set="MADEUP-6")
         except ValueError:
             pass
@@ -273,8 +267,8 @@ class TestReplacementHandlerWithMergeStrings:
     storage_filenames = ['consolidations.p', 'lemmas.p', 'specialchars.p',
                          'stopwords.p']
 
-    # No tests with neither replacer because handle_special_characters()
-    # uses requests
+    # handle_special_characters() no longer uses requests but there are
+    # currently no tests with neither replacer
 
     def test_replacement_handler_special(self):
         file_special_string = handle_file_and_manual_strings(

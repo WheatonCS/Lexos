@@ -50,20 +50,23 @@ def get_special_char_dict_from_file(char_set: str) -> Dict[str, str]:
     return conversion_dict
 
 
-def handle_special_characters(text: str) -> str:
+def handle_special_characters(text: str,
+                              char_set: str,
+                              special_characters: list) -> str:
     """Replaces encoded characters with their corresponding unicode characters.
 
     :param text: The text to be altered, containing common/encoded characters.
+    :param char_set: The character set to be used.
+    :param special_characters: The special characters to be used.
     :return: The text string, now containing unicode character equivalents.
     """
 
-    char_set = request.form['special_characters_preset']
     conversion_dict = {}
 
-    if char_set == 'None' and len(request.form['special_characters']) == 0:
+    if char_set == 'None' and len(special_characters) == 0:
         return text
 
-    elif char_set == 'HTML' and len(request.form['special_characters']) == 0:
+    elif char_set == 'HTML' and len(special_characters) == 0:
         return html.unescape(text)
 
     elif char_set == 'Old English SGML':
@@ -94,7 +97,7 @@ def handle_special_characters(text: str) -> str:
     else:
         # try to parse manually-entered character mappings
         try:
-            for char in request.form['special_characters'].split('\n'):
+            for char in special_characters.split('\n'):
                 pat, replace = char.replace(' ', '').split(',')
                 conversion_dict[pat] = replace
         except Exception:
@@ -108,7 +111,8 @@ def handle_special_characters(text: str) -> str:
 
 def replacement_handler(text: str,
                         replacer_string: str,
-                        is_lemma: bool) -> str:
+                        is_lemma: bool,
+                        escape_html: bool = False) -> str:
     """Handles replacement lines found in the scrub-alteration-upload files.
 
     :param text: A unicode string with the whole text to be altered.
@@ -117,12 +121,14 @@ def replacement_handler(text: str,
         majority of the words with one word.
     :param is_lemma: A boolean indicating whether or not the replacement line
         is for a lemma.
+    :param escape_html: A boolean indicating whether or not the text should
+        be run through html.escape() to convert entities to Unicode.
     :returns: The input string with replacements made.
     """
 
     # Convert HTML character entities to Unicode if HTML is selected *and*
     # there are further entities entered in the form field
-    if request.form['special_characters_preset'] == 'HTML':
+    if escape_html is True:
         text = html.unescape(text)
 
     # Remove spaces in replacement string for consistent format, then split the
@@ -977,12 +983,21 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         storage_folder=storage_folder, storage_filenames=storage_filenames,
         storage_number=2)
 
+    # Get form values
+    charset = request.form['special_characters_preset']
+    special_characters = request.form['special_characters']
+
+    # determine if text is to be html escaped
+    if charset == 'HTML':
+        escape_html = True
+
     # "\n" comes from "" + "\n" + ""
     if merged_string == "\n":
-        text = handle_special_characters(text)
+        text = handle_special_characters(text, charset, special_characters)
     else:
         text = replacement_handler(
-            text=text, replacer_string=merged_string, is_lemma=False)
+            text=text, replacer_string=merged_string, is_lemma=False,
+            escape_html=escape_html)
 
     # -- 3. tags (if Remove Tags is checked)----------------------------------
     if tags:  # If remove tags is checked:
