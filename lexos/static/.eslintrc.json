@@ -1,7 +1,11 @@
 {
   "extends": "standard",
+
   "rules": {
-    "space-before-function-paren": "error",
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "camelcase": "off",
+
     "valid-jsdoc": "error",
     "require-jsdoc": [
       "error",
@@ -16,6 +20,7 @@
       }
     ]
   },
+
   "env": {
     "browser": true,
     "commonjs": true,
