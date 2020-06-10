@@ -131,3 +131,15 @@ function validate_visualize_inputs(){
 
     return true;
 }
+
+
+/**
+ * Opens the visualization in fullscreen mode.
+ * @param {String} button_selector The selector for the fullscreen button.
+ * @param {String} element_selector The selector for the element to make fullscreen.
+ * @returns {void}
+ */
+function initialize_visualize_fullscreen_button(
+    button_selector = "#fullscreen-button", element_selector = ".section-body"){
+    $(button_selector).click(() => $(element_selector)[0].requestFullscreen())
+}
