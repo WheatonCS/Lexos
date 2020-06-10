@@ -1100,7 +1100,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """
         return orig_text.translate(total_removal_map)
 
-    # -- 7. pattern_replacements ---------------------------------------------------
+    # -- 7. pattern_replacements --------------------------------------------
     def pattern_replacements_function(orig_text: str) -> str:
         """Replaces characters according to user input strings.
 
