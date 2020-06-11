@@ -49,7 +49,7 @@ $(function () {
   })
 
   // Initialize the upload buttons
-  initialize_upload_buttons(['lemmas', 'consolidations',
+  initialize_upload_buttons(['lemmas', 'patterns',
     'stop-words', 'special-characters'])
 
   // Initialize the tooltips
@@ -262,19 +262,17 @@ function initialize_tooltips () {
 
   // "Lemmas"
   create_tooltip('#lemmas-tooltip-button', `Upload or input a list of
-    lemmas (word replacements). Enter the words you want to replace
-    separated by comma. Then, add a colon and follow it with the
-    replacement word. Enter each set of replacements on a separate line.
-    For example, "cyng, kyng:king" will replace every occurrence of "cyng"
-    and "kyng" with "king".`)
+        lemmas (word replacements). Enter the words you want to replace
+        separated by comma. Then, add a colon and follow it with the
+        replacement word. Enter each set of replacements on a separate line.
+        For example, "cyng, kyng:king" will replace every occurrence of "cyng"
+        and "kyng" with "king".`)
 
-  // "Consolidations"
-  create_tooltip('#consolidations-tooltip-button', `Upload or input a list
-    of consolidations (character replacements). Enter the characters you
-    want to replace separated by comma. Then, add a colon and follow it
-    with the replacement character. Enter each replacement on a separate
-    line. For example, "a, b:c" will replace every occurrence of "a" and
-    "b" with "c".`)
+  // "Pattern Replacement"
+  create_tooltip('#patterns-tooltip-button', `Upload or input a list
+        of character patterns to replace. Enter the characters you
+        want to replace separated from their replacement values by "&gt;".
+        To use regex, prefix the pattern with "REGEX:"`)
 
   // "Stop and Keep Words"
   create_tooltip('#stop-words-tooltip-button', `Upload or input a list of

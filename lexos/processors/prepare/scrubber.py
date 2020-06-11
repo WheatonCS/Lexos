@@ -12,7 +12,8 @@ from werkzeug.datastructures import FileStorage
 from lexos.helpers import constants as constants, \
     general_functions as general_functions
 from lexos.helpers.error_messages import NOT_ONE_REPLACEMENT_COLON_MESSAGE, \
-    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFT_HAND_MESSAGE
+    REPLACEMENT_RIGHT_OPERAND_MESSAGE, REPLACEMENT_NO_LEFT_HAND_MESSAGE, \
+    UNESCAPED_GREATER_THAN_SIGN_MESSAGE
 from lexos.helpers.exceptions import LexosException
 
 
@@ -189,6 +190,64 @@ def replacement_handler(text: str,
 
         text = replace_with_dict(text, replacement_dict, edge1, edge2)
 
+    return text
+
+
+def pattern_replacement_handler(text: str,
+                                replacer_string: str) -> str:
+    """Handle pattern replacement lines found in scrub-alteration-upload files.
+
+    :param text: A unicode string with the whole text to be altered.
+    :param replacer_string: A formatted string input with newline-separated
+        "replacement lines", where each line is formatted to replace the
+        majority of the words with one word.
+    :returns: The input string with replacements made.
+    """
+
+    # Convert HTML character entities to Unicode if HTML is selected *and*
+    #  there are further entities entered in the form field
+    if request.form['special_characters_preset'] == 'HTML':
+        text = html.unescape(text)
+
+    # Remove spaces in replacement string for consistent format, then split the
+    # individual replacements to be made
+    # Not sure if this is needed
+    no_space_replacer = replacer_string.translate({ord(" "): None}).strip('\n')
+
+    # Handle excess blank lines in file, etc.
+    replacement_lines = [token for token in no_space_replacer.split('\n')
+                         if token != ""]
+
+    replacement_jobs = []
+    # Search for all examples of > not preceded by a backslash
+    pat_for_sep = re.compile(r'(?<!\\)>')
+    for replacement_line in replacement_lines:
+        # There is more than one potential separator, raise an error
+        if len(re.findall(pat_for_sep, replacement_line)) > 1:
+            raise LexosException(
+                UNESCAPED_GREATER_THAN_SIGN_MESSAGE + replacement_line)
+        # Otherwise, define a replacement tuple
+        else:
+            # Remove whitespace around the separator and then split
+            replacement_line = re.sub(r'\s+>\s+', '>', replacement_line)
+            pattern, substitution = re.split(pat_for_sep, replacement_line)
+            # Handle string internal greater than sign
+            substitution = substitution.replace('\\>', '>')
+            # Convert \s token to a space
+            substitution = substitution.replace('\\s', ' ')
+            # If the pattern has the prefix REGEX:, remove it,
+            # and set regex=True
+            if pattern.lower().startswith('regex:'):
+                regex = True
+                pattern = re.sub(r'^REGEX:', '', pattern, flags=re.IGNORECASE)
+            else:
+                regex = False
+            replacement_jobs.append((regex, pattern, substitution))
+            # Do the replacement
+            if regex is True:
+                text = re.sub(pattern, substitution, text)
+            else:
+                text = text.replace(pattern, substitution)
     return text
 
 
@@ -813,9 +872,9 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
         option text fields and files.
     """
 
-    file_strings = {'consolidations_file[]': '', 'lemmas_file[]': '',
+    file_strings = {'pattern_replacements_file[]': '', 'lemmas_file[]': '',
                     'special_characters_file[]': '', 'stop_words_file[]': '',
-                    'consolidations': '', 'lemmas': '',
+                    'pattern_replacements': '', 'lemmas': '',
                     'special_characters': '', 'stop_words': ''}
 
     for index, key in enumerate(sorted(opt_uploads)):
@@ -831,14 +890,15 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
             file_strings[key] = ""
 
     # Create an array of option strings:
-    # cons_file_string, lem_file_string, sc_file_string, sw_kw_file_string,
-    #     cons_manual, lem_manual, sc_manual, and sw_kw_manual
+    # pat_replacements_file_string, lem_file_string, sc_file_string,
+    # sw_kw_file_string, pattern_replacements_manual, lem_manual, sc_manual,
+    # and sw_kw_manual
 
-    all_options = [file_strings.get('consolidations_file[]'),
+    all_options = [file_strings.get('pattern_replacements_file[]'),
                    file_strings.get('lemmas_file[]'),
                    file_strings.get('special_characters_file[]'),
                    file_strings.get('stop_words_file[]'),
-                   request.form['consolidations'],
+                   request.form['pattern_replacements'],
                    request.form['lemmas'],
                    request.form['special_characters'],
                    request.form['stop_words']]
@@ -884,33 +944,34 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     storage_filenames = sorted(
         [constants.STOPWORD_FILENAME, constants.LEMMA_FILENAME,
-         constants.CONSOLIDATION_FILENAME, constants.SPECIAL_CHAR_FILENAME])
+         constants.PATTERN_REPLACEMENTS_FILENAME,
+         constants.SPECIAL_CHAR_FILENAME])
     option_strings = prepare_additional_options(
         opt_uploads, storage_options, storage_folder, storage_filenames)
 
-    # handle uploaded FILES: consolidations, lemmas, special characters,
+    # handle uploaded FILES: pattern_replacements, lemmas, special characters,
     # stop-keep words
-    cons_file_string = option_strings[0]
+    pat_replacements_file_string = option_strings[0]
     lem_file_string = option_strings[1]
     sc_file_string = option_strings[2]
     sw_kw_file_string = option_strings[3]
 
-    # handle manual entries: consolidations, lemmas, special characters,
+    # handle manual entries: pattern_replacements, lemmas, special characters,
     # stop-keep words
-    cons_manual = option_strings[4]
+    pattern_replacements_manual = option_strings[4]
     lem_manual = option_strings[5]
     sc_manual = option_strings[6]
     sw_kw_manual = option_strings[7]
 
     # Scrubbing order:
     #
-    # Note:  lemmas and consolidations do NOT work on tags; in short,
+    # Note:  lemmas and pattern_replacements do NOT work on tags; in short,
     #        these manipulations do not change inside any tags
     #
     # 0. Gutenberg
     # 1. lower
     #    (not applied in tags ever;
-    #    lemmas/consolidations/specialChars/stopKeepWords changed;
+    #    lemmas/pattern_replacements/specialChars/stopKeepWords changed;
     #    text not changed at this point)
     # 2. special characters
     # 3. tags - scrub tags
@@ -920,7 +981,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # 5. digits (text not changed at this point, not applied in tags ever)
     # 6. white space (text not changed at this point, not applied in tags ever,
     #    otherwise tag attributes will be messed up)
-    # 7. consolidations
+    # 7. pattern_replacements
     #    (text not changed at this point, not applied in tags ever)
     # 8. lemmatize (text not changed at this point, not applied in tags ever)
     # 9. stop words/keep words
@@ -929,7 +990,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     # apply:
     # 0. remove Gutenberg boiler plate (if any)
     # 1. lowercase
-    # 2. consolidation
+    # 2. pattern_replacements
     # 3. lemmatize
     # 4. stop words
     # 5. remove punctuation, digits, and whitespace without changing all the
@@ -956,13 +1017,13 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
         # since lower is ON, apply lowercase to other options
         # apply to contents of any uploaded files
-        cons_file_string = cons_file_string.lower()
+        pat_replacements_file_string = pat_replacements_file_string.lower()
         lem_file_string = lem_file_string.lower()
         sc_file_string = sc_file_string.lower()
         sw_kw_file_string = sw_kw_file_string.lower()
 
         # apply to contents manually entered
-        cons_manual = cons_manual.lower()
+        pattern_replacements_manual = pattern_replacements_manual.lower()
         lem_manual = lem_manual.lower()
         sc_manual = sc_manual.lower()
         sw_kw_manual = sw_kw_manual.lower()
@@ -1039,21 +1100,23 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
         """
         return orig_text.translate(total_removal_map)
 
-    # -- 7. consolidations ---------------------------------------------------
-    def consolidation_function(orig_text: str) -> str:
+    # -- 7. pattern_replacements --------------------------------------------
+    def pattern_replacements_function(orig_text: str) -> str:
         """Replaces characters according to user input strings.
 
         :param orig_text: A text string.
-        :return: The text with characters swapped according to cons_file_string
-            and cons_manual.
+        :return: The text with characters swapped according to
+            pat_replacements_file_string and pattern_replacements_manual.
         """
 
         replacer_string = handle_file_and_manual_strings(
-            file_string=cons_file_string, manual_string=cons_manual,
-            storage_folder=storage_folder, storage_filenames=storage_filenames,
+            file_string=pat_replacements_file_string,
+            manual_string=pattern_replacements_manual,
+            storage_folder=storage_folder,
+            storage_filenames=storage_filenames,
             storage_number=0)
-        text = replacement_handler(
-            text=orig_text, replacer_string=replacer_string, is_lemma=False)
+        text = pattern_replacement_handler(
+            text=orig_text, replacer_string=replacer_string)
         return text
 
     # -- 8. lemmatize --------------------------------------------------------
@@ -1106,7 +1169,7 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
 
     # apply all the functions and exclude tag
     functions = [to_lower_function,
-                 consolidation_function,
+                 pattern_replacements_function,
                  lemmatize_function,
                  total_removal_function,
                  stop_keep_words_function]

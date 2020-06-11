@@ -31,8 +31,9 @@ DEBUG_LOG_FILE_NAME = "debug.log"
 MUFI_3_FILENAME = "MUFI_3_DICT.tsv"
 MUFI_4_FILENAME = "MUFI_4_DICT.tsv"
 STOPWORD_FILENAME = "stopwords.p"
+# CONSOLIDATION_FILENAME = "consolidations.p"
+PATTERN_REPLACEMENTS_FILENAME = "pattern_replacements.p"
 LEMMA_FILENAME = "lemmas.p"
-CONSOLIDATION_FILENAME = "consolidations.p"
 SPECIAL_CHAR_FILENAME = "specialchars.p"
 DIGIT_MAP_FILENAME = "digitmap.p"
 PUNCTUATION_MAP_FILENAME = "punctuationmap.p"
@@ -84,14 +85,14 @@ SCRUBBOXES = (
 SCRUBINPUTS = (
     "stop_words",
     "special_characters",
-    "consolidations",
+    "pattern_replacements",
     "lemmas"
 )
 
 OPTUPLOADNAMES = (
     "stop_words_file[]",
     "lemmas_file[]",
-    "consolidations_file[]",
+    "pattern_replacements_file[]",
     "special_characters_file[]"
 )
 
@@ -209,13 +210,13 @@ DEFAULT_SCRUB_OPTIONS = {
     "stop_words": "",
     "stop_words_method": "Off",
     "special_characters": "",
-    "consolidations": "",
+    "pattern_replacements": "",
     "lemmas": "",
     "special_characters_preset": "None",
     "file_uploads": {
         "stop_words_file[]": "",
         "lemmas_file[]": "",
-        "consolidations_file[]": "",
+        "pattern_replacements[]": "",
         "special_characters_file[]": ""}}
 
 DEFAULT_CUT_OPTIONS = {

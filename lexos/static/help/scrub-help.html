@@ -75,7 +75,7 @@
         Converts all uppercase characters to lowercase characters so that the
         tokens "The" and "the" will be considered as the same term. In addition,
         all contents (whether in uploaded files or entered manually) for the
-        Stop Words/Keep Words, Lemmas, Consolidations, or Special Characters
+        Stop Words/Keep Words, Pattern Replacements, Lemmas, or Special Characters
         options will also have all uppercase characters changed to lowercase.
         Lowercase is not applied inside any <code>HTML</code>, <code>XML</code>,
         or <code>SGML</code> markup tags remaining in the text.
@@ -212,6 +212,44 @@
         <u>Lexos test suite</u></a>.</em></b>
     </h3>
 
+    <li><b>Pattern Replacements</b></li>
+    <h3 class="help-section-paragraph">
+        Replaces a list of character patterns with substitutions. This is
+        typically to consolidate symbols considered equivalent or to provide
+        highly specific cleaning functions.
+    </h3>
+    <h3 class="help-section-paragraph">
+        For example, in Old English, the character "eth" <em>ð</em>  is interchangeable
+        with the character "thorn" <em>þ</em>. The Pattern Replacements option allows you to
+        choose to merge the two using a single character.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Pattern replacements should be entered in the format: <pre>ð > þ</pre> Where you wish to
+        change all occurrences of <code>ð</code> to <code>þ</code>. Multiple
+        consolidations can be separated by commas or line breaks. All replacements will be
+        applied in the order in which they are listed.
+    </h3>
+    <h3 class="help-section-paragraph">
+        If you find that you need to replace the <code>&gt;</code> character itself, place a backslash
+        before it like <code>\></code>. To replace a character with a space, use <code>\s</code>. For
+        instance, the pattern <code>- > \s</code> will replace hyphens with spaces.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Lexos accepts regular expression (regex) patterns if the pattern begins with <code>REGEX:</code>.
+        For example, <code>REGEX:^c > k</code> will change <em>c</em> to <em>k</em> only at the beginning
+        of the text. If you are using regex capture groups, you can reference them with <code>\1</code>,
+        <code>\2</code>, etc. For example, the pattern <code>REGEX:(hi)-(ho) > \2-\1</code> will change
+        "hi-ho" to "ho-hi". A useful regular expressions tutorial can be found at
+        <a target="_blank" href="https://regexone.com/"><u>RegexOne</u></a>. Regex patterns can also be
+        tested at <a target="_blank" href="https://regex101.com/">Regex101</a>.
+    </h3>
+    <h3 class="help-section-paragraph">
+        Pattern replacements can be entered manually in the provided form field or
+        uploaded from a file. Note that the "Make Lowercase" option will be applied
+        to your list of characters if that option is also selected. To replace
+        entire words (terms) with other words, you should use the <b>Lemma</b> option.
+    </h3>
+
     <li><b>Lemmas</b></li>
     <h3 class="help-section-paragraph">
         Replaces all instances of terms in a list with a common replacement
@@ -232,28 +270,6 @@
         in separate lines as shown below:
         <pre>cyninges, cyningas: cyning <br>Beowulfes, Beowulfe: Beowulf</pre>
         You can manually enter a list of lemmas or upload your own.
-    </h3>
-
-    <li><b>Consolidations</b></li>
-    <h3 class="help-section-paragraph">
-        Replaces a list of characters with a different character. This is
-        typically to consolidate symbols considered equivalent.
-    </h3>
-    <h3 class="help-section-paragraph">
-        For example, in Old English, the character "eth" ð  is interchangeable
-        with the character "thorn" þ. The Consolidations option allows you to
-        choose to merge the two using a single character.
-    </h3>
-    <h3 class="help-section-paragraph">
-        Consolidations should be entered in the format: <pre>ð: þ</pre> Where you wish to
-        change all occurrences of <code>ð</code> to <code>þ</code> . Multiple
-        consolidations can be separated by commas or line breaks.
-    </h3>
-    <h3 class="help-section-paragraph">
-        Consolidations can be entered manually in the provided form field or
-        uploaded from a file. Note that the "Make Lowercase" option will be applied
-        to your list of characters if that option is also selected. To replace
-        entire words (terms) with other words, you should use the <b>Lemma</b> option.
     </h3>
 
     <li><b>Special Characters</b></li>
@@ -287,31 +303,3 @@
         Multiple transformation rules should be listed on separate lines.
     </h3>
 </ul>
-
-<!-- Replacing Patterns -->
-<h3 class="help-section-title">Replacing Patterns</h3>
-
-<h3 class="help-section-paragraph">
-    Sometimes it is necessary to replace a pattern rather than a precise string.
-    For instance, if a document contains multiple URLs like
-    <code>http://lexos.wheatoncollege.edu</code> and
-    <code>http://scalar.usc.edu/works/lexos/</code>, and you need to strip
-    these URLs, a method is required for matching all URLs without knowing
-    what they are in advance. One technique is to apply regular expression
-    (regex) pattern matching. Lexos uses regular expressions internally to
-    perform some of its scrubbing options, but, as of version 3.0, it does
-    not provide a way for users to supply their own regular expression
-    patterns when scrubbing. If users need to strip or replace patterns by
-    regular expressions, it will be necessary to perform that action using
-    a separate script or tool <em><u>prior to using Lexos</u></em>. A useful
-    regular expressions tutorial can be found at
-    <a target="_blank" href="https://regexone.com/"><u>RegexOne</u></a>.
-    Most modern text editors like
-    <a target="_blank" href="https://www.sublimetext.com/"><u>Sublime Text</u></a> and
-    <a target="_blank" href="http://www.barebones.com/products/TextWrangler/"><u>TextWrangler</u></a>
-    accept regular expressions in their search and replace functions, and
-    users may find them to be a convenient means of performing actions with
-    regular expressions. We hope to add a regular expression pattern matching
-    to Lexos in the future.
-</h3>
-
