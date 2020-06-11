@@ -1,6 +1,6 @@
 /* Popup */
 #manage-popup .popup {
-    min-width: 120rem;
+    min-width: 130rem;
     min-height: 50rem;
 }
 
@@ -32,6 +32,14 @@
 
 .sort-ascending, .sort-descending {
     background-color: var(--highlight-color-light);
+}
+
+#manage-table-head .manage-table-cell:hover {
+    background-color: var(--highlight-color-light);
+}
+
+.sort-ascending, .sort-descending {
+    margin-left: .3rem;
 }
 
 .manage-table-row {

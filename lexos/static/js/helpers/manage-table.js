@@ -133,7 +133,6 @@ function create_manage_table () {
     })
 }
 
-/**
  * Appends a row to the table.
  * @param {string} id The ID of the document.
  * @param {string} active Whether the document is active ("true" or "false").
