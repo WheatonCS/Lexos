@@ -149,9 +149,9 @@ class Table {
     if (display) {
       start_loading(`#${this.name}-table-content`,
         `#${this.name}-table-generate-button,
-          #${this.name}-table-download-button,
-          #${this.name}-table-previous-button,
-          #${this.name}-table-next-button`)
+            #${this.name}-table-download-button,
+            #${this.name}-table-previous-button,
+            #${this.name}-table-next-button`)
     }
 
     // Send the request for data
@@ -166,13 +166,6 @@ class Table {
 
       // If the request was successful...
       .done(function (response) {
-        // Check for errors
-        if (response.hasOwnProperty('error')) {
-          error(response.error)
-          add_text_overlay(`#${table.name}-table-content`, 'Loading Failed')
-          return
-        }
-
         // Update the CSV
         table.csv = response[`${table.name}-table-csv`]
 
@@ -196,10 +189,11 @@ class Table {
         }
       })
 
-      // If the request failed, display an error
+    // If the request failed, display an error
       .fail(function () {
         error('Failed to retrieve the table data.')
-        add_text_overlay(`#${table.name}-table-content`, 'Loading Failed')
+        add_text_overlay(`#${table.name}-table-content`,
+          'Loading Failed')
       })
   }
 
