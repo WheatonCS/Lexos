@@ -19,19 +19,19 @@
 }
 
 #manage-table-head .manage-table-cell {
-    cursor: pointer;
     display: flex;
     align-items: center;
     height: 100%;
     color: var(--highlight-color);
+    transition: background-color .2s;
 }
 
-#manage-table-head .manage-table-cell:hover {
-    background-color: var(--highlight-color-light);
+.sort-direction-icon {
+    margin-left: .3rem;
 }
 
 .sort-ascending, .sort-descending {
-    margin-left: .3rem;
+    background-color: var(--highlight-color-light);
 }
 
 .manage-table-row {
@@ -60,6 +60,7 @@
 }
 
 .manage-table-cell {
+    cursor: pointer;
     padding: 1rem;
     word-wrap: break-word;
     overflow: hidden;

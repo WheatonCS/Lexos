@@ -1,4 +1,7 @@
 var manage_table_documents = []
+var manage_table_column_header_elements
+var manage_table_sort_column = 'id'
+var manage_table_sort_ascending = true
 
 /**
  * Initializes the manage table.
@@ -11,12 +14,12 @@ function initialize_manage_table (parent_query, enable_context_menu = false) {
   $(`
     <!-- Manage table head -->
     <div id="manage-table-head">
-      <h3 id="active" class="manage-table-cell sortable">Active <i id="state-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 class="manage-table-cell sortable"># <i id="id-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 id="document" class="manage-table-cell sortable">Document <i id="label-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 id="class" class="manage-table-cell sortable">Class <i id="class-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 class="manage-table-cell sortable">Source <i id="source-sortdir" class="sort-ascending">▲</i></h3>
-      <h3 id="excerpt" class="manage-table-cell sortable">Excerpt <i id="preview-sortdir" class="sort-ascending">▲</i></h3>
+      <h3 id="state" class="manage-table-cell">Active</h3>
+      <h3 id="id" class="manage-table-cell sort-ascending">#<i class="sort-direction-icon">▲</i></h3>
+      <h3 id="label" class="manage-table-cell">Document</h3>
+      <h3 id="class" class="manage-table-cell">Class</h3>
+      <h3 id="source" class="manage-table-cell">Source</h3>
+      <h3 id="preview" class="manage-table-cell">Excerpt</h3>
       <a id="manage-table-download-button" class="disabled right-justified button" href="manage/download">Download</a>
       <span id="manage-table-tooltip-button" class="tooltip-button">?</span>
     </div>
@@ -39,21 +42,51 @@ function initialize_manage_table (parent_query, enable_context_menu = false) {
 
   // Initialize the tooltips
   initialize_manage_table_tooltips()
+
+  // Sort on column header click
+  manage_table_column_header_elements = $('#manage-table-head .manage-table-cell')
+  manage_table_column_header_elements.each(function () {
+    let element = $(this)
+    element.click(() => sort(element))
+  })
+}
+
+/**
+ * Sorts the table according to the clicked column header.
+ * @param {jQuery} element The column header element that was clicked.
+ * @returns {void}
+ */
+function sort (element) {
+  // Determine the sort order and column
+  manage_table_sort_ascending = !element.hasClass('sort-ascending')
+  manage_table_sort_column = element.attr('id')
+
+  // Remove any existing sort visuals
+  $('.sort-direction-icon').remove()
+  manage_table_column_header_elements.each(function () {
+    $(this).removeClass('sort-ascending sort-descending')
+  })
+
+  // Add the visual
+  element.append(`<i class="sort-direction-icon">${manage_table_sort_ascending ? '▲' : '▼'}</i>`)
+  element.addClass(`sort-${manage_table_sort_ascending ? 'ascending' : 'descending'}`)
+
+  // Recreate the table
+  create_manage_table()
 }
 
 /**
  * Creates the table displaying the uploaded documents.
- * @param {boolean} enable_context_menu Whether to enable the context menu.
  * @returns {void}
  */
-function create_manage_table (enable_context_menu = true) {
+function create_manage_table () {
   // Display the loading overlay on the table body
   start_loading('#manage-table-body')
 
   // Get the uploaded documents
   $.ajax({type: 'GET', url: 'manage/documents'})
 
-  // If the request is successful, create the table
+    // If the request is successful, create the table
     .done(function (json_response) {
       manage_table_documents = parse_json(json_response)
 
@@ -67,19 +100,33 @@ function create_manage_table (enable_context_menu = true) {
       // Otherwise, enable the "Download" button
       enable('#manage-table-download-button')
 
+      // Sort the documents
+      let key = manage_table_sort_column
+      let sorted_documents = manage_table_documents.slice(0).sort((a, b) => {
+        let a_value = a[key]
+        let b_value = b[key]
+
+        if (typeof a_value === 'string') {
+          a_value = a_value.toUpperCase()
+          b_value = b_value.toUpperCase()
+        }
+
+        let result = a_value < b_value ? -1 : 1
+        return manage_table_sort_ascending ? result : -result
+      })
+
       // Create the table content
-      for (let i = 0; i < manage_table_documents.length; ++i) {
-        const d = manage_table_documents[i]
-        append_manage_table_row(d['id'], i + 1, d['state'],
-          d['label'], d['class'], d['source'], d['preview'],
-          enable_context_menu)
+      for (let i = 0; i < sorted_documents.length; ++i) {
+        const d = sorted_documents[i]
+        append_manage_table_row(d['id'], d['state'],
+          d['label'], d['class'], d['source'], d['preview'])
       }
 
       // Remove the loading overlay and fade in the table content
       finish_loading('#manage-table-body', '#manage-table-body')
     })
 
-  // Otherwise, display an error
+    // Otherwise, display an error
     .fail(function () {
       error('Failed to fetch the documents.')
       add_text_overlay('#manage-table-body', 'Loading Failed')
@@ -87,100 +134,29 @@ function create_manage_table (enable_context_menu = true) {
 }
 
 /**
- * Sorts an array of objects. Used for sorting the table.
- * @param {string} key The name of the column to sort by.
- * @param {string} order The sort direction, 'asc' or 'desc'.
- * @returns {void}
- */
-function sortArray (key, order = 'asc') {
-  return function innerSort (a, b) {
-    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-      // property doesn't exist on either object
-      return 0
-    }
-    const varA = (typeof a[key] === 'string')
-      ? a[key].toUpperCase() : a[key]
-    const varB = (typeof b[key] === 'string')
-      ? b[key].toUpperCase() : b[key]
-    let comparison = 0
-    if (varA > varB) {
-      comparison = 1
-    } else if (varA < varB) {
-      comparison = -1
-    }
-    return (
-      (order === 'desc') ? (comparison * -1) : comparison
-    )
-  }
-}
-
-/**
- * Triggers table sorting when a sort arrow is clicked.
- */
-$(document).on('click', '.sortable', function () {
-  const col = $(this).find('i').attr('id')
-  sort_manage_table(manage_table_documents, col)
-})
-
-/**
- * Sorts the table displaying the uploaded documents.
- * @param {array} manage_table_documents The list of document row objects.
- * @param {string} col The id of the sort direction arrow.
- * @param {boolean} enable_context_menu Whether to enable the context menu.
- * @returns {void}
- */
-function sort_manage_table (manage_table_documents, col, enable_context_menu = true) {
-  // Make a copy of the array for sorting
-  const copyForSorting = [...manage_table_documents]
-  if ($('#' + col).hasClass('sort-descending')) {
-    copyForSorting.sort(sortArray(col.split('-')[0], 'desc'))
-    $('#' + col).removeClass('sort-descending').addClass('sort-ascending').text('▲')
-    var reverse = false
-  } else {
-    copyForSorting.sort(sortArray(col.split('-')[0]))
-    $('#' + col).removeClass('sort-ascending').addClass('sort-descending').text('▼')
-    reverse = true
-  }
-
-  // Create the new table content
-  $('#manage-table-body').empty()
-  for (let i = 0; i < manage_table_documents.length; ++i) {
-    const d = copyForSorting[i]
-    let num = i + 1
-    if (reverse === true) {
-      num = manage_table_documents.length - i
-    }
-    append_manage_table_row(d['id'], num, d['state'],
-      d['label'], d['class'], d['source'], d['preview'],
-      enable_context_menu)
-  }
-}
-
-/**
  * Appends a row to the table.
  * @param {string} id The ID of the document.
- * @param {number} row_number The number of the row.
  * @param {string} active Whether the document is active ("true" or "false").
  * @param {string} label The name of the document.
  * @param {string} class_name The class name of the document.
  * @param {string} source The source name of the document.
  * @param {string} preview The preview of the document.
- * @param {boolean} enable_context_menu Whether to enable the context menu.
  * @returns {void}
  */
-function append_manage_table_row (id, row_number, active, label, class_name,
-  source, preview, enable_context_menu) {
+function append_manage_table_row (id, active,
+  label, class_name, source, preview) {
   // Create a new row and append it to the "table-body" element
-  let row = $(`
-        <div id="${id}" class="manage-table-row">
-            <div class="manage-table-active-indicator"></div>
-            <h3 class="manage-table-cell">${row_number}</h3>
-            <h3 class="manage-table-cell"></h3>
-            <h3 class="manage-table-cell"></h3>
-            <h3 class="manage-table-cell"></h3>
-            <h3 class="manage-table-cell"></h3>
-        </div>
-    `).appendTo('#manage-table-body')
+  let row =
+  $(`
+    <div id="${id}" class="manage-table-row">
+      <div class="manage-table-active-indicator"></div>
+      <h3 class="manage-table-cell">${id + 1}</h3>
+      <h3 class="manage-table-cell"></h3>
+      <h3 class="manage-table-cell"></h3>
+      <h3 class="manage-table-cell"></h3>
+      <h3 class="manage-table-cell"></h3>
+    </div>
+  `).appendTo('#manage-table-body')
 
   // HTML-escape the text and add it to the row
   $(row.find('.manage-table-cell')[1]).text(label)
@@ -192,7 +168,7 @@ function append_manage_table_row (id, row_number, active, label, class_name,
   if (active) row.addClass('manage-table-selected-row')
 
   // Add the context menu callback to the row
-  if (enable_context_menu) { row.on('contextmenu', show_context_menu) }
+  row.on('contextmenu', show_context_menu)
 }
 
 /**
