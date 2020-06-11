@@ -7,21 +7,21 @@ function create_popup (title) {
   // Create the popup element
   let id = get_id(title)
   let popup_container_element = $(`
-        <div id="${id}-popup" class="popup-container">
-            <div class="popup">
-                <div class="vertical-splitter">
-                    <h3 class="title">${title}</h3>
-                    <h3 class="right-justified clickable-text popup-close-button">X</h3>
-                </div>
-                <div class="popup-content"></div>
-            </div>
-       </div>
+      <div id="${id}-popup" class="popup-container">
+        <div class="popup">
+          <div class="vertical-splitter">
+            <h3 class="title">${title}</h3>
+            <h3 class="right-justified button popup-close-button">Done</h3>
+          </div>
+          <div class="popup-content"></div>
+        </div>
+      </div>
     `).appendTo('form')
 
   // Fade in the popup
   fade_in(`#${id}-popup`)
 
-  // Close the popup when the "X" button or the background is clicked
+  // Close the popup when the "Done" button or the background is clicked
   $(`#${id}-popup .popup-close-button`).click(close_popup)
   popup_container_element.click(close_popup)
 
