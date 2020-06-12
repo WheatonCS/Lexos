@@ -5,19 +5,19 @@
 function initialize_analyze_tooltips () {
   // "Tokenize"
   create_tooltip('#tokenize-tooltip-button', `Divide the text into n-grams
-        (by tokens or characters) of the desired length.`)
+    (by tokens or characters) of the desired length.`)
 
   // "Normalize"
   create_tooltip('#normalize-tooltip-button', `Set how terms are counted.
-        Terms can be counted by raw (absolute) counts, by proportional
-        frequencies (to account for document length), or by TF-IDF weighted
-        counts.`)
+    Terms can be counted by raw (absolute) counts, by proportional
+    frequencies (to account for document length), or by TF-IDF weighted
+    counts.`)
 
   // "TF-IDF"
   create_tooltip('#tf-idf-tooltip-button', `Normalize the data for different
-        document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"
-        target="_blank">Term Frequency-Inverse Document Frequency</a>.
-        Lexos uses base e (natural log) as the default.`)
+    document lengths using <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"
+    target="_blank">Term Frequency-Inverse Document Frequency</a>.
+    Lexos uses base e (natural log) as the default.`)
 
   initialize_cull_tooltips()
 }
@@ -30,16 +30,16 @@ function initialize_analyze_tooltips () {
 function initialize_cull_tooltips (on_right_edge = true) {
   // "Cull"
   create_tooltip('#cull-tooltip-button', `Place statistical bounds on the
-        terms in the document-term matrix.`, on_right_edge)
+    terms in the document-term matrix.`, on_right_edge)
 
   // "Use the top X Words"
   create_tooltip('#most-frequent-words-tooltip-button', `Use only the most
-        frequently occurring terms in the document-term matrix.`, on_right_edge)
+    frequently occurring terms in the document-term matrix.`, on_right_edge)
 
   // "Must be in X documents"
   create_tooltip('#minimum-occurrences-tooltip-button', `Set the minimum
-        number of documents in which terms must occur to be included in the
-        document-term matrix.`, on_right_edge)
+    number of documents in which terms must occur to be included in the
+    document-term matrix.`, on_right_edge)
 }
 
 /**

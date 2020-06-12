@@ -2,10 +2,10 @@
 environment:
   # NodeJS version
   nodejs_version: "10"
-  # Run for both architecture for python 3.7.x
+  # Run for both architecture for python 3.8.x
   matrix:
-    - PYTHON: "C:\\Python37-x64"
-      PYTHON_VERSION: "3.7"
+    - PYTHON: "C:\\Python38-x64"
+      PYTHON_VERSION: "3.8"
       PYTHON_ARCH: "64"
 
 # Set python path.

@@ -26,9 +26,9 @@
     pointer-events: none;
     position: absolute;
     white-space: nowrap;
-    padding: 1rem;
+    padding: var(--small-gap);
     background: var(--foreground-color);
-    border: 1rem solid var(--highlight-color-light);
+    border: var(--small-gap) solid var(--highlight-color-light);
     opacity: 0;
-    transition: opacity .2s;
+    transition: opacity var(--fade-duration);
 }

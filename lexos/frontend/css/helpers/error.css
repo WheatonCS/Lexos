@@ -33,7 +33,7 @@
     right: 0;
     bottom: 0;
     height: 4rem;
-    padding: .55rem 2rem 0 2rem;
+    padding: .55rem var(--gap) 0 var(--gap);
     pointer-events: none;
     background-color: var(--error-color);
 }
