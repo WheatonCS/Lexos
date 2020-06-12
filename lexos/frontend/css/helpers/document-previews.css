@@ -2,7 +2,7 @@
 #document-previews-top {
     display: grid;
     grid-template-columns: 35% 65%;
-    margin: 1rem;
+    margin: var(--small-gap);
 }
 
 #document-previews-buttons {
@@ -23,8 +23,8 @@
 .preview {
     overflow-wrap: break-word;
     background-color: var(--foreground-color-alternate);
-    margin-bottom: 1rem;
-    padding: 1rem;
+    margin-bottom: var(--small-gap);
+    padding: var(--small-gap);
 }
 
 .preview:last-child {
@@ -34,5 +34,5 @@
 .preview-name {
     display: block;
     color: var(--highlight-color);
-    margin-bottom: 1rem;
+    margin-bottom: var(--small-gap);
 }

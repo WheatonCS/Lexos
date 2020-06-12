@@ -1,0 +1,11 @@
+:root
+{
+    /* Durations */
+    --gap: 2rem;
+    --small-gap: 1rem;
+    --line-size: .2rem;
+
+    /* Sizes */
+    --fade-duration: .2s;
+    --long-fade-duration: .5s;
+}

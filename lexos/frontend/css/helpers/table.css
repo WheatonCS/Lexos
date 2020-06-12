@@ -15,7 +15,7 @@
     align-content: center;
     justify-items: center;
     min-height: 3rem;
-    margin: 1rem;
+    margin: var(--small-gap);
 }
 
 .lexos-table-top :last-child,
@@ -30,11 +30,11 @@
 
 .lexos-table-top h3,
 .lexos-table-top label {
-    margin-right: 1rem;
+    margin-right: var(--small-gap);
 }
 
 .lexos-table .important-button {
-    margin-right: 1rem;
+    margin-right: var(--small-gap);
 }
 
 .lexos-table-title {
@@ -69,7 +69,7 @@
 .lexos-table-head-cell,
 .lexos-table-cell {
     min-height: 4rem;
-    padding: 1rem;
+    padding: var(--small-gap);
     word-break: break-all;
     overflow: hidden;
 }
@@ -80,7 +80,7 @@
 
 .selected-cell {
     background-color: var(--highlight-color-light);
-    transition: background-color .2s;
+    transition: background-color var(--fade-duration);
 }
 
 
@@ -101,7 +101,7 @@
 }
 
 .lexos-table-row {
-    margin-bottom: 1rem;
+    margin-bottom: var(--small-gap);
 }
 
 .lexos-table-row:last-child {
@@ -118,11 +118,11 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     height: 3rem;
-    margin: 1rem;
+    margin: var(--small-gap);
 }
 
 .lexos-table-bottom input {
-    margin: 0 1rem 0 1rem;
+    margin: 0 var(--small-gap) 0 var(--small-gap);
 }
 
 .lexos-table-page-number {
@@ -130,5 +130,5 @@
 }
 
 .lexos-table-navigation-buttons span {
-    margin-left: 1rem;
+    margin-left: var(--small-gap);
 }

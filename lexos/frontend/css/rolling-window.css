@@ -15,7 +15,7 @@ form {
 #settings-section {
     display: grid;
     grid-template-columns: .7fr 1fr .6fr 1fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 
@@ -23,7 +23,7 @@ form {
 #search-input-grid {
     display: grid;
     grid-auto-flow: column;
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 #search-input-grid input {

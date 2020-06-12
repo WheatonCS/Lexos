@@ -15,7 +15,7 @@
 }
 
 #manage-table-download-button {
-    margin: 1rem 1rem;
+    margin: var(--small-gap) var(--small-gap);
 }
 
 #manage-table-head .manage-table-cell {
@@ -23,7 +23,7 @@
     align-items: center;
     height: 100%;
     color: var(--highlight-color);
-    transition: background-color .2s;
+    transition: background-color var(--fade-duration);
 }
 
 .sort-direction-icon {
@@ -55,8 +55,8 @@
 
 .manage-table-row {
     background-color: var(--foreground-color-alternate);
-    transition: background-color .2s;
-    margin-bottom: 1rem;
+    transition: background-color var(--fade-duration);
+    margin-bottom: var(--small-gap);
 }
 
 .manage-table-selected-row {
@@ -69,31 +69,31 @@
 
 .manage-table-cell {
     cursor: pointer;
-    padding: 1rem;
+    padding: var(--small-gap);
     word-wrap: break-word;
     overflow: hidden;
     color: var(--text-color);
 }
 
 .manage-table-cell:last-child {
-    padding-right: 2rem;
+    padding-right: var(--gap);
 }
 
 .manage-table-active-indicator {
-    width: 2rem;
-    height: 2rem;
+    width: var(--gap);
+    height: var(--gap);
     border-radius: 50%;
-    margin: 1rem 1rem;
+    margin: var(--small-gap) var(--small-gap);
 }
 
 .manage-table-row > .manage-table-active-indicator {
-    border: .2rem solid var(--background-color);
+    border: var(--line-size) solid var(--background-color);
     background-color: var(--foreground-color-alternate);
-    transition: border .2s, background-color .2s;
+    transition: border var(--fade-duration), background-color var(--fade-duration);
 }
 
 .manage-table-selected-row > .manage-table-active-indicator {
-    border: .2rem solid var(--highlight-color);
+    border: var(--line-size) solid var(--highlight-color);
     background-color: var(--highlight-color);
 }
 
@@ -103,5 +103,5 @@
     position: absolute;
     pointer-events: none;
     background-color: var(--highlight-color);
-    transition: opacity .2s;
+    transition: opacity var(--fade-duration);
 }

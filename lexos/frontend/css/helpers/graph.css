@@ -1,7 +1,7 @@
 #save-graph-popup-content {
     display: grid;
     justify-items: center;
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 #popup-width-input,

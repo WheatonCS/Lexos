@@ -116,7 +116,7 @@ function add_text_overlay (query, text, fade_in = true) {
 
     // Fade in the text
     if (fade_in) {
-      text_element.css({'opacity': '0', 'transition': 'opacity .5s'})
+      text_element.css({'opacity': '0', 'transition': 'opacity var(--long-fade-duration)'})
       setTimeout(function () { text_element.css('opacity', '1') }, 100)
     }
   })
@@ -139,7 +139,7 @@ function start_loading (query, disable_query = '') {
     element.empty()
 
     let loading_overlay_element = $(`
-            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity .2s">
+            <div class="loading-overlay centerer" style="opacity: 0; transition: opacity var(--long-fade-duration)">
                 <h3>Loading</h3>
             </div>
         `).appendTo(element)
@@ -168,7 +168,7 @@ function finish_loading (loading_overlay_query,
   enable(enable_query)
 
   // Fade in each specified element
-  fade_in(show_query, '.5s')
+  fade_in(show_query, 'var(--long-fade-duration)')
 }
 
 /**

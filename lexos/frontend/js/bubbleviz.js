@@ -113,7 +113,7 @@ function create_bubbleviz (response) {
 
   // If the bubble is moused over, create a tooltip with information on
   // the bubble and highlight the bubble
-    .style('transition', 'opacity .2s')
+    .style('transition', 'opacity var(--fade-duration)')
     .on('mouseover', function () {
       d3.select(this.parentNode.childNodes[0]).style('opacity', '.7')
       tooltip.style('opacity', '1')
