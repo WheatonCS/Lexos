@@ -28,7 +28,7 @@ matrix:
       node_js: "10"
       # Install dependencies.
       install:
-        - cd ./lexos/static
+        - cd ./lexos/frontend
         - npm install
       script:
         # Following line is commented out, frontend refactor is not completed

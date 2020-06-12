@@ -1,0 +1,98 @@
+/* Popup */
+#manage-popup .popup {
+    min-width: 130rem;
+    min-height: 50rem;
+}
+
+
+/* Table */
+#manage-table-head {
+    display: grid;
+    grid-template-columns: 7% 7% 16% 14% 16% 21% 16% 3%;
+    align-items: center;
+    background-color: var(--foreground-color);
+    height: 5rem;
+}
+
+#manage-table-download-button {
+    margin: 1rem 1rem;
+}
+
+#manage-table-head .manage-table-cell {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: var(--highlight-color);
+}
+
+#manage-table-head .manage-table-cell:hover {
+    background-color: var(--highlight-color-light);
+}
+
+.sort-ascending, .sort-descending {
+    margin-left: .3rem;
+}
+
+.manage-table-row {
+    display: grid;
+    grid-template-columns: 7% 7% 16% 14% 16% 40%;
+}
+
+#manage-table-body {
+    height: calc(100% - 5rem);
+    overflow-y: auto;
+    overflow-y: overlay;
+}
+
+.manage-table-row {
+    background-color: var(--foreground-color-alternate);
+    transition: background-color .2s;
+    margin-bottom: 1rem;
+}
+
+.manage-table-selected-row {
+    background-color: var(--highlight-color-light);
+}
+
+.manage-table-row:last-child {
+    margin-bottom: 0;
+}
+
+.manage-table-cell {
+    padding: 1rem;
+    word-wrap: break-word;
+    overflow: hidden;
+    color: var(--text-color);
+}
+
+.manage-table-cell:last-child {
+    padding-right: 2rem;
+}
+
+.manage-table-active-indicator {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin: 1rem 1rem;
+}
+
+.manage-table-row > .manage-table-active-indicator {
+    border: .2rem solid var(--background-color);
+    background-color: var(--foreground-color-alternate);
+    transition: border .2s, background-color .2s;
+}
+
+.manage-table-selected-row > .manage-table-active-indicator {
+    border: .2rem solid var(--highlight-color);
+    background-color: var(--highlight-color);
+}
+
+
+/* Selection box */
+#manage-table-selection-box {
+    position: absolute;
+    pointer-events: none;
+    background-color: var(--highlight-color);
+    transition: opacity .2s;
+}

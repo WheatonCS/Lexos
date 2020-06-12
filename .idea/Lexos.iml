@@ -13,7 +13,7 @@
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/lexos/templates" />
+        <option value="$MODULE_DIR$/lexos/frontend/html" />
       </list>
     </option>
   </component>
