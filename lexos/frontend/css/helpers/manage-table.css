@@ -4,6 +4,14 @@
     min-height: 50rem;
 }
 
+.separator {
+    width: 100%;
+    border: 1px solid #555;
+    background-color:#555;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 
 /* Table */
 #manage-table-head {

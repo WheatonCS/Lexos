@@ -11,7 +11,7 @@
     grid-gap: 2rem;
     justify-items: center;
     margin-top: 2rem;
-    padding: 2rem;
+    padding: 1rem 2rem 2rem 2rem;
     background-color: var(--foreground-color);
 }
 

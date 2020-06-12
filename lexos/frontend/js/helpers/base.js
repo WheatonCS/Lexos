@@ -280,6 +280,8 @@ function toggle_help_section () {
   $(`
         <div id="help-section" class="invisible">
             <div id="help-section-navbar">
+                <span class="left-justified"></span>
+                <span id="close-help-button" class="right-justified tooltip-button">&times;</span>
                 <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
                 <span id="page-help-button" class="right-justified help-button">Page Help</span>
                 <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
@@ -313,6 +315,10 @@ function toggle_help_section () {
   $('#walkthrough-button').click(function () {
     close_help_section()
     start_walkthrough()
+  })
+
+  $('#close-help-button').click(function () {
+    close_help_section()
   })
 
   // Fade in the help section
