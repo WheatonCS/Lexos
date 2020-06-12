@@ -11,7 +11,7 @@
     grid-gap: var(--gap);
     justify-items: center;
     margin-top: var(--gap);
-    padding: var(--gap);
+    padding: var(--small-gap) var(--gap) var(--gap) var(--gap);
     background-color: var(--foreground-color);
 }
 

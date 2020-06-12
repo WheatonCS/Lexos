@@ -279,14 +279,16 @@ function toggle_help_section () {
 
   $(`
     <div id="help-section" class="invisible">
-      <div id="help-section-navbar">
-        <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
-        <span id="page-help-button" class="right-justified help-button">Page Help</span>
-        <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
-        <span id="about-button" class="right-justified help-button">About Lexos</span>
+        <div id="help-section-navbar">
+          <span class="left-justified"></span>
+          <span id="close-help-button" class="right-justified tooltip-button">&times;</span>
+          <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
+          <span id="page-help-button" class="right-justified help-button">Page Help</span>
+          <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
+          <span id="about-button" class="right-justified help-button">About Lexos</span>
+        </div>
+        <div id="help-section-content"></div>
       </div>
-      <div id="help-section-content"></div>
-    </div>
     `).prependTo(main_grid)
 
   $('#help-button').addClass('highlight')
@@ -313,6 +315,10 @@ function toggle_help_section () {
   $('#walkthrough-button').click(function () {
     close_help_section()
     start_walkthrough()
+  })
+
+  $('#close-help-button').click(function () {
+    close_help_section()
   })
 
   // Fade in the help section
