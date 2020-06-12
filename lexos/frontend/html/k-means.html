@@ -5,92 +5,101 @@
 <!-- Head -->
 {% block page_head %}
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css"/>
+<!-- Page Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css" />
 
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="frontend/js/k-means.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/k-means.css"/>
+<!-- Page JS and CSS -->
+<script type="text/javascript" src="frontend/js/k-means.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/k-means.css" />
 {% endblock %}
 
 
 <!-- Options -->
 {% block options %}
 
-    <!-- Options -->
+<!-- Options -->
+<fieldset id="k-means-options-fieldset">
     <div id="k-means-options-section" class="section">
-        <h3 class="section-top title">Options</h3>
+        <legend class="section-top title">Options</legend>
 
         <div class="section-body">
 
             <!-- Clusters -->
-            <h3>Clusters</h3>
+            <label for="clusters-input">Clusters</label>
             <input id="clusters-input" name="clusters" value="1" type="text" spellcheck="false" autocomplete="off">
             <span id="clusters-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Voronoi -->
-            <label><input name="visualization_method" value="Voronoi" type="radio" checked><span></span>Voronoi</label>
+            <label for="voronoi"><input id="voronoi" name="visualization_method" value="Voronoi" type="radio" checked><span></span>Voronoi</label>
             <span id="visualization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- 2D Scatter -->
-            <label><input name="visualization_method" value="2D Scatter" type="radio"><span></span>2D Scatter</label><br>
+            <label for="2d"><input id="2d" name="visualization_method" value="2D Scatter" type="radio"><span></span>2D
+                Scatter</label><br>
 
             <!-- 3D Scatter -->
-            <label><input name="visualization_method" value="3D Scatter" type="radio"><span></span>3D Scatter</label>
+            <label for="3d"><input id="3d" name="visualization_method" value="3D Scatter" type="radio"><span></span>3D Scatter</label>
         </div>
     </div>
+</fieldset>
 
-    <!-- Advanced -->
+<!-- Advanced -->
+<fieldset id="advanced-options-fieldset">
     <div id="advanced-options-section" class="section">
-        <h3 class="section-top title">Advanced</h3>
+        <legend class="section-top title">Advanced</legend>
         <div class="section-body">
 
             <!-- K-Means -->
-            <label><input name="initialization_method" value="K-Means++" type="radio" checked><span></span>K-Means++</label>
+            <label><input name="initialization_method" value="K-Means++" type="radio"
+                    checked><span></span>K-Means++</label>
 
             <!-- Random -->
             <label><input name="initialization_method" value="Random" type="radio"><span></span>Random</label>
             <span id="initialization-method-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Maximum Iterations -->
-            <h3>Maximum Iterations</h3>
-            <input id="maximum-iterations-input" name="maximum_iterations" value="300" type="text" spellcheck="false" autocomplete="off"><br>
+            <label for="maximum-iterations-input">Maximum Iterations</label>
+            <input id="maximum-iterations-input" name="maximum_iterations" value="300" type="text" spellcheck="false"
+                autocomplete="off"><br>
 
             <!-- Different Centriods -->
-            <h3>Different Centroids</h3>
-            <input id="different-centroids-input" name="different_centroids" value="10" type="text" spellcheck="false" autocomplete="off">
+            <label for="different-centroids-input">Different Centroids</label>
+            <input id="different-centroids-input" name="different_centroids" value="10" type="text" spellcheck="false"
+                autocomplete="off">
             <span id="different-centroids-tooltip-button" class="tooltip-button">?</span><br>
 
             <!-- Relative Tolerance -->
-            <h3>Relative Tolerance</h3>
-            <input id="relative-tolerance-input" name="relative_tolerance" value="0.0001" type="text" spellcheck="false" autocomplete="off">
+            <label for="relative-tolerance-input">Relative Tolerance</label>
+            <input id="relative-tolerance-input" name="relative_tolerance" value="0.0001" type="text" spellcheck="false"
+                autocomplete="off">
             <span id="relative-tolerance-tooltip-button" class="tooltip-button">?</span>
         </div>
     </div>
+</fieldset>
 {% endblock %}
 
 
 <!-- Results -->
 {% block results %}
 
-    <!-- K-means -->
-    <div class="section">
+<!-- K-means -->
+<div class="section">
 
-        <!-- Top -->
-        <div class="vertical-splitter section-top">
-            <h3 class="title">K-Means</h3>
+    <!-- Top -->
+    <div class="vertical-splitter section-top">
+        <h3 class="title">K-Means</h3>
 
-            <div id="k-means-buttons" class="right-justified">
-                <span id="generate-button" class="disabled important-button">Generate</span>
-                <span id="png-button" class="disabled button">PNG</span>
-                <span id="svg-button" class="disabled button">SVG</span>
-                <span id="csv-button" class="disabled button">CSV</span>
-                <span id="fullscreen-button" class="disabled button">Fullscreen</span>
-            </div>
+        <div id="k-means-buttons" class="right-justified">
+            <span id="generate-button" class="disabled important-button">Generate</span>
+            <span id="png-button" class="disabled button">PNG</span>
+            <span id="svg-button" class="disabled button">SVG</span>
+            <span id="csv-button" class="disabled button">CSV</span>
+            <span id="fullscreen-button" class="disabled button">Fullscreen</span>
         </div>
-
-        <!-- Graph -->
-        <div id="graph-container" class="section-body"></div>
     </div>
+
+    <!-- Graph -->
+    <div id="graph-container" class="section-body"></div>
+</div>
 {% endblock %}

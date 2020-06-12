@@ -12,6 +12,14 @@ form {
     min-height: 60rem;
 }
 
+#scrubbing-options-section,
+#lemmas-section,
+#consolidations-section,
+#stop-words-section,
+#special-characters-section {
+    height: 100%;
+}
+
 
 /* Columns */
 .column {

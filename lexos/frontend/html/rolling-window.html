@@ -5,109 +5,123 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Plotly -->
-    <script src="frontend/node_modules/plotly.js-dist/plotly.js"></script>
+<!-- Plotly -->
+<script src="frontend/node_modules/plotly.js-dist/plotly.js"></script>
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css"/>
+<!-- Page Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css" />
 
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="frontend/js/rolling-window.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/rolling-window.css"/>
+<!-- Page JS and CSS -->
+<script type="text/javascript" src="frontend/js/rolling-window.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/rolling-window.css" />
 {% endblock %}
 
 
 <!-- Content -->
 {% block content %}
 
-    <!-- Settings -->
-    <div id="settings-section">
+<!-- Settings -->
+<div id="settings-section">
 
-        <!-- Calculation type -->
+    <!-- Calculation type -->
+    <fieldset id="calculation-type-fieldset">
         <div id="calculation-type-section" class="section">
-            <h3 class="section-top title">Calculation Type</h3>
+            <legend class="section-top title">Calculation Type</legend>
             <div class="section-body">
 
-                <label><input name="calculation_type" value="Rolling Average" type="radio" checked><span></span>Rolling Average</label>
+                <label><input name="calculation_type" value="Rolling Average" type="radio" checked><span></span>Rolling
+                    Average</label>
                 <span id="rolling-average-tooltip-button" class="tooltip-button">?</span>
                 <br>
 
-                <label><input name="calculation_type" value="Rolling Ratio" type="radio"><span></span>Rolling Ratio</label>
+                <label><input name="calculation_type" value="Rolling Ratio" type="radio"><span></span>Rolling
+                    Ratio</label>
                 <span id="rolling-ratio-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Search terms -->
+    <!-- Search terms -->
+    <fieldset id="search-terms-fieldset">
         <div id="search-terms-section" class="section">
 
             <div class="vertical-splitter section-top">
-                <h3 class="title">Search Terms</h3>
+                <legend class="title">Search Terms</legend>
                 <span id="search-terms-input-tooltip-button" class="right-justified tooltip-button">?</span><br>
             </div>
 
 
             <div class="section-body">
                 <div id="search-input-grid">
-                    <label id="search-terms-input"><input name="search_term" type="text" spellcheck="false" autocomplete="off"></label>
-                    <label id="search-terms-input-denominator"><input name="search_term_denominator" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label id="search-terms-input" for="search_term"><span class="hidden">Search Terms</span><input id="search_term" name="search_term" type="text" spellcheck="false"
+                            autocomplete="off"></label>
+                    <label id="search-terms-input-denominator" for="search_term_denominator"><span class="hidden">Search Term Denominator</span><input id="search_term_denominator" name="search_term_denominator" type="text"
+                            spellcheck="false" autocomplete="off"><span></span></label>
                 </div>
 
-                <label><input name="input_type" value="Words" type="radio" checked><span></span>Words</label><br>
+                <label for="words"><input id="words" name="input_type" value="Words" type="radio" checked><span></span>Words</label><br>
 
-                <label><input name="input_type" value="Strings" type="radio"><span></span>Strings</label>
+                <label for="strings"><input id="strings" name="input_type" value="Strings" type="radio"><span></span>Strings</label>
                 <span id="strings-tooltip-button" class="tooltip-button">?</span><br>
 
-                <label><input name="input_type" value="Regex" type="radio"><span></span>Regex</label>
+                <label for="regex"><input id="regex" name="input_type" value="Regex" type="radio"><span></span>Regex</label>
                 <span id="regex-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Window -->
+    <!-- Window -->
+    <fieldset id="window-section-fieldset">
         <div id="window-section" class="section">
-            <h3 class="section-top title">Window</h3>
+            <legend class="section-top title">Window</legend>
             <div class="section-body">
 
-                <label><input id="window-size-input" name="window_size" type="text" spellcheck="false" autocomplete="off"></label>
+                <label for="window-size-input" class="hidden">Window Size Input</label><input id="window-size-input" name="window_size" type="text" spellcheck="false"
+                        autocomplete="off">
                 <span id="window-size-tooltip-button" class="tooltip-button">?</span><br>
 
-                <label><input name="window_type" value="Words" type="radio" checked><span></span>Words</label><br>
-                <label><input name="window_type" value="Characters" type="radio"><span></span>Characters</label><br>
-                <label><input name="window_type" value="Lines" type="radio"><span></span>Lines</label>
+                <label for="window-words"><input id="window-words" name="window_type" value="Words" type="radio" checked><span></span>Words</label><br>
+                <label for="characters"><input id="characters" name="window_type" value="Characters" type="radio"><span></span>Characters</label><br>
+                <label for="lines"><input id="lines" name="window_type" value="Lines" type="radio"><span></span>Lines</label>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Display -->
+    <!-- Display -->
+    <fieldset id="display-section-fieldset">
         <div id="display-section" class="section">
-            <h3 class="section-top title">Display</h3>
+            <legend class="section-top title">Display</legend>
             <div class="section-body">
 
-                <label id="display-section-input-label">
-                    <input id="milestone-checkbox" name="enable_milestone" type="checkbox">
-                    <span></span>Milestone<input id="milestone-input" name="milestone" type="text" spellcheck="false" autocomplete="off">
-                </label>
+                <label id="display-section-input-label" for="milestone-checkbox" class="hidden">Milestone Checkbox</label>
+                <input id="milestone-checkbox" name="enable_milestone" type="checkbox">
+                <label id="display-section-input-label" for="milestone-input"><span>Milestone</span></label>
+                    <input id="milestone-input" name="milestone" type="text" spellcheck="false"
+                        autocomplete="off">
                 <span id="milestone-tooltip-button" class="tooltip-button">?</span>
 
                 <label><input name="show_points" type="checkbox"><span></span>Show Individual Points</label><br>
                 <label><input name="black_and_white" type="checkbox"><span></span>Black and White</label>
             </div>
         </div>
-    </div>
+    </fieldset>
+</div>
 
-    <!-- Rolling Window -->
-    <div id="rolling-window-display-section" class="section">
+<!-- Rolling Window -->
+<div id="rolling-window-display-section" class="section">
 
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Rolling Window</h3>
-            <div id="rolling-window-buttons" class="right-justified">
-                <span id="generate-button" class="disabled important-button">Generate</span>
-                <span id="png-button" class="disabled button">PNG</span>
-                <span id="svg-button" class="disabled button">SVG</span>
-                <span id="csv-button" class="disabled button">CSV</span>
-                <span id="fullscreen-button" class="disabled button">Fullscreen</span>
-            </div>
+    <div class="vertical-splitter section-top">
+        <h3 class="title">Rolling Window</h3>
+        <div id="rolling-window-buttons" class="right-justified">
+            <span id="generate-button" class="disabled important-button">Generate</span>
+            <span id="png-button" class="disabled button">PNG</span>
+            <span id="svg-button" class="disabled button">SVG</span>
+            <span id="csv-button" class="disabled button">CSV</span>
+            <span id="fullscreen-button" class="disabled button">Fullscreen</span>
         </div>
-
-        <div id="graph-container" class="section-body"></div>
     </div>
+
+    <div id="graph-container" class="section-body"></div>
+</div>
 {% endblock %}

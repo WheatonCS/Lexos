@@ -74,7 +74,7 @@ function create_consensus_tree () {
       // Create the consensus tree
       $(`
           <div id="consensus-tree" class="hidden">
-              <img src="${image_data}">
+              <img src="${image_data}" alt="Bootstrap Consensus Tree">
           </div>
       `).appendTo('#consensus-tree-body')
 

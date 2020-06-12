@@ -5,24 +5,25 @@
 <!-- Head -->
 {% block page_head %}
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css"/>
-    <script type="text/javascript" src="frontend/js/helpers/tree-options.js"></script>
+<!-- Page Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css" />
+<script type="text/javascript" src="frontend/js/helpers/tree-options.js"></script>
 
 
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="frontend/js/dendrogram.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/dendrogram.css"/>
+<!-- Page JS and CSS -->
+<script type="text/javascript" src="frontend/js/dendrogram.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/dendrogram.css" />
 {% endblock %}
 
 
 <!-- Options -->
 {% block options %}
 
-    <!-- Dendrogram options -->
+<!-- Dendrogram options -->
+<fieldset id="dendrogram-options-fieldset">
     <div id="dendrogram-options-section" class="section">
-        <h3 class="section-top title">Options</h3>
+        <legend class="section-top title">Options</legend>
 
         <div class="section-body">
 
@@ -43,32 +44,33 @@
             <span id="orientation-button" class="button">Left</span>
         </div>
     </div>
+</fieldset>
 {% endblock %}
 
 
 <!-- Results -->
 {% block results %}
 
-    <!-- Dendrogram -->
-    <div class="section">
-        <div class="vertical-splitter section-top">
-            <h3 class="title">Dendrogram</h3>
-            <div id="dendrogram-buttons" class="right-justified">
-                <span id="generate-button" class="disabled important-button">Generate</span>
-                <span id="png-button" class="disabled button">PNG</span>
-                <span id="svg-button" class="disabled button">SVG</span>
-                <span id="fullscreen-button" class="disabled button">Fullscreen</span>
-            </div>
+<!-- Dendrogram -->
+<div class="section">
+    <div class="vertical-splitter section-top">
+        <h3 class="title">Dendrogram</h3>
+        <div id="dendrogram-buttons" class="right-justified">
+            <span id="generate-button" class="disabled important-button">Generate</span>
+            <span id="png-button" class="disabled button">PNG</span>
+            <span id="svg-button" class="disabled button">SVG</span>
+            <span id="fullscreen-button" class="disabled button">Fullscreen</span>
         </div>
-
-        <div id="graph-container" class="section-body"></div>
     </div>
+
+    <div id="graph-container" class="section-body"></div>
+</div>
 {% endblock %}
 
 
 <!-- Hidden elements -->
 {% block hidden_elements %}
-    <input id="distance-metric-input" name="distance_metric" value="euclidean" type="hidden">
-    <input id="linkage-method-input" name="linkage_method" value="Average" type="hidden">
-    <input id="orientation-input" name="orientation" value="Left" type="hidden">
+<input id="distance-metric-input" name="distance_metric" value="euclidean" type="hidden">
+<input id="linkage-method-input" name="linkage_method" value="Average" type="hidden">
+<input id="orientation-input" name="orientation" value="Left" type="hidden">
 {% endblock %}

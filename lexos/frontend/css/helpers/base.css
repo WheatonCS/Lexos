@@ -31,7 +31,7 @@ h1 {
     margin: 0 0 .5rem 0;
 }
 
-h3, a, ul, label, textarea, input[type="text"], span {
+h2, h3, a, ul, label, legend, textarea, input[type="text"], span {
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
     font-size: 1.6rem;
@@ -233,7 +233,7 @@ form {
 }
 
 #navbar-right > a,
-#navbar-right > h3 {
+#navbar-right > h2 {
     margin: 1rem;
 }
 
@@ -313,6 +313,13 @@ footer {
     height: calc(100% - 5rem);
 }
 
+
+/* Fieldset */
+fieldset {
+    border: None;
+    padding: 0;
+    margin: 0;
+}
 
 /* Text input */
 input[type="text"] {

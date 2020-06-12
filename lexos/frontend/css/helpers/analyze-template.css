@@ -12,6 +12,10 @@ form {
     grid-gap: 2rem;
 }
 
+#tokenize-section, #normalize-section, #cull-section {
+    height: 100%;
+}
+
 #cull-section input[type="text"] {
     margin-right: .5rem;
 }
