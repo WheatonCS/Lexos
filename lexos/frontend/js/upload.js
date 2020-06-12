@@ -304,7 +304,8 @@ function walkthrough () {
   intro.setOptions({steps: [
     {
       element: '#lexos-dragon',
-      intro: `Welcome to Lexos!`,
+      intro: `Welcome to Lexos!<br><br>For a high contrast color scheme, click the dragon logo at the top left and
+      select the Grey Light theme.`,
       position: 'right'
     },
     {

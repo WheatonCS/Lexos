@@ -21,7 +21,7 @@
         <div id="upload-section" class="section">
 
             <div class="vertical-splitter section-top">
-                <h3 class="title">Upload</h3>
+                <h3 id="upload-title" class="title">Upload</h3>
                 <span id="upload-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
 
@@ -38,7 +38,7 @@
         <div id="scrape-section" class="section">
 
             <div class="vertical-splitter section-top">
-                <h3 class="title">Scrape</h3>
+                <h3 id="scrape-title" class="title">Scrape</h3>
                 <div class="right-justified">
                     <span id="scrape-button" class="button">Scrape</span>
                     <span id="scrape-tooltip-button" class="tooltip-button">?</span>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="borderless-section-body">
-                <textarea id="scrape-input" spellcheck="false" placeholder="Enter URLs to scrape here."></textarea>
+                <textarea id="scrape-input" spellcheck="false" placeholder="Enter URLs to scrape here." aria-labelledby="scrape-title"></textarea>
             </div>
         </div>
     </div>
@@ -66,5 +66,5 @@
     </div>
 
     <!-- Hidden elements -->
-    <input type="file" id="file-select-input" style="display:none" multiple/>
+    <input type="file" id="file-select-input" style="display:none" aria-labelledby="upload-title" multiple/>
 {% endblock %}

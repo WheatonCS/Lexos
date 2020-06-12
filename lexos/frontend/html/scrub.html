@@ -64,7 +64,7 @@
         <div id="lemmas-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
-                <h3 class="title">Lemmas</h3>
+                <h3 id="lemmas-title" class="title">Lemmas</h3>
 
                 <div class="right-justified">
                     <span id="lemmas-upload-button" class="button">Upload</span>
@@ -75,7 +75,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="lemmas" spellcheck="false" placeholder="Enter lemmas here."></textarea></label>
+                <textarea name="lemmas" spellcheck="false" placeholder="Enter lemmas here." aria-labelledby="lemmas-title"></textarea>
             </div>
         </div>
 
@@ -83,7 +83,7 @@
         <div id="consolidations-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
-                <h3 class="title">Consolidations</h3>
+                <h3 id="consolidations-title" class="title">Consolidations</h3>
 
                 <div class="right-justified">
                     <span id="consolidations-upload-button" class="button">Upload</span>
@@ -94,7 +94,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="consolidations" spellcheck="false" placeholder="Enter consolidations here."></textarea></label>
+                <textarea name="consolidations" spellcheck="false" placeholder="Enter consolidations here." aria-labelledby="consolidations-title"></textarea>
             </div>
         </div>
     </div>
@@ -107,7 +107,7 @@
 
             <div class="vertical-splitter scrub-section-top">
 
-                <h3 class="title">Stop/Keep Words</h3>
+                <h3 id="stopwords-title" class="title">Stop/Keep Words</h3>
 
                 <div class="right-justified">
                     <span id="stop-words-upload-button" class="button">Upload</span>
@@ -124,7 +124,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="stop_words" spellcheck="false" placeholder="Enter stop words and keep words here."></textarea></label>
+                <textarea name="stop_words" spellcheck="false" placeholder="Enter stop words and keep words here." aria-labelledby="stopwords-title"></textarea>
             </div>
         </div>
 
@@ -132,7 +132,7 @@
         <div id="special-characters-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
-                <h3 class="title">Special Characters</h3>
+                <h3 id="sc-title" class="title">Special Characters</h3>
 
                 <div class="right-justified">
                     <span id="special-characters-upload-button" class="button">Upload</span>
@@ -155,7 +155,7 @@
             </div>
 
             <div class="scrub-section-body">
-                <label><textarea name="special_characters" spellcheck="false" placeholder="Enter special characters here."></textarea></label>
+                <textarea name="special_characters" spellcheck="false" placeholder="Enter special characters here." aria-labelledby="sc-title"></textarea>
             </div>
         </div>
     </div>
@@ -178,9 +178,10 @@
     </div>
 
     <!-- Hidden elements -->
-    <input id="stop-words-file-input" name="stop_words_file[]" type="file" class="hidden">
-    <input id="lemmas-file-input" name="lemmas_file[]" type="file" class="hidden">
-    <input id="consolidations-file-input" name="consolidations_file[]" type="file" class="hidden">
-    <input id="special-characters-file-input" name="special_characters_file[]" type="file" class="hidden">
+    <input id="stop-words-file-input" name="stop_words_file[]" type="file" class="hidden" title="stopwords file input">
+    <input id="lemmas-file-input" name="lemmas_file[]" type="file" class="hidden" title="lemmas file input">
+    <input id="consolidations-file-input" name="consolidations_file[]" type="file" class="hidden" title="consolidations file input">
+    <input id="special-characters-file-input" name="special_characters_file[]" type="file" class="hidden" title="special characters file input">
+
 
 {% endblock %}
