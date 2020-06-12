@@ -294,20 +294,20 @@ function toggle_help_section () {
   help_visible = true
   let help_content_element = $('#help-section-content')
   help_content_element.load(
-    '/static/help' + window.location.pathname + '-help.html')
+    'frontend/help' + window.location.pathname + '-help.html')
 
   // Initialize the help section's buttons
   $('#glossary-button').click(function () {
-    help_content_element.load('/static/help/glossary-help.html')
+    help_content_element.load('frontend/help/glossary-help.html')
   })
 
   $('#about-button').click(function () {
-    help_content_element.load('/static/help/about-help.html')
+    help_content_element.load('frontend/help/about-help.html')
   })
 
   $('#page-help-button').click(function () {
     help_content_element.load(
-      '/static/help' + window.location.pathname + '-help.html')
+      'frontend/help' + window.location.pathname + '-help.html')
   })
 
   $('#walkthrough-button').click(function () {

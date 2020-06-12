@@ -22,7 +22,7 @@ install:
   # Set up node js checks.
   - choco install nodejs
   # use npm to install all the dependencies.
-  - cd .\lexos\static
+  - cd .\lexos\frontend
   - npm install
   - cd ..\..
 
@@ -41,7 +41,7 @@ test_script:
   - pydocstyle lexos\receivers\
 
   # Test for javascript code style
-  - cd .\lexos\static
+  - cd .\lexos\frontend
 
   # Following line is commented out, frontend refactor is not completed
   # - ./node_modules/.bin/eslint ./js/script_*.js

@@ -1,6 +1,6 @@
 # Library File Maintenance Guide
 
-Template files now load external libraries from `static/node_modules`. These libraries are maintained using `npm`. A record of the installation commands used is maintained below.
+Template files now load external libraries from `frontend/node_modules`. These libraries are maintained using `npm`. A record of the installation commands used is maintained below.
 
 As long as the `package.json` and `package-lock.json` files are unchanged, the entire sequence can be achieved by running `npm install`.
 
@@ -27,8 +27,8 @@ As long as the `package.json` and `package-lock.json` files are unchanged, the e
 ### Notes:
 
 - Some DataTables features may need additional installation, but I have not found anything that doesn't work so far.
-- The `pdfmake` and `jszip` functions require the external `jszip` and `pdfmake` libraries. When I installed these with `npm`, they placed scores of folders in the `node_modules` folder, making it incredible complex. It may be better to load the main javascripts from the `static/js folder`. That said, as far as I know, we are not currently using these functions, so no action is needed at this time.
-- `jquery.dataTables.areaselect.js` and `natural.js` cannot be loaded from `npm`, so they are placed in the `static/js` folder.
+- The `pdfmake` and `jszip` functions require the external `jszip` and `pdfmake` libraries. When I installed these with `npm`, they placed scores of folders in the `node_modules` folder, making it incredible complex. It may be better to load the main javascripts from the `frontend/js folder`. That said, as far as I know, we are not currently using these functions, so no action is needed at this time.
+- `jquery.dataTables.areaselect.js` and `natural.js` cannot be loaded from `npm`, so they are placed in the `frontend/js` folder.
 
 ## For `manage.html`
 
@@ -48,7 +48,7 @@ As long as the `package.json` and `package-lock.json` files are unchanged, the e
 
 Some packages could not be installed using `npm`. These are listed below with implementation notes:
 
-1. The DataTables extensions `jquery.dataTables.areaselect.js` and `natural.js` are placed in the `static/js` folder.
-in the `static/js` folder.
-3. The Lato and Junicode fonts are placed in the `static/fonts` folder. Currently, these are not accessed; the fonts are loaded from the web. However, we should really make loading from local files an alternative for local mode. I have not done this because I cannot make the downloaded version of Lato look exactly like the version downloaded from Google fonts.
+1. The DataTables extensions `jquery.dataTables.areaselect.js` and `natural.js` are placed in the `frontend/js` folder.
+in the `frontend/js` folder.
+3. The Lato and Junicode fonts are placed in the `frontend/fonts` folder. Currently, these are not accessed; the fonts are loaded from the web. However, we should really make loading from local files an alternative for local mode. I have not done this because I cannot make the downloaded version of Lato look exactly like the version downloaded from Google fonts.
 

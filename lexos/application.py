@@ -50,7 +50,8 @@ def get_secret_key(file_name: str = "secret_key") -> bytes:
         return open(file_full_name, "rb").read()
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="frontend",
+            template_folder="frontend/html")
 app.config.from_pyfile("config.cfg")
 app.config["MAX_CONTENT_LENGTH"] = lexos.helpers.constants.MAX_FILE_SIZE
 app.config["SECRET_KEY"] = get_secret_key()
