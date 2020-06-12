@@ -151,10 +151,10 @@ function append_manage_table_row (id, active,
     <div id="${id}" class="manage-table-row">
       <div class="manage-table-active-indicator"></div>
       <h3 class="manage-table-cell">${id + 1}</h3>
-      <h3 class="manage-table-cell"></h3>
-      <h3 class="manage-table-cell"></h3>
-      <h3 class="manage-table-cell"></h3>
-      <h3 class="manage-table-cell"></h3>
+      <h3 class="manage-table-cell empty-cell"></h3>
+      <h3 class="manage-table-cell empty-cell"></h3>
+      <h3 class="manage-table-cell empty-cell"></h3>
+      <h3 class="manage-table-cell empty-cell"></h3>
     </div>
   `).appendTo('#manage-table-body')
 

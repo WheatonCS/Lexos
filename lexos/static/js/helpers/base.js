@@ -73,6 +73,11 @@ function display_first_time_visit_popup () {
             Welcome to Lexos 4.0! Click the "i" icon on the top left for
             a walkthrough of the page you are on. Click the "Help" text
             on the top right for more detailed documentation.
+
+            <br><br>
+
+            For a high contrast colour scheme, click the dragon icon at the
+            top left and select the Grey Light theme.
         </h3>
     `).appendTo(popup_container_element.find('.popup-content'))
 
