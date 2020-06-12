@@ -92,13 +92,13 @@ a:hover {
     color: var(--highlight-color);
 }
 
+
 /* Fieldset */
 fieldset {
     border: None;
     padding: 0;
     margin: 0;
 }
-
 
 /* Text input */
 input[type="text"] {

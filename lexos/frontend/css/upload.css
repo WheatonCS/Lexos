@@ -9,7 +9,7 @@ form {
 #top-section {
     display: grid;
     grid-template-columns: 1fr .4fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 
@@ -25,18 +25,18 @@ form {
     cursor: pointer;
     width: 20rem;
     height: 6rem;
-    margin: 1rem;
+    margin: var(--small-gap);
     border-radius: 3rem;
     color: var(--foreground-color);
     background-color: var(--highlight-color);
-    border: .2rem solid var(--highlight-color);
-    transition: background-color .2s, border-color .2s;
+    border: var(--line-size) solid var(--highlight-color);
+    transition: background-color var(--fade-duration), border-color var(--fade-duration);
 }
 
 #browse-button:hover {
     color: var(--highlight-color);
     background-color: var(--highlight-color-light);
-    border: .2rem solid var(--highlight-color);
+    border: var(--line-size) solid var(--highlight-color);
 }
 
 #drag-and-drop-section {
@@ -44,8 +44,8 @@ form {
     width: 100%;
     color: var(--text-color);
     background-color: var(--foreground-color-alternate);
-    border: .2rem dashed var(--text-color);
-    transition: background-color .2s, border-color .2s;
+    border: var(--line-size) dashed var(--text-color);
+    transition: background-color var(--fade-duration), border-color var(--fade-duration);
 }
 
 #drag-and-drop-section.highlighted {
@@ -65,7 +65,7 @@ form {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
     grid-auto-rows: min-content;
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
     height: 100%;
     overflow-y: auto;
 }
@@ -76,7 +76,7 @@ form {
 
 .upload-preview-content{
     display: grid;
-    padding: 1rem;
+    padding: var(--small-gap);
     min-height: 8.2rem;
     height: 100%;
     align-content: center;
@@ -84,7 +84,7 @@ form {
     background-color: var(--foreground-color-alternate);
     min-width: 0;
     word-break: break-all;
-    transition: opacity .5s;
+    transition: opacity var(--long-fade-duration);
 }
 
 .progress-bar {
@@ -92,7 +92,7 @@ form {
     left: 0;
     top: 0;
     width: 0;
-    height: .2rem;
+    height: var(--line-size);
     background-color: var(--highlight-color);
-    transition: opacity .5s, width .5s;
+    transition: opacity var(--long-fade-duration), width var(--long-fade-duration);
 }

@@ -278,17 +278,17 @@ function toggle_help_section () {
   let main_grid = $('#main-grid').css('grid-template-columns', '40rem auto')
 
   $(`
-        <div id="help-section" class="invisible">
-            <div id="help-section-navbar">
-                <span class="left-justified"></span>
-                <span id="close-help-button" class="right-justified tooltip-button">&times;</span>
-                <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
-                <span id="page-help-button" class="right-justified help-button">Page Help</span>
-                <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
-                <span id="about-button" class="right-justified help-button">About Lexos</span>
-            </div>
-            <div id="help-section-content"></div>
+    <div id="help-section" class="invisible">
+        <div id="help-section-navbar">
+          <span class="left-justified"></span>
+          <span id="close-help-button" class="right-justified tooltip-button">&times;</span>
+          <span id="walkthrough-button" class="left-justified help-button">Page Walkthrough</span>
+          <span id="page-help-button" class="right-justified help-button">Page Help</span>
+          <span id="glossary-button" class="left-justified help-button">Help Glossary</span>
+          <span id="about-button" class="right-justified help-button">About Lexos</span>
         </div>
+        <div id="help-section-content"></div>
+      </div>
     `).prependTo(main_grid)
 
   $('#help-button').addClass('highlight')
@@ -322,7 +322,7 @@ function toggle_help_section () {
   })
 
   // Fade in the help section
-  fade_in('#help-section', '.5s')
+  fade_in('#help-section', 'var(--long-fade-duration)')
 }
 
 /**

@@ -48,16 +48,16 @@
 .introjs-tooltip {
     display: grid !important;
     grid-template-rows: 1fr min-content;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
     width: 30rem;
     max-width: none;
-    padding: 2rem;
+    padding: var(--gap);
     border-radius: 0;
     background-color: var(--foreground-color);
     color: var(--text-color);
     box-shadow: none;
     opacity: 0;
-    transition: opacity .5s;
+    transition: opacity var(--long-fade-duration);
 }
 
 
@@ -69,7 +69,7 @@
 
 .introjs-bullets ul li a {
     background-color: var(--text-color);
-    transition: background-color .2s;
+    transition: background-color var(--fade-duration);
 }
 
 .introjs-bullets ul li a:hover {
@@ -85,7 +85,7 @@
 .introjs-tooltipbuttons {
     display: grid;
     grid-template-columns: 1fr min-content min-content;
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 .introjs-tooltiptext {
@@ -113,14 +113,15 @@
     margin: 0 !important;
     padding: .9rem 1.5rem 1rem 1.5rem;
     border-radius: 3rem;
-    border: .2rem solid var(--secondary-highlight-color);
+    border: var(--line-size) solid var(--secondary-highlight-color);
     background-color: var(--secondary-highlight-color);
     -webkit-background-clip: inherit;
     background-image: none;
     text-shadow: none;
     color: var(--foreground-color);
     cursor: pointer;
-    transition: color .2s, border-color .2s, background-color .2s, opacity .5s;
+    transition: color var(--fade-duration), border-color var(--fade-duration),
+        background-color var(--fade-duration), opacity var(--long-fade-duration);
 }
 
 .introjs-button:hover {
@@ -131,5 +132,5 @@
 }
 
 .introjs-button {
-    margin-left: 1rem;
+    margin-left: var(--small-gap);
 }

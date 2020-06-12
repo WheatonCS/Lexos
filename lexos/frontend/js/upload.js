@@ -232,7 +232,7 @@ function create_upload_preview (file_name) {
     .text(file_name)
 
     // Fade in the preview element
-  fade_in(`#preview-${active_documents}`, '.5s')
+  fade_in(`#preview-${active_documents}`, 'var(--long-fade-duration)')
 
   // Return the upload preview element
   return upload_preview_element

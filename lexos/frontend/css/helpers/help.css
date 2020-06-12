@@ -1,33 +1,33 @@
 #help-section {
     display: block;
     width: 40rem;
-    padding-bottom: 2rem;
+    padding-bottom: var(--gap);
     overflow-y: auto;
 }
 
 #help-section-navbar {
     display: grid;
     grid-template-columns: auto auto;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
     justify-items: center;
-    margin-top: 2rem;
-    padding: 1rem 2rem 2rem 2rem;
+    margin-top: var(--gap);
+    padding: var(--small-gap) var(--gap) var(--gap) var(--gap);
     background-color: var(--foreground-color);
 }
 
 .help-section-title {
     display: block;
-    margin-top: 2rem;
-    padding: 2rem;
+    margin-top: var(--gap);
+    padding: var(--gap);
     color: var(--secondary-highlight-color);
     background-color: var(--foreground-color);
 }
 
 .help-section-paragraph,
 .help-section-list {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-bottom: 2rem;
+    padding-left: var(--gap);
+    padding-right: var(--gap);
+    padding-bottom: var(--gap);
 }
 
 .help-section-paragraph {
@@ -41,7 +41,7 @@
 }
 
 .help-section-list > li {
-    padding-bottom: 1rem;
+    padding-bottom: var(--small-gap);
 }
 
 .help-section-list > li:last-child {

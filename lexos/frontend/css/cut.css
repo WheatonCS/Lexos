@@ -9,7 +9,7 @@
 form {
     display: grid;
     grid-template-rows: min-content 1fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 #cut-settings-section, #cut-mode-section {
@@ -21,7 +21,7 @@ form {
 #options-section {
     display: grid;
     grid-template-columns: 1fr 1.3fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 

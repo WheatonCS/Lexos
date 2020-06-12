@@ -1,0 +1,23 @@
+@font-face {
+   font-family: "Quicksand";
+   src: url("../../fonts/quicksand-regular.ttf") format("truetype");
+   font-weight: 400;
+}
+
+@font-face {
+   font-family: "Open Sans";
+   src: url("../../fonts/open-sans-regular.ttf") format("truetype");
+   font-weight: 400;
+}
+
+@font-face {
+   font-family: "Open Sans";
+   src: url("../../fonts/open-sans-semibold.ttf") format("truetype");
+   font-weight: 600;
+}
+
+@font-face {
+   font-family: "Open Sans";
+   src: url("../../fonts/open-sans-bold.ttf") format("truetype");
+   font-weight: 700;
+}

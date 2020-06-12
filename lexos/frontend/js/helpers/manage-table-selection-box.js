@@ -42,7 +42,7 @@ function start_manage_table_selection (event) {
     'width': '0',
     'height': '0',
     'opacity': '.4',
-    'transition': 'opacity .2s, background-color .2s'
+    'transition': 'opacity var(--fade-duration), background-color var(--fade-duration)'
   })
 }
 

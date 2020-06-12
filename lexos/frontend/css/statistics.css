@@ -8,7 +8,7 @@ form {
 /* Top section */
 #top-section {
     display: grid;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
     grid-template-rows: 45rem auto 40rem;
     grid-template-columns: 36rem auto 30rem;
 }
@@ -16,17 +16,17 @@ form {
 #left-column {
     display: grid;
     grid-template-rows: min-content 1fr 1fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 #right-column {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 #generate-button {
-    margin: 1rem;
+    margin: var(--small-gap);
 }
 
 #standard-error-test,

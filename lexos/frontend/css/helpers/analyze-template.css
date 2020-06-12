@@ -9,7 +9,7 @@ form {
 #options-section {
     display: grid;
     grid-template-columns: 1.2fr 1fr 1fr 1.5fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 #tokenize-section, #normalize-section, #cull-section {
