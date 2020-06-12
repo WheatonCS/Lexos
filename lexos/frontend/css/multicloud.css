@@ -12,7 +12,7 @@
 #multicloud {
     display: grid;
     grid-template-columns: repeat(auto-fit, 46rem);
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
     align-items: center;
     justify-content: center;
     overflow-y: auto;
@@ -29,7 +29,7 @@
 
 .word-cloud-wrapper .title {
     overflow: hidden;
-    margin-right: 1rem;
+    margin-right: var(--small-gap);
     white-space: nowrap;
 }
 

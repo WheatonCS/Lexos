@@ -17,7 +17,7 @@ form {
 }
 
 #advanced-options-section label {
-    margin-right: 2rem;
+    margin-right: var(--gap);
 }
 
 #advanced-options-section input {
@@ -27,8 +27,8 @@ form {
 
 /* K-means */
 #k-means {
-    width: calc(100% - 2rem);
+    width: calc(100% - var(--gap));
     height: 56rem;
     overflow: hidden;
-    margin: 0 1rem 1rem 1rem;
+    margin: 0 var(--small-gap) var(--small-gap) var(--small-gap);
 }

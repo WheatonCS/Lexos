@@ -21,7 +21,7 @@ form {
 #left-column,
 #middle-column {
     display: grid;
-    row-gap: 2rem;
+    row-gap: var(--gap);
 }
 
 #left-column {
@@ -41,8 +41,8 @@ form {
 }
 
 .scrub-section-top {
-    margin: 1rem;
-    grid-gap: 1rem;
+    margin: var(--small-gap);
+    grid-gap: var(--small-gap);
 }
 
 .scrub-section-body {
@@ -64,7 +64,7 @@ form {
 
 /* Scrubbing options */
 #punctuation-options {
-    transition: opacity .2s;
+    transition: opacity var(--fade-duration);
 }
 
 
@@ -80,7 +80,7 @@ form {
 
 /* Special characters */
 .options-section label {
-    margin-bottom: 1rem;
+    margin-bottom: var(--small-gap);
 }
 
 #special-characters-section .scrub-section-body {
@@ -97,7 +97,7 @@ form {
 .tag-table-row {
     display: grid;
     grid-template-columns: 15% 58% 27%;
-    padding: 1rem;
+    padding: var(--small-gap);
 }
 
 #tag-table-head {
@@ -117,7 +117,7 @@ form {
 
 .tag-table-row {
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: var(--small-gap);
     background-color: var(--foreground-color-alternate);
 }
 
@@ -136,5 +136,5 @@ form {
 .tag-table-row > input {
     width: 25rem;
     margin: 0;
-    transition: opacity .2s;
+    transition: opacity var(--fade-duration);
 }

@@ -183,7 +183,7 @@ function create_word_cloud (id, name, words) {
 
   // If the text is moused over, create a tooltip with information on
   // the bubble and highlight the bubble
-    .style('transition', 'opacity .2s')
+    .style('transition', 'opacity var(--fade-duration)')
     .on('mouseover', function () {
       d3.select(this).style('opacity', '.7')
       tooltip.style('opacity', '1')

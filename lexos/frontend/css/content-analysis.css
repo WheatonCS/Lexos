@@ -16,7 +16,7 @@ form {
 #top-section {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
-    grid-gap: 2rem;
+    grid-gap: var(--gap);
 }
 
 
@@ -30,8 +30,8 @@ form {
     word-break: break-word;
     min-height: 3rem;
     width: 100%;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    padding: var(--small-gap);
+    margin-bottom: var(--small-gap);
     background-color: var(--foreground-color-alternate);
 }
 
@@ -44,7 +44,7 @@ form {
 #formula-body {
     display: grid;
     grid-template-rows: 10rem 1fr;
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 #formula-body label {
@@ -56,14 +56,14 @@ form {
     height: 100%;
     min-height: 0;
     grid-template-columns: 1fr .66fr 1.1fr;
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 #number-pad,
 #operations-pad {
     display: grid;
     grid-template-rows: repeat(4, 1fr);
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 #number-pad {
@@ -80,11 +80,11 @@ form {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% - .2rem);
-    height: calc(100% - .2rem);
+    width: calc(100% - var(--line-size));
+    height: calc(100% - var(--line-size));
     background-color: var(--foreground-color-alternate);
-    border: .2rem solid var(--background-color);
-    transition: color .2s, background-color .2s, border-color .2s;
+    border: var(--line-size) solid var(--background-color);
+    transition: color var(--fade-duration), background-color var(--fade-duration), border-color var(--fade-duration);
 }
 
 #number-pad h3:hover,
@@ -105,7 +105,7 @@ form {
 #document-tables-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(39.4rem, 1fr));
-    grid-gap: 1rem;
+    grid-gap: var(--small-gap);
 }
 
 #document-tables-grid .lexos-table {
