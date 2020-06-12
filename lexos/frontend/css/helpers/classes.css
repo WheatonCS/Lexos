@@ -1,0 +1,56 @@
+.clickable-text:hover {
+   color: var(--highlight-color);
+   cursor: pointer;
+}
+
+.highlight {
+   color: var(--highlight-color);
+}
+
+.centerer {
+   display: grid;
+   justify-items: center;
+   align-items: center;
+   width: 100%;
+   height: 100%;
+}
+
+.disabled {
+   opacity: .5 !important;
+   pointer-events: none !important;
+}
+
+.invisible {
+   opacity: 0;
+}
+
+.hidden {
+   display: none !important;
+}
+
+.center-justified {
+   justify-self: center;
+}
+
+.left-justified {
+   justify-self: left;
+}
+
+.right-justified {
+   justify-self: right;
+}
+
+.firefox-hidden-scrollbar {
+   scrollbar-width: none;
+}
+
+.vertical-splitter {
+   display: grid;
+   grid-template-columns: auto auto;
+}
+
+.title {
+   display: inline-block;
+   color: var(--highlight-color);
+   height: 3rem;
+}
