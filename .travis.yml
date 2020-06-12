@@ -5,9 +5,9 @@ sudo: required
 # Set up matrix for multiple languages check.
 matrix:
   include:
-    # Check for python 3.7
+    # Check for python 3.8
     - language: python
-      python: "3.7"
+      python: "3.8"
       install:
         # Use newest pip and install check tools.
         - python -m pip install --upgrade pip
@@ -31,16 +31,4 @@ matrix:
         - cd ./lexos/frontend
         - npm install
       script:
-        # Following line is commented out, frontend refactor is not completed
-        # - ./node_modules/.bin/eslint ./js/script_*.js
-        - ./node_modules/.bin/eslint ./js/scripts_statistics.js
-        - ./node_modules/.bin/eslint ./js/scripts_similarity.js
-        - ./node_modules/.bin/eslint ./js/scripts_dendrogram.js
-        - ./node_modules/.bin/eslint ./js/scripts_rwanalysis.js
-        - ./node_modules/.bin/eslint ./js/scripts_tokenizer.js
-        - ./node_modules/.bin/eslint ./js/scripts_upload.js
-        - ./node_modules/.bin/eslint ./js/scripts_manage.js
-        - ./node_modules/.bin/eslint ./js/scripts_kmeans.js
-        - ./node_modules/.bin/eslint ./js/scripts_scrub.js
-        - ./node_modules/.bin/eslint ./js/scripts_cut.js
-        - ./node_modules/.bin/eslint ./js/scripts_bct.js
+        - ./node_modules/.bin/eslint ./js/script_*.js
