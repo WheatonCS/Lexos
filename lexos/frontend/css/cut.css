@@ -12,6 +12,10 @@ form {
     grid-gap: var(--gap);
 }
 
+#cut-settings-section, #cut-mode-section {
+    height: 100%;
+}
+
 
 /* Options */
 #options-section {

@@ -58,7 +58,8 @@
             <!-- Body -->
             <div id="formula-body" class="section-body">
 
-                <label><textarea id="formula-textarea" name="formula" spellcheck="false"></textarea></label>
+                <label for="formula-textarea" class="hidden">Formula Text Area</label>
+                <textarea id="formula-textarea" name="formula" spellcheck="false"></textarea>
 
                 <div id="formula-buttons">
                     <div id="number-pad">
@@ -105,6 +106,7 @@
 
 
     <!-- Hidden elements -->
+    <label for="file-input" class="hidden">File Input</label>
     <input id="file-input" name="dictionaries[]" type="file" class="hidden" multiple>
 
 {% endblock %}

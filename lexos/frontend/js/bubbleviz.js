@@ -75,6 +75,7 @@ function create_bubbleviz (response) {
 
   // Create the tooltip
   let tooltip = d3.select('#bubbleviz').append('h3')
+    .text('No selection')
     .attr('class', 'visualize-tooltip')
 
     // Create the bubbleviz

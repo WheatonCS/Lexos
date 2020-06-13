@@ -65,7 +65,7 @@
 }
 
 #navbar-right > a,
-#navbar-right > h3 {
+#navbar-right > h2 {
    margin: var(--small-gap);
 }
 

@@ -10,6 +10,13 @@ form {
     grid-template-rows: min-content 1fr;
 }
 
+#calculation-type-section,
+#search-terms-section,
+#window-section,
+#display-section {
+    height: 100%;
+}
+
 
 /* Settings */
 #settings-section {

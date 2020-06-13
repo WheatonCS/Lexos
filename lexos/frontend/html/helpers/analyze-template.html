@@ -4,78 +4,98 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Plotly -->
-    <script src="frontend/node_modules/plotly.js-dist/plotly.js"></script>
+<!-- Plotly -->
+<script src="frontend/node_modules/plotly.js-dist/plotly.js"></script>
 
-    <!-- Template Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/analyze-template.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/analyze-template.css"/>
+<!-- Template Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/analyze-template.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/analyze-template.css" />
 
-    <!-- Page head -->
-    {% block page_head %}{% endblock %}
+<!-- Page head -->
+{% block page_head %}{% endblock %}
 {% endblock %}
 
 
 <!-- Content -->
 {% block content %}
 
-    <!-- Options -->
-    <div id="options-section">
+<!-- Options -->
+<div id="options-section">
 
-        <!-- Page options -->
-        {% block options %}{% endblock %}
+    <!-- Page options -->
+    {% block options %}{% endblock %}
 
-        <!-- Tokenize -->
+    <!-- Tokenize -->
+    <fieldset id="tokenize-section-fieldset">
         <div id="tokenize-section" class="section">
-
-            <div class="vertical-splitter section-top">
-                <h3 class="title">Tokenize</h3>
-                <span id="tokenize-tooltip-button" class="right-justified tooltip-button">?</span>
+            <div class="vertical-splitter">
+                <legend class="section-top title">Tokenize</legend>
+                <span id="tokenize-tooltip-button" class="right-justified tooltip-button section-top">?</span>
             </div>
 
             <div class="section-body">
-                <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
-                <label><input name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
-                <h3>Grams: </h3><label><input id="grams-input" name="token_size" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                <label for="by_tokens"><input id="by_tokens" name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
+                <label for="by_characters"><input id="by_characters" name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
+                <label for="grams-input">N-grams:</label> <input id="grams-input" name="token_size" value="1" type="text"
+                            spellcheck="false" autocomplete="off">
             </div>
         </div>
+    </fieldset>
 
-        <!-- Normalize -->
+    <!-- Normalize -->
+    <fieldset id="normalize-section-fieldset">
         <div id="normalize-section" class="section">
-
-            <div class="vertical-splitter section-top">
-                <h3 class="title">Normalize</h3>
-                <span id="normalize-tooltip-button" class="right-justified tooltip-button">?</span>
+            <div class="vertical-splitter">
+                <legend class="section-top title">Normalize</legend>
+                <span id="normalize-tooltip-button" class="right-justified tooltip-button section-top">?</span>
             </div>
 
             <div class="section-body">
-                <label><input name="normalization_method" value="Proportional" type="radio" checked><span></span>Proportional</label><br>
-                <label><input name="normalization_method" value="Raw" type="radio"><span></span>Raw</label><br>
-                <label><input name="normalization_method" value="TF-IDF" type="radio"><span></span>TF-IDF</label>
+                <label for="proportional"><input id="proportional" name="normalization_method" value="Proportional" type="radio"
+                        checked><span></span>Proportional</label><br>
+                <label for="raw"><input id="raw" name="normalization_method" value="Raw" type="radio"><span></span>Raw</label><br>
+                <label for="tfidf"><input id="tfidf" name="normalization_method" value="TF-IDF" type="radio"><span></span>TF-IDF</label>
                 <span id="tf-idf-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Cull -->
+    <!-- Cull -->
+    <fieldset id="cull-section-fieldset">
         <div id="cull-section" class="section">
 
-            <div class="vertical-splitter section-top">
-                <h3 class="title">Cull</h3>
-                <span id="cull-tooltip-button" class="right-justified tooltip-button">?</span>
+            <div class="vertical-splitter">
+                <legend class="section-top title">Cull</legend>
+                <span id="cull-tooltip-button" class="right-justified tooltip-button section-top">?</span>
             </div>
 
             <div class="section-body">
-                <label><input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox"><span></span>Use the top<input id="most-frequent-words-input" name="most_frequent_words" value="100" type="text" spellcheck="false" autocomplete="off">terms</label>
+                <label for="most-frequent-words-checkbox" class="hidden">Enable Most Frequent Words</label>
+                <input id="most-frequent-words-checkbox" name="enable_most_frequent_words"
+                        type="checkbox">
+                <span></span>
+                <label for="most-frequent-words-input">Use the top</label>
+                <input id="most-frequent-words-input"
+                        name="most_frequent_words" value="100" type="text" spellcheck="false"
+                        autocomplete="off"><h3>terms</h3>
                 <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
-                <label><input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox"><span></span>Must be in<input id="minimum-occurrences-input" name="minimum_occurrences" value="1" type="text" spellcheck="false" autocomplete="off">documents</label>
+                <label for="minimum-occurrences-checkbox" class="hidden">Enable Minimum Occurrences</label>
+                <input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences"
+                        type="checkbox">
+                <span></span>
+                <label for="minimum-occurrences-input">Must be in</label>
+                <input id="minimum-occurrences-input"
+                        name="minimum_occurrences" value="1" type="text" spellcheck="false"
+                        autocomplete="off"><h3>documents</h3>
                 <span id="minimum-occurrences-tooltip-button" class="tooltip-button">?</span>
             </div>
         </div>
-    </div>
+    </fieldset>
+</div>
 
-    <!-- Results -->
-    {% block results %}{% endblock %}
+<!-- Results -->
+{% block results %}{% endblock %}
 
-    <!-- Hidden elements -->
-    {%  block hidden_elements %}{% endblock %}
+<!-- Hidden elements -->
+{%  block hidden_elements %}{% endblock %}
 {% endblock %}

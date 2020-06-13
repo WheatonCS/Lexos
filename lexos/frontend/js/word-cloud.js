@@ -107,6 +107,7 @@ function create_word_cloud_layout (response) {
 function create_word_cloud (dataset) {
   // Create the tooltip
   let tooltip = d3.select('#word-cloud-container').append('h3')
+    .text('No selection')
     .attr('class', 'visualize-tooltip')
 
   // Create the word cloud

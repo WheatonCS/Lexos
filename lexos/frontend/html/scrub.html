@@ -5,27 +5,28 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/document-previews.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/document-previews.css"/>
+<!-- Page Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/document-previews.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/document-previews.css" />
 
 
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="frontend/js/scrub.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/scrub.css"/>
+<!-- Page JS and CSS -->
+<script type="text/javascript" src="frontend/js/scrub.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/scrub.css" />
 {% endblock %}
 
 
 <!-- Content -->
 {% block content %}
 
-    <!-- Left column -->
-    <div id="left-column" class="column">
+<!-- Left column -->
+<div id="left-column" class="column">
 
-        <!-- Scrubbing options -->
+    <!-- Scrubbing options -->
+    <fieldset id="scrubbing-options-fieldset">
         <div id="scrubbing-options-section" class="section">
 
-            <h3 class="section-top title">Scrubbing Options</h3>
+            <legend class="section-top title">Scrubbing Options</legend>
 
             <div class="section-body vertical-splitter">
 
@@ -40,11 +41,13 @@
 
                 <!-- Right section -->
                 <div class="options-section">
-                    <label><input id="scrub-tags-checkbox" name="scrub_tags" type="checkbox"><span></span>Scrub Tags</label>
+                    <label><input id="scrub-tags-checkbox" name="scrub_tags" type="checkbox"><span></span>Scrub
+                        Tags</label>
                     <span id="scrub-tags-settings-button" class="button disabled">Options</span>
                     <span id="scrub-tags-tooltip-button" class="tooltip-button">?</span><br>
 
-                    <label><input id="punctuation-checkbox" name="remove_punctuation" type="checkbox" checked><span></span>Remove Punctuation</label><br>
+                    <label><input id="punctuation-checkbox" name="remove_punctuation" type="checkbox"
+                            checked><span></span>Remove Punctuation</label><br>
 
                     <div id="punctuation-options">
                         <label><input name="keep_hyphens" type="checkbox"><span></span>Keep Hyphens</label>
@@ -59,62 +62,70 @@
                 </div>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Lemmas -->
+    <!-- Lemmas -->
+    <fieldset id="lemmas-fieldset">
         <div id="lemmas-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
-                <h3 id="lemmas-title" class="title">Lemmas</h3>
+                <legend id="lemmas-title" class="title">Lemmas</legend>
 
                 <div class="right-justified">
                     <span id="lemmas-upload-button" class="button">Upload</span>
                     <span id="lemmas-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
-                <h3 id="lemmas-upload-text" class="hidden upload-text"></h3>
+                <h3 id="lemmas-upload-text" class="hidden upload-text">None</h3>
             </div>
 
             <div class="scrub-section-body">
-                <textarea name="lemmas" spellcheck="false" placeholder="Enter lemmas here." aria-labelledby="lemmas-title"></textarea>
+                <textarea name="lemmas" spellcheck="false" placeholder="Enter lemmas here."
+                    aria-labelledby="lemmas-title"></textarea>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Consolidations -->
+    <!-- Consolidations -->
+    <fieldset id="consolidations-fieldset">
         <div id="consolidations-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
-                <h3 id="consolidations-title" class="title">Consolidations</h3>
+                <legend id="consolidations-title" class="title">Consolidations</legend>
 
                 <div class="right-justified">
                     <span id="consolidations-upload-button" class="button">Upload</span>
                     <span id="consolidations-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
-                <h3 id="consolidations-upload-text" class="hidden upload-text"></h3>
+                <h3 id="consolidations-upload-text" class="hidden upload-text">None</h3>
             </div>
 
             <div class="scrub-section-body">
-                <textarea name="consolidations" spellcheck="false" placeholder="Enter consolidations here." aria-labelledby="consolidations-title"></textarea>
+                <textarea name="consolidations" spellcheck="false" placeholder="Enter consolidations here."
+                    aria-labelledby="consolidations-title"></textarea>
             </div>
         </div>
-    </div>
+    </fieldset>
+</div>
 
-    <!-- Middle column -->
-    <div id="middle-column" class="column">
+<!-- Middle column -->
+<div id="middle-column" class="column">
 
-        <!-- Stop and keep words -->
+    <!-- Stop and keep words -->
+    <fieldset id="stop-words-fieldset">
         <div id="stop-words-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
 
-                <h3 id="stopwords-title" class="title">Stop/Keep Words</h3>
+                <legend id="stopwords-title" class="title">Stop/Keep Words</legend>
 
                 <div class="right-justified">
                     <span id="stop-words-upload-button" class="button">Upload</span>
                     <span id="stop-words-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
-                <h3 id="stop-words-upload-text" class="hidden upload-text"></h3>
+                <h3 id="stop-words-upload-text" class="hidden upload-text">None</h3>
 
                 <div id="stop-words-options" class="options-section">
                     <label><input type="radio" name="stop_words_method" value="Off" checked><span></span>Off</label>
@@ -124,64 +135,78 @@
             </div>
 
             <div class="scrub-section-body">
-                <textarea name="stop_words" spellcheck="false" placeholder="Enter stop words and keep words here." aria-labelledby="stopwords-title"></textarea>
+                <textarea name="stop_words" spellcheck="false" placeholder="Enter stop words and keep words here."
+                    aria-labelledby="stopwords-title"></textarea>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Special characters -->
+    <!-- Special characters -->
+    <fieldset id="special-characters-fieldset">
         <div id="special-characters-section" class="scrub-section">
 
             <div class="vertical-splitter scrub-section-top">
-                <h3 id="sc-title" class="title">Special Characters</h3>
+                <legend id="sc-title" class="title">Special Characters</legend>
 
                 <div class="right-justified">
                     <span id="special-characters-upload-button" class="button">Upload</span>
                     <span id="special-characters-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
-                <h3 id="special-characters-upload-text" class="hidden upload-text"></h3>
+                <h3 id="special-characters-upload-text" class="hidden upload-text">None</h3>
 
                 <div id="special-characters-options" class="vertical-splitter">
                     <div class="options-section">
-                        <label><input type="radio" name="special_characters_preset" value="None" checked><span></span>None</label><br>
-                        <label><input type="radio" name="special_characters_preset" value="HTML"><span></span>HTML</label><br>
-                        <label><input type="radio" name="special_characters_preset" value="Old English SGML"><span></span>Old English SGML</label>
+                        <label><input type="radio" name="special_characters_preset" value="None"
+                                checked><span></span>None</label><br>
+                        <label><input type="radio" name="special_characters_preset"
+                                value="HTML"><span></span>HTML</label><br>
+                        <label><input type="radio" name="special_characters_preset"
+                                value="Old English SGML"><span></span>Old English SGML</label>
                     </div>
                     <div class="options-section">
-                        <label><input type="radio" name="special_characters_preset" value="MUFI 3"><span></span>MUFI 3</label><br>
-                        <label><input type="radio" name="special_characters_preset" value="MUFI 4"><span></span>MUFI 4</label>
+                        <label><input type="radio" name="special_characters_preset" value="MUFI 3"><span></span>MUFI
+                            3</label><br>
+                        <label><input type="radio" name="special_characters_preset" value="MUFI 4"><span></span>MUFI
+                            4</label>
                     </div>
                 </div>
             </div>
 
             <div class="scrub-section-body">
-                <textarea name="special_characters" spellcheck="false" placeholder="Enter special characters here." aria-labelledby="sc-title"></textarea>
+                <textarea name="special_characters" spellcheck="false" placeholder="Enter special characters here."
+                    aria-labelledby="sc-title"></textarea>
             </div>
+        </div>
+    </fieldset>
+</div>
+
+<!-- Document previews -->
+<div id="document-previews-section" class="column section">
+
+    <div class="section-top vertical-splitter">
+
+        <h3 class="title">Previews</h3>
+
+        <div class="right-justified">
+            <span id="preview-button" class="disabled important-button button">Preview</span>
+            <span id="apply-button" class="disabled important-button button">Apply</span>
+            <a id="download-button" class="disabled button" href="scrub/download">Download</a>
         </div>
     </div>
 
-    <!-- Document previews -->
-    <div id="document-previews-section" class="column section">
+    <div id="previews"></div>
+</div>
 
-        <div class="section-top vertical-splitter">
-
-            <h3 class="title">Previews</h3>
-
-            <div class="right-justified">
-                <span id="preview-button" class="disabled important-button button">Preview</span>
-                <span id="apply-button" class="disabled important-button button">Apply</span>
-                <a id="download-button" class="disabled button" href="scrub/download">Download</a>
-            </div>
-        </div>
-
-        <div id="previews"></div>
-    </div>
-
-    <!-- Hidden elements -->
-    <input id="stop-words-file-input" name="stop_words_file[]" type="file" class="hidden" title="stopwords file input">
-    <input id="lemmas-file-input" name="lemmas_file[]" type="file" class="hidden" title="lemmas file input">
-    <input id="consolidations-file-input" name="consolidations_file[]" type="file" class="hidden" title="consolidations file input">
-    <input id="special-characters-file-input" name="special_characters_file[]" type="file" class="hidden" title="special characters file input">
+<!-- Hidden elements -->
+<label for="lemmas-file-input" class="hidden">Stop Words File Input</label>
+<input id="lemmas-file-input" name="lemmas_file[]" type="file" class="hidden">
+<label for="consolidations-file-input" class="hidden">Consolidations File Input</label>
+<input id="consolidations-file-input" name="consolidations_file[]" type="file" class="hidden">
+<label for="stop-words-file-input" class="hidden">Stop Words File Input</label>
+<input id="stop-words-file-input" name="stop_words_file[]" type="file" class="hidden">
+<label for="special-characters-file-input" class="hidden">Special Characters File Input</label>
+<input id="special-characters-file-input" name="special_characters_file[]" type="file" class="hidden">
 
 
 {% endblock %}

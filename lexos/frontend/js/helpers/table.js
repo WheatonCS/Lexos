@@ -311,8 +311,7 @@ class Table {
     if (this.searchable) {
       $(`
         <div>
-          <h3>Search: </h3>
-          <label><input name="${this.name}_table_search_input" type="text" spellcheck="false" autocomplete="off"></label>
+          <label for="${this.name}_table_search_input">Search: </label><input id="${this.name}_table_search_input" name="${this.name}_table_search_input" type="text" spellcheck="false" autocomplete="off"></label>
         </div>
       `).appendTo(table_top_element)
     }
@@ -320,23 +319,27 @@ class Table {
     // If the table is paginated, create the row count option
     if (this.paginated) {
       $(`
-        <div class="table-top-radio-option">
-          <h3>Rows:</h3>
-          <label><input name="${this.name}_table_row_count" value="10" type="radio" checked><span></span>10</label>
-          <label><input name="${this.name}_table_row_count" value="50" type="radio"><span></span>50</label>
-          <label><input name="${this.name}_table_row_count" value="100" type="radio"><span></span>100</label>
-        </div>
+        <fieldset>
+          <div class="table-top-radio-option">
+            <legend>Rows:</legend>
+            <label><input name="${this.name}_table_row_count" value="10" type="radio" checked><span></span>10</label>
+            <label><input name="${this.name}_table_row_count" value="50" type="radio"><span></span>50</label>
+            <label><input name="${this.name}_table_row_count" value="100" type="radio"><span></span>100</label>
+          </div>
+        </fieldset>
       `).appendTo(table_top_element)
     }
 
     // If the table is sortable, create the sort direction option
     if (this.sortable) {
       $(`
-        <div id="sort-radio-option" class="table-top-radio-option">
-          <h3>Order:</h3>
+        <fieldset>
+          <div id="sort-radio-option" class="table-top-radio-option">
+          <legend>Order:</legend>
           <label><input name="${this.name}_table_sort_mode" value="Ascending" type="radio" checked><span></span>Ascending</label>
           <label><input name="${this.name}_table_sort_mode" value="Descending" type="radio"><span></span>Descending</label>
-        </div>
+          </div>
+        </fieldset>
       `).appendTo(table_top_element)
     }
 
@@ -373,7 +376,7 @@ class Table {
       $(`
         <div class="lexos-table-bottom">
             <div>
-                <h3>Page</h3><input name="${this.name}_table_page_number" type="text" spellcheck="false" autocomplete="off" value="1"></label>
+                <label for="${this.name}_table_page_number">Page</label><input id="${this.name}_table_page_number" name="${this.name}_table_page_number" type="text" spellcheck="false" autocomplete="off" value="1">
                 <h3>of </h3>
                 <h3 id="${this.name}-table-page-count">1</h3>
             </div>

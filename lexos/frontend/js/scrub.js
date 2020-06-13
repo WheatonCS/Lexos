@@ -309,7 +309,7 @@ function initialize_upload_buttons (names) {
       // to say "Upload" again
       if (file_input_element.val()) {
         file_input_element.val('')
-        upload_text_element.addClass('hidden')
+        upload_text_element.addClass('hidden').text('None')
         upload_button_element.text('Upload')
         return
       }

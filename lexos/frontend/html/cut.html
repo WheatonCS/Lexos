@@ -5,28 +5,29 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/document-previews.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/document-previews.css"/>
+<!-- Page Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/document-previews.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/document-previews.css" />
 
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="frontend/js/cut.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/cut.css"/>
+<!-- Page JS and CSS -->
+<script type="text/javascript" src="frontend/js/cut.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/cut.css" />
 {% endblock %}
 
 
 <!-- Content -->
 {% block content %}
 
-    <!-- Options -->
-    <div id="options-section">
+<!-- Options -->
+<div id="options-section">
 
-        <!-- Cut mode -->
+    <!-- Cut mode -->
+    <fieldset id="cut-mode-fieldset">
         <div id="cut-mode-section" class="section">
 
             <div class="vertical-splitter section-top">
                 <div>
-                    <h3 class="title">Cut Mode</h3>
+                    <legend class="title">Cut Mode</legend>
                 </div>
                 <span id="cut-mode-tooltip-button" class="right-justified tooltip-button">?</span>
             </div>
@@ -47,56 +48,59 @@
                 <label><input type="radio" name="cut_mode" value="Milestones"><span></span>Milestones</label>
             </div>
         </div>
+    </fieldset>
 
-        <!-- Cut settings -->
+    <!-- Cut settings -->
+    <fieldset id="cut-settings">
         <div id="cut-settings-section" class="section">
-            <h3 class="section-top title">Cut Settings</h3>
+            <legend class="section-top title">Cut Settings</legend>
 
             <div id="cut-settings-grid" class="section-body">
 
                 <!-- Segment size -->
                 <div id="segment-size-input">
-                    <h3 id="segment-size-label">Segment Size</h3>
-                    <input name="segment_size" type="text" spellcheck="false" autocomplete="off">
+                    <label for="segment_size" id="segment-size-label">Segment Size</label>
+                    <input id="segment_size" name="segment_size" type="text" spellcheck="false" autocomplete="off">
                     <span id="segment-size-tooltip-button" class="tooltip-button">?</span>
                     <span id="number-of-segments-tooltip-button" class="tooltip-button hidden">?</span>
                 </div>
 
                 <!-- Overlap -->
                 <div id="overlap-input">
-                    <h3>Overlap</h3>
-                    <input name="overlap" type="text" spellcheck="false" autocomplete="off" value="0">
+                    <label for="overlap">Overlap</label>
+                    <input id="overlap" name="overlap" type="text" spellcheck="false" autocomplete="off" value="0">
                     <span id="overlap-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Merge threshold -->
                 <div id="merge-threshold-input">
-                    <h3>Merge %</h3>
-                    <input name="merge_threshold" type="text" spellcheck="false" autocomplete="off" value="50">
+                    <label for="merge_threshold">Merge %</label>
+                    <input id="merge_threshold" name="merge_threshold" type="text" spellcheck="false" autocomplete="off" value="50">
                     <span id="merge-threshold-tooltip-button" class="tooltip-button">?</span>
                 </div>
 
                 <!-- Milestone -->
                 <div id="milestone-input" class="hidden">
-                    <h3>Milestone</h3>
-                    <input name="milestone" type="text" spellcheck="false" autocomplete="off">
+                    <label for="milestone">Milestone</label>
+                    <input id="milestone" name="milestone" type="text" spellcheck="false" autocomplete="off">
                     <span id="milestone-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
         </div>
-    </div>
+    </fieldset>
+</div>
 
-    <!-- Document previews -->
-    <div id="document-previews-section" class="section">
+<!-- Document previews -->
+<div id="document-previews-section" class="section">
 
-        <div class="section-top vertical-splitter">
-            <h3 class="title">Previews</h3>
-            <div class="right-justified">
-                <span id="preview-button" class="disabled important-button button">Preview</span>
-                <span id="apply-button" class="disabled important-button button">Apply</span>
-                <a id="download-button" class="disabled button" href="cut/download">Download</a>
-            </div>
+    <div class="section-top vertical-splitter">
+        <h3 class="title">Previews</h3>
+        <div class="right-justified">
+            <span id="preview-button" class="disabled important-button button">Preview</span>
+            <span id="apply-button" class="disabled important-button button">Apply</span>
+            <a id="download-button" class="disabled button" href="cut/download">Download</a>
         </div>
-        <div id="previews"></div>
     </div>
+    <div id="previews"></div>
+</div>
 {% endblock %}

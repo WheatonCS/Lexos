@@ -5,130 +5,134 @@
 <!-- Head -->
 {% block head %}
 
-    <!-- Plotly -->
-    <script src="frontend/node_modules/plotly.js-dist/plotly.js"></script>
+<!-- Plotly -->
+<script src="frontend/node_modules/plotly.js-dist/plotly.js"></script>
 
-    <!-- Page Lexos dependencies -->
-    <script type="text/javascript" src="frontend/js/helpers/analyze-template.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/analyze-template.css"/>
-    <script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css"/>
-    <script type="text/javascript" src="frontend/js/helpers/table.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/helpers/table.css"/>
+<!-- Page Lexos dependencies -->
+<script type="text/javascript" src="frontend/js/helpers/analyze-template.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/analyze-template.css" />
+<script type="text/javascript" src="frontend/js/helpers/graph.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css" />
+<script type="text/javascript" src="frontend/js/helpers/table.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/helpers/table.css" />
 
-    <!-- Page JS and CSS -->
-    <script type="text/javascript" src="frontend/js/statistics.js"></script>
-    <link rel="stylesheet" type="text/css" href="frontend/css/statistics.css"/>
+<!-- Page JS and CSS -->
+<script type="text/javascript" src="frontend/js/statistics.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/statistics.css" />
 {% endblock %}
 
 
 <!-- Content -->
 {% block content %}
 
-    <!-- Top section -->
-    <div id="top-section">
+<!-- Top section -->
+<div id="top-section">
 
-        <!-- Options -->
-        <div id="left-column">
+    <!-- Options -->
+    <div id="left-column">
 
-            <!-- Generate -->
-            <div class="section">
-                <span id="generate-button" class="disabled important-button">Generate All</span>
-            </div>
+        <!-- Generate -->
+        <div class="section">
+            <span id="generate-button" class="disabled important-button">Generate All</span>
+        </div>
 
-            <!-- Tokenize -->
+        <!-- Tokenize -->
+        <fieldset>
             <div id="tokenize-section" class="section">
 
                 <div class="vertical-splitter section-top">
-                    <h3 class="title">Tokenize</h3>
+                    <legend class="title">Tokenize</legend>
                     <span id="tokenize-tooltip-button" class="right-justified tooltip-button">?</span>
                 </div>
 
                 <div class="section-body">
-                    <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By Tokens</label><br>
-                    <label><input name="token_type" value="Characters" type="radio"><span></span>By Characters</label><br>
+                    <label><input name="token_type" value="Tokens" type="radio" checked><span></span>By
+                        Tokens</label><br>
+                    <label><input name="token_type" value="Characters" type="radio"><span></span>By
+                        Characters</label><br>
 
-                    <h3>Grams</h3>
-                    <label><input id="grams-input" name="token_size" value="1" type="text" spellcheck="false" autocomplete="off"></label>
+                    <label for="grams-input">N-grams</label><input id="grams-input" name="token_size" value="1"
+                        type="text" spellcheck="false" autocomplete="off">
                 </div>
             </div>
+        </fieldset>
 
-            <!-- Cull -->
+        <!-- Cull -->
+        <fieldset>
             <div id="cull-section" class="section">
 
                 <div class="vertical-splitter section-top">
-                    <h3 class="title">Cull</h3>
+                    <legend class="title">Cull</legend>
                     <span id="cull-tooltip-button" class="right-justified tooltip-button">?</span>
                 </div>
 
                 <div class="section-body">
 
-                    <label>
-                        <input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox">
-                        <span></span>
-                        Use the top
-                        <input id="most-frequent-words-input" name="most_frequent_words" value="100" type="text" spellcheck="false" autocomplete="off">
-                        terms
-                    </label>
-
+                    <label for="most-frequent-words-checkbox" class="hidden">Enable Most Frequent Words</label>
+                    <input id="most-frequent-words-checkbox" name="enable_most_frequent_words" type="checkbox">
+                    <span></span>
+                    <label for="most-frequent-words-input">Use the top</label>
+                    <input id="most-frequent-words-input" name="most_frequent_words" value="100" type="text"
+                        spellcheck="false" autocomplete="off">
+                    terms
                     <span id="most-frequent-words-tooltip-button" class="tooltip-button">?</span><br>
 
-                    <label>
-                        <input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox">
-                        <span></span>
-                        Must be in
-                        <input id="minimum-occurrences-input" name="minimum_occurrences" value="1" type="text" spellcheck="false" autocomplete="off">
-                        documents
-                    </label>
-
+                    <label for="minimum-occurrences-checkbox">Minimum Occurrences</label>
+                    <input id="minimum-occurrences-checkbox" name="enable_minimum_occurrences" type="checkbox">
+                    <span></span>
+                    <label for="minimum-occurrences-input">Must be in</label>
+                    <input id="minimum-occurrences-input" name="minimum_occurrences" value="1" type="text"
+                        spellcheck="false" autocomplete="off">
+                    documents
                     <span id="minimum-occurrences-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
-        </div>
-
-        <!-- Document sizes -->
-        <div id="graph-section" class="section">
-            <div id="graph-section-top" class="vertical-splitter section-top">
-
-                <h3 class="title">Document Sizes</h3>
-
-                <div class="right-justified">
-                    <span id="png-button" class="disabled button">PNG</span>
-                    <span id="svg-button" class="disabled button">SVG</span>
-                    <span id="fullscreen-button" class="disabled button">Fullscreen</span>
-                </div>
-            </div>
-            <div id="graph-container" class="section-body"></div>
-        </div>
-
-        <!-- Corpus information section -->
-        <div id="right-column">
-
-            <!-- Corpus statistics -->
-            <div id="corpus-statistics-section" class="section">
-                <h3 class="section-top title">Document Size Statistics</h3>
-                <div id="corpus-statistics" class="section-body"></div>
-            </div>
-
-            <!-- Standard error test -->
-            <div id="standard-error-test-section" class="section">
-                <h3 class="section-top title">Standard Error Test</h3>
-                <div id="standard-error-test"  class="section-body"></div>
-            </div>
-
-            <!-- Interquartile range test -->
-            <div id="interquartile-range-test-section" class="section">
-                <h3 class="section-top title">Interquartile Range Test</h3>
-                <div id="interquartile-range-test"  class="section-body"></div>
-            </div>
-        </div>
+        </fieldset>
     </div>
 
-    <!-- Document statistics -->
-    <div id="table-section" class="section"></div>
+    <!-- Document sizes -->
+    <div id="graph-section" class="section">
+        <div id="graph-section-top" class="vertical-splitter section-top">
 
-    <!-- Hidden elements -->
-    <input name="csv_delimiter" value="Comma" type="hidden">
-    <input name="normalization_method" value="Raw" type="hidden">
+            <h3 class="title">Document Sizes</h3>
+
+            <div class="right-justified">
+                <span id="png-button" class="disabled button">PNG</span>
+                <span id="svg-button" class="disabled button">SVG</span>
+                <span id="fullscreen-button" class="disabled button">Fullscreen</span>
+            </div>
+        </div>
+        <div id="graph-container" class="section-body"></div>
+    </div>
+
+    <!-- Corpus information section -->
+    <div id="right-column">
+
+        <!-- Corpus statistics -->
+        <div id="corpus-statistics-section" class="section">
+            <h3 class="section-top title">Document Size Statistics</h3>
+            <div id="corpus-statistics" class="section-body"></div>
+        </div>
+
+        <!-- Standard error test -->
+        <div id="standard-error-test-section" class="section">
+            <h3 class="section-top title">Standard Error Test</h3>
+            <div id="standard-error-test" class="section-body"></div>
+        </div>
+
+        <!-- Interquartile range test -->
+        <div id="interquartile-range-test-section" class="section">
+            <h3 class="section-top title">Interquartile Range Test</h3>
+            <div id="interquartile-range-test" class="section-body"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Document statistics -->
+<div id="table-section" class="section"></div>
+
+<!-- Hidden elements -->
+<input name="csv_delimiter" value="Comma" type="hidden">
+<input name="normalization_method" value="Raw" type="hidden">
 
 {% endblock %}
