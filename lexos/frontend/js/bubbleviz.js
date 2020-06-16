@@ -26,7 +26,7 @@ function send_word_counts_request () {
   // Display the loading overlay and disable the "PNG", "SVG" and "Generate"
   // buttons
   start_loading('#bubbleviz', '#png-button, ' +
-        '#svg-button, #generate-button, #fullscreen-button')
+    '#svg-button, #generate-button, #fullscreen-button')
 
   // Send the request for the word counts
   $.ajax({
@@ -36,11 +36,11 @@ function send_word_counts_request () {
     data: JSON.stringify({maximum_top_words: $('#term-count-input').val()})
   })
 
-  // If the request is successful, create the bubbleviz
+    // If the request is successful, create the bubbleviz
     .done(create_bubbleviz)
 
-  // If the request failed, display an error message, display
-  // "Loading Failed" text, and enable the "Generate" button
+    // If the request failed, display an error message, display
+    // "Loading Failed" text, and enable the "Generate" button
     .fail(function () {
       error('Failed to retrieve the bubbleviz data.')
       add_text_overlay('#bubbleviz', 'Loading Failed')
