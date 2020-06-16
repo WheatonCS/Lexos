@@ -46,6 +46,8 @@ function send_word_counts_request () {
       add_text_overlay('#bubbleviz', 'Loading Failed')
       enable('#generate-button')
     })
+
+  test
 }
 
 /**
