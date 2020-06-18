@@ -64,6 +64,28 @@
         </div>
     </fieldset>
 
+    <!-- Pattern Replacements -->
+    <fieldset id="patterns-fieldset">
+        <div id="patterns-section" class="scrub-section">
+
+            <div class="vertical-splitter scrub-section-top">
+                <legend id="patterns-title" class="title">Pattern Replacements</legend>
+
+                <div class="right-justified">
+                    <span id="patterns-upload-button" class="button">Upload</span>
+                    <span id="patterns-tooltip-button" class="tooltip-button">?</span>
+                </div>
+
+                <h3 id="patterns-upload-text" class="hidden upload-text">None</h3>
+            </div>
+
+            <div class="scrub-section-body">
+                <textarea name="pattern_replacements" spellcheck="false" placeholder="Enter patterns to replace here."
+                    aria-labelledby="patterns-title"></textarea>
+            </div>
+        </div>
+    </fieldset>
+
     <!-- Lemmas -->
     <fieldset id="lemmas-fieldset">
         <div id="lemmas-section" class="scrub-section">
@@ -82,28 +104,6 @@
             <div class="scrub-section-body">
                 <textarea name="lemmas" spellcheck="false" placeholder="Enter lemmas here."
                     aria-labelledby="lemmas-title"></textarea>
-            </div>
-        </div>
-    </fieldset>
-
-    <!-- Consolidations -->
-    <fieldset id="consolidations-fieldset">
-        <div id="consolidations-section" class="scrub-section">
-
-            <div class="vertical-splitter scrub-section-top">
-                <legend id="consolidations-title" class="title">Consolidations</legend>
-
-                <div class="right-justified">
-                    <span id="consolidations-upload-button" class="button">Upload</span>
-                    <span id="consolidations-tooltip-button" class="tooltip-button">?</span>
-                </div>
-
-                <h3 id="consolidations-upload-text" class="hidden upload-text">None</h3>
-            </div>
-
-            <div class="scrub-section-body">
-                <textarea name="consolidations" spellcheck="false" placeholder="Enter consolidations here."
-                    aria-labelledby="consolidations-title"></textarea>
             </div>
         </div>
     </fieldset>

@@ -229,6 +229,7 @@ class LexosFile:
 
         if 'scrub' not in self.options:
             self.options['scrub'] = {}
+
         scrub_options = self.get_scrub_options()
 
         text_strfile_managering = self.load_contents()
@@ -485,16 +486,16 @@ class LexosFile:
                 str_legend = str_legend + \
                     "Lemmas: [" + self.options["scrub"]['lemmas'] + "], "
 
-            # consolidations
-            if ('consolidations_file[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['consolidations_file[]'] != ''):
-                str_legend = str_legend + "Consolidation file: " + \
-                    self.options["scrub"]['consolidations_file[]'] + ", "
-            if ('consolidations' in self.options["scrub"]) and (
-                    self.options["scrub"]['consolidations'] != ''):
+            # pattern replacements
+            if ('pattern_replacements_file[]' in self.options["scrub"]) and (
+                    self.options["scrub"]['pattern_replacements_file[]'] != ''):
+                str_legend = str_legend + "Pattern replacements file: " + \
+                    self.options["scrub"]['pattern_replacements_file[]'] + ", "
+            if ('pattern_replacements' in self.options["scrub"]) and (
+                    self.options["scrub"]['pattern_replacements'] != ''):
                 str_legend = str_legend + \
-                    "Consolidations: [" + \
-                    self.options["scrub"]['consolidations'] + "], "
+                    "Pattern Replacements: [" + \
+                    self.options["scrub"]['pattern_replacements'] + "], "
 
             # special characters (entities) - pull down
             if ('special_characters_preset' in self.options["scrub"]) and (
