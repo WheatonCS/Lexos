@@ -247,6 +247,7 @@ class LexosFile:
             spaces=scrub_options['remove_spaces'],
             tabs=scrub_options['remove_tabs'],
             new_lines=scrub_options['remove_newlines'],
+            regex_tokens=scrub_options['apply_token_regex'],
             opt_uploads=request.files,
             storage_options=storage_options,
             storage_folder=session_manager.session_folder() + '/scrub/',

@@ -77,6 +77,7 @@ SCRUBBOXES = (
     "remove_punctuation",
     "remove_spaces",
     "remove_tabs",
+    "apply_token_regex",
     "scrub_tags",
     "stop_words_method",
 )

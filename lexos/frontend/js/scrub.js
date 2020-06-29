@@ -274,6 +274,10 @@ function initialize_tooltips () {
     want to replace separated from their replacement values by "&gt;".
     To use regex, prefix the pattern with "REGEX:"`)
 
+  create_tooltip('#regex-tooltip-button', `Apply regex patterns to
+    each token instead of the document as a whole. This only works
+    for languages that use spaces for token delimiters.`)
+
   // "Stop and Keep Words"
   create_tooltip('#stop-words-tooltip-button', `Upload or input a list of
     "stop words" (words to be removed) or "keep words" (words to keep).
