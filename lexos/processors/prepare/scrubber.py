@@ -194,13 +194,17 @@ def replacement_handler(text: str,
 
 def pattern_replacement_handler(text: str,
                         replacer_string: str) -> str:
-    """Handles pattern replacement lines found in the scrub-alteration-upload files.
+    """Handles pattern replacement lines found in the pattern-replacement requests
+        manually entered (or requests, one per line, in uploaded files).
     :param text: A unicode string with the whole text to be altered.
     :param replacer_string: A formatted string input with newline-separated
-        "replacement lines", where each line is formatted to replace the
-        majority of the words with one word.
+        "replacement lines", where each line is an edit/replace request,
+        regex syntax allowed, e.g.,   regex:^a>b  ... or not,   foo>fee
     :returns: The input string with replacements made.
     """
+
+    import time
+    start = time.perf_counter()
 
     # Convert HTML character entities to Unicode if HTML is selected *and* there
     # are further entities entered in the form field
@@ -216,9 +220,12 @@ def pattern_replacement_handler(text: str,
     replacement_lines = [token for token in no_space_replacer.split('\n')
                          if token != ""]
 
-    replacement_jobs = []
     # Search for all examples of > not preceded by a backslash
     pat_for_sep = re.compile(r'(?<!\\)>')
+
+    # parse and build search/regex replacement lines
+    replacement_jobs = []  # store parsed replacement requests here
+
     for replacement_line in replacement_lines:
         # There is more than one potential separator, raise an error
         if len(re.findall(pat_for_sep, replacement_line)) > 1:
@@ -233,20 +240,76 @@ def pattern_replacement_handler(text: str,
             substitution = substitution.replace('\\>', '>')
             # Convert \s token to a space
             substitution = substitution.replace('\\s', ' ')
+            substitution = substitution.strip()
             # If the pattern has the prefix REGEX:, remove it and set regex=True
             if pattern.lower().startswith('regex:'):
                 regex = True
                 pattern = re.sub(r'^REGEX:', '', pattern, flags=re.IGNORECASE)
             else:
                 regex = False
-            replacement_jobs.append((regex, pattern, substitution))
 
-            # Do the replacement
+            replacement_jobs.append((regex, pattern, substitution))
+    # end for each replacement line
+
+    print(f"ALL replacement_jobs: {replacement_jobs}")
+    #end = time.perf_counter()
+    #print(f" ---------- Time to setup replacement_jobs: {end-start:.3f} -------------")
+
+    #parse_by_token = request.form['parse_by_token']
+    parse_by_token = True
+
+    if (parse_by_token):
+        # we are assuming tokens are separated by whitespace
+        theTokens = text.split()
+        #print("+++++ theTokens", theTokens)
+
+        tokens = [edit_token(token, replacement_jobs) for token in theTokens]
+        text   = " ".join(tokens)
+
+    else:
+        # handle all the replacements by direct substitution on the entire text
+        for replacement_line in replacement_jobs:
+            #print(f"replacement_line: {replacement_line}")
+            regex, pattern, substitution = replacement_line
+            #print(f"({regex}, {pattern}, {substitution})")
+
+            # Do the replacement (on the entire text)
             if regex == True:
+                pattern = re.compile(rf"{pattern}")
                 text = re.sub(pattern, substitution, text)
             else:
                 text = text.replace(pattern, substitution)
+        # end for each replacement pattern on the entire text
+    
+    end = time.perf_counter()
+    print(f" ---------- Time to replace: {end-start:.3f} -------------")
+      
     return text
+
+def edit_token(token: str, replacement_jobs: list) -> str:
+    """Alters token according to the replacements.
+
+    :param text: The input token to edit.
+    :param replacement_jobs: a list of (regexOn?, pattern, substitution) tuples
+    :return: The token after all replacements made.
+    """
+
+    for replacement_line in replacement_jobs:
+        #print(f"replacement_line: {replacement_line}")
+        regex, pattern, substitution = replacement_line
+        #print(f"({regex}, {pattern}, {substitution})")
+        
+        if regex == True:
+            pattern = re.compile(rf"{pattern}")
+        
+        # Do the replacement    
+        oldToken = token      
+        token = re.sub(pattern, substitution, token)
+        #print(f"TOKEN: {oldToken}>{token} USING ({regex}, {pattern}, {substitution})")
+    # end for each replacement 
+
+    return token
+
 
 def replace_with_dict(text: str, replacement_dict: Dict[str, str],
                       edge1: str, edge2: str) -> str:
