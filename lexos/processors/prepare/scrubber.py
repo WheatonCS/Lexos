@@ -968,7 +968,7 @@ def prepare_additional_options(opt_uploads: Dict[str, FileStorage],
 
 def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
           hyphen: bool, amper: bool, digits: bool, tags: bool,
-          spaces: bool, tabs: bool, new_lines: bool,
+          spaces: bool, tabs: bool, new_lines: bool, regex_tokens: bool,
           opt_uploads: Dict[str, FileStorage], storage_options: List[str],
           storage_folder: str, previewing: bool = False) -> str:
     """Scrubs the text according to the specifications chosen by the user.
@@ -991,6 +991,8 @@ def scrub(text: str, gutenberg: bool, lower: bool, punct: bool, apos: bool,
     :param spaces: A boolean indicating whether spaces should be removed.
     :param tabs: A boolean indicating whether tabs should be removed.
     :param new_lines: A boolean indicating whether newlines should be removed.
+    :param regex_tokens: A boolean indicating whether regex pattern replacements
+        should apply to tokens or the whole document.
     :param opt_uploads: A dictionary (specifically ImmutableMultiDict)
         containing the additional scrubbing option files that have been
         uploaded.
