@@ -203,8 +203,8 @@ def pattern_replacement_handler(text: str,
     :returns: The input string with replacements made.
     """
 
-    import time
-    start = time.perf_counter()
+    #import time
+    #start = time.perf_counter()
 
     # Convert HTML character entities to Unicode if HTML is selected *and* there
     # are further entities entered in the form field
@@ -251,7 +251,7 @@ def pattern_replacement_handler(text: str,
             replacement_jobs.append((regex, pattern, substitution))
     # end for each replacement line
 
-    print(f"ALL replacement_jobs: {replacement_jobs}")
+    #print(f"ALL replacement_jobs: {replacement_jobs}")
     #end = time.perf_counter()
     #print(f" ---------- Time to setup replacement_jobs: {end-start:.3f} -------------")
 
@@ -281,13 +281,13 @@ def pattern_replacement_handler(text: str,
                 text = text.replace(pattern, substitution)
         # end for each replacement pattern on the entire text
     
-    end = time.perf_counter()
-    print(f" ---------- Time to replace: {end-start:.3f} -------------")
+    #end = time.perf_counter()
+    #print(f" ---------- Time to replace: {end-start:.3f} -------------")
       
     return text
 
 def edit_token(token: str, replacement_jobs: list) -> str:
-    """Alters token according to the replacements.
+    """Alters token according to the list of (regex)pattern replacements.
 
     :param text: The input token to edit.
     :param replacement_jobs: a list of (regexOn?, pattern, substitution) tuples
