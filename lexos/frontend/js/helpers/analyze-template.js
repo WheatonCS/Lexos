@@ -34,7 +34,7 @@ function initialize_cull_tooltips (on_right_edge = true) {
 
   // "Use the top X Words"
   create_tooltip('#most-frequent-words-tooltip-button', `Use only the most
-    frequently occurring terms in the document-term matrix.`, on_right_edge)
+    frequently occurring terms in the document-term matrix. Enter a negative number to cull the least frequent`, on_right_edge)
 
   // "Must be in X documents"
   create_tooltip('#minimum-occurrences-tooltip-button', `Set the minimum
@@ -69,7 +69,8 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
   let most_frequent_words = $('#most-frequent-words-input').val()
 
   if ($('#most-frequent-words-checkbox').is(':checked') &&
-    !validate_number(most_frequent_words, 1)) {
+    // in this test, we are removing the minimum of '1' to try and implement a "cull least frequent words
+    !validate_number(most_frequent_words)) {
     error_highlight('#most-frequent-words-input')
     if (show_error) error('Invalid number of top terms.')
     valid = false
