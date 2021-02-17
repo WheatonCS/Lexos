@@ -156,6 +156,13 @@ class MatrixModel(BaseModel):
                 lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
                 dtm_data_frame=dtm_after_cull,
             )
+        # only leave the least frequent words in the corpus
+        # (modify so that two corpus sections can be combined)
+        if self._opts.culling_option.mfw_highest_rank is not None:
+            dtm_after_mfw = self._get_most_frequent_word(
+                upper_rank_bound=self._opts.culling_option.mfw_lowest_rank,
+                dtm_data_frame=dtm_after_cull,
+            )
         else:
             dtm_after_mfw = dtm_after_cull
 
@@ -251,8 +258,6 @@ class MatrixModel(BaseModel):
                                  (the rank is determined by the word's number
                                  of appearance in the whole corpus)
                                  (ranked from high to low)
-                                 (if lower_rank_bound is negative, we instead
-                                 cull by the '-N' least frequent words)
         :param dtm_data_frame: the dtm in the form of panda data frame.
                                 the indices(rows) are segment names
                                 the columns are words.
@@ -262,50 +267,65 @@ class MatrixModel(BaseModel):
         # get the word count of each word in the corpus (a panda series)
         corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
-        # get least frequent words if lower_rank_bound is less than 0
-        if lower_rank_bound < 0:
-            # sort the word list
-            sorted_word_count: pd.Series \
-                = corpus_word_count.sort_values(ascending=True)
+        # sort the word list
+        sorted_word_count: pd.Series \
+            = corpus_word_count.sort_values(ascending=False)
 
-            print("LOWER_RANK TEST")
-            upper_rank_bound: int = abs(lower_rank_bound)
-            # get the first "upper_rank_bound" number of item
-            least_frequent_counts: pd.Series \
-                = sorted_word_count.head(upper_rank_bound)
-            print("tail: ", least_frequent_counts[0:4])
+        print("UPPER_RANK TEST")
+        # get the first "lower_rank_bound" number of item
+        most_frequent_counts: pd.Series \
+            = sorted_word_count.head(lower_rank_bound)
+        print("head: ", most_frequent_counts[0:4])
 
-            # get the least frequent words (the index of the count)
-            least_frequent_words = least_frequent_counts.index
-            print("words: ", least_frequent_words[0:4])
+        # get the most frequent words (the index of the count)
+        most_frequent_words = most_frequent_counts.index
+        print("words: ", most_frequent_words[0:4])
 
-            print(type(dtm_data_frame[least_frequent_words]))
-            print("WHOLE DATA:\n",
-                  (dtm_data_frame[least_frequent_words])[0:10])
+        print(type(dtm_data_frame[most_frequent_words]))
+        print("WHOLE DATA:\n", \
+            (dtm_data_frame[most_frequent_words])[0:10])
 
-            return dtm_data_frame[least_frequent_words]
+        return dtm_data_frame[most_frequent_words]
 
-        # otherwise, get the most frequent word count
-        else:
-            # sort the word list
-            sorted_word_count: pd.Series \
-                = corpus_word_count.sort_values(ascending=False)
+    @staticmethod
+    def _get_least_frequent_word(upper_rank_bound: int,
+                                 dtm_data_frame: pd.DataFrame) -> pd.DataFrame:
+        """Get the least frequent words in final_matrix and words.
 
-            print("UPPER_RANK TEST")
-            # get the first "lower_rank_bound" number of item
-            most_frequent_counts: pd.Series \
-                = sorted_word_count.head(lower_rank_bound)
-            print("head: ", most_frequent_counts[0:4])
+        The new count matrix will consists of only the least frequent words in
+        the whole corpus.
+        :param upper_rank_bound: the highest rank to remain in the matrix
+                                 (the rank is determined by the word's number
+                                 of appearance in the whole corpus)
+                                 (ranked from low to high)
+        :param dtm_data_frame: the dtm in the form of panda data frame.
+                                the indices(rows) are segment names
+                                the columns are words.
+        :return:
+            dtm data frame with only the most/least frequent words
+        """
+        # get the word count of each word in the corpus (a panda series)
+        corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
 
-            # get the most frequent words (the index of the count)
-            most_frequent_words = most_frequent_counts.index
-            print("words: ", most_frequent_words[0:4])
+        # sort the word list
+        sorted_word_count: pd.Series \
+            = corpus_word_count.sort_values(ascending=True)
 
-            print(type(dtm_data_frame[most_frequent_words]))
-            print("WHOLE DATA:\n", \
-                  (dtm_data_frame[most_frequent_words])[0:10])
+        print("LOWER_RANK TEST")
+        # get the first "upper_rank_bound" number of item
+        least_frequent_counts: pd.Series \
+            = sorted_word_count.head(upper_rank_bound)
+        print("tail: ", least_frequent_counts[0:4])
 
-            return dtm_data_frame[most_frequent_words]
+        # get the least frequent words (the index of the count)
+        least_frequent_words = least_frequent_counts.index
+        print("words: ", least_frequent_words[0:4])
+
+        print(type(dtm_data_frame[least_frequent_words]))
+        print("WHOLE DATA:\n",
+              (dtm_data_frame[least_frequent_words])[0:10])
+
+        return dtm_data_frame[least_frequent_words]
 
     @staticmethod
     def _get_culled_matrix(least_num_seg: int,
