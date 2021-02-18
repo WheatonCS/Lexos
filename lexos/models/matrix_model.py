@@ -150,17 +150,39 @@ class MatrixModel(BaseModel):
         else:
             dtm_after_cull = dtm_data_frame
 
+        # check if both options are checked
+        if self._opts.culling_option.mfw_lowest_rank is not None and \
+                self._opts.culling_option.mfw_highest_rank is not None:
+
+            # set one variable to culled by most frequent
+            dtm_after_mfw = self._get_most_frequent_word(
+                lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
+                dtm_data_frame=dtm_after_cull,
+            )
+
+            # set variable to culled by least frequent
+            dtm_after_lfw = self._get_least_frequent_word(
+                upper_rank_bound=self._opts.culling_option.mfw_highest_rank,
+                dtm_data_frame=dtm_after_cull,
+            )
+
+            # then, merge the two using pd.concat()
+            dtm_combined = [dtm_after_lfw, dtm_after_mfw]
+            dtm_after_mfw = pd.concat(objs=dtm_combined, verify_integrity=True)
+            # if performance is too heavily hit, remove "verify_integrity" and
+            # add something else to prevent redundant columns
+
         # only leaves the most frequent words in dtm
-        if self._opts.culling_option.mfw_lowest_rank is not None:
+        elif self._opts.culling_option.mfw_lowest_rank is not None:
             dtm_after_mfw = self._get_most_frequent_word(
                 lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
                 dtm_data_frame=dtm_after_cull,
             )
         # only leave the least frequent words in the corpus
         # (modify so that two corpus sections can be combined)
-        if self._opts.culling_option.mfw_highest_rank is not None:
-            dtm_after_mfw = self._get_most_frequent_word(
-                upper_rank_bound=self._opts.culling_option.mfw_lowest_rank,
+        elif self._opts.culling_option.mfw_highest_rank is not None:
+            dtm_after_mfw = self._get_least_frequent_word(
+                upper_rank_bound=self._opts.culling_option.mfw_highest_rank,
                 dtm_data_frame=dtm_after_cull,
             )
         else:
@@ -262,7 +284,7 @@ class MatrixModel(BaseModel):
                                 the indices(rows) are segment names
                                 the columns are words.
         :return:
-            dtm data frame with only the most/least frequent words
+            dtm data frame with only the most frequent words
         """
         # get the word count of each word in the corpus (a panda series)
         corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
@@ -302,7 +324,7 @@ class MatrixModel(BaseModel):
                                 the indices(rows) are segment names
                                 the columns are words.
         :return:
-            dtm data frame with only the most/least frequent words
+            dtm data frame with only the least frequent words
         """
         # get the word count of each word in the corpus (a panda series)
         corpus_word_count: pd.Series = dtm_data_frame.sum(axis='index')
