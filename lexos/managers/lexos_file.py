@@ -241,7 +241,6 @@ class LexosFile:
         text_string = scrubber.scrub(
             text_strfile_managering,
             gutenberg=self.is_gutenberg,
-            # gutenberg=scrub_options['remove_gutenberg'],
             lower=scrub_options['make_lowercase'],
             punct=scrub_options['remove_punctuation'],
             apos=scrub_options['keep_apostrophes'],
