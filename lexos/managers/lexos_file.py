@@ -128,8 +128,8 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        # could make this more general with .*? instead of this/the, but I've only seen this/the used  
-        if re.search(r"\*\*\* START OF (THIS|THE) PROJECT GUTENBERG.*?\*\*\*",
+        # could make this more specific with (THE|THIS) instead of a catch all, but this allows for more variation  
+        if re.search(r"\*\*\* START OF .*PROJECT GUTENBERG.*?\*\*\*",
                      file_contents):
             return True
         else:
