@@ -753,6 +753,7 @@ def load_scrub_optional_upload(storage_folder: str, filename: str) -> str:
 
 
 def handle_gutenberg(text: str) -> str:
+    print("entering handle")
     """Removes Project Gutenberg boilerplate from text.
 
     :param text: A Project Gutenberg document.
@@ -777,12 +778,18 @@ def handle_gutenberg(text: str) -> str:
         text = text[end_boiler_front:]
     else:
         re_start_gutenberg = re.compile(
-            r"Copyright.*\n\n\n", re.IGNORECASE | re.UNICODE)
+            r"\*\*\*\n\n\nScanner.*? Notes", re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(re_start_gutenberg, text)
         if match:
-            end_boiler_front = match.end()
-            # text saved without front boilerplate
-            text = text[end_boiler_front:]
+            second_match = re.compile(
+                r"\nDavid Reed\n", re.IGNORECASE | re.UNICODE | re.MULTILINE)
+            match = re.search(second_match, text)
+
+            if match:
+                print("inside second match")
+                end_boiler_front = match.end()
+                # text saved without front boilerplate
+                text = text[end_boiler_front:]
 
     # now let's find the start of the ending boilerplate
     re_end_gutenberg = re.compile(

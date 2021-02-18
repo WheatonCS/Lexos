@@ -132,6 +132,9 @@ class LexosFile:
         if re.search(r"\*\*\* START OF .*PROJECT GUTENBERG.*?\*\*\*",
                      file_contents):
             return True
+        elif re.search(r"\nDavid Reed\n",
+                     file_contents):
+            return True
         else:
             return False
 
@@ -216,6 +219,7 @@ class LexosFile:
         return scrub_options
 
     def scrub_contents(self, saving_changes: bool) -> str:
+        print("entering scrib contents")
         """Scrub the contents of the file according to the user's options
 
         May save the changes or not.
