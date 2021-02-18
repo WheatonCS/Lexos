@@ -73,6 +73,7 @@ SCRUBBOXES = (
     "remove_digits",
     "keep_hyphens",
     "make_lowercase",
+    # "remove_gutenberg", #TEMPORARY (perhaps)
     "remove_newlines",
     "remove_punctuation",
     "remove_spaces",
@@ -201,6 +202,7 @@ DEFAULT_SCRUB_OPTIONS = {
     "remove_digits": True,
     "keep_hyphens": False,
     "make_lowercase": True,
+    # "remove_gutenberg": False, # ADDED
     "remove_newlines": True,
     "remove_punctuation": True,
     "remove_tabs": True,

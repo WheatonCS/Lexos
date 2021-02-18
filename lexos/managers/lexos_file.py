@@ -128,7 +128,8 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        if re.search(r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+        # could make this more general with .*? instead of this/the, but I've only seen this/the used  
+        if re.search(r"\*\*\* START OF (THIS|THE) PROJECT GUTENBERG.*?\*\*\*",
                      file_contents):
             return True
         else:
@@ -236,6 +237,7 @@ class LexosFile:
         text_string = scrubber.scrub(
             text_strfile_managering,
             gutenberg=self.is_gutenberg,
+            # gutenberg=scrub_options['remove_gutenberg'],
             lower=scrub_options['make_lowercase'],
             punct=scrub_options['remove_punctuation'],
             apos=scrub_options['keep_apostrophes'],

@@ -765,8 +765,10 @@ def handle_gutenberg(text: str) -> str:
     # This is a "non-greedy" regex pattern, meaning it will stop looking
     # and return after the first "***" (instead of deleting some of the text
     # if it finds "***" outside of the boilerplate.
+
+    # could make this more general with .*? instead of this/the, but I've only seen this or the used in texts
     re_start_gutenberg = re.compile(
-        r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+        r"\*\*\* START OF (THIS|THE) PROJECT GUTENBERG.*?\*\*\*",
         re.IGNORECASE | re.UNICODE | re.MULTILINE)
     match = re.search(re_start_gutenberg, text)
     if match:
