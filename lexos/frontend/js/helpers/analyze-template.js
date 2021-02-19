@@ -77,7 +77,7 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
   }
 
   //"Cull" - "Use the bottom x terms"
-  //
+
   let least_frequent_words = $('#least-frequent-words-input').val()
   if ($('#least-frequent-words-checkbox').is(':checked') &&
     // in this test, we are removing the minimum of '1' to try and implement a "cull least frequent words
