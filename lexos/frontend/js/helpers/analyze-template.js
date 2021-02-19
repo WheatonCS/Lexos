@@ -76,6 +76,17 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
     valid = false
   }
 
+  // "Cull" - "Use the bottom X terms"
+  let least_frequent_words = $('#least-frequent-words-input').val()
+
+  if ($('#least-frequent-words-checkbox').is(':checked') &&
+    // in this test, we are removing the minimum of '1' to try and implement a "cull least frequent words
+    !validate_number(least_frequent_words)) {
+    error_highlight('#least-frequent-words-input')
+    if (show_error) error('Invalid number of bottom terms.')
+    valid = false
+  }
+
   // "Cull" - "Must be in X documents"
   let minimum_documents = $('#minimum-occurrences-input').val()
   if ($('#minimum-occurrences-checkbox').is(':checked') &&
