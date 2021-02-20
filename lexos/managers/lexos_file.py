@@ -128,9 +128,9 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        # could make this more specific with (THE|THIS) instead of a catch all, but this allows for more variation  
-        if re.search(r"\*\*\* START OF .*PROJECT GUTENBERG.*?\*\*\*",
-                     file_contents):
+        # could make this more specific with (THE|THIS) instead of a catch all, but this allows for more variation
+        if re.search(r"\*\*\* START OF .*PROJECT GUTENBERG.*?\n?.*?\*\*\*",
+                     file_contents, re.IGNORECASE | re.UNICODE | re.MULTILINE):
             return True
         elif re.search(r"\nDavid Reed\n",
                      file_contents):
@@ -219,7 +219,6 @@ class LexosFile:
         return scrub_options
 
     def scrub_contents(self, saving_changes: bool) -> str:
-        print("entering scrib contents")
         """Scrub the contents of the file according to the user's options
 
         May save the changes or not.

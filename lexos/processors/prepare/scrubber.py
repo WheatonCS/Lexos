@@ -769,7 +769,7 @@ def handle_gutenberg(text: str) -> str:
 
     # OR USE (THE|THIS) to only catch when this or the is used
     re_start_gutenberg = re.compile(
-        r"\*\*\* START OF .*PROJECT GUTENBERG.*?\*\*\*",
+        r"\*\*\* START OF .*PROJECT GUTENBERG.*?\n?.*?\*\*\*",
         re.IGNORECASE | re.UNICODE | re.MULTILINE)
     match = re.search(re_start_gutenberg, text)
     if match:
