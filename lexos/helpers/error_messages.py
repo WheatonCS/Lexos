@@ -33,6 +33,9 @@ REPLACEMENT_RIGHT_OPERAND_MESSAGE = \
     "Too many values on right side of replacement string."
 REPLACEMENT_NO_LEFT_HAND_MESSAGE = \
     "Missing value on the left side of replacement string."
+UNESCAPED_GREATER_THAN_SIGN_MESSAGE = \
+    "Please place a backslash before all examples of `>` in the pattern" \
+    " you wish to replace."
 # ----------------------------------------------------------------------------
 
 
