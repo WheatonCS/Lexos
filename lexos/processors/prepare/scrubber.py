@@ -203,8 +203,6 @@ def pattern_replacement_handler(text: str,
     :returns: The input string with replacements made.
     """
 
-    #import time
-    #start = time.perf_counter()
 
     # Convert HTML character entities to Unicode if HTML is selected *and* there
     # are further entities entered in the form field
@@ -223,7 +221,7 @@ def pattern_replacement_handler(text: str,
     # Search for all examples of > not preceded by a backslash
     pat_for_sep = re.compile(r'(?<!\\)>')
 
-    # parse and build search/regex replacement lines
+    # Parse and build search/regex replacement lines
     replacement_jobs = []  # store parsed replacement requests here
 
     for replacement_line in replacement_lines:
@@ -236,11 +234,14 @@ def pattern_replacement_handler(text: str,
             # Remove whitespace around the separator and then split
             replacement_line = re.sub(r'\s+>\s+', '>', replacement_line)
             pattern, substitution = re.split(pat_for_sep, replacement_line)
+
             # Handle string internal greater than sign
             substitution = substitution.replace('\\>', '>')
+
             # Convert \s token to a space
             substitution = substitution.replace('\\s', ' ')
             substitution = substitution.strip()
+            
             # If the pattern has the prefix REGEX:, remove it and set regex=True
             if pattern.lower().startswith('regex:'):
                 regex = True
@@ -251,17 +252,12 @@ def pattern_replacement_handler(text: str,
             replacement_jobs.append((regex, pattern, substitution))
     # end for each replacement line
 
-    #print(f"ALL replacement_jobs: {replacement_jobs}")
-    #end = time.perf_counter()
-    #print(f" ---------- Time to setup replacement_jobs: {end-start:.3f} -------------")
-
-    #parse_by_token = request.form['parse_by_token']
+    # parse_by_token = request.form['parse_by_token']
     parse_by_token = True
 
     if (parse_by_token):
-        # we are assuming tokens are separated by whitespace
+        # Assuming tokens are separated by whitespace
         theTokens = text.split()
-        #print("+++++ theTokens", theTokens)
 
         tokens = [edit_token(token, replacement_jobs) for token in theTokens]
         text   = " ".join(tokens)
@@ -269,9 +265,7 @@ def pattern_replacement_handler(text: str,
     else:
         # handle all the replacements by direct substitution on the entire text
         for replacement_line in replacement_jobs:
-            #print(f"replacement_line: {replacement_line}")
             regex, pattern, substitution = replacement_line
-            #print(f"({regex}, {pattern}, {substitution})")
 
             # Do the replacement (on the entire text)
             if regex == True:
@@ -281,8 +275,6 @@ def pattern_replacement_handler(text: str,
                 text = text.replace(pattern, substitution)
         # end for each replacement pattern on the entire text
     
-    #end = time.perf_counter()
-    #print(f" ---------- Time to replace: {end-start:.3f} -------------")
       
     return text
 
