@@ -34,7 +34,11 @@ function initialize_cull_tooltips (on_right_edge = true) {
 
   // "Use the top X Words"
   create_tooltip('#most-frequent-words-tooltip-button', `Use only the most
-    frequently occurring terms in the document-term matrix. Enter a negative number to cull the least frequent`, on_right_edge)
+    frequently occurring terms in the document-term matrix.`, on_right_edge)
+  
+  //"Use the bottom x Words"
+  create_tooltip('#least-frequent-words-tooltip-button', `Use only the least
+    frequently occurring terms in the document-term matrix.`, on_right_edge)
 
   // "Must be in X documents"
   create_tooltip('#minimum-occurrences-tooltip-button', `Set the minimum
