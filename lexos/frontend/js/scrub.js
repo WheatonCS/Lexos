@@ -224,8 +224,18 @@ function update_document_previews (response) {
     return
   }
 
-  // Create the previews as hidden elements
+  // Create the previews as hidden elements 
+  let gutenberg_flag = false
   for (const preview of previews) { create_document_preview(preview[0], preview[1]) }
+  
+  // Check to see if any files are gutenberg, if so create pop up
+  for (const preview of previews) { if(preview[2] == true){gutenberg_flag = true} }
+  if(gutenberg_flag == true){
+      let popup_container_element = create_popup("Gutenberg File")
+    
+      $(`<span class="popup-ok-button button">OK</span>`)
+        .appendTo(popup_container_element.find('.popup'))  
+  }
 
   // Remove the loading overlay, fade in the previews, and enable the
   // buttons for the document previews section
