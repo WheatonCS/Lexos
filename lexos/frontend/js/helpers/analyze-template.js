@@ -34,7 +34,11 @@ function initialize_cull_tooltips (on_right_edge = true) {
 
   // "Use the top X Words"
   create_tooltip('#most-frequent-words-tooltip-button', `Use only the most
-    frequently occurring terms in the document-term matrix. Enter a negative number to cull the least frequent`, on_right_edge)
+    frequently occurring terms in the document-term matrix.`, on_right_edge)
+
+  //"Use the bottom x Words"
+  create_tooltip('#least-frequent-words-tooltip-button', `Use only the least
+    frequently occurring terms in the document-term matrix.`, on_right_edge)
 
   // "Must be in X documents"
   create_tooltip('#minimum-occurrences-tooltip-button', `Set the minimum
@@ -76,9 +80,9 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
     valid = false
   }
 
-  // "Cull" - "Use the bottom X terms"
-  let least_frequent_words = $('#least-frequent-words-input').val()
+  //"Cull" - "Use the bottom x terms"
 
+  let least_frequent_words = $('#least-frequent-words-input').val()
   if ($('#least-frequent-words-checkbox').is(':checked') &&
     // in this test, we are removing the minimum of '1' to try and implement a "cull least frequent words
     !validate_number(least_frequent_words)) {
