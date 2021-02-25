@@ -237,7 +237,6 @@ function update_document_previews (response) {
       gutenberg_flag = true
       // append name of gutenberg file
       gut_file_names.push(preview[0])
-      console.log(preview[0], preview[2])
     } 
   }
   
@@ -247,15 +246,15 @@ function update_document_previews (response) {
 
       $(`
       <span>We've detected one or more of your files are from Gutenberg. 
-      <br> All boilerplate header and footer content has been removed. 
+      <br> All boilerplate header and footer content has been automatically removed. 
       <span id="file_list"> <br> <br> Files Changed: </span>
       <em> <br> <br> See Help for more information </em></span>
     `).appendTo(popup_container_element.find('.popup-content'))
   }
-    // append gutenberg file names to popup
-    gut_file_names.forEach(function(elem){
-      $('#file_list').append(elem + ", ");
-})
+  
+  // append gutenberg file names to popup
+  $('#file_list').append(gut_file_names.join(', '))
+
   // Remove the loading overlay, fade in the previews, and enable the
   // buttons for the document previews section
   finish_document_previews_loading()
