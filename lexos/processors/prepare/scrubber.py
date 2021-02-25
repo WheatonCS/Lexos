@@ -753,7 +753,6 @@ def load_scrub_optional_upload(storage_folder: str, filename: str) -> str:
 
 
 def handle_gutenberg(text: str) -> str:
-    print("entering handle")
     """Removes Project Gutenberg boilerplate from text.
 
     :param text: A Project Gutenberg document.
@@ -786,7 +785,6 @@ def handle_gutenberg(text: str) -> str:
             match = re.search(second_match, text)
 
             if match:
-                print("inside second match")
                 end_boiler_front = match.end()
                 # text saved without front boilerplate
                 text = text[end_boiler_front:]

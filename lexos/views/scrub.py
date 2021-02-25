@@ -64,7 +64,7 @@ def execute() -> str:
     previews = file_manager.scrub_files(saving_changes=saving_changes)
 
     # Create the previews.
-    previews = [[preview[1], preview[3]] for preview in previews]
+    previews = [[preview[1], preview[3], preview[4]] for preview in previews]
 
     # Save the changes if requested.
     if saving_changes:
