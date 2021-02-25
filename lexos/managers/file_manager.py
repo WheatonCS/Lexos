@@ -321,10 +321,10 @@ class FileManager:
 
         previews = []
 
-        ## check if file is a gutenberg text
-        gutenberg = self.check_actives_tags()[2]
-
+        gutenberg = False
         for l_file in list(self.files.values()):
+            ## check if there is a gutenberg file 
+            gutenberg = l_file.is_gutenberg
             if l_file.active:
                 previews.append(
                     (l_file.id,

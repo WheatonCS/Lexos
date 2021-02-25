@@ -225,18 +225,37 @@ function update_document_previews (response) {
   }
 
   // Create the previews as hidden elements 
-  let gutenberg_flag = false
   for (const preview of previews) { create_document_preview(preview[0], preview[1]) }
   
   // Check to see if any files are gutenberg, if so create pop up
-  for (const preview of previews) { if(preview[2] == true){gutenberg_flag = true} }
+  let gutenberg_flag = false
+  let gut_file_names = []
+
+  for (const preview of previews) { 
+    if(preview[2] == true){
+      // set to true to trigger popup
+      gutenberg_flag = true
+      // append name of gutenberg file
+      gut_file_names.push(preview[0])
+      console.log(preview[0], preview[2])
+    } 
+  }
+  
+  // create popup if gutenberg files are modified
   if(gutenberg_flag == true){
       let popup_container_element = create_popup("Gutenberg File")
-    
-      $(`<span class="popup-ok-button button">OK</span>`)
-        .appendTo(popup_container_element.find('.popup'))  
-  }
 
+      $(`
+      <span>We've detected one or more of your files are from Gutenberg. 
+      <br> All boilerplate header and footer content has been removed. 
+      <span id="file_list"> <br> <br> Files Changed: </span>
+      <em> <br> <br> See Help for more information </em></span>
+    `).appendTo(popup_container_element.find('.popup-content'))
+  }
+    // append gutenberg file names to popup
+    gut_file_names.forEach(function(elem){
+      $('#file_list').append(elem + ", ");
+})
   // Remove the loading overlay, fade in the previews, and enable the
   // buttons for the document previews section
   finish_document_previews_loading()
