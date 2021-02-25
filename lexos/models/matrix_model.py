@@ -154,13 +154,13 @@ class MatrixModel(BaseModel):
         if self._opts.culling_option.mfw_lowest_rank is not None and \
                 self._opts.culling_option.mfw_highest_rank is not None:
 
-            # set one variable to culled by most frequent
+            # set one variable to matrix culled by most frequent
             dtm_after_mfw = self._get_most_frequent_word(
                 lower_rank_bound=self._opts.culling_option.mfw_lowest_rank,
                 dtm_data_frame=dtm_after_cull,
             )
 
-            # set variable to culled by least frequent
+            # set variable to matrix culled by least frequent
             dtm_after_lfw = self._get_least_frequent_word(
                 upper_rank_bound=self._opts.culling_option.mfw_highest_rank,
                 dtm_data_frame=dtm_after_cull,
@@ -168,7 +168,10 @@ class MatrixModel(BaseModel):
 
             # then, merge the two using pd.concat()
             dtm_combined = [dtm_after_lfw, dtm_after_mfw]
-            dtm_after_mfw = pd.concat(objs=dtm_combined, verify_integrity=True)
+            dtm_after_mfw = pd.concat(objs=dtm_combined,
+                                      verify_integrity=True,
+                                      ignore_index=True,
+                                      axis=1)
             # if performance is too heavily hit, remove "verify_integrity" and
             # add something else to prevent redundant columns
 
@@ -293,19 +296,12 @@ class MatrixModel(BaseModel):
         sorted_word_count: pd.Series \
             = corpus_word_count.sort_values(ascending=False)
 
-        print("UPPER_RANK TEST")
         # get the first "lower_rank_bound" number of item
         most_frequent_counts: pd.Series \
             = sorted_word_count.head(lower_rank_bound)
-        print("head: ", most_frequent_counts[0:4])
 
         # get the most frequent words (the index of the count)
         most_frequent_words = most_frequent_counts.index
-        print("words: ", most_frequent_words[0:4])
-
-        print(type(dtm_data_frame[most_frequent_words]))
-        print("WHOLE DATA:\n", \
-            (dtm_data_frame[most_frequent_words])[0:10])
 
         return dtm_data_frame[most_frequent_words]
 
@@ -333,19 +329,12 @@ class MatrixModel(BaseModel):
         sorted_word_count: pd.Series \
             = corpus_word_count.sort_values(ascending=True)
 
-        print("LOWER_RANK TEST")
         # get the first "upper_rank_bound" number of item
         least_frequent_counts: pd.Series \
             = sorted_word_count.head(upper_rank_bound)
-        print("tail: ", least_frequent_counts[0:4])
 
         # get the least frequent words (the index of the count)
         least_frequent_words = least_frequent_counts.index
-        print("words: ", least_frequent_words[0:4])
-
-        print(type(dtm_data_frame[least_frequent_words]))
-        print("WHOLE DATA:\n",
-              (dtm_data_frame[least_frequent_words])[0:10])
 
         return dtm_data_frame[least_frequent_words]
 
