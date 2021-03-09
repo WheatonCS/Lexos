@@ -5,6 +5,7 @@ from typing import NamedTuple
 import pandas as pd
 from scipy.spatial.distance import cosine
 
+from lexos.helpers.constants import ROUND_TO
 from lexos.helpers.error_messages import NON_NEGATIVE_INDEX_MESSAGE
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
@@ -91,7 +92,7 @@ class SimilarityModel(BaseModel):
         # calculate the cosine score, a parallel array to labels
         # the "file_word_count" refers to a row in "other_file_word_counts"
         cos_scores = [
-            round(cosine(comp_file_word_count, file_word_count), 3)
+            round(cosine(comp_file_word_count, file_word_count), ROUND_TO)
             for index, file_word_count in other_file_word_counts.iterrows()
         ]
 

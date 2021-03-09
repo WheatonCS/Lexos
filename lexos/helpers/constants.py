@@ -189,6 +189,7 @@ KMEANINPUT = (
 
 # Similarity query
 SIMINPUT = ("comparison_document",)
+ROUND_TO = 3
 
 # Top words
 TOPWORDINPUT = ["comparison_method"]
