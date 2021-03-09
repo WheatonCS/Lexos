@@ -103,11 +103,11 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
 
   // warn user if they are not culling by top documents
     if ($('#least-frequent-words-checkbox').is(':checked') &&
-        !$('#minimum-occurrences-checkbox').is(':checked')){
+        !($('#minimum-occurrences-checkbox').is(':checked') || $('#most-frequent-words-checkbox').is(':checked'))){
         let popup_container_element = create_popup("Warning")
         $(`
-        <span>You are culling by the bottom terms without filtering by how many documents
-        <br> This may give unhelpful or unpredictable results.
+        <span>You are culling by the bottom terms without filtering by how many documents or most frequent words
+        <br> This may give unhelpful or unpredictable results.</span>
     `   ).appendTo(popup_container_element.find('.popup-content'))
     }
 
