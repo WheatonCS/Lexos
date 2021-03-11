@@ -765,8 +765,10 @@ def handle_gutenberg(text: str) -> str:
     # This is a "non-greedy" regex pattern, meaning it will stop looking
     # and return after the first "***" (instead of deleting some of the text
     # if it finds "***" outside of the boilerplate.
+
+    # OR USE (THE|THIS) to only catch when this or the is used
     re_start_gutenberg = re.compile(
-        r"\*\*\* START OF THIS PROJECT GUTENBERG.*?\*\*\*",
+        r"\*\*\* START OF .*PROJECT GUTENBERG.*?\n?.*?\*\*\*",
         re.IGNORECASE | re.UNICODE | re.MULTILINE)
     match = re.search(re_start_gutenberg, text)
     if match:
@@ -775,12 +777,17 @@ def handle_gutenberg(text: str) -> str:
         text = text[end_boiler_front:]
     else:
         re_start_gutenberg = re.compile(
-            r"Copyright.*\n\n\n", re.IGNORECASE | re.UNICODE)
+            r"\*\*\*\n\n\nScanner.*? Notes", re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(re_start_gutenberg, text)
         if match:
-            end_boiler_front = match.end()
-            # text saved without front boilerplate
-            text = text[end_boiler_front:]
+            second_match = re.compile(
+                r"\nDavid Reed\n", re.IGNORECASE | re.UNICODE | re.MULTILINE)
+            match = re.search(second_match, text)
+
+            if match:
+                end_boiler_front = match.end()
+                # text saved without front boilerplate
+                text = text[end_boiler_front:]
 
     # now let's find the start of the ending boilerplate
     re_end_gutenberg = re.compile(
