@@ -69,7 +69,6 @@ def add_document() -> str:
                 paragraphs.append(''.join(texts))
 
         docx_text = '\n'.join(map(str, paragraphs))
-        print(docx_text)
         file_manager.add_upload_file(docx_text, file_name)
 
     # Otherwise, add the document
