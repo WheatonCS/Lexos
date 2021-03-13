@@ -66,6 +66,11 @@ DEFAULT_GENERALSETTINGS_OPTIONS = {
     "theme": "Basil Light"
 }
 
+# Docx Upload
+WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+PARA = WORD_NAMESPACE + 'p'
+TEXT = WORD_NAMESPACE + 't'
+
 # Scrub
 SCRUBBOXES = (
     "keep_ampersands",

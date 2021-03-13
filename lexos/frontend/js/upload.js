@@ -196,7 +196,7 @@ function initialize_upload_progress_callback (file) {
  * @return {boolean} bool: Whether the file type is supported.
  */
 function file_type_supported (filename) {
-  const supported_file_types = ['txt', 'xml', 'html', 'sgml', 'lexos']
+  const supported_file_types = ['txt', 'xml', 'html', 'sgml', 'lexos', 'docx']
 
   // Get the file's extension
   let fileType = filename.split('.')[filename.split('.').length - 1]

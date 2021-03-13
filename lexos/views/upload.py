@@ -2,8 +2,16 @@ import re
 import requests
 from urllib.parse import unquote
 from flask import request, Blueprint, jsonify
+from io import BytesIO
+import zipfile
+try:
+    from xml.etree.cElementTree import XML
+except ImportError:
+    from xml.etree.ElementTree import XML
+
 from lexos.managers import session_manager, utility
 from lexos.views.base import render
+from lexos.helpers.constants import WORD_NAMESPACE, PARA, TEXT
 
 upload_blueprint = Blueprint("upload", __name__)
 
@@ -36,6 +44,33 @@ def add_document() -> str:
         file_manager.handle_upload_workspace()
         file_manager = utility.load_file_manager()
         file_manager.update_workspace()
+
+    """
+    if file is .docx:
+        zip bytes into file
+        extract xml from document.xml file (body contents)
+        extract the text
+    """
+    if file_name.endswith('.docx'):
+        #bundle the bytes into a zip file
+        docx_document = zipfile.ZipFile(BytesIO(request.data), "r")
+        #extract xml from the document file, then parse the contents into nodes
+        xml_content = docx_document.read('word/document.xml')
+        docx_document.close()
+        tree = XML(xml_content)
+
+        #extract text from the nodes
+        paragraphs = []
+        for paragraph in tree.getiterator(PARA):
+            texts = [node.text
+                for node in paragraph.getiterator(TEXT)
+                    if node.text]
+            if texts:
+                paragraphs.append(''.join(texts))
+
+        docx_text = '\n'.join(map(str, paragraphs))
+        print(docx_text)
+        file_manager.add_upload_file(docx_text, file_name)
 
     # Otherwise, add the document
     else:
