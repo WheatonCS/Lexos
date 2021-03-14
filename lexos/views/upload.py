@@ -4,14 +4,12 @@ from urllib.parse import unquote
 from flask import request, Blueprint, jsonify
 from io import BytesIO
 import zipfile
-try:
-    from xml.etree.cElementTree import XML
-except ImportError:
-    from xml.etree.ElementTree import XML
+import chardet
 
 from lexos.managers import session_manager, utility
 from lexos.views.base import render
 from lexos.helpers.constants import WORD_NAMESPACE, PARA, TEXT
+from lexos.helpers.general_functions import extract_xml_text
 
 upload_blueprint = Blueprint("upload", __name__)
 
@@ -45,31 +43,15 @@ def add_document() -> str:
         file_manager = utility.load_file_manager()
         file_manager.update_workspace()
 
-    """
-    if file is .docx:
-        zip bytes into file
-        extract xml from document.xml file (body contents)
-        extract the text
-    """
+    # If the file is a .docx file
     if file_name.endswith('.docx'):
-        #bundle the bytes into a zip file
-        docx_document = zipfile.ZipFile(BytesIO(request.data), "r")
-        #extract xml from the document file, then parse the contents into nodes
-        xml_content = docx_document.read('word/document.xml')
-        docx_document.close()
-        tree = XML(xml_content)
+        #load bytes into zip file and read from xml document file
+        with zipfile.ZipFile(BytesIO(request.data), "r") as doc:
+            xml_content = doc.read('word/document.xml')
 
-        #extract text from the nodes
-        paragraphs = []
-        for paragraph in tree.getiterator(PARA):
-            texts = [node.text
-                for node in paragraph.getiterator(TEXT)
-                    if node.text]
-            if texts:
-                paragraphs.append(''.join(texts))
-
-        docx_text = '\n'.join(map(str, paragraphs))
-        file_manager.add_upload_file(docx_text, file_name)
+        # extract paragraph text and add the document
+        docx_text = extract_xml_text(xml_content)
+        file_manager.add_upload_file(docx_text.encode('utf-8'), file_name)
 
     # Otherwise, add the document
     else:

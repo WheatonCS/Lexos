@@ -6,11 +6,13 @@ import shutil
 from typing import Union, Any
 from zipfile import ZipFile
 from bs4 import UnicodeDammit
+import xml.etree.ElementTree as etree
 
 import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
+from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -294,3 +296,25 @@ def load_file_from_disk(loc_folder: str, filename: str) -> Any:
 
     file_string = pickle.load(open(loc_folder + filename, 'rb'))
     return file_string
+
+
+def extract_xml_text(xml_data: bytes) -> str:
+    """
+        parses all paragraph text from XML file (as bytes). Introduces new line in between each paragraph.
+
+        :param xml_data: xml file passed as bytes
+        :return: parsed paragraph text in string format
+    """
+
+    #create tree from xml content
+    tree = etree.fromstring(xml_data)
+    #extract para text from each node
+    paragraphs = []
+    for paragraph in tree.iter(PARA):
+        texts = [node.text
+            for node in paragraph.iter(TEXT)
+                if node.text]
+        if texts:
+            paragraphs.append(''.join(texts))
+
+    return '\n'.join(paragraphs)
