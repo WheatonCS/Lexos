@@ -6,13 +6,14 @@ import shutil
 from typing import Union, Any
 from zipfile import ZipFile
 from bs4 import UnicodeDammit
-import xml.etree.ElementTree as etree
+# import xml.etree.ElementTree as etree
+import lxml
 
 import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE
+from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, DOC, BODY
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -300,21 +301,44 @@ def load_file_from_disk(loc_folder: str, filename: str) -> Any:
 
 def extract_xml_text(xml_data: bytes) -> str:
     """
-        parses all paragraph text from XML file (as bytes). Introduces new line in between each paragraph.
+        parses paragraph text and formats tables from XML file (as bytes).
+
+        TODO: links new lines are not working -- fix
 
         :param xml_data: xml file passed as bytes
         :return: parsed paragraph text in string format
     """
-
     #create tree from xml content
-    tree = etree.fromstring(xml_data)
+    tree = lxml.etree.fromstring(xml_data)
+
     #extract para text from each node
     paragraphs = []
-    for paragraph in tree.iter(PARA):
-        texts = [node.text
-            for node in paragraph.iter(TEXT)
-                if node.text]
-        if texts:
-            paragraphs.append(''.join(texts))
+    node_types = (PARA, TEXT, COL, BR, ROW)
+    for paragraph in tree.iter():
+                    
+        """
+        handle new lines and table formatting
+        """
+        if paragraph.tag not in [DOC, BODY]:
+            grandparent = paragraph.getparent().getparent()
+            #add new line on break tag unless inside a table cell
+            if paragraph.tag == BR and grandparent.tag != COL:
+                paragraphs.append("\n")
+            # if node is start of a new table row add a new line
+            elif paragraph.tag == ROW:
+                paragraphs.append('\n')
+            # if node is a table cell, add a tab
+            elif paragraph.tag == COL:
+                paragraphs.append('\t')
 
-    return '\n'.join(paragraphs)
+        """
+        collect text
+        """
+        if paragraph.tag == PARA:
+            texts = [node.text
+                for node in paragraph.iter(TEXT)
+                    if node.text]
+            if texts:
+                paragraphs.append(''.join(texts))
+
+    return ''.join(paragraphs).encode('utf-8')

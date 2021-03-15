@@ -43,7 +43,11 @@ def add_document() -> str:
         file_manager = utility.load_file_manager()
         file_manager.update_workspace()
 
-    # If the file is a .docx file
+    """
+        Get docx file data.
+        For info on docx structure: 
+            https://stackoverflow.com/tags/docx/info
+    """
     if file_name.endswith('.docx'):
         #load bytes into zip file and read from xml document file
         with zipfile.ZipFile(BytesIO(request.data), "r") as doc:
@@ -51,7 +55,7 @@ def add_document() -> str:
 
         # extract paragraph text and add the document
         docx_text = extract_xml_text(xml_content)
-        file_manager.add_upload_file(docx_text.encode('utf-8'), file_name)
+        file_manager.add_upload_file(docx_text, file_name)
 
     # Otherwise, add the document
     else:

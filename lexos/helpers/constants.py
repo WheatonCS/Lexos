@@ -70,6 +70,11 @@ DEFAULT_GENERALSETTINGS_OPTIONS = {
 WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 PARA = WORD_NAMESPACE + 'p'
 TEXT = WORD_NAMESPACE + 't'
+ROW = WORD_NAMESPACE + 'tr'
+COL = WORD_NAMESPACE + 'tc'
+BR = WORD_NAMESPACE + 'pPr'
+DOC = WORD_NAMESPACE + 'document'
+BODY = WORD_NAMESPACE + 'body'
 
 # Scrub
 SCRUBBOXES = (
