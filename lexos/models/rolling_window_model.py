@@ -16,6 +16,8 @@ from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
 from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
+from lexos.helpers.constants import RW_SECTION_WORD, RW_SECTION_CHAR, \
+    RW_SECTION_LINE
 
 # Set the rwa regex flags.
 rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
@@ -1041,6 +1043,85 @@ class RollingWindowsModel(BaseModel):
             return self._get_ratio_csv_frame()
         else:
             raise ValueError("unhandled count type")
+
+    def _get_section_range(self, index: int, passage, size: int,
+                           join: bool) -> str:
+        """ get the section surrounding the index
+        (accounting for edges of corpus)
+
+        :param index: the index to get
+        :param passage: the entire passage to read from
+        :param size: how much of the bounds do we want to grab
+        :param join: whether or not passage is a list needing to be joined
+        :return: the section string
+        """
+        passage_length = len(passage)
+        # check if index is within corpus bounds
+        if index < 0 or index > passage_length:
+            string = "ERROR: selected index is out of bounds"
+            return string
+        left_bound = index - size
+        right_bound = index + size
+        # this flag will be raised in case corpus is smaller than the range
+        if left_bound < 0:
+            # compensate for the lost space, try to keep section size the same
+            right_bound += abs(left_bound)
+            left_bound = 0
+        if right_bound > passage_length and left_bound - \
+                (right_bound-passage_length) <= 0:
+            right_bound = passage_length - 1
+            left_bound = 0
+        elif right_bound > passage_length:
+            # compensate for the lost space, try to keep section size the same
+            left_bound -= right_bound-passage_length
+            right_bound = passage_length - 1
+        if join:
+            return "".join(passage[left_bound:right_bound])
+        else:
+            return passage[left_bound:right_bound]
+
+
+    def get_corpus_section(self) -> str:
+        """ Get corpus section from user input index
+
+        :return: The selected word along with the surrounding corpus section
+        """
+        # Unpack Data
+        data = RollingWindowsReceiver.get_index_options_from_front_end()
+        index = data.index
+        window_type = data.window_type
+
+        # get file string
+        # file_id = RollingWindowsReceiver().options_from_front_end() \
+        #     .passage_file_id
+        # file_id_content_map = FileManagerModel().load_file_manager() \
+        #     .get_content_of_active_with_id()
+        #
+        # file_passage = file_id_content_map[file_id]
+
+        # parse if words, lines, or characters
+        passage = self._passage
+        if window_type is WindowUnitType.word:
+            passage = get_words_with_right_boundary(self._passage)
+            # get section range
+            return self._get_section_range(index=index,
+                                           passage=passage,
+                                           size=RW_SECTION_WORD,
+                                           join=True)
+
+        elif window_type is WindowUnitType.letter:
+            return self._get_section_range(index=index,
+                                           passage=passage,
+                                           size=RW_SECTION_CHAR,
+                                           join=False)
+        elif window_type is WindowUnitType.line:
+            passage = self._passage.split('\n')
+            return self._get_section_range(index=index,
+                                           passage=passage,
+                                           size=RW_SECTION_LINE,
+                                           join=True)
+
+        return "ERROR"      # we should always return something above
 
     def get_results(self) -> str:
         """Get the rolling window results.

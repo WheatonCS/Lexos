@@ -91,6 +91,15 @@ class RWAFrontEndOptions(NamedTuple):
     text_color: str
 
 
+class RWASectionIndexOption(NamedTuple):
+    """The data needed for the corpus section display."""
+    # The index of the (word, character, line) in the corpus
+    index: int
+
+    # the type of window we are accessing
+    window_type: WindowUnitType
+
+
 class RollingWindowsReceiver(BaseReceiver):
     """Get all the options to generate rolling windows result."""
 
@@ -215,3 +224,23 @@ class RollingWindowsReceiver(BaseReceiver):
             )
         else:
             raise ValueError("invalid count type from front end")
+
+    def get_index_options_from_front_end(self) -> RWASectionIndexOption:
+        """return specific front end options to display preview of the corpus
+
+        :return: some but not all of the front end options (see below
+        """
+        # we don't need this import anywhere else but here
+        from flask import session
+
+        # get index from front end
+        index = int(self._front_end_data['corpus_index'])
+
+        # get window type from cache
+        window_type = session['rwoption']['window_type']
+
+        # get passage from self
+        passage = self._get_passage_file_id()
+
+        return RWASectionIndexOption(index=index,
+                                     window_type=window_type)

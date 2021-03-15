@@ -22,6 +22,9 @@ $(function () {
   // appropriate text on the "Rolling Window" section
   get_active_file_ids(single_active_document_check, '#graph-container')
 
+  // Initialize corpus preview button
+  corpus_preview_onclick()
+
   // Initialize the tooltips
   initialize_tooltips()
 
@@ -106,10 +109,12 @@ function send_rolling_window_result_request () {
 
   // If the request was successful, initialize the graph, store the CSV
   // data and enable the appropriate buttons
+  // enable rolling window onclick
     .done(function (response) {
       csv = response.csv
       initialize_graph(response.graph)
       enable('#generate-button, #csv-button')
+      //rolling_window_onclick()
     })
 
   // If the request failed, display an error and enable the "Generate"
@@ -255,4 +260,64 @@ function walkthrough () {
   ]})
 
   return intro
+}
+
+/**
+ * Initializes onclick for corpus preview
+ * @returns {void}
+ */
+function corpus_preview_onclick(){
+  $('#get-corpus-section').click(function(data){
+    // Get index input
+    let index = parseInt($('#corpus-section-input').val())
+
+    // Check if it's word, character, or line
+    // do stuff...
+
+    // Make ajax call
+    let payload = {corpus_index: index,
+                    window_option: null}
+    send_ajax_form_request("/rolling-window/fetch_corpus", payload)
+        .done(function(response){
+
+        })
+  })
+}
+
+/**
+ * Adds onclick to rolling window to display where in corpus we are
+ * @returns {void}
+ */
+function rolling_window_onclick(){
+    let rolling_window = $('.plotly-graph-div')
+    console.log(rolling_window.attr("id"))
+    console.log(rolling_window.type)
+    console.log(JSON.stringify(rolling_window._context))
+    rolling_window.on('plotly_click', function(data){
+        let annotate_text
+        let i
+        let annotation
+        console.log("Hello World")
+        let pts = '';
+        console.log(Object.getOwnPropertyNames(data))
+        console.log(Object.values(data))
+        // console.log(data.type)
+        // console.log(data.target)
+        for(i=0; i < data.points.length; i++){
+        annotate_text = 'x = '+data.points[i].x +
+                      'y = '+data.points[i].y.toPrecision(4);
+        console.log(annotate_text)
+        }
+        // annotation = {
+        //   text: annotate_text,
+        //   x: data.points[i].x,
+        //   y: parseFloat(data.points[i].y.toPrecision(4))
+        // }
+        //
+        // annotations = self.layout.annotations || [];
+        // annotations.push(annotation);
+        // Plotly.relayout('myDiv',{annotations: annotations})
+
+        }
+    )
 }
