@@ -30,6 +30,9 @@ $(function () {
 
   // Initialize the walkthrough
   initialize_walkthrough(walkthrough)
+
+  // Initialize graph onclick
+  // rolling_window_onclick()
 })
 
 /**
@@ -275,11 +278,10 @@ function corpus_preview_onclick(){
     // do stuff...
 
     // Make ajax call
-    let payload = {corpus_index: index,
-                    window_option: null}
-    send_ajax_form_request("/rolling-window/fetch_corpus", payload)
+    send_ajax_form_request("/rolling-window/fetch_corpus",
+        {corpus_index: index})
         .done(function(response){
-
+            console.log(response)
         })
   })
 }

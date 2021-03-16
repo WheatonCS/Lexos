@@ -35,10 +35,11 @@ def get_graph() -> str:
 
 
 @rolling_window_blueprint.route("/rolling-window/fetch_corpus",
-                                methods=["POST"])
+                                methods=["POST", "GET"])
 def get_corpus_section() -> str:
     """ Gets current word and [some number of] words around it and sends it
         back to be [art of a preview
     :return: The 'section' of the corpus that user selects
     """
-    return RollingWindowsModel.get_corpus_section()
+    print("DID WE GET HERE???")
+    return RollingWindowsModel().get_corpus_section()
