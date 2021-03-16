@@ -108,8 +108,13 @@
 
 <!-- Rolling Window -->
 <div id="rolling-window-display-section" class="section">
-    <div class="vertical-splitter section-top">
+    <div class="vertical-splitter section-top" id="graph-section-top">
         <legend class="title">Rolling Window</legend>
+        <div id="search-corpus" class="center-justified">
+            <label for="search-corpus-term">Search:</label>
+            <input id="search-corpus-term" name="search-corpus-term" type="text" spellcheck="false" autocomplete="off">
+            <span id="search-button" class="disabled important-button">Search</span>
+        </div>
         <div id="rolling-window-buttons" class="right-justified">
             <span id="generate-button" class="disabled important-button">Generate</span>
             <span id="png-button" class="disabled button">PNG</span>

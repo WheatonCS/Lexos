@@ -60,3 +60,20 @@ form {
 #display-section .section-body > .checkbox-label {
     width: calc(100% - 6rem);
 }
+
+/*Rolling Window Section Top */
+#graph-section-top {
+    display: grid;
+    grid-auto-flow: column;
+}
+#search-corpus {
+    width: 40rem;
+}
+#search-corpus-term-label {
+    width: calc(100% - 3rem);
+}
+
+#search-corpus input {
+    width: calc(100% - 30rem);
+    margin-right: var(--gap);
+}
