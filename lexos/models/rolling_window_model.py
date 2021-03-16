@@ -1044,8 +1044,9 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled count type")
 
-    def _get_section_range(self, index: int, passage, size: int,
-                           join: bool) -> str:
+    @staticmethod
+    def get_section_range(index: int, passage, size: int,
+                          join: bool) -> str:
         """ get the section surrounding the index
         (accounting for edges of corpus)
 
@@ -1080,48 +1081,61 @@ class RollingWindowsModel(BaseModel):
         else:
             return passage[left_bound:right_bound]
 
+    def _corpus_section_helper(self) -> str:
+        pass
 
     def get_corpus_section(self) -> str:
         """ Get corpus section from user input index
 
         :return: The selected word along with the surrounding corpus section
         """
+        print("NOW WE HERE? CUCK???")
+        passage = self._passage
+        print("WE ACCESSED SELF")
         # Unpack Data
-        data = RollingWindowsReceiver.get_index_options_from_front_end()
+        data = RollingWindowsReceiver().get_index_options_from_front_end()
         index = data.index
         window_type = data.window_type
-
-        # get file string
-        # file_id = RollingWindowsReceiver().options_from_front_end() \
-        #     .passage_file_id
-        # file_id_content_map = FileManagerModel().load_file_manager() \
-        #     .get_content_of_active_with_id()
-        #
-        # file_passage = file_id_content_map[file_id]
-
+        print("CHECKPOINT #3")
+        print(index)
+        print(window_type)
+        print(self._options.window_options.window_unit)
+        print(WindowUnitType.word)
         # parse if words, lines, or characters
-        passage = self._passage
+        print("CHECKPOINT #4")
         if window_type is WindowUnitType.word:
+            print("CHECKPOINT #4.5")
             passage = get_words_with_right_boundary(self._passage)
+            print("CHECKPOINT #5")
             # get section range
-            return self._get_section_range(index=index,
-                                           passage=passage,
-                                           size=RW_SECTION_WORD,
-                                           join=True)
+            return jsonify({
+                "corpus_section": self.get_section_range(index=index,
+                                                         passage=passage,
+                                                         size=RW_SECTION_WORD,
+                                                         join=True)
+            })
 
         elif window_type is WindowUnitType.letter:
-            return self._get_section_range(index=index,
-                                           passage=passage,
-                                           size=RW_SECTION_CHAR,
-                                           join=False)
+            print("CHECKPOINT #6")
+            passage = self._passage
+            return jsonify({
+                "corpus_section": self.get_section_range(index=index,
+                                                         passage=passage,
+                                                         size=RW_SECTION_CHAR,
+                                                         join=False)
+            })
         elif window_type is WindowUnitType.line:
+            print("CHECKPOINT #7")
             passage = self._passage.split('\n')
-            return self._get_section_range(index=index,
-                                           passage=passage,
-                                           size=RW_SECTION_LINE,
-                                           join=True)
-
-        return "ERROR"      # we should always return something above
+            return jsonify({
+                "corpus_section": self.get_section_range(index=index,
+                                                         passage=passage,
+                                                         size=RW_SECTION_LINE,
+                                                         join=True)
+                     })
+        # we should always return something above
+        print("CHECKPOINT FUCK ML")
+        return jsonify({"error": "ERROR"})
 
     def get_results(self) -> str:
         """Get the rolling window results.
@@ -1139,7 +1153,7 @@ class RollingWindowsModel(BaseModel):
                           filename="show-legend",
                           show_link=False,
                           output_type="div",
-                          include_plotlyjs=False,
+                          include_plotlyjs="cdn",
                           config=config),
 
             "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
