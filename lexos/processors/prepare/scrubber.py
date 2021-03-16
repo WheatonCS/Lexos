@@ -777,11 +777,13 @@ def handle_gutenberg(text: str) -> str:
         text = text[end_boiler_front:]
     else:
         re_start_gutenberg = re.compile(
-            r"\*\*\*\n\n\nScanner.*? Notes", re.IGNORECASE | re.UNICODE | re.MULTILINE)
+            r"\*\*\*\n\n\nScanner.*? Notes",
+            re.IGNORECASE | re.UNICODE | re.MULTILINE)
         match = re.search(re_start_gutenberg, text)
         if match:
             second_match = re.compile(
-                r"\nDavid Reed\n", re.IGNORECASE | re.UNICODE | re.MULTILINE)
+                r"\nDavid Reed\n",
+                re.IGNORECASE | re.UNICODE | re.MULTILINE)
             match = re.search(second_match, text)
 
             if match:

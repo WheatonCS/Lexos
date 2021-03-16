@@ -323,7 +323,7 @@ class FileManager:
 
         gutenberg = False
         for l_file in list(self.files.values()):
-            ## check if there is a gutenberg file 
+            # check if there is a gutenberg file
             gutenberg = l_file.is_gutenberg
             if l_file.active:
                 previews.append(
