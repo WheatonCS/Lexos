@@ -6,7 +6,7 @@ from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
 
 
 class BasicTest:
-    """A class that packs all the option for a basic testing"""
+    """A class that packs all the options for a basic testing"""
 
     _test_option = MatrixTestOptions(
         file_id_content_map={
@@ -20,7 +20,8 @@ class BasicTest:
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
-                                         mfw_lowest_rank=None)
+                                         mfw_lowest_rank=None,
+                                         mfw_highest_rank=None)
         )
     )
 
@@ -47,8 +48,8 @@ class BasicTest:
     )
 
 
-class CullingTest:
-    """A class that packs all the option for a culling test"""
+class CullingTestMost:
+    """A class that packs all the option for a culling by most test"""
 
     _test_option = MatrixTestOptions(
         file_id_content_map={
@@ -62,7 +63,8 @@ class CullingTest:
             norm_option=NormOption(use_freq=True, use_tf_idf=False,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=3,
-                                         mfw_lowest_rank=1)
+                                         mfw_lowest_rank=1,
+                                         mfw_highest_rank=None)
         )
     )
 
@@ -89,6 +91,91 @@ class CullingTest:
     )
 
 
+class CullingTestLeast:
+    """A class that packs all the options for a culling by least test"""
+    _test_option = MatrixTestOptions(
+        file_id_content_map={
+            1: "ha ha ha ha la ha",
+            2: "la la ta ta da da ha ha ha",
+            3: "la da ha"
+        },
+
+        front_end_option=MatrixFrontEndOption(
+            token_option=TokenOption(n_gram_size=1, token_type="word"),
+            norm_option=NormOption(use_freq=True, use_tf_idf=False,
+                                   tf_idf_norm_option='l1'),
+            culling_option=CullingOption(cull_least_seg=3,
+                                         mfw_lowest_rank=None,
+                                         mfw_highest_rank=1)
+        )
+    )
+
+    model = MatrixModel(test_options=_test_option)
+
+    expected_raw_count_matrix = pd.DataFrame(
+        [
+            [0., 5., 1., 0.],
+            [2., 3., 2., 2.],
+            [1., 1., 1., 0.]
+        ],
+        index=[1, 2, 3],
+        columns=['da', 'ha', 'la', 'ta']
+    )
+
+    expected_final_dtm = pd.DataFrame(
+        [
+            [1.],
+            [1.],
+            [1.]
+        ],
+        index=[1, 2, 3],
+        columns=['la']
+    )
+
+
+class CullingTestBoth:
+    """A class that packs all the options for a culling
+     by most and least test"""
+    _test_option = MatrixTestOptions(
+        file_id_content_map={
+            1: "ha ha ha ha la ha",
+            2: "la la ta ta da da ha ha ha",
+            3: "la da ha"
+        },
+
+        front_end_option=MatrixFrontEndOption(
+            token_option=TokenOption(n_gram_size=1, token_type="word"),
+            norm_option=NormOption(use_freq=True, use_tf_idf=False,
+                                   tf_idf_norm_option='l1'),
+            culling_option=CullingOption(cull_least_seg=3,
+                                         mfw_lowest_rank=1,
+                                         mfw_highest_rank=1)
+        )
+    )
+
+    model = MatrixModel(test_options=_test_option)
+
+    expected_raw_count_matrix = pd.DataFrame(
+        [
+            [0., 5., 1., 0.],
+            [2., 3., 2., 2.],
+            [1., 1., 1., 0.]
+        ],
+        index=[1, 2, 3],
+        columns=['da', 'ha', 'la', 'ta']
+    )
+
+    expected_final_dtm = pd.DataFrame(
+        [
+            [0.166667, 0.833333],
+            [0.4, 0.6],
+            [0.5, 0.5]
+        ],
+        index=[1, 2, 3],
+        columns=[0, 1]
+    )
+
+
 class TfTest:
     _test_option = MatrixTestOptions(
         file_id_content_map={
@@ -102,7 +189,8 @@ class TfTest:
             norm_option=NormOption(use_freq=True, use_tf_idf=True,
                                    tf_idf_norm_option='l1'),
             culling_option=CullingOption(cull_least_seg=None,
-                                         mfw_lowest_rank=None)
+                                         mfw_lowest_rank=None,
+                                         mfw_highest_rank=None)
         )
     )
 
@@ -127,8 +215,13 @@ def test_raw_count_matrix():
     )
 
     pd.testing.assert_frame_equal(
-        CullingTest.model._get_raw_count_matrix(),
-        CullingTest.expected_raw_count_matrix
+        CullingTestMost.model._get_raw_count_matrix(),
+        CullingTestMost.expected_raw_count_matrix
+    )
+
+    pd.testing.assert_frame_equal(
+        CullingTestLeast.model._get_raw_count_matrix(),
+        CullingTestLeast.expected_raw_count_matrix
     )
 
 
@@ -143,11 +236,27 @@ def test_transformations():
     )
 
     pd.testing.assert_frame_equal(
-        CullingTest.model._apply_transformations_to_matrix(
-            CullingTest.expected_raw_count_matrix
+        CullingTestMost.model._apply_transformations_to_matrix(
+            CullingTestMost.expected_raw_count_matrix
         ),
 
-        CullingTest.expected_final_dtm
+        CullingTestMost.expected_final_dtm
+    )
+
+    pd.testing.assert_frame_equal(
+        CullingTestLeast.model._apply_transformations_to_matrix(
+            CullingTestLeast.expected_raw_count_matrix
+        ),
+
+        CullingTestLeast.expected_final_dtm
+    )
+
+    pd.testing.assert_frame_equal(
+        CullingTestBoth.model._apply_transformations_to_matrix(
+            CullingTestBoth.expected_raw_count_matrix
+        ),
+
+        CullingTestBoth.expected_final_dtm
     )
 
 
@@ -158,8 +267,8 @@ def test_get_matrix():
     )
 
     pd.testing.assert_frame_equal(
-        CullingTest.model.get_matrix(),
-        CullingTest.expected_final_dtm
+        CullingTestMost.model.get_matrix(),
+        CullingTestMost.expected_final_dtm
     )
 
     pd.testing.assert_frame_equal(

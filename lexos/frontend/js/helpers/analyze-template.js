@@ -38,7 +38,9 @@ function initialize_cull_tooltips (on_right_edge = true) {
 
   //"Use the bottom x Words"
   create_tooltip('#least-frequent-words-tooltip-button', `Use only the least
-    frequently occurring terms in the document-term matrix.`, on_right_edge)
+    frequently occurring terms in the document-term matrix. Please make sure the selected words are in at
+    least 2 documents by checking the box below to improve your chances of getting better results.`,
+      on_right_edge)
 
   // "Must be in X documents"
   create_tooltip('#minimum-occurrences-tooltip-button', `Set the minimum
@@ -73,21 +75,9 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
   let most_frequent_words = $('#most-frequent-words-input').val()
 
   if ($('#most-frequent-words-checkbox').is(':checked') &&
-    // in this test, we are removing the minimum of '1' to try and implement a "cull least frequent words
     !validate_number(most_frequent_words)) {
     error_highlight('#most-frequent-words-input')
     if (show_error) error('Invalid number of top terms.')
-    valid = false
-  }
-
-  //"Cull" - "Use the bottom x terms"
-
-  let least_frequent_words = $('#least-frequent-words-input').val()
-  if ($('#least-frequent-words-checkbox').is(':checked') &&
-    // in this test, we are removing the minimum of '1' to try and implement a "cull least frequent words
-    !validate_number(least_frequent_words)) {
-    error_highlight('#least-frequent-words-input')
-    if (show_error) error('Invalid number of bottom terms.')
     valid = false
   }
 
@@ -99,6 +89,27 @@ function validate_analyze_inputs (show_error, remove_existing_errors = true) {
     if (show_error) error('Invalid number of minimum occurrences.')
     valid = false
   }
+
+  //"Cull" - "Use the bottom x terms"
+
+  let least_frequent_words = $('#least-frequent-words-input').val()
+  if ($('#least-frequent-words-checkbox').is(':checked') &&
+    !validate_number(least_frequent_words)) {
+    error_highlight('#least-frequent-words-input')
+
+    if (show_error) error('Invalid number of bottom terms.')
+    valid = false
+  }
+
+  // warn user if they are not culling by top documents
+    if ($('#least-frequent-words-checkbox').is(':checked') &&
+        !($('#minimum-occurrences-checkbox').is(':checked') || $('#most-frequent-words-checkbox').is(':checked'))){
+        let popup_container_element = create_popup("Warning")
+        $(`
+        <span>You are culling by the bottom terms without filtering by how many documents or most frequent words
+        <br> This may give unhelpful or unpredictable results.</span>
+    `   ).appendTo(popup_container_element.find('.popup-content'))
+    }
 
   return valid
 }

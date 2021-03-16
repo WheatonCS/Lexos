@@ -13,12 +13,38 @@ FRONT_PLATE = "'The Project Gutenberg EBook of Pride and Prejudice, by Jane" \
               "UTF-8\n\n*** START OF THIS PROJECT GUTENBERG EBOOK PRIDE " \
               "AND PREJUDICE ***"
 
+FRONT_PLATE_ALT = "\nThe Project Gutenberg EBook of The Strange Case Of " \
+                  "Dr. Jekyll And Mr.\nHyde, by Robert Louis Stevenson\n\n"\
+                  "This eBook is for the use of anyone anywhere at no cost" \
+                  " and with\nalmost no restrictions whatsoever.You may " \
+                  "copy it, give it away or\nre-use it under the terms " \
+                  "of the Project Gutenberg License included\nwith this " \
+                  "eBook or online at www.gutenberg.org\n\n\nTitle: " \
+                  "The Strange Case Of Dr. Jekyll And Mr. Hyde\n\n" \
+                  "Author: Robert Louis Stevenson\n\nRelease Date: " \
+                  "June 25, 2008 [EBook #43]\nLast Updated: December 6, " \
+                  "2018\n\nLanguage: English\n\nCharacter set encoding: " \
+                  "UTF-8\n\n*** START OF THIS PROJECT GUTENBERG EBOOK\n" \
+                  "THE STRANGE CASE OF DR. JEKYLL AND MR. HYDE ***" \
+
+FRONT_PLATE_OUTDATED = "***The Project Gutenberg's Etext of Shakespeare's" \
+                       " First Folio***\n********************The Tragedie" \
+                       " of Macbeth*********************\n\n***The Projec" \
+                       "t Gutenberg's Etext of Shakespeare's First Folio*" \
+                       "**********************The Tragedie of Macbeth****" \
+                       "*****************\n\n\n***START**THE SMALL PRINT" \
+                       "!**FOR PUBLIC DOMAIN ETEXTS**START***\nWhy is thi" \
+                       "s 'Small Print!' statement here?  You know: lawye" \
+                       "rs.\n\netext possible.\n\n***\n\n\nScanner's Notes:" \
+                       " What this is and isn't.  This was taken from\n" \
+                       "a copy of Shakespeare's first folio and it is as " \
+                       "close as I can\ncome in ASCII to the printed text.\n" \
+                       "  My email address for right " \
+                       "now are haradda@aol.comand davidr@inconnect.com.\n  " \
+                       "I hope that you enjoy this.\n\nDavid Reed\n"
+
 FRONT_PLATE_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND " \
                     "PREJUDICE\n\nBy Jane Austen\n\n"
-
-FRONT_COPY = "Blah blah blah.\n\nThis text is Copyright Joe Schmoe 2017. All" \
-             " rights reserved. If you are reading this, I will have your " \
-             "first born son. Bye bye.\n\n\n"
 
 TEXT_NEITHER = "Chapter 1\n\nIt is a truth universally acknowledged, that a" \
                " single man in possession\nof a good fortune, must be in" \
@@ -28,6 +54,7 @@ TEXT_NEITHER = "Chapter 1\n\nIt is a truth universally acknowledged, that a" \
                "loved them; and they were both ever\nsensible of the warmest" \
                " gratitude towards the persons who, by bringing\nher into "\
                " Derbyshire, had been the means of uniting them.\n\n"
+
 
 BACK_PLATE = "End of the Project Gutenberg EBook of Pride and Prejudice, by" \
              " Jane Austen\n\n*** END OF THIS PROJECT GUTENBERG EBOOK PRIDE" \
@@ -49,7 +76,8 @@ BACK_PLATE = "End of the Project Gutenberg EBook of Pride and Prejudice, by" \
              " email newsletter to hear about new eBooks.\n\n"
 
 TEXT_FRONT_PLATE = FRONT_PLATE + FRONT_PLATE_EXTRA + TEXT_NEITHER
-TEXT_FRONT_COPY = FRONT_COPY + TEXT_NEITHER
+TEXT_FRONT_PLATE_ALT = FRONT_PLATE_ALT + FRONT_PLATE_EXTRA + TEXT_NEITHER
+TEXT_FRONT_PLATE_OUTDATED = FRONT_PLATE_OUTDATED + FRONT_PLATE_EXTRA + \
+                            TEXT_NEITHER
 TEXT_BACK = TEXT_NEITHER + BACK_PLATE
 TEXT_BOTH_PLATE = TEXT_FRONT_PLATE + BACK_PLATE
-TEXT_BOTH_COPY = TEXT_FRONT_COPY + BACK_PLATE
