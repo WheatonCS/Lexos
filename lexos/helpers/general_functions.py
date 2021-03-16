@@ -13,7 +13,7 @@ import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, DOC, BODY
+from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, DOC, BODY, DRAW, PIC, FALLBACK
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -286,7 +286,6 @@ def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
         pass
     pickle.dump(contents, open(dest_folder + filename, 'wb'))
 
-
 def load_file_from_disk(loc_folder: str, filename: str) -> Any:
     """Loads a file that was previously saved to the disk.
 
@@ -297,9 +296,8 @@ def load_file_from_disk(loc_folder: str, filename: str) -> Any:
 
     file_string = pickle.load(open(loc_folder + filename, 'rb'))
     return file_string
-
-
-def extract_xml_text(xml_data: bytes) -> str:
+ 
+def extract_xml_text(xml_data: bytes) -> bytes:
     """
         parses paragraph text and formats tables from XML file (as bytes).
 
@@ -310,35 +308,35 @@ def extract_xml_text(xml_data: bytes) -> str:
     """
     #create tree from xml content
     tree = lxml.etree.fromstring(xml_data)
+    
+    # remove dead/unnecessary
+    log = tree.findall('.//' + FALLBACK)
+    for p in log:
+        j = p.getparent()
+        j.remove(p)
 
-    #extract para text from each node
-    paragraphs = []
-    node_types = (PARA, TEXT, COL, BR, ROW)
+    #extract content from each node
+    paragraphs = []    
     for paragraph in tree.iter():
-                    
         """
         handle new lines and table formatting
         """
-        if paragraph.tag not in [DOC, BODY]:
-            grandparent = paragraph.getparent().getparent()
-            #add new line on break tag unless inside a table cell
-            if paragraph.tag == BR and grandparent.tag != COL:
-                paragraphs.append("\n")
-            # if node is start of a new table row add a new line
-            elif paragraph.tag == ROW:
-                paragraphs.append('\n')
-            # if node is a table cell, add a tab
-            elif paragraph.tag == COL:
-                paragraphs.append('\t')
 
-        """
-        collect text
-        """
-        if paragraph.tag == PARA:
-            texts = [node.text
-                for node in paragraph.iter(TEXT)
-                    if node.text]
-            if texts:
-                paragraphs.append(''.join(texts))
+        if paragraph.tag == PIC:
+            pic_data = [paragraph.get('name'), paragraph.get('descr')]
+            # empty title/data are formatted as ''
+            paragraphs.append('[FIG] ' + pic_data[0] + ': ' + pic_data[1] + '\n')
+
+        elif paragraph.tag == BR:
+            paragraphs.append('\n')  
+
+        elif paragraph.tag == PARA:
+            # see if contains nested para to prevent doubling output
+            if paragraph.find('.//' + PARA) is None:
+                texts = [node.text
+                    for node in paragraph.iter(TEXT)
+                        if node.text]
+                if texts:
+                    paragraphs.append(''.join(texts))
 
     return ''.join(paragraphs).encode('utf-8')
