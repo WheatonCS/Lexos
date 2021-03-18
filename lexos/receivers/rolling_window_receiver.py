@@ -90,14 +90,8 @@ class RWAFrontEndOptions(NamedTuple):
     # The color to use
     text_color: str
 
-
-class RWASectionIndexOption(NamedTuple):
-    """The data needed for the corpus section display."""
-    # The index of the (word, character, line) in the corpus
-    index: int
-
-    # the type of window we are accessing
-    window_type: WindowUnitType
+    # Whether we send the corpus to the front end
+    fetch_corpus: int
 
 
 class RollingWindowsReceiver(BaseReceiver):
@@ -203,6 +197,7 @@ class RollingWindowsReceiver(BaseReceiver):
     def options_from_front_end(self) -> RWAFrontEndOptions:
         """Pack all the front end options together."""
         if self._front_end_data['calculation_type'] == 'Rolling Ratio':
+
             return RWAFrontEndOptions(
                 average_token_options=None,
                 ratio_token_options=self._get_ratio_token_options(),
@@ -210,7 +205,8 @@ class RollingWindowsReceiver(BaseReceiver):
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
                 passage_file_id=self._get_passage_file_id(),
-                text_color=self._front_end_data["text_color"]
+                text_color=self._front_end_data["text_color"],
+                fetch_corpus=int(self._front_end_data["fetch_corpus"])
             )
         elif self._front_end_data['calculation_type'] == 'Rolling Average':
             return RWAFrontEndOptions(
@@ -220,27 +216,8 @@ class RollingWindowsReceiver(BaseReceiver):
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
                 passage_file_id=self._get_passage_file_id(),
-                text_color=self._front_end_data["text_color"]
+                text_color=self._front_end_data["text_color"],
+                fetch_corpus=int(self._front_end_data["fetch_corpus"])
             )
         else:
             raise ValueError("invalid count type from front end")
-
-    def get_index_options_from_front_end(self) -> RWASectionIndexOption:
-        """return specific front end options to display preview of the corpus
-
-        :return: some but not all of the front end options (see below
-        """
-        # we don't need this import anywhere else but here
-        from flask import session
-
-        # get index from front end
-        index = int(self._front_end_data['corpus_index'])
-
-        # get window type from cache
-        window_type = session['rwoption']['window_type']
-
-        # get passage from self
-        passage = self._get_passage_file_id()
-
-        return RWASectionIndexOption(index=index,
-                                     window_type=window_type)
