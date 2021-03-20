@@ -43,6 +43,22 @@ FRONT_PLATE_OUTDATED = "***The Project Gutenberg's Etext of Shakespeare's" \
                        "now are haradda@aol.comand davidr@inconnect.com.\n  " \
                        "I hope that you enjoy this.\n\nDavid Reed\n"
 
+FRONT_PLATE_OUTDATED_WRONG = \
+                       "***The Project Gutenberg's Etext of Shakespeare's" \
+                       " First Folio***\n********************The Tragedie" \
+                       " of Macbeth*********************\n\n***The Projec" \
+                       "t Gutenberg's Etext of Shakespeare's First Folio*" \
+                       "**********************The Tragedie of Macbeth****" \
+                       "*****************\n\n\n***START**THE SMALL PRINT" \
+                       "!**FOR PUBLIC DOMAIN ETEXTS**START***\nWhy is thi" \
+                       "s 'Small Print!' statement here?  You know: lawye" \
+                       "rs.\n\netext possible.\n\n***\n\n\nScanner's Notes:" \
+                       " What this is and isn't.  This was taken from\n" \
+                       "a copy of Shakespeare's first folio and it is as " \
+                       "close as I can\ncome in ASCII to the printed text.\n" \
+                       "  My email address for right " \
+                       "now are haradda@aol.comand davidr@inconnect.com.\n  "
+
 FRONT_PLATE_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND " \
                     "PREJUDICE\n\nBy Jane Austen\n\n"
 
@@ -79,5 +95,7 @@ TEXT_FRONT_PLATE = FRONT_PLATE + FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_FRONT_PLATE_ALT = FRONT_PLATE_ALT + FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_FRONT_PLATE_OUTDATED = FRONT_PLATE_OUTDATED + FRONT_PLATE_EXTRA + \
                             TEXT_NEITHER
+TEXT_FRONT_PLATE_OUTDATED_WRONG = FRONT_PLATE_OUTDATED_WRONG + \
+                            FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_BACK = TEXT_NEITHER + BACK_PLATE
 TEXT_BOTH_PLATE = TEXT_FRONT_PLATE + BACK_PLATE
