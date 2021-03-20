@@ -297,20 +297,21 @@ def load_file_from_disk(loc_folder: str, filename: str) -> Any:
     file_string = pickle.load(open(loc_folder + filename, 'rb'))
     return file_string
  
-def extract_xml_text(xml_data: bytes) -> bytes:
+def extract_docx_content(xml_data: bytes) -> bytes:
     """
-        parses paragraph text and formats tables from XML file (as bytes).
+        parses text and formats tables/figures from XML file (as bytes).
 
-        TODO: links new lines are not working -- fix
+        TODO: update new line method
 
         :param xml_data: xml file passed as bytes
-        :return: parsed paragraph text in string format
+        :return: parsed text in byte string format
     """
     #create tree from xml content
     tree = lxml.etree.fromstring(xml_data)
     
-    # remove dead/unnecessary
-    log = tree.findall('.//' + FALLBACK)
+    # remove dead/unnecessary content
+    xpath = './/{node_type}'
+    log = tree.findall(xpath.format(node_type=FALLBACK))
     for p in log:
         j = p.getparent()
         j.remove(p)
@@ -318,25 +319,27 @@ def extract_xml_text(xml_data: bytes) -> bytes:
     #extract content from each node
     paragraphs = []    
     for paragraph in tree.iter():
-        """
-        handle new lines and table formatting
-        """
 
         if paragraph.tag == PIC:
             pic_data = [paragraph.get('name'), paragraph.get('descr')]
-            # empty title/data are formatted as ''
+            # empty title/data are formatted as '' so it's ok to not check if they exist
             paragraphs.append('[FIG] ' + pic_data[0] + ': ' + pic_data[1] + '\n')
 
         elif paragraph.tag == BR:
             paragraphs.append('\n')  
 
-        elif paragraph.tag == PARA:
-            # see if contains nested para to prevent doubling output
-            if paragraph.find('.//' + PARA) is None:
-                texts = [node.text
-                    for node in paragraph.iter(TEXT)
-                        if node.text]
-                if texts:
-                    paragraphs.append(''.join(texts))
+        elif paragraph.tag == TEXT:
+            """
+                IGNORE  
+                see if contains nested para to prevent doubling output
+                this will ignore text of paragraphs that have nested paragraphs
+                probably better to look upwards at ancestors not down at descendants
+                if paragraph.find('.//' + PARA) is None:
+                    texts = [node.text
+                        for node in paragraph.iter(TEXT)
+                            if node.text]
+            """
+            if paragraph.text:
+                paragraphs.append(paragraph.text)
 
     return ''.join(paragraphs).encode('utf-8')

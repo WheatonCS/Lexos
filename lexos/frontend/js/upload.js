@@ -144,7 +144,10 @@ function send_file_upload_requests () {
     data: file,
     processData: false,
     contentType: file.type,
-    headers: {'file-name': encodeURIComponent(file.name)}
+    headers: {'file-name': encodeURIComponent(file.name)},
+    success: function(data){
+      console.log(data)
+    }
   })
 
   // If the request is successful, call the "upload_success_callback()"

@@ -9,7 +9,7 @@ import chardet
 from lexos.managers import session_manager, utility
 from lexos.views.base import render
 from lexos.helpers.constants import WORD_NAMESPACE, PARA, TEXT
-from lexos.helpers.general_functions import extract_xml_text
+from lexos.helpers.general_functions import extract_docx_content
 
 upload_blueprint = Blueprint("upload", __name__)
 
@@ -53,8 +53,8 @@ def add_document() -> str:
         with zipfile.ZipFile(BytesIO(request.data), "r") as doc:
             xml_content = doc.read('word/document.xml')
 
-        # extract paragraph text and add the document
-        docx_text = extract_xml_text(xml_content)
+        # extract text and add the document
+        docx_text = extract_docx_content(xml_content)
         file_manager.add_upload_file(docx_text, file_name)
 
     # Otherwise, add the document
