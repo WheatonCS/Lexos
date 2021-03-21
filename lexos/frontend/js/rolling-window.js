@@ -170,6 +170,15 @@ function validate_inputs (show_error = false) {
     valid = false
   }
 
+  // "Corpus-section-input"
+  if (!validate_number($('#corpus-section-input input').val(), 0)) {
+    error_highlight('#corpus-section-input input')
+    if (show_error) error('Invalid window size.')
+    disable('#get-corpus-section')
+  } else {
+    enable('#get-corpus-section')
+  }
+
   return valid
 }
 
@@ -212,6 +221,10 @@ function initialize_tooltips () {
   create_tooltip('#milestone-tooltip-button', `Search the file for all
     instances of a specified string and plot a vertical dividing line at
     those locations.`, true)
+
+  // "Corpus Section Input"
+  create_tooltip('#get-corpus-section-tooltip-button', `Enter an x-value from the
+  graph and see the 20 words surrounding that term in the corpus`, true)
 }
 
 /**

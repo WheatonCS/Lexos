@@ -66,14 +66,18 @@ form {
     display: grid;
     grid-auto-flow: column;
 }
-#search-corpus {
+#corpus-section-input {
     width: 40rem;
 }
-#search-corpus-term-label {
-    width: calc(100% - 3rem);
+#corpus-section-input-label {
+    width: calc(100% - 5rem);
 }
 
-#search-corpus input {
+#corpus-section-input input {
     width: calc(100% - 30rem);
-    margin-right: var(--gap);
+}
+
+#get-corpus-section-tooltip-button{
+    margin-left: var(--small-gap);
+    margin-right: var(--small-gap);
 }
