@@ -7,7 +7,6 @@ import zipfile
 
 from lexos.managers import session_manager, utility
 from lexos.views.base import render
-from lexos.helpers.constants import WORD_NAMESPACE, PARA, TEXT
 from lexos.helpers.general_functions import extract_docx_content
 
 upload_blueprint = Blueprint("upload", __name__)

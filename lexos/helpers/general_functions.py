@@ -13,8 +13,7 @@ import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, \
-    DOC, BODY, DRAW, PIC, FALLBACK
+from lexos.helpers.constants import TEXT, BR, PIC, FALLBACK
 
 
 def get_encoding(input_string: bytes) -> str:
