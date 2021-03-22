@@ -4,7 +4,6 @@ from urllib.parse import unquote
 from flask import request, Blueprint, jsonify
 from io import BytesIO
 import zipfile
-import chardet
 
 from lexos.managers import session_manager, utility
 from lexos.views.base import render

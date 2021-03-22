@@ -9,6 +9,8 @@ from bs4 import UnicodeDammit
 # import xml.etree.ElementTree as etree
 import lxml
 
+import chardet
+
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
 from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, \
