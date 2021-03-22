@@ -809,11 +809,3 @@ docx_general_expected = \
     b'lines together, reading the first line of the first column, then the f' \
     b'irst line of the second column, then the second line of the first colu' \
     b'mn, and so on. Obviously, that is not accessible.'
-
-
-
-
-
-
-
-
