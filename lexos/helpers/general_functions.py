@@ -40,9 +40,9 @@ def make_preview_from(input_string: str) -> str:
     else:
         half_length = constants.PREVIEW_SIZE // 2
         input_string = re.sub(" +", ' ', input_string)  # Remove extra spaces
-        preview_string = input_string[:half_length].strip() \
-                         + "\u2026 \u2026" + input_string[
-                                             -half_length:].strip()
+        preview_string = \
+            input_string[:half_length].strip() + \
+            "\u2026 \u2026" + input_string[-half_length:].strip()
     return preview_string
 
 
