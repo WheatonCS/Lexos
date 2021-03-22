@@ -84,7 +84,7 @@ def test_with_two_dimension():
     dataframe = pd.DataFrame(
         index=["Documents", "Cosine Similarity"],
         columns=[1, 0],
-        data=[["F3.txt", "F2.txt"],  [.5527864045, .105572809]])
+        data=[["F3.txt", "F2.txt"],  [.553, .106]])
 
     dataframe = dataframe.transpose().sort_values(
         by="Documents", ascending=True).round(4)
@@ -119,7 +119,7 @@ def test_with_three_dimension():
     dataframe = pd.DataFrame(
         index=["Documents", "Cosine Similarity"],
         columns=[1, 0],
-        data=[["F3.txt", "F1.txt"], [1., .42264973081]]
+        data=[["F3.txt", "F1.txt"], [1., .423]]
     )
 
     dataframe = dataframe.transpose().sort_values(
