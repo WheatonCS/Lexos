@@ -13,7 +13,8 @@ import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, DOC, BODY, DRAW, PIC, FALLBACK
+from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, \
+    DOC, BODY, DRAW, PIC, FALLBACK
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -38,10 +39,11 @@ def make_preview_from(input_string: str) -> str:
     if len(input_string) <= constants.PREVIEW_SIZE:
         preview_string = input_string
     else:
-        half_length = constants.PREVIEW_SIZE//2
+        half_length = constants.PREVIEW_SIZE // 2
         input_string = re.sub(" +", ' ', input_string)  # Remove extra spaces
         preview_string = input_string[:half_length].strip() \
-            + "\u2026 \u2026" + input_string[-half_length:].strip()
+                         + "\u2026 \u2026" + input_string[
+                                             -half_length:].strip()
     return preview_string
 
 
@@ -286,6 +288,7 @@ def write_file_to_disk(contents: Any, dest_folder: str, filename: str):
         pass
     pickle.dump(contents, open(dest_folder + filename, 'wb'))
 
+
 def load_file_from_disk(loc_folder: str, filename: str) -> Any:
     """Loads a file that was previously saved to the disk.
 
@@ -296,7 +299,8 @@ def load_file_from_disk(loc_folder: str, filename: str) -> Any:
 
     file_string = pickle.load(open(loc_folder + filename, 'rb'))
     return file_string
- 
+
+
 def extract_docx_content(xml_data: bytes) -> bytes:
     """
         parses text and formats tables/figures from XML file (as bytes).
@@ -306,9 +310,9 @@ def extract_docx_content(xml_data: bytes) -> bytes:
         :param xml_data: xml file passed as bytes
         :return: parsed text in byte string format
     """
-    #create tree from xml content
+    # create tree from xml content
     tree = lxml.etree.fromstring(xml_data)
-    
+
     # remove dead/unnecessary content
     xpath = './/{node_type}'
     log = tree.findall(xpath.format(node_type=FALLBACK))
@@ -316,24 +320,27 @@ def extract_docx_content(xml_data: bytes) -> bytes:
         j = p.getparent()
         j.remove(p)
 
-    #extract content from each node
-    paragraphs = []    
+    # extract content from each node
+    paragraphs = []
     for paragraph in tree.iter():
 
         if paragraph.tag == PIC:
             pic_data = [paragraph.get('name'), paragraph.get('descr')]
-            # empty title/data are formatted as '' so it's ok to not check if they exist
-            paragraphs.append('[FIG] ' + pic_data[0] + ': ' + pic_data[1] + '\n')
+            # empty title/data are formatted as ''
+            # so it's ok to not check if they exist
+            paragraphs.append(
+                '[FIG] ' + pic_data[0] + ': ' + pic_data[1] + '\n')
 
         elif paragraph.tag == BR:
-            paragraphs.append('\n')  
+            paragraphs.append('\n')
 
         elif paragraph.tag == TEXT:
             """
-                IGNORE  
+                IGNORE
                 see if contains nested para to prevent doubling output
                 this will ignore text of paragraphs that have nested paragraphs
-                probably better to look upwards at ancestors not down at descendants
+                probably better to look upwards at ancestors not down at
+                descendants
                 if paragraph.find('.//' + PARA) is None:
                     texts = [node.text
                         for node in paragraph.iter(TEXT)

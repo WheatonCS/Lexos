@@ -1,6 +1,8 @@
 from lexos.helpers.general_functions import get_encoding, \
     generate_d3_object, merge_list, load_stastic, matrix_to_dict, \
-    dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes
+    dict_to_matrix, html_escape, apply_function_exclude_tags, decode_bytes, \
+    extract_docx_content
+from test.helpers import docx
 
 
 class TestGeneralFunctions:
@@ -123,3 +125,17 @@ class TestDecodeBytes:
         python_string = "Hello, world!"
 
         assert decode_bytes(python_string) == python_string
+
+
+class TestExtractDocxContent:
+    def test_image(self):
+        assert extract_docx_content(docx.docx_image) == \
+               docx.docx_image_expected
+
+    def test_table(self):
+        assert extract_docx_content(docx.docx_table) == \
+            docx.docx_table_expected
+
+    def test_header(self):
+        assert extract_docx_content(docx.docx_general) == \
+            docx.docx_general_expected

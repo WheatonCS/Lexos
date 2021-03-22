@@ -45,11 +45,11 @@ def add_document() -> str:
 
     """
         Get docx file data.
-        For info on docx structure: 
+        For info on docx structure:
             https://stackoverflow.com/tags/docx/info
     """
     if file_name.endswith('.docx'):
-        #load bytes into zip file and read from xml document file
+        # load bytes into zip file and read from xml document file
         with zipfile.ZipFile(BytesIO(request.data), "r") as doc:
             xml_content = doc.read('word/document.xml')
 
@@ -81,7 +81,7 @@ def scrape():
     scraped_files = []
     for i, url in enumerate(urls):
         response = requests.get(url)
-        file_name = "url"+str(i)+".txt"
+        file_name = "url" + str(i) + ".txt"
         scraped_files.append(file_name)
         file_manager.add_upload_file(response.text, file_name)
 
