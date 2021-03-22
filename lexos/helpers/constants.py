@@ -67,7 +67,8 @@ DEFAULT_GENERALSETTINGS_OPTIONS = {
 }
 
 # Docx Upload
-WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/' \
+                 'main}'
 WORD_PICTURE = '{http://schemas.openxmlformats.org/drawingml/2006/picture}'
 PARA = WORD_NAMESPACE + 'p'
 TEXT = WORD_NAMESPACE + 't'
@@ -78,7 +79,8 @@ DOC = WORD_NAMESPACE + 'document'
 BODY = WORD_NAMESPACE + 'body'
 DRAW = WORD_NAMESPACE + 'drawing'
 PIC = WORD_PICTURE + 'cNvPr'
-FALLBACK = '{http://schemas.openxmlformats.org/markup-compatibility/2006}' + 'Fallback'
+FALLBACK = '{http://schemas.openxmlformats.org/markup-compatibility/2006}' + \
+           'Fallback'
 
 # Scrub
 SCRUBBOXES = (
