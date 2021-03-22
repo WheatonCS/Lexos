@@ -983,27 +983,19 @@ class TestHandleGutenberg:
     def test_handle_gutenberg_match(self):
         assert handle_gutenberg(text=guten.TEXT_FRONT_PLATE) == \
             guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
-        assert handle_gutenberg(text=guten.TEXT_FRONT_COPY) == \
-            guten.TEXT_NEITHER
         assert handle_gutenberg(text=guten.TEXT_BACK) == guten.TEXT_NEITHER
         assert handle_gutenberg(text=guten.TEXT_BOTH_PLATE) == \
             guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
-        assert handle_gutenberg(text=guten.TEXT_BOTH_COPY) == \
-            guten.TEXT_NEITHER
-        assert handle_gutenberg(
-            text="This text is Copyright Joe Schmoe.\n\n\nDone.") == "Done."
-        assert handle_gutenberg(
-            text="This text is copyright Joe Schmoe.\n\n\nDone.") == "Done."
+        assert handle_gutenberg(text=guten.TEXT_FRONT_PLATE_ALT) == \
+               guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
+        assert handle_gutenberg(text=guten.TEXT_FRONT_PLATE_OUTDATED) == \
+               guten.FRONT_PLATE_EXTRA + guten.TEXT_NEITHER
 
     def test_handle_gutenberg_no_match(self):
         assert handle_gutenberg(text=guten.TEXT_NEITHER) == guten.TEXT_NEITHER
         assert handle_gutenberg(text="") == ""
-        assert handle_gutenberg(
-            text="This text is copyright\nJoe Schmoe.\n\n\nDone.") == \
-            "This text is copyright\nJoe Schmoe.\n\n\nDone."
-        assert handle_gutenberg(
-            text="This text is copyright Joe Schmoe.\n\nDone.") == \
-            "This text is copyright Joe Schmoe.\n\nDone."
+        assert handle_gutenberg(text=guten.FRONT_PLATE_EXTRA) == \
+               guten.FRONT_PLATE_EXTRA
 
 
 # prepare_additional_options
