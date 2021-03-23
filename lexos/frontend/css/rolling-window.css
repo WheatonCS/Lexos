@@ -55,7 +55,18 @@ form {
     width: calc(100% - 11.2rem);
 }
 
+input#lower-x-input,
+input#upper-x-input,
+input#lower-y-input,
+input#upper-y-input {
+    width: calc(100% - 28rem);
+    margin-left: 0rem;
+    margin-right: 0rem;
+}
 
+span#hide{
+    visibility: hidden;
+}
 /* Display options */
 #display-section .section-body > .checkbox-label {
     width: calc(100% - 6rem);

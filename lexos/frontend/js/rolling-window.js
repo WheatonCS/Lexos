@@ -117,7 +117,7 @@ function send_rolling_window_result_request () {
       csv = response.csv
       initialize_graph(response.graph)
       enable('#generate-button, #csv-button')
-      //rolling_window_onclick()
+      // rolling_window_onclick()
     })
 
   // If the request failed, display an error and enable the "Generate"
@@ -169,6 +169,41 @@ function validate_inputs (show_error = false) {
     }
     valid = false
   }
+
+  // "Set Axes for each input"
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#lower-x-input').val(), 0))) {
+    error_highlight('#lower-x-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#upper-x-input').val(), -10))) {
+    error_highlight('#upper-x-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#lower-y-input').val(), -10))) {
+    error_highlight('#lower-y-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#upper-y-input').val(), -10))) {
+    error_highlight('#upper-y-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+
 
   // "Corpus-section-input"
   if (!validate_number($('#corpus-section-input input').val(), 0)) {
@@ -282,8 +317,8 @@ function walkthrough () {
  * Initializes onclick for corpus preview
  * @returns {void}
  */
-function corpus_preview_onclick(){
-  $('#get-corpus-section').click(function(data){
+function corpus_preview_onclick () {
+  $('#get-corpus-section').click(function (data) {
     // Get index input
     let index = parseInt($('#corpus-section-input').val())
 
@@ -291,11 +326,11 @@ function corpus_preview_onclick(){
     // do stuff...
 
     // Make ajax call
-    send_ajax_form_request("/rolling-window/fetch_corpus",
-        {corpus_index: index})
-        .done(function(response){
-            console.log(response)
-        })
+    send_ajax_form_request('/rolling-window/fetch_corpus',
+      {corpus_index: index})
+      .done(function (response) {
+        console.log(response)
+      })
   })
 }
 
@@ -303,36 +338,35 @@ function corpus_preview_onclick(){
  * Adds onclick to rolling window to display where in corpus we are
  * @returns {void}
  */
-function rolling_window_onclick(){
-    let rolling_window = $('.plotly-graph-div')
-    console.log(rolling_window.attr("id"))
-    console.log(rolling_window.type)
-    console.log(JSON.stringify(rolling_window._context))
-    rolling_window.on('plotly_click', function(data){
-        let annotate_text
-        let i
-        let annotation
-        console.log("Hello World")
-        let pts = '';
-        console.log(Object.getOwnPropertyNames(data))
-        console.log(Object.values(data))
-        // console.log(data.type)
-        // console.log(data.target)
-        for(i=0; i < data.points.length; i++){
-        annotate_text = 'x = '+data.points[i].x +
-                      'y = '+data.points[i].y.toPrecision(4);
-        console.log(annotate_text)
-        }
-        // annotation = {
-        //   text: annotate_text,
-        //   x: data.points[i].x,
-        //   y: parseFloat(data.points[i].y.toPrecision(4))
-        // }
-        //
-        // annotations = self.layout.annotations || [];
-        // annotations.push(annotation);
-        // Plotly.relayout('myDiv',{annotations: annotations})
-
-        }
-    )
+function rolling_window_onclick () {
+  let rolling_window = $('.plotly-graph-div')
+  console.log(rolling_window.attr('id'))
+  console.log(rolling_window.type)
+  console.log(JSON.stringify(rolling_window._context))
+  rolling_window.on('plotly_click', function (data) {
+    let annotate_text
+    let i
+    let annotation
+    console.log('Hello World')
+    let pts = ''
+    console.log(Object.getOwnPropertyNames(data))
+    console.log(Object.values(data))
+    // console.log(data.type)
+    // console.log(data.target)
+    for (i = 0; i < data.points.length; i++) {
+      annotate_text = 'x = ' + data.points[i].x +
+                      'y = ' + data.points[i].y.toPrecision(4)
+      console.log(annotate_text)
+    }
+    // annotation = {
+    //   text: annotate_text,
+    //   x: data.points[i].x,
+    //   y: parseFloat(data.points[i].y.toPrecision(4))
+    // }
+    //
+    // annotations = self.layout.annotations || [];
+    // annotations.push(annotation);
+    // Plotly.relayout('myDiv',{annotations: annotations})
+  }
+  )
 }

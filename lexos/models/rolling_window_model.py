@@ -689,6 +689,7 @@ class RollingWindowsModel(BaseModel):
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
+
     def _get_mile_stone_color(self, index: int) -> str:
         """Get color for mile stone.
 
@@ -762,7 +763,7 @@ class RollingWindowsModel(BaseModel):
             data = result_plot + legend_helper + mile_stone_data
 
             # Return the plot with milestones as layout.
-            return go.Figure(
+            fig = go.Figure(
                 data=data,
                 layout=go.Layout(
                     dragmode="pan",
@@ -797,9 +798,20 @@ class RollingWindowsModel(BaseModel):
 
             )
 
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(
+                    range=[self._options.plot_options.axes_range[0],
+                           self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(
+                    range=[self._options.plot_options.axes_range[2],
+                           self._options.plot_options.axes_range[3]])
+                return fig
+
         else:
             # Return just the plot.
-            return go.Figure(
+            fig = go.Figure(
                 data=result_plot,
                 layout=go.Layout(
                     dragmode="pan",
@@ -832,6 +844,16 @@ class RollingWindowsModel(BaseModel):
                     )
                 )
             )
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(
+                    range=[self._options.plot_options.axes_range[0],
+                           self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(
+                    range=[self._options.plot_options.axes_range[2],
+                           self._options.plot_options.axes_range[3]])
+                return fig
 
     def _get_token_ratio_graph(self) -> go.Figure:
         """Get the plotly graph for the token ratio without milestone.
@@ -876,7 +898,7 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(
+            fig = go.Figure(
                 data=result_plot,
                 layout=go.Layout(
                     dragmode="pan",
@@ -909,6 +931,18 @@ class RollingWindowsModel(BaseModel):
                     )
                 )
             )
+
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(
+                    range=[self._options.plot_options.axes_range[0],
+                           self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(
+                    range=[self._options.plot_options.axes_range[2],
+                           self._options.plot_options.axes_range[3]])
+                return fig
+
 
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
@@ -940,7 +974,7 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(
+            fig = go.Figure(
                 data=result_plot,
                 layout=go.Layout(
                     dragmode="pan",
@@ -973,6 +1007,15 @@ class RollingWindowsModel(BaseModel):
                     )
                 )
             )
+
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(range=[self._options.plot_options.axes_range[0],
+                                        self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(range=[self._options.plot_options.axes_range[2],
+                                        self._options.plot_options.axes_range[3]])
+                return fig
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph.
