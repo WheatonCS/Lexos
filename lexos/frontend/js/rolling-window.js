@@ -4,9 +4,9 @@ let need_passage = 1
 let passage
 let stored_window_type
 
-let RW_SECTION_WORD = 10
-let RW_SECTION_LINE = 2
-let RW_SECTION_CHAR = 20
+let RW_SECTION_WORD = 25
+let RW_SECTION_LINE = 3
+let RW_SECTION_CHAR = 40
 
 $(function () {
   // Initialize validation
@@ -120,12 +120,13 @@ function send_rolling_window_result_request () {
   // enable rolling window onclick
     .done(function (response) {
       csv = response.csv
+      console.log(response.current_window_type)
+      //console.log(response.current_window_type)
       initialize_graph(response.graph)
       enable('#generate-button, #csv-button')
-      // rolling_window_onclick()
+      stored_window_type = response.current_window_type
       if (need_passage === 1) {
         passage = response.passage
-        stored_window_type = response.current_window_type
         need_passage = 0
         console.log('Successfully acquired passage')
       }
@@ -342,7 +343,9 @@ function corpus_preview_onclick () {
   // Instead, lets define some JS functions for getting the preview section
   $('#get-corpus-section').click(function (data) {
     let subsection = get_corpus_section()
-    // Make a pop-up with the section inside
+    let popup_string = "<span>" + subsection + "</span>"
+    let popup_container_element = create_popup("Text")
+      $(popup_string).appendTo(popup_container_element.find('.popup-content'))
   })
 }
 
@@ -351,8 +354,8 @@ function corpus_preview_onclick () {
  * @returns {string} The corpus section to preview
  */
 function get_corpus_section () {
-  let index = parseInt($('#corpus-section-input').val())
-  let str = ['Hello', 'There', 'Binch'].slice(0, 2).join(' ')
+  let index = $('#corpus-section-input').val()
+  console.log(index)
   if (stored_window_type === 'word') {
     // get section range
     let split_passage = passage.split(' ')

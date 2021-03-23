@@ -1090,6 +1090,14 @@ class RollingWindowsModel(BaseModel):
 
         :return: The rolling window results.
         """
+        window_type = self._options.window_options.window_unit
+        if window_type == WindowUnitType.word:
+            str_window_type = "word"
+        elif window_type == WindowUnitType.line:
+            str_window_type = "line"
+        elif window_type == WindowUnitType.letter:
+            str_window_type = "letter"
+        print(str_window_type)
         fetch_passage = self._options.fetch_corpus
         config = {
             "displaylogo": False,
@@ -1111,7 +1119,7 @@ class RollingWindowsModel(BaseModel):
 
                 "passage": self._passage,
 
-                "current_window_type": session['rwoption']['window_type']
+                "current_window_type": str_window_type
             })
         else:
             return jsonify({
@@ -1123,5 +1131,7 @@ class RollingWindowsModel(BaseModel):
                               config=config),
 
                 "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
-                                                        na_rep="NA")
+                                                        na_rep="NA"),
+
+                "current_window_type": str_window_type
             })
