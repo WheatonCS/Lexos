@@ -59,9 +59,9 @@ input#lower-x-input,
 input#upper-x-input,
 input#lower-y-input,
 input#upper-y-input {
-    width: calc(100% - 28rem);
-    margin-left: 0rem;
-    margin-right: 0rem;
+    width: calc(15%);
+    margin-left: 0;
+    margin-right: 0;
 }
 
 span#hide{
