@@ -128,12 +128,13 @@ class LexosFile:
         :return: a boolean representing if file is from Project Gutenberg.
         """
 
-        # could make this more specific with (THE|THIS) instead of a catch all, but this allows for more variation
+        # could make this more specific with (THE|THIS) instead of a catch all,
+        # but this allows for more variation
         if re.search(r"\*\*\* START OF .*PROJECT GUTENBERG.*?\n?.*?\*\*\*",
                      file_contents, re.IGNORECASE | re.UNICODE | re.MULTILINE):
             return True
         elif re.search(r"\nDavid Reed\n",
-                     file_contents):
+                       file_contents):
             return True
         else:
             return False

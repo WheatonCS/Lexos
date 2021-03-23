@@ -1,4 +1,12 @@
 let csv
+// Variables for getting the passage to the front end
+let need_passage = 1
+let passage
+let stored_window_type
+
+let RW_SECTION_WORD = 10
+let RW_SECTION_LINE = 2
+let RW_SECTION_CHAR = 20
 
 $(function () {
   // Initialize validation
@@ -30,9 +38,6 @@ $(function () {
 
   // Initialize the walkthrough
   initialize_walkthrough(walkthrough)
-
-  // Initialize graph onclick
-  // rolling_window_onclick()
 })
 
 /**
@@ -108,7 +113,7 @@ function create_rolling_window () {
 function send_rolling_window_result_request () {
   // Send a request for the k-means results
   send_ajax_form_request('/rolling-window/results',
-    {text_color: get_color('--text-color')})
+    {text_color: get_color('--text-color'), fetch_corpus: need_passage})
 
   // If the request was successful, initialize the graph, store the CSV
   // data and enable the appropriate buttons
@@ -117,7 +122,13 @@ function send_rolling_window_result_request () {
       csv = response.csv
       initialize_graph(response.graph)
       enable('#generate-button, #csv-button')
-      // rolling_window_onclick()
+      //rolling_window_onclick()
+      if (need_passage === 1){
+        passage = response.passage
+        stored_window_type = response.current_window_type
+        need_passage = 0
+        console.log("Successfully acquired passage")
+      }
     })
 
   // If the request failed, display an error and enable the "Generate"
@@ -170,50 +181,6 @@ function validate_inputs (show_error = false) {
     valid = false
   }
 
-  // "Set Axes for each input"
-  if ($('#set-axes-checkbox').prop('checked') &&
-    (!validate_number($('#lower-x-input').val(), 0))) {
-    error_highlight('#lower-x-input')
-    if (show_error) {
-      error(`Please either enter a input for axes or uncheck the set axes option.`)
-    }
-    valid = false
-  }
-  if ($('#set-axes-checkbox').prop('checked') &&
-    (!validate_number($('#upper-x-input').val(), -10))) {
-    error_highlight('#upper-x-input')
-    if (show_error) {
-      error(`Please either enter a input for axes or uncheck the set axes option.`)
-    }
-    valid = false
-  }
-  if ($('#set-axes-checkbox').prop('checked') &&
-    (!validate_number($('#lower-y-input').val(), -10))) {
-    error_highlight('#lower-y-input')
-    if (show_error) {
-      error(`Please either enter a input for axes or uncheck the set axes option.`)
-    }
-    valid = false
-  }
-  if ($('#set-axes-checkbox').prop('checked') &&
-    (!validate_number($('#upper-y-input').val(), -10))) {
-    error_highlight('#upper-y-input')
-    if (show_error) {
-      error(`Please either enter a input for axes or uncheck the set axes option.`)
-    }
-    valid = false
-  }
-
-
-  // "Corpus-section-input"
-  if (!validate_number($('#corpus-section-input input').val(), 0)) {
-    error_highlight('#corpus-section-input input')
-    if (show_error) error('Invalid window size.')
-    disable('#get-corpus-section')
-  } else {
-    enable('#get-corpus-section')
-  }
-
   return valid
 }
 
@@ -256,10 +223,6 @@ function initialize_tooltips () {
   create_tooltip('#milestone-tooltip-button', `Search the file for all
     instances of a specified string and plot a vertical dividing line at
     those locations.`, true)
-
-  // "Corpus Section Input"
-  create_tooltip('#get-corpus-section-tooltip-button', `Enter an x-value from the
-  graph and see the 20 words surrounding that term in the corpus`, true)
 }
 
 /**
@@ -317,56 +280,119 @@ function walkthrough () {
  * Initializes onclick for corpus preview
  * @returns {void}
  */
-function corpus_preview_onclick () {
-  $('#get-corpus-section').click(function (data) {
-    // Get index input
-    let index = parseInt($('#corpus-section-input').val())
-
-    // Check if it's word, character, or line
-    // do stuff...
-
-    // Make ajax call
-    send_ajax_form_request('/rolling-window/fetch_corpus',
-      {corpus_index: index})
-      .done(function (response) {
-        console.log(response)
-      })
+function corpus_preview_onclick(){
+  /* This code was non-functional and the method for fetching the passage has been changed */
+  // // Get index input
+  // let index = parseInt($('#corpus-section-input').val())
+  //
+  // // Check if it's word, character, or line
+  // // do stuff...
+  //
+  // // Make ajax call
+  // send_ajax_form_request("/rolling-window/fetch_corpus",
+  //     {corpus_index: index})
+  //     .done(function(response){
+  //         console.log(response.corpus_section)
+  //     })
+  // Instead, lets define some JS functions for getting the preview section
+  $('#get-corpus-section').click(function(data){
+    let subsection = get_corpus_section()
+    // Make a pop-up with the section inside
   })
+}
+
+/**
+ * Parses through passage to get the section that we need
+ * @returns {string} The corpus section to preview
+ */
+function get_corpus_section() {
+  let index = parseInt($('#corpus-section-input').val())
+  let str = ["Hello", "There", "Binch"].slice(0,2).join(" ")
+  if (stored_window_type === "word") {
+    // get section range
+    let split_passage = passage.split(" ")
+    return get_section_range(index, RW_SECTION_WORD, split_passage,true)
+  }
+
+  else if (stored_window_type === "letter"){
+    return get_section_range(index, RW_SECTION_CHAR, passage,false)
+  }
+
+  else if (stored_window_type === "line") {
+    let split_passage = passage.split("\n")
+    return get_section_range(index, RW_SECTION_LINE, split_passage,true)
+  }
+}
+
+/**
+ * Computes the section needed from the passage
+ * @returns {string} The precise section of the passage needed
+ */
+function get_section_range(index, size, the_passage, join){
+  let passage_length = the_passage.length
+  // check if index is within corpus bounds
+  if (index < 0 || index > passage_length)
+  {
+    return "ERROR: selected index is out of bounds"
+  }
+  let left_bound = index - size
+  let right_bound = index + size
+  // this flag will be raised in case corpus is smaller than the range
+  if (left_bound < 0) {
+    //compensate for the lost space, try to keep section size the same
+    right_bound += Math.abs(left_bound)
+    left_bound = 0
+  }
+  if (right_bound > passage_length && left_bound -
+     (right_bound-passage_length) <= 0){
+    right_bound = passage_length - 1
+    left_bound = 0
+  }
+  else if (right_bound > passage_length){
+    // compensate for the lost space, try to keep section size the same
+    left_bound -= right_bound-passage_length
+    right_bound = passage_length - 1
+  }
+  if (join){
+    let subsection = the_passage.slice(left_bound, right_bound)
+    return subsection.join(" ")
+  }
+  else
+    return the_passage.slice(left_bound, right_bound)
 }
 
 /**
  * Adds onclick to rolling window to display where in corpus we are
  * @returns {void}
  */
-function rolling_window_onclick () {
-  let rolling_window = $('.plotly-graph-div')
-  console.log(rolling_window.attr('id'))
-  console.log(rolling_window.type)
-  console.log(JSON.stringify(rolling_window._context))
-  rolling_window.on('plotly_click', function (data) {
-    let annotate_text
-    let i
-    let annotation
-    console.log('Hello World')
-    let pts = ''
-    console.log(Object.getOwnPropertyNames(data))
-    console.log(Object.values(data))
-    // console.log(data.type)
-    // console.log(data.target)
-    for (i = 0; i < data.points.length; i++) {
-      annotate_text = 'x = ' + data.points[i].x +
-                      'y = ' + data.points[i].y.toPrecision(4)
-      console.log(annotate_text)
-    }
-    // annotation = {
-    //   text: annotate_text,
-    //   x: data.points[i].x,
-    //   y: parseFloat(data.points[i].y.toPrecision(4))
-    // }
-    //
-    // annotations = self.layout.annotations || [];
-    // annotations.push(annotation);
-    // Plotly.relayout('myDiv',{annotations: annotations})
-  }
-  )
+function rolling_window_onclick(){
+    let rolling_window = document.getElementsByClassName("graph-container")
+    rolling_window.on('plotly_click', function(data){
+        let annotate_text
+        let i
+        let annotation
+        console.log(data)
+        let pts = '';
+        console.log(data.detail)
+        console.log(Object.getOwnPropertyNames(data))
+        console.log(Object.values(data))
+        // console.log(data.type)
+        // console.log(data.target)
+        for(i=0; i < data.points.length; i++){
+        annotate_text = 'x = '+data.points[i].x +
+                      'y = '+data.points[i].y.toPrecision(4);
+        console.log(annotate_text)
+        }
+        // annotation = {
+        //   text: annotate_text,
+        //   x: data.points[i].x,
+        //   y: parseFloat(data.points[i].y.toPrecision(4))
+        // }
+        //
+        // annotations = self.layout.annotations || [];
+        // annotations.push(annotation);
+        // Plotly.relayout('myDiv',{annotations: annotations})
+
+        }
+    )
 }

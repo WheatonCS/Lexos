@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
-from flask import jsonify
+from flask import jsonify, session
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
@@ -16,8 +16,6 @@ from lexos.helpers.definitions import get_words_with_right_boundary, \
     get_single_word_count_in_text
 from lexos.receivers.rolling_window_receiver import RWAFrontEndOptions, \
     RollingWindowsReceiver, WindowUnitType, RWATokenType
-from lexos.helpers.constants import RW_SECTION_WORD, RW_SECTION_CHAR, \
-    RW_SECTION_LINE
 
 # Set the rwa regex flags.
 rwa_regex_flags = re.DOTALL | re.MULTILINE | re.UNICODE
@@ -1087,118 +1085,43 @@ class RollingWindowsModel(BaseModel):
         else:
             raise ValueError("unhandled count type")
 
-    @staticmethod
-    def get_section_range(index: int, passage, size: int,
-                          join: bool) -> str:
-        """ get the section surrounding the index
-        (accounting for edges of corpus)
-
-        :param index: the index to get
-        :param passage: the entire passage to read from
-        :param size: how much of the bounds do we want to grab
-        :param join: whether or not passage is a list needing to be joined
-        :return: the section string
-        """
-        passage_length = len(passage)
-        # check if index is within corpus bounds
-        if index < 0 or index > passage_length:
-            string = "ERROR: selected index is out of bounds"
-            return string
-        left_bound = index - size
-        right_bound = index + size
-        # this flag will be raised in case corpus is smaller than the range
-        if left_bound < 0:
-            # compensate for the lost space, try to keep section size the same
-            right_bound += abs(left_bound)
-            left_bound = 0
-        if right_bound > passage_length and left_bound - \
-                (right_bound-passage_length) <= 0:
-            right_bound = passage_length - 1
-            left_bound = 0
-        elif right_bound > passage_length:
-            # compensate for the lost space, try to keep section size the same
-            left_bound -= right_bound-passage_length
-            right_bound = passage_length - 1
-        if join:
-            return "".join(passage[left_bound:right_bound])
-        else:
-            return passage[left_bound:right_bound]
-
-    def _corpus_section_helper(self) -> str:
-        pass
-
-    def get_corpus_section(self) -> str:
-        """ Get corpus section from user input index
-
-        :return: The selected word along with the surrounding corpus section
-        """
-        print("NOW WE HERE? CUCK???")
-        passage = self._passage
-        print("WE ACCESSED SELF")
-        # Unpack Data
-        data = RollingWindowsReceiver().get_index_options_from_front_end()
-        index = data.index
-        window_type = data.window_type
-        print("CHECKPOINT #3")
-        print(index)
-        print(window_type)
-        print(self._options.window_options.window_unit)
-        print(WindowUnitType.word)
-        # parse if words, lines, or characters
-        print("CHECKPOINT #4")
-        if window_type is WindowUnitType.word:
-            print("CHECKPOINT #4.5")
-            passage = get_words_with_right_boundary(self._passage)
-            print("CHECKPOINT #5")
-            # get section range
-            return jsonify({
-                "corpus_section": self.get_section_range(index=index,
-                                                         passage=passage,
-                                                         size=RW_SECTION_WORD,
-                                                         join=True)
-            })
-
-        elif window_type is WindowUnitType.letter:
-            print("CHECKPOINT #6")
-            passage = self._passage
-            return jsonify({
-                "corpus_section": self.get_section_range(index=index,
-                                                         passage=passage,
-                                                         size=RW_SECTION_CHAR,
-                                                         join=False)
-            })
-        elif window_type is WindowUnitType.line:
-            print("CHECKPOINT #7")
-            passage = self._passage.split('\n')
-            return jsonify({
-                "corpus_section": self.get_section_range(index=index,
-                                                         passage=passage,
-                                                         size=RW_SECTION_LINE,
-                                                         join=True)
-                     })
-        # we should always return something above
-        print("CHECKPOINT FUCK ML")
-        return jsonify({"error": "ERROR"})
-
     def get_results(self) -> str:
         """Get the rolling window results.
 
         :return: The rolling window results.
         """
+        fetch_passage = self._options.fetch_corpus
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
             "scrollZoom": True
         }
 
-        return jsonify({
-            "graph": plot(self._generate_rwa_graph(),
-                          filename="show-legend",
-                          show_link=False,
-                          output_type="div",
-                          include_plotlyjs="cdn",
-                          config=config),
+        if fetch_passage:
+            return jsonify({
+                "graph": plot(self._generate_rwa_graph(),
+                              filename="show-legend",
+                              show_link=False,
+                              output_type="div",
+                              include_plotlyjs=False,
+                              config=config),
 
-            "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
-                                                    na_rep="NA")
-        })
+                "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                        na_rep="NA"),
+
+                "passage": self._passage,
+
+                "current_window_type": session['rwoption']['window_type']
+            })
+        else:
+            return jsonify({
+                "graph": plot(self._generate_rwa_graph(),
+                              filename="show-legend",
+                              show_link=False,
+                              output_type="div",
+                              include_plotlyjs=False,
+                              config=config),
+
+                "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                        na_rep="NA")
+            })
