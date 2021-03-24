@@ -3,6 +3,7 @@ let csv
 let need_passage = 1
 let passage
 let stored_window_type
+let highlighted_word
 
 let RW_SECTION_WORD = 25
 let RW_SECTION_LINE = 3
@@ -354,15 +355,19 @@ function corpus_preview_onclick () {
  * @returns {string} The corpus section to preview
  */
 function get_corpus_section () {
-  let index = $('#corpus-section-input').val()
+  let index = parseInt($('input#corpus-section-input').val())
   console.log(index)
   if (stored_window_type === 'word') {
+    console.log("Here in word")
     // get section range
     let split_passage = passage.split(' ')
     return get_section_range(index, RW_SECTION_WORD, split_passage, true)
   } else if (stored_window_type === 'letter') {
-    return get_section_range(index, RW_SECTION_CHAR, passage, false)
+    let cpy_passage = passage
+    console.log("Here in letter")
+    return get_section_range(index, RW_SECTION_CHAR, cpy_passage, false)
   } else if (stored_window_type === 'line') {
+    console.log("Here in line")
     let split_passage = passage.split('\n')
     return get_section_range(index, RW_SECTION_LINE, split_passage, true)
   }
@@ -380,25 +385,36 @@ function get_section_range (index, size, the_passage, join) {
   }
   let left_bound = index - size
   let right_bound = index + size
+  highlighted_word = size
   // this flag will be raised in case corpus is smaller than the range
   if (left_bound < 0) {
     // compensate for the lost space, try to keep section size the same
     right_bound += Math.abs(left_bound)
+    highlighted_word += Math.abs(left_bound)
     left_bound = 0
   }
-  if (right_bound > passage_length && left_bound -
+  if (right_bound >= passage_length && left_bound -
      (right_bound - passage_length) <= 0) {
+    highlighted_word = size
     right_bound = passage_length - 1
     left_bound = 0
-  } else if (right_bound > passage_length) {
+  } else if (right_bound >= passage_length) {
     // compensate for the lost space, try to keep section size the same
+    highlighted_word -= right_bound - passage_length
     left_bound -= right_bound - passage_length
     right_bound = passage_length - 1
   }
   if (join) {
     let subsection = the_passage.slice(left_bound, right_bound)
+    subsection[highlighted_word] = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
+    console.log(highlighted_word)
+    console.log(subsection[highlighted_word])
     return subsection.join(' ')
-  } else { return the_passage.slice(left_bound, right_bound) }
+  } else {
+    let subsection = the_passage.slice(left_bound, right_bound)
+    subsection[highlighted_word] = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
+    return subsection
+  }
 }
 
 /**

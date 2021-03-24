@@ -1097,7 +1097,7 @@ class RollingWindowsModel(BaseModel):
             str_window_type = "line"
         elif window_type == WindowUnitType.letter:
             str_window_type = "letter"
-        print(str_window_type)
+
         fetch_passage = self._options.fetch_corpus
         config = {
             "displaylogo": False,
