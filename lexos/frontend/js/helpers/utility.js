@@ -348,7 +348,7 @@ function parse_json (json) {
  * @param {number} maximum The maximum the value can be.
  * @returns {boolean} Whether the value is valid.
  */
-function validate_number (number, minimum = NaN, maximum = NaN) {
+function validate_number (number, minimum = 1, maximum = NaN) {
   // Check that the value is a number
   let parsed_value = +number
   if (!number || isNaN(parsed_value)) return false
