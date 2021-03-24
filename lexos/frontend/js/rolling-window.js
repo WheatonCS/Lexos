@@ -6,8 +6,8 @@ let stored_window_type
 let highlighted_word
 
 let RW_SECTION_WORD = 25
-let RW_SECTION_LINE = 3
-let RW_SECTION_CHAR = 40
+let RW_SECTION_LINE = 6
+let RW_SECTION_CHAR = 75
 
 $(function () {
   // Initialize validation
@@ -121,15 +121,12 @@ function send_rolling_window_result_request () {
   // enable rolling window onclick
     .done(function (response) {
       csv = response.csv
-      console.log(response.current_window_type)
-      //console.log(response.current_window_type)
-      initialize_graph(response.graph)
+      initialize_graph(response.graph, 1)
       enable('#generate-button, #csv-button')
       stored_window_type = response.current_window_type
       if (need_passage === 1) {
         passage = response.passage
         need_passage = 0
-        console.log('Successfully acquired passage')
       }
     })
 
@@ -352,22 +349,22 @@ function corpus_preview_onclick () {
 
 /**
  * Parses through passage to get the section that we need
+ * @param {int} index The index that we're searching for in the corpus
  * @returns {string} The corpus section to preview
  */
-function get_corpus_section () {
-  let index = parseInt($('input#corpus-section-input').val())
-  console.log(index)
+function get_corpus_section (index = -1) {
+  if (index === -1){
+    index = parseInt($('input#corpus-section-input').val())
+  }
+
   if (stored_window_type === 'word') {
-    console.log("Here in word")
     // get section range
     let split_passage = passage.split(' ')
     return get_section_range(index, RW_SECTION_WORD, split_passage, true)
   } else if (stored_window_type === 'letter') {
     let cpy_passage = passage
-    console.log("Here in letter")
     return get_section_range(index, RW_SECTION_CHAR, cpy_passage, false)
   } else if (stored_window_type === 'line') {
-    console.log("Here in line")
     let split_passage = passage.split('\n')
     return get_section_range(index, RW_SECTION_LINE, split_passage, true)
   }
@@ -386,11 +383,18 @@ function get_section_range (index, size, the_passage, join) {
   let left_bound = index - size
   let right_bound = index + size
   highlighted_word = size
+
   // this flag will be raised in case corpus is smaller than the range
   if (left_bound < 0) {
     // compensate for the lost space, try to keep section size the same
     right_bound += Math.abs(left_bound)
-    highlighted_word += Math.abs(left_bound)
+    // if we choose an index near very start of graph, adjust the highlighted
+    // word accordingly
+    if (index < highlighted_word){
+    highlighted_word = index
+    } else {
+      highlighted_word += Math.abs(left_bound)
+    }
     left_bound = 0
   }
   if (right_bound >= passage_length && left_bound -
@@ -407,13 +411,15 @@ function get_section_range (index, size, the_passage, join) {
   if (join) {
     let subsection = the_passage.slice(left_bound, right_bound)
     subsection[highlighted_word] = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
-    console.log(highlighted_word)
-    console.log(subsection[highlighted_word])
     return subsection.join(' ')
   } else {
+    // splice as such that we can add coloring around selected word
     let subsection = the_passage.slice(left_bound, right_bound)
-    subsection[highlighted_word] = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
-    return subsection
+    let section1 = subsection.slice(0, highlighted_word)
+    let section2 = subsection.slice(highlighted_word+1, subsection.length)
+    let highlight_section = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
+    let final_string = section1 + highlight_section + section2
+    return final_string
   }
 }
 
@@ -422,32 +428,24 @@ function get_section_range (index, size, the_passage, join) {
  * @returns {void}
  */
 function rolling_window_onclick () {
-  let rolling_window = document.getElementsByClassName('graph-container')
+  let rolling_window = $('.js-plotly-plot')[0]
   rolling_window.on('plotly_click', function (data) {
     let annotate_text
     let i
     let annotation
-    console.log(data)
-    let pts = ''
-    console.log(data.detail)
-    console.log(Object.getOwnPropertyNames(data))
-    console.log(Object.values(data))
-    // console.log(data.type)
-    // console.log(data.target)
+
+    let index = 0
+
     for (i = 0; i < data.points.length; i++) {
-      annotate_text = 'x = ' + data.points[i].x +
-                      'y = ' + data.points[i].y.toPrecision(4)
-      console.log(annotate_text)
+      // annotate_text = 'x = ' + data.points[i].x +
+      //                 'y = ' + data.points[i].y.toPrecision(4)
+      // console.log(annotate_text)
+      index = data.points[i].x
     }
-    // annotation = {
-    //   text: annotate_text,
-    //   x: data.points[i].x,
-    //   y: parseFloat(data.points[i].y.toPrecision(4))
-    // }
-    //
-    // annotations = self.layout.annotations || [];
-    // annotations.push(annotation);
-    // Plotly.relayout('myDiv',{annotations: annotations})
+    let subsection = get_corpus_section(index)
+    let popup_string = "<span>" + subsection + "</span>"
+    let popup_container_element = create_popup("Text")
+    $(popup_string).appendTo(popup_container_element.find('.popup-content'))
   }
   )
 }

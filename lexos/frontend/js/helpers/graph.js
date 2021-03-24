@@ -29,16 +29,18 @@ function () { enable('#generate-button') }) {
 /**
  * Initializes the Plotly graph.
  * @param {string} graph_html The Plotly graph HTML to display.
+ * @param {int} set_window_onclick If graph sent from rolling window, add
+ * an onclick in update_graph_size()
  * @returns {void}
  */
-function initialize_graph (graph_html) {
+function initialize_graph (graph_html, set_window_onclick = 0) {
   // Add the Plotly graph HTML
   $(`<div id="graph" class="hidden"></div>`)
     .html(graph_html)
     .appendTo('#graph-container')
 
   // Update the graph size
-  update_graph_size()
+  update_graph_size(set_window_onclick)
   $(window).resize(update_graph_size)
 
   // Remove the loading overlay and show the graph
@@ -56,9 +58,11 @@ function remove_graphs () {
 
 /**
  * Updates the size of the graph to fit its containing element.
+ * @param {int} set_window_onclick If graph sent from rolling window, add
+ * an onclick in update_graph_size()
  * @returns {void}
  */
-function update_graph_size () {
+function update_graph_size (set_window_onclick = 0) {
   // Get the containing element
   let graph_container_element = $('#graph-container')
 
@@ -67,6 +71,11 @@ function update_graph_size () {
     height: graph_container_element.height(),
     responsive: false},
   {autosize: false})
+
+  if (set_window_onclick === 1){
+    // add onclick to rolling window
+    rolling_window_onclick()
+  }
 }
 
 /**
