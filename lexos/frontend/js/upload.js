@@ -144,7 +144,10 @@ function send_file_upload_requests () {
     data: file,
     processData: false,
     contentType: file.type,
-    headers: {'file-name': encodeURIComponent(file.name)}
+    headers: {'file-name': encodeURIComponent(file.name)},
+    success: function(data){
+      console.log(data)
+    }
   })
 
   // If the request is successful, call the "upload_success_callback()"
@@ -196,7 +199,7 @@ function initialize_upload_progress_callback (file) {
  * @return {boolean} bool: Whether the file type is supported.
  */
 function file_type_supported (filename) {
-  const supported_file_types = ['txt', 'xml', 'html', 'sgml', 'lexos']
+  const supported_file_types = ['txt', 'xml', 'html', 'sgml', 'lexos', 'docx']
 
   // Get the file's extension
   let fileType = filename.split('.')[filename.split('.').length - 1]
