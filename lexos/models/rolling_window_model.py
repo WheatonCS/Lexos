@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
-from flask import jsonify
+from flask import jsonify, session
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
@@ -1047,20 +1047,38 @@ class RollingWindowsModel(BaseModel):
 
         :return: The rolling window results.
         """
+        fetch_passage = self._options.fetch_corpus
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
             "scrollZoom": True
         }
 
-        return jsonify({
-            "graph": plot(self._generate_rwa_graph(),
-                          filename="show-legend",
-                          show_link=False,
-                          output_type="div",
-                          include_plotlyjs=False,
-                          config=config),
+        if fetch_passage:
+            return jsonify({
+                "graph": plot(self._generate_rwa_graph(),
+                              filename="show-legend",
+                              show_link=False,
+                              output_type="div",
+                              include_plotlyjs=False,
+                              config=config),
 
-            "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
-                                                    na_rep="NA")
-        })
+                "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                        na_rep="NA"),
+
+                "passage": self._passage,
+
+                "current_window_type": session['rwoption']['window_type']
+            })
+        else:
+            return jsonify({
+                "graph": plot(self._generate_rwa_graph(),
+                              filename="show-legend",
+                              show_link=False,
+                              output_type="div",
+                              include_plotlyjs=False,
+                              config=config),
+
+                "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                        na_rep="NA")
+            })

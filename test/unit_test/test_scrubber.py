@@ -996,6 +996,8 @@ class TestHandleGutenberg:
         assert handle_gutenberg(text="") == ""
         assert handle_gutenberg(text=guten.FRONT_PLATE_EXTRA) == \
                guten.FRONT_PLATE_EXTRA
+        assert handle_gutenberg(text=guten.TEXT_FRONT_PLATE_OUTDATED_WRONG) \
+               == guten.TEXT_FRONT_PLATE_OUTDATED_WRONG
 
 
 # prepare_additional_options
