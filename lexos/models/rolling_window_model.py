@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
-from flask import jsonify
+from flask import jsonify, session
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
@@ -687,6 +687,7 @@ class RollingWindowsModel(BaseModel):
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
+
     def _get_mile_stone_color(self, index: int) -> str:
         """Get color for mile stone.
 
@@ -760,7 +761,7 @@ class RollingWindowsModel(BaseModel):
             data = result_plot + legend_helper + mile_stone_data
 
             # Return the plot with milestones as layout.
-            return go.Figure(
+            fig = go.Figure(
                 data=data,
                 layout=go.Layout(
                     dragmode="pan",
@@ -795,9 +796,20 @@ class RollingWindowsModel(BaseModel):
 
             )
 
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(
+                    range=[self._options.plot_options.axes_range[0],
+                           self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(
+                    range=[self._options.plot_options.axes_range[2],
+                           self._options.plot_options.axes_range[3]])
+                return fig
+
         else:
             # Return just the plot.
-            return go.Figure(
+            fig = go.Figure(
                 data=result_plot,
                 layout=go.Layout(
                     dragmode="pan",
@@ -830,6 +842,16 @@ class RollingWindowsModel(BaseModel):
                     )
                 )
             )
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(
+                    range=[self._options.plot_options.axes_range[0],
+                           self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(
+                    range=[self._options.plot_options.axes_range[2],
+                           self._options.plot_options.axes_range[3]])
+                return fig
 
     def _get_token_ratio_graph(self) -> go.Figure:
         """Get the plotly graph for the token ratio without milestone.
@@ -874,7 +896,7 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(
+            fig = go.Figure(
                 data=result_plot,
                 layout=go.Layout(
                     dragmode="pan",
@@ -907,6 +929,18 @@ class RollingWindowsModel(BaseModel):
                     )
                 )
             )
+
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(
+                    range=[self._options.plot_options.axes_range[0],
+                           self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(
+                    range=[self._options.plot_options.axes_range[2],
+                           self._options.plot_options.axes_range[3]])
+                return fig
+
 
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
@@ -938,7 +972,7 @@ class RollingWindowsModel(BaseModel):
         if self._options.milestone is not None:
             return self._add_milestone(result_plot=result_plot)
         else:
-            return go.Figure(
+            fig = go.Figure(
                 data=result_plot,
                 layout=go.Layout(
                     dragmode="pan",
@@ -971,6 +1005,15 @@ class RollingWindowsModel(BaseModel):
                     )
                 )
             )
+
+            if not self._options.plot_options.set_axes:
+                return fig
+            else:
+                fig.update_xaxes(range=[self._options.plot_options.axes_range[0],
+                                        self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(range=[self._options.plot_options.axes_range[2],
+                                        self._options.plot_options.axes_range[3]])
+                return fig
 
     def _generate_rwa_graph(self) -> go.Figure:
         """Get the rolling window graph.
@@ -1047,20 +1090,48 @@ class RollingWindowsModel(BaseModel):
 
         :return: The rolling window results.
         """
+        window_type = self._options.window_options.window_unit
+        if window_type == WindowUnitType.word:
+            str_window_type = "word"
+        elif window_type == WindowUnitType.line:
+            str_window_type = "line"
+        elif window_type == WindowUnitType.letter:
+            str_window_type = "letter"
+
+        fetch_passage = self._options.fetch_corpus
         config = {
             "displaylogo": False,
             "modeBarButtonsToRemove": ["toImage", "toggleSpikelines"],
             "scrollZoom": True
         }
 
-        return jsonify({
-            "graph": plot(self._generate_rwa_graph(),
-                          filename="show-legend",
-                          show_link=False,
-                          output_type="div",
-                          include_plotlyjs=False,
-                          config=config),
+        if fetch_passage:
+            return jsonify({
+                "graph": plot(self._generate_rwa_graph(),
+                              filename="show-legend",
+                              show_link=False,
+                              output_type="div",
+                              include_plotlyjs=False,
+                              config=config),
 
-            "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
-                                                    na_rep="NA")
-        })
+                "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                        na_rep="NA"),
+
+                "passage": self._passage,
+
+                "current_window_type": str_window_type
+            })
+        else:
+            return jsonify({
+                "graph": plot(self._generate_rwa_graph(),
+                              filename="show-legend",
+                              show_link=False,
+                              output_type="div",
+                              include_plotlyjs=False,
+                              config=config),
+
+                "csv": self._get_rwa_csv_frame().to_csv(index_label="# Window",
+                                                        na_rep="NA"),
+
+                "current_window_type": str_window_type
+            })

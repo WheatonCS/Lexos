@@ -55,8 +55,40 @@ form {
     width: calc(100% - 11.2rem);
 }
 
+input#lower-x-input,
+input#upper-x-input,
+input#lower-y-input,
+input#upper-y-input {
+    width: calc(15%);
+    margin-left: 0;
+    margin-right: 0;
+}
 
+span#hide{
+    visibility: hidden;
+}
 /* Display options */
 #display-section .section-body > .checkbox-label {
     width: calc(100% - 6rem);
+}
+
+/*Rolling Window Section Top */
+#graph-section-top {
+    display: grid;
+    grid-auto-flow: column;
+}
+#corpus-section-input {
+    width: 40rem;
+}
+#corpus-section-input-label {
+    width: calc(100% - 5rem);
+}
+
+#corpus-section-input input {
+    width: calc(100% - 30rem);
+}
+
+#get-corpus-section-tooltip-button{
+    margin-left: var(--small-gap);
+    margin-right: var(--small-gap);
 }

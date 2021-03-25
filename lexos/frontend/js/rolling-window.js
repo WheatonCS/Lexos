@@ -1,4 +1,13 @@
 let csv
+// Variables for getting the passage to the front end
+let need_passage = 1
+let passage
+let stored_window_type
+let highlighted_word
+
+let RW_SECTION_WORD = 25
+let RW_SECTION_LINE = 6
+let RW_SECTION_CHAR = 75
 
 $(function () {
   // Initialize validation
@@ -21,6 +30,9 @@ $(function () {
   // Check that there is exactly one document active and display the
   // appropriate text on the "Rolling Window" section
   get_active_file_ids(single_active_document_check, '#graph-container')
+
+  // Initialize corpus preview button
+  corpus_preview_onclick()
 
   // Initialize the tooltips
   initialize_tooltips()
@@ -102,14 +114,20 @@ function create_rolling_window () {
 function send_rolling_window_result_request () {
   // Send a request for the k-means results
   send_ajax_form_request('/rolling-window/results',
-    {text_color: get_color('--text-color')})
+    {text_color: get_color('--text-color'), fetch_corpus: need_passage})
 
   // If the request was successful, initialize the graph, store the CSV
   // data and enable the appropriate buttons
+  // enable rolling window onclick
     .done(function (response) {
       csv = response.csv
-      initialize_graph(response.graph)
+      initialize_graph(response.graph, 1)
       enable('#generate-button, #csv-button')
+      stored_window_type = response.current_window_type
+      if (need_passage === 1) {
+        passage = response.passage
+        need_passage = 0
+      }
     })
 
   // If the request failed, display an error and enable the "Generate"
@@ -162,6 +180,47 @@ function validate_inputs (show_error = false) {
     valid = false
   }
 
+  // "Set Axes for each input"
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#lower-x-input').val(), 0))) {
+    error_highlight('#lower-x-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#upper-x-input').val(), -10))) {
+    error_highlight('#upper-x-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#lower-y-input').val(), -10))) {
+    error_highlight('#lower-y-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+  if ($('#set-axes-checkbox').prop('checked') &&
+    (!validate_number($('#upper-y-input').val(), -10))) {
+    error_highlight('#upper-y-input')
+    if (show_error) {
+      error(`Please either enter a input for axes or uncheck the set axes option.`)
+    }
+    valid = false
+  }
+
+  // "Get corpus section"
+  if (!validate_number($('#corpus-section-input input').val(), 0)) {
+    error_highlight('#corpus-section-input input')
+    disable('#get-corpus-section')
+  } else {
+    enable('#get-corpus-section')
+  }
   return valid
 }
 
@@ -204,6 +263,10 @@ function initialize_tooltips () {
   create_tooltip('#milestone-tooltip-button', `Search the file for all
     instances of a specified string and plot a vertical dividing line at
     those locations.`, true)
+
+  // "Get Corpus Section"
+  create_tooltip('#get-corpus-section-tooltip-button', `Enter an x value
+  from the graph to see the place in the corpus`, true)
 }
 
 /**
@@ -255,4 +318,134 @@ function walkthrough () {
   ]})
 
   return intro
+}
+
+/**
+ * Initializes onclick for corpus preview
+ * @returns {void}
+ */
+function corpus_preview_onclick () {
+  /* This code was non-functional and the method for fetching the passage has been changed */
+  // // Get index input
+  // let index = parseInt($('#corpus-section-input').val())
+  //
+  // // Check if it's word, character, or line
+  // // do stuff...
+  //
+  // // Make ajax call
+  // send_ajax_form_request("/rolling-window/fetch_corpus",
+  //     {corpus_index: index})
+  //     .done(function(response){
+  //         console.log(response.corpus_section)
+  //     })
+  // Instead, lets define some JS functions for getting the preview section
+  $('#get-corpus-section').click(function (data) {
+    let subsection = get_corpus_section()
+    let popup_string = "<span>" + subsection + "</span>"
+    let popup_container_element = create_popup("Text")
+      $(popup_string).appendTo(popup_container_element.find('.popup-content'))
+  })
+}
+
+/**
+ * Parses through passage to get the section that we need
+ * @param {int} index The index that we're searching for in the corpus
+ * @returns {string} The corpus section to preview
+ */
+function get_corpus_section (index = -1) {
+  if (index === -1){
+    index = parseInt($('input#corpus-section-input').val())
+  }
+
+  if (stored_window_type === 'word') {
+    // get section range
+    let split_passage = passage.split(' ')
+    return get_section_range(index, RW_SECTION_WORD, split_passage, true)
+  } else if (stored_window_type === 'letter') {
+    let cpy_passage = passage
+    return get_section_range(index, RW_SECTION_CHAR, cpy_passage, false)
+  } else if (stored_window_type === 'line') {
+    let split_passage = passage.split('\n')
+    return get_section_range(index, RW_SECTION_LINE, split_passage, true)
+  }
+}
+
+/**
+ * Computes the section needed from the passage
+ * @returns {string} The precise section of the passage needed
+ */
+function get_section_range (index, size, the_passage, join) {
+  let passage_length = the_passage.length
+  // check if index is within corpus bounds
+  if (index < 0 || index > passage_length) {
+    return 'ERROR: selected index is out of bounds'
+  }
+  let left_bound = index - size
+  let right_bound = index + size
+  highlighted_word = size
+
+  // this flag will be raised in case corpus is smaller than the range
+  if (left_bound < 0) {
+    // compensate for the lost space, try to keep section size the same
+    right_bound += Math.abs(left_bound)
+    // if we choose an index near very start of graph, adjust the highlighted
+    // word accordingly
+    if (index < highlighted_word){
+    highlighted_word = index
+    } else {
+      highlighted_word += Math.abs(left_bound)
+    }
+    left_bound = 0
+  }
+  if (right_bound >= passage_length && left_bound -
+     (right_bound - passage_length) <= 0) {
+    highlighted_word = size
+    right_bound = passage_length - 1
+    left_bound = 0
+  } else if (right_bound >= passage_length) {
+    // compensate for the lost space, try to keep section size the same
+    highlighted_word -= right_bound - passage_length
+    left_bound -= right_bound - passage_length
+    right_bound = passage_length - 1
+  }
+  if (join) {
+    let subsection = the_passage.slice(left_bound, right_bound)
+    subsection[highlighted_word] = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
+    return subsection.join(' ')
+  } else {
+    // splice as such that we can add coloring around selected word
+    let subsection = the_passage.slice(left_bound, right_bound)
+    let section1 = subsection.slice(0, highlighted_word)
+    let section2 = subsection.slice(highlighted_word+1, subsection.length)
+    let highlight_section = "<span style='color: red'>" + subsection[highlighted_word] + "</span>"
+    let final_string = section1 + highlight_section + section2
+    return final_string
+  }
+}
+
+/**
+ * Adds onclick to rolling window to display where in corpus we are
+ * @returns {void}
+ */
+function rolling_window_onclick () {
+  let rolling_window = $('.js-plotly-plot')[0]
+  rolling_window.on('plotly_click', function (data) {
+    let annotate_text
+    let i
+    let annotation
+
+    let index = 0
+
+    for (i = 0; i < data.points.length; i++) {
+      // annotate_text = 'x = ' + data.points[i].x +
+      //                 'y = ' + data.points[i].y.toPrecision(4)
+      // console.log(annotate_text)
+      index = data.points[i].x
+    }
+    let subsection = get_corpus_section(index)
+    let popup_string = "<span>" + subsection + "</span>"
+    let popup_container_element = create_popup("Text")
+    $(popup_string).appendTo(popup_container_element.find('.popup-content'))
+  }
+  )
 }

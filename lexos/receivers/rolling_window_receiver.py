@@ -62,6 +62,10 @@ class RWAPlotOptions(NamedTuple):
     individual_points: bool
     # Return plot in black-white scale if true.
     black_white: bool
+    # Set axes of graph if true
+    set_axes: bool
+    # The lower x-axis bound
+    axes_range: Optional[List[float]]
 
 
 class RWAFrontEndOptions(NamedTuple):
@@ -89,6 +93,9 @@ class RWAFrontEndOptions(NamedTuple):
 
     # The color to use
     text_color: str
+
+    # Whether we send the corpus to the front end
+    fetch_corpus: int
 
 
 class RollingWindowsReceiver(BaseReceiver):
@@ -176,6 +183,17 @@ class RollingWindowsReceiver(BaseReceiver):
             return [mile_stone.strip()
                     for mile_stone in raw_mile_stones.split(",")]
 
+    def _get_axes(self) -> Optional[List[float]]:
+        """Get the axes data from front end"""
+        if 'enable_set_axes' not in self._front_end_data:
+            return None
+        else:
+            lower_x_axis = float(self._front_end_data['lower_x_axis'])
+            upper_x_axis = float(self._front_end_data['upper_x_axis'])
+            lower_y_axis = float(self._front_end_data['lower_y_axis'])
+            upper_y_axis = float(self._front_end_data['upper_y_axis'])
+            return [lower_x_axis, upper_x_axis, lower_y_axis, upper_y_axis]
+
     def _get_passage_file_id(self) -> int:
         """Get the file id for the passage to run rolling window."""
         return load_file_manager().get_active_files()[0].id
@@ -187,13 +205,17 @@ class RollingWindowsReceiver(BaseReceiver):
 
         black_white = True if 'black_and_white' \
             in self._front_end_data else False
-
+        set_axes = True if 'enable_set_axes' \
+            in self._front_end_data else False
         return RWAPlotOptions(individual_points=individual_points,
-                              black_white=black_white)
+                              black_white=black_white,
+                              set_axes=set_axes,
+                              axes_range=self._get_axes())
 
     def options_from_front_end(self) -> RWAFrontEndOptions:
         """Pack all the front end options together."""
         if self._front_end_data['calculation_type'] == 'Rolling Ratio':
+
             return RWAFrontEndOptions(
                 average_token_options=None,
                 ratio_token_options=self._get_ratio_token_options(),
@@ -201,7 +223,8 @@ class RollingWindowsReceiver(BaseReceiver):
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
                 passage_file_id=self._get_passage_file_id(),
-                text_color=self._front_end_data["text_color"]
+                text_color=self._front_end_data["text_color"],
+                fetch_corpus=int(self._front_end_data["fetch_corpus"])
             )
         elif self._front_end_data['calculation_type'] == 'Rolling Average':
             return RWAFrontEndOptions(
@@ -211,7 +234,8 @@ class RollingWindowsReceiver(BaseReceiver):
                 plot_options=self._get_plot_option(),
                 milestone=self._get_milestone(),
                 passage_file_id=self._get_passage_file_id(),
-                text_color=self._front_end_data["text_color"]
+                text_color=self._front_end_data["text_color"],
+                fetch_corpus=int(self._front_end_data["fetch_corpus"])
             )
         else:
             raise ValueError("invalid count type from front end")
