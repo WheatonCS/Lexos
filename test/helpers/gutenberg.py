@@ -43,6 +43,10 @@ FRONT_PLATE_OUTDATED = "***The Project Gutenberg's Etext of Shakespeare's" \
                        "now are haradda@aol.comand davidr@inconnect.com.\n  " \
                        "I hope that you enjoy this.\n\nDavid Reed\n"
 
+# removes 'David Reed' at end of string
+FRONT_PLATE_OUTDATED_WRONG = \
+                    FRONT_PLATE_OUTDATED[:len(FRONT_PLATE_OUTDATED) - 11]
+
 FRONT_PLATE_EXTRA = "\n\nProduced by Anonymous Volunteers\n\nPRIDE AND " \
                     "PREJUDICE\n\nBy Jane Austen\n\n"
 
@@ -79,5 +83,7 @@ TEXT_FRONT_PLATE = FRONT_PLATE + FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_FRONT_PLATE_ALT = FRONT_PLATE_ALT + FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_FRONT_PLATE_OUTDATED = FRONT_PLATE_OUTDATED + FRONT_PLATE_EXTRA + \
                             TEXT_NEITHER
+TEXT_FRONT_PLATE_OUTDATED_WRONG = FRONT_PLATE_OUTDATED_WRONG + \
+                            FRONT_PLATE_EXTRA + TEXT_NEITHER
 TEXT_BACK = TEXT_NEITHER + BACK_PLATE
 TEXT_BOTH_PLATE = TEXT_FRONT_PLATE + BACK_PLATE
