@@ -92,7 +92,8 @@ class SimilarityModel(BaseModel):
         # calculate the cosine score, a parallel array to labels
         # the "file_word_count" refers to a row in "other_file_word_counts"
         cos_scores = [
-            round(cosine(comp_file_word_count, file_word_count), SIM_QUERY_ROUND)
+            round(cosine(comp_file_word_count, file_word_count),
+                  SIM_QUERY_ROUND)
             for index, file_word_count in other_file_word_counts.iterrows()
         ]
 
