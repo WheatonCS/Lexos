@@ -2,7 +2,7 @@ let csv
 // Variables for getting the passage to the front end
 let need_passage = 1
 let passage
-let stored_window_type
+let stored_window_type = null
 let highlighted_word
 
 let RW_SECTION_WORD = 25
@@ -39,6 +39,9 @@ $(function () {
 
   // Initialize the walkthrough
   initialize_walkthrough(walkthrough)
+
+  // Set search bar
+  update_search_label()
 })
 
 /**
@@ -128,6 +131,8 @@ function send_rolling_window_result_request () {
         passage = response.passage
         need_passage = 0
       }
+      // update the search label to match the x unit for the rolling window
+      update_search_label()
     })
 
   // If the request failed, display an error and enable the "Generate"
@@ -448,4 +453,17 @@ function rolling_window_onclick () {
     $(popup_string).appendTo(popup_container_element.find('.popup-content'))
   }
   )
+}
+
+/**
+ * Updates the search bar based on the graph unit
+ * @returns {void}
+ */
+function update_search_label () {
+  let label = $('label[for="corpus-section-input"]')
+  if (stored_window_type === null){
+    label.text("Search [term]")
+  } else {
+    label.text("Search " + stored_window_type)
+  }
 }
