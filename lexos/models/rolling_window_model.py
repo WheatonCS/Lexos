@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import colorlover as cl
 import plotly.graph_objs as go
-from flask import jsonify, session
+from flask import jsonify
 from plotly.offline import plot
 from typing import NamedTuple, Optional, List, Callable, Dict
 from lexos.models.base_model import BaseModel
@@ -687,7 +687,6 @@ class RollingWindowsModel(BaseModel):
             if not self._options.plot_options.black_white \
             else cl.scales['7']['seq']['Greys'][6 - index % 6]
 
-
     def _get_mile_stone_color(self, index: int) -> str:
         """Get color for mile stone.
 
@@ -941,7 +940,6 @@ class RollingWindowsModel(BaseModel):
                            self._options.plot_options.axes_range[3]])
                 return fig
 
-
     def _get_token_average_graph(self) -> go.Figure:
         """Get the plotly graph for token average without milestone.
 
@@ -1009,10 +1007,12 @@ class RollingWindowsModel(BaseModel):
             if not self._options.plot_options.set_axes:
                 return fig
             else:
-                fig.update_xaxes(range=[self._options.plot_options.axes_range[0],
-                                        self._options.plot_options.axes_range[1]])
-                fig.update_yaxes(range=[self._options.plot_options.axes_range[2],
-                                        self._options.plot_options.axes_range[3]])
+                fig.update_xaxes(range=[
+                    self._options.plot_options.axes_range[0],
+                    self._options.plot_options.axes_range[1]])
+                fig.update_yaxes(range=[
+                    self._options.plot_options.axes_range[2],
+                    self._options.plot_options.axes_range[3]])
                 return fig
 
     def _generate_rwa_graph(self) -> go.Figure:
