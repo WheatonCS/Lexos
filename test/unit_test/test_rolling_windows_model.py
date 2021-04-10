@@ -31,7 +31,9 @@ class TestRatioCountOne:
             ),
             plot_options=RWAPlotOptions(
                 individual_points=False,
-                black_white=False
+                black_white=False,
+                set_axes=False,
+                axes_range=None
             ),
             milestone="ta",
             text_color="#000000",
@@ -122,7 +124,9 @@ class TestRatioCountTwo:
             ),
             plot_options=RWAPlotOptions(
                 individual_points=False,
-                black_white=False
+                black_white=False,
+                set_axes=False,
+                axes_range=None
             ),
             milestone="ta",
             text_color="#000000",
@@ -181,7 +185,9 @@ class TestAverageCountOne:
             ),
             plot_options=RWAPlotOptions(
                 individual_points=False,
-                black_white=False
+                black_white=False,
+                set_axes=False,
+                axes_range=None
             ),
             milestone=None,
             text_color="#000000",
@@ -246,7 +252,9 @@ class TestAverageCountTwo:
             ),
             plot_options=RWAPlotOptions(
                 individual_points=False,
-                black_white=False
+                black_white=False,
+                set_axes=False,
+                axes_range=None
             ),
             milestone=None,
             text_color="#000000",
