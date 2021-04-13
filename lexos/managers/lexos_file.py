@@ -494,7 +494,8 @@ class LexosFile:
 
             # pattern replacements
             if ('pattern_replacements_file[]' in self.options["scrub"]) and (
-                    self.options["scrub"]['pattern_replacements_file[]'] != ''):
+                    self.options["scrub"]
+                    ['pattern_replacements_file[]'] != ''):
                 str_legend = str_legend + "Pattern replacements file: " + \
                     self.options["scrub"]['pattern_replacements_file[]'] + ", "
             if ('pattern_replacements' in self.options["scrub"]) and (
