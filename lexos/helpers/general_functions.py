@@ -13,7 +13,7 @@ import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import TEXT, BR, PIC, FALLBACK, CHART, PARA
+from lexos.helpers.constants import TEXT, BR, PIC, FALLBACK, CHART, PARA, TAB
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -321,28 +321,21 @@ def extract_docx_content(xml_data: bytes) -> bytes:
     paragraphs = []
     for paragraph in tree.iter():
 
-        if paragraph.tag in [PIC]:
+        if paragraph.tag == PIC:
             paragraphs.append('[FIGURE]')
             for val in ['name', 'descr']:
                 if paragraph.get(val) is not None:
                     paragraphs.append(": " + paragraph.get(val))
-                    # if paragraph.tag == CHART: paragraphs.append('\n')
-        
+            # add space or new line?
+            paragraphs.append(' ')
+
         elif paragraph.tag == PARA:
-            paragraphs.append('\n')  
+            paragraphs.append('\n')
+
+        elif paragraph.tag == TAB:
+            paragraphs.append('\t')  
 
         elif paragraph.tag == TEXT:
-            """
-                IGNORE
-                see if contains nested para to prevent doubling output
-                this will ignore text of paragraphs that have nested paragraphs
-                probably better to look upwards at ancestors not down at
-                descendants
-                if paragraph.find('.//' + PARA) is None:
-                    texts = [node.text
-                        for node in paragraph.iter(TEXT)
-                            if node.text]
-            """
             if paragraph.text is not None:
                 paragraphs.append(paragraph.text)
 
