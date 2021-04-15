@@ -84,10 +84,10 @@ def test_with_two_dimension():
     dataframe = pd.DataFrame(
         index=["Documents", "Cosine Similarity"],
         columns=[1, 0],
-        data=[["F3.txt", "F2.txt"],  [.5527864045, .105572809]])
+        data=[["F3.txt", "F2.txt"],  [.55279, .10557]])
 
     dataframe = dataframe.transpose().sort_values(
-        by="Documents", ascending=True).round(4)
+        by="Documents", ascending=True).round(5)
 
     pd.testing.assert_frame_equal(
         similarity_model._get_similarity_query(),
@@ -119,11 +119,11 @@ def test_with_three_dimension():
     dataframe = pd.DataFrame(
         index=["Documents", "Cosine Similarity"],
         columns=[1, 0],
-        data=[["F3.txt", "F1.txt"], [1., .42264973081]]
+        data=[["F3.txt", "F1.txt"], [1., .42265]]
     )
 
     dataframe = dataframe.transpose().sort_values(
-        by="Documents", ascending=True).round(4)
+        by="Documents", ascending=True).round(5)
 
     # assertion
     pd.testing.assert_frame_equal(
