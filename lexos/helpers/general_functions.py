@@ -13,7 +13,7 @@ import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, DOC, BODY, DRAW, PIC, FALLBACK
+from lexos.helpers.constants import PARA, TEXT, WORD_NAMESPACE, COL, BR, ROW, DOC, BODY, DRAW, PIC, FALLBACK, CHART
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -301,8 +301,6 @@ def extract_docx_content(xml_data: bytes) -> bytes:
     """
         parses text and formats tables/figures from XML file (as bytes).
 
-        TODO: update new line method
-
         :param xml_data: xml file passed as bytes
         :return: parsed text in byte string format
     """
@@ -320,12 +318,14 @@ def extract_docx_content(xml_data: bytes) -> bytes:
     paragraphs = []    
     for paragraph in tree.iter():
 
-        if paragraph.tag == PIC:
-            pic_data = [paragraph.get('name'), paragraph.get('descr')]
-            # empty title/data are formatted as '' so it's ok to not check if they exist
-            paragraphs.append('[FIG] ' + pic_data[0] + ': ' + pic_data[1] + '\n')
-
-        elif paragraph.tag == BR:
+        if paragraph.tag in [PIC]:
+            paragraphs.append('[FIGURE]')
+            for val in ['name', 'descr']:
+                if paragraph.get(val) is not None:
+                    paragraphs.append(": " + paragraph.get(val))
+                    # if paragraph.tag == CHART: paragraphs.append('\n')
+        
+        elif paragraph.tag == PARA:
             paragraphs.append('\n')  
 
         elif paragraph.tag == TEXT:
@@ -339,7 +339,7 @@ def extract_docx_content(xml_data: bytes) -> bytes:
                         for node in paragraph.iter(TEXT)
                             if node.text]
             """
-            if paragraph.text:
+            if paragraph.text is not None:
                 paragraphs.append(paragraph.text)
 
     return ''.join(paragraphs).encode('utf-8')
