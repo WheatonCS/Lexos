@@ -39,6 +39,10 @@ class CullingOption(NamedTuple):
     # if none, then don't apply most frequent word
     mfw_lowest_rank: Optional[int]
 
+    # the highest word rank to keep in DTM
+    # if none, then don't apply least frequent word
+    mfw_highest_rank: Optional[int]
+
     # the least number of passage that the word needs to be in
     # if none, then don't apply culling
     cull_least_seg: Optional[int]
@@ -112,13 +116,20 @@ class MatrixReceiver(BaseReceiver):
         else:
             lower_rank_bound = None
 
+        if 'enable_least_frequent_words' in self._front_end_data:
+            upper_rank_bound = int(
+                self._front_end_data['least_frequent_words'])
+        else:
+            upper_rank_bound = None
+
         if 'enable_minimum_occurrences' in self._front_end_data:
             least_num_seg = int(self._front_end_data['minimum_occurrences'])
         else:
             least_num_seg = None
 
         return CullingOption(cull_least_seg=least_num_seg,
-                             mfw_lowest_rank=lower_rank_bound)
+                             mfw_lowest_rank=lower_rank_bound,
+                             mfw_highest_rank=upper_rank_bound)
 
     def options_from_front_end(self) -> MatrixFrontEndOption:
         """Get all the matrix options from front end.

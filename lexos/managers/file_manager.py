@@ -321,13 +321,17 @@ class FileManager:
 
         previews = []
 
+        gutenberg = False
         for l_file in list(self.files.values()):
+            # check if there is a gutenberg file
+            gutenberg = l_file.is_gutenberg
             if l_file.active:
                 previews.append(
                     (l_file.id,
                      l_file.label,
                      l_file.class_label,
-                     l_file.scrub_contents(saving_changes)))
+                     l_file.scrub_contents(saving_changes),
+                     gutenberg))
 
         return previews
 
