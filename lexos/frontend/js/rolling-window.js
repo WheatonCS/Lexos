@@ -435,18 +435,15 @@ function get_section_range (index, size, the_passage, join) {
 function rolling_window_onclick () {
   let rolling_window = $('.js-plotly-plot')[0]
   rolling_window.on('plotly_click', function (data) {
-    let annotate_text
     let i
-    let annotation
 
     let index = 0
 
     for (i = 0; i < data.points.length; i++) {
-      // annotate_text = 'x = ' + data.points[i].x +
-      //                 'y = ' + data.points[i].y.toPrecision(4)
-      // console.log(annotate_text)
       index = data.points[i].x
     }
+    // put index into search bar
+    let search_input = $('input#corpus-section-input').val(index)
     let subsection = get_corpus_section(index)
     let popup_string = "<span>" + subsection + "</span>"
     let popup_container_element = create_popup("Text")
