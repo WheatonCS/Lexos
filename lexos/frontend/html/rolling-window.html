@@ -82,7 +82,7 @@
 
                 <label for="window-words"><input id="window-words" name="window_type" value="Words" type="radio" checked><span></span>Words</label><br>
                 <label for="characters"><input id="characters" name="window_type" value="Characters" type="radio"><span></span>Characters</label><br>
-                <label><input id="lines" name="window_type" value="Lines" type="radio"><span></span>Lines</label>
+                <label for="window-lines"><input id="window-lines" name="window_type" value="Lines" type="radio"><span></span>Lines</label>
             </div>
         </div>
     </fieldset>
@@ -97,7 +97,6 @@
                     <input id="milestone-checkbox" name="enable_milestone" type="checkbox">
                     <span></span>Milestone<input id="milestone-input" name="milestone" type="text" spellcheck="false"
                         autocomplete="off">
-                </label>
                 <span id="milestone-tooltip-button" class="tooltip-button">?</span>
 
                 <label><input name="show_points" type="checkbox"><span></span>Show Individual Points</label><br>
@@ -131,6 +130,7 @@
             <span id="fullscreen-button" class="disabled button">Fullscreen</span>
         </div>
     </div>
+
     <div id="graph-container" class="section-body"></div>
 </div>
 {% endblock %}
