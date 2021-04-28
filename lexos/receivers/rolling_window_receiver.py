@@ -184,7 +184,7 @@ class RollingWindowsReceiver(BaseReceiver):
                     for mile_stone in raw_mile_stones.split(",")]
 
     def _get_axes(self) -> Optional[List[float]]:
-        """Get the axes data from front end"""
+        """Get the axes data from front end."""
         if 'enable_set_axes' not in self._front_end_data:
             return None
         else:
