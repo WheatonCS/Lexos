@@ -80,8 +80,10 @@ BODY = WORD_NAMESPACE + 'body'
 DRAW = WORD_NAMESPACE + 'drawing'
 PIC = WORD_PICTURE + 'cNvPr'
 TAB = WORD_NAMESPACE + 'tab'
-CHART = '{http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing}'+ 'docPr'
-FALLBACK = '{http://schemas.openxmlformats.org/markup-compatibility/2006}' + 'Fallback'
+CHART = '{http://schemas.openxmlformats.org/drawingml/2006/' \
+        'wordprocessingDrawing}' + 'docPr'
+FALLBACK = '{http://schemas.openxmlformats.org/markup-compatibility/2006}' + \
+           'Fallback'
 
 # Scrub
 SCRUBBOXES = (

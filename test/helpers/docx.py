@@ -132,6 +132,7 @@ docx_image = \
     b'n w:val="lrTb"/><w:docGrid w:type="default" w:linePitch="100" w:charSp' \
     b'ace="0"/></w:sectPr></w:body></w:document>'
 
+
 docx_image_expected = \
     b'\nParagraphs are the building blocks of papers. Many students define' \
     b' paragraphs in terms of length: a paragraph is a group of at least fiv' \
@@ -144,11 +145,12 @@ docx_image_expected = \
     b'icularly journalistic styles, a paragraph can be just one sentence lon' \
     b'g. Ultimately, a paragraph is a sentence or group of sentences that su' \
     b'pport one main idea. In this handout, we will refer to this as the ' \
-    b'\xe2' \
-    b'\x80\x9ccontrolling idea,\xe2\x80\x9d because it controls what happen' \
-    b's in the rest of the paragraph.\n\n\n\nFigure [FIG] Image1: THIS IS DE' \
-    b'SCRIPTION\n\n1: CAPTION OF PHOTO\n\n\n\n\n\n\n\n\n\nok now we are out ' \
-    b'of the table and no longer tabbing'
+    b'\xe2\x80\x9c' \
+    b'controlling idea,\xe2\x80\x9d because it controls what happen' \
+    b's in the rest of the paragraph.\n\n\n\nFigure [FIGURE]: Image1: THIS I' \
+    b'S DESCRIPTION\n 1: CAPTION OF PHOTO\n\n\n\n\n\n\n\n\n\nok now we are o' \
+    b'ut of the table and no longer tabbing'
+
 
 docx_table = \
     b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document' \

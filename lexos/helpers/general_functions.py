@@ -13,7 +13,7 @@ import chardet
 
 import lexos.helpers.constants as constants
 from lexos.helpers.exceptions import LexosException
-from lexos.helpers.constants import TEXT, BR, PIC, FALLBACK, CHART, PARA, TAB
+from lexos.helpers.constants import TEXT, PIC, FALLBACK, PARA, TAB
 
 
 def get_encoding(input_string: bytes) -> str:
@@ -333,7 +333,7 @@ def extract_docx_content(xml_data: bytes) -> bytes:
             paragraphs.append('\n')
 
         elif paragraph.tag == TAB:
-            paragraphs.append('\t')  
+            paragraphs.append('\t')
 
         elif paragraph.tag == TEXT:
             if paragraph.text is not None:
