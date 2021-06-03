@@ -1,15 +1,15 @@
 """this is a model to produce an SVM classifier."""
-import nltk
+#import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-
+"""
 from sklearn.model_selection import train_test_split, KFold
 from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler
 from sklearn.feature_extraction.text import CountVectorizer,\
     TfidfVectorizer
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.svm import SVC
-
+"""
 from keras.preprocessing.text import one_hot
 
 from typing import Optional, NamedTuple
@@ -20,13 +20,12 @@ import string
 import pickle
 
 from lexos.models.base_model import BaseModel
-from lexos.models.matrix_model import MatrixModel
+#from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
-from lexos.models.file_manager_model import FileManagerModel
-import lexos.managers.utility as utility
-from lexos.receivers.classifier_reciever import ClassifierOption, \
-    ClassifierReceiver
-
+#from lexos.models.file_manager_model import FileManagerModel
+#import lexos.managers.utility as utility
+from lexos.receivers.classifier_reciever import ClassifierOption
+#ClassifierReciver
 
 class ClassifierTestOption(NamedTuple):
     """A named tuple to hold test options."""
@@ -77,11 +76,12 @@ class ClassifierModel(BaseModel):
         """
         # Load data into string variable and remove new line characters
         # Split text into a list of sentences
-        sentences = tokenize.sent_tokenize(text)
+        #sentences = tokenize.sent_tokenize(text)
         # Remove sentences that are less than min_char long
-        sentences = [sent for sent in sentences if len(sent) >= min_char]
+        #sentences = [sent for sent in sentences if len(sent) >= min_char]
 
-        return list(sentences)
+        #return list(sentences)
+        return 1
 
     def combine_data(self, text_dict, author_name):
         """Combine data.
@@ -100,7 +100,8 @@ class ClassifierModel(BaseModel):
         max_len = 8500
 
         # Select sentences
-        names = [subject_data, other]
+        #names = [subject_data, other]
+        names = []
         combined = []
 
         for name in names:
@@ -133,7 +134,7 @@ class ClassifierModel(BaseModel):
         data = pd.read_csv(filename, encoding="utf-8")
         text = list(data['text'].values)
         author = list(data['author'].values)
-        Counter(author)
+        #Counter(author)
 
         word_count = []
         char_count = []
@@ -147,7 +148,6 @@ class ClassifierModel(BaseModel):
         char_count = np.array(char_count)
 
         # Calculate average word lengths
-        text_string = ''
 
         text = [excerpt.replace('\xa0', '') for excerpt in text]
         new_text = []
@@ -175,16 +175,17 @@ class ClassifierModel(BaseModel):
         excerpt_list: list of strings. List of normalized text excerpts.
         Returns:
         processed: list of strings.
-        List of lists of processed text excerpts (stemmed and stop words removed).
+        List of lists of processed text excerpts 
+        (stemmed and stop words removed).
         """
         stop_words = set(stopwords.words('english'))
         porter = PorterStemmer()
- 
+
         processed = []
 
         for excerpt in excerpt_list:
             new = excerpt.split()
-            word_list = [porter.stem(w) for w in new if not w in stop_words]
+            word_list = [porter.stem(w) for w in new if w not in stop_words]
             word_list = " ".join(word_list)
             processed.append(word_list)
 
@@ -266,7 +267,7 @@ class ClassifierModel(BaseModel):
         n_gram_list = list(np.array(n_gram_list).flat)
 
         # Calculate vocab size
-        n_gram_cnt = Counter(n_gram_list)
+        n_gram_cnt = 1 #Counter(n_gram_list)
         vocab_size = len(n_gram_cnt)
 
         return vocab_size
@@ -281,7 +282,7 @@ class ClassifierModel(BaseModel):
         Returns:
         svm: the fitted SVM model.
         """
-        svm = SVC(C= 1, kernel= 'linear')
+        svm= SVC(C= 1, kernel= 'linear')
         # Fit bag of words svm
         np.random.seed(6)
         svm.fit(words, author)
@@ -307,7 +308,7 @@ class ClassifierModel(BaseModel):
         model: the model for saving the.
         author_name: the author name for accuratly naming the file.
         """
-        filename= author_name+"_finalized_model.sav"
+        filename= author_name+ "_finalized_model.sav"
         pickle.dump(model, open(filename, 'wb'))
 
     def load_model(self, author_name):
@@ -316,6 +317,6 @@ class ClassifierModel(BaseModel):
         Args:
         author_name: the name of the author for loading the model.
         """
-        filename= author_name+"_finalized_model.sav"
+        filename= author_name+ "_finalized_model.sav"
         loaded_model= pickle.load(open(filename, 'rb'))
         return loaded_model
