@@ -27,30 +27,30 @@ from lexos.receivers.classifier_reciever import ClassifierOption, ClassifierRece
 """
 
 Programmer: Torin Praeger, tpraeger@gmail.com
-If some future Lexos group winds up working on this tool, please only contact me 
+If some future Lexos group winds up working on this tool, please only contact me
 for help on it if you actually have tried to understand it and haven't been able to.
 
 Explination of this code dated 2021/4/11:
 As it stands, Lexos is not a useful framework for what this tool is attempting
-to do. That is subject to change, and if it does I will try to walk you 
-through what I did. 
+to do. That is subject to change, and if it does I will try to walk you
+through what I did.
 
 Lexos only allows tokenization of the corpus by words and characters. This is
-because Lexos uses the sklearn CountVectorizer() (scikit ver. 0.24.1) to tokenize. 
-To create a good classifier for author atribution we want to tokenize by sentences. 
-Lexos also creates a DTM every time a tool runs, meaning the DTM is not a 
-persistent object throughout the Lexos tools. The same is true for vocabulary sizes 
-and n-grams, the tools that generate them do it each time they are called, and not 
-in a persistent or overarching way. 
+because Lexos uses the sklearn CountVectorizer() (scikit ver. 0.24.1) to tokenize.
+To create a good classifier for author atribution we want to tokenize by sentences.
+Lexos also creates a DTM every time a tool runs, meaning the DTM is not a
+persistent object throughout the Lexos tools. The same is true for vocabulary sizes
+and n-grams, the tools that generate them do it each time they are called, and not
+in a persistent or overarching way.
 
-With all of this in mind I have elected to create a group of functions that are 
-insular, in that they are not connected to Lexos in any way other than that they 
-use it as a vehicle to recive the text data and return the model's work on it. 
+With all of this in mind I have elected to create a group of functions that are
+insular, in that they are not connected to Lexos in any way other than that they
+use it as a vehicle to recive the text data and return the model's work on it.
 This gives me far more control over what I can do with the text processing,
 with almost no preformance impact as Lexos already does this kind of work
-every time an analyze tool is used. 
+every time an analyze tool is used.
 
-Libraries: 
+Libraries:
 -nltk ver. 3.6 for: Sentence tokenizing
 -keras from TensorFlow2 for: one-hot encoding
 -scikit-learn ver. 0.24.1 for: creating SVM model, training model, predicting
@@ -59,9 +59,9 @@ with model, getting average score
 
 
 Know issues:
--Feature counts are non-standard between models, right now sklearn will not 
+-Feature counts are non-standard between models, right now sklearn will not
 allow a model to predict on data it wasn't trained on. This is obviously a
-massive blow to the usefulness of the tool, top priority fix. 
+massive blow to the usefulness of the tool, top priority fix.
 
 -pickle is not a safe or prefered library for saving models, you can learn
 why on your own. It would be far better to learn the actual form of an
