@@ -15,7 +15,8 @@ from keras.preprocessing.text import one_hot
 from typing import Optional, NamedTuple
 import pandas as pd
 import numpy as np
-
+import random
+import string
 import pickle
 
 from lexos.models.base_model import BaseModel
@@ -49,23 +50,23 @@ class ClassifierModel(BaseModel):
             self._test_token_type_str = None
             self._test_front_end_option = None
             self._test_document_label_map = None
-   
+
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
-            else    ().get_matrix()
- 
-    def sentencize(min_char):
+            else ().get_matrix()
+
+    def sentencize(self, min_char):
         """Convert text file to a list of sentences.
 
         Args:
         filepath: string. Filepath of text file.
-        min_char: int. Minimum number of characters required for a sentence to be
-        included.
-
+        min_char: int. Minimum number of characters required
+        for a sentence to be included.
         Returns:
-        sentences: list of strings. List of sentences containined in the text file.
+        sentences: list of strings. 
+        List of sentences containined in the text file.
         """
         # Load data into string variable and remove new line characters
         # Split text into a list of sentences
@@ -75,7 +76,7 @@ class ClassifierModel(BaseModel):
 
         return list(sentences)
 
-    def combine_data(text_dict, author_name):
+    def combine_data(self, text_dict, author_name):
         np.random.seed(1)
 
         # Set length parameter
@@ -86,7 +87,7 @@ class ClassifierModel(BaseModel):
         combined = []
 
         for name in names:
-            name = np.random.choice(name, max_len, replace = False)
+            name = np.random.choice(name, max_len, replace=False)
             combined += list(name)
 
         labels = [author_name]*max_len + ['Other']*max_len
@@ -102,7 +103,7 @@ class ClassifierModel(BaseModel):
         out_data['author'] = labels
         out_data.to_csv('author_data.csv', index=False)
 
-    def preprocess_data(filename):
+    def preprocess_data(self, filename):
         data = pd.read_csv(filename, encoding="utf-8")
         text = list(data['text'].values)
         author = list(data['author'].values)
@@ -127,7 +128,7 @@ class ClassifierModel(BaseModel):
 
         for excerpt in text:
             while "  " in excerpt:
-                excerpt = excerpt.replace("  "," ")
+                excerpt = excerpt.replace("  ", " ")
             new_text.append(excerpt)
 
         text = new_text
@@ -135,43 +136,40 @@ class ClassifierModel(BaseModel):
 
         for i in range(len(text)):
             new = text[i].lower()
-            new = new.translate(str.maketrans('','', string.punctuation))
+            new = new.translate(str.maketrans('', '', string.punctuation))
             new = new.replace('“', '').replace('”', '')
             normed_text.append(new)
-        return_dict = {"Normed_text" : normed_text, "Author" : author}
+        return_dict = {"Normed_text": normed_text, "Author": author}
         return return_dict
 
-    def process_data(excerpt_list):
+    def process_data(self, excerpt_list):
         """Stem data, remove stopwords and split into word lists
-        
         Args:
         excerpt_list: list of strings. List of normalized text excerpts.
-        
         Returns:
-        processed: list of strings. List of lists of processed text excerpts (stemmed and stop words removed).
+        processed: list of strings. 
+        List of lists of processed text excerpts (stemmed and stop words removed).
         """
         stop_words = set(stopwords.words('english'))
         porter = PorterStemmer()
-        
+ 
         processed = []
-        
+
         for excerpt in excerpt_list:
             new = excerpt.split()
             word_list = [porter.stem(w) for w in new if not w in stop_words]
             word_list = " ".join(word_list)
             processed.append(word_list)
-        
+
         return processed
 
-    def create_n_grams(excerpt_list, n, vocab_size, seq_size):
+    def create_n_grams(self, excerpt_list, n, vocab_size, seq_size):
         """Create a list of n-gram sequences
-        
         Args:
         excerpt_list: list of strings. List of normalized text excerpts.
         n: int. Length of n-grams.
         vocab_size: int. Size of n-gram vocab (used in one-hot encoding)
         seq_size: int. Size of n-gram sequences
-        
         Returns:
         n_gram_array: array. Numpy array of one-hot encoded n-grams.
         """
@@ -200,19 +198,19 @@ class ClassifierModel(BaseModel):
                 hot = hot + extra
 
             n_gram_list.append(hot)
-        
+
         n_gram_array = np.array(n_gram_list)
-        
+
         return n_gram_array
-        
-    def get_vocab_size(excerpt_list, n, seq_size):
+
+    def get_vocab_size(self, excerpt_list, n, seq_size):
         """Calculate size of n-gram vocab
-        
+
         Args:
         excerpt_list: list of strings. List of normalized text excerpts.
         n: int. Length of n-grams.
         seq_size: int. Size of n-gram sequences
-        
+
         Returns:
         vocab_size: int. Size of n-gram vocab.
         """
@@ -222,7 +220,7 @@ class ClassifierModel(BaseModel):
             # Remove spaces
             excerpt = excerpt.replace(" ", "")
 
-            # Extract n-grams           
+            # Extract n-grams
             n_grams = [excerpt[i:i + n] for i in range(len(excerpt) - n + 1)]
 
             # Create list of n-grams
@@ -233,34 +231,34 @@ class ClassifierModel(BaseModel):
                 diff = seq_size - gram_len
                 extra = [0]*diff
                 n_grams = n_grams + extra
-            
+
             n_gram_list.append(n_grams)
-        
+
         # Flatten n-gram list
         n_gram_list = list(np.array(n_gram_list).flat)
-        
+
         # Calculate vocab size
         n_gram_cnt = Counter(n_gram_list)
         vocab_size = len(n_gram_cnt)
-        
+
         return vocab_size
 
-    def fit_model(words,author):
+    def fit_model(self, words,author):
         svm = SVC(C = 1, kernel = 'linear')
         # Fit bag of words svm
         np.random.seed(6)
         svm.fit(words, author)
         return svm
 
-    def predict_model(model,data):
-        predictions = model.predict(data)
+    def predict_model(self, model, data):
+        predictions=model.predict(data)
         return predictions
 
-    def save_model(model,author_name):
-        filename = author_name+"_finalized_model.sav"
+    def save_model(self, model, author_name):
+        filename=author_name+"_finalized_model.sav"
         pickle.dump(model, open(filename, 'wb'))
 
-    def load_model(author_name):
-        filename = author_name+"_finalized_model.sav"
-        loaded_model = pickle.load(open(filename, 'rb'))
+    def load_model(self, author_name):
+        filename=author_name+"_finalized_model.sav"
+        loaded_model=pickle.load(open(filename, 'rb'))
         return loaded_model
