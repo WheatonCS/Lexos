@@ -1,10 +1,12 @@
+"""this is a reciever for the classifier model."""
 from typing import NamedTuple, Optional
 from lexos.receivers.base_receiver import BaseReceiver
 
 
 class ClassifierOption(NamedTuple):
-    """not quite sure what this does yet, still in learning process"""
-    """make sure to fix this XD"""
+    """not quite sure what this does yet, still in learning process.
+
+    TODO: add in the valid options"""
     text_color: str
 
 

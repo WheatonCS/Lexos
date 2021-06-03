@@ -1,4 +1,4 @@
-
+"""this is a model to produce an SVM classifier."""
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
@@ -42,7 +42,6 @@ class ClassifierModel(BaseModel):
 
     def __init__(self, test_options: Optional[ClassifierTestOption] = None):
         """Generate a classification model.
-
         :param test_options: The input used in testing to override the
                              dynamically loaded option.
         """
@@ -86,6 +85,7 @@ class ClassifierModel(BaseModel):
 
     def combine_data(self, text_dict, author_name):
         """Combine data.
+
         Args:
         text_dict: a dictionary of the text.
         author_name: the author's name.
@@ -122,9 +122,10 @@ class ClassifierModel(BaseModel):
 
     def preprocess_data(self, filename):
         """Preprocessing for data.
+
         Args:
         filename: name of the file to get the data from.
-        
+
         TODO: Remove this. This fucntion is completely deprecated.
         The things that it does are done by Lexos.
         Make notes on what it does and find out how to replicate.
@@ -168,8 +169,8 @@ class ClassifierModel(BaseModel):
         return return_dict
 
     def process_data(self, excerpt_list):
-
         """Stem data, remove stopwords and split into word lists
+
         Args:
         excerpt_list: list of strings. List of normalized text excerpts.
         Returns:
@@ -190,8 +191,8 @@ class ClassifierModel(BaseModel):
         return processed
 
     def create_n_grams(self, excerpt_list, n, vocab_size, seq_size):
-
         """Create a list of n-gram sequences.
+
         Args:
         excerpt_list: list of strings. List of normalized text excerpts.
         n: int. Length of n-grams.
@@ -231,7 +232,6 @@ class ClassifierModel(BaseModel):
         return n_gram_array
 
     def get_vocab_size(self, excerpt_list, n, seq_size):
-
         """Calculate size of n-gram vocab.
 
         Args:
@@ -273,6 +273,7 @@ class ClassifierModel(BaseModel):
 
     def fit_model(self, words, author):
         """Fits an SVM model for the specified author.
+
         Args:
         words: List of words to be used as features.
         author: string of the author's name.
@@ -288,6 +289,7 @@ class ClassifierModel(BaseModel):
 
     def predict_model(self, model, data):
         """Makes predictions on a dataset with the model.
+
         Args:
         model: the model for predictions.
         data: the dataset for predictions.
@@ -300,6 +302,7 @@ class ClassifierModel(BaseModel):
 
     def save_model(self, model, author_name):
         """Save a model to disk.
+
         Args:
         model: the model for saving the.
         author_name: the author name for accuratly naming the file.
@@ -309,6 +312,7 @@ class ClassifierModel(BaseModel):
 
     def load_model(self, author_name):
         """Load a model from disk.
+        
         Args:
         author_name: the name of the author for loading the model.
         """
