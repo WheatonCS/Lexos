@@ -11,14 +11,21 @@ from sklearn.svm import SVC
 
 from keras.preprocessing.text import one_hot
 
+from typing import Optional, NamedTuple
+import pandas as pd
+
+
 import pickle
 
 from lexos.models.base_model import BaseModel
 from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.models.file_manager_model import FileManagerModel
+import lexos.managers.utility as utility
+from lexos.receivers.classifier_reciever import ClassifierOption, ClassifierReceiver
 
 """
+
 Programmer: Torin Praeger, tpraeger@gmail.com
 If some future Lexos group winds up working on this tool, please only contact me 
 for help on it if you actually have tried to understand it and haven't been able to.
@@ -31,13 +38,13 @@ through what I did.
 Lexos only allows tokenization of the corpus by words and characters. This is
 because Lexos uses the sklearn CountVectorizer() (scikit ver. 0.24.1) to tokenize. 
 To create a good classifier for author atribution we want to tokenize by sentences. 
-Lexosalso creates a DTM every time a tool runs, meaning the DTM is not a 
+Lexos also creates a DTM every time a tool runs, meaning the DTM is not a 
 persistent object throughout the Lexos tools. The same is true for vocabulary sizes 
 and n-grams, the tools that generate them do it each time they are called, and not 
 in a persistent or overarching way. 
 
 With all of this in mind I have elected to create a group of functions that are 
-insular, in that they are not connected to Lexos in anyway other than that they 
+insular, in that they are not connected to Lexos in any way other than that they 
 use it as a vehicle to recive the text data and return the model's work on it. 
 This gives me far more control over what I can do with the text processing,
 with almost no preformance impact as Lexos already does this kind of work
@@ -60,9 +67,13 @@ massive blow to the usefulness of the tool, top priority fix.
 why on your own. It would be far better to learn the actual form of an
 sklearn model and save it as a JSON array
 
-
 """
 
+class ClassifierTestOption(NamedTuple):
+    doc_term_matrix: pd.DataFrame
+    document_label_map: DocumentLabelMap
+    front_end_option: ClassifierOption
+    token_type_str: str
 
 class ClassifierModel(BaseModel):
 
@@ -292,7 +303,7 @@ class ClassifierModel(BaseModel):
         svm = SVC(C = 1, kernel = 'linear')
         # Fit bag of words svm
         np.random.seed(6)
-        svm.fit(words_train, author_train)
+        svm.fit(words, author)
         return svm
 
     def predict_model(model,data):
