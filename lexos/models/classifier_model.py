@@ -13,6 +13,7 @@ import pickle
 from lexos.models.base_model import BaseModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.classifier_reciever import ClassifierOption
+from sklearn.svm import SVC
 
 
 """
@@ -22,7 +23,6 @@ from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler
 from sklearn.feature_extraction.text import CountVectorizer,
 TfidfVectorizer
 from sklearn.preprocessing import LabelBinarizer
-from sklearn.svm import SVC
 from lexos.models.matrix_model import MatrixModel
 from lexos.models.file_manager_model import FileManagerModel
 import lexos.managers.utility as utility
@@ -104,8 +104,9 @@ class ClassifierModel(BaseModel):
         # Set length parameter
         max_len = 8500
 
-        # Select sentences
-        #names = [subject_data, other]
+        """Select sentences
+        names = [subject_data, other]
+        """
         names = []
         combined = []
 
@@ -139,7 +140,7 @@ class ClassifierModel(BaseModel):
         data = pd.read_csv(filename, encoding="utf-8")
         text = list(data['text'].values)
         author = list(data['author'].values)
-        #Counter(author)
+        """Counter(author)"""
 
         word_count = []
         char_count = []
@@ -180,7 +181,7 @@ class ClassifierModel(BaseModel):
         excerpt_list: list of strings. List of normalized text excerpts.
         Returns:
         processed: list of strings.
-        List of lists of processed text excerpts 
+        List of lists of processed text excerpts
         (stemmed and stop words removed).
         """
         stop_words = set(stopwords.words('english'))
@@ -272,7 +273,7 @@ class ClassifierModel(BaseModel):
         n_gram_list = list(np.array(n_gram_list).flat)
 
         # Calculate vocab size
-        n_gram_cnt = 1 #Counter(n_gram_list)
+        n_gram_cnt = 1 # Counter(n_gram_list)
         vocab_size = len(n_gram_cnt)
 
         return vocab_size
@@ -287,7 +288,7 @@ class ClassifierModel(BaseModel):
         Returns:
         svm: the fitted SVM model.
         """
-        svm= SVC(C= 1, kernel= 'linear')
+        svm = SVC(C=1, kernel='linear')
         # Fit bag of words svm
         np.random.seed(6)
         svm.fit(words, author)
@@ -303,7 +304,7 @@ class ClassifierModel(BaseModel):
         Returns:
         predections: the predections made by the model.
         """
-        predictions= model.predict(data)
+        predictions = model.predict(data)
         return predictions
 
     def save_model(self, model, author_name):
@@ -313,7 +314,7 @@ class ClassifierModel(BaseModel):
         model: the model for saving the.
         author_name: the author name for accuratly naming the file.
         """
-        filename= author_name+ "_finalized_model.sav"
+        filename = author_name+ "_finalized_model.sav"
         pickle.dump(model, open(filename, 'wb'))
 
     def load_model(self, author_name):
@@ -322,6 +323,6 @@ class ClassifierModel(BaseModel):
         Args:
         author_name: the name of the author for loading the model.
         """
-        filename= author_name+ "_finalized_model.sav"
-        loaded_model= pickle.load(open(filename, 'rb'))
+        filename = author_name+ "_finalized_model.sav"
+        loaded_model = pickle.load(open(filename, 'rb'))
         return loaded_model

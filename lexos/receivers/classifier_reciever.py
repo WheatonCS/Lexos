@@ -1,5 +1,5 @@
 """this is a reciever for the classifier model."""
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 from lexos.receivers.base_receiver import BaseReceiver
 
 
