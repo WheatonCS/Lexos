@@ -9,8 +9,10 @@ classify_blueprint = Blueprint("classify", __name__)
 
 @classify_blueprint.route("/classify", methods=["GET"])
 def classifier():
+    """ Gets the classifier page.
+    :return: The classifier page.
+    """
     session["analyoption"] = constants.DEFAULT_ANALYZE_OPTIONS
 
     # Send the page.
     return render("classify.html")
-
