@@ -1,9 +1,11 @@
 from flask import session, Blueprint
-#flask jsonify
-#from lexos.managers import session_manager
 from lexos.helpers import constants as constants
-#from lexos.models.classifier_model import ClassifierModel
 from lexos.views.base import render
+
+"""flask jsonify
+from lexos.managers import session_manager
+from lexos.models.classifier_model import ClassifierModel
+"""
 
 classify_blueprint = Blueprint("classify", __name__)
 

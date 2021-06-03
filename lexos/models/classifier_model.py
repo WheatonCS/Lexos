@@ -1,15 +1,7 @@
 """this is a model to produce an SVM classifier."""
-#import nltk
+
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-"""
-from sklearn.model_selection import train_test_split, KFold
-from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler
-from sklearn.feature_extraction.text import CountVectorizer,\
-    TfidfVectorizer
-from sklearn.preprocessing import LabelBinarizer
-from sklearn.svm import SVC
-"""
 from keras.preprocessing.text import one_hot
 
 from typing import Optional, NamedTuple
@@ -18,14 +10,25 @@ import numpy as np
 import random
 import string
 import pickle
-
 from lexos.models.base_model import BaseModel
-#from lexos.models.matrix_model import MatrixModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
-#from lexos.models.file_manager_model import FileManagerModel
-#import lexos.managers.utility as utility
 from lexos.receivers.classifier_reciever import ClassifierOption
-#ClassifierReciver
+
+
+"""
+import nltk
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler
+from sklearn.feature_extraction.text import CountVectorizer,
+TfidfVectorizer
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.svm import SVC
+from lexos.models.matrix_model import MatrixModel
+from lexos.models.file_manager_model import FileManagerModel
+import lexos.managers.utility as utility
+ClassifierReciver
+"""
+
 
 class ClassifierTestOption(NamedTuple):
     """A named tuple to hold test options."""
@@ -74,13 +77,15 @@ class ClassifierModel(BaseModel):
         sentences: list of strings.
         List of sentences containined in the text file.
         """
+        """
         # Load data into string variable and remove new line characters
         # Split text into a list of sentences
-        #sentences = tokenize.sent_tokenize(text)
+        sentences = tokenize.sent_tokenize(text)
         # Remove sentences that are less than min_char long
-        #sentences = [sent for sent in sentences if len(sent) >= min_char]
+        sentences = [sent for sent in sentences if len(sent) >= min_char]
 
-        #return list(sentences)
+        return list(sentences)
+        """
         return 1
 
     def combine_data(self, text_dict, author_name):
