@@ -5,7 +5,8 @@ from nltk.stem.porter import PorterStemmer
 
 from sklearn.model_selection import train_test_split, KFold
 from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer,\
+    TfidfVectorizer
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.svm import SVC
 
@@ -13,7 +14,7 @@ from keras.preprocessing.text import one_hot
 
 from typing import Optional, NamedTuple
 import pandas as pd
-
+import numpy as np
 
 import pickle
 
@@ -25,11 +26,13 @@ import lexos.managers.utility as utility
 from lexos.receivers.classifier_reciever import ClassifierOption, \
     ClassifierReceiver
 
+
 class ClassifierTestOption(NamedTuple):
     doc_term_matrix: pd.DataFrame
     document_label_map: DocumentLabelMap
     front_end_option: ClassifierOption
     token_type_str: str
+
 
 class ClassifierModel(BaseModel):
 
@@ -46,17 +49,16 @@ class ClassifierModel(BaseModel):
             self._test_token_type_str = None
             self._test_front_end_option = None
             self._test_document_label_map = None
-    
+   
     @property
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else    ().get_matrix()
-
-    
+ 
     def sentencize(min_char):
         """Convert text file to a list of sentences.
-        
+
         Args:
         filepath: string. Filepath of text file.
         min_char: int. Minimum number of characters required for a sentence to be
@@ -66,17 +68,14 @@ class ClassifierModel(BaseModel):
         sentences: list of strings. List of sentences containined in the text file.
         """
         # Load data into string variable and remove new line characters
-        
-        
         # Split text into a list of sentences
         sentences = tokenize.sent_tokenize(text)
-        
         # Remove sentences that are less than min_char long
         sentences = [sent for sent in sentences if len(sent) >= min_char]
 
         return list(sentences)
 
-    def combine_data(text_dict,author_name):
+    def combine_data(text_dict, author_name):
         np.random.seed(1)
 
         # Set length parameter
@@ -90,12 +89,7 @@ class ClassifierModel(BaseModel):
             name = np.random.choice(name, max_len, replace = False)
             combined += list(name)
 
-        print('The length of the combined list is:', len(combined))
-
         labels = [author_name]*max_len + ['Other']*max_len
-
-        print('The length of the labels list is:', len(labels))
-
         random.seed(3)
 
         # Randomly shuffle data
@@ -106,9 +100,6 @@ class ClassifierModel(BaseModel):
         out_data = pd.DataFrame()
         out_data['text'] = combined
         out_data['author'] = labels
-
-        print(out_data.head())
-
         out_data.to_csv('author_data.csv', index=False)
 
     def preprocess_data(filename):
@@ -132,7 +123,6 @@ class ClassifierModel(BaseModel):
         text_string = ''
 
         text = [excerpt.replace('\xa0', '') for excerpt in text]
-
         new_text = []
 
         for excerpt in text:
