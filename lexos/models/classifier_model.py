@@ -38,14 +38,14 @@ class ClassifierTestOption(NamedTuple):
 
 
 class ClassifierModel(BaseModel):
-    """The Classifer model inherits from the base model"""
+    """The Classifer model inherits from the base model."""
 
     def __init__(self, test_options: Optional[ClassifierTestOption] = None):
         """Generate a classification model.
+
         :param test_options: The input used in testing to override the
                              dynamically loaded option.
         """
-
         super().__init__()
         if test_options is not None:
             self._test_dtm = test_options.doc_term_matrix
@@ -169,7 +169,7 @@ class ClassifierModel(BaseModel):
         return return_dict
 
     def process_data(self, excerpt_list):
-        """Stem data, remove stopwords and split into word lists
+        """Stem data, remove stopwords and split into word lists.
 
         Args:
         excerpt_list: list of strings. List of normalized text excerpts.
@@ -288,7 +288,7 @@ class ClassifierModel(BaseModel):
         return svm
 
     def predict_model(self, model, data):
-        """Makes predictions on a dataset with the model.
+        """Make predictions on a dataset with the model.
 
         Args:
         model: the model for predictions.
@@ -312,7 +312,7 @@ class ClassifierModel(BaseModel):
 
     def load_model(self, author_name):
         """Load a model from disk.
-        
+
         Args:
         author_name: the name of the author for loading the model.
         """
