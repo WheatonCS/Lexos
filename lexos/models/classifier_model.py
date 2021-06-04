@@ -273,7 +273,7 @@ class ClassifierModel(BaseModel):
         n_gram_list = list(np.array(n_gram_list).flat)
 
         # Calculate vocab size
-        n_gram_cnt = 1 # Counter(n_gram_list)
+        n_gram_cnt = 1  # Counter(n_gram_list)
         vocab_size = len(n_gram_cnt)
 
         return vocab_size
@@ -314,7 +314,7 @@ class ClassifierModel(BaseModel):
         model: the model for saving the.
         author_name: the author name for accuratly naming the file.
         """
-        filename = author_name+ "_finalized_model.sav"
+        filename = author_name + "_finalized_model.sav"
         pickle.dump(model, open(filename, 'wb'))
 
     def load_model(self, author_name):
@@ -323,6 +323,6 @@ class ClassifierModel(BaseModel):
         Args:
         author_name: the name of the author for loading the model.
         """
-        filename = author_name+ "_finalized_model.sav"
+        filename = author_name + "_finalized_model.sav"
         loaded_model = pickle.load(open(filename, 'rb'))
         return loaded_model
