@@ -67,6 +67,25 @@ DEFAULT_GENERALSETTINGS_OPTIONS = {
     "theme": "Basil Light"
 }
 
+# Docx Upload
+WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/' \
+                 'main}'
+WORD_PICTURE = '{http://schemas.openxmlformats.org/drawingml/2006/picture}'
+PARA = WORD_NAMESPACE + 'p'
+TEXT = WORD_NAMESPACE + 't'
+ROW = WORD_NAMESPACE + 'tr'
+COL = WORD_NAMESPACE + 'tc'
+BR = WORD_NAMESPACE + 'pPr'
+DOC = WORD_NAMESPACE + 'document'
+BODY = WORD_NAMESPACE + 'body'
+DRAW = WORD_NAMESPACE + 'drawing'
+PIC = WORD_PICTURE + 'cNvPr'
+TAB = WORD_NAMESPACE + 'tab'
+CHART = '{http://schemas.openxmlformats.org/drawingml/2006/' \
+        'wordprocessingDrawing}' + 'docPr'
+FALLBACK = '{http://schemas.openxmlformats.org/markup-compatibility/2006}' + \
+           'Fallback'
+
 # Scrub
 SCRUBBOXES = (
     "keep_ampersands",
