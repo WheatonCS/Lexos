@@ -15,6 +15,7 @@ from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.classifier_reciever import ClassifierOption, \
     ClassifierReceiver
 from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.matrix_model import MatrixModel
 import lexos.managers.utility as utility
 from sklearn.svm import SVC
@@ -94,6 +95,33 @@ class ClassifierModel(BaseModel):
             token_type = dtm_options.token_option.token_type
             return "Terms" if token_type == "Tokens" else "Characters"
 
+    def _get_file_col_dtm(self) -> pd.DataFrame:
+        """Get DTM with documents as columns and terms/characters as rows.
+
+        :return: A pandas data frame that contains the DTM where each document
+                 is a column with total and average added to the original DTM.
+        """
+        # Check if empty DTM is received.
+        assert not self._doc_term_matrix.empty, EMPTY_DTM_MESSAGE
+
+        labels = [self._document_label_map[file_id]
+                  for file_id in self._doc_term_matrix.index.values]
+
+        # Transpose the dtm for easier calculation.
+        file_col_dtm = self._doc_term_matrix.transpose()
+
+        file_col_dtm.columns = labels
+
+        # Find total and average of each row's data.
+        file_col_dtm.insert(loc=0, column="Total",
+                            value=file_col_dtm.sum(axis=1))
+
+        file_col_dtm.insert(loc=1, column="Average",
+                            value=file_col_dtm["Total"] /
+                            self._doc_term_matrix.shape[0])
+
+        return file_col_dtm.round(4)
+
     def sentencize(self, min_char):
         """Convert text file to a list of sentences.
 
@@ -115,6 +143,22 @@ class ClassifierModel(BaseModel):
         return list(sentences)
         """
         return 1
+
+    def _trim_data_set(self, data_dict) -> pd.DataFrame:
+        """Trim the DTM down to the top 100 words."""
+        # get the DTM
+        dtm = self._get_file_col_dtm()
+
+        # sort DTM by word count from highest to lowest
+        dtm_sorted = dtm.sort_values(
+            by=[dtm.columns[self._front_end_option.sort_column-1]],
+            ascending=self._front_end_option.sort_method
+        ) if self._front_end_option.sort_column != 0 \
+            else dtm.sort_index(ascending=self._front_end_option.sort_method)
+
+        # return sliced down DTM
+        sliced_dtm = dtm_sorted.iloc[0: 100]
+        return sliced_dtm
 
     def combine_data(self, text_dict, author_name):
         """Combine data.
