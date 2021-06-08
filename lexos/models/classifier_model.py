@@ -12,7 +12,11 @@ import string
 import pickle
 from lexos.models.base_model import BaseModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
-from lexos.receivers.classifier_reciever import ClassifierOption
+from lexos.receivers.classifier_reciever import ClassifierOption, \
+    ClassifierReciver
+from lexos.receivers.matrix_receiver import MatrixReceiver
+from lexos.models.matrix_model import MatrixModel
+import lexos.managers.utility as utility
 from sklearn.svm import SVC
 
 
@@ -23,10 +27,8 @@ from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler
 from sklearn.feature_extraction.text import CountVectorizer,
 TfidfVectorizer
 from sklearn.preprocessing import LabelBinarizer
-from lexos.models.matrix_model import MatrixModel
 from lexos.models.file_manager_model import FileManagerModel
-import lexos.managers.utility as utility
-ClassifierReciver
+
 """
 
 
@@ -64,7 +66,7 @@ class ClassifierModel(BaseModel):
     def _doc_term_matrix(self) -> pd.DataFrame:
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
-            else ().get_matrix()
+            else MatrixModel().get_matrix()
 
     @property
     def _document_label_map(self) -> DocumentLabelMap:
