@@ -66,6 +66,32 @@ class ClassifierModel(BaseModel):
         return self._test_dtm if self._test_dtm is not None \
             else ().get_matrix()
 
+    @property
+    def _document_label_map(self) -> DocumentLabelMap:
+        """:return: a map takes an id to temp labels."""
+        return self._test_document_label_map \
+            if self._test_document_label_map is not None \
+            else utility.get_active_document_label_map()
+
+    @property
+    def _classifier_option(self) -> ClassifierOption:
+        """:return: the front end option of bootstrap consensus tree."""
+        return self._test_front_end_option \
+            if self._test_front_end_option is not None \
+            else ClassifierReceiver().options_from_front_end()
+
+    @property
+    def _token_type_str(self) -> str:
+        """:return: A string that represents the token type used."""
+        if self._test_token_type_str is not None:
+            return self._test_token_type_str
+        else:
+            # Get dtm front end options.
+            dtm_options = MatrixReceiver().options_from_front_end()
+            # Get the correct current type.
+            token_type = dtm_options.token_option.token_type
+            return "Terms" if token_type == "Tokens" else "Characters"
+
     def sentencize(self, min_char):
         """Convert text file to a list of sentences.
 
