@@ -13,7 +13,7 @@ import pickle
 from lexos.models.base_model import BaseModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
 from lexos.receivers.classifier_reciever import ClassifierOption, \
-    ClassifierReciver
+    ClassifierReceiver
 from lexos.receivers.matrix_receiver import MatrixReceiver
 from lexos.models.matrix_model import MatrixModel
 import lexos.managers.utility as utility
