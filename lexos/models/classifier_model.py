@@ -1,4 +1,4 @@
-"""this is a model to produce an SVM classifier."""
+"""This is a model to produce an SVM classifier."""
 
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
@@ -12,7 +12,7 @@ import string
 import pickle
 from lexos.models.base_model import BaseModel
 from lexos.receivers.matrix_receiver import DocumentLabelMap
-from lexos.receivers.classifier_reciever import ClassifierOption, \
+from lexos.receivers.classifier_reciever import ClassifierOptions, \
     ClassifierReceiver
 from lexos.receivers.matrix_receiver import MatrixReceiver
 from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
@@ -38,12 +38,33 @@ class ClassifierTestOption(NamedTuple):
 
     doc_term_matrix: pd.DataFrame
     document_label_map: DocumentLabelMap
-    front_end_option: ClassifierOption
+    front_end_option: ClassifierOptions
     token_type_str: str
 
 
+class ClassifierResult(NamedTuple):
+    """A typed tuple to hold topword results."""
+    header: str
+    score: int
+    author: str
+
+
 class ClassifierModel(BaseModel):
-    """The Classifer model inherits from the base model."""
+    """The Classifer model inherits from the base model.
+
+    Note: Feature count is set to top 100 words currently.
+    If this is changed the training data will need to be remade.
+    With the correct number of features.
+    To do this, simply run the data generation code offline.
+    Then, save the new training data and list in the test folder.
+    MAKE SURE to use a novel text from an obscure author.
+    The classifier needs to learn against someone distinct.
+    If you give it the same author twice, it will perform terribly.
+    Choose an author who, reasonably, no one else will ever  model.
+    A good choice is yourself, or a friend, with no publications."""
+
+
+    feature_count = 100
 
     def __init__(self, test_options: Optional[ClassifierTestOption] = None):
         """Generate a classification model.
@@ -68,6 +89,9 @@ class ClassifierModel(BaseModel):
         """:return: The document term matrix."""
         return self._test_dtm if self._test_dtm is not None \
             else MatrixModel().get_matrix()
+            # the get_matrix function returns the normalized dtm
+            # need to set the correct normalization options on front
+            # other than that it's taken care of
 
     @property
     def _document_label_map(self) -> DocumentLabelMap:
@@ -77,7 +101,7 @@ class ClassifierModel(BaseModel):
             else utility.get_active_document_label_map()
 
     @property
-    def _classifier_option(self) -> ClassifierOption:
+    def _classifier_option(self) -> ClassifierOptions:
         """:return: the front end option of bootstrap consensus tree."""
         return self._test_front_end_option \
             if self._test_front_end_option is not None \
@@ -122,29 +146,7 @@ class ClassifierModel(BaseModel):
 
         return file_col_dtm.round(4)
 
-    def sentencize(self, min_char):
-        """Convert text file to a list of sentences.
-
-        Args:
-        filepath: string. Filepath of text file.
-        min_char: int. Minimum number of characters required
-        for a sentence to be included.
-        Returns:
-        sentences: list of strings.
-        List of sentences containined in the text file.
-        """
-        """
-        # Load data into string variable and remove new line characters
-        # Split text into a list of sentences
-        sentences = tokenize.sent_tokenize(text)
-        # Remove sentences that are less than min_char long
-        sentences = [sent for sent in sentences if len(sent) >= min_char]
-
-        return list(sentences)
-        """
-        return 1
-
-    def _trim_data_set(self, data_dict) -> pd.DataFrame:
+    def _trim_data_set(self) -> pd.DataFrame:
         """Trim the DTM down to the top 100 words."""
         # get the DTM
         dtm = self._get_file_col_dtm()
@@ -157,200 +159,16 @@ class ClassifierModel(BaseModel):
             else dtm.sort_index(ascending=self._front_end_option.sort_method)
 
         # return sliced down DTM
-        sliced_dtm = dtm_sorted.iloc[0: 100]
+        sliced_dtm = dtm_sorted.iloc[0: feature_count]
         return sliced_dtm
 
-    def combine_data(self, text_dict, author_name):
-        """Combine data.
 
-        Args:
-        text_dict: a dictionary of the text.
-        author_name: the author's name.
+    def _get_auth_list(self, author_name: str):
+        "return a list of the author"
+        return name_list = [author_name] * feature_count
 
-        This funntion is more than likely deprecated.
-        This service will be performed by other parts of Leoxs.
-        TODO: Delete or rework
-        """
-        np.random.seed(1)
 
-        # Set length parameter
-        max_len = 8500
-
-        """Select sentences
-        names = [subject_data, other]
-        """
-        names = []
-        combined = []
-
-        for name in names:
-            name = np.random.choice(name, max_len, replace=False)
-            combined += list(name)
-
-        labels = [author_name]*max_len + ['Other']*max_len
-        random.seed(3)
-
-        # Randomly shuffle data
-        zipped = list(zip(combined, labels))
-        random.shuffle(zipped)
-        combined, labels = zip(*zipped)
-
-        out_data = pd.DataFrame()
-        out_data['text'] = combined
-        out_data['author'] = labels
-        out_data.to_csv('author_data.csv', index=False)
-
-    def preprocess_data(self, filename):
-        """Preprocessing for data.
-
-        Args:
-        filename: name of the file to get the data from.
-
-        TODO: Remove this. This fucntion is completely deprecated.
-        The things that it does are done by Lexos.
-        Make notes on what it does and find out how to replicate.
-        """
-        data = pd.read_csv(filename, encoding="utf-8")
-        text = list(data['text'].values)
-        author = list(data['author'].values)
-        """Counter(author)"""
-
-        word_count = []
-        char_count = []
-
-        for i in range(len(text)):
-            word_count.append(len(text[i].split()))
-            char_count.append(len(text[i]))
-
-        # Convert lists to numpy arrays
-        word_count = np.array(word_count)
-        char_count = np.array(char_count)
-
-        # Calculate average word lengths
-
-        text = [excerpt.replace('\xa0', '') for excerpt in text]
-        new_text = []
-
-        for excerpt in text:
-            while "  " in excerpt:
-                excerpt = excerpt.replace("  ", " ")
-            new_text.append(excerpt)
-
-        text = new_text
-        normed_text = []
-
-        for i in range(len(text)):
-            new = text[i].lower()
-            new = new.translate(str.maketrans('', '', string.punctuation))
-            new = new.replace('“', '').replace('”', '')
-            normed_text.append(new)
-        return_dict = {"Normed_text": normed_text, "Author": author}
-        return return_dict
-
-    def process_data(self, excerpt_list):
-        """Stem data, remove stopwords and split into word lists.
-
-        Args:
-        excerpt_list: list of strings. List of normalized text excerpts.
-        Returns:
-        processed: list of strings.
-        List of lists of processed text excerpts
-        (stemmed and stop words removed).
-        """
-        stop_words = set(stopwords.words('english'))
-        porter = PorterStemmer()
-
-        processed = []
-
-        for excerpt in excerpt_list:
-            new = excerpt.split()
-            word_list = [porter.stem(w) for w in new if w not in stop_words]
-            word_list = " ".join(word_list)
-            processed.append(word_list)
-
-        return processed
-
-    def create_n_grams(self, excerpt_list, n, vocab_size, seq_size):
-        """Create a list of n-gram sequences.
-
-        Args:
-        excerpt_list: list of strings. List of normalized text excerpts.
-        n: int. Length of n-grams.
-        vocab_size: int. Size of n-gram vocab (used in one-hot encoding)
-        seq_size: int. Size of n-gram sequences
-        Returns:
-        n_gram_array: array. Numpy array of one-hot encoded n-grams.
-        """
-        n_gram_list = []
-
-        for excerpt in excerpt_list:
-            # Remove spaces
-            excerpt = excerpt.replace(" ", "")
-
-            # Extract n-grams
-            n_grams = [excerpt[i:i + n] for i in range(len(excerpt) - n + 1)]
-
-            # Convert to a single string with spaces between n-grams
-            new_string = " ".join(n_grams)
-
-            # One hot encode
-            hot = one_hot(new_string, round(vocab_size*1.3))
-
-            # Pad hot if necessary
-            hot_len = len(hot)
-            if hot_len >= seq_size:
-                hot = hot[0:seq_size]
-            else:
-                diff = seq_size - hot_len
-                extra = [0]*diff
-                hot = hot + extra
-
-            n_gram_list.append(hot)
-
-        n_gram_array = np.array(n_gram_list)
-
-        return n_gram_array
-
-    def get_vocab_size(self, excerpt_list, n, seq_size):
-        """Calculate size of n-gram vocab.
-
-        Args:
-        excerpt_list: list of strings. List of normalized text excerpts.
-        n: int. Length of n-grams.
-        seq_size: int. Size of n-gram sequences.
-
-        Returns:
-        vocab_size: int. Size of n-gram vocab.
-        """
-        n_gram_list = []
-
-        for excerpt in excerpt_list:
-            # Remove spaces
-            excerpt = excerpt.replace(" ", "")
-
-            # Extract n-grams
-            n_grams = [excerpt[i:i + n] for i in range(len(excerpt) - n + 1)]
-
-            # Create list of n-grams
-            gram_len = len(n_grams)
-            if gram_len >= seq_size:
-                n_grams = n_grams[0:seq_size]
-            else:
-                diff = seq_size - gram_len
-                extra = [0]*diff
-                n_grams = n_grams + extra
-
-            n_gram_list.append(n_grams)
-
-        # Flatten n-gram list
-        n_gram_list = list(np.array(n_gram_list).flat)
-
-        # Calculate vocab size
-        n_gram_cnt = 1  # Counter(n_gram_list)
-        vocab_size = len(n_gram_cnt)
-
-        return vocab_size
-
-    def fit_model(self, words, author):
+    def _fit_model(self, word_list, authors_list):
         """Fits an SVM model for the specified author.
 
         Args:
@@ -359,14 +177,28 @@ class ClassifierModel(BaseModel):
 
         Returns:
         svm: the fitted SVM model.
+
+        Notes:
+        C = 2 was found to be the best margin softener.
+        This took a lot of testing with a grid SVC.
+        It is possible that a non-integer C is better.
+        If someone wants to see if that's true go ahead.
+        I'm choosing to leave it as an integer.
+        If a float is better it will likely be 1<C<2.
+        This is as 1 was the second best performing int.
+
+        The Linear kernel was a compromise but is the best choice.
+        An RBF kernel provides up to a 4% increase in predictive power.
+        However, it is 334% slower for fittings.
+        This time cost is preventative in a web context.
+        To accomodate this, accuracy was sacrificed.
         """
-        svm = SVC(C=1, kernel='linear')
+        svm = SVC(C=2, kernel='linear')
         # Fit bag of words svm
-        np.random.seed(6)
         svm.fit(words, author)
         return svm
 
-    def predict_model(self, model, data):
+    def _predict_model(self, model, data):
         """Make predictions on a dataset with the model.
 
         Args:
@@ -379,7 +211,7 @@ class ClassifierModel(BaseModel):
         predictions = model.predict(data)
         return predictions
 
-    def save_model(self, model, author_name):
+    def _save_model(self, model, author_name):
         """Save a model to disk.
 
         Args:
@@ -389,7 +221,7 @@ class ClassifierModel(BaseModel):
         filename = author_name + "_finalized_model.sav"
         pickle.dump(model, open(filename, 'wb'))
 
-    def load_model(self, author_name):
+    def _load_model(self, author_name):
         """Load a model from disk.
 
         Args:
@@ -398,3 +230,25 @@ class ClassifierModel(BaseModel):
         filename = author_name + "_finalized_model.sav"
         loaded_model = pickle.load(open(filename, 'rb'))
         return loaded_model
+
+    def _get_result(self) -> ClassifierResult:
+        """Call the right method based on user selection
+
+        :return: a namedtuple that holds the classifier result, which contains a
+            header and a list of pandas series.
+
+        :TODO: add in loading models.
+        """
+        model = 0
+        classifier_option = self._classifier_option
+
+        data = self._trim_data_set()
+        author = self._get_auth_list(classifier_option.author_name)
+
+        if classifier_option.fit_model:
+            model = self._fit_model(data, author)
+        
+        if classifier_option.predict and model is not None:
+            results = self._predict_model(model, data)
+        else:
+            raise ValueError("Missing model for predictions.")
