@@ -210,7 +210,8 @@ function initialize_dropdown_menus () {
     ['Consensus Tree', 'consensus-tree'],
     ['Similarity Query', 'similarity-query'],
     ['Top Words', 'top-words'],
-    ['Content Analysis', 'content-analysis']
+    ['Content Analysis', 'content-analysis'],
+    ['Classifier', 'classifier']
   ])
 
   // Remove the menu if the mouse leaves the navbar

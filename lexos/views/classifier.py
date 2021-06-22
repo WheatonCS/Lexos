@@ -7,10 +7,10 @@ from lexos.managers import session_manager
 from lexos.models.classifier_model import ClassifierModel
 """
 
-classify_blueprint = Blueprint("classify", __name__)
+classifier_blueprint = Blueprint("classifier", __name__)
 
 
-@classify_blueprint.route("/classify", methods=["GET"])
+@classifier_blueprint.route("/classifier", methods=["GET"])
 def classifier():
     """ Gets the classifier page.
     :return: The classifier page.
@@ -18,4 +18,4 @@ def classifier():
     session["analyoption"] = constants.DEFAULT_ANALYZE_OPTIONS
 
     # Send the page.
-    return render("classify.html")
+    return render("classifier.html")

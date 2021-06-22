@@ -1,0 +1,42 @@
+/* Form */
+form {
+    grid-template-rows: 45rem 1fr;
+    min-height: 70rem;
+}
+
+
+/* Top section */
+#top-section {
+    display: grid;
+    grid-gap: var(--gap);
+    grid-template-rows: 45rem auto 40rem;
+    grid-template-columns: 36rem auto 30rem;
+}
+
+#left-column {
+    display: grid;
+    grid-template-rows: min-content 1fr 1fr;
+    grid-gap: var(--gap);
+}
+
+#right-column {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-gap: var(--gap);
+}
+
+#generate-button {
+    margin: var(--small-gap);
+}
+
+#standard-error-test,
+#interquartile-range-test {
+    overflow-y: auto;
+    word-break: break-word;
+}
+
+
+/* Hidden elements */
+#document-names-section {
+    display: none;
+}

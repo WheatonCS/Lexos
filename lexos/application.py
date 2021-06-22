@@ -27,7 +27,7 @@ from lexos.views.tokenize import tokenize_blueprint
 from lexos.views.top_words import top_words_blueprint
 from lexos.views.upload import upload_blueprint
 from lexos.views.word_cloud import word_cloud_blueprint
-from lexos.views.classifier import classify_blueprint
+from lexos.views.classifier import classifier_blueprint
 
 
 def get_secret_key(file_name: str = "secret_key") -> bytes:
@@ -84,7 +84,7 @@ app.register_blueprint(tokenize_blueprint)
 app.register_blueprint(top_words_blueprint)
 app.register_blueprint(upload_blueprint)
 app.register_blueprint(word_cloud_blueprint)
-app.register_blueprint(classify_blueprint)
+app.register_blueprint(classifier_blueprint)
 
 
 @app.template_filter()  # Register the template filter
