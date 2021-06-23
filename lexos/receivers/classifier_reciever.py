@@ -9,12 +9,19 @@ class ClassifierOptions(NamedTuple):
     TODO: add in loading models.
     """
     # Fitting a new model
-    fit_model: Optional[bool]
+    fit_model: bool
 
     #predicting with the model
-    predict: Optional[bool]
+    predict: bool
+
     author_name: str
     text_color: str
+
+    kernel: Optional[str]
+    margin_softener: Optional[int]
+    trial_count: Optional[int]
+    
+
 
 
 class ClassifierReceiver(BaseReceiver):
@@ -26,29 +33,32 @@ class ClassifierReceiver(BaseReceiver):
 
     def options_from_front_end(self) -> ClassifierOption:
         """Get the options from front end."""
-        
-        def _get_fit(self) -> Optional[bool]:
-            """Get the fit option."""
-            if 'fit_model' not in self._front_end_data:
-                return None
-            else:
-                return fit_model = self._front_end_data['fit_model']
-        
-        def _get_predict(self) -> Optional[bool]:
-            """Get the prediction option."""
-            if 'predict' not in self._front_end_data:
-                return None
-            else:
-                return predict = self._front_end_data['predict']
 
-        predict = self._get_predict()
-        fit_model = self._get_fit()
+        predict = self._front_end_data["predict"]
+        fit_model = self._front_end_data["fit_model"]
         author_name = self._front_end_data["author_name"]
         text_color = self._front_end_data["text_color"]
 
+        if fit_model:
+            try:
+                kernel = self._front_end_data["kernel"]
+                margin_softener = self._front_end_data["margin_softener"]
+            except KeyError:
+                kernel = None
+                margin_softener = None
+        
+        if predict:
+            try:
+                trial_count = self._front_end_data["trial_count"]
+            except KeyError:
+                trial_count = None
+        
         return classifierOption(
             fit_model = fit_model,
             predict = predict,
+            kernel = kernel,
+            trial_count = trial_count,
+            margin_softener = margin_softener,
             author_name = author_name,
             text_color = text_color
         )

@@ -33,15 +33,15 @@
 
         <!-- Generate -->
         <div class="section">
-            <span id="generate-button" class="disabled important-button">Generate All</span>
+            <span id="generate-button" class="disabled important-button">Generate</span>
         </div>
         
         <fieldset>
-            <div id="option-section" class="section">
+            <div id="fit-option-section" class="section">
 
                 <div class="vertical-splitter section-top">
-                    <legend class="title">Options</legend>
-                    <span id="classifier-options-tooltip-button" class="right-justified tooltip-button">?</span>
+                    <legend class="title">Fit Options</legend>
+                    <span id="fit-options-tooltip-button" class="right-justified tooltip-button">?</span>
                 </div>
 
                 <div class="section-body">
@@ -51,12 +51,40 @@
                     <label for="fit-model-input">Fit new model</label>
                     <span id="fit-model-tooltip-button" class="tooltip-button">?</span><br>
 
-                    <label><input id="predict-checkbox" name="enable_predict"
-                            type="checkbox"><span></span></label>
-                    <span></span>
-                    <label for="predict-input">Predict with model</label>
-                    <span id="predict-tooltip-button" class="tooltip-button">?</span>
+                    <label for="margin-softener-input">Margin softener C 
+                        <input id="margin-softener-input" name="margin-softener" value="2" type="text"
+                            spellcheck="false" autocomplete="off"></label>
+                    <span id="margin-softener-tooltip-button" class="tooltip-button">?</span><br>
 
+                    <label for="kernel-type-input">Kernel type
+                        <input id="kernel-type-input" name="kernel-type" value="linear" type="text"
+                            spellcheck="false" autocomplete="off" style="width:8rem"></label>
+                    <span id="kernel-type-tooltip-button" class="tooltip-button">?</span><br>
+
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div id="prediction-settings-section" class="section">
+
+                <div class="vertical-splitter section-top">
+                    <legend class="title">Prediction Settings</legend>
+                    <span id="prediction-settings-tooltip-button" class="right-justified tooltip-button">?</span>
+                </div>
+
+                <div class="section-body">
+                    
+                    <label><input id="predict-checkbox" name="enable_predict" type="checkbox">
+                        <span></span></label>
+                    <label for="predict-input">Make predictions</label>
+                    <span id="predict-tooltip-button" class="tooltip-button">?</span><br>
+
+                    
+                    <label for="trial-count-input">Run
+                    <input id="trial-count-input" name="trial-count" value="1" type="text"
+                        spellcheck="false" autocomplete="off"> trials</label>
+                    <span id="trial-count-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
         </fieldset>

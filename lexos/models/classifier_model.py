@@ -19,6 +19,8 @@ from lexos.helpers.error_messages import EMPTY_DTM_MESSAGE
 from lexos.models.matrix_model import MatrixModel
 import lexos.managers.utility as utility
 from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 
 
 """
@@ -168,7 +170,7 @@ class ClassifierModel(BaseModel):
         return name_list = [author_name] * feature_count
 
 
-    def _fit_model(self, word_list, authors_list):
+    def _fit_model(self, word_list, authors_list, margin_softener, kernel):
         """Fits an SVM model for the specified author.
 
         Args:
@@ -193,9 +195,9 @@ class ClassifierModel(BaseModel):
         This time cost is preventative in a web context.
         To accomodate this, accuracy was sacrificed.
         """
-        svm = SVC(C=2, kernel='linear')
+        svm = SVC(C= margin_softener, kernel= kernel)
         # Fit bag of words svm
-        svm.fit(words, author)
+        svm.fit(word_list, authors_list)
         return svm
 
     def _predict_model(self, model, data):
@@ -239,16 +241,63 @@ class ClassifierModel(BaseModel):
 
         :TODO: add in loading models.
         """
-        model = 0
+        # Starting the model as none for error checking.
+        model = None
+
+        # Randomly chose 1 of 3 persistent datsets
+        # Stored at that path
+        choice = str(random.randint(1, 3)) + ".txt"
+        path = '../test/Classifier/PersistentData/'
+        data_path = path + choice
+        auth_path = path + 'auth.txt'
+
+        # Create a base for the data and authors
+        # To be trained and tested against
+        # Both are hardset at len(100)
+        base_data = pd.read_csv(data_path, header= None)
+        base_auth = pd.read_csv(auth_path, header= None)
+        
         classifier_option = self._classifier_option
 
+        # Get the top 100 words from the TF/IDF
+        # normed DTM and the author's name 100 times
+        # and append them to the base sets
         data = self._trim_data_set()
+        data = data.append(base_data)
         author = self._get_auth_list(classifier_option.author_name)
+        author = author.append(base_auth)
 
-        if classifier_option.fit_model:
-            model = self._fit_model(data, author)
+        # Zip the data and author sets and 
+        # randomly shuffle them, then unzip them
+        zipped = list(zip(data, author))
+        random.shuffle(zipped)
+        data, author = zip(*zipped)
+
+        # Create an 80/20 test/train split of both sets
+        data_train, data_test, author_train, author_test = \
+            train_test_split(data, author, test_size = 0.2, random_state = 5)
+
+        # Fit a model on the training data
+        if classifier_option.fit_model and classifier_option.kernel is not None \
+            and classifier_option.margin_softener is not None:
+            model = self._fit_model(data_train, author_train, 
+                classifier_option.margin_softener, classifier_option.kernel)
         
-        if classifier_option.predict and model is not None:
-            results = self._predict_model(model, data)
+        # Predict on the test data and score the predictions
+        if classifier_option.predict and classifier_option.trial_count is not None \
+            and model is not None:
+            pred_list = []
+            acc_list = []
+
+            for i in range(classifier_option.trial_count):
+                results.self._predict_model(model, data_test)
+
+            for pred in pred_list:
+                acc_list.append(accuracy_score(author_test, pred))
+
+            accuracy = average(acc_list)
+            max_acc = max(acc_list)
+            min_acc = min(acc_list)
+
         else:
             raise ValueError("Missing model for predictions.")

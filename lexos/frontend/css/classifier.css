@@ -13,12 +13,6 @@ form {
     grid-template-columns: 36rem auto 30rem;
 }
 
-#left-column {
-    display: grid;
-    grid-template-rows: min-content 1fr 1fr;
-    grid-gap: var(--gap);
-}
-
 #right-column {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
