@@ -12,7 +12,7 @@ form {
     grid-gap: var(--gap);
 }
 
-#tokenize-section, #normalize-section, #cull-section {
+#tokenize-section, #normalize-section, #cull-section, #fit-option-section, #prediction-settings-section{
     height: 100%;
 }
 

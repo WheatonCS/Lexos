@@ -19,3 +19,13 @@ def classifier():
 
     # Send the page.
     return render("classifier.html")
+
+@classifier_blueprint.route("/classifier/prediction-statistics",
+                            methods=["POST"])
+def predictions() -> str:
+    """Get the statistics of the prediction trials.
+    :return: The statistics of the prediction trials.
+    """
+
+    session_manager.cache_analysis_option()
+    return jsonify(StatsModel().get_document_statistics())

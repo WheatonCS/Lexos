@@ -295,9 +295,11 @@ class ClassifierModel(BaseModel):
             for pred in pred_list:
                 acc_list.append(accuracy_score(author_test, pred))
 
-            accuracy = average(acc_list)
-            max_acc = max(acc_list)
-            min_acc = min(acc_list)
+            ave_acc = np.average(acc_list)
+            max_acc = np.amax(acc_list)
+            min_acc = np.amin(acc_list)
+            std_acc = np.std(acc_list)
+            var_acc = np.var(acc_list)
 
         else:
             raise ValueError("Missing model for predictions.")

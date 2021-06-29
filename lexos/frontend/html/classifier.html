@@ -1,6 +1,6 @@
 {% extends "helpers/base-template.html" %}
 
-{% block title %}Statistics{% endblock %}
+{% block title %}Classifier{% endblock %}
 
 <!-- Head -->
 {% block head %}
@@ -17,8 +17,8 @@
 <link rel="stylesheet" type="text/css" href="frontend/css/helpers/table.css" />
 
 <!-- Page JS and CSS -->
-<script type="text/javascript" src="frontend/js/statistics.js"></script>
-<link rel="stylesheet" type="text/css" href="frontend/css/statistics.css" />
+<script type="text/javascript" src="frontend/js/classifier.js"></script>
+<link rel="stylesheet" type="text/css" href="frontend/css/classifier.css" />
 {% endblock %}
 
 
@@ -106,5 +106,8 @@
     </div>
 
 </div>
+
+<!-- Prediction statistics -->
+<div id="table-section" class="section"></div>
 
 {% endblock %}

@@ -10,14 +10,15 @@ form {
     display: grid;
     grid-gap: var(--gap);
     grid-template-rows: 45rem auto 40rem;
-    grid-template-columns: 36rem auto 30rem;
+    grid-template-columns: 36rem auto;
 }
 
-#right-column {
+#left-column {
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: min-content 1fr 1fr;
     grid-gap: var(--gap);
 }
+
 
 #generate-button {
     margin: var(--small-gap);
