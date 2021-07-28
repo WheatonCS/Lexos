@@ -25,4 +25,12 @@ function initialize_tree_options () {
 
       ['Average', 'Single', 'Complete', 'Weighted'])
   })
+  $('#kernel-type-button').click(function () {
+    create_radio_options_popup('Kernel Type', 'kernel_type',
+      '#kernel-type-button', '#kernel-type-input',
+
+      ['Linear', 'RBF', 'Polynomial', 'Sigmoid'],
+
+      ['linear', 'rbf', 'poly', 'sigmoid'])
+  })
 }

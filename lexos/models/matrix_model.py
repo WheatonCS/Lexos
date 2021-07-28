@@ -11,6 +11,8 @@ from lexos.models.file_manager_model import FileManagerModel
 from lexos.receivers.matrix_receiver import MatrixFrontEndOption, \
     MatrixReceiver
 
+from nltk.tokenize import TweetTokenizer
+
 FileIDContentMap = Dict[int, str]
 
 
@@ -59,7 +61,7 @@ class MatrixModel(BaseModel):
             if self._test_front_end_option is not None \
             else MatrixReceiver().options_from_front_end()
 
-    def _get_raw_count_matrix(self) -> pd.DataFrame:
+    def _get_raw_count_matrix(self, Vocabulary = None) -> pd.DataFrame:
         """Get the raw count matrix for the whole corpus.
 
         :return: a panda data frame
@@ -107,27 +109,49 @@ class MatrixModel(BaseModel):
         # [\S]+  :
         #   means tokenize on a word boundary where boundary are \s
         #   (spaces, tabs, newlines)
+        if Vocabulary is not None:
+            # using the NLTK tweet tokenizer for our Vectorizer's
+            # tokenization because for some reason even when 'a'
+            # is in the provided vocabulary, the Vectorizer misses
+            # it without this tokenization helper
 
-        count_vector = CountVectorizer(
+            tk = TweetTokenizer()
+
+            count_vector = CountVectorizer(
             input='content', encoding='utf-8', min_df=1,
             analyzer=self._opts.token_option.token_type,
-            token_pattern=definitions.WORD_REGEX, lowercase=False,
+            vocabulary = Vocabulary, lowercase=False,
             ngram_range=(self._opts.token_option.n_gram_size,
                          self._opts.token_option.n_gram_size),
-            stop_words=[], dtype=float, max_df=1.0
-        )
+            stop_words=[], dtype=float, max_df=1.0,
+            tokenizer=tk.tokenize)
 
-        # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
-        doc_term_sparse_matrix = count_vector.fit_transform(file_contents)
+            transformer = TfidfTransformer(smooth_idf=False)
+            
+            dtm_before_tfidf = count_vector.fit_transform(file_contents)
+            dtm = transformer.fit_transform(dtm_before_tfidf)
+            return dtm.toarry()
+        
+        else:
+            count_vector = CountVectorizer(
+                input='content', encoding='utf-8', min_df=1,
+                analyzer=self._opts.token_option.token_type,
+                token_pattern=definitions.WORD_REGEX, lowercase=False,
+                ngram_range=(self._opts.token_option.n_gram_size,
+                            self._opts.token_option.n_gram_size),
+                stop_words=[], dtype=float, max_df=1.0
+            )
+            # make a (sparse) Document-Term-Matrix (DTM) to hold all counts
+            doc_term_sparse_matrix = count_vector.fit_transform(file_contents)
 
-        # need to get at the entire matrix and not sparse matrix
-        raw_count_matrix = doc_term_sparse_matrix.toarray()
-        # snag all features (e.g., word-grams or char-grams) that were counted
-        words = count_vector.get_feature_names()
-        # pack the data into a data frame
-        return pd.DataFrame(data=raw_count_matrix,
-                            index=file_ids,
-                            columns=words)
+            # need to get at the entire matrix and not sparse matrix
+            raw_count_matrix = doc_term_sparse_matrix.toarray()
+            # snag all features (e.g., word-grams or char-grams) that were counted
+            words = count_vector.get_feature_names()
+            # pack the data into a data frame
+            return pd.DataFrame(data=raw_count_matrix,
+                                index=file_ids,
+                                columns=words)
 
     def _apply_transformations_to_matrix(self, dtm_data_frame: pd.DataFrame) \
             -> pd.DataFrame:
@@ -228,7 +252,7 @@ class MatrixModel(BaseModel):
 
         return dtm_after_freq
 
-    def get_matrix(self) -> pd.DataFrame:
+    def get_matrix(self, Vocabulary = None) -> pd.DataFrame:
         """Get the document term matrix (DTM) of all the active files.
 
         :return:
@@ -236,7 +260,7 @@ class MatrixModel(BaseModel):
             - the index (row) header are file ids
             - the column header are words
         """
-        raw_count_matrix = self._get_raw_count_matrix()
+        raw_count_matrix = self._get_raw_count_matrix(Vocabulary = Vocabulary)
 
         return self._apply_transformations_to_matrix(raw_count_matrix)
 

@@ -15,7 +15,8 @@ def classifier():
     """ Gets the classifier page.
     :return: The classifier page.
     """
-    session["analyoption"] = constants.DEFAULT_ANALYZE_OPTIONS
+    if "analyoption" not in session:
+        session["analyoption"] = constants.DEFAULT_ANALYZE_OPTIONS
 
     # Send the page.
     return render("classifier.html")
@@ -29,3 +30,5 @@ def predictions() -> str:
 
     session_manager.cache_analysis_option()
     return jsonify(StatsModel().get_document_statistics())
+
+#@classifier_blueprint.route("/classifier/")

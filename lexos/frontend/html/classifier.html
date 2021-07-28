@@ -15,6 +15,8 @@
 <link rel="stylesheet" type="text/css" href="frontend/css/helpers/graph.css" />
 <script type="text/javascript" src="frontend/js/helpers/table.js"></script>
 <link rel="stylesheet" type="text/css" href="frontend/css/helpers/table.css" />
+<script type="text/javascript" src="frontend/js/helpers/tree-options.js"></script>
+
 
 <!-- Page JS and CSS -->
 <script type="text/javascript" src="frontend/js/classifier.js"></script>
@@ -33,7 +35,7 @@
 
         <!-- Generate -->
         <div class="section">
-            <span id="generate-button" class="disabled important-button">Generate</span>
+            <span id="generate-button" class="disabled important-button">Generate All</span>
         </div>
         
         <fieldset>
@@ -49,17 +51,23 @@
                             type="checkbox"><span></span></label>
                     <span></span>
                     <label for="fit-model-input">Fit new model</label>
-                    <span id="fit-model-tooltip-button" class="tooltip-button">?</span><br>
+                    
 
                     <label for="margin-softener-input">Margin softener C 
                         <input id="margin-softener-input" name="margin-softener" value="2" type="text"
                             spellcheck="false" autocomplete="off"></label>
                     <span id="margin-softener-tooltip-button" class="tooltip-button">?</span><br>
-
-                    <label for="kernel-type-input">Kernel type
-                        <input id="kernel-type-input" name="kernel-type" value="linear" type="text"
-                            spellcheck="false" autocomplete="off" style="width:8rem"></label>
-                    <span id="kernel-type-tooltip-button" class="tooltip-button">?</span><br>
+                    
+                    <label for="author-name-input">Author Name 
+                        <input id="author-name-input" name="author-name" value="" type="text"
+                            spellcheck="false" autocomplete="off" style="width: 10rem;"></label>
+                    <span id="author-name-tooltip-button" class="tooltip-button">?</span><br>
+                    
+                    <div>
+                        <h3>Kernel Type: </h3>
+                        <span id="kernel-type-button" class="button">Linear</span>
+                        <span id="kernel-type-tooltip-button" class="tooltip-button">?</span><br>
+                    </div>
 
                 </div>
             </div>
@@ -74,17 +82,16 @@
                 </div>
 
                 <div class="section-body">
-                    
-                    <label><input id="predict-checkbox" name="enable_predict" type="checkbox">
-                        <span></span></label>
-                    <label for="predict-input">Make predictions</label>
-                    <span id="predict-tooltip-button" class="tooltip-button">?</span><br>
+                    <label><input id="prediction-checkbox" name="enable_prediction"
+                            type="checkbox"><span></span></label>
+                    <span></span>
+                    <label for="prediction-input">Make predictions</label>
+                    <br>
+                    <label for="trial-count-input">Trial count 
+                        <input id="trial-count-input" name="trial-count" value="2" type="text"
+                            spellcheck="false" autocomplete="off"></label>
+                    <span id="trial-count-tooltip-button" class="tooltip-button">?</span><br>
 
-                    
-                    <label for="trial-count-input">Run
-                    <input id="trial-count-input" name="trial-count" value="1" type="text"
-                        spellcheck="false" autocomplete="off"> trials</label>
-                    <span id="trial-count-tooltip-button" class="tooltip-button">?</span>
                 </div>
             </div>
         </fieldset>
