@@ -26,6 +26,7 @@
     "lato-font": "^3.0.0",
     "lodash": "^4.17.21",
     "package-lock.json": "^1.0.0",
+    "path-parse": "^1.0.7",
     "plotly.js-dist": "^1.54.2",
     "smartmenus": "^1.0.1"
   },
