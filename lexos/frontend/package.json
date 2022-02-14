@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "ajv": "^8.10.0",
     "bootstrap": "^3.4.1",
     "bootstrap-contextmenu": "1.0.0",
     "bootstrap-switch": "^3.3.4",
