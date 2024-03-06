@@ -2,8 +2,10 @@ beautifulsoup4
 biopython
 chardet
 colorlover
-flask
+flask==1.1.1
 gensim
+itsdangerous==2.0.1
+Jinja2==3.0.3
 lxml
 matplotlib
 natsort
@@ -13,4 +15,4 @@ plotly
 requests
 scikit-learn
 scipy
-werkzeug
+werkzeug==2.0.2
