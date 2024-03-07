@@ -31,4 +31,4 @@ matrix:
         - cd ./lexos/frontend
         - npm install
       script:
-        - ./node_modules/.bin/eslint ./js/script_*.js
+        - ./node_modules/.bin/eslint ./js/*.js

@@ -41,10 +41,10 @@ test_script:
   - pydocstyle lexos\receivers\
 
   # Test for javascript code style
-  #- cd .\lexos\frontend
+  - cd .\lexos\frontend
 
   # Following line is commented out, frontend refactor is not completed
-  # - ./node_modules/.bin/eslint ./js/script_*.js
+  - ./node_modules/.bin/eslint ./js/*.js
   #- .\node_modules\.bin\eslint .\js\scripts_statistics.js
   #- .\node_modules\.bin\eslint .\js\scripts_similarity.js
   #- .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
@@ -56,6 +56,6 @@ test_script:
   #- .\node_modules\.bin\eslint .\js\scripts_scrub.js
   #- .\node_modules\.bin\eslint .\js\scripts_cut.js
   #- .\node_modules\.bin\eslint .\js\scripts_bct.js
-  #- cd ..\..
+  - cd ..\..
 
 build: off
