@@ -26,7 +26,7 @@ $(function () {
       enable('#preview-button, #apply-button')
     })
 
-    // Perform the cutting if the "Preview" or "Apply" button is pressed
+  // Perform the cutting if the "Preview" or "Apply" button is pressed
   $('#preview-button').click(function () { cut('preview') })
   $('#apply-button').click(function () { cut('apply') })
 

@@ -15,8 +15,8 @@ $(function () {
       enable('#preview-button, #apply-button')
     })
 
-    // Disable the punctuation options when the "Remove Punctuation" checkbox
-    // is unchecked
+  // Disable the punctuation options when the "Remove Punctuation" checkbox
+  // is unchecked
   let punctuation_checkbox_element = $('#punctuation-checkbox')
   punctuation_checkbox_element.click(function () {
     let punctuation_options_element = $('#punctuation-options')
