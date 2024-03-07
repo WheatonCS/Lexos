@@ -1,2 +1,2 @@
-class LexosExceptionError(Exception):
+class LexosException(Exception):
     pass
