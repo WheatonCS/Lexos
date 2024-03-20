@@ -8,7 +8,7 @@
     "bootstrap": "^3.4.1",
     "bootstrap-contextmenu": "1.0.0",
     "bootstrap-switch": "^3.3.4",
-    "d3": "^5.9.2",
+    "d3": "^7.6.1",
     "d3-cloud": "^1.2.4",
     "datatables.net": "^1.11.3",
     "datatables.net-bs": "^1.10.15",
