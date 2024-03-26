@@ -19,8 +19,10 @@ install:
   - pip install numpy
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
+  # Update Chocolately
+  - choco upgrade chocolatey
   # Set up node js checks.
-  - choco install nodejs --legacy-peer-deps --force
+  - choco install nodejs --legacy-peer-deps --force --version=20.11.1
   # use npm to install all the dependencies.
   - cd .\lexos\frontend
   - npm install
