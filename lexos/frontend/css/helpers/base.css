@@ -37,10 +37,11 @@
 #lexos-text {
    white-space: nowrap;
    margin-right: var(--gap);
+   color: var(--lexos-text-color);
 }
 
 #page-title {
-   opacity: .5;
+   opacity: .8;
 }
 
 #navbar-walkthrough-button {
