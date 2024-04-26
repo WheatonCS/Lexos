@@ -22,10 +22,10 @@ install:
   # Update Chocolately
   - choco upgrade chocolatey
   # Set up node js checks.
-  - choco install nodejs --legacy-peer-deps --force --version=20.11.1
+  - choco install nodejs --legacy-peer-deps --force --version=22.0.0
   # use npm to install all the dependencies.
   - cd .\lexos\frontend
-  - npm install
+  - npm install --legacy-peer-deps --force 
   - cd ..\..
 
 # Set only master branch.
