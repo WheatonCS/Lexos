@@ -156,7 +156,7 @@ function create_word_cloud (id, name, words) {
     .text('No selection')
     .attr('class', 'visualize-tooltip')
 
-    // Create the word cloud
+  // Create the word cloud
   d3.select(`#word-cloud-${id}`)
 
     .append('svg')

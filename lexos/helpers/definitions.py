@@ -22,8 +22,8 @@ _SINGLE_LEFT_WORD_BOUNDARY_REGEX_STR = r'^|\s'
 _SINGLE_RIGHT_WORD_BOUNDARY_REGEX_STR = r'\s|$'
 
 # ============== compiled version ==================
-# the compiled version of word regex
-WORD_REGEX = re.compile(_WORD_REGEX_STR, re.UNICODE)
+# All characters that are not white space (token boundaries are white space)
+WORD_REGEX = _WORD_REGEX_STR
 
 
 def count_phrase_in_text(phrase: str, text: str) -> int:

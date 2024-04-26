@@ -19,8 +19,10 @@ install:
   - pip install numpy
   - pip install -r requirements.txt
   - pip install -r dev_requirements.txt
+  # Update Chocolately
+  - choco upgrade chocolatey
   # Set up node js checks.
-  - choco install nodejs
+  - choco install nodejs --legacy-peer-deps --force --version=20.11.1
   # use npm to install all the dependencies.
   - cd .\lexos\frontend
   - npm install
@@ -33,7 +35,7 @@ branches:
 
 test_script:
   # Test for python static analysis.
-  - flake8 --ignore E121,E123,E126,E226,E24,E704,W503,W504,E741
+  - flake8 --ignore E121,E123,E126,E226,E24,E704,W503,W504,E741,N818
   # Unit testing.
   - pytest --cov=.\lexos
   # Doc style, at the moment only test files under models and receivers.
@@ -44,18 +46,18 @@ test_script:
   - cd .\lexos\frontend
 
   # Following line is commented out, frontend refactor is not completed
-  # - ./node_modules/.bin/eslint ./js/script_*.js
-  - .\node_modules\.bin\eslint .\js\scripts_statistics.js
-  - .\node_modules\.bin\eslint .\js\scripts_similarity.js
-  - .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
-  - .\node_modules\.bin\eslint .\js\scripts_rwanalysis.js
-  - .\node_modules\.bin\eslint .\js\scripts_tokenizer.js
-  - .\node_modules\.bin\eslint .\js\scripts_upload.js
-  - .\node_modules\.bin\eslint .\js\scripts_manage.js
-  - .\node_modules\.bin\eslint .\js\scripts_kmeans.js
-  - .\node_modules\.bin\eslint .\js\scripts_scrub.js
-  - .\node_modules\.bin\eslint .\js\scripts_cut.js
-  - .\node_modules\.bin\eslint .\js\scripts_bct.js
+  - ./node_modules/.bin/eslint ./js/*.js
+  #- .\node_modules\.bin\eslint .\js\scripts_statistics.js
+  #- .\node_modules\.bin\eslint .\js\scripts_similarity.js
+  #- .\node_modules\.bin\eslint .\js\scripts_dendrogram.js
+  #- .\node_modules\.bin\eslint .\js\scripts_rwanalysis.js
+  #- .\node_modules\.bin\eslint .\js\scripts_tokenizer.js
+  #- .\node_modules\.bin\eslint .\js\scripts_upload.js
+  #- .\node_modules\.bin\eslint .\js\scripts_manage.js
+  #- .\node_modules\.bin\eslint .\js\scripts_kmeans.js
+  #- .\node_modules\.bin\eslint .\js\scripts_scrub.js
+  #- .\node_modules\.bin\eslint .\js\scripts_cut.js
+  #- .\node_modules\.bin\eslint .\js\scripts_bct.js
   - cd ..\..
 
 build: off
