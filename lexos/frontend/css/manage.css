@@ -1,7 +1,7 @@
 /* Minimum width */
 #main-section,
 .popup-container {
-    min-width: 130rem;
+    /*min-width: 130rem;*/
 }
 
 #manage-tips {

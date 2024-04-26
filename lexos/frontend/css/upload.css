@@ -1,7 +1,7 @@
 /* Form */
 form {
     grid-template-rows: 1fr 1fr;
-    min-height: 75rem;
+    /*min-height: 75rem;*/
 }
 
 
