@@ -338,10 +338,7 @@ function remove_highlights () {
  * @returns {object} The parsed object.
  */
 function parse_json (json) {
-  if (json != "[object Object]") {
-    return JSON.parse(json.toString().replace(/\bNaN\b/g, '"N/A"'))
-  }
-  return {}
+  return JSON.parse(json.replace(/\bNaN\b/g, '"N/A"'))
 }
 
 /**
