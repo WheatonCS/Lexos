@@ -117,7 +117,7 @@ footer {
 /* Section */
 .section {
    background-color: var(--foreground-color);
-   overflow: hidden;
+   /*overflow: hidden;*/
 }
 
 .section-top {
