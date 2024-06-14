@@ -711,7 +711,7 @@ class RollingWindowsModel(BaseModel):
             self._find_mile_stone_windows_indexes_in_all_windows()
 
         # Check if passed in mile stones exist in the file.
-        if milestones_dict is not {}:
+        if milestones_dict != {}:
             # Find max and min y value in the result plot.
             y_max_in_each_plot = \
                 [max(each_plot['y'][~np.isnan(each_plot['y'])])
