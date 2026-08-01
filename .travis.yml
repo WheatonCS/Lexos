@@ -25,10 +25,10 @@ jobs:
         - pydocstyle lexos/models/
         - pydocstyle lexos/receivers/
 
-    # Check for node_js 10.x.
+    # Check for node_js 24.x.
     - name: "Node.js 10.x on Linux"
       language: node_js
-      node_js: 10
+      node_js: 24
       # Install dependencies.
       before_install:
         - cd ./lexos/frontend
