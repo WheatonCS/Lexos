@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    env:
+      PYTHON_VERSION: "3.8"
+      NODE_VERSION: "24"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: lexos/frontend/package-lock.json
+
+      - name: Install Python dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy
+          pip install -r requirements.txt
+          pip install -r dev_requirements.txt
+
+      - name: Install frontend dependencies
+        shell: pwsh
+        working-directory: lexos/frontend
+        run: npm ci
+
+      - name: Run flake8
+        shell: pwsh
+        run: flake8 --ignore E121,E123,E126,E226,E24,E704,W503,W504,E741
+
+      - name: Run pytest with coverage
+        shell: pwsh
+        run: pytest --cov=.\lexos
+
+      - name: Run pydocstyle
+        shell: pwsh
+        run: |
+          pydocstyle lexos\models\
+          pydocstyle lexos\receivers\
+
+      - name: Run frontend eslint checks
+        shell: pwsh
+        working-directory: lexos/frontend
+        run: |
+          npx eslint .\js\scripts_statistics.js
+          npx eslint .\js\scripts_similarity.js
+          npx eslint .\js\scripts_dendrogram.js
+          npx eslint .\js\scripts_rwanalysis.js
+          npx eslint .\js\scripts_tokenizer.js
+          npx eslint .\js\scripts_upload.js
+          npx eslint .\js\scripts_manage.js
+          npx eslint .\js\scripts_kmeans.js
+          npx eslint .\js\scripts_scrub.js
+          npx eslint .\js\scripts_cut.js
+          npx eslint .\js\scripts_bct.js
