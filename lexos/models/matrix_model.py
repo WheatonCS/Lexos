@@ -123,7 +123,7 @@ class MatrixModel(BaseModel):
         # need to get at the entire matrix and not sparse matrix
         raw_count_matrix = doc_term_sparse_matrix.toarray()
         # snag all features (e.g., word-grams or char-grams) that were counted
-        words = count_vector.get_feature_names()
+        words = count_vector.get_feature_names_out()
         # pack the data into a data frame
         return pd.DataFrame(data=raw_count_matrix,
                             index=file_ids,

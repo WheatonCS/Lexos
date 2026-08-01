@@ -1,11 +1,17 @@
 /* Minimum width */
 #main-section,
 .popup-container {
-    min-width: 140rem;
+    /*min-width: 140rem;*/
 }
 
 
 /* Options section */
 #options-section {
     grid-template-columns: 1.9fr .55fr .5fr 1.1fr;
+}
+
+#consensus-tree {
+    overflow: scroll;
+    max-width: 90vw;
+    max-height: 35vh;
 }

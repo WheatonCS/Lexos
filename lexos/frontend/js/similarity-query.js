@@ -73,8 +73,8 @@ function initialize_comparison_document_section (document_names, document_ids) {
     .appendTo('#comparison-document-section-body')
     .text(document_names[0])
 
-    // Remove the loading overlay from the "Comparison Document" section and
-    // fade in the comparison document name
+  // Remove the loading overlay from the "Comparison Document" section and
+  // fade in the comparison document name
   finish_loading('#comparison-document-section-body',
     '#comparison-document-text')
 

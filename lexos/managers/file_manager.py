@@ -524,17 +524,23 @@ class FileManager:
         # active files labels and classes.
         active_files = self.get_active_files()
         file_ids = [file.id for file in active_files]
-        class_labels = {file.class_label for file in active_files}
+        class_labels = list({file.class_label for file in active_files})
 
+        print(file_ids)
+        print(class_labels)
         # initialize values and get class division map.
         label_length = len(file_ids)
         class_length = len(class_labels)
+
+        print(label_length)
+        print(class_length)
 
         class_division_map = pd.DataFrame(
             data=np.zeros((class_length, label_length), dtype=bool),
             index=class_labels,
             columns=file_ids)
 
+        print("test")
         # set correct boolean value for each file.
         for file in active_files:
             class_division_map[file.id][file.class_label] = True

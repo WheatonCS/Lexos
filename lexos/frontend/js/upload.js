@@ -231,7 +231,7 @@ function create_upload_preview (file_name) {
   upload_preview_element.find('.upload-preview-content')
     .text(file_name)
 
-    // Fade in the preview element
+  // Fade in the preview element
   fade_in(`#preview-${active_documents}`, 'var(--long-fade-duration)')
 
   // Return the upload preview element

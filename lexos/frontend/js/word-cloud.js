@@ -95,7 +95,7 @@ function create_word_cloud_layout (response) {
     .fontSize(function (d) { return d.size })
     .on('end', create_word_cloud)
 
-    // Create the word cloud layout
+  // Create the word cloud layout
   layout.start()
 }
 

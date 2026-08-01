@@ -78,7 +78,7 @@ function create_bubbleviz (response) {
     .text('No selection')
     .attr('class', 'visualize-tooltip')
 
-    // Create the bubbleviz
+  // Create the bubbleviz
   let bubble = d3.pack(dataset)
     .size([diameter, diameter])
     .padding(3)
@@ -105,7 +105,7 @@ function create_bubbleviz (response) {
       return 'translate(' + d.x + ', ' + d.y + ')'
     })
 
-    // Create the bubbles
+  // Create the bubbles
   node.append('circle')
     .attr('r', function (d) { return d.r })
     .style('fill', function (d) {
@@ -130,7 +130,7 @@ function create_bubbleviz (response) {
       tooltip.style('opacity', '0')
     })
 
-    // Create the bubble text
+  // Create the bubble text
   node.append('text')
     .attr('dy', '.3em')
     .style('text-anchor', 'middle')
