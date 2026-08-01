@@ -1,7 +1,7 @@
 # Set up environment.
 environment:
   # NodeJS version
-  nodejs_version: "10"
+  nodejs_version: "24"
   # Run for both architecture for python 3.8.x
   matrix:
     - PYTHON: "C:\\Python38-x64"
