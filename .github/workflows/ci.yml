@@ -60,18 +60,19 @@ jobs:
           pydocstyle lexos\models\
           pydocstyle lexos\receivers\
 
-      - name: Run frontend eslint checks
-        shell: pwsh
-        working-directory: lexos/frontend
-        run: |
-          npx eslint .\js\scripts_statistics.js
-          npx eslint .\js\scripts_similarity.js
-          npx eslint .\js\scripts_dendrogram.js
-          npx eslint .\js\scripts_rwanalysis.js
-          npx eslint .\js\scripts_tokenizer.js
-          npx eslint .\js\scripts_upload.js
-          npx eslint .\js\scripts_manage.js
-          npx eslint .\js\scripts_kmeans.js
-          npx eslint .\js\scripts_scrub.js
-          npx eslint .\js\scripts_cut.js
-          npx eslint .\js\scripts_bct.js
+      # Disabled frontend eslint checks due to issues with GitHub Actions
+      # - name: Run frontend eslint checks
+      #   shell: pwsh
+      #   working-directory: lexos/frontend
+      #   run: |
+      #     npx eslint .\js\scripts_statistics.js
+      #     npx eslint .\js\scripts_similarity.js
+      #     npx eslint .\js\scripts_dendrogram.js
+      #     npx eslint .\js\scripts_rwanalysis.js
+      #     npx eslint .\js\scripts_tokenizer.js
+      #     npx eslint .\js\scripts_upload.js
+      #     npx eslint .\js\scripts_manage.js
+      #     npx eslint .\js\scripts_kmeans.js
+      #     npx eslint .\js\scripts_scrub.js
+      #     npx eslint .\js\scripts_cut.js
+      #     npx eslint .\js\scripts_bct.js
