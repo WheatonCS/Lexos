@@ -5,7 +5,7 @@ colorlover<=0.3.0
 flask==1.1.1
 gensim<=4.3.2
 itsdangerous==2.0.1
-Jinja2==3.0.3
+Jinja2==3.1.6
 lxml<=5.1.0
 matplotlib<=3.7.3
 natsort<=8.4.0
